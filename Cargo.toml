@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = ["geo-lang", "interaction-nets", "orbital-engine", "orbital-game"]
+members = ["caterpillar", "interaction-nets", "orbital-engine", "orbital-game"]
