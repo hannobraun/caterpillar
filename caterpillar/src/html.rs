@@ -1,10 +1,10 @@
 use sycamore::prelude::*;
 
-pub fn render() {
+pub fn render(canvas_id: u32) {
     sycamore::render(|cx| {
         view! { cx,
             textarea {}
-            canvas {}
+            canvas(data-raw-handle=(canvas_id)) {}
         }
     });
 }
