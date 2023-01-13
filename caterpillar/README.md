@@ -3,6 +3,15 @@
 An experiment in describing geometry programmatically. Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting the name!
 
 
+## How to Run
+
+Run using [Trunk](https://trunkrs.dev/):
+
+```
+trunk serve
+```
+
+
 ## Concept
 
 Here's an example of what I currently have in mind. Many details are bound to change as the implementation comes along, but for now, this is what I'm working towards, language-wise.
