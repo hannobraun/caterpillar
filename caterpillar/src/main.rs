@@ -1,10 +1,5 @@
-use sycamore::prelude::*;
+mod html;
 
 fn main() {
-    sycamore::render(|cx| {
-        view! { cx,
-            textarea {}
-            canvas {}
-        }
-    });
+    html::render();
 }
