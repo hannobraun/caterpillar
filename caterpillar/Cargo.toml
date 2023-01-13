@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.68"
 raw-window-handle = "0.5.0"
 sycamore = "0.8.2"
 wasm-bindgen-futures = "0.4.33"

@@ -180,6 +180,7 @@ dependencies = [
 name = "caterpillar"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "raw-window-handle 0.5.0",
  "sycamore",
  "wasm-bindgen-futures",
