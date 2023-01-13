@@ -6,3 +6,7 @@ edition = "2021"
 [dependencies]
 raw-window-handle = "0.5.0"
 sycamore = "0.8.2"
+
+[dependencies.wgpu]
+version = "0.14.2"
+features = ["webgl"]
