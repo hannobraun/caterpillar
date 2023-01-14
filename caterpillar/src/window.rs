@@ -11,6 +11,12 @@ impl Window {
     pub fn new(id: u32) -> Self {
         Self { id }
     }
+
+    pub fn size(&self) -> [u32; 2] {
+        // This is the initial default. Good enough for now, but should be
+        // adapted to always return the current size.
+        [300, 150]
+    }
 }
 
 unsafe impl HasRawDisplayHandle for Window {
