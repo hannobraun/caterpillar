@@ -13,9 +13,23 @@ impl Window {
     }
 
     pub fn size(&self) -> [u32; 2] {
-        // This is the initial default. Good enough for now, but should be
-        // adapted to always return the current size.
-        [300, 150]
+        let canvas = web_sys::window()
+            .and_then(|window| window.document())
+            .and_then(|document| {
+                document
+                    .query_selector(&format!(
+                        "[data-raw-handle=\"{}\"]",
+                        self.id
+                    ))
+                    .expect("Error selecting canvas")
+            })
+            .expect("Expected to find canvas in the DOM");
+
+        let size = [canvas.client_width(), canvas.client_height()];
+        size.map(|size| {
+            size.try_into()
+                .expect("Did not expect negative element size")
+        })
     }
 }
 
