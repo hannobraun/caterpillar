@@ -1,0 +1,17 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body>* {
+    width: 50%;
+    height: 100%;
+}
+
+textarea {
+    margin: 0;
+    border-width: 0;
+    padding: 0;
+    resize: none;
+}
