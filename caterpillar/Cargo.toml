@@ -6,12 +6,15 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.68"
 console_error_panic_hook = "0.1.7"
-console_log = "0.2.0"
 log = "0.4.17"
 raw-window-handle = "0.5.0"
 sycamore = "0.8.2"
 wasm-bindgen-futures = "0.4.33"
 web-sys = "0.3.60"
+
+[dependencies.console_log]
+version = "0.2.0"
+features = ["color"]
 
 [dependencies.wgpu]
 version = "0.14.2"
