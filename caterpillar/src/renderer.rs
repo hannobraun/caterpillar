@@ -3,6 +3,7 @@ use anyhow::anyhow;
 use crate::window::Window;
 
 pub struct Renderer {
+    adapter: wgpu::Adapter,
     device: wgpu::Device,
     queue: wgpu::Queue,
     surface: wgpu::Surface,
@@ -33,30 +34,27 @@ impl Renderer {
             )
             .await?;
 
-        {
-            let format = surface.get_supported_formats(&adapter)[0];
-            let [width, height] = window.size();
-
-            let surface_config = wgpu::SurfaceConfiguration {
-                usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-                format,
-                width: width,
-                height: height,
-                present_mode: wgpu::PresentMode::AutoVsync,
-                alpha_mode: wgpu::CompositeAlphaMode::Auto,
-            };
-
-            surface.configure(&device, &surface_config);
-        }
-
         Ok(Self {
+            adapter,
             device,
             queue,
             surface,
         })
     }
 
-    pub fn draw(&self, color: [f64; 4]) -> anyhow::Result<()> {
+    pub fn draw(&self, window: &Window, color: [f64; 4]) -> anyhow::Result<()> {
+        let format = self.surface.get_supported_formats(&self.adapter)[0];
+        let [width, height] = window.size();
+        let surface_config = wgpu::SurfaceConfiguration {
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            format,
+            width: width,
+            height: height,
+            present_mode: wgpu::PresentMode::AutoVsync,
+            alpha_mode: wgpu::CompositeAlphaMode::Auto,
+        };
+        self.surface.configure(&self.device, &surface_config);
+
         let [r, g, b, a] = color;
 
         let mut encoder = self.device.create_command_encoder(

@@ -24,7 +24,7 @@ fn main() {
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
         log::info!("requestAnimationFrame fired");
-        renderer.draw([0., 0., 0., 1.]).unwrap();
+        renderer.draw(&window, [0., 0., 0., 1.]).unwrap();
         request_animation_frame(&main_loop);
     }));
 
