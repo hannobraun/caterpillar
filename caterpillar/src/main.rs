@@ -1,3 +1,6 @@
+use std::{cell::RefCell, rc::Rc};
+
+use wasm_bindgen::{prelude::Closure, JsCast};
 use wasm_bindgen_futures::spawn_local;
 
 mod html;
@@ -14,6 +17,40 @@ fn main() {
     html::render(id);
 
     spawn_local(render(window));
+
+    let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
+        Rc::new(RefCell::new(None));
+    let main_loop_2 = main_loop.clone();
+
+    *main_loop_2.borrow_mut() = Some(Closure::new(move || {
+        log::info!("requestAnimationFrame fired");
+
+        if let Some(window) = web_sys::window() {
+            window
+                .request_animation_frame(
+                    main_loop
+                        .borrow()
+                        .as_ref()
+                        .unwrap()
+                        .as_ref()
+                        .unchecked_ref(),
+                )
+                .unwrap();
+        }
+    }));
+
+    if let Some(window) = web_sys::window() {
+        window
+            .request_animation_frame(
+                main_loop_2
+                    .borrow()
+                    .as_ref()
+                    .unwrap()
+                    .as_ref()
+                    .unchecked_ref(),
+            )
+            .unwrap();
+    }
 }
 
 async fn render(window: window::Window) {
