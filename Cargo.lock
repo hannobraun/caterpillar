@@ -183,6 +183,7 @@ dependencies = [
  "anyhow",
  "console_error_panic_hook",
  "console_log",
+ "futures",
  "log",
  "raw-window-handle 0.5.0",
  "sycamore",
