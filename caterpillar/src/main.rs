@@ -1,7 +1,7 @@
 use std::{cell::RefCell, rc::Rc};
 
+use futures::executor::block_on;
 use wasm_bindgen::{prelude::Closure, JsCast};
-use wasm_bindgen_futures::spawn_local;
 
 mod html;
 mod renderer;
@@ -16,7 +16,7 @@ fn main() {
     let window = window::Window::new(id);
     html::render(id);
 
-    spawn_local(render(window));
+    block_on(render(window));
 
     let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
         Rc::new(RefCell::new(None));
