@@ -3,10 +3,10 @@ use anyhow::anyhow;
 use crate::window::Window;
 
 pub struct Renderer {
+    surface: wgpu::Surface,
     adapter: wgpu::Adapter,
     device: wgpu::Device,
     queue: wgpu::Queue,
-    surface: wgpu::Surface,
 }
 
 impl Renderer {
@@ -35,10 +35,10 @@ impl Renderer {
             .await?;
 
         Ok(Self {
+            surface,
             adapter,
             device,
             queue,
-            surface,
         })
     }
 
