@@ -24,30 +24,17 @@ fn main() {
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
         log::info!("requestAnimationFrame fired");
-
-        if let Some(window) = web_sys::window() {
-            window
-                .request_animation_frame(
-                    main_loop
-                        .borrow()
-                        .as_ref()
-                        .unwrap()
-                        .as_ref()
-                        .unchecked_ref(),
-                )
-                .unwrap();
-        }
+        request_animation_frame(&main_loop);
     }));
 
+    request_animation_frame(&main_loop_2)
+}
+
+fn request_animation_frame(f: &Rc<RefCell<Option<Closure<dyn FnMut()>>>>) {
     if let Some(window) = web_sys::window() {
         window
             .request_animation_frame(
-                main_loop_2
-                    .borrow()
-                    .as_ref()
-                    .unwrap()
-                    .as_ref()
-                    .unchecked_ref(),
+                f.borrow().as_ref().unwrap().as_ref().unchecked_ref(),
             )
             .unwrap();
     }
