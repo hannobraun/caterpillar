@@ -9,7 +9,7 @@ mod window;
 
 fn main() {
     console_error_panic_hook::set_once();
-    console_log::init().unwrap();
+    console_log::init_with_level(log::Level::Warn).unwrap();
 
     let id = 1;
 
