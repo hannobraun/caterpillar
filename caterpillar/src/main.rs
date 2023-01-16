@@ -16,7 +16,8 @@ fn main() {
     let window = window::Window::new(id);
     html::render(id);
 
-    block_on(render(window));
+    let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
+    renderer.draw([0., 0., 0., 1.]).unwrap();
 
     let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
         Rc::new(RefCell::new(None));
@@ -38,9 +39,4 @@ fn request_animation_frame(f: &Rc<RefCell<Option<Closure<dyn FnMut()>>>>) {
             )
             .unwrap();
     }
-}
-
-async fn render(window: window::Window) {
-    let renderer = renderer::Renderer::new(&window).await.unwrap();
-    renderer.draw([0., 0., 0., 1.]).unwrap();
 }
