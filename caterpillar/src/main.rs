@@ -17,7 +17,6 @@ fn main() {
     html::render(id);
 
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
-    renderer.draw([0., 0., 0., 1.]).unwrap();
 
     let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
         Rc::new(RefCell::new(None));
@@ -25,6 +24,7 @@ fn main() {
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
         log::info!("requestAnimationFrame fired");
+        renderer.draw([0., 0., 0., 1.]).unwrap();
         request_animation_frame(&main_loop);
     }));
 
