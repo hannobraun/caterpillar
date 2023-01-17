@@ -13,9 +13,9 @@ fn main() {
 
     let id = 1;
 
-    let window = window::Window::new(id);
     html::render(id);
 
+    let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
 
     let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
