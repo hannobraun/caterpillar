@@ -1,3 +1,4 @@
+use gloo::utils::document;
 use raw_window_handle::{
     HasRawDisplayHandle, HasRawWindowHandle, RawDisplayHandle, RawWindowHandle,
     WebDisplayHandle, WebWindowHandle,
@@ -13,16 +14,9 @@ impl Window {
     }
 
     pub fn size(&self) -> [u32; 2] {
-        let canvas = web_sys::window()
-            .and_then(|window| window.document())
-            .and_then(|document| {
-                document
-                    .query_selector(&format!(
-                        "[data-raw-handle=\"{}\"]",
-                        self.id
-                    ))
-                    .expect("Error selecting canvas")
-            })
+        let canvas = document()
+            .query_selector(&format!("[data-raw-handle=\"{}\"]", self.id))
+            .expect("Error selecting canvas")
             .expect("Expected to find canvas in the DOM");
 
         let size = [canvas.client_width(), canvas.client_height()];
