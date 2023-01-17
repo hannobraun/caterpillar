@@ -23,7 +23,6 @@ fn main() {
     let main_loop_2 = main_loop.clone();
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
-        log::info!("requestAnimationFrame fired");
         renderer.draw(&window, [0., 0., 0., 1.]).unwrap();
         request_animation_frame(&main_loop);
     }));
