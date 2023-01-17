@@ -1,6 +1,7 @@
 use std::{cell::RefCell, rc::Rc};
 
 use futures::executor::block_on;
+use gloo::utils::window;
 use wasm_bindgen::{prelude::Closure, JsCast};
 
 mod html;
@@ -37,11 +38,9 @@ fn main_loop(mut f: impl FnMut() + 'static) {
 }
 
 fn request_animation_frame(f: &Rc<RefCell<Option<Closure<dyn FnMut()>>>>) {
-    if let Some(window) = web_sys::window() {
-        window
-            .request_animation_frame(
-                f.borrow().as_ref().unwrap().as_ref().unchecked_ref(),
-            )
-            .unwrap();
-    }
+    window()
+        .request_animation_frame(
+            f.borrow().as_ref().unwrap().as_ref().unchecked_ref(),
+        )
+        .unwrap();
 }
