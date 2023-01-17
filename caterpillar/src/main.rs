@@ -18,12 +18,18 @@ fn main() {
     let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
 
+    main_loop(move || {
+        renderer.draw(&window, [0., 0., 0., 1.]).unwrap();
+    });
+}
+
+fn main_loop(mut f: impl FnMut() + 'static) {
     let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
         Rc::new(RefCell::new(None));
     let main_loop_2 = main_loop.clone();
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
-        renderer.draw(&window, [0., 0., 0., 1.]).unwrap();
+        f();
         request_animation_frame(&main_loop);
     }));
 
