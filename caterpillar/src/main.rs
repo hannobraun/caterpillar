@@ -14,22 +14,29 @@ fn main() {
 
     let id = 1;
 
+    let background_color = [0., 0., 0., 1.];
+
     html::render(id);
 
     let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
 
-    let state = State { window, renderer };
+    let state = State {
+        background_color,
+        window,
+        renderer,
+    };
 
     main_loop(move || {
         state
             .renderer
-            .draw(&state.window, [0., 0., 0., 1.])
+            .draw(&state.window, state.background_color)
             .unwrap();
     });
 }
 
 pub struct State {
+    background_color: [f64; 4],
     window: window::Window,
     renderer: renderer::Renderer,
 }
