@@ -14,7 +14,7 @@ fn main() {
 
     let id = 1;
 
-    let background_color = [0., 0., 0., 1.];
+    let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
 
     html::render(id);
 
@@ -28,15 +28,17 @@ fn main() {
     };
 
     main_loop(move || {
+        let background_color = *state.background_color.borrow_mut();
+
         state
             .renderer
-            .draw(&state.window, state.background_color)
+            .draw(&state.window, background_color)
             .unwrap();
     });
 }
 
 pub struct State {
-    background_color: [f64; 4],
+    background_color: Rc<RefCell<[f64; 4]>>,
     window: window::Window,
     renderer: renderer::Renderer,
 }
