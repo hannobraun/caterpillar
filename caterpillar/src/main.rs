@@ -28,7 +28,7 @@ fn main() {
     };
 
     main_loop(move || {
-        let background_color = *state.background_color.borrow_mut();
+        let background_color = *state.background_color.borrow();
 
         state
             .renderer
