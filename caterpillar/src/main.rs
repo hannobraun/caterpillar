@@ -16,7 +16,7 @@ fn main() {
 
     let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
 
-    html::render(id);
+    html::render(id, background_color.clone());
 
     let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
