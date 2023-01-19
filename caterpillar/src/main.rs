@@ -19,9 +19,19 @@ fn main() {
     let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
 
+    let state = State { window, renderer };
+
     main_loop(move || {
-        renderer.draw(&window, [0., 0., 0., 1.]).unwrap();
+        state
+            .renderer
+            .draw(&state.window, [0., 0., 0., 1.])
+            .unwrap();
     });
+}
+
+pub struct State {
+    window: window::Window,
+    renderer: renderer::Renderer,
 }
 
 fn main_loop(mut f: impl FnMut() + 'static) {
