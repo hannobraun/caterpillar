@@ -39,7 +39,7 @@ fn main() {
 }
 
 pub struct State {
-    background_color: Rc<RefCell<[f64; 4]>>,
+    background_color: language::Output,
     window: window::Window,
     renderer: renderer::Renderer,
 }
