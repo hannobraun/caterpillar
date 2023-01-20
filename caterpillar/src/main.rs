@@ -15,8 +15,7 @@ fn main() {
 
     let id = 1;
 
-    let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
-    let language = language::Language::new(&background_color);
+    let (language, background_color) = language::init();
 
     html::render(id, language);
 
