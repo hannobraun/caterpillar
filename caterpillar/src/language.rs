@@ -10,7 +10,7 @@ pub fn init() -> (Interpreter, Output) {
 }
 
 pub struct Interpreter {
-    pub background_color: Rc<RefCell<[f64; 4]>>,
+    background_color: Rc<RefCell<[f64; 4]>>,
 }
 
 impl Interpreter {
