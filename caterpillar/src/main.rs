@@ -5,6 +5,7 @@ use gloo::utils::window;
 use wasm_bindgen::{prelude::Closure, JsCast};
 
 mod html;
+mod language;
 mod renderer;
 mod window;
 
@@ -15,8 +16,11 @@ fn main() {
     let id = 1;
 
     let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
+    let language = language::Language {
+        background_color: background_color.clone(),
+    };
 
-    html::render(id, background_color.clone());
+    html::render(id, language);
 
     let window = window::Window::new(id);
     let renderer = block_on(renderer::Renderer::new(&window)).unwrap();
