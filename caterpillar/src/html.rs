@@ -1,8 +1,8 @@
 use sycamore::prelude::*;
 
-use crate::language::Language;
+use crate::language::Interpreter;
 
-pub fn render(canvas_id: u32, language: Language) {
+pub fn render(canvas_id: u32, language: Interpreter) {
     sycamore::render(|cx| {
         let value = create_signal(cx, String::new());
         create_effect(cx, move || {
