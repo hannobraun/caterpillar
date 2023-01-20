@@ -4,9 +4,9 @@ use crate::language::Language;
 
 pub fn render(canvas_id: u32, language: Language) {
     sycamore::render(|cx| {
-        let signal = create_signal(cx, String::new());
+        let value = create_signal(cx, String::new());
         create_effect(cx, move || {
-            let Ok(value) = signal.get().parse::<u8>() else {
+            let Ok(value) = value.get().parse::<u8>() else {
                 return
             };
             let value = value as f64 / u8::MAX as f64;
@@ -15,7 +15,7 @@ pub fn render(canvas_id: u32, language: Language) {
         });
 
         view! { cx,
-            textarea(bind:value=signal) {}
+            textarea(bind:value=value) {}
             canvas(data-raw-handle=(canvas_id)) {}
         }
     });
