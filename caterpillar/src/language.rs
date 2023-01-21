@@ -37,10 +37,10 @@ fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
     Some(value as f64 / u8::MAX as f64)
 }
 
-fn read_token(code: impl Iterator<Item = char>, word: &mut String) {
+fn read_token(code: impl Iterator<Item = char>, token: &mut String) {
     // I think it would be a bit nicer to do this with `Iterator::collect_into`,
     // but that is not stable yet, as of this writing.
-    word.extend(
+    token.extend(
         code.skip_while(|ch| ch.is_whitespace())
             .take_while(|ch| !ch.is_whitespace()),
     );
