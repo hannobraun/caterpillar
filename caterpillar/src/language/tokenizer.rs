@@ -1,8 +1,10 @@
 use std::iter;
 
+pub type Buf = String;
+
 pub fn tokenize<'r>(
     chars: &'r mut impl Iterator<Item = char>,
-    buf: &'r mut String,
+    buf: &'r mut Buf,
 ) -> impl Iterator<Item = String> + 'r {
     iter::from_fn(|| {
         let mut state = State::NotStarted;
