@@ -4,7 +4,7 @@ pub type Buf = String;
 
 pub enum Token {
     /// A token that refers to a function
-    Fn(String),
+    Fn { name: String },
 }
 
 pub fn tokenize<'r>(
@@ -36,7 +36,7 @@ pub fn tokenize<'r>(
             return None;
         }
 
-        let token = Token::Fn(buf.clone());
+        let token = Token::Fn { name: buf.clone() };
         buf.clear();
 
         Some(token)
