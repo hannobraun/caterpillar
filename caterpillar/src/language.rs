@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, iter, rc::Rc};
 
 pub fn init() -> (Interpreter, Output) {
     let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
@@ -16,10 +16,11 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut code = code.chars();
+        let mut tokens = tokenize(&mut code);
 
-        let r = parse_color_channel(&mut code);
-        let g = parse_color_channel(&mut code);
-        let b = parse_color_channel(&mut code);
+        let r = parse_color_channel(&mut tokens);
+        let g = parse_color_channel(&mut tokens);
+        let b = parse_color_channel(&mut tokens);
 
         if let (Some(r), Some(g), Some(b)) = (r, g, b) {
             *self.background_color.borrow_mut() = [r, g, b, 1.];
@@ -27,23 +28,33 @@ impl Interpreter {
     }
 }
 
-fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
-    let mut token = String::new();
-    read_token(code, &mut token);
+pub fn tokenize(
+    code: &mut impl Iterator<Item = char>,
+) -> impl Iterator<Item = String> + '_ {
+    iter::from_fn(|| {
+        let mut token = String::new();
+        token.extend(
+            code.by_ref()
+                .skip_while(|ch| ch.is_whitespace())
+                .take_while(|ch| !ch.is_whitespace()),
+        );
 
+        if token.is_empty() {
+            return None;
+        }
+
+        Some(token)
+    })
+}
+
+fn parse_color_channel(
+    mut tokens: impl Iterator<Item = String>,
+) -> Option<f64> {
+    let token = tokens.next()?;
     let Ok(value) = token.parse::<u8>() else {
         return None;
     };
     Some(value as f64 / u8::MAX as f64)
-}
-
-fn read_token(code: impl Iterator<Item = char>, token: &mut String) {
-    // I think it would be a bit nicer to do this with `Iterator::collect_into`,
-    // but that is not stable yet, as of this writing.
-    token.extend(
-        code.skip_while(|ch| ch.is_whitespace())
-            .take_while(|ch| !ch.is_whitespace()),
-    );
 }
 
 pub type Output = Rc<RefCell<[f64; 4]>>;
