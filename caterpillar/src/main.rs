@@ -44,9 +44,10 @@ pub struct State {
     renderer: renderer::Renderer,
 }
 
+type MainLoop = Rc<RefCell<Option<Closure<dyn FnMut()>>>>;
+
 fn main_loop(mut f: impl FnMut() + 'static) {
-    let main_loop: Rc<RefCell<Option<Closure<dyn FnMut()>>>> =
-        Rc::new(RefCell::new(None));
+    let main_loop: MainLoop = Rc::new(RefCell::new(None));
     let main_loop_2 = main_loop.clone();
 
     *main_loop_2.borrow_mut() = Some(Closure::new(move || {
@@ -57,7 +58,7 @@ fn main_loop(mut f: impl FnMut() + 'static) {
     request_animation_frame(&main_loop_2)
 }
 
-fn request_animation_frame(f: &Rc<RefCell<Option<Closure<dyn FnMut()>>>>) {
+fn request_animation_frame(f: &MainLoop) {
     window()
         .request_animation_frame(
             f.borrow().as_ref().unwrap().as_ref().unchecked_ref(),
