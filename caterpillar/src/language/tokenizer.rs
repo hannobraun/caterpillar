@@ -1,7 +1,11 @@
 use std::iter;
 
 pub type Buf = String;
-pub type Token = String;
+
+pub enum Token {
+    /// A token that refers to a function
+    Fn(String),
+}
 
 pub fn tokenize<'r>(
     chars: &'r mut impl Iterator<Item = char>,
@@ -32,7 +36,7 @@ pub fn tokenize<'r>(
             return None;
         }
 
-        let token = buf.clone();
+        let token = Token::Fn(buf.clone());
         buf.clear();
 
         Some(token)
