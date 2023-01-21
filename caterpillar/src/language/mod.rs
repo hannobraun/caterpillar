@@ -33,7 +33,7 @@ impl Interpreter {
 }
 
 fn parse_color_channel(
-    mut tokens: impl Iterator<Item = String>,
+    mut tokens: impl Iterator<Item = tokenizer::Token>,
 ) -> Option<f64> {
     let token = tokens.next()?;
     let Ok(value) = token.parse::<u8>() else {
