@@ -4,7 +4,7 @@ pub struct Tokenizer;
 
 impl Tokenizer {
     pub fn tokenize<'r>(
-        &'r mut self,
+        &mut self,
         chars: &'r mut impl Iterator<Item = char>,
     ) -> impl Iterator<Item = String> + 'r {
         iter::from_fn(|| {
