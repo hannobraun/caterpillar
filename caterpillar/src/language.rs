@@ -17,10 +17,12 @@ impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut code = code.chars();
 
-        let value = parse_color_channel(&mut code);
+        let r = parse_color_channel(&mut code);
+        let g = parse_color_channel(&mut code);
+        let b = parse_color_channel(&mut code);
 
-        if let Some(value) = value {
-            *self.background_color.borrow_mut() = [value, value, value, 1.];
+        if let (Some(r), Some(g), Some(b)) = (r, g, b) {
+            *self.background_color.borrow_mut() = [r, g, b, 1.];
         }
     }
 }
