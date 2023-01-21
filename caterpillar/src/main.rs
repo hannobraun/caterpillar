@@ -58,10 +58,15 @@ fn main_loop(mut f: impl FnMut() + 'static) {
     request_animation_frame(&main_loop_2)
 }
 
-fn request_animation_frame(f: &MainLoop) {
+fn request_animation_frame(main_loop: &MainLoop) {
     window()
         .request_animation_frame(
-            f.borrow().as_ref().unwrap().as_ref().unchecked_ref(),
+            main_loop
+                .borrow()
+                .as_ref()
+                .unwrap()
+                .as_ref()
+                .unchecked_ref(),
         )
         .unwrap();
 }
