@@ -5,11 +5,25 @@ pub fn tokenize<'r>(
     buf: &'r mut String,
 ) -> impl Iterator<Item = String> + 'r {
     iter::from_fn(|| {
-        buf.extend(
-            chars
-                .skip_while(|ch| ch.is_whitespace())
-                .take_while(|ch| !ch.is_whitespace()),
-        );
+        let mut state = State::NotStarted;
+
+        for ch in chars.by_ref() {
+            match state {
+                State::NotStarted => {
+                    if !ch.is_whitespace() {
+                        state = State::ReadingToken;
+                        buf.push(ch);
+                    }
+                }
+                State::ReadingToken => {
+                    if ch.is_whitespace() {
+                        break;
+                    } else {
+                        buf.push(ch);
+                    }
+                }
+            }
+        }
 
         if buf.is_empty() {
             return None;
@@ -20,4 +34,9 @@ pub fn tokenize<'r>(
 
         Some(token)
     })
+}
+
+enum State {
+    NotStarted,
+    ReadingToken,
 }
