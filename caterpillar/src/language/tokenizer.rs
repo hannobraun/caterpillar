@@ -10,7 +10,6 @@ impl Tokenizer {
             let mut token = String::new();
             token.extend(
                 chars
-                    .by_ref()
                     .skip_while(|ch| ch.is_whitespace())
                     .take_while(|ch| !ch.is_whitespace()),
             );
