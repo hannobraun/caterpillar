@@ -1,11 +1,10 @@
 use std::iter;
 
-pub fn tokenize(
-    chars: &mut impl Iterator<Item = char>,
-) -> impl Iterator<Item = String> + '_ {
+pub fn tokenize<'r>(
+    chars: &'r mut impl Iterator<Item = char>,
+    buf: &'r mut String,
+) -> impl Iterator<Item = String> + 'r {
     iter::from_fn(|| {
-        let mut buf = String::new();
-
         buf.extend(
             chars
                 .skip_while(|ch| ch.is_whitespace())
