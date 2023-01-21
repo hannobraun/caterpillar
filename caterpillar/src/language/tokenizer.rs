@@ -3,10 +3,9 @@ use std::iter;
 pub struct Tokenizer;
 
 impl Tokenizer {
-    pub fn tokenize<'r>(
-        &mut self,
-        chars: &'r mut impl Iterator<Item = char>,
-    ) -> impl Iterator<Item = String> + 'r {
+    pub fn tokenize(
+        chars: &mut impl Iterator<Item = char>,
+    ) -> impl Iterator<Item = String> + '_ {
         iter::from_fn(|| {
             let mut buf = String::new();
 
