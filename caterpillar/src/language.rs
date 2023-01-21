@@ -28,7 +28,10 @@ impl Interpreter {
 }
 
 fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
-    let word = code.take_while(|c| !c.is_whitespace()).collect::<String>();
+    let word = code
+        .skip_while(|c| c.is_whitespace())
+        .take_while(|c| !c.is_whitespace())
+        .collect::<String>();
 
     let Ok(value) = word.parse::<u8>() else {
         return None;
