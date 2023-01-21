@@ -3,10 +3,6 @@ use std::iter;
 pub struct Tokenizer;
 
 impl Tokenizer {
-    pub fn new() -> Self {
-        Self
-    }
-
     pub fn tokenize<'r>(
         &'r mut self,
         chars: &'r mut impl Iterator<Item = char>,

@@ -18,7 +18,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut chars = code.chars();
-        let mut tokenizer = tokenizer::Tokenizer::new();
+        let mut tokenizer = tokenizer::Tokenizer;
 
         let mut tokens = tokenizer.tokenize(&mut chars);
 
