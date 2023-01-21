@@ -28,10 +28,10 @@ impl Interpreter {
 }
 
 fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
-    let mut word = String::new();
-    read_token(code, &mut word);
+    let mut token = String::new();
+    read_token(code, &mut token);
 
-    let Ok(value) = word.parse::<u8>() else {
+    let Ok(value) = token.parse::<u8>() else {
         return None;
     };
     Some(value as f64 / u8::MAX as f64)
