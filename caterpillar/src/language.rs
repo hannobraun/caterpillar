@@ -15,13 +15,18 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
-        let Ok(value) = code.parse::<u8>() else {
-            return
-        };
-        let value = value as f64 / u8::MAX as f64;
-
-        *self.background_color.borrow_mut() = [value, value, value, 1.];
+        let value = parse_color_channel(code);
+        if let Some(value) = value {
+            *self.background_color.borrow_mut() = [value, value, value, 1.];
+        }
     }
+}
+
+fn parse_color_channel(code: &str) -> Option<f64> {
+    let Ok(value) = code.parse::<u8>() else {
+        return None;
+    };
+    Some(value as f64 / u8::MAX as f64)
 }
 
 pub type Output = Rc<RefCell<[f64; 4]>>;
