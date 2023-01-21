@@ -12,16 +12,19 @@ impl Tokenizer {
         chars: &'r mut impl Iterator<Item = char>,
     ) -> impl Iterator<Item = String> + 'r {
         iter::from_fn(|| {
-            let mut token = String::new();
-            token.extend(
+            let mut buf = String::new();
+            buf.extend(
                 chars
                     .skip_while(|ch| ch.is_whitespace())
                     .take_while(|ch| !ch.is_whitespace()),
             );
 
-            if token.is_empty() {
+            if buf.is_empty() {
                 return None;
             }
+
+            let token = buf.clone();
+            buf.clear();
 
             Some(token)
         })
