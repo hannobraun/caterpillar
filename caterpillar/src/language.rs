@@ -29,7 +29,7 @@ impl Interpreter {
 
 fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
     let mut word = String::new();
-    read_word(code, &mut word);
+    read_token(code, &mut word);
 
     let Ok(value) = word.parse::<u8>() else {
         return None;
@@ -37,7 +37,7 @@ fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
     Some(value as f64 / u8::MAX as f64)
 }
 
-fn read_word(code: impl Iterator<Item = char>, word: &mut String) {
+fn read_token(code: impl Iterator<Item = char>, word: &mut String) {
     // I think it would be a bit nicer to do this with `Iterator::collect_into`,
     // but that is not stable yet, as of this writing.
     word.extend(
