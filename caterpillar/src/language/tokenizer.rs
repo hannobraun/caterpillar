@@ -1,12 +1,10 @@
 use std::iter;
 
-pub struct Tokenizer {
-    buf: String,
-}
+pub struct Tokenizer;
 
 impl Tokenizer {
     pub fn new() -> Self {
-        Self { buf: String::new() }
+        Self
     }
 
     pub fn tokenize<'r>(
@@ -14,18 +12,20 @@ impl Tokenizer {
         chars: &'r mut impl Iterator<Item = char>,
     ) -> impl Iterator<Item = String> + 'r {
         iter::from_fn(|| {
-            self.buf.extend(
+            let mut buf = String::new();
+
+            buf.extend(
                 chars
                     .skip_while(|ch| ch.is_whitespace())
                     .take_while(|ch| !ch.is_whitespace()),
             );
 
-            if self.buf.is_empty() {
+            if buf.is_empty() {
                 return None;
             }
 
-            let token = self.buf.clone();
-            self.buf.clear();
+            let token = buf.clone();
+            buf.clear();
 
             Some(token)
         })
