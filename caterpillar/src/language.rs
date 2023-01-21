@@ -15,9 +15,9 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
-        let code = code.chars();
+        let mut code = code.chars();
 
-        let value = parse_color_channel(code);
+        let value = parse_color_channel(&mut code);
 
         if let Some(value) = value {
             *self.background_color.borrow_mut() = [value, value, value, 1.];
