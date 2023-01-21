@@ -35,8 +35,8 @@ impl Interpreter {
 fn parse_color_channel(
     mut tokens: impl Iterator<Item = tokenizer::Token>,
 ) -> Option<f64> {
-    let tokenizer::Token::Fn(token) = tokens.next()?;
-    let Ok(value) = token.parse::<u8>() else {
+    let tokenizer::Token::Fn(function) = tokens.next()?;
+    let Ok(value) = function.parse::<u8>() else {
         return None;
     };
     Some(value as f64 / u8::MAX as f64)
