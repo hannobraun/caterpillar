@@ -28,15 +28,22 @@ impl Interpreter {
 }
 
 fn parse_color_channel(code: impl Iterator<Item = char>) -> Option<f64> {
-    let word = code
-        .skip_while(|ch| ch.is_whitespace())
-        .take_while(|ch| !ch.is_whitespace())
-        .collect::<String>();
+    let mut word = String::new();
+    read_word(code, &mut word);
 
     let Ok(value) = word.parse::<u8>() else {
         return None;
     };
     Some(value as f64 / u8::MAX as f64)
+}
+
+fn read_word(code: impl Iterator<Item = char>, word: &mut String) {
+    // I think it would be a bit nicer to do this with `Iterator::collect_into`,
+    // but that is not stable yet, as of this writing.
+    word.extend(
+        code.skip_while(|ch| ch.is_whitespace())
+            .take_while(|ch| !ch.is_whitespace()),
+    );
 }
 
 pub type Output = Rc<RefCell<[f64; 4]>>;
