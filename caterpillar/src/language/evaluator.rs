@@ -2,7 +2,10 @@ use std::iter;
 
 use super::tokenizer::Token;
 
-pub type Operation = u8;
+pub enum Operation {
+    /// Push a value to the stack
+    Push(u8),
+}
 
 pub fn evaluate(
     mut tokens: impl Iterator<Item = Token>,
@@ -12,6 +15,6 @@ pub fn evaluate(
         let Ok(value) = function.parse::<u8>() else {
             return None;
         };
-        Some(value)
+        Some(Operation::Push(value))
     })
 }
