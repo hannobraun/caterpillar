@@ -1,3 +1,4 @@
+mod evaluator;
 mod tokenizer;
 
 use std::{cell::RefCell, rc::Rc};
@@ -20,11 +21,12 @@ impl Interpreter {
         let mut token_buf = tokenizer::Buf::new();
 
         let mut chars = code.chars();
-        let mut tokens = tokenizer::tokenize(&mut chars, &mut token_buf);
+        let tokens = tokenizer::tokenize(&mut chars, &mut token_buf);
+        let mut operations = evaluator::evaluate(tokens);
 
-        let r = parse_color_channel(&mut tokens);
-        let g = parse_color_channel(&mut tokens);
-        let b = parse_color_channel(&mut tokens);
+        let r = parse_color_channel(&mut operations);
+        let g = parse_color_channel(&mut operations);
+        let b = parse_color_channel(&mut operations);
 
         if let (Some(r), Some(g), Some(b)) = (r, g, b) {
             *self.background_color.borrow_mut() = [r, g, b, 1.];
@@ -33,12 +35,9 @@ impl Interpreter {
 }
 
 fn parse_color_channel(
-    mut tokens: impl Iterator<Item = tokenizer::Token>,
+    mut operations: impl Iterator<Item = u8>,
 ) -> Option<f64> {
-    let tokenizer::Token::Fn { name: function } = tokens.next()?;
-    let Ok(value) = function.parse::<u8>() else {
-        return None;
-    };
+    let value = operations.next()?;
     Some(value as f64 / u8::MAX as f64)
 }
 
