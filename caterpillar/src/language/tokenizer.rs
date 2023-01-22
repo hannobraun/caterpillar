@@ -18,11 +18,11 @@ pub fn tokenize<'r>(
             match state {
                 State::NotStarted => {
                     if !ch.is_whitespace() {
-                        state = State::ReadingToken;
+                        state = State::ReadingFn;
                         buf.push(ch);
                     }
                 }
-                State::ReadingToken => {
+                State::ReadingFn => {
                     if ch.is_whitespace() {
                         break;
                     } else {
@@ -45,5 +45,5 @@ pub fn tokenize<'r>(
 
 enum State {
     NotStarted,
-    ReadingToken,
+    ReadingFn,
 }
