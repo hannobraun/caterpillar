@@ -8,13 +8,13 @@ pub enum Token {
 }
 
 pub fn tokenize<'r>(
-    chars: &'r mut impl Iterator<Item = char>,
+    mut chars: impl Iterator<Item = char> + 'r,
     buf: &'r mut Buf,
 ) -> impl Iterator<Item = Token> + 'r {
-    iter::from_fn(|| {
+    iter::from_fn(move || {
         let mut state = State::NotStarted;
 
-        for ch in chars.by_ref() {
+        for ch in &mut chars {
             match state {
                 State::NotStarted => {
                     if !ch.is_whitespace() {
