@@ -35,7 +35,7 @@ impl Interpreter {
 }
 
 fn parse_color_channel(
-    mut operations: impl Iterator<Item = u8>,
+    mut operations: impl Iterator<Item = evaluator::Operation>,
 ) -> Option<f64> {
     let value = operations.next()?;
     Some(value as f64 / u8::MAX as f64)
