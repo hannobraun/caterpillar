@@ -20,8 +20,8 @@ impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut token_buf = tokenizer::Buf::new();
 
-        let mut chars = code.chars();
-        let tokens = tokenizer::tokenize(&mut chars, &mut token_buf);
+        let chars = code.chars();
+        let tokens = tokenizer::tokenize(chars, &mut token_buf);
         let mut operations = evaluator::evaluate(tokens);
 
         let r = parse_color_channel(&mut operations);
