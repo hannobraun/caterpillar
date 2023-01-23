@@ -8,7 +8,9 @@ pub fn execute(
 ) {
     for op in ops {
         match op {
-            Operation::Push(value) => stack.push_back(value),
+            Operation::Push(value) => {
+                stack.push_back(value);
+            }
         }
     }
 }
