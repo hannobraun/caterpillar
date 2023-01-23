@@ -23,11 +23,11 @@ impl Interpreter {
 
         let chars = code.chars();
         let tokens = tokenizer::tokenize(chars, &mut token_buf);
-        let mut operations = evaluator::evaluate(tokens);
+        let mut ops = evaluator::evaluate(tokens);
 
-        let r = parse_color_channel(&mut operations);
-        let g = parse_color_channel(&mut operations);
-        let b = parse_color_channel(&mut operations);
+        let r = parse_color_channel(&mut ops);
+        let g = parse_color_channel(&mut ops);
+        let b = parse_color_channel(&mut ops);
 
         if let (Some(r), Some(g), Some(b)) = (r, g, b) {
             *self.background_color.borrow_mut() = [r, g, b, 1.];
