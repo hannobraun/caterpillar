@@ -1,10 +1,10 @@
 use std::iter;
 
-use super::tokenizer::Token;
+use super::{tokenizer::Token, values::Value};
 
 pub enum Operation {
     /// Push a value to the stack
-    Push(u8),
+    Push(Value),
 }
 
 pub fn evaluate(
@@ -15,6 +15,7 @@ pub fn evaluate(
         let Ok(value) = function.parse::<u8>() else {
             return None;
         };
+        let value = Value::U8(value);
         Some(Operation::Push(value))
     })
 }

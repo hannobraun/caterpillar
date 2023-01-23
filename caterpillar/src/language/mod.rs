@@ -1,5 +1,6 @@
 mod evaluator;
 mod tokenizer;
+mod values;
 
 use std::{cell::RefCell, rc::Rc};
 
@@ -38,7 +39,7 @@ fn parse_color_channel(
     mut operations: impl Iterator<Item = evaluator::Operation>,
 ) -> Option<f64> {
     let operation = operations.next()?;
-    let evaluator::Operation::Push(value) = operation;
+    let evaluator::Operation::Push(values::Value::U8(value)) = operation;
     Some(value as f64 / u8::MAX as f64)
 }
 
