@@ -16,6 +16,7 @@ pub fn evaluate(
             return None;
         };
         let value = Value::U8(value);
-        Some(Operation::Push(value))
+        let op = Operation::Push(value);
+        Some(op)
     })
 }
