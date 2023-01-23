@@ -1,8 +1,9 @@
 mod evaluator;
+mod executor;
 mod tokenizer;
 mod values;
 
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, collections::VecDeque, rc::Rc};
 
 pub fn init() -> (Interpreter, Output) {
     let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
@@ -20,14 +21,16 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut token_buf = tokenizer::Buf::new();
+        let mut stack = VecDeque::new();
 
         let chars = code.chars();
         let tokens = tokenizer::tokenize(chars, &mut token_buf);
-        let mut ops = evaluator::evaluate(tokens);
+        let ops = evaluator::evaluate(tokens);
+        executor::execute(ops, &mut stack);
 
-        let r = parse_color_channel(&mut ops);
-        let g = parse_color_channel(&mut ops);
-        let b = parse_color_channel(&mut ops);
+        let r = parse_color_channel(&mut stack);
+        let g = parse_color_channel(&mut stack);
+        let b = parse_color_channel(&mut stack);
 
         if let (Some(r), Some(g), Some(b)) = (r, g, b) {
             *self.background_color.borrow_mut() = [r, g, b, 1.];
@@ -35,11 +38,8 @@ impl Interpreter {
     }
 }
 
-fn parse_color_channel(
-    mut operations: impl Iterator<Item = evaluator::Operation>,
-) -> Option<f64> {
-    let operation = operations.next()?;
-    let evaluator::Operation::Push(values::Value::U8(value)) = operation;
+fn parse_color_channel(stack: &mut VecDeque<values::Value>) -> Option<f64> {
+    let values::Value::U8(value) = stack.pop_front()?;
     Some(value as f64 / u8::MAX as f64)
 }
 
