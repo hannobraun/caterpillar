@@ -11,6 +11,9 @@ pub fn execute(
             Operation::Push(value) => {
                 stack.push_back(value);
             }
+            Operation::Pop => {
+                stack.pop_back();
+            }
         }
     }
 }
