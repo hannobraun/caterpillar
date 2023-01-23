@@ -1,5 +1,4 @@
 mod evaluator;
-mod executor;
 mod tokenizer;
 mod values;
 
@@ -25,8 +24,7 @@ impl Interpreter {
 
         let chars = code.chars();
         let tokens = tokenizer::tokenize(chars, &mut token_buf);
-        let ops = evaluator::evaluate(tokens);
-        executor::execute(ops, &mut stack);
+        evaluator::evaluate(tokens, &mut stack);
 
         let r = parse_color_channel(&mut stack);
         let g = parse_color_channel(&mut stack);
