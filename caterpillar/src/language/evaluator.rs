@@ -1,15 +1,15 @@
 use std::collections::VecDeque;
 
 use super::{
-    parser::Syntax,
+    parser::SyntaxTree,
     values::{Color, Value},
 };
 
 pub type Stack = VecDeque<Value>;
 
-pub fn evaluate(tokens: impl Iterator<Item = Syntax>, stack: &mut Stack) {
+pub fn evaluate(tokens: impl Iterator<Item = SyntaxTree>, stack: &mut Stack) {
     for token in tokens {
-        let Syntax::Fn { name } = token;
+        let SyntaxTree::Fn { name } = token;
         evaluate_fn(name, stack);
     }
 }

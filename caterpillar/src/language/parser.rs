@@ -2,16 +2,16 @@ use std::iter;
 
 use super::tokenizer::Token;
 
-pub enum Syntax {
+pub enum SyntaxTree {
     /// A function
     Fn { name: String },
 }
 
 pub fn parse(
     mut tokens: impl Iterator<Item = Token>,
-) -> impl Iterator<Item = Syntax> {
+) -> impl Iterator<Item = SyntaxTree> {
     iter::from_fn(move || {
         let Token::Fn { name: function } = tokens.next()?;
-        Some(Syntax::Fn { name: function })
+        Some(SyntaxTree::Fn { name: function })
     })
 }
