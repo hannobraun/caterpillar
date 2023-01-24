@@ -12,9 +12,13 @@ pub fn evaluate(
     stack: &mut Stack,
 ) {
     for node in syntax_tree {
-        let SyntaxTree::Fn { name } = node;
-        evaluate_fn(name, stack);
+        evaluate_node(node, stack);
     }
+}
+
+fn evaluate_node(node: SyntaxTree, stack: &mut Stack) {
+    let SyntaxTree::Fn { name } = node;
+    evaluate_fn(name, stack);
 }
 
 fn evaluate_fn(name: String, stack: &mut Stack) {
