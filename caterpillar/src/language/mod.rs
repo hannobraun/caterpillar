@@ -3,7 +3,7 @@ mod parser;
 mod tokenizer;
 mod values;
 
-use std::{cell::RefCell, collections::VecDeque, rc::Rc};
+use std::{cell::RefCell, rc::Rc};
 
 pub fn init() -> (Interpreter, Output) {
     let background_color = Rc::new(RefCell::new([0., 0., 0., 1.]));
@@ -21,7 +21,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
         let mut token_buf = tokenizer::Buf::new();
-        let mut stack = VecDeque::new();
+        let mut stack = evaluator::Stack::new();
 
         let chars = code.chars();
         let tokens = tokenizer::tokenize(chars, &mut token_buf);

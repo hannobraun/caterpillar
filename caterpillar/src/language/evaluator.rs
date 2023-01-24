@@ -5,10 +5,9 @@ use super::{
     values::{Color, Value},
 };
 
-pub fn evaluate(
-    tokens: impl Iterator<Item = Syntax>,
-    stack: &mut VecDeque<Value>,
-) {
+pub type Stack = VecDeque<Value>;
+
+pub fn evaluate(tokens: impl Iterator<Item = Syntax>, stack: &mut Stack) {
     for token in tokens {
         let Syntax::Fn { name: function } = token;
 
