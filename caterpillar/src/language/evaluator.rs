@@ -8,7 +8,7 @@ use super::{
 pub type Stack = VecDeque<Value>;
 
 pub fn evaluate(
-    syntax_tree: impl Iterator<Item = SyntaxTree>,
+    syntax_tree: impl IntoIterator<Item = SyntaxTree>,
     stack: &mut Stack,
 ) {
     for node in syntax_tree {
