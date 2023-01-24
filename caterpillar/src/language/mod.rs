@@ -1,4 +1,5 @@
 mod evaluator;
+mod parser;
 mod tokenizer;
 mod values;
 
@@ -24,7 +25,8 @@ impl Interpreter {
 
         let chars = code.chars();
         let tokens = tokenizer::tokenize(chars, &mut token_buf);
-        evaluator::evaluate(tokens, &mut stack);
+        let syntax = parser::parse(tokens);
+        evaluator::evaluate(syntax, &mut stack);
 
         let Some(values::Value::Color(color)) = stack.pop_front() else {
             return;

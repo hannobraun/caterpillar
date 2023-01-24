@@ -1,16 +1,16 @@
 use std::collections::VecDeque;
 
 use super::{
-    tokenizer::Token,
+    parser::Syntax,
     values::{Color, Value},
 };
 
 pub fn evaluate(
-    tokens: impl Iterator<Item = Token>,
+    tokens: impl Iterator<Item = Syntax>,
     stack: &mut VecDeque<Value>,
 ) {
     for token in tokens {
-        let Token::Fn { name: function } = token;
+        let Syntax::Fn { name: function } = token;
 
         match function.as_str() {
             "color" => {
