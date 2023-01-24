@@ -11,8 +11,8 @@ pub fn evaluate(
     syntax_tree: impl Iterator<Item = SyntaxTree>,
     stack: &mut Stack,
 ) {
-    for token in syntax_tree {
-        let SyntaxTree::Fn { name } = token;
+    for node in syntax_tree {
+        let SyntaxTree::Fn { name } = node;
         evaluate_fn(name, stack);
     }
 }
