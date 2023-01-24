@@ -7,8 +7,11 @@ use super::{
 
 pub type Stack = VecDeque<Value>;
 
-pub fn evaluate(tokens: impl Iterator<Item = SyntaxTree>, stack: &mut Stack) {
-    for token in tokens {
+pub fn evaluate(
+    syntax_tree: impl Iterator<Item = SyntaxTree>,
+    stack: &mut Stack,
+) {
+    for token in syntax_tree {
         let SyntaxTree::Fn { name } = token;
         evaluate_fn(name, stack);
     }
