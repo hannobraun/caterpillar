@@ -9,9 +9,9 @@ pub type Stack = VecDeque<Value>;
 
 pub fn evaluate(tokens: impl Iterator<Item = Syntax>, stack: &mut Stack) {
     for token in tokens {
-        let Syntax::Fn { name: function } = token;
+        let Syntax::Fn { name } = token;
 
-        match function.as_str() {
+        match name.as_str() {
             "color" => {
                 let b = stack.pop_back();
                 let g = stack.pop_back();
@@ -33,7 +33,7 @@ pub fn evaluate(tokens: impl Iterator<Item = Syntax>, stack: &mut Stack) {
                 stack.pop_back();
             }
             _ => {
-                if let Ok(value) = function.parse::<u8>() {
+                if let Ok(value) = name.parse::<u8>() {
                     let value = Value::U8(value);
                     stack.push_back(value);
                 }
