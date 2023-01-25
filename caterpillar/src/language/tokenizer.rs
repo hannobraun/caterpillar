@@ -5,6 +5,9 @@ pub type Buf = String;
 pub enum Token {
     /// Refers to a function
     Fn { name: String },
+
+    /// Opens an array
+    ArrayOpen,
 }
 
 pub fn tokenize<'r>(
@@ -17,6 +20,10 @@ pub fn tokenize<'r>(
         for ch in &mut chars {
             match state {
                 State::NotStarted => {
+                    if ch == '[' {
+                        return Some(Token::ArrayOpen);
+                    }
+
                     if !ch.is_whitespace() {
                         state = State::ReadingFn;
                         buf.push(ch);
