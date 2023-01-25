@@ -25,9 +25,9 @@ pub fn tokenize<'r>(
                 State::ReadingFn => {
                     if ch.is_whitespace() {
                         break;
-                    } else {
-                        buf.push(ch);
                     }
+
+                    buf.push(ch);
                 }
             }
         }
