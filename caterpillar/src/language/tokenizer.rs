@@ -3,7 +3,7 @@ use std::iter;
 pub type Buf = String;
 
 pub enum Token {
-    /// A token that refers to a function
+    /// Refers to a function
     Fn { name: String },
 }
 
