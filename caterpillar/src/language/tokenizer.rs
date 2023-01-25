@@ -8,6 +8,9 @@ pub enum Token {
 
     /// Opens an array
     ArrayOpen,
+
+    /// Closes an array
+    ArrayClose,
 }
 
 pub fn tokenize<'r>(
@@ -22,6 +25,9 @@ pub fn tokenize<'r>(
                 State::NotStarted => {
                     if ch == '[' {
                         return Some(Token::ArrayOpen);
+                    }
+                    if ch == ']' {
+                        return Some(Token::ArrayClose);
                     }
 
                     if !ch.is_whitespace() {

@@ -17,6 +17,7 @@ pub fn parse(
                     return Some(SyntaxTree::Fn { name });
                 }
                 Token::ArrayOpen => {}
+                Token::ArrayClose => {}
             }
         }
 
