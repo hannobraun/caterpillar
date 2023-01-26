@@ -11,9 +11,9 @@ pub struct Renderer {
 
 impl Renderer {
     pub async fn new(window: &Window) -> anyhow::Result<Self> {
-        let instance = wgpu::Instance::new(wgpu::Backends::all());
+        let instance = wgpu::Instance::default();
 
-        let surface = unsafe { instance.create_surface(&window) };
+        let surface = unsafe { instance.create_surface(&window) }?;
 
         let adapter = instance
             .request_adapter(&wgpu::RequestAdapterOptions {
@@ -43,7 +43,8 @@ impl Renderer {
     }
 
     pub fn draw(&self, window: &Window, color: [f64; 4]) -> anyhow::Result<()> {
-        let format = self.surface.get_supported_formats(&self.adapter)[0];
+        let capabilities = self.surface.get_capabilities(&self.adapter);
+        let format = capabilities.formats[0];
         let [width, height] = window.size();
         let surface_config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -52,6 +53,7 @@ impl Renderer {
             height,
             present_mode: wgpu::PresentMode::AutoVsync,
             alpha_mode: wgpu::CompositeAlphaMode::Auto,
+            view_formats: vec![],
         };
         self.surface.configure(&self.device, &surface_config);
 

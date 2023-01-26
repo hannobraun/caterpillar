@@ -20,5 +20,5 @@ version = "0.2.0"
 features = ["color"]
 
 [dependencies.wgpu]
-version = "0.14.2"
+version = "0.15.0"
 features = ["webgl"]
