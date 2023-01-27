@@ -1,6 +1,6 @@
 pub struct Tokenizer<'r> {
-    pub chars: &'r mut dyn Iterator<Item = char>,
-    pub buf: String,
+    chars: &'r mut dyn Iterator<Item = char>,
+    buf: String,
 }
 
 impl<'r> Tokenizer<'r> {
