@@ -1,9 +1,9 @@
-pub struct Tokenizer<'r, Chars: Iterator<Item = char> + 'r> {
+pub struct Tokenizer<Chars: Iterator<Item = char>> {
     pub chars: Chars,
-    pub buf: &'r mut Buf,
+    pub buf: Buf,
 }
 
-impl<'r, Chars: Iterator<Item = char> + 'r> Iterator for Tokenizer<'r, Chars> {
+impl<Chars: Iterator<Item = char>> Iterator for Tokenizer<Chars> {
     type Item = Token;
 
     fn next(&mut self) -> Option<Self::Item> {
