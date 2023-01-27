@@ -3,7 +3,10 @@ pub struct Tokenizer<Chars> {
     pub buf: Buf,
 }
 
-impl<Chars: Iterator<Item = char>> Iterator for Tokenizer<Chars> {
+impl<Chars> Iterator for Tokenizer<Chars>
+where
+    Chars: Iterator<Item = char>,
+{
     type Item = Token;
 
     fn next(&mut self) -> Option<Self::Item> {
