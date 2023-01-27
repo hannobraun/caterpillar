@@ -3,6 +3,13 @@ pub struct Tokenizer<'r> {
     pub buf: Buf,
 }
 
+impl<'r> Tokenizer<'r> {
+    pub fn new(chars: &'r mut dyn Iterator<Item = char>) -> Self {
+        let buf = Buf::new();
+        Self { chars, buf }
+    }
+}
+
 impl<'r> Iterator for Tokenizer<'r> {
     type Item = Token;
 

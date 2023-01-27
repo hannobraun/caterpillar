@@ -20,13 +20,10 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn interpret(&self, code: &str) {
-        let token_buf = tokenizer::Buf::new();
         let mut stack = evaluator::Stack::new();
 
-        let tokens = tokenizer::Tokenizer {
-            chars: &mut code.chars(),
-            buf: token_buf,
-        };
+        let mut chars = code.chars();
+        let tokens = tokenizer::Tokenizer::new(&mut chars);
         let syntax = parser::parse(tokens);
         evaluator::evaluate(syntax, &mut stack);
 
