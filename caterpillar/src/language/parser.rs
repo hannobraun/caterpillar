@@ -1,17 +1,14 @@
-use std::iter;
-
 use super::tokenizer::Token;
 
-pub enum SyntaxTree {
-    /// A function
-    Fn { name: String },
+pub struct Parser<'r> {
+    pub tokens: &'r mut dyn Iterator<Item = Token>,
 }
 
-pub fn parse(
-    mut tokens: &mut dyn Iterator<Item = Token>,
-) -> impl Iterator<Item = SyntaxTree> + '_ {
-    iter::from_fn(move || {
-        for token in &mut tokens {
+impl<'r> Iterator for Parser<'r> {
+    type Item = SyntaxTree;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        for token in &mut self.tokens {
             match token {
                 Token::Fn { name } => {
                     return Some(SyntaxTree::Fn { name });
@@ -22,5 +19,10 @@ pub fn parse(
         }
 
         None
-    })
+    }
+}
+
+pub enum SyntaxTree {
+    /// A function
+    Fn { name: String },
 }
