@@ -1,12 +1,11 @@
-pub struct Tokenizer<Chars> {
-    pub chars: Chars,
+use std::str;
+
+pub struct Tokenizer<'r> {
+    pub chars: str::Chars<'r>,
     pub buf: Buf,
 }
 
-impl<Chars> Iterator for Tokenizer<Chars>
-where
-    Chars: Iterator<Item = char>,
-{
+impl<'r> Iterator for Tokenizer<'r> {
     type Item = Token;
 
     fn next(&mut self) -> Option<Self::Item> {
