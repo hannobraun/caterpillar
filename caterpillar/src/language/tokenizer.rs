@@ -1,4 +1,4 @@
-pub struct Tokenizer<Chars: Iterator<Item = char>> {
+pub struct Tokenizer<Chars> {
     pub chars: Chars,
     pub buf: Buf,
 }
