@@ -1,7 +1,7 @@
 use super::tokenizer::Token;
 
 pub struct Parser<'r> {
-    pub tokens: &'r mut dyn Iterator<Item = Token>,
+    tokens: &'r mut dyn Iterator<Item = Token>,
 }
 
 impl<'r> Parser<'r> {
