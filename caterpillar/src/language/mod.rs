@@ -23,8 +23,8 @@ impl Interpreter {
         let mut stack = evaluator::Stack::new();
 
         let mut chars = code.chars();
-        let tokens = tokenizer::Tokenizer::new(&mut chars);
-        let syntax = parser::parse(tokens);
+        let mut tokens = tokenizer::Tokenizer::new(&mut chars);
+        let syntax = parser::parse(&mut tokens);
         evaluator::evaluate(syntax, &mut stack);
 
         let Some(values::Value::Color(color)) = stack.pop_front() else {

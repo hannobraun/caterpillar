@@ -8,14 +8,14 @@ pub enum SyntaxTree {
 }
 
 pub fn parse(
-    tokens: impl Iterator<Item = Token>,
-) -> impl Iterator<Item = SyntaxTree> {
+    tokens: &mut dyn Iterator<Item = Token>,
+) -> impl Iterator<Item = SyntaxTree> + '_ {
     parse_tokens(tokens)
 }
 
 fn parse_tokens(
-    mut tokens: impl Iterator<Item = Token>,
-) -> impl Iterator<Item = SyntaxTree> {
+    mut tokens: &mut dyn Iterator<Item = Token>,
+) -> impl Iterator<Item = SyntaxTree> + '_ {
     iter::from_fn(move || {
         for token in &mut tokens {
             match token {
