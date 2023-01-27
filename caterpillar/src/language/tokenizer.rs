@@ -1,11 +1,11 @@
 pub struct Tokenizer<'r> {
     pub chars: &'r mut dyn Iterator<Item = char>,
-    pub buf: Buf,
+    pub buf: String,
 }
 
 impl<'r> Tokenizer<'r> {
     pub fn new(chars: &'r mut dyn Iterator<Item = char>) -> Self {
-        let buf = Buf::new();
+        let buf = String::new();
         Self { chars, buf }
     }
 }
@@ -53,8 +53,6 @@ impl<'r> Iterator for Tokenizer<'r> {
         Some(token)
     }
 }
-
-pub type Buf = String;
 
 pub enum Token {
     /// Refers to a function
