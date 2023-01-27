@@ -4,6 +4,12 @@ pub struct Parser<'r> {
     pub tokens: &'r mut dyn Iterator<Item = Token>,
 }
 
+impl<'r> Parser<'r> {
+    pub fn new(tokens: &'r mut dyn Iterator<Item = Token>) -> Self {
+        Self { tokens }
+    }
+}
+
 impl<'r> Iterator for Parser<'r> {
     type Item = SyntaxTree;
 
