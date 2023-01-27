@@ -1,7 +1,5 @@
-use std::str;
-
 pub struct Tokenizer<'r> {
-    pub chars: str::Chars<'r>,
+    pub chars: &'r mut dyn Iterator<Item = char>,
     pub buf: Buf,
 }
 
