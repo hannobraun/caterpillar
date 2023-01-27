@@ -24,7 +24,10 @@ impl Interpreter {
         let mut stack = evaluator::Stack::new();
 
         let chars = code.chars();
-        let tokens = tokenizer::tokenize(chars, &mut token_buf);
+        let tokens = tokenizer::Tokenizer {
+            chars,
+            buf: &mut token_buf,
+        };
         let syntax = parser::parse(tokens);
         evaluator::evaluate(syntax, &mut stack);
 
