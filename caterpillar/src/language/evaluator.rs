@@ -32,9 +32,13 @@ fn evaluate_node(node: SyntaxTreeNode, stack: &mut Stack) {
 fn evaluate_fn(name: String, stack: &mut Stack) {
     match name.as_str() {
         "color" => {
-            let b = stack.pop_back();
-            let g = stack.pop_back();
-            let r = stack.pop_back();
+            let Some(Value::Array(mut color)) = stack.pop_back() else {
+                return;
+            };
+
+            let b = color.pop_back();
+            let g = color.pop_back();
+            let r = color.pop_back();
 
             if let (
                 Some(Value::U8(r)),
