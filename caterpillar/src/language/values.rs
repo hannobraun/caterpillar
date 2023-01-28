@@ -1,4 +1,7 @@
+use std::collections::VecDeque;
+
 pub enum Value {
+    Array(VecDeque<Value>),
     Color(Color),
     U8(u8),
 }

@@ -21,7 +21,11 @@ fn evaluate_node(node: SyntaxTreeNode, stack: &mut Stack) {
         SyntaxTreeNode::Fn { name } => {
             evaluate_fn(name, stack);
         }
-        SyntaxTreeNode::Array { .. } => {}
+        SyntaxTreeNode::Array { syntax_tree } => {
+            let mut array_stack = VecDeque::new();
+            evaluate(syntax_tree, &mut array_stack);
+            stack.push_back(Value::Array(array_stack));
+        }
     }
 }
 
