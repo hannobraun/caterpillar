@@ -1,14 +1,14 @@
 use std::collections::VecDeque;
 
 use super::{
-    parser::SyntaxTree,
+    parser::SyntaxTreeNode,
     values::{Color, Value},
 };
 
 pub type Stack = VecDeque<Value>;
 
 pub fn evaluate(
-    syntax_tree: impl IntoIterator<Item = SyntaxTree>,
+    syntax_tree: impl IntoIterator<Item = SyntaxTreeNode>,
     stack: &mut Stack,
 ) {
     for node in syntax_tree {
@@ -16,12 +16,12 @@ pub fn evaluate(
     }
 }
 
-fn evaluate_node(node: SyntaxTree, stack: &mut Stack) {
+fn evaluate_node(node: SyntaxTreeNode, stack: &mut Stack) {
     match node {
-        SyntaxTree::Fn { name } => {
+        SyntaxTreeNode::Fn { name } => {
             evaluate_fn(name, stack);
         }
-        SyntaxTree::Array { .. } => {}
+        SyntaxTreeNode::Array { .. } => {}
     }
 }
 

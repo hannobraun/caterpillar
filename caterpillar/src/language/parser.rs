@@ -11,7 +11,7 @@ impl<'r> Parser<'r> {
 }
 
 impl<'r> Iterator for Parser<'r> {
-    type Item = SyntaxTree;
+    type Item = SyntaxTreeNode;
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut arrays: Vec<Vec<_>> = Vec::new();
@@ -19,7 +19,7 @@ impl<'r> Iterator for Parser<'r> {
         for token in &mut self.tokens {
             match token {
                 Token::Fn { name } => {
-                    let syntax_tree = SyntaxTree::Fn { name };
+                    let syntax_tree = SyntaxTreeNode::Fn { name };
                     if let Some(array) = arrays.last_mut() {
                         array.push(syntax_tree);
                     } else {
@@ -31,7 +31,7 @@ impl<'r> Iterator for Parser<'r> {
                 }
                 Token::ArrayClose => {
                     if let Some(syntax_tree) = arrays.pop() {
-                        return Some(SyntaxTree::Array { syntax_tree });
+                        return Some(SyntaxTreeNode::Array { syntax_tree });
                     }
 
                     // If there's no array open, nothing will happen. We can
@@ -44,10 +44,10 @@ impl<'r> Iterator for Parser<'r> {
     }
 }
 
-pub enum SyntaxTree {
+pub enum SyntaxTreeNode {
     /// A function
     Fn { name: String },
 
     /// An array
-    Array { syntax_tree: Vec<SyntaxTree> },
+    Array { syntax_tree: Vec<SyntaxTreeNode> },
 }
