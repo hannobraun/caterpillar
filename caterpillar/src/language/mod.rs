@@ -24,8 +24,8 @@ impl Interpreter {
 
         let mut chars = code.chars();
         let mut tokens = tokenizer::Tokenizer::new(&mut chars);
-        let syntax_trees = parser::Parser::new(&mut tokens);
-        evaluator::evaluate(syntax_trees, &mut stack);
+        let syntax_tree = parser::Parser::new(&mut tokens);
+        evaluator::evaluate(syntax_tree, &mut stack);
 
         let Some(values::Value::Color(color)) = stack.pop_front() else {
             return;
