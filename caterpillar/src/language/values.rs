@@ -1,6 +1,6 @@
 pub enum Value {
-    U8(u8),
     Color(Color),
+    U8(u8),
 }
 
 pub struct Color {
