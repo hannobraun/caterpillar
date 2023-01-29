@@ -10,7 +10,9 @@ pub fn render(canvas_id: u32, interpreter: Interpreter) {
         });
 
         view! { cx,
-            textarea(bind:value=code) {}
+            div(class="editor") {
+                textarea(bind:value=code) {}
+            }
             canvas(data-raw-handle=(canvas_id)) {}
         }
     });
