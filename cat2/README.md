@@ -27,7 +27,7 @@ The interpreter has a simple terminal-like interface, also implemented in Rust a
 
 ## Objective
 
-The objective of this experiment is to implement an interpreter for Caterpillar and use it to implement a one-dimensional Game of Life variant in Caterpillar. This should be relatively simple, both in terms of the infrastructure it requires (graphics, for example; text-based should be fine) and in terms of the actual logic.
+The objective of this experiment is to implement an interpreter for Caterpillar and use it to implement a [one-dimensional Game of Life](http://jonmillen.com/1dlife/index.html) variant in Caterpillar. This should be relatively simple, both in terms of the infrastructure it requires (graphics, for example; text-based should be fine) and in terms of the actual logic.
 
 At the same time, it should be substantial enough to provide insights into the language it is implemented with.
 
