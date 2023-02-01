@@ -2,6 +2,8 @@
 
 An experiment in describing geometry programmatically. Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting the name!
 
+This experiment has run its course and [has been superseded](../cat2/).
+
 
 ## How to Run
 
