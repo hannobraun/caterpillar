@@ -1,12 +1,6 @@
-pub struct Stack {
-    pub inner: Vec<Value>,
-}
+mod stack;
 
-#[derive(Clone)]
-pub enum Value {
-    Bool(bool),
-    U8(u8),
-}
+pub use self::stack::{Stack, Value};
 
 pub fn interpret(code: &str, stack: &mut Stack) {
     let tokens = tokenize(code);
