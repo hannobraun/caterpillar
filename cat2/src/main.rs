@@ -4,8 +4,12 @@ fn main() {
     let mut current = [false; 80];
 
     // Initial conditions.
-    current[40] = true;
+    current[37] = true;
+    current[38] = true;
+    current[39] = true;
     current[41] = true;
+    current[42] = true;
+    current[43] = true;
 
     loop {
         for &cell in &current {
