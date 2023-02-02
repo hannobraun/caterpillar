@@ -15,17 +15,17 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
     for token in tokens {
         match token {
             "clone" => {
-                let Some(value) = stack.inner.pop() else {
+                let Some(value) = stack.pop() else {
                     panic!("Expected value")
                 };
                 stack.inner.push(value.clone());
                 stack.inner.push(value);
             }
             "or" => {
-                let Some(Value::Bool(b)) = stack.inner.pop() else {
+                let Some(Value::Bool(b)) = stack.pop() else {
                     panic!("Expected `bool`")
                 };
-                let Some(Value::Bool(a)) = stack.inner.pop() else {
+                let Some(Value::Bool(a)) = stack.pop() else {
                     panic!("Expected `bool`")
                 };
 
@@ -33,10 +33,10 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 stack.inner.push(value);
             }
             "swap" => {
-                let Some(b) = stack.inner.pop() else {
+                let Some(b) = stack.pop() else {
                     panic!("Expected value")
                 };
-                let Some(a) = stack.inner.pop() else {
+                let Some(a) = stack.pop() else {
                     panic!("Expected value")
                 };
 
@@ -44,10 +44,10 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 stack.inner.push(a);
             }
             "=" => {
-                let Some(Value::U8(b)) = stack.inner.pop() else {
+                let Some(Value::U8(b)) = stack.pop() else {
                     panic!("Expected `u8`")
                 };
-                let Some(Value::U8(a)) = stack.inner.pop() else {
+                let Some(Value::U8(a)) = stack.pop() else {
                     panic!("Expected `u8`")
                 };
 

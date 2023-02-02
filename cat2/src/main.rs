@@ -69,7 +69,7 @@ fn cell_is_born(num_neighbors: u8) -> bool {
     };
     cp::interpret(code, &mut stack);
 
-    let Some(cp::Value::Bool(value)) = stack.inner.pop() else {
+    let Some(cp::Value::Bool(value)) = stack.pop() else {
         panic!("Unexpected result")
     };
     value
