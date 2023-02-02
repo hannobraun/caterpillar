@@ -15,9 +15,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
     for token in tokens {
         match token {
             "clone" => {
-                let Some(value) = stack.pop() else {
-                    panic!("Expected value")
-                };
+                let value = stack.pop_any();
+
                 stack.push(value.clone());
                 stack.push(value);
             }
@@ -33,12 +32,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 stack.push(value);
             }
             "swap" => {
-                let Some(b) = stack.pop() else {
-                    panic!("Expected value")
-                };
-                let Some(a) = stack.pop() else {
-                    panic!("Expected value")
-                };
+                let b = stack.pop_any();
+                let a = stack.pop_any();
 
                 stack.push(b);
                 stack.push(a);

@@ -8,6 +8,10 @@ impl Stack {
         Self { inner }
     }
 
+    pub fn pop_any(&mut self) -> Value {
+        self.inner.pop().expect("Stack is empty")
+    }
+
     pub fn push(&mut self, value: Value) {
         self.inner.push(value)
     }
