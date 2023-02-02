@@ -35,12 +35,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 stack.push(a);
             }
             "=" => {
-                let Some(Value::U8(b)) = stack.pop() else {
-                    panic!("Expected `u8`")
-                };
-                let Some(Value::U8(a)) = stack.pop() else {
-                    panic!("Expected `u8`")
-                };
+                let b = stack.pop_u8();
+                let a = stack.pop_u8();
 
                 let value = Value::Bool(a == b);
                 stack.push(value);

@@ -19,12 +19,15 @@ impl Stack {
         value
     }
 
-    pub fn push(&mut self, value: Value) {
-        self.inner.push(value)
+    pub fn pop_u8(&mut self) -> u8 {
+        let Value::U8(value) = self.pop_any() else {
+            panic!("Expected `u8`")
+        };
+        value
     }
 
-    pub fn pop(&mut self) -> Option<Value> {
-        self.inner.pop()
+    pub fn push(&mut self, value: Value) {
+        self.inner.push(value)
     }
 }
 
