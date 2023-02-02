@@ -24,8 +24,7 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 let b = stack.pop_bool();
                 let a = stack.pop_bool();
 
-                let value = Value::Bool(a || b);
-                stack.push(value);
+                stack.push(a || b);
             }
             "swap" => {
                 let b = stack.pop_any();
@@ -38,8 +37,7 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 let b = stack.pop_u8();
                 let a = stack.pop_u8();
 
-                let value = Value::Bool(a == b);
-                stack.push(value);
+                stack.push(a == b);
             }
             token => {
                 if let Ok(value) = token.parse::<u8>() {
