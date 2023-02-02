@@ -1,3 +1,5 @@
+mod cp;
+
 use std::time::Instant;
 
 fn main() {
@@ -61,5 +63,12 @@ fn cell_survives(num_neighbors: u8) -> bool {
 }
 
 fn cell_is_born(num_neighbors: u8) -> bool {
-    num_neighbors == 2 || num_neighbors == 3
+    let code = include_str!("caterpillar/cell_is_born.cp0");
+    let mut stack = vec![cp::Value::U8(num_neighbors)];
+    cp::interpret(code, &mut stack);
+
+    let Some(cp::Value::Bool(value)) = stack.pop() else {
+        panic!("Unexpected result")
+    };
+    value
 }
