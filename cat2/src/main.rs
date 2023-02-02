@@ -38,11 +38,11 @@ fn main() {
                 }
             });
 
-            if current[i] {
-                next[i] = cell_survives(num_neighbors);
+            next[i] = if current[i] {
+                cell_survives(num_neighbors)
             } else {
-                next[i] = cell_is_born(num_neighbors);
-            }
+                cell_is_born(num_neighbors)
+            };
         }
 
         current = next;
