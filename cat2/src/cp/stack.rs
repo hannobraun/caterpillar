@@ -26,8 +26,8 @@ impl Stack {
         value
     }
 
-    pub fn push(&mut self, value: Value) {
-        self.inner.push(value)
+    pub fn push(&mut self, value: impl Into<Value>) {
+        self.inner.push(value.into())
     }
 }
 
@@ -35,4 +35,16 @@ impl Stack {
 pub enum Value {
     Bool(bool),
     U8(u8),
+}
+
+impl From<bool> for Value {
+    fn from(value: bool) -> Self {
+        Self::Bool(value)
+    }
+}
+
+impl From<u8> for Value {
+    fn from(value: u8) -> Self {
+        Self::U8(value)
+    }
 }
