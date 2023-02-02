@@ -64,9 +64,7 @@ fn cell_survives(num_neighbors: u8) -> bool {
 
 fn cell_is_born(num_neighbors: u8) -> bool {
     let code = include_str!("caterpillar/cell_is_born.cp0");
-    let mut stack = cp::Stack {
-        inner: vec![cp::Value::U8(num_neighbors)],
-    };
+    let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
     cp::interpret(code, &mut stack);
 
     let Some(cp::Value::Bool(value)) = stack.pop() else {

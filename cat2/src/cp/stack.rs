@@ -3,6 +3,11 @@ pub struct Stack {
 }
 
 impl Stack {
+    pub fn from_values(values: &[Value]) -> Self {
+        let inner = Vec::from(values);
+        Self { inner }
+    }
+
     pub fn push(&mut self, value: Value) {
         self.inner.push(value)
     }
