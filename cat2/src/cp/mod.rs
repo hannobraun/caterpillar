@@ -18,8 +18,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 let Some(value) = stack.pop() else {
                     panic!("Expected value")
                 };
-                stack.inner.push(value.clone());
-                stack.inner.push(value);
+                stack.push(value.clone());
+                stack.push(value);
             }
             "or" => {
                 let Some(Value::Bool(b)) = stack.pop() else {
@@ -30,7 +30,7 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 };
 
                 let value = Value::Bool(a || b);
-                stack.inner.push(value);
+                stack.push(value);
             }
             "swap" => {
                 let Some(b) = stack.pop() else {
@@ -40,8 +40,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                     panic!("Expected value")
                 };
 
-                stack.inner.push(b);
-                stack.inner.push(a);
+                stack.push(b);
+                stack.push(a);
             }
             "=" => {
                 let Some(Value::U8(b)) = stack.pop() else {
@@ -52,11 +52,11 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 };
 
                 let value = Value::Bool(a == b);
-                stack.inner.push(value);
+                stack.push(value);
             }
             token => {
                 if let Ok(value) = token.parse::<u8>() {
-                    stack.inner.push(Value::U8(value));
+                    stack.push(Value::U8(value));
                     continue;
                 }
 

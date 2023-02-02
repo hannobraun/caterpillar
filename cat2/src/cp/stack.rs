@@ -3,6 +3,10 @@ pub struct Stack {
 }
 
 impl Stack {
+    pub fn push(&mut self, value: Value) {
+        self.inner.push(value)
+    }
+
     pub fn pop(&mut self) -> Option<Value> {
         self.inner.pop()
     }
