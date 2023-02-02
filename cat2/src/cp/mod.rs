@@ -21,12 +21,8 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                 stack.push(value);
             }
             "or" => {
-                let Some(Value::Bool(b)) = stack.pop() else {
-                    panic!("Expected `bool`")
-                };
-                let Some(Value::Bool(a)) = stack.pop() else {
-                    panic!("Expected `bool`")
-                };
+                let b = stack.pop_bool();
+                let a = stack.pop_bool();
 
                 let value = Value::Bool(a || b);
                 stack.push(value);

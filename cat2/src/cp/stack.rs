@@ -12,6 +12,13 @@ impl Stack {
         self.inner.pop().expect("Stack is empty")
     }
 
+    pub fn pop_bool(&mut self) -> bool {
+        let Value::Bool(value) = self.pop_any() else {
+            panic!("Expected `bool`")
+        };
+        value
+    }
+
     pub fn push(&mut self, value: Value) {
         self.inner.push(value)
     }
