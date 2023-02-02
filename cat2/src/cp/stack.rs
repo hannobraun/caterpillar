@@ -1,5 +1,5 @@
 pub struct Stack {
-    pub inner: Vec<Value>,
+    inner: Vec<Value>,
 }
 
 impl Stack {
