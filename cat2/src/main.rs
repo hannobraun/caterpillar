@@ -48,7 +48,7 @@ fn main() {
         current = next;
 
         let now = Instant::now();
-        while now.elapsed().as_secs_f64() < 0.5 {}
+        while now.elapsed().as_secs_f64() < 0.125 {}
     }
 }
 
