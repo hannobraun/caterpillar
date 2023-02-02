@@ -29,7 +29,7 @@ fn main() {
 
             let mut num_neighbors = 0;
             (min..=max).for_each(|j| {
-                if current[j] {
+                if current[j] && i != j {
                     num_neighbors += 1;
                 }
             });
