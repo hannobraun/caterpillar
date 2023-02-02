@@ -38,17 +38,21 @@ fn main() {
                 }
             });
 
-            next[i] = if current[i] {
-                cell_survives(num_neighbors)
-            } else {
-                cell_is_born(num_neighbors)
-            };
+            next[i] = cell_lives(current[i], num_neighbors);
         }
 
         current = next;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
+    }
+}
+
+fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
+    if lives_already {
+        cell_survives(num_neighbors)
+    } else {
+        cell_is_born(num_neighbors)
     }
 }
 
