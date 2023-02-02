@@ -1,10 +1,14 @@
+pub struct Stack {
+    pub inner: Vec<Value>,
+}
+
 #[derive(Clone)]
 pub enum Value {
     Bool(bool),
     U8(u8),
 }
 
-pub fn interpret(code: &str, stack: &mut Vec<Value>) {
+pub fn interpret(code: &str, stack: &mut Stack) {
     let tokens = tokenize(code);
     evaluate(tokens, stack);
 }
@@ -13,52 +17,52 @@ fn tokenize(code: &str) -> impl Iterator<Item = &str> {
     code.split_whitespace()
 }
 
-fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Vec<Value>) {
+fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
     for token in tokens {
         match token {
             "clone" => {
-                let Some(value) = stack.pop() else {
+                let Some(value) = stack.inner.pop() else {
                     panic!("Expected value")
                 };
-                stack.push(value.clone());
-                stack.push(value);
+                stack.inner.push(value.clone());
+                stack.inner.push(value);
             }
             "or" => {
-                let Some(Value::Bool(b)) = stack.pop() else {
+                let Some(Value::Bool(b)) = stack.inner.pop() else {
                     panic!("Expected `bool`")
                 };
-                let Some(Value::Bool(a)) = stack.pop() else {
+                let Some(Value::Bool(a)) = stack.inner.pop() else {
                     panic!("Expected `bool`")
                 };
 
                 let value = Value::Bool(a || b);
-                stack.push(value);
+                stack.inner.push(value);
             }
             "swap" => {
-                let Some(b) = stack.pop() else {
+                let Some(b) = stack.inner.pop() else {
                     panic!("Expected value")
                 };
-                let Some(a) = stack.pop() else {
+                let Some(a) = stack.inner.pop() else {
                     panic!("Expected value")
                 };
 
-                stack.push(b);
-                stack.push(a);
+                stack.inner.push(b);
+                stack.inner.push(a);
             }
             "=" => {
-                let Some(Value::U8(b)) = stack.pop() else {
+                let Some(Value::U8(b)) = stack.inner.pop() else {
                     panic!("Expected `u8`")
                 };
-                let Some(Value::U8(a)) = stack.pop() else {
+                let Some(Value::U8(a)) = stack.inner.pop() else {
                     panic!("Expected `u8`")
                 };
 
                 let value = Value::Bool(a == b);
-                stack.push(value);
+                stack.inner.push(value);
             }
             token => {
                 if let Ok(value) = token.parse::<u8>() {
-                    stack.push(Value::U8(value));
+                    stack.inner.push(Value::U8(value));
                     continue;
                 }
 
