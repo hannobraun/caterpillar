@@ -37,7 +37,7 @@ fn main() {
             if current[i] {
                 next[i] = cell_stays_alive(num_neighbors);
             } else {
-                next[i] = num_neighbors == 2 || num_neighbors == 3;
+                next[i] = cell_is_born(num_neighbors);
             }
         }
 
@@ -50,4 +50,8 @@ fn main() {
 
 fn cell_stays_alive(num_neighbors: u8) -> bool {
     num_neighbors == 2 || num_neighbors == 4
+}
+
+fn cell_is_born(num_neighbors: u8) -> bool {
+    num_neighbors == 2 || num_neighbors == 3
 }
