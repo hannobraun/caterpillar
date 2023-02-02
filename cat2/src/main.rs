@@ -39,7 +39,7 @@ fn main() {
             });
 
             if current[i] {
-                next[i] = num_neighbors == 2 || num_neighbors == 4;
+                next[i] = cell_is_born(num_neighbors);
             } else {
                 next[i] = num_neighbors == 2 || num_neighbors == 3;
             }
@@ -50,4 +50,8 @@ fn main() {
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.5 {}
     }
+}
+
+fn cell_is_born(num_neighbors: u8) -> bool {
+    num_neighbors == 2 || num_neighbors == 4
 }
