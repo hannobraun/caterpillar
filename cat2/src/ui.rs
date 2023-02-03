@@ -4,6 +4,7 @@ use crossterm::terminal;
 
 use crate::cells;
 
+#[derive(Clone)]
 pub struct Line {
     pub cells: [bool; cells::NUM_CELLS],
 }
