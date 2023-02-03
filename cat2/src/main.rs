@@ -34,9 +34,11 @@ fn main() -> anyhow::Result<()> {
         }
         println!("┃");
 
-        let mut next = [false; NUM_CELLS];
+        let mut next = ui::Line {
+            inner: [false; NUM_CELLS],
+        };
 
-        for (i, cell) in next.iter_mut().enumerate() {
+        for (i, cell) in next.inner.iter_mut().enumerate() {
             let min = if i > 2 { i - 2 } else { 0 };
             let max = if i < current.inner.len() - 1 - 2 {
                 i + 2
@@ -54,7 +56,7 @@ fn main() -> anyhow::Result<()> {
             *cell = cell_lives(current.inner[i], num_neighbors);
         }
 
-        current.inner = next;
+        current = next;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
