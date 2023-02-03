@@ -68,20 +68,20 @@ impl Line {
 
     pub fn print(
         &self,
-        line: u16,
+        y: u16,
         num_columns: u16,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
         let mut x = num_columns - cells::NUM_CELLS as u16 - 2;
 
-        print_vertical_border(&mut x, line, stdout)?;
+        print_vertical_border(&mut x, y, stdout)?;
 
         for &cell in &self.cells {
             let content = if cell { "#" } else { " " };
-            print(content, &mut x, line, stdout)?;
+            print(content, &mut x, y, stdout)?;
         }
 
-        print_vertical_border(&mut x, line, stdout)?;
+        print_vertical_border(&mut x, y, stdout)?;
 
         Ok(())
     }
