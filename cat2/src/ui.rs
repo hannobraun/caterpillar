@@ -10,9 +10,8 @@ pub struct Line {
 
 impl Line {
     pub fn init() -> Self {
-        Self {
-            inner: cells::init(),
-        }
+        let inner = cells::init();
+        Self { inner }
     }
 
     pub fn print(&self) -> anyhow::Result<()> {
