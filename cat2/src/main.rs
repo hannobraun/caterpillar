@@ -4,7 +4,7 @@ use std::time::Instant;
 
 const NUM_CELLS: usize = 80;
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let mut current = [false; NUM_CELLS];
 
     // Initial conditions.
