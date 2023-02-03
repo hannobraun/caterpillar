@@ -2,9 +2,7 @@ mod cells;
 mod cp;
 mod ui;
 
-use std::{iter, time::Instant};
-
-use crossterm::terminal;
+use std::time::Instant;
 
 fn main() -> anyhow::Result<()> {
     let mut current = ui::Line {
@@ -12,20 +10,7 @@ fn main() -> anyhow::Result<()> {
     };
 
     loop {
-        let (num_columns, _) = terminal::size()?;
-        iter::repeat(' ')
-            .take(num_columns as usize - cells::NUM_CELLS - 2)
-            .for_each(|c| print!("{c}"));
-
-        print!("┃");
-        for &cell in &current.inner {
-            if cell {
-                print!("#");
-            } else {
-                print!(" ");
-            }
-        }
-        println!("┃");
+        current.print()?;
 
         let mut next = ui::Line {
             inner: [false; cells::NUM_CELLS],
