@@ -17,11 +17,7 @@ pub fn init() -> [bool; NUM_CELLS] {
 
 pub fn neighbor_range(i: u8) -> (u8, u8) {
     let min = i.saturating_sub(2);
-    let max = if i < NUM_CELLS as u8 - 1 - 2 {
-        i + 2
-    } else {
-        NUM_CELLS as u8 - 1
-    };
+    let max = i.saturating_add(2).min(NUM_CELLS as u8 - 1);
 
     (min, max)
 }
