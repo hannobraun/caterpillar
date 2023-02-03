@@ -1,19 +1,22 @@
 mod cp;
+mod ui;
 
 use std::{iter, time::Instant};
 
 const NUM_CELLS: usize = 80;
 
 fn main() -> anyhow::Result<()> {
-    let mut current = [false; NUM_CELLS];
+    let mut current = ui::Line {
+        inner: [false; NUM_CELLS],
+    };
 
     // Initial conditions.
-    current[37] = true;
-    current[38] = true;
-    current[39] = true;
-    current[41] = true;
-    current[42] = true;
-    current[43] = true;
+    current.inner[37] = true;
+    current.inner[38] = true;
+    current.inner[39] = true;
+    current.inner[41] = true;
+    current.inner[42] = true;
+    current.inner[43] = true;
 
     loop {
         let (num_columns, _) = crossterm::terminal::size()?;
@@ -22,7 +25,7 @@ fn main() -> anyhow::Result<()> {
             .for_each(|c| print!("{c}"));
 
         print!("┃");
-        for &cell in &current {
+        for &cell in &current.inner {
             if cell {
                 print!("#");
             } else {
@@ -35,23 +38,23 @@ fn main() -> anyhow::Result<()> {
 
         for (i, cell) in next.iter_mut().enumerate() {
             let min = if i > 2 { i - 2 } else { 0 };
-            let max = if i < current.len() - 1 - 2 {
+            let max = if i < current.inner.len() - 1 - 2 {
                 i + 2
             } else {
-                current.len() - 1
+                current.inner.len() - 1
             };
 
             let mut num_neighbors = 0;
             (min..=max).for_each(|j| {
-                if current[j] && i != j {
+                if current.inner[j] && i != j {
                     num_neighbors += 1;
                 }
             });
 
-            *cell = cell_lives(current[i], num_neighbors);
+            *cell = cell_lives(current.inner[i], num_neighbors);
         }
 
-        current = next;
+        current.inner = next;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
