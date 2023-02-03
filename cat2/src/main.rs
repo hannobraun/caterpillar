@@ -11,8 +11,8 @@ fn main() -> anyhow::Result<()> {
         let next = cells::next_generation(current.cells);
         let next = ui::Line::from_cells(next);
 
+        next.print()?;
         current = next;
-        current.print()?;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
