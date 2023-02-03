@@ -2,8 +2,10 @@ mod cp;
 
 use std::time::Instant;
 
+const NUM_CELLS: usize = 80;
+
 fn main() {
-    let mut current = [false; 80];
+    let mut current = [false; NUM_CELLS];
 
     // Initial conditions.
     current[37] = true;
@@ -24,7 +26,7 @@ fn main() {
         }
         println!("┃");
 
-        let mut next = [false; 80];
+        let mut next = [false; NUM_CELLS];
 
         for i in 0..next.len() {
             let min = if i > 2 { i - 2 } else { 0 };
