@@ -74,9 +74,7 @@ impl Line {
     ) -> anyhow::Result<()> {
         let mut column = num_columns - cells::NUM_CELLS as u16 - 2;
 
-        stdout
-            .queue(cursor::MoveTo(column, line))?
-            .queue(style::PrintStyledContent("┃".stylize()))?;
+        print_vertical_border(column, line, stdout)?;
         column += 1;
 
         for &cell in &self.cells {
@@ -87,10 +85,19 @@ impl Line {
             column += 1;
         }
 
-        stdout
-            .queue(cursor::MoveTo(column, line))?
-            .queue(style::PrintStyledContent("┃".stylize()))?;
+        print_vertical_border(column, line, stdout)?;
 
         Ok(())
     }
+}
+
+fn print_vertical_border(
+    column: u16,
+    line: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    stdout
+        .queue(cursor::MoveTo(column, line))?
+        .queue(style::PrintStyledContent("┃".stylize()))?;
+    Ok(())
 }
