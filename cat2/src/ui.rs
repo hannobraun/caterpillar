@@ -72,16 +72,16 @@ impl Line {
         num_columns: u16,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
-        let mut column = num_columns - cells::NUM_CELLS as u16 - 2;
+        let mut x = num_columns - cells::NUM_CELLS as u16 - 2;
 
-        print_vertical_border(&mut column, line, stdout)?;
+        print_vertical_border(&mut x, line, stdout)?;
 
         for &cell in &self.cells {
             let content = if cell { "#" } else { " " };
-            print(content, &mut column, line, stdout)?;
+            print(content, &mut x, line, stdout)?;
         }
 
-        print_vertical_border(&mut column, line, stdout)?;
+        print_vertical_border(&mut x, line, stdout)?;
 
         Ok(())
     }
