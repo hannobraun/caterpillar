@@ -45,15 +45,14 @@ impl Lines {
 
         print_top_border(x, &mut y, lines_width, stdout)?;
 
-        for (i, line) in self
+        for line in self
             .inner
             .iter()
             .cloned()
             .chain(iter::repeat_with(Line::empty))
-            .enumerate()
             .take(num_rows as usize - 1)
         {
-            line.print(x, i as u16 + 1, stdout)?;
+            line.print(x, &mut y, stdout)?;
         }
 
         stdout.flush()?;
@@ -88,12 +87,14 @@ impl Line {
     pub fn print(
         &self,
         mut x: u16,
-        y: u16,
+        y: &mut u16,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
-        print_vertical_border(&mut x, y, stdout)?;
-        print_cells(self.cells, &mut x, y, stdout)?;
-        print_vertical_border(&mut x, y, stdout)?;
+        print_vertical_border(&mut x, *y, stdout)?;
+        print_cells(self.cells, &mut x, *y, stdout)?;
+        print_vertical_border(&mut x, *y, stdout)?;
+
+        *y += 1;
 
         Ok(())
     }
@@ -109,7 +110,7 @@ fn print_top_border(
     (0..width).try_for_each(|_| print("━", &mut x, *y, stdout))?;
     print("┓", &mut x, *y, stdout)?;
 
-    *y += width;
+    *y += 1;
 
     Ok(())
 }
