@@ -15,6 +15,17 @@ pub fn init() -> [bool; NUM_CELLS] {
     cells
 }
 
+pub fn neighbor_range(i: u8) -> (u8, u8) {
+    let min = if i > 2 { i - 2 } else { 0 };
+    let max = if i < NUM_CELLS as u8 - 1 - 2 {
+        i + 2
+    } else {
+        NUM_CELLS as u8 - 1
+    };
+
+    (min, max)
+}
+
 pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
     if lives_already {
         cell_survives(num_neighbors)

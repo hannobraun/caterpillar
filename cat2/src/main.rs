@@ -11,12 +11,8 @@ fn main() -> anyhow::Result<()> {
         let mut next = ui::Line::empty();
 
         for (i, cell) in next.inner.iter_mut().enumerate() {
-            let min = if i > 2 { i - 2 } else { 0 };
-            let max = if i < current.inner.len() - 1 - 2 {
-                i + 2
-            } else {
-                current.inner.len() - 1
-            };
+            let (min, max) = cells::neighbor_range(i as u8);
+            let (min, max) = (min as usize, max as usize);
 
             let mut num_neighbors = 0;
             (min..=max).for_each(|j| {
