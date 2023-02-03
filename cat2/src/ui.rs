@@ -9,6 +9,12 @@ pub struct Line {
 }
 
 impl Line {
+    pub fn init() -> Self {
+        Self {
+            inner: cells::init(),
+        }
+    }
+
     pub fn print(&self) -> anyhow::Result<()> {
         let (num_columns, _) = terminal::size()?;
         iter::repeat(' ')

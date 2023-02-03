@@ -5,9 +5,7 @@ mod ui;
 use std::time::Instant;
 
 fn main() -> anyhow::Result<()> {
-    let mut current = ui::Line {
-        inner: cells::init(),
-    };
+    let mut current = ui::Line::init();
 
     loop {
         let mut next = ui::Line {
