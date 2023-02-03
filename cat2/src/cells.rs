@@ -15,6 +15,19 @@ pub fn init() -> [bool; NUM_CELLS] {
     cells
 }
 
+pub fn num_neighbors(i: u8, cells: [bool; NUM_CELLS]) -> u8 {
+    let (min, max) = neighbor_range(i);
+
+    let mut num_neighbors = 0;
+    (min..=max).for_each(|j| {
+        if cells[j as usize] && i != j {
+            num_neighbors += 1;
+        }
+    });
+
+    num_neighbors
+}
+
 pub fn neighbor_range(i: u8) -> (u8, u8) {
     let min = i.saturating_sub(2);
     let max = i.saturating_add(2).min(NUM_CELLS as u8 - 1);

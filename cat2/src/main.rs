@@ -11,15 +11,7 @@ fn main() -> anyhow::Result<()> {
         let mut next = ui::Line::empty();
 
         for (i, cell) in next.inner.iter_mut().enumerate() {
-            let (min, max) = cells::neighbor_range(i as u8);
-
-            let mut num_neighbors = 0;
-            (min..=max).for_each(|j| {
-                if current.inner[j as usize] && i as u8 != j {
-                    num_neighbors += 1;
-                }
-            });
-
+            let num_neighbors = cells::num_neighbors(i as u8, current.inner);
             *cell = cells::cell_lives(current.inner[i], num_neighbors);
         }
 
