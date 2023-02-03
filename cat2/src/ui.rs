@@ -93,11 +93,11 @@ impl Line {
 
 fn print_vertical_border(
     x: u16,
-    line: u16,
+    y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     stdout
-        .queue(cursor::MoveTo(x, line))?
+        .queue(cursor::MoveTo(x, y))?
         .queue(style::PrintStyledContent("┃".stylize()))?;
     Ok(())
 }
