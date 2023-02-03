@@ -77,8 +77,7 @@ impl Line {
         print_vertical_border(&mut x, y, stdout)?;
 
         for &cell in &self.cells {
-            let content = if cell { "#" } else { " " };
-            print(content, &mut x, y, stdout)?;
+            print_cell(cell, &mut x, y, stdout)?;
         }
 
         print_vertical_border(&mut x, y, stdout)?;
@@ -93,6 +92,17 @@ fn print_vertical_border(
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     print("┃", x, y, stdout)
+}
+
+fn print_cell(
+    cell: bool,
+    x: &mut u16,
+    y: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    let content = if cell { "#" } else { " " };
+    print(content, x, y, stdout)?;
+    Ok(())
 }
 
 fn print(
