@@ -36,7 +36,7 @@ impl Lines {
         let lines_width = cells::NUM_CELLS as u16 + 2;
         let lines_height = num_rows as usize - 2;
 
-        while self.inner.len() > num_rows as usize {
+        while self.inner.len() > lines_height {
             self.inner.pop_front();
         }
 
