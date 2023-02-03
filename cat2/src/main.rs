@@ -3,6 +3,8 @@ mod ui;
 
 use std::{iter, time::Instant};
 
+use crossterm::terminal;
+
 const NUM_CELLS: usize = 80;
 
 fn main() -> anyhow::Result<()> {
@@ -19,7 +21,7 @@ fn main() -> anyhow::Result<()> {
     current.inner[43] = true;
 
     loop {
-        let (num_columns, _) = crossterm::terminal::size()?;
+        let (num_columns, _) = terminal::size()?;
         iter::repeat(' ')
             .take(num_columns as usize - NUM_CELLS - 2)
             .for_each(|c| print!("{c}"));
