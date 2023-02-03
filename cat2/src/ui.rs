@@ -41,6 +41,9 @@ impl Lines {
 
         let lines_width = cells::NUM_CELLS as u16 + 2;
         let x = num_columns - lines_width;
+        let mut y = 0;
+
+        print_top_border(x, &mut y, lines_width, stdout)?;
 
         for (i, line) in self
             .inner
@@ -48,9 +51,9 @@ impl Lines {
             .cloned()
             .chain(iter::repeat_with(Line::empty))
             .enumerate()
-            .take(num_rows as usize)
+            .take(num_rows as usize - 1)
         {
-            line.print(x, i as u16, stdout)?;
+            line.print(x, i as u16 + 1, stdout)?;
         }
 
         stdout.flush()?;
@@ -94,6 +97,21 @@ impl Line {
 
         Ok(())
     }
+}
+
+fn print_top_border(
+    mut x: u16,
+    y: &mut u16,
+    width: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    print("┏", &mut x, *y, stdout)?;
+    (0..width).try_for_each(|_| print("━", &mut x, *y, stdout))?;
+    print("┓", &mut x, *y, stdout)?;
+
+    *y += width;
+
+    Ok(())
 }
 
 fn print_vertical_border(
