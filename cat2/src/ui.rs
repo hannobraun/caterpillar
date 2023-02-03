@@ -33,13 +33,14 @@ impl Lines {
     pub fn print(&mut self, stdout: &mut Stdout) -> anyhow::Result<()> {
         let (num_columns, num_rows) = terminal::size()?;
 
+        let lines_width = cells::NUM_CELLS as u16 + 2;
+
         while self.inner.len() > num_rows as usize {
             self.inner.pop_front();
         }
 
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
-        let lines_width = cells::NUM_CELLS as u16 + 2;
         let x = num_columns - lines_width;
         let mut y = 0;
 
