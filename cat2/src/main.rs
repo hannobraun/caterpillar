@@ -12,11 +12,10 @@ fn main() -> anyhow::Result<()> {
 
         for (i, cell) in next.inner.iter_mut().enumerate() {
             let (min, max) = cells::neighbor_range(i as u8);
-            let (min, max) = (min as usize, max as usize);
 
             let mut num_neighbors = 0;
             (min..=max).for_each(|j| {
-                if current.inner[j] && i != j {
+                if current.inner[j as usize] && i as u8 != j {
                     num_neighbors += 1;
                 }
             });
