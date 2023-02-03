@@ -1,8 +1,12 @@
-use std::iter;
+use std::{collections::VecDeque, iter};
 
 use crossterm::terminal;
 
 use crate::cells;
+
+pub struct Lines {
+    pub inner: VecDeque<Line>,
+}
 
 #[derive(Clone)]
 pub struct Line {
