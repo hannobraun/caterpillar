@@ -50,10 +50,12 @@ impl Lines {
             .iter()
             .cloned()
             .chain(iter::repeat_with(Line::empty))
-            .take(num_rows as usize - 1)
+            .take(num_rows as usize - 2)
         {
             line.print(x, &mut y, stdout)?;
         }
+
+        print_bottom_border(x, &mut y, lines_width, stdout)?;
 
         stdout.flush()?;
         Ok(())
@@ -109,6 +111,21 @@ fn print_top_border(
     print("┏", &mut x, *y, stdout)?;
     (0..width).try_for_each(|_| print("━", &mut x, *y, stdout))?;
     print("┓", &mut x, *y, stdout)?;
+
+    *y += 1;
+
+    Ok(())
+}
+
+fn print_bottom_border(
+    mut x: u16,
+    y: &mut u16,
+    width: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    print("┗", &mut x, *y, stdout)?;
+    (0..width).try_for_each(|_| print("━", &mut x, *y, stdout))?;
+    print("┛", &mut x, *y, stdout)?;
 
     *y += 1;
 
