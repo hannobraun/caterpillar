@@ -2,9 +2,10 @@ mod cells;
 mod cp;
 mod ui;
 
-use std::time::Instant;
+use std::{io::stdout, time::Instant};
 
 fn main() -> anyhow::Result<()> {
+    let mut stdout = stdout();
     let mut lines = ui::Lines::new();
 
     loop {
@@ -13,8 +14,8 @@ fn main() -> anyhow::Result<()> {
         let next = cells::next_generation(current.cells());
         let next = ui::Line::from_cells(next);
 
-        next.print()?;
         lines.push_next(next);
+        lines.print(&mut stdout)?;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}

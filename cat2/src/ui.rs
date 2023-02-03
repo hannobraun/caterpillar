@@ -1,6 +1,13 @@
-use std::{collections::VecDeque, iter};
+use std::{
+    collections::VecDeque,
+    io::{Stdout, Write},
+};
 
-use crossterm::terminal;
+use crossterm::{
+    cursor,
+    style::{self, Stylize},
+    terminal, QueueableCommand,
+};
 
 use crate::cells;
 
@@ -20,6 +27,23 @@ impl Lines {
 
     pub fn push_next(&mut self, next: Line) {
         self.inner.push_back(next);
+    }
+
+    pub fn print(&mut self, stdout: &mut Stdout) -> anyhow::Result<()> {
+        let (num_columns, num_rows) = terminal::size()?;
+
+        while self.inner.len() > num_rows as usize {
+            self.inner.pop_front();
+        }
+
+        stdout.queue(terminal::Clear(terminal::ClearType::All))?;
+
+        for (i, line) in self.inner.iter().enumerate() {
+            line.print(i as u16, num_columns, stdout)?;
+        }
+
+        stdout.flush()?;
+        Ok(())
     }
 }
 
@@ -42,21 +66,30 @@ impl Line {
         self.cells
     }
 
-    pub fn print(&self) -> anyhow::Result<()> {
-        let (num_columns, _) = terminal::size()?;
-        iter::repeat(' ')
-            .take(num_columns as usize - cells::NUM_CELLS - 2)
-            .for_each(|c| print!("{c}"));
+    pub fn print(
+        &self,
+        line: u16,
+        num_columns: u16,
+        stdout: &mut Stdout,
+    ) -> anyhow::Result<()> {
+        let mut column = num_columns - cells::NUM_CELLS as u16 - 2;
 
-        print!("┃");
+        stdout
+            .queue(cursor::MoveTo(column, line))?
+            .queue(style::PrintStyledContent("┃".stylize()))?;
+        column += 1;
+
         for &cell in &self.cells {
-            if cell {
-                print!("#");
-            } else {
-                print!(" ");
-            }
+            let content = if cell { "#" } else { " " };
+            stdout
+                .queue(cursor::MoveTo(column, line))?
+                .queue(style::PrintStyledContent(content.stylize()))?;
+            column += 1;
         }
-        println!("┃");
+
+        stdout
+            .queue(cursor::MoveTo(column, line))?
+            .queue(style::PrintStyledContent("┃".stylize()))?;
 
         Ok(())
     }
