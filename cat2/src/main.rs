@@ -8,9 +8,7 @@ fn main() -> anyhow::Result<()> {
     let mut current = ui::Line::init();
 
     loop {
-        let mut next = ui::Line {
-            inner: [false; cells::NUM_CELLS],
-        };
+        let mut next = ui::Line::empty();
 
         for (i, cell) in next.inner.iter_mut().enumerate() {
             let min = if i > 2 { i - 2 } else { 0 };

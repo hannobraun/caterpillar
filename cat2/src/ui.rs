@@ -14,6 +14,12 @@ impl Line {
         Self { inner }
     }
 
+    pub fn empty() -> Self {
+        Self {
+            inner: [false; cells::NUM_CELLS],
+        }
+    }
+
     pub fn print(&self) -> anyhow::Result<()> {
         let (num_columns, _) = terminal::size()?;
         iter::repeat(' ')
