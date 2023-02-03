@@ -39,6 +39,8 @@ impl Lines {
 
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
+        let x = num_columns - cells::NUM_CELLS as u16 - 2;
+
         for (i, line) in self
             .inner
             .iter()
@@ -47,7 +49,7 @@ impl Lines {
             .enumerate()
             .take(num_rows as usize)
         {
-            line.print(i as u16, num_columns, stdout)?;
+            line.print(x, i as u16, stdout)?;
         }
 
         stdout.flush()?;
@@ -81,12 +83,10 @@ impl Line {
 
     pub fn print(
         &self,
+        mut x: u16,
         y: u16,
-        num_columns: u16,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
-        let mut x = num_columns - cells::NUM_CELLS as u16 - 2;
-
         print_vertical_border(&mut x, y, stdout)?;
         print_cells(self.cells, &mut x, y, stdout)?;
         print_vertical_border(&mut x, y, stdout)?;
