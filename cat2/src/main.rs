@@ -46,7 +46,7 @@ fn main() -> anyhow::Result<()> {
                 }
             });
 
-            *cell = cell_lives(current.inner[i], num_neighbors);
+            *cell = cells::cell_lives(current.inner[i], num_neighbors);
         }
 
         current = next;
@@ -54,23 +54,4 @@ fn main() -> anyhow::Result<()> {
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
     }
-}
-
-fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
-    if lives_already {
-        cell_survives(num_neighbors)
-    } else {
-        cell_is_born(num_neighbors)
-    }
-}
-
-fn cell_survives(num_neighbors: u8) -> bool {
-    num_neighbors == 2 || num_neighbors == 4
-}
-
-fn cell_is_born(num_neighbors: u8) -> bool {
-    let code = include_str!("caterpillar/cell_is_born.cp0");
-    let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
-    cp::interpret(code, &mut stack);
-    stack.pop_bool()
 }
