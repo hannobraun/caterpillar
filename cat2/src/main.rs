@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
 
         let mut next = [false; NUM_CELLS];
 
-        for i in 0..next.len() {
+        for (i, cell) in next.iter_mut().enumerate() {
             let min = if i > 2 { i - 2 } else { 0 };
             let max = if i < current.len() - 1 - 2 {
                 i + 2
@@ -48,7 +48,7 @@ fn main() -> anyhow::Result<()> {
                 }
             });
 
-            next[i] = cell_lives(current[i], num_neighbors);
+            *cell = cell_lives(current[i], num_neighbors);
         }
 
         current = next;
