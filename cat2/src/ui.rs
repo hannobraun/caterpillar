@@ -5,17 +5,17 @@ use crossterm::terminal;
 use crate::cells;
 
 pub struct Line {
-    pub inner: [bool; cells::NUM_CELLS],
+    pub cells: [bool; cells::NUM_CELLS],
 }
 
 impl Line {
     pub fn init() -> Self {
         let inner = cells::init();
-        Self { inner }
+        Self { cells: inner }
     }
 
     pub fn from_cells(cells: [bool; cells::NUM_CELLS]) -> Self {
-        Self { inner: cells }
+        Self { cells }
     }
 
     pub fn print(&self) -> anyhow::Result<()> {
@@ -25,7 +25,7 @@ impl Line {
             .for_each(|c| print!("{c}"));
 
         print!("┃");
-        for &cell in &self.inner {
+        for &cell in &self.cells {
             if cell {
                 print!("#");
             } else {

@@ -8,7 +8,7 @@ fn main() -> anyhow::Result<()> {
     let mut current = ui::Line::init();
 
     loop {
-        let next = cells::next_generation(current.inner);
+        let next = cells::next_generation(current.cells);
         let next = ui::Line::from_cells(next);
 
         current = next;
