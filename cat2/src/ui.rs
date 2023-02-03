@@ -75,11 +75,7 @@ impl Line {
         let mut x = num_columns - cells::NUM_CELLS as u16 - 2;
 
         print_vertical_border(&mut x, y, stdout)?;
-
-        for &cell in &self.cells {
-            print_cell(cell, &mut x, y, stdout)?;
-        }
-
+        print_cells(self.cells, &mut x, y, stdout)?;
         print_vertical_border(&mut x, y, stdout)?;
 
         Ok(())
@@ -92,6 +88,19 @@ fn print_vertical_border(
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     print("┃", x, y, stdout)
+}
+
+fn print_cells(
+    cells: [bool; cells::NUM_CELLS],
+    x: &mut u16,
+    y: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    for cell in cells {
+        print_cell(cell, x, y, stdout)?;
+    }
+
+    Ok(())
 }
 
 fn print_cell(
