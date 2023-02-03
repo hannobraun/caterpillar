@@ -14,6 +14,7 @@ fn main() {
     current[43] = true;
 
     loop {
+        print!("┃");
         for &cell in &current {
             if cell {
                 print!("#");
@@ -21,7 +22,7 @@ fn main() {
                 print!(" ");
             }
         }
-        println!();
+        println!("┃");
 
         let mut next = [false; 80];
 
