@@ -13,6 +13,10 @@ impl Lines {
         let inner = VecDeque::new();
         Self { inner }
     }
+
+    pub fn current(&self) -> Line {
+        self.inner.back().cloned().unwrap_or_else(Line::init)
+    }
 }
 
 #[derive(Clone)]

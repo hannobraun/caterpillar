@@ -8,8 +8,7 @@ fn main() -> anyhow::Result<()> {
     let mut lines = ui::Lines::new();
 
     loop {
-        let current =
-            lines.inner.back().cloned().unwrap_or_else(ui::Line::init);
+        let current = lines.current();
 
         let next = cells::next_generation(current.cells);
         let next = ui::Line::from_cells(next);
