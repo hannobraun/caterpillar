@@ -9,11 +9,7 @@ fn main() -> anyhow::Result<()> {
 
     loop {
         let mut next = ui::Line::empty();
-
-        for (i, cell) in next.inner.iter_mut().enumerate() {
-            let num_neighbors = cells::num_neighbors(i as u8, current.inner);
-            *cell = cells::cell_lives(current.inner[i], num_neighbors);
-        }
+        next.inner = cells::next_generation(current.inner);
 
         current = next;
         current.print()?;

@@ -15,6 +15,17 @@ pub fn init() -> [bool; NUM_CELLS] {
     cells
 }
 
+pub fn next_generation(current: [bool; NUM_CELLS]) -> [bool; NUM_CELLS] {
+    let mut next = [false; NUM_CELLS];
+
+    for (i, cell) in next.iter_mut().enumerate() {
+        let num_neighbors = num_neighbors(i as u8, current);
+        *cell = cell_lives(current[i], num_neighbors);
+    }
+
+    next
+}
+
 pub fn num_neighbors(i: u8, cells: [bool; NUM_CELLS]) -> u8 {
     let (min, max) = neighbor_range(i);
 
