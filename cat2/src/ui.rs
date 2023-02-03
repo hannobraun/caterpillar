@@ -34,6 +34,7 @@ impl Lines {
         let (num_columns, num_rows) = terminal::size()?;
 
         let lines_width = cells::NUM_CELLS as u16 + 2;
+        let lines_height = num_rows as usize - 2;
 
         while self.inner.len() > num_rows as usize {
             self.inner.pop_front();
@@ -51,7 +52,7 @@ impl Lines {
             .iter()
             .cloned()
             .chain(iter::repeat_with(Line::empty))
-            .take(num_rows as usize - 2)
+            .take(lines_height)
         {
             line.print(x, &mut y, stdout)?;
         }
