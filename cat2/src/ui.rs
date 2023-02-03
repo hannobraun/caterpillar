@@ -95,11 +95,21 @@ fn print_vertical_border(
     y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
+    print("┃", x, y, stdout)
+}
+
+fn print(
+    s: &str,
+    x: &mut u16,
+    y: u16,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
     stdout
         .queue(cursor::MoveTo(*x, y))?
-        .queue(style::PrintStyledContent("┃".stylize()))?;
+        .queue(style::PrintStyledContent(s.stylize()))?;
 
-    *x += 1;
+    let num_chars: u16 = s.chars().count().try_into().expect("String too long");
+    *x += num_chars;
 
     Ok(())
 }
