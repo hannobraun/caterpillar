@@ -5,7 +5,7 @@ use crossterm::terminal;
 use crate::cells;
 
 pub struct Lines {
-    pub inner: VecDeque<Line>,
+    inner: VecDeque<Line>,
 }
 
 impl Lines {
