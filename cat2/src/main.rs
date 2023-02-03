@@ -10,8 +10,6 @@ fn main() -> anyhow::Result<()> {
     };
 
     loop {
-        current.print()?;
-
         let mut next = ui::Line {
             inner: [false; cells::NUM_CELLS],
         };
@@ -35,6 +33,7 @@ fn main() -> anyhow::Result<()> {
         }
 
         current = next;
+        current.print()?;
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
