@@ -10,8 +10,8 @@ pub struct Line {
 
 impl Line {
     pub fn init() -> Self {
-        let inner = cells::init();
-        Self { cells: inner }
+        let cells = cells::init();
+        Self { cells }
     }
 
     pub fn from_cells(cells: [bool; cells::NUM_CELLS]) -> Self {
