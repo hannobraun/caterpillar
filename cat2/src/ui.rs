@@ -39,7 +39,8 @@ impl Lines {
 
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
-        let x = num_columns - cells::NUM_CELLS as u16 - 2;
+        let lines_width = cells::NUM_CELLS as u16 + 2;
+        let x = num_columns - lines_width;
 
         for (i, line) in self
             .inner
