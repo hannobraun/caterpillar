@@ -17,6 +17,10 @@ impl Lines {
     pub fn current(&self) -> Line {
         self.inner.back().cloned().unwrap_or_else(Line::init)
     }
+
+    pub fn push_next(&mut self, next: Line) {
+        self.inner.push_back(next);
+    }
 }
 
 #[derive(Clone)]

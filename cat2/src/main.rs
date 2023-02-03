@@ -14,7 +14,7 @@ fn main() -> anyhow::Result<()> {
         let next = ui::Line::from_cells(next);
 
         next.print()?;
-        lines.inner.push_back(next);
+        lines.push_next(next);
 
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
