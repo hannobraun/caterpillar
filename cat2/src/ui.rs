@@ -1,3 +1,5 @@
+use crate::cells;
+
 pub struct Line {
-    pub inner: [bool; 80],
+    pub inner: [bool; cells::NUM_CELLS],
 }
