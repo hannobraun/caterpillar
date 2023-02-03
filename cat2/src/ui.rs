@@ -78,10 +78,7 @@ impl Line {
 
         for &cell in &self.cells {
             let content = if cell { "#" } else { " " };
-            stdout
-                .queue(cursor::MoveTo(column, line))?
-                .queue(style::PrintStyledContent(content.stylize()))?;
-            column += 1;
+            print(content, &mut column, line, stdout)?;
         }
 
         print_vertical_border(&mut column, line, stdout)?;
