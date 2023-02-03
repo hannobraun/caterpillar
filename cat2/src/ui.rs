@@ -15,9 +15,8 @@ impl Line {
     }
 
     pub fn empty() -> Self {
-        Self {
-            inner: [false; cells::NUM_CELLS],
-        }
+        let inner = [false; cells::NUM_CELLS];
+        Self { inner }
     }
 
     pub fn print(&self) -> anyhow::Result<()> {
