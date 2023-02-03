@@ -10,9 +10,8 @@ pub struct Lines {
 
 impl Lines {
     pub fn new() -> Self {
-        Self {
-            inner: VecDeque::new(),
-        }
+        let inner = VecDeque::new();
+        Self { inner }
     }
 }
 
