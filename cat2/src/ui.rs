@@ -8,6 +8,14 @@ pub struct Lines {
     pub inner: VecDeque<Line>,
 }
 
+impl Lines {
+    pub fn new() -> Self {
+        Self {
+            inner: VecDeque::new(),
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct Line {
     pub cells: [bool; cells::NUM_CELLS],

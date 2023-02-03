@@ -2,12 +2,10 @@ mod cells;
 mod cp;
 mod ui;
 
-use std::{collections::VecDeque, time::Instant};
+use std::time::Instant;
 
 fn main() -> anyhow::Result<()> {
-    let mut lines = ui::Lines {
-        inner: VecDeque::new(),
-    };
+    let mut lines = ui::Lines::new();
 
     loop {
         let current =
