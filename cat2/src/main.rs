@@ -8,16 +8,8 @@ use crossterm::terminal;
 
 fn main() -> anyhow::Result<()> {
     let mut current = ui::Line {
-        inner: [false; cells::NUM_CELLS],
+        inner: cells::init(),
     };
-
-    // Initial conditions.
-    current.inner[37] = true;
-    current.inner[38] = true;
-    current.inner[39] = true;
-    current.inner[41] = true;
-    current.inner[42] = true;
-    current.inner[43] = true;
 
     loop {
         let (num_columns, _) = terminal::size()?;
