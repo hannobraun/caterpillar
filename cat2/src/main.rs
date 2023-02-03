@@ -1,3 +1,4 @@
+mod cells;
 mod cp;
 mod ui;
 
@@ -5,11 +6,9 @@ use std::{iter, time::Instant};
 
 use crossterm::terminal;
 
-const NUM_CELLS: usize = 80;
-
 fn main() -> anyhow::Result<()> {
     let mut current = ui::Line {
-        inner: [false; NUM_CELLS],
+        inner: [false; cells::NUM_CELLS],
     };
 
     // Initial conditions.
@@ -23,7 +22,7 @@ fn main() -> anyhow::Result<()> {
     loop {
         let (num_columns, _) = terminal::size()?;
         iter::repeat(' ')
-            .take(num_columns as usize - NUM_CELLS - 2)
+            .take(num_columns as usize - cells::NUM_CELLS - 2)
             .for_each(|c| print!("{c}"));
 
         print!("┃");
@@ -37,7 +36,7 @@ fn main() -> anyhow::Result<()> {
         println!("┃");
 
         let mut next = ui::Line {
-            inner: [false; NUM_CELLS],
+            inner: [false; cells::NUM_CELLS],
         };
 
         for (i, cell) in next.inner.iter_mut().enumerate() {
