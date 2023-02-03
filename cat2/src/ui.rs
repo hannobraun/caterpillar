@@ -1,6 +1,7 @@
 use std::{
     collections::VecDeque,
     io::{Stdout, Write},
+    iter,
 };
 
 use crossterm::{
@@ -38,7 +39,14 @@ impl Lines {
 
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
-        for (i, line) in self.inner.iter().enumerate() {
+        for (i, line) in self
+            .inner
+            .iter()
+            .cloned()
+            .chain(iter::repeat_with(Line::empty))
+            .enumerate()
+            .take(num_rows as usize)
+        {
             line.print(i as u16, num_columns, stdout)?;
         }
 
@@ -55,6 +63,11 @@ pub struct Line {
 impl Line {
     pub fn init() -> Self {
         let cells = cells::init();
+        Self { cells }
+    }
+
+    pub fn empty() -> Self {
+        let cells = [false; cells::NUM_CELLS];
         Self { cells }
     }
 
