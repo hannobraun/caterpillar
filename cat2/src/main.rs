@@ -1,6 +1,6 @@
 mod cp;
 
-use std::time::Instant;
+use std::{iter, time::Instant};
 
 const NUM_CELLS: usize = 80;
 
@@ -16,6 +16,11 @@ fn main() -> anyhow::Result<()> {
     current[43] = true;
 
     loop {
+        let (num_columns, _) = crossterm::terminal::size()?;
+        iter::repeat(' ')
+            .take(num_columns as usize - NUM_CELLS - 2)
+            .for_each(|c| print!("{c}"));
+
         print!("┃");
         for &cell in &current {
             if cell {
