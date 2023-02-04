@@ -10,7 +10,7 @@ impl Code {
 
         functions.insert(
             String::from("cell_is_born"),
-            String::from(include_str!("../caterpillar/cell_is_born.cp0")),
+            String::from("clone 2 = swap 3 = or"),
         );
 
         Self { functions }
