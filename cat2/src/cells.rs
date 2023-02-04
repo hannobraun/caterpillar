@@ -47,12 +47,12 @@ pub fn neighbor_range(i: u8) -> (u8, u8) {
 }
 
 pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
+    let code = cp::Code::new();
+    let mut stack = cp::Stack::new();
+
     if lives_already {
         cell_survives(num_neighbors)
     } else {
-        let code = cp::Code::new();
-        let mut stack = cp::Stack::new();
-
         stack.push(cp::Value::U8(num_neighbors));
         cp::interpret(code.function("cell_is_born"), &mut stack);
         stack.pop_bool()
