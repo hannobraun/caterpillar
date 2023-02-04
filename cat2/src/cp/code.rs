@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 pub struct Code {
-    pub functions: BTreeMap<String, String>,
+    functions: BTreeMap<String, String>,
 }
 
 impl Code {
