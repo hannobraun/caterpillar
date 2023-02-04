@@ -4,8 +4,7 @@ pub struct Code {
 
 impl Code {
     pub fn new() -> Self {
-        Self {
-            inner: include_str!("../caterpillar/cell_is_born.cp0"),
-        }
+        let inner = include_str!("../caterpillar/cell_is_born.cp0");
+        Self { inner }
     }
 }
