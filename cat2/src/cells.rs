@@ -50,17 +50,13 @@ pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
     if lives_already {
         cell_survives(num_neighbors)
     } else {
-        cell_is_born(num_neighbors)
+        let code = cp::Code::new();
+        let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
+        cp::interpret(code.function("cell_is_born"), &mut stack);
+        stack.pop_bool()
     }
 }
 
 fn cell_survives(num_neighbors: u8) -> bool {
     num_neighbors == 2 || num_neighbors == 4
-}
-
-fn cell_is_born(num_neighbors: u8) -> bool {
-    let code = cp::Code::new();
-    let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
-    cp::interpret(code.function("cell_is_born"), &mut stack);
-    stack.pop_bool()
 }
