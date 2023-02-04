@@ -59,8 +59,8 @@ fn cell_survives(num_neighbors: u8) -> bool {
 }
 
 fn cell_is_born(num_neighbors: u8) -> bool {
-    let mut code = cp::Code::new();
+    let code = cp::Code::new();
     let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
-    cp::interpret(&mut code, &mut stack);
+    cp::interpret(&code.inner, &mut stack);
     stack.pop_bool()
 }
