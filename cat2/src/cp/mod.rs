@@ -1,8 +1,12 @@
+mod code;
 mod stack;
 
-pub use self::stack::{Stack, Value};
+pub use self::{
+    code::Code,
+    stack::{Stack, Value},
+};
 
-pub fn interpret(code: &str, stack: &mut Stack) {
+pub fn interpret(code: Code, stack: &mut Stack) {
     let tokens = tokenize(code);
     evaluate(tokens, stack);
 }
