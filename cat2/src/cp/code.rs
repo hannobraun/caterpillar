@@ -1,23 +1,23 @@
 use std::collections::BTreeMap;
 
 pub struct Code {
-    pub inner: BTreeMap<String, String>,
+    pub functions: BTreeMap<String, String>,
 }
 
 impl Code {
     pub fn new() -> Self {
-        let mut inner = BTreeMap::new();
+        let mut functions = BTreeMap::new();
 
-        inner.insert(
+        functions.insert(
             String::from("cell_is_born"),
             String::from(include_str!("../caterpillar/cell_is_born.cp0")),
         );
 
-        Self { inner }
+        Self { functions }
     }
 
     pub fn function(&self, name: &str) -> &str {
-        self.inner
+        self.functions
             .get(name)
             .unwrap_or_else(|| panic!("Function {name} not defined"))
     }
