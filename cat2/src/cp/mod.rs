@@ -6,7 +6,7 @@ pub use self::{
     stack::{Stack, Value},
 };
 
-pub fn interpret(code: Code, stack: &mut Stack) {
+pub fn interpret(code: &mut Code, stack: &mut Stack) {
     let tokens = tokenize(code);
     evaluate(tokens, stack);
 }
