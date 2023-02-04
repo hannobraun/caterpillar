@@ -1,1 +1,3 @@
-pub type Code = &'static str;
+pub struct Code {
+    pub inner: &'static str,
+}
