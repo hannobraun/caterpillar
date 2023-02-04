@@ -61,11 +61,6 @@ fn cell_survives(num_neighbors: u8) -> bool {
 fn cell_is_born(num_neighbors: u8) -> bool {
     let code = cp::Code::new();
     let mut stack = cp::Stack::from_values(&[cp::Value::U8(num_neighbors)]);
-    cp::interpret(
-        code.inner
-            .get("cell_is_born")
-            .expect("Function not defined"),
-        &mut stack,
-    );
+    cp::interpret(code.function("cell_is_born"), &mut stack);
     stack.pop_bool()
 }
