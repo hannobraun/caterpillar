@@ -3,8 +3,8 @@ pub struct Stack {
 }
 
 impl Stack {
-    pub fn from_values(values: &[Value]) -> Self {
-        let inner = Vec::from(values);
+    pub fn new() -> Self {
+        let inner = Vec::new();
         Self { inner }
     }
 
