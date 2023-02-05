@@ -47,7 +47,7 @@ impl Lines {
         let mut area = area::new(stdout);
 
         area::move_cursor(&mut area, x, y);
-        print_top_border(&mut area, lines_width)?;
+        border::print_top_border(&mut area, lines_width)?;
         y = area.cursor[1];
 
         for line in self
@@ -63,7 +63,7 @@ impl Lines {
         }
 
         area::move_cursor(&mut area, x, y);
-        print_bottom_border(&mut area, lines_width)?;
+        border::print_bottom_border(&mut area, lines_width)?;
 
         stdout.flush()?;
         Ok(())
@@ -103,17 +103,6 @@ impl Line {
 
         Ok(())
     }
-}
-
-fn print_top_border(area: &mut area::Area, width: u16) -> anyhow::Result<()> {
-    border::print_horizontal(area, "┏", "┓", width)
-}
-
-fn print_bottom_border(
-    area: &mut area::Area,
-    width: u16,
-) -> anyhow::Result<()> {
-    border::print_horizontal(area, "┗", "┛", width)
 }
 
 fn print_cells(
