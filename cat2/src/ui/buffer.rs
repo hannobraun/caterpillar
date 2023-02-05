@@ -44,10 +44,9 @@ impl Buffer {
 
     pub fn write(&mut self, position: Vector, s: &str) {
         let mut x: usize = position.x;
-        let y: usize = position.y;
 
         for ch in s.chars() {
-            let index = self.index(x, y);
+            let index = self.index(x, position.y);
             self.current[index] = ch;
             x += 1;
         }
