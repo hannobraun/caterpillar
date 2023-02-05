@@ -20,9 +20,9 @@ fn write_sides(area: &mut Area) -> anyhow::Result<()> {
     let Vector { y: height, .. } = area::size(area);
 
     for _ in 1..height - 1 {
-        write_vertical(area)?;
+        draw_vertical(area)?;
         area::move_to_end_of_line(area);
-        write_vertical(area)?;
+        draw_vertical(area)?;
         area::move_to_new_line(area);
     }
 
@@ -49,7 +49,7 @@ fn write_horizontal(
     Ok(())
 }
 
-fn write_vertical(area: &mut Area) -> anyhow::Result<()> {
+fn draw_vertical(area: &mut Area) -> anyhow::Result<()> {
     area::draw(area, "┃");
     Ok(())
 }
