@@ -44,7 +44,8 @@ impl Buffer {
         let y: usize = y.into();
 
         for ch in s.chars() {
-            self.current[y * self.size.x as usize + x] = ch;
+            let index = y * self.size.x as usize + x;
+            self.current[index] = ch;
             x += 1;
         }
     }
