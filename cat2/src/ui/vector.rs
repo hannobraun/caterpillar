@@ -2,8 +2,8 @@ use std::ops;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Vector {
-    pub x: u16,
-    pub y: u16,
+    pub x: usize,
+    pub y: usize,
 }
 
 impl ops::Add for Vector {

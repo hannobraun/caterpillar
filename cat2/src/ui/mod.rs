@@ -39,11 +39,11 @@ impl Lines {
     ) -> anyhow::Result<()> {
         let (num_columns, num_rows) = terminal::size()?;
         buffer.prepare(Vector {
-            x: num_columns,
-            y: num_rows,
+            x: num_columns as usize,
+            y: num_rows as usize,
         });
 
-        let lines_width = cells::NUM_CELLS as u16 + 2;
+        let lines_width = cells::NUM_CELLS + 2;
         let lines_height = num_rows as usize - 2;
 
         while self.inner.len() > lines_height {
@@ -51,12 +51,12 @@ impl Lines {
         }
 
         let offset = Vector {
-            x: num_columns - lines_width,
+            x: num_columns as usize - lines_width,
             y: 0,
         };
         let size = Vector {
             x: lines_width,
-            y: num_rows,
+            y: num_rows as usize,
         };
         let area = area::new(buffer, offset, size);
 

@@ -43,6 +43,6 @@ pub fn move_to_end_of_line(area: &mut Area) {
 pub fn draw(area: &mut Area, s: &str) {
     area.buffer.write(area.offset + area.cursor, s);
 
-    let num_chars: u16 = s.chars().count().try_into().expect("String too long");
+    let num_chars = s.chars().count();
     area.cursor.x += num_chars;
 }

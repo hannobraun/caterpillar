@@ -37,14 +37,14 @@ impl Buffer {
         self.previous.clear();
         self.previous.extend(self.current.iter().cloned());
 
-        let size = (size.x * size.y) as usize;
+        let size = size.x * size.y;
         self.current.clear();
         self.current.extend(iter::repeat(' ').take(size));
     }
 
     pub fn write(&mut self, position: Vector, s: &str) {
-        let mut x: usize = position.x.into();
-        let y: usize = position.y.into();
+        let mut x: usize = position.x;
+        let y: usize = position.y;
 
         for ch in s.chars() {
             let index = self.index(x, y);
@@ -54,11 +54,7 @@ impl Buffer {
     }
 
     pub fn draw(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
-        for (y, line) in self
-            .current
-            .chunks(self.current_size.x as usize)
-            .enumerate()
-        {
+        for (y, line) in self.current.chunks(self.current_size.x).enumerate() {
             for (x, &ch) in line.iter().enumerate() {
                 let index = self.index(x, y);
                 if self.previous_size != self.current_size
@@ -77,6 +73,6 @@ impl Buffer {
     }
 
     fn index(&self, x: usize, y: usize) -> usize {
-        y * self.current_size.x as usize + x
+        y * self.current_size.x + x
     }
 }
