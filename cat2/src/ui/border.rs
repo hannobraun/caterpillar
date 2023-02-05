@@ -5,15 +5,7 @@ use super::{
 
 pub fn write(mut area: Area) -> anyhow::Result<Area> {
     write_top(&mut area)?;
-
-    let Vector { y: height, .. } = area::size(&area);
-    for _ in 1..height - 1 {
-        write_vertical(&mut area)?;
-        area::move_to_end_of_line(&mut area);
-        write_vertical(&mut area)?;
-        area::move_to_new_line(&mut area);
-    }
-
+    write_sides(&mut area)?;
     write_bottom(&mut area)?;
 
     let offset = Vector { x: 1, y: 1 };
@@ -22,6 +14,19 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
 
 fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
     write_horizontal(area, "┏", "┓")
+}
+
+fn write_sides(area: &mut Area) -> anyhow::Result<()> {
+    let Vector { y: height, .. } = area::size(area);
+
+    for _ in 1..height - 1 {
+        write_vertical(area)?;
+        area::move_to_end_of_line(area);
+        write_vertical(area)?;
+        area::move_to_new_line(area);
+    }
+
+    Ok(())
 }
 
 fn write_bottom(area: &mut area::Area) -> anyhow::Result<()> {
