@@ -13,7 +13,7 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
 }
 
 fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
-    write_horizontal(area, "┏", "┓")
+    draw_horizontal(area, "┏", "┓")
 }
 
 fn write_sides(area: &mut Area) -> anyhow::Result<()> {
@@ -30,10 +30,10 @@ fn write_sides(area: &mut Area) -> anyhow::Result<()> {
 }
 
 fn write_bottom(area: &mut area::Area) -> anyhow::Result<()> {
-    write_horizontal(area, "┗", "┛")
+    draw_horizontal(area, "┗", "┛")
 }
 
-fn write_horizontal(
+fn draw_horizontal(
     area: &mut Area,
     left_corner: &str,
     right_corner: &str,
