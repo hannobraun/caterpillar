@@ -9,7 +9,7 @@ pub fn print_cells(
     cells: [bool; cells::NUM_CELLS],
 ) -> anyhow::Result<()> {
     for cell in cells {
-        print_cell(area, cell)?;
+        draw_cell(area, cell)?;
     }
 
     area::move_to_new_line(area);
@@ -17,7 +17,7 @@ pub fn print_cells(
     Ok(())
 }
 
-fn print_cell(area: &mut Area, cell: bool) -> anyhow::Result<()> {
+fn draw_cell(area: &mut Area, cell: bool) -> anyhow::Result<()> {
     let content = if cell { "#" } else { " " };
     area::draw(area, content);
     Ok(())
