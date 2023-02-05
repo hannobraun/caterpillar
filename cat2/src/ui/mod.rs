@@ -96,9 +96,9 @@ impl Line {
         let mut area = area::new(stdout);
         area::move_cursor(&mut area, x, *y);
 
-        border::print_vertical_border(&mut area)?;
+        border::print_vertical(&mut area)?;
         print_cells(&mut area, self.cells)?;
-        border::print_vertical_border(&mut area)?;
+        border::print_vertical(&mut area)?;
 
         *y += 1;
 
