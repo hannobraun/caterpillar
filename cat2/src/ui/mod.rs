@@ -44,10 +44,10 @@ impl Lines {
 
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
-        let x = num_columns - lines_width;
-        let y = 0;
-
-        let offset = Vector { x, y };
+        let offset = Vector {
+            x: num_columns - lines_width,
+            y: 0,
+        };
         let size = Vector {
             x: lines_width,
             y: num_rows,
