@@ -44,7 +44,7 @@ impl Buffer {
         let y: usize = y.into();
 
         for ch in s.chars() {
-            let index = y * self.size.x as usize + x;
+            let index = self.index(x, y);
             self.current[index] = ch;
             x += 1;
         }
@@ -60,5 +60,9 @@ impl Buffer {
         }
 
         Ok(())
+    }
+
+    fn index(&self, x: usize, y: usize) -> usize {
+        y * self.size.x as usize + x
     }
 }
