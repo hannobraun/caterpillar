@@ -115,9 +115,7 @@ fn print_top_border(
     let mut area = area::new(stdout);
     area::move_cursor(&mut area, x, *y);
 
-    area::write(&mut area, "┏")?;
-    (0..width).try_for_each(|_| area::write(&mut area, "━"))?;
-    area::write(&mut area, "┓")?;
+    border::print_horizontal(&mut area, "┏", "┓", width)?;
 
     *y += 1;
 
@@ -133,9 +131,7 @@ fn print_bottom_border(
     let mut area = area::new(stdout);
     area::move_cursor(&mut area, x, *y);
 
-    area::write(&mut area, "┗")?;
-    (0..width).try_for_each(|_| area::write(&mut area, "━"))?;
-    area::write(&mut area, "┛")?;
+    border::print_horizontal(&mut area, "┗", "┛", width)?;
 
     *y += 1;
 
