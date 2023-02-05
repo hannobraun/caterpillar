@@ -1,4 +1,5 @@
 mod area;
+mod border;
 
 use std::{
     collections::VecDeque,
@@ -95,9 +96,9 @@ impl Line {
         let mut area = area::new(stdout);
         area::move_cursor(&mut area, x, *y);
 
-        print_vertical_border(&mut area)?;
+        border::print_vertical_border(&mut area)?;
         print_cells(&mut area, self.cells)?;
-        print_vertical_border(&mut area)?;
+        border::print_vertical_border(&mut area)?;
 
         *y += 1;
 
@@ -139,10 +140,6 @@ fn print_bottom_border(
     *y += 1;
 
     Ok(())
-}
-
-fn print_vertical_border(area: &mut area::Area) -> anyhow::Result<()> {
-    area::write(area, "┃")
 }
 
 fn print_cells(
