@@ -8,9 +8,9 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
 
     let Vector { y: height, .. } = area::size(&area);
     for _ in 1..height - 1 {
-        print_vertical(&mut area)?;
+        write_vertical(&mut area)?;
         area::move_to_end_of_line(&mut area);
-        print_vertical(&mut area)?;
+        write_vertical(&mut area)?;
         area::move_to_new_line(&mut area);
     }
 
@@ -44,6 +44,6 @@ fn print_horizontal(
     Ok(())
 }
 
-fn print_vertical(area: &mut Area) -> anyhow::Result<()> {
+fn write_vertical(area: &mut Area) -> anyhow::Result<()> {
     area::write(area, "┃")
 }
