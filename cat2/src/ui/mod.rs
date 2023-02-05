@@ -26,11 +26,6 @@ pub fn draw(
     });
 
     let lines_width = cells::NUM_CELLS + 2;
-    let lines_height = num_rows as usize - 2;
-
-    while generations.len() > lines_height {
-        generations.pop_front();
-    }
 
     let offset = Vector {
         x: num_columns as usize - lines_width,
