@@ -1,6 +1,9 @@
-use std::{
-    io::{Stdout, Write},
-    iter,
+use std::{io::Stdout, iter};
+
+use crossterm::{
+    cursor,
+    style::{self, Stylize},
+    QueueableCommand,
 };
 
 use super::vector::Vector;
@@ -47,15 +50,11 @@ impl Buffer {
     }
 
     pub fn print(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
-        let mut lines = self.current.chunks(self.size.x as usize).peekable();
-
-        while let Some(line) = lines.next() {
-            for ch in line {
-                write!(stdout, "{ch}")?;
-            }
-
-            if lines.peek().is_some() {
-                writeln!(stdout)?;
+        for (y, line) in self.current.chunks(self.size.x as usize).enumerate() {
+            for (x, ch) in line.iter().enumerate() {
+                stdout
+                    .queue(cursor::MoveTo(x as u16, y as u16))?
+                    .queue(style::PrintStyledContent(ch.stylize()))?;
             }
         }
 
