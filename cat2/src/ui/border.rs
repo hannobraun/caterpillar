@@ -5,7 +5,7 @@ use super::{
 
 pub fn write(mut area: Area) -> anyhow::Result<Area> {
     write_top(&mut area)?;
-    write_sides(&mut area)?;
+    draw_sides(&mut area)?;
     draw_bottom(&mut area);
 
     let offset = Vector { x: 1, y: 1 };
@@ -17,7 +17,7 @@ fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn write_sides(area: &mut Area) -> anyhow::Result<()> {
+fn draw_sides(area: &mut Area) -> anyhow::Result<()> {
     let Vector { y: height, .. } = area::size(area);
 
     for _ in 1..height - 1 {
