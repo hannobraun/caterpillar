@@ -1,9 +1,6 @@
 use super::area::{self, Area};
 
-pub fn print_top_border(
-    area: &mut area::Area,
-    width: u16,
-) -> anyhow::Result<()> {
+pub fn print_top(area: &mut area::Area, width: u16) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓", width)
 }
 

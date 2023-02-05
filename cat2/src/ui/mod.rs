@@ -47,7 +47,7 @@ impl Lines {
         let mut area = area::new(stdout);
 
         area::move_cursor(&mut area, x, y);
-        border::print_top_border(&mut area, lines_width)?;
+        border::print_top(&mut area, lines_width)?;
         y = area.cursor[1];
 
         for line in self
