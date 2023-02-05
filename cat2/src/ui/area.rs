@@ -13,6 +13,7 @@ pub struct Area<'a> {
     cursor: [u16; 2],
 }
 
+#[derive(Clone, Copy)]
 pub struct Vector {
     pub x: u16,
     pub y: u16,
