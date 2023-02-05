@@ -1,15 +1,15 @@
 use super::{buffer::Buffer, vector::Vector};
 
 pub struct Area<'a> {
-    out: &'a mut Buffer,
+    buffer: &'a mut Buffer,
     offset: Vector,
     size: Vector,
     cursor: Vector,
 }
 
-pub fn new(out: &mut Buffer, offset: Vector, size: Vector) -> Area {
+pub fn new(buffer: &mut Buffer, offset: Vector, size: Vector) -> Area {
     Area {
-        out,
+        buffer,
         offset,
         size,
         cursor: Vector { x: 0, y: 0 },
@@ -43,7 +43,7 @@ pub fn move_to_end_of_line(area: &mut Area) {
 pub fn draw(area: &mut Area, s: &str) {
     let Vector { x, y } = area.offset + area.cursor;
 
-    area.out.write(x, y, s);
+    area.buffer.write(x, y, s);
 
     let num_chars: u16 = s.chars().count().try_into().expect("String too long");
     area.cursor.x += num_chars;
