@@ -1,6 +1,7 @@
 mod area;
 mod border;
 mod buffer;
+mod generation;
 mod vector;
 
 pub use self::buffer::Buffer;
@@ -68,7 +69,7 @@ impl Lines {
             .chain(iter::repeat_with(Line::empty))
             .take(lines_height)
         {
-            print_cells(&mut area, line.cells)?;
+            generation::print_cells(&mut area, line.cells)?;
         }
 
         buffer.draw(stdout)?;
@@ -100,23 +101,4 @@ impl Line {
     pub fn cells(&self) -> [bool; cells::NUM_CELLS] {
         self.cells
     }
-}
-
-fn print_cells(
-    area: &mut area::Area,
-    cells: [bool; cells::NUM_CELLS],
-) -> anyhow::Result<()> {
-    for cell in cells {
-        print_cell(area, cell)?;
-    }
-
-    area::move_to_new_line(area);
-
-    Ok(())
-}
-
-fn print_cell(area: &mut area::Area, cell: bool) -> anyhow::Result<()> {
-    let content = if cell { "#" } else { " " };
-    area::draw(area, content);
-    Ok(())
 }
