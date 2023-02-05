@@ -63,7 +63,7 @@ impl Lines {
         }
 
         area::move_cursor(&mut area, x, y);
-        border::print_bottom_border(&mut area, lines_width)?;
+        border::print_bottom(&mut area, lines_width)?;
 
         stdout.flush()?;
         Ok(())
