@@ -24,10 +24,6 @@ impl Lines {
         Self { inner }
     }
 
-    pub fn current(&self) -> Generation {
-        self.inner.back().cloned().unwrap_or_else(cells::init)
-    }
-
     pub fn push_next(&mut self, next: Generation) {
         self.inner.push_back(next);
     }

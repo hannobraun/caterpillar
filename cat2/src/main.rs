@@ -17,7 +17,7 @@ fn main() -> anyhow::Result<()> {
     let delay = Duration::from_millis(125);
 
     loop {
-        let current = lines.current();
+        let current = lines.inner.back().cloned().unwrap_or_else(cells::init);
 
         let next = cells::next_generation(current);
 
