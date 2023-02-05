@@ -13,7 +13,8 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
 }
 
 fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
-    draw_horizontal(area, "┏", "┓")
+    draw_horizontal(area, "┏", "┓");
+    Ok(())
 }
 
 fn write_sides(area: &mut Area) -> anyhow::Result<()> {
@@ -30,14 +31,11 @@ fn write_sides(area: &mut Area) -> anyhow::Result<()> {
 }
 
 fn write_bottom(area: &mut area::Area) -> anyhow::Result<()> {
-    draw_horizontal(area, "┗", "┛")
+    draw_horizontal(area, "┗", "┛");
+    Ok(())
 }
 
-fn draw_horizontal(
-    area: &mut Area,
-    left_corner: &str,
-    right_corner: &str,
-) -> anyhow::Result<()> {
+fn draw_horizontal(area: &mut Area, left_corner: &str, right_corner: &str) {
     let Vector { x: width, .. } = area::size(area);
 
     area::draw(area, left_corner);
@@ -45,8 +43,6 @@ fn draw_horizontal(
     area::draw(area, right_corner);
 
     area::move_to_new_line(area);
-
-    Ok(())
 }
 
 fn draw_vertical(area: &mut Area) {
