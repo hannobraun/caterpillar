@@ -15,7 +15,7 @@ use crate::cells::{self, Generation};
 use self::vector::Vector;
 
 pub struct Lines {
-    inner: VecDeque<Generation>,
+    pub inner: VecDeque<Generation>,
 }
 
 impl Lines {
