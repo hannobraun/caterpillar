@@ -6,11 +6,11 @@ mod vector;
 
 pub use self::buffer::Buffer;
 
-use std::{collections::VecDeque, io::Stdout, iter};
+use std::{collections::VecDeque, io::Stdout};
 
 use crossterm::terminal;
 
-use crate::cells::{self, Generation, NUM_CELLS};
+use crate::cells::{self, Generation};
 
 use self::vector::Vector;
 
@@ -60,14 +60,7 @@ impl Lines {
         };
         let area = area::new(buffer, offset, size);
 
-        generations::draw(
-            area,
-            self.inner
-                .iter()
-                .cloned()
-                .chain(iter::repeat_with(|| [false; NUM_CELLS]))
-                .take(lines_height),
-        );
+        generations::draw(area, self.inner.iter().cloned().take(lines_height));
 
         buffer.draw(stdout)?;
 
