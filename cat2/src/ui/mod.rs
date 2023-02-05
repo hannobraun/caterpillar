@@ -44,10 +44,11 @@ impl Lines {
         let x = num_columns - lines_width;
         let mut y = 0;
 
-        print_top_border(x, &mut y, lines_width, stdout)?;
-
         let mut area = area::new(stdout);
+
         area::move_cursor(&mut area, x, y);
+        print_top_border(&mut area, lines_width)?;
+        y = area.cursor[1];
 
         for line in self
             .inner
@@ -104,19 +105,8 @@ impl Line {
     }
 }
 
-fn print_top_border(
-    x: u16,
-    y: &mut u16,
-    width: u16,
-    stdout: &mut Stdout,
-) -> anyhow::Result<()> {
-    let mut area = area::new(stdout);
-    area::move_cursor(&mut area, x, *y);
-
-    border::print_horizontal(&mut area, "┏", "┓", width)?;
-    *y += area.cursor[1];
-
-    Ok(())
+fn print_top_border(area: &mut area::Area, width: u16) -> anyhow::Result<()> {
+    border::print_horizontal(area, "┏", "┓", width)
 }
 
 fn print_bottom_border(
