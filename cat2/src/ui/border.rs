@@ -41,7 +41,7 @@ fn write_horizontal(
     let Vector { x: width, .. } = area::size(area);
 
     area::write(area, left_corner)?;
-    (0..width).try_for_each(|_| area::write(area, "━"))?;
+    (0..width - 2).try_for_each(|_| area::write(area, "━"))?;
     area::write(area, right_corner)?;
 
     area::move_to_new_line(area);
