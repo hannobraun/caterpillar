@@ -1,8 +1,8 @@
-use crate::cells;
+use crate::cells::Generation;
 
 use super::area::{self, Area};
 
-pub fn draw_generation(area: &mut Area, generation: [bool; cells::NUM_CELLS]) {
+pub fn draw_generation(area: &mut Area, generation: Generation) {
     for cell in generation {
         draw_cell(area, cell);
     }

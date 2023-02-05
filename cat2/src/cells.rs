@@ -2,7 +2,9 @@ use crate::cp;
 
 pub const NUM_CELLS: usize = 80;
 
-pub fn init() -> [bool; NUM_CELLS] {
+pub type Generation = [bool; NUM_CELLS];
+
+pub fn init() -> Generation {
     let mut cells = [false; NUM_CELLS];
 
     cells[37] = true;
@@ -15,7 +17,7 @@ pub fn init() -> [bool; NUM_CELLS] {
     cells
 }
 
-pub fn next_generation(current: [bool; NUM_CELLS]) -> [bool; NUM_CELLS] {
+pub fn next_generation(current: Generation) -> Generation {
     let mut next = [false; NUM_CELLS];
 
     for (i, cell) in next.iter_mut().enumerate() {
@@ -26,7 +28,7 @@ pub fn next_generation(current: [bool; NUM_CELLS]) -> [bool; NUM_CELLS] {
     next
 }
 
-pub fn num_neighbors(i: u8, cells: [bool; NUM_CELLS]) -> u8 {
+pub fn num_neighbors(i: u8, cells: Generation) -> u8 {
     let (min, max) = neighbor_range(i);
 
     let mut num_neighbors = 0;

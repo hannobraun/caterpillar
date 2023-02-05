@@ -10,12 +10,12 @@ use std::{collections::VecDeque, io::Stdout, iter};
 
 use crossterm::terminal;
 
-use crate::cells::{self, NUM_CELLS};
+use crate::cells::{self, Generation, NUM_CELLS};
 
 use self::vector::Vector;
 
 pub struct Lines {
-    inner: VecDeque<[bool; NUM_CELLS]>,
+    inner: VecDeque<Generation>,
 }
 
 impl Lines {
@@ -24,11 +24,11 @@ impl Lines {
         Self { inner }
     }
 
-    pub fn current(&self) -> [bool; NUM_CELLS] {
+    pub fn current(&self) -> Generation {
         self.inner.back().cloned().unwrap_or_else(cells::init)
     }
 
-    pub fn push_next(&mut self, next: [bool; NUM_CELLS]) {
+    pub fn push_next(&mut self, next: Generation) {
         self.inner.push_back(next);
     }
 
