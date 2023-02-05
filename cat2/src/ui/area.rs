@@ -10,7 +10,7 @@ pub struct Area<'a> {
     out: &'a mut Stdout,
     offset: Vector,
     size: Vector,
-    cursor: [u16; 2],
+    cursor: Vector,
 }
 
 #[derive(Clone, Copy)]
@@ -24,7 +24,7 @@ pub fn new(out: &mut Stdout, offset: Vector, size: Vector) -> Area {
         out,
         offset,
         size,
-        cursor: [0; 2],
+        cursor: Vector { x: 0, y: 0 },
     }
 }
 
@@ -33,14 +33,14 @@ pub fn size(area: &Area) -> Vector {
 }
 
 pub fn new_line(area: &mut Area) {
-    let [x, y] = &mut area.cursor;
+    let Vector { x, y } = &mut area.cursor;
 
     *x = 0;
     *y += 1;
 }
 
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
-    let [x, y] = &mut area.cursor;
+    let Vector { x, y } = &mut area.cursor;
 
     area.out
         .queue(cursor::MoveTo(area.offset.x + *x, area.offset.y + *y))?
