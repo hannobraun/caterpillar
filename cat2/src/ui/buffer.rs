@@ -6,7 +6,7 @@ use std::{
 use super::vector::Vector;
 
 pub struct Buffer {
-    chars: Box<[char]>,
+    chars: Vec<char>,
     width: usize,
 }
 
