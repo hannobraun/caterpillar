@@ -6,7 +6,7 @@ use super::{
 pub fn write(mut area: Area) -> anyhow::Result<Area> {
     write_top(&mut area)?;
     write_sides(&mut area)?;
-    draw_bottom(&mut area)?;
+    draw_bottom(&mut area);
 
     let offset = Vector { x: 1, y: 1 };
     Ok(area::slice(area, [offset, offset]))
@@ -30,9 +30,8 @@ fn write_sides(area: &mut Area) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn draw_bottom(area: &mut area::Area) -> anyhow::Result<()> {
+fn draw_bottom(area: &mut area::Area) {
     draw_horizontal(area, "┗", "┛");
-    Ok(())
 }
 
 fn draw_horizontal(area: &mut Area, left_corner: &str, right_corner: &str) {
