@@ -20,6 +20,9 @@ fn main() -> anyhow::Result<()> {
     loop {
         let current = lines.back().cloned().unwrap_or_else(cells::init);
 
+        // We only add new generations, but never delete them. This is fine for
+        // now, I think. Let's just hope nobody runs this for long enough to
+        // fill up their main memory.
         let next = cells::next_generation(current);
         lines.push_back(next);
 
