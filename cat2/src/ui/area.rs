@@ -8,20 +8,25 @@ use crossterm::{
 
 pub struct Area<'a> {
     out: &'a mut Stdout,
+    pub cursor: [u16; 2],
 }
 
 pub fn new(out: &mut Stdout) -> Area {
-    Area { out }
+    Area {
+        out,
+        cursor: [0; 2],
+    }
 }
 
-pub fn write(
-    area: &mut Area,
-    x: &mut u16,
-    y: u16,
-    s: &str,
-) -> anyhow::Result<()> {
+pub fn move_cursor(area: &mut Area, x: u16, y: u16) {
+    area.cursor = [x, y];
+}
+
+pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
+    let [x, y] = &mut area.cursor;
+
     area.out
-        .queue(cursor::MoveTo(*x, y))?
+        .queue(cursor::MoveTo(*x, *y))?
         .queue(style::PrintStyledContent(s.stylize()))?;
 
     let num_chars: u16 = s.chars().count().try_into().expect("String too long");

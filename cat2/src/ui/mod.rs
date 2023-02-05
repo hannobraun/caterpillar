@@ -103,16 +103,17 @@ impl Line {
 }
 
 fn print_top_border(
-    mut x: u16,
+    x: u16,
     y: &mut u16,
     width: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     let mut area = area::new(stdout);
+    area::move_cursor(&mut area, x, *y);
 
-    area::write(&mut area, &mut x, *y, "┏")?;
-    (0..width).try_for_each(|_| area::write(&mut area, &mut x, *y, "━"))?;
-    area::write(&mut area, &mut x, *y, "┓")?;
+    area::write(&mut area, "┏")?;
+    (0..width).try_for_each(|_| area::write(&mut area, "━"))?;
+    area::write(&mut area, "┓")?;
 
     *y += 1;
 
@@ -120,16 +121,17 @@ fn print_top_border(
 }
 
 fn print_bottom_border(
-    mut x: u16,
+    x: u16,
     y: &mut u16,
     width: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     let mut area = area::new(stdout);
+    area::move_cursor(&mut area, x, *y);
 
-    area::write(&mut area, &mut x, *y, "┗")?;
-    (0..width).try_for_each(|_| area::write(&mut area, &mut x, *y, "━"))?;
-    area::write(&mut area, &mut x, *y, "┛")?;
+    area::write(&mut area, "┗")?;
+    (0..width).try_for_each(|_| area::write(&mut area, "━"))?;
+    area::write(&mut area, "┛")?;
 
     *y += 1;
 
@@ -142,7 +144,12 @@ fn print_vertical_border(
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     let mut area = area::new(stdout);
-    area::write(&mut area, x, y, "┃")
+    area::move_cursor(&mut area, *x, y);
+    area::write(&mut area, "┃")?;
+
+    *x = area.cursor[0];
+
+    Ok(())
 }
 
 fn print_cells(
@@ -167,5 +174,10 @@ fn print_cell(
     let mut area = area::new(stdout);
 
     let content = if cell { "#" } else { " " };
-    area::write(&mut area, x, y, content)
+    area::move_cursor(&mut area, *x, y);
+    area::write(&mut area, content)?;
+
+    *x = area.cursor[0];
+
+    Ok(())
 }
