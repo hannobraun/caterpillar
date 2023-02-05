@@ -60,7 +60,7 @@ impl Lines {
         };
         let area = area::new(buffer, offset, size);
 
-        generations::draw(area, self.inner.iter().cloned());
+        generations::draw(area, self.inner.iter());
 
         buffer.draw(stdout)?;
 
