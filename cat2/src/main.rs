@@ -21,7 +21,7 @@ fn main() -> anyhow::Result<()> {
 
         let next = cells::next_generation(current);
 
-        lines.push_next(next);
+        lines.inner.push_back(next);
         lines.print(&mut buffer, &mut stdout)?;
 
         thread::sleep(delay - time.elapsed());

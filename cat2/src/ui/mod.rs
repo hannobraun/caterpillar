@@ -24,10 +24,6 @@ impl Lines {
         Self { inner }
     }
 
-    pub fn push_next(&mut self, next: Generation) {
-        self.inner.push_back(next);
-    }
-
     pub fn print(
         &mut self,
         buffer: &mut Buffer,
