@@ -3,6 +3,8 @@ mod border;
 mod buffer;
 mod vector;
 
+pub use self::buffer::Buffer;
+
 use std::{
     collections::VecDeque,
     io::{Stdout, Write},
@@ -13,7 +15,7 @@ use crossterm::{terminal, QueueableCommand};
 
 use crate::cells;
 
-use self::{buffer::Buffer, vector::Vector};
+use self::vector::Vector;
 
 pub struct Lines {
     inner: VecDeque<Line>,
