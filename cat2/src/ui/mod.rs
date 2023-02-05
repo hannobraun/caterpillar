@@ -35,7 +35,8 @@ impl Lines {
 
     pub fn print(&mut self, stdout: &mut Stdout) -> anyhow::Result<()> {
         let (num_columns, num_rows) = terminal::size()?;
-        let mut buffer = Buffer::new(Vector {
+        let mut buffer = Buffer::new();
+        buffer.prepare(Vector {
             x: num_columns,
             y: num_rows,
         });

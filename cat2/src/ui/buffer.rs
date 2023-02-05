@@ -11,13 +11,19 @@ pub struct Buffer {
 }
 
 impl Buffer {
-    pub fn new(size: Vector) -> Self {
-        let width = size.x.into();
+    pub fn new() -> Self {
+        Self {
+            chars: Vec::new(),
+            width: 0,
+        }
+    }
+
+    pub fn prepare(&mut self, size: Vector) {
+        self.width = size.x.into();
 
         let size = (size.x * size.y) as usize;
-        let chars = iter::repeat(' ').take(size).collect();
-
-        Self { chars, width }
+        self.chars.clear();
+        self.chars.extend(iter::repeat(' ').take(size));
     }
 
     pub fn write(&mut self, x: u16, y: u16, s: &str) {
