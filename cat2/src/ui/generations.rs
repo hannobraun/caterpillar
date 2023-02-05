@@ -1,6 +1,17 @@
 use crate::cells::Generation;
 
-use super::area::{self, Area};
+use super::{
+    area::{self, Area},
+    border,
+};
+
+pub fn draw(area: Area, generations: impl Iterator<Item = Generation>) {
+    let mut area = border::draw(area);
+
+    for generation in generations {
+        draw_generation(&mut area, generation)
+    }
+}
 
 pub fn draw_generation(area: &mut Area, generation: Generation) {
     for cell in generation {

@@ -60,17 +60,14 @@ impl Lines {
         };
         let area = area::new(buffer, offset, size);
 
-        let mut area = border::draw(area);
-
-        for generation in self
-            .inner
-            .iter()
-            .cloned()
-            .chain(iter::repeat_with(|| [false; NUM_CELLS]))
-            .take(lines_height)
-        {
-            generations::draw_generation(&mut area, generation);
-        }
+        generations::draw(
+            area,
+            self.inner
+                .iter()
+                .cloned()
+                .chain(iter::repeat_with(|| [false; NUM_CELLS]))
+                .take(lines_height),
+        );
 
         buffer.draw(stdout)?;
 
