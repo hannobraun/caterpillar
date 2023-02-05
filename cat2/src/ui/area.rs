@@ -31,9 +31,19 @@ pub fn slice(mut area: Area, offsets: [Vector; 2]) -> Area {
     area
 }
 
+pub fn move_to_previous_line(area: &mut Area) {
+    area.cursor.x = 0;
+    area.cursor.y = area.cursor.y.saturating_sub(1);
+}
+
 pub fn move_to_next_line(area: &mut Area) {
     area.cursor.x = 0;
     area.cursor.y += 1;
+}
+
+pub fn move_to_last_line(area: &mut Area) {
+    area.cursor.x = 0;
+    area.cursor.y = area.size.y - 1;
 }
 
 pub fn move_to_end_of_line(area: &mut Area) {
