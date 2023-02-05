@@ -88,18 +88,16 @@ impl Line {
 
     pub fn print(
         &self,
-        mut x: u16,
+        x: u16,
         y: &mut u16,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
-        print_vertical_border(&mut x, *y, stdout)?;
-
         let mut area = area::new(stdout);
         area::move_cursor(&mut area, x, *y);
-        print_cells(&mut area, self.cells)?;
-        x = area.cursor[0];
 
-        print_vertical_border(&mut x, *y, stdout)?;
+        print_vertical_border(&mut area)?;
+        print_cells(&mut area, self.cells)?;
+        print_vertical_border(&mut area)?;
 
         *y += 1;
 
@@ -143,18 +141,8 @@ fn print_bottom_border(
     Ok(())
 }
 
-fn print_vertical_border(
-    x: &mut u16,
-    y: u16,
-    stdout: &mut Stdout,
-) -> anyhow::Result<()> {
-    let mut area = area::new(stdout);
-    area::move_cursor(&mut area, *x, y);
-    area::write(&mut area, "┃")?;
-
-    *x = area.cursor[0];
-
-    Ok(())
+fn print_vertical_border(area: &mut area::Area) -> anyhow::Result<()> {
+    area::write(area, "┃")
 }
 
 fn print_cells(
