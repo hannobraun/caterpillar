@@ -7,19 +7,19 @@ use super::vector::Vector;
 
 pub struct Buffer {
     chars: Vec<char>,
-    width: usize,
+    size: Vector,
 }
 
 impl Buffer {
     pub fn new() -> Self {
         Self {
             chars: Vec::new(),
-            width: 0,
+            size: Vector { x: 0, y: 0 },
         }
     }
 
     pub fn prepare(&mut self, size: Vector) {
-        self.width = size.x.into();
+        self.size = size;
 
         let size = (size.x * size.y) as usize;
         self.chars.clear();
@@ -31,13 +31,13 @@ impl Buffer {
         let y: usize = y.into();
 
         for ch in s.chars() {
-            self.chars[y * self.width + x] = ch;
+            self.chars[y * self.size.x as usize + x] = ch;
             x += 1;
         }
     }
 
     pub fn print(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
-        let mut lines = self.chars.chunks(self.width).peekable();
+        let mut lines = self.chars.chunks(self.size.x as usize).peekable();
 
         while let Some(line) = lines.next() {
             for ch in line {
