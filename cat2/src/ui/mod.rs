@@ -14,7 +14,7 @@ use crate::cells::{self, Generation};
 
 use self::vector::Vector;
 
-pub fn print(
+pub fn draw(
     generations: &mut VecDeque<Generation>,
     buffer: &mut Buffer,
     stdout: &mut Stdout,
