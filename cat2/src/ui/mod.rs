@@ -6,7 +6,7 @@ mod vector;
 
 pub use self::buffer::Buffer;
 
-use std::{collections::VecDeque, io::Stdout};
+use std::io::Stdout;
 
 use crossterm::terminal;
 
@@ -15,7 +15,7 @@ use crate::cells::{self, Generation};
 use self::vector::Vector;
 
 pub fn draw(
-    generations: &VecDeque<Generation>,
+    generations: &[Generation],
     buffer: &mut Buffer,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
