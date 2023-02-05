@@ -20,11 +20,11 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
     Ok(area::slice(area, [offset, offset]))
 }
 
-pub fn print_top(area: &mut area::Area) -> anyhow::Result<()> {
+fn print_top(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓")
 }
 
-pub fn print_bottom(area: &mut area::Area) -> anyhow::Result<()> {
+fn print_bottom(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┗", "┛")
 }
 
@@ -44,6 +44,6 @@ fn print_horizontal(
     Ok(())
 }
 
-pub fn print_vertical(area: &mut Area) -> anyhow::Result<()> {
+fn print_vertical(area: &mut Area) -> anyhow::Result<()> {
     area::write(area, "┃")
 }
