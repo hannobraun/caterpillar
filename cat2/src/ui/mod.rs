@@ -1,16 +1,16 @@
+mod area;
+
 use std::{
     collections::VecDeque,
     io::{Stdout, Write},
     iter,
 };
 
-use crossterm::{
-    cursor,
-    style::{self, Stylize},
-    terminal, QueueableCommand,
-};
+use crossterm::{terminal, QueueableCommand};
 
 use crate::cells;
+
+use self::area::Area;
 
 pub struct Lines {
     inner: VecDeque<Line>,
@@ -172,12 +172,6 @@ fn print(
     y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    stdout
-        .queue(cursor::MoveTo(*x, y))?
-        .queue(style::PrintStyledContent(s.stylize()))?;
-
-    let num_chars: u16 = s.chars().count().try_into().expect("String too long");
-    *x += num_chars;
-
-    Ok(())
+    let mut area = Area { out: stdout };
+    area::write(&mut area, x, y, s)
 }
