@@ -1,8 +1,8 @@
-mod code;
+mod functions;
 mod stack;
 
 pub use self::{
-    code::Functions,
+    functions::Functions,
     stack::{Stack, Value},
 };
 
