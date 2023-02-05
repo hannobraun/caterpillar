@@ -5,11 +5,7 @@ mod vector;
 
 pub use self::buffer::Buffer;
 
-use std::{
-    collections::VecDeque,
-    io::{Stdout, Write},
-    iter,
-};
+use std::{collections::VecDeque, io::Stdout, iter};
 
 use crossterm::terminal;
 
@@ -77,7 +73,6 @@ impl Lines {
 
         buffer.draw(stdout)?;
 
-        stdout.flush()?;
         Ok(())
     }
 }

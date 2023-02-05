@@ -1,4 +1,7 @@
-use std::{io::Stdout, iter};
+use std::{
+    io::{Stdout, Write},
+    iter,
+};
 
 use crossterm::{
     cursor,
@@ -67,6 +70,8 @@ impl Buffer {
                 }
             }
         }
+
+        stdout.flush()?;
 
         Ok(())
     }
