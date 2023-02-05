@@ -19,8 +19,7 @@ fn main() -> anyhow::Result<()> {
     loop {
         let current = lines.current();
 
-        let next = cells::next_generation(current.cells());
-        let next = ui::Line::from_cells(next);
+        let next = cells::next_generation(current);
 
         lines.push_next(next);
         lines.print(&mut buffer, &mut stdout)?;

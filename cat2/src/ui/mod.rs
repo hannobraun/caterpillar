@@ -10,12 +10,12 @@ use std::{collections::VecDeque, io::Stdout, iter};
 
 use crossterm::terminal;
 
-use crate::cells;
+use crate::cells::{self, NUM_CELLS};
 
 use self::vector::Vector;
 
 pub struct Lines {
-    inner: VecDeque<Line>,
+    inner: VecDeque<[bool; NUM_CELLS]>,
 }
 
 impl Lines {
@@ -24,11 +24,11 @@ impl Lines {
         Self { inner }
     }
 
-    pub fn current(&self) -> Line {
-        self.inner.back().cloned().unwrap_or_else(Line::init)
+    pub fn current(&self) -> [bool; NUM_CELLS] {
+        self.inner.back().cloned().unwrap_or_else(cells::init)
     }
 
-    pub fn push_next(&mut self, next: Line) {
+    pub fn push_next(&mut self, next: [bool; NUM_CELLS]) {
         self.inner.push_back(next);
     }
 
@@ -66,39 +66,14 @@ impl Lines {
             .inner
             .iter()
             .cloned()
-            .chain(iter::repeat_with(Line::empty))
+            .chain(iter::repeat_with(|| [false; NUM_CELLS]))
             .take(lines_height)
         {
-            generations::write_generation(&mut area, line.cells);
+            generations::write_generation(&mut area, line);
         }
 
         buffer.draw(stdout)?;
 
         Ok(())
-    }
-}
-
-#[derive(Clone)]
-pub struct Line {
-    cells: [bool; cells::NUM_CELLS],
-}
-
-impl Line {
-    pub fn init() -> Self {
-        let cells = cells::init();
-        Self { cells }
-    }
-
-    pub fn empty() -> Self {
-        let cells = [false; cells::NUM_CELLS];
-        Self { cells }
-    }
-
-    pub fn from_cells(cells: [bool; cells::NUM_CELLS]) -> Self {
-        Self { cells }
-    }
-
-    pub fn cells(&self) -> [bool; cells::NUM_CELLS] {
-        self.cells
     }
 }
