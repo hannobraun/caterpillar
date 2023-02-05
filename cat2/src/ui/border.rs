@@ -3,7 +3,7 @@ use super::{
     vector::Vector,
 };
 
-pub fn write(mut area: Area) -> anyhow::Result<Area> {
+pub fn draw(mut area: Area) -> anyhow::Result<Area> {
     draw_top(&mut area);
     draw_sides(&mut area);
     draw_bottom(&mut area);

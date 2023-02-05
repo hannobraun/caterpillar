@@ -59,7 +59,7 @@ impl Lines {
         };
         let area = area::new(buffer, offset, size);
 
-        let mut area = border::write(area)?;
+        let mut area = border::draw(area)?;
 
         for line in self
             .inner
