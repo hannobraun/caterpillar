@@ -3,6 +3,23 @@ use super::{
     vector::Vector,
 };
 
+pub fn write(mut area: Area) -> anyhow::Result<Area> {
+    print_top(&mut area)?;
+
+    let Vector { y: height, .. } = area::size(&area);
+    for _ in 1..height - 1 {
+        print_vertical(&mut area)?;
+        area::move_to_end_of_line(&mut area);
+        print_vertical(&mut area)?;
+        area::new_line(&mut area);
+    }
+
+    print_bottom(&mut area)?;
+
+    let offset = Vector { x: 1, y: 1 };
+    Ok(area::slice(area, [offset, offset]))
+}
+
 pub fn print_top(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓")
 }

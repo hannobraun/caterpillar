@@ -52,9 +52,9 @@ impl Lines {
             x: lines_width,
             y: num_rows,
         };
-        let mut area = area::new(stdout, offset, size);
+        let area = area::new(stdout, offset, size);
 
-        border::print_top(&mut area)?;
+        let mut area = border::write(area)?;
 
         for line in self
             .inner
@@ -65,8 +65,6 @@ impl Lines {
         {
             line.print(&mut area)?;
         }
-
-        border::print_bottom(&mut area)?;
 
         stdout.flush()?;
         Ok(())
@@ -98,10 +96,7 @@ impl Line {
     }
 
     pub fn print(&self, area: &mut area::Area) -> anyhow::Result<()> {
-        border::print_vertical(area)?;
         print_cells(area, self.cells)?;
-        border::print_vertical(area)?;
-
         area::new_line(area);
 
         Ok(())
