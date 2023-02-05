@@ -1,21 +1,13 @@
-use std::io::Stdout;
-
-use crossterm::{
-    cursor,
-    style::{self, Stylize},
-    QueueableCommand,
-};
-
-use super::vector::Vector;
+use super::{buffer::Buffer, vector::Vector};
 
 pub struct Area<'a> {
-    out: &'a mut Stdout,
+    out: &'a mut Buffer,
     offset: Vector,
     size: Vector,
     cursor: Vector,
 }
 
-pub fn new(out: &mut Stdout, offset: Vector, size: Vector) -> Area {
+pub fn new(out: &mut Buffer, offset: Vector, size: Vector) -> Area {
     Area {
         out,
         offset,
@@ -51,9 +43,7 @@ pub fn move_to_end_of_line(area: &mut Area) {
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
     let Vector { x, y } = area.offset + area.cursor;
 
-    area.out
-        .queue(cursor::MoveTo(x, y))?
-        .queue(style::PrintStyledContent(s.stylize()))?;
+    area.out.write(x, y, s);
 
     let num_chars: u16 = s.chars().count().try_into().expect("String too long");
     area.cursor.x += num_chars;

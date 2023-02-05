@@ -1,5 +1,6 @@
 mod area;
 mod border;
+mod buffer;
 mod vector;
 
 use std::{
@@ -12,7 +13,7 @@ use crossterm::{terminal, QueueableCommand};
 
 use crate::cells;
 
-use self::vector::Vector;
+use self::{buffer::Buffer, vector::Vector};
 
 pub struct Lines {
     inner: VecDeque<Line>,
@@ -34,6 +35,10 @@ impl Lines {
 
     pub fn print(&mut self, stdout: &mut Stdout) -> anyhow::Result<()> {
         let (num_columns, num_rows) = terminal::size()?;
+        let mut buffer = Buffer::new(Vector {
+            x: num_columns,
+            y: num_rows,
+        });
 
         let lines_width = cells::NUM_CELLS as u16 + 2;
         let lines_height = num_rows as usize - 2;
@@ -52,7 +57,7 @@ impl Lines {
             x: lines_width,
             y: num_rows,
         };
-        let area = area::new(stdout, offset, size);
+        let area = area::new(&mut buffer, offset, size);
 
         let mut area = border::write(area)?;
 
@@ -65,6 +70,8 @@ impl Lines {
         {
             line.print(&mut area)?;
         }
+
+        buffer.print(stdout)?;
 
         stdout.flush()?;
         Ok(())
