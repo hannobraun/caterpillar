@@ -1,4 +1,4 @@
-use std::io::Stdout;
+use std::{io::Stdout, ops};
 
 use crossterm::{
     cursor,
@@ -17,6 +17,17 @@ pub struct Area<'a> {
 pub struct Vector {
     pub x: u16,
     pub y: u16,
+}
+
+impl ops::Add for Vector {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
 }
 
 pub fn new(out: &mut Stdout, offset: Vector, size: Vector) -> Area {
@@ -38,8 +49,7 @@ pub fn new_line(area: &mut Area) {
 }
 
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
-    let x = area.offset.x + area.cursor.x;
-    let y = area.offset.y + area.cursor.y;
+    let Vector { x, y } = area.offset + area.cursor;
 
     area.out
         .queue(cursor::MoveTo(x, y))?
