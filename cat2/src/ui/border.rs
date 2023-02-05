@@ -1,4 +1,7 @@
-use super::area::{self, Area};
+use super::{
+    area::{self, Area},
+    vector::Vector,
+};
 
 pub fn print_top(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓")
@@ -13,7 +16,7 @@ fn print_horizontal(
     left_corner: &str,
     right_corner: &str,
 ) -> anyhow::Result<()> {
-    let area::Vector { x: width, .. } = area::size(area);
+    let Vector { x: width, .. } = area::size(area);
 
     area::write(area, left_corner)?;
     (0..width).try_for_each(|_| area::write(area, "━"))?;

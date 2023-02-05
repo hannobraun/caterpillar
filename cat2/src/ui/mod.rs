@@ -1,5 +1,6 @@
 mod area;
 mod border;
+mod vector;
 
 use std::{
     collections::VecDeque,
@@ -10,6 +11,8 @@ use std::{
 use crossterm::{terminal, QueueableCommand};
 
 use crate::cells;
+
+use self::vector::Vector;
 
 pub struct Lines {
     inner: VecDeque<Line>,
@@ -46,8 +49,8 @@ impl Lines {
 
         let mut area = area::new(
             stdout,
-            area::Vector { x, y },
-            area::Vector {
+            Vector { x, y },
+            Vector {
                 x: lines_width,
                 y: num_rows,
             },

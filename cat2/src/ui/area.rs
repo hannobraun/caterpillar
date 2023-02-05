@@ -1,4 +1,4 @@
-use std::{io::Stdout, ops};
+use std::io::Stdout;
 
 use crossterm::{
     cursor,
@@ -6,28 +6,13 @@ use crossterm::{
     QueueableCommand,
 };
 
+use super::vector::Vector;
+
 pub struct Area<'a> {
     out: &'a mut Stdout,
     offset: Vector,
     size: Vector,
     cursor: Vector,
-}
-
-#[derive(Clone, Copy)]
-pub struct Vector {
-    pub x: u16,
-    pub y: u16,
-}
-
-impl ops::Add for Vector {
-    type Output = Self;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-        }
-    }
 }
 
 pub fn new(out: &mut Stdout, offset: Vector, size: Vector) -> Area {
