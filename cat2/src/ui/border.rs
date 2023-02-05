@@ -8,7 +8,7 @@ pub fn print_bottom(area: &mut area::Area, width: u16) -> anyhow::Result<()> {
     print_horizontal(area, "┗", "┛", width)
 }
 
-pub fn print_horizontal(
+fn print_horizontal(
     area: &mut Area,
     left_corner: &str,
     right_corner: &str,
