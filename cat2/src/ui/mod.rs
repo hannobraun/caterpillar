@@ -14,41 +14,37 @@ use crate::cells::{self, Generation};
 
 use self::vector::Vector;
 
-pub struct Lines {}
+pub fn print(
+    generations: &mut VecDeque<Generation>,
+    buffer: &mut Buffer,
+    stdout: &mut Stdout,
+) -> anyhow::Result<()> {
+    let (num_columns, num_rows) = terminal::size()?;
+    buffer.prepare(Vector {
+        x: num_columns as usize,
+        y: num_rows as usize,
+    });
 
-impl Lines {
-    pub fn print(
-        generations: &mut VecDeque<Generation>,
-        buffer: &mut Buffer,
-        stdout: &mut Stdout,
-    ) -> anyhow::Result<()> {
-        let (num_columns, num_rows) = terminal::size()?;
-        buffer.prepare(Vector {
-            x: num_columns as usize,
-            y: num_rows as usize,
-        });
+    let lines_width = cells::NUM_CELLS + 2;
+    let lines_height = num_rows as usize - 2;
 
-        let lines_width = cells::NUM_CELLS + 2;
-        let lines_height = num_rows as usize - 2;
-
-        while generations.len() > lines_height {
-            generations.pop_front();
-        }
-
-        let offset = Vector {
-            x: num_columns as usize - lines_width,
-            y: 0,
-        };
-        let size = Vector {
-            x: lines_width,
-            y: num_rows as usize,
-        };
-        let area = area::new(buffer, offset, size);
-
-        generations::draw(area, generations.iter());
-
-        buffer.draw(stdout)?;
-
-        Ok(())
+    while generations.len() > lines_height {
+        generations.pop_front();
     }
+
+    let offset = Vector {
+        x: num_columns as usize - lines_width,
+        y: 0,
+    };
+    let size = Vector {
+        x: lines_width,
+        y: num_rows as usize,
+    };
+    let area = area::new(buffer, offset, size);
+
+    generations::draw(area, generations.iter());
+
+    buffer.draw(stdout)?;
+
+    Ok(())
 }

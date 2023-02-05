@@ -23,7 +23,7 @@ fn main() -> anyhow::Result<()> {
         let next = cells::next_generation(current);
 
         lines.push_back(next);
-        ui::Lines::print(&mut lines, &mut buffer, &mut stdout)?;
+        ui::print(&mut lines, &mut buffer, &mut stdout)?;
 
         thread::sleep(delay - time.elapsed());
         time += delay;
