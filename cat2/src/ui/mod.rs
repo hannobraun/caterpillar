@@ -68,7 +68,7 @@ impl Lines {
             .chain(iter::repeat_with(Line::empty))
             .take(lines_height)
         {
-            line.print(&mut area)?;
+            print_cells(&mut area, line.cells)?;
         }
 
         buffer.draw(stdout)?;
@@ -99,10 +99,6 @@ impl Line {
 
     pub fn cells(&self) -> [bool; cells::NUM_CELLS] {
         self.cells
-    }
-
-    pub fn print(&self, area: &mut area::Area) -> anyhow::Result<()> {
-        print_cells(area, self.cells)
     }
 }
 
