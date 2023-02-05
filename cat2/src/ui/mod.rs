@@ -75,7 +75,7 @@ impl Lines {
             line.print(&mut area)?;
         }
 
-        buffer.print(stdout)?;
+        buffer.draw(stdout)?;
 
         stdout.flush()?;
         Ok(())

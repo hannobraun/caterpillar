@@ -50,7 +50,7 @@ impl Buffer {
         }
     }
 
-    pub fn print(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
+    pub fn draw(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
         for (y, line) in self
             .current
             .chunks(self.current_size.x as usize)
