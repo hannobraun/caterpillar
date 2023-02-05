@@ -1,7 +1,7 @@
 mod area;
 mod border;
 mod buffer;
-mod generation;
+mod generations;
 mod vector;
 
 pub use self::buffer::Buffer;
@@ -69,7 +69,7 @@ impl Lines {
             .chain(iter::repeat_with(Line::empty))
             .take(lines_height)
         {
-            generation::write_generation(&mut area, line.cells);
+            generations::write_generation(&mut area, line.cells);
         }
 
         buffer.draw(stdout)?;
