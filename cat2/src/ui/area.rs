@@ -38,11 +38,11 @@ pub fn new_line(area: &mut Area) {
 }
 
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
+    let x = area.offset.x + area.cursor.x;
+    let y = area.offset.y + area.cursor.y;
+
     area.out
-        .queue(cursor::MoveTo(
-            area.offset.x + area.cursor.x,
-            area.offset.y + area.cursor.y,
-        ))?
+        .queue(cursor::MoveTo(x, y))?
         .queue(style::PrintStyledContent(s.stylize()))?;
 
     let num_chars: u16 = s.chars().count().try_into().expect("String too long");
