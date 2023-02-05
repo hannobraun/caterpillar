@@ -6,6 +6,7 @@ use std::{
 use super::vector::Vector;
 
 pub struct Buffer {
+    previous: Vec<char>,
     chars: Vec<char>,
     size: Vector,
 }
@@ -13,6 +14,7 @@ pub struct Buffer {
 impl Buffer {
     pub fn new() -> Self {
         Self {
+            previous: Vec::new(),
             chars: Vec::new(),
             size: Vector { x: 0, y: 0 },
         }
@@ -20,6 +22,9 @@ impl Buffer {
 
     pub fn prepare(&mut self, size: Vector) {
         self.size = size;
+
+        self.previous.clear();
+        self.previous.extend(self.chars.iter().cloned());
 
         let size = (size.x * size.y) as usize;
         self.chars.clear();
