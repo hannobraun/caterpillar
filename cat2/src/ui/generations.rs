@@ -2,7 +2,7 @@ use crate::cells;
 
 use super::area::{self, Area};
 
-pub fn write_generation(area: &mut Area, cells: [bool; cells::NUM_CELLS]) {
+pub fn draw_generation(area: &mut Area, cells: [bool; cells::NUM_CELLS]) {
     for cell in cells {
         draw_cell(area, cell);
     }

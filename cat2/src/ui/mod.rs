@@ -69,7 +69,7 @@ impl Lines {
             .chain(iter::repeat_with(|| [false; NUM_CELLS]))
             .take(lines_height)
         {
-            generations::write_generation(&mut area, generation);
+            generations::draw_generation(&mut area, generation);
         }
 
         buffer.draw(stdout)?;
