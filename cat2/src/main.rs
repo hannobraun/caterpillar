@@ -2,7 +2,7 @@ mod cells;
 mod cp;
 mod ui;
 
-use std::{io::stdout, time::Instant};
+use std::{io::stdout, thread, time::Instant};
 
 fn main() -> anyhow::Result<()> {
     let mut stdout = stdout();
@@ -22,6 +22,8 @@ fn main() -> anyhow::Result<()> {
         // function call completely messes up the UI. It starts flickering, but
         // with this busy loop here, it's perfectly smooth for some reason.
         let now = Instant::now();
-        while now.elapsed().as_secs_f64() < 0.125 {}
+        while now.elapsed().as_secs_f64() < 0.125 {
+            thread::yield_now();
+        }
     }
 }
