@@ -13,7 +13,7 @@ pub struct Buffer {
     current: Vec<char>,
 
     previous_size: Vector,
-    size: Vector,
+    current_size: Vector,
 }
 
 impl Buffer {
@@ -23,13 +23,13 @@ impl Buffer {
             current: Vec::new(),
 
             previous_size: Vector { x: 0, y: 0 },
-            size: Vector { x: 0, y: 0 },
+            current_size: Vector { x: 0, y: 0 },
         }
     }
 
     pub fn prepare(&mut self, size: Vector) {
-        self.previous_size = self.size;
-        self.size = size;
+        self.previous_size = self.current_size;
+        self.current_size = size;
 
         self.previous.clear();
         self.previous.extend(self.current.iter().cloned());
@@ -51,7 +51,11 @@ impl Buffer {
     }
 
     pub fn print(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
-        for (y, line) in self.current.chunks(self.size.x as usize).enumerate() {
+        for (y, line) in self
+            .current
+            .chunks(self.current_size.x as usize)
+            .enumerate()
+        {
             for (x, ch) in line.iter().enumerate() {
                 stdout
                     .queue(cursor::MoveTo(x as u16, y as u16))?
@@ -63,6 +67,6 @@ impl Buffer {
     }
 
     fn index(&self, x: usize, y: usize) -> usize {
-        y * self.size.x as usize + x
+        y * self.current_size.x as usize + x
     }
 }
