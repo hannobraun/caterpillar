@@ -40,9 +40,9 @@ fn write_horizontal(
 ) -> anyhow::Result<()> {
     let Vector { x: width, .. } = area::size(area);
 
-    area::draw(area, left_corner)?;
-    (0..width - 2).try_for_each(|_| area::draw(area, "━"))?;
-    area::draw(area, right_corner)?;
+    area::draw(area, left_corner);
+    (0..width - 2).for_each(|_| area::draw(area, "━"));
+    area::draw(area, right_corner);
 
     area::move_to_new_line(area);
 
@@ -50,5 +50,6 @@ fn write_horizontal(
 }
 
 fn write_vertical(area: &mut Area) -> anyhow::Result<()> {
-    area::draw(area, "┃")
+    area::draw(area, "┃");
+    Ok(())
 }

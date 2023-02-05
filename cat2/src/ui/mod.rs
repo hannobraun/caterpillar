@@ -117,5 +117,6 @@ fn print_cells(
 
 fn print_cell(area: &mut area::Area, cell: bool) -> anyhow::Result<()> {
     let content = if cell { "#" } else { " " };
-    area::draw(area, content)
+    area::draw(area, content);
+    Ok(())
 }

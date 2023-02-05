@@ -40,13 +40,11 @@ pub fn move_to_end_of_line(area: &mut Area) {
     area.cursor.x = area.size.x - 1;
 }
 
-pub fn draw(area: &mut Area, s: &str) -> anyhow::Result<()> {
+pub fn draw(area: &mut Area, s: &str) {
     let Vector { x, y } = area.offset + area.cursor;
 
     area.out.write(x, y, s);
 
     let num_chars: u16 = s.chars().count().try_into().expect("String too long");
     area.cursor.x += num_chars;
-
-    Ok(())
 }
