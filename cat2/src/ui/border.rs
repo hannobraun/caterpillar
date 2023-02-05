@@ -8,8 +8,7 @@ pub fn draw(mut area: Area) -> Area {
     draw_sides(&mut area);
     draw_bottom(&mut area);
 
-    let offset = Vector { x: 1, y: 1 };
-    area::slice(area, [offset, offset])
+    area::slice(area, [Vector { x: 1, y: 1 }, Vector { x: 2, y: 2 }])
 }
 
 fn draw_top(area: &mut area::Area) {
