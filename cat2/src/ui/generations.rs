@@ -7,8 +7,9 @@ use super::{
 
 pub fn draw(area: Area, generations: impl Iterator<Item = Generation>) {
     let mut area = border::draw(area);
+    let limit = area::size(&area).y.into();
 
-    for generation in generations {
+    for generation in generations.take(limit) {
         draw_generation(&mut area, generation)
     }
 }
