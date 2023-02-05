@@ -14,18 +14,11 @@ use crate::cells::{self, Generation};
 
 use self::vector::Vector;
 
-pub struct Lines {
-    pub inner: VecDeque<Generation>,
-}
+pub struct Lines {}
 
 impl Lines {
-    pub fn new() -> Self {
-        let inner = VecDeque::new();
-        Self { inner }
-    }
-
     pub fn print(
-        &mut self,
+        generations: &mut VecDeque<Generation>,
         buffer: &mut Buffer,
         stdout: &mut Stdout,
     ) -> anyhow::Result<()> {
@@ -38,8 +31,8 @@ impl Lines {
         let lines_width = cells::NUM_CELLS + 2;
         let lines_height = num_rows as usize - 2;
 
-        while self.inner.len() > lines_height {
-            self.inner.pop_front();
+        while generations.len() > lines_height {
+            generations.pop_front();
         }
 
         let offset = Vector {
@@ -52,7 +45,7 @@ impl Lines {
         };
         let area = area::new(buffer, offset, size);
 
-        generations::draw(area, self.inner.iter());
+        generations::draw(area, generations.iter());
 
         buffer.draw(stdout)?;
 
