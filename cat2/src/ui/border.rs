@@ -3,13 +3,13 @@ use super::{
     vector::Vector,
 };
 
-pub fn draw(mut area: Area) -> anyhow::Result<Area> {
+pub fn draw(mut area: Area) -> Area {
     draw_top(&mut area);
     draw_sides(&mut area);
     draw_bottom(&mut area);
 
     let offset = Vector { x: 1, y: 1 };
-    Ok(area::slice(area, [offset, offset]))
+    area::slice(area, [offset, offset])
 }
 
 fn draw_top(area: &mut area::Area) {
