@@ -17,6 +17,10 @@ fn main() -> anyhow::Result<()> {
         lines.push_next(next);
         lines.print(&mut stdout)?;
 
+        // I wrote this in a moment of idiocy, when I had temporarily forgotten
+        // that `thread::sleep` exists. However, trying to replace it with that
+        // function call completely messes up the UI. It starts flickering, but
+        // with this busy loop here, it's perfectly smooth for some reason.
         let now = Instant::now();
         while now.elapsed().as_secs_f64() < 0.125 {}
     }
