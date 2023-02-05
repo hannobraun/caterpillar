@@ -16,3 +16,9 @@ impl ops::Add for Vector {
         }
     }
 }
+
+impl ops::AddAssign for Vector {
+    fn add_assign(&mut self, rhs: Self) {
+        *self = *self + rhs
+    }
+}
