@@ -42,13 +42,11 @@ impl Buffer {
         self.current.extend(iter::repeat(' ').take(size));
     }
 
-    pub fn write(&mut self, position: Vector, s: &str) {
-        let mut x: usize = position.x;
-
+    pub fn write(&mut self, mut position: Vector, s: &str) {
         for ch in s.chars() {
-            let index = self.index(x, position.y);
+            let index = self.index(position.x, position.y);
             self.current[index] = ch;
-            x += 1;
+            position.x += 1;
         }
     }
 
