@@ -33,10 +33,8 @@ pub fn size(area: &Area) -> Vector {
 }
 
 pub fn new_line(area: &mut Area) {
-    let Vector { x, y } = &mut area.cursor;
-
-    *x = 0;
-    *y += 1;
+    area.cursor.x = 0;
+    area.cursor.y += 1;
 }
 
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
