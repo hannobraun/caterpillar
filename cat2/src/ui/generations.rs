@@ -10,12 +10,12 @@ pub fn draw(area: Area, generations: impl Iterator<Item = Generation>) {
     let limit = area::size(&area).y.into();
 
     for generation in generations.take(limit) {
-        draw_generation(&mut area, generation)
+        draw_generation(&mut area, &generation)
     }
 }
 
-pub fn draw_generation(area: &mut Area, generation: Generation) {
-    for cell in generation {
+pub fn draw_generation(area: &mut Area, generation: &Generation) {
+    for &cell in generation {
         draw_cell(area, cell);
     }
 
