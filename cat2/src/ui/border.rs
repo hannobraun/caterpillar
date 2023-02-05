@@ -14,7 +14,7 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
         area::move_to_new_line(&mut area);
     }
 
-    print_bottom(&mut area)?;
+    write_bottom(&mut area)?;
 
     let offset = Vector { x: 1, y: 1 };
     Ok(area::slice(area, [offset, offset]))
@@ -24,7 +24,7 @@ fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓")
 }
 
-fn print_bottom(area: &mut area::Area) -> anyhow::Result<()> {
+fn write_bottom(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┗", "┛")
 }
 
