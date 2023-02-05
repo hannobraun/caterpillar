@@ -7,7 +7,7 @@ use super::vector::Vector;
 
 pub struct Buffer {
     previous: Vec<char>,
-    chars: Vec<char>,
+    current: Vec<char>,
     size: Vector,
 }
 
@@ -15,7 +15,7 @@ impl Buffer {
     pub fn new() -> Self {
         Self {
             previous: Vec::new(),
-            chars: Vec::new(),
+            current: Vec::new(),
             size: Vector { x: 0, y: 0 },
         }
     }
@@ -24,11 +24,11 @@ impl Buffer {
         self.size = size;
 
         self.previous.clear();
-        self.previous.extend(self.chars.iter().cloned());
+        self.previous.extend(self.current.iter().cloned());
 
         let size = (size.x * size.y) as usize;
-        self.chars.clear();
-        self.chars.extend(iter::repeat(' ').take(size));
+        self.current.clear();
+        self.current.extend(iter::repeat(' ').take(size));
     }
 
     pub fn write(&mut self, x: u16, y: u16, s: &str) {
@@ -36,13 +36,13 @@ impl Buffer {
         let y: usize = y.into();
 
         for ch in s.chars() {
-            self.chars[y * self.size.x as usize + x] = ch;
+            self.current[y * self.size.x as usize + x] = ch;
             x += 1;
         }
     }
 
     pub fn print(&self, stdout: &mut Stdout) -> anyhow::Result<()> {
-        let mut lines = self.chars.chunks(self.size.x as usize).peekable();
+        let mut lines = self.current.chunks(self.size.x as usize).peekable();
 
         while let Some(line) = lines.next() {
             for ch in line {
