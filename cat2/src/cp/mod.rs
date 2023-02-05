@@ -2,7 +2,7 @@ mod code;
 mod stack;
 
 pub use self::{
-    code::Code,
+    code::Functions,
     stack::{Stack, Value},
 };
 

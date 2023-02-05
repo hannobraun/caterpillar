@@ -1,10 +1,10 @@
 use std::collections::BTreeMap;
 
-pub struct Code {
+pub struct Functions {
     functions: BTreeMap<String, String>,
 }
 
-impl Code {
+impl Functions {
     pub fn new() -> Self {
         let mut functions = BTreeMap::new();
 

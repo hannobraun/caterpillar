@@ -47,7 +47,7 @@ pub fn neighbor_range(i: u8) -> (u8, u8) {
 }
 
 pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
-    let code = cp::Code::new();
+    let code = cp::Functions::new();
     let mut stack = cp::Stack::new();
 
     if lives_already {
