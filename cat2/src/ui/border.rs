@@ -10,6 +10,8 @@ pub fn print_horizontal(
     (0..width).try_for_each(|_| area::write(area, "━"))?;
     area::write(area, right_corner)?;
 
+    area::new_line(area);
+
     Ok(())
 }
 

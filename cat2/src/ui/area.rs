@@ -22,6 +22,13 @@ pub fn move_cursor(area: &mut Area, x: u16, y: u16) {
     area.cursor = [x, y];
 }
 
+pub fn new_line(area: &mut Area) {
+    let [x, y] = &mut area.cursor;
+
+    *x = 0;
+    *y += 1;
+}
+
 pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
     let [x, y] = &mut area.cursor;
 

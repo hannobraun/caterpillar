@@ -116,8 +116,7 @@ fn print_top_border(
     area::move_cursor(&mut area, x, *y);
 
     border::print_horizontal(&mut area, "┏", "┓", width)?;
-
-    *y += 1;
+    *y += area.cursor[1];
 
     Ok(())
 }
@@ -132,8 +131,7 @@ fn print_bottom_border(
     area::move_cursor(&mut area, x, *y);
 
     border::print_horizontal(&mut area, "┗", "┛", width)?;
-
-    *y += 1;
+    *y += area.cursor[1];
 
     Ok(())
 }
