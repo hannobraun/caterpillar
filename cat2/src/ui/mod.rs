@@ -97,7 +97,7 @@ impl Line {
 
     pub fn print(&self, area: &mut area::Area) -> anyhow::Result<()> {
         print_cells(area, self.cells)?;
-        area::new_line(area);
+        area::move_to_new_line(area);
 
         Ok(())
     }

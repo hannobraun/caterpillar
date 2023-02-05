@@ -11,7 +11,7 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
         print_vertical(&mut area)?;
         area::move_to_end_of_line(&mut area);
         print_vertical(&mut area)?;
-        area::new_line(&mut area);
+        area::move_to_new_line(&mut area);
     }
 
     print_bottom(&mut area)?;
@@ -39,7 +39,7 @@ fn print_horizontal(
     (0..width).try_for_each(|_| area::write(area, "━"))?;
     area::write(area, right_corner)?;
 
-    area::new_line(area);
+    area::move_to_new_line(area);
 
     Ok(())
 }
