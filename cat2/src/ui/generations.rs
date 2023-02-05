@@ -1,8 +1,6 @@
 use crate::cells;
 
-use super::area::Area;
-
-use super::area;
+use super::area::{self, Area};
 
 pub fn write_generation(area: &mut Area, cells: [bool; cells::NUM_CELLS]) {
     for cell in cells {
