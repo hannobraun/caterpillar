@@ -9,7 +9,7 @@ use crossterm::{
 pub struct Area<'a> {
     out: &'a mut Stdout,
     offset: Vector,
-    size: [u16; 2],
+    size: Vector,
     cursor: [u16; 2],
 }
 
@@ -19,7 +19,7 @@ pub struct Vector {
     pub y: u16,
 }
 
-pub fn new(out: &mut Stdout, offset: Vector, size: [u16; 2]) -> Area {
+pub fn new(out: &mut Stdout, offset: Vector, size: Vector) -> Area {
     Area {
         out,
         offset,
@@ -28,7 +28,7 @@ pub fn new(out: &mut Stdout, offset: Vector, size: [u16; 2]) -> Area {
     }
 }
 
-pub fn size(area: &Area) -> [u16; 2] {
+pub fn size(area: &Area) -> Vector {
     area.size
 }
 

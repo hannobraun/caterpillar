@@ -44,8 +44,14 @@ impl Lines {
         let x = num_columns - lines_width;
         let y = 0;
 
-        let mut area =
-            area::new(stdout, area::Vector { x, y }, [lines_width, num_rows]);
+        let mut area = area::new(
+            stdout,
+            area::Vector { x, y },
+            area::Vector {
+                x: lines_width,
+                y: num_rows,
+            },
+        );
 
         border::print_top(&mut area)?;
 
