@@ -158,26 +158,19 @@ fn print_cells(
     y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    for cell in cells {
-        print_cell(cell, x, y, stdout)?;
-    }
-
-    Ok(())
-}
-
-fn print_cell(
-    cell: bool,
-    x: &mut u16,
-    y: u16,
-    stdout: &mut Stdout,
-) -> anyhow::Result<()> {
     let mut area = area::new(stdout);
-
-    let content = if cell { "#" } else { " " };
     area::move_cursor(&mut area, *x, y);
-    area::write(&mut area, content)?;
+
+    for cell in cells {
+        print_cell(&mut area, cell)?;
+    }
 
     *x = area.cursor[0];
 
     Ok(())
+}
+
+fn print_cell(area: &mut area::Area, cell: bool) -> anyhow::Result<()> {
+    let content = if cell { "#" } else { " " };
+    area::write(area, content)
 }
