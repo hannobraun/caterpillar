@@ -102,10 +102,7 @@ impl Line {
     }
 
     pub fn print(&self, area: &mut area::Area) -> anyhow::Result<()> {
-        print_cells(area, self.cells)?;
-        area::move_to_new_line(area);
-
-        Ok(())
+        print_cells(area, self.cells)
     }
 }
 
@@ -116,6 +113,8 @@ fn print_cells(
     for cell in cells {
         print_cell(area, cell)?;
     }
+
+    area::move_to_new_line(area);
 
     Ok(())
 }
