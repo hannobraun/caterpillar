@@ -40,7 +40,7 @@ pub fn move_to_end_of_line(area: &mut Area) {
     area.cursor.x = area.size.x - 1;
 }
 
-pub fn write(area: &mut Area, s: &str) -> anyhow::Result<()> {
+pub fn draw(area: &mut Area, s: &str) -> anyhow::Result<()> {
     let Vector { x, y } = area.offset + area.cursor;
 
     area.out.write(x, y, s);
