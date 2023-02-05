@@ -44,10 +44,10 @@ impl Lines {
         let x = num_columns - lines_width;
         let mut y = 0;
 
-        let mut area = area::new(stdout);
+        let mut area = area::new(stdout, [lines_width, num_rows]);
 
         area::move_cursor(&mut area, x, y);
-        border::print_top(&mut area, lines_width)?;
+        border::print_top(&mut area)?;
         y = area.cursor[1];
 
         for line in self
@@ -63,7 +63,7 @@ impl Lines {
         }
 
         area::move_cursor(&mut area, x, y);
-        border::print_bottom(&mut area, lines_width)?;
+        border::print_bottom(&mut area)?;
 
         stdout.flush()?;
         Ok(())

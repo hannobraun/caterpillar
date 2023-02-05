@@ -8,14 +8,20 @@ use crossterm::{
 
 pub struct Area<'a> {
     out: &'a mut Stdout,
+    size: [u16; 2],
     pub cursor: [u16; 2],
 }
 
-pub fn new(out: &mut Stdout) -> Area {
+pub fn new(out: &mut Stdout, size: [u16; 2]) -> Area {
     Area {
         out,
+        size,
         cursor: [0; 2],
     }
+}
+
+pub fn size(area: &Area) -> [u16; 2] {
+    area.size
 }
 
 pub fn move_cursor(area: &mut Area, x: u16, y: u16) {
