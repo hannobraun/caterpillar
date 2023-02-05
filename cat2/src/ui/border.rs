@@ -4,7 +4,7 @@ use super::{
 };
 
 pub fn write(mut area: Area) -> anyhow::Result<Area> {
-    draw_top(&mut area)?;
+    draw_top(&mut area);
     draw_sides(&mut area);
     draw_bottom(&mut area);
 
@@ -12,9 +12,8 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
     Ok(area::slice(area, [offset, offset]))
 }
 
-fn draw_top(area: &mut area::Area) -> anyhow::Result<()> {
+fn draw_top(area: &mut area::Area) {
     draw_horizontal(area, "┏", "┓");
-    Ok(())
 }
 
 fn draw_sides(area: &mut Area) {
