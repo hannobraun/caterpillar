@@ -21,14 +21,14 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
 }
 
 fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
-    print_horizontal(area, "┏", "┓")
+    write_horizontal(area, "┏", "┓")
 }
 
 fn write_bottom(area: &mut area::Area) -> anyhow::Result<()> {
-    print_horizontal(area, "┗", "┛")
+    write_horizontal(area, "┗", "┛")
 }
 
-fn print_horizontal(
+fn write_horizontal(
     area: &mut Area,
     left_corner: &str,
     right_corner: &str,
