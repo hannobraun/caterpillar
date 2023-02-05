@@ -4,7 +4,7 @@ use super::{
 };
 
 pub fn write(mut area: Area) -> anyhow::Result<Area> {
-    print_top(&mut area)?;
+    write_top(&mut area)?;
 
     let Vector { y: height, .. } = area::size(&area);
     for _ in 1..height - 1 {
@@ -20,7 +20,7 @@ pub fn write(mut area: Area) -> anyhow::Result<Area> {
     Ok(area::slice(area, [offset, offset]))
 }
 
-fn print_top(area: &mut area::Area) -> anyhow::Result<()> {
+fn write_top(area: &mut area::Area) -> anyhow::Result<()> {
     print_horizontal(area, "┏", "┓")
 }
 
