@@ -4,7 +4,7 @@ use super::area::Area;
 
 use super::area;
 
-pub fn print_cells(
+pub fn write_generation(
     area: &mut Area,
     cells: [bool; cells::NUM_CELLS],
 ) -> anyhow::Result<()> {
