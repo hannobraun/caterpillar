@@ -62,14 +62,14 @@ impl Lines {
 
         let mut area = border::draw(area);
 
-        for line in self
+        for generation in self
             .inner
             .iter()
             .cloned()
             .chain(iter::repeat_with(|| [false; NUM_CELLS]))
             .take(lines_height)
         {
-            generations::write_generation(&mut area, line);
+            generations::write_generation(&mut area, generation);
         }
 
         buffer.draw(stdout)?;
