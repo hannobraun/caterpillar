@@ -10,7 +10,7 @@ pub struct Area<'a> {
     out: &'a mut Stdout,
     offset: [u16; 2],
     size: [u16; 2],
-    pub cursor: [u16; 2],
+    cursor: [u16; 2],
 }
 
 pub fn new(out: &mut Stdout, offset: [u16; 2], size: [u16; 2]) -> Area {
