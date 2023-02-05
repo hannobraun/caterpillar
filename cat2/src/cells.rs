@@ -54,7 +54,7 @@ pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
         cell_survives(num_neighbors)
     } else {
         stack.push(cp::Value::U8(num_neighbors));
-        cp::interpret(code.function("cell_is_born"), &mut stack);
+        cp::interpret(code.get("cell_is_born"), &mut stack);
         stack.pop_bool()
     }
 }

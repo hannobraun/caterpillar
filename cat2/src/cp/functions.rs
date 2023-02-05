@@ -19,7 +19,7 @@ impl Functions {
         Self { inner }
     }
 
-    pub fn function(&self, name: &str) -> &str {
+    pub fn get(&self, name: &str) -> &str {
         self.inner
             .get(name)
             .unwrap_or_else(|| panic!("Function {name} not defined"))
