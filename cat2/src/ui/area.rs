@@ -31,7 +31,7 @@ pub fn slice(mut area: Area, offsets: [Vector; 2]) -> Area {
     area
 }
 
-pub fn move_to_new_line(area: &mut Area) {
+pub fn move_to_next_line(area: &mut Area) {
     area.cursor.x = 0;
     area.cursor.y += 1;
 }

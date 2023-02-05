@@ -18,7 +18,7 @@ pub fn draw_generation(area: &mut Area, generation: Generation) {
         draw_cell(area, cell);
     }
 
-    area::move_to_new_line(area);
+    area::move_to_next_line(area);
 }
 
 fn draw_cell(area: &mut Area, cell: bool) {

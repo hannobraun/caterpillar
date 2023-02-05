@@ -23,7 +23,7 @@ fn draw_sides(area: &mut Area) {
         draw_vertical(area);
         area::move_to_end_of_line(area);
         draw_vertical(area);
-        area::move_to_new_line(area);
+        area::move_to_next_line(area);
     }
 }
 
@@ -38,7 +38,7 @@ fn draw_horizontal(area: &mut Area, left_corner: &str, right_corner: &str) {
     (0..width - 2).for_each(|_| area::draw(area, "━"));
     area::draw(area, right_corner);
 
-    area::move_to_new_line(area);
+    area::move_to_next_line(area);
 }
 
 fn draw_vertical(area: &mut Area) {
