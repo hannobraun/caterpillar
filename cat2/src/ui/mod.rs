@@ -42,13 +42,11 @@ impl Lines {
         stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
         let x = num_columns - lines_width;
-        let mut y = 0;
+        let y = 0;
 
-        let mut area = area::new(stdout, [lines_width, num_rows]);
+        let mut area = area::new(stdout, [x, y], [lines_width, num_rows]);
 
-        area::move_cursor(&mut area, x, y);
         border::print_top(&mut area)?;
-        y = area.cursor[1];
 
         for line in self
             .inner
@@ -57,12 +55,9 @@ impl Lines {
             .chain(iter::repeat_with(Line::empty))
             .take(lines_height)
         {
-            area::move_cursor(&mut area, x, y);
             line.print(&mut area)?;
-            y = area.cursor[1];
         }
 
-        area::move_cursor(&mut area, x, y);
         border::print_bottom(&mut area)?;
 
         stdout.flush()?;
