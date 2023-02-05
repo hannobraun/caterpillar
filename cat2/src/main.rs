@@ -6,6 +6,7 @@ use std::{io::stdout, thread, time::Instant};
 
 fn main() -> anyhow::Result<()> {
     let mut stdout = stdout();
+    let mut buffer = ui::Buffer::new();
     let mut lines = ui::Lines::new();
 
     loop {
@@ -15,7 +16,7 @@ fn main() -> anyhow::Result<()> {
         let next = ui::Line::from_cells(next);
 
         lines.push_next(next);
-        lines.print(&mut stdout)?;
+        lines.print(&mut buffer, &mut stdout)?;
 
         // I wrote this in a moment of idiocy, when I had temporarily forgotten
         // that `thread::sleep` exists. However, trying to replace it with that

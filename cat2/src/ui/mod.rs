@@ -35,9 +35,12 @@ impl Lines {
         self.inner.push_back(next);
     }
 
-    pub fn print(&mut self, stdout: &mut Stdout) -> anyhow::Result<()> {
+    pub fn print(
+        &mut self,
+        buffer: &mut Buffer,
+        stdout: &mut Stdout,
+    ) -> anyhow::Result<()> {
         let (num_columns, num_rows) = terminal::size()?;
-        let mut buffer = Buffer::new();
         buffer.prepare(Vector {
             x: num_columns,
             y: num_rows,
@@ -60,7 +63,7 @@ impl Lines {
             x: lines_width,
             y: num_rows,
         };
-        let area = area::new(&mut buffer, offset, size);
+        let area = area::new(buffer, offset, size);
 
         let mut area = border::write(area)?;
 
