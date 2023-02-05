@@ -11,7 +11,7 @@ use std::{
     iter,
 };
 
-use crossterm::{terminal, QueueableCommand};
+use crossterm::terminal;
 
 use crate::cells;
 
@@ -52,8 +52,6 @@ impl Lines {
         while self.inner.len() > lines_height {
             self.inner.pop_front();
         }
-
-        stdout.queue(terminal::Clear(terminal::ClearType::All))?;
 
         let offset = Vector {
             x: num_columns - lines_width,

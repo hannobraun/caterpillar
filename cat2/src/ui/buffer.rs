@@ -56,10 +56,15 @@ impl Buffer {
             .chunks(self.current_size.x as usize)
             .enumerate()
         {
-            for (x, ch) in line.iter().enumerate() {
-                stdout
-                    .queue(cursor::MoveTo(x as u16, y as u16))?
-                    .queue(style::PrintStyledContent(ch.stylize()))?;
+            for (x, &ch) in line.iter().enumerate() {
+                let index = self.index(x, y);
+                if self.previous_size != self.current_size
+                    || self.previous[index] != ch
+                {
+                    stdout
+                        .queue(cursor::MoveTo(x as u16, y as u16))?
+                        .queue(style::PrintStyledContent(ch.stylize()))?;
+                }
             }
         }
 
