@@ -10,8 +10,6 @@ use crossterm::{terminal, QueueableCommand};
 
 use crate::cells;
 
-use self::area::Area;
-
 pub struct Lines {
     inner: VecDeque<Line>,
 }
@@ -110,7 +108,7 @@ fn print_top_border(
     width: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    let mut area = Area { out: stdout };
+    let mut area = area::new(stdout);
 
     area::write(&mut area, &mut x, *y, "┏")?;
     (0..width).try_for_each(|_| area::write(&mut area, &mut x, *y, "━"))?;
@@ -127,7 +125,7 @@ fn print_bottom_border(
     width: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    let mut area = Area { out: stdout };
+    let mut area = area::new(stdout);
 
     area::write(&mut area, &mut x, *y, "┗")?;
     (0..width).try_for_each(|_| area::write(&mut area, &mut x, *y, "━"))?;
@@ -143,7 +141,7 @@ fn print_vertical_border(
     y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    let mut area = Area { out: stdout };
+    let mut area = area::new(stdout);
     area::write(&mut area, x, y, "┃")
 }
 
@@ -166,7 +164,7 @@ fn print_cell(
     y: u16,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
-    let mut area = Area { out: stdout };
+    let mut area = area::new(stdout);
 
     let content = if cell { "#" } else { " " };
     area::write(&mut area, x, y, content)

@@ -7,7 +7,11 @@ use crossterm::{
 };
 
 pub struct Area<'a> {
-    pub out: &'a mut Stdout,
+    out: &'a mut Stdout,
+}
+
+pub fn new(out: &mut Stdout) -> Area {
+    Area { out }
 }
 
 pub fn move_cursor(area: &mut Area, x: u16, y: u16) -> anyhow::Result<()> {
