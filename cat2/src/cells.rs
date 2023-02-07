@@ -1,4 +1,4 @@
-use crate::cp;
+use crate::cp::{self, Functions};
 
 pub const NUM_CELLS: usize = 80;
 
@@ -17,12 +17,15 @@ pub fn init() -> Generation {
     cells
 }
 
-pub fn next_generation(current: Generation) -> Generation {
+pub fn next_generation(
+    current: Generation,
+    functions: &Functions,
+) -> Generation {
     let mut next = [false; NUM_CELLS];
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current);
-        *cell = cell_lives(current[i], num_neighbors);
+        *cell = cell_lives(current[i], num_neighbors, functions);
     }
 
     next
@@ -48,8 +51,11 @@ pub fn neighbor_range(i: u8) -> (u8, u8) {
     (min, max)
 }
 
-pub fn cell_lives(lives_already: bool, num_neighbors: u8) -> bool {
-    let functions = cp::Functions::new();
+pub fn cell_lives(
+    lives_already: bool,
+    num_neighbors: u8,
+    functions: &Functions,
+) -> bool {
     let mut stack = cp::Stack::new();
 
     if lives_already {
