@@ -17,6 +17,8 @@ pub struct Buffer {
 
     previous_size: Vector,
     current_size: Vector,
+
+    cursor: Vector,
 }
 
 impl Buffer {
@@ -27,6 +29,8 @@ impl Buffer {
 
             previous_size: Vector { x: 0, y: 0 },
             current_size: Vector { x: 0, y: 0 },
+
+            cursor: Vector { x: 0, y: 0 },
         }
     }
 
@@ -42,11 +46,15 @@ impl Buffer {
         self.current.extend(iter::repeat(' ').take(size));
     }
 
-    pub fn write(&mut self, mut position: Vector, s: &str) {
+    pub fn move_cursor(&mut self, position: Vector) {
+        self.cursor = position;
+    }
+
+    pub fn write(&mut self, s: &str) {
         for ch in s.chars() {
-            let index = self.index(position.x, position.y);
+            let index = self.index(self.cursor.x, self.cursor.y);
             self.current[index] = ch;
-            position.x += 1;
+            self.cursor.x += 1;
         }
     }
 

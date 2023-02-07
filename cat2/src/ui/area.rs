@@ -51,7 +51,8 @@ pub fn move_to_end_of_line(area: &mut Area) {
 }
 
 pub fn draw(area: &mut Area, s: &str) {
-    area.buffer.write(area.offset + area.cursor, s);
+    area.buffer.move_cursor(area.offset + area.cursor);
+    area.buffer.write(s);
 
     let num_chars = s.chars().count();
     area.cursor.x += num_chars;
