@@ -1,6 +1,7 @@
 mod area;
 mod border;
 mod buffer;
+mod editor;
 mod generations;
 mod vector;
 
@@ -41,6 +42,16 @@ pub fn draw(
         let area = area::new(buffer, offset, size);
 
         generations::draw(area, generations.iter());
+    }
+    {
+        let offset = Vector { x: 0, y: 0 };
+        let size = Vector {
+            x: num_columns - generations_width,
+            y: 3,
+        };
+        let area = area::new(buffer, offset, size);
+
+        editor::draw(area);
     }
 
     buffer.draw(stdout)?;
