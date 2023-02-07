@@ -11,12 +11,16 @@ use std::io::Stdout;
 
 use crossterm::terminal;
 
-use crate::cells::{self, Generation};
+use crate::{
+    cells::{self, Generation},
+    cp,
+};
 
 use self::{border::BORDER_OVERHEAD, vector::Vector};
 
 pub fn draw(
     generations: &[Generation],
+    functions: &cp::Functions,
     buffer: &mut Buffer,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
@@ -56,7 +60,7 @@ pub fn draw(
         };
         let area = area::new(buffer, offset, size);
 
-        editor::draw(area);
+        editor::draw(area, functions.get("cell_is_born"));
     }
 
     buffer.draw(stdout)?;
