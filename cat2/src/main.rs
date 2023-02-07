@@ -17,6 +17,7 @@ async fn main() -> anyhow::Result<()> {
 
     let delay = Duration::from_millis(125);
     let mut interval = time::interval(delay);
+    interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
         interval.tick().await;
