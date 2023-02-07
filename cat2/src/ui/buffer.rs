@@ -72,6 +72,11 @@ impl Buffer {
             }
         }
 
+        stdout.queue(cursor::MoveTo(
+            self.cursor.x as u16,
+            self.cursor.y as u16,
+        ))?;
+
         stdout.flush()?;
 
         Ok(())
