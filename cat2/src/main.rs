@@ -8,7 +8,8 @@ use std::{
     time::{Duration, Instant},
 };
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
