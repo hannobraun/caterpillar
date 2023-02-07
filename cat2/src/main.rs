@@ -17,9 +17,10 @@ async fn main() -> anyhow::Result<()> {
 
     let delay = Duration::from_millis(125);
     let mut interval = time::interval(delay);
-    interval.tick().await; // the first tick is immediate; get it out of the way
 
     loop {
+        interval.tick().await;
+
         let current = generations.last().cloned().unwrap_or_else(cells::init);
 
         // We only add new generations, but never delete them. This is fine for
@@ -29,7 +30,5 @@ async fn main() -> anyhow::Result<()> {
         generations.push(next);
 
         ui::draw(&generations, &functions, &mut buffer, &mut stdout)?;
-
-        interval.tick().await;
     }
 }
