@@ -46,7 +46,10 @@ pub fn draw(
     {
         let editor_height = 1 + BORDER_OVERHEAD;
 
-        let offset = Vector { x: 0, y: 0 };
+        let offset = Vector {
+            x: 0,
+            y: num_rows - editor_height,
+        };
         let size = Vector {
             x: num_columns - generations_width,
             y: editor_height,
