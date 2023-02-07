@@ -2,11 +2,9 @@ mod cells;
 mod cp;
 mod ui;
 
-use std::{
-    io::stdout,
-    thread,
-    time::{Duration, Instant},
-};
+use std::{io::stdout, time::Duration};
+
+use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -17,8 +15,9 @@ async fn main() -> anyhow::Result<()> {
 
     let functions = cp::Functions::new();
 
-    let mut time = Instant::now();
     let delay = Duration::from_millis(125);
+    let mut interval = time::interval(delay);
+    interval.tick().await; // the first tick is immediate; get it out of the way
 
     loop {
         let current = generations.last().cloned().unwrap_or_else(cells::init);
@@ -31,7 +30,6 @@ async fn main() -> anyhow::Result<()> {
 
         ui::draw(&generations, &functions, &mut buffer, &mut stdout)?;
 
-        thread::sleep(delay - time.elapsed());
-        time += delay;
+        interval.tick().await;
     }
 }
