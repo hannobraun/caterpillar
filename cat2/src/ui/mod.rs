@@ -13,7 +13,7 @@ use crossterm::terminal;
 
 use crate::cells::{self, Generation};
 
-use self::vector::Vector;
+use self::{border::BORDER_OVERHEAD, vector::Vector};
 
 pub fn draw(
     generations: &[Generation],
@@ -28,7 +28,7 @@ pub fn draw(
         y: num_rows,
     });
 
-    let generations_width = cells::NUM_CELLS + 2;
+    let generations_width = cells::NUM_CELLS + BORDER_OVERHEAD;
 
     {
         let offset = Vector {

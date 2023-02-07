@@ -3,6 +3,8 @@ use super::{
     vector::Vector,
 };
 
+pub const BORDER_OVERHEAD: usize = 2;
+
 pub fn draw(mut area: Area) -> Area {
     draw_top(&mut area);
     draw_sides(&mut area);
@@ -34,7 +36,7 @@ fn draw_horizontal(area: &mut Area, left_corner: &str, right_corner: &str) {
     let Vector { x: width, .. } = area::size(area);
 
     area::draw(area, left_corner);
-    (0..width - 2).for_each(|_| area::draw(area, "━"));
+    (0..width - BORDER_OVERHEAD).for_each(|_| area::draw(area, "━"));
     area::draw(area, right_corner);
 
     area::move_to_next_line(area);
