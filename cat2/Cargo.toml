@@ -6,3 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 crossterm = "*"
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
