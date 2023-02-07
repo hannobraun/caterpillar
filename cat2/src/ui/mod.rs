@@ -20,21 +20,23 @@ pub fn draw(
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
     let (num_columns, num_rows) = terminal::size()?;
+    let (num_columns, num_rows) = (num_columns as usize, num_rows as usize);
+
     buffer.prepare(Vector {
-        x: num_columns as usize,
-        y: num_rows as usize,
+        x: num_columns,
+        y: num_rows,
     });
 
     let generations_width = cells::NUM_CELLS + 2;
 
     {
         let offset = Vector {
-            x: num_columns as usize - generations_width,
+            x: num_columns - generations_width,
             y: 0,
         };
         let size = Vector {
             x: generations_width,
-            y: num_rows as usize,
+            y: num_rows,
         };
         let area = area::new(buffer, offset, size);
 
