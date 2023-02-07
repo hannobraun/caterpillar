@@ -27,17 +27,19 @@ pub fn draw(
 
     let generations_width = cells::NUM_CELLS + 2;
 
-    let offset = Vector {
-        x: num_columns as usize - generations_width,
-        y: 0,
-    };
-    let size = Vector {
-        x: generations_width,
-        y: num_rows as usize,
-    };
-    let area = area::new(buffer, offset, size);
+    {
+        let offset = Vector {
+            x: num_columns as usize - generations_width,
+            y: 0,
+        };
+        let size = Vector {
+            x: generations_width,
+            y: num_rows as usize,
+        };
+        let area = area::new(buffer, offset, size);
 
-    generations::draw(area, generations.iter());
+        generations::draw(area, generations.iter());
+    }
 
     buffer.draw(stdout)?;
 
