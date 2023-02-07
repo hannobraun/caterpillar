@@ -44,10 +44,12 @@ pub fn draw(
         generations::draw(area, generations.iter());
     }
     {
+        let editor_height = 1 + BORDER_OVERHEAD;
+
         let offset = Vector { x: 0, y: 0 };
         let size = Vector {
             x: num_columns - generations_width,
-            y: 3,
+            y: editor_height,
         };
         let area = area::new(buffer, offset, size);
 
