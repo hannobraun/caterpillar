@@ -9,8 +9,9 @@ use std::{
 };
 
 fn main() -> anyhow::Result<()> {
-    let mut stdout = stdout();
     let mut buffer = ui::Buffer::new();
+    let mut stdout = stdout();
+
     let mut generations = Vec::new();
 
     let functions = cp::Functions::new();
