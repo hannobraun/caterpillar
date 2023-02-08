@@ -3,10 +3,10 @@ mod stack;
 
 pub use self::{
     functions::Functions,
-    stack::{Stack, Value},
+    stack::{DataStack, Value},
 };
 
-pub fn interpret(code: &str, stack: &mut Stack) {
+pub fn interpret(code: &str, stack: &mut DataStack) {
     let tokens = tokenize(code);
     evaluate(tokens, stack);
 }
@@ -15,7 +15,7 @@ fn tokenize(code: &str) -> impl Iterator<Item = &str> {
     code.split_whitespace()
 }
 
-fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
+fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut DataStack) {
     for token in tokens {
         match token {
             "clone" => {

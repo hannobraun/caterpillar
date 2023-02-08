@@ -56,7 +56,7 @@ pub fn cell_lives(
     num_neighbors: u8,
     functions: &cp::Functions,
 ) -> bool {
-    let mut stack = cp::Stack::new();
+    let mut stack = cp::DataStack::new();
 
     if lives_already {
         cell_survives(num_neighbors)

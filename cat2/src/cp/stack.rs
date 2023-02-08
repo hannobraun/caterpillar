@@ -1,8 +1,8 @@
-pub struct Stack {
+pub struct DataStack {
     inner: Vec<Value>,
 }
 
-impl Stack {
+impl DataStack {
     pub fn new() -> Self {
         let inner = Vec::new();
         Self { inner }
