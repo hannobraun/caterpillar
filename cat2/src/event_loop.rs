@@ -38,9 +38,7 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .cloned()
                 .unwrap_or_else(cells::init);
 
-            let mut interpreter = cp::Interpreter {
-                data_stack: cp::DataStack::new(),
-            };
+            let mut interpreter = cp::Interpreter::new();
 
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long

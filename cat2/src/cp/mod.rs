@@ -12,6 +12,14 @@ pub struct Interpreter {
     pub data_stack: DataStack,
 }
 
+impl Interpreter {
+    pub fn new() -> Self {
+        Self {
+            data_stack: DataStack::new(),
+        }
+    }
+}
+
 pub fn interpret(code: &str, interpreter: &mut Interpreter) {
     let tokens = tokenize(code);
     evaluate(tokens, &mut interpreter.data_stack);
