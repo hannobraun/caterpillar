@@ -17,6 +17,7 @@ pub enum Key {
 }
 
 pub struct State {
+    pub interpreter: cp::Interpreter,
     pub functions: Functions,
     pub generations: Vec<Generation>,
     pub buffer: ui::Buffer,
@@ -38,14 +39,12 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .cloned()
                 .unwrap_or_else(cells::init);
 
-            let mut interpreter = cp::Interpreter::new();
-
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long
             // enough to fill up their main memory.
             let next = cells::next_generation(
                 current,
-                &mut interpreter,
+                &mut state.interpreter,
                 &state.functions,
             );
             state.generations.push(next);
