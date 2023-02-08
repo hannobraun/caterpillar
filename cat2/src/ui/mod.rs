@@ -60,7 +60,7 @@ pub fn draw(
         };
         let area = area::new(buffer, offset, size);
 
-        editor::draw(area, functions.get("cell_is_born"));
+        editor::draw(area, functions.get("cell_is_born").join(" ").as_str());
     }
 
     buffer.draw(stdout)?;

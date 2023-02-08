@@ -23,9 +23,8 @@ impl Interpreter {
 }
 
 pub fn interpret(interpreter: &mut Interpreter) {
-    let code = interpreter.functions.get("cell_is_born");
-    let tokens = tokenize(code);
-    evaluate(&tokens, &mut interpreter.data_stack);
+    let tokens = interpreter.functions.get("cell_is_born");
+    evaluate(tokens, &mut interpreter.data_stack);
 }
 
 fn evaluate(tokens: &Tokens, stack: &mut DataStack) {

@@ -1,7 +1,9 @@
 use std::collections::BTreeMap;
 
+use super::{tokenize, tokenizer::Tokens};
+
 pub struct Functions {
-    inner: BTreeMap<String, String>,
+    inner: BTreeMap<String, Tokens>,
 }
 
 impl Functions {
@@ -13,19 +15,19 @@ impl Functions {
         // for the user to modify.
         inner.insert(
             String::from("cell_is_born"),
-            String::from("clone 2 = swap 3 = or"),
+            tokenize("clone 2 = swap 3 = or"),
         );
 
         Self { inner }
     }
 
-    pub fn get(&self, name: &str) -> &str {
+    pub fn get(&self, name: &str) -> &Tokens {
         self.inner
             .get(name)
             .unwrap_or_else(|| panic!("Function {name} not defined"))
     }
 
-    pub fn get_mut(&mut self, name: &str) -> &mut String {
+    pub fn get_mut(&mut self, name: &str) -> &mut Tokens {
         self.inner
             .get_mut(name)
             .unwrap_or_else(|| panic!("Function {name} not defined"))

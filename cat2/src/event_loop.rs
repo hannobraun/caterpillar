@@ -28,7 +28,12 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
             state.interpreter.functions.get_mut("cell_is_born").pop();
         }
         Event::Key(Key::Char(ch)) => {
-            state.interpreter.functions.get_mut("cell_is_born").push(ch);
+            let function = state.interpreter.functions.get_mut("cell_is_born");
+            let mut token = function.pop().unwrap_or_default();
+
+            token.push(ch);
+
+            function.push(token);
         }
         Event::Tick => {
             let current = state
