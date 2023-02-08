@@ -22,8 +22,8 @@ impl Interpreter {
     }
 }
 
-pub fn interpret(interpreter: &mut Interpreter) {
-    let tokens = interpreter.functions.get("cell_is_born");
+pub fn interpret(fn_name: &str, interpreter: &mut Interpreter) {
+    let tokens = interpreter.functions.get(fn_name);
     evaluate(tokens, &mut interpreter.data_stack);
 }
 
