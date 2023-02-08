@@ -34,9 +34,15 @@ async fn main() -> anyhow::Result<()> {
     loop {
         let event = tokio::select! {
             _ = interval.tick() => {
-                event_loop::Event::Tick
+                None
             }
             event = events.next() => {
+                Some(event)
+            }
+        };
+
+        let event = match event {
+            Some(event) => {
                 let Some(event) = event else {
                     anyhow::bail!("Error reading input event");
                 };
@@ -56,28 +62,19 @@ async fn main() -> anyhow::Result<()> {
                 }
 
                 match event {
-                    Event::Key(KeyEvent { code, .. }) => {
-                        match code {
-                            KeyCode::Backspace => {
-                                event_loop::Event::Key(
-                                    event_loop::Key::Backspace
-                                )
-                            }
-                            KeyCode::Char(ch) => {
-                                event_loop::Event::Key(
-                                    event_loop::Key::Char(ch)
-                                )
-                            }
-                            _ => {
-                                continue
-                            }
+                    Event::Key(KeyEvent { code, .. }) => match code {
+                        KeyCode::Backspace => {
+                            event_loop::Event::Key(event_loop::Key::Backspace)
                         }
-                    }
-                    _ => {
-                        continue
-                    }
+                        KeyCode::Char(ch) => {
+                            event_loop::Event::Key(event_loop::Key::Char(ch))
+                        }
+                        _ => continue,
+                    },
+                    _ => continue,
                 }
             }
+            None => event_loop::Event::Tick,
         };
 
         event_loop::run_once(event, &mut state)?;
