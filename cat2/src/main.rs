@@ -22,11 +22,9 @@ async fn main() -> anyhow::Result<()> {
 
     terminal::enable_raw_mode()?;
 
-    let generations = Vec::new();
-
     let mut state = event_loop::State {
         functions: cp::Functions::new(),
-        generations,
+        generations: Vec::new(),
         buffer,
         stdout,
     };
