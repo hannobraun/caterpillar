@@ -7,7 +7,7 @@ use crate::{
 };
 
 pub enum Event {
-    Input(char),
+    Key(char),
     Tick,
 }
 
@@ -20,7 +20,7 @@ pub struct State {
 
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
-        Event::Input(_) => {
+        Event::Key(_) => {
             // Not handling input, yet.
         }
         Event::Tick => {

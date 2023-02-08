@@ -57,7 +57,7 @@ async fn main() -> anyhow::Result<()> {
 
                 match event {
                     Event::Key(KeyEvent { code: KeyCode::Char(ch), .. }) => {
-                        event_loop::Event::Input(ch)
+                        event_loop::Event::Key(ch)
                     }
                     _ => {
                         continue
