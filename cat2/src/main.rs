@@ -17,7 +17,12 @@ use tokio::time;
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
+    let result = main_inner().await;
+    terminal::disable_raw_mode()?;
+    result
+}
 
+async fn main_inner() -> anyhow::Result<()> {
     let mut events = EventStream::new();
 
     let mut state = event_loop::State {
@@ -78,8 +83,6 @@ async fn main() -> anyhow::Result<()> {
 
         event_loop::run_once(event, &mut state)?;
     }
-
-    terminal::disable_raw_mode()?;
 
     Ok(())
 }
