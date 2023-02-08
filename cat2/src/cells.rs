@@ -64,10 +64,7 @@ pub fn cell_lives(
         cell_survives(num_neighbors)
     } else {
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
-        cp::interpret(
-            functions.get("cell_is_born"),
-            &mut interpreter.data_stack,
-        );
+        cp::interpret(functions.get("cell_is_born"), &mut interpreter);
         interpreter.data_stack.pop_bool()
     }
 }
