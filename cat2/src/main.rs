@@ -24,10 +24,8 @@ async fn main() -> anyhow::Result<()> {
 
     let generations = Vec::new();
 
-    let functions = cp::Functions::new();
-
     let mut state = event_loop::State {
-        functions,
+        functions: cp::Functions::new(),
         generations,
         buffer,
         stdout,
