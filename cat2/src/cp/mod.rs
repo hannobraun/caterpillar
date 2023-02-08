@@ -10,9 +10,9 @@ pub struct Interpreter {
     pub data_stack: DataStack,
 }
 
-pub fn interpret(code: &str, stack: &mut DataStack) {
+pub fn interpret(code: &str, data_stack: &mut DataStack) {
     let tokens = tokenize(code);
-    evaluate(tokens, stack);
+    evaluate(tokens, data_stack);
 }
 
 fn tokenize(code: &str) -> impl Iterator<Item = &str> {
