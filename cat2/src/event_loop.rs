@@ -2,7 +2,7 @@ use std::io;
 
 use crate::{
     cells::{self, Generation},
-    cp::Functions,
+    cp::{self, Functions},
     ui,
 };
 
@@ -38,10 +38,18 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .cloned()
                 .unwrap_or_else(cells::init);
 
+            let mut interpreter = cp::Interpreter {
+                data_stack: cp::DataStack::new(),
+            };
+
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long
             // enough to fill up their main memory.
-            let next = cells::next_generation(current, &state.functions);
+            let next = cells::next_generation(
+                current,
+                &mut interpreter,
+                &state.functions,
+            );
             state.generations.push(next);
         }
     }

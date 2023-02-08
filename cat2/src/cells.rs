@@ -19,18 +19,14 @@ pub fn init() -> Generation {
 
 pub fn next_generation(
     current: Generation,
+    interpreter: &mut cp::Interpreter,
     functions: &cp::Functions,
 ) -> Generation {
-    let mut interpreter = cp::Interpreter {
-        data_stack: cp::DataStack::new(),
-    };
-
     let mut next = [false; NUM_CELLS];
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current);
-        *cell =
-            cell_lives(current[i], num_neighbors, &mut interpreter, functions);
+        *cell = cell_lives(current[i], num_neighbors, interpreter, functions);
     }
 
     next
