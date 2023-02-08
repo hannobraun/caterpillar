@@ -3,7 +3,11 @@ mod cp;
 mod event_loop;
 mod ui;
 
-use std::{io, time::Duration};
+use std::{
+    io,
+    panic::{self, AssertUnwindSafe},
+    time::Duration,
+};
 
 use crossterm::{
     event::{
@@ -11,15 +15,19 @@ use crossterm::{
     },
     terminal,
 };
-use futures::StreamExt;
+use futures::{FutureExt, StreamExt};
 use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
-    let result = main_inner().await;
+    let result = AssertUnwindSafe(main_inner()).catch_unwind().await;
     terminal::disable_raw_mode()?;
-    result
+
+    match result {
+        Ok(result) => result,
+        Err(err) => panic::resume_unwind(err),
+    }
 }
 
 async fn main_inner() -> anyhow::Result<()> {
