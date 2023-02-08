@@ -5,7 +5,10 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-crossterm = "*"
+
+[dependencies.crossterm]
+version = "*"
+features = ["event-stream"]
 
 [dependencies.tokio]
 version = "*"

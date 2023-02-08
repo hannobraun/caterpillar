@@ -49,6 +49,7 @@ checksum = "77f67c7faacd4db07a939f55d66a983a5355358a1f17d32cc9a8d01d1266b9ce"
 dependencies = [
  "bitflags",
  "crossterm_winapi",
+ "futures-core",
  "libc",
  "mio",
  "parking_lot",
@@ -65,6 +66,12 @@ checksum = "2ae1b35a484aa10e07fe0638d02301c5ad24de82d310ccbd2f3693da5f09bf1c"
 dependencies = [
  "winapi",
 ]
+
+[[package]]
+name = "futures-core"
+version = "0.3.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec90ff4d0fe1f57d600049061dc6bb68ed03c7d2fbd697274c41805dcb3f8608"
 
 [[package]]
 name = "hermit-abi"
