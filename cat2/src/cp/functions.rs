@@ -24,4 +24,10 @@ impl Functions {
             .get(name)
             .unwrap_or_else(|| panic!("Function {name} not defined"))
     }
+
+    pub fn get_mut(&mut self, name: &str) -> &mut String {
+        self.inner
+            .get_mut(name)
+            .unwrap_or_else(|| panic!("Function {name} not defined"))
+    }
 }

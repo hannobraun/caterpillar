@@ -20,8 +20,8 @@ pub struct State {
 
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
-        Event::Key(_) => {
-            // Not handling input, yet.
+        Event::Key(ch) => {
+            state.functions.get_mut("cell_is_born").push(ch);
         }
         Event::Tick => {
             let current = state
