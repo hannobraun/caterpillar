@@ -5,7 +5,7 @@ mod tokenizer;
 pub use self::{
     functions::Functions,
     stack::{DataStack, Value},
-    tokenizer::tokenize,
+    tokenizer::{tokenize, Tokens},
 };
 
 pub struct Interpreter {
@@ -25,12 +25,12 @@ impl Interpreter {
 pub fn interpret(interpreter: &mut Interpreter) {
     let code = interpreter.functions.get("cell_is_born");
     let tokens = tokenize(code);
-    evaluate(tokens, &mut interpreter.data_stack);
+    evaluate(&tokens, &mut interpreter.data_stack);
 }
 
-fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut DataStack) {
+fn evaluate(tokens: &Tokens, stack: &mut DataStack) {
     for token in tokens {
-        match token {
+        match token.as_str() {
             "clone" => {
                 let value = stack.pop_any();
 
