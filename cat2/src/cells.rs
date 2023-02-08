@@ -56,14 +56,14 @@ pub fn cell_lives(
     num_neighbors: u8,
     functions: &cp::Functions,
 ) -> bool {
-    let mut stack = cp::DataStack::new();
+    let mut data_stack = cp::DataStack::new();
 
     if lives_already {
         cell_survives(num_neighbors)
     } else {
-        stack.push(cp::Value::U8(num_neighbors));
-        cp::interpret(functions.get("cell_is_born"), &mut stack);
-        stack.pop_bool()
+        data_stack.push(cp::Value::U8(num_neighbors));
+        cp::interpret(functions.get("cell_is_born"), &mut data_stack);
+        data_stack.pop_bool()
     }
 }
 
