@@ -1,9 +1,11 @@
 mod functions;
 mod stack;
+mod tokenizer;
 
 pub use self::{
     functions::Functions,
     stack::{DataStack, Value},
+    tokenizer::tokenize,
 };
 
 pub struct Interpreter {
@@ -13,10 +15,6 @@ pub struct Interpreter {
 pub fn interpret(code: &str, interpreter: &mut Interpreter) {
     let tokens = tokenize(code);
     evaluate(tokens, &mut interpreter.data_stack);
-}
-
-fn tokenize(code: &str) -> impl Iterator<Item = &str> {
-    code.split_whitespace()
 }
 
 fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut DataStack) {
