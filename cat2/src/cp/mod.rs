@@ -49,7 +49,9 @@ fn evaluate<'a>(tokens: impl Iterator<Item = &'a str>, stack: &mut Stack) {
                     continue;
                 }
 
-                panic!("Unknown token: `{token}`")
+                // If we land here, the token is unknown. We silently swallow
+                // that error right now, because we don't have a good way to
+                // report it to the user.
             }
         }
     }
