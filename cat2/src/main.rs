@@ -55,7 +55,7 @@ async fn main() -> anyhow::Result<()> {
                     }
                 }
 
-                continue;
+                event_loop::Event::Input(event)
             }
         };
 

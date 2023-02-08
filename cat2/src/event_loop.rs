@@ -7,6 +7,7 @@ use crate::{
 };
 
 pub enum Event {
+    Input(crossterm::event::Event),
     Tick,
 }
 
@@ -18,19 +19,24 @@ pub struct State {
 }
 
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
-    let Event::Tick = event;
+    match event {
+        Event::Input(_) => {
+            // Not handling input, yet.
+        }
+        Event::Tick => {
+            let current = state
+                .generations
+                .last()
+                .cloned()
+                .unwrap_or_else(cells::init);
 
-    let current = state
-        .generations
-        .last()
-        .cloned()
-        .unwrap_or_else(cells::init);
-
-    // We only add new generations, but never delete them. This is fine for now,
-    // I think. Let's just hope nobody runs this for long enough to fill up
-    // their main memory.
-    let next = cells::next_generation(current, &state.functions);
-    state.generations.push(next);
+            // We only add new generations, but never delete them. This is fine
+            // for now, I think. Let's just hope nobody runs this for long
+            // enough to fill up their main memory.
+            let next = cells::next_generation(current, &state.functions);
+            state.generations.push(next);
+        }
+    }
 
     ui::draw(
         &state.generations,
