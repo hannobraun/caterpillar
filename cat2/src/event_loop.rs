@@ -6,6 +6,10 @@ use crate::{
     ui,
 };
 
+pub enum Event {
+    Tick,
+}
+
 pub struct State {
     pub functions: Functions,
     pub generations: Vec<Generation>,
@@ -13,7 +17,9 @@ pub struct State {
     pub stdout: io::Stdout,
 }
 
-pub fn run_once(state: &mut State) -> anyhow::Result<()> {
+pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
+    let Event::Tick = event;
+
     let current = state
         .generations
         .last()

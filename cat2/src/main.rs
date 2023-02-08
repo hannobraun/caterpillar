@@ -32,8 +32,10 @@ async fn main() -> anyhow::Result<()> {
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
-        tokio::select! {
-            _ = interval.tick() => {}
+        let event = tokio::select! {
+            _ = interval.tick() => {
+                event_loop::Event::Tick
+            }
             event = events.next() => {
                 let Some(event) = event else {
                     anyhow::bail!("Error reading input event");
@@ -52,10 +54,12 @@ async fn main() -> anyhow::Result<()> {
                         break;
                     }
                 }
-            }
-        }
 
-        event_loop::run_once(&mut state)?;
+                continue;
+            }
+        };
+
+        event_loop::run_once(event, &mut state)?;
     }
 
     terminal::disable_raw_mode()?;
