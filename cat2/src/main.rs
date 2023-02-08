@@ -16,9 +16,9 @@ use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let mut events = EventStream::new();
-
     terminal::enable_raw_mode()?;
+
+    let mut events = EventStream::new();
 
     let mut state = event_loop::State {
         functions: cp::Functions::new(),
