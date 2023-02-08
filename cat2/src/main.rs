@@ -16,7 +16,6 @@ use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let buffer = ui::Buffer::new();
     let stdout = stdout();
     let mut events = EventStream::new();
 
@@ -25,7 +24,7 @@ async fn main() -> anyhow::Result<()> {
     let mut state = event_loop::State {
         functions: cp::Functions::new(),
         generations: Vec::new(),
-        buffer,
+        buffer: ui::Buffer::new(),
         stdout,
     };
 
