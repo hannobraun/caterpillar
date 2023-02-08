@@ -4,12 +4,22 @@ mod ui;
 
 use std::{io::stdout, time::Duration};
 
+use crossterm::{
+    event::{
+        Event, EventStream, KeyCode, KeyEvent, KeyEventKind, KeyModifiers,
+    },
+    terminal,
+};
+use futures::StreamExt;
 use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
+    let mut events = EventStream::new();
+
+    terminal::enable_raw_mode()?;
 
     let mut generations = Vec::new();
 
@@ -20,7 +30,28 @@ async fn main() -> anyhow::Result<()> {
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
-        interval.tick().await;
+        tokio::select! {
+            _ = interval.tick() => {}
+            event = events.next() => {
+                let Some(event) = event else {
+                    anyhow::bail!("Error reading input event");
+                };
+                let event = event?;
+
+                if let Event::Key(KeyEvent {
+                    code: KeyCode::Char('c'),
+                    modifiers,
+                    kind: KeyEventKind::Press,
+                    ..
+                }) = event
+                {
+                    if modifiers.contains(KeyModifiers::CONTROL) {
+                        // CTRL-C
+                        break;
+                    }
+                }
+            }
+        }
 
         let current = generations.last().cloned().unwrap_or_else(cells::init);
 
@@ -32,4 +63,8 @@ async fn main() -> anyhow::Result<()> {
 
         ui::draw(&generations, &functions, &mut buffer, &mut stdout)?;
     }
+
+    terminal::disable_raw_mode()?;
+
+    Ok(())
 }
