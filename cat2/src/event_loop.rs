@@ -12,6 +12,7 @@ pub enum Event {
 }
 
 pub enum Key {
+    Backspace,
     Char(char),
 }
 
@@ -24,6 +25,9 @@ pub struct State {
 
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
+        Event::Key(Key::Backspace) => {
+            state.functions.get_mut("cell_is_born").pop();
+        }
         Event::Key(Key::Char(ch)) => {
             state.functions.get_mut("cell_is_born").push(ch);
         }
