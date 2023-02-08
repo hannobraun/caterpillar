@@ -21,11 +21,16 @@ pub fn next_generation(
     current: Generation,
     functions: &cp::Functions,
 ) -> Generation {
+    let mut interpreter = cp::Interpreter {
+        data_stack: cp::DataStack::new(),
+    };
+
     let mut next = [false; NUM_CELLS];
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current);
-        *cell = cell_lives(current[i], num_neighbors, functions);
+        *cell =
+            cell_lives(current[i], num_neighbors, &mut interpreter, functions);
     }
 
     next
@@ -54,17 +59,14 @@ pub fn neighbor_range(i: u8) -> (u8, u8) {
 pub fn cell_lives(
     lives_already: bool,
     num_neighbors: u8,
+    interpreter: &mut cp::Interpreter,
     functions: &cp::Functions,
 ) -> bool {
-    let mut interpreter = cp::Interpreter {
-        data_stack: cp::DataStack::new(),
-    };
-
     if lives_already {
         cell_survives(num_neighbors)
     } else {
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
-        cp::interpret(functions.get("cell_is_born"), &mut interpreter);
+        cp::interpret(functions.get("cell_is_born"), interpreter);
         interpreter.data_stack.pop_bool()
     }
 }
