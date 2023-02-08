@@ -6,6 +6,10 @@ pub use self::{
     stack::{DataStack, Value},
 };
 
+pub struct Interpreter {
+    pub data_stack: DataStack,
+}
+
 pub fn interpret(code: &str, stack: &mut DataStack) {
     let tokens = tokenize(code);
     evaluate(tokens, stack);
