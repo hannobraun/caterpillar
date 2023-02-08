@@ -25,7 +25,14 @@ pub struct State {
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
         Event::Key(Key::Backspace) => {
-            state.interpreter.functions.get_mut("cell_is_born").pop();
+            let function = state.interpreter.functions.get_mut("cell_is_born");
+            let mut token = function.pop().unwrap_or_default();
+
+            token.pop();
+
+            if !token.is_empty() {
+                function.push(token);
+            }
         }
         Event::Key(Key::Char(ch)) => {
             let function = state.interpreter.functions.get_mut("cell_is_born");
