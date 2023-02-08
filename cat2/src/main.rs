@@ -16,7 +16,6 @@ use tokio::time;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let stdout = stdout();
     let mut events = EventStream::new();
 
     terminal::enable_raw_mode()?;
@@ -25,7 +24,7 @@ async fn main() -> anyhow::Result<()> {
         functions: cp::Functions::new(),
         generations: Vec::new(),
         buffer: ui::Buffer::new(),
-        stdout,
+        stdout: stdout(),
     };
 
     let delay = Duration::from_millis(125);
