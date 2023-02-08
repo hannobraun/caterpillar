@@ -3,7 +3,7 @@ mod cp;
 mod event_loop;
 mod ui;
 
-use std::{io::stdout, time::Duration};
+use std::{io, time::Duration};
 
 use crossterm::{
     event::{
@@ -24,7 +24,7 @@ async fn main() -> anyhow::Result<()> {
         functions: cp::Functions::new(),
         generations: Vec::new(),
         buffer: ui::Buffer::new(),
-        stdout: stdout(),
+        stdout: io::stdout(),
     };
 
     let delay = Duration::from_millis(125);
