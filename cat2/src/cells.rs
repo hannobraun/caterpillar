@@ -20,13 +20,12 @@ pub fn init() -> Generation {
 pub fn next_generation(
     current: Generation,
     interpreter: &mut cp::Interpreter,
-    functions: &cp::Functions,
 ) -> Generation {
     let mut next = [false; NUM_CELLS];
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current);
-        *cell = cell_lives(current[i], num_neighbors, interpreter, functions);
+        *cell = cell_lives(current[i], num_neighbors, interpreter);
     }
 
     next
@@ -56,13 +55,12 @@ pub fn cell_lives(
     lives_already: bool,
     num_neighbors: u8,
     interpreter: &mut cp::Interpreter,
-    functions: &cp::Functions,
 ) -> bool {
     if lives_already {
         cell_survives(num_neighbors)
     } else {
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
-        cp::interpret(functions.get("cell_is_born"), interpreter);
+        cp::interpret(interpreter);
         interpreter.data_stack.pop_bool()
     }
 }

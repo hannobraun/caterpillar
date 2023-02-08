@@ -22,7 +22,6 @@ async fn main() -> anyhow::Result<()> {
 
     let mut state = event_loop::State {
         interpreter: cp::Interpreter::new(),
-        functions: cp::Functions::new(),
         generations: Vec::new(),
         buffer: ui::Buffer::new(),
         stdout: io::stdout(),

@@ -9,18 +9,21 @@ pub use self::{
 };
 
 pub struct Interpreter {
+    pub functions: Functions,
     pub data_stack: DataStack,
 }
 
 impl Interpreter {
     pub fn new() -> Self {
         Self {
+            functions: Functions::new(),
             data_stack: DataStack::new(),
         }
     }
 }
 
-pub fn interpret(code: &str, interpreter: &mut Interpreter) {
+pub fn interpret(interpreter: &mut Interpreter) {
+    let code = interpreter.functions.get("cell_is_born");
     let tokens = tokenize(code);
     evaluate(tokens, &mut interpreter.data_stack);
 }

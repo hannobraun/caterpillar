@@ -2,8 +2,7 @@ use std::io;
 
 use crate::{
     cells::{self, Generation},
-    cp::{self, Functions},
-    ui,
+    cp, ui,
 };
 
 pub enum Event {
@@ -18,7 +17,6 @@ pub enum Key {
 
 pub struct State {
     pub interpreter: cp::Interpreter,
-    pub functions: Functions,
     pub generations: Vec<Generation>,
     pub buffer: ui::Buffer,
     pub stdout: io::Stdout,
@@ -27,10 +25,10 @@ pub struct State {
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
         Event::Key(Key::Backspace) => {
-            state.functions.get_mut("cell_is_born").pop();
+            state.interpreter.functions.get_mut("cell_is_born").pop();
         }
         Event::Key(Key::Char(ch)) => {
-            state.functions.get_mut("cell_is_born").push(ch);
+            state.interpreter.functions.get_mut("cell_is_born").push(ch);
         }
         Event::Tick => {
             let current = state
@@ -42,18 +40,14 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long
             // enough to fill up their main memory.
-            let next = cells::next_generation(
-                current,
-                &mut state.interpreter,
-                &state.functions,
-            );
+            let next = cells::next_generation(current, &mut state.interpreter);
             state.generations.push(next);
         }
     }
 
     ui::draw(
         &state.generations,
-        &state.functions,
+        &state.interpreter.functions,
         &mut state.buffer,
         &mut state.stdout,
     )?;
