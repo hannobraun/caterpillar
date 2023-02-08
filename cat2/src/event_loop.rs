@@ -7,7 +7,7 @@ use crate::{
 };
 
 pub enum Event {
-    Input(crossterm::event::Event),
+    Input(char),
     Tick,
 }
 
