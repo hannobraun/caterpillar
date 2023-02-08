@@ -7,8 +7,12 @@ use crate::{
 };
 
 pub enum Event {
-    Key(char),
+    Key(Key),
     Tick,
+}
+
+pub enum Key {
+    Char(char),
 }
 
 pub struct State {
@@ -20,7 +24,7 @@ pub struct State {
 
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
-        Event::Key(ch) => {
+        Event::Key(Key::Char(ch)) => {
             state.functions.get_mut("cell_is_born").push(ch);
         }
         Event::Tick => {
