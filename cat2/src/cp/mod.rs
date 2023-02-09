@@ -4,7 +4,7 @@ mod tokenizer;
 
 pub use self::{
     functions::Functions,
-    stack::{DataStack, Value},
+    stack::{DataStack, Type, Value},
     tokenizer::{tokenize, Tokens},
 };
 
