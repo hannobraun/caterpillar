@@ -14,24 +14,19 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        self_.define(
-            "cell_is_born",
-            Function {
-                tokens: tokenize("clone 2 = swap 3 = or"),
-            },
-        );
-        self_.define(
-            "cell_survives",
-            Function {
-                tokens: tokenize("clone 2 = swap 4 = or"),
-            },
-        );
+        self_.define("cell_is_born", "clone 2 = swap 3 = or");
+        self_.define("cell_survives", "clone 2 = swap 4 = or");
 
         self_
     }
 
-    pub fn define(&mut self, name: impl Into<String>, function: Function) {
-        self.inner.insert(name.into(), function);
+    pub fn define(&mut self, name: impl Into<String>, body: &str) {
+        self.inner.insert(
+            name.into(),
+            Function {
+                tokens: tokenize(body),
+            },
+        );
     }
 
     pub fn get(&self, name: &str) -> &Tokens {
