@@ -49,7 +49,7 @@ impl From<u8> for Value {
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Type {
     U8,
 }
