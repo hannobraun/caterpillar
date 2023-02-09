@@ -17,6 +17,10 @@ impl Functions {
             String::from("cell_is_born"),
             tokenize("clone 2 = swap 3 = or"),
         );
+        inner.insert(
+            String::from("cell_survives"),
+            tokenize("clone 2 = swap 4 = or"),
+        );
 
         Self { inner }
     }

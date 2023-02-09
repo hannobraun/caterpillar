@@ -57,14 +57,12 @@ pub fn cell_lives(
     interpreter: &mut cp::Interpreter,
 ) -> bool {
     if lives_already {
-        cell_survives(num_neighbors)
+        interpreter.data_stack.push(cp::Value::U8(num_neighbors));
+        cp::interpret("cell_survives", interpreter);
+        interpreter.data_stack.pop_bool()
     } else {
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         cp::interpret("cell_is_born", interpreter);
         interpreter.data_stack.pop_bool()
     }
-}
-
-fn cell_survives(num_neighbors: u8) -> bool {
-    num_neighbors == 2 || num_neighbors == 4
 }
