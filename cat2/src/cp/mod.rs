@@ -23,7 +23,7 @@ impl Interpreter {
 }
 
 pub fn interpret(fn_name: &str, interpreter: &mut Interpreter) {
-    let tokens = interpreter.functions.get(fn_name);
+    let tokens = interpreter.functions.get(fn_name, [Type::U8]);
     evaluate(tokens, &mut interpreter.data_stack);
 }
 

@@ -62,7 +62,11 @@ pub fn draw(
 
         editor::draw(
             area,
-            interpreter.functions.get("cell_is_born").join(" ").as_str(),
+            interpreter
+                .functions
+                .get("cell_is_born", [cp::Type::U8])
+                .join(" ")
+                .as_str(),
         );
     }
 

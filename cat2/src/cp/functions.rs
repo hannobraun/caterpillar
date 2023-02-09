@@ -34,10 +34,14 @@ impl Functions {
         );
     }
 
-    pub fn get(&self, name: &str) -> &Tokens {
+    pub fn get(
+        &self,
+        name: &str,
+        args: impl IntoIterator<Item = Type>,
+    ) -> &Tokens {
         &self
             .inner
-            .get(&(name.into(), [Type::U8].into()))
+            .get(&(name.into(), args.into()))
             .unwrap_or_else(|| panic!("Function {name} not defined"))
             .tokens
     }
