@@ -82,7 +82,7 @@ where
     }
 }
 
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Arg {
     Type(Type),
 }
