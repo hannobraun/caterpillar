@@ -15,13 +15,13 @@ impl Functions {
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
         self_.define(
-            String::from("cell_is_born"),
+            "cell_is_born",
             Function {
                 tokens: tokenize("clone 2 = swap 3 = or"),
             },
         );
         self_.define(
-            String::from("cell_survives"),
+            "cell_survives",
             Function {
                 tokens: tokenize("clone 2 = swap 4 = or"),
             },
