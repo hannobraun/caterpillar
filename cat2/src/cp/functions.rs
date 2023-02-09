@@ -14,8 +14,16 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        self_.define("cell_is_born", [Type::U8], "clone 2 = swap 3 = or");
-        self_.define("cell_survives", [Type::U8], "clone 2 = swap 4 = or");
+        self_.define(
+            "cell_is_born",
+            [Arg::Type(Type::U8)],
+            "clone 2 = swap 3 = or",
+        );
+        self_.define(
+            "cell_survives",
+            [Arg::Type(Type::U8)],
+            "clone 2 = swap 4 = or",
+        );
 
         self_
     }
@@ -37,13 +45,14 @@ impl Functions {
     pub fn get(
         &self,
         name: &str,
-        args: impl IntoIterator<Item = Type>,
+        args: impl IntoIterator<Item = Arg>,
     ) -> Option<&Function> {
         self.inner.get(&(name.into(), args.into()))
     }
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {
-        self.inner.get_mut(&(name.into(), [Type::U8].into()))
+        self.inner
+            .get_mut(&(name.into(), [Arg::Type(Type::U8)].into()))
     }
 
     pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
@@ -56,7 +65,7 @@ impl Functions {
             }
 
             if let Some(value) = values.next() {
-                args.push(value.ty());
+                args.push(Arg::Type(value.ty()));
             }
         }
     }
@@ -73,11 +82,11 @@ pub struct Args {
 
 impl<T> From<T> for Args
 where
-    T: IntoIterator<Item = Type>,
+    T: IntoIterator<Item = Arg>,
 {
     fn from(iter: T) -> Self {
         Self {
-            inner: iter.into_iter().map(Arg::Type).collect(),
+            inner: iter.into_iter().collect(),
         }
     }
 }

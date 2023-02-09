@@ -64,7 +64,7 @@ pub fn draw(
             area,
             interpreter
                 .functions
-                .get("cell_is_born", [cp::Type::U8])
+                .get("cell_is_born", [cp::Arg::Type(cp::Type::U8)])
                 .unwrap()
                 .tokens
                 .join(" ")
