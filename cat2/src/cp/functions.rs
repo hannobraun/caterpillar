@@ -66,7 +66,7 @@ pub struct Function {
     pub tokens: Tokens,
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Args {
     pub inner: Vec<Arg>,
 }
@@ -82,7 +82,7 @@ where
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub enum Arg {
     Type(Type),
 }

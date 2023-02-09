@@ -1,6 +1,6 @@
 use std::ops;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub struct Vector {
     pub x: usize,
     pub y: usize,
