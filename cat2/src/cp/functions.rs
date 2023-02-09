@@ -38,10 +38,8 @@ impl Functions {
         &self,
         name: &str,
         args: impl IntoIterator<Item = Type>,
-    ) -> &Function {
-        self.inner
-            .get(&(name.into(), args.into()))
-            .unwrap_or_else(|| panic!("Function {name} not defined"))
+    ) -> Option<&Function> {
+        self.inner.get(&(name.into(), args.into()))
     }
 
     pub fn get_mut(&mut self, name: &str) -> &mut Function {
