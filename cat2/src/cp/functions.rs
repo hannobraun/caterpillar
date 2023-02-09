@@ -8,25 +8,30 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let mut inner = BTreeMap::new();
+        let inner = BTreeMap::new();
+        let mut self_ = Self { inner };
 
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        inner.insert(
+        self_.define(
             String::from("cell_is_born"),
             Function {
                 tokens: tokenize("clone 2 = swap 3 = or"),
             },
         );
-        inner.insert(
+        self_.define(
             String::from("cell_survives"),
             Function {
                 tokens: tokenize("clone 2 = swap 4 = or"),
             },
         );
 
-        Self { inner }
+        self_
+    }
+
+    pub fn define(&mut self, name: impl Into<String>, function: Function) {
+        self.inner.insert(name.into(), function);
     }
 
     pub fn get(&self, name: &str) -> &Tokens {
