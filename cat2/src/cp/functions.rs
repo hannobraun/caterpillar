@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{data_stack::Type, tokenize, tokenizer::Tokens};
+use super::{tokenize, tokenizer::Tokens, Type};
 
 pub struct Functions {
     inner: BTreeMap<(String, Args), Function>,
