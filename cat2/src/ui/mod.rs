@@ -19,8 +19,8 @@ use crate::{
 use self::{border::BORDER_OVERHEAD, vector::Vector};
 
 pub fn draw(
+    interpreter: &cp::Interpreter,
     generations: &[Generation],
-    functions: &cp::Functions,
     buffer: &mut Buffer,
     stdout: &mut Stdout,
 ) -> anyhow::Result<()> {
@@ -60,7 +60,10 @@ pub fn draw(
         };
         let area = area::new(buffer, offset, size);
 
-        editor::draw(area, functions.get("cell_is_born").join(" ").as_str());
+        editor::draw(
+            area,
+            interpreter.functions.get("cell_is_born").join(" ").as_str(),
+        );
     }
 
     buffer.draw(stdout)?;
