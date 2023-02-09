@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 
-use super::{tokenize, tokenizer::Tokens};
+use super::{stack::Type, tokenize, tokenizer::Tokens};
 
 pub struct Functions {
-    inner: BTreeMap<String, Function>,
+    inner: BTreeMap<(String, Args), Function>,
 }
 
 impl Functions {
@@ -14,15 +14,20 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        self_.define("cell_is_born", "clone 2 = swap 3 = or");
-        self_.define("cell_survives", "clone 2 = swap 4 = or");
+        self_.define("cell_is_born", [Type::U8], "clone 2 = swap 3 = or");
+        self_.define("cell_survives", [Type::U8], "clone 2 = swap 4 = or");
 
         self_
     }
 
-    pub fn define(&mut self, name: impl Into<String>, body: &str) {
+    pub fn define(
+        &mut self,
+        name: impl Into<String>,
+        args: impl Into<Args>,
+        body: &str,
+    ) {
         self.inner.insert(
-            name.into(),
+            (name.into(), args.into()),
             Function {
                 tokens: tokenize(body),
             },
@@ -32,7 +37,7 @@ impl Functions {
     pub fn get(&self, name: &str) -> &Tokens {
         &self
             .inner
-            .get(name)
+            .get(&(name.into(), [Type::U8].into()))
             .unwrap_or_else(|| panic!("Function {name} not defined"))
             .tokens
     }
@@ -40,7 +45,7 @@ impl Functions {
     pub fn get_mut(&mut self, name: &str) -> &mut Tokens {
         &mut self
             .inner
-            .get_mut(name)
+            .get_mut(&(name.into(), [Type::U8].into()))
             .unwrap_or_else(|| panic!("Function {name} not defined"))
             .tokens
     }
@@ -48,4 +53,20 @@ impl Functions {
 
 pub struct Function {
     pub tokens: Tokens,
+}
+
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+pub struct Args {
+    pub inner: Vec<Type>,
+}
+
+impl<T> From<T> for Args
+where
+    T: IntoIterator<Item = Type>,
+{
+    fn from(iter: T) -> Self {
+        Self {
+            inner: iter.into_iter().collect(),
+        }
+    }
 }

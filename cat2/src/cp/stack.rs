@@ -48,3 +48,8 @@ impl From<u8> for Value {
         Self::U8(value)
     }
 }
+
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+pub enum Type {
+    U8,
+}
