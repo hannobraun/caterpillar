@@ -1,10 +1,10 @@
+mod data_stack;
 mod functions;
-mod stack;
 mod tokenizer;
 
 pub use self::{
+    data_stack::{DataStack, Type, Value},
     functions::Functions,
-    stack::{DataStack, Type, Value},
     tokenizer::{tokenize, Tokens},
 };
 
