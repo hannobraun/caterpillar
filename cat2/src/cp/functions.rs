@@ -64,9 +64,8 @@ impl Functions {
                 return Some(function);
             }
 
-            if let Some(value) = values.next() {
-                args.push(Arg::Type(value.ty()));
-            }
+            let value = values.next()?;
+            args.push(Arg::Type(value.ty()));
         }
     }
 }
