@@ -65,6 +65,7 @@ pub fn draw(
             interpreter
                 .functions
                 .get("cell_is_born", [cp::Type::U8])
+                .tokens
                 .join(" ")
                 .as_str(),
         );
