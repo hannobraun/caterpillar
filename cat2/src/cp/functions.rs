@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{tokenize, Tokens, Type};
+use super::{tokenize, DataStack, Tokens, Type};
 
 pub struct Functions {
     inner: BTreeMap<(String, Args), Function>,
@@ -44,6 +44,21 @@ impl Functions {
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {
         self.inner.get_mut(&(name.into(), [Type::U8].into()))
+    }
+
+    pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
+        let mut args = Vec::new();
+        let mut values = stack.values_from_top();
+
+        loop {
+            if let Some(function) = self.get(name, args.iter().rev().cloned()) {
+                return Some(function);
+            }
+
+            if let Some(value) = values.next() {
+                args.push(value.ty());
+            }
+        }
     }
 }
 

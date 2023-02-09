@@ -29,12 +29,25 @@ impl DataStack {
     pub fn push(&mut self, value: impl Into<Value>) {
         self.inner.push(value.into())
     }
+
+    pub fn values_from_top(&self) -> impl Iterator<Item = &Value> {
+        self.inner.iter().rev()
+    }
 }
 
 #[derive(Clone)]
 pub enum Value {
     Bool(bool),
     U8(u8),
+}
+
+impl Value {
+    pub fn ty(&self) -> Type {
+        match self {
+            Self::Bool(_) => Type::Bool,
+            Self::U8(_) => Type::U8,
+        }
+    }
 }
 
 impl From<bool> for Value {
@@ -51,5 +64,6 @@ impl From<u8> for Value {
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Type {
+    Bool,
     U8,
 }
