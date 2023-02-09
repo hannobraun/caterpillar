@@ -68,7 +68,7 @@ pub struct Function {
 
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 pub struct Args {
-    pub inner: Vec<Type>,
+    pub inner: Vec<Arg>,
 }
 
 impl<T> From<T> for Args
@@ -77,7 +77,12 @@ where
 {
     fn from(iter: T) -> Self {
         Self {
-            inner: iter.into_iter().collect(),
+            inner: iter.into_iter().map(Arg::Type).collect(),
         }
     }
+}
+
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+pub enum Arg {
+    Type(Type),
 }
