@@ -26,21 +26,21 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
         Event::Key(Key::Backspace) => {
             let function = state.interpreter.functions.get_mut("cell_is_born");
-            let mut token = function.pop().unwrap_or_default();
+            let mut token = function.tokens.pop().unwrap_or_default();
 
             token.pop();
 
             if !token.is_empty() {
-                function.push(token);
+                function.tokens.push(token);
             }
         }
         Event::Key(Key::Char(ch)) => {
             let function = state.interpreter.functions.get_mut("cell_is_born");
-            let mut token = function.pop().unwrap_or_default();
+            let mut token = function.tokens.pop().unwrap_or_default();
 
             token.push(ch);
 
-            function.push(token);
+            function.tokens.push(token);
         }
         Event::Tick => {
             let current = state

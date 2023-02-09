@@ -46,12 +46,10 @@ impl Functions {
             .tokens
     }
 
-    pub fn get_mut(&mut self, name: &str) -> &mut Tokens {
-        &mut self
-            .inner
+    pub fn get_mut(&mut self, name: &str) -> &mut Function {
+        self.inner
             .get_mut(&(name.into(), [Type::U8].into()))
             .unwrap_or_else(|| panic!("Function {name} not defined"))
-            .tokens
     }
 }
 
