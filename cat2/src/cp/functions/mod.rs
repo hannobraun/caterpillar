@@ -1,7 +1,5 @@
 mod registry;
 
-use std::collections::BTreeMap;
-
 use self::registry::Registry;
 
 use super::{tokenize, DataStack, Tokens, Type};
@@ -12,9 +10,7 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let registry = Registry {
-            inner: BTreeMap::new(),
-        };
+        let registry = Registry::new();
         let mut self_ = Self { registry };
 
         // Eventually, we'll store the source code in a persistent way. But for
