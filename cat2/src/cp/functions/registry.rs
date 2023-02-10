@@ -59,7 +59,9 @@ impl Registry {
                 let type_of_last_value = matched_values.last().map(Value::ty);
                 let type_of_last_arg = candidate.args.inner.last().map(Arg::ty);
 
-                if type_of_last_value == type_of_last_arg {
+                let is_correct_type = type_of_last_value == type_of_last_arg;
+
+                if is_correct_type {
                     prime_candidate = Some(candidate);
                 }
             }
