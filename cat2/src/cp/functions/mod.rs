@@ -7,13 +7,13 @@ use self::registry::Registry;
 use super::{tokenize, DataStack, Tokens, Type};
 
 pub struct Functions {
-    inner: Registry,
+    registry: Registry,
 }
 
 impl Functions {
     pub fn new() -> Self {
-        let inner = BTreeMap::new();
-        let mut self_ = Self { inner };
+        let registry = BTreeMap::new();
+        let mut self_ = Self { registry };
 
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
@@ -38,7 +38,7 @@ impl Functions {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.inner.insert(
+        self.registry.insert(
             (name.into(), args.into()),
             Function {
                 tokens: tokenize(body),
@@ -51,11 +51,11 @@ impl Functions {
         name: &str,
         args: impl IntoIterator<Item = Arg>,
     ) -> Option<&Function> {
-        self.inner.get(&(name.into(), args.into()))
+        self.registry.get(&(name.into(), args.into()))
     }
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {
-        self.inner
+        self.registry
             .get_mut(&(name.into(), [Arg::Type(Type::U8)].into()))
     }
 
