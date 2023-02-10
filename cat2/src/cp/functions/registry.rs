@@ -23,9 +23,14 @@ impl Registry {
     pub fn resolve(
         &self,
         name: impl Into<String>,
-        _: impl IntoIterator<Item = crate::cp::Value>,
+        values: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
+        use crate::cp::Value;
+
+        use super::Arg;
+
         let name = name.into();
+        let mut values = values.into_iter();
 
         let mut by_name = self
             .inner
@@ -35,7 +40,37 @@ impl Registry {
         by_name.sort_by_key(|f| f.args.len());
         by_name.reverse();
 
-        by_name.pop()
+        let mut matched_values = Vec::new();
+        loop {
+            // This is a prime candidate for using `Vec::drain_filter`, once
+            // that is stable.
+            let mut with_matching_signature_len = Vec::new();
+            let mut i = 0;
+            while i < by_name.len() {
+                if by_name[i].args.len() == matched_values.len() {
+                    with_matching_signature_len.push(by_name.remove(i));
+                } else {
+                    i += 1;
+                }
+            }
+
+            let mut prime_candidate = with_matching_signature_len.pop();
+            for candidate in with_matching_signature_len.drain(..) {
+                let type_of_last_value = matched_values.last().map(Value::ty);
+                let type_of_last_arg = candidate.args.inner.last().map(Arg::ty);
+
+                if type_of_last_value == type_of_last_arg {
+                    prime_candidate = Some(candidate);
+                }
+            }
+
+            if prime_candidate.is_some() {
+                return prime_candidate;
+            }
+
+            let next_value = values.next()?;
+            matched_values.push(next_value);
+        }
     }
 
     pub fn get(
@@ -70,6 +105,18 @@ mod tests {
     use crate::cp::{functions::Args, Arg, Type, Value};
 
     use super::Registry;
+
+    #[test]
+    fn resolve_matching_type() {
+        let mut registry = Registry::new();
+        registry.define("name", [Arg::Type(Type::Bool)], "");
+        registry.define("name", [Arg::Type(Type::U8)], "");
+
+        let f = registry.resolve("name", [Value::U8(0)]).unwrap();
+
+        assert_eq!(f.name, "name");
+        assert_eq!(f.args, Args::from([Arg::Type(Type::U8)]));
+    }
 
     #[test]
     fn resolve_simplest_signature() {

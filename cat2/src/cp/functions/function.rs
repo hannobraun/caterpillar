@@ -47,3 +47,12 @@ where
 pub enum Arg {
     Type(Type),
 }
+
+impl Arg {
+    #[cfg(test)]
+    pub fn ty(&self) -> Type {
+        match self {
+            Arg::Type(ty) => ty.clone(),
+        }
+    }
+}
