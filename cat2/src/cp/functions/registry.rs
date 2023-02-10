@@ -16,7 +16,8 @@ impl Registry {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.inner.push((args.into(), Function::new(name, body)));
+        let args = args.into();
+        self.inner.push((args, Function::new(name, body)));
     }
 
     #[cfg(test)]
