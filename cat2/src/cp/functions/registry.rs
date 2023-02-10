@@ -1,7 +1,7 @@
 use super::{Args, Function};
 
 pub struct Registry {
-    inner: Vec<(Args, Function)>,
+    inner: Vec<Function>,
 }
 
 impl Registry {
@@ -17,8 +17,7 @@ impl Registry {
         body: &str,
     ) {
         let args = args.into();
-        self.inner
-            .push((args.clone(), Function::new(name, args, body)));
+        self.inner.push(Function::new(name, args, body));
     }
 
     #[cfg(test)]
@@ -28,10 +27,7 @@ impl Registry {
         _: impl Into<Args>,
     ) -> Option<&Function> {
         let name = name.into();
-        self.inner
-            .iter()
-            .find(|(_, f)| f.name == name)
-            .map(|(_, f)| f)
+        self.inner.iter().find(|f| f.name == name)
     }
 
     pub fn get(
@@ -44,10 +40,7 @@ impl Registry {
 
         self.inner
             .iter()
-            .find(|(_, function)| {
-                function.name == name && function.args == args
-            })
-            .map(|(_, function)| function)
+            .find(|function| function.name == name && function.args == args)
     }
 
     pub fn get_mut(
@@ -60,10 +53,7 @@ impl Registry {
 
         self.inner
             .iter_mut()
-            .find(|(_, function)| {
-                function.name == name && function.args == args
-            })
-            .map(|(_, function)| function)
+            .find(|function| function.name == name && function.args == args)
     }
 }
 
