@@ -26,7 +26,16 @@ impl Registry {
         _: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
         let name = name.into();
-        self.inner.iter().find(|f| f.name == name)
+
+        let mut by_name = self
+            .inner
+            .iter()
+            .filter(|f| f.name == name)
+            .collect::<Vec<_>>();
+        by_name.sort_by_key(|f| f.args.inner.len());
+        by_name.reverse();
+
+        by_name.pop()
     }
 
     pub fn get(
@@ -58,14 +67,19 @@ impl Registry {
 
 #[cfg(test)]
 mod tests {
+    use crate::cp::{functions::Args, Arg, Type, Value};
+
     use super::Registry;
 
     #[test]
     fn resolve() {
         let mut registry = Registry::new();
+        registry.define("name", [Arg::Type(Type::Bool)], "");
         registry.define("name", [], "");
 
-        let f = registry.resolve("name", []).unwrap();
+        let f = registry.resolve("name", [Value::Bool(true)]).unwrap();
+
         assert_eq!(f.name, "name");
+        assert_eq!(f.args, Args::from([]));
     }
 }
