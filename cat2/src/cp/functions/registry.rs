@@ -24,7 +24,7 @@ impl Registry {
     pub fn resolve(
         &self,
         name: impl Into<String>,
-        _: impl Into<Args>,
+        _: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
         let name = name.into();
         self.inner.iter().find(|f| f.name == name)
