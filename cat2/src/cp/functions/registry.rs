@@ -72,7 +72,7 @@ mod tests {
     use super::Registry;
 
     #[test]
-    fn resolve() {
+    fn resolve_simplest_signature() {
         let mut registry = Registry::new();
         registry.define("name", [Arg::Type(Type::Bool)], "");
         registry.define("name", [], "");
