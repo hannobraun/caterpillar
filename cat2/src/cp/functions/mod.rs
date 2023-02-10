@@ -1,9 +1,13 @@
+mod registry;
+
 use std::collections::BTreeMap;
+
+use self::registry::Registry;
 
 use super::{tokenize, DataStack, Tokens, Type};
 
 pub struct Functions {
-    inner: BTreeMap<(String, Args), Function>,
+    inner: Registry,
 }
 
 impl Functions {
