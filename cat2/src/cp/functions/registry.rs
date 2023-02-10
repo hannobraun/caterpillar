@@ -20,6 +20,19 @@ impl Registry {
         self.inner.push((args.into(), Function::new(name, body)));
     }
 
+    #[cfg(test)]
+    pub fn resolve(
+        &self,
+        name: impl Into<String>,
+        _: impl Into<Args>,
+    ) -> Option<&Function> {
+        let name = name.into();
+        self.inner
+            .iter()
+            .find(|(_, f)| f.name == name)
+            .map(|(_, f)| f)
+    }
+
     pub fn get(
         &self,
         name: impl Into<String>,
@@ -46,5 +59,19 @@ impl Registry {
             .iter_mut()
             .find(|(a, function)| function.name == name && a == &args)
             .map(|(_, function)| function)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Registry;
+
+    #[test]
+    fn resolve() {
+        let mut registry = Registry::new();
+        registry.define("name", [], "");
+
+        let f = registry.resolve("name", []).unwrap();
+        assert_eq!(f.name, "name");
     }
 }
