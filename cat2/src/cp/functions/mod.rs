@@ -40,11 +40,7 @@ impl Functions {
         self.registry.insert(name, args, body);
     }
 
-    pub fn get(
-        &self,
-        name: &str,
-        args: impl IntoIterator<Item = Arg>,
-    ) -> Option<&Function> {
+    pub fn get(&self, name: &str, args: impl Into<Args>) -> Option<&Function> {
         self.registry.get(name, args)
     }
 
