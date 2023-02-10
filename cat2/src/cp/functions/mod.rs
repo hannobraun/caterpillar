@@ -45,7 +45,7 @@ impl Functions {
         name: &str,
         args: impl IntoIterator<Item = Arg>,
     ) -> Option<&Function> {
-        self.registry.inner.get(&(name.into(), args.into()))
+        self.registry.get(name, args)
     }
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {

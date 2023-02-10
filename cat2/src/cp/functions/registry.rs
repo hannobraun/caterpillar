@@ -21,4 +21,12 @@ impl Registry {
         self.inner
             .insert((name.into(), args.into()), Function::new(body));
     }
+
+    pub fn get(
+        &self,
+        name: impl Into<String>,
+        args: impl Into<Args>,
+    ) -> Option<&Function> {
+        self.inner.get(&(name.into(), args.into()))
+    }
 }
