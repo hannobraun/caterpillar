@@ -2,13 +2,19 @@ use crate::cp::{tokenize, Tokens, Type};
 
 pub struct Function {
     pub name: String,
+    pub args: Args,
     pub tokens: Tokens,
 }
 
 impl Function {
-    pub fn new(name: impl Into<String>, body: &str) -> Self {
+    pub fn new(
+        name: impl Into<String>,
+        args: impl Into<Args>,
+        body: &str,
+    ) -> Self {
         Function {
             name: name.into(),
+            args: args.into(),
             tokens: tokenize(body),
         }
     }
