@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use super::{Args, Function};
 
 pub struct Registry {
-    pub inner: BTreeMap<(String, Args), Function>,
+    inner: BTreeMap<(String, Args), Function>,
 }
 
 impl Registry {
