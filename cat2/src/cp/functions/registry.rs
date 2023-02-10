@@ -1,14 +1,12 @@
-use std::collections::BTreeMap;
-
 use super::{Args, Function};
 
 pub struct Registry {
-    inner: BTreeMap<(String, Args), Function>,
+    inner: Vec<(String, Args, Function)>,
 }
 
 impl Registry {
     pub fn new() -> Self {
-        let inner = BTreeMap::new();
+        let inner = Vec::new();
         Self { inner }
     }
 
@@ -19,7 +17,7 @@ impl Registry {
         body: &str,
     ) {
         self.inner
-            .insert((name.into(), args.into()), Function::new(body));
+            .push((name.into(), args.into(), Function::new(body)));
     }
 
     pub fn get(
@@ -27,7 +25,13 @@ impl Registry {
         name: impl Into<String>,
         args: impl Into<Args>,
     ) -> Option<&Function> {
-        self.inner.get(&(name.into(), args.into()))
+        let name = name.into();
+        let args = args.into();
+
+        self.inner
+            .iter()
+            .find(|(n, a, _)| n == &name && a == &args)
+            .map(|(_, _, function)| function)
     }
 
     pub fn get_mut(
@@ -35,6 +39,12 @@ impl Registry {
         name: impl Into<String>,
         args: impl Into<Args>,
     ) -> Option<&mut Function> {
-        self.inner.get_mut(&(name.into(), args.into()))
+        let name = name.into();
+        let args = args.into();
+
+        self.inner
+            .iter_mut()
+            .find(|(n, a, _)| n == &name && a == &args)
+            .map(|(_, _, function)| function)
     }
 }
