@@ -44,7 +44,9 @@ impl Registry {
 
         self.inner
             .iter()
-            .find(|(a, function)| function.name == name && a == &args)
+            .find(|(_, function)| {
+                function.name == name && function.args == args
+            })
             .map(|(_, function)| function)
     }
 
@@ -58,7 +60,9 @@ impl Registry {
 
         self.inner
             .iter_mut()
-            .find(|(a, function)| function.name == name && a == &args)
+            .find(|(_, function)| {
+                function.name == name && function.args == args
+            })
             .map(|(_, function)| function)
     }
 }
