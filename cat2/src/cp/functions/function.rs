@@ -14,7 +14,7 @@ impl Function {
     }
 }
 
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Args {
     pub inner: Vec<Arg>,
 }
