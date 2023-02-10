@@ -1,6 +1,8 @@
 mod function;
 mod registry;
 
+pub use self::function::{Arg, Args};
+
 use self::{function::Function, registry::Registry};
 
 use super::{DataStack, Type};
@@ -65,25 +67,4 @@ impl Functions {
             args.push(Arg::Type(value.ty()));
         }
     }
-}
-
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
-pub struct Args {
-    pub inner: Vec<Arg>,
-}
-
-impl<T> From<T> for Args
-where
-    T: IntoIterator<Item = Arg>,
-{
-    fn from(iter: T) -> Self {
-        Self {
-            inner: iter.into_iter().collect(),
-        }
-    }
-}
-
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
-pub enum Arg {
-    Type(Type),
 }
