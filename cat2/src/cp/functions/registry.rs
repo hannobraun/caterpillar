@@ -16,7 +16,6 @@ impl Registry {
         args: impl Into<Args>,
         body: &str,
     ) {
-        let name = name.into();
         self.inner.push((args.into(), Function::new(name, body)));
     }
 
