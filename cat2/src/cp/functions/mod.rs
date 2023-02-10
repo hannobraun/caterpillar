@@ -12,7 +12,9 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let registry = BTreeMap::new();
+        let registry = Registry {
+            inner: BTreeMap::new(),
+        };
         let mut self_ = Self { registry };
 
         // Eventually, we'll store the source code in a persistent way. But for
@@ -38,7 +40,7 @@ impl Functions {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.registry.insert(
+        self.registry.inner.insert(
             (name.into(), args.into()),
             Function {
                 tokens: tokenize(body),
@@ -51,11 +53,12 @@ impl Functions {
         name: &str,
         args: impl IntoIterator<Item = Arg>,
     ) -> Option<&Function> {
-        self.registry.get(&(name.into(), args.into()))
+        self.registry.inner.get(&(name.into(), args.into()))
     }
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {
         self.registry
+            .inner
             .get_mut(&(name.into(), [Arg::Type(Type::U8)].into()))
     }
 

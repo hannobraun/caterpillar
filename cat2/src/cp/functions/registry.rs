@@ -2,4 +2,6 @@ use std::collections::BTreeMap;
 
 use super::{Args, Function};
 
-pub type Registry = BTreeMap<(String, Args), Function>;
+pub struct Registry {
+    pub inner: BTreeMap<(String, Args), Function>,
+}
