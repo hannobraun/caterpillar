@@ -29,4 +29,12 @@ impl Registry {
     ) -> Option<&Function> {
         self.inner.get(&(name.into(), args.into()))
     }
+
+    pub fn get_mut(
+        &mut self,
+        name: impl Into<String>,
+        args: impl Into<Args>,
+    ) -> Option<&mut Function> {
+        self.inner.get_mut(&(name.into(), args.into()))
+    }
 }

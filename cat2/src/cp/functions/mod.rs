@@ -49,9 +49,7 @@ impl Functions {
     }
 
     pub fn get_mut(&mut self, name: &str) -> Option<&mut Function> {
-        self.registry
-            .inner
-            .get_mut(&(name.into(), [Arg::Type(Type::U8)].into()))
+        self.registry.get_mut(name, [Arg::Type(Type::U8)])
     }
 
     pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
