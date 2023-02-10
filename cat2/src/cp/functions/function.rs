@@ -25,6 +25,13 @@ pub struct Args {
     pub inner: Vec<Arg>,
 }
 
+impl Args {
+    #[cfg(test)]
+    pub fn len(&self) -> usize {
+        self.inner.len()
+    }
+}
+
 impl<T> From<T> for Args
 where
     T: IntoIterator<Item = Arg>,

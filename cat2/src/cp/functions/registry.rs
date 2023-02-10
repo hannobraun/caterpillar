@@ -32,7 +32,7 @@ impl Registry {
             .iter()
             .filter(|f| f.name == name)
             .collect::<Vec<_>>();
-        by_name.sort_by_key(|f| f.args.inner.len());
+        by_name.sort_by_key(|f| f.args.len());
         by_name.reverse();
 
         by_name.pop()
