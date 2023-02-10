@@ -1,7 +1,5 @@
 use std::collections::BTreeMap;
 
-use crate::cp::tokenize;
-
 use super::{Args, Function};
 
 pub struct Registry {
@@ -20,11 +18,7 @@ impl Registry {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.inner.insert(
-            (name.into(), args.into()),
-            Function {
-                tokens: tokenize(body),
-            },
-        );
+        self.inner
+            .insert((name.into(), args.into()), Function::new(body));
     }
 }
