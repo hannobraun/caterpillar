@@ -10,7 +10,7 @@ impl Registry {
         Self { inner }
     }
 
-    pub fn insert(
+    pub fn define(
         &mut self,
         name: impl Into<String>,
         args: impl Into<Args>,

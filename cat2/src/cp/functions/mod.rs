@@ -37,7 +37,7 @@ impl Functions {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.registry.insert(name, args, body);
+        self.registry.define(name, args, body);
     }
 
     pub fn get(&self, name: &str, args: impl Into<Args>) -> Option<&Function> {
