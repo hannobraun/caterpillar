@@ -35,7 +35,7 @@ impl DataStack {
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Value {
     Bool(bool),
     U8(u8),
