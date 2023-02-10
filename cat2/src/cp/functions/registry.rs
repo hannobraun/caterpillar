@@ -17,7 +17,8 @@ impl Registry {
         body: &str,
     ) {
         let name = name.into();
-        self.inner.push((name, args.into(), Function::new(body)));
+        self.inner
+            .push((name.clone(), args.into(), Function::new(name, body)));
     }
 
     pub fn get(
