@@ -2,7 +2,7 @@ mod registry;
 
 use self::registry::Registry;
 
-use super::{tokenize, DataStack, Tokens, Type};
+use super::{DataStack, Tokens, Type};
 
 pub struct Functions {
     registry: Registry,
@@ -36,12 +36,7 @@ impl Functions {
         args: impl Into<Args>,
         body: &str,
     ) {
-        self.registry.inner.insert(
-            (name.into(), args.into()),
-            Function {
-                tokens: tokenize(body),
-            },
-        );
+        self.registry.insert(name, args, body);
     }
 
     pub fn get(
