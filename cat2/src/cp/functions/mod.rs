@@ -1,8 +1,9 @@
+mod function;
 mod registry;
 
-use self::registry::Registry;
+use self::{function::Function, registry::Registry};
 
-use super::{DataStack, Tokens, Type};
+use super::{DataStack, Type};
 
 pub struct Functions {
     registry: Registry,
@@ -66,10 +67,6 @@ impl Functions {
             args.push(Arg::Type(value.ty()));
         }
     }
-}
-
-pub struct Function {
-    pub tokens: Tokens,
 }
 
 #[derive(Eq, PartialEq, Ord, PartialOrd)]
