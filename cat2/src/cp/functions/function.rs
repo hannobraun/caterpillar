@@ -20,7 +20,7 @@ impl Function {
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Args {
     pub inner: Vec<Arg>,
 }
@@ -36,7 +36,7 @@ where
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Arg {
     Type(Type),
 }
