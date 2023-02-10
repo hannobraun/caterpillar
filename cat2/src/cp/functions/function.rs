@@ -30,6 +30,11 @@ impl Args {
     pub fn len(&self) -> usize {
         self.inner.len()
     }
+
+    #[cfg(test)]
+    pub fn last(&self) -> Option<&Arg> {
+        self.inner.last()
+    }
 }
 
 impl<T> From<T> for Args

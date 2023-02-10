@@ -57,7 +57,7 @@ impl Registry {
             let mut prime_candidate = with_matching_signature_len.pop();
             for candidate in with_matching_signature_len.drain(..) {
                 let type_of_last_value = matched_values.last().map(Value::ty);
-                let type_of_last_arg = candidate.args.inner.last().map(Arg::ty);
+                let type_of_last_arg = candidate.args.last().map(Arg::ty);
 
                 let is_correct_type = type_of_last_value == type_of_last_arg;
 
