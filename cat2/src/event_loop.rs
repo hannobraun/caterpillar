@@ -2,7 +2,8 @@ use std::io;
 
 use crate::{
     cells::{self, Generation},
-    cp, ui,
+    cp::{self, Arg, Type},
+    ui,
 };
 
 pub enum Event {
@@ -25,8 +26,11 @@ pub struct State {
 pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
     match event {
         Event::Key(Key::Backspace) => {
-            let function =
-                state.interpreter.functions.get_mut("cell_is_born").unwrap();
+            let function = state
+                .interpreter
+                .functions
+                .get_mut("cell_is_born", [Arg::Type(Type::U8)])
+                .unwrap();
             let mut token = function.tokens.pop().unwrap_or_default();
 
             token.pop();
@@ -36,8 +40,11 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
             }
         }
         Event::Key(Key::Char(ch)) => {
-            let function =
-                state.interpreter.functions.get_mut("cell_is_born").unwrap();
+            let function = state
+                .interpreter
+                .functions
+                .get_mut("cell_is_born", [Arg::Type(Type::U8)])
+                .unwrap();
             let mut token = function.tokens.pop().unwrap_or_default();
 
             token.push(ch);
