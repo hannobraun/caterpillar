@@ -40,6 +40,10 @@ impl Registry {
                 continue;
             }
 
+            if next_candidate.args.inner.len() > values.len() {
+                continue;
+            }
+
             for (arg, value) in next_candidate.args.inner.iter().zip(&values) {
                 if arg.ty() != value.ty() {
                     continue 'outer;
@@ -166,5 +170,15 @@ mod tests {
 
         assert_eq!(f.name, "name");
         assert_eq!(f.args, Args::from([Arg::Type(Type::Bool)]));
+    }
+
+    #[test]
+    fn resolve_only_if_all_arguments_match() {
+        let mut registry = Registry::new();
+        registry.define("name", [Arg::Type(Type::Bool)], "");
+
+        let f = registry.resolve("name", []);
+
+        assert!(f.is_none());
     }
 }
