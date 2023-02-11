@@ -60,8 +60,17 @@ impl Registry {
                 let type_of_last_arg = candidate.args.last().map(Arg::ty);
 
                 let is_correct_type = type_of_last_value == type_of_last_arg;
+                let is_strong_enough_match = prime_candidate
+                    .and_then(|prime_candidate| prime_candidate.args.last())
+                    .map(Arg::is_type)
+                    .unwrap_or(true)
+                    || candidate
+                        .args
+                        .last()
+                        .map(Arg::is_value)
+                        .unwrap_or(false);
 
-                if is_correct_type {
+                if is_correct_type && is_strong_enough_match {
                     prime_candidate = Some(candidate);
                 }
             }
@@ -130,5 +139,17 @@ mod tests {
 
         assert_eq!(f.name, "name");
         assert_eq!(f.args, Args::from([]));
+    }
+
+    #[test]
+    fn resolve_prefer_value() {
+        let mut registry = Registry::new();
+        registry.define("name", [Arg::Value(Value::Bool(true))], "");
+        registry.define("name", [Arg::Type(Type::Bool)], "");
+
+        let f = registry.resolve("name", [Value::Bool(true)]).unwrap();
+
+        assert_eq!(f.name, "name");
+        assert_eq!(f.args, Args::from([Arg::Value(Value::Bool(true))]));
     }
 }

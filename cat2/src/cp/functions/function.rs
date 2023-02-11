@@ -51,6 +51,9 @@ where
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Arg {
     Type(Type),
+
+    #[cfg(test)]
+    Value(crate::cp::Value),
 }
 
 impl Arg {
@@ -58,6 +61,23 @@ impl Arg {
     pub fn ty(&self) -> Type {
         match self {
             Arg::Type(ty) => ty.clone(),
+            Arg::Value(value) => value.ty(),
+        }
+    }
+
+    #[cfg(test)]
+    pub fn is_type(&self) -> bool {
+        match self {
+            Self::Type(_) => true,
+            Self::Value(_) => false,
+        }
+    }
+
+    #[cfg(test)]
+    pub fn is_value(&self) -> bool {
+        match self {
+            Self::Type(_) => false,
+            Self::Value(_) => true,
         }
     }
 }
