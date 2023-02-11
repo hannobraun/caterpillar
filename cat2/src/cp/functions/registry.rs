@@ -22,80 +22,46 @@ impl Registry {
     #[cfg(test)]
     pub fn resolve(
         &self,
-        name: impl Into<String>,
+        _: impl Into<String>,
         values: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
-        use crate::cp::Value;
+        let values = values.into_iter().collect::<Vec<_>>();
 
-        use super::Arg;
+        // We'll use this variable to store our current best candidate in. So
+        // far we haven't looked at any, so it's empty.
+        let mut prime_candidate: Option<&Function> = None;
 
-        let name = name.into();
-        let mut values = values.into_iter();
-
-        // Find all functions with the correct name, and sort them by the number
-        // of their arguments. We'll `.pop()` functions from the end of the
-        // list, so we'll be looking at those with the fewest arguments first.
-        let mut candidates = self
-            .inner
-            .iter()
-            .filter(|f| f.name == name)
-            .collect::<Vec<_>>();
-        candidates.sort_by_key(|f| f.args.len());
-        candidates.reverse();
-
-        // Now we'll be looking at the candidates and match them against the
-        // values to find the best one. We expect the `values` iterator to
-        // provide the top value on the stack first. We'll move down the stack
-        // until we find a match or run out of candidates.
-        //
-        // We store the values we've already matches against in this `Vec`.
-        // Since we haven't yet matched against any values, it starts out empty.
-        let mut matched_values = Vec::new();
-
-        loop {
-            // This is a prime candidate for using `Vec::drain_filter`, once
-            // that is stable.
-            let mut with_matching_signature_len = Vec::new();
-            let mut i = 0;
-            while i < candidates.len() {
-                if candidates[i].args.len() == matched_values.len() {
-                    with_matching_signature_len.push(candidates.remove(i));
-                } else {
-                    i += 1;
+        'outer: for next_candidate in &self.inner {
+            // Let's look at some criteria that would disqualify the function
+            // from being a match.
+            for (arg, value) in next_candidate.args.inner.iter().zip(&values) {
+                if arg.ty() != value.ty() {
+                    continue 'outer;
                 }
             }
 
-            let mut prime_candidate = with_matching_signature_len.pop();
-            for candidate in with_matching_signature_len.drain(..) {
-                let last_matched_value = matched_values.last();
-                let last_arg_of_candidate = candidate.args.last();
+            // The function qualifies! Now let's check if there's anything that
+            // makes it worse than the current prime candidate.
+            if let Some(prime_candidate) = prime_candidate {
+                let args_prime = &prime_candidate.args.inner;
+                let args_next = &next_candidate.args.inner;
 
-                let type_of_last_value = last_matched_value.map(Value::ty);
-                let type_of_last_arg = last_arg_of_candidate.map(Arg::ty);
+                if args_prime.len() < args_next.len() {
+                    continue 'outer;
+                }
 
-                let is_correct_type = type_of_last_value == type_of_last_arg;
-                let is_strong_enough_match = prime_candidate
-                    .and_then(|prime_candidate| prime_candidate.args.last())
-                    .map(Arg::is_type)
-                    .unwrap_or(true)
-                    || candidate
-                        .args
-                        .last()
-                        .map(Arg::is_value)
-                        .unwrap_or(false);
-
-                if is_correct_type && is_strong_enough_match {
-                    prime_candidate = Some(candidate);
+                for (a, b) in args_prime.iter().zip(args_next) {
+                    if a.is_value() && b.is_type() {
+                        continue 'outer;
+                    }
                 }
             }
 
-            if prime_candidate.is_some() {
-                return prime_candidate;
-            }
-
-            let next_value = values.next()?;
-            matched_values.push(next_value);
+            // Nothing found! Replace the current prime candidate.
+            prime_candidate = Some(next_candidate);
         }
+
+        prime_candidate
     }
 
     pub fn get(
@@ -134,8 +100,8 @@ mod tests {
     #[test]
     fn resolve_matching_type() {
         let mut registry = Registry::new();
-        registry.define("name", [Arg::Type(Type::Bool)], "");
         registry.define("name", [Arg::Type(Type::U8)], "");
+        registry.define("name", [Arg::Type(Type::Bool)], "");
 
         let f = registry.resolve("name", [Value::U8(0)]).unwrap();
 
@@ -146,8 +112,8 @@ mod tests {
     #[test]
     fn resolve_simplest_signature() {
         let mut registry = Registry::new();
-        registry.define("name", [Arg::Type(Type::Bool)], "");
         registry.define("name", [], "");
+        registry.define("name", [Arg::Type(Type::Bool)], "");
 
         let f = registry.resolve("name", [Value::Bool(true)]).unwrap();
 
