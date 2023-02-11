@@ -35,13 +35,13 @@ impl Registry {
         // Find all functions with the correct name, and sort them by the number
         // of their arguments. We'll `.pop()` functions from the end of the
         // list, so we'll be looking at those with the fewest arguments first.
-        let mut by_name = self
+        let mut candidates = self
             .inner
             .iter()
             .filter(|f| f.name == name)
             .collect::<Vec<_>>();
-        by_name.sort_by_key(|f| f.args.len());
-        by_name.reverse();
+        candidates.sort_by_key(|f| f.args.len());
+        candidates.reverse();
 
         // Now we'll be looking at the candidates and match them against the
         // values to find the best one. We expect the `values` iterator to
@@ -57,9 +57,9 @@ impl Registry {
             // that is stable.
             let mut with_matching_signature_len = Vec::new();
             let mut i = 0;
-            while i < by_name.len() {
-                if by_name[i].args.len() == matched_values.len() {
-                    with_matching_signature_len.push(by_name.remove(i));
+            while i < candidates.len() {
+                if candidates[i].args.len() == matched_values.len() {
+                    with_matching_signature_len.push(candidates.remove(i));
                 } else {
                     i += 1;
                 }
