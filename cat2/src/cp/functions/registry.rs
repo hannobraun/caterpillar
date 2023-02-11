@@ -43,7 +43,15 @@ impl Registry {
         by_name.sort_by_key(|f| f.args.len());
         by_name.reverse();
 
+        // Now we'll be looking at the candidates and match them against the
+        // values to find the best one. We expect the `values` iterator to
+        // provide the top value on the stack first. We'll move down the stack
+        // until we find a match or run out of candidates.
+        //
+        // We store the values we've already matches against in this `Vec`.
+        // Since we haven't yet matched against any values, it starts out empty.
         let mut matched_values = Vec::new();
+
         loop {
             // This is a prime candidate for using `Vec::drain_filter`, once
             // that is stable.
