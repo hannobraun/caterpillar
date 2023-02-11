@@ -115,7 +115,7 @@ mod tests {
     }
 
     #[test]
-    fn resolve_matching_type() {
+    fn resolve_only_matching_type() {
         let mut registry = Registry::new();
         registry.define("name", [Arg::Type(Type::U8)], "");
         registry.define("name", [Arg::Type(Type::Bool)], "");
