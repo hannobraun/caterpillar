@@ -44,6 +44,12 @@ impl Registry {
                 if arg.ty() != value.ty() {
                     continue 'outer;
                 }
+
+                if let Some(next_value) = arg.value() {
+                    if next_value != value {
+                        continue 'outer;
+                    }
+                }
             }
 
             // The function qualifies! Now let's check if there's anything that
@@ -148,5 +154,17 @@ mod tests {
 
         assert_eq!(f.name, "name");
         assert_eq!(f.args, Args::from([Arg::Value(Value::Bool(true))]));
+    }
+
+    #[test]
+    fn resolve_only_match_correct_value() {
+        let mut registry = Registry::new();
+        registry.define("name", [Arg::Type(Type::Bool)], "");
+        registry.define("name", [Arg::Value(Value::Bool(true))], "");
+
+        let f = registry.resolve("name", [Value::Bool(false)]).unwrap();
+
+        assert_eq!(f.name, "name");
+        assert_eq!(f.args, Args::from([Arg::Type(Type::Bool)]));
     }
 }

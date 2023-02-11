@@ -54,6 +54,14 @@ impl Arg {
     }
 
     #[cfg(test)]
+    pub fn value(&self) -> Option<&crate::cp::Value> {
+        match self {
+            Arg::Type(_) => None,
+            Arg::Value(value) => Some(value),
+        }
+    }
+
+    #[cfg(test)]
     pub fn is_type(&self) -> bool {
         match self {
             Self::Type(_) => true,
