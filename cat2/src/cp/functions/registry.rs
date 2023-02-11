@@ -22,9 +22,10 @@ impl Registry {
     #[cfg(test)]
     pub fn resolve(
         &self,
-        _: impl Into<String>,
+        name: impl Into<String>,
         values: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
+        let name = name.into();
         let values = values.into_iter().collect::<Vec<_>>();
 
         // We'll use this variable to store our current best candidate in. So
@@ -34,6 +35,11 @@ impl Registry {
         'outer: for next_candidate in &self.inner {
             // Let's look at some criteria that would disqualify the function
             // from being a match.
+
+            if next_candidate.name != name {
+                continue;
+            }
+
             for (arg, value) in next_candidate.args.inner.iter().zip(&values) {
                 if arg.ty() != value.ty() {
                     continue 'outer;
@@ -96,6 +102,17 @@ mod tests {
     use crate::cp::{functions::Args, Arg, Type, Value};
 
     use super::Registry;
+
+    #[test]
+    fn resolve_only_matching_name() {
+        let mut registry = Registry::new();
+        registry.define("name", [], "");
+        registry.define("other", [], "");
+
+        let f = registry.resolve("name", []).unwrap();
+
+        assert_eq!(f.name, "name");
+    }
 
     #[test]
     fn resolve_matching_type() {
