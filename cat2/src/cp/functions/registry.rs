@@ -32,6 +32,9 @@ impl Registry {
         let name = name.into();
         let mut values = values.into_iter();
 
+        // Find all functions with the correct name, and sort them by the number
+        // of their arguments. We'll `.pop()` functions from the end of the
+        // list, so we'll be looking at those with the fewest arguments first.
         let mut by_name = self
             .inner
             .iter()
