@@ -40,12 +40,11 @@ where
 pub enum Arg {
     Type(Type),
 
-    #[cfg(test)]
+    #[cfg_attr(not(test), allow(dead_code))]
     Value(crate::cp::Value),
 }
 
 impl Arg {
-    #[cfg(test)]
     pub fn ty(&self) -> Type {
         match self {
             Arg::Type(ty) => ty.clone(),
@@ -53,7 +52,6 @@ impl Arg {
         }
     }
 
-    #[cfg(test)]
     pub fn value(&self) -> Option<&crate::cp::Value> {
         match self {
             Arg::Type(_) => None,
@@ -61,7 +59,6 @@ impl Arg {
         }
     }
 
-    #[cfg(test)]
     pub fn is_type(&self) -> bool {
         match self {
             Self::Type(_) => true,
@@ -69,7 +66,6 @@ impl Arg {
         }
     }
 
-    #[cfg(test)]
     pub fn is_value(&self) -> bool {
         match self {
             Self::Type(_) => false,

@@ -55,16 +55,7 @@ impl Functions {
     }
 
     pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
-        let mut args = Vec::new();
-        let mut values = stack.values_from_top();
-
-        loop {
-            if let Some(function) = self.get(name, args.iter().rev().cloned()) {
-                return Some(function);
-            }
-
-            let value = values.next()?;
-            args.push(Arg::Type(value.ty()));
-        }
+        self.registry
+            .resolve(name, stack.values_from_top().cloned())
     }
 }

@@ -19,7 +19,6 @@ impl Registry {
         self.inner.push(Function::new(name, args, body));
     }
 
-    #[cfg(test)]
     pub fn resolve(
         &self,
         name: &str,
