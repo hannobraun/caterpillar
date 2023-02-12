@@ -59,9 +59,19 @@ pub fn cell_lives(
     interpreter.data_stack.push(cp::Value::U8(num_neighbors));
 
     if lives_already {
-        cp::evaluate("cell_survives", interpreter).unwrap();
+        cp::evaluate(
+            "cell_survives",
+            &interpreter.functions,
+            &mut interpreter.data_stack,
+        )
+        .unwrap();
     } else {
-        cp::evaluate("cell_is_born", interpreter).unwrap();
+        cp::evaluate(
+            "cell_is_born",
+            &interpreter.functions,
+            &mut interpreter.data_stack,
+        )
+        .unwrap();
     }
 
     interpreter.data_stack.pop_bool()
