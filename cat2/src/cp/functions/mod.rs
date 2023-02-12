@@ -5,7 +5,7 @@ pub use self::function::{Arg, Args};
 
 use self::{function::Function, registry::Registry};
 
-use super::{DataStack, Type};
+use super::{DataStack, Type, Value};
 
 pub struct Functions {
     registry: Registry,
@@ -19,6 +19,16 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
+        self_.define(
+            "cell_lives",
+            [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
+            "swap drop cell_survives",
+        );
+        self_.define(
+            "cell_lives",
+            [Arg::Value(Value::Bool(false)), Arg::Type(Type::U8)],
+            "swap drop cell_is_born",
+        );
         self_.define(
             "cell_is_born",
             [Arg::Type(Type::U8)],
