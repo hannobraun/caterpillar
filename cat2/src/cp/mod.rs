@@ -22,7 +22,10 @@ impl Interpreter {
     }
 }
 
-pub fn evaluate(fn_name: &str, interpreter: &mut Interpreter) {
+pub fn evaluate(
+    fn_name: &str,
+    interpreter: &mut Interpreter,
+) -> Result<(), FunctionNotFound> {
     let function = interpreter
         .functions
         .find(fn_name, &interpreter.data_stack)
@@ -67,4 +70,9 @@ pub fn evaluate(fn_name: &str, interpreter: &mut Interpreter) {
             }
         }
     }
+
+    Ok(())
 }
+
+#[derive(Debug)]
+pub struct FunctionNotFound;
