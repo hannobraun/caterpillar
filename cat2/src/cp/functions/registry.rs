@@ -22,10 +22,9 @@ impl Registry {
     #[cfg(test)]
     pub fn resolve(
         &self,
-        name: impl Into<String>,
+        name: &str,
         values: impl IntoIterator<Item = crate::cp::Value>,
     ) -> Option<&Function> {
-        let name = name.into();
         let values = values.into_iter().collect::<Vec<_>>();
 
         // We'll use this variable to store our current best candidate in. So
@@ -77,12 +76,7 @@ impl Registry {
         prime_candidate
     }
 
-    pub fn get(
-        &self,
-        name: impl Into<String>,
-        args: impl Into<Args>,
-    ) -> Option<&Function> {
-        let name = name.into();
+    pub fn get(&self, name: &str, args: impl Into<Args>) -> Option<&Function> {
         let args = args.into();
 
         self.inner
@@ -92,10 +86,9 @@ impl Registry {
 
     pub fn get_mut(
         &mut self,
-        name: impl Into<String>,
+        name: &str,
         args: impl Into<Args>,
     ) -> Option<&mut Function> {
-        let name = name.into();
         let args = args.into();
 
         self.inner
