@@ -30,37 +30,37 @@ pub fn interpret(fn_name: &str, interpreter: &mut Interpreter) {
     evaluate(&function.tokens, &mut interpreter.data_stack);
 }
 
-fn evaluate(tokens: &Tokens, stack: &mut DataStack) {
+fn evaluate(tokens: &Tokens, data_stack: &mut DataStack) {
     for token in tokens {
         match token.as_str() {
             "clone" => {
-                let value = stack.pop_any();
+                let value = data_stack.pop_any();
 
-                stack.push(value.clone());
-                stack.push(value);
+                data_stack.push(value.clone());
+                data_stack.push(value);
             }
             "or" => {
-                let b = stack.pop_bool();
-                let a = stack.pop_bool();
+                let b = data_stack.pop_bool();
+                let a = data_stack.pop_bool();
 
-                stack.push(a || b);
+                data_stack.push(a || b);
             }
             "swap" => {
-                let b = stack.pop_any();
-                let a = stack.pop_any();
+                let b = data_stack.pop_any();
+                let a = data_stack.pop_any();
 
-                stack.push(b);
-                stack.push(a);
+                data_stack.push(b);
+                data_stack.push(a);
             }
             "=" => {
-                let b = stack.pop_u8();
-                let a = stack.pop_u8();
+                let b = data_stack.pop_u8();
+                let a = data_stack.pop_u8();
 
-                stack.push(a == b);
+                data_stack.push(a == b);
             }
             token => {
                 if let Ok(value) = token.parse::<u8>() {
-                    stack.push(Value::U8(value));
+                    data_stack.push(Value::U8(value));
                     continue;
                 }
 
