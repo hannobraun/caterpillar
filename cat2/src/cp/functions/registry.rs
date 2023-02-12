@@ -1,3 +1,5 @@
+use crate::cp::Value;
+
 use super::{Args, Function};
 
 pub struct Registry {
@@ -22,7 +24,7 @@ impl Registry {
     pub fn resolve(
         &self,
         name: &str,
-        values: impl IntoIterator<Item = crate::cp::Value>,
+        values: impl IntoIterator<Item = Value>,
     ) -> Option<&Function> {
         let values = values.into_iter().collect::<Vec<_>>();
 
