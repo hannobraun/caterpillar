@@ -41,7 +41,9 @@ impl Registry {
             if next_candidate.args.inner.len() > values.len() {
                 continue;
             }
-            for (arg, value) in next_candidate.args.inner.iter().zip(&values) {
+            for (arg, value) in
+                next_candidate.args.inner.iter().rev().zip(&values)
+            {
                 if arg.ty() != value.ty() {
                     continue 'outer;
                 }
