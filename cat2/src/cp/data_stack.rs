@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct DataStack {
     inner: Vec<Value>,
 }
