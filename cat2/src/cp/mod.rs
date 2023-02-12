@@ -34,6 +34,9 @@ pub fn evaluate(
             data_stack.push(value.clone());
             data_stack.push(value);
         }
+        "drop" => {
+            data_stack.pop_any();
+        }
         "or" => {
             let b = data_stack.pop_bool();
             let a = data_stack.pop_bool();
