@@ -27,40 +27,37 @@ pub fn interpret(fn_name: &str, interpreter: &mut Interpreter) {
         .functions
         .find(fn_name, &interpreter.data_stack)
         .unwrap();
-    evaluate(&function.tokens, &mut interpreter.data_stack);
-}
 
-fn evaluate(tokens: &Tokens, data_stack: &mut DataStack) {
-    for token in tokens {
+    for token in &function.tokens {
         match token.as_str() {
             "clone" => {
-                let value = data_stack.pop_any();
+                let value = interpreter.data_stack.pop_any();
 
-                data_stack.push(value.clone());
-                data_stack.push(value);
+                interpreter.data_stack.push(value.clone());
+                interpreter.data_stack.push(value);
             }
             "or" => {
-                let b = data_stack.pop_bool();
-                let a = data_stack.pop_bool();
+                let b = interpreter.data_stack.pop_bool();
+                let a = interpreter.data_stack.pop_bool();
 
-                data_stack.push(a || b);
+                interpreter.data_stack.push(a || b);
             }
             "swap" => {
-                let b = data_stack.pop_any();
-                let a = data_stack.pop_any();
+                let b = interpreter.data_stack.pop_any();
+                let a = interpreter.data_stack.pop_any();
 
-                data_stack.push(b);
-                data_stack.push(a);
+                interpreter.data_stack.push(b);
+                interpreter.data_stack.push(a);
             }
             "=" => {
-                let b = data_stack.pop_u8();
-                let a = data_stack.pop_u8();
+                let b = interpreter.data_stack.pop_u8();
+                let a = interpreter.data_stack.pop_u8();
 
-                data_stack.push(a == b);
+                interpreter.data_stack.push(a == b);
             }
             token => {
                 if let Ok(value) = token.parse::<u8>() {
-                    data_stack.push(Value::U8(value));
+                    interpreter.data_stack.push(Value::U8(value));
                     continue;
                 }
 
