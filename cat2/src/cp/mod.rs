@@ -29,7 +29,7 @@ pub fn evaluate(
     let function = interpreter
         .functions
         .find(fn_name, &interpreter.data_stack)
-        .unwrap();
+        .ok_or(FunctionNotFound)?;
 
     for token in &function.tokens {
         match token.as_str() {
