@@ -22,7 +22,7 @@ impl Interpreter {
     }
 }
 
-pub fn interpret(fn_name: &str, interpreter: &mut Interpreter) {
+pub fn evaluate(fn_name: &str, interpreter: &mut Interpreter) {
     let function = interpreter
         .functions
         .find(fn_name, &interpreter.data_stack)
