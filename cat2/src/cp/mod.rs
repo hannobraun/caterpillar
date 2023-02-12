@@ -27,46 +27,45 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
-    let function = functions
-        .find(fn_name, data_stack)
-        .ok_or(FunctionNotFound)?;
+    match fn_name {
+        "clone" => {
+            let value = data_stack.pop_any();
 
-    for token in &function.tokens {
-        match token.as_str() {
-            "clone" => {
-                let value = data_stack.pop_any();
+            data_stack.push(value.clone());
+            data_stack.push(value);
+        }
+        "or" => {
+            let b = data_stack.pop_bool();
+            let a = data_stack.pop_bool();
 
-                data_stack.push(value.clone());
-                data_stack.push(value);
+            data_stack.push(a || b);
+        }
+        "swap" => {
+            let b = data_stack.pop_any();
+            let a = data_stack.pop_any();
+
+            data_stack.push(b);
+            data_stack.push(a);
+        }
+        "=" => {
+            let b = data_stack.pop_u8();
+            let a = data_stack.pop_u8();
+
+            data_stack.push(a == b);
+        }
+        token => {
+            if let Ok(value) = token.parse::<u8>() {
+                data_stack.push(Value::U8(value));
+                return Ok(());
             }
-            "or" => {
-                let b = data_stack.pop_bool();
-                let a = data_stack.pop_bool();
 
-                data_stack.push(a || b);
-            }
-            "swap" => {
-                let b = data_stack.pop_any();
-                let a = data_stack.pop_any();
+            // If we land here, it's not a builtin function.
+            let function = functions
+                .find(fn_name, data_stack)
+                .ok_or(FunctionNotFound)?;
 
-                data_stack.push(b);
-                data_stack.push(a);
-            }
-            "=" => {
-                let b = data_stack.pop_u8();
-                let a = data_stack.pop_u8();
-
-                data_stack.push(a == b);
-            }
-            token => {
-                if let Ok(value) = token.parse::<u8>() {
-                    data_stack.push(Value::U8(value));
-                    continue;
-                }
-
-                // If we land here, the token is unknown. We silently swallow
-                // that error right now, because we don't have a good way to
-                // report it to the user.
+            for token in &function.tokens {
+                evaluate(token, functions, data_stack)?;
             }
         }
     }
