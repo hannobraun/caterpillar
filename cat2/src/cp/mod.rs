@@ -34,8 +34,8 @@ pub fn evaluate(
         "or" => builtins::or(data_stack),
         "swap" => builtins::swap(data_stack),
         "=" => builtins::eq(data_stack),
-        token => {
-            if let Ok(value) = token.parse::<u8>() {
+        fn_name => {
+            if let Ok(value) = fn_name.parse::<u8>() {
                 data_stack.push(Value::U8(value));
                 return Ok(());
             }
