@@ -64,7 +64,7 @@ pub fn evaluate(
 
             // If we land here, it's not a builtin function.
             let function = functions
-                .find(fn_name, data_stack)
+                .resolve(fn_name, data_stack)
                 .ok_or(FunctionNotFound)?;
 
             for token in &function.tokens {

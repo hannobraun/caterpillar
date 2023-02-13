@@ -52,7 +52,7 @@ impl Functions {
         self.registry.define(name, args, body);
     }
 
-    pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
+    pub fn resolve(&self, name: &str, stack: &DataStack) -> Option<&Function> {
         self.registry
             .resolve(name, stack.values_from_top().cloned())
     }
