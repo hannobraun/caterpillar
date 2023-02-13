@@ -1,11 +1,10 @@
-use super::{DataStack, Value};
+use super::DataStack;
 
 pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
         "or" => or,
-        "saturating" => saturating,
         "swap" => swap,
         "=" => eq,
         _ => return None,
@@ -37,11 +36,6 @@ fn or(data_stack: &mut DataStack) {
     let a = data_stack.pop_bool();
 
     data_stack.push(a || b);
-}
-
-fn saturating(data_stack: &mut DataStack) {
-    let value = data_stack.pop_u8();
-    data_stack.push(Value::SaturatingU8(value));
 }
 
 fn swap(data_stack: &mut DataStack) {

@@ -39,7 +39,6 @@ impl DataStack {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Value {
     Bool(bool),
-    SaturatingU8(u8),
     U8(u8),
 }
 
@@ -47,7 +46,6 @@ impl Value {
     pub fn ty(&self) -> Type {
         match self {
             Self::Bool(_) => Type::Bool,
-            Self::SaturatingU8(_) => Type::SaturatingU8,
             Self::U8(_) => Type::U8,
         }
     }
@@ -68,6 +66,5 @@ impl From<u8> for Value {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Type {
     Bool,
-    SaturatingU8,
     U8,
 }
