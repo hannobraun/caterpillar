@@ -25,6 +25,13 @@ fn drop(data_stack: &mut DataStack) {
     data_stack.pop_any();
 }
 
+fn eq(data_stack: &mut DataStack) {
+    let b = data_stack.pop_u8();
+    let a = data_stack.pop_u8();
+
+    data_stack.push(a == b);
+}
+
 fn or(data_stack: &mut DataStack) {
     let b = data_stack.pop_bool();
     let a = data_stack.pop_bool();
@@ -43,11 +50,4 @@ fn swap(data_stack: &mut DataStack) {
 
     data_stack.push(b);
     data_stack.push(a);
-}
-
-fn eq(data_stack: &mut DataStack) {
-    let b = data_stack.pop_u8();
-    let a = data_stack.pop_u8();
-
-    data_stack.push(a == b);
 }
