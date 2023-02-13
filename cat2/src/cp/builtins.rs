@@ -1,5 +1,18 @@
 use super::DataStack;
 
+pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
+    let builtin = match name {
+        "clone" => clone,
+        "drop" => drop,
+        "or" => or,
+        "swap" => swap,
+        "=" => eq,
+        _ => return None,
+    };
+
+    Some(builtin)
+}
+
 pub fn clone(data_stack: &mut DataStack) {
     let value = data_stack.pop_any();
 

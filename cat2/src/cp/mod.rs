@@ -28,16 +28,7 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
-    let builtin: Option<fn(&mut DataStack)> = match fn_name {
-        "clone" => Some(builtins::clone),
-        "drop" => Some(builtins::drop),
-        "or" => Some(builtins::or),
-        "swap" => Some(builtins::swap),
-        "=" => Some(builtins::eq),
-        _ => None,
-    };
-
-    if let Some(builtin) = builtin {
+    if let Some(builtin) = builtins::get(fn_name) {
         builtin(data_stack);
         return Ok(());
     }
