@@ -7,6 +7,7 @@ pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
         "or" => or,
         "swap" => swap,
         "=" => eq,
+        "-" => sub,
         _ => return None,
     };
 
@@ -36,6 +37,15 @@ fn or(data_stack: &mut DataStack) {
     let a = data_stack.pop_bool();
 
     data_stack.push(a || b);
+}
+
+fn sub(data_stack: &mut DataStack) {
+    let b = data_stack.pop_u8();
+    let a = data_stack.pop_u8();
+
+    let x = a.saturating_sub(b);
+
+    data_stack.push(x);
 }
 
 fn swap(data_stack: &mut DataStack) {
