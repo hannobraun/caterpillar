@@ -19,6 +19,7 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
+        self_.define("neighbor_range_min", [Arg::Type(Type::U8)], "2 -");
         self_.define(
             "cell_lives",
             [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
