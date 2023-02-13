@@ -28,27 +28,32 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
-    match fn_name {
-        "clone" => builtins::clone(data_stack),
-        "drop" => builtins::drop(data_stack),
-        "or" => builtins::or(data_stack),
-        "swap" => builtins::swap(data_stack),
-        "=" => builtins::eq(data_stack),
-        fn_name => {
-            if let Ok(value) = fn_name.parse::<u8>() {
-                data_stack.push(Value::U8(value));
-                return Ok(());
-            }
+    let builtin: Option<fn(&mut DataStack)> = match fn_name {
+        "clone" => Some(builtins::clone),
+        "drop" => Some(builtins::drop),
+        "or" => Some(builtins::or),
+        "swap" => Some(builtins::swap),
+        "=" => Some(builtins::eq),
+        _ => None,
+    };
 
-            // If we land here, it's not a builtin function.
-            let function = functions
-                .resolve(fn_name, data_stack)
-                .ok_or(FunctionNotFound)?;
+    if let Some(builtin) = builtin {
+        builtin(data_stack);
+        return Ok(());
+    }
 
-            for token in &function.tokens {
-                evaluate(token, functions, data_stack)?;
-            }
-        }
+    if let Ok(value) = fn_name.parse::<u8>() {
+        data_stack.push(Value::U8(value));
+        return Ok(());
+    }
+
+    // If we land here, it's not a builtin function.
+    let function = functions
+        .resolve(fn_name, data_stack)
+        .ok_or(FunctionNotFound)?;
+
+    for token in &function.tokens {
+        evaluate(token, functions, data_stack)?;
     }
 
     Ok(())
