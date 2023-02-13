@@ -1,3 +1,4 @@
+mod builtins;
 mod data_stack;
 mod functions;
 mod tokenizer;
@@ -28,34 +29,11 @@ pub fn evaluate(
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
     match fn_name {
-        "clone" => {
-            let value = data_stack.pop_any();
-
-            data_stack.push(value.clone());
-            data_stack.push(value);
-        }
-        "drop" => {
-            data_stack.pop_any();
-        }
-        "or" => {
-            let b = data_stack.pop_bool();
-            let a = data_stack.pop_bool();
-
-            data_stack.push(a || b);
-        }
-        "swap" => {
-            let b = data_stack.pop_any();
-            let a = data_stack.pop_any();
-
-            data_stack.push(b);
-            data_stack.push(a);
-        }
-        "=" => {
-            let b = data_stack.pop_u8();
-            let a = data_stack.pop_u8();
-
-            data_stack.push(a == b);
-        }
+        "clone" => builtins::clone(data_stack),
+        "drop" => builtins::drop(data_stack),
+        "or" => builtins::or(data_stack),
+        "swap" => builtins::swap(data_stack),
+        "=" => builtins::eq(data_stack),
         token => {
             if let Ok(value) = token.parse::<u8>() {
                 data_stack.push(Value::U8(value));
