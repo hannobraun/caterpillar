@@ -52,6 +52,11 @@ impl Functions {
         self.registry.define(name, args, body);
     }
 
+    pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
+        self.registry
+            .resolve(name, stack.values_from_top().cloned())
+    }
+
     pub fn get(&self, name: &str, args: impl Into<Args>) -> Option<&Function> {
         self.registry.get(name, args)
     }
@@ -62,10 +67,5 @@ impl Functions {
         args: impl Into<Args>,
     ) -> Option<&mut Function> {
         self.registry.get_mut(name, args)
-    }
-
-    pub fn find(&self, name: &str, stack: &DataStack) -> Option<&Function> {
-        self.registry
-            .resolve(name, stack.values_from_top().cloned())
     }
 }
