@@ -20,6 +20,11 @@ impl Functions {
         // for the user to modify.
         registry.define("neighbor_range_min", [Arg::Type(Type::U8)], "2 -");
         registry.define(
+            "neighbor_range_max",
+            [Arg::Type(Type::U8)],
+            "2 + 79 min",
+        );
+        registry.define(
             "cell_lives",
             [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
             "swap drop cell_survives",

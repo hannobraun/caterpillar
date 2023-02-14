@@ -67,7 +67,14 @@ pub fn neighbor_range(i: u8, interpreter: &mut cp::Interpreter) -> (u8, u8) {
     .unwrap();
     let min = interpreter.data_stack.pop_u8();
 
-    let max = i.saturating_add(2).min(NUM_CELLS as u8 - 1);
+    interpreter.data_stack.push(cp::Value::U8(i));
+    cp::evaluate(
+        "neighbor_range_max",
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+    )
+    .unwrap();
+    let max = interpreter.data_stack.pop_u8();
 
     (min, max)
 }
