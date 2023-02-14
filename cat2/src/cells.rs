@@ -45,7 +45,15 @@ pub fn num_neighbors(
     cells: Generation,
     interpreter: &mut cp::Interpreter,
 ) -> u8 {
-    let (min, max) = neighbor_range(i, interpreter);
+    interpreter.data_stack.push(cp::Value::U8(i));
+    cp::evaluate(
+        "neighbor_range",
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+    )
+    .unwrap();
+    let max = interpreter.data_stack.pop_u8();
+    let min = interpreter.data_stack.pop_u8();
 
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
@@ -55,26 +63,4 @@ pub fn num_neighbors(
     });
 
     num_neighbors
-}
-
-pub fn neighbor_range(i: u8, interpreter: &mut cp::Interpreter) -> (u8, u8) {
-    interpreter.data_stack.push(cp::Value::U8(i));
-    cp::evaluate(
-        "neighbor_range_min",
-        &interpreter.functions,
-        &mut interpreter.data_stack,
-    )
-    .unwrap();
-    let min = interpreter.data_stack.pop_u8();
-
-    interpreter.data_stack.push(cp::Value::U8(i));
-    cp::evaluate(
-        "neighbor_range_max",
-        &interpreter.functions,
-        &mut interpreter.data_stack,
-    )
-    .unwrap();
-    let max = interpreter.data_stack.pop_u8();
-
-    (min, max)
 }

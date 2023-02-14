@@ -18,6 +18,11 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
+        registry.define(
+            "neighbor_range",
+            [Arg::Type(Type::U8)],
+            "clone neighbor_range_min swap neighbor_range_max",
+        );
         registry.define("neighbor_range_min", [Arg::Type(Type::U8)], "2 -");
         registry.define(
             "neighbor_range_max",
