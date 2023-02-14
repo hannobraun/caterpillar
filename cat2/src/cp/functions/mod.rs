@@ -22,8 +22,9 @@ impl Functions {
         registry.define(
             "neighbor_range_max",
             [Arg::Type(Type::U8)],
-            "2 + 79 min",
+            "2 + num_cells 1 - min",
         );
+        registry.define("num_cells", [], "80");
         registry.define(
             "cell_lives",
             [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
