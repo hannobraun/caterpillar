@@ -4,6 +4,7 @@ pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
+        "min" => min,
         "or" => or,
         "swap" => swap,
         "=" => eq,
@@ -40,6 +41,15 @@ fn eq(data_stack: &mut DataStack) {
     let a = data_stack.pop_u8();
 
     data_stack.push(a == b);
+}
+
+fn min(data_stack: &mut DataStack) {
+    let b = data_stack.pop_u8();
+    let a = data_stack.pop_u8();
+
+    let x = u8::min(a, b);
+
+    data_stack.push(x);
 }
 
 fn or(data_stack: &mut DataStack) {
