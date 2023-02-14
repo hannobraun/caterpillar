@@ -7,11 +7,21 @@ pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
         "or" => or,
         "swap" => swap,
         "=" => eq,
+        "+" => add,
         "-" => sub,
         _ => return None,
     };
 
     Some(builtin)
+}
+
+fn add(data_stack: &mut DataStack) {
+    let b = data_stack.pop_u8();
+    let a = data_stack.pop_u8();
+
+    let x = a.saturating_add(b);
+
+    data_stack.push(x);
 }
 
 fn clone(data_stack: &mut DataStack) {
