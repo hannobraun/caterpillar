@@ -39,9 +39,11 @@ pub fn evaluate(
     }
 
     // If we land here, it's not a builtin function.
-    let function = functions
-        .resolve(fn_name, data_stack)
-        .ok_or(FunctionNotFound)?;
+    let function = functions.resolve(fn_name, data_stack).ok_or_else(|| {
+        FunctionNotFound {
+            name: fn_name.into(),
+        }
+    })?;
 
     for token in &function.tokens {
         evaluate(token, functions, data_stack)?;
@@ -51,4 +53,6 @@ pub fn evaluate(
 }
 
 #[derive(Debug)]
-pub struct FunctionNotFound;
+pub struct FunctionNotFound {
+    pub name: String,
+}
