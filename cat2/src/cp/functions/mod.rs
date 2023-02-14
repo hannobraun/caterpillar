@@ -13,44 +13,34 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let registry = Registry::new();
-        let mut self_ = Self { registry };
+        let mut registry = Registry::new();
 
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        self_.define("neighbor_range_min", [Arg::Type(Type::U8)], "2 -");
-        self_.define(
+        registry.define("neighbor_range_min", [Arg::Type(Type::U8)], "2 -");
+        registry.define(
             "cell_lives",
             [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
             "swap drop cell_survives",
         );
-        self_.define(
+        registry.define(
             "cell_lives",
             [Arg::Value(Value::Bool(false)), Arg::Type(Type::U8)],
             "swap drop cell_is_born",
         );
-        self_.define(
+        registry.define(
             "cell_is_born",
             [Arg::Type(Type::U8)],
             "clone 2 = swap 3 = or",
         );
-        self_.define(
+        registry.define(
             "cell_survives",
             [Arg::Type(Type::U8)],
             "clone 2 = swap 4 = or",
         );
 
-        self_
-    }
-
-    pub fn define(
-        &mut self,
-        name: impl Into<String>,
-        args: impl Into<Args>,
-        body: &str,
-    ) {
-        self.registry.define(name, args, body);
+        Self { registry }
     }
 
     pub fn resolve(&self, name: &str, stack: &DataStack) -> Option<&Function> {
