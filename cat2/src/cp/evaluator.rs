@@ -5,6 +5,14 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
+    evaluate_expression(expression, functions, data_stack)
+}
+
+fn evaluate_expression(
+    expression: &Expression,
+    functions: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
     match expression {
         Expression::Block(_) => {
             todo!("Evaluating blocks is not supported yet")
