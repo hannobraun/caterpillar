@@ -45,7 +45,7 @@ pub fn evaluate(
         }
     })?;
 
-    for Token::Fn(token) in &function.tokens {
+    for Token::Fn(token) in &function.body {
         evaluate(token, functions, data_stack)?;
     }
 

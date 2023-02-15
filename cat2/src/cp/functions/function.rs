@@ -3,7 +3,7 @@ use crate::cp::{tokenize, Tokens, Type};
 pub struct Function {
     pub name: String,
     pub args: Args,
-    pub tokens: Tokens,
+    pub body: Tokens,
 }
 
 impl Function {
@@ -15,7 +15,7 @@ impl Function {
         Function {
             name: name.into(),
             args: args.into(),
-            tokens: tokenize(body),
+            body: tokenize(body),
         }
     }
 }
