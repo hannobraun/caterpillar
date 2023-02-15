@@ -25,7 +25,7 @@ fn parse_expressions(
 }
 
 fn parse_expression(
-    mut tokens: impl Iterator<Item = Token>,
+    tokens: &mut dyn Iterator<Item = Token>,
     terminator: Option<&Token>,
 ) -> Option<Expression> {
     let token = tokens.next()?;
