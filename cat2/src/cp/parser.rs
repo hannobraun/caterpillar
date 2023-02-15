@@ -7,10 +7,17 @@ pub enum Expression {
 }
 
 pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
-    let mut tokens = tokens.into_iter();
+    let tokens = tokens.into_iter();
+    parse_expressions(tokens, None)
+}
+
+fn parse_expressions(
+    mut tokens: impl Iterator<Item = Token>,
+    terminator: Option<&Token>,
+) -> Expressions {
     let mut expressions = Vec::new();
 
-    while let Some(expression) = parse_expression(&mut tokens, None) {
+    while let Some(expression) = parse_expression(&mut tokens, terminator) {
         expressions.push(expression);
     }
 
