@@ -1,9 +1,9 @@
-use crate::cp::{tokenize, Tokens, Type};
+use crate::cp::{parse, tokenize, Expressions, Type};
 
 pub struct Function {
     pub name: String,
     pub args: Args,
-    pub body: Tokens,
+    pub body: Expressions,
 }
 
 impl Function {
@@ -15,7 +15,7 @@ impl Function {
         Function {
             name: name.into(),
             args: args.into(),
-            body: tokenize(body),
+            body: parse(tokenize(body)),
         }
     }
 }

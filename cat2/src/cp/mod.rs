@@ -1,11 +1,13 @@
 mod builtins;
 mod data_stack;
 mod functions;
+mod parser;
 mod tokenizer;
 
 pub use self::{
     data_stack::{DataStack, Type, Value},
     functions::{Arg, Functions},
+    parser::{parse, Expression, Expressions},
     tokenizer::{tokenize, Token, Tokens},
 };
 
@@ -45,7 +47,7 @@ pub fn evaluate(
         }
     })?;
 
-    for Token::Fn(token) in &function.body {
+    for Expression::Fn(token) in &function.body {
         evaluate(token, functions, data_stack)?;
     }
 
