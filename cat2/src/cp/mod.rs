@@ -6,7 +6,7 @@ mod tokenizer;
 pub use self::{
     data_stack::{DataStack, Type, Value},
     functions::{Arg, Functions},
-    tokenizer::{tokenize, Tokens},
+    tokenizer::{tokenize, Token, Tokens},
 };
 
 pub struct Interpreter {
@@ -45,7 +45,7 @@ pub fn evaluate(
         }
     })?;
 
-    for token in &function.tokens {
+    for Token::Fn(token) in &function.tokens {
         evaluate(token, functions, data_stack)?;
     }
 

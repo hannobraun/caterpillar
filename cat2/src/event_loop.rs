@@ -31,12 +31,16 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .functions
                 .get_mut("cell_is_born", [Arg::Type(Type::U8)])
                 .unwrap();
-            let mut token = function.tokens.pop().unwrap_or_default();
+            let mut token = function
+                .tokens
+                .pop()
+                .map(|cp::Token::Fn(token)| token)
+                .unwrap_or_default();
 
             token.pop();
 
             if !token.is_empty() {
-                function.tokens.push(token);
+                function.tokens.push(cp::Token::Fn(token));
             }
         }
         Event::Key(Key::Char(ch)) => {
@@ -45,11 +49,15 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .functions
                 .get_mut("cell_is_born", [Arg::Type(Type::U8)])
                 .unwrap();
-            let mut token = function.tokens.pop().unwrap_or_default();
+            let mut token = function
+                .tokens
+                .pop()
+                .map(|cp::Token::Fn(token)| token)
+                .unwrap_or_default();
 
             token.push(ch);
 
-            function.tokens.push(token);
+            function.tokens.push(cp::Token::Fn(token));
         }
         Event::Tick => {
             let current = state
