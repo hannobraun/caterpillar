@@ -15,6 +15,10 @@ pub fn parse(tokens: Tokens) -> Expressions {
                 // Currently ignored.
                 None
             }
+            Token::BlockClose => {
+                // Currently ignored.
+                None
+            }
         })
         .collect()
 }
