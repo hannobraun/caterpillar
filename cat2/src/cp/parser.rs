@@ -23,12 +23,10 @@ fn parse_expression(
     match tokens.next()? {
         Token::Fn(name) => Some(Expression::Fn(name)),
         Token::BlockOpen => {
-            // Currently ignored.
-            None
+            todo!("`{{` not supported yet")
         }
         Token::BlockClose => {
-            // Currently ignored.
-            None
+            todo!("`}}` not supported yet")
         }
     }
 }
