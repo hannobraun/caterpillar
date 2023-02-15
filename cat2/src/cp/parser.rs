@@ -43,7 +43,7 @@ fn parse_expression(
             Some(Expression::Block(expressions))
         }
         Token::BlockClose => {
-            todo!("`}}` not supported yet")
+            panic!("Unexpected `}}`")
         }
     }
 }
