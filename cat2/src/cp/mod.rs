@@ -31,7 +31,14 @@ pub fn evaluate(
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
     let Expression::Fn(fn_name) = expression;
+    evaluate_fn(fn_name, functions, data_stack)
+}
 
+fn evaluate_fn(
+    fn_name: &str,
+    functions: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
     if let Some(builtin) = builtins::get(fn_name) {
         builtin(data_stack);
         return Ok(());
