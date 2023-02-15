@@ -1,4 +1,4 @@
-use super::{Token, Tokens};
+use super::Token;
 
 pub type Expressions = Vec<Expression>;
 
@@ -6,7 +6,7 @@ pub enum Expression {
     Fn(String),
 }
 
-pub fn parse(tokens: Tokens) -> Expressions {
+pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
     tokens.into_iter().filter_map(parse_token).collect()
 }
 
