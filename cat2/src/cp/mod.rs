@@ -32,8 +32,7 @@ pub fn evaluate(
 ) -> Result<(), FunctionNotFound> {
     match expression {
         Expression::Block(_) => {
-            // Currently ignored.
-            Ok(())
+            todo!("Evaluating blocks is not supported yet")
         }
         Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
     }
