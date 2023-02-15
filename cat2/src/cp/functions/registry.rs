@@ -78,16 +78,4 @@ impl Registry {
 
         prime_candidate
     }
-
-    pub fn get_mut(
-        &mut self,
-        name: &str,
-        args: impl Into<Args>,
-    ) -> Option<&mut Function> {
-        let args = args.into();
-
-        self.inner
-            .iter_mut()
-            .find(|function| function.name == name && function.args == args)
-    }
 }
