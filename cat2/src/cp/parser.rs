@@ -3,6 +3,7 @@ use super::Token;
 pub type Expressions = Vec<Expression>;
 
 pub enum Expression {
+    Block(Expressions),
     Fn(String),
 }
 
@@ -37,7 +38,9 @@ fn parse_expression(
     match token {
         Token::Fn(name) => Some(Expression::Fn(name)),
         Token::BlockOpen => {
-            todo!("`{{` not supported yet")
+            let expressions =
+                parse_expressions(tokens, Some(&Token::BlockClose));
+            Some(Expression::Block(expressions))
         }
         Token::BlockClose => {
             todo!("`}}` not supported yet")

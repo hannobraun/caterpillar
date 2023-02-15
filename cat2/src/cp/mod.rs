@@ -30,8 +30,13 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
-    let Expression::Fn(fn_name) = expression;
-    evaluate_fn(fn_name, functions, data_stack)
+    match expression {
+        Expression::Block(_) => {
+            // Currently ignored.
+            Ok(())
+        }
+        Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
+    }
 }
 
 fn evaluate_fn(
