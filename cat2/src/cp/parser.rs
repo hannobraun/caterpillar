@@ -9,8 +9,12 @@ pub enum Expression {
 pub fn parse(tokens: Tokens) -> Expressions {
     tokens
         .into_iter()
-        .map(|token| match token {
-            Token::Fn(name) => Expression::Fn(name),
+        .filter_map(|token| match token {
+            Token::Fn(name) => Some(Expression::Fn(name)),
+            Token::BlockOpen => {
+                // Currently ignored.
+                None
+            }
         })
         .collect()
 }
