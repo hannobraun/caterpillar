@@ -26,10 +26,12 @@ impl Interpreter {
 }
 
 pub fn evaluate(
-    fn_name: &str,
+    expression: &Expression,
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
+    let Expression::Fn(fn_name) = expression;
+
     if let Some(builtin) = builtins::get(fn_name) {
         builtin(data_stack);
         return Ok(());
@@ -47,8 +49,8 @@ pub fn evaluate(
         }
     })?;
 
-    for Expression::Fn(token) in &function.body {
-        evaluate(token, functions, data_stack)?;
+    for expression in &function.body {
+        evaluate(expression, functions, data_stack)?;
     }
 
     Ok(())

@@ -29,7 +29,7 @@ pub fn next_generation(
         interpreter.data_stack.push(cp::Value::Bool(current[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         cp::evaluate(
-            "cell_lives",
+            &cp::Expression::Fn("cell_lives".into()),
             &interpreter.functions,
             &mut interpreter.data_stack,
         )
@@ -47,7 +47,7 @@ pub fn num_neighbors(
 ) -> u8 {
     interpreter.data_stack.push(cp::Value::U8(i));
     cp::evaluate(
-        "neighbor_range",
+        &cp::Expression::Fn("neighbor_range".into()),
         &interpreter.functions,
         &mut interpreter.data_stack,
     )
