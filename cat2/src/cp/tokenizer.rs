@@ -1,5 +1,6 @@
 pub type Tokens = Vec<Token>;
 
+#[derive(Eq, PartialEq)]
 pub enum Token {
     Fn(String),
     BlockOpen,
