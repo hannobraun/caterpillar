@@ -19,11 +19,11 @@ pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
 
 fn parse_expression(
     mut tokens: impl Iterator<Item = Token>,
-    terminator: Option<Token>,
+    terminator: Option<&Token>,
 ) -> Option<Expression> {
     let token = tokens.next()?;
 
-    if Some(&token) == terminator.as_ref() {
+    if Some(&token) == terminator {
         return None;
     }
 
