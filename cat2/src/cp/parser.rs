@@ -20,7 +20,9 @@ pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
 fn parse_expression(
     mut tokens: impl Iterator<Item = Token>,
 ) -> Option<Expression> {
-    match tokens.next()? {
+    let token = tokens.next()?;
+
+    match token {
         Token::Fn(name) => Some(Expression::Fn(name)),
         Token::BlockOpen => {
             todo!("`{{` not supported yet")
