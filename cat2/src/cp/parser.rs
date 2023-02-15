@@ -20,16 +20,15 @@ pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
 fn parse_expression(
     mut tokens: impl Iterator<Item = Token>,
 ) -> Option<Expression> {
-    match tokens.next() {
-        Some(Token::Fn(name)) => Some(Expression::Fn(name)),
-        Some(Token::BlockOpen) => {
+    match tokens.next()? {
+        Token::Fn(name) => Some(Expression::Fn(name)),
+        Token::BlockOpen => {
             // Currently ignored.
             None
         }
-        Some(Token::BlockClose) => {
+        Token::BlockClose => {
             // Currently ignored.
             None
         }
-        None => None,
     }
 }
