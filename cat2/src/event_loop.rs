@@ -66,12 +66,7 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
         }
     }
 
-    ui::draw(
-        &state.interpreter,
-        &state.generations,
-        &mut state.buffer,
-        &mut state.stdout,
-    )?;
+    ui::draw(&state.generations, &mut state.buffer, &mut state.stdout)?;
 
     Ok(())
 }

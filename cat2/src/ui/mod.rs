@@ -10,15 +10,11 @@ use std::io::Stdout;
 
 use crossterm::terminal;
 
-use crate::{
-    cells::{self, Generation},
-    cp,
-};
+use crate::cells::{self, Generation};
 
 use self::{border::BORDER_OVERHEAD, vector::Vector};
 
 pub fn draw(
-    _: &cp::Interpreter,
     generations: &[Generation],
     buffer: &mut Buffer,
     stdout: &mut Stdout,
