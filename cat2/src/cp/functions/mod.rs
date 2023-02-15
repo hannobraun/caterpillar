@@ -59,10 +59,6 @@ impl Functions {
             .resolve(name, stack.values_from_top().cloned())
     }
 
-    pub fn get(&self, name: &str, args: impl Into<Args>) -> Option<&Function> {
-        self.registry.get(name, args)
-    }
-
     pub fn get_mut(
         &mut self,
         name: &str,

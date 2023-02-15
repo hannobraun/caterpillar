@@ -1,7 +1,6 @@
 mod area;
 mod border;
 mod buffer;
-mod editor;
 mod generations;
 mod vector;
 
@@ -19,7 +18,7 @@ use crate::{
 use self::{border::BORDER_OVERHEAD, vector::Vector};
 
 pub fn draw(
-    interpreter: &cp::Interpreter,
+    _: &cp::Interpreter,
     generations: &[Generation],
     buffer: &mut Buffer,
     stdout: &mut Stdout,
@@ -46,30 +45,6 @@ pub fn draw(
         let area = area::new(buffer, offset, size);
 
         generations::draw(area, generations.iter());
-    }
-    {
-        let editor_height = 1 + BORDER_OVERHEAD;
-
-        let offset = Vector {
-            x: 0,
-            y: num_rows - editor_height,
-        };
-        let size = Vector {
-            x: num_columns - generations_width,
-            y: editor_height,
-        };
-        let area = area::new(buffer, offset, size);
-
-        editor::draw(
-            area,
-            interpreter
-                .functions
-                .get("cell_is_born", [cp::Arg::Type(cp::Type::U8)])
-                .unwrap()
-                .tokens
-                .join(" ")
-                .as_str(),
-        );
     }
 
     buffer.draw(stdout)?;
