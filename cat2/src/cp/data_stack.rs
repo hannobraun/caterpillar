@@ -15,6 +15,13 @@ impl DataStack {
         self.inner.pop().expect("Stack is empty")
     }
 
+    pub fn pop_block(&mut self) -> Block {
+        let Value::Block(value) = self.pop_any() else {
+            panic!("Expected block")
+        };
+        value
+    }
+
     pub fn pop_bool(&mut self) -> bool {
         let Value::Bool(value) = self.pop_any() else {
             panic!("Expected `bool`")
