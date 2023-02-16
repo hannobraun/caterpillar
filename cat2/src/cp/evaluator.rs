@@ -45,7 +45,7 @@ fn evaluate_fn(
     })?;
 
     for expression in &function.body {
-        evaluate(expression, functions, data_stack)?;
+        evaluate_expression(expression, functions, data_stack)?;
     }
 
     Ok(())
