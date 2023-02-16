@@ -2,6 +2,7 @@ use super::Token;
 
 pub type Expressions = Vec<Expression>;
 
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Expression {
     Block(Expressions),
     Fn(String),
