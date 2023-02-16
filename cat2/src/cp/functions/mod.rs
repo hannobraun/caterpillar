@@ -50,8 +50,7 @@ impl Functions {
         Self { registry }
     }
 
-    pub fn resolve(&self, name: &str, stack: &DataStack) -> Option<&Function> {
-        self.registry
-            .resolve(name, stack.values_from_top().cloned())
+    pub fn resolve(&self, name: &str, _: &DataStack) -> Option<&Function> {
+        self.registry.resolve(name)
     }
 }

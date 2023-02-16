@@ -40,29 +40,3 @@ where
 pub enum Arg {
     Type(Type),
 }
-
-impl Arg {
-    pub fn ty(&self) -> Type {
-        match self {
-            Arg::Type(ty) => ty.clone(),
-        }
-    }
-
-    pub fn value(&self) -> Option<&crate::cp::Value> {
-        match self {
-            Arg::Type(_) => None,
-        }
-    }
-
-    pub fn is_type(&self) -> bool {
-        match self {
-            Self::Type(_) => true,
-        }
-    }
-
-    pub fn is_value(&self) -> bool {
-        match self {
-            Self::Type(_) => false,
-        }
-    }
-}
