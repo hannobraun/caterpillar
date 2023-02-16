@@ -5,7 +5,7 @@ pub use self::function::{Arg, Args};
 
 use self::{function::Function, registry::Registry};
 
-use super::{DataStack, Type, Value};
+use super::{DataStack, Type};
 
 pub struct Functions {
     registry: Registry,
@@ -32,14 +32,10 @@ impl Functions {
         registry.define("num_cells", [], "80");
         registry.define(
             "cell_lives",
-            [Arg::Value(Value::Bool(true)), Arg::Type(Type::U8)],
-            "swap drop cell_survives",
+            [Arg::Type(Type::Bool), Arg::Type(Type::U8)],
+            "swap { cell_survives } { cell_is_born } if",
         );
-        registry.define(
-            "cell_lives",
-            [Arg::Value(Value::Bool(false)), Arg::Type(Type::U8)],
-            "swap drop cell_is_born",
-        );
+
         registry.define(
             "cell_is_born",
             [Arg::Type(Type::U8)],
