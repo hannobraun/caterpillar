@@ -1,6 +1,8 @@
 use super::{DataStack, Functions};
 
-pub fn get(name: &str) -> Option<fn(&Functions, &mut DataStack)> {
+pub type Builtin = fn(&Functions, &mut DataStack);
+
+pub fn get(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
