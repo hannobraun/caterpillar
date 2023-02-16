@@ -1,20 +1,14 @@
-use crate::cp::{parse, tokenize, Expressions, Type};
+use crate::cp::{parse, tokenize, Expressions};
 
 pub struct Function {
     pub name: String,
-    pub args: Args,
     pub body: Expressions,
 }
 
 impl Function {
-    pub fn new(
-        name: impl Into<String>,
-        args: impl Into<Args>,
-        body: &str,
-    ) -> Self {
+    pub fn new(name: impl Into<String>, body: &str) -> Self {
         Function {
             name: name.into(),
-            args: args.into(),
             body: parse(tokenize(body)),
         }
     }
@@ -37,6 +31,4 @@ where
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-pub enum Arg {
-    Type(Type),
-}
+pub enum Arg {}

@@ -1,4 +1,4 @@
-use super::{Args, Function};
+use super::Function;
 
 pub struct Registry {
     inner: Vec<Function>,
@@ -10,13 +10,8 @@ impl Registry {
         Self { inner }
     }
 
-    pub fn define(
-        &mut self,
-        name: impl Into<String>,
-        args: impl Into<Args>,
-        body: &str,
-    ) {
-        self.inner.push(Function::new(name, args, body));
+    pub fn define(&mut self, name: impl Into<String>, body: &str) {
+        self.inner.push(Function::new(name, body));
     }
 
     pub fn resolve(&self, name: &str) -> Option<&Function> {
