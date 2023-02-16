@@ -1,6 +1,6 @@
-use super::DataStack;
+use super::{DataStack, Functions};
 
-pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
+pub fn get(name: &str) -> Option<fn(&Functions, &mut DataStack)> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
@@ -16,7 +16,7 @@ pub fn get(name: &str) -> Option<fn(&mut DataStack)> {
     Some(builtin)
 }
 
-fn add(data_stack: &mut DataStack) {
+fn add(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
 
@@ -25,25 +25,25 @@ fn add(data_stack: &mut DataStack) {
     data_stack.push(x);
 }
 
-fn clone(data_stack: &mut DataStack) {
+fn clone(_: &Functions, data_stack: &mut DataStack) {
     let value = data_stack.pop_any();
 
     data_stack.push(value.clone());
     data_stack.push(value);
 }
 
-fn drop(data_stack: &mut DataStack) {
+fn drop(_: &Functions, data_stack: &mut DataStack) {
     data_stack.pop_any();
 }
 
-fn eq(data_stack: &mut DataStack) {
+fn eq(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
 
     data_stack.push(a == b);
 }
 
-fn min(data_stack: &mut DataStack) {
+fn min(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
 
@@ -52,14 +52,14 @@ fn min(data_stack: &mut DataStack) {
     data_stack.push(x);
 }
 
-fn or(data_stack: &mut DataStack) {
+fn or(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_bool();
     let a = data_stack.pop_bool();
 
     data_stack.push(a || b);
 }
 
-fn sub(data_stack: &mut DataStack) {
+fn sub(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
 
@@ -68,7 +68,7 @@ fn sub(data_stack: &mut DataStack) {
     data_stack.push(x);
 }
 
-fn swap(data_stack: &mut DataStack) {
+fn swap(_: &Functions, data_stack: &mut DataStack) {
     let b = data_stack.pop_any();
     let a = data_stack.pop_any();
 
