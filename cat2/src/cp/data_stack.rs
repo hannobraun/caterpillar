@@ -40,7 +40,7 @@ impl DataStack {
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Value {
-    Block(Expressions),
+    Block(Block),
     Bool(bool),
     U8(u8),
 }
@@ -66,6 +66,8 @@ impl From<u8> for Value {
         Self::U8(value)
     }
 }
+
+pub type Block = Expressions;
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Type {
