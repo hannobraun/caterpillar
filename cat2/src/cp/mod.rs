@@ -8,7 +8,7 @@ mod tokenizer;
 pub use self::{
     data_stack::{DataStack, Type, Value},
     evaluator::evaluate,
-    functions::{Arg, Functions},
+    functions::Functions,
     parser::{parse, Expression, Expressions},
     tokenizer::{tokenize, Token, Tokens},
 };

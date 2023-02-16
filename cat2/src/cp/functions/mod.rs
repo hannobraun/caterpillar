@@ -1,8 +1,6 @@
 mod function;
 mod registry;
 
-pub use self::function::{Arg, Args};
-
 use self::{function::Function, registry::Registry};
 
 use super::DataStack;
