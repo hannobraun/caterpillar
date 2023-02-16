@@ -1,3 +1,5 @@
+use super::Expressions;
+
 #[derive(Debug)]
 pub struct DataStack {
     inner: Vec<Value>,
@@ -38,6 +40,7 @@ impl DataStack {
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Value {
+    Block(Expressions),
     Bool(bool),
     U8(u8),
 }
@@ -45,6 +48,7 @@ pub enum Value {
 impl Value {
     pub fn ty(&self) -> Type {
         match self {
+            Self::Block(_) => Type::Block,
             Self::Bool(_) => Type::Bool,
             Self::U8(_) => Type::U8,
         }
@@ -65,6 +69,7 @@ impl From<u8> for Value {
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Type {
+    Block,
     Bool,
     U8,
 }

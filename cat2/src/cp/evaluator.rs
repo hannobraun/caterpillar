@@ -14,8 +14,9 @@ fn evaluate_expression(
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
     match expression {
-        Expression::Block(_) => {
-            todo!("Evaluating blocks is not supported yet")
+        Expression::Block(expressions) => {
+            data_stack.push(Value::Block(expressions.clone()));
+            Ok(())
         }
         Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
     }
