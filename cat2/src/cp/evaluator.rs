@@ -1,11 +1,15 @@
-use super::{builtins, DataStack, Expression, Functions, Value};
+use super::{builtins, DataStack, Expression, Expressions, Functions, Value};
 
 pub fn evaluate(
-    expression: &Expression,
+    expressions: &Expressions,
     functions: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
-    evaluate_expression(expression, functions, data_stack)
+    for expression in expressions {
+        evaluate_expression(expression, functions, data_stack)?;
+    }
+
+    Ok(())
 }
 
 fn evaluate_expression(
@@ -44,9 +48,7 @@ fn evaluate_fn(
         }
     })?;
 
-    for expression in &function.body {
-        evaluate_expression(expression, functions, data_stack)?;
-    }
+    evaluate(&function.body, functions, data_stack)?;
 
     Ok(())
 }
