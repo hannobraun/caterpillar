@@ -32,7 +32,7 @@ fn evaluate_fn(
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
     if let Some(builtin) = builtins::get(fn_name) {
-        builtin(functions, data_stack);
+        builtin(functions, data_stack)?;
         return Ok(());
     }
 
