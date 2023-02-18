@@ -5,6 +5,7 @@ pub type Expressions = Vec<Expression>;
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Expression {
     Block(Expressions),
+    List(Expressions),
     Fn(String),
 }
 
@@ -47,7 +48,9 @@ fn parse_expression(
             panic!("Unexpected `}}`")
         }
         Token::ListOpen => {
-            panic!("Unexpected `[`")
+            let expressions =
+                parse_expressions(tokens, Some(&Token::ListClose));
+            Some(Expression::List(expressions))
         }
         Token::ListClose => {
             panic!("Unexpected `]`")

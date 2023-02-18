@@ -22,6 +22,9 @@ fn evaluate_expression(
             data_stack.push(Value::Block(expressions.clone()));
             Ok(())
         }
+        Expression::List(_) => {
+            todo!("Evaluating lists is not supported yet")
+        }
         Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
     }
 }
