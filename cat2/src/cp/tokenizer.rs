@@ -6,6 +6,7 @@ pub enum Token {
     BlockOpen,
     BlockClose,
     ListOpen,
+    ListClose,
 }
 
 pub fn tokenize(code: &str) -> Tokens {
@@ -14,6 +15,7 @@ pub fn tokenize(code: &str) -> Tokens {
             "{" => Token::BlockOpen,
             "}" => Token::BlockClose,
             "[" => Token::ListOpen,
+            "]" => Token::ListClose,
             _ => Token::Fn(token.to_string()),
         })
         .collect()

@@ -49,5 +49,8 @@ fn parse_expression(
         Token::ListOpen => {
             panic!("Unexpected `[`")
         }
+        Token::ListClose => {
+            panic!("Unexpected `]`")
+        }
     }
 }
