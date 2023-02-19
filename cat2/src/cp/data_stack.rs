@@ -1,3 +1,5 @@
+use std::vec;
+
 use super::Expressions;
 
 #[derive(Debug)]
@@ -38,6 +40,15 @@ impl DataStack {
 
     pub fn push(&mut self, value: impl Into<Value>) {
         self.inner.push(value.into())
+    }
+}
+
+impl IntoIterator for DataStack {
+    type Item = Value;
+    type IntoIter = vec::IntoIter<Value>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
     }
 }
 
