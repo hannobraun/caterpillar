@@ -56,6 +56,7 @@ impl IntoIterator for DataStack {
 pub enum Value {
     Block(Block),
     Bool(bool),
+    List(Vec<Value>),
     U8(u8),
 }
 
