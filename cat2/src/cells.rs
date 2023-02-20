@@ -24,7 +24,7 @@ pub fn next_generation(
     let mut next = empty_generation();
 
     for (i, cell) in next.iter_mut().enumerate() {
-        let num_neighbors = num_neighbors(i as u8, current, interpreter);
+        let num_neighbors = num_neighbors(i as u8, &current, interpreter);
 
         interpreter.data_stack.push(cp::Value::Bool(current[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
@@ -46,7 +46,7 @@ pub fn empty_generation() -> Generation {
 
 pub fn num_neighbors(
     i: u8,
-    cells: Generation,
+    cells: &Generation,
     interpreter: &mut cp::Interpreter,
 ) -> u8 {
     interpreter.data_stack.push(cp::Value::U8(i));
