@@ -32,7 +32,7 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
                 .generations
                 .last()
                 .cloned()
-                .unwrap_or_else(cells::init);
+                .unwrap_or_else(|| cells::init(&mut state.interpreter));
 
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long

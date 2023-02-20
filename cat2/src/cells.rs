@@ -1,13 +1,27 @@
-use std::iter;
-
 use crate::cp;
 
 pub const NUM_CELLS: usize = 80;
 
 pub type Generation = Vec<bool>;
 
-pub fn init() -> Generation {
-    let mut cells = empty_generation();
+pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
+    cp::evaluate(
+        &vec![cp::Expression::Fn("empty_generation".into())],
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+    )
+    .unwrap();
+    let mut cells = interpreter
+        .data_stack
+        .pop_list()
+        .into_iter()
+        .map(|value| {
+            let cp::Value::Bool(value) = value else {
+                panic!("Expected `bool`")
+            };
+            value
+        })
+        .collect::<Vec<_>>();
 
     cells[37] = true;
     cells[38] = true;
@@ -23,7 +37,23 @@ pub fn next_generation(
     current: &Generation,
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
-    let mut next = empty_generation();
+    cp::evaluate(
+        &vec![cp::Expression::Fn("empty_generation".into())],
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+    )
+    .unwrap();
+    let mut next = interpreter
+        .data_stack
+        .pop_list()
+        .into_iter()
+        .map(|value| {
+            let cp::Value::Bool(value) = value else {
+                panic!("Expected `bool`")
+            };
+            value
+        })
+        .collect::<Vec<_>>();
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current, interpreter);
@@ -40,10 +70,6 @@ pub fn next_generation(
     }
 
     next
-}
-
-pub fn empty_generation() -> Generation {
-    iter::repeat(false).take(NUM_CELLS).collect()
 }
 
 pub fn num_neighbors(

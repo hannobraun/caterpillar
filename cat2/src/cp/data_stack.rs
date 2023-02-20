@@ -31,6 +31,13 @@ impl DataStack {
         value
     }
 
+    pub fn pop_list(&mut self) -> Vec<Value> {
+        let Value::List(value) = self.pop_any() else {
+            panic!("Expected list")
+        };
+        value
+    }
+
     pub fn pop_u8(&mut self) -> u8 {
         let Value::U8(value) = self.pop_any() else {
             panic!("Expected `u8`")

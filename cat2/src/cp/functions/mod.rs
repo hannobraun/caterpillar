@@ -17,6 +17,19 @@ impl Functions {
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
         registry.define(
+            "empty_generation",
+            "[ false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false \
+            false false false false false false false false ]",
+        );
+        registry.define(
             "neighbor_range",
             "clone neighbor_range_min swap neighbor_range_max",
         );
