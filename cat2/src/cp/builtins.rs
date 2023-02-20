@@ -14,6 +14,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "min" => min,
         "or" => or,
         "swap" => swap,
+        "true" => true_,
         "=" => eq,
         "+" => add,
         "-" => sub,
@@ -142,5 +143,13 @@ fn swap(
     data_stack.push(b);
     data_stack.push(a);
 
+    Ok(())
+}
+
+fn true_(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    data_stack.push(Value::Bool(true));
     Ok(())
 }
