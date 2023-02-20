@@ -11,7 +11,15 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
         &mut interpreter.data_stack,
     )
     .unwrap();
-    let mut cells = interpreter
+
+    cp::evaluate(
+        &vec![cp::Expression::Fn("init".into())],
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+    )
+    .unwrap();
+
+    interpreter
         .data_stack
         .pop_list()
         .into_iter()
@@ -21,16 +29,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
             };
             value
         })
-        .collect::<Vec<_>>();
-
-    cells[37] = true;
-    cells[38] = true;
-    cells[39] = true;
-    cells[41] = true;
-    cells[42] = true;
-    cells[43] = true;
-
-    cells
+        .collect::<Vec<_>>()
 }
 
 pub fn next_generation(

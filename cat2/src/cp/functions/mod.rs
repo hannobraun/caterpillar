@@ -30,6 +30,15 @@ impl Functions {
             false false false false false false false false ]",
         );
         registry.define(
+            "init",
+            "37 true set_list \
+            38 true set_list \
+            39 true set_list \
+            41 true set_list \
+            42 true set_list \
+            43 true set_list"
+        );
+        registry.define(
             "neighbor_range",
             "clone neighbor_range_min swap neighbor_range_max",
         );
