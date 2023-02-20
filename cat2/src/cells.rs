@@ -1,8 +1,10 @@
+use std::iter;
+
 use crate::cp;
 
 pub const NUM_CELLS: usize = 80;
 
-pub type Generation = [bool; NUM_CELLS];
+pub type Generation = Vec<bool>;
 
 pub fn init() -> Generation {
     let mut cells = empty_generation();
@@ -41,7 +43,7 @@ pub fn next_generation(
 }
 
 pub fn empty_generation() -> Generation {
-    [false; NUM_CELLS]
+    iter::repeat(false).take(NUM_CELLS).collect()
 }
 
 pub fn num_neighbors(
