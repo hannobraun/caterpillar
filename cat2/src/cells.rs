@@ -5,7 +5,7 @@ pub const NUM_CELLS: usize = 80;
 pub type Generation = [bool; NUM_CELLS];
 
 pub fn init() -> Generation {
-    let mut cells = [false; NUM_CELLS];
+    let mut cells = empty_generation();
 
     cells[37] = true;
     cells[38] = true;
@@ -21,7 +21,7 @@ pub fn next_generation(
     current: Generation,
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
-    let mut next = [false; NUM_CELLS];
+    let mut next = empty_generation();
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = num_neighbors(i as u8, current, interpreter);
@@ -38,6 +38,10 @@ pub fn next_generation(
     }
 
     next
+}
+
+pub fn empty_generation() -> Generation {
+    [false; NUM_CELLS]
 }
 
 pub fn num_neighbors(
