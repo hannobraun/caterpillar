@@ -73,6 +73,12 @@ impl From<bool> for Value {
     }
 }
 
+impl From<Vec<Value>> for Value {
+    fn from(value: Vec<Value>) -> Self {
+        Self::List(value)
+    }
+}
+
 impl From<u8> for Value {
     fn from(value: u8) -> Self {
         Self::U8(value)
