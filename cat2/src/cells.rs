@@ -6,13 +6,6 @@ pub type Generation = Vec<bool>;
 
 pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
     cp::evaluate(
-        &vec![cp::Expression::Fn("empty_generation".into())],
-        &interpreter.functions,
-        &mut interpreter.data_stack,
-    )
-    .unwrap();
-
-    cp::evaluate(
         &vec![cp::Expression::Fn("init".into())],
         &interpreter.functions,
         &mut interpreter.data_stack,
