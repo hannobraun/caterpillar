@@ -13,6 +13,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "if" => if_,
         "min" => min,
         "or" => or,
+        "set_list" => set_list,
         "swap" => swap,
         "true" => true_,
         "=" => eq,
@@ -115,6 +116,21 @@ fn or(
     let a = data_stack.pop_bool();
 
     data_stack.push(a || b);
+
+    Ok(())
+}
+
+fn set_list(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let value = data_stack.pop_any();
+    let index = data_stack.pop_u8();
+    let mut list = data_stack.pop_list();
+
+    list[index as usize] = value;
+
+    data_stack.push(list);
 
     Ok(())
 }
