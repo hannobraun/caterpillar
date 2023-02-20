@@ -1,4 +1,6 @@
-use super::{evaluate, evaluator::FunctionNotFound, DataStack, Functions};
+use super::{
+    evaluate, evaluator::FunctionNotFound, DataStack, Functions, Value,
+};
 
 pub type Builtin =
     fn(&Functions, &mut DataStack) -> Result<(), FunctionNotFound>;
@@ -7,6 +9,7 @@ pub fn get(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
+        "false" => false_,
         "if" => if_,
         "min" => min,
         "or" => or,
@@ -64,6 +67,14 @@ fn eq(
 
     data_stack.push(a == b);
 
+    Ok(())
+}
+
+fn false_(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    data_stack.push(Value::Bool(false));
     Ok(())
 }
 
