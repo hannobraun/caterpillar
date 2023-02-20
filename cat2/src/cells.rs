@@ -18,13 +18,13 @@ pub fn init() -> Generation {
 }
 
 pub fn next_generation(
-    current: Generation,
+    current: &Generation,
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
     let mut next = empty_generation();
 
     for (i, cell) in next.iter_mut().enumerate() {
-        let num_neighbors = num_neighbors(i as u8, &current, interpreter);
+        let num_neighbors = num_neighbors(i as u8, current, interpreter);
 
         interpreter.data_stack.push(cp::Value::Bool(current[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));

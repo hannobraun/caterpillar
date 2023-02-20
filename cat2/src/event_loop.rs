@@ -37,7 +37,7 @@ pub fn run_once(event: Event, state: &mut State) -> anyhow::Result<()> {
             // We only add new generations, but never delete them. This is fine
             // for now, I think. Let's just hope nobody runs this for long
             // enough to fill up their main memory.
-            let next = cells::next_generation(current, &mut state.interpreter);
+            let next = cells::next_generation(&current, &mut state.interpreter);
             state.generations.push(next);
         }
     }
