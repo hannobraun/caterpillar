@@ -14,6 +14,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "if" => if_,
         "min" => min,
         "or" => or,
+        "over" => over,
         "set_list" => set_list,
         "swap" => swap,
         "true" => true_,
@@ -128,6 +129,20 @@ fn or(
     let a = data_stack.pop_bool();
 
     data_stack.push(a || b);
+
+    Ok(())
+}
+
+fn over(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let b = data_stack.pop_any();
+    let a = data_stack.pop_any();
+
+    data_stack.push(a.clone());
+    data_stack.push(b);
+    data_stack.push(a);
 
     Ok(())
 }
