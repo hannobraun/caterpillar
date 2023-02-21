@@ -9,6 +9,7 @@ pub fn get(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "clone" => clone,
         "drop" => drop,
+        "eval" => eval,
         "false" => false_,
         "if" => if_,
         "min" => min,
@@ -68,6 +69,17 @@ fn eq(
     let a = data_stack.pop_u8();
 
     data_stack.push(a == b);
+
+    Ok(())
+}
+
+fn eval(
+    functions: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let block = data_stack.pop_block();
+
+    evaluate(&block, functions, data_stack)?;
 
     Ok(())
 }
