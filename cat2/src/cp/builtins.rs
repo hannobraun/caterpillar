@@ -15,6 +15,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "min" => min,
         "or" => or,
         "over" => over,
+        "rot" => rot,
         "set_list" => set_list,
         "swap" => swap,
         "true" => true_,
@@ -142,6 +143,21 @@ fn over(
 
     data_stack.push(a.clone());
     data_stack.push(b);
+    data_stack.push(a);
+
+    Ok(())
+}
+
+fn rot(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let c = data_stack.pop_any();
+    let b = data_stack.pop_any();
+    let a = data_stack.pop_any();
+
+    data_stack.push(b);
+    data_stack.push(c);
     data_stack.push(a);
 
     Ok(())
