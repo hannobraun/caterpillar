@@ -30,6 +30,10 @@ impl Functions {
             false false false false false false false false ]",
         );
         registry.define(
+            "times",
+            "clone 0 = { drop drop } { over eval rot rot 1 - times } if",
+        );
+        registry.define(
             "init",
             "empty_generation \
                 37 true set_list \
