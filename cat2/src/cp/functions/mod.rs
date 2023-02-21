@@ -16,19 +16,7 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        registry.define(
-            "empty_generation",
-            "[ false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false \
-            false false false false false false false false ]",
-        );
+        registry.define("empty_generation", "[ { false } 80 times ]");
         registry.define(
             "times",
             "clone 0 = { drop drop } { over eval rot rot 1 - times } if",
