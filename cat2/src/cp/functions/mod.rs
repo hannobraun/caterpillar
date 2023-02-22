@@ -19,9 +19,10 @@ impl Functions {
         registry.define("empty_generation", "[ { false } 80 times ]");
         registry.define(
             "times",
-            "is_done { drop drop } { over eval rot rot 1 - times } if",
+            "is_done { clean_up } { over eval rot rot 1 - times } if",
         );
         registry.define("is_done", "clone 0 =");
+        registry.define("clean_up", "drop drop");
         registry.define(
             "init",
             "empty_generation \
