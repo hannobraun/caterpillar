@@ -17,12 +17,11 @@ impl Functions {
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
         registry.define("empty_generation", "[ { false } 80 times ]");
-        registry.define(
-            "times",
-            "is_done { clean_up } { over eval rot rot 1 - times } if",
-        );
+        registry
+            .define("times", "is_done { clean_up } { eval_loop 1 - times } if");
         registry.define("is_done", "clone 0 =");
         registry.define("clean_up", "drop drop");
+        registry.define("eval_loop", "over eval rot rot");
         registry.define(
             "init",
             "empty_generation \
