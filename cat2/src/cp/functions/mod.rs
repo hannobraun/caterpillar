@@ -20,8 +20,8 @@ impl Functions {
         registry.define("times", "done? { clean_up } { loop again } if");
         registry.define("done?", "clone 0 =");
         registry.define("clean_up", "drop drop");
-        registry.define("loop", "over eval result_to_bottom");
-        registry.define("result_to_bottom", "rot rot");
+        registry.define("loop", "over eval reset_stack");
+        registry.define("reset_stack", "rot rot");
         registry.define("again", "1 - times");
         registry.define(
             "init",
