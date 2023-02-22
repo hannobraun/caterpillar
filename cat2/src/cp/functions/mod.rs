@@ -21,7 +21,8 @@ impl Functions {
             .define("times", "is_done { clean_up } { eval_loop 1 - times } if");
         registry.define("is_done", "clone 0 =");
         registry.define("clean_up", "drop drop");
-        registry.define("eval_loop", "over eval rot rot");
+        registry.define("eval_loop", "over eval result_to_bottom");
+        registry.define("result_to_bottom", "rot rot");
         registry.define(
             "init",
             "empty_generation \
