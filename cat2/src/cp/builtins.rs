@@ -12,6 +12,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "eval" => eval,
         "false" => false_,
         "if" => if_,
+        "list_get" => list_get,
         "list_set" => list_set,
         "min" => min,
         "or" => or,
@@ -104,6 +105,21 @@ fn if_(
 
     let block = if cond { then } else { else_ };
     evaluate(&block, functions, data_stack)?;
+
+    Ok(())
+}
+
+fn list_get(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let index = data_stack.pop_u8();
+    let list = data_stack.pop_list();
+
+    let value = list[index as usize].clone();
+
+    data_stack.push(list);
+    data_stack.push(value);
 
     Ok(())
 }
