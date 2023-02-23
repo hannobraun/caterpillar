@@ -82,8 +82,9 @@ pub fn num_neighbors(
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
         let cell_is_alive = cells[j as usize];
+        let cell_is_neighbor = i != j;
 
-        if cell_is_alive && i != j {
+        if cell_is_alive && cell_is_neighbor {
             num_neighbors += 1;
         }
     });
