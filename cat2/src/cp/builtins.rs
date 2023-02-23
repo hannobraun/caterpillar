@@ -12,11 +12,11 @@ pub fn get(name: &str) -> Option<Builtin> {
         "eval" => eval,
         "false" => false_,
         "if" => if_,
+        "list_set" => list_set,
         "min" => min,
         "or" => or,
         "over" => over,
         "rot" => rot,
-        "list_set" => list_set,
         "swap" => swap,
         "true" => true_,
         "=" => eq,
@@ -108,6 +108,21 @@ fn if_(
     Ok(())
 }
 
+fn list_set(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let value = data_stack.pop_any();
+    let index = data_stack.pop_u8();
+    let mut list = data_stack.pop_list();
+
+    list[index as usize] = value;
+
+    data_stack.push(list);
+
+    Ok(())
+}
+
 fn min(
     _: &Functions,
     data_stack: &mut DataStack,
@@ -159,21 +174,6 @@ fn rot(
     data_stack.push(b);
     data_stack.push(c);
     data_stack.push(a);
-
-    Ok(())
-}
-
-fn list_set(
-    _: &Functions,
-    data_stack: &mut DataStack,
-) -> Result<(), FunctionNotFound> {
-    let value = data_stack.pop_any();
-    let index = data_stack.pop_u8();
-    let mut list = data_stack.pop_list();
-
-    list[index as usize] = value;
-
-    data_stack.push(list);
 
     Ok(())
 }
