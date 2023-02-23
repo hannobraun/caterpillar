@@ -81,7 +81,18 @@ pub fn num_neighbors(
 
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
-        let cell_is_alive = cells[j as usize];
+        interpreter.data_stack.push(cp::Value::List(
+            cells.iter().cloned().map(cp::Value::Bool).collect(),
+        ));
+        interpreter.data_stack.push(cp::Value::U8(j));
+        cp::evaluate(
+            &vec![cp::Expression::Fn("cell_is_alive".into())],
+            &interpreter.functions,
+            &mut interpreter.data_stack,
+        )
+        .unwrap();
+        let cell_is_alive = interpreter.data_stack.pop_bool();
+
         let cell_is_neighbor = i != j;
 
         if cell_is_alive && cell_is_neighbor {
