@@ -16,7 +16,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "or" => or,
         "over" => over,
         "rot" => rot,
-        "list_set" => set_list,
+        "list_set" => list_set,
         "swap" => swap,
         "true" => true_,
         "=" => eq,
@@ -163,7 +163,7 @@ fn rot(
     Ok(())
 }
 
-fn set_list(
+fn list_set(
     _: &Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), FunctionNotFound> {
