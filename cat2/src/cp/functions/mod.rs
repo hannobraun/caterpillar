@@ -16,7 +16,7 @@ impl Functions {
         // Eventually, we'll store the source code in a persistent way. But for
         // now, we'll just define default code on startup, as a starting point
         // for the user to modify.
-        registry.define("empty_generation", "[ { false } 80 times ]");
+        registry.define("empty_generation", "[ { false } num_cells times ]");
         registry.define("times", "done? { clean_up } { loop again } if");
         registry.define("done?", "clone 0 =");
         registry.define("clean_up", "drop drop");
