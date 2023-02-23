@@ -26,12 +26,12 @@ impl Functions {
         registry.define(
             "init",
             "empty_generation \
-                37 true set_list \
-                38 true set_list \
-                39 true set_list \
-                41 true set_list \
-                42 true set_list \
-                43 true set_list",
+                37 true list_set \
+                38 true list_set \
+                39 true list_set \
+                41 true list_set \
+                42 true list_set \
+                43 true list_set",
         );
         registry.define(
             "neighbor_range",

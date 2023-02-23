@@ -16,7 +16,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "or" => or,
         "over" => over,
         "rot" => rot,
-        "set_list" => set_list,
+        "list_set" => set_list,
         "swap" => swap,
         "true" => true_,
         "=" => eq,
