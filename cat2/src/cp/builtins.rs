@@ -7,6 +7,7 @@ pub type Builtin =
 
 pub fn get(name: &str) -> Option<Builtin> {
     let builtin = match name {
+        "and" => and,
         "clone" => clone,
         "drop" => drop,
         "eval" => eval,
@@ -38,6 +39,20 @@ fn add(
     let a = data_stack.pop_u8();
 
     let x = a.saturating_add(b);
+
+    data_stack.push(x);
+
+    Ok(())
+}
+
+fn and(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let b = data_stack.pop_bool();
+    let a = data_stack.pop_bool();
+
+    let x = a && b;
 
     data_stack.push(x);
 
