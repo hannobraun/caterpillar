@@ -15,6 +15,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "list_get" => list_get,
         "list_set" => list_set,
         "min" => min,
+        "not" => not,
         "or" => or,
         "over" => over,
         "rot" => rot,
@@ -147,6 +148,19 @@ fn min(
     let a = data_stack.pop_u8();
 
     let x = u8::min(a, b);
+
+    data_stack.push(x);
+
+    Ok(())
+}
+
+fn not(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let v = data_stack.pop_bool();
+
+    let x = !v;
 
     data_stack.push(x);
 
