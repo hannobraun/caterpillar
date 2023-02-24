@@ -41,6 +41,7 @@ impl Functions {
         registry.define("neighbor_range_max", "2 + num_cells 1 - min");
         registry.define("num_cells", "80");
         registry.define("cell_is_alive", "list_get");
+        registry.define("cell_is_neighbor", "= not");
         registry
             .define("cell_lives", "swap { cell_survives } { cell_is_born } if");
         registry.define("cell_is_born", "clone 2 = swap 3 = or");

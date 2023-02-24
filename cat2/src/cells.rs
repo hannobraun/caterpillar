@@ -93,7 +93,15 @@ pub fn num_neighbors(
         .unwrap();
         let cell_is_alive = interpreter.data_stack.pop_bool();
 
-        let cell_is_neighbor = i != j;
+        interpreter.data_stack.push(cp::Value::U8(i));
+        interpreter.data_stack.push(cp::Value::U8(j));
+        cp::evaluate(
+            &vec![cp::Expression::Fn("cell_is_neighbor".into())],
+            &interpreter.functions,
+            &mut interpreter.data_stack,
+        )
+        .unwrap();
+        let cell_is_neighbor = interpreter.data_stack.pop_bool();
 
         if cell_is_alive && cell_is_neighbor {
             num_neighbors += 1;
