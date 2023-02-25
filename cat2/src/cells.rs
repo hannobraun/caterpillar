@@ -81,7 +81,6 @@ pub fn num_neighbors(
 
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
-        interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         interpreter.data_stack.push(cp::Value::U8(i));
         interpreter.data_stack.push(cp::Value::U8(j));
         interpreter.data_stack.push(cp::Value::List(
@@ -93,7 +92,7 @@ pub fn num_neighbors(
             &mut interpreter.data_stack,
         )
         .unwrap();
-        num_neighbors = interpreter.data_stack.pop_u8();
+        num_neighbors += interpreter.data_stack.pop_u8();
     });
 
     num_neighbors
