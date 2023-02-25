@@ -42,7 +42,8 @@ impl Functions {
         registry.define("num_cells", "80");
         registry.define("cell_is_alive", "list_get");
         registry.define("cell_is_neighbor", "= not");
-        registry.define("count_neighbor", "and { 1 + } { } if");
+        registry
+            .define("count_neighbor", "cell_is_neighbor and { 1 + } { } if");
         registry
             .define("cell_lives", "swap { cell_survives } { cell_is_born } if");
         registry.define("cell_is_born", "clone 2 = swap 3 = or");

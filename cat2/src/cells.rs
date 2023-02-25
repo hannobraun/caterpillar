@@ -93,21 +93,10 @@ pub fn num_neighbors(
         .unwrap();
         let cell_is_alive = interpreter.data_stack.pop_bool();
 
-        interpreter.data_stack.push(cp::Value::U8(i));
-        interpreter.data_stack.push(cp::Value::U8(j));
-        cp::evaluate(
-            &vec![cp::Expression::Fn("cell_is_neighbor".into())],
-            &interpreter.functions,
-            &mut interpreter.data_stack,
-        )
-        .unwrap();
-        let cell_is_neighbor = interpreter.data_stack.pop_bool();
-
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         interpreter.data_stack.push(cp::Value::Bool(cell_is_alive));
-        interpreter
-            .data_stack
-            .push(cp::Value::Bool(cell_is_neighbor));
+        interpreter.data_stack.push(cp::Value::U8(i));
+        interpreter.data_stack.push(cp::Value::U8(j));
         cp::evaluate(
             &vec![cp::Expression::Fn("count_neighbor".into())],
             &interpreter.functions,
