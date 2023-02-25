@@ -42,9 +42,9 @@ impl Functions {
         registry.define("num_cells", "80");
         registry.define(
             "count_neighbor",
-            "over cell_is_alive swap drop rot rot cell_is_neighbor and { 1 + } { } if",
+            "cell_is_alive cell_is_neighbor and { 1 + } { } if",
         );
-        registry.define("cell_is_alive", "list_get");
+        registry.define("cell_is_alive", "over list_get swap drop rot rot");
         registry.define("cell_is_neighbor", "= not");
         registry
             .define("cell_lives", "swap { cell_survives } { cell_is_born } if");
