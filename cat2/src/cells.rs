@@ -81,22 +81,12 @@ pub fn num_neighbors(
 
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
+        interpreter.data_stack.push(cp::Value::U8(num_neighbors));
+        interpreter.data_stack.push(cp::Value::U8(i));
+        interpreter.data_stack.push(cp::Value::U8(j));
         interpreter.data_stack.push(cp::Value::List(
             cells.iter().cloned().map(cp::Value::Bool).collect(),
         ));
-        interpreter.data_stack.push(cp::Value::U8(j));
-        cp::evaluate(
-            &vec![cp::Expression::Fn("cell_is_alive".into())],
-            &interpreter.functions,
-            &mut interpreter.data_stack,
-        )
-        .unwrap();
-        let cell_is_alive = interpreter.data_stack.pop_bool();
-
-        interpreter.data_stack.push(cp::Value::U8(num_neighbors));
-        interpreter.data_stack.push(cp::Value::Bool(cell_is_alive));
-        interpreter.data_stack.push(cp::Value::U8(i));
-        interpreter.data_stack.push(cp::Value::U8(j));
         cp::evaluate(
             &vec![cp::Expression::Fn("count_neighbor".into())],
             &interpreter.functions,
