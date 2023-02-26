@@ -30,6 +30,7 @@ fn evaluate_expression(
             Ok(())
         }
         Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
+        Expression::Name(name) => todo!("Unexpected name `{name}`"),
     }
 }
 

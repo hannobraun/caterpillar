@@ -7,6 +7,7 @@ pub enum Expression {
     Block(Expressions),
     List(Expressions),
     Fn(String),
+    Name(String),
 }
 
 pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
@@ -39,7 +40,7 @@ fn parse_expression(
 
     match token {
         Token::Fn(name) => Some(Expression::Fn(name)),
-        Token::Name(name) => todo!("Unexpected name `{name}`"),
+        Token::Name(name) => Some(Expression::Name(name)),
         Token::BlockOpen => {
             let expressions =
                 parse_expressions(tokens, Some(&Token::BlockClose));
