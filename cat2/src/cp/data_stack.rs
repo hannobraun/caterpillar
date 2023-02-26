@@ -64,6 +64,7 @@ pub enum Value {
     Block(Block),
     Bool(bool),
     List(Vec<Value>),
+    Name(String),
     U8(u8),
 }
 
