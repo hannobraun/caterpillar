@@ -16,7 +16,7 @@ pub fn tokenize(code: &str) -> Tokens {
             "}" => Token::BlockClose,
             "[" => Token::ListOpen,
             "]" => Token::ListClose,
-            _ => Token::Fn(token.to_string()),
+            token => Token::Fn(token.to_string()),
         })
         .collect()
 }
