@@ -39,6 +39,7 @@ fn parse_expression(
 
     match token {
         Token::Fn(name) => Some(Expression::Fn(name)),
+        Token::Name(name) => todo!("Unexpected name `{name}`"),
         Token::BlockOpen => {
             let expressions =
                 parse_expressions(tokens, Some(&Token::BlockClose));

@@ -3,6 +3,7 @@ pub type Tokens = Vec<Token>;
 #[derive(Clone, Eq, PartialEq)]
 pub enum Token {
     Fn(String),
+    Name(String),
     BlockOpen,
     BlockClose,
     ListOpen,
@@ -16,7 +17,13 @@ pub fn tokenize(code: &str) -> Tokens {
             "}" => Token::BlockClose,
             "[" => Token::ListOpen,
             "]" => Token::ListClose,
-            token => Token::Fn(token.to_string()),
+            token => {
+                if let Some(name) = token.strip_prefix(':') {
+                    return Token::Name(name.to_string());
+                }
+
+                Token::Fn(token.to_string())
+            }
         })
         .collect()
 }
