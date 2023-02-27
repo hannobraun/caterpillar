@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use super::{
     evaluate, evaluator::FunctionNotFound, DataStack, Functions, Value,
 };
@@ -20,6 +22,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "or" => or,
         "over" => over,
         "rot" => rot,
+        "shuffle" => shuffle,
         "swap" => swap,
         "true" => true_,
         "=" => eq,
@@ -219,6 +222,29 @@ fn rot(
     data_stack.push(b);
     data_stack.push(c);
     data_stack.push(a);
+
+    Ok(())
+}
+
+fn shuffle(
+    _: &Functions,
+    data_stack: &mut DataStack,
+) -> Result<(), FunctionNotFound> {
+    let indices = data_stack.pop_list().into_iter().map(|value| {
+        let Value::U8(value) = value else {
+            panic!("Expected `u8`")
+        };
+        value
+    });
+
+    let mut values = VecDeque::new();
+    for _ in 0..indices.len() {
+        values.push_front(data_stack.pop_any());
+    }
+
+    for index in indices {
+        data_stack.push(values[index as usize].clone());
+    }
 
     Ok(())
 }
