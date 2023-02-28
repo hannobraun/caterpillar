@@ -43,8 +43,3 @@ It's quite possible that I'll abandon this prototype once the objective is reach
 - **Self-hosting:** Split the system into an interface and a language runtime, run that language runtime in WebAssembly, implement a Caterpillar to WASM compiler in Caterpillar, then re-implement the language runtime in Caterpillar.
 
 There are many other things I can imagine, but let's leave it at that for now. I wouldn't be surprised if this prototype ran its course and I felt the need to start again with a modified approach, even before I make it to stretch goals.
-
-
-## Acknowledgements
-
-Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting the name!
