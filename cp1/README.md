@@ -18,7 +18,7 @@ Caterpillar is a language with the following attributes:
 - **Concatenative, stack-based:** Among many other nice attributes, concatenative languages provide a certain simplicity, making implementation easier.
 - **Purely functional:** This is a design space that I'd like to explore, mostly because I have vague notions that the restrictions that purely functional programming brings, can make many things easier.
 - **Homoiconic:** Making code easily processable in the language itself should make interactivity easier. Also, once you have a language with a simple syntax, there seems to be little reason not to make it homoiconic.
-- **Interpreted, dynamically typed:** These are actually the opposite of what I'd like to do. This is simply to save work.
+- **Interpreted, dynamically typed:** These are actually the opposite of what I'd like to do eventually. This is simply to save work.
 
 The language is run by an interpreter which is implemented in a host language (Rust). That interpreter provides specialized I/O primitives to allow for some experimentation with the language (see next section).
 
