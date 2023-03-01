@@ -1,12 +1,15 @@
-use super::{builtins, DataStack, Expression, Expressions, Functions, Value};
+use super::{
+    builtins, Bindings, DataStack, Expression, Expressions, Functions, Value,
+};
 
 pub fn evaluate(
     expressions: &Expressions,
     functions: &Functions,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
     for expression in expressions {
-        evaluate_expression(expression, functions, data_stack)?;
+        evaluate_expression(expression, functions, data_stack, bindings)?;
     }
 
     Ok(())
@@ -16,6 +19,7 @@ fn evaluate_expression(
     expression: &Expression,
     functions: &Functions,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
     match expression {
         Expression::Block(expressions) => {
@@ -24,12 +28,14 @@ fn evaluate_expression(
         }
         Expression::List(expressions) => {
             let mut list_stack = DataStack::new();
-            evaluate(expressions, functions, &mut list_stack)?;
+            evaluate(expressions, functions, &mut list_stack, bindings)?;
             let list = Value::List(list_stack.into_iter().collect());
             data_stack.push(list);
             Ok(())
         }
-        Expression::Fn(fn_name) => evaluate_fn(fn_name, functions, data_stack),
+        Expression::Fn(fn_name) => {
+            evaluate_fn(fn_name, functions, data_stack, bindings)
+        }
         Expression::Name(name) => {
             data_stack.push(Value::Name(name.clone()));
             Ok(())
@@ -41,9 +47,10 @@ fn evaluate_fn(
     fn_name: &str,
     functions: &Functions,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
     if let Some(builtin) = builtins::get(fn_name) {
-        builtin(functions, data_stack)?;
+        builtin(functions, data_stack, bindings)?;
         return Ok(());
     }
 
@@ -58,7 +65,7 @@ fn evaluate_fn(
             name: fn_name.into(),
         })?;
 
-    evaluate(&function.body, functions, data_stack)?;
+    evaluate(&function.body, functions, data_stack, bindings)?;
 
     Ok(())
 }

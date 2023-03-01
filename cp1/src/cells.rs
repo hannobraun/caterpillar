@@ -9,6 +9,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
         &vec![cp::Expression::Fn("init".into())],
         &interpreter.functions,
         &mut interpreter.data_stack,
+        &mut interpreter.bindings,
     )
     .unwrap();
 
@@ -33,6 +34,7 @@ pub fn next_generation(
         &vec![cp::Expression::Fn("empty_generation".into())],
         &interpreter.functions,
         &mut interpreter.data_stack,
+        &mut interpreter.bindings,
     )
     .unwrap();
     let mut next = interpreter
@@ -56,6 +58,7 @@ pub fn next_generation(
             &vec![cp::Expression::Fn("cell_lives".into())],
             &interpreter.functions,
             &mut interpreter.data_stack,
+            &mut interpreter.bindings,
         )
         .unwrap();
         *cell = interpreter.data_stack.pop_bool();
@@ -74,6 +77,7 @@ pub fn num_neighbors(
         &vec![cp::Expression::Fn("neighbor_range".into())],
         &interpreter.functions,
         &mut interpreter.data_stack,
+        &mut interpreter.bindings,
     )
     .unwrap();
     let max = interpreter.data_stack.pop_u8();
@@ -90,6 +94,7 @@ pub fn num_neighbors(
             &vec![cp::Expression::Fn("count_neighbor".into())],
             &interpreter.functions,
             &mut interpreter.data_stack,
+            &mut interpreter.bindings,
         )
         .unwrap();
         num_neighbors += interpreter.data_stack.pop_u8();
