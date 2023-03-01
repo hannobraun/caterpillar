@@ -1,3 +1,4 @@
+mod bindings;
 mod builtins;
 mod data_stack;
 mod evaluator;
@@ -6,6 +7,7 @@ mod parser;
 mod tokenizer;
 
 pub use self::{
+    bindings::Bindings,
     data_stack::{DataStack, Value},
     evaluator::evaluate,
     functions::Functions,
@@ -16,6 +18,7 @@ pub use self::{
 pub struct Interpreter {
     pub functions: Functions,
     pub data_stack: DataStack,
+    pub bindings: Bindings,
 }
 
 impl Interpreter {
@@ -23,6 +26,7 @@ impl Interpreter {
         Self {
             functions: Functions::new(),
             data_stack: DataStack::new(),
+            bindings: Bindings,
         }
     }
 }
