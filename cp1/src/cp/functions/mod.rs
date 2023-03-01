@@ -3,8 +3,6 @@ mod registry;
 
 use self::{function::Function, registry::Registry};
 
-use super::DataStack;
-
 pub struct Functions {
     registry: Registry,
 }
@@ -54,7 +52,7 @@ impl Functions {
         Self { registry }
     }
 
-    pub fn resolve(&self, name: &str, _: &DataStack) -> Option<&Function> {
+    pub fn resolve(&self, name: &str) -> Option<&Function> {
         self.registry.resolve(name)
     }
 }

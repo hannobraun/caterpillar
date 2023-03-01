@@ -53,11 +53,10 @@ fn evaluate_fn(
     }
 
     // If we land here, it's not a builtin function.
-    let function = functions.resolve(fn_name, data_stack).ok_or_else(|| {
-        FunctionNotFound {
+    let function =
+        functions.resolve(fn_name).ok_or_else(|| FunctionNotFound {
             name: fn_name.into(),
-        }
-    })?;
+        })?;
 
     evaluate(&function.body, functions, data_stack)?;
 
