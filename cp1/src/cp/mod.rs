@@ -26,7 +26,7 @@ impl Interpreter {
         Self {
             functions: Functions::new(),
             data_stack: DataStack::new(),
-            bindings: Bindings,
+            bindings: Bindings::new(),
         }
     }
 }
