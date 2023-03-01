@@ -20,7 +20,10 @@ impl Functions {
             "[ :block :num ] bind
                 num done?
                 { }
-                { block eval block num again }
+                {
+                    block eval
+                    block num again
+                }
                     if",
         );
         registry.define("done?", "0 =");
