@@ -17,16 +17,16 @@ impl Functions {
         registry.define("empty_generation", "[ { false } num_cells times ]");
         registry.define(
             "times",
-            "[ :num ] bind
+            "[ :block :num ] bind
                 num done?
                 { clean_up }
-                { loop num again }
+                { block loop block num again }
                     if",
         );
         registry.define("done?", "0 =");
-        registry.define("clean_up", "drop");
-        registry.define("loop", "clone eval reset_stack");
-        registry.define("reset_stack", "swap");
+        registry.define("clean_up", "");
+        registry.define("loop", "eval reset_stack");
+        registry.define("reset_stack", "");
         registry.define("again", "1 - times");
         registry.define(
             "init",
