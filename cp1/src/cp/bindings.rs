@@ -16,4 +16,8 @@ impl Bindings {
     pub fn create(&mut self, name: String, value: Value) {
         self.inner.insert(name, value);
     }
+
+    pub fn resolve(&self, name: &str) -> Option<Value> {
+        self.inner.get(name).cloned()
+    }
 }

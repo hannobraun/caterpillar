@@ -49,6 +49,11 @@ fn evaluate_fn(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
+    if let Some(value) = bindings.resolve(fn_name) {
+        data_stack.push(value);
+        return Ok(());
+    }
+
     if let Some(builtin) = builtins::get(fn_name) {
         builtin(functions, data_stack, bindings)?;
         return Ok(());
