@@ -7,7 +7,7 @@ Caterpillar builds on the results of an [earlier experiment](../archive/cp0/) of
 
 ## Status
 
-Complete vaporware. As of this writing, nothing but this README exists.
+Implementation is in progress.
 
 
 ## Concept
