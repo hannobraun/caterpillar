@@ -19,12 +19,11 @@ impl Functions {
             "times",
             "[ :block :num ] bind
                 num done?
-                { clean_up }
+                { }
                 { block eval block num again }
                     if",
         );
         registry.define("done?", "0 =");
-        registry.define("clean_up", "");
         registry.define("again", "1 - times");
         registry.define(
             "init",
