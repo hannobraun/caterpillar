@@ -25,8 +25,7 @@ impl Functions {
         );
         registry.define("done?", "0 =");
         registry.define("clean_up", "");
-        registry.define("loop", "eval reset_stack");
-        registry.define("reset_stack", "");
+        registry.define("loop", "eval");
         registry.define("again", "1 - times");
         registry.define(
             "init",
