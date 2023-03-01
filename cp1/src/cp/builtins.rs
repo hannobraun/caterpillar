@@ -14,6 +14,7 @@ pub type Builtin = fn(
 pub fn get(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "and" => and,
+        "bind" => bind,
         "clone" => clone,
         "drop" => drop,
         "eval" => eval,
@@ -64,6 +65,26 @@ fn and(
     let x = a && b;
 
     data_stack.push(x);
+
+    Ok(())
+}
+
+fn bind(
+    _: &Functions,
+    data_stack: &mut DataStack,
+    bindings: &mut Bindings,
+) -> Result<(), FunctionNotFound> {
+    let mut names = data_stack.pop_list();
+    names.reverse();
+
+    for name in names {
+        let Value::Name(name) = name else {
+            panic!("Expected name")
+        };
+        let value = data_stack.pop_any();
+
+        bindings.create(name, value);
+    }
 
     Ok(())
 }
