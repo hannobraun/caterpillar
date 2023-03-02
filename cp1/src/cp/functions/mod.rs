@@ -40,7 +40,9 @@ impl Functions {
         );
         registry.define(
             "neighbor_range",
-            "clone neighbor_range_min swap neighbor_range_max",
+            "[ :i ] bind
+                i neighbor_range_min
+                i neighbor_range_max",
         );
         registry.define("neighbor_range_min", "2 -");
         registry.define("neighbor_range_max", "2 + num_cells 1 - min");
