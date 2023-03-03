@@ -49,7 +49,7 @@ impl Functions {
         registry.define("num_cells", "80");
         registry.define(
             "count_neighbor",
-            "[ :i :j :cells ] bind
+            "[ :cells :i :j ] bind
                 cells j cell_is_alive
                 i j cell_is_neighbor
                     and { 1 } { 0 } if",
