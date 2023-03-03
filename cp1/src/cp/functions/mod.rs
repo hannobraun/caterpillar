@@ -69,7 +69,13 @@ impl Functions {
                 num_neighbors 3 =
                     or",
         );
-        registry.define("cell_survives", "clone 2 = swap 4 = or");
+        registry.define(
+            "cell_survives",
+            "[ :num_neighbors ] bind
+                num_neighbors 2 =
+                num_neighbors 4 =
+                    or",
+        );
 
         Self { registry }
     }
