@@ -56,8 +56,12 @@ impl Functions {
         );
         registry.define("cell_is_alive", "list_get");
         registry.define("cell_is_neighbor", "= not");
-        registry
-            .define("cell_lives", "swap { cell_survives } { cell_is_born } if");
+        registry.define(
+            "cell_lives",
+            "[ :is_alive :num_neighbors ] bind
+                num_neighbors
+                    is_alive { cell_survives } { cell_is_born } if",
+        );
         registry.define("cell_is_born", "clone 2 = swap 3 = or");
         registry.define("cell_survives", "clone 2 = swap 4 = or");
 
