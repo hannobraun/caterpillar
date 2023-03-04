@@ -50,7 +50,7 @@ pub fn next_generation(
         .collect::<Vec<_>>();
 
     for (i, cell) in next.iter_mut().enumerate() {
-        let num_neighbors = count_neighbors(i as u8, current, interpreter);
+        let num_neighbors = count_neighbors(current, i as u8, interpreter);
 
         interpreter.data_stack.push(cp::Value::Bool(current[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
@@ -68,8 +68,8 @@ pub fn next_generation(
 }
 
 pub fn count_neighbors(
-    i: u8,
     cells: &Generation,
+    i: u8,
     interpreter: &mut cp::Interpreter,
 ) -> u8 {
     interpreter.data_stack.push(cp::Value::U8(i));
