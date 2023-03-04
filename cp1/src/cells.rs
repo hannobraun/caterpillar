@@ -27,7 +27,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
 }
 
 pub fn next_generation(
-    current: &Generation,
+    cells: &Generation,
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
     cp::evaluate(
@@ -50,9 +50,9 @@ pub fn next_generation(
         .collect::<Vec<_>>();
 
     for (i, cell) in next.iter_mut().enumerate() {
-        let num_neighbors = count_neighbors(current, i as u8, interpreter);
+        let num_neighbors = count_neighbors(cells, i as u8, interpreter);
 
-        interpreter.data_stack.push(cp::Value::Bool(current[i]));
+        interpreter.data_stack.push(cp::Value::Bool(cells[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         cp::evaluate(
             &vec![cp::Expression::Fn("cell_lives".into())],
