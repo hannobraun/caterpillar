@@ -50,7 +50,7 @@ impl Functions {
         registry.define(
             "count_neighbor",
             "[ :cells :i :j ] bind
-                cells j cell_is_alive
+                cells j cell_is_alive swap drop
                 i j cell_is_neighbor
                     and { 1 } { 0 } if",
         );
