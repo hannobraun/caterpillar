@@ -13,7 +13,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
     )
     .unwrap();
 
-    interpreter
+    let cells = interpreter
         .data_stack
         .pop_list()
         .into_iter()
@@ -23,7 +23,10 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
             };
             value
         })
-        .collect::<Vec<_>>()
+        .collect::<Vec<_>>();
+    assert!(interpreter.data_stack.is_empty());
+
+    cells
 }
 
 pub fn next_generation(
@@ -48,6 +51,7 @@ pub fn next_generation(
             value
         })
         .collect::<Vec<_>>();
+    assert!(interpreter.data_stack.is_empty());
 
     for (i, cell) in next.iter_mut().enumerate() {
         let num_neighbors = count_neighbors(cells, i as u8, interpreter);
@@ -62,6 +66,7 @@ pub fn next_generation(
         )
         .unwrap();
         *cell = interpreter.data_stack.pop_bool();
+        assert!(interpreter.data_stack.is_empty());
     }
 
     next
@@ -82,6 +87,7 @@ pub fn count_neighbors(
     .unwrap();
     let max = interpreter.data_stack.pop_u8();
     let min = interpreter.data_stack.pop_u8();
+    assert!(interpreter.data_stack.is_empty());
 
     let mut num_neighbors = 0;
     (min..=max).for_each(|j| {
@@ -98,6 +104,7 @@ pub fn count_neighbors(
         )
         .unwrap();
         num_neighbors += interpreter.data_stack.pop_u8();
+        assert!(interpreter.data_stack.is_empty());
     });
 
     num_neighbors

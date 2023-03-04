@@ -13,6 +13,10 @@ impl DataStack {
         Self { inner }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
     pub fn pop_any(&mut self) -> Value {
         self.inner.pop().expect("Stack is empty")
     }
