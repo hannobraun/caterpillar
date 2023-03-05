@@ -45,7 +45,13 @@ impl Functions {
                 i neighbor_range_max",
         );
         registry.define("neighbor_range_min", "2 -");
-        registry.define("neighbor_range_max", "2 + num_cells 1 - min");
+        registry.define(
+            "neighbor_range_max",
+            "
+            2 +
+            num_cells 1 -
+                min",
+        );
         registry.define("num_cells", "80");
         registry.define(
             "count_neighbor",
