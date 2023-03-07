@@ -39,6 +39,21 @@ impl Functions {
                 43 true list_set",
         );
         registry.define(
+            "count_each_neighbor",
+            "[ :cells :min_index :max_index :i ] bind
+                min_index 0
+                {
+                    [ :j :count ] bind
+                    cells i j count_neighbor
+                        count + [ :count ] bind
+                    j 1 + [ :j ] bind
+                    j count
+                }
+                max_index min_index - 1 +
+                    times
+                swap drop",
+        );
+        registry.define(
             "neighbor_range",
             "[ :i ] bind
                 i neighbor_range_min

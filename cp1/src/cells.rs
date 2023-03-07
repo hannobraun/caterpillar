@@ -89,23 +89,21 @@ pub fn count_neighbors(
     let min = interpreter.data_stack.pop_u8();
     assert!(interpreter.data_stack.is_empty());
 
-    let mut num_neighbors = 0;
-    (min..=max).for_each(|j| {
-        interpreter.data_stack.push(cp::Value::List(
-            cells.iter().cloned().map(cp::Value::Bool).collect(),
-        ));
-        interpreter.data_stack.push(cp::Value::U8(i));
-        interpreter.data_stack.push(cp::Value::U8(j));
-        cp::evaluate(
-            &vec![cp::Expression::Fn("count_neighbor".into())],
-            &interpreter.functions,
-            &mut interpreter.data_stack,
-            &mut interpreter.bindings,
-        )
-        .unwrap();
-        num_neighbors += interpreter.data_stack.pop_u8();
-        assert!(interpreter.data_stack.is_empty());
-    });
+    interpreter.data_stack.push(cp::Value::List(
+        cells.iter().cloned().map(cp::Value::Bool).collect(),
+    ));
+    interpreter.data_stack.push(cp::Value::U8(min));
+    interpreter.data_stack.push(cp::Value::U8(max));
+    interpreter.data_stack.push(cp::Value::U8(i));
+    cp::evaluate(
+        &vec![cp::Expression::Fn("count_each_neighbor".into())],
+        &interpreter.functions,
+        &mut interpreter.data_stack,
+        &mut interpreter.bindings,
+    )
+    .unwrap();
+    let num_neighbors = interpreter.data_stack.pop_u8();
+    assert!(interpreter.data_stack.is_empty());
 
     num_neighbors
 }
