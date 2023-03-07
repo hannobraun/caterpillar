@@ -5,7 +5,7 @@
 - Implement local scopes
   Currently all variables are global.
 - Implement linear or affine types
-  Types on the stack are basically affine by default, but variables are implicitly cloned on every use.
+  Values on the stack are basically affine by default, but variables are implicitly cloned on every use.
 - Improve the parsing to be less whitespace-sensitive
   Right now, a list needs to be written like this: `[ 1 2 3 ]`
   But there's no good reason not to allow this: `[1 2 3]`
