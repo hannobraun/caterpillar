@@ -30,7 +30,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
 }
 
 pub fn next_generation(
-    cells: &Generation,
+    cells: Generation,
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
     cp::evaluate(
