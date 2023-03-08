@@ -39,6 +39,13 @@ impl Functions {
                 43 true list_set",
         );
         registry.define(
+            "next_generation_cell",
+            "[ :cells :i ] bind
+                cells i count_neighbors
+                    [ :num_neighbors ] bind
+                cells i num_neighbors cell_lives",
+        );
+        registry.define(
             "count_neighbors",
             "[ :cells :i ] bind
                 i neighbor_range
