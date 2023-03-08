@@ -59,10 +59,11 @@ pub fn next_generation(
             break;
         }
 
-        let cell = &mut next[i];
-
         interpreter.data_stack.push(cp::Value::List(
             cells.iter().cloned().map(cp::Value::Bool).collect(),
+        ));
+        interpreter.data_stack.push(cp::Value::List(
+            next.iter().cloned().map(cp::Value::Bool).collect(),
         ));
         interpreter.data_stack.push(cp::Value::U8(i as u8));
         cp::evaluate(
@@ -72,7 +73,17 @@ pub fn next_generation(
             &mut interpreter.bindings,
         )
         .unwrap();
-        *cell = interpreter.data_stack.pop_bool();
+        next = interpreter
+            .data_stack
+            .pop_list()
+            .into_iter()
+            .map(|value| {
+                let cp::Value::Bool(value) = value else {
+                panic!("Expected `bool`")
+            };
+                value
+            })
+            .collect::<Vec<_>>();
         assert!(interpreter.data_stack.is_empty());
 
         i += 1;

@@ -40,10 +40,12 @@ impl Functions {
         );
         registry.define(
             "next_generation_cell",
-            "[ :cells :i ] bind
+            "[ :cells :next_cells :i ] bind
                 cells i count_neighbors
                     [ :num_neighbors ] bind
-                cells i num_neighbors cell_lives",
+                cells i num_neighbors cell_lives
+                    [ :is_alive ] bind
+                next_cells i is_alive list_set",
         );
         registry.define(
             "count_neighbors",
