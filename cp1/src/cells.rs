@@ -77,26 +77,12 @@ pub fn count_neighbors(
     i: u8,
     interpreter: &mut cp::Interpreter,
 ) -> u8 {
-    interpreter.data_stack.push(cp::Value::U8(i));
-    cp::evaluate(
-        &vec![cp::Expression::Fn("neighbor_range".into())],
-        &interpreter.functions,
-        &mut interpreter.data_stack,
-        &mut interpreter.bindings,
-    )
-    .unwrap();
-    let max = interpreter.data_stack.pop_u8();
-    let min = interpreter.data_stack.pop_u8();
-    assert!(interpreter.data_stack.is_empty());
-
     interpreter.data_stack.push(cp::Value::List(
         cells.iter().cloned().map(cp::Value::Bool).collect(),
     ));
-    interpreter.data_stack.push(cp::Value::U8(min));
-    interpreter.data_stack.push(cp::Value::U8(max));
     interpreter.data_stack.push(cp::Value::U8(i));
     cp::evaluate(
-        &vec![cp::Expression::Fn("count_each_neighbor".into())],
+        &vec![cp::Expression::Fn("count_neighbors".into())],
         &interpreter.functions,
         &mut interpreter.data_stack,
         &mut interpreter.bindings,
