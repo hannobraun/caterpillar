@@ -54,7 +54,19 @@ pub fn next_generation(
     assert!(interpreter.data_stack.is_empty());
 
     for (i, cell) in next.iter_mut().enumerate() {
-        let num_neighbors = count_neighbors(cells, i as u8, interpreter);
+        interpreter.data_stack.push(cp::Value::List(
+            cells.iter().cloned().map(cp::Value::Bool).collect(),
+        ));
+        interpreter.data_stack.push(cp::Value::U8(i as u8));
+        cp::evaluate(
+            &vec![cp::Expression::Fn("count_neighbors".into())],
+            &interpreter.functions,
+            &mut interpreter.data_stack,
+            &mut interpreter.bindings,
+        )
+        .unwrap();
+        let num_neighbors = interpreter.data_stack.pop_u8();
+        assert!(interpreter.data_stack.is_empty());
 
         interpreter.data_stack.push(cp::Value::Bool(cells[i]));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
@@ -70,26 +82,4 @@ pub fn next_generation(
     }
 
     next
-}
-
-pub fn count_neighbors(
-    cells: &Generation,
-    i: u8,
-    interpreter: &mut cp::Interpreter,
-) -> u8 {
-    interpreter.data_stack.push(cp::Value::List(
-        cells.iter().cloned().map(cp::Value::Bool).collect(),
-    ));
-    interpreter.data_stack.push(cp::Value::U8(i));
-    cp::evaluate(
-        &vec![cp::Expression::Fn("count_neighbors".into())],
-        &interpreter.functions,
-        &mut interpreter.data_stack,
-        &mut interpreter.bindings,
-    )
-    .unwrap();
-    let num_neighbors = interpreter.data_stack.pop_u8();
-    assert!(interpreter.data_stack.is_empty());
-
-    num_neighbors
 }
