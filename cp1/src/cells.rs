@@ -68,7 +68,10 @@ pub fn next_generation(
         let num_neighbors = interpreter.data_stack.pop_u8();
         assert!(interpreter.data_stack.is_empty());
 
-        interpreter.data_stack.push(cp::Value::Bool(cells[i]));
+        interpreter.data_stack.push(cp::Value::List(
+            cells.iter().cloned().map(cp::Value::Bool).collect(),
+        ));
+        interpreter.data_stack.push(cp::Value::U8(i as u8));
         interpreter.data_stack.push(cp::Value::U8(num_neighbors));
         cp::evaluate(
             &vec![cp::Expression::Fn("cell_lives".into())],

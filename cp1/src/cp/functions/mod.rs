@@ -86,7 +86,10 @@ impl Functions {
         registry.define("cell_is_neighbor", "= not");
         registry.define(
             "cell_lives",
-            "[ :is_alive :num_neighbors ] bind
+            "[ :cells :i :num_neighbors ] bind
+                cells i list_get
+                    [ :is_alive ] bind
+                    drop
                 num_neighbors
                     is_alive { cell_survives } { cell_is_born } if",
         );
