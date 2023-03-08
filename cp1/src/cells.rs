@@ -53,7 +53,14 @@ pub fn next_generation(
         .collect::<Vec<_>>();
     assert!(interpreter.data_stack.is_empty());
 
-    for (i, cell) in next.iter_mut().enumerate() {
+    let mut i = 0;
+    loop {
+        if i >= next.len() {
+            break;
+        }
+
+        let cell = &mut next[i];
+
         interpreter.data_stack.push(cp::Value::List(
             cells.iter().cloned().map(cp::Value::Bool).collect(),
         ));
@@ -67,6 +74,8 @@ pub fn next_generation(
         .unwrap();
         *cell = interpreter.data_stack.pop_bool();
         assert!(interpreter.data_stack.is_empty());
+
+        i += 1;
     }
 
     next
