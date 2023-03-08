@@ -15,6 +15,8 @@
   Values on the stack are basically affine by default, but variables are implicitly cloned on every use.
 - Allow binding to empty values
   Effectively, this means dropping values from the stack. Like this (new syntax): `=> ( _ )`
+- Prevent shadowing of functions
+  A variable shadowing a function should not happen by accident. Eventually, it could be a warning, but for now, a hard error will do.
 
 ## Syntax
 
