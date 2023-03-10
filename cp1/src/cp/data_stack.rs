@@ -81,6 +81,18 @@ pub enum Value {
     U8(u8),
 }
 
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Value::Block(block) => write!(f, "{block}"),
+            Value::Bool(bool) => write!(f, "{bool}"),
+            Value::List(list) => write!(f, "{list}"),
+            Value::Name(name) => write!(f, "{name}"),
+            Value::U8(u8) => write!(f, "{u8}"),
+        }
+    }
+}
+
 impl From<bool> for Value {
     fn from(value: bool) -> Self {
         Self::Bool(value)
@@ -130,5 +142,15 @@ impl IntoIterator for List {
 
     fn into_iter(self) -> Self::IntoIter {
         self.values.into_iter()
+    }
+}
+
+impl fmt::Display for List {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for value in &self.values {
+            write!(f, "{value}")?;
+        }
+
+        Ok(())
     }
 }
