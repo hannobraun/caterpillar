@@ -74,7 +74,10 @@ impl<'r> IntoIterator for &'r DataStack {
 
 impl fmt::Display for DataStack {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for value in self {
+        for (i, value) in self.into_iter().enumerate() {
+            if i > 0 {
+                write!(f, " ")?;
+            }
             write!(f, "{value}")?;
         }
 
