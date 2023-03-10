@@ -1,4 +1,4 @@
-use std::{slice, vec};
+use std::{fmt, slice, vec};
 
 use super::Expressions;
 
@@ -102,4 +102,10 @@ impl From<u8> for Value {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Block {
     pub expressions: Expressions,
+}
+
+impl fmt::Display for Block {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.expressions)
+    }
 }
