@@ -72,6 +72,16 @@ impl<'r> IntoIterator for &'r DataStack {
     }
 }
 
+impl fmt::Display for DataStack {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for value in self {
+            write!(f, "{value}")?;
+        }
+
+        Ok(())
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Value {
     Block(Block),
