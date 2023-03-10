@@ -1,8 +1,20 @@
+use std::fmt;
+
 use super::Token;
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Expressions {
     pub inner: Vec<Expression>,
+}
+
+impl fmt::Display for Expressions {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for expression in &self.inner {
+            write!(f, "{expression}")?;
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -11,6 +23,17 @@ pub enum Expression {
     List(Expressions),
     Fn(String),
     Name(String),
+}
+
+impl fmt::Display for Expression {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Expression::Block(block) => write!(f, "{block}"),
+            Expression::List(list) => write!(f, "{list}"),
+            Expression::Fn(fn_name) => write!(f, "{fn_name}"),
+            Expression::Name(name) => write!(f, "{name}"),
+        }
+    }
 }
 
 pub fn parse(tokens: impl IntoIterator<Item = Token>) -> Expressions {
