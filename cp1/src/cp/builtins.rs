@@ -132,7 +132,7 @@ fn eval(
 ) -> Result<(), FunctionNotFound> {
     let block = data_stack.pop_block();
 
-    evaluate(&block, functions, data_stack, bindings)?;
+    evaluate(&block.expressions, functions, data_stack, bindings)?;
 
     Ok(())
 }
@@ -156,7 +156,7 @@ fn if_(
     let cond = data_stack.pop_bool();
 
     let block = if cond { then } else { else_ };
-    evaluate(&block, functions, data_stack, bindings)?;
+    evaluate(&block.expressions, functions, data_stack, bindings)?;
 
     Ok(())
 }

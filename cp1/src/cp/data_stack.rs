@@ -99,4 +99,7 @@ impl From<u8> for Value {
     }
 }
 
-pub type Block = Expressions;
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+pub struct Block {
+    pub expressions: Expressions,
+}

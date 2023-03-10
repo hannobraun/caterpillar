@@ -1,5 +1,6 @@
 use super::{
-    builtins, Bindings, DataStack, Expression, Expressions, Functions, Value,
+    builtins, data_stack::Block, Bindings, DataStack, Expression, Expressions,
+    Functions, Value,
 };
 
 pub fn evaluate(
@@ -23,7 +24,9 @@ fn evaluate_expression(
 ) -> Result<(), FunctionNotFound> {
     match expression {
         Expression::Block(expressions) => {
-            data_stack.push(Value::Block(expressions.clone()));
+            data_stack.push(Value::Block(Block {
+                expressions: expressions.clone(),
+            }));
             Ok(())
         }
         Expression::List(expressions) => {
