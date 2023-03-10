@@ -35,7 +35,7 @@ impl DataStack {
         value
     }
 
-    pub fn pop_list(&mut self) -> Vec<Value> {
+    pub fn pop_list(&mut self) -> List {
         let Value::List(value) = self.pop_any() else {
             panic!("Expected list")
         };
@@ -76,7 +76,7 @@ impl<'r> IntoIterator for &'r DataStack {
 pub enum Value {
     Block(Block),
     Bool(bool),
-    List(Vec<Value>),
+    List(List),
     Name(String),
     U8(u8),
 }
@@ -87,8 +87,8 @@ impl From<bool> for Value {
     }
 }
 
-impl From<Vec<Value>> for Value {
-    fn from(value: Vec<Value>) -> Self {
+impl From<List> for Value {
+    fn from(value: List) -> Self {
         Self::List(value)
     }
 }
@@ -107,5 +107,28 @@ pub struct Block {
 impl fmt::Display for Block {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.expressions)
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+pub struct List {
+    pub values: Vec<Value>,
+}
+
+impl FromIterator<Value> for List {
+    fn from_iter<T: IntoIterator<Item = Value>>(iter: T) -> Self {
+        Self {
+            values: iter.into_iter().collect(),
+        }
+    }
+}
+
+impl IntoIterator for List {
+    type Item = Value;
+
+    type IntoIter = vec::IntoIter<Value>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.values.into_iter()
     }
 }

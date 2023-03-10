@@ -75,7 +75,7 @@ fn bind(
     bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
     let mut names = data_stack.pop_list();
-    names.reverse();
+    names.values.reverse();
 
     for name in names {
         let Value::Name(name) = name else {
@@ -169,7 +169,7 @@ fn list_get(
     let index = data_stack.pop_u8();
     let list = data_stack.pop_list();
 
-    let value = list[index as usize].clone();
+    let value = list.values[index as usize].clone();
 
     data_stack.push(list);
     data_stack.push(value);
@@ -186,7 +186,7 @@ fn list_set(
     let index = data_stack.pop_u8();
     let mut list = data_stack.pop_list();
 
-    list[index as usize] = value;
+    list.values[index as usize] = value;
 
     data_stack.push(list);
 
