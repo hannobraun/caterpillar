@@ -100,7 +100,7 @@ impl fmt::Display for Value {
             Value::Block(block) => write!(f, "{block}"),
             Value::Bool(bool) => write!(f, "{bool}"),
             Value::List(list) => write!(f, "{list}"),
-            Value::Name(name) => write!(f, "{name}"),
+            Value::Name(name) => write!(f, ":{name}"),
             Value::U8(u8) => write!(f, "{u8}"),
         }
     }
