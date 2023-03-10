@@ -131,7 +131,7 @@ pub struct Block {
 
 impl fmt::Display for Block {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.expressions)
+        write!(f, "{{ {} }}", self.expressions)
     }
 }
 
