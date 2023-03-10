@@ -1,4 +1,4 @@
-use std::vec;
+use std::{slice, vec};
 
 use super::Expressions;
 
@@ -60,6 +60,15 @@ impl IntoIterator for DataStack {
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
+    }
+}
+
+impl<'r> IntoIterator for &'r DataStack {
+    type Item = &'r Value;
+    type IntoIter = slice::Iter<'r, Value>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.iter()
     }
 }
 
