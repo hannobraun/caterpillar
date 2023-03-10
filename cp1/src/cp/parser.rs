@@ -9,7 +9,10 @@ pub struct Expressions {
 
 impl fmt::Display for Expressions {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for expression in &self.inner {
+        for (i, expression) in self.inner.iter().enumerate() {
+            if i > 0 {
+                write!(f, " ")?;
+            }
             write!(f, "{expression}")?;
         }
 
