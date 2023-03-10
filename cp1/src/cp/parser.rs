@@ -1,6 +1,9 @@
 use super::Token;
 
-pub type Expressions = Vec<Expression>;
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+pub struct Expressions {
+    pub inner: Vec<Expression>,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Expression {
@@ -25,7 +28,7 @@ fn parse_expressions(
         expressions.push(expression);
     }
 
-    expressions
+    Expressions { inner: expressions }
 }
 
 fn parse_expression(

@@ -6,7 +6,9 @@ pub type Generation = Vec<bool>;
 
 pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
     cp::evaluate(
-        &vec![cp::Expression::Fn("init".into())],
+        &cp::Expressions {
+            inner: vec![cp::Expression::Fn("init".into())],
+        },
         &interpreter.functions,
         &mut interpreter.data_stack,
         &mut interpreter.bindings,
@@ -34,7 +36,9 @@ pub fn next_generation(
     interpreter: &mut cp::Interpreter,
 ) -> Generation {
     cp::evaluate(
-        &vec![cp::Expression::Fn("empty_generation".into())],
+        &cp::Expressions {
+            inner: vec![cp::Expression::Fn("empty_generation".into())],
+        },
         &interpreter.functions,
         &mut interpreter.data_stack,
         &mut interpreter.bindings,
@@ -67,7 +71,9 @@ pub fn next_generation(
         ));
         interpreter.data_stack.push(cp::Value::U8(i as u8));
         cp::evaluate(
-            &vec![cp::Expression::Fn("next_generation_cell".into())],
+            &cp::Expressions {
+                inner: vec![cp::Expression::Fn("next_generation_cell".into())],
+            },
             &interpreter.functions,
             &mut interpreter.data_stack,
             &mut interpreter.bindings,

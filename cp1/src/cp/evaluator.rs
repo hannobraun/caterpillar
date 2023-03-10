@@ -9,7 +9,7 @@ pub fn evaluate(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
 ) -> Result<(), FunctionNotFound> {
-    for expression in expressions {
+    for expression in &expressions.inner {
         evaluate_expression(expression, functions, data_stack, bindings)?;
     }
 
