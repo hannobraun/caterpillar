@@ -161,7 +161,7 @@ impl IntoIterator for List {
 impl fmt::Display for List {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for value in &self.values {
-            write!(f, "{value}")?;
+            write!(f, "[ {value} ]")?;
         }
 
         Ok(())
