@@ -8,9 +8,16 @@ pub fn evaluate(
     functions: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    debug_output: bool,
 ) -> Result<(), FunctionNotFound> {
     for expression in &expressions.inner {
-        evaluate_expression(expression, functions, data_stack, bindings)?;
+        evaluate_expression(
+            expression,
+            functions,
+            data_stack,
+            bindings,
+            debug_output,
+        )?;
     }
 
     Ok(())
@@ -21,7 +28,12 @@ fn evaluate_expression(
     functions: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    debug_output: bool,
 ) -> Result<(), FunctionNotFound> {
+    if debug_output {
+        eprintln!("{data_stack} : {expression}");
+    }
+
     match expression {
         Expression::Block(expressions) => {
             data_stack.push(Value::Block(Block {
@@ -31,13 +43,19 @@ fn evaluate_expression(
         }
         Expression::List(expressions) => {
             let mut list_stack = DataStack::new();
-            evaluate(expressions, functions, &mut list_stack, bindings)?;
+            evaluate(
+                expressions,
+                functions,
+                &mut list_stack,
+                bindings,
+                debug_output,
+            )?;
             let list = Value::List(list_stack.into_iter().collect());
             data_stack.push(list);
             Ok(())
         }
         Expression::Fn(fn_name) => {
-            evaluate_fn(fn_name, functions, data_stack, bindings)
+            evaluate_fn(fn_name, functions, data_stack, bindings, debug_output)
         }
         Expression::Name(name) => {
             data_stack.push(Value::Name(name.clone()));
@@ -51,6 +69,7 @@ fn evaluate_fn(
     functions: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    debug_output: bool,
 ) -> Result<(), FunctionNotFound> {
     if let Some(value) = bindings.resolve(fn_name) {
         data_stack.push(value);
@@ -58,7 +77,7 @@ fn evaluate_fn(
     }
 
     if let Some(builtin) = builtins::get(fn_name) {
-        builtin(functions, data_stack, bindings)?;
+        builtin(functions, data_stack, bindings, debug_output)?;
         return Ok(());
     }
 
@@ -73,7 +92,13 @@ fn evaluate_fn(
             name: fn_name.into(),
         })?;
 
-    evaluate(&function.body, functions, data_stack, bindings)?;
+    evaluate(
+        &function.body,
+        functions,
+        data_stack,
+        bindings,
+        debug_output,
+    )?;
 
     Ok(())
 }

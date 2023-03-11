@@ -12,6 +12,7 @@ pub fn init(interpreter: &mut cp::Interpreter) -> Generation {
         &interpreter.functions,
         &mut interpreter.data_stack,
         &mut interpreter.bindings,
+        false,
     )
     .unwrap();
 
@@ -42,6 +43,7 @@ pub fn next_generation(
         &interpreter.functions,
         &mut interpreter.data_stack,
         &mut interpreter.bindings,
+        false,
     )
     .unwrap();
     let mut next = interpreter
@@ -77,6 +79,7 @@ pub fn next_generation(
             &interpreter.functions,
             &mut interpreter.data_stack,
             &mut interpreter.bindings,
+            false,
         )
         .unwrap();
         next = interpreter

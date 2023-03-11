@@ -9,6 +9,7 @@ pub type Builtin = fn(
     &Functions,
     &mut DataStack,
     &mut Bindings,
+    bool,
 ) -> Result<(), FunctionNotFound>;
 
 pub fn get(name: &str) -> Option<Builtin> {
@@ -43,6 +44,7 @@ fn add(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
@@ -58,6 +60,7 @@ fn and(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_bool();
     let a = data_stack.pop_bool();
@@ -73,6 +76,7 @@ fn bind(
     _: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let mut names = data_stack.pop_list();
     names.values.reverse();
@@ -93,6 +97,7 @@ fn clone(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let value = data_stack.pop_any();
 
@@ -106,6 +111,7 @@ fn drop(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     data_stack.pop_any();
 
@@ -116,6 +122,7 @@ fn eq(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
@@ -129,10 +136,17 @@ fn eval(
     functions: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    debug_output: bool,
 ) -> Result<(), FunctionNotFound> {
     let block = data_stack.pop_block();
 
-    evaluate(&block.expressions, functions, data_stack, bindings)?;
+    evaluate(
+        &block.expressions,
+        functions,
+        data_stack,
+        bindings,
+        debug_output,
+    )?;
 
     Ok(())
 }
@@ -141,6 +155,7 @@ fn false_(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     data_stack.push(Value::Bool(false));
     Ok(())
@@ -150,13 +165,20 @@ fn if_(
     functions: &Functions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
+    debug_output: bool,
 ) -> Result<(), FunctionNotFound> {
     let else_ = data_stack.pop_block();
     let then = data_stack.pop_block();
     let cond = data_stack.pop_bool();
 
     let block = if cond { then } else { else_ };
-    evaluate(&block.expressions, functions, data_stack, bindings)?;
+    evaluate(
+        &block.expressions,
+        functions,
+        data_stack,
+        bindings,
+        debug_output,
+    )?;
 
     Ok(())
 }
@@ -165,6 +187,7 @@ fn list_get(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let index = data_stack.pop_u8();
     let list = data_stack.pop_list();
@@ -181,6 +204,7 @@ fn list_set(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let value = data_stack.pop_any();
     let index = data_stack.pop_u8();
@@ -197,6 +221,7 @@ fn min(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
@@ -212,6 +237,7 @@ fn not(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let v = data_stack.pop_bool();
 
@@ -226,6 +252,7 @@ fn or(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_bool();
     let a = data_stack.pop_bool();
@@ -239,6 +266,7 @@ fn over(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_any();
     let a = data_stack.pop_any();
@@ -254,6 +282,7 @@ fn rot(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let c = data_stack.pop_any();
     let b = data_stack.pop_any();
@@ -270,6 +299,7 @@ fn shuffle(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let indices = data_stack.pop_list().into_iter().map(|value| {
         let Value::U8(value) = value else {
@@ -294,6 +324,7 @@ fn sub(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_u8();
     let a = data_stack.pop_u8();
@@ -309,6 +340,7 @@ fn swap(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     let b = data_stack.pop_any();
     let a = data_stack.pop_any();
@@ -323,6 +355,7 @@ fn true_(
     _: &Functions,
     data_stack: &mut DataStack,
     _: &mut Bindings,
+    _: bool,
 ) -> Result<(), FunctionNotFound> {
     data_stack.push(Value::Bool(true));
     Ok(())
