@@ -27,6 +27,7 @@ pub fn get(name: &str) -> Option<Builtin> {
         "not" => not,
         "or" => or,
         "over" => over,
+        "print" => print,
         "rot" => rot,
         "shuffle" => shuffle,
         "swap" => swap,
@@ -275,6 +276,17 @@ fn over(
     data_stack.push(b);
     data_stack.push(a);
 
+    Ok(())
+}
+
+fn print(
+    _: &Functions,
+    data_stack: &mut DataStack,
+    _: &mut Bindings,
+    _: bool,
+) -> Result<(), FunctionNotFound> {
+    let value = data_stack.pop_any();
+    eprintln!("{value}");
     Ok(())
 }
 
