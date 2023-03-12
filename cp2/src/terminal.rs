@@ -14,7 +14,7 @@ use tokio::time;
 
 pub async fn run(
     frame_time: Duration,
-    f: impl FnMut(Size),
+    f: impl FnMut(Size) -> anyhow::Result<()>,
 ) -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner(frame_time, f))
@@ -30,7 +30,7 @@ pub async fn run(
 
 async fn run_inner(
     frame_time: Duration,
-    mut f: impl FnMut(Size),
+    mut f: impl FnMut(Size) -> anyhow::Result<()>,
 ) -> anyhow::Result<()> {
     let mut events = EventStream::new();
 
@@ -78,7 +78,7 @@ async fn run_inner(
             }
         };
 
-        f(size)
+        f(size)?;
     }
 
     Ok(())
