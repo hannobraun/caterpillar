@@ -12,9 +12,9 @@ use crossterm::{
 use futures::{FutureExt, StreamExt};
 use tokio::time;
 
-pub async fn run() -> anyhow::Result<()> {
+pub async fn run(frame_time: Duration) -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
-    let result = AssertUnwindSafe(run_inner()).catch_unwind().await;
+    let result = AssertUnwindSafe(run_inner(frame_time)).catch_unwind().await;
     terminal::disable_raw_mode()?;
 
     match result {
@@ -23,10 +23,9 @@ pub async fn run() -> anyhow::Result<()> {
     }
 }
 
-async fn run_inner() -> anyhow::Result<()> {
+async fn run_inner(frame_time: Duration) -> anyhow::Result<()> {
     let mut events = EventStream::new();
 
-    let frame_time = Duration::from_millis(125);
     let mut interval = time::interval(frame_time);
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
