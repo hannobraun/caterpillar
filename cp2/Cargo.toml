@@ -3,6 +3,11 @@ name = "cp2"
 version = "0.1.0"
 edition = "2021"
 
+
+[dependencies.crossterm]
+version = "*"
+features = ["event-stream"]
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
