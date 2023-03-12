@@ -1,11 +1,12 @@
 use std::panic::{self, AssertUnwindSafe};
 
+use crossterm::terminal;
 use futures::FutureExt;
 
 pub async fn run() -> anyhow::Result<()> {
-    crossterm::terminal::enable_raw_mode()?;
+    terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner()).catch_unwind().await;
-    crossterm::terminal::disable_raw_mode()?;
+    terminal::disable_raw_mode()?;
 
     match result {
         Ok(result) => result,
