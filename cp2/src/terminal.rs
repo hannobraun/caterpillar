@@ -1,4 +1,5 @@
 use std::{
+    io::{self, Stdout},
     panic::{self, AssertUnwindSafe},
     time::Duration,
 };
@@ -12,9 +13,11 @@ use crossterm::{
 use futures::{FutureExt, StreamExt};
 use tokio::time;
 
+use crate::ui;
+
 pub async fn run(
     frame_time: Duration,
-    f: impl FnMut(Size) -> anyhow::Result<()>,
+    f: impl FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
 ) -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner(frame_time, f))
@@ -30,9 +33,12 @@ pub async fn run(
 
 async fn run_inner(
     frame_time: Duration,
-    mut f: impl FnMut(Size) -> anyhow::Result<()>,
+    mut f: impl FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
 ) -> anyhow::Result<()> {
     let mut events = EventStream::new();
+
+    let mut buffer = ui::Buffer::new();
+    let mut stdout = io::stdout();
 
     let mut interval = time::interval(frame_time);
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
@@ -78,7 +84,7 @@ async fn run_inner(
             }
         };
 
-        f(size)?;
+        f(size, &mut buffer, &mut stdout)?;
     }
 
     Ok(())
