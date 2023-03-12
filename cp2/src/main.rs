@@ -1,5 +1,7 @@
+mod terminal;
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    println!("Hello, world!");
+    terminal::run().await?;
     Ok(())
 }
