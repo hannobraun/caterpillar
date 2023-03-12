@@ -4,7 +4,7 @@
 
 An experimental programming language, to explore interactive programming and other aspects of the programming language design space.
 
-Caterpillar builds on the results of an [earlier experiment](../cp1/) of the same name. Its predecessor had similar goals, but a different starting point. It became hard to work with, when the code written in Caterpillar reached a level of complexity that the language features and debugging infrastructure couldn't support (which was surprisingly soon).
+Caterpillar builds on the results of an [earlier experiment](../archive/cp1/) of the same name. Its predecessor had similar goals, but a different starting point. It became hard to work with, when the code written in Caterpillar reached a level of complexity that the language features and debugging infrastructure couldn't support (which was surprisingly soon).
 
 
 ## Status
