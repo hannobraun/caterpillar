@@ -12,7 +12,10 @@ use crossterm::{
 use futures::{FutureExt, StreamExt};
 use tokio::time;
 
-pub async fn run(frame_time: Duration, f: impl FnMut()) -> anyhow::Result<()> {
+pub async fn run(
+    frame_time: Duration,
+    f: impl FnMut(Size),
+) -> anyhow::Result<()> {
     terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner(frame_time, f))
         .catch_unwind()
@@ -27,7 +30,7 @@ pub async fn run(frame_time: Duration, f: impl FnMut()) -> anyhow::Result<()> {
 
 async fn run_inner(
     frame_time: Duration,
-    mut f: impl FnMut(),
+    mut f: impl FnMut(Size),
 ) -> anyhow::Result<()> {
     let mut events = EventStream::new();
 
@@ -64,8 +67,24 @@ async fn run_inner(
             }
         }
 
-        f()
+        let size = {
+            let (num_columns, num_rows) = terminal::size()?;
+            let (num_columns, num_rows) =
+                (num_columns as usize, num_rows as usize);
+
+            Size {
+                num_columns,
+                num_rows,
+            }
+        };
+
+        f(size)
     }
 
     Ok(())
+}
+
+pub struct Size {
+    pub num_columns: usize,
+    pub num_rows: usize,
 }
