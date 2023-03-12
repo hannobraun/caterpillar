@@ -26,8 +26,8 @@ pub async fn run() -> anyhow::Result<()> {
 async fn run_inner() -> anyhow::Result<()> {
     let mut events = EventStream::new();
 
-    let delay = Duration::from_millis(125);
-    let mut interval = time::interval(delay);
+    let frame_time = Duration::from_millis(125);
+    let mut interval = time::interval(frame_time);
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
