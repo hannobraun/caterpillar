@@ -37,7 +37,7 @@ where
 
 async fn run_inner<F, R>(
     mut events: EventStream,
-    mut interval: Interval,
+    _: Interval,
     mut f: F,
 ) -> anyhow::Result<()>
 where
@@ -47,7 +47,7 @@ where
     f().await?;
 
     loop {
-        let () = match next_event(&mut events, &mut interval).await? {
+        let () = match next_event(&mut events).await? {
             Some(()) => (),
             None => break,
         };
@@ -60,7 +60,6 @@ where
 
 pub async fn next_event(
     events: &mut EventStream,
-    _: &mut Interval,
 ) -> anyhow::Result<Option<()>> {
     let event = tokio::select! {
         event = events.next() => {
