@@ -11,10 +11,10 @@ use crate::{
 };
 
 pub async fn run() -> anyhow::Result<()> {
-    let mut buffer = ui::Buffer::new();
-    let mut stdout = stdout();
-
     Terminal::run(|mut terminal| {
+        let mut buffer = ui::Buffer::new();
+        let mut stdout = stdout();
+
         let size = match terminal::Size::get() {
             Ok(size) => size,
             Err(err) => return future::ready(Err(err)),
