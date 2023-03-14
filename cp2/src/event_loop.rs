@@ -17,11 +17,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
     let mut stdout = stdout();
 
     let size = terminal::Size::get()?;
-
-    match run_once(size, &mut buffer, &mut stdout) {
-        Ok(()) => (),
-        Err(err) => return Err(err),
-    }
+    run_once(size, &mut buffer, &mut stdout)?;
 
     loop {
         let () = match block_on(terminal.next_event()) {
