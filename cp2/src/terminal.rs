@@ -31,10 +31,10 @@ where
     }
 }
 
-async fn run_inner(
-    frame_time: Duration,
-    mut f: impl FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
-) -> anyhow::Result<()> {
+async fn run_inner<F>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
+where
+    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
+{
     let mut events = EventStream::new();
 
     let mut buffer = ui::Buffer::new();
