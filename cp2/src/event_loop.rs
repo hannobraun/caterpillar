@@ -2,6 +2,19 @@ use std::io::Stdout;
 
 use crate::{terminal, ui};
 
+pub async fn run() -> anyhow::Result<()> {
+    let frame_time = std::time::Duration::from_millis(125);
+    let mut buffer = ui::Buffer::new();
+    let mut stdout = std::io::stdout();
+
+    terminal::run(frame_time, |size| {
+        std::future::ready(run_once(size, &mut buffer, &mut stdout))
+    })
+    .await?;
+
+    Ok(())
+}
+
 pub fn run_once(
     terminal_size: terminal::Size,
     buffer: &mut ui::Buffer,
