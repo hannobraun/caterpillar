@@ -44,6 +44,8 @@ where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
+    f().await?;
+
     loop {
         let () = match next_event(&mut events, &mut interval).await? {
             Some(()) => (),
@@ -58,12 +60,9 @@ where
 
 pub async fn next_event(
     events: &mut EventStream,
-    interval: &mut Interval,
+    _: &mut Interval,
 ) -> anyhow::Result<Option<()>> {
     let event = tokio::select! {
-        _ = interval.tick() => {
-            None
-        }
         event = events.next() => {
             Some(event)
         }
