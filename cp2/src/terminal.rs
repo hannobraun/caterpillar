@@ -11,20 +11,25 @@ use crossterm::{
 };
 use futures::{FutureExt, StreamExt};
 
-pub async fn run<F, R>(f: F) -> anyhow::Result<()>
-where
-    F: FnMut() -> R,
-    R: Future<Output = anyhow::Result<()>>,
-{
-    let events = EventStream::new();
+pub struct Terminal {}
 
-    terminal::enable_raw_mode()?;
-    let result = AssertUnwindSafe(run_inner(events, f)).catch_unwind().await;
-    terminal::disable_raw_mode()?;
+impl Terminal {
+    pub async fn run<F, R>(f: F) -> anyhow::Result<()>
+    where
+        F: FnMut() -> R,
+        R: Future<Output = anyhow::Result<()>>,
+    {
+        let events = EventStream::new();
 
-    match result {
-        Ok(result) => result,
-        Err(err) => panic::resume_unwind(err),
+        terminal::enable_raw_mode()?;
+        let result =
+            AssertUnwindSafe(run_inner(events, f)).catch_unwind().await;
+        terminal::disable_raw_mode()?;
+
+        match result {
+            Ok(result) => result,
+            Err(err) => panic::resume_unwind(err),
+        }
     }
 }
 

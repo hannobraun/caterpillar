@@ -3,13 +3,16 @@ use std::{
     io::{stdout, Stdout},
 };
 
-use crate::{terminal, ui};
+use crate::{
+    terminal::{self, Terminal},
+    ui,
+};
 
 pub async fn run() -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
-    terminal::run(|| {
+    Terminal::run(|| {
         let size = match terminal::Size::get() {
             Ok(size) => size,
             Err(err) => return future::ready(Err(err)),
