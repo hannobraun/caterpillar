@@ -1,4 +1,5 @@
 use std::{
+    future::Future,
     io::{self, Stdout},
     panic::{self, AssertUnwindSafe},
     time::Duration,
@@ -15,9 +16,10 @@ use tokio::time;
 
 use crate::ui;
 
-pub async fn run<F>(frame_time: Duration, f: F) -> anyhow::Result<()>
+pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
+    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> R,
+    R: Future<Output = anyhow::Result<()>>,
 {
     terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner(frame_time, f))
@@ -31,9 +33,10 @@ where
     }
 }
 
-async fn run_inner<F>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
+async fn run_inner<F, R>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
+    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> R,
+    R: Future<Output = anyhow::Result<()>>,
 {
     let mut events = EventStream::new();
 
@@ -84,7 +87,7 @@ where
             }
         };
 
-        f(size, &mut buffer, &mut stdout)?;
+        f(size, &mut buffer, &mut stdout).await?;
     }
 
     Ok(())
