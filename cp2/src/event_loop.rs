@@ -1,9 +1,9 @@
-use std::io::Stdout;
+use std::{io::Stdout, time::Duration};
 
 use crate::{terminal, ui};
 
 pub async fn run() -> anyhow::Result<()> {
-    let frame_time = std::time::Duration::from_millis(125);
+    let frame_time = Duration::from_millis(125);
     let mut buffer = ui::Buffer::new();
     let mut stdout = std::io::stdout();
 
