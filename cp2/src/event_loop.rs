@@ -24,6 +24,8 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
             Some(()) => (),
             None => break,
         };
+
+        let size = terminal::Size::get()?;
         run_once(size, &mut buffer, &mut stdout)?;
     }
 
