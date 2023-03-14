@@ -1,7 +1,4 @@
-use std::{
-    future,
-    io::{stdout, Stdout},
-};
+use std::io::{stdout, Stdout};
 
 use futures::executor::block_on;
 
@@ -11,39 +8,36 @@ use crate::{
 };
 
 pub async fn run() -> anyhow::Result<()> {
-    Terminal::run(|mut terminal| {
-        let mut buffer = ui::Buffer::new();
-        let mut stdout = stdout();
+    Terminal::run(run_inner).await?;
 
-        let size = match terminal::Size::get() {
-            Ok(size) => size,
-            Err(err) => return future::ready(Err(err)),
+    Ok(())
+}
+
+pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
+    let mut buffer = ui::Buffer::new();
+    let mut stdout = stdout();
+
+    let size = match terminal::Size::get() {
+        Ok(size) => size,
+        Err(err) => return Err(err),
+    };
+
+    match run_once(size, &mut buffer, &mut stdout) {
+        Ok(()) => (),
+        Err(err) => return Err(err),
+    }
+
+    loop {
+        let () = match block_on(terminal.next_event()) {
+            Ok(Some(())) => (),
+            Ok(None) => break,
+            Err(err) => return Err(err),
         };
         match run_once(size, &mut buffer, &mut stdout) {
             Ok(()) => (),
-            Err(err) => return future::ready(Err(err)),
+            Err(err) => return Err(err),
         }
-
-        loop {
-            let () = match block_on(terminal.next_event()) {
-                Ok(Some(())) => (),
-                Ok(None) => break,
-                Err(err) => return future::ready(Err(err)),
-            };
-
-            let size = match terminal::Size::get() {
-                Ok(size) => size,
-                Err(err) => return future::ready(Err(err)),
-            };
-            match run_once(size, &mut buffer, &mut stdout) {
-                Ok(()) => (),
-                Err(err) => return future::ready(Err(err)),
-            }
-        }
-
-        future::ready(Ok(()))
-    })
-    .await?;
+    }
 
     Ok(())
 }
