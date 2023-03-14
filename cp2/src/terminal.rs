@@ -15,10 +15,10 @@ use tokio::time;
 
 use crate::ui;
 
-pub async fn run(
-    frame_time: Duration,
-    f: impl FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
-) -> anyhow::Result<()> {
+pub async fn run<F>(frame_time: Duration, f: F) -> anyhow::Result<()>
+where
+    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> anyhow::Result<()>,
+{
     terminal::enable_raw_mode()?;
     let result = AssertUnwindSafe(run_inner(frame_time, f))
         .catch_unwind()
