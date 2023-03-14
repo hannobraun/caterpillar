@@ -11,15 +11,18 @@ use crossterm::{
     terminal,
 };
 use futures::{FutureExt, StreamExt};
-use tokio::time;
+use tokio::time::{self, Interval};
 
 pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
 where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
+    let mut interval = time::interval(frame_time);
+    interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
+
     terminal::enable_raw_mode()?;
-    let result = AssertUnwindSafe(run_inner(frame_time, f))
+    let result = AssertUnwindSafe(run_inner(interval, f))
         .catch_unwind()
         .await;
     terminal::disable_raw_mode()?;
@@ -30,15 +33,12 @@ where
     }
 }
 
-async fn run_inner<F, R>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
+async fn run_inner<F, R>(mut interval: Interval, mut f: F) -> anyhow::Result<()>
 where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     let mut events = EventStream::new();
-
-    let mut interval = time::interval(frame_time);
-    interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
         let event = tokio::select! {
