@@ -16,7 +16,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
-    let size = terminal::Size::get()?;
+    let size = terminal.size()?;
     run_once(size, &mut buffer, &mut stdout)?;
 
     loop {
@@ -25,7 +25,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
             None => break,
         };
 
-        let size = terminal::Size::get()?;
+        let size = terminal.size()?;
         run_once(size, &mut buffer, &mut stdout)?;
     }
 

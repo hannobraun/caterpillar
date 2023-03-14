@@ -58,16 +58,8 @@ impl Terminal {
 
         Ok(Some(()))
     }
-}
 
-#[derive(Clone, Copy)]
-pub struct Size {
-    pub num_columns: usize,
-    pub num_rows: usize,
-}
-
-impl Size {
-    pub fn get() -> anyhow::Result<Self> {
+    pub fn size(&self) -> anyhow::Result<Size> {
         let (num_columns, num_rows) = terminal::size()?;
         let (num_columns, num_rows) = (num_columns as usize, num_rows as usize);
 
@@ -76,4 +68,10 @@ impl Size {
             num_rows,
         })
     }
+}
+
+#[derive(Clone, Copy)]
+pub struct Size {
+    pub num_columns: usize,
+    pub num_rows: usize,
 }
