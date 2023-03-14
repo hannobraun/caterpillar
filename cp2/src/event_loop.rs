@@ -9,7 +9,6 @@ use crate::{
 
 pub async fn run() -> anyhow::Result<()> {
     Terminal::run(run_inner).await?;
-
     Ok(())
 }
 
