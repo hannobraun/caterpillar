@@ -34,6 +34,30 @@ impl Terminal {
             Err(err) => panic::resume_unwind(err),
         }
     }
+
+    pub async fn next_event(&mut self) -> anyhow::Result<Option<()>> {
+        let event = self.events.next().await;
+
+        let Some(event) = event else {
+        anyhow::bail!("Error reading input event");
+    };
+        let event = event?;
+
+        if let Event::Key(KeyEvent {
+            code: KeyCode::Char('c'),
+            modifiers,
+            kind: KeyEventKind::Press,
+            ..
+        }) = event
+        {
+            if modifiers.contains(KeyModifiers::CONTROL) {
+                // CTRL-C
+                return Ok(None);
+            }
+        }
+
+        Ok(Some(()))
+    }
 }
 
 async fn run_inner<F, R>(mut terminal: Terminal, mut f: F) -> anyhow::Result<()>
@@ -44,7 +68,7 @@ where
     f().await?;
 
     loop {
-        let () = match next_event(&mut terminal.events).await? {
+        let () = match terminal.next_event().await? {
             Some(()) => (),
             None => break,
         };
@@ -53,32 +77,6 @@ where
     }
 
     Ok(())
-}
-
-pub async fn next_event(
-    events: &mut EventStream,
-) -> anyhow::Result<Option<()>> {
-    let event = events.next().await;
-
-    let Some(event) = event else {
-        anyhow::bail!("Error reading input event");
-    };
-    let event = event?;
-
-    if let Event::Key(KeyEvent {
-        code: KeyCode::Char('c'),
-        modifiers,
-        kind: KeyEventKind::Press,
-        ..
-    }) = event
-    {
-        if modifiers.contains(KeyModifiers::CONTROL) {
-            // CTRL-C
-            return Ok(None);
-        }
-    }
-
-    Ok(Some(()))
 }
 
 pub struct Size {
