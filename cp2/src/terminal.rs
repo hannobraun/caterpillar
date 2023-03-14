@@ -79,6 +79,7 @@ where
     Ok(())
 }
 
+#[derive(Clone, Copy)]
 pub struct Size {
     pub num_columns: usize,
     pub num_rows: usize,
