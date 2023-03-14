@@ -1,11 +1,14 @@
-use std::{io::Stdout, time::Duration};
+use std::{
+    io::{stdout, Stdout},
+    time::Duration,
+};
 
 use crate::{terminal, ui};
 
 pub async fn run() -> anyhow::Result<()> {
     let frame_time = Duration::from_millis(125);
     let mut buffer = ui::Buffer::new();
-    let mut stdout = std::io::stdout();
+    let mut stdout = stdout();
 
     terminal::run(frame_time, |size| {
         std::future::ready(run_once(size, &mut buffer, &mut stdout))
