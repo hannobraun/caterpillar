@@ -11,7 +11,11 @@ pub async fn run() -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
-    terminal::run(frame_time, |size| {
+    terminal::run(frame_time, || {
+        let size = match terminal::Size::get() {
+            Ok(size) => size,
+            Err(err) => return future::ready(Err(err)),
+        };
         future::ready(run_once(size, &mut buffer, &mut stdout))
     })
     .await?;

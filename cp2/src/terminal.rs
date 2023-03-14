@@ -15,7 +15,7 @@ use tokio::time;
 
 pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size) -> R,
+    F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     terminal::enable_raw_mode()?;
@@ -32,7 +32,7 @@ where
 
 async fn run_inner<F, R>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size) -> R,
+    F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     let mut events = EventStream::new();
@@ -70,9 +70,7 @@ where
             }
         }
 
-        let size = Size::get()?;
-
-        f(size).await?;
+        f().await?;
     }
 
     Ok(())
