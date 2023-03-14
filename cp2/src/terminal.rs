@@ -1,7 +1,6 @@
 use std::{
     future::Future,
     panic::{self, AssertUnwindSafe},
-    time::Duration,
 };
 
 use crossterm::{
@@ -12,7 +11,7 @@ use crossterm::{
 };
 use futures::{FutureExt, StreamExt};
 
-pub async fn run<F, R>(_: Duration, f: F) -> anyhow::Result<()>
+pub async fn run<F, R>(f: F) -> anyhow::Result<()>
 where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,

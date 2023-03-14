@@ -1,17 +1,15 @@
 use std::{
     future,
     io::{stdout, Stdout},
-    time::Duration,
 };
 
 use crate::{terminal, ui};
 
 pub async fn run() -> anyhow::Result<()> {
-    let frame_time = Duration::from_millis(125);
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
-    terminal::run(frame_time, || {
+    terminal::run(|| {
         let size = match terminal::Size::get() {
             Ok(size) => size,
             Err(err) => return future::ready(Err(err)),
