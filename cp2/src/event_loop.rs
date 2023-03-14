@@ -16,10 +16,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
-    let size = match terminal::Size::get() {
-        Ok(size) => size,
-        Err(err) => return Err(err),
-    };
+    let size = terminal::Size::get()?;
 
     match run_once(size, &mut buffer, &mut stdout) {
         Ok(()) => (),
