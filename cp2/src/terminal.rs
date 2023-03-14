@@ -14,11 +14,9 @@ use crossterm::{
 use futures::{FutureExt, StreamExt};
 use tokio::time;
 
-use crate::ui;
-
 pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> R,
+    F: FnMut(Size, &mut Stdout) -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     terminal::enable_raw_mode()?;
@@ -35,12 +33,11 @@ where
 
 async fn run_inner<F, R>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut ui::Buffer, &mut Stdout) -> R,
+    F: FnMut(Size, &mut Stdout) -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     let mut events = EventStream::new();
 
-    let mut buffer = ui::Buffer::new();
     let mut stdout = io::stdout();
 
     let mut interval = time::interval(frame_time);
@@ -87,7 +84,7 @@ where
             }
         };
 
-        f(size, &mut buffer, &mut stdout).await?;
+        f(size, &mut stdout).await?;
     }
 
     Ok(())
