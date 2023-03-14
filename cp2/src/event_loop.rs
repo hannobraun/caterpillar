@@ -1,4 +1,5 @@
 use std::{
+    future,
     io::{stdout, Stdout},
     time::Duration,
 };
@@ -11,7 +12,7 @@ pub async fn run() -> anyhow::Result<()> {
     let mut stdout = stdout();
 
     terminal::run(frame_time, |size| {
-        std::future::ready(run_once(size, &mut buffer, &mut stdout))
+        future::ready(run_once(size, &mut buffer, &mut stdout))
     })
     .await?;
 
