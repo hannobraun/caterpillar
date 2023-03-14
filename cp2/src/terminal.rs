@@ -16,15 +16,15 @@ pub struct Terminal {
 }
 
 impl Terminal {
-    pub async fn run<F, R>(f: F) -> anyhow::Result<()>
+    pub async fn run<F, R>(mut f: F) -> anyhow::Result<()>
     where
-        F: FnMut() -> R,
+        F: FnMut(Terminal) -> R,
         R: Future<Output = anyhow::Result<()>>,
     {
         let events = EventStream::new();
 
         terminal::enable_raw_mode()?;
-        let result = AssertUnwindSafe(run_inner(Terminal { events }, f))
+        let result = AssertUnwindSafe(f(Terminal { events }))
             .catch_unwind()
             .await;
         terminal::disable_raw_mode()?;
@@ -58,25 +58,6 @@ impl Terminal {
 
         Ok(Some(()))
     }
-}
-
-async fn run_inner<F, R>(mut terminal: Terminal, mut f: F) -> anyhow::Result<()>
-where
-    F: FnMut() -> R,
-    R: Future<Output = anyhow::Result<()>>,
-{
-    f().await?;
-
-    loop {
-        let () = match terminal.next_event().await? {
-            Some(()) => (),
-            None => break,
-        };
-
-        f().await?;
-    }
-
-    Ok(())
 }
 
 #[derive(Clone, Copy)]
