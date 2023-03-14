@@ -53,11 +53,7 @@ where
 pub async fn next_event(
     events: &mut EventStream,
 ) -> anyhow::Result<Option<()>> {
-    let event = tokio::select! {
-        event = events.next() => {
-            event
-        }
-    };
+    let event = events.next().await;
 
     let Some(event) = event else {
         anyhow::bail!("Error reading input event");
