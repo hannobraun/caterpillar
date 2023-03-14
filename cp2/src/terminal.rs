@@ -11,7 +11,9 @@ use crossterm::{
 };
 use futures::{FutureExt, StreamExt};
 
-pub struct Terminal {}
+pub struct Terminal {
+    events: EventStream,
+}
 
 impl Terminal {
     pub async fn run<F, R>(f: F) -> anyhow::Result<()>
@@ -22,8 +24,9 @@ impl Terminal {
         let events = EventStream::new();
 
         terminal::enable_raw_mode()?;
-        let result =
-            AssertUnwindSafe(run_inner(events, f)).catch_unwind().await;
+        let result = AssertUnwindSafe(run_inner(Terminal { events }, f))
+            .catch_unwind()
+            .await;
         terminal::disable_raw_mode()?;
 
         match result {
@@ -33,10 +36,7 @@ impl Terminal {
     }
 }
 
-async fn run_inner<F, R>(
-    mut events: EventStream,
-    mut f: F,
-) -> anyhow::Result<()>
+async fn run_inner<F, R>(mut terminal: Terminal, mut f: F) -> anyhow::Result<()>
 where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
@@ -44,7 +44,7 @@ where
     f().await?;
 
     loop {
-        let () = match next_event(&mut events).await? {
+        let () = match next_event(&mut terminal.events).await? {
             Some(()) => (),
             None => break,
         };
