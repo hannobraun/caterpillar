@@ -1,6 +1,5 @@
 use std::{
     future::Future,
-    io::{self, Stdout},
     panic::{self, AssertUnwindSafe},
     time::Duration,
 };
@@ -16,7 +15,7 @@ use tokio::time;
 
 pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut Stdout) -> R,
+    F: FnMut(Size) -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     terminal::enable_raw_mode()?;
@@ -33,12 +32,10 @@ where
 
 async fn run_inner<F, R>(frame_time: Duration, mut f: F) -> anyhow::Result<()>
 where
-    F: FnMut(Size, &mut Stdout) -> R,
+    F: FnMut(Size) -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     let mut events = EventStream::new();
-
-    let mut stdout = io::stdout();
 
     let mut interval = time::interval(frame_time);
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
@@ -84,7 +81,7 @@ where
             }
         };
 
-        f(size, &mut stdout).await?;
+        f(size).await?;
     }
 
     Ok(())
