@@ -24,10 +24,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
             Some(()) => (),
             None => break,
         };
-        match run_once(size, &mut buffer, &mut stdout) {
-            Ok(()) => (),
-            Err(err) => return Err(err),
-        }
+        run_once(size, &mut buffer, &mut stdout)?;
     }
 
     Ok(())
