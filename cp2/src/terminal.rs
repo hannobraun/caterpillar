@@ -70,16 +70,7 @@ where
             }
         }
 
-        let size = {
-            let (num_columns, num_rows) = terminal::size()?;
-            let (num_columns, num_rows) =
-                (num_columns as usize, num_rows as usize);
-
-            Size {
-                num_columns,
-                num_rows,
-            }
-        };
+        let size = Size::get()?;
 
         f(size).await?;
     }
@@ -90,4 +81,16 @@ where
 pub struct Size {
     pub num_columns: usize,
     pub num_rows: usize,
+}
+
+impl Size {
+    pub fn get() -> anyhow::Result<Self> {
+        let (num_columns, num_rows) = terminal::size()?;
+        let (num_columns, num_rows) = (num_columns as usize, num_rows as usize);
+
+        Ok(Size {
+            num_columns,
+            num_rows,
+        })
+    }
 }
