@@ -56,8 +56,8 @@ where
 
         if let Some(event) = event {
             let Some(event) = event else {
-                    anyhow::bail!("Error reading input event");
-                };
+                anyhow::bail!("Error reading input event");
+            };
             let event = event?;
 
             if let Event::Key(KeyEvent {
