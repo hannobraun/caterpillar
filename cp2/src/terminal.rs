@@ -11,22 +11,16 @@ use crossterm::{
     terminal,
 };
 use futures::{FutureExt, StreamExt};
-use tokio::time::{self, Interval};
 
-pub async fn run<F, R>(frame_time: Duration, f: F) -> anyhow::Result<()>
+pub async fn run<F, R>(_: Duration, f: F) -> anyhow::Result<()>
 where
     F: FnMut() -> R,
     R: Future<Output = anyhow::Result<()>>,
 {
     let events = EventStream::new();
 
-    let mut interval = time::interval(frame_time);
-    interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
-
     terminal::enable_raw_mode()?;
-    let result = AssertUnwindSafe(run_inner(events, interval, f))
-        .catch_unwind()
-        .await;
+    let result = AssertUnwindSafe(run_inner(events, f)).catch_unwind().await;
     terminal::disable_raw_mode()?;
 
     match result {
@@ -37,7 +31,6 @@ where
 
 async fn run_inner<F, R>(
     mut events: EventStream,
-    _: Interval,
     mut f: F,
 ) -> anyhow::Result<()>
 where
