@@ -20,5 +20,8 @@ pub fn run() -> Vec<TestResult> {
         results.push(TestResult { name, pass });
     }
 
+    results.sort_by_key(|result| result.pass);
+    results.reverse();
+
     results
 }
