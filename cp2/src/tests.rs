@@ -10,7 +10,7 @@ pub struct TestResult {
 pub fn run() -> Vec<TestResult> {
     let mut tests = BTreeMap::new();
 
-    tests.insert("bool", "true");
+    tests.insert("true", "true");
 
     let mut results = Vec::new();
 
