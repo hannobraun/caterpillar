@@ -14,13 +14,13 @@ pub async fn run() -> anyhow::Result<()> {
 }
 
 pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
-    let tests = tests::run();
+    let test_results = tests::run();
 
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
     let size = terminal.size()?;
-    run_once(&tests, size, &mut buffer, &mut stdout)?;
+    run_once(&test_results, size, &mut buffer, &mut stdout)?;
 
     loop {
         let () = match block_on(terminal.next_event())? {
@@ -29,7 +29,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
         };
 
         let size = terminal.size()?;
-        run_once(&tests, size, &mut buffer, &mut stdout)?;
+        run_once(&test_results, size, &mut buffer, &mut stdout)?;
     }
 
     Ok(())
