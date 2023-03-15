@@ -1,3 +1,4 @@
+mod cp;
 mod event_loop;
 mod terminal;
 mod tests;

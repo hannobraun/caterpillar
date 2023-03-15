@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use crate::cp;
+
 pub struct TestResult {
     pub name: &'static str,
     pub pass: bool,
@@ -13,7 +15,7 @@ pub fn run() -> Vec<TestResult> {
     let mut results = Vec::new();
 
     for (name, code) in tests {
-        let pass = code == "true";
+        let pass = cp::evaluate(code);
 
         results.push(TestResult { name, pass });
     }
