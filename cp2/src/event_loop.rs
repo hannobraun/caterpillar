@@ -51,14 +51,14 @@ pub fn run_once(
 
     let tests = [("test 1", true), ("test 2", false)];
     for (test, pass) in tests {
-        ui::area::draw(&mut area, test);
-        ui::area::draw(&mut area, "... ");
-
         if pass {
-            ui::area::draw(&mut area, "passed");
+            ui::area::draw(&mut area, "PASS");
         } else {
-            ui::area::draw(&mut area, "fail");
+            ui::area::draw(&mut area, "FAIL");
         }
+
+        ui::area::draw(&mut area, " ");
+        ui::area::draw(&mut area, test);
 
         ui::area::move_to_next_line(&mut area);
     }
