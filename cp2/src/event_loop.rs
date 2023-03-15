@@ -4,7 +4,8 @@ use futures::executor::block_on;
 
 use crate::{
     terminal::{self, Terminal},
-    tests, ui,
+    tests::{self, TestResult},
+    ui,
 };
 
 pub async fn run() -> anyhow::Result<()> {
@@ -35,7 +36,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
 }
 
 pub fn run_once(
-    tests: &[(&str, bool)],
+    tests: &[TestResult],
     terminal_size: terminal::Size,
     buffer: &mut ui::Buffer,
     stdout: &mut Stdout,
@@ -52,15 +53,15 @@ pub fn run_once(
     let area = ui::area::new(buffer, offset, terminal_size);
     let mut area = ui::border::draw(area);
 
-    for &(test, pass) in tests {
-        if pass {
+    for result in tests {
+        if result.pass {
             ui::area::draw(&mut area, "PASS");
         } else {
             ui::area::draw(&mut area, "FAIL");
         }
 
         ui::area::draw(&mut area, " ");
-        ui::area::draw(&mut area, test);
+        ui::area::draw(&mut area, result.name);
 
         ui::area::move_to_next_line(&mut area);
     }
