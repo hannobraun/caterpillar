@@ -47,7 +47,11 @@ pub fn run_once(
     let offset = ui::Vector { x: 0, y: 0 };
 
     let area = ui::area::new(buffer, offset, terminal_size);
-    ui::border::draw(area);
+    let mut area = ui::border::draw(area);
+
+    ui::area::draw(&mut area, "test 1... passed");
+    ui::area::move_to_next_line(&mut area);
+    ui::area::draw(&mut area, "test 2... fail");
 
     buffer.draw(stdout)?;
 
