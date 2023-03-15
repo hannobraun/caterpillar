@@ -1,17 +1,22 @@
+use std::collections::BTreeMap;
+
 pub struct TestResult {
     pub name: &'static str,
     pub pass: bool,
 }
 
 pub fn run() -> Vec<TestResult> {
-    vec![
-        TestResult {
-            name: "test 1",
-            pass: true,
-        },
-        TestResult {
-            name: "test 2",
-            pass: false,
-        },
-    ]
+    let mut tests = BTreeMap::new();
+
+    tests.insert("bool", "true");
+
+    let mut results = Vec::new();
+
+    for (name, code) in tests {
+        let pass = code == "true";
+
+        results.push(TestResult { name, pass });
+    }
+
+    results
 }
