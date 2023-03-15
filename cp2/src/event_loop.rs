@@ -13,11 +13,13 @@ pub async fn run() -> anyhow::Result<()> {
 }
 
 pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
+    let tests = [("test 1", true), ("test 2", false)];
+
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
 
     let size = terminal.size()?;
-    run_once(size, &mut buffer, &mut stdout)?;
+    run_once(&tests, size, &mut buffer, &mut stdout)?;
 
     loop {
         let () = match block_on(terminal.next_event())? {
@@ -26,13 +28,14 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
         };
 
         let size = terminal.size()?;
-        run_once(size, &mut buffer, &mut stdout)?;
+        run_once(&tests, size, &mut buffer, &mut stdout)?;
     }
 
     Ok(())
 }
 
 pub fn run_once(
+    tests: &[(&str, bool)],
     terminal_size: terminal::Size,
     buffer: &mut ui::Buffer,
     stdout: &mut Stdout,
@@ -49,8 +52,7 @@ pub fn run_once(
     let area = ui::area::new(buffer, offset, terminal_size);
     let mut area = ui::border::draw(area);
 
-    let tests = [("test 1", true), ("test 2", false)];
-    for (test, pass) in tests {
+    for &(test, pass) in tests {
         if pass {
             ui::area::draw(&mut area, "PASS");
         } else {
