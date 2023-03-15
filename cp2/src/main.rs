@@ -1,5 +1,6 @@
 mod event_loop;
 mod terminal;
+mod tests;
 mod ui;
 
 #[tokio::main]

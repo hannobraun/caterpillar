@@ -4,7 +4,7 @@ use futures::executor::block_on;
 
 use crate::{
     terminal::{self, Terminal},
-    ui,
+    tests, ui,
 };
 
 pub async fn run() -> anyhow::Result<()> {
@@ -13,7 +13,7 @@ pub async fn run() -> anyhow::Result<()> {
 }
 
 pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
-    let tests = [("test 1", true), ("test 2", false)];
+    let tests = tests::run();
 
     let mut buffer = ui::Buffer::new();
     let mut stdout = stdout();
