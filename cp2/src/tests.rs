@@ -11,6 +11,7 @@ pub fn run() -> Vec<TestResult> {
     let mut tests = BTreeMap::new();
 
     tests.insert("true", "true");
+    tests.insert("false not", "false not");
 
     let mut results = Vec::new();
 
