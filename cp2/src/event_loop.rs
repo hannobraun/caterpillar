@@ -49,9 +49,11 @@ pub fn run_once(
     let area = ui::area::new(buffer, offset, terminal_size);
     let mut area = ui::border::draw(area);
 
-    ui::area::draw(&mut area, "test 1... passed");
-    ui::area::move_to_next_line(&mut area);
-    ui::area::draw(&mut area, "test 2... fail");
+    let tests = ["test 1... passed", "test 2... fail"];
+    for test in tests {
+        ui::area::draw(&mut area, test);
+        ui::area::move_to_next_line(&mut area);
+    }
 
     buffer.draw(stdout)?;
 
