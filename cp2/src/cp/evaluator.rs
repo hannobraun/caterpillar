@@ -1,3 +1,3 @@
-pub fn evaluate(code: &str) -> bool {
-    code == "true"
+pub fn evaluate(code: &str, data_stack: &mut Vec<bool>) {
+    data_stack.push(code == "true");
 }

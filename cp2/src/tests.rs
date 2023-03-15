@@ -15,7 +15,9 @@ pub fn run() -> Vec<TestResult> {
     let mut results = Vec::new();
 
     for (name, code) in tests {
-        let pass = cp::evaluate(code);
+        let mut data_stack = Vec::new();
+        cp::evaluate(code, &mut data_stack);
+        let pass = data_stack.pop().unwrap_or(false) && data_stack.is_empty();
 
         results.push(TestResult { name, pass });
     }
