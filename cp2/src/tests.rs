@@ -12,6 +12,7 @@ pub fn run() -> Vec<TestReport> {
 
     tests.insert("true", "true");
     tests.insert("false not", "false not");
+    tests.insert("drop", "true false drop");
 
     let mut results = Vec::new();
 
