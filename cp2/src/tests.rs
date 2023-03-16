@@ -2,12 +2,12 @@ use std::collections::BTreeMap;
 
 use crate::cp;
 
-pub struct TestResult {
+pub struct TestReport {
     pub name: &'static str,
     pub result: Result<(), Error>,
 }
 
-pub fn run() -> Vec<TestResult> {
+pub fn run() -> Vec<TestReport> {
     let mut tests = BTreeMap::new();
 
     tests.insert("true", "true");
@@ -33,7 +33,7 @@ pub fn run() -> Vec<TestResult> {
                 }
             });
 
-        results.push(TestResult { name, result: pass });
+        results.push(TestReport { name, result: pass });
     }
 
     results.sort_by_key(|result| result.result.is_ok());
