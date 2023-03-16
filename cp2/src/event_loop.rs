@@ -66,6 +66,11 @@ pub fn run_once(
         ui::area::draw(&mut area, " ");
         ui::area::draw(&mut area, test_report.name);
 
+        if let Err(err) = &test_report.result {
+            ui::area::move_to_next_line(&mut area);
+            ui::area::draw(&mut area, &format!("    {err}"))
+        }
+
         ui::area::move_to_next_line(&mut area);
     }
 
