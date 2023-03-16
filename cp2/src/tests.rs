@@ -36,7 +36,7 @@ pub fn run() -> Vec<TestReport> {
         results.push(TestReport { name, result: pass });
     }
 
-    results.sort_by_key(|result| result.result.is_ok());
+    results.sort_by_key(|report| report.result.is_ok());
     results.reverse();
 
     results
