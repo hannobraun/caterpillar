@@ -54,10 +54,13 @@ pub fn run_once(
     let mut area = ui::border::draw(area);
 
     for test_report in test_reports {
-        if test_report.result.is_ok() {
-            ui::area::draw(&mut area, "PASS");
-        } else {
-            ui::area::draw(&mut area, "FAIL");
+        match test_report.result {
+            Ok(()) => {
+                ui::area::draw(&mut area, "PASS");
+            }
+            Err(_) => {
+                ui::area::draw(&mut area, "FAIL");
+            }
         }
 
         ui::area::draw(&mut area, " ");
