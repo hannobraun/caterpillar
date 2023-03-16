@@ -6,12 +6,10 @@ pub fn evaluate(
         match token.as_str() {
             "true" => data_stack.push(true),
             "false" => data_stack.push(false),
-            "not" => {
-                // We should have some mechanism that reports an error, if the
-                // stack is empty.
-                let x = data_stack.pop().unwrap();
-                data_stack.push(!x);
-            }
+            "not" => match data_stack.pop() {
+                Some(x) => data_stack.push(!x),
+                None => return Err(Error::PopFromEmptyStack),
+            },
             _ => {
                 return Err(Error::UnexpectedToken(token));
             }
@@ -22,5 +20,6 @@ pub fn evaluate(
 }
 
 pub enum Error {
+    PopFromEmptyStack,
     UnexpectedToken(String),
 }
