@@ -1,6 +1,8 @@
+use super::data_stack::DataStack;
+
 pub fn evaluate(
     tokens: Vec<String>,
-    data_stack: &mut Vec<bool>,
+    data_stack: &mut DataStack,
 ) -> Result<(), Error> {
     for token in tokens {
         match token.as_str() {

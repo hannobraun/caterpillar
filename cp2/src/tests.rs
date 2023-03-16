@@ -16,7 +16,7 @@ pub fn run() -> Vec<TestReport> {
     let mut results = Vec::new();
 
     for (name, code) in tests {
-        let mut data_stack = Vec::new();
+        let mut data_stack = cp::DataStack::new();
         let tokens = cp::tokenize(code);
         let result = cp::evaluate(tokens, &mut data_stack)
             .map_err(|err| Error::Evaluator(err))
