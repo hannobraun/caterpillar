@@ -53,15 +53,15 @@ pub fn run_once(
     let area = ui::area::new(buffer, offset, terminal_size);
     let mut area = ui::border::draw(area);
 
-    for test_result in test_reports {
-        if test_result.result.is_ok() {
+    for test_report in test_reports {
+        if test_report.result.is_ok() {
             ui::area::draw(&mut area, "PASS");
         } else {
             ui::area::draw(&mut area, "FAIL");
         }
 
         ui::area::draw(&mut area, " ");
-        ui::area::draw(&mut area, test_result.name);
+        ui::area::draw(&mut area, test_report.name);
 
         ui::area::move_to_next_line(&mut area);
     }
