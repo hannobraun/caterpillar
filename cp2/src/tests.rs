@@ -18,8 +18,10 @@ pub fn run() -> Vec<TestResult> {
     for (name, code) in tests {
         let mut data_stack = Vec::new();
         let tokens = cp::tokenize(code);
-        cp::evaluate(tokens, &mut data_stack);
-        let pass = data_stack.pop().unwrap_or(false) && data_stack.is_empty();
+        let result = cp::evaluate(tokens, &mut data_stack);
+        let pass = result.is_ok()
+            && data_stack.pop().unwrap_or(false)
+            && data_stack.is_empty();
 
         results.push(TestResult { name, pass });
     }

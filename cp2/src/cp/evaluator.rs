@@ -1,4 +1,7 @@
-pub fn evaluate(tokens: Vec<String>, data_stack: &mut Vec<bool>) {
+pub fn evaluate(
+    tokens: Vec<String>,
+    data_stack: &mut Vec<bool>,
+) -> Result<(), Error> {
     for token in tokens {
         match token.as_str() {
             "true" => data_stack.push(true),
@@ -14,8 +17,12 @@ pub fn evaluate(tokens: Vec<String>, data_stack: &mut Vec<bool>) {
                 // real error reporting mechanism. For now, let's just make sure
                 // the test won't pass.
                 data_stack.clear();
-                return;
+                return Ok(());
             }
         }
     }
+
+    Ok(())
 }
+
+pub enum Error {}
