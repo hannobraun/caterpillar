@@ -36,7 +36,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
 }
 
 pub fn run_once(
-    test_results: &[TestReport],
+    test_reports: &[TestReport],
     terminal_size: terminal::Size,
     buffer: &mut ui::Buffer,
     stdout: &mut Stdout,
@@ -53,7 +53,7 @@ pub fn run_once(
     let area = ui::area::new(buffer, offset, terminal_size);
     let mut area = ui::border::draw(area);
 
-    for test_result in test_results {
+    for test_result in test_reports {
         if test_result.result.is_ok() {
             ui::area::draw(&mut area, "PASS");
         } else {
