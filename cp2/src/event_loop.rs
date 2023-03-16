@@ -54,7 +54,7 @@ pub fn run_once(
     let mut area = ui::border::draw(area);
 
     for test_result in test_results {
-        if test_result.pass {
+        if test_result.pass.is_ok() {
             ui::area::draw(&mut area, "PASS");
         } else {
             ui::area::draw(&mut area, "FAIL");
