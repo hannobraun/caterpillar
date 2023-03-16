@@ -4,7 +4,7 @@ use crate::cp;
 
 pub struct TestResult {
     pub name: &'static str,
-    pub pass: Result<(), Error>,
+    pub result: Result<(), Error>,
 }
 
 pub fn run() -> Vec<TestResult> {
@@ -33,10 +33,10 @@ pub fn run() -> Vec<TestResult> {
                 }
             });
 
-        results.push(TestResult { name, pass });
+        results.push(TestResult { name, result: pass });
     }
 
-    results.sort_by_key(|result| result.pass.is_ok());
+    results.sort_by_key(|result| result.result.is_ok());
     results.reverse();
 
     results
