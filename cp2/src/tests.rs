@@ -4,7 +4,7 @@ use crate::cp;
 
 pub struct TestResult {
     pub name: &'static str,
-    pub pass: Result<(), ()>,
+    pub pass: Result<(), Error>,
 }
 
 pub fn run() -> Vec<TestResult> {
@@ -20,16 +20,16 @@ pub fn run() -> Vec<TestResult> {
         let tokens = cp::tokenize(code);
         let result = cp::evaluate(tokens, &mut data_stack);
         let pass = result
-            .map_err(|_| ())
+            .map_err(|err| Error::Evaluator(err))
             .and_then(|()| match data_stack.pop() {
                 Some(true) => Ok(()),
-                _ => Err(()),
+                _ => Err(Error::TestFailed),
             })
             .and_then(|()| {
                 if data_stack.is_empty() {
                     Ok(())
                 } else {
-                    Err(())
+                    Err(Error::TestReturnedTooMuch)
                 }
             });
 
@@ -40,4 +40,10 @@ pub fn run() -> Vec<TestResult> {
     results.reverse();
 
     results
+}
+
+pub enum Error {
+    Evaluator(cp::EvaluatorError),
+    TestFailed,
+    TestReturnedTooMuch,
 }
