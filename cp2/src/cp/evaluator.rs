@@ -10,7 +10,8 @@ pub fn evaluate(
             "false" => data_stack.push(false),
             "not" => {
                 let arg = data_stack.pop()?;
-                data_stack.push(!arg);
+                let value = !arg;
+                data_stack.push(value);
             }
             _ => {
                 return Err(Error::UnexpectedToken(token));
