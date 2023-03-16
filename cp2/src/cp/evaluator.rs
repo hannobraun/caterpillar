@@ -13,11 +13,7 @@ pub fn evaluate(
                 data_stack.push(!x);
             }
             _ => {
-                // Unexpected token. Eventually, it would be great to have some
-                // real error reporting mechanism. For now, let's just make sure
-                // the test won't pass.
-                data_stack.clear();
-                return Ok(());
+                return Err(Error::UnexpectedToken(token));
             }
         }
     }
@@ -25,4 +21,6 @@ pub fn evaluate(
     Ok(())
 }
 
-pub enum Error {}
+pub enum Error {
+    UnexpectedToken(String),
+}
