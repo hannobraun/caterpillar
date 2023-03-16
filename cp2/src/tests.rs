@@ -19,7 +19,7 @@ pub fn run() -> Vec<TestReport> {
         let mut data_stack = Vec::new();
         let tokens = cp::tokenize(code);
         let result = cp::evaluate(tokens, &mut data_stack);
-        let pass = result
+        let result = result
             .map_err(|err| Error::Evaluator(err))
             .and_then(|()| match data_stack.pop() {
                 Some(true) => Ok(()),
@@ -33,7 +33,7 @@ pub fn run() -> Vec<TestReport> {
                 }
             });
 
-        results.push(TestReport { name, result: pass });
+        results.push(TestReport { name, result });
     }
 
     results.sort_by_key(|report| report.result.is_ok());
