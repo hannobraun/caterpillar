@@ -1,4 +1,4 @@
-use super::data_stack::DataStack;
+use super::data_stack::{DataStack, PopFromEmptyStack};
 
 pub fn evaluate(
     tokens: Vec<String>,
@@ -9,8 +9,8 @@ pub fn evaluate(
             "true" => data_stack.push(true),
             "false" => data_stack.push(false),
             "not" => match data_stack.pop() {
-                Some(x) => data_stack.push(!x),
-                None => return Err(Error::PopFromEmptyStack),
+                Ok(x) => data_stack.push(!x),
+                Err(PopFromEmptyStack) => return Err(Error::PopFromEmptyStack),
             },
             _ => {
                 return Err(Error::UnexpectedToken(token));

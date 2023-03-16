@@ -21,7 +21,7 @@ pub fn run() -> Vec<TestReport> {
         let result = cp::evaluate(tokens, &mut data_stack)
             .map_err(|err| Error::Evaluator(err))
             .and_then(|()| match data_stack.pop() {
-                Some(true) => Ok(()),
+                Ok(true) => Ok(()),
                 _ => Err(Error::TestFailed),
             })
             .and_then(|()| {
