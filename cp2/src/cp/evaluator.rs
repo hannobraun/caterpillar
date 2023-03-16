@@ -8,10 +8,10 @@ pub fn evaluate(
         match token.as_str() {
             "true" => data_stack.push(true),
             "false" => data_stack.push(false),
-            "not" => match data_stack.pop() {
-                Ok(x) => data_stack.push(!x),
-                Err(err) => return Err(err.into()),
-            },
+            "not" => {
+                let x = data_stack.pop()?;
+                data_stack.push(!x);
+            }
             _ => {
                 return Err(Error::UnexpectedToken(token));
             }
