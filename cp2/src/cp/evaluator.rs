@@ -10,7 +10,7 @@ pub fn evaluate(
             "false" => data_stack.push(false),
             "not" => match data_stack.pop() {
                 Ok(x) => data_stack.push(!x),
-                Err(PopFromEmptyStack) => return Err(Error::PopFromEmptyStack),
+                Err(err) => return Err(err.into()),
             },
             _ => {
                 return Err(Error::UnexpectedToken(token));
@@ -23,8 +23,8 @@ pub fn evaluate(
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Tried to pop value from empty stack")]
-    PopFromEmptyStack,
+    #[error(transparent)]
+    PopFromEmptyStack(#[from] PopFromEmptyStack),
 
     #[error("Unexpected token: `{0}`")]
     UnexpectedToken(String),
