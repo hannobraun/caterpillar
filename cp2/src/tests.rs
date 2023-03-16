@@ -41,8 +41,14 @@ pub fn run() -> Vec<TestReport> {
     results
 }
 
+#[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error(transparent)]
     Evaluator(cp::EvaluatorError),
+
+    #[error("Test did not return `true`")]
     TestFailed,
+
+    #[error("Test returned too many values")]
     TestReturnedTooMuch,
 }
