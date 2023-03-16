@@ -19,7 +19,11 @@ pub fn evaluate(
     Ok(())
 }
 
+#[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("Tried to pop value from empty stack")]
     PopFromEmptyStack,
+
+    #[error("Unexpected token: {0}")]
     UnexpectedToken(String),
 }
