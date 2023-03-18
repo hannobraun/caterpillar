@@ -12,7 +12,7 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
     let mut data_stack = DataStack::new();
 
     let tokens = tokenize(code);
-    let expressions = parse(tokens);
+    let expressions = parse(tokens)?;
     evaluate(expressions, &mut data_stack)?;
 
     Ok(data_stack)
@@ -20,6 +20,9 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("Parser error")]
+    Parser(#[from] parser::Error),
+
     #[error("Evaluator error")]
     Evaluator(#[from] evaluator::Error),
 }

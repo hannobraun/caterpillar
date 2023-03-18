@@ -7,7 +7,7 @@ pub enum Expression {
     Word(String),
 }
 
-pub fn parse(tokens: Tokens) -> Expressions {
+pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
     let expressions = tokens
         .0
         .into_iter()
@@ -15,5 +15,8 @@ pub fn parse(tokens: Tokens) -> Expressions {
             Token::Word(word) => Expression::Word(word),
         })
         .collect();
-    Expressions(expressions)
+    Ok(Expressions(expressions))
 }
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {}
