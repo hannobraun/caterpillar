@@ -4,6 +4,7 @@ pub struct Tokens(pub Vec<Token>);
 pub enum Token {
     BindingOperator,
     RoundBracketOpen,
+    RoundBracketClose,
     Word(String),
 }
 
@@ -13,6 +14,7 @@ pub fn tokenize(code: &str) -> Tokens {
         .map(|token| match token {
             "=>" => Token::BindingOperator,
             "(" => Token::RoundBracketOpen,
+            ")" => Token::RoundBracketClose,
             token => Token::Word(token.into()),
         })
         .collect();
