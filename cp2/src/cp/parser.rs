@@ -12,7 +12,7 @@ pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
 
     while let Ok(token) = tokens.next() {
         let expression = match token {
-            Token::Word(word) => Expression::Word(word),
+            Token::Ident(word) => Expression::Word(word),
             token => return Err(Error::UnexpectedToken(token)),
         };
 

@@ -17,7 +17,7 @@ pub enum Token {
     BindingOperator,
     RoundBracketOpen,
     RoundBracketClose,
-    Word(String),
+    Ident(String),
 }
 
 pub fn tokenize(code: &str) -> Tokens {
@@ -27,7 +27,7 @@ pub fn tokenize(code: &str) -> Tokens {
             "=>" => Token::BindingOperator,
             "(" => Token::RoundBracketOpen,
             ")" => Token::RoundBracketClose,
-            token => Token::Word(token.into()),
+            token => Token::Ident(token.into()),
         })
         .collect();
     Tokens(tokens)
