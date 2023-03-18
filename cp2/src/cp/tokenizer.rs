@@ -1,5 +1,6 @@
 pub struct Tokens(pub Vec<Token>);
 
+#[derive(Debug)]
 pub enum Token {
     Word(String),
 }
