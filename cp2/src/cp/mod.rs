@@ -9,3 +9,13 @@ pub use self::{
     parser::parse,
     tokenizer::tokenize,
 };
+
+pub fn execute(code: &str) -> Result<DataStack, EvaluatorError> {
+    let mut data_stack = DataStack::new();
+
+    let tokens = tokenize(code);
+    let expressions = parse(tokens);
+    evaluate(expressions, &mut data_stack)?;
+
+    Ok(data_stack)
+}

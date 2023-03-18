@@ -17,16 +17,13 @@ pub fn run() -> Vec<TestReport> {
     let mut results = Vec::new();
 
     for (name, code) in tests {
-        let mut data_stack = cp::DataStack::new();
-        let tokens = cp::tokenize(code);
-        let expressions = cp::parse(tokens);
-        let result = cp::evaluate(expressions, &mut data_stack)
+        let result = cp::execute(code)
             .map_err(|err| Error::Evaluator(err))
-            .and_then(|()| match data_stack.pop() {
-                Ok(true) => Ok(()),
+            .and_then(|mut data_stack| match data_stack.pop() {
+                Ok(true) => Ok(data_stack),
                 _ => Err(Error::TestFailed),
             })
-            .and_then(|()| {
+            .and_then(|data_stack| {
                 if data_stack.is_empty() {
                     Ok(())
                 } else {
