@@ -43,7 +43,7 @@ pub fn run() -> Vec<TestReport> {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Evaluator(cp::EvaluatorError),
+    Evaluator(cp::Error),
 
     #[error("Test did not return `true`")]
     TestFailed,

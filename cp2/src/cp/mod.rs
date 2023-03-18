@@ -10,7 +10,7 @@ pub use self::{
     tokenizer::tokenize,
 };
 
-pub fn execute(code: &str) -> Result<DataStack, EvaluatorError> {
+pub fn execute(code: &str) -> Result<DataStack, Error> {
     let mut data_stack = DataStack::new();
 
     let tokens = tokenize(code);
@@ -18,4 +18,10 @@ pub fn execute(code: &str) -> Result<DataStack, EvaluatorError> {
     evaluate(expressions, &mut data_stack)?;
 
     Ok(data_stack)
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("Evaluator error")]
+    Evaluator(#[from] EvaluatorError),
 }
