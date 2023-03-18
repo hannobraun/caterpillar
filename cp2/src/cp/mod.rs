@@ -4,9 +4,7 @@ mod parser;
 mod tokenizer;
 
 pub use self::{
-    data_stack::DataStack,
-    evaluator::{evaluate, Error as EvaluatorError},
-    parser::parse,
+    data_stack::DataStack, evaluator::evaluate, parser::parse,
     tokenizer::tokenize,
 };
 
