@@ -8,6 +8,8 @@ impl Tokens {
     }
 }
 
+#[derive(Debug, thiserror::Error)]
+#[error("No more tokens")]
 pub struct NoMoreTokens;
 
 #[derive(Debug, Eq, PartialEq)]
