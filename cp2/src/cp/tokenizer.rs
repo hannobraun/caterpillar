@@ -1,7 +1,6 @@
 pub struct Tokens(pub Vec<Token>);
 
 pub enum Token {
-    /// A word refers to a function or variable
     Word(String),
 }
 

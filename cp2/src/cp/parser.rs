@@ -3,6 +3,7 @@ use super::tokenizer::{Token, Tokens};
 pub struct Expressions(pub Vec<Expression>);
 
 pub enum Expression {
+    /// A word refers to a function or variable
     Word(String),
 }
 
