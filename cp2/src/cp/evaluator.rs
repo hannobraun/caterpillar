@@ -9,6 +9,9 @@ pub fn evaluate(
 ) -> Result<(), Error> {
     for expression in expressions.0 {
         match expression {
+            Expression::Binding(_) => {
+                // Currently ignored.
+            }
             Expression::Word(word) => match word.as_str() {
                 "drop" => data_stack.pop().map(|_| ())?,
                 "true" => data_stack.push(true),
