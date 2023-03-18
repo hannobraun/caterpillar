@@ -18,7 +18,7 @@ pub fn run() -> Vec<TestReport> {
 
     for (name, code) in tests {
         let result = cp::execute(code)
-            .map_err(|err| Error::Evaluator(err))
+            .map_err(|err| Error::Language(err))
             .and_then(|mut data_stack| match data_stack.pop() {
                 Ok(true) => Ok(data_stack),
                 _ => Err(Error::TestFailed),
@@ -43,7 +43,7 @@ pub fn run() -> Vec<TestReport> {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Evaluator(cp::Error),
+    Language(cp::Error),
 
     #[error("Test did not return `true`")]
     TestFailed,
