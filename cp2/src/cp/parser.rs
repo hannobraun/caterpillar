@@ -7,10 +7,9 @@ pub enum Expression {
     Word(String),
 }
 
-pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
+pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
-    let mut tokens = tokens.0.into_iter();
     while let Some(token) = tokens.next() {
         let expression = match token {
             Token::Word(word) => Expression::Word(word),

@@ -2,6 +2,12 @@ use std::collections::VecDeque;
 
 pub struct Tokens(pub VecDeque<Token>);
 
+impl Tokens {
+    pub fn next(&mut self) -> Option<Token> {
+        self.0.pop_front()
+    }
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub enum Token {
     BindingOperator,
