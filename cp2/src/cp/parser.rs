@@ -12,6 +12,7 @@ pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
         .0
         .into_iter()
         .map(|token| match token {
+            Token::BindingOperator => Err(Error::UnexpectedToken(token)),
             Token::Word(word) => Ok(Expression::Word(word)),
         })
         .collect::<Result<_, _>>()?;
@@ -19,4 +20,7 @@ pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {}
+pub enum Error {
+    #[error("Unexpected token: `{0:?}`")]
+    UnexpectedToken(Token),
+}
