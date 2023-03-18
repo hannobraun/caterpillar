@@ -13,10 +13,8 @@ pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
     let mut tokens = tokens.0.into_iter();
     while let Some(token) = tokens.next() {
         let expression = match token {
-            Token::BindingOperator => {
-                return Err(Error::UnexpectedToken(token))
-            }
             Token::Word(word) => Expression::Word(word),
+            token => return Err(Error::UnexpectedToken(token)),
         };
 
         expressions.push(expression);
