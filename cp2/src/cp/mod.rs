@@ -20,9 +20,9 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Parser error")]
+    #[error("Parser error: {0}")]
     Parser(#[from] parser::Error),
 
-    #[error("Evaluator error")]
+    #[error("Evaluator error: {0}")]
     Evaluator(#[from] evaluator::Error),
 }
