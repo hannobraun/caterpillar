@@ -4,10 +4,10 @@ use super::{
 };
 
 pub fn evaluate(
-    tokens: Expressions,
+    expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    for Expression::Word(token) in tokens.0 {
+    for Expression::Word(token) in expressions.0 {
         match token.as_str() {
             "drop" => data_stack.pop().map(|_| ())?,
             "true" => data_stack.push(true),
