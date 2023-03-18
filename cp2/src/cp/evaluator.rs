@@ -31,6 +31,6 @@ pub enum Error {
     #[error(transparent)]
     PopFromEmptyStack(#[from] PopFromEmptyStack),
 
-    #[error("Unexpected token: `{0}`")]
+    #[error("Unknown word: `{0}`")]
     UnknownWord(String),
 }
