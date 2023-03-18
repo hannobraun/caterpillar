@@ -23,5 +23,5 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("Evaluator error")]
-    Evaluator(#[from] EvaluatorError),
+    Evaluator(#[from] evaluator::Error),
 }
