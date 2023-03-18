@@ -1,4 +1,6 @@
-pub struct Tokens(pub Vec<Token>);
+use std::collections::VecDeque;
+
+pub struct Tokens(pub VecDeque<Token>);
 
 #[derive(Debug)]
 pub enum Token {
