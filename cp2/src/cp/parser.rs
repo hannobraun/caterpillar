@@ -12,9 +12,9 @@ pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
         .0
         .into_iter()
         .map(|token| match token {
-            Token::Word(word) => Expression::Word(word),
+            Token::Word(word) => Ok(Expression::Word(word)),
         })
-        .collect();
+        .collect::<Result<_, _>>()?;
     Ok(Expressions(expressions))
 }
 
