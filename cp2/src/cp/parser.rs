@@ -8,14 +8,20 @@ pub enum Expression {
 }
 
 pub fn parse(tokens: Tokens) -> Result<Expressions, Error> {
-    let expressions = tokens
-        .0
-        .into_iter()
-        .map(|token| match token {
-            Token::BindingOperator => Err(Error::UnexpectedToken(token)),
-            Token::Word(word) => Ok(Expression::Word(word)),
-        })
-        .collect::<Result<_, _>>()?;
+    let mut expressions = Vec::new();
+
+    let mut tokens = tokens.0.into_iter();
+    while let Some(token) = tokens.next() {
+        let expression = match token {
+            Token::BindingOperator => {
+                return Err(Error::UnexpectedToken(token))
+            }
+            Token::Word(word) => Expression::Word(word),
+        };
+
+        expressions.push(expression);
+    }
+
     Ok(Expressions(expressions))
 }
 
