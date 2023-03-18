@@ -7,8 +7,9 @@ pub enum Token {
 pub fn tokenize(code: &str) -> Tokens {
     let tokens = code
         .split_whitespace()
-        .map(Into::into)
-        .map(Token::Word)
+        .map(|token| match token {
+            token => Token::Word(token.into()),
+        })
         .collect();
     Tokens(tokens)
 }
