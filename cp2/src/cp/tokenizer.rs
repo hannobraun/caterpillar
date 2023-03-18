@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 pub struct Tokens(pub VecDeque<Token>);
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum Token {
     BindingOperator,
     RoundBracketOpen,
