@@ -18,7 +18,7 @@ pub fn evaluate(
                 data_stack.push(value);
             }
             _ => {
-                return Err(Error::UnexpectedToken(word));
+                return Err(Error::UnknownWord(word));
             }
         }
     }
@@ -32,5 +32,5 @@ pub enum Error {
     PopFromEmptyStack(#[from] PopFromEmptyStack),
 
     #[error("Unexpected token: `{0}`")]
-    UnexpectedToken(String),
+    UnknownWord(String),
 }
