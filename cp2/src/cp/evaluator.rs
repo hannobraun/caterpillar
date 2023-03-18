@@ -7,8 +7,8 @@ pub fn evaluate(
     expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    for Expression::Word(token) in expressions.0 {
-        match token.as_str() {
+    for Expression::Word(word) in expressions.0 {
+        match word.as_str() {
             "drop" => data_stack.pop().map(|_| ())?,
             "true" => data_stack.push(true),
             "false" => data_stack.push(false),
@@ -18,7 +18,7 @@ pub fn evaluate(
                 data_stack.push(value);
             }
             _ => {
-                return Err(Error::UnexpectedToken(token));
+                return Err(Error::UnexpectedToken(word));
             }
         }
     }
