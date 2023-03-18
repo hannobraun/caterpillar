@@ -1,10 +1,13 @@
-use super::data_stack::{DataStack, PopFromEmptyStack};
+use super::{
+    data_stack::{DataStack, PopFromEmptyStack},
+    tokenizer::Tokens,
+};
 
 pub fn evaluate(
-    tokens: Vec<String>,
+    tokens: Tokens,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    for token in tokens {
+    for token in tokens.0 {
         match token.as_str() {
             "drop" => data_stack.pop().map(|_| ())?,
             "true" => data_stack.push(true),
