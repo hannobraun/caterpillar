@@ -10,7 +10,7 @@ pub enum Expression {
 pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
-    while let Some(token) = tokens.next() {
+    while let Ok(token) = tokens.next() {
         let expression = match token {
             Token::Word(word) => Expression::Word(word),
             token => return Err(Error::UnexpectedToken(token)),
