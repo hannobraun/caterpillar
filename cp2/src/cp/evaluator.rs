@@ -1,13 +1,13 @@
 use super::{
     data_stack::{DataStack, PopFromEmptyStack},
-    tokenizer::{Token, Tokens},
+    parser::{Expression, Expressions},
 };
 
 pub fn evaluate(
-    tokens: Tokens,
+    tokens: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    for Token::Word(token) in tokens.0 {
+    for Expression::Word(token) in tokens.0 {
         match token.as_str() {
             "drop" => data_stack.pop().map(|_| ())?,
             "true" => data_stack.push(true),
