@@ -47,6 +47,7 @@ pub enum Token {
     CurlyBracketClose,
     RoundBracketOpen,
     RoundBracketClose,
+    SquareBracketOpen,
     Ident(String),
 }
 
@@ -60,6 +61,7 @@ pub fn tokenize(code: &str) -> Tokens {
             "}" => Token::CurlyBracketClose,
             "(" => Token::RoundBracketOpen,
             ")" => Token::RoundBracketClose,
+            "[" => Token::SquareBracketOpen,
             token => Token::Ident(token.into()),
         })
         .collect();
