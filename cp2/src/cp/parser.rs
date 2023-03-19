@@ -41,8 +41,6 @@ fn parse_expression(
 fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
     let mut binding_names = Vec::new();
 
-    tokens.expect(Token::RoundBracketOpen)?;
-
     loop {
         match tokens.next()? {
             Token::Ident(ident) => binding_names.push(ident),

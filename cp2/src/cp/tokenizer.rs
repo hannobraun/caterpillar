@@ -7,6 +7,7 @@ impl Tokens {
         self.0.pop_front().ok_or(NoMoreTokens)
     }
 
+    #[allow(unused)]
     pub fn expect(&mut self, token: Token) -> Result<Token, ExpectedToken> {
         match self.0.pop_front() {
             Some(next) => {
