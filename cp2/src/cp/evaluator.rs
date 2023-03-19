@@ -49,6 +49,12 @@ pub fn evaluate(
                     let value = !arg;
                     data_stack.push(value);
                 }
+                "unwrap" => {
+                    let array = data_stack.pop_array()?;
+                    for value in array {
+                        data_stack.push(value);
+                    }
+                }
                 _ => {
                     if let Some(value) = bindings.remove(&word) {
                         data_stack.push(value);

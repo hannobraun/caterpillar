@@ -23,6 +23,16 @@ impl DataStack {
         value.ok_or(Error::PopFromEmptyStack)
     }
 
+    pub fn pop_array(&mut self) -> Result<Vec<Value>, Error> {
+        match self.pop_any()? {
+            Value::Array(values) => Ok(values),
+            value => Err(Error::UnexpectedType {
+                expected: "array",
+                actual: value,
+            }),
+        }
+    }
+
     pub fn pop_bool(&mut self) -> Result<bool, Error> {
         match self.pop_any()? {
             Value::Bool(bool) => Ok(bool),
