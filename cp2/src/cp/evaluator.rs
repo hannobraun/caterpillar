@@ -49,7 +49,7 @@ pub fn evaluate(
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    PopFromEmptyStack(#[from] PopFromEmptyStack),
+    DataStack(#[from] PopFromEmptyStack),
 
     #[error("Unknown word: `{0}`")]
     UnknownWord(String),
