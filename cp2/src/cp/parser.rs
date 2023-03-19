@@ -44,7 +44,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
     loop {
         match tokens.next()? {
             Token::Ident(ident) => binding_names.push(ident),
-            Token::RoundBracketClose => break,
+            Token::Period => break,
             token => return Err(Error::UnexpectedToken(token)),
         }
     }

@@ -14,7 +14,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("false not", "false not");
     tests.insert("drop", "true false drop");
     tests.insert("clone", "true clone drop");
-    tests.insert("binding", "true false => t f ) t");
+    tests.insert("binding", "true false => t f . t");
     tests.insert("block eval", "{ true } eval");
     tests.insert("block - lazy evaluation", "true { drop } drop");
 
