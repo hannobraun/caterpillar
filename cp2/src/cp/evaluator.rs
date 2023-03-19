@@ -19,6 +19,9 @@ pub fn evaluate(
                     bindings.insert(name, value);
                 }
             }
+            Expression::Array(_) => {
+                // not yet implemented
+            }
             Expression::Block(expressions) => {
                 data_stack.push(Value::Block(expressions));
             }

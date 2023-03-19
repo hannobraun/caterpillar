@@ -8,6 +8,8 @@ pub enum Expression {
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
+    Array(Expressions),
+
     /// A block of code that is lazily evaluated
     Block(Expressions),
 
@@ -33,6 +35,7 @@ fn parse_expression(
     match token {
         Token::BindingOperator => parse_binding(tokens),
         Token::CurlyBracketOpen => parse_block(tokens),
+        Token::SquareBracketOpen => parse_array(tokens),
         Token::Ident(ident) => Ok(Expression::Word(ident)),
         token => Err(Error::UnexpectedToken(token)),
     }
@@ -65,6 +68,21 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
     }
 
     Ok(Expression::Block(Expressions(expressions)))
+}
+
+fn parse_array(tokens: &mut Tokens) -> Result<Expression, Error> {
+    let mut expressions = Vec::new();
+
+    loop {
+        let expression = match tokens.next()? {
+            Token::SquareBracketClose => break,
+            token => parse_expression(token, tokens)?,
+        };
+
+        expressions.push(expression)
+    }
+
+    Ok(Expression::Array(Expressions(expressions)))
 }
 
 #[derive(Debug, thiserror::Error)]
