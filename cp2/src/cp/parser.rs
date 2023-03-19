@@ -14,16 +14,22 @@ pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
     while let Ok(token) = tokens.next() {
-        let expression = match token {
-            Token::BindingOperator => parse_binding(&mut tokens)?,
-            Token::Ident(ident) => Expression::Word(ident),
-            token => return Err(Error::UnexpectedToken(token)),
-        };
-
+        let expression = parse_expression(token, &mut tokens)?;
         expressions.push(expression);
     }
 
     Ok(Expressions(expressions))
+}
+
+fn parse_expression(
+    token: Token,
+    tokens: &mut Tokens,
+) -> Result<Expression, Error> {
+    match token {
+        Token::BindingOperator => parse_binding(tokens),
+        Token::Ident(ident) => Ok(Expression::Word(ident)),
+        token => return Err(Error::UnexpectedToken(token)),
+    }
 }
 
 fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
