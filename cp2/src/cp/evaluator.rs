@@ -19,6 +19,9 @@ pub fn evaluate(
                     bindings.insert(name, value);
                 }
             }
+            Expression::Block(_) => {
+                // not implemented yet
+            }
             Expression::Word(word) => match word.as_str() {
                 "drop" => data_stack.pop().map(|_| ())?,
                 "true" => data_stack.push(true),
