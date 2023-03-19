@@ -15,6 +15,12 @@ impl DataStack {
         self.values.pop().ok_or(Error::PopFromEmptyStack)
     }
 
+    pub fn pop_bool(&mut self) -> Result<bool, Error> {
+        match self.pop()? {
+            Value::Bool(bool) => Ok(bool),
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
