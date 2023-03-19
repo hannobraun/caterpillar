@@ -2,11 +2,15 @@ use super::parser::Expressions;
 
 pub struct DataStack {
     values: Vec<Value>,
+    marker: usize,
 }
 
 impl DataStack {
     pub fn new() -> Self {
-        Self { values: Vec::new() }
+        Self {
+            values: Vec::new(),
+            marker: 0,
+        }
     }
 
     pub fn push(&mut self, value: impl Into<Value>) {
@@ -14,7 +18,9 @@ impl DataStack {
     }
 
     pub fn pop_any(&mut self) -> Result<Value, Error> {
-        self.values.pop().ok_or(Error::PopFromEmptyStack)
+        let value = self.values.pop();
+        self.marker = usize::min(self.marker, self.values.len());
+        value.ok_or(Error::PopFromEmptyStack)
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, Error> {
@@ -40,6 +46,16 @@ impl DataStack {
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
+
+    pub fn mark(&mut self) {
+        self.marker = self.values.len();
+    }
+
+    pub fn drain_values_from_mark(
+        &mut self,
+    ) -> impl Iterator<Item = Value> + '_ {
+        self.values.drain(self.marker..)
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -56,6 +72,7 @@ pub enum Error {
 
 #[derive(Clone, Debug)]
 pub enum Value {
+    Array(Vec<Value>),
     Block(Expressions),
     Bool(bool),
 }
