@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    data_stack::{DataStack, PopFromEmptyStack},
+    data_stack::{DataStack, PopFromEmptyStack, Value},
     parser::{Expression, Expressions},
 };
 
@@ -27,7 +27,7 @@ pub fn evaluate(
                 "true" => data_stack.push(true),
                 "false" => data_stack.push(false),
                 "not" => {
-                    let arg = data_stack.pop()?;
+                    let Value::Bool(arg) = data_stack.pop()?;
                     let value = !arg;
                     data_stack.push(value);
                 }

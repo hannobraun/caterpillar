@@ -21,7 +21,7 @@ pub fn run() -> Vec<TestReport> {
         let result = cp::execute(code)
             .map_err(|err| Error::Language(err))
             .and_then(|mut data_stack| match data_stack.pop() {
-                Ok(true) => Ok(data_stack),
+                Ok(cp::Value::Bool(true)) => Ok(data_stack),
                 _ => Err(Error::TestFailed),
             })
             .and_then(|data_stack| {

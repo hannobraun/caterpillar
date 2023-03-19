@@ -4,7 +4,9 @@ mod parser;
 mod tokenizer;
 
 pub use self::{
-    data_stack::DataStack, evaluator::evaluate, parser::parse,
+    data_stack::{DataStack, Value},
+    evaluator::evaluate,
+    parser::parse,
     tokenizer::tokenize,
 };
 

@@ -1,5 +1,5 @@
 pub struct DataStack {
-    values: Vec<bool>,
+    values: Vec<Value>,
 }
 
 impl DataStack {
@@ -7,11 +7,11 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
-    pub fn push(&mut self, value: bool) {
-        self.values.push(value)
+    pub fn push(&mut self, value: impl Into<Value>) {
+        self.values.push(value.into())
     }
 
-    pub fn pop(&mut self) -> Result<bool, PopFromEmptyStack> {
+    pub fn pop(&mut self) -> Result<Value, PopFromEmptyStack> {
         self.values.pop().ok_or(PopFromEmptyStack)
     }
 
@@ -23,3 +23,13 @@ impl DataStack {
 #[derive(Debug, thiserror::Error)]
 #[error("Tried to pop value from empty stack")]
 pub struct PopFromEmptyStack;
+
+pub enum Value {
+    Bool(bool),
+}
+
+impl From<bool> for Value {
+    fn from(value: bool) -> Self {
+        Self::Bool(value)
+    }
+}
