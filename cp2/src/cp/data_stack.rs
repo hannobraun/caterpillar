@@ -26,6 +26,7 @@ pub enum Error {
     PopFromEmptyStack,
 }
 
+#[derive(Debug)]
 pub enum Value {
     Bool(bool),
 }
