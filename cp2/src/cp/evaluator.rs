@@ -23,6 +23,13 @@ pub fn evaluate(
                 data_stack.push(Value::Block(expressions));
             }
             Expression::Word(word) => match word.as_str() {
+                "clone" => {
+                    let original = data_stack.pop_any()?;
+                    let clone = original.clone();
+
+                    data_stack.push(original);
+                    data_stack.push(clone);
+                }
                 "drop" => data_stack.pop_any().map(|_| ())?,
                 "eval" => {
                     let block = data_stack.pop_block()?;
