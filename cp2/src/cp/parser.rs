@@ -32,7 +32,7 @@ fn parse_expression(
         Token::BindingOperator => parse_binding(tokens),
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(ident) => Ok(Expression::Word(ident)),
-        token => return Err(Error::UnexpectedToken(token)),
+        token => Err(Error::UnexpectedToken(token)),
     }
 }
 

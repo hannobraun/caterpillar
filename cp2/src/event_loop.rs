@@ -23,7 +23,7 @@ pub async fn run_inner(mut terminal: Terminal) -> anyhow::Result<()> {
     run_once(&test_results, size, &mut buffer, &mut stdout)?;
 
     loop {
-        let () = match block_on(terminal.next_event())? {
+        match block_on(terminal.next_event())? {
             Some(()) => (),
             None => break,
         };
