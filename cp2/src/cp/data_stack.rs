@@ -54,7 +54,7 @@ pub enum Error {
     },
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Value {
     Block(Expressions),
     Bool(bool),

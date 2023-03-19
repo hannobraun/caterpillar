@@ -1,9 +1,9 @@
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Expressions(pub Vec<Expression>);
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Expression {
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
