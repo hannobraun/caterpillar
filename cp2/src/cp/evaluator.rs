@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    data_stack::{DataStack, PopFromEmptyStack, Value},
+    data_stack::{self, DataStack, Value},
     parser::{Expression, Expressions},
 };
 
@@ -49,7 +49,7 @@ pub fn evaluate(
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    DataStack(#[from] PopFromEmptyStack),
+    DataStack(#[from] data_stack::Error),
 
     #[error("Unknown word: `{0}`")]
     UnknownWord(String),

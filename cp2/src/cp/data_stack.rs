@@ -11,8 +11,8 @@ impl DataStack {
         self.values.push(value.into())
     }
 
-    pub fn pop(&mut self) -> Result<Value, PopFromEmptyStack> {
-        self.values.pop().ok_or(PopFromEmptyStack)
+    pub fn pop(&mut self) -> Result<Value, Error> {
+        self.values.pop().ok_or(Error::PopFromEmptyStack)
     }
 
     pub fn is_empty(&self) -> bool {
@@ -21,8 +21,10 @@ impl DataStack {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Tried to pop value from empty stack")]
-pub struct PopFromEmptyStack;
+pub enum Error {
+    #[error("Tried to pop value from empty stack")]
+    PopFromEmptyStack,
+}
 
 pub enum Value {
     Bool(bool),
