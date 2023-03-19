@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
-    data_stack::{self, DataStack},
+    data_stack::{self, DataStack, Value},
     parser::{Expression, Expressions},
 };
 
@@ -19,8 +19,8 @@ pub fn evaluate(
                     bindings.insert(name, value);
                 }
             }
-            Expression::Block(_) => {
-                // not implemented yet
+            Expression::Block(expressions) => {
+                data_stack.push(Value::Block(expressions));
             }
             Expression::Word(word) => match word.as_str() {
                 "drop" => data_stack.pop_any().map(|_| ())?,
