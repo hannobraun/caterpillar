@@ -42,6 +42,7 @@ pub struct ExpectedToken {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Token {
     BindingOperator,
+    Period,
     CurlyBracketOpen,
     CurlyBracketClose,
     RoundBracketOpen,
@@ -54,6 +55,7 @@ pub fn tokenize(code: &str) -> Tokens {
         .split_whitespace()
         .map(|token| match token {
             "=>" => Token::BindingOperator,
+            "." => Token::Period,
             "{" => Token::CurlyBracketOpen,
             "}" => Token::CurlyBracketClose,
             "(" => Token::RoundBracketOpen,
