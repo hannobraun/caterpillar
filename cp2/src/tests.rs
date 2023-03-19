@@ -14,6 +14,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("false not", "false not");
     tests.insert("drop", "true false drop");
     tests.insert("binding", "true false => ( t f ) t");
+    tests.insert("block eval", "{ true } eval");
 
     let mut results = Vec::new();
 

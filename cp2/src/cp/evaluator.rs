@@ -24,6 +24,10 @@ pub fn evaluate(
             }
             Expression::Word(word) => match word.as_str() {
                 "drop" => data_stack.pop_any().map(|_| ())?,
+                "eval" => {
+                    let block = data_stack.pop_block()?;
+                    evaluate(block, data_stack)?;
+                }
                 "true" => data_stack.push(true),
                 "false" => data_stack.push(false),
                 "not" => {

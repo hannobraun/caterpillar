@@ -27,6 +27,16 @@ impl DataStack {
         }
     }
 
+    pub fn pop_block(&mut self) -> Result<Expressions, Error> {
+        match self.pop_any()? {
+            Value::Block(expressions) => Ok(expressions),
+            value => Err(Error::UnexpectedType {
+                expected: "block",
+                actual: value,
+            }),
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
