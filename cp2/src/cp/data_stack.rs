@@ -11,12 +11,12 @@ impl DataStack {
         self.values.push(value.into())
     }
 
-    pub fn pop(&mut self) -> Result<Value, Error> {
+    pub fn pop_any(&mut self) -> Result<Value, Error> {
         self.values.pop().ok_or(Error::PopFromEmptyStack)
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, Error> {
-        match self.pop()? {
+        match self.pop_any()? {
             Value::Bool(bool) => Ok(bool),
         }
     }

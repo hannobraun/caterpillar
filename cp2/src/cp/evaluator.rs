@@ -15,7 +15,7 @@ pub fn evaluate(
         match expression {
             Expression::Binding(mut names) => {
                 while let Some(name) = names.pop() {
-                    let value = data_stack.pop()?;
+                    let value = data_stack.pop_any()?;
                     bindings.insert(name, value);
                 }
             }
@@ -23,7 +23,7 @@ pub fn evaluate(
                 // not implemented yet
             }
             Expression::Word(word) => match word.as_str() {
-                "drop" => data_stack.pop().map(|_| ())?,
+                "drop" => data_stack.pop_any().map(|_| ())?,
                 "true" => data_stack.push(true),
                 "false" => data_stack.push(false),
                 "not" => {
