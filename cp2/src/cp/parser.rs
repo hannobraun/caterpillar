@@ -53,7 +53,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
 }
 
 fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
-    let mut expressions = Expressions(Vec::new());
+    let mut expressions = Vec::new();
 
     loop {
         let expression = match tokens.next()? {
@@ -61,10 +61,10 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
             token => parse_expression(token, tokens)?,
         };
 
-        expressions.0.push(expression);
+        expressions.push(expression);
     }
 
-    Ok(Expression::Block(expressions))
+    Ok(Expression::Block(Expressions(expressions)))
 }
 
 #[derive(Debug, thiserror::Error)]
