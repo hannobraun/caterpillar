@@ -37,7 +37,10 @@ fn parse_expression(
             let binding_names = parse_binding(tokens)?;
             Ok(Expression::Binding(binding_names))
         }
-        Token::CurlyBracketOpen => parse_block(tokens),
+        Token::CurlyBracketOpen => {
+            let expressions = parse_block(tokens)?;
+            Ok(Expression::Block(expressions))
+        }
         Token::SquareBracketOpen => parse_array(tokens),
         Token::Ident(ident) => Ok(Expression::Word(ident)),
         token => Err(Error::UnexpectedToken(token)),
@@ -58,7 +61,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
     Ok(binding_names)
 }
 
-fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
+fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
     loop {
@@ -70,7 +73,7 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
         expressions.push(expression);
     }
 
-    Ok(Expression::Block(Expressions(expressions)))
+    Ok(Expressions(expressions))
 }
 
 fn parse_array(tokens: &mut Tokens) -> Result<Expression, Error> {
