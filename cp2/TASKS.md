@@ -1,4 +1,4 @@
 # Tasks
 
-- Color test output
+- Color test output.
 - Print error location with error message.
