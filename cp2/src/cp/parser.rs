@@ -33,7 +33,10 @@ fn parse_expression(
     tokens: &mut Tokens,
 ) -> Result<Expression, Error> {
     match token {
-        Token::BindingOperator => parse_binding(tokens),
+        Token::BindingOperator => {
+            let binding_names = parse_binding(tokens)?;
+            Ok(Expression::Binding(binding_names))
+        }
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::SquareBracketOpen => parse_array(tokens),
         Token::Ident(ident) => Ok(Expression::Word(ident)),
@@ -41,7 +44,7 @@ fn parse_expression(
     }
 }
 
-fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
+fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
     let mut binding_names = Vec::new();
 
     loop {
@@ -52,7 +55,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Expression, Error> {
         }
     }
 
-    Ok(Expression::Binding(binding_names))
+    Ok(binding_names)
 }
 
 fn parse_block(tokens: &mut Tokens) -> Result<Expression, Error> {
