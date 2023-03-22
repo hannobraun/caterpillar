@@ -20,19 +20,15 @@ pub enum Expression {
 pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
-    while let Ok(token) = tokens.next() {
-        let expression = parse_expression(token, &mut tokens)?;
+    while let Ok(expression) = parse_expression(&mut tokens) {
         expressions.push(expression);
     }
 
     Ok(Expressions(expressions))
 }
 
-fn parse_expression(
-    token: Token,
-    tokens: &mut Tokens,
-) -> Result<Expression, Error> {
-    match token {
+fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
+    match tokens.peek()? {
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
             Ok(Expression::Binding(binding_names))
@@ -45,13 +41,21 @@ fn parse_expression(
             let expressions = parse_array(tokens)?;
             Ok(Expression::Array(expressions))
         }
-        Token::Ident(ident) => Ok(Expression::Word(ident)),
-        token => Err(Error::UnexpectedToken(token)),
+        Token::Ident(_) => {
+            let ident = tokens.expect_ident()?;
+            Ok(Expression::Word(ident))
+        }
+        _ => {
+            let token = tokens.next()?;
+            Err(Error::UnexpectedToken(token))
+        }
     }
 }
 
 fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
     let mut binding_names = Vec::new();
+
+    tokens.expect(Token::BindingOperator)?;
 
     loop {
         match tokens.next()? {
@@ -67,10 +71,15 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
 fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
+    tokens.expect(Token::CurlyBracketOpen)?;
+
     loop {
-        let expression = match tokens.next()? {
-            Token::CurlyBracketClose => break,
-            token => parse_expression(token, tokens)?,
+        let expression = match tokens.peek()? {
+            Token::CurlyBracketClose => {
+                tokens.next()?;
+                break;
+            }
+            _ => parse_expression(tokens)?,
         };
 
         expressions.push(expression);
@@ -82,10 +91,15 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
 fn parse_array(tokens: &mut Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
+    tokens.expect(Token::SquareBracketOpen)?;
+
     loop {
-        let expression = match tokens.next()? {
-            Token::SquareBracketClose => break,
-            token => parse_expression(token, tokens)?,
+        let expression = match tokens.peek()? {
+            Token::SquareBracketClose => {
+                tokens.next()?;
+                break;
+            }
+            _ => parse_expression(tokens)?,
         };
 
         expressions.push(expression)

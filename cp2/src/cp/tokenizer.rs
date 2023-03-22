@@ -3,6 +3,10 @@ use std::collections::VecDeque;
 pub struct Tokens(pub VecDeque<Token>);
 
 impl Tokens {
+    pub fn peek(&self) -> Result<&Token, NoMoreTokens> {
+        self.0.front().ok_or(NoMoreTokens)
+    }
+
     pub fn next(&mut self) -> Result<Token, NoMoreTokens> {
         self.0.pop_front().ok_or(NoMoreTokens)
     }
@@ -23,6 +27,16 @@ impl Tokens {
             None => Err(ExpectedToken {
                 expected: token,
                 actual: None,
+            }),
+        }
+    }
+
+    pub fn expect_ident(&mut self) -> Result<String, ExpectedToken> {
+        match self.0.pop_front() {
+            Some(Token::Ident(ident)) => Ok(ident),
+            token => Err(ExpectedToken {
+                expected: Token::Ident(String::new()),
+                actual: token,
             }),
         }
     }
