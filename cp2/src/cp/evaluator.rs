@@ -9,12 +9,13 @@ pub fn evaluate(
     expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
+    let mut functions = BTreeMap::new();
     let mut bindings = BTreeMap::new();
 
     for expression in expressions.0 {
         match expression {
-            Expression::Function { .. } => {
-                // not implemented
+            Expression::Function { name, body } => {
+                functions.insert(name, body);
             }
             Expression::Binding(mut names) => {
                 while let Some(name) = names.pop() {
@@ -59,6 +60,10 @@ pub fn evaluate(
                     }
                 }
                 _ => {
+                    if let Some(body) = functions.get(&word).cloned() {
+                        evaluate(body, data_stack)?;
+                        continue;
+                    }
                     if let Some(value) = bindings.remove(&word) {
                         data_stack.push(value);
                         continue;

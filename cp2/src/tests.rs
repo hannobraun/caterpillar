@@ -19,6 +19,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("block - lazy evaluation", "true { drop } drop");
     tests.insert("array unwrap", "[ true ] unwrap");
     tests.insert("array - eager evaluation", "true false [ drop ] drop");
+    tests.insert("fn", "fn test { true } test");
 
     let mut results = Vec::new();
 
