@@ -41,7 +41,10 @@ fn parse_expression(
             let expressions = parse_block(tokens)?;
             Ok(Expression::Block(expressions))
         }
-        Token::SquareBracketOpen => parse_array(tokens),
+        Token::SquareBracketOpen => {
+            let expressions = parse_array(tokens)?;
+            Ok(Expression::Array(expressions))
+        }
         Token::Ident(ident) => Ok(Expression::Word(ident)),
         token => Err(Error::UnexpectedToken(token)),
     }
@@ -76,7 +79,7 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
     Ok(Expressions(expressions))
 }
 
-fn parse_array(tokens: &mut Tokens) -> Result<Expression, Error> {
+fn parse_array(tokens: &mut Tokens) -> Result<Expressions, Error> {
     let mut expressions = Vec::new();
 
     loop {
@@ -88,7 +91,7 @@ fn parse_array(tokens: &mut Tokens) -> Result<Expression, Error> {
         expressions.push(expression)
     }
 
-    Ok(Expression::Array(Expressions(expressions)))
+    Ok(Expressions(expressions))
 }
 
 #[derive(Debug, thiserror::Error)]
