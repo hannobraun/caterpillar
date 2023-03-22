@@ -13,6 +13,9 @@ pub fn evaluate(
 
     for expression in expressions.0 {
         match expression {
+            Expression::Function { .. } => {
+                // not implemented
+            }
             Expression::Binding(mut names) => {
                 while let Some(name) = names.pop() {
                     let value = data_stack.pop_any()?;

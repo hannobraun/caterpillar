@@ -5,6 +5,11 @@ pub struct Expressions(pub Vec<Expression>);
 
 #[derive(Clone, Debug)]
 pub enum Expression {
+    Function {
+        name: String,
+        body: Expressions,
+    },
+
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
@@ -29,6 +34,10 @@ pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
 
 fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
     match tokens.peek()? {
+        Token::Function => {
+            let (name, body) = parse_function(tokens)?;
+            Ok(Expression::Function { name, body })
+        }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
             Ok(Expression::Binding(binding_names))
@@ -50,6 +59,13 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
             Err(Error::UnexpectedToken(token))
         }
     }
+}
+
+fn parse_function(tokens: &mut Tokens) -> Result<(String, Expressions), Error> {
+    tokens.expect(Token::Function)?;
+    let name = tokens.expect_ident()?;
+    let body = parse_block(tokens)?;
+    Ok((name, body))
 }
 
 fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
