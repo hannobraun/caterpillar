@@ -46,6 +46,17 @@ pub fn evaluate(
                     let block = data_stack.pop_block()?;
                     evaluate(block, data_stack)?;
                 }
+                "if" => {
+                    let else_ = data_stack.pop_block()?;
+                    let then = data_stack.pop_block()?;
+                    let condition = data_stack.pop_bool()?;
+
+                    if condition {
+                        evaluate(then, data_stack)?;
+                    } else {
+                        evaluate(else_, data_stack)?;
+                    }
+                }
                 "true" => data_stack.push(true),
                 "false" => data_stack.push(false),
                 "not" => {
