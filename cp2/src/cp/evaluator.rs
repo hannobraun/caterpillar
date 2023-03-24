@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use super::{
+    call_stack::Functions,
     data_stack::{self, DataStack, Value},
     parser::{Expression, Expressions},
 };
@@ -9,7 +10,7 @@ pub fn evaluate(
     expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    let mut functions = BTreeMap::new();
+    let mut functions = Functions::new();
     let mut bindings = BTreeMap::new();
 
     for expression in expressions.0 {
