@@ -1,5 +1,5 @@
 use super::{
-    call_stack::{Bindings, Functions},
+    call_stack::{Bindings, Functions, StackFrame},
     data_stack::{self, DataStack, Value},
     parser::{Expression, Expressions},
 };
@@ -8,18 +8,20 @@ pub fn evaluate(
     expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    let mut functions = Functions::new();
-    let mut bindings = Bindings::new();
+    let mut stack_frame = StackFrame {
+        bindings: Bindings::new(),
+        functions: Functions::new(),
+    };
 
     for expression in expressions.0 {
         match expression {
             Expression::Function { name, body } => {
-                functions.insert(name, body);
+                stack_frame.functions.insert(name, body);
             }
             Expression::Binding(mut names) => {
                 while let Some(name) = names.pop() {
                     let value = data_stack.pop_any()?;
-                    bindings.insert(name, value);
+                    stack_frame.bindings.insert(name, value);
                 }
             }
             Expression::Array(expressions) => {
@@ -70,11 +72,13 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) = functions.get(&word).cloned() {
+                    if let Some(body) =
+                        stack_frame.functions.get(&word).cloned()
+                    {
                         evaluate(body, data_stack)?;
                         continue;
                     }
-                    if let Some(value) = bindings.remove(&word) {
+                    if let Some(value) = stack_frame.bindings.remove(&word) {
                         data_stack.push(value);
                         continue;
                     }
