@@ -6,7 +6,7 @@ mod tokenizer;
 pub use self::{
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
-    parser::parse,
+    parser::{parse, Expressions},
     tokenizer::tokenize,
 };
 
