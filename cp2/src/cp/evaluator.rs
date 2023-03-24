@@ -1,5 +1,5 @@
 use super::{
-    call_stack::{Bindings, Functions, StackFrame},
+    call_stack::StackFrame,
     data_stack::{self, DataStack, Value},
     parser::{Expression, Expressions},
 };
@@ -8,10 +8,7 @@ pub fn evaluate(
     expressions: Expressions,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    let mut stack_frame = StackFrame {
-        bindings: Bindings::new(),
-        functions: Functions::new(),
-    };
+    let mut stack_frame = StackFrame::new();
 
     for expression in expressions.0 {
         match expression {
