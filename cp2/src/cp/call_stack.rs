@@ -2,6 +2,14 @@ use std::collections::BTreeMap;
 
 use super::{data_stack::Value, Expressions};
 
+pub struct CallStack;
+
+impl CallStack {
+    pub fn new_stack_frame(&mut self) -> StackFrame {
+        StackFrame::new()
+    }
+}
+
 pub struct StackFrame {
     pub bindings: Bindings,
     pub functions: Functions,
