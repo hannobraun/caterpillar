@@ -6,9 +6,10 @@ use super::{
 
 pub fn evaluate(
     expressions: Expressions,
+    call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
-    let mut stack_frame = CallStack.new_stack_frame();
+    let mut stack_frame = call_stack.new_stack_frame();
 
     for expression in expressions.0 {
         match expression {
@@ -23,7 +24,7 @@ pub fn evaluate(
             }
             Expression::Array(expressions) => {
                 data_stack.mark();
-                evaluate(expressions, data_stack)?;
+                evaluate(expressions, call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
                 let array = Value::Array(values);
                 data_stack.push(array);
@@ -42,7 +43,7 @@ pub fn evaluate(
                 "drop" => data_stack.pop_any().map(|_| ())?,
                 "eval" => {
                     let block = data_stack.pop_block()?;
-                    evaluate(block, data_stack)?;
+                    evaluate(block, call_stack, data_stack)?;
                 }
                 "if" => {
                     let else_ = data_stack.pop_block()?;
@@ -50,9 +51,9 @@ pub fn evaluate(
                     let condition = data_stack.pop_bool()?;
 
                     if condition {
-                        evaluate(then, data_stack)?;
+                        evaluate(then, call_stack, data_stack)?;
                     } else {
-                        evaluate(else_, data_stack)?;
+                        evaluate(else_, call_stack, data_stack)?;
                     }
                 }
                 "true" => data_stack.push(true),
@@ -72,7 +73,7 @@ pub fn evaluate(
                     if let Some(body) =
                         stack_frame.functions.get(&word).cloned()
                     {
-                        evaluate(body, data_stack)?;
+                        evaluate(body, call_stack, data_stack)?;
                         continue;
                     }
                     if let Some(value) = stack_frame.bindings.remove(&word) {
