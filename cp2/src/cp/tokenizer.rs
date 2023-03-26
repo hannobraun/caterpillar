@@ -64,6 +64,7 @@ pub enum Token {
     SquareBracketOpen,
     SquareBracketClose,
     Ident(String),
+    Symbol(String),
 }
 
 pub fn tokenize(code: &str) -> Tokens {
@@ -79,7 +80,13 @@ pub fn tokenize(code: &str) -> Tokens {
             ")" => Token::RoundBracketClose,
             "[" => Token::SquareBracketOpen,
             "]" => Token::SquareBracketClose,
-            token => Token::Ident(token.into()),
+            token => {
+                if let Some(("", symbol)) = token.split_once(':') {
+                    return Token::Symbol(symbol.into());
+                }
+
+                Token::Ident(token.into())
+            }
         })
         .collect();
     Tokens(tokens)
