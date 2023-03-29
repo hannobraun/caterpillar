@@ -13,7 +13,9 @@ pub enum Expression {
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
-    Array(SyntaxTree),
+    Array {
+        syntax_tree: SyntaxTree,
+    },
 
     /// A block of code that is lazily evaluated
     Block(SyntaxTree),
@@ -48,7 +50,7 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens)?;
-            Ok(Expression::Array(syntax_tree))
+            Ok(Expression::Array { syntax_tree })
         }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;

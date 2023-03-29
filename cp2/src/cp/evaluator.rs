@@ -22,7 +22,7 @@ pub fn evaluate(
                     stack_frame.bindings.insert(name, value);
                 }
             }
-            Expression::Array(syntax_tree) => {
+            Expression::Array { syntax_tree } => {
                 data_stack.mark();
                 evaluate(syntax_tree, call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
