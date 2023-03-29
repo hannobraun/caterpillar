@@ -27,13 +27,13 @@ pub enum Expression {
 }
 
 pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
-    let mut expressions = Vec::new();
+    let mut syntax_tree = Vec::new();
 
     while let Ok(expression) = parse_expression(&mut tokens) {
-        expressions.push(expression);
+        syntax_tree.push(expression);
     }
 
-    Ok(SyntaxTree(expressions))
+    Ok(SyntaxTree(syntax_tree))
 }
 
 fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
