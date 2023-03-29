@@ -18,7 +18,9 @@ pub enum Expression {
     },
 
     /// A block of code that is lazily evaluated
-    Block(SyntaxTree),
+    Block {
+        syntax_tree: SyntaxTree,
+    },
 
     /// A word refers to a function or variable
     Word(String),
@@ -46,7 +48,7 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
         }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;
-            Ok(Expression::Block(syntax_tree))
+            Ok(Expression::Block { syntax_tree })
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens)?;
