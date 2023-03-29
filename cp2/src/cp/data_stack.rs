@@ -45,7 +45,7 @@ impl DataStack {
 
     pub fn pop_block(&mut self) -> Result<SyntaxTree, Error> {
         match self.pop_any()? {
-            Value::Block(expressions) => Ok(expressions),
+            Value::Block(syntax_tree) => Ok(syntax_tree),
             value => Err(Error::UnexpectedType {
                 expected: "block",
                 actual: value,
