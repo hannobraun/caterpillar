@@ -29,8 +29,8 @@ pub fn evaluate(
                 let array = Value::Array(values);
                 data_stack.push(array);
             }
-            Expression::Block(expressions) => {
-                data_stack.push(Value::Block(expressions));
+            Expression::Block(syntax_tree) => {
+                data_stack.push(Value::Block(syntax_tree));
             }
             Expression::Word(word) => match word.as_str() {
                 "clone" => {
