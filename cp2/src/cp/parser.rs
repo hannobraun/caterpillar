@@ -45,8 +45,8 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
             Ok(Expression::Binding(binding_names))
         }
         Token::CurlyBracketOpen => {
-            let expressions = parse_block(tokens)?;
-            Ok(Expression::Block(expressions))
+            let syntax_tree = parse_block(tokens)?;
+            Ok(Expression::Block(syntax_tree))
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens)?;
