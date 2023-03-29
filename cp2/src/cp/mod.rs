@@ -16,8 +16,8 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
     let mut data_stack = DataStack::new();
 
     let tokens = tokenize(code);
-    let expressions = parse(tokens)?;
-    evaluate(expressions, &mut CallStack, &mut data_stack)?;
+    let syntax_tree = parse(tokens)?;
+    evaluate(syntax_tree, &mut CallStack, &mut data_stack)?;
 
     Ok(data_stack)
 }
