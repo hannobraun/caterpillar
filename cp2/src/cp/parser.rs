@@ -109,7 +109,7 @@ fn parse_block(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
 }
 
 fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
-    let mut expressions = Vec::new();
+    let mut syntax_tree = Vec::new();
 
     tokens.expect(Token::SquareBracketOpen)?;
 
@@ -122,10 +122,10 @@ fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
             _ => parse_expression(tokens)?,
         };
 
-        expressions.push(expression)
+        syntax_tree.push(expression)
     }
 
-    Ok(SyntaxTree(expressions))
+    Ok(SyntaxTree(syntax_tree))
 }
 
 #[derive(Debug, thiserror::Error)]
