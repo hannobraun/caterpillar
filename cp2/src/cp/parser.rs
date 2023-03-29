@@ -1,35 +1,35 @@
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
-pub struct Expressions(pub Vec<Expression>);
+pub struct SyntaxTree(pub Vec<Expression>);
 
 #[derive(Clone, Debug)]
 pub enum Expression {
     Function {
         name: String,
-        body: Expressions,
+        body: SyntaxTree,
     },
 
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
-    Array(Expressions),
+    Array(SyntaxTree),
 
     /// A block of code that is lazily evaluated
-    Block(Expressions),
+    Block(SyntaxTree),
 
     /// A word refers to a function or variable
     Word(String),
 }
 
-pub fn parse(mut tokens: Tokens) -> Result<Expressions, Error> {
+pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
     let mut expressions = Vec::new();
 
     while let Ok(expression) = parse_expression(&mut tokens) {
         expressions.push(expression);
     }
 
-    Ok(Expressions(expressions))
+    Ok(SyntaxTree(expressions))
 }
 
 fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
@@ -61,7 +61,7 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
     }
 }
 
-fn parse_function(tokens: &mut Tokens) -> Result<(String, Expressions), Error> {
+fn parse_function(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
     tokens.expect(Token::Function)?;
     let name = tokens.expect_ident()?;
     let body = parse_block(tokens)?;
@@ -84,7 +84,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
     Ok(binding_names)
 }
 
-fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
+fn parse_block(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     let mut expressions = Vec::new();
 
     tokens.expect(Token::CurlyBracketOpen)?;
@@ -101,10 +101,10 @@ fn parse_block(tokens: &mut Tokens) -> Result<Expressions, Error> {
         expressions.push(expression);
     }
 
-    Ok(Expressions(expressions))
+    Ok(SyntaxTree(expressions))
 }
 
-fn parse_array(tokens: &mut Tokens) -> Result<Expressions, Error> {
+fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     let mut expressions = Vec::new();
 
     tokens.expect(Token::SquareBracketOpen)?;
@@ -121,7 +121,7 @@ fn parse_array(tokens: &mut Tokens) -> Result<Expressions, Error> {
         expressions.push(expression)
     }
 
-    Ok(Expressions(expressions))
+    Ok(SyntaxTree(expressions))
 }
 
 #[derive(Debug, thiserror::Error)]

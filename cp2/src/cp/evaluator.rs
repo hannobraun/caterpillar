@@ -1,11 +1,11 @@
 use super::{
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
-    parser::{Expression, Expressions},
+    parser::{Expression, SyntaxTree},
 };
 
 pub fn evaluate(
-    expressions: Expressions,
+    expressions: SyntaxTree,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {

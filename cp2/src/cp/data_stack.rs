@@ -1,4 +1,4 @@
-use super::parser::Expressions;
+use super::parser::SyntaxTree;
 
 pub struct DataStack {
     values: Vec<Value>,
@@ -43,7 +43,7 @@ impl DataStack {
         }
     }
 
-    pub fn pop_block(&mut self) -> Result<Expressions, Error> {
+    pub fn pop_block(&mut self) -> Result<SyntaxTree, Error> {
         match self.pop_any()? {
             Value::Block(expressions) => Ok(expressions),
             value => Err(Error::UnexpectedType {
@@ -83,7 +83,7 @@ pub enum Error {
 #[derive(Clone, Debug)]
 pub enum Value {
     Array(Vec<Value>),
-    Block(Expressions),
+    Block(SyntaxTree),
     Bool(bool),
 }
 
