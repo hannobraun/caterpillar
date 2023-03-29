@@ -5,13 +5,13 @@ use super::{
 };
 
 pub fn evaluate(
-    expressions: SyntaxTree,
+    syntax_tree: SyntaxTree,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), Error> {
     let mut stack_frame = call_stack.new_stack_frame();
 
-    for expression in expressions.0 {
+    for expression in syntax_tree.0 {
         match expression {
             Expression::Function { name, body } => {
                 stack_frame.functions.insert(name, body);
