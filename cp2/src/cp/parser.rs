@@ -47,8 +47,8 @@ fn parse_expression(tokens: &mut Tokens) -> Result<Expression, Error> {
             Ok(Expression::Block(expressions))
         }
         Token::SquareBracketOpen => {
-            let expressions = parse_array(tokens)?;
-            Ok(Expression::Array(expressions))
+            let syntax_tree = parse_array(tokens)?;
+            Ok(Expression::Array(syntax_tree))
         }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;
