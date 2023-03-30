@@ -11,7 +11,7 @@ pub fn evaluate(
 ) -> Result<(), Error> {
     let mut stack_frame = call_stack.new_stack_frame();
 
-    for expression in syntax_tree.0 {
+    for expression in syntax_tree {
         match expression {
             Expression::Function { name, body } => {
                 stack_frame.functions.insert(name, body);

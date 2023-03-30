@@ -1,7 +1,18 @@
+use std::vec;
+
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(pub Vec<Expression>);
+
+impl IntoIterator for SyntaxTree {
+    type Item = Expression;
+    type IntoIter = vec::IntoIter<Expression>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
 
 #[derive(Clone, Debug)]
 pub enum Expression {
