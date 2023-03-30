@@ -8,7 +8,7 @@ pub fn evaluate(
     syntax_tree: SyntaxTree,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
-) -> Result<(), Error> {
+) -> Result<(), ErrorKind> {
     let mut stack_frame = call_stack.new_stack_frame();
 
     for expression in syntax_tree {
@@ -81,7 +81,7 @@ pub fn evaluate(
                         continue;
                     }
 
-                    return Err(Error::UnknownWord(word));
+                    return Err(ErrorKind::UnknownWord(word));
                 }
             },
         }
@@ -91,7 +91,7 @@ pub fn evaluate(
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {
+pub enum ErrorKind {
     #[error(transparent)]
     DataStack(#[from] data_stack::Error),
 

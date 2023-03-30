@@ -28,5 +28,5 @@ pub enum Error {
     Parser(#[from] parser::Error),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] evaluator::Error),
+    Evaluator(#[from] evaluator::ErrorKind),
 }
