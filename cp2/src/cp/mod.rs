@@ -5,7 +5,7 @@ mod parser;
 mod tokenizer;
 
 pub use self::{
-    call_stack::CallStack,
+    call_stack::{CallStack, Functions},
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
     parser::{parse, SyntaxTree},
