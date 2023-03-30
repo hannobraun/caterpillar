@@ -22,33 +22,35 @@ fn parse_expression(
     tokens: &mut Tokens,
     functions: &mut Functions,
 ) -> Result<Expression, Error> {
-    match tokens.peek()? {
+    let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
             functions.insert(name.clone(), body.clone());
-            Ok(Expression::Function { name, body })
+            Expression::Function { name, body }
         }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
-            Ok(Expression::Binding(binding_names))
+            Expression::Binding(binding_names)
         }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens, functions)?;
-            Ok(Expression::Block { syntax_tree })
+            Expression::Block { syntax_tree }
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens, functions)?;
-            Ok(Expression::Array { syntax_tree })
+            Expression::Array { syntax_tree }
         }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;
-            Ok(Expression::Word(ident))
+            Expression::Word(ident)
         }
         _ => {
             let token = tokens.next()?;
-            Err(Error::UnexpectedToken(token))
+            return Err(Error::UnexpectedToken(token));
         }
-    }
+    };
+
+    Ok(expression)
 }
 
 fn parse_function(
