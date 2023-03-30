@@ -15,8 +15,8 @@ pub fn evaluate(
 
     for expression in syntax_tree {
         match expression {
-            Expression::Function { name, body } => {
-                stack_frame.functions.insert(name.clone(), body.clone());
+            Expression::Function { .. } => {
+                // no longer required
             }
             Expression::Binding(names) => {
                 for name in names.iter().rev() {
