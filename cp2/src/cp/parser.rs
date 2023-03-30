@@ -96,9 +96,7 @@ fn parse_block(
             _ => parse_expression(tokens, functions)?,
         };
 
-        if let Some(expression) = expression {
-            syntax_tree.push(expression);
-        }
+        syntax_tree.extend(expression);
     }
 
     Ok(SyntaxTree(syntax_tree))
@@ -121,9 +119,7 @@ fn parse_array(
             _ => parse_expression(tokens, functions)?,
         };
 
-        if let Some(expression) = expression {
-            syntax_tree.push(expression)
-        }
+        syntax_tree.extend(expression)
     }
 
     Ok(SyntaxTree(syntax_tree))
