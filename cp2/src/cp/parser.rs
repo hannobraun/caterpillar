@@ -44,7 +44,9 @@ pub fn parse(
         syntax_tree.extend(expression);
     }
 
-    Ok(SyntaxTree(syntax_tree))
+    let syntax_tree = SyntaxTree(syntax_tree);
+
+    Ok(syntax_tree)
 }
 
 fn parse_expression(
