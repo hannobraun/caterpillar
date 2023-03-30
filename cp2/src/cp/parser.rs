@@ -1,6 +1,9 @@
 use std::{collections::BTreeMap, slice};
 
-use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
+use super::{
+    tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
+    ROOT_FN,
+};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<Expression>);
@@ -45,6 +48,8 @@ pub fn parse(
     }
 
     let syntax_tree = SyntaxTree(syntax_tree);
+
+    functions.insert(ROOT_FN.into(), syntax_tree.clone());
 
     Ok(syntax_tree)
 }

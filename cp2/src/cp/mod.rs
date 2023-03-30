@@ -12,6 +12,11 @@ pub use self::{
     tokenizer::tokenize,
 };
 
+// It doesn't really matter what the name of the root function is, as long as
+// it's no parsable as an identifier. If it were, the user could define a
+// function to shadow this one.
+const ROOT_FN: &str = ":root";
+
 pub fn execute(code: &str) -> Result<DataStack, Error> {
     let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
