@@ -3,7 +3,7 @@ use std::vec;
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
-pub struct SyntaxTree(pub Vec<Expression>);
+pub struct SyntaxTree(Vec<Expression>);
 
 impl IntoIterator for SyntaxTree {
     type Item = Expression;
