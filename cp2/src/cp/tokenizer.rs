@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+#[derive(Debug)]
 pub struct Tokens(pub VecDeque<Token>);
 
 impl Tokens {
