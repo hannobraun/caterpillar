@@ -2,41 +2,6 @@ use std::slice;
 
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
-#[derive(Clone, Debug)]
-pub struct SyntaxTree(Vec<Expression>);
-
-impl<'r> IntoIterator for &'r SyntaxTree {
-    type Item = &'r Expression;
-    type IntoIter = slice::Iter<'r, Expression>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.0.iter()
-    }
-}
-
-#[derive(Clone, Debug)]
-pub enum Expression {
-    Function {
-        name: String,
-        body: SyntaxTree,
-    },
-
-    /// Binds values from the stack to provided names
-    Binding(Vec<String>),
-
-    Array {
-        syntax_tree: SyntaxTree,
-    },
-
-    /// A block of code that is lazily evaluated
-    Block {
-        syntax_tree: SyntaxTree,
-    },
-
-    /// A word refers to a function or variable
-    Word(String),
-}
-
 pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
@@ -137,6 +102,41 @@ fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     }
 
     Ok(SyntaxTree(syntax_tree))
+}
+
+#[derive(Clone, Debug)]
+pub struct SyntaxTree(Vec<Expression>);
+
+impl<'r> IntoIterator for &'r SyntaxTree {
+    type Item = &'r Expression;
+    type IntoIter = slice::Iter<'r, Expression>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter()
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum Expression {
+    Function {
+        name: String,
+        body: SyntaxTree,
+    },
+
+    /// Binds values from the stack to provided names
+    Binding(Vec<String>),
+
+    Array {
+        syntax_tree: SyntaxTree,
+    },
+
+    /// A block of code that is lazily evaluated
+    Block {
+        syntax_tree: SyntaxTree,
+    },
+
+    /// A word refers to a function or variable
+    Word(String),
 }
 
 #[derive(Debug, thiserror::Error)]
