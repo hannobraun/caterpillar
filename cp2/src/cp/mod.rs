@@ -13,10 +13,11 @@ pub use self::{
 };
 
 pub fn execute(code: &str) -> Result<DataStack, Error> {
+    let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
     let tokens = tokenize(code);
-    let syntax_tree = parse(tokens)?;
+    let syntax_tree = parse(tokens, &mut functions)?;
     evaluate(&syntax_tree, &mut CallStack, &mut data_stack)?;
 
     Ok(data_stack)
