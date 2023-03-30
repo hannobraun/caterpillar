@@ -25,8 +25,8 @@ fn parse_expression(
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
-            functions.insert(name.clone(), body.clone());
-            Expression::Function { name, body }
+            functions.insert(name, body);
+            return Ok(None);
         }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
