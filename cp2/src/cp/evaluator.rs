@@ -2,10 +2,12 @@ use super::{
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
     parser::{Expression, SyntaxTree},
+    Functions,
 };
 
 pub fn evaluate(
     syntax_tree: &SyntaxTree,
+    functions: &Functions,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), ErrorKind> {
@@ -24,7 +26,7 @@ pub fn evaluate(
             }
             Expression::Array { syntax_tree } => {
                 data_stack.mark();
-                evaluate(syntax_tree, call_stack, data_stack)?;
+                evaluate(syntax_tree, functions, call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
                 let array = Value::Array(values);
                 data_stack.push(array);
@@ -45,7 +47,7 @@ pub fn evaluate(
                 "drop" => data_stack.pop_any().map(|_| ())?,
                 "eval" => {
                     let block = data_stack.pop_block()?;
-                    evaluate(&block, call_stack, data_stack)?;
+                    evaluate(&block, functions, call_stack, data_stack)?;
                 }
                 "if" => {
                     let else_ = data_stack.pop_block()?;
@@ -53,9 +55,9 @@ pub fn evaluate(
                     let condition = data_stack.pop_bool()?;
 
                     if condition {
-                        evaluate(&then, call_stack, data_stack)?;
+                        evaluate(&then, functions, call_stack, data_stack)?;
                     } else {
-                        evaluate(&else_, call_stack, data_stack)?;
+                        evaluate(&else_, functions, call_stack, data_stack)?;
                     }
                 }
                 "true" => data_stack.push(true),
@@ -72,8 +74,8 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) = stack_frame.functions.get(word) {
-                        evaluate(body, call_stack, data_stack)?;
+                    if let Some(body) = functions.get(word) {
+                        evaluate(body, functions, call_stack, data_stack)?;
                         continue;
                     }
                     if let Some(value) = stack_frame.bindings.remove(word) {
