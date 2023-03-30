@@ -12,14 +12,12 @@ impl CallStack {
 
 pub struct StackFrame {
     pub bindings: Bindings,
-    pub functions: Functions,
 }
 
 impl StackFrame {
     pub fn new() -> Self {
         Self {
             bindings: Bindings::new(),
-            functions: Functions::new(),
         }
     }
 }
