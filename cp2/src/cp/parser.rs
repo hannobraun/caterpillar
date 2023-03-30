@@ -19,11 +19,6 @@ impl<'r> IntoIterator for &'r SyntaxTree {
 
 #[derive(Clone, Debug)]
 pub enum Expression {
-    Function {
-        name: String,
-        body: SyntaxTree,
-    },
-
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 

@@ -15,9 +15,6 @@ pub fn evaluate(
 
     for expression in syntax_tree {
         match expression {
-            Expression::Function { .. } => {
-                // no longer required
-            }
             Expression::Binding(names) => {
                 for name in names.iter().rev() {
                     let value = data_stack.pop_any()?;
