@@ -5,10 +5,10 @@ mod parser;
 mod tokenizer;
 
 pub use self::{
-    call_stack::{CallStack, Functions},
+    call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
-    parser::{parse, SyntaxTree},
+    parser::{parse, Functions, SyntaxTree},
     tokenizer::tokenize,
 };
 

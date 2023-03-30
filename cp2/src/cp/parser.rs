@@ -1,9 +1,6 @@
-use std::slice;
+use std::{collections::BTreeMap, slice};
 
-use super::{
-    tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
-    Functions,
-};
+use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<Expression>);
@@ -34,6 +31,8 @@ pub enum Expression {
     /// A word refers to a function or variable
     Word(String),
 }
+
+pub type Functions = BTreeMap<String, SyntaxTree>;
 
 pub fn parse(
     mut tokens: Tokens,

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{data_stack::Value, SyntaxTree};
+use super::data_stack::Value;
 
 pub struct CallStack;
 
@@ -23,4 +23,3 @@ impl StackFrame {
 }
 
 pub type Bindings = BTreeMap<String, Value>;
-pub type Functions = BTreeMap<String, SyntaxTree>;
