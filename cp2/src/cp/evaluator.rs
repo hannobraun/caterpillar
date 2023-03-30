@@ -16,10 +16,10 @@ pub fn evaluate(
             Expression::Function { name, body } => {
                 stack_frame.functions.insert(name, body);
             }
-            Expression::Binding(mut names) => {
-                while let Some(name) = names.pop() {
+            Expression::Binding(names) => {
+                for name in names.iter().rev() {
                     let value = data_stack.pop_any()?;
-                    stack_frame.bindings.insert(name, value);
+                    stack_frame.bindings.insert(name.clone(), value);
                 }
             }
             Expression::Array { syntax_tree } => {
