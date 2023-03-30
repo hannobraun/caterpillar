@@ -11,7 +11,7 @@ pub fn parse(
 ) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
-    while let Ok(expression) = parse_expression(&mut tokens, functions) {
+    while let Ok(Some(expression)) = parse_expression(&mut tokens, functions) {
         syntax_tree.push(expression);
     }
 
@@ -21,7 +21,7 @@ pub fn parse(
 fn parse_expression(
     tokens: &mut Tokens,
     functions: &mut Functions,
-) -> Result<Expression, Error> {
+) -> Result<Option<Expression>, Error> {
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
@@ -50,7 +50,7 @@ fn parse_expression(
         }
     };
 
-    Ok(expression)
+    Ok(Some(expression))
 }
 
 fn parse_function(
@@ -96,7 +96,9 @@ fn parse_block(
             _ => parse_expression(tokens, functions)?,
         };
 
-        syntax_tree.push(expression);
+        if let Some(expression) = expression {
+            syntax_tree.push(expression);
+        }
     }
 
     Ok(SyntaxTree(syntax_tree))
@@ -119,7 +121,9 @@ fn parse_array(
             _ => parse_expression(tokens, functions)?,
         };
 
-        syntax_tree.push(expression)
+        if let Some(expression) = expression {
+            syntax_tree.push(expression)
+        }
     }
 
     Ok(SyntaxTree(syntax_tree))
