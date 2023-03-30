@@ -11,10 +11,10 @@ pub fn evaluate(
 ) -> Result<(), ErrorKind> {
     let mut stack_frame = call_stack.new_stack_frame();
 
-    for expression in syntax_tree {
+    for expression in &syntax_tree {
         match expression {
             Expression::Function { name, body } => {
-                stack_frame.functions.insert(name, body);
+                stack_frame.functions.insert(name.clone(), body.clone());
             }
             Expression::Binding(names) => {
                 for name in names.iter().rev() {
@@ -24,13 +24,15 @@ pub fn evaluate(
             }
             Expression::Array { syntax_tree } => {
                 data_stack.mark();
-                evaluate(syntax_tree, call_stack, data_stack)?;
+                evaluate(syntax_tree.clone(), call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
                 let array = Value::Array(values);
                 data_stack.push(array);
             }
             Expression::Block { syntax_tree } => {
-                data_stack.push(Value::Block { syntax_tree });
+                data_stack.push(Value::Block {
+                    syntax_tree: syntax_tree.clone(),
+                });
             }
             Expression::Word(word) => match word.as_str() {
                 "clone" => {
@@ -70,18 +72,17 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) =
-                        stack_frame.functions.get(&word).cloned()
+                    if let Some(body) = stack_frame.functions.get(word).cloned()
                     {
                         evaluate(body, call_stack, data_stack)?;
                         continue;
                     }
-                    if let Some(value) = stack_frame.bindings.remove(&word) {
+                    if let Some(value) = stack_frame.bindings.remove(word) {
                         data_stack.push(value);
                         continue;
                     }
 
-                    return Err(ErrorKind::UnknownWord(word));
+                    return Err(ErrorKind::UnknownWord(word.clone()));
                 }
             },
         }

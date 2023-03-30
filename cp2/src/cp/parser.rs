@@ -1,16 +1,16 @@
-use std::vec;
+use std::slice;
 
 use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<Expression>);
 
-impl IntoIterator for SyntaxTree {
-    type Item = Expression;
-    type IntoIter = vec::IntoIter<Expression>;
+impl<'r> IntoIterator for &'r SyntaxTree {
+    type Item = &'r Expression;
+    type IntoIter = slice::Iter<'r, Expression>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.0.into_iter()
+        self.0.iter()
     }
 }
 
