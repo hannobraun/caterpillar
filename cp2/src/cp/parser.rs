@@ -11,8 +11,8 @@ pub fn parse(
 ) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
-    while let Ok(Some(expression)) = parse_expression(&mut tokens, functions) {
-        syntax_tree.push(expression);
+    while let Ok(expression) = parse_expression(&mut tokens, functions) {
+        syntax_tree.extend(expression);
     }
 
     Ok(SyntaxTree(syntax_tree))
