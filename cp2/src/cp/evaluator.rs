@@ -5,13 +5,13 @@ use super::{
 };
 
 pub fn evaluate(
-    syntax_tree: SyntaxTree,
+    syntax_tree: &SyntaxTree,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), ErrorKind> {
     let mut stack_frame = call_stack.new_stack_frame();
 
-    for expression in &syntax_tree {
+    for expression in syntax_tree {
         match expression {
             Expression::Function { name, body } => {
                 stack_frame.functions.insert(name.clone(), body.clone());
@@ -24,7 +24,7 @@ pub fn evaluate(
             }
             Expression::Array { syntax_tree } => {
                 data_stack.mark();
-                evaluate(syntax_tree.clone(), call_stack, data_stack)?;
+                evaluate(syntax_tree, call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
                 let array = Value::Array(values);
                 data_stack.push(array);
@@ -45,7 +45,7 @@ pub fn evaluate(
                 "drop" => data_stack.pop_any().map(|_| ())?,
                 "eval" => {
                     let block = data_stack.pop_block()?;
-                    evaluate(block, call_stack, data_stack)?;
+                    evaluate(&block, call_stack, data_stack)?;
                 }
                 "if" => {
                     let else_ = data_stack.pop_block()?;
@@ -53,9 +53,9 @@ pub fn evaluate(
                     let condition = data_stack.pop_bool()?;
 
                     if condition {
-                        evaluate(then, call_stack, data_stack)?;
+                        evaluate(&then, call_stack, data_stack)?;
                     } else {
-                        evaluate(else_, call_stack, data_stack)?;
+                        evaluate(&else_, call_stack, data_stack)?;
                     }
                 }
                 "true" => data_stack.push(true),
@@ -72,8 +72,7 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) = stack_frame.functions.get(word).cloned()
-                    {
+                    if let Some(body) = stack_frame.functions.get(word) {
                         evaluate(body, call_stack, data_stack)?;
                         continue;
                     }
