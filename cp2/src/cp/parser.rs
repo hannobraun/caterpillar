@@ -1,9 +1,6 @@
 use std::vec;
 
-use super::{
-    tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
-    Functions,
-};
+use super::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<SyntaxElement>);
@@ -40,26 +37,20 @@ pub enum SyntaxElement {
     Word(String),
 }
 
-pub fn parse(
-    mut tokens: Tokens,
-    functions: &mut Functions,
-) -> Result<SyntaxTree, Error> {
+pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
-    while let Ok(expression) = parse_expression(&mut tokens, functions) {
+    while let Ok(expression) = parse_expression(&mut tokens) {
         syntax_tree.push(expression);
     }
 
     Ok(SyntaxTree(syntax_tree))
 }
 
-fn parse_expression(
-    tokens: &mut Tokens,
-    functions: &mut Functions,
-) -> Result<SyntaxElement, Error> {
+fn parse_expression(tokens: &mut Tokens) -> Result<SyntaxElement, Error> {
     let expression = match tokens.peek()? {
         Token::Function => {
-            let (name, body) = parse_function(tokens, functions)?;
+            let (name, body) = parse_function(tokens)?;
             SyntaxElement::Function { name, body }
         }
         Token::BindingOperator => {
@@ -67,11 +58,11 @@ fn parse_expression(
             SyntaxElement::Binding(binding_names)
         }
         Token::CurlyBracketOpen => {
-            let syntax_tree = parse_block(tokens, functions)?;
+            let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block { syntax_tree }
         }
         Token::SquareBracketOpen => {
-            let syntax_tree = parse_array(tokens, functions)?;
+            let syntax_tree = parse_array(tokens)?;
             SyntaxElement::Array { syntax_tree }
         }
         Token::Ident(_) => {
@@ -87,13 +78,10 @@ fn parse_expression(
     Ok(expression)
 }
 
-fn parse_function(
-    tokens: &mut Tokens,
-    functions: &mut Functions,
-) -> Result<(String, SyntaxTree), Error> {
+fn parse_function(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
     tokens.expect(Token::Function)?;
     let name = tokens.expect_ident()?;
-    let body = parse_block(tokens, functions)?;
+    let body = parse_block(tokens)?;
     Ok((name, body))
 }
 
@@ -113,10 +101,7 @@ fn parse_binding(tokens: &mut Tokens) -> Result<Vec<String>, Error> {
     Ok(binding_names)
 }
 
-fn parse_block(
-    tokens: &mut Tokens,
-    functions: &mut Functions,
-) -> Result<SyntaxTree, Error> {
+fn parse_block(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
     tokens.expect(Token::CurlyBracketOpen)?;
@@ -127,7 +112,7 @@ fn parse_block(
                 tokens.next()?;
                 break;
             }
-            _ => parse_expression(tokens, functions)?,
+            _ => parse_expression(tokens)?,
         };
 
         syntax_tree.push(expression);
@@ -136,10 +121,7 @@ fn parse_block(
     Ok(SyntaxTree(syntax_tree))
 }
 
-fn parse_array(
-    tokens: &mut Tokens,
-    functions: &mut Functions,
-) -> Result<SyntaxTree, Error> {
+fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
     tokens.expect(Token::SquareBracketOpen)?;
@@ -150,7 +132,7 @@ fn parse_array(
                 tokens.next()?;
                 break;
             }
-            _ => parse_expression(tokens, functions)?,
+            _ => parse_expression(tokens)?,
         };
 
         syntax_tree.push(expression)
