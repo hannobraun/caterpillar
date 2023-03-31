@@ -20,6 +20,11 @@ impl IntoIterator for SyntaxTree {
 
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
+    Function {
+        name: String,
+        body: SyntaxTree,
+    },
+
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
@@ -61,9 +66,13 @@ fn parse_expression(
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
+            let element = SyntaxElement::Function {
+                name: name.clone(),
+                body: body.clone(),
+            };
             let body = analyze(body);
             functions.insert(name, body);
-            return Ok(None);
+            element
         }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;

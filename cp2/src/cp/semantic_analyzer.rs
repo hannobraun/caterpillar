@@ -35,6 +35,10 @@ pub fn analyze(syntax_tree: SyntaxTree) -> ExpressionGraph {
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
+            SyntaxElement::Function { .. } => {
+                // not handled yet
+                continue;
+            }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
             SyntaxElement::Array { syntax_tree } => {
                 let expressions = analyze(syntax_tree);
