@@ -48,7 +48,7 @@ pub fn parse(
     let mut syntax_tree = Vec::new();
 
     while let Ok(expression) = parse_expression(&mut tokens, functions) {
-        syntax_tree.extend(expression);
+        syntax_tree.push(expression);
     }
 
     let syntax_tree = SyntaxTree(syntax_tree);
@@ -62,7 +62,7 @@ pub fn parse(
 fn parse_expression(
     tokens: &mut Tokens,
     functions: &mut Functions,
-) -> Result<Option<SyntaxElement>, Error> {
+) -> Result<SyntaxElement, Error> {
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
@@ -96,7 +96,7 @@ fn parse_expression(
         }
     };
 
-    Ok(Some(expression))
+    Ok(expression)
 }
 
 fn parse_function(
@@ -142,7 +142,7 @@ fn parse_block(
             _ => parse_expression(tokens, functions)?,
         };
 
-        syntax_tree.extend(expression);
+        syntax_tree.push(expression);
     }
 
     Ok(SyntaxTree(syntax_tree))
@@ -165,7 +165,7 @@ fn parse_array(
             _ => parse_expression(tokens, functions)?,
         };
 
-        syntax_tree.extend(expression)
+        syntax_tree.push(expression)
     }
 
     Ok(SyntaxTree(syntax_tree))
