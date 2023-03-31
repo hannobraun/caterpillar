@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, vec};
 
-use super::{parser::SyntaxElement, SyntaxTree, ROOT_FN};
+use super::{parser::SyntaxElement, SyntaxTree};
 
 #[derive(Clone, Debug)]
 pub struct ExpressionGraph(Vec<Expression>);
@@ -71,10 +71,6 @@ pub fn analyze(
 
         expressions.0.push(expression);
     }
-
-    functions
-        .registry
-        .insert(ROOT_FN.into(), expressions.clone());
 
     expressions
 }
