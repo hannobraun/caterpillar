@@ -25,8 +25,8 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens, &mut functions)?;
-    let syntax_tree = analyze(syntax_tree);
-    evaluate(syntax_tree, &functions, &mut CallStack, &mut data_stack)?;
+    let expressions = analyze(syntax_tree);
+    evaluate(expressions, &functions, &mut CallStack, &mut data_stack)?;
 
     Ok(data_stack)
 }
