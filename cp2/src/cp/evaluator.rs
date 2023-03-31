@@ -1,7 +1,7 @@
 use super::{
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
-    parser::{Expression, SyntaxTree},
+    parser::{SyntaxElement, SyntaxTree},
     Functions,
 };
 
@@ -15,25 +15,25 @@ pub fn evaluate(
 
     for expression in syntax_tree {
         match expression {
-            Expression::Binding(names) => {
+            SyntaxElement::Binding(names) => {
                 for name in names.iter().rev() {
                     let value = data_stack.pop_any()?;
                     stack_frame.bindings.insert(name.clone(), value);
                 }
             }
-            Expression::Array { syntax_tree } => {
+            SyntaxElement::Array { syntax_tree } => {
                 data_stack.mark();
                 evaluate(syntax_tree, functions, call_stack, data_stack)?;
                 let values = data_stack.drain_values_from_mark().collect();
                 let array = Value::Array(values);
                 data_stack.push(array);
             }
-            Expression::Block { syntax_tree } => {
+            SyntaxElement::Block { syntax_tree } => {
                 data_stack.push(Value::Block {
                     syntax_tree: syntax_tree.clone(),
                 });
             }
-            Expression::Word(word) => match word.as_str() {
+            SyntaxElement::Word(word) => match word.as_str() {
                 "clone" => {
                     let original = data_stack.pop_any()?;
                     let clone = original.clone();

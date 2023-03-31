@@ -6,11 +6,11 @@ use super::{
 };
 
 #[derive(Clone, Debug)]
-pub struct SyntaxTree(Vec<Expression>);
+pub struct SyntaxTree(Vec<SyntaxElement>);
 
 impl<'r> IntoIterator for &'r SyntaxTree {
-    type Item = &'r Expression;
-    type IntoIter = slice::Iter<'r, Expression>;
+    type Item = &'r SyntaxElement;
+    type IntoIter = slice::Iter<'r, SyntaxElement>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.0.iter()
@@ -18,7 +18,7 @@ impl<'r> IntoIterator for &'r SyntaxTree {
 }
 
 #[derive(Clone, Debug)]
-pub enum Expression {
+pub enum SyntaxElement {
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
@@ -57,7 +57,7 @@ pub fn parse(
 fn parse_expression(
     tokens: &mut Tokens,
     functions: &mut Functions,
-) -> Result<Option<Expression>, Error> {
+) -> Result<Option<SyntaxElement>, Error> {
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
@@ -66,19 +66,19 @@ fn parse_expression(
         }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
-            Expression::Binding(binding_names)
+            SyntaxElement::Binding(binding_names)
         }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens, functions)?;
-            Expression::Block { syntax_tree }
+            SyntaxElement::Block { syntax_tree }
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens, functions)?;
-            Expression::Array { syntax_tree }
+            SyntaxElement::Array { syntax_tree }
         }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;
-            Expression::Word(ident)
+            SyntaxElement::Word(ident)
         }
         _ => {
             let token = tokens.next()?;
