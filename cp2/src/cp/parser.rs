@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, slice};
+use std::{collections::BTreeMap, vec};
 
 use super::{
     tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
@@ -8,12 +8,12 @@ use super::{
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<SyntaxElement>);
 
-impl<'r> IntoIterator for &'r SyntaxTree {
-    type Item = &'r SyntaxElement;
-    type IntoIter = slice::Iter<'r, SyntaxElement>;
+impl IntoIterator for SyntaxTree {
+    type Item = SyntaxElement;
+    type IntoIter = vec::IntoIter<SyntaxElement>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.0.iter()
+        self.0.into_iter()
     }
 }
 

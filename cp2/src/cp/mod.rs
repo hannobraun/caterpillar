@@ -23,7 +23,7 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens, &mut functions)?;
-    evaluate(&syntax_tree, &functions, &mut CallStack, &mut data_stack)?;
+    evaluate(syntax_tree, &functions, &mut CallStack, &mut data_stack)?;
 
     Ok(data_stack)
 }
