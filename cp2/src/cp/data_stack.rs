@@ -45,7 +45,7 @@ impl DataStack {
 
     pub fn pop_block(&mut self) -> Result<ExpressionGraph, Error> {
         match self.pop_any()? {
-            Value::Block { syntax_tree } => Ok(syntax_tree),
+            Value::Block { expressions } => Ok(expressions),
             value => Err(Error::UnexpectedType {
                 expected: "block",
                 actual: value,
@@ -83,7 +83,7 @@ pub enum Error {
 #[derive(Clone, Debug)]
 pub enum Value {
     Array(Vec<Value>),
-    Block { syntax_tree: ExpressionGraph },
+    Block { expressions: ExpressionGraph },
     Bool(bool),
 }
 

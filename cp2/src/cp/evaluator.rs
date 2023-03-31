@@ -30,7 +30,7 @@ pub fn evaluate(
             }
             Expression::Block { syntax_tree } => {
                 data_stack.push(Value::Block {
-                    syntax_tree: syntax_tree.clone(),
+                    expressions: syntax_tree.clone(),
                 });
             }
             Expression::Word(word) => match word.as_str() {
