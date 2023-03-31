@@ -1,6 +1,8 @@
 use std::{collections::BTreeMap, vec};
 
 use super::{
+    analyze,
+    semantic_analyzer::ExpressionGraph,
     tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
     ROOT_FN,
 };
@@ -35,7 +37,7 @@ pub enum SyntaxElement {
     Word(String),
 }
 
-pub type Functions = BTreeMap<String, SyntaxTree>;
+pub type Functions = BTreeMap<String, ExpressionGraph>;
 
 pub fn parse(
     mut tokens: Tokens,
@@ -48,8 +50,9 @@ pub fn parse(
     }
 
     let syntax_tree = SyntaxTree(syntax_tree);
+    let expression_graph = analyze(syntax_tree.clone());
 
-    functions.insert(ROOT_FN.into(), syntax_tree.clone());
+    functions.insert(ROOT_FN.into(), expression_graph);
 
     Ok(syntax_tree)
 }
@@ -92,10 +95,11 @@ fn parse_expression(
 fn parse_function(
     tokens: &mut Tokens,
     functions: &mut Functions,
-) -> Result<(String, SyntaxTree), Error> {
+) -> Result<(String, ExpressionGraph), Error> {
     tokens.expect(Token::Function)?;
     let name = tokens.expect_ident()?;
     let body = parse_block(tokens, functions)?;
+    let body = analyze(body);
     Ok((name, body))
 }
 

@@ -1,4 +1,4 @@
-use super::parser::SyntaxTree;
+use super::semantic_analyzer::ExpressionGraph;
 
 pub struct DataStack {
     values: Vec<Value>,
@@ -43,7 +43,7 @@ impl DataStack {
         }
     }
 
-    pub fn pop_block(&mut self) -> Result<SyntaxTree, Error> {
+    pub fn pop_block(&mut self) -> Result<ExpressionGraph, Error> {
         match self.pop_any()? {
             Value::Block { syntax_tree } => Ok(syntax_tree),
             value => Err(Error::UnexpectedType {
@@ -83,7 +83,7 @@ pub enum Error {
 #[derive(Clone, Debug)]
 pub enum Value {
     Array(Vec<Value>),
-    Block { syntax_tree: SyntaxTree },
+    Block { syntax_tree: ExpressionGraph },
     Bool(bool),
 }
 

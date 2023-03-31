@@ -2,6 +2,7 @@ mod call_stack;
 mod data_stack;
 mod evaluator;
 mod parser;
+mod semantic_analyzer;
 mod tokenizer;
 
 pub use self::{
@@ -9,6 +10,7 @@ pub use self::{
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
     parser::{parse, Functions, SyntaxTree},
+    semantic_analyzer::analyze,
     tokenizer::tokenize,
 };
 
@@ -23,6 +25,7 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens, &mut functions)?;
+    let syntax_tree = analyze(syntax_tree);
     evaluate(syntax_tree, &functions, &mut CallStack, &mut data_stack)?;
 
     Ok(data_stack)
