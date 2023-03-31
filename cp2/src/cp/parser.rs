@@ -52,7 +52,7 @@ pub fn parse(
     }
 
     let syntax_tree = SyntaxTree(syntax_tree);
-    let expression_graph = analyze(syntax_tree.clone());
+    let expression_graph = analyze(syntax_tree.clone(), functions);
 
     functions.insert(ROOT_FN.into(), expression_graph);
 
@@ -70,7 +70,7 @@ fn parse_expression(
                 name: name.clone(),
                 body: body.clone(),
             };
-            let body = analyze(body);
+            let body = analyze(body, functions);
             functions.insert(name, body);
             element
         }

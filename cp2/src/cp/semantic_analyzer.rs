@@ -30,24 +30,28 @@ pub enum Expression {
 
 pub type Functions = BTreeMap<String, ExpressionGraph>;
 
-pub fn analyze(syntax_tree: SyntaxTree) -> ExpressionGraph {
+pub fn analyze(
+    syntax_tree: SyntaxTree,
+    functions: &mut Functions,
+) -> ExpressionGraph {
     let mut expressions = ExpressionGraph::new();
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
-            SyntaxElement::Function { .. } => {
-                // not handled yet
+            SyntaxElement::Function { name, body } => {
+                let body = analyze(body, functions);
+                functions.insert(name, body);
                 continue;
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
             SyntaxElement::Array { syntax_tree } => {
-                let expressions = analyze(syntax_tree);
+                let expressions = analyze(syntax_tree, functions);
                 Expression::Array {
                     syntax_tree: expressions,
                 }
             }
             SyntaxElement::Block { syntax_tree } => {
-                let expressions = analyze(syntax_tree);
+                let expressions = analyze(syntax_tree, functions);
                 Expression::Block {
                     syntax_tree: expressions,
                 }
