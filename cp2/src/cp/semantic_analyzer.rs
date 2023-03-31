@@ -28,7 +28,17 @@ pub enum Expression {
     Word(String),
 }
 
-pub type Functions = BTreeMap<String, ExpressionGraph>;
+pub struct Functions {
+    pub registry: BTreeMap<String, ExpressionGraph>,
+}
+
+impl Functions {
+    pub fn new() -> Self {
+        Self {
+            registry: BTreeMap::new(),
+        }
+    }
+}
 
 pub fn analyze(
     syntax_tree: SyntaxTree,
@@ -40,7 +50,7 @@ pub fn analyze(
         let expression = match syntax_element {
             SyntaxElement::Function { name, body } => {
                 let body = analyze(body, functions);
-                functions.insert(name, body);
+                functions.registry.insert(name, body);
                 continue;
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
@@ -62,7 +72,9 @@ pub fn analyze(
         expressions.0.push(expression);
     }
 
-    functions.insert(ROOT_FN.into(), expressions.clone());
+    functions
+        .registry
+        .insert(ROOT_FN.into(), expressions.clone());
 
     expressions
 }

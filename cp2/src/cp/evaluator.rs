@@ -71,7 +71,7 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) = functions.get(&word).cloned() {
+                    if let Some(body) = functions.registry.get(&word).cloned() {
                         evaluate(body, functions, call_stack, data_stack)?;
                         continue;
                     }
