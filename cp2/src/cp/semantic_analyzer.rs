@@ -1,4 +1,4 @@
-use std::vec;
+use std::{collections::BTreeMap, vec};
 
 use super::{parser::SyntaxElement, SyntaxTree};
 
@@ -27,6 +27,8 @@ pub enum Expression {
     Block { syntax_tree: ExpressionGraph },
     Word(String),
 }
+
+pub type Functions = BTreeMap<String, ExpressionGraph>;
 
 pub fn analyze(syntax_tree: SyntaxTree) -> ExpressionGraph {
     let mut expressions = ExpressionGraph::new();

@@ -9,8 +9,8 @@ pub use self::{
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
-    parser::{parse, Functions, SyntaxTree},
-    semantic_analyzer::analyze,
+    parser::{parse, SyntaxTree},
+    semantic_analyzer::{analyze, Functions},
     tokenizer::tokenize,
 };
 

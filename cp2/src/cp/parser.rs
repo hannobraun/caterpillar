@@ -1,10 +1,10 @@
-use std::{collections::BTreeMap, vec};
+use std::vec;
 
 use super::{
     analyze,
     semantic_analyzer::ExpressionGraph,
     tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
-    ROOT_FN,
+    Functions, ROOT_FN,
 };
 
 #[derive(Clone, Debug)]
@@ -36,8 +36,6 @@ pub enum SyntaxElement {
     /// A word refers to a function or variable
     Word(String),
 }
-
-pub type Functions = BTreeMap<String, ExpressionGraph>;
 
 pub fn parse(
     mut tokens: Tokens,
