@@ -6,14 +6,14 @@ use super::{
 };
 
 pub fn evaluate(
-    syntax_tree: ExpressionGraph,
+    expressions: ExpressionGraph,
     functions: &Functions,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> Result<(), ErrorKind> {
     let mut stack_frame = call_stack.new_stack_frame();
 
-    for expression in syntax_tree {
+    for expression in expressions {
         match expression {
             Expression::Binding(names) => {
                 for name in names.iter().rev() {
