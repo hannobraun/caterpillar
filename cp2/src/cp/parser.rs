@@ -1,9 +1,8 @@
 use std::vec;
 
 use super::{
-    analyze,
     tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
-    Functions, ROOT_FN,
+    Functions,
 };
 
 #[derive(Clone, Debug)]
@@ -52,10 +51,6 @@ pub fn parse(
     }
 
     let syntax_tree = SyntaxTree(syntax_tree);
-    let expression_graph = analyze(syntax_tree.clone(), functions);
-
-    functions.insert(ROOT_FN.into(), expression_graph);
-
     Ok(syntax_tree)
 }
 
