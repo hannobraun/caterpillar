@@ -2,7 +2,6 @@ use std::vec;
 
 use super::{
     analyze,
-    semantic_analyzer::ExpressionGraph,
     tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens},
     Functions, ROOT_FN,
 };
@@ -62,6 +61,7 @@ fn parse_expression(
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
+            let body = analyze(body);
             functions.insert(name, body);
             return Ok(None);
         }
@@ -93,11 +93,10 @@ fn parse_expression(
 fn parse_function(
     tokens: &mut Tokens,
     functions: &mut Functions,
-) -> Result<(String, ExpressionGraph), Error> {
+) -> Result<(String, SyntaxTree), Error> {
     tokens.expect(Token::Function)?;
     let name = tokens.expect_ident()?;
     let body = parse_block(tokens, functions)?;
-    let body = analyze(body);
     Ok((name, body))
 }
 
