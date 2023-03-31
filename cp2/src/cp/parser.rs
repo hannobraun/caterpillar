@@ -66,13 +66,7 @@ fn parse_expression(
     let expression = match tokens.peek()? {
         Token::Function => {
             let (name, body) = parse_function(tokens, functions)?;
-            let element = SyntaxElement::Function {
-                name: name.clone(),
-                body: body.clone(),
-            };
-            let body = analyze(body, functions);
-            functions.insert(name, body);
-            element
+            SyntaxElement::Function { name, body }
         }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
