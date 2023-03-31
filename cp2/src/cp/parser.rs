@@ -50,8 +50,7 @@ pub fn parse(
         syntax_tree.push(expression);
     }
 
-    let syntax_tree = SyntaxTree(syntax_tree);
-    Ok(syntax_tree)
+    Ok(SyntaxTree(syntax_tree))
 }
 
 fn parse_expression(
