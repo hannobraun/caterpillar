@@ -1,7 +1,7 @@
 use super::{
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
-    semantic_analyzer::{Expression, ExpressionGraph},
+    analyzer::{Expression, ExpressionGraph},
     Functions,
 };
 

@@ -1,16 +1,16 @@
+mod analyzer;
 mod call_stack;
 mod data_stack;
 mod evaluator;
 mod parser;
-mod semantic_analyzer;
 mod tokenizer;
 
 pub use self::{
+    analyzer::{analyze, Functions},
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
     parser::{parse, SyntaxTree},
-    semantic_analyzer::{analyze, Functions},
     tokenizer::tokenize,
 };
 

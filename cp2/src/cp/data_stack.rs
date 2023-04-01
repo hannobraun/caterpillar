@@ -1,4 +1,4 @@
-use super::semantic_analyzer::ExpressionGraph;
+use super::analyzer::ExpressionGraph;
 
 pub struct DataStack {
     values: Vec<Value>,
