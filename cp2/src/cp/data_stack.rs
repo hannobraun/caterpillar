@@ -1,5 +1,6 @@
 use super::analyzer::ExpressionGraph;
 
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct DataStack {
     values: Vec<Value>,
     marker: usize,
