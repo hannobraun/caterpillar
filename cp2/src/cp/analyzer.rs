@@ -28,6 +28,7 @@ pub enum Expression {
     Word(String),
 }
 
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
 pub struct Functions {
     pub registry: BTreeMap<String, Function>,
 }
@@ -40,7 +41,7 @@ impl Functions {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Function {
     pub body: ExpressionGraph,
 }
