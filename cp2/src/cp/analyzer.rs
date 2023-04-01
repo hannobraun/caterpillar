@@ -56,7 +56,9 @@ pub fn analyze(
             SyntaxElement::Function { name, body } => {
                 let body = analyze(body, functions);
                 let function = Function { body };
+
                 functions.registry.insert(name, function);
+
                 continue;
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
