@@ -1,7 +1,7 @@
 use super::{
+    analyzer::{Expression, ExpressionGraph},
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
-    analyzer::{Expression, ExpressionGraph},
     Functions,
 };
 
@@ -71,8 +71,15 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(body) = functions.registry.get(&word).cloned() {
-                        evaluate(body, functions, call_stack, data_stack)?;
+                    if let Some(function) =
+                        functions.registry.get(&word).cloned()
+                    {
+                        evaluate(
+                            function.body,
+                            functions,
+                            call_stack,
+                            data_stack,
+                        )?;
                         continue;
                     }
                     if let Some(value) = stack_frame.bindings.remove(&word) {

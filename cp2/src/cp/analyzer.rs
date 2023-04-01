@@ -29,7 +29,7 @@ pub enum Expression {
 }
 
 pub struct Functions {
-    pub registry: BTreeMap<String, ExpressionGraph>,
+    pub registry: BTreeMap<String, Function>,
 }
 
 impl Functions {
@@ -38,6 +38,11 @@ impl Functions {
             registry: BTreeMap::new(),
         }
     }
+}
+
+#[derive(Clone)]
+pub struct Function {
+    pub body: ExpressionGraph,
 }
 
 pub fn analyze(
@@ -50,7 +55,8 @@ pub fn analyze(
         let expression = match syntax_element {
             SyntaxElement::Function { name, body } => {
                 let body = analyze(body, functions);
-                functions.registry.insert(name, body);
+                let function = Function { body };
+                functions.registry.insert(name, function);
                 continue;
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
