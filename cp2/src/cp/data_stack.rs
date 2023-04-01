@@ -68,7 +68,7 @@ impl DataStack {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 pub enum Error {
     #[error("Tried to pop value from empty stack")]
     PopFromEmptyStack,
@@ -80,7 +80,7 @@ pub enum Error {
     },
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub enum Value {
     Array(Vec<Value>),
     Block { expressions: ExpressionGraph },

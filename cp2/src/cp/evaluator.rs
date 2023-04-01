@@ -96,7 +96,7 @@ pub fn evaluate(
     Ok(())
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 pub enum ErrorKind {
     #[error(transparent)]
     DataStack(#[from] data_stack::Error),

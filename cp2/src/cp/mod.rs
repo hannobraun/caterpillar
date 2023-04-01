@@ -27,7 +27,7 @@ pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
     Ok((functions, data_stack))
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 pub enum Error {
     #[error("Parser error: {0}")]
     Parser(#[from] parser::Error),

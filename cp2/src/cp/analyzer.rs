@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, vec};
 
 use super::{parser::SyntaxElement, SyntaxTree};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub struct ExpressionGraph(Vec<Expression>);
 
 impl ExpressionGraph {
@@ -20,7 +20,7 @@ impl IntoIterator for ExpressionGraph {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub enum Expression {
     Binding(Vec<String>),
     Array { syntax_tree: ExpressionGraph },

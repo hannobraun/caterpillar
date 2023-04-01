@@ -42,18 +42,18 @@ impl Tokens {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 #[error("No more tokens")]
 pub struct NoMoreTokens;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 #[error("Expected `{expected:?}`, got `{actual:?}`")]
 pub struct ExpectedToken {
     pub expected: Token,
     pub actual: Option<Token>,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Token {
     Function,
     BindingOperator,

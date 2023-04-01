@@ -141,7 +141,7 @@ fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
     Ok(SyntaxTree(syntax_tree))
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 pub enum Error {
     #[error("Expected more tokens")]
     ExpectedMoreTokens(#[from] NoMoreTokens),
