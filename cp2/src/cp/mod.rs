@@ -14,7 +14,7 @@ pub use self::{
     tokenizer::tokenize,
 };
 
-pub fn execute(code: &str) -> Result<DataStack, Error> {
+pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
     let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
@@ -24,7 +24,7 @@ pub fn execute(code: &str) -> Result<DataStack, Error> {
 
     evaluate(expressions, &functions, &mut CallStack, &mut data_stack)?;
 
-    Ok(data_stack)
+    Ok((functions, data_stack))
 }
 
 #[derive(Debug, thiserror::Error)]
