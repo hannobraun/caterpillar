@@ -1,27 +1,9 @@
-use std::collections::BTreeMap;
-
 use crate::cp::{
     expressions::{Expression, ExpressionGraph},
+    functions::Function,
     syntax::{SyntaxElement, SyntaxTree},
+    Functions,
 };
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Functions {
-    pub registry: BTreeMap<String, Function>,
-}
-
-impl Functions {
-    pub fn new() -> Self {
-        Self {
-            registry: BTreeMap::new(),
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Function {
-    pub body: ExpressionGraph,
-}
 
 pub fn analyze(
     syntax_tree: SyntaxTree,
