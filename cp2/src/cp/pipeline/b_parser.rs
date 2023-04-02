@@ -53,7 +53,7 @@ pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
         syntax_tree.push(expression);
     }
 
-    Ok(SyntaxTree(syntax_tree))
+    Ok(SyntaxTree::from(syntax_tree))
 }
 
 fn parse_expression(
