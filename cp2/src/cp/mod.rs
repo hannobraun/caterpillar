@@ -12,7 +12,7 @@ pub use self::{
     functions::Functions,
     pipeline::{
         a_tokenizer::tokenize, b_parser::parse, c_analyzer::analyze,
-        evaluator::evaluate,
+        d_evaluator::evaluate,
     },
 };
 
@@ -35,5 +35,5 @@ pub enum Error {
     Parser(#[from] pipeline::b_parser::Error),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] pipeline::evaluator::ErrorKind),
+    Evaluator(#[from] pipeline::d_evaluator::ErrorKind),
 }
