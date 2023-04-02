@@ -1,6 +1,6 @@
 use std::vec;
 
-use super::pipeline::tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
+use super::pipeline::a_tokenizer::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<SyntaxElement>);

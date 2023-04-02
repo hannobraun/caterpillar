@@ -11,7 +11,7 @@ pub use self::{
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
     parser::{parse, SyntaxTree},
-    pipeline::tokenizer::tokenize,
+    pipeline::a_tokenizer::tokenize,
 };
 
 pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
