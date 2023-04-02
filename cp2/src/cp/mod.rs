@@ -1,4 +1,3 @@
-mod analyzer;
 mod call_stack;
 mod data_stack;
 mod evaluator;
@@ -7,11 +6,14 @@ mod syntax;
 mod tokens;
 
 pub use self::{
-    analyzer::{analyze, Functions},
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
-    pipeline::{a_tokenizer::tokenize, b_parser::parse},
+    pipeline::{
+        a_tokenizer::tokenize,
+        analyzer::{analyze, Functions},
+        b_parser::parse,
+    },
 };
 
 pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {

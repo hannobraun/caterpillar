@@ -1,4 +1,4 @@
-use super::analyzer::ExpressionGraph;
+use super::pipeline::analyzer::ExpressionGraph;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct DataStack {
