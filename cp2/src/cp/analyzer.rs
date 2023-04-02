@@ -41,7 +41,7 @@ impl Functions {
     }
 }
 
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Function {
     pub body: ExpressionGraph,
 }
