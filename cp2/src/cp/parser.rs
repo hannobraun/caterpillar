@@ -40,7 +40,10 @@ pub enum SyntaxElement {
 pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
-    while let Ok(Some(expression)) = parse_expression(&mut tokens) {
+    loop {
+        let Some(expression) = parse_expression(&mut tokens)? else {
+            break;
+        };
         syntax_tree.push(expression);
     }
 
