@@ -1,32 +1,9 @@
-use std::{collections::BTreeMap, vec};
+use std::collections::BTreeMap;
 
-use crate::cp::syntax::{SyntaxElement, SyntaxTree};
-
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
-pub struct ExpressionGraph(Vec<Expression>);
-
-impl From<Vec<Expression>> for ExpressionGraph {
-    fn from(expressions: Vec<Expression>) -> Self {
-        Self(expressions)
-    }
-}
-
-impl IntoIterator for ExpressionGraph {
-    type Item = Expression;
-    type IntoIter = vec::IntoIter<Expression>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.0.into_iter()
-    }
-}
-
-#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
-pub enum Expression {
-    Binding(Vec<String>),
-    Array { syntax_tree: ExpressionGraph },
-    Block { syntax_tree: ExpressionGraph },
-    Word(String),
-}
+use crate::cp::{
+    expressions::{Expression, ExpressionGraph},
+    syntax::{SyntaxElement, SyntaxTree},
+};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Functions {

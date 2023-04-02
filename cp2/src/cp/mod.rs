@@ -1,6 +1,7 @@
 mod call_stack;
 mod data_stack;
 mod evaluator;
+mod expressions;
 mod pipeline;
 mod syntax;
 mod tokens;
@@ -11,8 +12,8 @@ pub use self::{
     evaluator::evaluate,
     pipeline::{
         a_tokenizer::tokenize,
-        c_analyzer::{analyze, Functions},
         b_parser::parse,
+        c_analyzer::{analyze, Functions},
     },
 };
 
