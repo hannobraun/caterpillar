@@ -5,6 +5,12 @@ use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub struct ExpressionGraph(Vec<Expression>);
 
+impl From<Vec<Expression>> for ExpressionGraph {
+    fn from(expressions: Vec<Expression>) -> Self {
+        Self(expressions)
+    }
+}
+
 impl IntoIterator for ExpressionGraph {
     type Item = Expression;
     type IntoIter = vec::IntoIter<Expression>;
