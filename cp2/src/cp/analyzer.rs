@@ -28,7 +28,7 @@ pub enum Expression {
     Word(String),
 }
 
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Functions {
     pub registry: BTreeMap<String, Function>,
 }
