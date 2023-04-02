@@ -5,6 +5,12 @@ use crate::cp::tokens::{ExpectedToken, NoMoreTokens, Token, Tokens};
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<SyntaxElement>);
 
+impl From<Vec<SyntaxElement>> for SyntaxTree {
+    fn from(syntax_tree: Vec<SyntaxElement>) -> Self {
+        Self(syntax_tree)
+    }
+}
+
 impl IntoIterator for SyntaxTree {
     type Item = SyntaxElement;
     type IntoIter = vec::IntoIter<SyntaxElement>;
