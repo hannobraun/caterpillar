@@ -4,6 +4,7 @@ mod data_stack;
 mod evaluator;
 mod parser;
 mod pipeline;
+mod tokens;
 
 pub use self::{
     analyzer::{analyze, Functions},
