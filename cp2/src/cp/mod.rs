@@ -3,6 +3,7 @@ mod call_stack;
 mod data_stack;
 mod evaluator;
 mod pipeline;
+mod syntax;
 mod tokens;
 
 pub use self::{

@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, vec};
 
-use super::pipeline::b_parser::{SyntaxElement, SyntaxTree};
+use super::syntax::{SyntaxElement, SyntaxTree};
 
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub struct ExpressionGraph(Vec<Expression>);
