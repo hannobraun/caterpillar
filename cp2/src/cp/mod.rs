@@ -1,6 +1,5 @@
 mod call_stack;
 mod data_stack;
-mod evaluator;
 mod expressions;
 mod functions;
 mod pipeline;
@@ -10,9 +9,11 @@ mod tokens;
 pub use self::{
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
-    evaluator::evaluate,
     functions::Functions,
-    pipeline::{a_tokenizer::tokenize, b_parser::parse, c_analyzer::analyze},
+    pipeline::{
+        a_tokenizer::tokenize, b_parser::parse, c_analyzer::analyze,
+        evaluator::evaluate,
+    },
 };
 
 pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
@@ -34,5 +35,5 @@ pub enum Error {
     Parser(#[from] pipeline::b_parser::Error),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] evaluator::ErrorKind),
+    Evaluator(#[from] pipeline::evaluator::ErrorKind),
 }
