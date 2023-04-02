@@ -1,6 +1,6 @@
 use std::vec;
 
-use super::tokens::{ExpectedToken, NoMoreTokens, Token, Tokens};
+use crate::cp::tokens::{ExpectedToken, NoMoreTokens, Token, Tokens};
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree(Vec<SyntaxElement>);
