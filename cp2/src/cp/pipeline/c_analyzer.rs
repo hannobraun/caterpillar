@@ -81,5 +81,5 @@ pub fn analyze(
         expressions.push(expression);
     }
 
-    ExpressionGraph(expressions)
+    ExpressionGraph::from(expressions)
 }
