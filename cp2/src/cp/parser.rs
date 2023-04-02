@@ -50,7 +50,11 @@ pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
 fn parse_expression(
     tokens: &mut Tokens,
 ) -> Result<Option<SyntaxElement>, Error> {
-    let next_token = tokens.peek()?;
+    let next_token = match tokens.peek() {
+        Ok(token) => token,
+        Err(NoMoreTokens) => return Ok(None),
+    };
+
     let expression = match next_token {
         Token::Function => {
             let (name, body) = parse_function(tokens)?;
