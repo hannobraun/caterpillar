@@ -1,4 +1,5 @@
 use std::{
+    cmp::min,
     io::{Stdout, Write},
     iter,
 };
@@ -83,6 +84,9 @@ impl Buffer {
     }
 
     fn index(&self, x: usize, y: usize) -> usize {
+        let x = min(x, self.current_size.x - 1);
+        let y = min(y, self.current_size.y - 1);
+
         y * self.current_size.x + x
     }
 }
