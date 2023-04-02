@@ -5,12 +5,6 @@ use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 #[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub struct ExpressionGraph(Vec<Expression>);
 
-impl ExpressionGraph {
-    pub fn new() -> Self {
-        Self(Vec::new())
-    }
-}
-
 impl IntoIterator for ExpressionGraph {
     type Item = Expression;
     type IntoIter = vec::IntoIter<Expression>;
@@ -50,7 +44,7 @@ pub fn analyze(
     syntax_tree: SyntaxTree,
     functions: &mut Functions,
 ) -> ExpressionGraph {
-    let mut expressions = ExpressionGraph::new();
+    let mut expressions = Vec::new();
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
@@ -78,8 +72,8 @@ pub fn analyze(
             SyntaxElement::Word(word) => Expression::Word(word),
         };
 
-        expressions.0.push(expression);
+        expressions.push(expression);
     }
 
-    expressions
+    ExpressionGraph(expressions)
 }
