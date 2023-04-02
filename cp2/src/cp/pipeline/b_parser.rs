@@ -136,7 +136,7 @@ fn parse_block(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
         syntax_tree.push(expression);
     }
 
-    Ok(SyntaxTree(syntax_tree))
+    Ok(SyntaxTree::from(syntax_tree))
 }
 
 fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
@@ -158,7 +158,7 @@ fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
         syntax_tree.push(expression)
     }
 
-    Ok(SyntaxTree(syntax_tree))
+    Ok(SyntaxTree::from(syntax_tree))
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
