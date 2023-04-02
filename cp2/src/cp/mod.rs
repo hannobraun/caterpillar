@@ -10,10 +10,7 @@ pub use self::{
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     evaluator::evaluate,
-    pipeline::{
-        a_tokenizer::tokenize,
-        b_parser::{parse, SyntaxTree},
-    },
+    pipeline::{a_tokenizer::tokenize, b_parser::parse},
 };
 
 pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
