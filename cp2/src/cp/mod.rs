@@ -11,7 +11,7 @@ pub use self::{
     evaluator::evaluate,
     pipeline::{
         a_tokenizer::tokenize,
-        analyzer::{analyze, Functions},
+        c_analyzer::{analyze, Functions},
         b_parser::parse,
     },
 };

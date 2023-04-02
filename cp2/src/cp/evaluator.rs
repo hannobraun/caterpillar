@@ -1,7 +1,7 @@
 use super::{
     call_stack::CallStack,
     data_stack::{self, DataStack, Value},
-    pipeline::analyzer::{Expression, ExpressionGraph},
+    pipeline::c_analyzer::{Expression, ExpressionGraph},
     Functions,
 };
 
