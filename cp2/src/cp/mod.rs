@@ -12,7 +12,7 @@ pub use self::{
     evaluator::evaluate,
     pipeline::{
         a_tokenizer::tokenize,
-        parser::{parse, SyntaxTree},
+        b_parser::{parse, SyntaxTree},
     },
 };
 
@@ -32,7 +32,7 @@ pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
 pub enum Error {
     #[error("Parser error: {0}")]
-    Parser(#[from] pipeline::parser::Error),
+    Parser(#[from] pipeline::b_parser::Error),
 
     #[error("Evaluator error: {0}")]
     Evaluator(#[from] evaluator::ErrorKind),
