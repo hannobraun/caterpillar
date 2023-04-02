@@ -56,6 +56,7 @@ pub struct ExpectedToken {
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Token {
     Function,
+    Test,
     BindingOperator,
     Period,
     CurlyBracketOpen,
@@ -73,6 +74,7 @@ pub fn tokenize(code: &str) -> Tokens {
         .split_whitespace()
         .map(|token| match token {
             "fn" => Token::Function,
+            "test" => Token::Test,
             "=>" => Token::BindingOperator,
             "." => Token::Period,
             "{" => Token::CurlyBracketOpen,
