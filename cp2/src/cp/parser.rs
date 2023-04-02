@@ -40,14 +40,16 @@ pub enum SyntaxElement {
 pub fn parse(mut tokens: Tokens) -> Result<SyntaxTree, Error> {
     let mut syntax_tree = Vec::new();
 
-    while let Ok(expression) = parse_expression(&mut tokens) {
+    while let Ok(Some(expression)) = parse_expression(&mut tokens) {
         syntax_tree.push(expression);
     }
 
     Ok(SyntaxTree(syntax_tree))
 }
 
-fn parse_expression(tokens: &mut Tokens) -> Result<SyntaxElement, Error> {
+fn parse_expression(
+    tokens: &mut Tokens,
+) -> Result<Option<SyntaxElement>, Error> {
     let next_token = tokens.peek()?;
     let expression = match next_token {
         Token::Function => {
@@ -76,7 +78,7 @@ fn parse_expression(tokens: &mut Tokens) -> Result<SyntaxElement, Error> {
         }
     };
 
-    Ok(expression)
+    Ok(Some(expression))
 }
 
 fn parse_function(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
@@ -115,6 +117,8 @@ fn parse_block(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
             }
             _ => parse_expression(tokens)?,
         };
+        let expression =
+            expression.ok_or(Error::ExpectedMoreTokens(NoMoreTokens))?;
 
         syntax_tree.push(expression);
     }
@@ -135,6 +139,8 @@ fn parse_array(tokens: &mut Tokens) -> Result<SyntaxTree, Error> {
             }
             _ => parse_expression(tokens)?,
         };
+        let expression =
+            expression.ok_or(Error::ExpectedMoreTokens(NoMoreTokens))?;
 
         syntax_tree.push(expression)
     }
