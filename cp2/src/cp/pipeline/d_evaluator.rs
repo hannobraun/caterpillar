@@ -63,6 +63,14 @@ pub fn evaluate(
                     let value = !arg;
                     data_stack.push(value);
                 }
+                "and" => {
+                    let b = data_stack.pop_bool()?;
+                    let a = data_stack.pop_bool()?;
+
+                    let x = a && b;
+
+                    data_stack.push(x);
+                }
                 "unwrap" => {
                     let array = data_stack.pop_array()?;
                     for value in array {
