@@ -16,10 +16,10 @@ pub fn tokenize(code: &str) -> Tokens {
             "]" => Token::SquareBracketClose,
             token => {
                 if let Some(("", symbol)) = token.split_once(':') {
-                    return Token::Symbol(symbol.into());
+                    Token::Symbol(symbol.into())
+                } else {
+                    Token::Ident(token.into())
                 }
-
-                Token::Ident(token.into())
             }
         })
         .collect();
