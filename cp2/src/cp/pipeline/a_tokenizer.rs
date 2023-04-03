@@ -1,9 +1,13 @@
+use std::collections::VecDeque;
+
 use crate::cp::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
-    let tokens = code
-        .split_whitespace()
-        .map(|token| match token {
+    let code = code.split_whitespace();
+    let mut tokens = VecDeque::new();
+
+    for token in code {
+        let token = match token {
             "fn" => Token::Function,
             "test" => Token::Test,
             "=>" => Token::BindingOperator,
@@ -21,7 +25,10 @@ pub fn tokenize(code: &str) -> Tokens {
                     Token::Ident(token.into())
                 }
             }
-        })
-        .collect();
+        };
+
+        tokens.push_back(token);
+    }
+
     Tokens(tokens)
 }
