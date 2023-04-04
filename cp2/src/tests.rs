@@ -27,7 +27,7 @@ pub fn run() -> Vec<TestReport> {
     let mut results = Vec::new();
 
     for (name, code) in tests {
-        let result = cp::execute(code)
+        let result = cp::execute(code.chars())
             .map_err(Error::Language)
             .and_then(|(_, mut data_stack)| {
                 if data_stack.pop_bool()? {
