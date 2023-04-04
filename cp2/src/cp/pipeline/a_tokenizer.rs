@@ -13,7 +13,8 @@ pub fn tokenize(code: &str) -> Tokens {
                     continue;
                 }
 
-                State::Processing(String::from(ch))
+                let buf = String::from(ch);
+                State::Processing(buf)
             }
             State::Processing(buf) => {
                 if !ch.is_whitespace() {
