@@ -17,14 +17,19 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                 state = State::Processing { buf }
             }
             State::Processing { buf } => {
+                if Token::match_eagerly(buf, &mut tokens) {
+                    buf.clear();
+                }
+
                 if !ch.is_whitespace() {
                     buf.push(ch);
                     continue;
                 }
 
-                Token::match_delimited(buf.as_str(), &mut tokens);
-
-                state = State::Searching;
+                if !buf.is_empty() {
+                    Token::match_delimited(buf.as_str(), &mut tokens);
+                    state = State::Searching;
+                }
             }
         }
     }
