@@ -84,10 +84,10 @@ impl Token {
             "]" => Token::SquareBracketClose,
             token => {
                 if let Some(("", symbol)) = token.split_once(':') {
-                    Token::Symbol(symbol.into())
-                } else {
-                    Token::Ident(token.into())
+                    return Token::Symbol(symbol.into());
                 }
+
+                Token::Ident(token.into())
             }
         }
     }
