@@ -71,8 +71,8 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn match_eagerly(s: &str) -> Option<Self> {
-        match s {
+    pub fn match_eagerly(s: &str, tokens: &mut Vec<Self>) -> bool {
+        let token = match s {
             "=>" => Some(Token::BindingOperator),
             "." => Some(Token::Period),
             "{" => Some(Token::CurlyBracketOpen),
@@ -82,11 +82,17 @@ impl Token {
             "[" => Some(Token::SquareBracketOpen),
             "]" => Some(Token::SquareBracketClose),
             _ => None,
+        };
+
+        if let Some(token) = token {
+            tokens.push(token);
+            true
+        } else {
+            false
         }
     }
     pub fn match_delimited(s: &str, tokens: &mut Vec<Self>) {
-        if let Some(token) = Self::match_eagerly(s) {
-            tokens.push(token);
+        if Self::match_eagerly(s, tokens) {
             return;
         }
         if let Some(keyword) = Keyword::parse(s) {
