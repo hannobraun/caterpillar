@@ -1,4 +1,5 @@
 use crate::cp::{
+    keywords::Keyword,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{ExpectedToken, NoMoreTokens, Token, Tokens},
 };
@@ -25,7 +26,7 @@ fn parse_expression(
     };
 
     let expression = match next_token {
-        Token::Function => {
+        Token::Keyword(Keyword::Fn) => {
             let (name, body) = parse_function(tokens)?;
             SyntaxElement::Function { name, body }
         }
@@ -55,7 +56,7 @@ fn parse_expression(
 }
 
 fn parse_function(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
-    tokens.expect(Token::Function)?;
+    tokens.expect(Token::Keyword(Keyword::Fn))?;
     let name = tokens.expect_ident()?;
     let body = parse_block(tokens)?;
     Ok((name, body))
