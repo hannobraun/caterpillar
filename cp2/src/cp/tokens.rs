@@ -85,16 +85,16 @@ impl Token {
             ")" => Token::RoundBracketClose,
             "[" => Token::SquareBracketOpen,
             "]" => Token::SquareBracketClose,
-            token => {
-                if let Some(keyword) = Keyword::parse(token) {
+            s => {
+                if let Some(keyword) = Keyword::parse(s) {
                     return Token::Keyword(keyword);
                 }
 
-                if let Some(("", symbol)) = token.split_once(':') {
+                if let Some(("", symbol)) = s.split_once(':') {
                     return Token::Symbol(symbol.into());
                 }
 
-                Token::Ident(token.into())
+                Token::Ident(s.into())
             }
         }
     }
