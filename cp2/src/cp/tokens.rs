@@ -71,7 +71,7 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn match_token(s: &str) -> Self {
+    pub fn match_delimited(s: &str) -> Self {
         match s {
             "=>" => Token::BindingOperator,
             "." => Token::Period,
