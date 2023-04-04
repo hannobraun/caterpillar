@@ -13,6 +13,9 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("true", "true");
     tests.insert("false not", "false not");
     tests.insert("and - true true", "true true and");
+    tests.insert("and - true false", "true false and not");
+    tests.insert("and - false true", "false true and not");
+    tests.insert("and - false false", "false false and not");
     tests.insert("drop", "true false drop");
     tests.insert("clone", "true clone drop");
     tests.insert("binding", "true false => t f . t");
