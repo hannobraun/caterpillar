@@ -55,7 +55,7 @@ pub struct ExpectedToken {
     pub actual: Option<Token>,
 }
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Token {
     BindingOperator,
     Period,
