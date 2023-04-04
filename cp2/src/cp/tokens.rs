@@ -84,17 +84,20 @@ impl Token {
             _ => None,
         }
     }
-    pub fn match_delimited(s: &str) -> Self {
+    pub fn match_delimited(s: &str, tokens: &mut Vec<Self>) {
         if let Some(token) = Self::match_eagerly(s) {
-            return token;
+            tokens.push(token);
+            return;
         }
         if let Some(keyword) = Keyword::parse(s) {
-            return Token::Keyword(keyword);
+            tokens.push(Token::Keyword(keyword));
+            return;
         }
         if let Some(("", symbol)) = s.split_once(':') {
-            return Token::Symbol(symbol.into());
+            tokens.push(Token::Symbol(symbol.into()));
+            return;
         }
 
-        Token::Ident(s.into())
+        tokens.push(Token::Ident(s.into()));
     }
 }

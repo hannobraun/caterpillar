@@ -42,6 +42,5 @@ enum State {
 }
 
 fn match_token(token: &str, tokens: &mut Vec<Token>) {
-    let token = Token::match_delimited(token);
-    tokens.push(token);
+    Token::match_delimited(token, tokens);
 }
