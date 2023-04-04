@@ -71,25 +71,26 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn match_eagerly(s: &str, tokens: &mut Vec<Self>) -> bool {
-        let token = match s {
-            "=>" => Some(Token::BindingOperator),
-            "." => Some(Token::Period),
-            "{" => Some(Token::CurlyBracketOpen),
-            "}" => Some(Token::CurlyBracketClose),
-            "(" => Some(Token::RoundBracketOpen),
-            ")" => Some(Token::RoundBracketClose),
-            "[" => Some(Token::SquareBracketOpen),
-            "]" => Some(Token::SquareBracketClose),
-            _ => None,
-        };
+    const EAGER_TOKENS: &[(&'static str, Token)] = &[
+        ("=>", Token::BindingOperator),
+        (".", Token::Period),
+        ("{", Token::CurlyBracketOpen),
+        ("}", Token::CurlyBracketClose),
+        ("(", Token::RoundBracketOpen),
+        (")", Token::RoundBracketClose),
+        ("[", Token::SquareBracketOpen),
+        ("]", Token::SquareBracketClose),
+    ];
 
-        if let Some(token) = token {
-            tokens.push(token);
-            true
-        } else {
-            false
+    pub fn match_eagerly(s: &str, tokens: &mut Vec<Self>) -> bool {
+        for (token_str, token) in Self::EAGER_TOKENS {
+            if s == *token_str {
+                tokens.push(token.clone());
+                return true;
+            }
         }
+
+        false
     }
     pub fn match_delimited(s: &str, tokens: &mut Vec<Self>) {
         if Self::match_eagerly(s, tokens) {
