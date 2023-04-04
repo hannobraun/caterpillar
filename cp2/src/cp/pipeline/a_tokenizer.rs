@@ -22,7 +22,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                     continue;
                 }
 
-                match_token(buf.as_str(), &mut tokens);
+                Token::match_delimited(buf.as_str(), &mut tokens);
 
                 state = State::Searching;
             }
@@ -30,7 +30,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     }
 
     if let State::Processing { buf } = state {
-        match_token(&buf, &mut tokens);
+        Token::match_delimited(&buf, &mut tokens);
     }
 
     Tokens(tokens.into())
@@ -39,8 +39,4 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
 enum State {
     Searching,
     Processing { buf: String },
-}
-
-fn match_token(token: &str, tokens: &mut Vec<Token>) {
-    Token::match_delimited(token, tokens);
 }
