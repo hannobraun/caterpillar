@@ -71,8 +71,8 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn match_token(token: &str) -> Self {
-        match token {
+    pub fn match_token(s: &str) -> Self {
+        match s {
             "=>" => Token::BindingOperator,
             "." => Token::Period,
             "{" => Token::CurlyBracketOpen,
