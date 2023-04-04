@@ -5,16 +5,14 @@ pub fn tokenize(code: &str) -> Tokens {
     let mut tokens = Vec::new();
 
     for token in code {
-        let token = match_token(token);
-
-        tokens.push(token);
+        match_token(token, &mut tokens);
     }
 
     Tokens(tokens.into())
 }
 
-fn match_token(token: &str) -> Token {
-    match token {
+fn match_token(token: &str, tokens: &mut Vec<Token>) {
+    let token = match token {
         "fn" => Token::Function,
         "test" => Token::Test,
         "=>" => Token::BindingOperator,
@@ -32,5 +30,7 @@ fn match_token(token: &str) -> Token {
                 Token::Ident(token.into())
             }
         }
-    }
+    };
+
+    tokens.push(token);
 }
