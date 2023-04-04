@@ -7,14 +7,14 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     let mut state = State::Searching;
 
     for ch in code {
-        let next_state = match &mut state {
+        match &mut state {
             State::Searching => {
                 if ch.is_whitespace() {
                     continue;
                 }
 
                 let buf = String::from(ch);
-                State::Processing { buf }
+                state = State::Processing { buf }
             }
             State::Processing { buf } => {
                 if !ch.is_whitespace() {
@@ -24,11 +24,9 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
 
                 match_token(buf.as_str(), &mut tokens);
 
-                State::Searching
+                state = State::Searching;
             }
-        };
-
-        state = next_state;
+        }
     }
 
     if let State::Processing { buf } = state {
