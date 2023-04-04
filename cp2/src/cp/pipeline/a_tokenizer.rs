@@ -1,14 +1,45 @@
 use crate::cp::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
-    let code = code.split_whitespace();
+    let code = code.chars();
     let mut tokens = Vec::new();
 
-    for token in code {
-        match_token(token, &mut tokens);
+    let mut state = State::Searching;
+
+    for ch in code {
+        let next_state = match &mut state {
+            State::Searching => {
+                if ch.is_whitespace() {
+                    continue;
+                }
+
+                State::Processing(String::from(ch))
+            }
+            State::Processing(buf) => {
+                if !ch.is_whitespace() {
+                    buf.push(ch);
+                    continue;
+                }
+
+                match_token(buf.as_str(), &mut tokens);
+
+                State::Searching
+            }
+        };
+
+        state = next_state;
+    }
+
+    if let State::Processing(buf) = state {
+        match_token(&buf, &mut tokens);
     }
 
     Tokens(tokens.into())
+}
+
+enum State {
+    Searching,
+    Processing(String),
 }
 
 fn match_token(token: &str, tokens: &mut Vec<Token>) {
