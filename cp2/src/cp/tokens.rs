@@ -71,27 +71,30 @@ pub enum Token {
 }
 
 impl Token {
-    pub fn match_delimited(s: &str) -> Self {
+    pub fn match_eagerly(s: &str) -> Option<Self> {
         match s {
-            "=>" => Token::BindingOperator,
-            "." => Token::Period,
-            "{" => Token::CurlyBracketOpen,
-            "}" => Token::CurlyBracketClose,
-            "(" => Token::RoundBracketOpen,
-            ")" => Token::RoundBracketClose,
-            "[" => Token::SquareBracketOpen,
-            "]" => Token::SquareBracketClose,
-            s => {
-                if let Some(keyword) = Keyword::parse(s) {
-                    return Token::Keyword(keyword);
-                }
-
-                if let Some(("", symbol)) = s.split_once(':') {
-                    return Token::Symbol(symbol.into());
-                }
-
-                Token::Ident(s.into())
-            }
+            "=>" => Some(Token::BindingOperator),
+            "." => Some(Token::Period),
+            "{" => Some(Token::CurlyBracketOpen),
+            "}" => Some(Token::CurlyBracketClose),
+            "(" => Some(Token::RoundBracketOpen),
+            ")" => Some(Token::RoundBracketClose),
+            "[" => Some(Token::SquareBracketOpen),
+            "]" => Some(Token::SquareBracketClose),
+            _ => None,
         }
+    }
+    pub fn match_delimited(s: &str) -> Self {
+        if let Some(token) = Self::match_eagerly(s) {
+            return token;
+        }
+        if let Some(keyword) = Keyword::parse(s) {
+            return Token::Keyword(keyword);
+        }
+        if let Some(("", symbol)) = s.split_once(':') {
+            return Token::Symbol(symbol.into());
+        }
+
+        Token::Ident(s.into())
     }
 }
