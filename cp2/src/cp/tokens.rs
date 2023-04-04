@@ -57,7 +57,6 @@ pub struct ExpectedToken {
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub enum Token {
-    Test,
     BindingOperator,
     Period,
     CurlyBracketOpen,
@@ -74,7 +73,6 @@ pub enum Token {
 impl Token {
     pub fn match_delimited(token: &str) -> Self {
         match token {
-            "test" => Token::Test,
             "=>" => Token::BindingOperator,
             "." => Token::Period,
             "{" => Token::CurlyBracketOpen,
