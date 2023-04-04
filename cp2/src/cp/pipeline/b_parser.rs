@@ -26,10 +26,6 @@ fn parse_expression(
     };
 
     let expression = match next_token {
-        Token::Keyword(Keyword::Fn) => {
-            let (name, body) = parse_function(tokens)?;
-            SyntaxElement::Function { name, body }
-        }
         Token::BindingOperator => {
             let binding_names = parse_binding(tokens)?;
             SyntaxElement::Binding(binding_names)
@@ -41,6 +37,10 @@ fn parse_expression(
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array(tokens)?;
             SyntaxElement::Array { syntax_tree }
+        }
+        Token::Keyword(Keyword::Fn) => {
+            let (name, body) = parse_function(tokens)?;
+            SyntaxElement::Function { name, body }
         }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;
