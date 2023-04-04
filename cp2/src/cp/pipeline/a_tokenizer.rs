@@ -14,9 +14,9 @@ pub fn tokenize(code: &str) -> Tokens {
                 }
 
                 let buf = String::from(ch);
-                State::Processing(buf)
+                State::Processing { buf }
             }
-            State::Processing(buf) => {
+            State::Processing { buf } => {
                 if !ch.is_whitespace() {
                     buf.push(ch);
                     continue;
@@ -31,7 +31,7 @@ pub fn tokenize(code: &str) -> Tokens {
         state = next_state;
     }
 
-    if let State::Processing(buf) = state {
+    if let State::Processing { buf } = state {
         match_token(&buf, &mut tokens);
     }
 
@@ -40,7 +40,7 @@ pub fn tokenize(code: &str) -> Tokens {
 
 enum State {
     Searching,
-    Processing(String),
+    Processing { buf: String },
 }
 
 fn match_token(token: &str, tokens: &mut Vec<Token>) {
