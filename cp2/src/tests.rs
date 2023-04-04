@@ -23,7 +23,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("fn", "fn f { true } f");
     tests.insert("if then", "true { true } { false } if");
     tests.insert("if else", "false { false } { true } if");
-    tests.insert("flexible tokenization", "{true }eval [true ]unwrap and");
+    tests.insert("flexible tokenization", "{true}eval[true]unwrap and");
 
     let mut results = Vec::new();
 

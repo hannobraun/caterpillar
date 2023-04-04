@@ -88,6 +88,12 @@ impl Token {
                 tokens.push(token.clone());
                 return true;
             }
+
+            if let Some((first_token, "")) = s.split_once(token_str) {
+                Self::match_delimited(first_token, tokens);
+                tokens.push(token.clone());
+                return true;
+            }
         }
 
         false
