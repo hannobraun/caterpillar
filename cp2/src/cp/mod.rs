@@ -17,7 +17,7 @@ pub fn execute(code: &str) -> Result<(Functions, DataStack), Error> {
     let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
-    let tokens = pipeline::tokenize(code);
+    let tokens = pipeline::tokenize(code.chars());
     let syntax_tree = pipeline::parse(tokens)?;
     let expressions = pipeline::analyze(syntax_tree, &mut functions);
 
