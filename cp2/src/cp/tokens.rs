@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use super::keywords::Keyword;
+
 #[derive(Debug)]
 pub struct Tokens(pub VecDeque<Token>);
 
@@ -65,6 +67,7 @@ pub enum Token {
     RoundBracketClose,
     SquareBracketOpen,
     SquareBracketClose,
+    Keyword(Keyword),
     Ident(String),
     Symbol(String),
 }
@@ -83,6 +86,10 @@ impl Token {
             "[" => Token::SquareBracketOpen,
             "]" => Token::SquareBracketClose,
             token => {
+                if let Some(keyword) = Keyword::parse(token) {
+                    return Token::Keyword(keyword);
+                }
+
                 if let Some(("", symbol)) = token.split_once(':') {
                     return Token::Symbol(symbol.into());
                 }
