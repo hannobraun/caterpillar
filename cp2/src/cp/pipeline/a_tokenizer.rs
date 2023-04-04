@@ -44,25 +44,6 @@ enum State {
 }
 
 fn match_token(token: &str, tokens: &mut Vec<Token>) {
-    let token = match token {
-        "fn" => Token::Function,
-        "test" => Token::Test,
-        "=>" => Token::BindingOperator,
-        "." => Token::Period,
-        "{" => Token::CurlyBracketOpen,
-        "}" => Token::CurlyBracketClose,
-        "(" => Token::RoundBracketOpen,
-        ")" => Token::RoundBracketClose,
-        "[" => Token::SquareBracketOpen,
-        "]" => Token::SquareBracketClose,
-        token => {
-            if let Some(("", symbol)) = token.split_once(':') {
-                Token::Symbol(symbol.into())
-            } else {
-                Token::Ident(token.into())
-            }
-        }
-    };
-
+    let token = Token::match_delimited(token);
     tokens.push(token);
 }

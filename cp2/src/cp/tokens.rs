@@ -68,3 +68,27 @@ pub enum Token {
     Ident(String),
     Symbol(String),
 }
+
+impl Token {
+    pub fn match_delimited(token: &str) -> Self {
+        match token {
+            "fn" => Token::Function,
+            "test" => Token::Test,
+            "=>" => Token::BindingOperator,
+            "." => Token::Period,
+            "{" => Token::CurlyBracketOpen,
+            "}" => Token::CurlyBracketClose,
+            "(" => Token::RoundBracketOpen,
+            ")" => Token::RoundBracketClose,
+            "[" => Token::SquareBracketOpen,
+            "]" => Token::SquareBracketClose,
+            token => {
+                if let Some(("", symbol)) = token.split_once(':') {
+                    Token::Symbol(symbol.into())
+                } else {
+                    Token::Ident(token.into())
+                }
+            }
+        }
+    }
+}
