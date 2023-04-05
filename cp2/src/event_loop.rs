@@ -48,9 +48,7 @@ pub fn run_once(
 
     buffer.prepare(terminal_size);
 
-    let offset = ui::Vector { x: 0, y: 0 };
-
-    let area = ui::area::new(buffer, offset, terminal_size);
+    let area = ui::area::new(buffer, terminal_size);
     let mut area = ui::border::draw(area);
 
     for test_report in test_reports {

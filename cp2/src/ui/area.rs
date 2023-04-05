@@ -7,11 +7,11 @@ pub struct Area<'a> {
     cursor: Vector,
 }
 
-pub fn new(buffer: &mut Buffer, offset: Vector, size: Vector) -> Area {
+pub fn new(buffer: &mut Buffer, size: Vector) -> Area {
     Area {
         buffer,
         size,
-        offset,
+        offset: Vector { x: 0, y: 0 },
         cursor: Vector { x: 0, y: 0 },
     }
 }
