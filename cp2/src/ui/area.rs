@@ -1,3 +1,5 @@
+use std::cmp::min;
+
 use super::{buffer::Buffer, vector::Vector};
 
 pub struct Area<'a> {
@@ -34,6 +36,8 @@ pub fn slice(mut area: Area, offsets: [Vector; 2]) -> Area {
 pub fn move_to_next_line(area: &mut Area) {
     area.cursor.x = 0;
     area.cursor.y += 1;
+
+    area.cursor.y = min(area.cursor.y, area.size.y - 1);
 }
 
 pub fn move_to_end_of_line(area: &mut Area) {
