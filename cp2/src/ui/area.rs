@@ -2,16 +2,16 @@ use super::{buffer::Buffer, vector::Vector};
 
 pub struct Area<'a> {
     buffer: &'a mut Buffer,
-    offset: Vector,
     size: Vector,
+    offset: Vector,
     cursor: Vector,
 }
 
 pub fn new(buffer: &mut Buffer, offset: Vector, size: Vector) -> Area {
     Area {
         buffer,
-        offset,
         size,
+        offset,
         cursor: Vector { x: 0, y: 0 },
     }
 }
