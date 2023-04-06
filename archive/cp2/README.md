@@ -9,7 +9,7 @@ Caterpillar builds on the results of an [earlier experiment](../cp1/) of the sam
 
 ## Status
 
-I might not have started yet. At the time of writing, this README is all that exists.
+This prototype is abandoned. The approach of building a test framework first worked out nicely, but the user interface was still too ambitious and distracted from the language design aspect. [There is a more focused successor.](../../cp3/).
 
 
 ## Concept
