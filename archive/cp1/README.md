@@ -7,7 +7,7 @@ Caterpillar builds on the results of an [earlier experiment](../cp0/) of the sam
 
 ## Status
 
-This prototype has been abandoned. [There is a successor.](../../cp2/)
+This prototype has been abandoned. [There was a successor.](../cp2/)
 
 
 ## Concept
