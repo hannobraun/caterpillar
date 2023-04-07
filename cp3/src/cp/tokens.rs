@@ -67,6 +67,7 @@ pub enum Token {
     SquareBracketClose,
     Keyword(Keyword),
     Ident(String),
+    String(String),
     Symbol(String),
 }
 

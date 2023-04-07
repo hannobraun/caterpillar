@@ -1,3 +1,5 @@
+use std::mem;
+
 use crate::cp::tokens::{Token, Tokens};
 
 pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
@@ -10,6 +12,11 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
         match &mut state {
             State::Searching => {
                 if ch.is_whitespace() {
+                    continue;
+                }
+
+                if ch == '"' {
+                    state = State::ProcessingString { buf: String::new() };
                     continue;
                 }
 
@@ -31,6 +38,15 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                     state = State::Searching;
                 }
             }
+            State::ProcessingString { buf } => {
+                if ch == '"' {
+                    let s = mem::take(buf);
+                    tokens.push(Token::String(s));
+                    continue;
+                }
+
+                buf.push(ch);
+            }
         }
     }
 
@@ -44,4 +60,5 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
 enum State {
     Searching,
     ProcessingAny { buf: String },
+    ProcessingString { buf: String },
 }
