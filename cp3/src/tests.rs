@@ -10,23 +10,23 @@ pub struct TestReport {
 pub fn run() -> Vec<TestReport> {
     let mut tests = BTreeMap::new();
 
-    tests.insert("true", "true");
-    tests.insert("false not", "false not");
-    tests.insert("and - true true", "true true and");
-    tests.insert("and - true false", "true false and not");
-    tests.insert("and - false true", "false true and not");
-    tests.insert("and - false false", "false false and not");
-    tests.insert("drop", "true false drop");
-    tests.insert("clone", "true clone drop");
-    tests.insert("binding", "true false => t f . t");
-    tests.insert("block eval", "{ true } eval");
-    tests.insert("block - lazy evaluation", "true { drop } drop");
-    tests.insert("array unwrap", "[ true ] unwrap");
-    tests.insert("array - eager evaluation", "true false [ drop ] drop");
-    tests.insert("fn", "fn f { true } f");
-    tests.insert("if then", "true { true } { false } if");
-    tests.insert("if else", "false { false } { true } if");
-    tests.insert("flexible tokenization", "{true}eval[true]unwrap and");
+    tests.insert("true", r#"true"#);
+    tests.insert("false not", r#"false not"#);
+    tests.insert("and - true true", r#"true true and"#);
+    tests.insert("and - true false", r#"true false and not"#);
+    tests.insert("and - false true", r#"false true and not"#);
+    tests.insert("and - false false", r#"false false and not"#);
+    tests.insert("drop", r#"true false drop"#);
+    tests.insert("clone", r#"true clone drop"#);
+    tests.insert("binding", r#"true false => t f . t"#);
+    tests.insert("block eval", r#"{ true } eval"#);
+    tests.insert("block - lazy evaluation", r#"true { drop } drop"#);
+    tests.insert("array unwrap", r#"[ true ] unwrap"#);
+    tests.insert("array - eager evaluation", r#"true false [ drop ] drop"#);
+    tests.insert("fn", r#"fn f { true } f"#);
+    tests.insert("if then", r#"true { true } { false } if"#);
+    tests.insert("if else", r#"false { false } { true } if"#);
+    tests.insert("flexible tokenization", r#"{true}eval[true]unwrap and"#);
 
     let mut results = Vec::new();
 
