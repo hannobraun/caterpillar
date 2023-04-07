@@ -33,6 +33,9 @@ pub fn evaluate(
                     expressions: syntax_tree.clone(),
                 });
             }
+            Expression::String(_) => {
+                // not handled yet
+            }
             Expression::Word(word) => match word.as_str() {
                 "clone" => {
                     let original = data_stack.pop_any()?;

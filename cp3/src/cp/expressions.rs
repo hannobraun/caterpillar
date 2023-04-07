@@ -23,5 +23,6 @@ pub enum Expression {
     Binding(Vec<String>),
     Array { syntax_tree: ExpressionGraph },
     Block { syntax_tree: ExpressionGraph },
+    String(String),
     Word(String),
 }
