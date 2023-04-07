@@ -37,6 +37,8 @@ pub enum SyntaxElement {
         syntax_tree: SyntaxTree,
     },
 
+    String(String),
+
     /// A word refers to a function or variable
     Word(String),
 }

@@ -42,6 +42,16 @@ impl Tokens {
             }),
         }
     }
+
+    pub fn expect_string(&mut self) -> Result<String, ExpectedToken> {
+        match self.0.pop_front() {
+            Some(Token::String(string)) => Ok(string),
+            token => Err(ExpectedToken {
+                expected: Token::String(String::new()),
+                actual: token,
+            }),
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]

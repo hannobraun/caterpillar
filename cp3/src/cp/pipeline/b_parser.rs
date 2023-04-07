@@ -46,6 +46,10 @@ fn parse_expression(
             let ident = tokens.expect_ident()?;
             SyntaxElement::Word(ident)
         }
+        Token::String(_) => {
+            let string = tokens.expect_string()?;
+            SyntaxElement::String(string)
+        }
         _ => {
             let token = tokens.next()?;
             return Err(Error::UnexpectedToken(token));

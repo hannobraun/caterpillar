@@ -34,6 +34,10 @@ pub fn analyze(
                     syntax_tree: expressions,
                 }
             }
+            SyntaxElement::String(_) => {
+                // not handled yet
+                continue;
+            }
             SyntaxElement::Word(word) => Expression::Word(word),
         };
 
