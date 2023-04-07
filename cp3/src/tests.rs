@@ -30,6 +30,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("if else", r#"false { false } { true } if"#);
     tests.insert("string =", r#""a" "a" ="#);
     tests.insert("string = not", r#""a" "b" = not"#);
+    tests.insert("string - tokenization", r#""a""a"="b""b"= and"#);
 
     let mut results = Vec::new();
 

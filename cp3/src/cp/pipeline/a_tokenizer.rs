@@ -28,6 +28,12 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                     buf.clear();
                 }
 
+                if ch == '"' {
+                    Token::match_delimited(buf.as_str(), &mut tokens);
+                    state = State::ProcessingString { buf: String::new() };
+                    continue;
+                }
+
                 if !ch.is_whitespace() {
                     buf.push(ch);
                     continue;
