@@ -1,16 +1,18 @@
 mod cp;
 mod tests;
 
+use crossterm::style::Stylize;
+
 fn main() {
     let test_reports = tests::run();
 
     for test_report in test_reports {
         match &test_report.result {
             Ok(()) => {
-                print!("PASS");
+                print!("{}", "PASS".bold().green());
             }
             Err(_) => {
-                print!("FAIL");
+                print!("{}", "FAIL".bold().red());
             }
         }
 
