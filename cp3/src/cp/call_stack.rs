@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::data_stack::Value;
+use super::values::Value;
 
 pub struct CallStack;
 

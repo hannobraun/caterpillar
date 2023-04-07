@@ -6,6 +6,7 @@ mod keywords;
 mod pipeline;
 mod syntax;
 mod tokens;
+mod values;
 
 pub use self::{
     call_stack::CallStack,

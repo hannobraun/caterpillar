@@ -1,6 +1,7 @@
 use crate::cp::{
-    data_stack::{self, Value},
+    data_stack,
     expressions::{Expression, ExpressionGraph},
+    values::Value,
     CallStack, DataStack, Functions,
 };
 
