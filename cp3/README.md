@@ -14,7 +14,7 @@ This iteration of Caterpillar is a more focused version of an [earlier prototype
 
 ## Status
 
-I might not have started yet. At the time of writing, this README is all that exists.
+In progress.
 
 
 ## Concept
