@@ -38,6 +38,14 @@ pub fn evaluate(
                 data_stack.push(string);
             }
             Expression::Word(word) => match word.as_str() {
+                "=" => {
+                    let a = data_stack.pop_any();
+                    let b = data_stack.pop_any();
+
+                    let x = a == b;
+
+                    data_stack.push(x);
+                }
                 "clone" => {
                     let original = data_stack.pop_any()?;
                     let clone = original.clone();
