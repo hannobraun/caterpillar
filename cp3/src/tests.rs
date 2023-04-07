@@ -21,12 +21,13 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("binding", r#"true false => t f . t"#);
     tests.insert("block eval", r#"{ true } eval"#);
     tests.insert("block - lazy evaluation", r#"true { drop } drop"#);
+    tests.insert("block - tokenization", r#"{true}eval{true}eval and"#);
     tests.insert("array unwrap", r#"[ true ] unwrap"#);
     tests.insert("array - eager evaluation", r#"true false [ drop ] drop"#);
+    tests.insert("array - tokenization", r#"[true]unwrap[true]unwrap and"#);
     tests.insert("fn", r#"fn f { true } f"#);
     tests.insert("if then", r#"true { true } { false } if"#);
     tests.insert("if else", r#"false { false } { true } if"#);
-    tests.insert("flexible tokenization", r#"{true}eval[true]unwrap and"#);
 
     let mut results = Vec::new();
 
