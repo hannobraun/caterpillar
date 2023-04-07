@@ -40,8 +40,8 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
             }
             State::ProcessingString { buf } => {
                 if ch == '"' {
-                    let s = mem::take(buf);
-                    tokens.push(Token::String(s));
+                    let string = mem::take(buf);
+                    tokens.push(Token::String(string));
                     continue;
                 }
 
