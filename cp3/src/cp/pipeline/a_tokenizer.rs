@@ -14,9 +14,9 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                 }
 
                 let buf = String::from(ch);
-                state = State::Processing { buf }
+                state = State::ProcessingAny { buf }
             }
-            State::Processing { buf } => {
+            State::ProcessingAny { buf } => {
                 if Token::match_eagerly(buf, &mut tokens) {
                     buf.clear();
                 }
@@ -34,7 +34,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
         }
     }
 
-    if let State::Processing { buf } = state {
+    if let State::ProcessingAny { buf } = state {
         Token::match_delimited(&buf, &mut tokens);
     }
 
@@ -43,5 +43,5 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
 
 enum State {
     Searching,
-    Processing { buf: String },
+    ProcessingAny { buf: String },
 }
