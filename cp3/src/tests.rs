@@ -28,6 +28,8 @@ pub fn run() -> Vec<TestReport> {
     tests.insert("fn", r#"fn f { true } f"#);
     tests.insert("if then", r#"true { true } { false } if"#);
     tests.insert("if else", r#"false { false } { true } if"#);
+    tests.insert("string =", r#""a" "a" ="#);
+    tests.insert("string = not", r#""a" "b" = not"#);
 
     let mut results = Vec::new();
 
