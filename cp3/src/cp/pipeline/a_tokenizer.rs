@@ -42,6 +42,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
                 if ch == '"' {
                     let string = mem::take(buf);
                     tokens.push(Token::String(string));
+                    state = State::Searching;
                     continue;
                 }
 
