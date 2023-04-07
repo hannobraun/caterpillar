@@ -33,8 +33,9 @@ pub fn evaluate(
                     expressions: syntax_tree.clone(),
                 });
             }
-            Expression::String(_) => {
-                // not handled yet
+            Expression::String(string) => {
+                let string = Value::String(string);
+                data_stack.push(string);
             }
             Expression::Word(word) => match word.as_str() {
                 "clone" => {

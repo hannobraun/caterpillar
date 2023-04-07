@@ -5,6 +5,7 @@ pub enum Value {
     Array(Vec<Value>),
     Block { expressions: ExpressionGraph },
     Bool(bool),
+    String(String),
 }
 
 impl From<bool> for Value {
