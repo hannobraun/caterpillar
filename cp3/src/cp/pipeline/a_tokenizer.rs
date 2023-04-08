@@ -64,6 +64,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     Tokens(tokens.into())
 }
 
+#[derive(Debug)]
 enum State {
     Searching,
     ProcessingAny { buf: String },
