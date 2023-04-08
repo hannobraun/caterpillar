@@ -13,6 +13,10 @@ impl Functions {
             registry: BTreeMap::new(),
         }
     }
+
+    pub fn define(&mut self, name: String, function: Function) {
+        self.registry.insert(name, function);
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]

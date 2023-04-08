@@ -17,7 +17,7 @@ pub fn analyze(
                 let body = analyze(body, functions);
                 let function = Function { body };
 
-                functions.registry.insert(name, function);
+                functions.define(name, function);
 
                 continue;
             }
