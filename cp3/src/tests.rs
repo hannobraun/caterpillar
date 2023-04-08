@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::cp;
 
 pub struct TestReport {
-    pub name: &'static str,
+    pub name: String,
     pub result: Result<(), Error>,
 }
 
@@ -52,7 +52,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
                 }
             });
 
-        results.push(TestReport { name, result });
+        results.push(TestReport {
+            name: name.into(),
+            result,
+        });
     }
 
     results.sort_by_key(|report| report.result.is_ok());
