@@ -17,6 +17,10 @@ impl Functions {
     pub fn define(&mut self, name: String, function: Function) {
         self.registry.insert(name, function);
     }
+
+    pub fn get(&self, name: &str) -> Option<Function> {
+        self.registry.get(name).cloned()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]

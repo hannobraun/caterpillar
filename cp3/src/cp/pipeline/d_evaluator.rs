@@ -91,9 +91,7 @@ pub fn evaluate(
                     }
                 }
                 _ => {
-                    if let Some(function) =
-                        functions.registry.get(&word).cloned()
-                    {
+                    if let Some(function) = functions.get(&word) {
                         evaluate(
                             function.body,
                             functions,
