@@ -12,7 +12,7 @@ pub use self::{
     call_stack::CallStack,
     data_stack::{DataStack, Error as DataStackError},
     functions::Functions,
-    pipeline::evaluate,
+    pipeline::{evaluate, EvaluatorError},
 };
 
 pub fn execute(
