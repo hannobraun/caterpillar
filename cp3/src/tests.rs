@@ -47,12 +47,12 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         .map_err(Error::Language)
         .and_then(|()| {
             if data_stack.pop_bool()? {
-                Ok(data_stack)
+                Ok(())
             } else {
                 Err(Error::TestFailed)
             }
         })
-        .and_then(|data_stack| {
+        .and_then(|()| {
             if data_stack.is_empty() {
                 Ok(())
             } else {
