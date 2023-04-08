@@ -26,6 +26,11 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
             State::ProcessingAny { buf } => {
                 if Token::match_eagerly(buf, &mut tokens) {
                     buf.clear();
+
+                    if ch.is_whitespace() {
+                        state = State::Searching;
+                        continue;
+                    }
                 }
 
                 if ch == '"' {
