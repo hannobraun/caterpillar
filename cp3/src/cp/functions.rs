@@ -4,7 +4,7 @@ use super::expressions::ExpressionGraph;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Functions {
-    pub registry: BTreeMap<String, Function>,
+    registry: BTreeMap<String, Function>,
 }
 
 impl Functions {
