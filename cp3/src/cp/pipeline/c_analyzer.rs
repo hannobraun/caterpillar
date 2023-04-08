@@ -21,6 +21,10 @@ pub fn analyze(
 
                 continue;
             }
+            SyntaxElement::Test { .. } => {
+                // not handled yet
+                continue;
+            }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
             SyntaxElement::Array { syntax_tree } => {
                 let expressions = analyze(syntax_tree, functions);

@@ -42,6 +42,10 @@ fn parse_expression(
             let (name, body) = parse_function(tokens)?;
             SyntaxElement::Function { name, body }
         }
+        Token::Keyword(Keyword::Test) => {
+            let (name, body) = parse_test(tokens)?;
+            SyntaxElement::Test { name, body }
+        }
         Token::Ident(_) => {
             let ident = tokens.expect_ident()?;
             SyntaxElement::Word(ident)
@@ -62,6 +66,13 @@ fn parse_expression(
 fn parse_function(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
     tokens.expect(Token::Keyword(Keyword::Fn))?;
     let name = tokens.expect_ident()?;
+    let body = parse_block(tokens)?;
+    Ok((name, body))
+}
+
+fn parse_test(tokens: &mut Tokens) -> Result<(String, SyntaxTree), Error> {
+    tokens.expect(Token::Keyword(Keyword::Test))?;
+    let name = tokens.expect_string()?;
     let body = parse_block(tokens)?;
     Ok((name, body))
 }

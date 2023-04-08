@@ -25,6 +25,11 @@ pub enum SyntaxElement {
         body: SyntaxTree,
     },
 
+    Test {
+        name: String,
+        body: SyntaxTree,
+    },
+
     /// Binds values from the stack to provided names
     Binding(Vec<String>),
 
