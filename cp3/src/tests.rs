@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::cp;
 
 pub struct TestReport {
@@ -8,54 +6,61 @@ pub struct TestReport {
 }
 
 pub fn run() -> anyhow::Result<Vec<TestReport>> {
-    let mut tests = BTreeMap::new();
+    let code = r#"
+        test "true" { true }
+        test "false not" { false not }
+        test "and - true true" { true true and }
+        test "and - true false" { true false and not }
+        test "and - false true" { false true and not }
+        test "and - false false" { false false and not }
+        test "drop" { true false drop }
+        test "clone" { true clone drop }
+        test "binding" { true false => t f . t }
+        test "block eval" { { true } eval }
+        test "block - lazy evaluation" { true { drop } drop }
+        test "block - tokenization" { {true}eval{true}eval and }
+        test "array unwrap" { [ true ] unwrap }
+        test "array - eager evaluation" { true false [ drop ] drop }
+        test "array - tokenization" { [true]unwrap[true]unwrap and }
+        test "fn" { fn f { true } f }
+        test "if then" { true { true } { false } if }
+        test "if else" { false { false } { true } if }
+        test "string =" { "a" "a" = }
+        test "string = not" { "a" "b" = not }
+        test "string - tokenization" { "a""a"="b""b"= and }
+    "#;
 
-    tests.insert("true", r#"true"#);
-    tests.insert("false not", r#"false not"#);
-    tests.insert("and - true true", r#"true true and"#);
-    tests.insert("and - true false", r#"true false and not"#);
-    tests.insert("and - false true", r#"false true and not"#);
-    tests.insert("and - false false", r#"false false and not"#);
-    tests.insert("drop", r#"true false drop"#);
-    tests.insert("clone", r#"true clone drop"#);
-    tests.insert("binding", r#"true false => t f . t"#);
-    tests.insert("block eval", r#"{ true } eval"#);
-    tests.insert("block - lazy evaluation", r#"true { drop } drop"#);
-    tests.insert("block - tokenization", r#"{true}eval{true}eval and"#);
-    tests.insert("array unwrap", r#"[ true ] unwrap"#);
-    tests.insert("array - eager evaluation", r#"true false [ drop ] drop"#);
-    tests.insert("array - tokenization", r#"[true]unwrap[true]unwrap and"#);
-    tests.insert("fn", r#"fn f { true } f"#);
-    tests.insert("if then", r#"true { true } { false } if"#);
-    tests.insert("if else", r#"false { false } { true } if"#);
-    tests.insert("string =", r#""a" "a" ="#);
-    tests.insert("string = not", r#""a" "b" = not"#);
-    tests.insert("string - tokenization", r#""a""a"="b""b"= and"#);
+    let (functions, _) = cp::execute(code.chars())?;
 
     let mut results = Vec::new();
 
-    for (name, code) in tests {
-        let result = cp::execute(code.chars())
-            .map_err(Error::Language)
-            .and_then(|(_, mut data_stack)| {
-                if data_stack.pop_bool()? {
-                    Ok(data_stack)
-                } else {
-                    Err(Error::TestFailed)
-                }
-            })
-            .and_then(|data_stack| {
-                if data_stack.is_empty() {
-                    Ok(())
-                } else {
-                    Err(Error::TestReturnedTooMuch)
-                }
-            });
+    for (name, code) in functions.tests() {
+        let mut call_stack = cp::CallStack;
+        let mut data_stack = cp::DataStack::new();
 
-        results.push(TestReport {
-            name: name.into(),
-            result,
+        let result = cp::evaluate(
+            code.body,
+            &functions,
+            &mut call_stack,
+            &mut data_stack,
+        )
+        .map_err(Error::Language)
+        .and_then(|()| {
+            if data_stack.pop_bool()? {
+                Ok(data_stack)
+            } else {
+                Err(Error::TestFailed)
+            }
+        })
+        .and_then(|data_stack| {
+            if data_stack.is_empty() {
+                Ok(())
+            } else {
+                Err(Error::TestReturnedTooMuch)
+            }
         });
+
+        results.push(TestReport { name, result });
     }
 
     results.sort_by_key(|report| report.result.is_ok());
@@ -67,7 +72,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Language(cp::Error),
+    Language(cp::EvaluatorError),
 
     #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),

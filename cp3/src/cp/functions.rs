@@ -21,6 +21,16 @@ impl Functions {
     pub fn get(&self, name: &str) -> Option<Function> {
         self.registry.get(name).cloned()
     }
+
+    pub fn tests(&self) -> impl Iterator<Item = (String, Function)> + '_ {
+        self.registry.iter().filter_map(|(name, function)| {
+            if function.test {
+                Some((name.clone(), function.clone()))
+            } else {
+                None
+            }
+        })
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
