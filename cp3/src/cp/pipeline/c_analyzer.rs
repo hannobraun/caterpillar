@@ -15,7 +15,7 @@ pub fn analyze(
         let expression = match syntax_element {
             SyntaxElement::Function { name, body } => {
                 let body = analyze(body, functions);
-                let function = Function { body };
+                let function = Function { body, test: false };
 
                 functions.define(name, function);
 
