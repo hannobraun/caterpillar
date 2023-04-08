@@ -30,7 +30,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         test "string - tokenization" { "a""a"="b""b"= and }
     "#;
 
-    let (functions, _) = cp::execute(code.chars())?;
+    let (functions, data_stack) = cp::execute(code.chars())?;
+    if !data_stack.is_empty() {
+        anyhow::bail!("Importing tests left values on stack: {data_stack:?}")
+    }
 
     let mut results = Vec::new();
 
