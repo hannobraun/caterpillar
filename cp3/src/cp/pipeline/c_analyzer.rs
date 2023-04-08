@@ -21,8 +21,12 @@ pub fn analyze(
 
                 continue;
             }
-            SyntaxElement::Test { .. } => {
-                // not handled yet
+            SyntaxElement::Test { name, body } => {
+                let body = analyze(body, functions);
+                let function = Function { body, test: true };
+
+                functions.define(name, function);
+
                 continue;
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
