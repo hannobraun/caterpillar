@@ -4,7 +4,7 @@ mod tests;
 use crossterm::style::Stylize;
 
 fn main() -> anyhow::Result<()> {
-    let test_reports = tests::run();
+    let test_reports = tests::run()?;
 
     for test_report in test_reports {
         match &test_report.result {

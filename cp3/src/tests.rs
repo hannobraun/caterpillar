@@ -7,7 +7,7 @@ pub struct TestReport {
     pub result: Result<(), Error>,
 }
 
-pub fn run() -> Vec<TestReport> {
+pub fn run() -> anyhow::Result<Vec<TestReport>> {
     let mut tests = BTreeMap::new();
 
     tests.insert("true", r#"true"#);
@@ -58,7 +58,7 @@ pub fn run() -> Vec<TestReport> {
     results.sort_by_key(|report| report.result.is_ok());
     results.reverse();
 
-    results
+    Ok(results)
 }
 
 #[derive(Debug, thiserror::Error)]
