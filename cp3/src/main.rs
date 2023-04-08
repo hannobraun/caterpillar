@@ -3,7 +3,7 @@ mod tests;
 
 use crossterm::style::Stylize;
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let test_reports = tests::run();
 
     for test_report in test_reports {
@@ -24,4 +24,6 @@ fn main() {
 
         println!();
     }
+
+    Ok(())
 }
