@@ -10,7 +10,7 @@ pub fn evaluate(
     functions: &Functions,
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
-) -> Result<(), ErrorKind> {
+) -> Result<(), Error> {
     let mut stack_frame = call_stack.new_stack_frame();
 
     for expression in expressions {
@@ -107,7 +107,7 @@ pub fn evaluate(
                         continue;
                     }
 
-                    return Err(ErrorKind::UnknownWord(word.clone()));
+                    return Err(Error::UnknownWord(word.clone()));
                 }
             },
         }
@@ -117,7 +117,7 @@ pub fn evaluate(
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
-pub enum ErrorKind {
+pub enum Error {
     #[error(transparent)]
     DataStack(#[from] data_stack::Error),
 

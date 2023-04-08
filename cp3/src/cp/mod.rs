@@ -41,5 +41,5 @@ pub enum Error {
     Parser(#[from] pipeline::b_parser::Error),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] pipeline::d_evaluator::ErrorKind),
+    Evaluator(#[from] pipeline::d_evaluator::Error),
 }
