@@ -44,7 +44,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             &mut call_stack,
             &mut data_stack,
         )
-        .map_err(Error::Language)
+        .map_err(Error::Evaluator)
         .and_then(|()| {
             if data_stack.pop_bool()? {
                 Ok(())
@@ -72,7 +72,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Language(cp::EvaluatorError),
+    Evaluator(cp::EvaluatorError),
 
     #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),
