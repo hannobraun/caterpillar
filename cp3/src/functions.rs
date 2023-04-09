@@ -1,5 +1,5 @@
 use crate::cp::{self, Functions};
 
-pub fn define() -> Functions {
-    cp::Functions::new()
+pub fn define() -> anyhow::Result<Functions> {
+    Ok(cp::Functions::new())
 }
