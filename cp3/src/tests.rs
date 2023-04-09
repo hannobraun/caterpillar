@@ -57,12 +57,12 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
     let mut results = Vec::new();
 
-    for (name, code) in functions.tests() {
+    for (name, function) in functions.tests() {
         let mut call_stack = cp::CallStack;
         let mut data_stack = cp::DataStack::new();
 
         let result = cp::evaluate(
-            code.body,
+            function.body,
             &functions,
             &mut call_stack,
             &mut data_stack,
