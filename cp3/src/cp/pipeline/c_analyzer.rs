@@ -13,8 +13,11 @@ pub fn analyze(
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
-            SyntaxElement::Module { .. } => {
-                // not yet implemented
+            SyntaxElement::Module { body, .. } => {
+                // Modules aren't fully implemented yet. We analyze their body,
+                // treating it the same as top-level code, but ignore the fact
+                // that the module exists, basically.
+                expressions.extend(analyze(body, functions));
                 continue;
             }
             SyntaxElement::Function { name, body } => {

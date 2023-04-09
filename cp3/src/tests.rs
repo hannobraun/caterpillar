@@ -7,33 +7,47 @@ pub struct TestReport {
 
 pub fn run() -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
-        test "true" { true }
-        test "false not" { false not }
-        test "and - true true" { true true and }
-        test "and - true false" { true false and not }
-        test "and - false true" { false true and not }
-        test "and - false false" { false false and not }
+        mod bool {
+            test "true" { true }
+            test "false not" { false not }
+            test "and - true true" { true true and }
+            test "and - true false" { true false and not }
+            test "and - false true" { false true and not }
+            test "and - false false" { false false and not }
+        }
 
-        test "drop" { true false drop }
-        test "clone" { true clone drop }
-        test "binding" { true false => t f . t }
+        mod basics {
+            test "drop" { true false drop }
+            test "clone" { true clone drop }
+            test "binding" { true false => t f . t }
+        }
 
-        test "block eval" { { true } eval }
-        test "block - lazy evaluation" { true { drop } drop }
-        test "block - tokenization" { {true}eval{true}eval and }
+        mod block {
+            test "block eval" { { true } eval }
+            test "block - lazy evaluation" { true { drop } drop }
+            test "block - tokenization" { {true}eval{true}eval and }
+        }
 
-        test "array unwrap" { [ true ] unwrap }
-        test "array - eager evaluation" { true false [ drop ] drop }
-        test "array - tokenization" { [true]unwrap[true]unwrap and }
+        mod array {
+            test "array unwrap" { [ true ] unwrap }
+            test "array - eager evaluation" { true false [ drop ] drop }
+            test "array - tokenization" { [true]unwrap[true]unwrap and }
+        }
 
-        test "fn" { fn f { true } f }
+        mod fn_ {
+            test "fn" { fn f { true } f }
+        }
 
-        test "if then" { true { true } { false } if }
-        test "if else" { false { false } { true } if }
+        mod if_ {
+            test "if then" { true { true } { false } if }
+            test "if else" { false { false } { true } if }
+        }
 
-        test "string =" { "a" "a" = }
-        test "string = not" { "a" "b" = not }
-        test "string - tokenization" { "a""a"="b""b"= and }
+        mod string {
+            test "string =" { "a" "a" = }
+            test "string = not" { "a" "b" = not }
+            test "string - tokenization" { "a""a"="b""b"= and }
+        }
     "#;
 
     let (functions, data_stack) = cp::execute(code.chars())?;
