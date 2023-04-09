@@ -6,6 +6,7 @@ use crate::cp::{
 };
 
 pub fn analyze(
+    module: &str,
     syntax_tree: SyntaxTree,
     functions: &mut Functions,
 ) -> ExpressionGraph {
@@ -13,24 +14,29 @@ pub fn analyze(
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
-            SyntaxElement::Module { body, .. } => {
-                // Modules aren't fully implemented yet. We analyze their body,
-                // treating it the same as top-level code, but ignore the fact
-                // that the module exists, basically.
-                expressions.extend(analyze(body, functions));
+            SyntaxElement::Module { name, body } => {
+                expressions.extend(analyze(&name, body, functions));
                 continue;
             }
             SyntaxElement::Function { name, body } => {
-                let body = analyze(body, functions);
-                let function = Function { body, test: false };
+                let body = analyze(module, body, functions);
+                let function = Function {
+                    body,
+                    test: false,
+                    module: module.into(),
+                };
 
                 functions.define(name, function);
 
                 continue;
             }
             SyntaxElement::Test { name, body } => {
-                let body = analyze(body, functions);
-                let function = Function { body, test: true };
+                let body = analyze(module, body, functions);
+                let function = Function {
+                    body,
+                    test: true,
+                    module: module.into(),
+                };
 
                 functions.define(name, function);
 
@@ -38,13 +44,13 @@ pub fn analyze(
             }
             SyntaxElement::Binding(binding) => Expression::Binding(binding),
             SyntaxElement::Array { syntax_tree } => {
-                let expressions = analyze(syntax_tree, functions);
+                let expressions = analyze(module, syntax_tree, functions);
                 Expression::Array {
                     syntax_tree: expressions,
                 }
             }
             SyntaxElement::Block { syntax_tree } => {
-                let expressions = analyze(syntax_tree, functions);
+                let expressions = analyze(module, syntax_tree, functions);
                 Expression::Block {
                     syntax_tree: expressions,
                 }

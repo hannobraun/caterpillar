@@ -37,4 +37,5 @@ impl Functions {
 pub struct Function {
     pub body: ExpressionGraph,
     pub test: bool,
+    pub module: String,
 }

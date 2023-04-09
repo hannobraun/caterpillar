@@ -23,7 +23,7 @@ pub fn execute(
 
     let tokens = pipeline::tokenize(code);
     let syntax_tree = pipeline::parse(tokens)?;
-    let expressions = pipeline::analyze(syntax_tree, &mut functions);
+    let expressions = pipeline::analyze("", syntax_tree, &mut functions);
 
     pipeline::evaluate(
         expressions,
