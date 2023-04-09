@@ -20,6 +20,11 @@ impl IntoIterator for SyntaxTree {
 
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
+    Module {
+        name: String,
+        body: SyntaxTree,
+    },
+
     Function {
         name: String,
         body: SyntaxTree,

@@ -13,6 +13,10 @@ pub fn analyze(
 
     for syntax_element in syntax_tree {
         let expression = match syntax_element {
+            SyntaxElement::Module { .. } => {
+                // not yet implemented
+                continue;
+            }
             SyntaxElement::Function { name, body } => {
                 let body = analyze(body, functions);
                 let function = Function { body, test: false };
