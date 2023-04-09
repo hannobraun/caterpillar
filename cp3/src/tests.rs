@@ -24,15 +24,15 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         }
 
         mod block {
-            test "block eval" { { true } eval }
-            test "block - lazy evaluation" { true { drop } drop }
-            test "block - tokenization" { {true}eval{true}eval and }
+            test "eval" { { true } eval }
+            test "lazy evaluation" { true { drop } drop }
+            test "tokenization" { {true}eval{true}eval and }
         }
 
         mod array {
-            test "array unwrap" { [ true ] unwrap }
-            test "array - eager evaluation" { true false [ drop ] drop }
-            test "array - tokenization" { [true]unwrap[true]unwrap and }
+            test "unwrap" { [ true ] unwrap }
+            test "eager evaluation" { true false [ drop ] drop }
+            test "tokenization" { [true]unwrap[true]unwrap and }
         }
 
         mod fn_ {
@@ -40,14 +40,14 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         }
 
         mod if_ {
-            test "if then" { true { true } { false } if }
-            test "if else" { false { false } { true } if }
+            test "then" { true { true } { false } if }
+            test "else" { false { false } { true } if }
         }
 
         mod string {
-            test "string =" { "a" "a" = }
-            test "string = not" { "a" "b" = not }
-            test "string - tokenization" { "a""a"="b""b"= and }
+            test "=" { "a" "a" = }
+            test "= not" { "a" "b" = not }
+            test "tokenization" { "a""a"="b""b"= and }
         }
     "#;
 
