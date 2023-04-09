@@ -1,10 +1,11 @@
 mod cp;
+mod functions;
 mod tests;
 
 use crossterm::style::Stylize;
 
 fn main() -> anyhow::Result<()> {
-    let mut functions = cp::Functions::new();
+    let mut functions = functions::define();
     let test_reports = tests::run(&mut functions)?;
 
     for test_report in test_reports {
