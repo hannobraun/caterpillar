@@ -16,7 +16,7 @@ fn main() -> anyhow::Result<()> {
             }
         }
 
-        print!(" {}", test_report.name);
+        print!(" {} - {}", test_report.module, test_report.name);
 
         if let Err(err) = &test_report.result {
             print!("\n    {err}");

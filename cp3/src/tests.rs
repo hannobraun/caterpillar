@@ -1,6 +1,7 @@
 use crate::cp;
 
 pub struct TestReport {
+    pub module: String,
     pub name: String,
     pub result: Result<(), Error>,
 }
@@ -83,7 +84,11 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             }
         });
 
-        results.push(TestReport { name, result });
+        results.push(TestReport {
+            module: function.module,
+            name,
+            result,
+        });
     }
 
     results.sort_by_key(|report| report.result.is_ok());
