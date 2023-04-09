@@ -17,22 +17,22 @@ pub use self::{
 
 pub fn execute(
     code: impl IntoIterator<Item = char>,
-) -> Result<(Functions, DataStack), Error> {
-    let mut functions = Functions::new();
+    functions: &mut Functions,
+) -> Result<DataStack, Error> {
     let mut data_stack = DataStack::new();
 
     let tokens = pipeline::tokenize(code);
     let syntax_tree = pipeline::parse(tokens)?;
-    let expressions = pipeline::analyze("", syntax_tree, &mut functions);
+    let expressions = pipeline::analyze("", syntax_tree, functions);
 
     pipeline::evaluate(
         expressions,
-        &functions,
+        functions,
         &mut CallStack,
         &mut data_stack,
     )?;
 
-    Ok((functions, data_stack))
+    Ok(data_stack)
 }
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, thiserror::Error)]
