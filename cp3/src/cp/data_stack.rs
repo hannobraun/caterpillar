@@ -54,6 +54,16 @@ impl DataStack {
         }
     }
 
+    pub fn pop_u8(&mut self) -> Result<u8, Error> {
+        match self.pop_any()? {
+            Value::U8(num) => Ok(num),
+            value => Err(Error::UnexpectedType {
+                expected: "u8",
+                actual: value,
+            }),
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }

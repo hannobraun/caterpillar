@@ -38,6 +38,14 @@ pub fn evaluate(
                 data_stack.push(string);
             }
             Expression::Word(word) => match word.as_str() {
+                "-" => {
+                    let a = data_stack.pop_u8()?;
+                    let b = data_stack.pop_u8()?;
+
+                    let x = a.saturating_sub(b);
+
+                    data_stack.push(x);
+                }
                 "=" => {
                     let a = data_stack.pop_any();
                     let b = data_stack.pop_any();
