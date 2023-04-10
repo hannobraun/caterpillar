@@ -38,6 +38,5 @@ impl Functions {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Function {
     pub body: ExpressionGraph,
-    pub test: bool,
     pub module: String,
 }

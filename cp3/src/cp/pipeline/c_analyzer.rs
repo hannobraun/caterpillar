@@ -22,7 +22,6 @@ pub fn analyze(
                 let body = analyze(module, body, functions);
                 let function = Function {
                     body,
-                    test: false,
                     module: module.into(),
                 };
 
@@ -34,7 +33,6 @@ pub fn analyze(
                 let body = analyze(module, body, functions);
                 let function = Function {
                     body,
-                    test: true,
                     module: module.into(),
                 };
 
