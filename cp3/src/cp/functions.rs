@@ -16,12 +16,12 @@ impl Functions {
         }
     }
 
-    pub fn define(&mut self, name: String, function: Function) {
-        if function.test {
-            self.tests.insert(name, function);
-        } else {
-            self.functions.insert(name, function);
-        }
+    pub fn define_function(&mut self, name: String, function: Function) {
+        self.functions.insert(name, function);
+    }
+
+    pub fn define_test(&mut self, name: String, function: Function) {
+        self.tests.insert(name, function);
     }
 
     pub fn function(&self, name: &str) -> Option<Function> {

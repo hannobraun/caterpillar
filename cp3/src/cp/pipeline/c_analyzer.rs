@@ -26,7 +26,7 @@ pub fn analyze(
                     module: module.into(),
                 };
 
-                functions.define(name, function);
+                functions.define_function(name, function);
 
                 continue;
             }
@@ -38,7 +38,7 @@ pub fn analyze(
                     module: module.into(),
                 };
 
-                functions.define(name, function);
+                functions.define_test(name, function);
 
                 continue;
             }
