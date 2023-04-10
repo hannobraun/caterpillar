@@ -96,7 +96,7 @@ pub fn evaluate(
                         continue;
                     }
 
-                    if let Some(function) = functions.get(&word) {
+                    if let Some(function) = functions.function(&word) {
                         evaluate(
                             function.body,
                             functions,

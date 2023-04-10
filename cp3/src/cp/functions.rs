@@ -24,7 +24,7 @@ impl Functions {
         }
     }
 
-    pub fn get(&self, name: &str) -> Option<Function> {
+    pub fn function(&self, name: &str) -> Option<Function> {
         self.functions.get(name).cloned()
     }
 
