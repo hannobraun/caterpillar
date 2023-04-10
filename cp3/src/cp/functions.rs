@@ -34,13 +34,9 @@ impl Functions {
     }
 
     pub fn tests(&self) -> impl Iterator<Item = (String, Function)> + '_ {
-        self.tests.iter().filter_map(|(name, function)| {
-            if function.test {
-                Some((name.clone(), function.clone()))
-            } else {
-                None
-            }
-        })
+        self.tests
+            .iter()
+            .map(|(name, function)| (name.clone(), function.clone()))
     }
 }
 
