@@ -25,12 +25,7 @@ impl Functions {
     }
 
     pub fn get(&self, name: &str) -> Option<Function> {
-        self.functions
-            .get(name)
-            .and_then(
-                |function| if function.test { None } else { Some(function) },
-            )
-            .cloned()
+        self.functions.get(name).cloned()
     }
 
     pub fn tests(&self) -> impl Iterator<Item = (String, Function)> + '_ {
