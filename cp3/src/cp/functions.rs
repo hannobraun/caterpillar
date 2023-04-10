@@ -4,22 +4,22 @@ use super::expressions::ExpressionGraph;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Functions {
-    registry: BTreeMap<String, Function>,
+    functions: BTreeMap<String, Function>,
 }
 
 impl Functions {
     pub fn new() -> Self {
         Self {
-            registry: BTreeMap::new(),
+            functions: BTreeMap::new(),
         }
     }
 
     pub fn define(&mut self, name: String, function: Function) {
-        self.registry.insert(name, function);
+        self.functions.insert(name, function);
     }
 
     pub fn get(&self, name: &str) -> Option<Function> {
-        self.registry
+        self.functions
             .get(name)
             .and_then(
                 |function| if function.test { None } else { Some(function) },
@@ -28,7 +28,7 @@ impl Functions {
     }
 
     pub fn tests(&self) -> impl Iterator<Item = (String, Function)> + '_ {
-        self.registry.iter().filter_map(|(name, function)| {
+        self.functions.iter().filter_map(|(name, function)| {
             if function.test {
                 Some((name.clone(), function.clone()))
             } else {
