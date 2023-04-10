@@ -19,7 +19,12 @@ impl Functions {
     }
 
     pub fn get(&self, name: &str) -> Option<Function> {
-        self.registry.get(name).cloned()
+        self.registry
+            .get(name)
+            .and_then(
+                |function| if function.test { None } else { Some(function) },
+            )
+            .cloned()
     }
 
     pub fn tests(&self) -> impl Iterator<Item = (String, Function)> + '_ {
