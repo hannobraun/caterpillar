@@ -91,6 +91,11 @@ pub fn evaluate(
                     }
                 }
                 _ => {
+                    if let Ok(num) = word.parse::<u8>() {
+                        data_stack.push(num);
+                        continue;
+                    }
+
                     if let Some(function) = functions.get(&word) {
                         evaluate(
                             function.body,
