@@ -17,10 +17,13 @@ pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
             test "and - false false" { false false and not }
         }
 
+        mod binding {
+            test "binding" { true false => t f . t }
+        }
+
         mod basics {
             test "drop" { true false drop }
             test "clone" { true clone drop }
-            test "binding" { true false => t f . t }
         }
 
         mod block {
