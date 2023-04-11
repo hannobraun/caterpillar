@@ -19,6 +19,7 @@ pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
 
         mod binding {
             test "binding" { true false => t f . t }
+            test "tokenization" { true=>t.t }
         }
 
         mod basics {
