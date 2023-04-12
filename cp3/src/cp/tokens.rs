@@ -108,6 +108,7 @@ impl Token {
 
         vec![]
     }
+
     pub fn match_delimited(s: &str) -> Vec<Self> {
         let mut tokens = Self::match_eagerly(s);
         if !tokens.is_empty() {
