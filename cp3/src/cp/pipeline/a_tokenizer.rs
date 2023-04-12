@@ -1,6 +1,6 @@
 use std::mem;
 
-use crate::cp::tokens::{Token, Tokens};
+use crate::cp::tokens::Token;
 
 #[derive(Debug)]
 pub enum Tokenizer {
@@ -13,7 +13,7 @@ pub fn new() -> Tokenizer {
     Tokenizer::Searching
 }
 
-pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
+pub fn tokenize(code: impl IntoIterator<Item = char>) -> Vec<Token> {
     let code = code.into_iter();
     let mut tokens = Vec::new();
 
@@ -24,7 +24,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     }
     tokens.extend(finalize(tokenizer));
 
-    Tokens(tokens.into())
+    tokens
 }
 
 pub fn push_char(
