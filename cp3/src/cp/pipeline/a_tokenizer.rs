@@ -96,7 +96,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
-    pub const EAGER_TOKENS: &[(&str, Token)] = &[
+    const EAGER_TOKENS: &[(&str, Token)] = &[
         ("=>", Token::BindingOperator),
         (".", Token::Period),
         ("{", Token::CurlyBracketOpen),
