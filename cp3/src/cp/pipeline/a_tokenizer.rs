@@ -28,7 +28,6 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     for ch in code {
         push_char(ch, &mut tokenizer, &mut tokens);
     }
-
     finalize(tokenizer, &mut tokens);
 
     Tokens(tokens.into())
