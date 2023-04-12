@@ -97,28 +97,24 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
     let delimiters = &[
-        ("=>", Some(Token::BindingOperator)),
-        (".", Some(Token::Period)),
-        ("{", Some(Token::CurlyBracketOpen)),
-        ("}", Some(Token::CurlyBracketClose)),
-        ("(", Some(Token::RoundBracketOpen)),
-        (")", Some(Token::RoundBracketClose)),
-        ("[", Some(Token::SquareBracketOpen)),
-        ("]", Some(Token::SquareBracketClose)),
+        ("=>", Token::BindingOperator),
+        (".", Token::Period),
+        ("{", Token::CurlyBracketOpen),
+        ("}", Token::CurlyBracketClose),
+        ("(", Token::RoundBracketOpen),
+        (")", Token::RoundBracketClose),
+        ("[", Token::SquareBracketOpen),
+        ("]", Token::SquareBracketClose),
     ];
 
     for (delimiter, token) in delimiters {
-        if let Some(token) = token {
-            if buf == *delimiter {
-                return vec![token.clone()];
-            }
+        if buf == *delimiter {
+            return vec![token.clone()];
         }
 
         if let Some((first_token, "")) = buf.split_once(delimiter) {
             let mut tokens = match_delimited(first_token);
-            if let Some(token) = token {
-                tokens.push(token.clone());
-            }
+            tokens.push(token.clone());
             return tokens;
         }
     }
