@@ -82,14 +82,14 @@ pub enum Token {
 }
 
 impl Token {
-    pub const EAGER_TOKENS: &[(&'static str, Self)] = &[
-        ("=>", Self::BindingOperator),
-        (".", Self::Period),
-        ("{", Self::CurlyBracketOpen),
-        ("}", Self::CurlyBracketClose),
-        ("(", Self::RoundBracketOpen),
-        (")", Self::RoundBracketClose),
-        ("[", Self::SquareBracketOpen),
-        ("]", Self::SquareBracketClose),
+    pub const EAGER_TOKENS: &[(&'static str, Token)] = &[
+        ("=>", Token::BindingOperator),
+        (".", Token::Period),
+        ("{", Token::CurlyBracketOpen),
+        ("}", Token::CurlyBracketClose),
+        ("(", Token::RoundBracketOpen),
+        (")", Token::RoundBracketClose),
+        ("[", Token::SquareBracketOpen),
+        ("]", Token::SquareBracketClose),
     ];
 }
