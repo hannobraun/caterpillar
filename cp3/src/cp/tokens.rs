@@ -94,12 +94,9 @@ impl Token {
     ];
 
     pub fn match_eagerly(s: &str) -> Vec<Self> {
-        let mut tokens = Vec::new();
-
         for (token_str, token) in Self::EAGER_TOKENS {
             if s == *token_str {
-                tokens.push(token.clone());
-                return tokens;
+                return vec![token.clone()];
             }
 
             if let Some((first_token, "")) = s.split_once(token_str) {
@@ -109,7 +106,7 @@ impl Token {
             }
         }
 
-        tokens
+        vec![]
     }
     pub fn match_delimited(s: &str) -> Vec<Self> {
         let mut tokens = Self::match_eagerly(s);
