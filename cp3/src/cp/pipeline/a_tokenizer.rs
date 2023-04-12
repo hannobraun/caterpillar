@@ -107,14 +107,14 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
         ("]", Some(Token::SquareBracketClose)),
     ];
 
-    for (token_str, token) in delimiters {
+    for (delimiter, token) in delimiters {
         if let Some(token) = token {
-            if buf == *token_str {
+            if buf == *delimiter {
                 return vec![token.clone()];
             }
         }
 
-        if let Some((first_token, "")) = buf.split_once(token_str) {
+        if let Some((first_token, "")) = buf.split_once(delimiter) {
             let mut tokens = match_delimited(first_token);
             if let Some(token) = token {
                 tokens.push(token.clone());
