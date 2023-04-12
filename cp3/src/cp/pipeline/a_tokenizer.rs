@@ -50,7 +50,9 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
             tokenizer.state = State::ProcessingAny { buf }
         }
         State::ProcessingAny { buf } => {
-            if Token::match_eagerly(buf, tokens) {
+            let t = Token::match_eagerly(buf);
+            if !t.is_empty() {
+                tokens.extend(t);
                 buf.clear();
 
                 if ch.is_whitespace() {
