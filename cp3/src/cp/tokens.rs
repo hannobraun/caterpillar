@@ -80,16 +80,3 @@ pub enum Token {
     String(String),
     Symbol(String),
 }
-
-impl Token {
-    pub const EAGER_TOKENS: &[(&'static str, Token)] = &[
-        ("=>", Token::BindingOperator),
-        (".", Token::Period),
-        ("{", Token::CurlyBracketOpen),
-        ("}", Token::CurlyBracketClose),
-        ("(", Token::RoundBracketOpen),
-        (")", Token::RoundBracketClose),
-        ("[", Token::SquareBracketOpen),
-        ("]", Token::SquareBracketClose),
-    ];
-}

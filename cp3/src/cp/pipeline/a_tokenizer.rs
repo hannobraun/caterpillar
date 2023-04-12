@@ -96,7 +96,18 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
-    for (token_str, token) in Token::EAGER_TOKENS {
+    pub const EAGER_TOKENS: &[(&str, Token)] = &[
+        ("=>", Token::BindingOperator),
+        (".", Token::Period),
+        ("{", Token::CurlyBracketOpen),
+        ("}", Token::CurlyBracketClose),
+        ("(", Token::RoundBracketOpen),
+        (")", Token::RoundBracketClose),
+        ("[", Token::SquareBracketOpen),
+        ("]", Token::SquareBracketClose),
+    ];
+
+    for (token_str, token) in EAGER_TOKENS {
         if buf == *token_str {
             return vec![token.clone()];
         }
