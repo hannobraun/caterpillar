@@ -111,21 +111,21 @@ fn match_eagerly(s: &str) -> Vec<Token> {
     vec![]
 }
 
-fn match_delimited(s: &str) -> Vec<Token> {
-    let mut tokens = match_eagerly(s);
+fn match_delimited(buf: &str) -> Vec<Token> {
+    let mut tokens = match_eagerly(buf);
     if !tokens.is_empty() {
         return tokens;
     }
 
-    if let Some(keyword) = Keyword::parse(s) {
+    if let Some(keyword) = Keyword::parse(buf) {
         tokens.push(Token::Keyword(keyword));
         return tokens;
     }
-    if let Some(("", symbol)) = s.split_once(':') {
+    if let Some(("", symbol)) = buf.split_once(':') {
         tokens.push(Token::Symbol(symbol.into()));
         return tokens;
     }
 
-    tokens.push(Token::Ident(s.into()));
+    tokens.push(Token::Ident(buf.into()));
     tokens
 }
