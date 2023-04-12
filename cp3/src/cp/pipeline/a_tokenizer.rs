@@ -95,13 +95,13 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     vec![]
 }
 
-fn match_eagerly(s: &str) -> Vec<Token> {
+fn match_eagerly(buf: &str) -> Vec<Token> {
     for (token_str, token) in Token::EAGER_TOKENS {
-        if s == *token_str {
+        if buf == *token_str {
             return vec![token.clone()];
         }
 
-        if let Some((first_token, "")) = s.split_once(token_str) {
+        if let Some((first_token, "")) = buf.split_once(token_str) {
             let mut tokens = match_delimited(first_token);
             tokens.push(token.clone());
             return tokens;
