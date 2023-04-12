@@ -57,7 +57,7 @@ pub fn push_char(
             }
 
             if ch == '"' {
-                tokens.extend(match_delimited(buf.as_str()));
+                tokens.extend(match_delimited(&buf));
                 return Tokenizer::ProcessingString { buf: String::new() };
             }
 
@@ -67,7 +67,7 @@ pub fn push_char(
             }
 
             if !buf.is_empty() {
-                tokens.extend(match_delimited(buf.as_str()));
+                tokens.extend(match_delimited(&buf));
                 return Tokenizer::Searching;
             }
 
