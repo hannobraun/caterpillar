@@ -2,21 +2,15 @@ use std::mem;
 
 use crate::cp::tokens::{Token, Tokens};
 
-pub struct Tokenizer {
-    state: State,
-}
-
 #[derive(Debug)]
-enum State {
+pub enum Tokenizer {
     Searching,
     ProcessingAny { buf: String },
     ProcessingString { buf: String },
 }
 
 pub fn new() -> Tokenizer {
-    Tokenizer {
-        state: State::Searching,
-    }
+    Tokenizer::Searching
 }
 
 pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
@@ -34,37 +28,35 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
 }
 
 pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
-    match &mut tokenizer.state {
-        State::Searching => {
+    match tokenizer {
+        Tokenizer::Searching => {
             if ch.is_whitespace() {
                 return;
             }
 
             if ch == '"' {
-                tokenizer.state =
-                    State::ProcessingString { buf: String::new() };
+                *tokenizer = Tokenizer::ProcessingString { buf: String::new() };
                 return;
             }
 
             let buf = String::from(ch);
-            tokenizer.state = State::ProcessingAny { buf }
+            *tokenizer = Tokenizer::ProcessingAny { buf }
         }
-        State::ProcessingAny { buf } => {
+        Tokenizer::ProcessingAny { buf } => {
             let t = Token::match_eagerly(buf);
             if !t.is_empty() {
                 tokens.extend(t);
                 buf.clear();
 
                 if ch.is_whitespace() {
-                    tokenizer.state = State::Searching;
+                    *tokenizer = Tokenizer::Searching;
                     return;
                 }
             }
 
             if ch == '"' {
                 tokens.extend(Token::match_delimited(buf.as_str()));
-                tokenizer.state =
-                    State::ProcessingString { buf: String::new() };
+                *tokenizer = Tokenizer::ProcessingString { buf: String::new() };
                 return;
             }
 
@@ -75,14 +67,14 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
 
             if !buf.is_empty() {
                 tokens.extend(Token::match_delimited(buf.as_str()));
-                tokenizer.state = State::Searching;
+                *tokenizer = Tokenizer::Searching;
             }
         }
-        State::ProcessingString { buf } => {
+        Tokenizer::ProcessingString { buf } => {
             if ch == '"' {
                 let string = mem::take(buf);
                 tokens.push(Token::String(string));
-                tokenizer.state = State::Searching;
+                *tokenizer = Tokenizer::Searching;
                 return;
             }
 
@@ -92,7 +84,7 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
 }
 
 pub fn finalize(tokenizer: Tokenizer, tokens: &mut Vec<Token>) {
-    if let State::ProcessingAny { buf } = tokenizer.state {
+    if let Tokenizer::ProcessingAny { buf } = tokenizer {
         tokens.extend(Token::match_delimited(&buf));
     }
 }
