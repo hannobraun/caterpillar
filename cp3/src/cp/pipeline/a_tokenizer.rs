@@ -6,6 +6,13 @@ pub struct Tokenizer {
     state: State,
 }
 
+#[derive(Debug)]
+enum State {
+    Searching,
+    ProcessingAny { buf: String },
+    ProcessingString { buf: String },
+}
+
 pub fn new() -> Tokenizer {
     Tokenizer {
         state: State::Searching,
@@ -83,11 +90,4 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
             buf.push(ch);
         }
     }
-}
-
-#[derive(Debug)]
-enum State {
-    Searching,
-    ProcessingAny { buf: String },
-    ProcessingString { buf: String },
 }
