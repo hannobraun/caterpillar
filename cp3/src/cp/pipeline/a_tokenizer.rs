@@ -96,7 +96,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
-    let eager_tokens = &[
+    let delimiters = &[
         ("=>", Some(Token::BindingOperator)),
         (".", Some(Token::Period)),
         ("{", Some(Token::CurlyBracketOpen)),
@@ -107,7 +107,7 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
         ("]", Some(Token::SquareBracketClose)),
     ];
 
-    for (token_str, token) in eager_tokens {
+    for (token_str, token) in delimiters {
         if let Some(token) = token {
             if buf == *token_str {
                 return vec![token.clone()];
