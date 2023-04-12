@@ -6,13 +6,17 @@ pub struct Tokenizer {
     state: State,
 }
 
+pub fn new() -> Tokenizer {
+    Tokenizer {
+        state: State::Searching,
+    }
+}
+
 pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     let code = code.into_iter();
     let mut tokens = Vec::new();
 
-    let mut tokenizer = Tokenizer {
-        state: State::Searching,
-    };
+    let mut tokenizer = new();
 
     for ch in code {
         match &mut tokenizer.state {
