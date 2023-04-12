@@ -103,7 +103,7 @@ impl Token {
             }
 
             if let Some((first_token, "")) = s.split_once(token_str) {
-                Self::match_delimited(first_token, &mut tokens);
+                let mut tokens = Self::match_delimited(first_token);
                 tokens.push(token.clone());
                 return tokens;
             }
@@ -111,17 +111,22 @@ impl Token {
 
         tokens
     }
-    pub fn match_delimited(s: &str, tokens: &mut Vec<Self>) {
-        tokens.extend(Self::match_eagerly(s));
+    pub fn match_delimited(s: &str) -> Vec<Self> {
+        let mut tokens = Self::match_eagerly(s);
+        if !tokens.is_empty() {
+            return tokens;
+        }
+
         if let Some(keyword) = Keyword::parse(s) {
             tokens.push(Token::Keyword(keyword));
-            return;
+            return tokens;
         }
         if let Some(("", symbol)) = s.split_once(':') {
             tokens.push(Token::Symbol(symbol.into()));
-            return;
+            return tokens;
         }
 
         tokens.push(Token::Ident(s.into()));
+        tokens
     }
 }

@@ -62,7 +62,7 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
             }
 
             if ch == '"' {
-                Token::match_delimited(buf.as_str(), tokens);
+                tokens.extend(Token::match_delimited(buf.as_str()));
                 tokenizer.state =
                     State::ProcessingString { buf: String::new() };
                 return;
@@ -74,7 +74,7 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
             }
 
             if !buf.is_empty() {
-                Token::match_delimited(buf.as_str(), tokens);
+                tokens.extend(Token::match_delimited(buf.as_str()));
                 tokenizer.state = State::Searching;
             }
         }
@@ -93,6 +93,6 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
 
 pub fn finalize(tokenizer: Tokenizer, tokens: &mut Vec<Token>) {
     if let State::ProcessingAny { buf } = tokenizer.state {
-        Token::match_delimited(&buf, tokens);
+        tokens.extend(Token::match_delimited(&buf));
     }
 }
