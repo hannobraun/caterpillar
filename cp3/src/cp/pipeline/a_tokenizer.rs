@@ -22,7 +22,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
     for ch in code {
         tokenizer = push_char(ch, tokenizer, &mut tokens);
     }
-    finalize(tokenizer, &mut tokens);
+    tokens.extend(finalize(tokenizer));
 
     Tokens(tokens.into())
 }
@@ -87,8 +87,10 @@ pub fn push_char(
     }
 }
 
-pub fn finalize(tokenizer: Tokenizer, tokens: &mut Vec<Token>) {
+pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     if let Tokenizer::ProcessingAny { buf } = tokenizer {
-        tokens.extend(Token::match_delimited(&buf));
+        return Token::match_delimited(&buf);
     }
+
+    vec![]
 }
