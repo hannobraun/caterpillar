@@ -93,14 +93,14 @@ impl Token {
         ("]", Self::SquareBracketClose),
     ];
 
-    pub fn match_eagerly(s: &str) -> Vec<Self> {
-        for (token_str, token) in Self::EAGER_TOKENS {
+    pub fn match_eagerly(s: &str) -> Vec<Token> {
+        for (token_str, token) in Token::EAGER_TOKENS {
             if s == *token_str {
                 return vec![token.clone()];
             }
 
             if let Some((first_token, "")) = s.split_once(token_str) {
-                let mut tokens = Self::match_delimited(first_token);
+                let mut tokens = Token::match_delimited(first_token);
                 tokens.push(token.clone());
                 return tokens;
             }
@@ -109,8 +109,8 @@ impl Token {
         vec![]
     }
 
-    pub fn match_delimited(s: &str) -> Vec<Self> {
-        let mut tokens = Self::match_eagerly(s);
+    pub fn match_delimited(s: &str) -> Vec<Token> {
+        let mut tokens = Token::match_eagerly(s);
         if !tokens.is_empty() {
             return tokens;
         }
