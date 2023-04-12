@@ -1,6 +1,6 @@
 use std::mem;
 
-use crate::cp::tokens::Token;
+use crate::cp::{keywords::Keyword, tokens::Token};
 
 #[derive(Debug)]
 pub enum Tokenizer {
@@ -46,7 +46,7 @@ pub fn push_char(
             Tokenizer::ProcessingAny { buf }
         }
         Tokenizer::ProcessingAny { mut buf } => {
-            let t = Token::match_eagerly(&buf);
+            let t = match_eagerly(&buf);
             if !t.is_empty() {
                 tokens.extend(t);
                 buf.clear();
@@ -57,7 +57,7 @@ pub fn push_char(
             }
 
             if ch == '"' {
-                tokens.extend(Token::match_delimited(buf.as_str()));
+                tokens.extend(match_delimited(buf.as_str()));
                 return Tokenizer::ProcessingString { buf: String::new() };
             }
 
@@ -67,7 +67,7 @@ pub fn push_char(
             }
 
             if !buf.is_empty() {
-                tokens.extend(Token::match_delimited(buf.as_str()));
+                tokens.extend(match_delimited(buf.as_str()));
                 return Tokenizer::Searching;
             }
 
@@ -89,8 +89,43 @@ pub fn push_char(
 
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     if let Tokenizer::ProcessingAny { buf } = tokenizer {
-        return Token::match_delimited(&buf);
+        return match_delimited(&buf);
     }
 
     vec![]
+}
+
+pub fn match_eagerly(s: &str) -> Vec<Token> {
+    for (token_str, token) in Token::EAGER_TOKENS {
+        if s == *token_str {
+            return vec![token.clone()];
+        }
+
+        if let Some((first_token, "")) = s.split_once(token_str) {
+            let mut tokens = match_delimited(first_token);
+            tokens.push(token.clone());
+            return tokens;
+        }
+    }
+
+    vec![]
+}
+
+pub fn match_delimited(s: &str) -> Vec<Token> {
+    let mut tokens = match_eagerly(s);
+    if !tokens.is_empty() {
+        return tokens;
+    }
+
+    if let Some(keyword) = Keyword::parse(s) {
+        tokens.push(Token::Keyword(keyword));
+        return tokens;
+    }
+    if let Some(("", symbol)) = s.split_once(':') {
+        tokens.push(Token::Symbol(symbol.into()));
+        return tokens;
+    }
+
+    tokens.push(Token::Ident(s.into()));
+    tokens
 }
