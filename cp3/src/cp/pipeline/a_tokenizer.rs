@@ -29,9 +29,7 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Tokens {
         push_char(ch, &mut tokenizer, &mut tokens);
     }
 
-    if let State::ProcessingAny { buf } = tokenizer.state {
-        Token::match_delimited(&buf, &mut tokens);
-    }
+    finalize(tokenizer, &mut tokens);
 
     Tokens(tokens.into())
 }
@@ -89,5 +87,11 @@ pub fn push_char(ch: char, tokenizer: &mut Tokenizer, tokens: &mut Vec<Token>) {
 
             buf.push(ch);
         }
+    }
+}
+
+pub fn finalize(tokenizer: Tokenizer, tokens: &mut Vec<Token>) {
+    if let State::ProcessingAny { buf } = tokenizer.state {
+        Token::match_delimited(&buf, tokens);
     }
 }
