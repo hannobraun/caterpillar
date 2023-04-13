@@ -22,11 +22,11 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Vec<Token> {
     let code = code.into_iter();
     let mut tokens = Vec::new();
 
-    let mut tokenizer = new();
+    let tokenizer = new();
 
-    for ch in code {
-        tokenizer = push_char(ch, tokenizer, &mut tokens);
-    }
+    let tokenizer = code.fold(tokenizer, |tokenizer, ch| {
+        push_char(ch, tokenizer, &mut tokens)
+    });
     tokens.extend(finalize(tokenizer));
 
     tokens
