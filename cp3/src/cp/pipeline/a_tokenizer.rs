@@ -25,72 +25,73 @@ pub fn tokenize(code: impl IntoIterator<Item = char>) -> Vec<Token> {
     let tokenizer = new();
 
     let tokenizer = code.fold(tokenizer, |tokenizer, ch| {
-        push_char(ch, tokenizer, &mut tokens)
+        let (tokenizer, ts) = push_char(ch, tokenizer);
+        tokens.extend(ts);
+        tokenizer
     });
     tokens.extend(finalize(tokenizer));
 
     tokens
 }
 
-pub fn push_char(
-    ch: char,
-    tokenizer: Tokenizer,
-    tokens: &mut Vec<Token>,
-) -> Tokenizer {
+pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
     match tokenizer {
         Tokenizer::Searching => {
             if ch.is_whitespace() {
-                return tokenizer;
+                return (tokenizer, vec![]);
             }
 
             if ch == STRING_DELIMITER {
-                return Tokenizer::ProcessingString { buf: String::new() };
+                return (
+                    Tokenizer::ProcessingString { buf: String::new() },
+                    vec![],
+                );
             }
 
             let buf = String::from(ch);
-            Tokenizer::ProcessingAny { buf }
+            (Tokenizer::ProcessingAny { buf }, vec![])
         }
         Tokenizer::ProcessingAny { mut buf } => {
-            let t = match_eagerly(&buf);
-            if !t.is_empty() {
-                tokens.extend(t);
+            let mut tokens = match_eagerly(&buf);
+            if !tokens.is_empty() {
                 buf.clear();
 
                 if ch.is_whitespace() {
-                    return Tokenizer::Searching;
+                    return (Tokenizer::Searching, tokens);
                 }
             }
 
             if ch == STRING_DELIMITER {
                 tokens.extend(match_delimited(&buf));
-                return Tokenizer::ProcessingString { buf: String::new() };
+                return (
+                    Tokenizer::ProcessingString { buf: String::new() },
+                    tokens,
+                );
             }
 
             if !ch.is_whitespace() {
                 buf.push(ch);
-                return Tokenizer::ProcessingAny { buf };
+                return (Tokenizer::ProcessingAny { buf }, tokens);
             }
 
             if !buf.is_empty() {
                 tokens.extend(match_delimited(&buf));
-                return Tokenizer::Searching;
+                return (Tokenizer::Searching, tokens);
             }
 
-            Tokenizer::ProcessingAny { buf }
+            (Tokenizer::ProcessingAny { buf }, tokens)
         }
         Tokenizer::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
                 let string = mem::take(&mut buf);
                 let token = Token::String(string);
 
-                tokens.push(token);
-
-                return Tokenizer::Searching;
+                return (Tokenizer::Searching, vec![token]);
             }
 
             buf.push(ch);
 
-            Tokenizer::ProcessingString { buf }
+            (Tokenizer::ProcessingString { buf }, vec![])
         }
     }
 }
