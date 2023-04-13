@@ -98,7 +98,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
-    let delimiters = map! {
+    let mut delimiters = map! {
         "=>" => Token::BindingOperator,
         "." => Token::Period,
         "{" => Token::CurlyBracketOpen,
@@ -109,8 +109,8 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
         "]" => Token::SquareBracketClose,
     };
 
-    if let Some(token) = delimiters.get(buf) {
-        return vec![token.clone()];
+    if let Some(token) = delimiters.remove(buf) {
+        return vec![token];
     }
 
     for (delimiter, token) in delimiters {
