@@ -81,7 +81,10 @@ pub fn push_char(
         Tokenizer::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
                 let string = mem::take(&mut buf);
-                tokens.push(Token::String(string));
+                let token = Token::String(string);
+
+                tokens.push(token);
+
                 return Tokenizer::Searching;
             }
 
