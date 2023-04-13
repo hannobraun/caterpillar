@@ -1,5 +1,7 @@
 use std::mem;
 
+use map_macro::map;
+
 use crate::cp::{keywords::Keyword, tokens::Token};
 
 #[derive(Debug)]
@@ -96,25 +98,25 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
-    let delimiters = &[
-        ("=>", Token::BindingOperator),
-        (".", Token::Period),
-        ("{", Token::CurlyBracketOpen),
-        ("}", Token::CurlyBracketClose),
-        ("(", Token::RoundBracketOpen),
-        (")", Token::RoundBracketClose),
-        ("[", Token::SquareBracketOpen),
-        ("]", Token::SquareBracketClose),
-    ];
+    let delimiters = map! {
+        "=>" => Token::BindingOperator,
+        "." => Token::Period,
+        "{" => Token::CurlyBracketOpen,
+        "}" => Token::CurlyBracketClose,
+        "(" => Token::RoundBracketOpen,
+        ")" => Token::RoundBracketClose,
+        "[" => Token::SquareBracketOpen,
+        "]" => Token::SquareBracketClose,
+    };
+
+    if let Some(token) = delimiters.get(buf) {
+        return vec![token.clone()];
+    }
 
     for (delimiter, token) in delimiters {
-        if buf == *delimiter {
-            return vec![token.clone()];
-        }
-
         if let Some((first_token, "")) = buf.split_once(delimiter) {
             let mut tokens = match_delimited(first_token);
-            tokens.push(token.clone());
+            tokens.push(token);
             return tokens;
         }
     }
