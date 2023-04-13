@@ -80,3 +80,5 @@ pub enum Token {
     String(String),
     Symbol(String),
 }
+
+pub const STRING_DELIMITER: char = '"';

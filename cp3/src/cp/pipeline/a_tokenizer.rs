@@ -2,7 +2,10 @@ use std::mem;
 
 use map_macro::map;
 
-use crate::cp::{keywords::Keyword, tokens::Token};
+use crate::cp::{
+    keywords::Keyword,
+    tokens::{Token, STRING_DELIMITER},
+};
 
 #[derive(Debug)]
 pub enum Tokenizer {
@@ -40,7 +43,7 @@ pub fn push_char(
                 return tokenizer;
             }
 
-            if ch == '"' {
+            if ch == STRING_DELIMITER {
                 return Tokenizer::ProcessingString { buf: String::new() };
             }
 
@@ -58,7 +61,7 @@ pub fn push_char(
                 }
             }
 
-            if ch == '"' {
+            if ch == STRING_DELIMITER {
                 tokens.extend(match_delimited(&buf));
                 return Tokenizer::ProcessingString { buf: String::new() };
             }
@@ -76,7 +79,7 @@ pub fn push_char(
             Tokenizer::ProcessingAny { buf }
         }
         Tokenizer::ProcessingString { mut buf } => {
-            if ch == '"' {
+            if ch == STRING_DELIMITER {
                 let string = mem::take(&mut buf);
                 tokens.push(Token::String(string));
                 return Tokenizer::Searching;
