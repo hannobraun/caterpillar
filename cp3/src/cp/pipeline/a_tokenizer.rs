@@ -108,8 +108,11 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
 
     for (delimiter, token) in delimiters {
         if let Some((first_token, "")) = buf.split_once(delimiter) {
-            let mut tokens = match_delimited(first_token);
+            let mut tokens = Vec::new();
+
+            tokens.extend(match_delimited(first_token));
             tokens.push(token);
+
             return tokens;
         }
     }
