@@ -81,11 +81,13 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 }
 
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
+    let mut tokens = Vec::new();
+
     if let Tokenizer::ProcessingAny { buf } = tokenizer {
-        return match_delimited(&buf);
+        tokens.extend(match_delimited(&buf));
     }
 
-    vec![]
+    tokens
 }
 
 fn match_eagerly(buf: &str) -> Vec<Token> {
