@@ -24,14 +24,17 @@ pub fn execute(
     let tokens = tokens::Tokens({
         let mut tokens = Vec::new();
 
-        let tokenizer = pipeline::a_tokenizer::new();
+        let pipeline = pipeline::Pipeline {
+            tokenizer: pipeline::a_tokenizer::new(),
+        };
 
-        let tokenizer = code.into_iter().fold(tokenizer, |tokenizer, ch| {
-            let (tokenizer, ts) =
-                pipeline::a_tokenizer::push_char(ch, tokenizer);
-            tokens.extend(ts);
-            tokenizer
-        });
+        let tokenizer =
+            code.into_iter().fold(pipeline.tokenizer, |tokenizer, ch| {
+                let (tokenizer, ts) =
+                    pipeline::a_tokenizer::push_char(ch, tokenizer);
+                tokens.extend(ts);
+                tokenizer
+            });
         tokens.extend(pipeline::a_tokenizer::finalize(tokenizer));
 
         tokens.into()

@@ -9,3 +9,7 @@ pub use self::{
     c_analyzer::analyze,
     d_evaluator::{evaluate, Error as EvaluatorError},
 };
+
+pub struct Pipeline {
+    pub tokenizer: Tokenizer,
+}
