@@ -14,7 +14,7 @@ pub enum Tokenizer {
     ProcessingString { buf: String },
 }
 
-pub fn new() -> Tokenizer {
+pub fn tokenizer() -> Tokenizer {
     Tokenizer::Searching
 }
 

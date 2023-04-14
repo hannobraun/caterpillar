@@ -25,7 +25,7 @@ pub fn execute(
         let mut tokens = Vec::new();
 
         let pipeline = pipeline::Pipeline {
-            tokenizer: pipeline::a_tokenizer::new(),
+            tokenizer: pipeline::a_tokenizer::tokenizer(),
         };
 
         let tokenizer =
