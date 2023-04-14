@@ -120,18 +120,13 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
     vec![]
 }
 
-fn match_delimited(buf: &str) -> Vec<Token> {
-    let mut tokens = Vec::new();
-
+fn match_delimited(buf: &str) -> Option<Token> {
     if let Some(keyword) = Keyword::parse(buf) {
-        tokens.push(Token::Keyword(keyword));
-        return tokens;
+        return Some(Token::Keyword(keyword));
     }
     if let Some(("", symbol)) = buf.split_once(':') {
-        tokens.push(Token::Symbol(symbol.into()));
-        return tokens;
+        return Some(Token::Symbol(symbol.into()));
     }
 
-    tokens.push(Token::Ident(buf.into()));
-    tokens
+    Some(Token::Ident(buf.into()))
 }
