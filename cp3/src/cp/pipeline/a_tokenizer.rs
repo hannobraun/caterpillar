@@ -1,4 +1,4 @@
-use std::mem;
+use std::{iter, mem, option};
 
 use map_macro::map;
 
@@ -12,6 +12,27 @@ pub enum Tokenizer {
     Searching,
     ProcessingAny { buf: String },
     ProcessingString { buf: String },
+}
+
+#[derive(Eq, PartialEq)]
+pub enum Tokens {
+    Zero,
+    One(Token),
+    Two(Token, Token),
+}
+
+impl IntoIterator for Tokens {
+    type Item = Token;
+    type IntoIter =
+        iter::Chain<option::IntoIter<Token>, option::IntoIter<Token>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        match self {
+            Tokens::Zero => None.into_iter().chain(None),
+            Tokens::One(token) => Some(token).into_iter().chain(None),
+            Tokens::Two(a, b) => Some(a).into_iter().chain(Some(b)),
+        }
+    }
 }
 
 pub fn tokenizer() -> Tokenizer {
@@ -36,7 +57,9 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             (Tokenizer::ProcessingAny { buf }, vec![])
         }
         Tokenizer::ProcessingAny { mut buf } => {
-            let mut tokens = match_eagerly(&buf);
+            let mut tokens = Vec::new();
+
+            tokens.extend(match_eagerly(&buf));
             if !tokens.is_empty() {
                 buf.clear();
 
@@ -90,7 +113,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     tokens
 }
 
-fn match_eagerly(buf: &str) -> Vec<Token> {
+fn match_eagerly(buf: &str) -> Tokens {
     let mut delimiters = map! {
         "=>" => Token::BindingOperator,
         "." => Token::Period,
@@ -103,21 +126,19 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
     };
 
     if let Some(token) = delimiters.remove(buf) {
-        return vec![token];
+        return Tokens::One(token);
     }
 
     for (delimiter, token) in delimiters {
         if let Some((first_token, "")) = buf.split_once(delimiter) {
-            let mut tokens = Vec::new();
-
-            tokens.extend(match_delimited(first_token));
-            tokens.push(token);
-
-            return tokens;
+            return match match_delimited(first_token) {
+                Some(first_token) => Tokens::Two(first_token, token),
+                None => Tokens::One(token),
+            };
         }
     }
 
-    vec![]
+    Tokens::Zero
 }
 
 fn match_delimited(buf: &str) -> Option<Token> {
