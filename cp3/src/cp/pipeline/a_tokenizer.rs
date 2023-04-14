@@ -116,10 +116,7 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
 }
 
 fn match_delimited(buf: &str) -> Vec<Token> {
-    let mut tokens = match_eagerly(buf);
-    if !tokens.is_empty() {
-        return tokens;
-    }
+    let mut tokens = Vec::new();
 
     if let Some(keyword) = Keyword::parse(buf) {
         tokens.push(Token::Keyword(keyword));
