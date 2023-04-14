@@ -121,6 +121,10 @@ fn match_eagerly(buf: &str) -> Vec<Token> {
 }
 
 fn match_delimited(buf: &str) -> Option<Token> {
+    // This function is only ever called with a `buf` that has already been
+    // matched against delimiters before. We don't need to check again, if any
+    // delimiters are in here.
+
     if let Some(keyword) = Keyword::parse(buf) {
         return Some(Token::Keyword(keyword));
     }
