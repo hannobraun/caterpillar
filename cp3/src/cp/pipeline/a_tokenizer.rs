@@ -19,12 +19,11 @@ pub fn new() -> Tokenizer {
 }
 
 pub fn tokenize(code: impl IntoIterator<Item = char>) -> Vec<Token> {
-    let code = code.into_iter();
     let mut tokens = Vec::new();
 
     let tokenizer = new();
 
-    let tokenizer = code.fold(tokenizer, |tokenizer, ch| {
+    let tokenizer = code.into_iter().fold(tokenizer, |tokenizer, ch| {
         let (tokenizer, ts) = push_char(ch, tokenizer);
         tokens.extend(ts);
         tokenizer
