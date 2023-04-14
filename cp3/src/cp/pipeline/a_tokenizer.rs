@@ -18,21 +18,6 @@ pub fn new() -> Tokenizer {
     Tokenizer::Searching
 }
 
-pub fn tokenize(code: impl IntoIterator<Item = char>) -> Vec<Token> {
-    let mut tokens = Vec::new();
-
-    let tokenizer = new();
-
-    let tokenizer = code.into_iter().fold(tokenizer, |tokenizer, ch| {
-        let (tokenizer, ts) = push_char(ch, tokenizer);
-        tokens.extend(ts);
-        tokenizer
-    });
-    tokens.extend(finalize(tokenizer));
-
-    tokens
-}
-
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
     match tokenizer {
         Tokenizer::Searching => {

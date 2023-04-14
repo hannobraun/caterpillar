@@ -21,7 +21,25 @@ pub fn execute(
 ) -> Result<DataStack, Error> {
     let mut data_stack = DataStack::new();
 
-    let tokens = tokens::Tokens(pipeline::a_tokenizer::tokenize(code).into());
+    let tokens = tokens::Tokens(
+        {
+            let mut tokens = Vec::new();
+
+            let tokenizer = pipeline::a_tokenizer::new();
+
+            let tokenizer =
+                code.into_iter().fold(tokenizer, |tokenizer, ch| {
+                    let (tokenizer, ts) =
+                        pipeline::a_tokenizer::push_char(ch, tokenizer);
+                    tokens.extend(ts);
+                    tokenizer
+                });
+            tokens.extend(pipeline::a_tokenizer::finalize(tokenizer));
+
+            tokens
+        }
+        .into(),
+    );
     let syntax_tree = pipeline::parse(tokens)?;
     let expressions = pipeline::analyze("", syntax_tree, functions);
 
