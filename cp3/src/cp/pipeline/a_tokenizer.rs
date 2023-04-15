@@ -76,18 +76,18 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 );
             }
 
-            if !ch.is_whitespace() {
-                buf.push(ch);
-                return (Tokenizer::ProcessingAny { buf }, tokens);
+            if ch.is_whitespace() {
+                let (t, next_state) = match match_delimited(&buf) {
+                    tokens @ Some(_) => (tokens, Tokenizer::Searching),
+                    tokens @ None => (tokens, Tokenizer::ProcessingAny { buf }),
+                };
+
+                tokens.extend(t);
+                return (next_state, tokens);
             }
 
-            let (t, next_state) = match match_delimited(&buf) {
-                tokens @ Some(_) => (tokens, Tokenizer::Searching),
-                tokens @ None => (tokens, Tokenizer::ProcessingAny { buf }),
-            };
-
-            tokens.extend(t);
-            (next_state, tokens)
+            buf.push(ch);
+            (Tokenizer::ProcessingAny { buf }, tokens)
         }
         Tokenizer::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
