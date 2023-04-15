@@ -77,9 +77,9 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             }
 
             if ch.is_whitespace() {
-                let (t, next_state) = match match_delimited(&buf) {
-                    tokens @ Some(_) => (tokens, Tokenizer::Searching),
-                    tokens @ None => (tokens, Tokenizer::ProcessingAny { buf }),
+                let (next_state, t) = match match_delimited(&buf) {
+                    tokens @ Some(_) => (Tokenizer::Searching, tokens),
+                    tokens @ None => (Tokenizer::ProcessingAny { buf }, tokens),
                 };
 
                 tokens.extend(t);
