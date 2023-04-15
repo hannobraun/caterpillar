@@ -110,7 +110,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     let mut tokens = Vec::new();
 
     if let Tokenizer::ProcessingAny { buf } = tokenizer {
-        tokens.extend(match_delimited(&buf));
+        tokens.extend(match_eagerly(&buf));
     }
 
     tokens
