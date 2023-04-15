@@ -114,7 +114,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
 }
 
 fn match_eagerly(buf: &str) -> Tokens {
-    let mut delimiters = map! {
+    let delimiters = map! {
         "=>" => Token::BindingOperator,
         "." => Token::Period,
         "{" => Token::CurlyBracketOpen,
@@ -124,10 +124,6 @@ fn match_eagerly(buf: &str) -> Tokens {
         "[" => Token::SquareBracketOpen,
         "]" => Token::SquareBracketClose,
     };
-
-    if let Some(token) = delimiters.remove(buf) {
-        return Tokens::One(token);
-    }
 
     for (delimiter, token) in delimiters {
         if let Some((first_token, "")) = buf.split_once(delimiter) {
@@ -153,5 +149,9 @@ fn match_delimited(buf: &str) -> Option<Token> {
         return Some(Token::Symbol(symbol.into()));
     }
 
-    Some(Token::Ident(buf.into()))
+    if buf.is_empty() {
+        None
+    } else {
+        Some(Token::Ident(buf.into()))
+    }
 }
