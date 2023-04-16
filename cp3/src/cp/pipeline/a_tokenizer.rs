@@ -8,7 +8,12 @@ use crate::cp::{
 };
 
 #[derive(Debug)]
-pub enum Tokenizer {
+pub struct Tokenizer {
+    state: State,
+}
+
+#[derive(Debug)]
+enum State {
     Searching,
     ProcessingAny { buf: String },
     ProcessingString { buf: String },
@@ -36,33 +41,39 @@ impl IntoIterator for Tokens {
 }
 
 pub fn tokenizer() -> Tokenizer {
-    Tokenizer::Searching
+    Tokenizer {
+        state: State::Searching,
+    }
 }
 
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
-    let tokenizer = match tokenizer {
-        Tokenizer::Searching => {
+    let tokenizer = match tokenizer.state {
+        State::Searching => {
             if ch.is_whitespace() {
                 return (tokenizer, vec![]);
             }
 
             if ch == STRING_DELIMITER {
                 return (
-                    Tokenizer::ProcessingString { buf: String::new() },
+                    Tokenizer {
+                        state: State::ProcessingString { buf: String::new() },
+                    },
                     vec![],
                 );
             }
 
             let buf = String::from(ch);
-            Tokenizer::ProcessingAny { buf }
+            State::ProcessingAny { buf }
         }
-        Tokenizer::ProcessingAny { mut buf } => {
+        State::ProcessingAny { mut buf } => {
             if ch == STRING_DELIMITER {
                 let mut tokens = Vec::new();
                 tokens.extend(match_delimited(&buf));
 
                 return (
-                    Tokenizer::ProcessingString { buf: String::new() },
+                    Tokenizer {
+                        state: State::ProcessingString { buf: String::new() },
+                    },
                     tokens,
                 );
             }
@@ -71,35 +82,40 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 let t = match_delimited(&buf);
 
                 let next_state = match &t {
-                    Some(_) => Tokenizer::Searching,
-                    None => Tokenizer::ProcessingAny { buf },
+                    Some(_) => State::Searching,
+                    None => State::ProcessingAny { buf },
                 };
 
                 let mut tokens = Vec::new();
                 tokens.extend(t);
 
-                return (next_state, tokens);
+                return (Tokenizer { state: next_state }, tokens);
             }
 
             buf.push(ch);
-            Tokenizer::ProcessingAny { buf }
+            State::ProcessingAny { buf }
         }
-        Tokenizer::ProcessingString { mut buf } => {
+        State::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
                 let string = mem::take(&mut buf);
                 let token = Token::String(string);
 
-                return (Tokenizer::Searching, vec![token]);
+                return (
+                    Tokenizer {
+                        state: State::Searching,
+                    },
+                    vec![token],
+                );
             }
 
             buf.push(ch);
 
-            Tokenizer::ProcessingString { buf }
+            State::ProcessingString { buf }
         }
     };
 
     match tokenizer {
-        Tokenizer::ProcessingAny { mut buf } => {
+        State::ProcessingAny { mut buf } => {
             let mut tokens = Vec::new();
 
             let t = match_eagerly(&buf);
@@ -108,20 +124,30 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 buf.clear();
 
                 if ch.is_whitespace() {
-                    return (Tokenizer::Searching, tokens);
+                    return (
+                        Tokenizer {
+                            state: State::Searching,
+                        },
+                        tokens,
+                    );
                 }
             }
 
-            (Tokenizer::ProcessingAny { buf }, tokens)
+            (
+                Tokenizer {
+                    state: State::ProcessingAny { buf },
+                },
+                tokens,
+            )
         }
-        tokenizer => (tokenizer, vec![]),
+        tokenizer => (Tokenizer { state: tokenizer }, vec![]),
     }
 }
 
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     let mut tokens = Vec::new();
 
-    if let Tokenizer::ProcessingAny { buf } = tokenizer {
+    if let State::ProcessingAny { buf } = tokenizer.state {
         tokens.extend(match_eagerly(&buf));
     }
 
