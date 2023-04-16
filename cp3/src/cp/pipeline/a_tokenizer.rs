@@ -48,10 +48,7 @@ pub fn tokenizer() -> Tokenizer {
     }
 }
 
-pub fn push_char(
-    ch: char,
-    mut tokenizer: Tokenizer,
-) -> (Tokenizer, Vec<Token>) {
+pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (next_state, tokens) = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
@@ -108,11 +105,7 @@ pub fn push_char(
     };
 
     tokenizer.state = next_state;
-
-    let mut ts = Vec::new();
-    ts.extend(tokens);
-
-    (tokenizer, ts)
+    (tokenizer, tokens)
 }
 
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
