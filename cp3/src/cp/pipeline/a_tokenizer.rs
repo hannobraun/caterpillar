@@ -79,12 +79,10 @@ pub fn push_char(
             State::ProcessingAny => {
                 let t = match_delimited(&tokenizer.buf);
 
-                let (next_state, tokens) = match t {
+                match t {
                     Some(token) => (State::Searching, Tokens::One(token)),
                     None => (State::ProcessingAny, Tokens::Zero),
-                };
-
-                (next_state, tokens)
+                }
             }
             State::ProcessingString => {
                 tokenizer.buf.push(ch);
