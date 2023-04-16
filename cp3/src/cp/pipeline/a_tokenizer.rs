@@ -99,13 +99,8 @@ pub fn push_char(
 
             tokenizer.buf.push(ch);
 
-            let next_state = match tokenizer.state {
-                State::Searching | State::ProcessingAny => State::ProcessingAny,
-                State::ProcessingString => State::ProcessingString,
-            };
-
-            match next_state {
-                State::ProcessingAny => {
+            match tokenizer.state {
+                State::Searching | State::ProcessingAny => {
                     let mut tokens = Vec::new();
 
                     let t = match_eagerly(&tokenizer.buf);
@@ -126,7 +121,7 @@ pub fn push_char(
 
                     (State::ProcessingAny, tokens)
                 }
-                state => (state, vec![]),
+                State::ProcessingString => (State::ProcessingString, vec![]),
             }
         }
     };
