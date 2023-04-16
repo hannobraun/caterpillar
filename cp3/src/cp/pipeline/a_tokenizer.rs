@@ -131,13 +131,8 @@ pub fn push_char(
         }
     };
 
-    (
-        Tokenizer {
-            buf: tokenizer.buf,
-            state: next_state,
-        },
-        tokens,
-    )
+    tokenizer.state = next_state;
+    (tokenizer, tokens)
 }
 
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
