@@ -107,16 +107,6 @@ pub fn push_char(
                     if t != Tokens::Zero {
                         tokens.extend(t);
                         tokenizer.buf.clear();
-
-                        if ch.is_whitespace() {
-                            return (
-                                Tokenizer {
-                                    buf: tokenizer.buf,
-                                    state: State::Searching,
-                                },
-                                tokens,
-                            );
-                        }
                     }
 
                     (State::ProcessingAny, tokens)
