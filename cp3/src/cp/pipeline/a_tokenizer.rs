@@ -17,7 +17,7 @@ pub struct Tokenizer {
 enum State {
     Searching,
     ProcessingAny,
-    ProcessingString { buf: String },
+    ProcessingString,
 }
 
 #[derive(Eq, PartialEq)]
@@ -62,7 +62,7 @@ pub fn push_char(
                 return (
                     Tokenizer {
                         buf: String::new(),
-                        state: State::ProcessingString { buf: String::new() },
+                        state: State::ProcessingString,
                     },
                     vec![],
                 );
@@ -80,7 +80,7 @@ pub fn push_char(
                 return (
                     Tokenizer {
                         buf: String::new(),
-                        state: State::ProcessingString { buf: String::new() },
+                        state: State::ProcessingString,
                     },
                     tokens,
                 );
@@ -109,23 +109,23 @@ pub fn push_char(
             tokenizer.buf.push(ch);
             State::ProcessingAny
         }
-        State::ProcessingString { mut buf } => {
+        State::ProcessingString => {
             if ch == STRING_DELIMITER {
-                let string = mem::take(&mut buf);
+                let string = mem::take(&mut tokenizer.buf);
                 let token = Token::String(string);
 
                 return (
                     Tokenizer {
-                        buf,
+                        buf: tokenizer.buf,
                         state: State::Searching,
                     },
                     vec![token],
                 );
             }
 
-            buf.push(ch);
+            tokenizer.buf.push(ch);
 
-            State::ProcessingString { buf }
+            State::ProcessingString
         }
     };
 
