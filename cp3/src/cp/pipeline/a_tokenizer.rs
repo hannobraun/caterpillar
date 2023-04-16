@@ -103,8 +103,7 @@ pub fn push_char(
                 State::Searching | State::ProcessingAny => {
                     let mut tokens = Vec::new();
 
-                    let t = match_eagerly(&tokenizer.buf);
-                    tokens.extend(t);
+                    tokens.extend(match_eagerly(&tokenizer.buf));
                     if !tokens.is_empty() {
                         tokenizer.buf.clear();
                     }
