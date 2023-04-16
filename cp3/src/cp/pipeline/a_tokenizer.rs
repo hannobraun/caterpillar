@@ -69,8 +69,8 @@ pub fn push_char(
             }
             State::ProcessingString => {
                 let token = Token::String(tokenizer.buf.clone());
-                tokenizer.buf.clear();
 
+                tokenizer.buf.clear();
                 (State::Searching, Tokens::One(token))
             }
         },
