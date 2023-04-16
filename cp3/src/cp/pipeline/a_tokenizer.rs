@@ -54,13 +54,17 @@ pub fn push_char(
 ) -> (Tokenizer, Vec<Token>) {
     match ch {
         STRING_DELIMITER => match tokenizer.state {
-            State::Searching => (
-                Tokenizer {
-                    buf: String::new(),
-                    state: State::ProcessingString,
-                },
-                vec![],
-            ),
+            State::Searching => {
+                tokenizer.buf.clear();
+
+                (
+                    Tokenizer {
+                        buf: tokenizer.buf,
+                        state: State::ProcessingString,
+                    },
+                    vec![],
+                )
+            }
             State::ProcessingAny => {
                 let mut tokens = Vec::new();
                 tokens.extend(match_delimited(&tokenizer.buf));
