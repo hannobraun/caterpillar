@@ -75,7 +75,18 @@ pub fn push_char(
                     tokens,
                 );
             }
-            _ => {}
+            State::ProcessingString => {
+                let string = mem::take(&mut tokenizer.buf);
+                let token = Token::String(string);
+
+                return (
+                    Tokenizer {
+                        buf: tokenizer.buf,
+                        state: State::Searching,
+                    },
+                    vec![token],
+                );
+            }
         }
     }
 
@@ -114,19 +125,6 @@ pub fn push_char(
             State::ProcessingAny
         }
         State::ProcessingString => {
-            if ch == STRING_DELIMITER {
-                let string = mem::take(&mut tokenizer.buf);
-                let token = Token::String(string);
-
-                return (
-                    Tokenizer {
-                        buf: tokenizer.buf,
-                        state: State::Searching,
-                    },
-                    vec![token],
-                );
-            }
-
             tokenizer.buf.push(ch);
 
             State::ProcessingString
