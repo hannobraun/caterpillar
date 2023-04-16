@@ -52,20 +52,22 @@ pub fn push_char(
     ch: char,
     mut tokenizer: Tokenizer,
 ) -> (Tokenizer, Vec<Token>) {
+    if let STRING_DELIMITER = ch {
+        if let State::Searching = tokenizer.state {
+            return (
+                Tokenizer {
+                    buf: String::new(),
+                    state: State::ProcessingString,
+                },
+                vec![],
+            );
+        }
+    }
+
     let next_state = match tokenizer.state {
         State::Searching => {
             if ch.is_whitespace() {
                 return (tokenizer, vec![]);
-            }
-
-            if ch == STRING_DELIMITER {
-                return (
-                    Tokenizer {
-                        buf: String::new(),
-                        state: State::ProcessingString,
-                    },
-                    vec![],
-                );
             }
 
             tokenizer.buf.clear();
