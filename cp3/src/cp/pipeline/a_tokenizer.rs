@@ -52,44 +52,42 @@ pub fn push_char(
     ch: char,
     mut tokenizer: Tokenizer,
 ) -> (Tokenizer, Vec<Token>) {
-    let next_state = match ch {
+    match ch {
         STRING_DELIMITER => match tokenizer.state {
-            State::Searching => {
-                return (
-                    Tokenizer {
-                        buf: String::new(),
-                        state: State::ProcessingString,
-                    },
-                    vec![],
-                );
-            }
+            State::Searching => (
+                Tokenizer {
+                    buf: String::new(),
+                    state: State::ProcessingString,
+                },
+                vec![],
+            ),
             State::ProcessingAny => {
                 let mut tokens = Vec::new();
                 tokens.extend(match_delimited(&tokenizer.buf));
 
-                return (
+                (
                     Tokenizer {
                         buf: String::new(),
                         state: State::ProcessingString,
                     },
                     tokens,
-                );
+                )
             }
             State::ProcessingString => {
                 let string = mem::take(&mut tokenizer.buf);
                 let token = Token::String(string);
 
-                return (
+                (
                     Tokenizer {
                         buf: tokenizer.buf,
                         state: State::Searching,
                     },
                     vec![token],
-                );
+                )
             }
         },
         ch if ch.is_whitespace() => match tokenizer.state {
-            State::Searching => return (tokenizer, vec![]),
+            State::Searching => (tokenizer, vec![]),
             State::ProcessingAny => {
                 let t = match_delimited(&tokenizer.buf);
 
@@ -101,24 +99,24 @@ pub fn push_char(
                 let mut tokens = Vec::new();
                 tokens.extend(t);
 
-                return (
+                (
                     Tokenizer {
                         buf: tokenizer.buf,
                         state: next_state,
                     },
                     tokens,
-                );
+                )
             }
             State::ProcessingString => {
                 tokenizer.buf.push(ch);
 
-                return (
+                (
                     Tokenizer {
                         buf: tokenizer.buf,
                         state: State::ProcessingString,
                     },
                     vec![],
-                );
+                )
             }
         },
         ch => {
@@ -128,48 +126,48 @@ pub fn push_char(
 
             tokenizer.buf.push(ch);
 
-            match tokenizer.state {
+            let next_state = match tokenizer.state {
                 State::Searching | State::ProcessingAny => State::ProcessingAny,
                 State::ProcessingString => State::ProcessingString,
-            }
-        }
-    };
+            };
 
-    match next_state {
-        State::ProcessingAny => {
-            let mut tokens = Vec::new();
+            match next_state {
+                State::ProcessingAny => {
+                    let mut tokens = Vec::new();
 
-            let t = match_eagerly(&tokenizer.buf);
-            if t != Tokens::Zero {
-                tokens.extend(t);
-                tokenizer.buf.clear();
+                    let t = match_eagerly(&tokenizer.buf);
+                    if t != Tokens::Zero {
+                        tokens.extend(t);
+                        tokenizer.buf.clear();
 
-                if ch.is_whitespace() {
-                    return (
+                        if ch.is_whitespace() {
+                            return (
+                                Tokenizer {
+                                    buf: tokenizer.buf,
+                                    state: State::Searching,
+                                },
+                                tokens,
+                            );
+                        }
+                    }
+
+                    (
                         Tokenizer {
-                            buf: tokenizer.buf,
-                            state: State::Searching,
+                            buf: tokenizer.buf.clone(),
+                            state: State::ProcessingAny,
                         },
                         tokens,
-                    );
+                    )
                 }
+                state => (
+                    Tokenizer {
+                        buf: tokenizer.buf,
+                        state,
+                    },
+                    vec![],
+                ),
             }
-
-            (
-                Tokenizer {
-                    buf: tokenizer.buf.clone(),
-                    state: State::ProcessingAny,
-                },
-                tokens,
-            )
         }
-        state => (
-            Tokenizer {
-                buf: tokenizer.buf,
-                state,
-            },
-            vec![],
-        ),
     }
 }
 
