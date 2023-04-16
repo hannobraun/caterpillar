@@ -59,7 +59,8 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
         Tokenizer::ProcessingAny { mut buf } => {
             let mut tokens = Vec::new();
 
-            tokens.extend(match_eagerly(&buf));
+            let t = match_eagerly(&buf);
+            tokens.extend(t);
             if !tokens.is_empty() {
                 buf.clear();
 
