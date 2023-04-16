@@ -16,7 +16,7 @@ pub struct Tokenizer {
 #[derive(Debug)]
 enum State {
     Searching,
-    ProcessingAny { buf: String },
+    ProcessingAny,
     ProcessingString { buf: String },
 }
 
@@ -48,7 +48,10 @@ pub fn tokenizer() -> Tokenizer {
     }
 }
 
-pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
+pub fn push_char(
+    ch: char,
+    mut tokenizer: Tokenizer,
+) -> (Tokenizer, Vec<Token>) {
     let next_state = match tokenizer.state {
         State::Searching => {
             if ch.is_whitespace() {
@@ -65,13 +68,14 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 );
             }
 
-            let buf = String::from(ch);
-            State::ProcessingAny { buf }
+            tokenizer.buf.clear();
+            tokenizer.buf = String::from(ch);
+            State::ProcessingAny
         }
-        State::ProcessingAny { mut buf } => {
+        State::ProcessingAny => {
             if ch == STRING_DELIMITER {
                 let mut tokens = Vec::new();
-                tokens.extend(match_delimited(&buf));
+                tokens.extend(match_delimited(&tokenizer.buf));
 
                 return (
                     Tokenizer {
@@ -83,11 +87,11 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             }
 
             if ch.is_whitespace() {
-                let t = match_delimited(&buf);
+                let t = match_delimited(&tokenizer.buf);
 
                 let next_state = match &t {
                     Some(_) => State::Searching,
-                    None => State::ProcessingAny { buf: buf.clone() },
+                    None => State::ProcessingAny,
                 };
 
                 let mut tokens = Vec::new();
@@ -95,15 +99,15 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
                 return (
                     Tokenizer {
-                        buf,
+                        buf: tokenizer.buf,
                         state: next_state,
                     },
                     tokens,
                 );
             }
 
-            buf.push(ch);
-            State::ProcessingAny { buf }
+            tokenizer.buf.push(ch);
+            State::ProcessingAny
         }
         State::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
@@ -126,18 +130,18 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
     };
 
     match next_state {
-        State::ProcessingAny { mut buf } => {
+        State::ProcessingAny => {
             let mut tokens = Vec::new();
 
-            let t = match_eagerly(&buf);
+            let t = match_eagerly(&tokenizer.buf);
             if t != Tokens::Zero {
                 tokens.extend(t);
-                buf.clear();
+                tokenizer.buf.clear();
 
                 if ch.is_whitespace() {
                     return (
                         Tokenizer {
-                            buf,
+                            buf: tokenizer.buf,
                             state: State::Searching,
                         },
                         tokens,
@@ -147,8 +151,8 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
             (
                 Tokenizer {
-                    buf: buf.clone(),
-                    state: State::ProcessingAny { buf },
+                    buf: tokenizer.buf.clone(),
+                    state: State::ProcessingAny,
                 },
                 tokens,
             )
@@ -166,8 +170,8 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     let mut tokens = Vec::new();
 
-    if let State::ProcessingAny { buf } = tokenizer.state {
-        tokens.extend(match_eagerly(&buf));
+    if let State::ProcessingAny = tokenizer.state {
+        tokens.extend(match_eagerly(&tokenizer.buf));
     }
 
     tokens
