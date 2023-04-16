@@ -88,22 +88,9 @@ pub fn push_char(
                 );
             }
         },
-        ch if ch.is_whitespace() => {
-            if let State::Searching = tokenizer.state {
-                return (tokenizer, vec![]);
-            }
-        }
-        _ => {}
-    }
-
-    let next_state = match tokenizer.state {
-        State::Searching => {
-            tokenizer.buf.clear();
-            tokenizer.buf = String::from(ch);
-            State::ProcessingAny
-        }
-        State::ProcessingAny => {
-            if ch.is_whitespace() {
+        ch if ch.is_whitespace() => match tokenizer.state {
+            State::Searching => return (tokenizer, vec![]),
+            State::ProcessingAny => {
                 let t = match_delimited(&tokenizer.buf);
 
                 let next_state = match &t {
@@ -122,7 +109,18 @@ pub fn push_char(
                     tokens,
                 );
             }
+            _ => {}
+        },
+        _ => {}
+    }
 
+    let next_state = match tokenizer.state {
+        State::Searching => {
+            tokenizer.buf.clear();
+            tokenizer.buf = String::from(ch);
+            State::ProcessingAny
+        }
+        State::ProcessingAny => {
             tokenizer.buf.push(ch);
             State::ProcessingAny
         }
