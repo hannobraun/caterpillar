@@ -121,22 +121,27 @@ pub fn push_char(
                 );
             }
         },
-        ch => match tokenizer.state {
-            State::Searching => {
+        ch => {
+            if let State::Searching = tokenizer.state {
                 tokenizer.buf.clear();
-                tokenizer.buf = String::from(ch);
-                State::ProcessingAny
             }
-            State::ProcessingAny => {
-                tokenizer.buf.push(ch);
-                State::ProcessingAny
-            }
-            State::ProcessingString => {
-                tokenizer.buf.push(ch);
 
-                State::ProcessingString
+            match tokenizer.state {
+                State::Searching => {
+                    tokenizer.buf = String::from(ch);
+                    State::ProcessingAny
+                }
+                State::ProcessingAny => {
+                    tokenizer.buf.push(ch);
+                    State::ProcessingAny
+                }
+                State::ProcessingString => {
+                    tokenizer.buf.push(ch);
+
+                    State::ProcessingString
+                }
             }
-        },
+        }
     };
 
     match next_state {
