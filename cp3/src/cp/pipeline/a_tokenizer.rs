@@ -52,7 +52,7 @@ pub fn push_char(
     ch: char,
     mut tokenizer: Tokenizer,
 ) -> (Tokenizer, Vec<Token>) {
-    match ch {
+    let next_state = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
                 return (
@@ -121,24 +121,22 @@ pub fn push_char(
                 );
             }
         },
-        _ => {}
-    }
+        ch => match tokenizer.state {
+            State::Searching => {
+                tokenizer.buf.clear();
+                tokenizer.buf = String::from(ch);
+                State::ProcessingAny
+            }
+            State::ProcessingAny => {
+                tokenizer.buf.push(ch);
+                State::ProcessingAny
+            }
+            State::ProcessingString => {
+                tokenizer.buf.push(ch);
 
-    let next_state = match tokenizer.state {
-        State::Searching => {
-            tokenizer.buf.clear();
-            tokenizer.buf = String::from(ch);
-            State::ProcessingAny
-        }
-        State::ProcessingAny => {
-            tokenizer.buf.push(ch);
-            State::ProcessingAny
-        }
-        State::ProcessingString => {
-            tokenizer.buf.push(ch);
-
-            State::ProcessingString
-        }
+                State::ProcessingString
+            }
+        },
     };
 
     match next_state {
