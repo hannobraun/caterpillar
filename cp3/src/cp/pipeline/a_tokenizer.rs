@@ -69,9 +69,11 @@ pub fn push_char(
                 let mut tokens = Vec::new();
                 tokens.extend(match_delimited(&tokenizer.buf));
 
+                tokenizer.buf.clear();
+
                 (
                     Tokenizer {
-                        buf: String::new(),
+                        buf: tokenizer.buf,
                         state: State::ProcessingString,
                     },
                     tokens,
