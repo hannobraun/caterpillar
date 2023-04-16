@@ -109,7 +109,17 @@ pub fn push_char(
                     tokens,
                 );
             }
-            _ => {}
+            State::ProcessingString => {
+                tokenizer.buf.push(ch);
+
+                return (
+                    Tokenizer {
+                        buf: tokenizer.buf,
+                        state: State::ProcessingString,
+                    },
+                    vec![],
+                );
+            }
         },
         _ => {}
     }
