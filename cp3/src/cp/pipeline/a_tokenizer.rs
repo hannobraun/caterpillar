@@ -53,14 +53,29 @@ pub fn push_char(
     mut tokenizer: Tokenizer,
 ) -> (Tokenizer, Vec<Token>) {
     if let STRING_DELIMITER = ch {
-        if let State::Searching = tokenizer.state {
-            return (
-                Tokenizer {
-                    buf: String::new(),
-                    state: State::ProcessingString,
-                },
-                vec![],
-            );
+        match tokenizer.state {
+            State::Searching => {
+                return (
+                    Tokenizer {
+                        buf: String::new(),
+                        state: State::ProcessingString,
+                    },
+                    vec![],
+                );
+            }
+            State::ProcessingAny => {
+                let mut tokens = Vec::new();
+                tokens.extend(match_delimited(&tokenizer.buf));
+
+                return (
+                    Tokenizer {
+                        buf: String::new(),
+                        state: State::ProcessingString,
+                    },
+                    tokens,
+                );
+            }
+            _ => {}
         }
     }
 
@@ -75,19 +90,6 @@ pub fn push_char(
             State::ProcessingAny
         }
         State::ProcessingAny => {
-            if ch == STRING_DELIMITER {
-                let mut tokens = Vec::new();
-                tokens.extend(match_delimited(&tokenizer.buf));
-
-                return (
-                    Tokenizer {
-                        buf: String::new(),
-                        state: State::ProcessingString,
-                    },
-                    tokens,
-                );
-            }
-
             if ch.is_whitespace() {
                 let t = match_delimited(&tokenizer.buf);
 
