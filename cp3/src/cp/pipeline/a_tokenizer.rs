@@ -127,11 +127,7 @@ pub fn push_char(
             }
 
             match tokenizer.state {
-                State::Searching => {
-                    tokenizer.buf.push(ch);
-                    State::ProcessingAny
-                }
-                State::ProcessingAny => {
+                State::Searching | State::ProcessingAny => {
                     tokenizer.buf.push(ch);
                     State::ProcessingAny
                 }
