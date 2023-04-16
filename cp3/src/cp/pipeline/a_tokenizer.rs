@@ -1,4 +1,4 @@
-use std::{iter, mem, option};
+use std::{iter, option};
 
 use map_macro::map;
 
@@ -68,8 +68,8 @@ pub fn push_char(
                 (State::ProcessingString, tokens)
             }
             State::ProcessingString => {
-                let string = mem::take(&mut tokenizer.buf);
-                let token = Token::String(string);
+                let token = Token::String(tokenizer.buf.clone());
+                tokenizer.buf.clear();
 
                 (State::Searching, Tokens::One(token))
             }
