@@ -77,7 +77,10 @@ pub fn push_char(
         ch if ch.is_whitespace() => match tokenizer.state {
             State::Searching => (State::Searching, Tokens::Zero),
             State::ProcessingAny => match match_delimited(&tokenizer.buf) {
-                Some(token) => (State::Searching, Tokens::One(token)),
+                Some(token) => {
+                    tokenizer.buf.clear();
+                    (State::Searching, Tokens::One(token))
+                }
                 None => (State::ProcessingAny, Tokens::Zero),
             },
             State::ProcessingString => {
@@ -86,10 +89,6 @@ pub fn push_char(
             }
         },
         ch => {
-            if let State::Searching = tokenizer.state {
-                tokenizer.buf.clear();
-            }
-
             tokenizer.buf.push(ch);
 
             match tokenizer.state {
