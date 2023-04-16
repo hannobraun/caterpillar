@@ -60,8 +60,8 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             let mut tokens = Vec::new();
 
             let t = match_eagerly(&buf);
-            tokens.extend(t);
-            if !tokens.is_empty() {
+            if t != Tokens::Zero {
+                tokens.extend(t);
                 buf.clear();
 
                 if ch.is_whitespace() {
