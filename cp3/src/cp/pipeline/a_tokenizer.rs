@@ -40,7 +40,7 @@ pub fn tokenizer() -> Tokenizer {
 }
 
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
-    let (tokenizer, _): (_, Vec<Token>) = match tokenizer {
+    let tokenizer = match tokenizer {
         Tokenizer::Searching => {
             if ch.is_whitespace() {
                 return (tokenizer, vec![]);
@@ -54,7 +54,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             }
 
             let buf = String::from(ch);
-            (Tokenizer::ProcessingAny { buf }, vec![])
+            Tokenizer::ProcessingAny { buf }
         }
         Tokenizer::ProcessingAny { mut buf } => {
             if ch == STRING_DELIMITER {
@@ -82,7 +82,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             }
 
             buf.push(ch);
-            (Tokenizer::ProcessingAny { buf }, vec![])
+            Tokenizer::ProcessingAny { buf }
         }
         Tokenizer::ProcessingString { mut buf } => {
             if ch == STRING_DELIMITER {
@@ -94,7 +94,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
             buf.push(ch);
 
-            (Tokenizer::ProcessingString { buf }, vec![])
+            Tokenizer::ProcessingString { buf }
         }
     };
 
