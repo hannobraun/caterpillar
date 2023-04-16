@@ -140,7 +140,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 tokens,
             )
         }
-        tokenizer => (Tokenizer { state: tokenizer }, vec![]),
+        state => (Tokenizer { state }, vec![]),
     }
 }
 
