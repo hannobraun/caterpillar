@@ -47,7 +47,7 @@ pub fn tokenizer() -> Tokenizer {
 }
 
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
-    let tokenizer = match tokenizer.state {
+    let next_state = match tokenizer.state {
         State::Searching => {
             if ch.is_whitespace() {
                 return (tokenizer, vec![]);
@@ -114,7 +114,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
         }
     };
 
-    match tokenizer {
+    match next_state {
         State::ProcessingAny { mut buf } => {
             let mut tokens = Vec::new();
 
