@@ -104,8 +104,8 @@ pub fn push_char(
                     let mut tokens = Vec::new();
 
                     let t = match_eagerly(&tokenizer.buf);
-                    if t != Tokens::Zero {
-                        tokens.extend(t);
+                    tokens.extend(t);
+                    if !tokens.is_empty() {
                         tokenizer.buf.clear();
                     }
 
