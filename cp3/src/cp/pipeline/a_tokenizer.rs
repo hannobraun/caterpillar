@@ -9,6 +9,7 @@ use crate::cp::{
 
 #[derive(Debug)]
 pub struct Tokenizer {
+    buf: String,
     state: State,
 }
 
@@ -42,6 +43,7 @@ impl IntoIterator for Tokens {
 
 pub fn tokenizer() -> Tokenizer {
     Tokenizer {
+        buf: String::new(),
         state: State::Searching,
     }
 }
@@ -56,6 +58,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
             if ch == STRING_DELIMITER {
                 return (
                     Tokenizer {
+                        buf: String::new(),
                         state: State::ProcessingString { buf: String::new() },
                     },
                     vec![],
@@ -72,6 +75,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
                 return (
                     Tokenizer {
+                        buf: String::new(),
                         state: State::ProcessingString { buf: String::new() },
                     },
                     tokens,
@@ -83,13 +87,19 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
                 let next_state = match &t {
                     Some(_) => State::Searching,
-                    None => State::ProcessingAny { buf },
+                    None => State::ProcessingAny { buf: buf.clone() },
                 };
 
                 let mut tokens = Vec::new();
                 tokens.extend(t);
 
-                return (Tokenizer { state: next_state }, tokens);
+                return (
+                    Tokenizer {
+                        buf,
+                        state: next_state,
+                    },
+                    tokens,
+                );
             }
 
             buf.push(ch);
@@ -102,6 +112,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
                 return (
                     Tokenizer {
+                        buf,
                         state: State::Searching,
                     },
                     vec![token],
@@ -126,6 +137,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
                 if ch.is_whitespace() {
                     return (
                         Tokenizer {
+                            buf,
                             state: State::Searching,
                         },
                         tokens,
@@ -135,12 +147,19 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Vec<Token>) {
 
             (
                 Tokenizer {
+                    buf: buf.clone(),
                     state: State::ProcessingAny { buf },
                 },
                 tokens,
             )
         }
-        state => (Tokenizer { state }, vec![]),
+        state => (
+            Tokenizer {
+                buf: tokenizer.buf,
+                state,
+            },
+            vec![],
+        ),
     }
 }
 
