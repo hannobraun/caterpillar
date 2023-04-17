@@ -27,6 +27,10 @@ impl Buf {
         self
     }
 
+    pub fn as_inner(&self) -> &str {
+        &self.0
+    }
+
     pub fn to_inner(&self) -> String {
         self.0.clone()
     }
@@ -75,7 +79,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                 (State::ProcessingString, Tokens::Zero)
             }
             State::ProcessingAny => {
-                let tokens = match match_delimited(&tokenizer.buf.0) {
+                let tokens = match match_delimited(tokenizer.buf.as_inner()) {
                     Some(token) => Tokens::One(token),
                     None => Tokens::Zero,
                 };
@@ -92,13 +96,15 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
         },
         ch if ch.is_whitespace() => match tokenizer.state {
             State::Searching => (State::Searching, Tokens::Zero),
-            State::ProcessingAny => match match_delimited(&tokenizer.buf.0) {
-                Some(token) => {
-                    tokenizer.buf = tokenizer.buf.clear();
-                    (State::Searching, Tokens::One(token))
+            State::ProcessingAny => {
+                match match_delimited(tokenizer.buf.as_inner()) {
+                    Some(token) => {
+                        tokenizer.buf = tokenizer.buf.clear();
+                        (State::Searching, Tokens::One(token))
+                    }
+                    None => (State::ProcessingAny, Tokens::Zero),
                 }
-                None => (State::ProcessingAny, Tokens::Zero),
-            },
+            }
             State::ProcessingString => {
                 tokenizer.buf = tokenizer.buf.push(ch);
                 (State::ProcessingString, Tokens::Zero)
@@ -109,7 +115,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
 
             match tokenizer.state {
                 State::Searching | State::ProcessingAny => {
-                    let tokens = match_eagerly(&tokenizer.buf.0);
+                    let tokens = match_eagerly(tokenizer.buf.as_inner());
                     if tokens != Tokens::Zero {
                         tokenizer.buf = tokenizer.buf.clear();
                     }
@@ -131,7 +137,7 @@ pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
     let mut tokens = Vec::new();
 
     if let State::ProcessingAny = tokenizer.state {
-        tokens.extend(match_eagerly(&tokenizer.buf.0));
+        tokens.extend(match_eagerly(tokenizer.buf.as_inner()));
     }
 
     tokens
