@@ -16,6 +16,13 @@ pub struct Tokenizer {
 #[derive(Debug)]
 struct Buf(String);
 
+impl Buf {
+    pub fn clear(mut self) -> Self {
+        self.0.clear();
+        self
+    }
+}
+
 #[derive(Debug)]
 enum State {
     Searching,
@@ -55,7 +62,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (next_state, tokens) = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
-                tokenizer.buf.0.clear();
+                tokenizer.buf = tokenizer.buf.clear();
                 (State::ProcessingString, Tokens::Zero)
             }
             State::ProcessingAny => {
@@ -64,13 +71,13 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                     None => Tokens::Zero,
                 };
 
-                tokenizer.buf.0.clear();
+                tokenizer.buf = tokenizer.buf.clear();
                 (State::ProcessingString, tokens)
             }
             State::ProcessingString => {
                 let token = Token::String(tokenizer.buf.0.clone());
 
-                tokenizer.buf.0.clear();
+                tokenizer.buf = tokenizer.buf.clear();
                 (State::Searching, Tokens::One(token))
             }
         },
@@ -78,7 +85,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
             State::Searching => (State::Searching, Tokens::Zero),
             State::ProcessingAny => match match_delimited(&tokenizer.buf.0) {
                 Some(token) => {
-                    tokenizer.buf.0.clear();
+                    tokenizer.buf = tokenizer.buf.clear();
                     (State::Searching, Tokens::One(token))
                 }
                 None => (State::ProcessingAny, Tokens::Zero),
@@ -95,7 +102,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                 State::Searching | State::ProcessingAny => {
                     let tokens = match_eagerly(&tokenizer.buf.0);
                     if tokens != Tokens::Zero {
-                        tokenizer.buf.0.clear();
+                        tokenizer.buf = tokenizer.buf.clear();
                     }
 
                     (State::ProcessingAny, tokens)
