@@ -17,6 +17,11 @@ pub struct Tokenizer {
 struct Buf(String);
 
 impl Buf {
+    pub fn push(mut self, ch: char) -> Self {
+        self.0.push(ch);
+        self
+    }
+
     pub fn clear(mut self) -> Self {
         self.0.clear();
         self
@@ -95,12 +100,12 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                 None => (State::ProcessingAny, Tokens::Zero),
             },
             State::ProcessingString => {
-                tokenizer.buf.0.push(ch);
+                tokenizer.buf = tokenizer.buf.push(ch);
                 (State::ProcessingString, Tokens::Zero)
             }
         },
         ch => {
-            tokenizer.buf.0.push(ch);
+            tokenizer.buf = tokenizer.buf.push(ch);
 
             match tokenizer.state {
                 State::Searching | State::ProcessingAny => {
