@@ -21,6 +21,10 @@ impl Buf {
         self.0.clear();
         self
     }
+
+    pub fn to_inner(&self) -> String {
+        self.0.clone()
+    }
 }
 
 #[derive(Debug)]
@@ -75,7 +79,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                 (State::ProcessingString, tokens)
             }
             State::ProcessingString => {
-                let token = Token::String(tokenizer.buf.0.clone());
+                let token = Token::String(tokenizer.buf.to_inner());
 
                 tokenizer.buf = tokenizer.buf.clear();
                 (State::Searching, Tokens::One(token))
