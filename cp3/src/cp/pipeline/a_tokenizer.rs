@@ -128,9 +128,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
         }
     };
 
-    let tokenizer = Tokenizer { buf, state };
-
-    (tokenizer, tokens)
+    (Tokenizer { buf, state }, tokens)
 }
 
 fn match_eagerly(buf: &str) -> Tokens {
