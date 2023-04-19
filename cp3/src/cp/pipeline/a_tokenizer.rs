@@ -72,11 +72,11 @@ pub fn tokenizer() -> Tokenizer {
 }
 
 pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
-    let (next_state, tokens) = match ch {
+    let (buf, next_state, tokens) = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
                 tokenizer.buf = tokenizer.buf.clear();
-                (State::ProcessingString, Tokens::Zero)
+                (tokenizer.buf, State::ProcessingString, Tokens::Zero)
             }
             State::ProcessingAny => {
                 let tokens = match match_delimited(tokenizer.buf.as_inner()) {
@@ -85,29 +85,29 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                 };
 
                 tokenizer.buf = tokenizer.buf.clear();
-                (State::ProcessingString, tokens)
+                (tokenizer.buf, State::ProcessingString, tokens)
             }
             State::ProcessingString => {
                 let token = Token::String(tokenizer.buf.to_inner());
 
                 tokenizer.buf = tokenizer.buf.clear();
-                (State::Searching, Tokens::One(token))
+                (tokenizer.buf, State::Searching, Tokens::One(token))
             }
         },
         ch if ch.is_whitespace() => match tokenizer.state {
-            State::Searching => (State::Searching, Tokens::Zero),
+            State::Searching => (tokenizer.buf, State::Searching, Tokens::Zero),
             State::ProcessingAny => {
                 match match_delimited(tokenizer.buf.as_inner()) {
                     Some(token) => {
                         tokenizer.buf = tokenizer.buf.clear();
-                        (State::Searching, Tokens::One(token))
+                        (tokenizer.buf, State::Searching, Tokens::One(token))
                     }
-                    None => (State::ProcessingAny, Tokens::Zero),
+                    None => (tokenizer.buf, State::ProcessingAny, Tokens::Zero),
                 }
             }
             State::ProcessingString => {
                 tokenizer.buf = tokenizer.buf.push(ch);
-                (State::ProcessingString, Tokens::Zero)
+                (tokenizer.buf, State::ProcessingString, Tokens::Zero)
             }
         },
         ch => {
@@ -120,15 +120,16 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                         tokenizer.buf = tokenizer.buf.clear();
                     }
 
-                    (State::ProcessingAny, tokens)
+                    (tokenizer.buf, State::ProcessingAny, tokens)
                 }
                 State::ProcessingString => {
-                    (State::ProcessingString, Tokens::Zero)
+                    (tokenizer.buf, State::ProcessingString, Tokens::Zero)
                 }
             }
         }
     };
 
+    tokenizer.buf = buf;
     tokenizer.state = next_state;
 
     (tokenizer, tokens)
