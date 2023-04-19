@@ -71,7 +71,7 @@ pub fn tokenizer() -> Tokenizer {
     }
 }
 
-pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
+pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (buf, next_state, tokens) = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
@@ -128,8 +128,10 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
         }
     };
 
-    tokenizer.buf = buf;
-    tokenizer.state = next_state;
+    let tokenizer = Tokenizer {
+        buf,
+        state: next_state,
+    };
 
     (tokenizer, tokens)
 }
