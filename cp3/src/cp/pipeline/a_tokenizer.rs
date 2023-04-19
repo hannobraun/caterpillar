@@ -75,23 +75,7 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (buf, state, tokens) = match ch {
         STRING_DELIMITER => push_string_delimiter(tokenizer),
         ch if ch.is_whitespace() => push_whitespace(ch, tokenizer),
-        ch => {
-            let mut buf = tokenizer.buf.push(ch);
-
-            match tokenizer.state {
-                State::Searching | State::ProcessingAny => {
-                    let tokens = match_eagerly(buf.as_inner());
-                    if tokens != Tokens::Zero {
-                        buf = buf.clear();
-                    }
-
-                    (buf, State::ProcessingAny, tokens)
-                }
-                State::ProcessingString => {
-                    (buf, State::ProcessingString, Tokens::Zero)
-                }
-            }
-        }
+        ch => push_any_char(ch, tokenizer),
     };
 
     (Tokenizer { buf, state }, tokens)
@@ -136,6 +120,22 @@ fn push_whitespace(ch: char, tokenizer: Tokenizer) -> (Buf, State, Tokens) {
             State::ProcessingString,
             Tokens::Zero,
         ),
+    }
+}
+
+fn push_any_char(ch: char, tokenizer: Tokenizer) -> (Buf, State, Tokens) {
+    let mut buf = tokenizer.buf.push(ch);
+
+    match tokenizer.state {
+        State::Searching | State::ProcessingAny => {
+            let tokens = match_eagerly(buf.as_inner());
+            if tokens != Tokens::Zero {
+                buf = buf.clear();
+            }
+
+            (buf, State::ProcessingAny, tokens)
+        }
+        State::ProcessingString => (buf, State::ProcessingString, Tokens::Zero),
     }
 }
 
