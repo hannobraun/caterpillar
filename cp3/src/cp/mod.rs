@@ -35,7 +35,9 @@ pub fn execute(
                 tokens.extend(ts);
                 tokenizer
             });
-        tokens.extend(pipeline::a_tokenizer::finalize(tokenizer));
+
+        let ts = pipeline::a_tokenizer::finalize(tokenizer);
+        tokens.extend(ts);
 
         tokens.into()
     });
