@@ -130,6 +130,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     };
 
     tokenizer.state = next_state;
+
     (tokenizer, tokens)
 }
 
