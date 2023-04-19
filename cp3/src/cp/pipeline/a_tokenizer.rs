@@ -74,24 +74,7 @@ pub fn tokenizer() -> Tokenizer {
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (buf, state, tokens) = match ch {
         STRING_DELIMITER => push_string_delimiter(tokenizer),
-        ch if ch.is_whitespace() => match tokenizer.state {
-            State::Searching => (tokenizer.buf, State::Searching, Tokens::Zero),
-            State::ProcessingAny => {
-                match match_delimited(tokenizer.buf.as_inner()) {
-                    Some(token) => (
-                        tokenizer.buf.clear(),
-                        State::Searching,
-                        Tokens::One(token),
-                    ),
-                    None => (tokenizer.buf, State::ProcessingAny, Tokens::Zero),
-                }
-            }
-            State::ProcessingString => (
-                tokenizer.buf.push(ch),
-                State::ProcessingString,
-                Tokens::Zero,
-            ),
-        },
+        ch if ch.is_whitespace() => push_whitespace(ch, tokenizer),
         ch => {
             let mut buf = tokenizer.buf.push(ch);
 
@@ -132,6 +115,27 @@ fn push_string_delimiter(tokenizer: Tokenizer) -> (Buf, State, Tokens) {
 
             (tokenizer.buf.clear(), State::Searching, Tokens::One(token))
         }
+    }
+}
+
+fn push_whitespace(ch: char, tokenizer: Tokenizer) -> (Buf, State, Tokens) {
+    match tokenizer.state {
+        State::Searching => (tokenizer.buf, State::Searching, Tokens::Zero),
+        State::ProcessingAny => {
+            match match_delimited(tokenizer.buf.as_inner()) {
+                Some(token) => (
+                    tokenizer.buf.clear(),
+                    State::Searching,
+                    Tokens::One(token),
+                ),
+                None => (tokenizer.buf, State::ProcessingAny, Tokens::Zero),
+            }
+        }
+        State::ProcessingString => (
+            tokenizer.buf.push(ch),
+            State::ProcessingString,
+            Tokens::Zero,
+        ),
     }
 }
 
