@@ -73,24 +73,7 @@ pub fn tokenizer() -> Tokenizer {
 
 pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (buf, state, tokens) = match ch {
-        STRING_DELIMITER => match tokenizer.state {
-            State::Searching => {
-                (tokenizer.buf.clear(), State::ProcessingString, Tokens::Zero)
-            }
-            State::ProcessingAny => {
-                let tokens = match match_delimited(tokenizer.buf.as_inner()) {
-                    Some(token) => Tokens::One(token),
-                    None => Tokens::Zero,
-                };
-
-                (tokenizer.buf.clear(), State::ProcessingString, tokens)
-            }
-            State::ProcessingString => {
-                let token = Token::String(tokenizer.buf.to_inner());
-
-                (tokenizer.buf.clear(), State::Searching, Tokens::One(token))
-            }
-        },
+        STRING_DELIMITER => push_string_delimiter(tokenizer),
         ch if ch.is_whitespace() => match tokenizer.state {
             State::Searching => (tokenizer.buf, State::Searching, Tokens::Zero),
             State::ProcessingAny => {
@@ -129,6 +112,27 @@ pub fn push_char(ch: char, tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     };
 
     (Tokenizer { buf, state }, tokens)
+}
+
+fn push_string_delimiter(tokenizer: Tokenizer) -> (Buf, State, Tokens) {
+    match tokenizer.state {
+        State::Searching => {
+            (tokenizer.buf.clear(), State::ProcessingString, Tokens::Zero)
+        }
+        State::ProcessingAny => {
+            let tokens = match match_delimited(tokenizer.buf.as_inner()) {
+                Some(token) => Tokens::One(token),
+                None => Tokens::Zero,
+            };
+
+            (tokenizer.buf.clear(), State::ProcessingString, tokens)
+        }
+        State::ProcessingString => {
+            let token = Token::String(tokenizer.buf.to_inner());
+
+            (tokenizer.buf.clear(), State::Searching, Tokens::One(token))
+        }
+    }
 }
 
 fn match_eagerly(buf: &str) -> Tokens {
