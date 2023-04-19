@@ -103,10 +103,11 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                     None => (tokenizer.buf, State::ProcessingAny, Tokens::Zero),
                 }
             }
-            State::ProcessingString => {
-                tokenizer.buf = tokenizer.buf.push(ch);
-                (tokenizer.buf, State::ProcessingString, Tokens::Zero)
-            }
+            State::ProcessingString => (
+                tokenizer.buf.push(ch),
+                State::ProcessingString,
+                Tokens::Zero,
+            ),
         },
         ch => {
             tokenizer.buf = tokenizer.buf.push(ch);
