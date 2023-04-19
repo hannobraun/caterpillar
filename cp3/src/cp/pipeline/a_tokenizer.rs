@@ -75,8 +75,7 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     let (buf, next_state, tokens) = match ch {
         STRING_DELIMITER => match tokenizer.state {
             State::Searching => {
-                tokenizer.buf = tokenizer.buf.clear();
-                (tokenizer.buf, State::ProcessingString, Tokens::Zero)
+                (tokenizer.buf.clear(), State::ProcessingString, Tokens::Zero)
             }
             State::ProcessingAny => {
                 let tokens = match match_delimited(tokenizer.buf.as_inner()) {
@@ -84,24 +83,23 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
                     None => Tokens::Zero,
                 };
 
-                tokenizer.buf = tokenizer.buf.clear();
-                (tokenizer.buf, State::ProcessingString, tokens)
+                (tokenizer.buf.clear(), State::ProcessingString, tokens)
             }
             State::ProcessingString => {
                 let token = Token::String(tokenizer.buf.to_inner());
 
-                tokenizer.buf = tokenizer.buf.clear();
-                (tokenizer.buf, State::Searching, Tokens::One(token))
+                (tokenizer.buf.clear(), State::Searching, Tokens::One(token))
             }
         },
         ch if ch.is_whitespace() => match tokenizer.state {
             State::Searching => (tokenizer.buf, State::Searching, Tokens::Zero),
             State::ProcessingAny => {
                 match match_delimited(tokenizer.buf.as_inner()) {
-                    Some(token) => {
-                        tokenizer.buf = tokenizer.buf.clear();
-                        (tokenizer.buf, State::Searching, Tokens::One(token))
-                    }
+                    Some(token) => (
+                        tokenizer.buf.clear(),
+                        State::Searching,
+                        Tokens::One(token),
+                    ),
                     None => (tokenizer.buf, State::ProcessingAny, Tokens::Zero),
                 }
             }
