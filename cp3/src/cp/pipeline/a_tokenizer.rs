@@ -134,16 +134,6 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
     (tokenizer, tokens)
 }
 
-pub fn finalize(tokenizer: Tokenizer) -> Vec<Token> {
-    let mut tokens = Vec::new();
-
-    if let State::ProcessingAny = tokenizer.state {
-        tokens.extend(match_eagerly(tokenizer.buf.as_inner()));
-    }
-
-    tokens
-}
-
 fn match_eagerly(buf: &str) -> Tokens {
     let delimiters = map! {
         "=>" => Token::BindingOperator,

@@ -36,7 +36,9 @@ pub fn execute(
                 tokenizer
             });
 
-        let ts = pipeline::a_tokenizer::finalize(tokenizer);
+        let end_of_stream = '\u{0004}';
+        let (_, ts) =
+            pipeline::a_tokenizer::push_char(end_of_stream, tokenizer);
         tokens.extend(ts);
 
         tokens.into()
