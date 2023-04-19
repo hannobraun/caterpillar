@@ -110,19 +110,19 @@ pub fn push_char(ch: char, mut tokenizer: Tokenizer) -> (Tokenizer, Tokens) {
             ),
         },
         ch => {
-            tokenizer.buf = tokenizer.buf.push(ch);
+            let mut buf = tokenizer.buf.push(ch);
 
             match tokenizer.state {
                 State::Searching | State::ProcessingAny => {
-                    let tokens = match_eagerly(tokenizer.buf.as_inner());
+                    let tokens = match_eagerly(buf.as_inner());
                     if tokens != Tokens::Zero {
-                        tokenizer.buf = tokenizer.buf.clear();
+                        buf = buf.clear();
                     }
 
-                    (tokenizer.buf, State::ProcessingAny, tokens)
+                    (buf, State::ProcessingAny, tokens)
                 }
                 State::ProcessingString => {
-                    (tokenizer.buf, State::ProcessingString, Tokens::Zero)
+                    (buf, State::ProcessingString, Tokens::Zero)
                 }
             }
         }
