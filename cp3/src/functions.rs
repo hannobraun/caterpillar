@@ -1,6 +1,6 @@
-use crate::cp::{self, Functions};
+use crate::cp;
 
-pub fn define() -> anyhow::Result<Functions> {
+pub fn define() -> anyhow::Result<cp::Functions> {
     let mut functions = cp::Functions::new();
 
     let code = r#"
