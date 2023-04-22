@@ -47,11 +47,13 @@ It's quite possible that I'll abandon this prototype once the objective is reach
 - **Compile-time metaprogramming:** I'd like to experiment with writing a static type system for Caterpillar in Caterpillar itself.
 - **Self-hosting:** Split the system into an interface and a language runtime, run that language runtime in WebAssembly, implement a Caterpillar to WASM compiler in Caterpillar, then re-implement the language runtime in Caterpillar.
 - **Content-addressable functions:** See [Unison](https://www.unison-lang.org/learn/the-big-idea/).
+- **Web-based UI:** Browsers are the most universal runtime that we have. Having the development environment running there will provide a nice baseline of platform support.
 
 
 ## Long-term goals
 
-These goals are unlikely to be implemented as part of this prototype, but might be the topic of future prototypes:
+I have some use cases in mind, that would be perfect applications of interactive programming. These are unlikely to be implemented as part of this prototype, but might be the topic of future prototypes:
 
-- **Web-based UI:** Browsers are the most universal runtime that we have. Having the development environment running there will provide a nice baseline of platform support.
-- **Microcontroller target:** The direct feedback of an interactive programming environment would be especially valuable for code that is running on another device.
+- **Synthesizer:** Define a code-based synthesizer that can be programmed in Caterpillar.
+- **Fantasy Console:** Define a [fantasy video game console](https://en.wikipedia.org/wiki/Fantasy_video_game_console) that can be programmed in Caterpillar.
+- **Embedded Runtime:** Direct interaction with and development of a program running on a microcontroller.
