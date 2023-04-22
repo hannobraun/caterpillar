@@ -7,7 +7,7 @@ An experimental programming language that is inspired by two insights:
 1. Interactive programming is an under-explored area of software development.
 2. By combining pure functions with affine or linear types, we can get memory safety without runtime overhead, without the complexity of Rust's borrow checker.
 
-I'm also exploring some other aspects of programming language design, but those two are at the core of what this is about.
+I'm also exploring other aspects of programming language design, but those two are at the core of what this project is about.
 
 This iteration of Caterpillar is a more focused version of an [earlier prototype](../archive/cp2/). It simplifies the UI side of that prototype, while keeping most of the rest.
 
