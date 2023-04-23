@@ -1,6 +1,6 @@
 use std::{iter, option};
 
-use map_macro::map;
+use map_macro::hash_map;
 
 use crate::cp::{
     keywords::Keyword,
@@ -140,7 +140,7 @@ fn push_any_char(ch: char, tokenizer: Tokenizer) -> (Buf, State, Tokens) {
 }
 
 fn match_eagerly(buf: &str) -> Tokens {
-    let delimiters = map! {
+    let delimiters = hash_map! {
         "=>" => Token::BindingOperator,
         "." => Token::Period,
         "{" => Token::CurlyBracketOpen,
