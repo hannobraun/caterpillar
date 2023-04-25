@@ -1,5 +1,6 @@
 mod cp;
 mod functions;
+mod test_report;
 mod tests;
 
 use crossterm::style::Stylize;

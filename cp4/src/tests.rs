@@ -1,10 +1,7 @@
-use crate::cp;
-
-pub struct TestReport {
-    pub module: String,
-    pub name: String,
-    pub result: Result<(), Error>,
-}
+use crate::{
+    cp,
+    test_report::{Error, TestReport},
+};
 
 pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
@@ -99,19 +96,4 @@ pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     results.reverse();
 
     Ok(results)
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error(transparent)]
-    Evaluator(cp::EvaluatorError),
-
-    #[error(transparent)]
-    ReturnValue(#[from] cp::DataStackError),
-
-    #[error("Test did not return `true`")]
-    TestFailed,
-
-    #[error("Test returned too many values")]
-    TestReturnedTooMuch,
 }
