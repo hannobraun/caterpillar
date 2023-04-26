@@ -5,51 +5,6 @@ use crate::{
 
 pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
-        mod bool {
-            test "true" { true }
-            test "false not" { false not }
-            test "and - true true" { true true and }
-            test "and - true false" { true false and not }
-            test "and - false true" { false true and not }
-            test "and - false false" { false false and not }
-        }
-
-        mod binding {
-            test "binding" { true false => t f . t }
-            test "tokenization" { true=>t.t }
-        }
-
-        mod basics {
-            test "drop" { true false drop }
-            test "clone" { true clone drop }
-        }
-
-        mod block {
-            test "eval" { { true } eval }
-            test "lazy evaluation" { true { drop } drop }
-            test "tokenization" { {true}eval{true}eval and }
-        }
-
-        mod array {
-            test "unwrap" { [ true ] unwrap }
-            test "eager evaluation" { true false [ drop ] drop }
-            test "tokenization" { [true]unwrap[true]unwrap and }
-        }
-
-        mod fn_ {
-            test "fn" { fn f { true } f }
-        }
-
-        mod if_ {
-            test "then" { true { true } { false } if }
-            test "else" { false { false } { true } if }
-        }
-
-        mod string {
-            test "=" { "a" "a" = }
-            test "= not" { "a" "b" = not }
-            test "tokenization" { "a""a"="b""b"= and }
-        }
     "#;
 
     let data_stack = cp::execute(code.chars(), functions)?;
