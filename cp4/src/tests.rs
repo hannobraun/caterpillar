@@ -7,7 +7,7 @@ pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
     "#;
 
-    let data_stack = cp::execute(code.chars(), functions)?;
+    let data_stack = cp::execute(code.chars())?;
     if !data_stack.is_empty() {
         anyhow::bail!("Importing tests left values on stack: {data_stack:?}")
     }

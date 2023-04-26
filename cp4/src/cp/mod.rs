@@ -39,10 +39,7 @@ impl DataStack {
 #[derive(Debug, thiserror::Error)]
 pub enum DataStackError {}
 
-pub fn execute(
-    _: impl IntoIterator<Item = char>,
-    _: &mut Functions,
-) -> anyhow::Result<DataStack> {
+pub fn execute(_: impl IntoIterator<Item = char>) -> anyhow::Result<DataStack> {
     Ok(DataStack {})
 }
 
