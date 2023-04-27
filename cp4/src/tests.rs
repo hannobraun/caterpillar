@@ -1,7 +1,4 @@
-use crate::{
-    cp,
-    test_report::{Error, TestReport},
-};
+use crate::{cp, test_report::TestReport};
 
 pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
@@ -23,28 +20,14 @@ pub fn run(functions: &mut cp::Functions) -> anyhow::Result<Vec<TestReport>> {
             functions,
             &mut call_stack,
             &mut data_stack,
-        )
-        .map_err(Error::Evaluator)
-        .and_then(|()| {
-            if data_stack.pop_bool()? {
-                Ok(())
-            } else {
-                Err(Error::TestFailed)
-            }
-        })
-        .and_then(|()| {
-            if data_stack.is_empty() {
-                Ok(())
-            } else {
-                Err(Error::TestReturnedTooMuch)
-            }
-        });
+        );
 
-        results.push(TestReport {
-            module: function.module,
+        results.push(TestReport::new(
+            function.module,
             name,
             result,
-        });
+            data_stack,
+        ));
     }
 
     results.sort_by_key(|report| report.result.is_ok());

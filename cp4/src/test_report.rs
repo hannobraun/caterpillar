@@ -8,6 +8,38 @@ pub struct TestReport {
     pub result: Result<(), Error>,
 }
 
+impl TestReport {
+    pub fn new(
+        module: String,
+        name: String,
+        result: Result<(), cp::EvaluatorError>,
+        mut data_stack: cp::DataStack,
+    ) -> Self {
+        let result = result
+            .map_err(Error::Evaluator)
+            .and_then(|()| {
+                if data_stack.pop_bool()? {
+                    Ok(())
+                } else {
+                    Err(Error::TestFailed)
+                }
+            })
+            .and_then(|()| {
+                if data_stack.is_empty() {
+                    Ok(())
+                } else {
+                    Err(Error::TestReturnedTooMuch)
+                }
+            });
+
+        TestReport {
+            module,
+            name,
+            result,
+        }
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
