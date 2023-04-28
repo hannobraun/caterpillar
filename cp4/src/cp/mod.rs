@@ -9,7 +9,7 @@ impl DataStack {
     }
 
     pub fn is_empty(&self) -> bool {
-        true
+        self.values.is_empty()
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
