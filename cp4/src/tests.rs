@@ -1,8 +1,7 @@
 use crate::{cp, test_report::TestReport};
 
 pub fn run() -> Vec<TestReport> {
-    let result = Ok(());
-    let data_stack = cp::DataStack::new();
+    let (result, data_stack) = cp::execute("true");
 
     vec![TestReport::new(
         "test".into(),

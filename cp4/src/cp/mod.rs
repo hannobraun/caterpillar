@@ -20,3 +20,10 @@ pub enum DataStackError {}
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {}
+
+pub fn execute(_: &str) -> (Result<(), EvaluatorError>, DataStack) {
+    let result = Ok(());
+    let data_stack = DataStack::new();
+
+    (result, data_stack)
+}
