@@ -1,9 +1,11 @@
 #[derive(Debug)]
-pub struct DataStack {}
+pub struct DataStack {
+    values: Vec<bool>,
+}
 
 impl DataStack {
     pub fn new() -> Self {
-        Self {}
+        Self { values: Vec::new() }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -11,12 +13,15 @@ impl DataStack {
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        Ok(false)
+        self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
     }
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum DataStackError {}
+pub enum DataStackError {
+    #[error("Tried to pop value from empty stack")]
+    PopFromEmptyStack,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {}
