@@ -28,14 +28,20 @@ pub enum DataStackError {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {}
+pub enum EvaluatorError {
+    #[error("Unknown word: `{0}`")]
+    UnknownWord(String),
+}
 
 pub fn execute(code: &str) -> (Result<(), EvaluatorError>, DataStack) {
     let mut data_stack = DataStack::new();
 
     let (value, result) = match code {
         "true" => (true, Ok(())),
-        _ => (false, Ok(())),
+        "false" => (false, Ok(())),
+        word => {
+            return (Err(EvaluatorError::UnknownWord(word.into())), data_stack)
+        }
     };
 
     data_stack.push(value);
