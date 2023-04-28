@@ -1,8 +1,8 @@
 use crate::{cp, test_report::TestReport};
 
 pub fn run() -> Vec<TestReport> {
-    let module = "test".into();
-    let name = "test".into();
+    let module = "bool".into();
+    let name = "true".into();
 
     let (result, data_stack) = cp::execute("true");
 
