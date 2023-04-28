@@ -36,9 +36,9 @@ pub enum EvaluatorError {
 pub fn execute(code: &str) -> (Result<(), EvaluatorError>, DataStack) {
     let mut data_stack = DataStack::new();
 
-    let (value, result) = match code {
-        "true" => (true, Ok(())),
-        "false" => (false, Ok(())),
+    let value = match code {
+        "true" => true,
+        "false" => false,
         word => {
             return (Err(EvaluatorError::UnknownWord(word.into())), data_stack)
         }
@@ -46,5 +46,5 @@ pub fn execute(code: &str) -> (Result<(), EvaluatorError>, DataStack) {
 
     data_stack.push(value);
 
-    (result, data_stack)
+    (Ok(()), data_stack)
 }
