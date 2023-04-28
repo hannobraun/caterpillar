@@ -1,4 +1,3 @@
-use cp::DataStack;
 use test_report::TestReport;
 
 mod cp;
@@ -6,7 +5,7 @@ mod test_report;
 
 fn main() -> anyhow::Result<()> {
     let result = Ok(());
-    let data_stack = DataStack::new();
+    let data_stack = cp::DataStack::new();
     let test_reports = vec![TestReport::new(
         "test".into(),
         "test".into(),
