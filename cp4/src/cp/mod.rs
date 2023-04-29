@@ -11,9 +11,10 @@ pub enum EvaluatorError {
     UnknownWord(String),
 }
 
-pub fn execute(code: &str) -> (Result<(), EvaluatorError>, DataStack) {
-    let mut data_stack = DataStack::new();
-
+pub fn execute(
+    code: &str,
+    data_stack: &mut DataStack,
+) -> Result<(), EvaluatorError> {
     for code in code.split_whitespace() {
         match code {
             "true" => {
@@ -22,14 +23,9 @@ pub fn execute(code: &str) -> (Result<(), EvaluatorError>, DataStack) {
             "false" => {
                 data_stack.push(false);
             }
-            word => {
-                return (
-                    Err(EvaluatorError::UnknownWord(word.into())),
-                    data_stack,
-                )
-            }
+            word => return Err(EvaluatorError::UnknownWord(word.into())),
         }
     }
 
-    (Ok(()), data_stack)
+    Ok(())
 }

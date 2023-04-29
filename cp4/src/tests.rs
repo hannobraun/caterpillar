@@ -12,7 +12,9 @@ pub fn run() -> Vec<TestReport> {
         let module = module.into();
         let name = name.into();
 
-        let (result, data_stack) = cp::execute(code);
+        let mut data_stack = cp::DataStack::new();
+        let result = cp::execute(code, &mut data_stack);
+
         test_reports.push(TestReport::new(module, name, result, data_stack));
     }
 
