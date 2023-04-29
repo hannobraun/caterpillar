@@ -23,6 +23,11 @@ pub fn execute(
             "false" => {
                 data_stack.push(false);
             }
+            "not" => {
+                let a = data_stack.pop_bool()?;
+                let x = !a;
+                data_stack.push(x);
+            }
             word => return Err(EvaluatorError::UnknownWord(word.into())),
         }
     }

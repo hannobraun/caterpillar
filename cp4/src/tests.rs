@@ -7,6 +7,7 @@ pub fn run() -> Vec<TestReport> {
     let mut test_reports = Vec::new();
 
     tests.insert(("bool", "true"), "true");
+    tests.insert(("bool", "false not"), "false not");
 
     for ((module, name), code) in tests {
         let module = module.into();
