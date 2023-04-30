@@ -9,7 +9,7 @@ pub enum EvaluatorError {
     UnknownWord(String),
 }
 
-pub fn evaluate(
+pub async fn evaluate(
     tokens: impl IntoIterator<Item = String>,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
