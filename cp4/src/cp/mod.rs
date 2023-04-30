@@ -15,8 +15,8 @@ pub fn execute(
     code: &str,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    for code in code.split_whitespace() {
-        match code {
+    for word in code.split_whitespace() {
+        match word {
             "true" => {
                 data_stack.push(true);
             }
