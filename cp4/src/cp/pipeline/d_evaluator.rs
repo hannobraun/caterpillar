@@ -1,3 +1,7 @@
+use std::pin::Pin;
+
+use futures::{Stream, StreamExt};
+
 use crate::cp::{DataStack, DataStackError};
 
 #[derive(Debug, thiserror::Error)]
@@ -10,10 +14,10 @@ pub enum EvaluatorError {
 }
 
 pub async fn evaluate(
-    tokens: impl IntoIterator<Item = String>,
+    mut tokens: Pin<&mut dyn Stream<Item = String>>,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    for token in tokens {
+    while let Some(token) = tokens.next().await {
         match token.as_str() {
             "true" => {
                 data_stack.push(true);
