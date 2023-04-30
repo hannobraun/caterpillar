@@ -6,7 +6,7 @@ pub use self::{
     pipeline::d_evaluator::EvaluatorError,
 };
 
-pub fn execute(
+pub async fn execute(
     code: &str,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {

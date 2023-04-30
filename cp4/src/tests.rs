@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use futures::executor::block_on;
+
 use crate::{cp, test_report::TestReport};
 
 pub fn run() -> Vec<TestReport> {
@@ -14,7 +16,7 @@ pub fn run() -> Vec<TestReport> {
         let name = name.into();
 
         let mut data_stack = cp::DataStack::new();
-        let result = cp::execute(code, &mut data_stack);
+        let result = block_on(cp::execute(code, &mut data_stack));
 
         test_reports.push(TestReport::new(module, name, result, data_stack));
     }
