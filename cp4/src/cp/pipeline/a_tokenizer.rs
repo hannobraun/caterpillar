@@ -1,3 +1,3 @@
-pub fn tokenize(code: &str) -> impl Iterator<Item = &str> {
-    code.split_whitespace()
+pub fn tokenize(code: &str) -> impl Iterator<Item = String> + '_ {
+    code.split_whitespace().map(String::from)
 }

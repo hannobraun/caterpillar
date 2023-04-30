@@ -19,7 +19,7 @@ pub fn execute(
     let tokens = pipeline::a_tokenizer::tokenize(code);
 
     for token in tokens {
-        match token {
+        match token.as_str() {
             "true" => {
                 data_stack.push(true);
             }
