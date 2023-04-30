@@ -16,8 +16,8 @@ pub fn execute(
     code: &str,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    for word in pipeline::a_tokenizer::tokenize(code) {
-        match word {
+    for token in pipeline::a_tokenizer::tokenize(code) {
+        match token {
             "true" => {
                 data_stack.push(true);
             }
