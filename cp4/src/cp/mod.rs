@@ -1,4 +1,5 @@
 mod data_stack;
+mod pipeline;
 
 pub use self::data_stack::{DataStack, DataStackError};
 
@@ -15,7 +16,7 @@ pub fn execute(
     code: &str,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    for word in code.split_whitespace() {
+    for word in pipeline::a_tokenizer::tokenize(code) {
         match word {
             "true" => {
                 data_stack.push(true);
