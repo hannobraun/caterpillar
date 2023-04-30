@@ -1,16 +1,10 @@
 mod data_stack;
 mod pipeline;
 
-pub use self::data_stack::{DataStack, DataStackError};
-
-#[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {
-    #[error(transparent)]
-    DataStack(#[from] DataStackError),
-
-    #[error("Unknown word: `{0}`")]
-    UnknownWord(String),
-}
+pub use self::{
+    data_stack::{DataStack, DataStackError},
+    pipeline::d_evaluator::EvaluatorError,
+};
 
 pub fn execute(
     code: &str,
