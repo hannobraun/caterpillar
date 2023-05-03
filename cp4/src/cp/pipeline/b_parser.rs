@@ -10,7 +10,11 @@ impl Parser {
     }
 
     pub async fn next_token(&mut self) -> Option<SyntaxElement> {
-        match self.tokenizer.next_token().await? {
+        let Some(token) = self.tokenizer.next_token().await else {
+            return None;
+        };
+
+        match token {
             Token::Ident(ident) => Some(SyntaxElement::Word(ident)),
         }
     }
