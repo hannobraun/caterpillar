@@ -1,6 +1,6 @@
 use crate::cp::{DataStack, DataStackError};
 
-use super::b_parser::{Parser, SyntaxElement};
+use super::b_parser::{Parser, ParserError, SyntaxElement};
 
 pub struct Evaluator {
     parser: Parser,
@@ -15,8 +15,8 @@ impl Evaluator {
         &mut self,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        while let Ok(Some(SyntaxElement::Word(token))) =
-            self.parser.next_token().await
+        while let Some(SyntaxElement::Word(token)) =
+            self.parser.next_token().await?
         {
             match token.as_str() {
                 "true" => {
@@ -40,6 +40,9 @@ impl Evaluator {
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
+    #[error(transparent)]
+    Parser(#[from] ParserError),
+
     #[error(transparent)]
     DataStack(#[from] DataStackError),
 
