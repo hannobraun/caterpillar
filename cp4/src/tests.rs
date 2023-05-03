@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, pin::pin};
+use std::collections::BTreeMap;
 
 use futures::{executor::block_on, stream};
 
@@ -14,7 +14,7 @@ pub fn run() -> Vec<TestReport> {
     for ((module, name), code) in tests {
         let module = module.into();
         let name = name.into();
-        let code = pin!(stream::iter(code.chars()));
+        let code = Box::pin(stream::iter(code.chars()));
 
         let mut data_stack = cp::DataStack::new();
         let result = block_on(cp::execute(code, &mut data_stack));

@@ -2,13 +2,13 @@ use std::pin::Pin;
 
 use futures::{Stream, StreamExt};
 
-pub struct Tokenizer<'r> {
-    chars: Chars<'r>,
+pub struct Tokenizer {
+    chars: Chars,
     buf: String,
 }
 
-impl<'r> Tokenizer<'r> {
-    pub fn new(chars: Chars<'r>) -> Self {
+impl Tokenizer {
+    pub fn new(chars: Chars) -> Self {
         Self {
             chars,
             buf: String::new(),
@@ -41,4 +41,4 @@ impl<'r> Tokenizer<'r> {
     }
 }
 
-pub type Chars<'r> = Pin<&'r mut dyn Stream<Item = char>>;
+pub type Chars = Pin<Box<dyn Stream<Item = char>>>;

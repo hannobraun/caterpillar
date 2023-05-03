@@ -7,7 +7,7 @@ pub use self::{
 };
 
 pub async fn execute(
-    code: pipeline::a_tokenizer::Chars<'_>,
+    code: pipeline::a_tokenizer::Chars,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
     let mut tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
