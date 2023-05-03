@@ -1,22 +1,21 @@
 use crate::cp::{DataStack, DataStackError};
 
-use super::a_tokenizer::{Token, Tokenizer};
+use super::{a_tokenizer::Token, b_parser::Parser};
 
 pub struct Evaluator {
-    tokenizer: Tokenizer,
+    parser: Parser,
 }
 
 impl Evaluator {
-    pub fn new(tokenizer: Tokenizer) -> Self {
-        Self { tokenizer }
+    pub fn new(parser: Parser) -> Self {
+        Self { parser }
     }
 
     pub async fn evaluate(
         &mut self,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        while let Some(Token::Ident(token)) = self.tokenizer.next_token().await
-        {
+        while let Some(Token::Ident(token)) = self.parser.next_token().await {
             match token.as_str() {
                 "true" => {
                     data_stack.push(true);
