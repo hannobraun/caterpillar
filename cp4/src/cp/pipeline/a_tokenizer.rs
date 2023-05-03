@@ -11,9 +11,9 @@ impl Tokenizer {
         Self { buf: String::new() }
     }
 
-    pub async fn tokenize<'r>(
-        &'r mut self,
-        mut ch: Pin<&'r mut dyn Stream<Item = char>>,
+    pub async fn tokenize(
+        &mut self,
+        mut ch: Pin<&mut dyn Stream<Item = char>>,
     ) -> Option<String> {
         loop {
             let ch = match ch.next().await {
