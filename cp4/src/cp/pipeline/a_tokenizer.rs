@@ -15,7 +15,7 @@ impl Tokenizer {
         }
     }
 
-    pub async fn next_token(&mut self) -> Option<String> {
+    pub async fn next_token(&mut self) -> Option<Token> {
         loop {
             let ch = match self.chars.next().await {
                 Some(ch) => ch,
@@ -24,14 +24,14 @@ impl Tokenizer {
                         return None;
                     }
 
-                    let token = self.buf.clone();
+                    let token = Token::Word(self.buf.clone());
                     self.buf.clear();
                     return Some(token);
                 }
             };
 
             if ch.is_whitespace() {
-                let token = self.buf.clone();
+                let token = Token::Word(self.buf.clone());
                 self.buf.clear();
                 return Some(token);
             }
@@ -42,3 +42,7 @@ impl Tokenizer {
 }
 
 pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
+
+pub enum Token {
+    Word(String),
+}

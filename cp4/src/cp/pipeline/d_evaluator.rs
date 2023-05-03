@@ -1,6 +1,6 @@
 use crate::cp::{DataStack, DataStackError};
 
-use super::a_tokenizer::Tokenizer;
+use super::a_tokenizer::{Token, Tokenizer};
 
 pub struct Evaluator {
     tokenizer: Tokenizer,
@@ -15,7 +15,7 @@ impl Evaluator {
         &mut self,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        while let Some(token) = self.tokenizer.next_token().await {
+        while let Some(Token::Word(token)) = self.tokenizer.next_token().await {
             match token.as_str() {
                 "true" => {
                     data_stack.push(true);
