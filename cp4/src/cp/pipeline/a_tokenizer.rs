@@ -1,6 +1,6 @@
-use std::{pin::Pin, task::Poll};
+use std::pin::Pin;
 
-use futures::{stream, Stream};
+use futures::{Stream, StreamExt};
 
 pub struct Tokenizer {
     buf: String,
@@ -14,29 +14,28 @@ impl Tokenizer {
     pub async fn tokenize<'r>(
         &'r mut self,
         mut ch: Pin<&'r mut dyn Stream<Item = char>>,
-    ) -> impl Stream<Item = String> + 'r {
-        stream::poll_fn(move |cx| loop {
-            let ch = match ch.as_mut().poll_next(cx) {
-                Poll::Ready(Some(ch)) => ch,
-                Poll::Ready(None) => {
+    ) -> Option<String> {
+        loop {
+            let ch = match ch.next().await {
+                Some(ch) => ch,
+                None => {
                     if self.buf.is_empty() {
-                        return Poll::Ready(None);
+                        return None;
                     }
 
                     let token = self.buf.clone();
                     self.buf.clear();
-                    return Poll::Ready(Some(token));
+                    return Some(token);
                 }
-                Poll::Pending => return Poll::Pending,
             };
 
             if ch.is_whitespace() {
                 let token = self.buf.clone();
                 self.buf.clear();
-                return Poll::Ready(Some(token));
+                return Some(token);
             }
 
             self.buf.push(ch);
-        })
+        }
     }
 }

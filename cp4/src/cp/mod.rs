@@ -3,7 +3,7 @@ mod pipeline;
 
 use std::{future, pin::pin};
 
-use futures::{stream, StreamExt};
+use futures::stream;
 
 pub use self::{
     data_stack::{DataStack, DataStackError},
@@ -14,11 +14,10 @@ pub async fn execute(
     code: &str,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let code = pin!(stream::iter(code.chars()));
+    let mut code = pin!(stream::iter(code.chars()));
     let mut tokenizer = pipeline::a_tokenizer::Tokenizer::new();
 
-    let mut tokens = tokenizer.tokenize(code).await;
-    while let Some(token) = tokens.next().await {
+    while let Some(token) = tokenizer.tokenize(code.as_mut()).await {
         pipeline::d_evaluator::evaluate(future::ready(token), data_stack)
             .await?;
     }
