@@ -5,6 +5,10 @@ use crate::cp::{DataStack, DataStackError};
 pub struct Evaluator {}
 
 impl Evaluator {
+    pub fn new() -> Self {
+        Self {}
+    }
+
     pub async fn evaluate(
         &mut self,
         token: impl Future<Output = String>,
