@@ -9,13 +9,15 @@ impl Parser {
         Self { tokenizer }
     }
 
-    pub async fn next_token(&mut self) -> Option<SyntaxElement> {
+    pub async fn next_token(
+        &mut self,
+    ) -> Result<Option<SyntaxElement>, ParserError> {
         let Some(token) = self.tokenizer.next_token().await else {
-            return None;
+            return Ok(None);
         };
 
         match token {
-            Token::Ident(ident) => Some(SyntaxElement::Word(ident)),
+            Token::Ident(ident) => Ok(Some(SyntaxElement::Word(ident))),
         }
     }
 }
@@ -23,3 +25,6 @@ impl Parser {
 pub enum SyntaxElement {
     Word(String),
 }
+
+#[derive(Debug, thiserror::Error)]
+pub enum ParserError {}
