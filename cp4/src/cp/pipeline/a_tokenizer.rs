@@ -24,12 +24,12 @@ impl Tokenizer {
                         return None;
                     }
 
-                    return Some(Token::word(&mut self.buf));
+                    return Some(Token::ident(&mut self.buf));
                 }
             };
 
             if ch.is_whitespace() {
-                return Some(Token::word(&mut self.buf));
+                return Some(Token::ident(&mut self.buf));
             }
 
             self.buf.push(ch);
@@ -44,7 +44,7 @@ pub enum Token {
 }
 
 impl Token {
-    fn word(buf: &mut String) -> Self {
+    fn ident(buf: &mut String) -> Self {
         let token = buf.clone();
         buf.clear();
         Self::Ident(token)
