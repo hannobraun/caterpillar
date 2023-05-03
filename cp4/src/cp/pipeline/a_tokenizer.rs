@@ -2,21 +2,22 @@ use std::pin::Pin;
 
 use futures::{Stream, StreamExt};
 
-pub struct Tokenizer {
+pub struct Tokenizer<'r> {
+    chars: Pin<&'r mut dyn Stream<Item = char>>,
     buf: String,
 }
 
-impl Tokenizer {
-    pub fn new() -> Self {
-        Self { buf: String::new() }
+impl<'r> Tokenizer<'r> {
+    pub fn new(chars: Pin<&'r mut dyn Stream<Item = char>>) -> Self {
+        Self {
+            chars,
+            buf: String::new(),
+        }
     }
 
-    pub async fn tokenize(
-        &mut self,
-        mut chars: Pin<&mut dyn Stream<Item = char>>,
-    ) -> Option<String> {
+    pub async fn tokenize(&mut self) -> Option<String> {
         loop {
-            let ch = match chars.next().await {
+            let ch = match self.chars.next().await {
                 Some(ch) => ch,
                 None => {
                     if self.buf.is_empty() {
