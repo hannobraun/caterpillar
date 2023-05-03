@@ -24,16 +24,12 @@ impl Tokenizer {
                         return None;
                     }
 
-                    let token = Token::Word(self.buf.clone());
-                    self.buf.clear();
-                    return Some(token);
+                    return Some(Token::word(&mut self.buf));
                 }
             };
 
             if ch.is_whitespace() {
-                let token = Token::Word(self.buf.clone());
-                self.buf.clear();
-                return Some(token);
+                return Some(Token::word(&mut self.buf));
             }
 
             self.buf.push(ch);
@@ -45,4 +41,12 @@ pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 
 pub enum Token {
     Word(String),
+}
+
+impl Token {
+    fn word(buf: &mut String) -> Self {
+        let token = buf.clone();
+        buf.clear();
+        Self::Word(token)
+    }
 }
