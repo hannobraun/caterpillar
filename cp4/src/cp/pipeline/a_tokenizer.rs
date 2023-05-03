@@ -10,6 +10,7 @@ impl Tokenizer {
     }
 
     pub fn tokenize(
+        &mut self,
         code: impl IntoIterator<Item = char>,
     ) -> impl Iterator<Item = String> {
         let mut code = code.into_iter();
