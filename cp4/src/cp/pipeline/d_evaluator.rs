@@ -2,7 +2,7 @@ use std::future::Future;
 
 use crate::cp::{DataStack, DataStackError};
 
-pub struct Evaluator;
+pub struct Evaluator {}
 
 impl Evaluator {
     pub async fn evaluate(
