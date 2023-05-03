@@ -1,4 +1,6 @@
-use std::iter;
+use std::{pin::Pin, task::Poll};
+
+use futures::{stream, Stream};
 
 pub struct Tokenizer {
     buf: String,
@@ -11,26 +13,27 @@ impl Tokenizer {
 
     pub async fn tokenize<'r>(
         &'r mut self,
-        mut code: impl Iterator<Item = char> + 'r,
-    ) -> impl Iterator<Item = String> + 'r {
-        iter::from_fn(move || loop {
-            let ch = match code.next() {
-                Some(ch) => ch,
-                None => {
+        mut ch: Pin<&'r mut dyn Stream<Item = char>>,
+    ) -> impl Stream<Item = String> + 'r {
+        stream::poll_fn(move |cx| loop {
+            let ch = match ch.as_mut().poll_next(cx) {
+                Poll::Ready(Some(ch)) => ch,
+                Poll::Ready(None) => {
                     if self.buf.is_empty() {
-                        return None;
+                        return Poll::Ready(None);
                     }
 
                     let token = self.buf.clone();
                     self.buf.clear();
-                    return Some(token);
+                    return Poll::Ready(Some(token));
                 }
+                Poll::Pending => return Poll::Pending,
             };
 
             if ch.is_whitespace() {
                 let token = self.buf.clone();
                 self.buf.clear();
-                return Some(token);
+                return Poll::Ready(Some(token));
             }
 
             self.buf.push(ch);
