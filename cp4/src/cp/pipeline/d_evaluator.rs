@@ -2,15 +2,6 @@ use std::future::Future;
 
 use crate::cp::{DataStack, DataStackError};
 
-#[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {
-    #[error(transparent)]
-    DataStack(#[from] DataStackError),
-
-    #[error("Unknown word: `{0}`")]
-    UnknownWord(String),
-}
-
 pub async fn evaluate(
     token: impl Future<Output = String>,
     data_stack: &mut DataStack,
@@ -31,4 +22,13 @@ pub async fn evaluate(
     }
 
     Ok(())
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum EvaluatorError {
+    #[error(transparent)]
+    DataStack(#[from] DataStackError),
+
+    #[error("Unknown word: `{0}`")]
+    UnknownWord(String),
 }
