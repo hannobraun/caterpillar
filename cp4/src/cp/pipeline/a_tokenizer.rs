@@ -40,13 +40,13 @@ impl Tokenizer {
 pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 
 pub enum Token {
-    Word(String),
+    Ident(String),
 }
 
 impl Token {
     fn word(buf: &mut String) -> Self {
         let token = buf.clone();
         buf.clear();
-        Self::Word(token)
+        Self::Ident(token)
     }
 }

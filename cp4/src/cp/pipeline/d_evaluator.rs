@@ -15,7 +15,8 @@ impl Evaluator {
         &mut self,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        while let Some(Token::Word(token)) = self.tokenizer.next_token().await {
+        while let Some(Token::Ident(token)) = self.tokenizer.next_token().await
+        {
             match token.as_str() {
                 "true" => {
                     data_stack.push(true);
