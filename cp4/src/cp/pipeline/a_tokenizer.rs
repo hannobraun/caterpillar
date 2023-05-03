@@ -11,9 +11,8 @@ impl Tokenizer {
 
     pub fn tokenize<'r>(
         &'r mut self,
-        code: impl Iterator<Item = char> + 'r,
+        mut code: impl Iterator<Item = char> + 'r,
     ) -> impl Iterator<Item = String> + 'r {
-        let mut code = code;
         let mut tokenizer = Tokenizer::new();
 
         iter::from_fn(move || loop {
