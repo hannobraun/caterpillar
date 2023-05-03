@@ -13,29 +13,27 @@ impl Tokenizer {
         &'r mut self,
         mut code: impl Iterator<Item = char> + 'r,
     ) -> impl Iterator<Item = String> + 'r {
-        let mut tokenizer = Tokenizer::new();
-
         iter::from_fn(move || loop {
             let ch = match code.next() {
                 Some(ch) => ch,
                 None => {
-                    if tokenizer.buf.is_empty() {
+                    if self.buf.is_empty() {
                         return None;
                     }
 
-                    let token = tokenizer.buf.clone();
-                    tokenizer.buf.clear();
+                    let token = self.buf.clone();
+                    self.buf.clear();
                     return Some(token);
                 }
             };
 
             if ch.is_whitespace() {
-                let token = tokenizer.buf.clone();
-                tokenizer.buf.clear();
+                let token = self.buf.clone();
+                self.buf.clear();
                 return Some(token);
             }
 
-            tokenizer.buf.push(ch);
+            self.buf.push(ch);
         })
     }
 }
