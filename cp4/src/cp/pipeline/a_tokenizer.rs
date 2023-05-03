@@ -4,11 +4,17 @@ pub struct Tokenizer {
     buf: String,
 }
 
+impl Tokenizer {
+    pub fn new() -> Self {
+        Self { buf: String::new() }
+    }
+}
+
 pub fn tokenize(
     code: impl IntoIterator<Item = char>,
 ) -> impl Iterator<Item = String> {
     let mut code = code.into_iter();
-    let mut tokenizer = Tokenizer { buf: String::new() };
+    let mut tokenizer = Tokenizer::new();
 
     iter::from_fn(move || loop {
         let ch = match code.next() {
