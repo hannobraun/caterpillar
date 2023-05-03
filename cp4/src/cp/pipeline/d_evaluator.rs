@@ -1,5 +1,3 @@
-use std::future::Future;
-
 use crate::cp::{DataStack, DataStackError};
 
 pub struct Evaluator {}
@@ -11,10 +9,10 @@ impl Evaluator {
 
     pub async fn evaluate(
         &mut self,
-        token: impl Future<Output = String>,
+        token: String,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        match token.await.as_str() {
+        match token.as_str() {
             "true" => {
                 data_stack.push(true);
             }
