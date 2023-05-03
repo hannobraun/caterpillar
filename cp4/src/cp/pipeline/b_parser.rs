@@ -18,6 +18,7 @@ impl Parser {
 
         match token {
             Token::Ident(ident) => Ok(Some(SyntaxElement::Word(ident))),
+            _ => Err(ParserError::UnexpectedToken),
         }
     }
 }
@@ -27,4 +28,7 @@ pub enum SyntaxElement {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum ParserError {}
+pub enum ParserError {
+    #[error("Unexpected token")]
+    UnexpectedToken,
+}

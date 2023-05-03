@@ -40,13 +40,19 @@ impl Tokenizer {
 pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 
 pub enum Token {
+    CurlyBracketOpen,
     Ident(String),
 }
 
 impl Token {
     fn from_buf(buf: &mut String) -> Self {
-        let token = buf.clone();
+        let token = match buf.as_str() {
+            "{" => Self::CurlyBracketOpen,
+            _ => Self::Ident(buf.clone()),
+        };
+
         buf.clear();
-        Self::Ident(token)
+
+        token
     }
 }
