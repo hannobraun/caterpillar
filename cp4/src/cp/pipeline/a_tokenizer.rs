@@ -39,6 +39,7 @@ impl Tokenizer {
 
 pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 
+#[derive(Debug)]
 pub enum Token {
     CurlyBracketOpen,
     Ident(String),
