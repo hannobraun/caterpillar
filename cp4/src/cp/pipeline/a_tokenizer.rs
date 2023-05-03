@@ -13,10 +13,10 @@ impl Tokenizer {
 
     pub async fn tokenize(
         &mut self,
-        mut ch: Pin<&mut dyn Stream<Item = char>>,
+        mut chars: Pin<&mut dyn Stream<Item = char>>,
     ) -> Option<String> {
         loop {
-            let ch = match ch.next().await {
+            let ch = match chars.next().await {
                 Some(ch) => ch,
                 None => {
                     if self.buf.is_empty() {
