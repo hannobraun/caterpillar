@@ -9,7 +9,13 @@ impl Parser {
         Self { tokenizer }
     }
 
-    pub async fn next_token(&mut self) -> Option<Token> {
-        self.tokenizer.next_token().await
+    pub async fn next_token(&mut self) -> Option<SyntaxElement> {
+        match self.tokenizer.next_token().await? {
+            Token::Ident(ident) => Some(SyntaxElement::Word(ident)),
+        }
     }
+}
+
+pub enum SyntaxElement {
+    Word(String),
 }
