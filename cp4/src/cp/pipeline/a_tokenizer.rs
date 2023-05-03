@@ -9,7 +9,7 @@ impl Tokenizer {
         Self { buf: String::new() }
     }
 
-    pub fn tokenize<'r>(
+    pub async fn tokenize<'r>(
         &'r mut self,
         mut code: impl Iterator<Item = char> + 'r,
     ) -> impl Iterator<Item = String> + 'r {
