@@ -6,6 +6,7 @@ pub struct Evaluator;
 
 impl Evaluator {
     pub async fn evaluate(
+        &mut self,
         token: impl Future<Output = String>,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {

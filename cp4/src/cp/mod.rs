@@ -13,11 +13,9 @@ pub async fn execute(
     let mut tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
 
     while let Some(token) = tokenizer.next_token().await {
-        pipeline::d_evaluator::Evaluator::evaluate(
-            std::future::ready(token),
-            data_stack,
-        )
-        .await?;
+        pipeline::d_evaluator::Evaluator
+            .evaluate(std::future::ready(token), data_stack)
+            .await?;
     }
 
     Ok(())
