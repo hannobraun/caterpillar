@@ -11,9 +11,10 @@ pub async fn execute(
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
     let mut tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
+    let mut evaluator = pipeline::d_evaluator::Evaluator;
 
     while let Some(token) = tokenizer.next_token().await {
-        pipeline::d_evaluator::Evaluator
+        evaluator
             .evaluate(std::future::ready(token), data_stack)
             .await?;
     }
