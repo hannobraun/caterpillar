@@ -17,7 +17,7 @@ pub async fn execute(
     let code = pin!(stream::iter(code.chars()));
     let mut tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
 
-    while let Some(token) = tokenizer.tokenize().await {
+    while let Some(token) = tokenizer.next_token().await {
         pipeline::d_evaluator::evaluate(future::ready(token), data_stack)
             .await?;
     }

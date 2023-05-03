@@ -15,7 +15,7 @@ impl<'r> Tokenizer<'r> {
         }
     }
 
-    pub async fn tokenize(&mut self) -> Option<String> {
+    pub async fn next_token(&mut self) -> Option<String> {
         loop {
             let ch = match self.chars.next().await {
                 Some(ch) => ch,
