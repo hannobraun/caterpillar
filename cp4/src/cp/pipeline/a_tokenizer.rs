@@ -9,10 +9,10 @@ impl Tokenizer {
         Self { buf: String::new() }
     }
 
-    pub fn tokenize(
-        &mut self,
-        code: impl IntoIterator<Item = char>,
-    ) -> impl Iterator<Item = String> {
+    pub fn tokenize<'r>(
+        &'r mut self,
+        code: impl IntoIterator<Item = char> + 'r,
+    ) -> impl Iterator<Item = String> + 'r {
         let mut code = code.into_iter();
         let mut tokenizer = Tokenizer::new();
 
