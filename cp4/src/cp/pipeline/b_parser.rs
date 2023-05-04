@@ -40,6 +40,10 @@ pub enum ParserError {
 
 impl ParserError {
     pub fn is_no_more_chars(&self) -> bool {
-        matches!(self, ParserError::Tokenizer(TokenizerError::NoMoreChars,),)
+        if let Self::Tokenizer(TokenizerError::NoMoreChars) = self {
+            return true;
+        }
+
+        false
     }
 }
