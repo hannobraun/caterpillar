@@ -37,3 +37,9 @@ pub enum ParserError {
     #[error("Unexpected token: {0:?}")]
     UnexpectedToken(Token),
 }
+
+impl ParserError {
+    pub fn is_no_more_chars(&self) -> bool {
+        matches!(self, ParserError::Tokenizer(TokenizerError::NoMoreChars,),)
+    }
+}

@@ -1,6 +1,4 @@
-use crate::cp::{
-    pipeline::a_tokenizer::TokenizerError, DataStack, DataStackError,
-};
+use crate::cp::{DataStack, DataStackError};
 
 use super::b_parser::{Parser, ParserError, SyntaxElement};
 
@@ -54,11 +52,10 @@ pub enum EvaluatorError {
 
 impl EvaluatorError {
     pub fn is_no_more_chars(&self) -> bool {
-        matches!(
-            self,
-            EvaluatorError::Parser(ParserError::Tokenizer(
-                TokenizerError::NoMoreChars,
-            ),)
-        )
+        if let Self::Parser(err) = self {
+            return err.is_no_more_chars();
+        }
+
+        false
     }
 }
