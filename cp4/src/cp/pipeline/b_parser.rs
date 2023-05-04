@@ -9,10 +9,8 @@ impl Parser {
         Self { tokenizer }
     }
 
-    pub async fn next_token(
-        &mut self,
-    ) -> Result<Option<SyntaxElement>, ParserError> {
-        self.parse().await.map(Some)
+    pub async fn next_token(&mut self) -> Result<SyntaxElement, ParserError> {
+        self.parse().await
     }
 
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {

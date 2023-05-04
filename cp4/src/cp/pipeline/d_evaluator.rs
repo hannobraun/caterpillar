@@ -15,9 +15,9 @@ impl Evaluator {
         &mut self,
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
-        while let Some(SyntaxElement::Word(token)) =
-            self.parser.next_token().await?
-        {
+        loop {
+            let SyntaxElement::Word(token) = self.parser.next_token().await?;
+
             match token.as_str() {
                 "true" => {
                     data_stack.push(true);
@@ -33,8 +33,6 @@ impl Evaluator {
                 word => return Err(EvaluatorError::UnknownWord(word.into())),
             }
         }
-
-        Ok(())
     }
 }
 
