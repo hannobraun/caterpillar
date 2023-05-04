@@ -16,11 +16,7 @@ pub async fn execute(
 
     match evaluator.evaluate(data_stack).await {
         Ok(()) => {}
-        Err(EvaluatorError::Parser(
-            pipeline::b_parser::ParserError::Tokenizer(
-                pipeline::a_tokenizer::TokenizerError::NoMoreChars,
-            ),
-        )) => {}
+        Err(err) if err.is_no_more_chars() => {}
         Err(err) => return Err(err),
     }
 

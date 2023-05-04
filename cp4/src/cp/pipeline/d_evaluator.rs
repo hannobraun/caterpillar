@@ -1,4 +1,6 @@
-use crate::cp::{DataStack, DataStackError};
+use crate::cp::{
+    pipeline::a_tokenizer::TokenizerError, DataStack, DataStackError,
+};
 
 use super::b_parser::{Parser, ParserError, SyntaxElement};
 
@@ -48,4 +50,15 @@ pub enum EvaluatorError {
 
     #[error("Unknown word: `{0}`")]
     UnknownWord(String),
+}
+
+impl EvaluatorError {
+    pub fn is_no_more_chars(&self) -> bool {
+        matches!(
+            self,
+            EvaluatorError::Parser(ParserError::Tokenizer(
+                TokenizerError::NoMoreChars,
+            ),)
+        )
+    }
 }
