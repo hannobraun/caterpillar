@@ -14,7 +14,15 @@ pub async fn execute(
     let parser = pipeline::b_parser::Parser::new(tokenizer);
     let mut evaluator = pipeline::d_evaluator::Evaluator::new(parser);
 
-    evaluator.evaluate(data_stack).await?;
+    match evaluator.evaluate(data_stack).await {
+        Ok(()) => {}
+        Err(EvaluatorError::Parser(
+            pipeline::b_parser::ParserError::Tokenizer(
+                pipeline::a_tokenizer::TokenizerError::NoMoreChars,
+            ),
+        )) => {}
+        Err(err) => return Err(err),
+    }
 
     Ok(())
 }

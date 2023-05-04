@@ -1,4 +1,4 @@
-use super::a_tokenizer::{Token, Tokenizer};
+use super::a_tokenizer::{Token, Tokenizer, TokenizerError};
 
 pub struct Parser {
     tokenizer: Tokenizer,
@@ -16,9 +16,7 @@ impl Parser {
     }
 
     async fn parse(&mut self) -> Result<Option<SyntaxElement>, ParserError> {
-        let Ok(token) = self.tokenizer.next_token().await else {
-            return Ok(None);
-        };
+        let token = self.tokenizer.next_token().await?;
 
         match token {
             Token::Ident(ident) => Ok(Some(SyntaxElement::Word(ident))),
@@ -33,6 +31,9 @@ pub enum SyntaxElement {
 
 #[derive(Debug, thiserror::Error)]
 pub enum ParserError {
+    #[error(transparent)]
+    Tokenizer(#[from] TokenizerError),
+
     #[error("Unexpected token: {0:?}")]
     UnexpectedToken(Token),
 }
