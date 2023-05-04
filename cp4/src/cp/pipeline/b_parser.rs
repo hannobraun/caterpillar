@@ -12,14 +12,14 @@ impl Parser {
     pub async fn next_token(
         &mut self,
     ) -> Result<Option<SyntaxElement>, ParserError> {
-        self.parse().await
+        self.parse().await.map(Some)
     }
 
-    async fn parse(&mut self) -> Result<Option<SyntaxElement>, ParserError> {
+    async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
         let token = self.tokenizer.next_token().await?;
 
         match token {
-            Token::Ident(ident) => Ok(Some(SyntaxElement::Word(ident))),
+            Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
             token => Err(ParserError::UnexpectedToken(token)),
         }
     }
