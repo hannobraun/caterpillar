@@ -16,7 +16,7 @@ impl Parser {
     }
 
     async fn parse(&mut self) -> Result<Option<SyntaxElement>, ParserError> {
-        let Some(token) = self.tokenizer.next_token().await else {
+        let Ok(token) = self.tokenizer.next_token().await else {
             return Ok(None);
         };
 

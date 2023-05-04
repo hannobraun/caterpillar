@@ -15,21 +15,21 @@ impl Tokenizer {
         }
     }
 
-    pub async fn next_token(&mut self) -> Option<Token> {
+    pub async fn next_token(&mut self) -> Result<Token, TokenizerError> {
         loop {
             let ch = match self.chars.next().await {
                 Some(ch) => ch,
                 None => {
                     if self.buf.is_empty() {
-                        return None;
+                        return Err(TokenizerError::NoMoreChars);
                     }
 
-                    return Some(Token::from_buf(&mut self.buf));
+                    return Ok(Token::from_buf(&mut self.buf));
                 }
             };
 
             if ch.is_whitespace() {
-                return Some(Token::from_buf(&mut self.buf));
+                return Ok(Token::from_buf(&mut self.buf));
             }
 
             self.buf.push(ch);
@@ -58,4 +58,8 @@ impl Token {
 
         token
     }
+}
+
+pub enum TokenizerError {
+    NoMoreChars,
 }
