@@ -60,6 +60,8 @@ impl Token {
     }
 }
 
+#[derive(Debug, thiserror::Error)]
 pub enum TokenizerError {
+    #[error("No more characters")]
     NoMoreChars,
 }
