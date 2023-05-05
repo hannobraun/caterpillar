@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
+async-recursion = "*"
 crossterm = "*"
 futures = "*"
 thiserror = "*"
