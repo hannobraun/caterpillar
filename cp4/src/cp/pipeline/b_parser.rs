@@ -17,9 +17,7 @@ impl Parser {
 
     #[async_recursion(?Send)]
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
-        let token = self.tokenizer.peek().await?;
-
-        match token {
+        match self.tokenizer.peek().await? {
             Token::CurlyBracketOpen => self.parse_block().await,
             Token::Ident(_) => self.parse_word().await,
             token => Err(ParserError::UnexpectedToken(token.clone())),
