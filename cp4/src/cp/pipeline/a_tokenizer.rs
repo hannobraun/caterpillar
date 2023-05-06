@@ -15,7 +15,7 @@ impl Tokenizer {
         }
     }
 
-    pub async fn next_token(&mut self) -> Result<Token, TokenizerError> {
+    pub async fn next(&mut self) -> Result<Token, TokenizerError> {
         loop {
             let ch = match self.chars.next().await {
                 Some(ch) => ch,
