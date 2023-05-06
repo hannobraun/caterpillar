@@ -1,3 +1,5 @@
+use async_recursion::async_recursion;
+
 use super::a_tokenizer::{Token, Tokenizer, TokenizerError};
 
 pub struct Parser {
@@ -13,10 +15,12 @@ impl Parser {
         self.parse().await
     }
 
+    #[async_recursion(?Send)]
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
         let token = self.tokenizer.peek().await?;
 
         match token {
+            Token::CurlyBracketOpen => self.parse_block().await,
             Token::Ident(_) => self.parse_word().await,
             token => Err(ParserError::UnexpectedToken(token.clone())),
         }
@@ -30,9 +34,34 @@ impl Parser {
             token => Err(ParserError::UnexpectedToken(token)),
         }
     }
+
+    #[async_recursion(?Send)]
+    async fn parse_block(&mut self) -> Result<SyntaxElement, ParserError> {
+        let mut syntax_tree = Vec::new();
+
+        let token = self.tokenizer.next().await?;
+        if token != Token::CurlyBracketOpen {
+            return Err(ParserError::UnexpectedToken(token));
+        }
+
+        loop {
+            let token = self.tokenizer.peek().await?;
+
+            let syntax_element = match token {
+                Token::CurlyBracketClose => {
+                    self.tokenizer.next().await?;
+                    return Ok(SyntaxElement::Block { syntax_tree });
+                }
+                _ => self.parse().await?,
+            };
+
+            syntax_tree.push(syntax_element);
+        }
+    }
 }
 
 pub enum SyntaxElement {
+    Block { syntax_tree: Vec<SyntaxElement> },
     Word(String),
 }
 

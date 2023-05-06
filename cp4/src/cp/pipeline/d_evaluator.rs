@@ -17,6 +17,9 @@ impl Evaluator {
     ) -> Result<(), EvaluatorError> {
         loop {
             match self.parser.next().await? {
+                SyntaxElement::Block { .. } => {
+                    // not supported yet
+                }
                 SyntaxElement::Word(word) => {
                     self.evaluate_word(word, data_stack).await?
                 }
