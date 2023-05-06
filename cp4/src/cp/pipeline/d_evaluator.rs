@@ -16,9 +16,9 @@ impl Evaluator {
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
         loop {
-            let SyntaxElement::Word(token) = self.parser.next().await?;
+            let SyntaxElement::Word(word) = self.parser.next().await?;
 
-            match token.as_str() {
+            match word.as_str() {
                 "true" => {
                     data_stack.push(true);
                 }
