@@ -25,9 +25,7 @@ impl Parser {
     }
 
     async fn parse_word(&mut self) -> Result<SyntaxElement, ParserError> {
-        let token = self.tokenizer.next().await?;
-
-        match token {
+        match self.tokenizer.next().await? {
             Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
             token => Err(ParserError::UnexpectedToken(token)),
         }
