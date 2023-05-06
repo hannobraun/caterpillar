@@ -14,6 +14,15 @@ impl Parser {
     }
 
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
+        let token = self.tokenizer.peek().await?;
+
+        match token {
+            Token::Ident(_) => self.parse_word().await,
+            token => Err(ParserError::UnexpectedToken(token.clone())),
+        }
+    }
+
+    async fn parse_word(&mut self) -> Result<SyntaxElement, ParserError> {
         let token = self.tokenizer.next().await?;
 
         match token {

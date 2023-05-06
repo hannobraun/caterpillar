@@ -5,6 +5,7 @@ use futures::{Stream, StreamExt};
 pub struct Tokenizer {
     chars: Chars,
     buf: String,
+    next: Option<Token>,
 }
 
 impl Tokenizer {
@@ -12,10 +13,15 @@ impl Tokenizer {
         Self {
             chars,
             buf: String::new(),
+            next: None,
         }
     }
 
     pub async fn next(&mut self) -> Result<Token, TokenizerError> {
+        if let Some(token) = self.next.take() {
+            return Ok(token);
+        }
+
         loop {
             let ch = match self.chars.next().await {
                 Some(ch) => ch,
@@ -34,6 +40,16 @@ impl Tokenizer {
 
             self.buf.push(ch);
         }
+    }
+
+    pub async fn peek(&mut self) -> Result<&Token, TokenizerError> {
+        let token = self.next().await?;
+        self.next = Some(token);
+
+        // Can't panic. We just put a token in there.
+        let token = self.next.as_ref().unwrap();
+
+        Ok(token)
     }
 }
 
