@@ -1,4 +1,4 @@
-use crate::cp::{DataStack, DataStackError};
+use crate::cp::{data_stack::Value, DataStack, DataStackError};
 
 use super::b_parser::{Parser, ParserError, SyntaxElement};
 
@@ -17,8 +17,9 @@ impl Evaluator {
     ) -> Result<(), EvaluatorError> {
         loop {
             match self.parser.next().await? {
-                SyntaxElement::Block { .. } => {
-                    // not supported yet
+                SyntaxElement::Block { syntax_tree } => {
+                    let block = Value::Block(syntax_tree);
+                    data_stack.push(block);
                 }
                 SyntaxElement::Word(word) => {
                     self.evaluate_word(word, data_stack).await?
