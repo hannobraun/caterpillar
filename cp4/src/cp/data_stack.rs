@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub struct DataStack {
-    values: Vec<bool>,
+    values: Vec<Value>,
 }
 
 impl DataStack {
@@ -13,12 +13,20 @@ impl DataStack {
     }
 
     pub fn push(&mut self, value: bool) {
-        self.values.push(value);
+        self.values.push(Value::Bool(value));
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
+        let value =
+            self.values.pop().ok_or(DataStackError::PopFromEmptyStack)?;
+        let Value::Bool(value) = value;
+        Ok(value)
     }
+}
+
+#[derive(Debug)]
+pub enum Value {
+    Bool(bool),
 }
 
 #[derive(Debug, thiserror::Error)]
