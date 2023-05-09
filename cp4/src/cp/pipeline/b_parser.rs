@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use async_recursion::async_recursion;
 use async_trait::async_trait;
 
@@ -35,7 +37,7 @@ impl Parser {
     #[async_recursion(?Send)]
     async fn parse_block(&mut self) -> Result<SyntaxElement, ParserError> {
         let mut syntax_tree = SyntaxTree {
-            elements: Vec::new(),
+            elements: VecDeque::new(),
         };
 
         let token = self.tokenizer.next().await?;
@@ -54,14 +56,14 @@ impl Parser {
                 _ => self.parse().await?,
             };
 
-            syntax_tree.elements.push(syntax_element);
+            syntax_tree.elements.push_back(syntax_element);
         }
     }
 }
 
 #[derive(Debug)]
 pub struct SyntaxTree {
-    pub elements: Vec<SyntaxElement>,
+    pub elements: VecDeque<SyntaxElement>,
 }
 
 #[derive(Debug)]
