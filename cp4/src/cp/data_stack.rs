@@ -23,8 +23,7 @@ impl DataStack {
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        let value = self.pop_any()?;
-        let Value::Bool(value) = value else {
+        let Value::Bool(value) = self.pop_any()? else {
             return Err(DataStackError::UnexpectedType { expected: "bool" });
         };
         Ok(value)
