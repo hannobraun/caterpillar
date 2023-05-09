@@ -3,12 +3,12 @@ use crate::cp::{data_stack::Value, DataStack, DataStackError};
 use super::b_parser::{ParserError, SyntaxElement, SyntaxSource};
 
 pub struct Evaluator {
-    parser: Box<dyn SyntaxSource>,
+    syntax: Box<dyn SyntaxSource>,
 }
 
 impl Evaluator {
-    pub fn new(parser: Box<dyn SyntaxSource>) -> Self {
-        Self { parser }
+    pub fn new(syntax: Box<dyn SyntaxSource>) -> Self {
+        Self { syntax }
     }
 
     pub async fn evaluate(
@@ -16,7 +16,7 @@ impl Evaluator {
         data_stack: &mut DataStack,
     ) -> Result<(), EvaluatorError> {
         loop {
-            match self.parser.next().await? {
+            match self.syntax.next().await? {
                 SyntaxElement::Block { syntax_tree } => {
                     let block = Value::Block(syntax_tree);
                     data_stack.push(block);
