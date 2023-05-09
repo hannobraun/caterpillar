@@ -102,3 +102,12 @@ impl SyntaxSource for Parser {
         self.next().await
     }
 }
+
+#[async_trait(?Send)]
+impl SyntaxSource for SyntaxTree {
+    async fn next(&mut self) -> Result<SyntaxElement, ParserError> {
+        self.elements
+            .pop_front()
+            .ok_or(ParserError::Tokenizer(TokenizerError::NoMoreChars))
+    }
+}
