@@ -22,6 +22,13 @@ impl DataStack {
         self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
     }
 
+    pub fn pop_block(&mut self) -> Result<SyntaxTree, DataStackError> {
+        let Value::Block(value) = self.pop_any()? else {
+            return Err(DataStackError::UnexpectedType { expected: "block" });
+        };
+        Ok(value)
+    }
+
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
         let Value::Bool(value) = self.pop_any()? else {
             return Err(DataStackError::UnexpectedType { expected: "bool" });

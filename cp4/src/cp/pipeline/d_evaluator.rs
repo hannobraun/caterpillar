@@ -1,3 +1,5 @@
+use async_recursion::async_recursion;
+
 use crate::cp::{data_stack::Value, DataStack, DataStackError};
 
 use super::b_parser::{ParserError, SyntaxElement, SyntaxSource};
@@ -11,6 +13,7 @@ impl Evaluator {
         Self { syntax }
     }
 
+    #[async_recursion(?Send)]
     pub async fn evaluate(
         &mut self,
         data_stack: &mut DataStack,
@@ -44,6 +47,10 @@ impl Evaluator {
                 let a = data_stack.pop_bool()?;
                 let x = !a;
                 data_stack.push(x);
+            }
+            "eval" => {
+                let a = data_stack.pop_block()?;
+                Evaluator::new(Box::new(a)).evaluate(data_stack).await?;
             }
             word => return Err(EvaluatorError::UnknownWord(word.into())),
         }
