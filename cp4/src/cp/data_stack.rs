@@ -1,4 +1,4 @@
-use super::pipeline::b_parser::SyntaxElement;
+use super::pipeline::b_parser::SyntaxTree;
 
 #[derive(Debug)]
 pub struct DataStack {
@@ -30,7 +30,7 @@ impl DataStack {
 
 #[derive(Debug)]
 pub enum Value {
-    Block(Vec<SyntaxElement>),
+    Block(SyntaxTree),
     Bool(bool),
 }
 
