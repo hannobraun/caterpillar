@@ -18,7 +18,7 @@ impl Evaluator {
         loop {
             match self.parser.next().await? {
                 SyntaxElement::Block { syntax_tree } => {
-                    let block = Value::Block(syntax_tree);
+                    let block = Value::Block(syntax_tree.elements);
                     data_stack.push(block);
                 }
                 SyntaxElement::Word(word) => {

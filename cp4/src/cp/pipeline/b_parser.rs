@@ -34,7 +34,9 @@ impl Parser {
 
     #[async_recursion(?Send)]
     async fn parse_block(&mut self) -> Result<SyntaxElement, ParserError> {
-        let mut syntax_tree = Vec::new();
+        let mut syntax_tree = SyntaxTree {
+            elements: Vec::new(),
+        };
 
         let token = self.tokenizer.next().await?;
         if token != Token::CurlyBracketOpen {
@@ -52,14 +54,19 @@ impl Parser {
                 _ => self.parse().await?,
             };
 
-            syntax_tree.push(syntax_element);
+            syntax_tree.elements.push(syntax_element);
         }
     }
 }
 
 #[derive(Debug)]
+pub struct SyntaxTree {
+    pub elements: Vec<SyntaxElement>,
+}
+
+#[derive(Debug)]
 pub enum SyntaxElement {
-    Block { syntax_tree: Vec<SyntaxElement> },
+    Block { syntax_tree: SyntaxTree },
     Word(String),
 }
 
