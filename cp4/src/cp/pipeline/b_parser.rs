@@ -1,4 +1,5 @@
 use async_recursion::async_recursion;
+use async_trait::async_trait;
 
 use super::a_tokenizer::{Token, Tokenizer, TokenizerError};
 
@@ -78,5 +79,17 @@ impl ParserError {
         }
 
         false
+    }
+}
+
+#[async_trait(?Send)]
+pub trait SyntaxSource {
+    async fn next(&mut self) -> Result<SyntaxElement, ParserError>;
+}
+
+#[async_trait(?Send)]
+impl SyntaxSource for Parser {
+    async fn next(&mut self) -> Result<SyntaxElement, ParserError> {
+        self.next().await
     }
 }
