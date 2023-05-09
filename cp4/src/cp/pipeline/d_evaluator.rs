@@ -1,13 +1,13 @@
 use crate::cp::{data_stack::Value, DataStack, DataStackError};
 
-use super::b_parser::{Parser, ParserError, SyntaxElement};
+use super::b_parser::{ParserError, SyntaxElement, SyntaxSource};
 
 pub struct Evaluator {
-    parser: Parser,
+    parser: Box<dyn SyntaxSource>,
 }
 
 impl Evaluator {
-    pub fn new(parser: Parser) -> Self {
+    pub fn new(parser: Box<dyn SyntaxSource>) -> Self {
         Self { parser }
     }
 

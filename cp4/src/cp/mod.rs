@@ -12,7 +12,7 @@ pub async fn execute(
 ) -> Result<(), EvaluatorError> {
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
-    let mut evaluator = pipeline::d_evaluator::Evaluator::new(parser);
+    let mut evaluator = pipeline::d_evaluator::Evaluator::new(Box::new(parser));
 
     match evaluator.evaluate(data_stack).await {
         Ok(()) => {}
