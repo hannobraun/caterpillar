@@ -27,13 +27,6 @@ impl Parser {
         }
     }
 
-    async fn parse_word(&mut self) -> Result<SyntaxElement, ParserError> {
-        match self.tokenizer.next().await? {
-            Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
-            token => Err(ParserError::UnexpectedToken(token)),
-        }
-    }
-
     #[async_recursion(?Send)]
     async fn parse_block(&mut self) -> Result<SyntaxElement, ParserError> {
         let mut syntax_tree = SyntaxTree {
@@ -57,6 +50,13 @@ impl Parser {
             };
 
             syntax_tree.elements.push_back(syntax_element);
+        }
+    }
+
+    async fn parse_word(&mut self) -> Result<SyntaxElement, ParserError> {
+        match self.tokenizer.next().await? {
+            Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
+            token => Err(ParserError::UnexpectedToken(token)),
         }
     }
 }
