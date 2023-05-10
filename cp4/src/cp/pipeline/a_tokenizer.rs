@@ -59,6 +59,7 @@ pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
+    Fn,
     Ident(String),
 }
 
@@ -67,6 +68,7 @@ impl Token {
         let token = match buf.as_str() {
             "{" => Self::CurlyBracketOpen,
             "}" => Self::CurlyBracketClose,
+            "fn" => Self::Fn,
             _ => Self::Ident(buf.clone()),
         };
 
