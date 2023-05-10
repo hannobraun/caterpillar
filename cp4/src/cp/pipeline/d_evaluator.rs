@@ -1,8 +1,12 @@
 use async_recursion::async_recursion;
 
-use crate::cp::{data_stack::Value, DataStack, DataStackError};
+use crate::cp::{
+    data_stack::Value,
+    syntax::{SyntaxElement, SyntaxSource},
+    DataStack, DataStackError,
+};
 
-use super::b_parser::{ParserError, SyntaxElement, SyntaxSource};
+use super::b_parser::ParserError;
 
 pub struct Evaluator {
     syntax: Box<dyn SyntaxSource>,

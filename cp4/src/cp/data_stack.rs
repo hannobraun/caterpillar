@@ -1,4 +1,4 @@
-use super::pipeline::b_parser::SyntaxTree;
+use super::syntax::SyntaxTree;
 
 #[derive(Debug)]
 pub struct DataStack {
