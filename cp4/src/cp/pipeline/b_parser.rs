@@ -22,11 +22,13 @@ impl Parser {
 
     #[async_recursion(?Send)]
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
-        match self.tokenizer.peek().await? {
-            Token::CurlyBracketOpen => self.parse_block().await,
-            Token::Ident(_) => self.parse_word().await,
-            token => Err(ParserError::UnexpectedToken(token.clone())),
-        }
+        let syntax_element = match self.tokenizer.peek().await? {
+            Token::CurlyBracketOpen => self.parse_block().await?,
+            Token::Ident(_) => self.parse_word().await?,
+            token => return Err(ParserError::UnexpectedToken(token.clone())),
+        };
+
+        Ok(syntax_element)
     }
 
     #[async_recursion(?Send)]
