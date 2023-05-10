@@ -33,10 +33,7 @@ impl Parser {
             elements: VecDeque::new(),
         };
 
-        let token = self.tokenizer.next().await?;
-        if token != Token::CurlyBracketOpen {
-            return Err(ParserError::UnexpectedToken(token));
-        }
+        self.expect(Token::CurlyBracketOpen).await?;
 
         loop {
             let token = self.tokenizer.peek().await?;
@@ -58,6 +55,16 @@ impl Parser {
             Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
             token => Err(ParserError::UnexpectedToken(token)),
         }
+    }
+
+    async fn expect(&mut self, expected: Token) -> Result<(), ParserError> {
+        let token = self.tokenizer.next().await?;
+
+        if token != expected {
+            return Err(ParserError::UnexpectedToken(token));
+        }
+
+        Ok(())
     }
 }
 
