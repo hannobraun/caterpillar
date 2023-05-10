@@ -23,7 +23,10 @@ impl Parser {
     #[async_recursion(?Send)]
     async fn parse(&mut self) -> Result<SyntaxElement, ParserError> {
         let syntax_element = match self.tokenizer.peek().await? {
-            Token::CurlyBracketOpen => self.parse_block().await?,
+            Token::CurlyBracketOpen => {
+                let syntax_tree = self.parse_block().await?;
+                SyntaxElement::Block { syntax_tree }
+            }
             Token::Ident(_) => self.parse_word().await?,
             token => return Err(ParserError::UnexpectedToken(token.clone())),
         };
@@ -32,7 +35,7 @@ impl Parser {
     }
 
     #[async_recursion(?Send)]
-    async fn parse_block(&mut self) -> Result<SyntaxElement, ParserError> {
+    async fn parse_block(&mut self) -> Result<SyntaxTree, ParserError> {
         let mut syntax_tree = SyntaxTree {
             elements: VecDeque::new(),
         };
@@ -45,7 +48,7 @@ impl Parser {
             let syntax_element = match token {
                 Token::CurlyBracketClose => {
                     self.tokenizer.next().await?;
-                    return Ok(SyntaxElement::Block { syntax_tree });
+                    return Ok(syntax_tree);
                 }
                 _ => self.parse().await?,
             };
