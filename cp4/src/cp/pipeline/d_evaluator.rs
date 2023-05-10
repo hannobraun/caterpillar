@@ -28,6 +28,9 @@ impl Evaluator {
                     let block = Value::Block(syntax_tree);
                     data_stack.push(block);
                 }
+                SyntaxElement::Function { .. } => {
+                    // not supported yet
+                }
                 SyntaxElement::Word(word) => {
                     self.evaluate_word(word, data_stack).await?
                 }

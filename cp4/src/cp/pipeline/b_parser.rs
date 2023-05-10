@@ -27,6 +27,7 @@ impl Parser {
                 let syntax_tree = self.parse_block().await?;
                 SyntaxElement::Block { syntax_tree }
             }
+            Token::Fn => self.parse_fn().await?,
             Token::Ident(_) => self.parse_word().await?,
             token => return Err(ParserError::UnexpectedToken(token.clone())),
         };
@@ -55,6 +56,19 @@ impl Parser {
 
             syntax_tree.elements.push_back(syntax_element);
         }
+    }
+
+    async fn parse_fn(&mut self) -> Result<SyntaxElement, ParserError> {
+        self.expect(Token::Fn).await?;
+
+        let token = self.tokenizer.next().await?;
+        let Token::Ident(name) = token else {
+            return Err(ParserError::UnexpectedToken(token));
+        };
+
+        let body = self.parse_block().await?;
+
+        Ok(SyntaxElement::Function { name, body })
     }
 
     async fn parse_word(&mut self) -> Result<SyntaxElement, ParserError> {
