@@ -4,7 +4,7 @@ use futures::{executor::block_on, stream};
 
 use crate::{cp, test_report::TestReport};
 
-pub fn run() -> anyhow::Result<Vec<TestReport>> {
+pub async fn run() -> anyhow::Result<Vec<TestReport>> {
     let mut tests = BTreeMap::new();
     let mut test_reports = Vec::new();
 
