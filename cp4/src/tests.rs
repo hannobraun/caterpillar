@@ -4,7 +4,7 @@ use futures::{executor::block_on, stream};
 
 use crate::{cp, test_report::TestReport};
 
-pub fn run() -> Vec<TestReport> {
+pub fn run() -> anyhow::Result<Vec<TestReport>> {
     let mut tests = BTreeMap::new();
     let mut test_reports = Vec::new();
 
@@ -24,5 +24,5 @@ pub fn run() -> Vec<TestReport> {
         test_reports.push(TestReport::new(module, name, result, data_stack));
     }
 
-    test_reports
+    Ok(test_reports)
 }
