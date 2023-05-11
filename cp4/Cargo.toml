@@ -10,3 +10,7 @@ async-trait = "*"
 crossterm = "*"
 futures = "*"
 thiserror = "*"
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
