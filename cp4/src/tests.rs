@@ -11,6 +11,7 @@ pub fn run() -> Vec<TestReport> {
     tests.insert(("bool", "true"), "true");
     tests.insert(("bool", "false not"), "false not");
     tests.insert(("block", "eval"), "{ true } eval");
+    tests.insert(("fn_", "fn"), "fn f { true } f");
 
     for ((module, name), code) in tests {
         let module = module.into();

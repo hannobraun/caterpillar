@@ -30,8 +30,8 @@ impl Evaluator {
                     let block = Value::Block(syntax_tree);
                     data_stack.push(block);
                 }
-                SyntaxElement::Function { .. } => {
-                    // not supported yet
+                SyntaxElement::Function { name, body } => {
+                    functions.0.insert(name, body);
                 }
                 SyntaxElement::Word(word) => {
                     self.evaluate_word(word, data_stack, functions).await?
@@ -64,7 +64,15 @@ impl Evaluator {
                     .evaluate(data_stack, functions)
                     .await?;
             }
-            word => return Err(EvaluatorError::UnknownWord(word.into())),
+            word => {
+                if let Some(function) = functions.0.get(word) {
+                    Evaluator::new(Box::new(function.clone()))
+                        .evaluate(data_stack, functions)
+                        .await?;
+                }
+
+                return Err(EvaluatorError::UnknownWord(word.into()));
+            }
         }
 
         Ok(())
