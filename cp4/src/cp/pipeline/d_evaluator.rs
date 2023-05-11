@@ -2,6 +2,7 @@ use async_recursion::async_recursion;
 
 use crate::cp::{
     data_stack::Value,
+    functions::Functions,
     syntax::{SyntaxElement, SyntaxSource},
     DataStack, DataStackError,
 };
@@ -21,6 +22,7 @@ impl Evaluator {
     pub async fn evaluate(
         &mut self,
         data_stack: &mut DataStack,
+        functions: &mut Functions,
     ) -> Result<(), EvaluatorError> {
         loop {
             match self.syntax.next().await? {
@@ -32,7 +34,7 @@ impl Evaluator {
                     // not supported yet
                 }
                 SyntaxElement::Word(word) => {
-                    self.evaluate_word(word, data_stack).await?
+                    self.evaluate_word(word, data_stack, functions).await?
                 }
             }
         }
@@ -42,6 +44,7 @@ impl Evaluator {
         &mut self,
         word: String,
         data_stack: &mut DataStack,
+        functions: &mut Functions,
     ) -> Result<(), EvaluatorError> {
         match word.as_str() {
             "true" => {
@@ -57,7 +60,9 @@ impl Evaluator {
             }
             "eval" => {
                 let a = data_stack.pop_block()?;
-                Evaluator::new(Box::new(a)).evaluate(data_stack).await?;
+                Evaluator::new(Box::new(a))
+                    .evaluate(data_stack, functions)
+                    .await?;
             }
             word => return Err(EvaluatorError::UnknownWord(word.into())),
         }
