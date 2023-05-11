@@ -4,12 +4,12 @@ use async_trait::async_trait;
 
 use super::pipeline::{a_tokenizer::TokenizerError, b_parser::ParserError};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SyntaxTree {
     pub elements: VecDeque<SyntaxElement>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum SyntaxElement {
     Block { syntax_tree: SyntaxTree },
     Function { name: String, body: SyntaxTree },
