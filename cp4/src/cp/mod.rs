@@ -12,7 +12,7 @@ pub async fn execute(
     code: pipeline::a_tokenizer::Chars,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let mut functions = functions::Functions(std::collections::BTreeMap::new());
+    let mut functions = functions::Functions::new();
 
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
