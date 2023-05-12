@@ -17,7 +17,7 @@ impl Functions {
         self.functions.get(name).cloned()
     }
 
-    pub fn define_fn(&mut self, name: String, body: SyntaxTree) {
+    pub fn define(&mut self, name: String, body: SyntaxTree) {
         self.functions.insert(name, body);
     }
 }
