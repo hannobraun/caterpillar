@@ -65,7 +65,7 @@ impl Evaluator {
                     .await?;
             }
             word => {
-                if let Some(function) = functions.0.get(word) {
+                if let Some(function) = functions.get(word) {
                     Evaluator::new(Box::new(function.clone()))
                         .evaluate(data_stack, functions)
                         .await?;
