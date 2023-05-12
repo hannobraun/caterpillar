@@ -11,15 +11,14 @@ pub use self::{
 
 pub async fn execute(
     code: pipeline::a_tokenizer::Chars,
+    functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let mut functions = Functions::new();
-
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
     let mut evaluator = pipeline::d_evaluator::Evaluator::new(Box::new(parser));
 
-    match evaluator.evaluate(data_stack, &mut functions).await {
+    match evaluator.evaluate(data_stack, functions).await {
         Ok(()) => {}
         Err(err) if err.is_no_more_chars() => {}
         Err(err) => return Err(err),

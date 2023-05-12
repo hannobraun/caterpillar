@@ -18,8 +18,10 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let name = name.into();
         let code = Box::pin(stream::iter(code.chars()));
 
+        let mut functions = cp::Functions::new();
         let mut data_stack = cp::DataStack::new();
-        let result = block_on(cp::execute(code, &mut data_stack));
+        let result =
+            block_on(cp::execute(code, &mut functions, &mut data_stack));
 
         test_reports.push(TestReport::new(module, name, result, data_stack));
     }
