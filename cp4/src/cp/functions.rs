@@ -2,18 +2,22 @@ use std::collections::BTreeMap;
 
 use super::syntax::SyntaxTree;
 
-pub struct Functions(BTreeMap<String, SyntaxTree>);
+pub struct Functions {
+    functions: BTreeMap<String, SyntaxTree>,
+}
 
 impl Functions {
     pub fn new() -> Self {
-        Self(BTreeMap::new())
+        Self {
+            functions: BTreeMap::new(),
+        }
     }
 
     pub fn get(&self, name: &str) -> Option<SyntaxTree> {
-        self.0.get(name).cloned()
+        self.functions.get(name).cloned()
     }
 
     pub fn define_fn(&mut self, name: String, body: SyntaxTree) {
-        self.0.insert(name, body);
+        self.functions.insert(name, body);
     }
 }
