@@ -9,7 +9,7 @@ impl Functions {
         Self(BTreeMap::new())
     }
 
-    pub fn get(&self, name: &str) -> Option<&SyntaxTree> {
-        self.0.get(name)
+    pub fn get(&self, name: &str) -> Option<SyntaxTree> {
+        self.0.get(name).cloned()
     }
 }
