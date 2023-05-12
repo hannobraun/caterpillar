@@ -5,6 +5,7 @@ mod syntax;
 
 pub use self::{
     data_stack::{DataStack, DataStackError},
+    functions::Functions,
     pipeline::d_evaluator::EvaluatorError,
 };
 
@@ -12,7 +13,7 @@ pub async fn execute(
     code: pipeline::a_tokenizer::Chars,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let mut functions = functions::Functions::new();
+    let mut functions = Functions::new();
 
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
