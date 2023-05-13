@@ -14,11 +14,13 @@ pub async fn execute(
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
+    let mut tests = Functions::new();
+
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
     let mut evaluator = pipeline::d_evaluator::Evaluator::new(Box::new(parser));
 
-    match evaluator.evaluate(data_stack, functions).await {
+    match evaluator.evaluate(data_stack, functions, &mut tests).await {
         Ok(()) => {}
         Err(err) if err.is_no_more_chars() => {}
         Err(err) => return Err(err),

@@ -23,6 +23,7 @@ impl Evaluator {
         &mut self,
         data_stack: &mut DataStack,
         functions: &mut Functions,
+        tests: &mut Functions,
     ) -> Result<(), EvaluatorError> {
         loop {
             match self.syntax.next().await? {
@@ -34,7 +35,8 @@ impl Evaluator {
                     functions.define(name, body);
                 }
                 SyntaxElement::Word(word) => {
-                    self.evaluate_word(word, data_stack, functions).await?
+                    self.evaluate_word(word, data_stack, functions, tests)
+                        .await?
                 }
             }
         }
@@ -45,6 +47,7 @@ impl Evaluator {
         word: String,
         data_stack: &mut DataStack,
         functions: &mut Functions,
+        tests: &mut Functions,
     ) -> Result<(), EvaluatorError> {
         match word.as_str() {
             "true" => {
@@ -61,13 +64,13 @@ impl Evaluator {
             "eval" => {
                 let a = data_stack.pop_block()?;
                 Evaluator::new(Box::new(a))
-                    .evaluate(data_stack, functions)
+                    .evaluate(data_stack, functions, tests)
                     .await?;
             }
             word => {
                 if let Some(function) = functions.get(word) {
                     Evaluator::new(Box::new(function))
-                        .evaluate(data_stack, functions)
+                        .evaluate(data_stack, functions, tests)
                         .await?;
                 }
 
