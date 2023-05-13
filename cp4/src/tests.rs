@@ -18,9 +18,9 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let name = name.into();
         let code = Box::pin(stream::iter(code.chars()));
 
+        let mut data_stack = cp::DataStack::new();
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
-        let mut data_stack = cp::DataStack::new();
 
         let result = block_on(cp::execute(
             code,
