@@ -21,6 +21,7 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
         let mut data_stack = cp::DataStack::new();
+
         let result = block_on(cp::execute(
             code,
             &mut data_stack,
