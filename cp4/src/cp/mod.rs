@@ -11,8 +11,8 @@ pub use self::{
 
 pub async fn execute(
     code: pipeline::a_tokenizer::Chars,
-    functions: &mut Functions,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
 ) -> Result<(), EvaluatorError> {
     let mut tests = Functions::new();
 
