@@ -13,8 +13,8 @@ impl Functions {
         }
     }
 
-    pub fn get(&self, name: &str) -> Option<SyntaxTree> {
-        self.inner.get(name).cloned().map(|function| function.body)
+    pub fn get(&self, name: &str) -> Option<Function> {
+        self.inner.get(name).cloned()
     }
 
     pub fn define(&mut self, name: String, body: SyntaxTree) {
