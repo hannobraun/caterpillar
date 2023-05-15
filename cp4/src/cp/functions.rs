@@ -18,7 +18,8 @@ impl Functions {
     }
 
     pub fn define(&mut self, name: String, body: SyntaxTree) {
-        let function = Function { body };
+        let module = String::new();
+        let function = Function { module, body };
         self.inner.insert(name, function);
     }
 }
@@ -34,5 +35,6 @@ impl IntoIterator for Functions {
 
 #[derive(Clone)]
 pub struct Function {
+    pub module: String,
     pub body: SyntaxTree,
 }
