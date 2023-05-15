@@ -6,7 +6,7 @@ mod syntax;
 pub use self::{
     data_stack::{DataStack, DataStackError},
     functions::Functions,
-    pipeline::d_evaluator::EvaluatorError,
+    pipeline::d_evaluator::{Evaluator, EvaluatorError},
 };
 
 pub async fn execute(
@@ -17,7 +17,7 @@ pub async fn execute(
 ) -> Result<(), EvaluatorError> {
     let tokenizer = pipeline::a_tokenizer::Tokenizer::new(code);
     let parser = pipeline::b_parser::Parser::new(tokenizer);
-    let mut evaluator = pipeline::d_evaluator::Evaluator::new(Box::new(parser));
+    let mut evaluator = Evaluator::new(Box::new(parser));
 
     match evaluator.evaluate(data_stack, functions, tests).await {
         Ok(()) => {}
