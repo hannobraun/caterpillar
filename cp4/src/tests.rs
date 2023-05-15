@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use futures::{executor::block_on, stream};
+use futures::stream;
 
 use crate::{cp, test_report::TestReport};
 
@@ -22,12 +22,9 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let result = block_on(cp::execute(
-            code,
-            &mut data_stack,
-            &mut functions,
-            &mut tests,
-        ));
+        let result =
+            cp::execute(code, &mut data_stack, &mut functions, &mut tests)
+                .await;
 
         test_reports.push(TestReport::new(module, name, result, data_stack));
     }
