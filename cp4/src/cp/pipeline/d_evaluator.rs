@@ -32,7 +32,8 @@ impl Evaluator {
                     data_stack.push(block);
                 }
                 SyntaxElement::Function { name, body } => {
-                    functions.define(name, body);
+                    let module = String::new();
+                    functions.define(name, module, body);
                 }
                 SyntaxElement::Word(word) => {
                     self.evaluate_word(word, data_stack, functions, tests)

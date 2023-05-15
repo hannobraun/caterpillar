@@ -17,8 +17,7 @@ impl Functions {
         self.inner.get(name).cloned()
     }
 
-    pub fn define(&mut self, name: String, body: SyntaxTree) {
-        let module = String::new();
+    pub fn define(&mut self, name: String, module: String, body: SyntaxTree) {
         let function = Function { module, body };
         self.inner.insert(name, function);
     }
