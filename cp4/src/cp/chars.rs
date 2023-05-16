@@ -1,13 +1,11 @@
-use std::pin::Pin;
-
-use futures::{Stream, StreamExt};
+use std::collections::VecDeque;
 
 pub struct Chars {
-    pub inner: Pin<Box<dyn Stream<Item = char>>>,
+    pub inner: VecDeque<char>,
 }
 
 impl Chars {
     pub async fn next(&mut self) -> Option<char> {
-        self.inner.next().await
+        self.inner.pop_front()
     }
 }

@@ -1,7 +1,5 @@
 use std::collections::BTreeMap;
 
-use futures::stream;
-
 use crate::{cp, test_report::TestReport};
 
 pub async fn run() -> anyhow::Result<Vec<TestReport>> {
@@ -17,7 +15,7 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let module = module.into();
         let name = name.into();
         let chars = cp::Chars {
-            inner: Box::pin(stream::iter(code.chars())),
+            inner: code.chars().collect(),
         };
 
         let mut data_stack = cp::DataStack::new();
