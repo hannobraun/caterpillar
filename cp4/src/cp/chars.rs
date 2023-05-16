@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 pub struct Chars {
-    pub inner: VecDeque<char>,
+    inner: VecDeque<char>,
 }
 
 impl Chars {
