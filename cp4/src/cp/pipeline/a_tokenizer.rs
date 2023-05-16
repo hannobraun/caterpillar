@@ -1,5 +1,3 @@
-use futures::StreamExt;
-
 use crate::cp::chars::Chars;
 
 pub struct Tokenizer {
@@ -23,7 +21,7 @@ impl Tokenizer {
         }
 
         loop {
-            let ch = match self.chars.inner.next().await {
+            let ch = match self.chars.next().await {
                 Some(ch) => ch,
                 None => {
                     if self.buf.is_empty() {
