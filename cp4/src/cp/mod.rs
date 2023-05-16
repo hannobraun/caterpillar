@@ -1,3 +1,4 @@
+mod chars;
 mod data_stack;
 mod functions;
 mod pipeline;
@@ -10,7 +11,7 @@ pub use self::{
 };
 
 pub async fn execute(
-    code: pipeline::a_tokenizer::Chars,
+    code: chars::Chars,
     data_stack: &mut DataStack,
     functions: &mut Functions,
     tests: &mut Functions,

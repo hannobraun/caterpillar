@@ -1,6 +1,6 @@
-use std::pin::Pin;
+use futures::StreamExt;
 
-use futures::{Stream, StreamExt};
+use crate::cp::chars::Chars;
 
 pub struct Tokenizer {
     chars: Chars,
@@ -52,8 +52,6 @@ impl Tokenizer {
         Ok(token)
     }
 }
-
-pub type Chars = Pin<Box<dyn Stream<Item = char>>>;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Token {
