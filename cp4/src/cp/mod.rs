@@ -5,13 +5,14 @@ mod pipeline;
 mod syntax;
 
 pub use self::{
+    chars::Chars,
     data_stack::{DataStack, DataStackError},
     functions::Functions,
     pipeline::d_evaluator::{Evaluator, EvaluatorError},
 };
 
 pub async fn execute(
-    code: chars::Chars,
+    code: Chars,
     data_stack: &mut DataStack,
     functions: &mut Functions,
     tests: &mut Functions,
