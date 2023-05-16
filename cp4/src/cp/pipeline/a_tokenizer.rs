@@ -23,7 +23,7 @@ impl Tokenizer {
         }
 
         loop {
-            let ch = match self.chars.next().await {
+            let ch = match self.chars.inner.next().await {
                 Some(ch) => ch,
                 None => {
                     if self.buf.is_empty() {
