@@ -16,7 +16,7 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
     for ((module, name), code) in tests {
         let module = module.into();
         let name = name.into();
-        let code = cp::Chars {
+        let chars = cp::Chars {
             inner: Box::pin(stream::iter(code.chars())),
         };
 
@@ -25,7 +25,7 @@ pub async fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut tests = cp::Functions::new();
 
         let result =
-            cp::execute(code, &mut data_stack, &mut functions, &mut tests)
+            cp::execute(chars, &mut data_stack, &mut functions, &mut tests)
                 .await;
 
         test_reports.push(TestReport::new(module, name, result, data_stack));
