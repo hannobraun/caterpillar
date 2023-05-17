@@ -40,6 +40,7 @@ dependencies = [
 name = "cp5"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "crossterm",
  "thiserror",
 ]
