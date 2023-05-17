@@ -13,6 +13,7 @@ pub fn execute(
     for word in code.split_whitespace() {
         match word {
             "true" => data_stack.push(true),
+            "false" => data_stack.push(false),
             _ => return Err(EvaluatorError::UnknownWord(word.into())),
         }
     }
