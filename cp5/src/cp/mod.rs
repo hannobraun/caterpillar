@@ -14,6 +14,11 @@ pub fn execute(
         match word {
             "true" => data_stack.push(true),
             "false" => data_stack.push(false),
+            "not" => {
+                let a = data_stack.pop()?;
+                let x = !a;
+                data_stack.push(x);
+            }
             _ => return Err(EvaluatorError::UnknownWord(word.into())),
         }
     }

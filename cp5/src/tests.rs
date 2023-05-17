@@ -9,6 +9,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     let mut tests = BTreeMap::new();
 
     tests.insert(("bool", "true"), "true");
+    tests.insert(("bool", "false not"), "false not");
 
     let mut results = Vec::new();
 
