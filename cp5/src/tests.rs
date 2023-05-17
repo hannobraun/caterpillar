@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     cp,
-    test_report::{self, TestReport},
+    test_report::{Error, TestReport},
 };
 
 pub fn run() -> anyhow::Result<Vec<TestReport>> {
@@ -20,7 +20,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let result = if data_stack.pop()? {
             Ok(())
         } else {
-            Err(test_report::Error::TestFailed)
+            Err(Error::TestFailed)
         };
 
         results.push(TestReport {
