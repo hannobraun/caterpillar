@@ -37,6 +37,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "cp5"
+version = "0.1.0"
+
+[[package]]
 name = "crossterm"
 version = "0.26.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
