@@ -13,9 +13,14 @@ pub fn run() -> Result<Vec<TestReport>, test_report::Error> {
     let mut results = Vec::new();
 
     for ((module, name), code) in tests {
-        let result = match cp::execute(code) {
-            true => Ok(()),
-            false => Err(test_report::Error::TestFailed),
+        let mut data_stack = cp::DataStack::new();
+
+        cp::execute(code, &mut data_stack);
+
+        let result = if data_stack.pop()? {
+            Ok(())
+        } else {
+            Err(test_report::Error::TestFailed)
         };
 
         results.push(TestReport {
