@@ -11,6 +11,9 @@ pub struct TestReport {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
+    Evaluator(cp::EvaluatorError),
+
+    #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),
 
     #[error("Test did not return `true`")]

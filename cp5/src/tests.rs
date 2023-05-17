@@ -15,13 +15,15 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     for ((module, name), code) in tests {
         let mut data_stack = cp::DataStack::new();
 
-        cp::execute(code, &mut data_stack);
-
-        let result = if data_stack.pop()? {
-            Ok(())
-        } else {
-            Err(Error::TestFailed)
-        };
+        let result = cp::execute(code, &mut data_stack)
+            .map_err(Error::Evaluator)
+            .and_then(|()| {
+                if data_stack.pop()? {
+                    Ok(())
+                } else {
+                    Err(Error::TestFailed)
+                }
+            });
 
         results.push(TestReport {
             module: module.into(),
