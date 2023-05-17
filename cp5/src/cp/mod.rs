@@ -1,5 +1,5 @@
-mod pipeline;
 mod data_stack;
+mod pipeline;
 
 pub use self::data_stack::{DataStack, DataStackError};
 
