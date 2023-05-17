@@ -12,6 +12,9 @@ pub struct TestReport {
 pub enum Error {
     #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),
+
+    #[error("Test did not return `true`")]
+    TestFailed,
 }
 
 pub fn print(test_reports: &[TestReport]) {
