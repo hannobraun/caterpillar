@@ -41,6 +41,7 @@ name = "cp5"
 version = "0.1.0"
 dependencies = [
  "crossterm",
+ "thiserror",
 ]
 
 [[package]]
