@@ -5,7 +5,7 @@ use crate::{
     test_report::{self, TestReport},
 };
 
-pub fn run() -> Vec<TestReport> {
+pub fn run() -> Result<Vec<TestReport>, test_report::Error> {
     let mut tests = BTreeMap::new();
 
     tests.insert(("bool", "true"), "true");
@@ -25,5 +25,5 @@ pub fn run() -> Vec<TestReport> {
         })
     }
 
-    results
+    Ok(results)
 }
