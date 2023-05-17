@@ -14,7 +14,7 @@ This iteration of Caterpillar is a variation of an [earlier prototype](../cp3/),
 
 ## Status
 
-Not started yet. As of this writing, only this README exists.
+Abandoned. The new execution pipeline architecture didn't work out like I hoped. I've come up with a different approach which I'll try in a new prototype.
 
 
 ## Concept
