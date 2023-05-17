@@ -1,3 +1,4 @@
+mod pipeline;
 mod data_stack;
 
 pub use self::data_stack::{DataStack, DataStackError};
@@ -9,6 +10,3 @@ pub fn execute(code: &str, data_stack: &mut DataStack) {
         }
     }
 }
-
-#[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {}
