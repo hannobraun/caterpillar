@@ -17,10 +17,13 @@ pub fn execute(
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
+    let mut tokens = VecDeque::new();
 
     loop {
         let Some(token) = tokenize(&mut chars) else { break };
-        let Some(syntax_element) = parse(token) else { continue };
+        tokens.push_back(token);
+
+        let Some(syntax_element) = parse(&mut tokens) else { continue };
         evaluate(syntax_element, data_stack)?;
     }
 
