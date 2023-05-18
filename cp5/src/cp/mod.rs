@@ -19,7 +19,8 @@ pub fn execute(
 
     loop {
         let Some(token) = tokenize(&mut chars) else { break };
-        evaluate(token, data_stack)?;
+        let pipeline::a_tokenizer::Token::Ident(ident) = token;
+        evaluate(ident, data_stack)?;
     }
 
     Ok(())

@@ -1,13 +1,9 @@
 use crate::cp::{DataStack, DataStackError};
 
-use super::a_tokenizer::Token;
-
 pub fn evaluate(
-    token: Token,
+    ident: String,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let Token::Ident(ident) = token;
-
     match ident.as_str() {
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
