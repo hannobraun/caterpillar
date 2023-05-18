@@ -23,7 +23,7 @@ pub fn execute(
         let Some(token) = tokenize(&mut chars) else { break };
         tokens.push_back(token);
 
-        let Some(pipeline::b_parser::SyntaxElement::Word(syntax_element)) = parse(&mut tokens) else { continue };
+        let Some(syntax_element) = parse(&mut tokens) else { continue };
         evaluate(syntax_element, data_stack)?;
     }
 

@@ -1,9 +1,13 @@
 use crate::cp::{DataStack, DataStackError};
 
+use super::b_parser::SyntaxElement;
+
 pub fn evaluate(
-    word: String,
+    syntax_element: SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
+    let SyntaxElement::Word(word) = syntax_element;
+
     match word.as_str() {
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
