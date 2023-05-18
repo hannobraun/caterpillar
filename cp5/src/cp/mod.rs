@@ -3,6 +3,7 @@ mod pipeline;
 
 use std::collections::VecDeque;
 
+use self::pipeline::a_tokenizer::tokenize;
 pub use self::{
     data_stack::{DataStack, DataStackError},
     pipeline::d_evaluator::EvaluatorError,
@@ -15,15 +16,7 @@ pub fn execute(
     let mut chars = code.chars().collect::<VecDeque<_>>();
 
     loop {
-        let mut word = String::new();
-
-        while let Some(ch) = chars.pop_front() {
-            if ch.is_whitespace() {
-                break;
-            }
-
-            word.push(ch)
-        }
+        let word = tokenize(&mut chars);
 
         if word.is_empty() {
             break;
