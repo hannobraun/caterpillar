@@ -22,6 +22,7 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
     Some(Token::Ident(buf))
 }
 
+#[derive(Debug)]
 pub enum Token {
     CurlyBracketOpen,
     Ident(String),
