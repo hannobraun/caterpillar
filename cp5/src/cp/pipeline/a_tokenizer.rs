@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-pub fn tokenize(chars: &mut VecDeque<char>) -> String {
+pub fn tokenize(chars: &mut VecDeque<char>) -> Option<String> {
     let mut word = String::new();
 
     while let Some(ch) = chars.pop_front() {
@@ -11,5 +11,9 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> String {
         word.push(ch)
     }
 
-    word
+    if word.is_empty() {
+        return None;
+    }
+
+    Some(word)
 }
