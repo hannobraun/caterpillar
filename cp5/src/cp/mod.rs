@@ -3,10 +3,9 @@ mod pipeline;
 
 use std::collections::VecDeque;
 
-use self::pipeline::a_tokenizer::tokenize;
 pub use self::{
     data_stack::{DataStack, DataStackError},
-    pipeline::d_evaluator::EvaluatorError,
+    pipeline::{a_tokenizer::tokenize, d_evaluator::EvaluatorError},
 };
 
 pub fn execute(
