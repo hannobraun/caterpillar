@@ -3,10 +3,10 @@ use crate::cp::{DataStack, DataStackError};
 use super::a_tokenizer::Token;
 
 pub fn evaluate(
-    word: Token,
+    token: Token,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let Token::Ident(word) = word;
+    let Token::Ident(word) = token;
 
     match word.as_str() {
         "true" => data_stack.push(true),
