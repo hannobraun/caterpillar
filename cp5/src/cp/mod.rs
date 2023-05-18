@@ -12,10 +12,7 @@ pub use self::{
     },
 };
 
-pub fn execute(
-    code: &str,
-    data_stack: &mut DataStack,
-) -> Result<(), EvaluatorError> {
+pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
     let mut tokens = VecDeque::new();
 
@@ -28,4 +25,10 @@ pub fn execute(
     }
 
     Ok(())
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("Evaluator error: {0}")]
+    Evaluator(#[from] EvaluatorError),
 }

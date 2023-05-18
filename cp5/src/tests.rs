@@ -17,7 +17,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut data_stack = cp::DataStack::new();
 
         let result = cp::execute(code, &mut data_stack)
-            .map_err(Error::Evaluator)
+            .map_err(Error::Language)
             .and_then(|()| {
                 if data_stack.pop()? {
                     Ok(())
