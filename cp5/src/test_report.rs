@@ -18,6 +18,9 @@ pub enum Error {
 
     #[error("Test did not return `true`")]
     TestFailed,
+
+    #[error("Test returned too many values")]
+    TestReturnedTooMuch,
 }
 
 pub fn print(test_reports: &[TestReport]) {

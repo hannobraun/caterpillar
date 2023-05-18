@@ -14,6 +14,10 @@ impl DataStack {
     pub fn pop(&mut self) -> Result<bool, DataStackError> {
         self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.values.is_empty()
+    }
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -24,6 +24,13 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
                 } else {
                     Err(Error::TestFailed)
                 }
+            })
+            .and_then(|()| {
+                if data_stack.is_empty() {
+                    Ok(())
+                } else {
+                    Err(Error::TestReturnedTooMuch)
+                }
             });
 
         results.push(TestReport {
