@@ -16,7 +16,7 @@ pub fn execute(
     let mut chars = code.chars().collect::<VecDeque<_>>();
 
     loop {
-        let Some(word) = tokenize(&mut chars) else { break };
+        let Some(pipeline::a_tokenizer::Token::Ident(word)) = tokenize(&mut chars) else { break };
         pipeline::d_evaluator::evaluate(&word, data_stack)?;
     }
 
