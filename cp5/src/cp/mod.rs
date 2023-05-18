@@ -5,7 +5,10 @@ use std::collections::VecDeque;
 
 pub use self::{
     data_stack::{DataStack, DataStackError},
-    pipeline::{a_tokenizer::tokenize, d_evaluator::EvaluatorError},
+    pipeline::{
+        a_tokenizer::tokenize,
+        d_evaluator::{evaluate, EvaluatorError},
+    },
 };
 
 pub fn execute(
@@ -16,7 +19,7 @@ pub fn execute(
 
     loop {
         let Some(token) = tokenize(&mut chars) else { break };
-        pipeline::d_evaluator::evaluate(token, data_stack)?;
+        evaluate(token, data_stack)?;
     }
 
     Ok(())
