@@ -11,16 +11,7 @@ pub fn execute(
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
     for word in code.split_whitespace() {
-        match word {
-            "true" => data_stack.push(true),
-            "false" => data_stack.push(false),
-            "not" => {
-                let a = data_stack.pop()?;
-                let x = !a;
-                data_stack.push(x);
-            }
-            _ => return Err(EvaluatorError::UnknownWord(word.into())),
-        }
+        pipeline::d_evaluator::evaluate(word, data_stack)?;
     }
 
     Ok(())
