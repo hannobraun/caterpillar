@@ -8,7 +8,7 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
             break;
         }
 
-        buf.push(ch)
+        buf.push(ch);
     }
 
     if buf.is_empty() {
