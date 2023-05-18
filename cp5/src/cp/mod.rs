@@ -7,6 +7,7 @@ pub use self::{
     data_stack::{DataStack, DataStackError},
     pipeline::{
         a_tokenizer::tokenize,
+        b_parser::parse,
         d_evaluator::{evaluate, EvaluatorError},
     },
 };
@@ -19,8 +20,8 @@ pub fn execute(
 
     loop {
         let Some(token) = tokenize(&mut chars) else { break };
-        let pipeline::a_tokenizer::Token::Ident(ident) = token;
-        evaluate(ident, data_stack)?;
+        let Some(syntax_element) = parse(token) else { continue };
+        evaluate(syntax_element, data_stack)?;
     }
 
     Ok(())
