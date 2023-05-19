@@ -11,9 +11,12 @@ impl DataStack {
         self.values.push(value.into())
     }
 
+    pub fn pop_any(&mut self) -> Result<Value, DataStackError> {
+        self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
+    }
+
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        let value =
-            self.values.pop().ok_or(DataStackError::PopFromEmptyStack)?;
+        let value = self.pop_any()?;
         match value {
             Value::Bool(value) => Ok(value),
         }
