@@ -21,6 +21,8 @@ pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
         tokens.push_back(token);
 
         let Some(syntax_element) = parse(&mut tokens) else { continue };
+        let syntax_element = syntax_element?;
+
         evaluate(syntax_element, data_stack)?;
     }
 
@@ -29,6 +31,9 @@ pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("Parser error: {0}")]
+    Parser(#[from] pipeline::b_parser::ParserError),
+
     #[error("Evaluator error: {0}")]
     Evaluator(#[from] EvaluatorError),
 }
