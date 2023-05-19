@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use crate::cp::syntax::SyntaxElement;
+
 use super::a_tokenizer::Token;
 
 pub fn parse(
@@ -39,11 +41,6 @@ fn parse_block(
             }
         }
     }
-}
-
-pub enum SyntaxElement {
-    Block { syntax_tree: Vec<SyntaxElement> },
-    Word(String),
 }
 
 #[derive(Debug, thiserror::Error)]

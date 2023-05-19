@@ -1,5 +1,6 @@
 mod data_stack;
 mod pipeline;
+mod syntax;
 
 use std::collections::VecDeque;
 

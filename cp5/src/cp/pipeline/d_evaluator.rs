@@ -1,6 +1,4 @@
-use crate::cp::{DataStack, DataStackError};
-
-use super::b_parser::SyntaxElement;
+use crate::cp::{syntax::SyntaxElement, DataStack, DataStackError};
 
 pub fn evaluate(
     syntax_element: SyntaxElement,
