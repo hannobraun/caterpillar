@@ -8,7 +8,7 @@ impl DataStack {
     }
 
     pub fn push(&mut self, value: bool) {
-        self.values.push(Value::Bool(value))
+        self.values.push(value.into())
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
@@ -27,6 +27,12 @@ impl DataStack {
 #[derive(Debug)]
 pub enum Value {
     Bool(bool),
+}
+
+impl From<bool> for Value {
+    fn from(value: bool) -> Self {
+        Self::Bool(value)
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
