@@ -23,7 +23,7 @@ fn evaluator_word(
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
         "not" => {
-            let a = data_stack.pop()?;
+            let a = data_stack.pop_bool()?;
             let x = !a;
             data_stack.push(x);
         }

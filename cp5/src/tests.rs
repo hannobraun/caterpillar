@@ -19,7 +19,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let result = cp::execute(code, &mut data_stack)
             .map_err(Error::Language)
             .and_then(|()| {
-                if data_stack.pop()? {
+                if data_stack.pop_bool()? {
                     Ok(())
                 } else {
                     Err(Error::TestFailed)
