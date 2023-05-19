@@ -7,7 +7,7 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
-    pub fn push(&mut self, value: bool) {
+    pub fn push(&mut self, value: impl Into<Value>) {
         self.values.push(value.into())
     }
 
