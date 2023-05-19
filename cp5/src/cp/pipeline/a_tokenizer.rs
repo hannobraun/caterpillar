@@ -10,11 +10,14 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
 
         buf.push(ch);
 
-        if buf == "{" {
-            return Some(Token::CurlyBracketOpen);
-        }
-        if buf == "}" {
-            return Some(Token::CurlyBracketClose);
+        match buf.as_str() {
+            "{" => {
+                return Some(Token::CurlyBracketOpen);
+            }
+            "}" => {
+                return Some(Token::CurlyBracketClose);
+            }
+            _ => {}
         }
     }
 
