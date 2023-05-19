@@ -16,8 +16,7 @@ impl DataStack {
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        let value = self.pop_any()?;
-        match value {
+        match self.pop_any()? {
             Value::Bool(value) => Ok(value),
         }
     }
