@@ -6,12 +6,43 @@ pub fn parse(
     tokens: &mut VecDeque<Token>,
 ) -> Option<Result<SyntaxElement, ParserError>> {
     match tokens.pop_front()? {
+        token @ Token::CurlyBracketOpen => {
+            tokens.push_front(token);
+            parse_block(tokens)
+        }
         Token::Ident(ident) => Some(Ok(SyntaxElement::Word(ident))),
         token => Some(Err(ParserError::UnexpectedToken(token))),
     }
 }
 
+fn parse_block(
+    tokens: &mut VecDeque<Token>,
+) -> Option<Result<SyntaxElement, ParserError>> {
+    let open = tokens.pop_front()?;
+    let Token::CurlyBracketOpen = open else {
+        return Some(Err(ParserError::UnexpectedToken(open)));
+    };
+
+    let mut syntax_tree = Vec::new();
+
+    loop {
+        match tokens.pop_front()? {
+            Token::CurlyBracketClose => {
+                return Some(Ok(SyntaxElement::Block { syntax_tree }));
+            }
+            token => {
+                tokens.push_front(token);
+                match parse(tokens)? {
+                    Ok(syntax_element) => syntax_tree.push(syntax_element),
+                    Err(err) => return Some(Err(err)),
+                }
+            }
+        }
+    }
+}
+
 pub enum SyntaxElement {
+    Block { syntax_tree: Vec<SyntaxElement> },
     Word(String),
 }
 

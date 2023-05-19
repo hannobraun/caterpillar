@@ -6,8 +6,13 @@ pub fn evaluate(
     syntax_element: SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
-    let SyntaxElement::Word(word) = syntax_element;
-    evaluator_word(word, data_stack)
+    match syntax_element {
+        SyntaxElement::Block { .. } => {
+            // not supported yet
+            Ok(())
+        }
+        SyntaxElement::Word(word) => evaluator_word(word, data_stack),
+    }
 }
 
 fn evaluator_word(
