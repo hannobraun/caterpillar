@@ -1,12 +1,14 @@
-use crate::cp::{syntax::SyntaxElement, DataStack, DataStackError};
+use crate::cp::{
+    data_stack::Value, syntax::SyntaxElement, DataStack, DataStackError,
+};
 
 pub fn evaluate(
     syntax_element: SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
     match syntax_element {
-        SyntaxElement::Block { .. } => {
-            // not supported yet
+        SyntaxElement::Block { syntax_tree } => {
+            data_stack.push(Value::Block(syntax_tree));
             Ok(())
         }
         SyntaxElement::Word(word) => evaluator_word(word, data_stack),

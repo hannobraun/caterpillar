@@ -1,3 +1,5 @@
+use super::syntax::SyntaxTree;
+
 pub struct DataStack {
     values: Vec<Value>,
 }
@@ -18,6 +20,10 @@ impl DataStack {
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
         match self.pop_any()? {
             Value::Bool(value) => Ok(value),
+            value => Err(DataStackError::UnexpectedType {
+                expected: "bool",
+                actual: value,
+            }),
         }
     }
 
@@ -29,6 +35,7 @@ impl DataStack {
 #[derive(Debug)]
 pub enum Value {
     Bool(bool),
+    Block(SyntaxTree),
 }
 
 impl From<bool> for Value {
@@ -41,4 +48,10 @@ impl From<bool> for Value {
 pub enum DataStackError {
     #[error("Tried to pop value from empty stack")]
     PopFromEmptyStack,
+
+    #[error("Expected value of type `{expected}` but found {actual:?}")]
+    UnexpectedType {
+        expected: &'static str,
+        actual: Value,
+    },
 }
