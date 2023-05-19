@@ -13,6 +13,9 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
         if buf == "{" {
             return Some(Token::CurlyBracketOpen);
         }
+        if buf == "}" {
+            return Some(Token::CurlyBracketClose);
+        }
     }
 
     if buf.is_empty() {
@@ -25,5 +28,6 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
 #[derive(Debug)]
 pub enum Token {
     CurlyBracketOpen,
+    CurlyBracketClose,
     Ident(String),
 }
