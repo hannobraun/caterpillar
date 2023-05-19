@@ -6,11 +6,8 @@ pub fn parse(
     tokens: &mut VecDeque<Token>,
 ) -> Option<Result<SyntaxElement, ParserError>> {
     match tokens.pop_front()? {
-        Token::CurlyBracketOpen => {
-            // not supported yet
-            None
-        }
         Token::Ident(ident) => Some(Ok(SyntaxElement::Word(ident))),
+        token => Some(Err(ParserError::UnexpectedToken(token))),
     }
 }
 
@@ -19,4 +16,7 @@ pub enum SyntaxElement {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum ParserError {}
+pub enum ParserError {
+    #[error("Unexpected token: `{0:?}`")]
+    UnexpectedToken(Token),
+}
