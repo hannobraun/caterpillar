@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::cp::syntax::SyntaxElement;
+use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 
 use super::a_tokenizer::Token;
 
@@ -25,7 +25,9 @@ fn parse_block(
         return Some(Err(ParserError::UnexpectedToken(open)));
     };
 
-    let mut syntax_tree = Vec::new();
+    let mut syntax_tree = SyntaxTree {
+        elements: Vec::new(),
+    };
 
     loop {
         match tokens.pop_front()? {
@@ -35,7 +37,9 @@ fn parse_block(
             token => {
                 tokens.push_front(token);
                 match parse(tokens)? {
-                    Ok(syntax_element) => syntax_tree.push(syntax_element),
+                    Ok(syntax_element) => {
+                        syntax_tree.elements.push(syntax_element)
+                    }
                     Err(err) => return Some(Err(err)),
                 }
             }
