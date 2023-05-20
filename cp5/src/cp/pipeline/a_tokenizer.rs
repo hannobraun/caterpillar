@@ -31,7 +31,7 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
     Some(Token::Ident(buf))
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
