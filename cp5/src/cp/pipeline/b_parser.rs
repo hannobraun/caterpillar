@@ -7,17 +7,17 @@ use super::{a_tokenizer::Token, PipelineError};
 pub fn parse(
     tokens: &mut VecDeque<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens.pop_front().ok_or(PipelineError::NotEnoughInput)? {
-        token @ Token::CurlyBracketOpen => {
-            tokens.push_front(token);
-            parse_block(tokens)
-        }
-        token @ Token::Ident(_) => {
-            tokens.push_front(token);
+    match tokens.front().ok_or(PipelineError::NotEnoughInput)? {
+        Token::CurlyBracketOpen => parse_block(tokens),
+        Token::Ident(_) => {
             let word = parse_word(tokens)?;
             Ok(SyntaxElement::Word(word))
         }
-        token => Err(PipelineError::Stage(ParserError::UnexpectedToken(token))),
+        _ => {
+            let token =
+                tokens.pop_front().ok_or(PipelineError::NotEnoughInput)?;
+            Err(PipelineError::Stage(ParserError::UnexpectedToken(token)))
+        }
     }
 }
 
