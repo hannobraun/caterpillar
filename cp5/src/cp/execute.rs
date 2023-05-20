@@ -16,7 +16,7 @@ pub fn execute(
     data_stack: &mut DataStack,
     debug: bool,
 ) -> Result<(), Error> {
-    let mut chars = code.chars().collect::<VecDeque<_>>();
+    let mut chars = code.chars().collect();
     let mut tokens = pipeline::stage_input::StageInput::new();
 
     loop {
