@@ -5,14 +5,14 @@ use super::{a_tokenizer::Token, stage_input::StageInput, PipelineError};
 pub fn parse(
     tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens.peek().map_err(PipelineError::NotEnoughInput)? {
+    match tokens.peek()? {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
             let word = parse_word(tokens)?;
             Ok(SyntaxElement::Word(word))
         }
         _ => {
-            let token = tokens.next().map_err(PipelineError::NotEnoughInput)?;
+            let token = tokens.next()?;
             Err(PipelineError::Stage(ParserError::UnexpectedToken(token)))
         }
     }
@@ -21,7 +21,7 @@ pub fn parse(
 fn parse_block(
     tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    let open = tokens.next().map_err(PipelineError::NotEnoughInput)?;
+    let open = tokens.next()?;
     let Token::CurlyBracketOpen = open else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(open)));
     };
@@ -31,7 +31,7 @@ fn parse_block(
     };
 
     loop {
-        match tokens.peek().map_err(PipelineError::NotEnoughInput)? {
+        match tokens.peek()? {
             Token::CurlyBracketClose => {
                 let _ = tokens.next();
                 return Ok(SyntaxElement::Block { syntax_tree });
@@ -47,7 +47,7 @@ fn parse_block(
 fn parse_word(
     tokens: &mut StageInput<Token>,
 ) -> Result<String, PipelineError<ParserError>> {
-    let token = tokens.next().map_err(PipelineError::NotEnoughInput)?;
+    let token = tokens.next()?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(token)));
     };
