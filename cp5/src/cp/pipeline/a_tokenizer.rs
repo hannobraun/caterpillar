@@ -4,6 +4,9 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
     let mut buf = String::new();
 
     while let Some(ch) = chars.pop_front() {
+        if ch.is_whitespace() && buf.is_empty() {
+            continue;
+        }
         if ch.is_whitespace() {
             break;
         }
