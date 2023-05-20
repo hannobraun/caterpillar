@@ -31,12 +31,12 @@ fn parse_block(
     };
 
     loop {
-        match tokens.next().ok_or(PipelineError::NotEnoughInput)? {
+        match tokens.peek().ok_or(PipelineError::NotEnoughInput)? {
             Token::CurlyBracketClose => {
+                let _ = tokens.next();
                 return Ok(SyntaxElement::Block { syntax_tree });
             }
-            token => {
-                tokens.elements.push_front(token);
+            _ => {
                 let syntax_element = parse(tokens)?;
                 syntax_tree.elements.push(syntax_element)
             }
