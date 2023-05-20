@@ -2,8 +2,11 @@ use std::{collections::VecDeque, ops::ControlFlow};
 
 use super::{
     evaluate,
-    pipeline::{self, a_tokenizer::tokenize, b_parser::parse},
-    DataStack, EvaluatorError, PipelineError,
+    pipeline::{
+        self, a_tokenizer::tokenize, b_parser::parse,
+        d_evaluator::EvaluatorError,
+    },
+    DataStack, PipelineError,
 };
 
 pub fn execute(
