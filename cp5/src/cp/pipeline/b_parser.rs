@@ -12,7 +12,11 @@ pub fn parse(
             tokens.push_front(token);
             parse_block(tokens)
         }
-        Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
+        token @ Token::Ident(_) => {
+            tokens.push_front(token);
+            let word = parse_word(tokens)?;
+            Ok(SyntaxElement::Word(word))
+        }
         token => Err(PipelineError::Stage(ParserError::UnexpectedToken(token))),
     }
 }
@@ -41,6 +45,16 @@ fn parse_block(
             }
         }
     }
+}
+
+fn parse_word(
+    tokens: &mut VecDeque<Token>,
+) -> Result<String, PipelineError<ParserError>> {
+    let token = tokens.pop_front().ok_or(PipelineError::NotEnoughInput)?;
+    let Token::Ident(ident) = token else {
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(token)));
+    };
+    Ok(ident)
 }
 
 #[derive(Debug, thiserror::Error)]
