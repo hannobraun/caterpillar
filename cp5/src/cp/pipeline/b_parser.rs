@@ -5,11 +5,7 @@ use super::{a_tokenizer::Token, stage_input::StageInput, PipelineError};
 pub fn parse(
     tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens
-        .elements
-        .front()
-        .ok_or(PipelineError::NotEnoughInput)?
-    {
+    match tokens.peek().ok_or(PipelineError::NotEnoughInput)? {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
             let word = parse_word(tokens)?;

@@ -16,6 +16,10 @@ impl<T> StageInput<T> {
         self.elements.push_back(element)
     }
 
+    pub fn peek(&self) -> Option<&T> {
+        self.elements.front()
+    }
+
     pub fn next(&mut self) -> Option<T> {
         self.elements.pop_front()
     }
