@@ -55,6 +55,9 @@ fn execute_inner(
     let Some(syntax_element) = parse(tokens) else {
         return Ok(ControlFlow::Continue(()))
     };
+    if debug {
+        dbg!(&syntax_element);
+    }
     let syntax_element = syntax_element?;
 
     evaluate(syntax_element, data_stack)?;
