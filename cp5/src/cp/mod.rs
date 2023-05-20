@@ -20,9 +20,7 @@ pub fn execute(
     debug: bool,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
-    let mut tokens = pipeline::StageInput {
-        elements: VecDeque::new(),
-    };
+    let mut tokens = pipeline::StageInput::new();
 
     loop {
         match execute_inner(&mut chars, &mut tokens, data_stack, debug) {
