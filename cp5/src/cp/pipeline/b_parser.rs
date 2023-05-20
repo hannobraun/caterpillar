@@ -1,6 +1,6 @@
 use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 
-use super::{a_tokenizer::Token, PipelineError, StageInput};
+use super::{a_tokenizer::Token, stage_input::StageInput, PipelineError};
 
 pub fn parse(
     tokens: &mut StageInput<Token>,

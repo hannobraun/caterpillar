@@ -20,7 +20,7 @@ pub fn execute(
     debug: bool,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
-    let mut tokens = pipeline::StageInput::new();
+    let mut tokens = pipeline::stage_input::StageInput::new();
 
     loop {
         match execute_inner(&mut chars, &mut tokens, data_stack, debug) {
@@ -41,7 +41,9 @@ pub fn execute(
 
 fn execute_inner(
     chars: &mut VecDeque<char>,
-    tokens: &mut pipeline::StageInput<pipeline::a_tokenizer::Token>,
+    tokens: &mut pipeline::stage_input::StageInput<
+        pipeline::a_tokenizer::Token,
+    >,
     data_stack: &mut DataStack,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
@@ -74,7 +76,7 @@ fn execute_inner(
 pub struct Error {
     pub kind: ErrorKind,
     pub chars: VecDeque<char>,
-    pub tokens: pipeline::StageInput<pipeline::a_tokenizer::Token>,
+    pub tokens: pipeline::stage_input::StageInput<pipeline::a_tokenizer::Token>,
 }
 
 #[derive(Debug, thiserror::Error)]
