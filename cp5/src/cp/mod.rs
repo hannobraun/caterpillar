@@ -10,6 +10,7 @@ pub use self::{
         a_tokenizer::tokenize,
         b_parser::parse,
         d_evaluator::{evaluate, EvaluatorError},
+        PipelineError,
     },
 };
 
@@ -52,13 +53,16 @@ fn execute_inner(
     }
     tokens.push_back(token);
 
-    let Some(syntax_element) = parse(tokens) else {
-        return Ok(ControlFlow::Continue(()))
+    let syntax_element = match parse(tokens) {
+        Ok(syntax_element) => syntax_element,
+        Err(PipelineError::NotEnoughInput) => {
+            return Ok(ControlFlow::Continue(()))
+        }
+        Err(PipelineError::Stage(err)) => return Err(err.into()),
     };
     if debug {
         dbg!(&syntax_element);
     }
-    let syntax_element = syntax_element?;
 
     evaluate(syntax_element, data_stack)?;
 

@@ -2,27 +2,27 @@ use std::collections::VecDeque;
 
 use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 
-use super::a_tokenizer::Token;
+use super::{a_tokenizer::Token, PipelineError};
 
 pub fn parse(
     tokens: &mut VecDeque<Token>,
-) -> Option<Result<SyntaxElement, ParserError>> {
-    match tokens.pop_front()? {
+) -> Result<SyntaxElement, PipelineError<ParserError>> {
+    match tokens.pop_front().ok_or(PipelineError::NotEnoughInput)? {
         token @ Token::CurlyBracketOpen => {
             tokens.push_front(token);
             parse_block(tokens)
         }
-        Token::Ident(ident) => Some(Ok(SyntaxElement::Word(ident))),
-        token => Some(Err(ParserError::UnexpectedToken(token))),
+        Token::Ident(ident) => Ok(SyntaxElement::Word(ident)),
+        token => Err(PipelineError::Stage(ParserError::UnexpectedToken(token))),
     }
 }
 
 fn parse_block(
     tokens: &mut VecDeque<Token>,
-) -> Option<Result<SyntaxElement, ParserError>> {
-    let open = tokens.pop_front()?;
+) -> Result<SyntaxElement, PipelineError<ParserError>> {
+    let open = tokens.pop_front().ok_or(PipelineError::NotEnoughInput)?;
     let Token::CurlyBracketOpen = open else {
-        return Some(Err(ParserError::UnexpectedToken(open)));
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(open)));
     };
 
     let mut syntax_tree = SyntaxTree {
@@ -30,17 +30,17 @@ fn parse_block(
     };
 
     loop {
-        match tokens.pop_front()? {
+        match tokens.pop_front().ok_or(PipelineError::NotEnoughInput)? {
             Token::CurlyBracketClose => {
-                return Some(Ok(SyntaxElement::Block { syntax_tree }));
+                return Ok(SyntaxElement::Block { syntax_tree });
             }
             token => {
                 tokens.push_front(token);
-                match parse(tokens)? {
+                match parse(tokens) {
                     Ok(syntax_element) => {
                         syntax_tree.elements.push(syntax_element)
                     }
-                    Err(err) => return Some(Err(err)),
+                    Err(err) => return Err(err),
                 }
             }
         }
