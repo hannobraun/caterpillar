@@ -3,7 +3,7 @@ use std::{collections::VecDeque, ops::ControlFlow};
 use super::{
     pipeline::{
         self,
-        a_tokenizer::tokenize,
+        a_tokenizer::{tokenize, Token},
         b_parser::parse,
         d_evaluator::{evaluate, EvaluatorError},
         stage_input::StageInput,
@@ -39,7 +39,7 @@ pub fn execute(
 
 fn execute_inner(
     chars: &mut VecDeque<char>,
-    tokens: &mut StageInput<pipeline::a_tokenizer::Token>,
+    tokens: &mut StageInput<Token>,
     data_stack: &mut DataStack,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
@@ -72,7 +72,7 @@ fn execute_inner(
 pub struct Error {
     pub kind: ErrorKind,
     pub chars: VecDeque<char>,
-    pub tokens: StageInput<pipeline::a_tokenizer::Token>,
+    pub tokens: StageInput<Token>,
 }
 
 #[derive(Debug, thiserror::Error)]
