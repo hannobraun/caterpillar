@@ -2,7 +2,7 @@ mod data_stack;
 mod pipeline;
 mod syntax;
 
-use std::collections::VecDeque;
+use std::{collections::VecDeque, ops::ControlFlow};
 
 pub use self::{
     data_stack::{DataStack, DataStackError},
@@ -18,16 +18,34 @@ pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
     let mut tokens = VecDeque::new();
 
     loop {
-        let Some(token) = tokenize(&mut chars) else { break };
-        tokens.push_back(token);
-
-        let Some(syntax_element) = parse(&mut tokens) else { continue };
-        let syntax_element = syntax_element?;
-
-        evaluate(syntax_element, data_stack)?;
+        match execute_inner(&mut chars, &mut tokens, data_stack) {
+            Ok(ControlFlow::Continue(())) => continue,
+            Ok(ControlFlow::Break(())) => break,
+            Err(err) => return Err(err),
+        }
     }
 
     Ok(())
+}
+
+fn execute_inner(
+    chars: &mut VecDeque<char>,
+    tokens: &mut VecDeque<pipeline::a_tokenizer::Token>,
+    data_stack: &mut DataStack,
+) -> Result<ControlFlow<(), ()>, Error> {
+    let Some(token) = tokenize(chars) else {
+        return Ok(ControlFlow::Break(()))
+    };
+    tokens.push_back(token);
+
+    let Some(syntax_element) = parse(tokens) else {
+        return Ok(ControlFlow::Continue(()))
+    };
+    let syntax_element = syntax_element?;
+
+    evaluate(syntax_element, data_stack)?;
+
+    Ok(ControlFlow::Continue(()))
 }
 
 #[derive(Debug, thiserror::Error)]
