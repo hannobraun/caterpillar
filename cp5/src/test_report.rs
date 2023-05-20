@@ -11,7 +11,7 @@ pub struct TestReport {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Language(cp::ErrorKind),
+    Language(cp::Error),
 
     #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),

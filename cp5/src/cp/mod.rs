@@ -13,10 +13,7 @@ pub use self::{
     },
 };
 
-pub fn execute(
-    code: &str,
-    data_stack: &mut DataStack,
-) -> Result<(), ErrorKind> {
+pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
     let mut tokens = VecDeque::new();
 
@@ -24,7 +21,7 @@ pub fn execute(
         match execute_inner(&mut chars, &mut tokens, data_stack) {
             Ok(ControlFlow::Continue(())) => continue,
             Ok(ControlFlow::Break(())) => break,
-            Err(err) => return Err(err),
+            Err(kind) => return Err(Error { kind }),
         }
     }
 
@@ -49,6 +46,12 @@ fn execute_inner(
     evaluate(syntax_element, data_stack)?;
 
     Ok(ControlFlow::Continue(()))
+}
+
+#[derive(Debug, thiserror::Error)]
+#[error(transparent)]
+pub struct Error {
+    pub kind: ErrorKind,
 }
 
 #[derive(Debug, thiserror::Error)]
