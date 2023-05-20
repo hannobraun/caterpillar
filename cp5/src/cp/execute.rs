@@ -6,6 +6,7 @@ use super::{
         a_tokenizer::tokenize,
         b_parser::parse,
         d_evaluator::{evaluate, EvaluatorError},
+        stage_input::StageInput,
         PipelineError,
     },
     DataStack,
@@ -17,7 +18,7 @@ pub fn execute(
     debug: bool,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect();
-    let mut tokens = pipeline::stage_input::StageInput::new();
+    let mut tokens = StageInput::new();
 
     loop {
         match execute_inner(&mut chars, &mut tokens, data_stack, debug) {
@@ -38,9 +39,7 @@ pub fn execute(
 
 fn execute_inner(
     chars: &mut VecDeque<char>,
-    tokens: &mut pipeline::stage_input::StageInput<
-        pipeline::a_tokenizer::Token,
-    >,
+    tokens: &mut StageInput<pipeline::a_tokenizer::Token>,
     data_stack: &mut DataStack,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
@@ -73,7 +72,7 @@ fn execute_inner(
 pub struct Error {
     pub kind: ErrorKind,
     pub chars: VecDeque<char>,
-    pub tokens: pipeline::stage_input::StageInput<pipeline::a_tokenizer::Token>,
+    pub tokens: StageInput<pipeline::a_tokenizer::Token>,
 }
 
 #[derive(Debug, thiserror::Error)]
