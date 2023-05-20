@@ -21,7 +21,13 @@ pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
         match execute_inner(&mut chars, &mut tokens, data_stack) {
             Ok(ControlFlow::Continue(())) => continue,
             Ok(ControlFlow::Break(())) => break,
-            Err(kind) => return Err(Error { kind }),
+            Err(kind) => {
+                return Err(Error {
+                    kind,
+                    chars,
+                    tokens,
+                })
+            }
         }
     }
 
@@ -49,9 +55,11 @@ fn execute_inner(
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error(transparent)]
+#[error("{kind}\n\t{chars:?}\n\t{tokens:?}")]
 pub struct Error {
     pub kind: ErrorKind,
+    pub chars: VecDeque<char>,
+    pub tokens: VecDeque<pipeline::a_tokenizer::Token>,
 }
 
 #[derive(Debug, thiserror::Error)]
