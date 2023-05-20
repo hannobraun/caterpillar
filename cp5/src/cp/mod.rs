@@ -32,7 +32,7 @@ pub fn execute(
                 return Err(Error {
                     kind,
                     chars,
-                    tokens: tokens.elements,
+                    tokens,
                 })
             }
         }
@@ -76,7 +76,7 @@ fn execute_inner(
 pub struct Error {
     pub kind: ErrorKind,
     pub chars: VecDeque<char>,
-    pub tokens: VecDeque<pipeline::a_tokenizer::Token>,
+    pub tokens: pipeline::StageInput<pipeline::a_tokenizer::Token>,
 }
 
 #[derive(Debug, thiserror::Error)]
