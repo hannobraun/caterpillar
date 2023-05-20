@@ -25,4 +25,6 @@ impl<T> StageInput<T> {
     }
 }
 
+#[derive(Debug, thiserror::Error)]
+#[error("No more input")]
 pub struct NoMoreInput;
