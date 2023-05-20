@@ -1,8 +1,8 @@
 use std::{collections::VecDeque, ops::ControlFlow};
 
 use super::{
-    evaluate, parse,
-    pipeline::{self, a_tokenizer::tokenize},
+    evaluate,
+    pipeline::{self, a_tokenizer::tokenize, b_parser::parse},
     DataStack, EvaluatorError, PipelineError,
 };
 
