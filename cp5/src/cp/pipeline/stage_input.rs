@@ -15,4 +15,8 @@ impl<T> StageInput<T> {
     pub fn add(&mut self, element: T) {
         self.elements.push_back(element)
     }
+
+    pub fn next(&mut self) -> Option<T> {
+        self.elements.pop_front()
+    }
 }
