@@ -13,12 +13,16 @@ pub use self::{
     },
 };
 
-pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
+pub fn execute(
+    code: &str,
+    data_stack: &mut DataStack,
+    debug: bool,
+) -> Result<(), Error> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
     let mut tokens = VecDeque::new();
 
     loop {
-        match execute_inner(&mut chars, &mut tokens, data_stack) {
+        match execute_inner(&mut chars, &mut tokens, data_stack, debug) {
             Ok(ControlFlow::Continue(())) => continue,
             Ok(ControlFlow::Break(())) => break,
             Err(kind) => {
@@ -38,10 +42,14 @@ fn execute_inner(
     chars: &mut VecDeque<char>,
     tokens: &mut VecDeque<pipeline::a_tokenizer::Token>,
     data_stack: &mut DataStack,
+    debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
     let Some(token) = tokenize(chars) else {
         return Ok(ControlFlow::Break(()))
     };
+    if debug {
+        dbg!(&token);
+    }
     tokens.push_back(token);
 
     let Some(syntax_element) = parse(tokens) else {

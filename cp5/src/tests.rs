@@ -16,7 +16,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     for ((module, name), code) in tests {
         let mut data_stack = cp::DataStack::new();
 
-        let result = cp::execute(code, &mut data_stack)
+        let result = cp::execute(code, &mut data_stack, false)
             .map_err(Error::Language)
             .and_then(|()| {
                 if data_stack.pop_bool()? {
