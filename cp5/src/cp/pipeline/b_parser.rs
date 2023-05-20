@@ -1,11 +1,18 @@
 use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 
-use super::{a_tokenizer::Token, stage_input::StageInput, PipelineError};
+use super::{
+    a_tokenizer::Token,
+    stage_input::{NoMoreInput, StageInput},
+    PipelineError,
+};
 
 pub fn parse(
     tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens.peek().ok_or(PipelineError::NotEnoughInput)? {
+    match tokens
+        .peek()
+        .map_err(|NoMoreInput| PipelineError::NotEnoughInput)?
+    {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
             let word = parse_word(tokens)?;
@@ -31,7 +38,10 @@ fn parse_block(
     };
 
     loop {
-        match tokens.peek().ok_or(PipelineError::NotEnoughInput)? {
+        match tokens
+            .peek()
+            .map_err(|NoMoreInput| PipelineError::NotEnoughInput)?
+        {
             Token::CurlyBracketClose => {
                 let _ = tokens.next();
                 return Ok(SyntaxElement::Block { syntax_tree });

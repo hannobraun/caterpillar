@@ -16,11 +16,13 @@ impl<T> StageInput<T> {
         self.elements.push_back(element)
     }
 
-    pub fn peek(&self) -> Option<&T> {
-        self.elements.front()
+    pub fn peek(&self) -> Result<&T, NoMoreInput> {
+        self.elements.front().ok_or(NoMoreInput)
     }
 
     pub fn next(&mut self) -> Option<T> {
         self.elements.pop_front()
     }
 }
+
+pub struct NoMoreInput;
