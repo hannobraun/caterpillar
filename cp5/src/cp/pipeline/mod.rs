@@ -9,6 +9,12 @@ pub struct StageInput<T> {
     pub elements: VecDeque<T>,
 }
 
+impl<T> StageInput<T> {
+    pub fn add(&mut self, element: T) {
+        self.elements.push_back(element)
+    }
+}
+
 pub enum PipelineError<T> {
     NotEnoughInput,
     Stage(T),

@@ -53,7 +53,7 @@ fn execute_inner(
     if debug {
         dbg!(&token);
     }
-    tokens.elements.push_back(token);
+    tokens.add(token);
 
     let syntax_element = match parse(tokens) {
         Ok(syntax_element) => syntax_element,
