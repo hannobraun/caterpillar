@@ -20,8 +20,8 @@ impl<T> StageInput<T> {
         self.elements.front().ok_or(NoMoreInput)
     }
 
-    pub fn next(&mut self) -> Option<T> {
-        self.elements.pop_front()
+    pub fn next(&mut self) -> Result<T, NoMoreInput> {
+        self.elements.pop_front().ok_or(NoMoreInput)
     }
 }
 

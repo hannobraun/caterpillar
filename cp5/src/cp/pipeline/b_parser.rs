@@ -19,7 +19,9 @@ pub fn parse(
             Ok(SyntaxElement::Word(word))
         }
         _ => {
-            let token = tokens.next().ok_or(PipelineError::NotEnoughInput)?;
+            let token = tokens
+                .next()
+                .map_err(|NoMoreInput| PipelineError::NotEnoughInput)?;
             Err(PipelineError::Stage(ParserError::UnexpectedToken(token)))
         }
     }
@@ -28,7 +30,9 @@ pub fn parse(
 fn parse_block(
     tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    let open = tokens.next().ok_or(PipelineError::NotEnoughInput)?;
+    let open = tokens
+        .next()
+        .map_err(|NoMoreInput| PipelineError::NotEnoughInput)?;
     let Token::CurlyBracketOpen = open else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(open)));
     };
@@ -57,7 +61,9 @@ fn parse_block(
 fn parse_word(
     tokens: &mut StageInput<Token>,
 ) -> Result<String, PipelineError<ParserError>> {
-    let token = tokens.next().ok_or(PipelineError::NotEnoughInput)?;
+    let token = tokens
+        .next()
+        .map_err(|NoMoreInput| PipelineError::NotEnoughInput)?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(token)));
     };
