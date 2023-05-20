@@ -36,12 +36,8 @@ fn parse_block(
             }
             token => {
                 tokens.push_front(token);
-                match parse(tokens) {
-                    Ok(syntax_element) => {
-                        syntax_tree.elements.push(syntax_element)
-                    }
-                    Err(err) => return Err(err),
-                }
+                let syntax_element = parse(tokens)?;
+                syntax_tree.elements.push(syntax_element)
             }
         }
     }
