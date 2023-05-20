@@ -6,8 +6,9 @@ use super::{
         a_tokenizer::tokenize,
         b_parser::parse,
         d_evaluator::{evaluate, EvaluatorError},
+        PipelineError,
     },
-    DataStack, PipelineError,
+    DataStack,
 };
 
 pub fn execute(

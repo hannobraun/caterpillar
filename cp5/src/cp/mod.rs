@@ -6,5 +6,4 @@ mod syntax;
 pub use self::{
     data_stack::{DataStack, DataStackError},
     execute::{execute, Error},
-    pipeline::PipelineError,
 };
