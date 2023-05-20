@@ -4,7 +4,9 @@ pub mod d_evaluator;
 
 pub mod stage_input;
 
+#[derive(Debug, thiserror::Error)]
 pub enum PipelineError<T> {
+    #[error(transparent)]
     NotEnoughInput(stage_input::NoMoreInput),
     Stage(T),
 }
