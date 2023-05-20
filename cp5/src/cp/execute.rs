@@ -2,9 +2,8 @@ use std::{collections::VecDeque, ops::ControlFlow};
 
 use super::{
     pipeline::{
-        self,
         a_tokenizer::{tokenize, Token},
-        b_parser::parse,
+        b_parser::{parse, ParserError},
         d_evaluator::{evaluate, EvaluatorError},
         stage_input::StageInput,
         PipelineError,
@@ -78,7 +77,7 @@ pub struct Error {
 #[derive(Debug, thiserror::Error)]
 pub enum ErrorKind {
     #[error("Parser error: {0}")]
-    Parser(#[from] pipeline::b_parser::ParserError),
+    Parser(#[from] ParserError),
 
     #[error("Evaluator error: {0}")]
     Evaluator(#[from] EvaluatorError),
