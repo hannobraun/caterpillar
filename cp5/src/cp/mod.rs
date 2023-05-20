@@ -57,7 +57,7 @@ fn execute_inner(
 
     let syntax_element = match parse(tokens) {
         Ok(syntax_element) => syntax_element,
-        Err(PipelineError::NotEnoughInput) => {
+        Err(PipelineError::NotEnoughInput(_)) => {
             return Ok(ControlFlow::Continue(()))
         }
         Err(PipelineError::Stage(err)) => return Err(err.into()),

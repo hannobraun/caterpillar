@@ -5,6 +5,6 @@ pub mod d_evaluator;
 pub mod stage_input;
 
 pub enum PipelineError<T> {
-    NotEnoughInput,
+    NotEnoughInput(stage_input::NoMoreInput),
     Stage(T),
 }
