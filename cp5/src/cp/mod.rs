@@ -13,7 +13,10 @@ pub use self::{
     },
 };
 
-pub fn execute(code: &str, data_stack: &mut DataStack) -> Result<(), Error> {
+pub fn execute(
+    code: &str,
+    data_stack: &mut DataStack,
+) -> Result<(), ErrorKind> {
     let mut chars = code.chars().collect::<VecDeque<_>>();
     let mut tokens = VecDeque::new();
 
@@ -32,7 +35,7 @@ fn execute_inner(
     chars: &mut VecDeque<char>,
     tokens: &mut VecDeque<pipeline::a_tokenizer::Token>,
     data_stack: &mut DataStack,
-) -> Result<ControlFlow<(), ()>, Error> {
+) -> Result<ControlFlow<(), ()>, ErrorKind> {
     let Some(token) = tokenize(chars) else {
         return Ok(ControlFlow::Break(()))
     };
@@ -49,7 +52,7 @@ fn execute_inner(
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {
+pub enum ErrorKind {
     #[error("Parser error: {0}")]
     Parser(#[from] pipeline::b_parser::ParserError),
 
