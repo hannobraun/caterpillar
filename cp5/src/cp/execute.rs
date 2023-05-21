@@ -26,8 +26,8 @@ pub fn execute(
             Err(kind) => {
                 return Err(Error {
                     kind,
-                    chars,
                     tokens,
+                    chars,
                 })
             }
         }
@@ -70,8 +70,8 @@ fn execute_inner(
 #[error("{kind}\n\t{chars:?}\n\t{tokens:?}")]
 pub struct Error {
     pub kind: ErrorKind,
-    pub chars: VecDeque<char>,
     pub tokens: StageInput<Token>,
+    pub chars: VecDeque<char>,
 }
 
 #[derive(Debug, thiserror::Error)]
