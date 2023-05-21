@@ -50,7 +50,7 @@ fn execute_inner(
     }
     tokens.add(token);
 
-    let syntax_element = match parse(&mut tokens.reader()) {
+    let syntax_element = match parse(tokens.reader()) {
         Ok(syntax_element) => syntax_element,
         Err(PipelineError::NotEnoughInput(_)) => {
             return Ok(ControlFlow::Continue(()))

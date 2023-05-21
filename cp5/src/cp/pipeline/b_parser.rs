@@ -3,9 +3,9 @@ use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
 
 pub fn parse(
-    tokens: &mut StageInputReader<Token>,
+    mut tokens: StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    parse_syntax_element(tokens)
+    parse_syntax_element(&mut tokens)
 }
 
 fn parse_syntax_element(
