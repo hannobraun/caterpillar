@@ -2,13 +2,16 @@ use crate::cp::{
     data_stack::Value, syntax::SyntaxElement, DataStack, DataStackError,
 };
 
-use super::PipelineError;
+use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn evaluate(
-    syntax_element: SyntaxElement,
+    mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    evaluate_syntax_element(&syntax_element, data_stack)
+    let syntax_element = syntax_elements.next()?;
+    evaluate_syntax_element(syntax_element, data_stack)?;
+    syntax_elements.take();
+    Ok(())
 }
 
 fn evaluate_syntax_element(

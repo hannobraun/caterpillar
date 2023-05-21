@@ -8,6 +8,7 @@ use super::{
         stage_input::StageInput,
         PipelineError,
     },
+    syntax::SyntaxElement,
     DataStack,
 };
 
@@ -18,9 +19,16 @@ pub fn execute(
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect();
     let mut tokens = StageInput::new();
+    let mut syntax_elements = StageInput::new();
 
     loop {
-        match execute_inner(&mut chars, &mut tokens, data_stack, debug) {
+        match execute_inner(
+            &mut chars,
+            &mut tokens,
+            &mut syntax_elements,
+            data_stack,
+            debug,
+        ) {
             Ok(ControlFlow::Continue(())) => continue,
             Ok(ControlFlow::Break(())) => break,
             Err(kind) => {
@@ -39,6 +47,7 @@ pub fn execute(
 fn execute_inner(
     chars: &mut VecDeque<char>,
     tokens: &mut StageInput<Token>,
+    syntax_elements: &mut StageInput<SyntaxElement>,
     data_stack: &mut DataStack,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
@@ -60,8 +69,9 @@ fn execute_inner(
     if debug {
         dbg!(&syntax_element);
     }
+    syntax_elements.add(syntax_element);
 
-    match evaluate(syntax_element, data_stack) {
+    match evaluate(syntax_elements.reader(), data_stack) {
         Ok(()) => {}
         Err(PipelineError::NotEnoughInput(_)) => {
             return Ok(ControlFlow::Continue(()))
