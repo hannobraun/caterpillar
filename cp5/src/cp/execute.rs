@@ -61,7 +61,13 @@ fn execute_inner(
         dbg!(&syntax_element);
     }
 
-    evaluate(syntax_element, data_stack)?;
+    match evaluate(syntax_element, data_stack) {
+        Ok(()) => {}
+        Err(PipelineError::NotEnoughInput(_)) => {
+            return Ok(ControlFlow::Continue(()))
+        }
+        Err(PipelineError::Stage(err)) => return Err(err.into()),
+    }
 
     Ok(ControlFlow::Continue(()))
 }

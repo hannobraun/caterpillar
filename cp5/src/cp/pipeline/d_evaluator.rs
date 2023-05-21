@@ -2,16 +2,20 @@ use crate::cp::{
     data_stack::Value, syntax::SyntaxElement, DataStack, DataStackError,
 };
 
+use super::PipelineError;
+
 pub fn evaluate(
     syntax_element: SyntaxElement,
     data_stack: &mut DataStack,
-) -> Result<(), EvaluatorError> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
         SyntaxElement::Block { syntax_tree } => {
             data_stack.push(Value::Block(syntax_tree));
             Ok(())
         }
-        SyntaxElement::Word(word) => evaluate_word(word, data_stack),
+        SyntaxElement::Word(word) => {
+            evaluate_word(word, data_stack).map_err(PipelineError::Stage)
+        }
     }
 }
 
