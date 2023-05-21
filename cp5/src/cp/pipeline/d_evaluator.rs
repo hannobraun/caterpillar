@@ -8,20 +8,20 @@ pub fn evaluate(
     syntax_element: SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    evaluate_syntax_element(syntax_element, data_stack)
+    evaluate_syntax_element(&syntax_element, data_stack)
 }
 
 fn evaluate_syntax_element(
-    syntax_element: SyntaxElement,
+    syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
         SyntaxElement::Block { syntax_tree } => {
-            data_stack.push(Value::Block(syntax_tree));
+            data_stack.push(Value::Block(syntax_tree.clone()));
             Ok(())
         }
         SyntaxElement::Word(word) => {
-            evaluate_word(&word, data_stack).map_err(PipelineError::Stage)
+            evaluate_word(word, data_stack).map_err(PipelineError::Stage)
         }
     }
 }
