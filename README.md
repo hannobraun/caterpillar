@@ -2,7 +2,7 @@
 
 An experiment in programming language design.
 
-This project is organized as a series of prototypes, each labeled `cp<n>`, where `<n>` is a sequential integer. Check out the top-level directory for currently active prototypes, and the [`archive/`](archive/) directory for completed or abandoned prototypes.
+This project is organized as a series of prototypes, each labeled `cp<n>`, where `<n>` is a sequential integer. Check out the top-level directory for currently active prototypes, and the [`archive/`](archive/) directory for completed or abandoned ones.
 
 
 ## Acknowledgements
