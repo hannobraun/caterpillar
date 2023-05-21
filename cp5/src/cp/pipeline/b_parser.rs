@@ -43,7 +43,7 @@ fn parse_block(
                 return Ok(SyntaxElement::Block { syntax_tree });
             }
             _ => {
-                let syntax_element = parse(tokens)?;
+                let syntax_element = parse_syntax_element(tokens)?;
                 syntax_tree.elements.push(syntax_element)
             }
         }
