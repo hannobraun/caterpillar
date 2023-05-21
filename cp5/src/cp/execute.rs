@@ -67,7 +67,7 @@ fn execute_inner(
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("{kind}\n\t{chars:?}\n\t{tokens:?}")]
+#[error("{kind}\n\t{tokens:?}\n\t{chars:?}")]
 pub struct Error {
     pub kind: ErrorKind,
     pub tokens: StageInput<Token>,
