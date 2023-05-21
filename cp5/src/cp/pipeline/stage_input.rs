@@ -16,12 +16,22 @@ impl<T> StageInput<T> {
         self.elements.push_back(element)
     }
 
+    pub fn reader(&mut self) -> StageInputReader<T> {
+        StageInputReader { inner: self }
+    }
+}
+
+pub struct StageInputReader<'r, T> {
+    inner: &'r mut StageInput<T>,
+}
+
+impl<'r, T> StageInputReader<'r, T> {
     pub fn peek(&self) -> Result<&T, NoMoreInput> {
-        self.elements.front().ok_or(NoMoreInput)
+        self.inner.elements.front().ok_or(NoMoreInput)
     }
 
     pub fn next(&mut self) -> Result<T, NoMoreInput> {
-        self.elements.pop_front().ok_or(NoMoreInput)
+        self.inner.elements.pop_front().ok_or(NoMoreInput)
     }
 }
 
