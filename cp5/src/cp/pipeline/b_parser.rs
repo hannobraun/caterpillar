@@ -5,9 +5,9 @@ use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
 pub fn parse(
     mut tokens: StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    let syntax_element = parse_syntax_element(&mut tokens);
+    let syntax_element = parse_syntax_element(&mut tokens)?;
     tokens.take();
-    syntax_element
+    Ok(syntax_element)
 }
 
 fn parse_syntax_element(
