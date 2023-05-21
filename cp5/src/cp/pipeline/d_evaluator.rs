@@ -11,11 +11,11 @@ pub fn evaluate(
             data_stack.push(Value::Block(syntax_tree));
             Ok(())
         }
-        SyntaxElement::Word(word) => evaluator_word(word, data_stack),
+        SyntaxElement::Word(word) => evaluate_word(word, data_stack),
     }
 }
 
-fn evaluator_word(
+fn evaluate_word(
     word: String,
     data_stack: &mut DataStack,
 ) -> Result<(), EvaluatorError> {
