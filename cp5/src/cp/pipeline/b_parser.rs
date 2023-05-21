@@ -1,27 +1,27 @@
 use crate::cp::syntax::{SyntaxElement, SyntaxTree};
 
-use super::{a_tokenizer::Token, stage_input::StageInput, PipelineError};
+use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
 
 pub fn parse(
-    tokens: &mut StageInput<Token>,
+    tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens.reader().peek()? {
+    match tokens.peek()? {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
             let word = parse_word(tokens)?;
             Ok(SyntaxElement::Word(word))
         }
         _ => {
-            let token = tokens.reader().next()?;
+            let token = tokens.next()?;
             Err(PipelineError::Stage(ParserError::UnexpectedToken(token)))
         }
     }
 }
 
 fn parse_block(
-    tokens: &mut StageInput<Token>,
+    tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    let open = tokens.reader().next()?;
+    let open = tokens.next()?;
     let Token::CurlyBracketOpen = open else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(open)));
     };
@@ -31,9 +31,9 @@ fn parse_block(
     };
 
     loop {
-        match tokens.reader().peek()? {
+        match tokens.peek()? {
             Token::CurlyBracketClose => {
-                let _ = tokens.reader().next();
+                let _ = tokens.next();
                 return Ok(SyntaxElement::Block { syntax_tree });
             }
             _ => {
@@ -45,9 +45,9 @@ fn parse_block(
 }
 
 fn parse_word(
-    tokens: &mut StageInput<Token>,
+    tokens: &mut StageInputReader<Token>,
 ) -> Result<String, PipelineError<ParserError>> {
-    let token = tokens.reader().next()?;
+    let token = tokens.next()?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(token)));
     };
