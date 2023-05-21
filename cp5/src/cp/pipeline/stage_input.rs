@@ -32,7 +32,7 @@ pub struct StageInputReader<'r, T> {
 
 impl<'r, T> StageInputReader<'r, T> {
     pub fn peek(&self) -> Result<&T, NoMoreInput> {
-        self.inner.elements.front().ok_or(NoMoreInput)
+        self.inner.elements.get(self.num_read).ok_or(NoMoreInput)
     }
 
     pub fn next(&mut self) -> Result<&T, NoMoreInput> {
