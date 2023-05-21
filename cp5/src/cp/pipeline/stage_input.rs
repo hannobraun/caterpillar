@@ -17,12 +17,16 @@ impl<T> StageInput<T> {
     }
 
     pub fn reader(&mut self) -> StageInputReader<T> {
-        StageInputReader { inner: self }
+        StageInputReader {
+            inner: self,
+            num_read: 0,
+        }
     }
 }
 
 pub struct StageInputReader<'r, T> {
     inner: &'r mut StageInput<T>,
+    num_read: usize,
 }
 
 impl<'r, T> StageInputReader<'r, T> {
@@ -30,8 +34,15 @@ impl<'r, T> StageInputReader<'r, T> {
         self.inner.elements.front().ok_or(NoMoreInput)
     }
 
-    pub fn next(&mut self) -> Result<T, NoMoreInput> {
-        self.inner.elements.pop_front().ok_or(NoMoreInput)
+    pub fn next(&mut self) -> Result<&T, NoMoreInput> {
+        let element =
+            self.inner.elements.get(self.num_read).ok_or(NoMoreInput)?;
+        self.num_read += 1;
+        Ok(element)
+    }
+
+    pub fn take(&mut self) {
+        let _ = self.inner.elements.drain(..self.num_read).last();
     }
 }
 

@@ -5,7 +5,9 @@ use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
 pub fn parse(
     mut tokens: StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    parse_syntax_element(&mut tokens)
+    let syntax_element = parse_syntax_element(&mut tokens);
+    tokens.take();
+    syntax_element
 }
 
 fn parse_syntax_element(
@@ -19,7 +21,9 @@ fn parse_syntax_element(
         }
         _ => {
             let token = tokens.next()?;
-            Err(PipelineError::Stage(ParserError::UnexpectedToken(token)))
+            Err(PipelineError::Stage(ParserError::UnexpectedToken(
+                token.clone(),
+            )))
         }
     }
 }
@@ -29,7 +33,9 @@ fn parse_block(
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
     let open = tokens.next()?;
     let Token::CurlyBracketOpen = open else {
-        return Err(PipelineError::Stage(ParserError::UnexpectedToken(open)));
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            open.clone()
+        )));
     };
 
     let mut syntax_tree = SyntaxTree {
@@ -55,9 +61,11 @@ fn parse_word(
 ) -> Result<String, PipelineError<ParserError>> {
     let token = tokens.next()?;
     let Token::Ident(ident) = token else {
-        return Err(PipelineError::Stage(ParserError::UnexpectedToken(token)));
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            token.clone()
+        )));
     };
-    Ok(ident)
+    Ok(ident.clone())
 }
 
 #[derive(Debug, thiserror::Error)]
