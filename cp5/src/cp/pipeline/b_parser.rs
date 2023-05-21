@@ -5,6 +5,12 @@ use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
 pub fn parse(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
+    parse_syntax_element(tokens)
+}
+
+fn parse_syntax_element(
+    tokens: &mut StageInputReader<Token>,
+) -> Result<SyntaxElement, PipelineError<ParserError>> {
     match tokens.peek()? {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
