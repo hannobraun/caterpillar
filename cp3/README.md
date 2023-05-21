@@ -14,7 +14,7 @@ This iteration of Caterpillar is a more focused version of an [earlier prototype
 
 ## Status
 
-Work on this prototype is paused, while I [try another approach to the language implementation](../cp4/).
+Work on this prototype is paused, while I [try another approach to the language implementation](../cp5/).
 
 
 ## Concept
