@@ -24,6 +24,7 @@ impl<T> StageInput<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct StageInputReader<'r, T> {
     inner: &'r mut StageInput<T>,
     num_read: usize,
