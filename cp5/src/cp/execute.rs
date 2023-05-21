@@ -34,6 +34,7 @@ pub fn execute(
             Err(kind) => {
                 return Err(Error {
                     kind,
+                    syntax_elements,
                     tokens,
                     chars,
                 })
@@ -83,9 +84,10 @@ fn execute_inner(
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("{kind}\n\t{tokens:?}\n\t{chars:?}")]
+#[error("{kind}\n\t{syntax_elements:?}\n\t{tokens:?}\n\t{chars:?}")]
 pub struct Error {
     pub kind: ErrorKind,
+    pub syntax_elements: StageInput<SyntaxElement>,
     pub tokens: StageInput<Token>,
     pub chars: VecDeque<char>,
 }
