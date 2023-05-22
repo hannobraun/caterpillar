@@ -34,8 +34,8 @@ fn evaluate_word(
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
         "not" => {
-            let a = data_stack.pop_bool()?;
-            let x = !a;
+            let b = data_stack.pop_bool()?;
+            let x = !b;
             data_stack.push(x);
         }
         _ => {
