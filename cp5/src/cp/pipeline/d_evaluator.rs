@@ -38,6 +38,12 @@ fn evaluate_word(
             let b = data_stack.pop_bool()?;
             data_stack.push(!b);
         }
+        "eval" => {
+            let block = data_stack.pop_block()?;
+            for syntax_element in block.elements {
+                evaluate_syntax_element(&syntax_element, data_stack)?;
+            }
+        }
         _ => {
             return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
                 word.into(),

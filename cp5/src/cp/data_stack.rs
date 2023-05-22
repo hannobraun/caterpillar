@@ -27,6 +27,16 @@ impl DataStack {
         }
     }
 
+    pub fn pop_block(&mut self) -> Result<SyntaxTree, DataStackError> {
+        match self.pop_any()? {
+            Value::Block(value) => Ok(value),
+            value => Err(DataStackError::UnexpectedType {
+                expected: "block",
+                actual: value,
+            }),
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }

@@ -10,6 +10,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
     tests.insert(("bool", "true"), "true");
     tests.insert(("bool", "false not"), "false not");
+    tests.insert(("block", "eval"), "{ true } eval");
 
     let mut results = Vec::new();
 
