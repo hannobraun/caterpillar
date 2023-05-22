@@ -54,3 +54,9 @@ pub enum EvaluatorError {
     #[error("Unknown word: `{0}`")]
     UnknownWord(String),
 }
+
+impl From<DataStackError> for PipelineError<EvaluatorError> {
+    fn from(err: DataStackError) -> Self {
+        PipelineError::Stage(err.into())
+    }
+}
