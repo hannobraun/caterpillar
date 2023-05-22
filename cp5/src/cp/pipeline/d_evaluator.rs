@@ -8,7 +8,8 @@ pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    evaluate_syntax_element(syntax_elements.next()?, data_stack)?;
+    let syntax_element = syntax_elements.next()?;
+    evaluate_syntax_element(syntax_element, data_stack)?;
     syntax_elements.take();
     Ok(())
 }
