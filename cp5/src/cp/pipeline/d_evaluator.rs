@@ -35,8 +35,7 @@ fn evaluate_word(
         "false" => data_stack.push(false),
         "not" => {
             let b = data_stack.pop_bool()?;
-            let x = !b;
-            data_stack.push(x);
+            data_stack.push(!b);
         }
         _ => {
             return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
