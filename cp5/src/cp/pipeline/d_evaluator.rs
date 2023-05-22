@@ -22,16 +22,14 @@ fn evaluate_syntax_element(
             data_stack.push(Value::Block(syntax_tree.clone()));
             Ok(())
         }
-        SyntaxElement::Word(word) => {
-            evaluate_word(word, data_stack).map_err(PipelineError::Stage)
-        }
+        SyntaxElement::Word(word) => evaluate_word(word, data_stack),
     }
 }
 
 fn evaluate_word(
     word: &str,
     data_stack: &mut DataStack,
-) -> Result<(), EvaluatorError> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
@@ -40,7 +38,11 @@ fn evaluate_word(
             let x = !a;
             data_stack.push(x);
         }
-        _ => return Err(EvaluatorError::UnknownWord(word.into())),
+        _ => {
+            return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
+                word.into(),
+            )))
+        }
     }
 
     Ok(())
