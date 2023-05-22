@@ -8,16 +8,16 @@ pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    evaluate_syntax_element(&mut syntax_elements, data_stack)?;
+    evaluate_syntax_element(syntax_elements.next()?, data_stack)?;
     syntax_elements.take();
     Ok(())
 }
 
 fn evaluate_syntax_element(
-    syntax_elements: &mut StageInputReader<SyntaxElement>,
+    syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    match syntax_elements.next()? {
+    match syntax_element {
         SyntaxElement::Block { syntax_tree } => {
             data_stack.push(Value::Block(syntax_tree.clone()));
             Ok(())
