@@ -19,8 +19,8 @@ fn parse_syntax_element(
             SyntaxElement::Block { syntax_tree }
         }
         Token::Ident(_) => {
-            let word = parse_ident(tokens)?;
-            SyntaxElement::Word(word)
+            let ident = parse_ident(tokens)?;
+            SyntaxElement::Word(ident)
         }
         token => {
             return Err(PipelineError::Stage(ParserError::UnexpectedToken(
