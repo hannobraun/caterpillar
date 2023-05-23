@@ -18,6 +18,10 @@ fn parse_syntax_element(
             let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block { syntax_tree }
         }
+        Token::Fn => {
+            let (name, body) = parse_fn(tokens)?;
+            SyntaxElement::Function { name, body }
+        }
         Token::Ident(_) => {
             let ident = parse_ident(tokens)?;
             SyntaxElement::Word(ident)
@@ -53,6 +57,16 @@ fn parse_block(
             }
         }
     }
+}
+
+fn parse_fn(
+    tokens: &mut StageInputReader<Token>,
+) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
+    expect_token(tokens, Token::Fn)?;
+    let name = parse_ident(tokens)?;
+    let body = parse_block(tokens)?;
+
+    Ok((name, body))
 }
 
 fn parse_ident(

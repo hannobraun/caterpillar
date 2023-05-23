@@ -23,6 +23,10 @@ fn evaluate_syntax_element(
             data_stack.push(Value::Block(syntax_tree.clone()));
             Ok(())
         }
+        SyntaxElement::Function { .. } => {
+            // not supported yet
+            Ok(())
+        }
         SyntaxElement::Word(word) => evaluate_word(word, data_stack),
     }
 }
