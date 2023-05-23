@@ -13,22 +13,24 @@ pub fn parse(
 fn parse_syntax_element(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    match tokens.peek()? {
+    let syntax_element = match tokens.peek()? {
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;
-            Ok(SyntaxElement::Block { syntax_tree })
+            SyntaxElement::Block { syntax_tree }
         }
         Token::Ident(_) => {
             let word = parse_ident(tokens)?;
-            Ok(SyntaxElement::Word(word))
+            SyntaxElement::Word(word)
         }
         _ => {
             let token = tokens.next()?;
-            Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            return Err(PipelineError::Stage(ParserError::UnexpectedToken(
                 token.clone(),
-            )))
+            )));
         }
-    }
+    };
+
+    Ok(syntax_element)
 }
 
 fn parse_block(
