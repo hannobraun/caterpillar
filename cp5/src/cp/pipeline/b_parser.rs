@@ -16,7 +16,7 @@ fn parse_syntax_element(
     match tokens.peek()? {
         Token::CurlyBracketOpen => parse_block(tokens),
         Token::Ident(_) => {
-            let word = parse_word(tokens)?;
+            let word = parse_ident(tokens)?;
             Ok(SyntaxElement::Word(word))
         }
         _ => {
@@ -51,7 +51,7 @@ fn parse_block(
     }
 }
 
-fn parse_word(
+fn parse_ident(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<String, PipelineError<ParserError>> {
     let token = tokens.next()?;
