@@ -14,7 +14,10 @@ fn parse_syntax_element(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
     match tokens.peek()? {
-        Token::CurlyBracketOpen => parse_block(tokens),
+        Token::CurlyBracketOpen => {
+            let syntax_tree = parse_block(tokens)?;
+            Ok(SyntaxElement::Block { syntax_tree })
+        }
         Token::Ident(_) => {
             let word = parse_ident(tokens)?;
             Ok(SyntaxElement::Word(word))
@@ -30,7 +33,7 @@ fn parse_syntax_element(
 
 fn parse_block(
     tokens: &mut StageInputReader<Token>,
-) -> Result<SyntaxElement, PipelineError<ParserError>> {
+) -> Result<SyntaxTree, PipelineError<ParserError>> {
     expect_token(tokens, Token::CurlyBracketOpen)?;
 
     let mut syntax_tree = SyntaxTree {
@@ -41,7 +44,7 @@ fn parse_block(
         match tokens.peek()? {
             Token::CurlyBracketClose => {
                 let _ = tokens.next();
-                return Ok(SyntaxElement::Block { syntax_tree });
+                return Ok(syntax_tree);
             }
             _ => {
                 let syntax_element = parse_syntax_element(tokens)?;
