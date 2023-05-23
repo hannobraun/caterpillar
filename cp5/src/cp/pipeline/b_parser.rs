@@ -22,8 +22,7 @@ fn parse_syntax_element(
             let word = parse_ident(tokens)?;
             SyntaxElement::Word(word)
         }
-        _ => {
-            let token = tokens.next()?;
+        token => {
             return Err(PipelineError::Stage(ParserError::UnexpectedToken(
                 token.clone(),
             )));
