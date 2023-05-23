@@ -31,12 +31,7 @@ fn parse_syntax_element(
 fn parse_block(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement, PipelineError<ParserError>> {
-    let open = tokens.next()?;
-    let Token::CurlyBracketOpen = open else {
-        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
-            open.clone()
-        )));
-    };
+    expect_token(tokens, Token::CurlyBracketOpen)?;
 
     let mut syntax_tree = SyntaxTree {
         elements: Vec::new(),
@@ -66,6 +61,21 @@ fn parse_word(
         )));
     };
     Ok(ident.clone())
+}
+
+fn expect_token(
+    tokens: &mut StageInputReader<Token>,
+    expected: Token,
+) -> Result<(), PipelineError<ParserError>> {
+    let token = tokens.next()?;
+
+    if token != &expected {
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            token.clone(),
+        )));
+    };
+
+    Ok(())
 }
 
 #[derive(Debug, thiserror::Error)]
