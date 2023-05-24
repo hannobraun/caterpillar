@@ -57,6 +57,17 @@ fn evaluate_word(
             }
         }
         _ => {
+            if let Some(body) = functions.get(word) {
+                for syntax_element in body.elements {
+                    evaluate_syntax_element(
+                        &syntax_element,
+                        data_stack,
+                        functions,
+                    )?;
+                }
+                return Ok(());
+            }
+
             return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
                 word.into(),
             )));
