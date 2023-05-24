@@ -1,5 +1,6 @@
 use crate::cp::{
     data_stack::Value, syntax::SyntaxElement, DataStack, DataStackError,
+    Functions,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -7,9 +8,10 @@ use super::{stage_input::StageInputReader, PipelineError};
 pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.next()?;
-    evaluate_syntax_element(syntax_element, data_stack)?;
+    evaluate_syntax_element(syntax_element, data_stack, functions)?;
     syntax_elements.take();
     Ok(())
 }
@@ -17,6 +19,7 @@ pub fn evaluate(
 fn evaluate_syntax_element(
     syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
         SyntaxElement::Block { syntax_tree } => {
@@ -27,13 +30,14 @@ fn evaluate_syntax_element(
             // not supported yet
             Ok(())
         }
-        SyntaxElement::Word(word) => evaluate_word(word, data_stack),
+        SyntaxElement::Word(word) => evaluate_word(word, data_stack, functions),
     }
 }
 
 fn evaluate_word(
     word: &str,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
         "true" => data_stack.push(true),
@@ -45,7 +49,11 @@ fn evaluate_word(
         "eval" => {
             let block = data_stack.pop_block()?;
             for syntax_element in block.elements {
-                evaluate_syntax_element(&syntax_element, data_stack)?;
+                evaluate_syntax_element(
+                    &syntax_element,
+                    data_stack,
+                    functions,
+                )?;
             }
         }
         _ => {

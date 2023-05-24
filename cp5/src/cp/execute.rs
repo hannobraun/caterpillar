@@ -9,12 +9,13 @@ use super::{
         PipelineError,
     },
     syntax::SyntaxElement,
-    DataStack,
+    DataStack, Functions,
 };
 
 pub fn execute(
     code: &str,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
     debug: bool,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect();
@@ -27,6 +28,7 @@ pub fn execute(
             &mut tokens,
             &mut syntax_elements,
             data_stack,
+            functions,
             debug,
         ) {
             Ok(ControlFlow::Continue(())) => continue,
@@ -50,6 +52,7 @@ fn execute_inner(
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
     data_stack: &mut DataStack,
+    functions: &mut Functions,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
     let Some(token) = tokenize(chars) else {
@@ -72,7 +75,7 @@ fn execute_inner(
     }
     syntax_elements.add(syntax_element);
 
-    match evaluate(syntax_elements.reader(), data_stack) {
+    match evaluate(syntax_elements.reader(), data_stack, functions) {
         Ok(()) => {}
         Err(PipelineError::NotEnoughInput(_)) => {
             return Ok(ControlFlow::Continue(()))
