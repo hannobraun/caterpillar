@@ -59,7 +59,7 @@ fn evaluate_word(
         _ => {
             return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
                 word.into(),
-            )))
+            )));
         }
     }
 
