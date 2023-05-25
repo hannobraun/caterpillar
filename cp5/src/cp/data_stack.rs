@@ -1,5 +1,6 @@
 use super::syntax::SyntaxTree;
 
+#[derive(Debug)]
 pub struct DataStack {
     values: Vec<Value>,
 }
