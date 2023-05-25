@@ -7,5 +7,6 @@ pub struct SyntaxTree {
 pub enum SyntaxElement {
     Block { syntax_tree: SyntaxTree },
     Function { name: String, body: SyntaxTree },
+    Module { name: String, body: SyntaxTree },
     Word(String),
 }

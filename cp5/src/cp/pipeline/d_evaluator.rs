@@ -32,6 +32,10 @@ fn evaluate_syntax_element(
             functions.define("".into(), name.clone(), body.clone());
             Ok(())
         }
+        SyntaxElement::Module { .. } => {
+            // not supported yet
+            Ok(())
+        }
         SyntaxElement::Word(word) => {
             evaluate_word(word, data_stack, functions, tests)
         }

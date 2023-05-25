@@ -22,6 +22,10 @@ fn parse_syntax_element(
             let (name, body) = parse_fn(tokens)?;
             SyntaxElement::Function { name, body }
         }
+        Token::Mod => {
+            let (name, body) = parse_mod(tokens)?;
+            SyntaxElement::Module { name, body }
+        }
         Token::Ident(_) => {
             let ident = parse_ident(tokens)?;
             SyntaxElement::Word(ident)
@@ -63,6 +67,16 @@ fn parse_fn(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
     expect_token(tokens, Token::Fn)?;
+    let name = parse_ident(tokens)?;
+    let body = parse_block(tokens)?;
+
+    Ok((name, body))
+}
+
+fn parse_mod(
+    tokens: &mut StageInputReader<Token>,
+) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
+    expect_token(tokens, Token::Mod)?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
 
