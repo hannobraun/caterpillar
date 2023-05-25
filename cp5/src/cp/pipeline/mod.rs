@@ -8,5 +8,7 @@ pub mod stage_input;
 pub enum PipelineError<T> {
     #[error(transparent)]
     NotEnoughInput(#[from] stage_input::NoMoreInput),
+
+    #[error(transparent)]
     Stage(T),
 }
