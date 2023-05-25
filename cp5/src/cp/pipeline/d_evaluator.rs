@@ -29,7 +29,7 @@ fn evaluate_syntax_element(
             Ok(())
         }
         SyntaxElement::Function { name, body } => {
-            functions.define(name.clone(), body.clone());
+            functions.define("".into(), name.clone(), body.clone());
             Ok(())
         }
         SyntaxElement::Word(word) => {
@@ -63,7 +63,7 @@ fn evaluate_word(
             }
         }
         _ => {
-            if let Some(body) = functions.get(word) {
+            if let Some(body) = functions.get("", word) {
                 for syntax_element in body.elements {
                     evaluate_syntax_element(
                         &syntax_element,

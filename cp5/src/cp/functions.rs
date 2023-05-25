@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use super::syntax::SyntaxTree;
 
 pub struct Functions {
-    inner: BTreeMap<String, SyntaxTree>,
+    inner: BTreeMap<(String, String), SyntaxTree>,
 }
 
 impl Functions {
@@ -13,11 +13,11 @@ impl Functions {
         }
     }
 
-    pub fn define(&mut self, name: String, body: SyntaxTree) {
-        self.inner.insert(name, body);
+    pub fn define(&mut self, module: String, name: String, body: SyntaxTree) {
+        self.inner.insert((module, name), body);
     }
 
-    pub fn get(&self, name: &str) -> Option<SyntaxTree> {
-        self.inner.get(name).cloned()
+    pub fn get(&self, module: &str, name: &str) -> Option<SyntaxTree> {
+        self.inner.get(&(module.into(), name.into())).cloned()
     }
 }
