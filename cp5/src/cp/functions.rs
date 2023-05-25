@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{btree_map, BTreeMap};
 
 use super::syntax::SyntaxTree;
 
@@ -19,5 +19,14 @@ impl Functions {
 
     pub fn get(&self, module: &str, name: &str) -> Option<SyntaxTree> {
         self.inner.get(&(module.into(), name.into())).cloned()
+    }
+}
+
+impl IntoIterator for Functions {
+    type Item = ((String, String), SyntaxTree);
+    type IntoIter = btree_map::IntoIter<(String, String), SyntaxTree>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
     }
 }
