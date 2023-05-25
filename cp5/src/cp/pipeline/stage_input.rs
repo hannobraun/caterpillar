@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use crate::cp::syntax::{SyntaxElement, SyntaxTree};
+
 #[derive(Debug)]
 pub struct StageInput<T> {
     elements: VecDeque<T>,
@@ -20,6 +22,14 @@ impl<T> StageInput<T> {
         StageInputReader {
             inner: self,
             num_read: 0,
+        }
+    }
+}
+
+impl From<SyntaxTree> for StageInput<SyntaxElement> {
+    fn from(syntax_tree: SyntaxTree) -> Self {
+        Self {
+            elements: syntax_tree.elements.into(),
         }
     }
 }
