@@ -8,4 +8,9 @@ pub use self::{
     data_stack::{DataStack, DataStackError},
     execute::{execute, Error},
     functions::Functions,
+    pipeline::{
+        d_evaluator::{evaluate, EvaluatorError},
+        stage_input::StageInput,
+        PipelineError,
+    },
 };
