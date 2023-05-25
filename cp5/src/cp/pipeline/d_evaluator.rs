@@ -9,9 +9,10 @@ pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.next()?;
-    evaluate_syntax_element(syntax_element, data_stack, functions)?;
+    evaluate_syntax_element(syntax_element, data_stack, functions, tests)?;
     syntax_elements.take();
     Ok(())
 }
@@ -20,6 +21,7 @@ fn evaluate_syntax_element(
     syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
         SyntaxElement::Block { syntax_tree } => {
@@ -30,7 +32,9 @@ fn evaluate_syntax_element(
             functions.define(name.clone(), body.clone());
             Ok(())
         }
-        SyntaxElement::Word(word) => evaluate_word(word, data_stack, functions),
+        SyntaxElement::Word(word) => {
+            evaluate_word(word, data_stack, functions, tests)
+        }
     }
 }
 
@@ -38,6 +42,7 @@ fn evaluate_word(
     word: &str,
     data_stack: &mut DataStack,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
         "true" => data_stack.push(true),
@@ -53,6 +58,7 @@ fn evaluate_word(
                     &syntax_element,
                     data_stack,
                     functions,
+                    tests,
                 )?;
             }
         }
@@ -63,6 +69,7 @@ fn evaluate_word(
                         &syntax_element,
                         data_stack,
                         functions,
+                        tests,
                     )?;
                 }
                 return Ok(());
