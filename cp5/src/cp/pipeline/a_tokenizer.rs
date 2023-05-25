@@ -17,6 +17,7 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
             "{" => return Some(Token::CurlyBracketOpen),
             "}" => return Some(Token::CurlyBracketClose),
             "fn" => return Some(Token::Fn),
+            "mod" => return Some(Token::Mod),
             _ => {}
         }
     }
@@ -33,5 +34,6 @@ pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
     Fn,
+    Mod,
     Ident(String),
 }
