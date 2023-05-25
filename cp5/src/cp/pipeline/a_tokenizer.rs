@@ -14,15 +14,9 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
         buf.push(ch);
 
         match buf.as_str() {
-            "{" => {
-                return Some(Token::CurlyBracketOpen);
-            }
-            "}" => {
-                return Some(Token::CurlyBracketClose);
-            }
-            "fn" => {
-                return Some(Token::Fn);
-            }
+            "{" => return Some(Token::CurlyBracketOpen),
+            "}" => return Some(Token::CurlyBracketClose),
+            "fn" => return Some(Token::Fn),
             _ => {}
         }
     }
