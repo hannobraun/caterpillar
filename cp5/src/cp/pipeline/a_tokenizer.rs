@@ -31,14 +31,18 @@ fn tokenize_inner(
         match buf.as_str() {
             "{" => return Ok(Token::CurlyBracketOpen),
             "}" => return Ok(Token::CurlyBracketClose),
-            "fn" => return Ok(Token::Fn),
-            "mod" => return Ok(Token::Mod),
             _ => {}
         }
     }
 
     if buf.is_empty() {
         return Err(PipelineError::NotEnoughInput(NoMoreInput));
+    }
+
+    match buf.as_str() {
+        "fn" => return Ok(Token::Fn),
+        "mod" => return Ok(Token::Mod),
+        _ => {}
     }
 
     Ok(Token::Ident(buf))
