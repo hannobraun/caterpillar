@@ -26,6 +26,14 @@ impl<T> StageInput<T> {
     }
 }
 
+impl<T> FromIterator<T> for StageInput<T> {
+    fn from_iter<I: IntoIterator<Item = T>>(elements: I) -> Self {
+        Self {
+            elements: elements.into_iter().collect(),
+        }
+    }
+}
+
 impl From<SyntaxTree> for StageInput<SyntaxElement> {
     fn from(syntax_tree: SyntaxTree) -> Self {
         Self {
