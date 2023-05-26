@@ -1,19 +1,24 @@
-use std::{collections::VecDeque, convert::Infallible};
+use std::convert::Infallible;
 
-use super::{stage_input::NoMoreInput, PipelineError};
+use super::{
+    stage_input::{NoMoreInput, StageInputReader},
+    PipelineError,
+};
 
 pub fn tokenize(
-    chars: &mut VecDeque<char>,
+    mut chars: StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
-    tokenize_inner(chars)
+    let token = tokenize_inner(&mut chars)?;
+    chars.take();
+    Ok(token)
 }
 
 fn tokenize_inner(
-    chars: &mut VecDeque<char>,
+    chars: &mut StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
-    while let Some(ch) = chars.pop_front() {
+    while let Ok(&ch) = chars.next() {
         if ch.is_whitespace() && buf.is_empty() {
             continue;
         }

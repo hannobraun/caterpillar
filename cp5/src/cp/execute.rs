@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, ops::ControlFlow};
+use std::ops::ControlFlow;
 
 use super::{
     pipeline::{
@@ -50,7 +50,7 @@ pub fn execute(
 }
 
 fn execute_inner(
-    chars: &mut VecDeque<char>,
+    chars: &mut StageInput<char>,
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
     data_stack: &mut DataStack,
@@ -58,7 +58,7 @@ fn execute_inner(
     tests: &mut Functions,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
-    let Ok(token) = tokenize(chars) else {
+    let Ok(token) = tokenize(chars.reader()) else {
         return Ok(ControlFlow::Break(()))
     };
     if debug {
@@ -95,7 +95,7 @@ pub struct Error {
     pub kind: ErrorKind,
     pub syntax_elements: StageInput<SyntaxElement>,
     pub tokens: StageInput<Token>,
-    pub chars: VecDeque<char>,
+    pub chars: StageInput<char>,
 }
 
 #[derive(Debug, thiserror::Error)]
