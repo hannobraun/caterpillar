@@ -5,6 +5,12 @@ use super::{stage_input::NoMoreInput, PipelineError};
 pub fn tokenize(
     chars: &mut VecDeque<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
+    tokenize_inner(chars)
+}
+
+fn tokenize_inner(
+    chars: &mut VecDeque<char>,
+) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
     while let Some(ch) = chars.pop_front() {
