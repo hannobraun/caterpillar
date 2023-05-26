@@ -1,6 +1,10 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, convert::Infallible};
 
-pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
+use super::{stage_input::NoMoreInput, PipelineError};
+
+pub fn tokenize(
+    chars: &mut VecDeque<char>,
+) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
     while let Some(ch) = chars.pop_front() {
@@ -14,19 +18,19 @@ pub fn tokenize(chars: &mut VecDeque<char>) -> Option<Token> {
         buf.push(ch);
 
         match buf.as_str() {
-            "{" => return Some(Token::CurlyBracketOpen),
-            "}" => return Some(Token::CurlyBracketClose),
-            "fn" => return Some(Token::Fn),
-            "mod" => return Some(Token::Mod),
+            "{" => return Ok(Token::CurlyBracketOpen),
+            "}" => return Ok(Token::CurlyBracketClose),
+            "fn" => return Ok(Token::Fn),
+            "mod" => return Ok(Token::Mod),
             _ => {}
         }
     }
 
     if buf.is_empty() {
-        return None;
+        return Err(PipelineError::NotEnoughInput(NoMoreInput));
     }
 
-    Some(Token::Ident(buf))
+    Ok(Token::Ident(buf))
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

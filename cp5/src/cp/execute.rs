@@ -58,7 +58,7 @@ fn execute_inner(
     tests: &mut Functions,
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
-    let Some(token) = tokenize(chars) else {
+    let Ok(token) = tokenize(chars) else {
         return Ok(ControlFlow::Break(()))
     };
     if debug {
