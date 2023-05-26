@@ -42,6 +42,7 @@ fn tokenize_inner(
     match buf.as_str() {
         "fn" => return Ok(Token::Fn),
         "mod" => return Ok(Token::Mod),
+        "test" => return Ok(Token::Test),
         _ => {}
     }
 
@@ -54,5 +55,6 @@ pub enum Token {
     CurlyBracketClose,
     Fn,
     Mod,
+    Test,
     Ident(String),
 }
