@@ -19,27 +19,39 @@ impl DataStack {
     }
 
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
-        match self.pop_any()? {
-            Value::Bool(value) => Ok(value),
-            value => Err(DataStackError::UnexpectedType {
-                expected: "bool",
-                actual: value,
-            }),
-        }
+        self.pop_specific_type("bool", |value| {
+            let Value::Bool(value) = value else {
+                return Err(value);
+            };
+
+            Ok(value)
+        })
     }
 
     pub fn pop_block(&mut self) -> Result<SyntaxTree, DataStackError> {
-        match self.pop_any()? {
-            Value::Block(value) => Ok(value),
-            value => Err(DataStackError::UnexpectedType {
-                expected: "block",
-                actual: value,
-            }),
-        }
+        self.pop_specific_type("block", |value| {
+            let Value::Block(value) = value else {
+                return Err(value);
+            };
+
+            Ok(value)
+        })
     }
 
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
+    }
+
+    fn pop_specific_type<T>(
+        &mut self,
+        expected: &'static str,
+        f: impl FnOnce(Value) -> Result<T, Value>,
+    ) -> Result<T, DataStackError> {
+        let value = self.pop_any()?;
+        f(value).map_err(|value| DataStackError::UnexpectedType {
+            expected,
+            actual: value,
+        })
     }
 }
 
