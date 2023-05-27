@@ -29,7 +29,8 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         )
         .map_err(Error::Language)
         .and_then(|()| {
-            if data_stack.pop_bool()? {
+            let test_passed = data_stack.pop_bool()?;
+            if test_passed {
                 Ok(())
             } else {
                 Err(Error::TestFailed)
