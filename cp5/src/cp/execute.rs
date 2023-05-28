@@ -33,7 +33,13 @@ pub fn execute(
             tests,
             debug,
         ) {
-            Ok(ControlFlow::Continue(())) => continue,
+            Ok(ControlFlow::Continue(())) => {
+                if chars.is_empty() {
+                    break;
+                }
+
+                continue;
+            }
             Ok(ControlFlow::Break(())) => break,
             Err(kind) => {
                 return Err(Error {
@@ -59,7 +65,7 @@ fn execute_inner(
     debug: bool,
 ) -> Result<ControlFlow<(), ()>, ErrorKind> {
     let Ok(token) = tokenize(chars.reader()) else {
-        return Ok(ControlFlow::Break(()))
+        return Ok(ControlFlow::Continue(()))
     };
     if debug {
         dbg!(&token);

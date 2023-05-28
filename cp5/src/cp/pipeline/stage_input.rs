@@ -14,6 +14,10 @@ impl<T> StageInput<T> {
         }
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.elements.is_empty()
+    }
+
     pub fn add(&mut self, element: T) {
         self.elements.push_back(element)
     }
