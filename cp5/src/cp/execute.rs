@@ -1,5 +1,3 @@
-use std::ops::ControlFlow;
-
 use super::{
     pipeline::{
         a_tokenizer::{tokenize, Token},
@@ -33,14 +31,13 @@ pub fn execute(
             tests,
             debug,
         ) {
-            Ok(ControlFlow::Continue(())) => {
+            Ok(()) => {
                 if chars.is_empty() {
                     break;
                 }
 
                 continue;
             }
-            Ok(ControlFlow::Break(())) => break,
             Err(kind) => {
                 return Err(Error {
                     kind,
@@ -63,9 +60,9 @@ fn execute_inner(
     functions: &mut Functions,
     tests: &mut Functions,
     debug: bool,
-) -> Result<ControlFlow<(), ()>, ErrorKind> {
+) -> Result<(), ErrorKind> {
     let Ok(token) = tokenize(chars.reader()) else {
-        return Ok(ControlFlow::Continue(()))
+        return Ok(())
     };
     if debug {
         dbg!(&token);
@@ -74,9 +71,7 @@ fn execute_inner(
 
     let syntax_element = match parse(tokens.reader()) {
         Ok(syntax_element) => syntax_element,
-        Err(PipelineError::NotEnoughInput(_)) => {
-            return Ok(ControlFlow::Continue(()))
-        }
+        Err(PipelineError::NotEnoughInput(_)) => return Ok(()),
         Err(PipelineError::Stage(err)) => return Err(err.into()),
     };
     if debug {
@@ -86,13 +81,11 @@ fn execute_inner(
 
     match evaluate(syntax_elements.reader(), data_stack, functions, tests) {
         Ok(()) => {}
-        Err(PipelineError::NotEnoughInput(_)) => {
-            return Ok(ControlFlow::Continue(()))
-        }
+        Err(PipelineError::NotEnoughInput(_)) => return Ok(()),
         Err(PipelineError::Stage(err)) => return Err(err.into()),
     }
 
-    Ok(ControlFlow::Continue(()))
+    Ok(())
 }
 
 #[derive(Debug, thiserror::Error)]
