@@ -75,11 +75,7 @@ fn execute_inner(
     }
     syntax_elements.add(syntax_element);
 
-    match evaluate(syntax_elements.reader(), data_stack, functions, tests) {
-        Ok(()) => {}
-        Err(PipelineError::NotEnoughInput(_)) => return Ok(()),
-        Err(PipelineError::Stage(err)) => return Err(err.into()),
-    }
+    evaluate(syntax_elements.reader(), data_stack, functions, tests)?;
 
     Ok(())
 }
@@ -121,6 +117,15 @@ impl From<PipelineError<ParserError>> for ErrorKind {
         match err {
             PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
             PipelineError::Stage(err) => Self::Parser(err),
+        }
+    }
+}
+
+impl From<PipelineError<EvaluatorError>> for ErrorKind {
+    fn from(err: PipelineError<EvaluatorError>) -> Self {
+        match err {
+            PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
+            PipelineError::Stage(err) => Self::Evaluator(err),
         }
     }
 }
