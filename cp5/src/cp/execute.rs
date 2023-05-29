@@ -69,11 +69,7 @@ fn execute_inner(
     }
     tokens.add(token);
 
-    let syntax_element = match parse(tokens.reader()) {
-        Ok(syntax_element) => syntax_element,
-        Err(PipelineError::NotEnoughInput(_)) => return Ok(()),
-        Err(PipelineError::Stage(err)) => return Err(err.into()),
-    };
+    let syntax_element = parse(tokens.reader())?;
     if debug {
         dbg!(&syntax_element);
     }
@@ -116,6 +112,15 @@ impl From<PipelineError<Infallible>> for ErrorKind {
             PipelineError::Stage(_) => {
                 unreachable!("Handling infallible error")
             }
+        }
+    }
+}
+
+impl From<PipelineError<ParserError>> for ErrorKind {
+    fn from(err: PipelineError<ParserError>) -> Self {
+        match err {
+            PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
+            PipelineError::Stage(err) => Self::Parser(err),
         }
     }
 }
