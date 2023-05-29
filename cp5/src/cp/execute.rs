@@ -1,9 +1,11 @@
+use std::convert::Infallible;
+
 use super::{
     pipeline::{
         a_tokenizer::{tokenize, Token},
         b_parser::{parse, ParserError},
         d_evaluator::{evaluate, EvaluatorError},
-        stage_input::StageInput,
+        stage_input::{NoMoreInput, StageInput},
         PipelineError,
     },
     syntax::SyntaxElement,
@@ -31,7 +33,7 @@ pub fn execute(
             tests,
             debug,
         ) {
-            Ok(()) => {
+            Ok(()) | Err(ErrorKind::NotEnoughInput) => {
                 if chars.is_empty() {
                     break;
                 }
@@ -61,9 +63,7 @@ fn execute_inner(
     tests: &mut Functions,
     debug: bool,
 ) -> Result<(), ErrorKind> {
-    let Ok(token) = tokenize(chars.reader()) else {
-        return Ok(())
-    };
+    let token = tokenize(chars.reader())?;
     if debug {
         dbg!(&token);
     }
@@ -99,9 +99,23 @@ pub struct Error {
 
 #[derive(Debug, thiserror::Error)]
 pub enum ErrorKind {
+    #[error("Not enough input")]
+    NotEnoughInput,
+
     #[error("Parser error: {0}")]
     Parser(#[from] ParserError),
 
     #[error("Evaluator error: {0}")]
     Evaluator(#[from] EvaluatorError),
+}
+
+impl From<PipelineError<Infallible>> for ErrorKind {
+    fn from(err: PipelineError<Infallible>) -> Self {
+        match err {
+            PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
+            PipelineError::Stage(_) => {
+                unreachable!("Handling infallible error")
+            }
+        }
+    }
 }
