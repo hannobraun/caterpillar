@@ -20,29 +20,24 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let result = cp::execute(
-            code,
-            &mut data_stack,
-            &mut functions,
-            &mut tests,
-            false,
-        )
-        .map_err(Error::Language)
-        .and_then(|()| {
-            let test_passed = data_stack.pop_bool()?;
-            if test_passed {
-                Ok(())
-            } else {
-                Err(Error::TestFailed)
-            }
-        })
-        .and_then(|()| {
-            if data_stack.is_empty() {
-                Ok(())
-            } else {
-                Err(Error::TestReturnedTooMuch)
-            }
-        });
+        let result =
+            cp::execute(code, &mut data_stack, &mut functions, &mut tests)
+                .map_err(Error::Language)
+                .and_then(|()| {
+                    let test_passed = data_stack.pop_bool()?;
+                    if test_passed {
+                        Ok(())
+                    } else {
+                        Err(Error::TestFailed)
+                    }
+                })
+                .and_then(|()| {
+                    if data_stack.is_empty() {
+                        Ok(())
+                    } else {
+                        Err(Error::TestReturnedTooMuch)
+                    }
+                });
 
         results.push(TestReport {
             module: module.into(),

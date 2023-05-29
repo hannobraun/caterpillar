@@ -17,7 +17,6 @@ pub fn execute(
     data_stack: &mut DataStack,
     functions: &mut Functions,
     tests: &mut Functions,
-    debug: bool,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect();
     let mut tokens = StageInput::new();
@@ -31,7 +30,6 @@ pub fn execute(
             data_stack,
             functions,
             tests,
-            debug,
         ) {
             Ok(()) | Err(ErrorKind::NotEnoughInput) => {
                 if chars.is_empty() {
@@ -61,18 +59,11 @@ fn execute_inner(
     data_stack: &mut DataStack,
     functions: &mut Functions,
     tests: &mut Functions,
-    debug: bool,
 ) -> Result<(), ErrorKind> {
     let token = tokenize(chars.reader())?;
-    if debug {
-        dbg!(&token);
-    }
     tokens.add(token);
 
     let syntax_element = parse(tokens.reader())?;
-    if debug {
-        dbg!(&syntax_element);
-    }
     syntax_elements.add(syntax_element);
 
     evaluate(syntax_elements.reader(), data_stack, functions, tests)?;
