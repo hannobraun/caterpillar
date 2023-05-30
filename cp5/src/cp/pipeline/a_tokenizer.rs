@@ -16,7 +16,28 @@ pub fn tokenize(
 fn tokenize_inner(
     chars: &mut StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
+    if *chars.peek()? == '"' {
+        return read_string(chars);
+    }
+
     read_other(chars)
+}
+
+fn read_string(
+    chars: &mut StageInputReader<char>,
+) -> Result<Token, PipelineError<Infallible>> {
+    // This method is only ever called, if this is true. If it isn't, that's a
+    // bug in this module.
+    assert_eq!(*chars.next()?, '"');
+
+    let mut buf = String::new();
+
+    loop {
+        match *chars.next()? {
+            '"' => return Ok(Token::String(buf)),
+            ch => buf.push(ch),
+        }
+    }
 }
 
 fn read_other(
@@ -63,4 +84,5 @@ pub enum Token {
     Mod,
     Test,
     Ident(String),
+    String(String),
 }
