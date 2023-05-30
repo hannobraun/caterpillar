@@ -16,6 +16,12 @@ pub fn tokenize(
 fn tokenize_inner(
     chars: &mut StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
+    read_other(chars)
+}
+
+fn read_other(
+    chars: &mut StageInputReader<char>,
+) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
     while let Ok(&ch) = chars.next() {
