@@ -5,9 +5,7 @@ use crate::cp::{
 
 use super::{stage_input::StageInputReader, PipelineError};
 
-pub fn parse(
-    mut tokens: StageInputReader<Token>,
-) -> Result<SyntaxElement, PipelineError<ParserError>> {
+pub fn parse(mut tokens: StageInputReader<Token>) -> Result<SyntaxElement> {
     let syntax_element = parse_syntax_element(&mut tokens)?;
     tokens.take();
     Ok(syntax_element)
@@ -15,7 +13,7 @@ pub fn parse(
 
 fn parse_syntax_element(
     tokens: &mut StageInputReader<Token>,
-) -> Result<SyntaxElement, PipelineError<ParserError>> {
+) -> Result<SyntaxElement> {
     let syntax_element = match tokens.peek()? {
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;
@@ -47,9 +45,7 @@ fn parse_syntax_element(
     Ok(syntax_element)
 }
 
-fn parse_block(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<SyntaxTree, PipelineError<ParserError>> {
+fn parse_block(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
     expect_token(tokens, Token::CurlyBracketOpen)?;
 
     let mut syntax_tree = SyntaxTree {
@@ -72,7 +68,7 @@ fn parse_block(
 
 fn parse_fn(
     tokens: &mut StageInputReader<Token>,
-) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
+) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Fn))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
@@ -82,7 +78,7 @@ fn parse_fn(
 
 fn parse_mod(
     tokens: &mut StageInputReader<Token>,
-) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
+) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Mod))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
@@ -90,9 +86,7 @@ fn parse_mod(
     Ok((name, body))
 }
 
-fn parse_string(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<String, PipelineError<ParserError>> {
+fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {
     let token = tokens.next()?;
     let Token::Literal(Literal::String(s)) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
@@ -102,9 +96,7 @@ fn parse_string(
     Ok(s.clone())
 }
 
-fn parse_ident(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<String, PipelineError<ParserError>> {
+fn parse_ident(tokens: &mut StageInputReader<Token>) -> Result<String> {
     let token = tokens.next()?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
@@ -117,7 +109,7 @@ fn parse_ident(
 fn expect_token(
     tokens: &mut StageInputReader<Token>,
     expected: Token,
-) -> Result<(), PipelineError<ParserError>> {
+) -> Result<()> {
     let token = tokens.next()?;
 
     if token != &expected {
@@ -128,6 +120,8 @@ fn expect_token(
 
     Ok(())
 }
+
+type Result<T> = std::result::Result<T, PipelineError<ParserError>>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum ParserError {
