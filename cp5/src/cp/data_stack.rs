@@ -59,11 +59,18 @@ impl DataStack {
 pub enum Value {
     Bool(bool),
     Block(SyntaxTree),
+    String(String),
 }
 
 impl From<bool> for Value {
     fn from(value: bool) -> Self {
         Self::Bool(value)
+    }
+}
+
+impl From<String> for Value {
+    fn from(value: String) -> Self {
+        Self::String(value)
     }
 }
 
