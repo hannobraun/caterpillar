@@ -36,6 +36,10 @@ fn evaluate_syntax_element(
             // not supported yet
             Ok(())
         }
+        SyntaxElement::String(_) => {
+            // not supported yet
+            Ok(())
+        }
         SyntaxElement::Word(word) => {
             evaluate_word(word, data_stack, functions, tests)
         }

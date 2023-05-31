@@ -1,6 +1,6 @@
 use crate::cp::{
     syntax::{SyntaxElement, SyntaxTree},
-    tokens::{Keyword, Token},
+    tokens::{Keyword, Literal, Token},
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -28,6 +28,10 @@ fn parse_syntax_element(
         Token::Keyword(Keyword::Mod) => {
             let (name, body) = parse_mod(tokens)?;
             SyntaxElement::Module { name, body }
+        }
+        Token::Literal(Literal::String(_)) => {
+            let s = parse_string(tokens)?;
+            SyntaxElement::String(s)
         }
         Token::Ident(_) => {
             let ident = parse_ident(tokens)?;
@@ -84,6 +88,18 @@ fn parse_mod(
     let body = parse_block(tokens)?;
 
     Ok((name, body))
+}
+
+fn parse_string(
+    tokens: &mut StageInputReader<Token>,
+) -> Result<String, PipelineError<ParserError>> {
+    let token = tokens.next()?;
+    let Token::Literal(Literal::String(s)) = token else {
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            token.clone()))
+        );
+    };
+    Ok(s.clone())
 }
 
 fn parse_ident(
