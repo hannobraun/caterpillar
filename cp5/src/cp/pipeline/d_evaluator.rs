@@ -36,8 +36,8 @@ fn evaluate_syntax_element(
             // not supported yet
             Ok(())
         }
-        SyntaxElement::String(_) => {
-            // not supported yet
+        SyntaxElement::String(s) => {
+            data_stack.push(s.clone());
             Ok(())
         }
         SyntaxElement::Word(word) => {
