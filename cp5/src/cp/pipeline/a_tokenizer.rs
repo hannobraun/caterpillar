@@ -1,6 +1,6 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::Token;
+use crate::cp::tokens::{Keyword, Token};
 
 use super::{
     stage_input::{NoMoreInput, StageInputReader},
@@ -69,9 +69,9 @@ fn read_other(
     }
 
     match buf.as_str() {
-        "fn" => return Ok(Token::Fn),
-        "mod" => return Ok(Token::Mod),
-        "test" => return Ok(Token::Test),
+        "fn" => return Ok(Token::Keyword(Keyword::Fn)),
+        "mod" => return Ok(Token::Keyword(Keyword::Mod)),
+        "test" => return Ok(Token::Keyword(Keyword::Test)),
         _ => {}
     }
 

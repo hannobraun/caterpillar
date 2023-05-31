@@ -1,6 +1,6 @@
 use crate::cp::{
     syntax::{SyntaxElement, SyntaxTree},
-    tokens::Token,
+    tokens::{Keyword, Token},
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -21,11 +21,11 @@ fn parse_syntax_element(
             let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block { syntax_tree }
         }
-        Token::Fn => {
+        Token::Keyword(Keyword::Fn) => {
             let (name, body) = parse_fn(tokens)?;
             SyntaxElement::Function { name, body }
         }
-        Token::Mod => {
+        Token::Keyword(Keyword::Mod) => {
             let (name, body) = parse_mod(tokens)?;
             SyntaxElement::Module { name, body }
         }
@@ -69,7 +69,7 @@ fn parse_block(
 fn parse_fn(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
-    expect_token(tokens, Token::Fn)?;
+    expect_token(tokens, Token::Keyword(Keyword::Fn))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
 
@@ -79,7 +79,7 @@ fn parse_fn(
 fn parse_mod(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<(String, SyntaxTree), PipelineError<ParserError>> {
-    expect_token(tokens, Token::Mod)?;
+    expect_token(tokens, Token::Keyword(Keyword::Mod))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
 
