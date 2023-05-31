@@ -18,9 +18,15 @@ pub fn tokenize(
 fn tokenize_inner(
     chars: &mut StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
-    match *chars.peek()? {
-        '"' => read_string(chars),
-        _ => read_other(chars),
+    loop {
+        match *chars.peek()? {
+            '"' => return read_string(chars),
+            ch if ch.is_whitespace() => {
+                let _ = chars.next()?;
+                continue;
+            }
+            _ => return read_other(chars),
+        }
     }
 }
 
@@ -47,9 +53,6 @@ fn read_other(
     let mut buf = String::new();
 
     while let Ok(&ch) = chars.next() {
-        if ch.is_whitespace() && buf.is_empty() {
-            continue;
-        }
         if ch.is_whitespace() {
             break;
         }
