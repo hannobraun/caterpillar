@@ -70,6 +70,14 @@ fn evaluate_word(
                 )?;
             }
         }
+        "=" => {
+            let a = data_stack.pop_string()?;
+            let b = data_stack.pop_string()?;
+
+            let eq = a == b;
+
+            data_stack.push(eq);
+        }
         _ => {
             if let Some(body) = functions.get("", word) {
                 for syntax_element in body.elements {

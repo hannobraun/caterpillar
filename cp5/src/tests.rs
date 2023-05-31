@@ -12,6 +12,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     tests.insert(("bool", "false not"), "false not");
     tests.insert(("block", "eval"), "{ true } eval");
     tests.insert(("fn_", "fn"), "fn f { true } f");
+    tests.insert(("string", "="), r#""a" "a" ="#);
 
     let mut results = Vec::new();
 

@@ -38,6 +38,16 @@ impl DataStack {
         })
     }
 
+    pub fn pop_string(&mut self) -> Result<String, DataStackError> {
+        self.pop_specific_type("string", |value| {
+            let Value::String(value) = value else {
+                return Err(value);
+            };
+
+            Ok(value)
+        })
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
