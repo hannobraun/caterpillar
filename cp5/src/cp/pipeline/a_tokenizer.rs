@@ -18,11 +18,10 @@ pub fn tokenize(
 fn tokenize_inner(
     chars: &mut StageInputReader<char>,
 ) -> Result<Token, PipelineError<Infallible>> {
-    if *chars.peek()? == '"' {
-        return read_string(chars);
+    match *chars.peek()? {
+        '"' => read_string(chars),
+        _ => read_other(chars),
     }
-
-    read_other(chars)
 }
 
 fn read_string(
