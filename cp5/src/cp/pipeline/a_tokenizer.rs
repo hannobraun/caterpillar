@@ -1,6 +1,6 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::{Keyword, Token};
+use crate::cp::tokens::{Keyword, Literal, Token};
 
 use super::{
     stage_input::{NoMoreInput, StageInputReader},
@@ -36,7 +36,7 @@ fn read_string(
 
     loop {
         match *chars.next()? {
-            '"' => return Ok(Token::String(buf)),
+            '"' => return Ok(Token::Literal(Literal::String(buf))),
             ch => buf.push(ch),
         }
     }
