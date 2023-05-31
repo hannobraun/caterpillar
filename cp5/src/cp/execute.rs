@@ -2,13 +2,14 @@ use std::convert::Infallible;
 
 use super::{
     pipeline::{
-        a_tokenizer::{tokenize, Token},
+        a_tokenizer::tokenize,
         b_parser::{parse, ParserError},
         d_evaluator::{evaluate, EvaluatorError},
         stage_input::{NoMoreInput, StageInput},
         PipelineError,
     },
     syntax::SyntaxElement,
+    tokens::Token,
     DataStack, Functions,
 };
 

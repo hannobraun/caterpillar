@@ -1,6 +1,9 @@
-use crate::cp::syntax::{SyntaxElement, SyntaxTree};
+use crate::cp::{
+    syntax::{SyntaxElement, SyntaxTree},
+    tokens::Token,
+};
 
-use super::{a_tokenizer::Token, stage_input::StageInputReader, PipelineError};
+use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn parse(
     mut tokens: StageInputReader<Token>,

@@ -3,6 +3,7 @@ mod execute;
 mod functions;
 mod pipeline;
 mod syntax;
+mod tokens;
 
 pub use self::{
     data_stack::{DataStack, DataStackError},
