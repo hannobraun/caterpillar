@@ -12,12 +12,19 @@ pub fn evaluate(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.next()?;
-    evaluate_syntax_element(syntax_element, data_stack, functions, tests)?;
+    evaluate_syntax_element(
+        None,
+        syntax_element,
+        data_stack,
+        functions,
+        tests,
+    )?;
     syntax_elements.take();
     Ok(())
 }
 
 fn evaluate_syntax_element(
+    module: Option<&str>,
     syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
     functions: &mut Functions,
@@ -32,9 +39,10 @@ fn evaluate_syntax_element(
             functions.define("".into(), name.clone(), body.clone());
             Ok(())
         }
-        SyntaxElement::Module { name: _, body } => {
+        SyntaxElement::Module { name, body } => {
             for syntax_element in &body.elements {
                 evaluate_syntax_element(
+                    Some(name),
                     syntax_element,
                     data_stack,
                     functions,
@@ -52,12 +60,13 @@ fn evaluate_syntax_element(
             Ok(())
         }
         SyntaxElement::Word(word) => {
-            evaluate_word(word, data_stack, functions, tests)
+            evaluate_word(module, word, data_stack, functions, tests)
         }
     }
 }
 
 fn evaluate_word(
+    module: Option<&str>,
     word: &str,
     data_stack: &mut DataStack,
     functions: &mut Functions,
@@ -74,6 +83,7 @@ fn evaluate_word(
             let block = data_stack.pop_block()?;
             for syntax_element in block.elements {
                 evaluate_syntax_element(
+                    module,
                     &syntax_element,
                     data_stack,
                     functions,
@@ -93,6 +103,7 @@ fn evaluate_word(
             if let Some(body) = functions.get("", word) {
                 for syntax_element in body.elements {
                     evaluate_syntax_element(
+                        module,
                         &syntax_element,
                         data_stack,
                         functions,
