@@ -66,6 +66,7 @@ impl<'r, T> StageInputReader<'r, T> {
 
     pub fn take(&mut self) {
         let _ = self.inner.elements.drain(..self.num_read).last();
+        self.num_read = 0;
     }
 }
 
