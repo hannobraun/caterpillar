@@ -32,8 +32,15 @@ fn evaluate_syntax_element(
             functions.define("".into(), name.clone(), body.clone());
             Ok(())
         }
-        SyntaxElement::Module { .. } => {
-            // not supported yet
+        SyntaxElement::Module { name: _, body } => {
+            for syntax_element in &body.elements {
+                evaluate_syntax_element(
+                    syntax_element,
+                    data_stack,
+                    functions,
+                    tests,
+                )?;
+            }
             Ok(())
         }
         SyntaxElement::Test { name, body } => {
