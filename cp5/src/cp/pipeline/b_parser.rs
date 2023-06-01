@@ -27,6 +27,10 @@ fn parse_syntax_element(
             let (name, body) = parse_mod(tokens)?;
             SyntaxElement::Module { name, body }
         }
+        Token::Keyword(Keyword::Test) => {
+            let (name, body) = parse_test(tokens)?;
+            SyntaxElement::Test { name, body }
+        }
         Token::Literal(Literal::String(_)) => {
             let s = parse_string(tokens)?;
             SyntaxElement::String(s)
@@ -81,6 +85,16 @@ fn parse_mod(
 ) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Mod))?;
     let name = parse_ident(tokens)?;
+    let body = parse_block(tokens)?;
+
+    Ok((name, body))
+}
+
+fn parse_test(
+    tokens: &mut StageInputReader<Token>,
+) -> Result<(String, SyntaxTree)> {
+    expect_token(tokens, Token::Keyword(Keyword::Test))?;
+    let name = parse_string(tokens)?;
     let body = parse_block(tokens)?;
 
     Ok((name, body))

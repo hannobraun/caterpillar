@@ -36,6 +36,10 @@ fn evaluate_syntax_element(
             // not supported yet
             Ok(())
         }
+        SyntaxElement::Test { .. } => {
+            // not supported yet
+            Ok(())
+        }
         SyntaxElement::String(s) => {
             data_stack.push(s.clone());
             Ok(())
