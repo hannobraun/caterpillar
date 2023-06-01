@@ -30,3 +30,18 @@ impl IntoIterator for Functions {
         self.inner.into_iter()
     }
 }
+
+#[derive(Clone, Copy)]
+pub struct Module<'r> {
+    _inner: Option<&'r str>,
+}
+
+impl<'r> Module<'r> {
+    pub fn none() -> Self {
+        Self { _inner: None }
+    }
+
+    pub fn some(s: &'r str) -> Self {
+        Self { _inner: Some(s) }
+    }
+}

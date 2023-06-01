@@ -1,6 +1,6 @@
 use crate::cp::{
-    data_stack::Value, syntax::SyntaxElement, DataStack, DataStackError,
-    Functions,
+    data_stack::Value, functions::Module, syntax::SyntaxElement, DataStack,
+    DataStackError, Functions,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -120,21 +120,6 @@ fn evaluate_word(
     }
 
     Ok(())
-}
-
-#[derive(Clone, Copy)]
-pub struct Module<'r> {
-    _inner: Option<&'r str>,
-}
-
-impl<'r> Module<'r> {
-    pub fn none() -> Self {
-        Self { _inner: None }
-    }
-
-    pub fn some(s: &'r str) -> Self {
-        Self { _inner: Some(s) }
-    }
 }
 
 #[derive(Debug, thiserror::Error)]
