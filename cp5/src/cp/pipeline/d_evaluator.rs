@@ -36,8 +36,8 @@ fn evaluate_syntax_element(
             // not supported yet
             Ok(())
         }
-        SyntaxElement::Test { .. } => {
-            // not supported yet
+        SyntaxElement::Test { name, body } => {
+            tests.define("".into(), name.clone(), body.clone());
             Ok(())
         }
         SyntaxElement::String(s) => {
