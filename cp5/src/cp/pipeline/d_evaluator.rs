@@ -13,7 +13,7 @@ pub fn evaluate(
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.next()?;
     evaluate_syntax_element(
-        None,
+        Module::none(),
         syntax_element,
         data_stack,
         functions,
@@ -24,7 +24,7 @@ pub fn evaluate(
 }
 
 fn evaluate_syntax_element(
-    module: Option<&str>,
+    module: Module,
     syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
     functions: &mut Functions,
@@ -42,7 +42,7 @@ fn evaluate_syntax_element(
         SyntaxElement::Module { name, body } => {
             for syntax_element in &body.elements {
                 evaluate_syntax_element(
-                    Some(name),
+                    Module::some(name),
                     syntax_element,
                     data_stack,
                     functions,
@@ -66,7 +66,7 @@ fn evaluate_syntax_element(
 }
 
 fn evaluate_word(
-    module: Option<&str>,
+    module: Module,
     word: &str,
     data_stack: &mut DataStack,
     functions: &mut Functions,
@@ -120,6 +120,21 @@ fn evaluate_word(
     }
 
     Ok(())
+}
+
+#[derive(Clone, Copy)]
+pub struct Module<'r> {
+    _inner: Option<&'r str>,
+}
+
+impl<'r> Module<'r> {
+    pub fn none() -> Self {
+        Self { _inner: None }
+    }
+
+    pub fn some(s: &'r str) -> Self {
+        Self { _inner: Some(s) }
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
