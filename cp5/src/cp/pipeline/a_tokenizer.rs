@@ -23,6 +23,7 @@ fn tokenize_inner(
             '"' => return read_string(chars),
             ch if ch.is_whitespace() => {
                 let _ = chars.next()?;
+                chars.take();
                 continue;
             }
             _ => return read_other(chars),
