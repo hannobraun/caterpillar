@@ -3,7 +3,7 @@ use std::collections::{btree_map, BTreeMap};
 use super::syntax::SyntaxTree;
 
 pub struct Functions {
-    inner: BTreeMap<(String, String), Function>,
+    inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
@@ -14,24 +14,18 @@ impl Functions {
     }
 
     pub fn define(&mut self, module: String, name: String, body: SyntaxTree) {
-        let function = Function {
-            module: module.clone(),
-            body,
-        };
-        self.inner.insert((module, name), function);
+        let function = Function { module, body };
+        self.inner.insert(name, function);
     }
 
-    pub fn get(&self, module: &str, name: &str) -> Option<SyntaxTree> {
-        self.inner
-            .get(&(module.into(), name.into()))
-            .cloned()
-            .map(|function| function.body)
+    pub fn get(&self, _module: &str, name: &str) -> Option<SyntaxTree> {
+        self.inner.get(name).cloned().map(|function| function.body)
     }
 }
 
 impl IntoIterator for Functions {
-    type Item = ((String, String), Function);
-    type IntoIter = btree_map::IntoIter<(String, String), Function>;
+    type Item = (String, Function);
+    type IntoIter = btree_map::IntoIter<String, Function>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
