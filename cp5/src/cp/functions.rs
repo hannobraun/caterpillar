@@ -18,7 +18,7 @@ impl Functions {
         self.inner.insert(name, function);
     }
 
-    pub fn get(&self, _module: &str, name: &str) -> Option<SyntaxTree> {
+    pub fn get(&self, name: &str) -> Option<SyntaxTree> {
         self.inner.get(name).cloned().map(|function| function.body)
     }
 }

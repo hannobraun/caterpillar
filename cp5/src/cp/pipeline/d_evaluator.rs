@@ -100,7 +100,7 @@ fn evaluate_word(
             data_stack.push(eq);
         }
         _ => {
-            if let Some(body) = functions.get("", word) {
+            if let Some(body) = functions.get(word) {
                 for syntax_element in body.elements {
                     evaluate_syntax_element(
                         module,
