@@ -101,7 +101,7 @@ fn evaluate_word(
         }
         _ => {
             if let Some(function) = functions.get(word) {
-                for syntax_element in function.elements {
+                for syntax_element in function.body.elements {
                     evaluate_syntax_element(
                         module,
                         &syntax_element,
