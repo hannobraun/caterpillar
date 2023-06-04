@@ -55,7 +55,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         }
 
         let result = end_result
-            .map_err(Error::Language)
+            .map_err(Error::Evaluator)
             .and_then(|()| {
                 let test_passed = data_stack.pop_bool()?;
                 if test_passed {
