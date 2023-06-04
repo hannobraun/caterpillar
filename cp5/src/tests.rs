@@ -1,28 +1,58 @@
-use std::collections::BTreeMap;
-
 use crate::{
     cp,
     test_report::{Error, TestReport},
 };
 
 pub fn run() -> anyhow::Result<Vec<TestReport>> {
-    let mut tests = BTreeMap::new();
+    let code = r#"
+        mod bool {
+            test "true" { true }
+            test "false not" { false not }
+        }
 
-    tests.insert(("bool", "true"), "true");
-    tests.insert(("bool", "false not"), "false not");
-    tests.insert(("block", "eval"), "{ true } eval");
-    tests.insert(("fn_", "fn"), "fn f { true } f");
-    tests.insert(("string", "="), r#""a" "a" ="#);
+        mod block {
+            test "eval" { { true } eval }
+        }
+
+        mod fn_ {
+            test "fn" { fn f { true } f }
+        }
+
+        mod string {
+            test "=" { "a" "a" = }
+        }
+    "#;
+
+    let mut data_stack = cp::DataStack::new();
+    let mut functions = cp::Functions::new();
+    let mut tests = cp::Functions::new();
+
+    cp::execute(code, &mut data_stack, &mut functions, &mut tests)?;
+
+    if !data_stack.is_empty() {
+        anyhow::bail!("Importing tests left values on stack: {data_stack:?}")
+    }
 
     let mut results = Vec::new();
 
-    for ((module, name), code) in tests {
+    for (name, function) in tests {
+        let mut syntax_elements = cp::StageInput::from(function.body);
+
         let mut data_stack = cp::DataStack::new();
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let end_result =
-            cp::execute(code, &mut data_stack, &mut functions, &mut tests);
+        let mut end_result = Ok(());
+        while !syntax_elements.is_empty() {
+            let result = cp::evaluate(
+                syntax_elements.reader(),
+                &mut data_stack,
+                &mut functions,
+                &mut tests,
+            );
+
+            end_result = end_result.and(result);
+        }
 
         let result = end_result
             .map_err(Error::Language)
@@ -43,8 +73,8 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             });
 
         results.push(TestReport {
-            module: module.into(),
-            name: name.into(),
+            module: function.module,
+            name,
             result,
         })
     }
