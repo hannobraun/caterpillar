@@ -13,7 +13,8 @@ impl Functions {
         }
     }
 
-    pub fn define(&mut self, module: String, name: String, body: SyntaxTree) {
+    pub fn define(&mut self, module: Module, name: String, body: SyntaxTree) {
+        let module = module.name();
         let function = Function { module, body };
         self.inner.insert(name, function);
     }
@@ -50,5 +51,9 @@ impl<'r> Module<'r> {
 
     pub fn some(s: &'r str) -> Self {
         Self { _inner: Some(s) }
+    }
+
+    pub fn name(&self) -> String {
+        self._inner.unwrap_or("<root>").into()
     }
 }

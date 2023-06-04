@@ -36,7 +36,7 @@ fn evaluate_syntax_element(
             Ok(())
         }
         SyntaxElement::Function { name, body } => {
-            functions.define("".into(), name.clone(), body.clone());
+            functions.define(Module::none(), name.clone(), body.clone());
             Ok(())
         }
         SyntaxElement::Module { name, body } => {
@@ -52,7 +52,7 @@ fn evaluate_syntax_element(
             Ok(())
         }
         SyntaxElement::Test { name, body } => {
-            tests.define("".into(), name.clone(), body.clone());
+            tests.define(module, name.clone(), body.clone());
             Ok(())
         }
         SyntaxElement::String(s) => {
