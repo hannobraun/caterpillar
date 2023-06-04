@@ -21,10 +21,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let result =
+        let end_result =
             cp::execute(code, &mut data_stack, &mut functions, &mut tests);
 
-        let result = result
+        let result = end_result
             .map_err(Error::Language)
             .and_then(|()| {
                 let test_passed = data_stack.pop_bool()?;
