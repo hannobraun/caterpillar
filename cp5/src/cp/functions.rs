@@ -41,19 +41,19 @@ pub struct Function {
 
 #[derive(Clone, Copy)]
 pub struct Module<'r> {
-    _inner: Option<&'r str>,
+    inner: Option<&'r str>,
 }
 
 impl<'r> Module<'r> {
     pub fn none() -> Self {
-        Self { _inner: None }
+        Self { inner: None }
     }
 
     pub fn some(s: &'r str) -> Self {
-        Self { _inner: Some(s) }
+        Self { inner: Some(s) }
     }
 
     pub fn name(&self) -> String {
-        self._inner.unwrap_or("<root>").into()
+        self.inner.unwrap_or("<root>").into()
     }
 }
