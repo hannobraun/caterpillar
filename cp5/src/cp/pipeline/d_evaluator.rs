@@ -11,20 +11,11 @@ pub fn evaluate_all(
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    let mut end_result = Ok(());
-
     while !syntax_elements.is_empty() {
-        let result =
-            evaluate(syntax_elements.reader(), data_stack, functions, tests);
-
-        end_result = end_result.and(result);
-
-        if end_result.is_err() {
-            break;
-        }
+        evaluate(syntax_elements.reader(), data_stack, functions, tests)?;
     }
 
-    end_result
+    Ok(())
 }
 
 pub fn evaluate(
