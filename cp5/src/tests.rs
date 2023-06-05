@@ -42,14 +42,14 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let end_result = cp::evaluate_all(
+        let result = cp::evaluate_all(
             syntax_elements,
             &mut data_stack,
             &mut functions,
             &mut tests,
         );
 
-        let result = end_result
+        let result = result
             .map_err(Error::Evaluator)
             .and_then(|()| {
                 let test_passed = data_stack.pop_bool()?;
