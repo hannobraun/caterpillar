@@ -88,6 +88,12 @@ fn evaluate_word(
     match word {
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
+        "and" => {
+            let a = data_stack.pop_bool()?;
+            let b = data_stack.pop_bool()?;
+
+            data_stack.push(a && b);
+        }
         "not" => {
             let b = data_stack.pop_bool()?;
             data_stack.push(!b);

@@ -8,6 +8,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         mod bool {
             test "true" { true }
             test "false not" { false not }
+            test "and - true true" { true true and }
+            test "and - true false" { true false and not }
+            test "and - false true" { false true and not }
+            test "and - false false" { false false and not }
         }
 
         mod block {
