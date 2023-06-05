@@ -68,6 +68,10 @@ fn evaluate_syntax_element(
             tests.define(module, name.clone(), body.clone());
             Ok(())
         }
+        SyntaxElement::Binding { .. } => {
+            // not supported yet
+            Ok(())
+        }
         SyntaxElement::String(s) => {
             data_stack.push(s.clone());
             Ok(())

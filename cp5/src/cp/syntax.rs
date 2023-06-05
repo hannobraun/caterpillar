@@ -9,6 +9,7 @@ pub enum SyntaxElement {
     Function { name: String, body: SyntaxTree },
     Module { name: String, body: SyntaxTree },
     Test { name: String, body: SyntaxTree },
+    Binding { idents: Vec<String> },
     String(String),
     Word(String),
 }

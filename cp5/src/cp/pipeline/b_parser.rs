@@ -15,6 +15,10 @@ fn parse_syntax_element(
     tokens: &mut StageInputReader<Token>,
 ) -> Result<SyntaxElement> {
     let syntax_element = match tokens.peek()? {
+        Token::BindingOperator => {
+            let idents = parse_binding(tokens)?;
+            SyntaxElement::Binding { idents }
+        }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block { syntax_tree }
@@ -47,6 +51,25 @@ fn parse_syntax_element(
     };
 
     Ok(syntax_element)
+}
+
+fn parse_binding(tokens: &mut StageInputReader<Token>) -> Result<Vec<String>> {
+    expect_token(tokens, Token::BindingOperator)?;
+
+    let mut idents = Vec::new();
+
+    loop {
+        match tokens.peek()? {
+            Token::Period => {
+                let _ = tokens.next();
+                return Ok(idents);
+            }
+            _ => {
+                let ident = parse_ident(tokens)?;
+                idents.push(ident);
+            }
+        }
+    }
 }
 
 fn parse_block(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
