@@ -61,6 +61,7 @@ fn read_other(
         buf.push(ch);
 
         match buf.as_str() {
+            "=>" => return Ok(Token::BindingOperator),
             "{" => return Ok(Token::CurlyBracketOpen),
             "}" => return Ok(Token::CurlyBracketClose),
             _ => {}
