@@ -1,9 +1,31 @@
 use crate::cp::{
     data_stack::Value, functions::Module, syntax::SyntaxElement, DataStack,
-    DataStackError, Functions,
+    DataStackError, Functions, StageInput,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
+
+pub fn evaluate_all(
+    mut syntax_elements: StageInput<SyntaxElement>,
+    data_stack: &mut DataStack,
+    functions: &mut Functions,
+    tests: &mut Functions,
+) -> Result<(), PipelineError<EvaluatorError>> {
+    let mut end_result = Ok(());
+
+    while !syntax_elements.is_empty() {
+        let result =
+            evaluate(syntax_elements.reader(), data_stack, functions, tests);
+
+        end_result = end_result.and(result);
+
+        if end_result.is_err() {
+            break;
+        }
+    }
+
+    end_result
+}
 
 pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,

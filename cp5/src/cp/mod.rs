@@ -10,7 +10,7 @@ pub use self::{
     execute::{execute, Error},
     functions::Functions,
     pipeline::{
-        d_evaluator::{evaluate, EvaluatorError},
+        d_evaluator::{evaluate, evaluate_all, EvaluatorError},
         stage_input::StageInput,
         PipelineError,
     },

@@ -36,28 +36,18 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let mut syntax_elements = cp::StageInput::from(function.body);
+        let syntax_elements = cp::StageInput::from(function.body);
 
         let mut data_stack = cp::DataStack::new();
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
-        let mut end_result = Ok(());
-
-        while !syntax_elements.is_empty() {
-            let result = cp::evaluate(
-                syntax_elements.reader(),
-                &mut data_stack,
-                &mut functions,
-                &mut tests,
-            );
-
-            end_result = end_result.and(result);
-
-            if end_result.is_err() {
-                break;
-            }
-        }
+        let end_result = cp::evaluate_all(
+            syntax_elements,
+            &mut data_stack,
+            &mut functions,
+            &mut tests,
+        );
 
         let result = end_result
             .map_err(Error::Evaluator)
