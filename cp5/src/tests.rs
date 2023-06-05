@@ -43,6 +43,8 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let mut tests = cp::Functions::new();
 
         let mut end_result = Ok(());
+        let mut prev_input_len = syntax_elements.len();
+
         while !syntax_elements.is_empty() {
             let result = cp::evaluate(
                 syntax_elements.reader(),
@@ -52,6 +54,15 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             );
 
             end_result = end_result.and(result);
+
+            // This shouldn't be necessary, if everything works correctly. It
+            // just safeguards against an infinite loop, due to some bug in
+            // `cp::evaluate`.
+            if prev_input_len == syntax_elements.len() {
+                break;
+            } else {
+                prev_input_len = syntax_elements.len();
+            }
         }
 
         let result = end_result
