@@ -1,6 +1,7 @@
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Token {
     BindingOperator,
+    Period,
     CurlyBracketOpen,
     CurlyBracketClose,
     Keyword(Keyword),
