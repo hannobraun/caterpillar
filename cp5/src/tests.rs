@@ -55,6 +55,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
             end_result = end_result.and(result);
 
+            if end_result.is_err() {
+                break;
+            }
+
             // This shouldn't be necessary, if everything works correctly. It
             // just safeguards against an infinite loop, due to some bug in
             // `cp::evaluate`.
