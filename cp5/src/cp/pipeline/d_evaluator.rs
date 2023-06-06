@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::cp::{
     data_stack::Value, functions::Module, syntax::SyntaxElement, DataStack,
     DataStackError, Functions, StageInput,
@@ -79,8 +81,11 @@ fn evaluate_syntax_element(
             tests.define(module, name.clone(), body.clone());
             Ok(())
         }
-        SyntaxElement::Binding { .. } => {
-            // not supported yet
+        SyntaxElement::Binding { idents } => {
+            for ident in idents.iter().rev() {
+                let value = data_stack.pop_any()?;
+                bindings.inner.insert(ident.clone(), value);
+            }
             Ok(())
         }
         SyntaxElement::String(s) => {
@@ -136,6 +141,11 @@ fn evaluate_word(
             data_stack.push(eq);
         }
         _ => {
+            if let Some(value) = bindings.inner.remove(word) {
+                data_stack.push(value);
+                return Ok(());
+            }
+
             if let Some(function) = functions.get(word) {
                 for syntax_element in function.body.elements {
                     evaluate_syntax_element(
@@ -159,11 +169,15 @@ fn evaluate_word(
     Ok(())
 }
 
-pub struct Bindings {}
+pub struct Bindings {
+    inner: BTreeMap<String, Value>,
+}
 
 impl Bindings {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            inner: BTreeMap::new(),
+        }
     }
 }
 

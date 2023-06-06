@@ -14,6 +14,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             test "and - false false" { false false and not }
         }
 
+        mod binding {
+            test "binding" { true false => t f . t }
+        }
+
         mod block {
             test "eval" { { true } eval }
         }
