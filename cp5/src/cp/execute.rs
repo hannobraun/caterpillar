@@ -10,12 +10,13 @@ use super::{
     },
     syntax::SyntaxElement,
     tokens::Token,
-    DataStack, Functions,
+    Bindings, DataStack, Functions,
 };
 
 pub fn execute(
     code: &str,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), Error> {
@@ -29,6 +30,7 @@ pub fn execute(
             &mut tokens,
             &mut syntax_elements,
             data_stack,
+            bindings,
             functions,
             tests,
         ) {
@@ -58,6 +60,7 @@ fn execute_inner(
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), ErrorKind> {
@@ -67,7 +70,13 @@ fn execute_inner(
     let syntax_element = parse(tokens.reader())?;
     syntax_elements.add(syntax_element);
 
-    evaluate(syntax_elements.reader(), data_stack, functions, tests)?;
+    evaluate(
+        syntax_elements.reader(),
+        data_stack,
+        bindings,
+        functions,
+        tests,
+    )?;
 
     Ok(())
 }

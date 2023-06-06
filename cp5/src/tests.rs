@@ -28,10 +28,17 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     "#;
 
     let mut data_stack = cp::DataStack::new();
+    let mut bindings = cp::Bindings {};
     let mut functions = cp::Functions::new();
     let mut tests = cp::Functions::new();
 
-    cp::execute(code, &mut data_stack, &mut functions, &mut tests)?;
+    cp::execute(
+        code,
+        &mut data_stack,
+        &mut bindings,
+        &mut functions,
+        &mut tests,
+    )?;
 
     if !data_stack.is_empty() {
         anyhow::bail!("Importing tests left values on stack: {data_stack:?}")
@@ -43,12 +50,14 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let syntax_elements = cp::StageInput::from(function.body);
 
         let mut data_stack = cp::DataStack::new();
+        let mut bindings = cp::Bindings {};
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 
         let result = cp::evaluate_all(
             syntax_elements,
             &mut data_stack,
+            &mut bindings,
             &mut functions,
             &mut tests,
         );

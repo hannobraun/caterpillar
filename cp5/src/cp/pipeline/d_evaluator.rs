@@ -8,11 +8,18 @@ use super::{stage_input::StageInputReader, PipelineError};
 pub fn evaluate_all(
     mut syntax_elements: StageInput<SyntaxElement>,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     while !syntax_elements.is_empty() {
-        evaluate(syntax_elements.reader(), data_stack, functions, tests)?;
+        evaluate(
+            syntax_elements.reader(),
+            data_stack,
+            bindings,
+            functions,
+            tests,
+        )?;
     }
 
     Ok(())
@@ -21,6 +28,7 @@ pub fn evaluate_all(
 pub fn evaluate(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
@@ -29,6 +37,7 @@ pub fn evaluate(
         Module::none(),
         syntax_element,
         data_stack,
+        bindings,
         functions,
         tests,
     )?;
@@ -40,6 +49,7 @@ fn evaluate_syntax_element(
     module: Module,
     syntax_element: &SyntaxElement,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
@@ -58,6 +68,7 @@ fn evaluate_syntax_element(
                     Module::some(name),
                     syntax_element,
                     data_stack,
+                    bindings,
                     functions,
                     tests,
                 )?;
@@ -77,7 +88,7 @@ fn evaluate_syntax_element(
             Ok(())
         }
         SyntaxElement::Word(word) => {
-            evaluate_word(module, word, data_stack, functions, tests)
+            evaluate_word(module, word, data_stack, bindings, functions, tests)
         }
     }
 }
@@ -86,6 +97,7 @@ fn evaluate_word(
     module: Module,
     word: &str,
     data_stack: &mut DataStack,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
@@ -109,6 +121,7 @@ fn evaluate_word(
                     module,
                     &syntax_element,
                     data_stack,
+                    bindings,
                     functions,
                     tests,
                 )?;
@@ -129,6 +142,7 @@ fn evaluate_word(
                         module,
                         &syntax_element,
                         data_stack,
+                        bindings,
                         functions,
                         tests,
                     )?;
@@ -144,6 +158,8 @@ fn evaluate_word(
 
     Ok(())
 }
+
+pub struct Bindings {}
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
