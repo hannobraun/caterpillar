@@ -28,7 +28,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
     "#;
 
     let mut data_stack = cp::DataStack::new();
-    let mut bindings = cp::Bindings {};
+    let mut bindings = cp::Bindings::new();
     let mut functions = cp::Functions::new();
     let mut tests = cp::Functions::new();
 
@@ -50,7 +50,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         let syntax_elements = cp::StageInput::from(function.body);
 
         let mut data_stack = cp::DataStack::new();
-        let mut bindings = cp::Bindings {};
+        let mut bindings = cp::Bindings::new();
         let mut functions = cp::Functions::new();
         let mut tests = cp::Functions::new();
 

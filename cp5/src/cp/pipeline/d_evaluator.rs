@@ -161,6 +161,12 @@ fn evaluate_word(
 
 pub struct Bindings {}
 
+impl Bindings {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
     #[error(transparent)]
