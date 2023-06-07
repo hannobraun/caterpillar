@@ -20,6 +20,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
         mod basics {
             test "drop" { true false drop }
+            test "clone" { true clone drop }
         }
 
         mod block {

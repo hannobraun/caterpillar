@@ -107,6 +107,12 @@ fn evaluate_word(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
+        "clone" => {
+            let a = data_stack.pop_any()?;
+
+            data_stack.push(a.clone());
+            data_stack.push(a);
+        }
         "drop" => {
             data_stack.pop_any()?;
         }
