@@ -33,6 +33,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
         mod string {
             test "=" { "a" "a" = }
+            test "= not" { "a" "b" = not }
         }
     "#;
 
