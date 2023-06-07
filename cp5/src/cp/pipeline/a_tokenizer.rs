@@ -66,6 +66,7 @@ fn read_other(
             "{" => return Ok(Token::CurlyBracketOpen),
             "}" => return Ok(Token::CurlyBracketClose),
             "[" => return Ok(Token::SquareBracketOpen),
+            "]" => return Ok(Token::SquareBracketClose),
             _ => {}
         }
     }

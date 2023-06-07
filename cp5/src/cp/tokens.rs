@@ -5,6 +5,7 @@ pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
     SquareBracketOpen,
+    SquareBracketClose,
     Keyword(Keyword),
     Literal(Literal),
     Ident(String),
