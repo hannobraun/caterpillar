@@ -24,6 +24,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
         mod block {
             test "eval" { { true } eval }
+            test "lazy evaluation" { true { drop } drop }
         }
 
         mod fn_ {
