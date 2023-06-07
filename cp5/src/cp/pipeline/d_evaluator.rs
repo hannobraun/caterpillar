@@ -56,6 +56,10 @@ fn evaluate_syntax_element(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
+        SyntaxElement::Array { .. } => {
+            // no implemented yet
+            Ok(())
+        }
         SyntaxElement::Block { syntax_tree } => {
             data_stack.push(Value::Block(syntax_tree.clone()));
             Ok(())

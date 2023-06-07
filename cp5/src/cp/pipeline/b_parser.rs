@@ -23,6 +23,10 @@ fn parse_syntax_element(
             let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block { syntax_tree }
         }
+        Token::SquareBracketOpen => {
+            let syntax_tree = parse_array(tokens)?;
+            SyntaxElement::Array { syntax_tree }
+        }
         Token::Keyword(Keyword::Fn) => {
             let (name, body) = parse_fn(tokens)?;
             SyntaxElement::Function { name, body }
@@ -67,6 +71,27 @@ fn parse_binding(tokens: &mut StageInputReader<Token>) -> Result<Vec<String>> {
             _ => {
                 let ident = parse_ident(tokens)?;
                 idents.push(ident);
+            }
+        }
+    }
+}
+
+fn parse_array(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
+    expect_token(tokens, Token::SquareBracketOpen)?;
+
+    let mut syntax_tree = SyntaxTree {
+        elements: Vec::new(),
+    };
+
+    loop {
+        match tokens.peek()? {
+            Token::SquareBracketClose => {
+                let _ = tokens.next();
+                return Ok(syntax_tree);
+            }
+            _ => {
+                let syntax_element = parse_syntax_element(tokens)?;
+                syntax_tree.elements.push(syntax_element)
             }
         }
     }

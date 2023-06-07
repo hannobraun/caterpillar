@@ -5,6 +5,7 @@ pub struct SyntaxTree {
 
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
+    Array { syntax_tree: SyntaxTree },
     Block { syntax_tree: SyntaxTree },
     Function { name: String, body: SyntaxTree },
     Module { name: String, body: SyntaxTree },
