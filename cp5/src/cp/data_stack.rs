@@ -65,7 +65,7 @@ impl DataStack {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Value {
     Bool(bool),
     Block(SyntaxTree),
