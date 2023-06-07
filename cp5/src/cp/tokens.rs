@@ -4,6 +4,7 @@ pub enum Token {
     Period,
     CurlyBracketOpen,
     CurlyBracketClose,
+    SquareBracketOpen,
     Keyword(Keyword),
     Literal(Literal),
     Ident(String),
