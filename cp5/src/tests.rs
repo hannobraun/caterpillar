@@ -18,6 +18,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             test "binding" { true false => t f . t }
         }
 
+        mod basics {
+            test "drop" { true false drop }
+        }
+
         mod block {
             test "eval" { { true } eval }
         }

@@ -107,6 +107,9 @@ fn evaluate_word(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
+        "drop" => {
+            data_stack.pop_any()?;
+        }
         "true" => data_stack.push(true),
         "false" => data_stack.push(false),
         "and" => {
