@@ -58,15 +58,12 @@ fn evaluate_syntax_element(
     match syntax_element {
         SyntaxElement::Array { .. } => {
             // no implemented yet
-            Ok(())
         }
         SyntaxElement::Block { syntax_tree } => {
             data_stack.push(Value::Block(syntax_tree.clone()));
-            Ok(())
         }
         SyntaxElement::Function { name, body } => {
             functions.define(Module::none(), name.clone(), body.clone());
-            Ok(())
         }
         SyntaxElement::Module { name, body } => {
             for syntax_element in &body.elements {
@@ -79,27 +76,27 @@ fn evaluate_syntax_element(
                     tests,
                 )?;
             }
-            Ok(())
         }
         SyntaxElement::Test { name, body } => {
             tests.define(module, name.clone(), body.clone());
-            Ok(())
         }
         SyntaxElement::Binding { idents } => {
             for ident in idents.iter().rev() {
                 let value = data_stack.pop_any()?;
                 bindings.inner.insert(ident.clone(), value);
             }
-            Ok(())
         }
         SyntaxElement::String(s) => {
             data_stack.push(s.clone());
-            Ok(())
         }
         SyntaxElement::Word(word) => {
-            evaluate_word(module, word, data_stack, bindings, functions, tests)
+            evaluate_word(
+                module, word, data_stack, bindings, functions, tests,
+            )?;
         }
     }
+
+    Ok(())
 }
 
 fn evaluate_word(
