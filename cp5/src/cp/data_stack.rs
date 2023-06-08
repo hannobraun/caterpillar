@@ -85,7 +85,8 @@ impl DataStack {
     pub fn drain_values_from_marker(
         &mut self,
     ) -> impl Iterator<Item = Value> + '_ {
-        self.values.drain(self.marker..)
+        let index = usize::min(self.marker, self.values.len());
+        self.values.drain(index..)
     }
 }
 
