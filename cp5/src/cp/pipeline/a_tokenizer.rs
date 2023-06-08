@@ -53,12 +53,13 @@ fn read_other(
 ) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
-    while let Ok(&ch) = chars.read() {
+    while let Ok(&ch) = chars.peek() {
         if ch.is_whitespace() {
             break;
         }
 
         buf.push(ch);
+        let _ = chars.read();
 
         for (s, token) in DELIMITERS {
             match buf.split_once(*s) {
