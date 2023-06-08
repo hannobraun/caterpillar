@@ -70,7 +70,7 @@ fn evaluate_syntax_element(
                 )?;
             }
 
-            let values = data_stack.drain_values_from_mark().collect();
+            let values = data_stack.drain_values_from_marker().collect();
             let array = Value::Array(values);
             data_stack.push(array);
         }

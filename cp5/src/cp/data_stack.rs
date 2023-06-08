@@ -82,7 +82,7 @@ impl DataStack {
         self.marker = self.values.len();
     }
 
-    pub fn drain_values_from_mark(
+    pub fn drain_values_from_marker(
         &mut self,
     ) -> impl Iterator<Item = Value> + '_ {
         self.values.drain(self.marker..)
