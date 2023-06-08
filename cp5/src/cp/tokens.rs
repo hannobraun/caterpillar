@@ -22,3 +22,12 @@ pub enum Keyword {
 pub enum Literal {
     String(String),
 }
+
+pub const DELIMITERS: &[(&str, Token)] = &[
+    ("=>", Token::BindingOperator),
+    (".", Token::Period),
+    ("{", Token::CurlyBracketOpen),
+    ("}", Token::CurlyBracketClose),
+    ("[", Token::SquareBracketOpen),
+    ("]", Token::SquareBracketClose),
+];

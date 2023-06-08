@@ -1,6 +1,6 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::{Keyword, Literal, Token};
+use crate::cp::tokens::{Keyword, Literal, Token, DELIMITERS};
 
 use super::{
     stage_input::{NoMoreInput, StageInputReader},
@@ -89,12 +89,3 @@ fn read_keyword_or_ident(
 
     Ok(Token::Ident(buf))
 }
-
-const DELIMITERS: &[(&str, Token)] = &[
-    ("=>", Token::BindingOperator),
-    (".", Token::Period),
-    ("{", Token::CurlyBracketOpen),
-    ("}", Token::CurlyBracketClose),
-    ("[", Token::SquareBracketOpen),
-    ("]", Token::SquareBracketClose),
-];
