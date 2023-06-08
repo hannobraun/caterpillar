@@ -3,11 +3,15 @@ use super::syntax::SyntaxTree;
 #[derive(Debug)]
 pub struct DataStack {
     values: Vec<Value>,
+    marker: usize,
 }
 
 impl DataStack {
     pub fn new() -> Self {
-        Self { values: Vec::new() }
+        Self {
+            values: Vec::new(),
+            marker: 0,
+        }
     }
 
     pub fn push(&mut self, value: impl Into<Value>) {
@@ -63,10 +67,21 @@ impl DataStack {
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
+
+    pub fn mark(&mut self) {
+        self.marker = self.values.len();
+    }
+
+    pub fn drain_values_from_mark(
+        &mut self,
+    ) -> impl Iterator<Item = Value> + '_ {
+        self.values.drain(self.marker..)
+    }
 }
 
 #[derive(Clone, Debug)]
 pub enum Value {
+    Array(Vec<Value>),
     Bool(bool),
     Block(SyntaxTree),
     String(String),

@@ -56,8 +56,23 @@ fn evaluate_syntax_element(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
-        SyntaxElement::Array { .. } => {
-            // no implemented yet
+        SyntaxElement::Array { syntax_tree } => {
+            data_stack.mark();
+
+            for syntax_element in &syntax_tree.elements {
+                evaluate_syntax_element(
+                    module,
+                    syntax_element,
+                    data_stack,
+                    bindings,
+                    functions,
+                    tests,
+                )?;
+            }
+
+            let values = data_stack.drain_values_from_mark().collect();
+            let array = Value::Array(values);
+            data_stack.push(array);
         }
         SyntaxElement::Block { syntax_tree } => {
             data_stack.push(Value::Block(syntax_tree.clone()));
