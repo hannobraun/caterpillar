@@ -58,7 +58,7 @@ fn read_other(
     let mut buf = String::new();
 
     while let Ok(&ch) = chars.peek() {
-        if ch.is_whitespace() {
+        if ch.is_whitespace() || ch == STRING_DELIMITER {
             break;
         }
 
