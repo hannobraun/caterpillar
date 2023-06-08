@@ -60,14 +60,10 @@ fn read_other(
 
         buf.push(ch);
 
-        match buf.as_str() {
-            "=>" => return Ok(Token::BindingOperator),
-            "." => return Ok(Token::Period),
-            "{" => return Ok(Token::CurlyBracketOpen),
-            "}" => return Ok(Token::CurlyBracketClose),
-            "[" => return Ok(Token::SquareBracketOpen),
-            "]" => return Ok(Token::SquareBracketClose),
-            _ => {}
+        for (s, token) in DELIMITERS {
+            if buf == *s {
+                return Ok(token.clone());
+            }
         }
     }
 
@@ -84,3 +80,12 @@ fn read_other(
 
     Ok(Token::Ident(buf))
 }
+
+const DELIMITERS: &[(&str, Token)] = &[
+    ("=>", Token::BindingOperator),
+    (".", Token::Period),
+    ("{", Token::CurlyBracketOpen),
+    ("}", Token::CurlyBracketClose),
+    ("[", Token::SquareBracketOpen),
+    ("]", Token::SquareBracketClose),
+];
