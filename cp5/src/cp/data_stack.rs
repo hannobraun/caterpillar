@@ -22,6 +22,16 @@ impl DataStack {
         self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
     }
 
+    pub fn pop_array(&mut self) -> Result<Vec<Value>, DataStackError> {
+        self.pop_specific_type("array", |value| {
+            let Value::Array(value) = value else {
+                return Err(value);
+            };
+
+            Ok(value)
+        })
+    }
+
     pub fn pop_bool(&mut self) -> Result<bool, DataStackError> {
         self.pop_specific_type("bool", |value| {
             let Value::Bool(value) = value else {

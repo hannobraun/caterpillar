@@ -144,6 +144,13 @@ fn evaluate_word(
             let b = data_stack.pop_bool()?;
             data_stack.push(!b);
         }
+        "unwrap" => {
+            let array = data_stack.pop_array()?;
+
+            for value in array {
+                data_stack.push(value);
+            }
+        }
         "eval" => {
             let block = data_stack.pop_block()?;
             for syntax_element in block.elements {

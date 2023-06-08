@@ -28,6 +28,10 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             test "lazy evaluation" { true { drop } drop }
         }
 
+        mod array {
+            test "unwrap" { [ true ] unwrap }
+        }
+
         mod fn_ {
             test "fn" { fn f { true } f }
         }
