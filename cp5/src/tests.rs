@@ -30,6 +30,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
         mod array {
             test "unwrap" { [ true ] unwrap }
+            test "eager evaluation" { true false [ drop ] drop }
         }
 
         mod fn_ {
