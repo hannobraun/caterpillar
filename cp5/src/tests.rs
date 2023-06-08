@@ -37,6 +37,11 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
             test "fn" { fn f { true } f }
         }
 
+        mod if_ {
+            test "then" { true { true } { false } if }
+            test "else" { false { false } { true } if }
+        }
+
         mod string {
             test "=" { "a" "a" = }
             test "= not" { "a" "b" = not }

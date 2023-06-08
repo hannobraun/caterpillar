@@ -146,6 +146,17 @@ fn evaluate_word(
             let b = data_stack.pop_bool()?;
             data_stack.push(!b);
         }
+        "if" => {
+            let else_ = data_stack.pop_block()?;
+            let then_ = data_stack.pop_block()?;
+            let cond = data_stack.pop_bool()?;
+
+            let block = if cond { then_ } else { else_ };
+
+            evaluate_block(
+                module, block, data_stack, bindings, functions, tests,
+            )?;
+        }
         "unwrap" => {
             let array = data_stack.pop_array()?;
 
