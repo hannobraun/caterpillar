@@ -23,6 +23,8 @@ pub enum Literal {
     String(String),
 }
 
+pub const STRING_DELIMITER: char = '"';
+
 pub const DELIMITERS: &[(&str, Token)] = &[
     ("=>", Token::BindingOperator),
     (".", Token::Period),

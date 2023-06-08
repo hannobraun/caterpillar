@@ -1,6 +1,8 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::{Literal, Token, DELIMITERS, KEYWORDS};
+use crate::cp::tokens::{
+    Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER,
+};
 
 use super::{
     stage_input::{NoMoreInput, StageInputReader},
@@ -20,7 +22,7 @@ fn tokenize_inner(
 ) -> Result<Token, PipelineError<Infallible>> {
     loop {
         match *chars.peek()? {
-            '"' => return read_string(chars),
+            STRING_DELIMITER => return read_string(chars),
             ch if ch.is_whitespace() => {
                 let _ = chars.read()?;
                 chars.take();
@@ -36,13 +38,15 @@ fn read_string(
 ) -> Result<Token, PipelineError<Infallible>> {
     // This method is only ever called, if this is true. If it isn't, that's a
     // bug in this module.
-    assert_eq!(*chars.read()?, '"');
+    assert_eq!(*chars.read()?, STRING_DELIMITER);
 
     let mut buf = String::new();
 
     loop {
         match *chars.read()? {
-            '"' => return Ok(Token::Literal(Literal::String(buf))),
+            STRING_DELIMITER => {
+                return Ok(Token::Literal(Literal::String(buf)))
+            }
             ch => buf.push(ch),
         }
     }
