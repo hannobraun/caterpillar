@@ -22,7 +22,7 @@ fn tokenize_inner(
         match *chars.peek()? {
             '"' => return read_string(chars),
             ch if ch.is_whitespace() => {
-                let _ = chars.next()?;
+                let _ = chars.read()?;
                 chars.take();
                 continue;
             }
@@ -36,12 +36,12 @@ fn read_string(
 ) -> Result<Token, PipelineError<Infallible>> {
     // This method is only ever called, if this is true. If it isn't, that's a
     // bug in this module.
-    assert_eq!(*chars.next()?, '"');
+    assert_eq!(*chars.read()?, '"');
 
     let mut buf = String::new();
 
     loop {
-        match *chars.next()? {
+        match *chars.read()? {
             '"' => return Ok(Token::Literal(Literal::String(buf))),
             ch => buf.push(ch),
         }
@@ -53,7 +53,7 @@ fn read_other(
 ) -> Result<Token, PipelineError<Infallible>> {
     let mut buf = String::new();
 
-    while let Ok(&ch) = chars.next() {
+    while let Ok(&ch) = chars.read() {
         if ch.is_whitespace() {
             break;
         }

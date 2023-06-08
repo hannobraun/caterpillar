@@ -65,7 +65,7 @@ fn parse_binding(tokens: &mut StageInputReader<Token>) -> Result<Vec<String>> {
     loop {
         match tokens.peek()? {
             Token::Period => {
-                let _ = tokens.next();
+                let _ = tokens.read();
                 return Ok(idents);
             }
             _ => {
@@ -86,7 +86,7 @@ fn parse_array(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
     loop {
         match tokens.peek()? {
             Token::SquareBracketClose => {
-                let _ = tokens.next();
+                let _ = tokens.read();
                 return Ok(syntax_tree);
             }
             _ => {
@@ -107,7 +107,7 @@ fn parse_block(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
     loop {
         match tokens.peek()? {
             Token::CurlyBracketClose => {
-                let _ = tokens.next();
+                let _ = tokens.read();
                 return Ok(syntax_tree);
             }
             _ => {
@@ -149,7 +149,7 @@ fn parse_test(
 }
 
 fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {
-    let token = tokens.next()?;
+    let token = tokens.read()?;
     let Token::Literal(Literal::String(s)) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
             token.clone()))
@@ -159,7 +159,7 @@ fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {
 }
 
 fn parse_ident(tokens: &mut StageInputReader<Token>) -> Result<String> {
-    let token = tokens.next()?;
+    let token = tokens.read()?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
             token.clone()
@@ -172,7 +172,7 @@ fn expect_token(
     tokens: &mut StageInputReader<Token>,
     expected: Token,
 ) -> Result<()> {
-    let token = tokens.next()?;
+    let token = tokens.read()?;
 
     if token != &expected {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(

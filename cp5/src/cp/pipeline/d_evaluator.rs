@@ -36,7 +36,7 @@ pub fn evaluate(
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    let syntax_element = syntax_elements.next()?;
+    let syntax_element = syntax_elements.read()?;
     evaluate_syntax_element(
         Module::none(),
         syntax_element,

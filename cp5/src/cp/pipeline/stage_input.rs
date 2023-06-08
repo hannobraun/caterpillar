@@ -57,7 +57,7 @@ impl<'r, T> StageInputReader<'r, T> {
         self.inner.elements.get(self.num_read).ok_or(NoMoreInput)
     }
 
-    pub fn next(&mut self) -> Result<&T, NoMoreInput> {
+    pub fn read(&mut self) -> Result<&T, NoMoreInput> {
         let element =
             self.inner.elements.get(self.num_read).ok_or(NoMoreInput)?;
         self.num_read += 1;
