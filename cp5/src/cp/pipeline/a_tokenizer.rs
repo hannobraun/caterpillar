@@ -61,9 +61,12 @@ fn read_other(
         buf.push(ch);
 
         for (s, token) in DELIMITERS {
-            if buf == *s {
-                return Ok(token.clone());
-            }
+            let s = *s;
+            match buf.split_once(s) {
+                Some(("", _)) => return Ok(token.clone()),
+                Some(_) => break,
+                None => {}
+            };
         }
     }
 
