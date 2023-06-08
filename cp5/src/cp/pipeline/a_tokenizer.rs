@@ -70,6 +70,12 @@ fn read_other(
         }
     }
 
+    read_keyword_or_ident(buf)
+}
+
+fn read_keyword_or_ident(
+    buf: String,
+) -> Result<Token, PipelineError<Infallible>> {
     if buf.is_empty() {
         return Err(PipelineError::NotEnoughInput(NoMoreInput));
     }
