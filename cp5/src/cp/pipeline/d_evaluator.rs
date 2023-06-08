@@ -1,8 +1,10 @@
 use std::collections::BTreeMap;
 
 use crate::cp::{
-    data_stack::Value, functions::Module, syntax::SyntaxElement, DataStack,
-    DataStackError, Functions, StageInput,
+    data_stack::Value,
+    functions::Module,
+    syntax::{SyntaxElement, SyntaxTree},
+    DataStack, DataStackError, Functions, StageInput,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -153,16 +155,9 @@ fn evaluate_word(
         }
         "eval" => {
             let block = data_stack.pop_block()?;
-            for syntax_element in block.elements {
-                evaluate_syntax_element(
-                    module,
-                    &syntax_element,
-                    data_stack,
-                    bindings,
-                    functions,
-                    tests,
-                )?;
-            }
+            evaluate_block(
+                module, block, data_stack, bindings, functions, tests,
+            )?;
         }
         "=" => {
             let a = data_stack.pop_string()?;
@@ -179,16 +174,14 @@ fn evaluate_word(
             }
 
             if let Some(function) = functions.get(word) {
-                for syntax_element in function.body.elements {
-                    evaluate_syntax_element(
-                        module,
-                        &syntax_element,
-                        data_stack,
-                        bindings,
-                        functions,
-                        tests,
-                    )?;
-                }
+                evaluate_block(
+                    module,
+                    function.body,
+                    data_stack,
+                    bindings,
+                    functions,
+                    tests,
+                )?;
                 return Ok(());
             }
 
@@ -196,6 +189,28 @@ fn evaluate_word(
                 word.into(),
             )));
         }
+    }
+
+    Ok(())
+}
+
+fn evaluate_block(
+    module: Module,
+    block: SyntaxTree,
+    data_stack: &mut DataStack,
+    bindings: &mut Bindings,
+    functions: &mut Functions,
+    tests: &mut Functions,
+) -> Result<(), PipelineError<EvaluatorError>> {
+    for syntax_element in block.elements {
+        evaluate_syntax_element(
+            module,
+            &syntax_element,
+            data_stack,
+            bindings,
+            functions,
+            tests,
+        )?;
     }
 
     Ok(())
