@@ -63,7 +63,10 @@ fn read_other(
         for (s, token) in DELIMITERS {
             match buf.split_once(*s) {
                 Some(("", _)) => return Ok(token.clone()),
-                Some(_) => break,
+                Some((buf, _)) => {
+                    chars.unread_last_n(s.chars().count());
+                    return read_keyword_or_ident(buf.into());
+                }
                 None => {}
             };
         }

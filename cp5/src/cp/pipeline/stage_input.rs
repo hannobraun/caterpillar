@@ -64,6 +64,10 @@ impl<'r, T> StageInputReader<'r, T> {
         Ok(element)
     }
 
+    pub fn unread_last_n(&mut self, n: usize) {
+        self.num_read -= n;
+    }
+
     pub fn take(&mut self) {
         let _ = self.inner.elements.drain(..self.num_read).last();
         self.num_read = 0;

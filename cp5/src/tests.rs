@@ -16,6 +16,7 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
         mod binding {
             test "binding" { true false => t f . t }
+            test "tokenization" { true=>t.t }
         }
 
         mod basics {
@@ -26,11 +27,13 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
         mod block {
             test "eval" { { true } eval }
             test "lazy evaluation" { true { drop } drop }
+            test "tokenization" { {true}eval{true}eval and }
         }
 
         mod array {
             test "unwrap" { [ true ] unwrap }
             test "eager evaluation" { true false [ drop ] drop }
+            test "tokenization" { [true]unwrap[true]unwrap and }
         }
 
         mod fn_ {
