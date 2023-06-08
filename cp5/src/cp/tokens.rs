@@ -31,3 +31,9 @@ pub const DELIMITERS: &[(&str, Token)] = &[
     ("[", Token::SquareBracketOpen),
     ("]", Token::SquareBracketClose),
 ];
+
+pub const KEYWORDS: &[(&str, Token)] = &[
+    ("fn", Token::Keyword(Keyword::Fn)),
+    ("mod", Token::Keyword(Keyword::Mod)),
+    ("test", Token::Keyword(Keyword::Test)),
+];

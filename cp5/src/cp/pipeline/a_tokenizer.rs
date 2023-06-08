@@ -1,6 +1,6 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::{Keyword, Literal, Token, DELIMITERS};
+use crate::cp::tokens::{Literal, Token, DELIMITERS, KEYWORDS};
 
 use super::{
     stage_input::{NoMoreInput, StageInputReader},
@@ -79,11 +79,10 @@ fn read_keyword_or_ident(
         return Err(PipelineError::NotEnoughInput(NoMoreInput));
     }
 
-    match buf.as_str() {
-        "fn" => return Ok(Token::Keyword(Keyword::Fn)),
-        "mod" => return Ok(Token::Keyword(Keyword::Mod)),
-        "test" => return Ok(Token::Keyword(Keyword::Test)),
-        _ => {}
+    for (s, token) in KEYWORDS {
+        if buf == *s {
+            return Ok(token.clone());
+        }
     }
 
     Ok(Token::Ident(buf))
