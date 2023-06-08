@@ -48,10 +48,6 @@ impl DataStack {
         })
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.values.is_empty()
-    }
-
     fn pop_specific_type<T>(
         &mut self,
         expected: &'static str,
@@ -62,6 +58,10 @@ impl DataStack {
             expected,
             actual: value,
         })
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.values.is_empty()
     }
 }
 
