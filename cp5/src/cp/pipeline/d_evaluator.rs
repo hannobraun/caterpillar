@@ -178,6 +178,12 @@ fn evaluate_word(
 
             data_stack.push(eq);
         }
+        "-" => {
+            let b = data_stack.pop_u8()?;
+            let a = data_stack.pop_u8()?;
+
+            data_stack.push(a - b);
+        }
         _ => {
             if let Some(value) = bindings.inner.remove(word) {
                 data_stack.push(value);

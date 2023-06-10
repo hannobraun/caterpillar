@@ -62,6 +62,16 @@ impl DataStack {
         })
     }
 
+    pub fn pop_u8(&mut self) -> Result<u8, DataStackError> {
+        self.pop_specific_type("u8", |value| {
+            let Value::U8(value) = value else {
+                return Err(value);
+            };
+
+            Ok(value)
+        })
+    }
+
     fn pop_specific_type<T>(
         &mut self,
         expected: &'static str,
