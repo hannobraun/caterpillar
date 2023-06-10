@@ -3,7 +3,7 @@ use crate::{
     test_report::{Error, TestReport},
 };
 
-pub fn run() -> anyhow::Result<Vec<TestReport>> {
+pub fn run(mut functions: cp::Functions) -> anyhow::Result<Vec<TestReport>> {
     let code = r#"
         mod bool {
             test "true" { true }
@@ -54,7 +54,6 @@ pub fn run() -> anyhow::Result<Vec<TestReport>> {
 
     let mut data_stack = cp::DataStack::new();
     let mut bindings = cp::Bindings::new();
-    let mut functions = cp::Functions::new();
     let mut tests = cp::Functions::new();
 
     cp::execute(
