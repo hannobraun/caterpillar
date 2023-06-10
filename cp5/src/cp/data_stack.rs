@@ -100,7 +100,7 @@ impl DataStack {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Value {
     Array(Vec<Value>),
     Bool(bool),

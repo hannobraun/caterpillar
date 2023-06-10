@@ -1,9 +1,9 @@
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxElement {
     Array { syntax_tree: SyntaxTree },
     Block { syntax_tree: SyntaxTree },
