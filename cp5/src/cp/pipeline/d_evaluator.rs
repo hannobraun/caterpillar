@@ -196,6 +196,11 @@ fn evaluate_word(
                 return Ok(());
             }
 
+            if let Ok(value) = word.parse::<u8>() {
+                data_stack.push(value);
+                return Ok(());
+            }
+
             return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
                 word.into(),
             )));
