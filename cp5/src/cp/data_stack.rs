@@ -96,6 +96,7 @@ pub enum Value {
     Bool(bool),
     Block(SyntaxTree),
     String(String),
+    U8(u8),
 }
 
 impl From<bool> for Value {
@@ -107,6 +108,12 @@ impl From<bool> for Value {
 impl From<String> for Value {
     fn from(value: String) -> Self {
         Self::String(value)
+    }
+}
+
+impl From<u8> for Value {
+    fn from(value: u8) -> Self {
+        Self::U8(value)
     }
 }
 
