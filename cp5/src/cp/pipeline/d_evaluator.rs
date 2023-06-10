@@ -171,8 +171,8 @@ fn evaluate_word(
             )?;
         }
         "=" => {
-            let a = data_stack.pop_any()?;
             let b = data_stack.pop_any()?;
+            let a = data_stack.pop_any()?;
 
             let eq = a == b;
 
