@@ -15,7 +15,7 @@ pub fn evaluate_all(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     while !syntax_elements.is_empty() {
         evaluate(
             syntax_elements.reader(),
@@ -35,7 +35,7 @@ pub fn evaluate(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.read()?;
     evaluate_syntax_element(
         Module::none(),
@@ -44,7 +44,15 @@ pub fn evaluate(
         bindings,
         functions,
         tests,
-    )?;
+    )
+    .map_err(|err| match err {
+        PipelineError::NotEnoughInput(err) => {
+            PipelineError::NotEnoughInput(err)
+        }
+        PipelineError::Stage(kind) => {
+            PipelineError::Stage(EvaluatorError { kind })
+        }
+    })?;
     syntax_elements.take();
     Ok(())
 }
