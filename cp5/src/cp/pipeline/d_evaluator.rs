@@ -15,7 +15,7 @@ pub fn evaluate_all(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result {
+) -> Result<(), PipelineError<EvaluatorError>> {
     while !syntax_elements.is_empty() {
         evaluate(
             syntax_elements.reader(),
@@ -35,7 +35,7 @@ pub fn evaluate(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result {
+) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.read()?;
     evaluate_syntax_element(
         Module::none(),
@@ -56,7 +56,7 @@ fn evaluate_syntax_element(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             data_stack.mark();
@@ -123,7 +123,7 @@ fn evaluate_word(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
         "clone" => {
             let a = data_stack.pop_any()?;
@@ -223,7 +223,7 @@ fn evaluate_block(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result {
+) -> Result<(), PipelineError<EvaluatorError>> {
     for syntax_element in block.elements {
         evaluate_syntax_element(
             module,
@@ -249,8 +249,6 @@ impl Bindings {
         }
     }
 }
-
-type Result = std::result::Result<(), PipelineError<EvaluatorError>>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
