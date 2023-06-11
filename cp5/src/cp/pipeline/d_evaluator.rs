@@ -185,8 +185,8 @@ fn evaluate_word(
             data_stack.push(a - b);
         }
         _ => {
-            if let Some(value) = bindings.inner.remove(word) {
-                data_stack.push(value);
+            if let Some(value) = bindings.inner.get(word) {
+                data_stack.push(value.clone());
                 return Ok(());
             }
 
