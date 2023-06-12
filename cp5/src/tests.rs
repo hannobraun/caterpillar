@@ -50,6 +50,10 @@ pub fn run(mut functions: cp::Functions) -> anyhow::Result<Vec<TestReport>> {
             test "= not" { "a" "b" = not }
             test "tokenization" { "a""a"="b""b"= and }
         }
+
+        mod std {
+            test "times" { { true } 2 times drop }
+        }
     "#;
 
     let mut data_stack = cp::DataStack::new();

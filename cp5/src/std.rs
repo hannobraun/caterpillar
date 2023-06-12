@@ -4,6 +4,17 @@ pub fn define() -> anyhow::Result<cp::Functions> {
     let mut functions = cp::Functions::new();
 
     let code = r#"
+        fn times {
+            => block num .
+            num 0 =
+                {}
+                {
+                    block eval
+                    num 1 - => num .
+                    block num times
+                }
+                    if
+        }
     "#;
 
     let mut data_stack = cp::DataStack::new();
