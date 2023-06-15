@@ -2,15 +2,14 @@ use std::collections::{btree_map, BTreeMap};
 
 use super::syntax::SyntaxTree;
 
+#[derive(Default)]
 pub struct Functions {
     inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
     pub fn new() -> Functions {
-        Functions {
-            inner: BTreeMap::new(),
-        }
+        Self::default()
     }
 
     pub fn define(&mut self, module: Module, name: String, body: SyntaxTree) {
