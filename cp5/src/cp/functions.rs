@@ -32,6 +32,15 @@ impl IntoIterator for Functions {
     }
 }
 
+impl<'a> IntoIterator for &'a Functions {
+    type Item = (&'a String, &'a Function);
+    type IntoIter = btree_map::Iter<'a, String, Function>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.iter()
+    }
+}
+
 #[derive(Clone)]
 pub struct Function {
     pub module: String,
