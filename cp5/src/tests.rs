@@ -71,12 +71,12 @@ pub fn define(functions: &mut cp::Functions) -> anyhow::Result<cp::Functions> {
 
 pub fn run(
     functions: &mut cp::Functions,
-    tests: cp::Functions,
+    tests: &cp::Functions,
 ) -> anyhow::Result<Vec<TestReport>> {
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let syntax_elements = cp::StageInput::from(function.body);
+        let syntax_elements = cp::StageInput::from(function.body.clone());
 
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();
@@ -109,8 +109,8 @@ pub fn run(
             });
 
         results.push(TestReport {
-            module: function.module,
-            name,
+            module: function.module.clone(),
+            name: name.clone(),
             result,
         })
     }

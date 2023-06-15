@@ -8,7 +8,7 @@ mod tests;
 fn main() -> anyhow::Result<()> {
     let mut functions = std::define()?;
     let tests = tests::define(&mut functions)?;
-    let test_reports = tests::run(&mut functions, tests)?;
+    let test_reports = tests::run(&mut functions, &tests)?;
     test_report::print(&test_reports);
 
     for input in stdin().lines() {
