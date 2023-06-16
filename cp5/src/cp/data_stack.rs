@@ -1,3 +1,5 @@
+use core::fmt;
+
 use super::syntax::SyntaxTree;
 
 #[derive(Debug)]
@@ -87,6 +89,20 @@ impl DataStack {
     ) -> impl Iterator<Item = Value> + '_ {
         let index = usize::min(self.marker, self.values.len());
         self.values.drain(index..)
+    }
+}
+
+impl fmt::Display for DataStack {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        for (i, value) in self.values.iter().enumerate() {
+            if i != 0 {
+                write!(f, " ")?;
+            }
+
+            write!(f, "{value:?}")?;
+        }
+
+        Ok(())
     }
 }
 
