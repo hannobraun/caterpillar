@@ -115,6 +115,18 @@ pub enum Value {
     U8(u8),
 }
 
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Value::Array(value) => write!(f, "{value:?}"),
+            Value::Bool(value) => write!(f, "{value}"),
+            Value::Block(value) => write!(f, "{value:?}"),
+            Value::String(value) => write!(f, "{value}"),
+            Value::U8(value) => write!(f, "{value}"),
+        }
+    }
+}
+
 impl From<bool> for Value {
     fn from(value: bool) -> Self {
         Self::Bool(value)
