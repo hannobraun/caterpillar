@@ -25,7 +25,7 @@ fn main() -> anyhow::Result<()> {
             &mut tests,
         )?;
 
-        println!("{data_stack:?}");
+        println!("{data_stack}");
     }
 
     Ok(())
