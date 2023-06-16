@@ -93,7 +93,7 @@ impl DataStack {
 }
 
 impl fmt::Display for DataStack {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (i, value) in self.values.iter().enumerate() {
             if i != 0 {
                 write!(f, " ")?;
