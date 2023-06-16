@@ -99,7 +99,7 @@ impl fmt::Display for DataStack {
                 write!(f, " ")?;
             }
 
-            write!(f, "{value:?}")?;
+            write!(f, "{value}")?;
         }
 
         Ok(())
