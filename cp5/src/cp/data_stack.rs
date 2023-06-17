@@ -24,7 +24,7 @@ impl DataStack {
         self.values.pop().ok_or(DataStackError::PopFromEmptyStack)
     }
 
-    pub fn pop_array(&mut self) -> Result<Vec<Value>, DataStackError> {
+    pub fn pop_array(&mut self) -> Result<Array, DataStackError> {
         self.pop_specific_type("array", |value| {
             let Value::Array(value) = value else {
                 return Err(value);
@@ -108,7 +108,7 @@ impl fmt::Display for DataStack {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Value {
-    Array(Vec<Value>),
+    Array(Array),
     Bool(bool),
     Block(SyntaxTree),
     String(String),
@@ -144,6 +144,8 @@ impl From<u8> for Value {
         Self::U8(value)
     }
 }
+
+pub type Array = Vec<Value>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataStackError {
