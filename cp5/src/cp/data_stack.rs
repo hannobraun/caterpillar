@@ -150,6 +150,24 @@ pub struct Array {
     pub elements: Vec<Value>,
 }
 
+impl fmt::Display for Array {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[")?;
+
+        if !self.elements.is_empty() {
+            write!(f, " ")?;
+        }
+
+        for element in &self.elements {
+            write!(f, "{element} ")?;
+        }
+
+        write!(f, "]")?;
+
+        Ok(())
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum DataStackError {
     #[error("Tried to pop value from empty stack")]
