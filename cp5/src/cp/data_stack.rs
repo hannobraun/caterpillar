@@ -118,7 +118,7 @@ pub enum Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Value::Array(value) => write!(f, "{value:?}"),
+            Value::Array(value) => write!(f, "{value}"),
             Value::Bool(value) => write!(f, "{value}"),
             Value::Block(value) => write!(f, "{value:?}"),
             Value::String(value) => write!(f, "{value}"),
