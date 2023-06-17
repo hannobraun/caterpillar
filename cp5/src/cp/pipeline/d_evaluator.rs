@@ -80,8 +80,8 @@ fn evaluate_syntax_element(
                 )?;
             }
 
-            let values = data_stack.drain_values_from_marker().collect();
-            let array = Value::Array(values);
+            let array = data_stack.drain_values_from_marker().collect();
+            let array = Value::Array(array);
             data_stack.push(array);
         }
         SyntaxElement::Block { syntax_tree } => {
