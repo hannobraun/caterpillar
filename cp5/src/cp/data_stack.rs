@@ -145,7 +145,10 @@ impl From<u8> for Value {
     }
 }
 
-pub type Array = Vec<Value>;
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Array {
+    pub elements: Vec<Value>,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataStackError {

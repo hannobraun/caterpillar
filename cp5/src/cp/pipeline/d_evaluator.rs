@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::cp::{
-    data_stack::Value,
+    data_stack::{Array, Value},
     functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
     DataStack, DataStackError, Functions, StageInput,
@@ -80,7 +80,9 @@ fn evaluate_syntax_element(
                 )?;
             }
 
-            let array = data_stack.drain_values_from_marker().collect();
+            let array = Array {
+                elements: data_stack.drain_values_from_marker().collect(),
+            };
             let array = Value::Array(array);
             data_stack.push(array);
         }
@@ -168,7 +170,7 @@ fn evaluate_word(
         "unwrap" => {
             let array = data_stack.pop_array()?;
 
-            for value in array {
+            for value in array.elements {
                 data_stack.push(value);
             }
         }
