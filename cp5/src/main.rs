@@ -26,6 +26,9 @@ fn main() -> anyhow::Result<()> {
         )?;
 
         println!("{data_stack}");
+
+        let test_reports = tests::run(&mut functions, &tests)?;
+        test_report::print(&test_reports);
     }
 
     Ok(())
