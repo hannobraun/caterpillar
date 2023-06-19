@@ -4,6 +4,7 @@ use super::{
     pipeline::{
         a_tokenizer::tokenize,
         b_parser::{parse, ParserError},
+        c_analyzer::{analyze, Expression},
         d_evaluator::{evaluate, EvaluatorError},
         stage_input::{NoMoreInput, StageInput},
         PipelineError,
@@ -23,12 +24,14 @@ pub fn execute(
     let mut chars = code.chars().collect();
     let mut tokens = StageInput::new();
     let mut syntax_elements = StageInput::new();
+    let mut expressions = StageInput::new();
 
     loop {
         match execute_inner(
             &mut chars,
             &mut tokens,
             &mut syntax_elements,
+            &mut expressions,
             data_stack,
             bindings,
             functions,
@@ -55,10 +58,12 @@ pub fn execute(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 fn execute_inner(
     chars: &mut StageInput<char>,
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
+    expressions: &mut StageInput<Expression>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
@@ -69,6 +74,9 @@ fn execute_inner(
 
     let syntax_element = parse(tokens.reader())?;
     syntax_elements.add(syntax_element);
+
+    let expression = analyze(syntax_elements.reader())?;
+    expressions.add(expression);
 
     evaluate(
         syntax_elements.reader(),
