@@ -65,9 +65,8 @@ fn evaluate_expression(
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
-    let Expression::RawSyntaxElement(syntax_element) = expression;
-    match syntax_element {
-        SyntaxElement::Array { syntax_tree } => {
+    match expression {
+        Expression::RawSyntaxElement(SyntaxElement::Array { syntax_tree }) => {
             data_stack.mark();
 
             for syntax_element in &syntax_tree.elements {
@@ -87,13 +86,16 @@ fn evaluate_expression(
             let array = Value::Array(array);
             data_stack.push(array);
         }
-        SyntaxElement::Block { syntax_tree } => {
+        Expression::RawSyntaxElement(SyntaxElement::Block { syntax_tree }) => {
             data_stack.push(Value::Block(syntax_tree.clone()));
         }
-        SyntaxElement::Function { name, body } => {
+        Expression::RawSyntaxElement(SyntaxElement::Function {
+            name,
+            body,
+        }) => {
             functions.define(Module::none(), name.clone(), body.clone());
         }
-        SyntaxElement::Module { name, body } => {
+        Expression::RawSyntaxElement(SyntaxElement::Module { name, body }) => {
             for syntax_element in &body.elements {
                 evaluate_expression(
                     Module::some(name),
@@ -105,19 +107,19 @@ fn evaluate_expression(
                 )?;
             }
         }
-        SyntaxElement::Test { name, body } => {
+        Expression::RawSyntaxElement(SyntaxElement::Test { name, body }) => {
             tests.define(module, name.clone(), body.clone());
         }
-        SyntaxElement::Binding { idents } => {
+        Expression::RawSyntaxElement(SyntaxElement::Binding { idents }) => {
             for ident in idents.iter().rev() {
                 let value = data_stack.pop_any()?;
                 bindings.inner.insert(ident.clone(), value);
             }
         }
-        SyntaxElement::String(s) => {
+        Expression::RawSyntaxElement(SyntaxElement::String(s)) => {
             data_stack.push(s.clone());
         }
-        SyntaxElement::Word(word) => {
+        Expression::RawSyntaxElement(SyntaxElement::Word(word)) => {
             evaluate_word(
                 module, word, data_stack, bindings, functions, tests,
             )?;
