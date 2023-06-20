@@ -4,7 +4,7 @@ use crate::cp::{
     data_stack::{Array, Value},
     functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
-    DataStack, DataStackError, Functions, StageInput,
+    DataStack, DataStackError, Expression, Functions, StageInput,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
@@ -39,7 +39,7 @@ pub fn evaluate(
     let syntax_element = syntax_elements.read()?;
     evaluate_syntax_element(
         Module::none(),
-        syntax_element,
+        &Expression::RawSyntaxElement(syntax_element.clone()),
         data_stack,
         bindings,
         functions,
@@ -59,12 +59,13 @@ pub fn evaluate(
 
 fn evaluate_syntax_element(
     module: Module,
-    syntax_element: &SyntaxElement,
+    syntax_element: &Expression,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+    let Expression::RawSyntaxElement(syntax_element) = syntax_element;
     match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             data_stack.mark();
@@ -72,7 +73,7 @@ fn evaluate_syntax_element(
             for syntax_element in &syntax_tree.elements {
                 evaluate_syntax_element(
                     module,
-                    syntax_element,
+                    &Expression::RawSyntaxElement(syntax_element.clone()),
                     data_stack,
                     bindings,
                     functions,
@@ -96,7 +97,7 @@ fn evaluate_syntax_element(
             for syntax_element in &body.elements {
                 evaluate_syntax_element(
                     Module::some(name),
-                    syntax_element,
+                    &Expression::RawSyntaxElement(syntax_element.clone()),
                     data_stack,
                     bindings,
                     functions,
@@ -237,7 +238,7 @@ fn evaluate_block(
     for syntax_element in block.elements {
         evaluate_syntax_element(
             module,
-            &syntax_element,
+            &Expression::RawSyntaxElement(syntax_element),
             data_stack,
             bindings,
             functions,
