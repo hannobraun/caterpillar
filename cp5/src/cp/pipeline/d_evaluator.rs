@@ -30,13 +30,13 @@ pub fn evaluate_all(
 }
 
 pub fn evaluate(
-    mut syntax_elements: StageInputReader<Expression>,
+    mut expressions: StageInputReader<Expression>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    let expression = syntax_elements.read()?;
+    let expression = expressions.read()?;
     evaluate_expression(
         Module::none(),
         expression,
@@ -53,7 +53,7 @@ pub fn evaluate(
             PipelineError::Stage(EvaluatorError { kind })
         }
     })?;
-    syntax_elements.take();
+    expressions.take();
     Ok(())
 }
 
