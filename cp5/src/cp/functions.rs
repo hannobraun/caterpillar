@@ -2,7 +2,7 @@ use std::collections::{btree_map, BTreeMap};
 
 use super::syntax::SyntaxTree;
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Functions {
     inner: BTreeMap<String, Function>,
 }
@@ -41,7 +41,7 @@ impl<'a> IntoIterator for &'a Functions {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Function {
     pub module: String,
     pub body: SyntaxTree,
