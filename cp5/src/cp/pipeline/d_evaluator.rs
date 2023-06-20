@@ -59,13 +59,13 @@ pub fn evaluate(
 
 fn evaluate_syntax_element(
     module: Module,
-    syntax_element: &Expression,
+    expression: &Expression,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
-    let Expression::RawSyntaxElement(syntax_element) = syntax_element;
+    let Expression::RawSyntaxElement(syntax_element) = expression;
     match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             data_stack.mark();
