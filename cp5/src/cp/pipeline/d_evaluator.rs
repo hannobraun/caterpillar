@@ -10,20 +10,14 @@ use crate::cp::{
 use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn evaluate_all(
-    mut syntax_elements: StageInput<Expression>,
+    mut expressions: StageInput<Expression>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
-    while !syntax_elements.is_empty() {
-        evaluate(
-            syntax_elements.reader(),
-            data_stack,
-            bindings,
-            functions,
-            tests,
-        )?;
+    while !expressions.is_empty() {
+        evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
     }
 
     Ok(())
