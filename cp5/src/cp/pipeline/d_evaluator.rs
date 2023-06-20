@@ -37,9 +37,10 @@ pub fn evaluate(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.read()?;
+    let expression = Expression::RawSyntaxElement(syntax_element.clone());
     evaluate_expression(
         Module::none(),
-        &Expression::RawSyntaxElement(syntax_element.clone()),
+        &expression,
         data_stack,
         bindings,
         functions,
