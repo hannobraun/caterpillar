@@ -37,7 +37,7 @@ pub fn evaluate(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let syntax_element = syntax_elements.read()?;
-    evaluate_syntax_element(
+    evaluate_expression(
         Module::none(),
         &Expression::RawSyntaxElement(syntax_element.clone()),
         data_stack,
@@ -57,7 +57,7 @@ pub fn evaluate(
     Ok(())
 }
 
-fn evaluate_syntax_element(
+fn evaluate_expression(
     module: Module,
     expression: &Expression,
     data_stack: &mut DataStack,
@@ -71,7 +71,7 @@ fn evaluate_syntax_element(
             data_stack.mark();
 
             for syntax_element in &syntax_tree.elements {
-                evaluate_syntax_element(
+                evaluate_expression(
                     module,
                     &Expression::RawSyntaxElement(syntax_element.clone()),
                     data_stack,
@@ -95,7 +95,7 @@ fn evaluate_syntax_element(
         }
         SyntaxElement::Module { name, body } => {
             for syntax_element in &body.elements {
-                evaluate_syntax_element(
+                evaluate_expression(
                     Module::some(name),
                     &Expression::RawSyntaxElement(syntax_element.clone()),
                     data_stack,
@@ -236,7 +236,7 @@ fn evaluate_block(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     for syntax_element in block.elements {
-        evaluate_syntax_element(
+        evaluate_expression(
             module,
             &Expression::RawSyntaxElement(syntax_element),
             data_stack,
