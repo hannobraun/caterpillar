@@ -1,8 +1,6 @@
 use core::fmt;
 
-use super::{
-    pipeline::c_analyzer::Expressions, syntax::SyntaxTree, Expression,
-};
+use super::pipeline::c_analyzer::Expressions;
 
 #[derive(Debug)]
 pub struct DataStack {
@@ -52,15 +50,6 @@ impl DataStack {
                 return Err(value);
             };
 
-            let value = Expressions {
-                elements: value
-                    .elements
-                    .into_iter()
-                    .map(|syntax_element| {
-                        Expression::RawSyntaxElement(syntax_element)
-                    })
-                    .collect(),
-            };
             Ok(value)
         })
     }
@@ -121,7 +110,7 @@ impl fmt::Display for DataStack {
 pub enum Value {
     Array(Array),
     Bool(bool),
-    Block(SyntaxTree),
+    Block(Expressions),
     String(String),
     U8(u8),
 }
