@@ -51,12 +51,12 @@ fn analyze_syntax_tree(syntax_tree: &SyntaxTree) -> Expressions {
     expressions
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Expressions {
     pub elements: Vec<Expression>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Array { expressions: Expressions },
     Function { name: String, body: Expressions },
