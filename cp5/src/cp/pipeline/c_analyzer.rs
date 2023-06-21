@@ -12,10 +12,16 @@ pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     functions: &mut Functions,
 ) -> Result<Expression, PipelineError<Infallible>> {
-    let syntax_element = syntax_elements.read()?;
-    let expression = analyze_syntax_element(syntax_element, functions).unwrap();
-    syntax_elements.take();
-    Ok(expression)
+    loop {
+        let syntax_element = syntax_elements.read()?;
+        let expression = analyze_syntax_element(syntax_element, functions);
+        syntax_elements.take();
+
+        match expression {
+            Some(expression) => return Ok(expression),
+            None => continue,
+        }
+    }
 }
 
 fn analyze_syntax_element(
