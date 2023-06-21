@@ -101,7 +101,7 @@ fn evaluate_expression(
                 )?;
             }
         }
-        Expression::RawSyntaxElement(SyntaxElement::String(s)) => {
+        Expression::String(s) => {
             data_stack.push(s.clone());
         }
         Expression::Test { name, body } => {
