@@ -2,6 +2,7 @@ use std::convert::Infallible;
 
 use crate::cp::{
     data_stack::Value,
+    functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
     Functions,
 };
@@ -44,7 +45,10 @@ fn analyze_syntax_element(
         SyntaxElement::Function { name, body } => {
             let name = name.clone();
             let body = analyze_syntax_tree(body, functions);
-            Expression::Function { name, body }
+
+            functions.define(Module::none(), name, body);
+
+            return None;
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
