@@ -7,10 +7,10 @@ use super::{stage_input::StageInputReader, PipelineError};
 pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,
 ) -> Result<Expression, PipelineError<Infallible>> {
-    let syntax_element =
+    let expression =
         Expression::RawSyntaxElement(syntax_elements.read()?.clone());
     syntax_elements.take();
-    Ok(syntax_element)
+    Ok(expression)
 }
 
 pub enum Expression {
