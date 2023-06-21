@@ -76,19 +76,7 @@ pub fn run(
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let mut syntax_elements = cp::StageInput::from(function.body.clone());
-        let expressions = {
-            let mut syntax_elements = syntax_elements.reader();
-            let mut expressions = cp::StageInput::new();
-
-            while let Ok(syntax_element) = syntax_elements.read() {
-                expressions.add(cp::Expression::RawSyntaxElement(
-                    syntax_element.clone(),
-                ));
-            }
-
-            expressions
-        };
+        let expressions = cp::StageInput::from(function.body.clone());
 
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();

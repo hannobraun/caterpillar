@@ -222,18 +222,13 @@ fn evaluate_word(
             }
 
             if let Some(function) = functions.get(word) {
-                let body = Expressions {
-                    elements: function
-                        .body
-                        .elements
-                        .into_iter()
-                        .map(|syntax_element| {
-                            Expression::RawSyntaxElement(syntax_element)
-                        })
-                        .collect(),
-                };
                 evaluate_block(
-                    module, body, data_stack, bindings, functions, tests,
+                    module,
+                    function.body,
+                    data_stack,
+                    bindings,
+                    functions,
+                    tests,
                 )?;
                 return Ok(());
             }

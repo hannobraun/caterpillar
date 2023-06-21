@@ -1,6 +1,8 @@
 use std::collections::{btree_map, BTreeMap};
 
-use super::syntax::SyntaxTree;
+use super::{
+    pipeline::c_analyzer::Expressions, syntax::SyntaxTree, Expression,
+};
 
 #[derive(Debug, Default)]
 pub struct Functions {
@@ -14,6 +16,16 @@ impl Functions {
 
     pub fn define(&mut self, module: Module, name: String, body: SyntaxTree) {
         let module = module.name();
+        let body = Expressions {
+            elements: body
+                .elements
+                .iter()
+                .cloned()
+                .map(|syntax_element| {
+                    Expression::RawSyntaxElement(syntax_element)
+                })
+                .collect(),
+        };
         let function = Function { module, body };
         self.inner.insert(name, function);
     }
@@ -44,7 +56,7 @@ impl<'a> IntoIterator for &'a Functions {
 #[derive(Clone, Debug)]
 pub struct Function {
     pub module: String,
-    pub body: SyntaxTree,
+    pub body: Expressions,
 }
 
 #[derive(Clone, Copy)]
