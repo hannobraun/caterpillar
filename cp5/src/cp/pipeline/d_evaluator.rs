@@ -62,17 +62,12 @@ fn evaluate_expression(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     match expression {
-        Expression::RawSyntaxElement(SyntaxElement::Array { syntax_tree }) => {
+        Expression::Array { expressions } => {
             data_stack.mark();
 
-            for syntax_element in &syntax_tree.elements {
+            for expression in &expressions.elements {
                 evaluate_expression(
-                    module,
-                    &Expression::RawSyntaxElement(syntax_element.clone()),
-                    data_stack,
-                    bindings,
-                    functions,
-                    tests,
+                    module, expression, data_stack, bindings, functions, tests,
                 )?;
             }
 
