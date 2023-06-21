@@ -89,11 +89,11 @@ fn evaluate_expression(
         }) => {
             functions.define(Module::none(), name.clone(), body.clone());
         }
-        Expression::RawSyntaxElement(SyntaxElement::Module { name, body }) => {
-            for syntax_element in &body.elements {
+        Expression::Module { name, body } => {
+            for expression in &body.elements {
                 evaluate_expression(
                     Module::some(name),
-                    &Expression::RawSyntaxElement(syntax_element.clone()),
+                    expression,
                     data_stack,
                     bindings,
                     functions,
@@ -117,6 +117,9 @@ fn evaluate_expression(
             evaluate_word(
                 module, word, data_stack, bindings, functions, tests,
             )?;
+        }
+        Expression::RawSyntaxElement(syntax_element) => {
+            panic!("Unexpected raw syntax element: {syntax_element:?}")
         }
     }
 

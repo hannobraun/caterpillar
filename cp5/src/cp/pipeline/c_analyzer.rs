@@ -14,9 +14,31 @@ pub fn analyze(
 }
 
 fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
-    Expression::RawSyntaxElement(syntax_element.clone())
+    match syntax_element {
+        SyntaxElement::Module { name, body } => {
+            let mut expressions = Expressions {
+                elements: Vec::new(),
+            };
+
+            for syntax_element in body {
+                let expression = analyze_syntax_element(syntax_element);
+                expressions.elements.push(expression);
+            }
+
+            Expression::Module {
+                name: name.clone(),
+                body: expressions,
+            }
+        }
+        syntax_element => Expression::RawSyntaxElement(syntax_element.clone()),
+    }
+}
+
+pub struct Expressions {
+    pub elements: Vec<Expression>,
 }
 
 pub enum Expression {
+    Module { name: String, body: Expressions },
     RawSyntaxElement(SyntaxElement),
 }
