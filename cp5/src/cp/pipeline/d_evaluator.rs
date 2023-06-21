@@ -77,7 +77,7 @@ fn evaluate_expression(
             let array = Value::Array(array);
             data_stack.push(array);
         }
-        Expression::RawSyntaxElement(SyntaxElement::Binding { idents }) => {
+        Expression::Binding { idents } => {
             for ident in idents.iter().rev() {
                 let value = data_stack.pop_any()?;
                 bindings.inner.insert(ident.clone(), value);
