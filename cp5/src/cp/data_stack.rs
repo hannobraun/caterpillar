@@ -1,6 +1,8 @@
 use core::fmt;
 
-use super::syntax::SyntaxTree;
+use super::{
+    pipeline::c_analyzer::Expressions, syntax::SyntaxTree, Expression,
+};
 
 #[derive(Debug)]
 pub struct DataStack {
@@ -44,12 +46,21 @@ impl DataStack {
         })
     }
 
-    pub fn pop_block(&mut self) -> Result<SyntaxTree, DataStackError> {
+    pub fn pop_block(&mut self) -> Result<Expressions, DataStackError> {
         self.pop_specific_type("block", |value| {
             let Value::Block(value) = value else {
                 return Err(value);
             };
 
+            let value = Expressions {
+                elements: value
+                    .elements
+                    .into_iter()
+                    .map(|syntax_element| {
+                        Expression::RawSyntaxElement(syntax_element)
+                    })
+                    .collect(),
+            };
             Ok(value)
         })
     }

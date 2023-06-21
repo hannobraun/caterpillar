@@ -157,16 +157,6 @@ fn evaluate_word(
 
             let block = if cond { then_ } else { else_ };
 
-            let block = Expressions {
-                elements: block
-                    .elements
-                    .into_iter()
-                    .map(|syntax_element| {
-                        Expression::RawSyntaxElement(syntax_element)
-                    })
-                    .collect(),
-            };
-
             evaluate_block(
                 module, block, data_stack, bindings, functions, tests,
             )?;
@@ -180,15 +170,6 @@ fn evaluate_word(
         }
         "eval" => {
             let block = data_stack.pop_block()?;
-            let block = Expressions {
-                elements: block
-                    .elements
-                    .into_iter()
-                    .map(|syntax_element| {
-                        Expression::RawSyntaxElement(syntax_element)
-                    })
-                    .collect(),
-            };
             evaluate_block(
                 module, block, data_stack, bindings, functions, tests,
             )?;
