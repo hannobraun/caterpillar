@@ -83,9 +83,6 @@ fn evaluate_expression(
                 bindings.inner.insert(ident.clone(), value);
             }
         }
-        Expression::Block { expressions } => {
-            data_stack.push(Value::Block(expressions.clone()));
-        }
         Expression::Function { name, body } => {
             functions.define(Module::none(), name.clone(), body.clone());
         }
@@ -101,11 +98,11 @@ fn evaluate_expression(
                 )?;
             }
         }
-        Expression::String(s) => {
-            data_stack.push(s.clone());
-        }
         Expression::Test { name, body } => {
             tests.define(module, name.clone(), body.clone());
+        }
+        Expression::Value(value) => {
+            data_stack.push(value.clone());
         }
         Expression::RawSyntaxElement(SyntaxElement::Word(word)) => {
             evaluate_word(

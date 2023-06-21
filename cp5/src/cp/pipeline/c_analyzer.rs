@@ -1,6 +1,9 @@
 use std::convert::Infallible;
 
-use crate::cp::syntax::{SyntaxElement, SyntaxTree};
+use crate::cp::{
+    data_stack::Value,
+    syntax::{SyntaxElement, SyntaxTree},
+};
 
 use super::{stage_input::StageInputReader, PipelineError};
 
@@ -25,7 +28,7 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
         }
         SyntaxElement::Block { syntax_tree } => {
             let expressions = analyze_syntax_tree(syntax_tree);
-            Expression::Block { expressions }
+            Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
             let name = name.clone();
@@ -39,7 +42,7 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
         }
         SyntaxElement::String(s) => {
             let s = s.clone();
-            Expression::String(s)
+            Expression::Value(Value::String(s))
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
@@ -72,10 +75,9 @@ pub struct Expressions {
 pub enum Expression {
     Array { expressions: Expressions },
     Binding { idents: Vec<String> },
-    Block { expressions: Expressions },
     Function { name: String, body: Expressions },
     Module { name: String, body: Expressions },
-    String(String),
     Test { name: String, body: Expressions },
+    Value(Value),
     RawSyntaxElement(SyntaxElement),
 }
