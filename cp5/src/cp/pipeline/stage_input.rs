@@ -1,9 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::cp::{
-    syntax::{SyntaxElement, SyntaxTree},
-    Expression,
-};
+use crate::cp::Expression;
 
 use super::c_analyzer::Expressions;
 
@@ -47,14 +44,6 @@ impl From<Expressions> for StageInput<Expression> {
     fn from(expressions: Expressions) -> Self {
         Self {
             elements: expressions.elements.into(),
-        }
-    }
-}
-
-impl From<SyntaxTree> for StageInput<SyntaxElement> {
-    fn from(syntax_tree: SyntaxTree) -> Self {
-        Self {
-            elements: syntax_tree.elements.into(),
         }
     }
 }
