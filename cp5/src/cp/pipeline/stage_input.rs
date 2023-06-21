@@ -1,6 +1,11 @@
 use std::collections::VecDeque;
 
-use crate::cp::syntax::{SyntaxElement, SyntaxTree};
+use crate::cp::{
+    syntax::{SyntaxElement, SyntaxTree},
+    Expression,
+};
+
+use super::c_analyzer::Expressions;
 
 #[derive(Debug)]
 pub struct StageInput<T> {
@@ -34,6 +39,14 @@ impl<T> FromIterator<T> for StageInput<T> {
     fn from_iter<I: IntoIterator<Item = T>>(elements: I) -> Self {
         Self {
             elements: elements.into_iter().collect(),
+        }
+    }
+}
+
+impl From<Expressions> for StageInput<Expression> {
+    fn from(expressions: Expressions) -> Self {
+        Self {
+            elements: expressions.elements.into(),
         }
     }
 }
