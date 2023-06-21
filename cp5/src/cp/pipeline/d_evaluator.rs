@@ -89,7 +89,17 @@ fn evaluate_expression(
             name,
             body,
         }) => {
-            functions.define(Module::none(), name.clone(), body.clone());
+            let body = Expressions {
+                elements: body
+                    .elements
+                    .iter()
+                    .cloned()
+                    .map(|syntax_element| {
+                        Expression::RawSyntaxElement(syntax_element)
+                    })
+                    .collect(),
+            };
+            functions.define(Module::none(), name.clone(), body);
         }
         Expression::Module { name, body } => {
             for expression in &body.elements {
@@ -104,7 +114,17 @@ fn evaluate_expression(
             }
         }
         Expression::RawSyntaxElement(SyntaxElement::Test { name, body }) => {
-            tests.define(module, name.clone(), body.clone());
+            let body = Expressions {
+                elements: body
+                    .elements
+                    .iter()
+                    .cloned()
+                    .map(|syntax_element| {
+                        Expression::RawSyntaxElement(syntax_element)
+                    })
+                    .collect(),
+            };
+            tests.define(module, name.clone(), body);
         }
         Expression::RawSyntaxElement(SyntaxElement::Binding { idents }) => {
             for ident in idents.iter().rev() {
