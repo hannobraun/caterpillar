@@ -3,23 +3,28 @@ use std::convert::Infallible;
 use crate::cp::{
     data_stack::Value,
     syntax::{SyntaxElement, SyntaxTree},
+    Functions,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,
+    functions: &mut Functions,
 ) -> Result<Expression, PipelineError<Infallible>> {
     let syntax_element = syntax_elements.read()?;
-    let expression = analyze_syntax_element(syntax_element);
+    let expression = analyze_syntax_element(syntax_element, functions);
     syntax_elements.take();
     Ok(expression)
 }
 
-fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
+fn analyze_syntax_element(
+    syntax_element: &SyntaxElement,
+    functions: &mut Functions,
+) -> Expression {
     match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
-            let expressions = analyze_syntax_tree(syntax_tree);
+            let expressions = analyze_syntax_tree(syntax_tree, functions);
             Expression::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
@@ -27,17 +32,17 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
             Expression::Binding { idents }
         }
         SyntaxElement::Block { syntax_tree } => {
-            let expressions = analyze_syntax_tree(syntax_tree);
+            let expressions = analyze_syntax_tree(syntax_tree, functions);
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body);
+            let body = analyze_syntax_tree(body, functions);
             Expression::Function { name, body }
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body);
+            let body = analyze_syntax_tree(body, functions);
             Expression::Module { name, body }
         }
         SyntaxElement::String(s) => {
@@ -46,7 +51,7 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body);
+            let body = analyze_syntax_tree(body, functions);
             Expression::Test { name, body }
         }
         SyntaxElement::Word(word) => {
@@ -55,13 +60,16 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
     }
 }
 
-fn analyze_syntax_tree(syntax_tree: &SyntaxTree) -> Expressions {
+fn analyze_syntax_tree(
+    syntax_tree: &SyntaxTree,
+    functions: &mut Functions,
+) -> Expressions {
     let mut expressions = Expressions {
         elements: Vec::new(),
     };
 
     for syntax_element in syntax_tree {
-        let expression = analyze_syntax_element(syntax_element);
+        let expression = analyze_syntax_element(syntax_element, functions);
         expressions.elements.push(expression);
     }
 
