@@ -77,18 +77,8 @@ fn evaluate_expression(
             let array = Value::Array(array);
             data_stack.push(array);
         }
-        Expression::RawSyntaxElement(SyntaxElement::Block { syntax_tree }) => {
-            let expressions = Expressions {
-                elements: syntax_tree
-                    .elements
-                    .iter()
-                    .cloned()
-                    .map(|syntax_element| {
-                        Expression::RawSyntaxElement(syntax_element)
-                    })
-                    .collect(),
-            };
-            data_stack.push(Value::Block(expressions));
+        Expression::Block { expressions } => {
+            data_stack.push(Value::Block(expressions.clone()));
         }
         Expression::Function { name, body } => {
             functions.define(Module::none(), name.clone(), body.clone());
