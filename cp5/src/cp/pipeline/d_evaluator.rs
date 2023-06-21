@@ -77,6 +77,12 @@ fn evaluate_expression(
             let array = Value::Array(array);
             data_stack.push(array);
         }
+        Expression::RawSyntaxElement(SyntaxElement::Binding { idents }) => {
+            for ident in idents.iter().rev() {
+                let value = data_stack.pop_any()?;
+                bindings.inner.insert(ident.clone(), value);
+            }
+        }
         Expression::Block { expressions } => {
             data_stack.push(Value::Block(expressions.clone()));
         }
@@ -95,17 +101,11 @@ fn evaluate_expression(
                 )?;
             }
         }
-        Expression::Test { name, body } => {
-            tests.define(module, name.clone(), body.clone());
-        }
-        Expression::RawSyntaxElement(SyntaxElement::Binding { idents }) => {
-            for ident in idents.iter().rev() {
-                let value = data_stack.pop_any()?;
-                bindings.inner.insert(ident.clone(), value);
-            }
-        }
         Expression::RawSyntaxElement(SyntaxElement::String(s)) => {
             data_stack.push(s.clone());
+        }
+        Expression::Test { name, body } => {
+            tests.define(module, name.clone(), body.clone());
         }
         Expression::RawSyntaxElement(SyntaxElement::Word(word)) => {
             evaluate_word(

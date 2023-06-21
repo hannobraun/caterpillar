@@ -17,11 +17,11 @@ impl<'r> IntoIterator for &'r SyntaxTree {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxElement {
     Array { syntax_tree: SyntaxTree },
+    Binding { idents: Vec<String> },
     Block { syntax_tree: SyntaxTree },
     Function { name: String, body: SyntaxTree },
     Module { name: String, body: SyntaxTree },
-    Test { name: String, body: SyntaxTree },
-    Binding { idents: Vec<String> },
     String(String),
+    Test { name: String, body: SyntaxTree },
     Word(String),
 }
