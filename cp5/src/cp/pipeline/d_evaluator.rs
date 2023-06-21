@@ -85,21 +85,8 @@ fn evaluate_expression(
         Expression::RawSyntaxElement(SyntaxElement::Block { syntax_tree }) => {
             data_stack.push(Value::Block(syntax_tree.clone()));
         }
-        Expression::RawSyntaxElement(SyntaxElement::Function {
-            name,
-            body,
-        }) => {
-            let body = Expressions {
-                elements: body
-                    .elements
-                    .iter()
-                    .cloned()
-                    .map(|syntax_element| {
-                        Expression::RawSyntaxElement(syntax_element)
-                    })
-                    .collect(),
-            };
-            functions.define(Module::none(), name.clone(), body);
+        Expression::Function { name, body } => {
+            functions.define(Module::none(), name.clone(), body.clone());
         }
         Expression::Module { name, body } => {
             for expression in &body.elements {
