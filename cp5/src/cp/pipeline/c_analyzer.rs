@@ -16,11 +16,9 @@ pub fn analyze(
 fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
     match syntax_element {
         SyntaxElement::Module { name, body } => {
+            let name = name.clone();
             let body = analyze_syntax_tree(body);
-            Expression::Module {
-                name: name.clone(),
-                body,
-            }
+            Expression::Module { name, body }
         }
         syntax_element => Expression::RawSyntaxElement(syntax_element.clone()),
     }
