@@ -99,7 +99,6 @@ pub struct Expressions {
 pub enum Expression {
     Array { expressions: Expressions },
     Binding { idents: Vec<String> },
-    Function { name: String, body: Expressions },
     Module { name: String, body: Expressions },
     Test { name: String, body: Expressions },
     Value(Value),
