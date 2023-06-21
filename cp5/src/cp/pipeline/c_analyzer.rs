@@ -49,7 +49,9 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
             let body = analyze_syntax_tree(body);
             Expression::Test { name, body }
         }
-        syntax_element => Expression::RawSyntaxElement(syntax_element.clone()),
+        SyntaxElement::Word(word) => {
+            Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
+        }
     }
 }
 
