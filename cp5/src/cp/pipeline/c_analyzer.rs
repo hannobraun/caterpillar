@@ -20,6 +20,11 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
             let body = analyze_syntax_tree(body);
             Expression::Module { name, body }
         }
+        SyntaxElement::Test { name, body } => {
+            let name = name.clone();
+            let body = analyze_syntax_tree(body);
+            Expression::Test { name, body }
+        }
         syntax_element => Expression::RawSyntaxElement(syntax_element.clone()),
     }
 }
@@ -45,5 +50,6 @@ pub struct Expressions {
 #[derive(Clone, Debug)]
 pub enum Expression {
     Module { name: String, body: Expressions },
+    Test { name: String, body: Expressions },
     RawSyntaxElement(SyntaxElement),
 }
