@@ -34,10 +34,12 @@ fn analyze_syntax_element(syntax_element: &SyntaxElement) -> Expression {
     }
 }
 
+#[derive(Clone, Debug)]
 pub struct Expressions {
     pub elements: Vec<Expression>,
 }
 
+#[derive(Clone, Debug)]
 pub enum Expression {
     Module { name: String, body: Expressions },
     RawSyntaxElement(SyntaxElement),
