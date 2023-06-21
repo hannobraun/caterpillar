@@ -13,7 +13,7 @@ pub fn analyze(
     functions: &mut Functions,
 ) -> Result<Expression, PipelineError<Infallible>> {
     let syntax_element = syntax_elements.read()?;
-    let expression = analyze_syntax_element(syntax_element, functions);
+    let expression = analyze_syntax_element(syntax_element, functions).unwrap();
     syntax_elements.take();
     Ok(expression)
 }
@@ -21,8 +21,8 @@ pub fn analyze(
 fn analyze_syntax_element(
     syntax_element: &SyntaxElement,
     functions: &mut Functions,
-) -> Expression {
-    match syntax_element {
+) -> Option<Expression> {
+    let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions = analyze_syntax_tree(syntax_tree, functions);
             Expression::Array { expressions }
@@ -57,7 +57,9 @@ fn analyze_syntax_element(
         SyntaxElement::Word(word) => {
             Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
         }
-    }
+    };
+
+    Some(expression)
 }
 
 fn analyze_syntax_tree(
@@ -70,7 +72,9 @@ fn analyze_syntax_tree(
 
     for syntax_element in syntax_tree {
         let expression = analyze_syntax_element(syntax_element, functions);
-        expressions.elements.push(expression);
+        if let Some(expression) = expression {
+            expressions.elements.push(expression);
+        }
     }
 
     expressions
