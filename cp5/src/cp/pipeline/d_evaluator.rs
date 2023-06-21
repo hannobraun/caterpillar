@@ -3,11 +3,13 @@ use std::collections::BTreeMap;
 use crate::cp::{
     data_stack::{Array, Value},
     functions::Module,
-    syntax::{SyntaxElement, SyntaxTree},
+    syntax::SyntaxElement,
     DataStack, DataStackError, Expression, Functions, StageInput,
 };
 
-use super::{stage_input::StageInputReader, PipelineError};
+use super::{
+    c_analyzer::Expressions, stage_input::StageInputReader, PipelineError,
+};
 
 pub fn evaluate_all(
     mut expressions: StageInput<Expression>,
@@ -163,6 +165,16 @@ fn evaluate_word(
 
             let block = if cond { then_ } else { else_ };
 
+            let block = Expressions {
+                elements: block
+                    .elements
+                    .into_iter()
+                    .map(|syntax_element| {
+                        Expression::RawSyntaxElement(syntax_element)
+                    })
+                    .collect(),
+            };
+
             evaluate_block(
                 module, block, data_stack, bindings, functions, tests,
             )?;
@@ -176,6 +188,15 @@ fn evaluate_word(
         }
         "eval" => {
             let block = data_stack.pop_block()?;
+            let block = Expressions {
+                elements: block
+                    .elements
+                    .into_iter()
+                    .map(|syntax_element| {
+                        Expression::RawSyntaxElement(syntax_element)
+                    })
+                    .collect(),
+            };
             evaluate_block(
                 module, block, data_stack, bindings, functions, tests,
             )?;
@@ -201,13 +222,18 @@ fn evaluate_word(
             }
 
             if let Some(function) = functions.get(word) {
+                let body = Expressions {
+                    elements: function
+                        .body
+                        .elements
+                        .into_iter()
+                        .map(|syntax_element| {
+                            Expression::RawSyntaxElement(syntax_element)
+                        })
+                        .collect(),
+                };
                 evaluate_block(
-                    module,
-                    function.body,
-                    data_stack,
-                    bindings,
-                    functions,
-                    tests,
+                    module, body, data_stack, bindings, functions, tests,
                 )?;
                 return Ok(());
             }
@@ -228,16 +254,16 @@ fn evaluate_word(
 
 fn evaluate_block(
     module: Module,
-    block: SyntaxTree,
+    block: Expressions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
-    for syntax_element in block.elements {
+    for expression in block.elements {
         evaluate_expression(
             module,
-            &Expression::RawSyntaxElement(syntax_element),
+            &expression,
             data_stack,
             bindings,
             functions,
