@@ -21,6 +21,20 @@ impl Functions {
         self.inner.insert(name, function);
     }
 
+    pub fn define_intrinsic(
+        &mut self,
+        module: Module,
+        name: String,
+        body: IntrinsicBody,
+    ) {
+        let module = module.name();
+        let function = Function {
+            module,
+            body: FunctionBody::Intrinsic { body },
+        };
+        self.inner.insert(name, function);
+    }
+
     pub fn get(&self, name: &str) -> Option<Function> {
         self.inner.get(name).cloned()
     }

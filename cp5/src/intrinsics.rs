@@ -1,5 +1,25 @@
 use crate::cp;
 
+pub fn define(functions: &mut cp::Functions) {
+    let intrinsics = [
+        ("clone", clone as cp::IntrinsicBody),
+        ("drop", drop),
+        ("true", true_),
+        ("false", false_),
+        ("and", and),
+        ("not", not),
+        ("if", if_),
+        ("unwrap", unwrap),
+        ("eval", eval),
+        ("=", eq),
+        ("-", sub),
+    ];
+
+    for (name, body) in intrinsics {
+        functions.define_intrinsic(cp::Module::none(), name.into(), body);
+    }
+}
+
 pub fn clone(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     let a = evaluator.data_stack.pop_any()?;
 

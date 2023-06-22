@@ -1,7 +1,3 @@
-use crate::intrinsics::{
-    and, clone, drop, eq, eval, false_, if_, not, sub, true_, unwrap,
-};
-
 use super::{
     data_stack::{Array, Value},
     pipeline::c_analyzer::Expressions,
@@ -95,39 +91,22 @@ impl Evaluator<'_> {
     }
 
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
-        match word {
-            "clone" => clone(self)?,
-            "drop" => drop(self)?,
-            "true" => true_(self)?,
-            "false" => false_(self)?,
-            "and" => and(self)?,
-            "not" => not(self)?,
-            "if" => if_(self)?,
-            "unwrap" => unwrap(self)?,
-            "eval" => eval(self)?,
-            "=" => eq(self)?,
-            "-" => sub(self)?,
-            _ => {
-                if let Some(value) = self.bindings.inner.get(word) {
-                    self.data_stack.push(value.clone());
-                    return Ok(());
-                }
-
-                if let Some(function) = self.functions.get(word) {
-                    self.evaluate_function(&function)?;
-                    return Ok(());
-                }
-
-                if let Ok(value) = word.parse::<u8>() {
-                    self.data_stack.push(value);
-                    return Ok(());
-                }
-
-                return Err(EvaluatorError::UnknownWord(word.into()));
-            }
+        if let Some(value) = self.bindings.inner.get(word) {
+            self.data_stack.push(value.clone());
+            return Ok(());
         }
 
-        Ok(())
+        if let Some(function) = self.functions.get(word) {
+            self.evaluate_function(&function)?;
+            return Ok(());
+        }
+
+        if let Ok(value) = word.parse::<u8>() {
+            self.data_stack.push(value);
+            return Ok(());
+        }
+
+        Err(EvaluatorError::UnknownWord(word.into()))
     }
 }
 

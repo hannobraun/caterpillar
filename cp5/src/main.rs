@@ -8,6 +8,7 @@ mod tests;
 
 fn main() -> anyhow::Result<()> {
     let mut functions = cp::Functions::new();
+    intrinsics::define(&mut functions);
     std::define(&mut functions)?;
 
     let mut tests = tests::define(&mut functions)?;
