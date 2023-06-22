@@ -6,8 +6,8 @@ use super::{
     data_stack::{Array, Value},
     pipeline::c_analyzer::Expressions,
     syntax::SyntaxElement,
-    Bindings, DataStack, DataStackError, Expression, FunctionKind, Functions,
-    PipelineError,
+    Bindings, DataStack, DataStackError, Expression, Function, FunctionKind,
+    Functions, PipelineError,
 };
 
 pub struct Evaluator<'r> {
@@ -80,9 +80,11 @@ impl Evaluator<'_> {
 
     pub fn evaluate_function(
         &mut self,
-        function: &FunctionKind,
+        function: &Function,
     ) -> Result<(), EvaluatorError> {
-        let FunctionKind::UserDefined { body, .. } = function;
+        let Function {
+            kind: FunctionKind::UserDefined { body, .. },
+        } = function;
         self.evaluate_block(body)?;
         Ok(())
     }
@@ -107,7 +109,7 @@ impl Evaluator<'_> {
                 }
 
                 if let Some(function) = self.functions.get(word) {
-                    self.evaluate_function(&function.kind)?;
+                    self.evaluate_function(&function)?;
                     return Ok(());
                 }
 
