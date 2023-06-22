@@ -11,7 +11,7 @@ use super::{
     },
     syntax::SyntaxElement,
     tokens::Token,
-    Bindings, DataStack, EvaluatorErrorKind, Functions,
+    Bindings, DataStack, EvaluatorError, Functions,
 };
 
 pub fn execute(
@@ -101,7 +101,7 @@ pub enum ErrorKind {
     Parser(#[from] ParserError),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] EvaluatorErrorKind),
+    Evaluator(#[from] EvaluatorError),
 }
 
 impl From<PipelineError<Infallible>> for ErrorKind {
@@ -124,8 +124,8 @@ impl From<PipelineError<ParserError>> for ErrorKind {
     }
 }
 
-impl From<PipelineError<EvaluatorErrorKind>> for ErrorKind {
-    fn from(err: PipelineError<EvaluatorErrorKind>) -> Self {
+impl From<PipelineError<EvaluatorError>> for ErrorKind {
+    fn from(err: PipelineError<EvaluatorError>) -> Self {
         match err {
             PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
             PipelineError::Stage(err) => Self::Evaluator(err),

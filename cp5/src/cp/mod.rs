@@ -11,7 +11,7 @@ pub use self::{
     functions::{Function, Functions},
     pipeline::{
         c_analyzer::Expression,
-        d_evaluator::{evaluate_all, Bindings, EvaluatorErrorKind},
+        d_evaluator::{evaluate_all, Bindings, EvaluatorError},
         stage_input::StageInput,
         PipelineError,
     },

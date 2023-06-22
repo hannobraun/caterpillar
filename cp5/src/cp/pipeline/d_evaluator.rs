@@ -17,7 +17,7 @@ pub fn evaluate_all(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     while !expressions.is_empty() {
         evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
     }
@@ -31,7 +31,7 @@ pub fn evaluate(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
     evaluate_expression(expression, data_stack, bindings, functions, tests)?;
     expressions.take();
@@ -44,7 +44,7 @@ fn evaluate_expression(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match expression {
         Expression::Array { expressions } => {
             data_stack.mark();
@@ -97,7 +97,7 @@ fn evaluate_word(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     match word {
         "clone" => {
             let a = data_stack.pop_any()?;
@@ -171,7 +171,7 @@ fn evaluate_word(
                 return Ok(());
             }
 
-            return Err(PipelineError::Stage(EvaluatorErrorKind::UnknownWord(
+            return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
                 word.into(),
             )));
         }
@@ -186,7 +186,7 @@ fn evaluate_block(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorErrorKind>> {
+) -> Result<(), PipelineError<EvaluatorError>> {
     for expression in block.elements {
         evaluate_expression(
             &expression,
@@ -213,7 +213,7 @@ impl Bindings {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum EvaluatorErrorKind {
+pub enum EvaluatorError {
     #[error(transparent)]
     DataStack(#[from] DataStackError),
 
@@ -221,7 +221,7 @@ pub enum EvaluatorErrorKind {
     UnknownWord(String),
 }
 
-impl From<DataStackError> for PipelineError<EvaluatorErrorKind> {
+impl From<DataStackError> for PipelineError<EvaluatorError> {
     fn from(err: DataStackError) -> Self {
         PipelineError::Stage(err.into())
     }
