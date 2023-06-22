@@ -194,7 +194,7 @@ fn evaluate_word(
             }
 
             if let Some(function) = functions.get(word) {
-                let Function { body, .. } = function;
+                let Function::UserDefined { body, .. } = function;
                 evaluate_block(
                     module, body, data_stack, bindings, functions, tests,
                 )?;
