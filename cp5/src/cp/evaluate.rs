@@ -107,7 +107,7 @@ impl Evaluator<'_> {
                 }
 
                 if let Some(function) = self.functions.get(word) {
-                    self.evaluate_function(&function)?;
+                    self.evaluate_function(&function.kind)?;
                     return Ok(());
                 }
 

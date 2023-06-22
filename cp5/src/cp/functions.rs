@@ -20,8 +20,8 @@ impl Functions {
         self.inner.insert(name, function);
     }
 
-    pub fn get(&self, name: &str) -> Option<FunctionKind> {
-        self.inner.get(name).cloned().map(|function| function.kind)
+    pub fn get(&self, name: &str) -> Option<Function> {
+        self.inner.get(name).cloned()
     }
 }
 
