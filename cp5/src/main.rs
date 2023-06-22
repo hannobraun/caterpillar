@@ -1,6 +1,7 @@
 use ::std::io::stdin;
 
 mod cp;
+mod intrinsics;
 mod std;
 mod test_report;
 mod tests;
