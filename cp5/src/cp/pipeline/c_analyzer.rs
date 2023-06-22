@@ -77,7 +77,10 @@ fn analyze_syntax_element(
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
             let body = analyze_syntax_tree(body, module, functions, tests);
-            Expression::Test { name, body }
+
+            tests.define(module, name, body);
+
+            return None;
         }
         SyntaxElement::Word(word) => {
             let refers_to_function = functions.get(word).is_some();
@@ -125,7 +128,6 @@ pub enum Expression {
     Binding { idents: Vec<String> },
     EvalFunction { name: String },
     Module { name: String, body: Expressions },
-    Test { name: String, body: Expressions },
     Value(Value),
     RawSyntaxElement(SyntaxElement),
 }

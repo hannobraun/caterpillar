@@ -100,9 +100,6 @@ fn evaluate_expression(
                 )?;
             }
         }
-        Expression::Test { name, body } => {
-            tests.define(module, name.clone(), body.clone());
-        }
         Expression::Value(value) => {
             data_stack.push(value.clone());
         }
