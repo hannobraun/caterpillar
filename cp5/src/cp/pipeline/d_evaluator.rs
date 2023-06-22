@@ -15,7 +15,7 @@ pub fn evaluate_all(
     mut expressions: StageInput<Expression>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-    functions: &mut Functions,
+    functions: &Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     while !expressions.is_empty() {
