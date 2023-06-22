@@ -80,10 +80,10 @@ impl Evaluator<'_> {
 
     pub fn evaluate_function(
         &mut self,
-        function: Function,
+        function: &Function,
     ) -> Result<(), EvaluatorError> {
         let Function::UserDefined { body, .. } = function;
-        self.evaluate_block(&body)?;
+        self.evaluate_block(body)?;
         Ok(())
     }
 
@@ -107,7 +107,7 @@ impl Evaluator<'_> {
                 }
 
                 if let Some(function) = self.functions.get(word) {
-                    self.evaluate_function(function)?;
+                    self.evaluate_function(&function)?;
                     return Ok(());
                 }
 
