@@ -2,7 +2,7 @@ use core::fmt;
 
 use super::pipeline::c_analyzer::Expressions;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
     marker: usize,
@@ -10,10 +10,7 @@ pub struct DataStack {
 
 impl DataStack {
     pub fn new() -> Self {
-        Self {
-            values: Vec::new(),
-            marker: 0,
-        }
+        Self::default()
     }
 
     pub fn push(&mut self, value: impl Into<Value>) {
