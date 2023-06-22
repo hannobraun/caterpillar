@@ -76,7 +76,8 @@ pub fn run(
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let expressions = cp::StageInput::from(function.body.clone());
+        let cp::Function { module, body } = function;
+        let expressions = cp::StageInput::from(body.clone());
 
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();
@@ -109,7 +110,7 @@ pub fn run(
             });
 
         results.push(TestReport {
-            module: function.module.clone(),
+            module: module.clone(),
             name: name.clone(),
             result,
         })
