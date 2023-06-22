@@ -78,6 +78,15 @@ impl Evaluator<'_> {
         Ok(())
     }
 
+    pub fn evaluate_function(
+        &mut self,
+        function: Function,
+    ) -> Result<(), EvaluatorError> {
+        let Function::UserDefined { body, .. } = function;
+        self.evaluate_block(body)?;
+        Ok(())
+    }
+
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
         match word {
             "clone" => clone(self)?,
@@ -98,8 +107,7 @@ impl Evaluator<'_> {
                 }
 
                 if let Some(function) = self.functions.get(word) {
-                    let Function::UserDefined { body, .. } = function;
-                    self.evaluate_block(body)?;
+                    self.evaluate_function(function)?;
                     return Ok(());
                 }
 
