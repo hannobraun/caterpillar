@@ -1,10 +1,8 @@
-use std::collections::BTreeMap;
-
 use crate::cp::{
     data_stack::{Array, Value},
     functions::Function,
     syntax::SyntaxElement,
-    DataStack, EvaluatorError, Expression, Functions, StageInput,
+    Bindings, DataStack, EvaluatorError, Expression, Functions, StageInput,
 };
 
 use super::{
@@ -197,16 +195,4 @@ fn evaluate_block(
     }
 
     Ok(())
-}
-
-pub struct Bindings {
-    pub inner: BTreeMap<String, Value>,
-}
-
-impl Bindings {
-    pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-        }
-    }
 }
