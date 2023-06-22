@@ -12,11 +12,16 @@ use super::{stage_input::StageInputReader, PipelineError};
 pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Result<Expression, PipelineError<Infallible>> {
     loop {
         let syntax_element = syntax_elements.read()?;
-        let expression =
-            analyze_syntax_element(syntax_element, Module::none(), functions);
+        let expression = analyze_syntax_element(
+            syntax_element,
+            Module::none(),
+            functions,
+            tests,
+        );
         syntax_elements.take();
 
         match expression {
@@ -30,11 +35,12 @@ fn analyze_syntax_element(
     syntax_element: &SyntaxElement,
     module: Module,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Option<Expression> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions =
-                analyze_syntax_tree(syntax_tree, module, functions);
+                analyze_syntax_tree(syntax_tree, module, functions, tests);
             Expression::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
@@ -43,12 +49,12 @@ fn analyze_syntax_element(
         }
         SyntaxElement::Block { syntax_tree } => {
             let expressions =
-                analyze_syntax_tree(syntax_tree, module, functions);
+                analyze_syntax_tree(syntax_tree, module, functions, tests);
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body, module, functions);
+            let body = analyze_syntax_tree(body, module, functions, tests);
 
             functions.define(Module::none(), name, body);
 
@@ -56,8 +62,12 @@ fn analyze_syntax_element(
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
-            let body =
-                analyze_syntax_tree(body, Module::some(&name), functions);
+            let body = analyze_syntax_tree(
+                body,
+                Module::some(&name),
+                functions,
+                tests,
+            );
             Expression::Module { name, body }
         }
         SyntaxElement::String(s) => {
@@ -66,7 +76,7 @@ fn analyze_syntax_element(
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body, module, functions);
+            let body = analyze_syntax_tree(body, module, functions, tests);
             Expression::Test { name, body }
         }
         SyntaxElement::Word(word) => {
@@ -87,6 +97,7 @@ fn analyze_syntax_tree(
     syntax_tree: &SyntaxTree,
     module: Module,
     functions: &mut Functions,
+    tests: &mut Functions,
 ) -> Expressions {
     let mut expressions = Expressions {
         elements: Vec::new(),
@@ -94,7 +105,7 @@ fn analyze_syntax_tree(
 
     for syntax_element in syntax_tree {
         let expression =
-            analyze_syntax_element(syntax_element, module, functions);
+            analyze_syntax_element(syntax_element, module, functions, tests);
         if let Some(expression) = expression {
             expressions.elements.push(expression);
         }
