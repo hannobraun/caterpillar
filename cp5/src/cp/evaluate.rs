@@ -22,8 +22,8 @@ impl Evaluator<'_> {
         &mut self,
         block: Expressions,
     ) -> Result<(), EvaluatorError> {
-        for expression in block.elements {
-            self.evaluate_expression(&expression)?;
+        for expression in &block.elements {
+            self.evaluate_expression(expression)?;
         }
 
         Ok(())
