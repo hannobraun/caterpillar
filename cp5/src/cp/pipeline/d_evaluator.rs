@@ -213,12 +213,6 @@ impl Bindings {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("{kind}")]
-pub struct EvaluatorError {
-    pub kind: EvaluatorErrorKind,
-}
-
-#[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind {
     #[error(transparent)]
     DataStack(#[from] DataStackError),
