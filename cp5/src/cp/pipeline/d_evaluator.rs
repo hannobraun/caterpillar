@@ -83,6 +83,11 @@ fn evaluate_expression(
                 bindings.inner.insert(ident.clone(), value);
             }
         }
+        Expression::EvalFunction { name } => {
+            evaluate_word(
+                module, name, data_stack, bindings, functions, tests,
+            )?;
+        }
         Expression::Module { name, body } => {
             for expression in &body.elements {
                 evaluate_expression(

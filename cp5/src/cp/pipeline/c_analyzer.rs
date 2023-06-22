@@ -65,7 +65,13 @@ fn analyze_syntax_element(
             Expression::Test { name, body }
         }
         SyntaxElement::Word(word) => {
-            Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
+            let refers_to_function = functions.get(word).is_some();
+
+            if refers_to_function {
+                Expression::EvalFunction { name: word.clone() }
+            } else {
+                Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
+            }
         }
     };
 
@@ -99,6 +105,7 @@ pub struct Expressions {
 pub enum Expression {
     Array { expressions: Expressions },
     Binding { idents: Vec<String> },
+    EvalFunction { name: String },
     Module { name: String, body: Expressions },
     Test { name: String, body: Expressions },
     Value(Value),
