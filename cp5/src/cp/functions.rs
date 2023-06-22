@@ -16,7 +16,7 @@ impl Functions {
         let module = module.name();
         let function = Function {
             module,
-            body: FunctionKind::UserDefined { body },
+            body: FunctionBody::UserDefined { body },
         };
         self.inner.insert(name, function);
     }
@@ -47,11 +47,11 @@ impl<'a> IntoIterator for &'a Functions {
 #[derive(Clone, Debug)]
 pub struct Function {
     pub module: String,
-    pub body: FunctionKind,
+    pub body: FunctionBody,
 }
 
 #[derive(Clone, Debug)]
-pub enum FunctionKind {
+pub enum FunctionBody {
     UserDefined { body: Expressions },
 }
 

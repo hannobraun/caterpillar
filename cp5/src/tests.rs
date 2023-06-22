@@ -78,7 +78,7 @@ pub fn run(
     for (name, function) in tests {
         let cp::Function {
             module,
-            body: cp::FunctionKind::UserDefined { body },
+            body: cp::FunctionBody::UserDefined { body },
         } = function;
         let expressions = cp::StageInput::from(body.clone());
 

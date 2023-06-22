@@ -12,7 +12,7 @@ pub use self::{
     data_stack::{DataStack, DataStackError},
     evaluate::{Evaluator, EvaluatorError},
     execute::{execute, Error},
-    functions::{Function, FunctionKind, Functions},
+    functions::{Function, FunctionBody, Functions},
     pipeline::{
         c_analyzer::Expression, d_evaluator::evaluate_all,
         stage_input::StageInput, PipelineError,
