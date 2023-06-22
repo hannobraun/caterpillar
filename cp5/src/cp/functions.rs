@@ -15,7 +15,8 @@ impl Functions {
     pub fn define(&mut self, module: Module, name: String, body: Expressions) {
         let module = module.name();
         let function = Function {
-            kind: FunctionKind::UserDefined { module, body },
+            module,
+            kind: FunctionKind::UserDefined { body },
         };
         self.inner.insert(name, function);
     }
@@ -45,12 +46,13 @@ impl<'a> IntoIterator for &'a Functions {
 
 #[derive(Clone, Debug)]
 pub struct Function {
+    pub module: String,
     pub kind: FunctionKind,
 }
 
 #[derive(Clone, Debug)]
 pub enum FunctionKind {
-    UserDefined { module: String, body: Expressions },
+    UserDefined { body: Expressions },
 }
 
 #[derive(Clone, Copy)]
