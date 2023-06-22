@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::cp::{
     data_stack::{Array, Value},
-    functions::{Function, Module},
+    functions::Function,
     syntax::SyntaxElement,
     DataStack, DataStackError, Expression, Functions, StageInput,
 };
@@ -33,28 +33,20 @@ pub fn evaluate(
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
-    evaluate_expression(
-        Module::none(),
-        expression,
-        data_stack,
-        bindings,
-        functions,
-        tests,
-    )
-    .map_err(|err| match err {
-        PipelineError::NotEnoughInput(err) => {
-            PipelineError::NotEnoughInput(err)
-        }
-        PipelineError::Stage(kind) => {
-            PipelineError::Stage(EvaluatorError { kind })
-        }
-    })?;
+    evaluate_expression(expression, data_stack, bindings, functions, tests)
+        .map_err(|err| match err {
+            PipelineError::NotEnoughInput(err) => {
+                PipelineError::NotEnoughInput(err)
+            }
+            PipelineError::Stage(kind) => {
+                PipelineError::Stage(EvaluatorError { kind })
+            }
+        })?;
     expressions.take();
     Ok(())
 }
 
 fn evaluate_expression(
-    module: Module,
     expression: &Expression,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
@@ -67,7 +59,7 @@ fn evaluate_expression(
 
             for expression in &expressions.elements {
                 evaluate_expression(
-                    module, expression, data_stack, bindings, functions, tests,
+                    expression, data_stack, bindings, functions, tests,
                 )?;
             }
 
@@ -84,19 +76,12 @@ fn evaluate_expression(
             }
         }
         Expression::EvalFunction { name } => {
-            evaluate_word(
-                module, name, data_stack, bindings, functions, tests,
-            )?;
+            evaluate_word(name, data_stack, bindings, functions, tests)?;
         }
-        Expression::Module { name, body } => {
+        Expression::Module { body, .. } => {
             for expression in &body.elements {
                 evaluate_expression(
-                    Module::some(name),
-                    expression,
-                    data_stack,
-                    bindings,
-                    functions,
-                    tests,
+                    expression, data_stack, bindings, functions, tests,
                 )?;
             }
         }
@@ -104,9 +89,7 @@ fn evaluate_expression(
             data_stack.push(value.clone());
         }
         Expression::RawSyntaxElement(SyntaxElement::Word(word)) => {
-            evaluate_word(
-                module, word, data_stack, bindings, functions, tests,
-            )?;
+            evaluate_word(word, data_stack, bindings, functions, tests)?;
         }
         Expression::RawSyntaxElement(syntax_element) => {
             panic!("Unexpected raw syntax element: {syntax_element:?}")
@@ -117,7 +100,6 @@ fn evaluate_expression(
 }
 
 fn evaluate_word(
-    module: Module,
     word: &str,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
@@ -153,9 +135,7 @@ fn evaluate_word(
 
             let block = if cond { then_ } else { else_ };
 
-            evaluate_block(
-                module, block, data_stack, bindings, functions, tests,
-            )?;
+            evaluate_block(block, data_stack, bindings, functions, tests)?;
         }
         "unwrap" => {
             let array = data_stack.pop_array()?;
@@ -166,9 +146,7 @@ fn evaluate_word(
         }
         "eval" => {
             let block = data_stack.pop_block()?;
-            evaluate_block(
-                module, block, data_stack, bindings, functions, tests,
-            )?;
+            evaluate_block(block, data_stack, bindings, functions, tests)?;
         }
         "=" => {
             let b = data_stack.pop_any()?;
@@ -192,9 +170,7 @@ fn evaluate_word(
 
             if let Some(function) = functions.get(word) {
                 let Function::UserDefined { body, .. } = function;
-                evaluate_block(
-                    module, body, data_stack, bindings, functions, tests,
-                )?;
+                evaluate_block(body, data_stack, bindings, functions, tests)?;
                 return Ok(());
             }
 
@@ -213,7 +189,6 @@ fn evaluate_word(
 }
 
 fn evaluate_block(
-    module: Module,
     block: Expressions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
@@ -222,7 +197,6 @@ fn evaluate_block(
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     for expression in block.elements {
         evaluate_expression(
-            module,
             &expression,
             data_stack,
             bindings,
