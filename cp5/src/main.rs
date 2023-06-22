@@ -6,7 +6,9 @@ mod test_report;
 mod tests;
 
 fn main() -> anyhow::Result<()> {
-    let mut functions = std::define()?;
+    let mut functions = cp::Functions::new();
+    std::define(&mut functions)?;
+
     let mut tests = tests::define(&mut functions)?;
     let test_reports = tests::run(&functions, &tests)?;
     test_report::print(&test_reports);
