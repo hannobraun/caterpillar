@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::cp::{
     data_stack::{Array, Value},
-    functions::Module,
+    functions::{Function, Module},
     syntax::SyntaxElement,
     DataStack, DataStackError, Expression, Functions, StageInput,
 };
@@ -194,13 +194,9 @@ fn evaluate_word(
             }
 
             if let Some(function) = functions.get(word) {
+                let Function { body, .. } = function;
                 evaluate_block(
-                    module,
-                    function.body,
-                    data_stack,
-                    bindings,
-                    functions,
-                    tests,
+                    module, body, data_stack, bindings, functions, tests,
                 )?;
                 return Ok(());
             }
