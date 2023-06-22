@@ -82,7 +82,7 @@ impl Evaluator<'_> {
         &mut self,
         function: &Function,
     ) -> Result<(), EvaluatorError> {
-        let FunctionKind::UserDefined { body, .. } = &function.kind;
+        let FunctionKind::UserDefined { body, .. } = &function.body;
         self.evaluate_block(body)?;
         Ok(())
     }
