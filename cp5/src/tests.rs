@@ -70,7 +70,7 @@ pub fn define(functions: &mut cp::Functions) -> anyhow::Result<cp::Functions> {
 }
 
 pub fn run(
-    functions: &mut cp::Functions,
+    functions: &cp::Functions,
     tests: &cp::Functions,
 ) -> anyhow::Result<Vec<TestReport>> {
     let mut results = Vec::new();

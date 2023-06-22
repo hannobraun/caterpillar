@@ -8,7 +8,7 @@ mod tests;
 fn main() -> anyhow::Result<()> {
     let mut functions = std::define()?;
     let mut tests = tests::define(&mut functions)?;
-    let test_reports = tests::run(&mut functions, &tests)?;
+    let test_reports = tests::run(&functions, &tests)?;
     test_report::print(&test_reports);
 
     let mut data_stack = cp::DataStack::new();
@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
 
         println!("{data_stack}");
 
-        let test_reports = tests::run(&mut functions, &tests)?;
+        let test_reports = tests::run(&functions, &tests)?;
         test_report::print(&test_reports);
     }
 
