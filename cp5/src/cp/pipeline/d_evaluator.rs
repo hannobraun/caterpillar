@@ -33,7 +33,8 @@ pub fn evaluate(
     tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
-    evaluate_expression(expression, data_stack, bindings, functions, tests)?;
+    evaluate_expression(expression, data_stack, bindings, functions, tests)
+        .map_err(PipelineError::Stage)?;
     expressions.take();
     Ok(())
 }
@@ -44,7 +45,7 @@ fn evaluate_expression(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
+) -> Result<(), EvaluatorError> {
     match expression {
         Expression::Array { expressions } => {
             data_stack.mark();
@@ -97,7 +98,7 @@ fn evaluate_word(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
+) -> Result<(), EvaluatorError> {
     match word {
         "clone" => {
             let a = data_stack.pop_any()?;
@@ -171,9 +172,7 @@ fn evaluate_word(
                 return Ok(());
             }
 
-            return Err(PipelineError::Stage(EvaluatorError::UnknownWord(
-                word.into(),
-            )));
+            return Err(EvaluatorError::UnknownWord(word.into()));
         }
     }
 
@@ -186,7 +185,7 @@ fn evaluate_block(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
+) -> Result<(), EvaluatorError> {
     for expression in block.elements {
         evaluate_expression(
             &expression,
