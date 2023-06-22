@@ -52,9 +52,11 @@ pub struct Function {
 
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
-    Intrinsic(fn(&mut Evaluator) -> Result<(), EvaluatorError>),
+    Intrinsic(IntrinsicBody),
     UserDefined { body: Expressions },
 }
+
+pub type IntrinsicBody = fn(&mut Evaluator) -> Result<(), EvaluatorError>;
 
 #[derive(Clone, Copy)]
 pub struct Module<'r> {
