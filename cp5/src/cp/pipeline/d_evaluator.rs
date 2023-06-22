@@ -200,7 +200,7 @@ fn evaluate_block(
 }
 
 pub struct Bindings {
-    inner: BTreeMap<String, Value>,
+    pub inner: BTreeMap<String, Value>,
 }
 
 impl Bindings {
