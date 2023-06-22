@@ -4,7 +4,7 @@ use super::pipeline::c_analyzer::Expressions;
 
 #[derive(Debug, Default)]
 pub struct Functions {
-    inner: BTreeMap<String, FunctionKind>,
+    inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
@@ -14,18 +14,20 @@ impl Functions {
 
     pub fn define(&mut self, module: Module, name: String, body: Expressions) {
         let module = module.name();
-        let function = FunctionKind::UserDefined { module, body };
+        let function = Function {
+            kind: FunctionKind::UserDefined { module, body },
+        };
         self.inner.insert(name, function);
     }
 
     pub fn get(&self, name: &str) -> Option<FunctionKind> {
-        self.inner.get(name).cloned()
+        self.inner.get(name).cloned().map(|function| function.kind)
     }
 }
 
 impl IntoIterator for Functions {
-    type Item = (String, FunctionKind);
-    type IntoIter = btree_map::IntoIter<String, FunctionKind>;
+    type Item = (String, Function);
+    type IntoIter = btree_map::IntoIter<String, Function>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
@@ -33,12 +35,17 @@ impl IntoIterator for Functions {
 }
 
 impl<'a> IntoIterator for &'a Functions {
-    type Item = (&'a String, &'a FunctionKind);
-    type IntoIter = btree_map::Iter<'a, String, FunctionKind>;
+    type Item = (&'a String, &'a Function);
+    type IntoIter = btree_map::Iter<'a, String, Function>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.iter()
     }
+}
+
+#[derive(Clone, Debug)]
+pub struct Function {
+    pub kind: FunctionKind,
 }
 
 #[derive(Clone, Debug)]

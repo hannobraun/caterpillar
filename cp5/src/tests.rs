@@ -76,7 +76,9 @@ pub fn run(
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let cp::FunctionKind::UserDefined { module, body } = function;
+        let cp::Function {
+            kind: cp::FunctionKind::UserDefined { module, body },
+        } = function;
         let expressions = cp::StageInput::from(body.clone());
 
         let mut data_stack = cp::DataStack::new();
