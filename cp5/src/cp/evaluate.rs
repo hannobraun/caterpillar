@@ -14,7 +14,7 @@ pub struct Evaluator<'r> {
 }
 
 impl Evaluator<'_> {
-    fn evaluate_block(
+    pub fn evaluate_block(
         &mut self,
         block: Expressions,
     ) -> Result<(), EvaluatorError> {
@@ -74,7 +74,7 @@ impl Evaluator<'_> {
         Ok(())
     }
 
-    fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
+    pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
         match word {
             "clone" => clone(self)?,
             "drop" => drop(self)?,
