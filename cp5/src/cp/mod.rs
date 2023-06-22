@@ -10,7 +10,7 @@ mod tokens;
 pub use self::{
     bindings::Bindings,
     data_stack::{DataStack, DataStackError},
-    evaluate::EvaluatorError,
+    evaluate::{Evaluator, EvaluatorError},
     execute::{execute, Error},
     functions::{Function, Functions},
     pipeline::{
