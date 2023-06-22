@@ -82,8 +82,15 @@ impl Evaluator<'_> {
         &mut self,
         function: &Function,
     ) -> Result<(), EvaluatorError> {
-        let FunctionBody::UserDefined { body } = &function.body;
-        self.evaluate_block(body)?;
+        match &function.body {
+            FunctionBody::Intrinsic(intrinsic) => {
+                intrinsic(self)?;
+            }
+            FunctionBody::UserDefined { body } => {
+                self.evaluate_block(body)?;
+            }
+        }
+
         Ok(())
     }
 

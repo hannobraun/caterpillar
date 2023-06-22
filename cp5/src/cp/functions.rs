@@ -1,6 +1,6 @@
 use std::collections::{btree_map, BTreeMap};
 
-use super::pipeline::c_analyzer::Expressions;
+use super::{pipeline::c_analyzer::Expressions, Evaluator, EvaluatorError};
 
 #[derive(Debug, Default)]
 pub struct Functions {
@@ -52,6 +52,7 @@ pub struct Function {
 
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
+    Intrinsic(fn(&mut Evaluator) -> Result<(), EvaluatorError>),
     UserDefined { body: Expressions },
 }
 
