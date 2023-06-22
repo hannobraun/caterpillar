@@ -81,14 +81,14 @@ pub fn run(
 
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();
-        let mut tests = cp::Functions::new();
+        let tests = cp::Functions::new();
 
         let result = cp::evaluate_all(
             expressions,
             &mut data_stack,
             &mut bindings,
             functions,
-            &mut tests,
+            &tests,
         );
 
         let result = result

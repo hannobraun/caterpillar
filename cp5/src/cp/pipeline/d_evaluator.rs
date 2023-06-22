@@ -16,7 +16,7 @@ pub fn evaluate_all(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &mut Functions,
+    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     while !expressions.is_empty() {
         evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
@@ -30,7 +30,7 @@ pub fn evaluate(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &mut Functions,
+    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
     evaluate_expression(expression, data_stack, bindings, functions, tests)
@@ -51,7 +51,7 @@ fn evaluate_expression(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &mut Functions,
+    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     match expression {
         Expression::Array { expressions } => {
@@ -104,7 +104,7 @@ fn evaluate_word(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &mut Functions,
+    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     match word {
         "clone" => {
@@ -193,7 +193,7 @@ fn evaluate_block(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &mut Functions,
+    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     for expression in block.elements {
         evaluate_expression(
