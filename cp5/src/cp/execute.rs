@@ -5,13 +5,13 @@ use super::{
         a_tokenizer::tokenize,
         b_parser::{parse, ParserError},
         c_analyzer::{analyze, Expression},
-        d_evaluator::{evaluate, EvaluatorError},
+        d_evaluator::evaluate,
         stage_input::{NoMoreInput, StageInput},
         PipelineError,
     },
     syntax::SyntaxElement,
     tokens::Token,
-    Bindings, DataStack, Functions,
+    Bindings, DataStack, EvaluatorErrorKind, Functions,
 };
 
 pub fn execute(
@@ -101,7 +101,7 @@ pub enum ErrorKind {
     Parser(#[from] ParserError),
 
     #[error("Evaluator error: {0}")]
-    Evaluator(#[from] EvaluatorError),
+    Evaluator(#[from] EvaluatorErrorKind),
 }
 
 impl From<PipelineError<Infallible>> for ErrorKind {
@@ -124,8 +124,8 @@ impl From<PipelineError<ParserError>> for ErrorKind {
     }
 }
 
-impl From<PipelineError<EvaluatorError>> for ErrorKind {
-    fn from(err: PipelineError<EvaluatorError>) -> Self {
+impl From<PipelineError<EvaluatorErrorKind>> for ErrorKind {
+    fn from(err: PipelineError<EvaluatorErrorKind>) -> Self {
         match err {
             PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
             PipelineError::Stage(err) => Self::Evaluator(err),

@@ -17,7 +17,7 @@ pub fn evaluate_all(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
+) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     while !expressions.is_empty() {
         evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
     }
@@ -31,17 +31,9 @@ pub fn evaluate(
     bindings: &mut Bindings,
     functions: &Functions,
     tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
+) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     let expression = expressions.read()?;
-    evaluate_expression(expression, data_stack, bindings, functions, tests)
-        .map_err(|err| match err {
-            PipelineError::NotEnoughInput(err) => {
-                PipelineError::NotEnoughInput(err)
-            }
-            PipelineError::Stage(kind) => {
-                PipelineError::Stage(EvaluatorError { kind })
-            }
-        })?;
+    evaluate_expression(expression, data_stack, bindings, functions, tests)?;
     expressions.take();
     Ok(())
 }
