@@ -76,61 +76,17 @@ impl Evaluator<'_> {
 
     fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
         match word {
-            "clone" => {
-                let a = self.data_stack.pop_any()?;
-
-                self.data_stack.push(a.clone());
-                self.data_stack.push(a);
-            }
-            "drop" => {
-                self.data_stack.pop_any()?;
-            }
-            "true" => self.data_stack.push(true),
-            "false" => self.data_stack.push(false),
-            "and" => {
-                let a = self.data_stack.pop_bool()?;
-                let b = self.data_stack.pop_bool()?;
-
-                self.data_stack.push(a && b);
-            }
-            "not" => {
-                let b = self.data_stack.pop_bool()?;
-                self.data_stack.push(!b);
-            }
-            "if" => {
-                let else_ = self.data_stack.pop_block()?;
-                let then_ = self.data_stack.pop_block()?;
-                let cond = self.data_stack.pop_bool()?;
-
-                let block = if cond { then_ } else { else_ };
-
-                self.evaluate_block(block)?;
-            }
-            "unwrap" => {
-                let array = self.data_stack.pop_array()?;
-
-                for value in array.elements {
-                    self.data_stack.push(value);
-                }
-            }
-            "eval" => {
-                let block = self.data_stack.pop_block()?;
-                self.evaluate_block(block)?;
-            }
-            "=" => {
-                let b = self.data_stack.pop_any()?;
-                let a = self.data_stack.pop_any()?;
-
-                let eq = a == b;
-
-                self.data_stack.push(eq);
-            }
-            "-" => {
-                let b = self.data_stack.pop_u8()?;
-                let a = self.data_stack.pop_u8()?;
-
-                self.data_stack.push(a - b);
-            }
+            "clone" => clone(self)?,
+            "drop" => drop(self)?,
+            "true" => true_(self)?,
+            "false" => false_(self)?,
+            "and" => and(self)?,
+            "not" => not(self)?,
+            "if" => if_(self)?,
+            "unwrap" => unwrap(self)?,
+            "eval" => eval(self)?,
+            "=" => eq(self)?,
+            "-" => sub(self)?,
             _ => {
                 if let Some(value) = self.bindings.inner.get(word) {
                     self.data_stack.push(value.clone());
@@ -154,6 +110,94 @@ impl Evaluator<'_> {
 
         Ok(())
     }
+}
+
+fn clone(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let a = evaluator.data_stack.pop_any()?;
+
+    evaluator.data_stack.push(a.clone());
+    evaluator.data_stack.push(a);
+
+    Ok(())
+}
+
+fn drop(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    evaluator.data_stack.pop_any()?;
+    Ok(())
+}
+
+fn true_(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    evaluator.data_stack.push(true);
+    Ok(())
+}
+
+fn false_(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    evaluator.data_stack.push(false);
+    Ok(())
+}
+
+fn and(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let a = evaluator.data_stack.pop_bool()?;
+    let b = evaluator.data_stack.pop_bool()?;
+
+    evaluator.data_stack.push(a && b);
+
+    Ok(())
+}
+
+fn not(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let b = evaluator.data_stack.pop_bool()?;
+    evaluator.data_stack.push(!b);
+
+    Ok(())
+}
+
+fn if_(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let else_ = evaluator.data_stack.pop_block()?;
+    let then_ = evaluator.data_stack.pop_block()?;
+    let cond = evaluator.data_stack.pop_bool()?;
+
+    let block = if cond { then_ } else { else_ };
+
+    evaluator.evaluate_block(block)?;
+
+    Ok(())
+}
+
+fn unwrap(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let array = evaluator.data_stack.pop_array()?;
+
+    for value in array.elements {
+        evaluator.data_stack.push(value);
+    }
+
+    Ok(())
+}
+
+fn eval(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let block = evaluator.data_stack.pop_block()?;
+    evaluator.evaluate_block(block)?;
+    Ok(())
+}
+
+fn eq(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let b = evaluator.data_stack.pop_any()?;
+    let a = evaluator.data_stack.pop_any()?;
+
+    let eq = a == b;
+
+    evaluator.data_stack.push(eq);
+
+    Ok(())
+}
+
+fn sub(evaluator: &mut Evaluator) -> Result<(), EvaluatorError> {
+    let b = evaluator.data_stack.pop_u8()?;
+    let a = evaluator.data_stack.pop_u8()?;
+
+    evaluator.data_stack.push(a - b);
+
+    Ok(())
 }
 
 #[derive(Debug, thiserror::Error)]
