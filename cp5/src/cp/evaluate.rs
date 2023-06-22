@@ -6,7 +6,7 @@ use super::{
     data_stack::{Array, Value},
     pipeline::c_analyzer::Expressions,
     syntax::SyntaxElement,
-    Bindings, DataStack, DataStackError, Expression, Function, Functions,
+    Bindings, DataStack, DataStackError, Expression, FunctionKind, Functions,
     PipelineError,
 };
 
@@ -80,9 +80,9 @@ impl Evaluator<'_> {
 
     pub fn evaluate_function(
         &mut self,
-        function: &Function,
+        function: &FunctionKind,
     ) -> Result<(), EvaluatorError> {
-        let Function::UserDefined { body, .. } = function;
+        let FunctionKind::UserDefined { body, .. } = function;
         self.evaluate_block(body)?;
         Ok(())
     }
