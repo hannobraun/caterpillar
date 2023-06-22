@@ -8,7 +8,7 @@ mod tokens;
 pub use self::{
     data_stack::{DataStack, DataStackError},
     execute::{execute, Error},
-    functions::Functions,
+    functions::{Function, Functions},
     pipeline::{
         c_analyzer::Expression,
         d_evaluator::{evaluate_all, Bindings, EvaluatorError},
