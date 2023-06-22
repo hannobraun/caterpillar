@@ -1,23 +1,9 @@
 use crate::cp::{
     evaluate::Evaluator, Bindings, DataStack, EvaluatorError, Expression,
-    Functions, StageInput,
+    Functions,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
-
-pub fn evaluate_all(
-    mut expressions: StageInput<Expression>,
-    data_stack: &mut DataStack,
-    bindings: &mut Bindings,
-    functions: &Functions,
-    tests: &Functions,
-) -> Result<(), PipelineError<EvaluatorError>> {
-    while !expressions.is_empty() {
-        evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
-    }
-
-    Ok(())
-}
 
 pub fn evaluate(
     mut expressions: StageInputReader<Expression>,

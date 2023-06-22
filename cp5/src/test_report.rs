@@ -11,7 +11,7 @@ pub struct TestReport {
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
-    Evaluator(cp::PipelineError<cp::EvaluatorError>),
+    Evaluator(cp::EvaluatorError),
 
     #[error(transparent)]
     ReturnValue(#[from] cp::DataStackError),

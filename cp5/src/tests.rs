@@ -76,20 +76,18 @@ pub fn run(
     let mut results = Vec::new();
 
     for (name, function) in tests {
-        let cp::FunctionBody::UserDefined { body } = &function.body;
-        let expressions = cp::StageInput::from(body.clone());
-
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();
         let tests = cp::Functions::new();
 
-        let result = cp::evaluate_all(
-            expressions,
-            &mut data_stack,
-            &mut bindings,
+        let mut evaluator = cp::Evaluator {
+            data_stack: &mut data_stack,
+            bindings: &mut bindings,
             functions,
-            &tests,
-        );
+            tests: &tests,
+        };
+
+        let result = evaluator.evaluate_function(function);
 
         let result = result
             .map_err(Error::Evaluator)

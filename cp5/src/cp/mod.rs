@@ -14,7 +14,6 @@ pub use self::{
     execute::{execute, Error},
     functions::{Function, FunctionBody, Functions},
     pipeline::{
-        c_analyzer::Expression, d_evaluator::evaluate_all,
-        stage_input::StageInput, PipelineError,
+        c_analyzer::Expression, stage_input::StageInput, PipelineError,
     },
 };
