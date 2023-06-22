@@ -29,7 +29,7 @@ pub fn evaluate(
     mut expressions: StageInputReader<Expression>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-    functions: &mut Functions,
+    functions: &Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
@@ -58,7 +58,7 @@ fn evaluate_expression(
     expression: &Expression,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-    functions: &mut Functions,
+    functions: &Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     match expression {
@@ -119,7 +119,7 @@ fn evaluate_word(
     word: &str,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-    functions: &mut Functions,
+    functions: &Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     match word {
@@ -219,7 +219,7 @@ fn evaluate_block(
     block: Expressions,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-    functions: &mut Functions,
+    functions: &Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<EvaluatorErrorKind>> {
     for expression in block.elements {
