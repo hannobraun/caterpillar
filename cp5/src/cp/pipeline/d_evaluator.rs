@@ -4,7 +4,7 @@ use crate::cp::{
     data_stack::{Array, Value},
     functions::Function,
     syntax::SyntaxElement,
-    DataStack, DataStackError, Expression, Functions, StageInput,
+    DataStack, EvaluatorError, Expression, Functions, StageInput,
 };
 
 use super::{
@@ -209,20 +209,5 @@ impl Bindings {
         Self {
             inner: BTreeMap::new(),
         }
-    }
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {
-    #[error(transparent)]
-    DataStack(#[from] DataStackError),
-
-    #[error("Unknown word: `{0}`")]
-    UnknownWord(String),
-}
-
-impl From<DataStackError> for PipelineError<EvaluatorError> {
-    fn from(err: DataStackError) -> Self {
-        PipelineError::Stage(err.into())
     }
 }
