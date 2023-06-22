@@ -52,7 +52,7 @@ pub struct Function {
 
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
-    Intrinsic(IntrinsicBody),
+    Intrinsic { body: IntrinsicBody },
     UserDefined { body: Expressions },
 }
 

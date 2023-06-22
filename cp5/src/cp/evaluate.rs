@@ -83,7 +83,7 @@ impl Evaluator<'_> {
         function: &Function,
     ) -> Result<(), EvaluatorError> {
         match &function.body {
-            FunctionBody::Intrinsic(body) => {
+            FunctionBody::Intrinsic { body } => {
                 body(self)?;
             }
             FunctionBody::UserDefined { body } => {
