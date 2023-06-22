@@ -20,7 +20,7 @@ pub struct Evaluator<'r> {
 impl Evaluator<'_> {
     pub fn evaluate_block(
         &mut self,
-        block: Expressions,
+        block: &Expressions,
     ) -> Result<(), EvaluatorError> {
         for expression in &block.elements {
             self.evaluate_expression(expression)?;
@@ -83,7 +83,7 @@ impl Evaluator<'_> {
         function: Function,
     ) -> Result<(), EvaluatorError> {
         let Function::UserDefined { body, .. } = function;
-        self.evaluate_block(body)?;
+        self.evaluate_block(&body)?;
         Ok(())
     }
 

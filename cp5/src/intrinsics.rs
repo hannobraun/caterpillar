@@ -47,7 +47,7 @@ pub fn if_(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
 
     let block = if cond { then_ } else { else_ };
 
-    evaluator.evaluate_block(block)?;
+    evaluator.evaluate_block(&block)?;
 
     Ok(())
 }
@@ -64,7 +64,7 @@ pub fn unwrap(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
 
 pub fn eval(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     let block = evaluator.data_stack.pop_block()?;
-    evaluator.evaluate_block(block)?;
+    evaluator.evaluate_block(&block)?;
     Ok(())
 }
 
