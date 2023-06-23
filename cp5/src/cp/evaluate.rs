@@ -53,7 +53,9 @@ impl Evaluator<'_> {
                 }
             }
             Expression::EvalFunction { name } => {
-                self.evaluate_word(name)?;
+                if let Some(function) = self.functions.get(name) {
+                    self.evaluate_function(&function)?;
+                }
             }
             Expression::Module { body, .. } => {
                 for expression in &body.elements {
@@ -93,11 +95,6 @@ impl Evaluator<'_> {
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
         if let Some(value) = self.bindings.inner.get(word) {
             self.data_stack.push(value.clone());
-            return Ok(());
-        }
-
-        if let Some(function) = self.functions.get(word) {
-            self.evaluate_function(&function)?;
             return Ok(());
         }
 
