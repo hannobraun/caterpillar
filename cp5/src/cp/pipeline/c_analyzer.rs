@@ -108,8 +108,12 @@ fn analyze_syntax_element(
             return None;
         }
         SyntaxElement::Word(word) => {
+            let refers_to_binding = bindings.is_declared(word);
             let refers_to_function = functions.is_declared(word);
 
+            if refers_to_binding {
+                return Some(Expression::EvalBinding { name: word.clone() });
+            }
             if refers_to_function {
                 return Some(Expression::EvalFunction { name: word.clone() });
             }
@@ -157,6 +161,7 @@ pub struct Expressions {
 pub enum Expression {
     Array { expressions: Expressions },
     Binding { idents: Vec<String> },
+    EvalBinding { name: String },
     EvalFunction { name: String },
     Module { name: String, body: Expressions },
     Value(Value),

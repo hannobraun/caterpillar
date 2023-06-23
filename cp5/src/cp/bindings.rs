@@ -21,6 +21,10 @@ impl Bindings {
         self.definitions.insert(name, value);
     }
 
+    pub fn is_declared(&self, name: &str) -> bool {
+        self.declarations.contains(name)
+    }
+
     pub fn get(&self, name: &str) -> Option<&Value> {
         self.definitions.get(name)
     }

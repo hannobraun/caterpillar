@@ -52,6 +52,14 @@ impl Evaluator<'_> {
                     self.bindings.define(ident.clone(), value);
                 }
             }
+            Expression::EvalBinding { name } => {
+                let value = self
+                    .bindings
+                    .get(name)
+                    // This is a bug in the analyzer.
+                    .expect("Binding eval must refer to binding");
+                self.data_stack.push(value.clone());
+            }
             Expression::EvalFunction { name } => {
                 let function = self
                     .functions
@@ -96,11 +104,6 @@ impl Evaluator<'_> {
     }
 
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
-        if let Some(value) = self.bindings.get(word) {
-            self.data_stack.push(value.clone());
-            return Ok(());
-        }
-
         if let Ok(value) = word.parse::<u8>() {
             self.data_stack.push(value);
             return Ok(());
