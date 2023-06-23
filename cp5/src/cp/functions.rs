@@ -4,7 +4,7 @@ use super::{pipeline::c_analyzer::Expressions, Evaluator, EvaluatorError};
 
 #[derive(Debug, Default)]
 pub struct Functions {
-    inner: BTreeMap<String, Function>,
+    definitions: BTreeMap<String, Function>,
 }
 
 impl Functions {
@@ -18,7 +18,7 @@ impl Functions {
             module,
             body: FunctionBody::UserDefined { body },
         };
-        self.inner.insert(name, function);
+        self.definitions.insert(name, function);
     }
 
     pub fn define_intrinsic(
@@ -32,15 +32,15 @@ impl Functions {
             module,
             body: FunctionBody::Intrinsic { body },
         };
-        self.inner.insert(name, function);
+        self.definitions.insert(name, function);
     }
 
     pub fn is_declared(&self, name: &str) -> bool {
-        self.inner.contains_key(name)
+        self.definitions.contains_key(name)
     }
 
     pub fn get(&self, name: &str) -> Option<Function> {
-        self.inner.get(name).cloned()
+        self.definitions.get(name).cloned()
     }
 }
 
@@ -49,7 +49,7 @@ impl IntoIterator for Functions {
     type IntoIter = btree_map::IntoIter<String, Function>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.inner.into_iter()
+        self.definitions.into_iter()
     }
 }
 
@@ -58,7 +58,7 @@ impl<'a> IntoIterator for &'a Functions {
     type IntoIter = btree_map::Iter<'a, String, Function>;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.inner.iter()
+        self.definitions.iter()
     }
 }
 
