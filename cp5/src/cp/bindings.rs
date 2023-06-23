@@ -15,4 +15,8 @@ impl Bindings {
     pub fn define(&mut self, name: String, value: Value) {
         self.inner.insert(name, value);
     }
+
+    pub fn get(&self, name: &str) -> Option<&Value> {
+        self.inner.get(name)
+    }
 }

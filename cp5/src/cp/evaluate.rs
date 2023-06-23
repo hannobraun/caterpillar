@@ -96,7 +96,7 @@ impl Evaluator<'_> {
     }
 
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
-        if let Some(value) = self.bindings.inner.get(word) {
+        if let Some(value) = self.bindings.get(word) {
             self.data_stack.push(value.clone());
             return Ok(());
         }
