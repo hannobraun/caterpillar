@@ -84,7 +84,7 @@ fn analyze_syntax_element(
             return None;
         }
         SyntaxElement::Word(word) => {
-            let refers_to_function = functions.get(word).is_some();
+            let refers_to_function = functions.is_declared(word);
 
             if refers_to_function {
                 Expression::EvalFunction { name: word.clone() }
