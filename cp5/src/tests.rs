@@ -15,8 +15,8 @@ pub fn define(functions: &mut cp::Functions) -> anyhow::Result<cp::Functions> {
         }
 
         mod binding {
-            test "binding" { true false => t f . t }
-            test "tokenization" { true=>t.t }
+            test "binding" { true false => true_ false_ . true_ }
+            test "tokenization" { true=>true_.true_ }
         }
 
         mod basics {
