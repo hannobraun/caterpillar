@@ -4,7 +4,7 @@ use super::data_stack::Value;
 
 #[derive(Default)]
 pub struct Bindings {
-    pub inner: BTreeMap<String, Value>,
+    inner: BTreeMap<String, Value>,
 }
 
 impl Bindings {
