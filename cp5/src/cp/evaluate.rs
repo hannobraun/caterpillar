@@ -53,9 +53,12 @@ impl Evaluator<'_> {
                 }
             }
             Expression::EvalFunction { name } => {
-                if let Some(function) = self.functions.get(name) {
-                    self.evaluate_function(&function)?;
-                }
+                let function = self
+                    .functions
+                    .get(name)
+                    // This is a bug in the analyzer.
+                    .expect("Function eval must refer to function");
+                self.evaluate_function(&function)?;
             }
             Expression::Module { body, .. } => {
                 for expression in &body.elements {
