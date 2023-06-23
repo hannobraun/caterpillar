@@ -1,15 +1,20 @@
-use std::collections::{btree_map, BTreeMap};
+use std::collections::{btree_map, BTreeMap, BTreeSet};
 
 use super::{pipeline::c_analyzer::Expressions, Evaluator, EvaluatorError};
 
 #[derive(Debug, Default)]
 pub struct Functions {
+    declarations: BTreeSet<String>,
     definitions: BTreeMap<String, Function>,
 }
 
 impl Functions {
     pub fn new() -> Functions {
         Self::default()
+    }
+
+    pub fn declare(&mut self, name: String) {
+        self.declarations.insert(name);
     }
 
     pub fn define(&mut self, module: Module, name: String, body: Expressions) {
@@ -36,7 +41,7 @@ impl Functions {
     }
 
     pub fn is_declared(&self, name: &str) -> bool {
-        self.definitions.contains_key(name)
+        self.declarations.contains(name) || self.definitions.contains_key(name)
     }
 
     pub fn get(&self, name: &str) -> Option<Function> {

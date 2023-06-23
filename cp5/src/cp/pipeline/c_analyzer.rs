@@ -54,8 +54,10 @@ fn analyze_syntax_element(
         }
         SyntaxElement::Function { name, body } => {
             let module = Module::none();
-            let body = analyze_syntax_tree(body, module, functions, tests);
 
+            functions.declare(name.clone());
+
+            let body = analyze_syntax_tree(body, module, functions, tests);
             functions.define(module, name.clone(), body);
 
             return None;
