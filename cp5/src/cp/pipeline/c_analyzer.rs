@@ -111,10 +111,10 @@ fn analyze_syntax_element(
             let refers_to_function = functions.is_declared(word);
 
             if refers_to_function {
-                Expression::EvalFunction { name: word.clone() }
-            } else {
-                Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
+                return Some(Expression::EvalFunction { name: word.clone() });
             }
+
+            Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
         }
     };
 
