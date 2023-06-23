@@ -52,6 +52,10 @@ fn analyze_syntax_element(
             Expression::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
+            for ident in idents {
+                bindings.declare(ident.clone());
+            }
+
             let idents = idents.clone();
             Expression::Binding { idents }
         }
