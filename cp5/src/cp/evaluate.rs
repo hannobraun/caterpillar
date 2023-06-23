@@ -58,7 +58,7 @@ impl Evaluator<'_> {
                     .get(name)
                     // This is a bug in the analyzer.
                     .expect("Function eval must refer to function");
-                self.evaluate_function(&function)?;
+                self.evaluate_function(function)?;
             }
             Expression::Module { body, .. } => {
                 for expression in &body.elements {

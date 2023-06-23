@@ -44,8 +44,8 @@ impl Functions {
         self.declarations.contains(name) || self.definitions.contains_key(name)
     }
 
-    pub fn get(&self, name: &str) -> Option<Function> {
-        self.definitions.get(name).cloned()
+    pub fn get(&self, name: &str) -> Option<&Function> {
+        self.definitions.get(name)
     }
 }
 
