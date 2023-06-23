@@ -49,7 +49,7 @@ impl Evaluator<'_> {
             Expression::Binding { idents } => {
                 for ident in idents.iter().rev() {
                     let value = self.data_stack.pop_any()?;
-                    self.bindings.inner.insert(ident.clone(), value);
+                    self.bindings.define(ident.clone(), value);
                 }
             }
             Expression::EvalFunction { name } => {

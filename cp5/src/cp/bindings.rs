@@ -11,4 +11,8 @@ impl Bindings {
     pub fn new() -> Self {
         Self::default()
     }
+
+    pub fn define(&mut self, name: String, value: Value) {
+        self.inner.insert(name, value);
+    }
 }
