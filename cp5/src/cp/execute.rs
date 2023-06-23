@@ -75,7 +75,8 @@ fn execute_inner(
     let syntax_element = parse(tokens.reader())?;
     syntax_elements.add(syntax_element);
 
-    let expression = analyze(syntax_elements.reader(), functions, tests)?;
+    let expression =
+        analyze(syntax_elements.reader(), bindings, functions, tests)?;
     expressions.add(expression);
 
     evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;

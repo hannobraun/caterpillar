@@ -4,13 +4,14 @@ use crate::cp::{
     data_stack::Value,
     functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
-    Functions,
+    Bindings, Functions,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<Expression, PipelineError<Infallible>> {
@@ -19,6 +20,7 @@ pub fn analyze(
         let expression = analyze_syntax_element(
             syntax_element,
             Module::none(),
+            bindings,
             functions,
             tests,
         );
@@ -34,13 +36,19 @@ pub fn analyze(
 fn analyze_syntax_element(
     syntax_element: &SyntaxElement,
     module: Module,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Option<Expression> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
-            let expressions =
-                analyze_syntax_tree(syntax_tree, module, functions, tests);
+            let expressions = analyze_syntax_tree(
+                syntax_tree,
+                module,
+                bindings,
+                functions,
+                tests,
+            );
             Expression::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
@@ -48,15 +56,25 @@ fn analyze_syntax_element(
             Expression::Binding { idents }
         }
         SyntaxElement::Block { syntax_tree } => {
-            let expressions =
-                analyze_syntax_tree(syntax_tree, module, functions, tests);
+            let expressions = analyze_syntax_tree(
+                syntax_tree,
+                module,
+                bindings,
+                functions,
+                tests,
+            );
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
             functions.declare(name.clone());
 
-            let body =
-                analyze_syntax_tree(body, Module::none(), functions, tests);
+            let body = analyze_syntax_tree(
+                body,
+                Module::none(),
+                bindings,
+                functions,
+                tests,
+            );
             functions.define(Module::none(), name.clone(), body);
 
             return None;
@@ -66,6 +84,7 @@ fn analyze_syntax_element(
             let body = analyze_syntax_tree(
                 body,
                 Module::some(&name),
+                bindings,
                 functions,
                 tests,
             );
@@ -77,7 +96,8 @@ fn analyze_syntax_element(
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
-            let body = analyze_syntax_tree(body, module, functions, tests);
+            let body =
+                analyze_syntax_tree(body, module, bindings, functions, tests);
 
             tests.define(module, name, body);
 
@@ -100,6 +120,7 @@ fn analyze_syntax_element(
 fn analyze_syntax_tree(
     syntax_tree: &SyntaxTree,
     module: Module,
+    bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Expressions {
@@ -108,8 +129,13 @@ fn analyze_syntax_tree(
     };
 
     for syntax_element in syntax_tree {
-        let expression =
-            analyze_syntax_element(syntax_element, module, functions, tests);
+        let expression = analyze_syntax_element(
+            syntax_element,
+            module,
+            bindings,
+            functions,
+            tests,
+        );
         if let Some(expression) = expression {
             expressions.elements.push(expression);
         }
