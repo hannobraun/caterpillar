@@ -4,7 +4,7 @@ use super::data_stack::Value;
 
 #[derive(Default)]
 pub struct Bindings {
-    inner: BTreeMap<String, Value>,
+    definitions: BTreeMap<String, Value>,
 }
 
 impl Bindings {
@@ -13,10 +13,10 @@ impl Bindings {
     }
 
     pub fn define(&mut self, name: String, value: Value) {
-        self.inner.insert(name, value);
+        self.definitions.insert(name, value);
     }
 
     pub fn get(&self, name: &str) -> Option<&Value> {
-        self.inner.get(name)
+        self.definitions.get(name)
     }
 }
