@@ -53,10 +53,11 @@ fn analyze_syntax_element(
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
+            let module = Module::none();
             let name = name.clone();
             let body = analyze_syntax_tree(body, module, functions, tests);
 
-            functions.define(Module::none(), name, body);
+            functions.define(module, name, body);
 
             return None;
         }
