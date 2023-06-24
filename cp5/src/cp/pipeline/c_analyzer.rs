@@ -103,8 +103,8 @@ fn analyze_syntax_element(
 
             return None;
         }
-        SyntaxElement::Value(s) => {
-            let s = s.clone();
+        SyntaxElement::Value(value) => {
+            let s = value.clone();
             Expression::Value(s)
         }
         SyntaxElement::Word(word) => {
