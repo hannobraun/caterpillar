@@ -5,7 +5,7 @@ use super::{
     pipeline::{
         a_tokenizer::tokenize,
         b_parser::{parse, ParserError},
-        c_analyzer::analyze,
+        c_analyzer::{analyze, AnalyzerError},
         d_evaluator::evaluate,
         stage_input::{NoMoreInput, StageInput},
         PipelineError,
@@ -102,6 +102,9 @@ pub enum ErrorKind {
     #[error("Parser error: {0}")]
     Parser(#[from] ParserError),
 
+    #[error("Analyzer error: {0}")]
+    Analyzer(#[from] AnalyzerError),
+
     #[error("Evaluator error: {0}")]
     Evaluator(#[from] EvaluatorError),
 }
@@ -122,6 +125,15 @@ impl From<PipelineError<ParserError>> for ErrorKind {
         match err {
             PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
             PipelineError::Stage(err) => Self::Parser(err),
+        }
+    }
+}
+
+impl From<PipelineError<AnalyzerError>> for ErrorKind {
+    fn from(err: PipelineError<AnalyzerError>) -> Self {
+        match err {
+            PipelineError::NotEnoughInput(NoMoreInput) => Self::NotEnoughInput,
+            PipelineError::Stage(err) => Self::Analyzer(err),
         }
     }
 }

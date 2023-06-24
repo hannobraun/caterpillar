@@ -1,5 +1,3 @@
-use std::convert::Infallible;
-
 use crate::cp::{
     data_stack::Value,
     expressions::{Expression, Expressions},
@@ -15,7 +13,7 @@ pub fn analyze(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Expression, PipelineError<Infallible>> {
+) -> Result<Expression, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.read()?;
         let expression = analyze_syntax_element(
@@ -24,7 +22,8 @@ pub fn analyze(
             bindings,
             functions,
             tests,
-        );
+        )
+        .map_err(PipelineError::Stage)?;
         syntax_elements.take();
 
         match expression {
@@ -40,7 +39,7 @@ fn analyze_syntax_element(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Option<Expression> {
+) -> Result<Option<Expression>, AnalyzerError> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions = analyze_syntax_tree(
@@ -49,7 +48,7 @@ fn analyze_syntax_element(
                 bindings,
                 functions,
                 tests,
-            );
+            )?;
             Expression::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
@@ -67,7 +66,7 @@ fn analyze_syntax_element(
                 bindings,
                 functions,
                 tests,
-            );
+            )?;
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
@@ -79,10 +78,10 @@ fn analyze_syntax_element(
                 bindings,
                 functions,
                 tests,
-            );
+            )?;
             functions.define(Module::none(), name.clone(), body);
 
-            return None;
+            return Ok(None);
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
@@ -92,17 +91,17 @@ fn analyze_syntax_element(
                 bindings,
                 functions,
                 tests,
-            );
+            )?;
             Expression::Module { name, body }
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
             let body =
-                analyze_syntax_tree(body, module, bindings, functions, tests);
+                analyze_syntax_tree(body, module, bindings, functions, tests)?;
 
             tests.define(module, name, body);
 
-            return None;
+            return Ok(None);
         }
         SyntaxElement::Value(value) => Expression::Value(value.clone()),
         SyntaxElement::Word(word) => {
@@ -110,17 +109,21 @@ fn analyze_syntax_element(
             let refers_to_function = functions.is_declared(word);
 
             if refers_to_binding {
-                return Some(Expression::EvalBinding { name: word.clone() });
+                return Ok(Some(Expression::EvalBinding {
+                    name: word.clone(),
+                }));
             }
             if refers_to_function {
-                return Some(Expression::EvalFunction { name: word.clone() });
+                return Ok(Some(Expression::EvalFunction {
+                    name: word.clone(),
+                }));
             }
 
             Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
         }
     };
 
-    Some(expression)
+    Ok(Some(expression))
 }
 
 fn analyze_syntax_tree(
@@ -129,7 +132,7 @@ fn analyze_syntax_tree(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Expressions {
+) -> Result<Expressions, AnalyzerError> {
     let mut expressions = Expressions {
         elements: Vec::new(),
     };
@@ -141,11 +144,14 @@ fn analyze_syntax_tree(
             bindings,
             functions,
             tests,
-        );
+        )?;
         if let Some(expression) = expression {
             expressions.elements.push(expression);
         }
     }
 
-    expressions
+    Ok(expressions)
 }
+
+#[derive(Debug, thiserror::Error)]
+pub enum AnalyzerError {}
