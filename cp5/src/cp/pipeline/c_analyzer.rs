@@ -119,7 +119,7 @@ fn analyze_syntax_element(
                 }));
             }
 
-            Expression::RawSyntaxElement(SyntaxElement::Word(word.clone()))
+            return Err(AnalyzerError::UnrecognizedWord(word.clone()));
         }
     };
 
@@ -154,4 +154,7 @@ fn analyze_syntax_tree(
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum AnalyzerError {}
+pub enum AnalyzerError {
+    #[error("Unrecognized word: {0}")]
+    UnrecognizedWord(String),
+}
