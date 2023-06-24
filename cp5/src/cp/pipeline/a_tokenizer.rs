@@ -9,13 +9,13 @@ use super::{
     PipelineError,
 };
 
-pub fn tokenize(mut chars: StageInputReader<char>) -> Result {
+pub fn tokenize(mut chars: StageInputReader<char>) -> Result<Token> {
     let token = tokenize_inner(&mut chars)?;
     chars.take();
     Ok(token)
 }
 
-fn tokenize_inner(chars: &mut StageInputReader<char>) -> Result {
+fn tokenize_inner(chars: &mut StageInputReader<char>) -> Result<Token> {
     loop {
         match *chars.peek()? {
             STRING_DELIMITER => return read_string(chars),
@@ -29,7 +29,7 @@ fn tokenize_inner(chars: &mut StageInputReader<char>) -> Result {
     }
 }
 
-fn read_string(chars: &mut StageInputReader<char>) -> Result {
+fn read_string(chars: &mut StageInputReader<char>) -> Result<Token> {
     // This method is only ever called, if this is true. If it isn't, that's a
     // bug in this module.
     assert_eq!(*chars.read()?, STRING_DELIMITER);
@@ -46,7 +46,7 @@ fn read_string(chars: &mut StageInputReader<char>) -> Result {
     }
 }
 
-fn read_other(chars: &mut StageInputReader<char>) -> Result {
+fn read_other(chars: &mut StageInputReader<char>) -> Result<Token> {
     let mut buf = String::new();
 
     while let Ok(&ch) = chars.peek() {
@@ -72,7 +72,7 @@ fn read_other(chars: &mut StageInputReader<char>) -> Result {
     read_keyword_or_ident(buf)
 }
 
-fn read_keyword_or_ident(buf: String) -> Result {
+fn read_keyword_or_ident(buf: String) -> Result<Token> {
     if buf.is_empty() {
         return Err(PipelineError::NotEnoughInput(NoMoreInput));
     }
@@ -86,4 +86,4 @@ fn read_keyword_or_ident(buf: String) -> Result {
     Ok(Token::Ident(buf))
 }
 
-type Result = std::result::Result<Token, PipelineError<Infallible>>;
+type Result<T> = std::result::Result<T, PipelineError<Infallible>>;
