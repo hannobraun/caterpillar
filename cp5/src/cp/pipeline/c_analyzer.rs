@@ -2,6 +2,7 @@ use std::convert::Infallible;
 
 use crate::cp::{
     data_stack::Value,
+    expressions::{Expression, Expressions},
     functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
     Bindings, Functions,
@@ -147,20 +148,4 @@ fn analyze_syntax_tree(
     }
 
     expressions
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Expressions {
-    pub elements: Vec<Expression>,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Expression {
-    Array { expressions: Expressions },
-    Binding { idents: Vec<String> },
-    EvalBinding { name: String },
-    EvalFunction { name: String },
-    Module { name: String, body: Expressions },
-    Value(Value),
-    RawSyntaxElement(SyntaxElement),
 }

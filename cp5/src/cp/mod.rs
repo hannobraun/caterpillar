@@ -2,6 +2,7 @@ mod bindings;
 mod data_stack;
 mod evaluate;
 mod execute;
+mod expressions;
 mod functions;
 mod pipeline;
 mod syntax;

@@ -1,10 +1,9 @@
 use crate::cp::{
-    evaluate::Evaluator, Bindings, DataStack, EvaluatorError, Functions,
+    evaluate::Evaluator, expressions::Expression, Bindings, DataStack,
+    EvaluatorError, Functions,
 };
 
-use super::{
-    c_analyzer::Expression, stage_input::StageInputReader, PipelineError,
-};
+use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn evaluate(
     mut expressions: StageInputReader<Expression>,
