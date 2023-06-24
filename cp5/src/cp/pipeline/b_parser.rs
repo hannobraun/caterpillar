@@ -40,6 +40,10 @@ fn parse_syntax_element(
             let (name, body) = parse_test(tokens)?;
             SyntaxElement::Test { name, body }
         }
+        Token::Literal(Literal::Number(_)) => {
+            let number = parse_number(tokens)?;
+            SyntaxElement::Value(Value::U8(number))
+        }
         Token::Literal(Literal::String(_)) => {
             let s = parse_string(tokens)?;
             SyntaxElement::Value(Value::String(s))
@@ -147,6 +151,16 @@ fn parse_test(
     let body = parse_block(tokens)?;
 
     Ok((name, body))
+}
+
+fn parse_number(tokens: &mut StageInputReader<Token>) -> Result<u8> {
+    let token = tokens.read()?;
+    let Token::Literal(Literal::Number(number)) = token else {
+        return Err(PipelineError::Stage(ParserError::UnexpectedToken(
+            token.clone()))
+        );
+    };
+    Ok(*number)
 }
 
 fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {

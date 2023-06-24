@@ -104,11 +104,6 @@ impl Evaluator<'_> {
     }
 
     pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
-        if let Ok(value) = word.parse::<u8>() {
-            self.data_stack.push(value);
-            return Ok(());
-        }
-
         Err(EvaluatorError::UnknownWord(word.into()))
     }
 }

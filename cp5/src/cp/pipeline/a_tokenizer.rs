@@ -77,6 +77,10 @@ fn read_keyword_or_ident(buf: String) -> Result<Token> {
         return Err(PipelineError::NotEnoughInput(NoMoreInput));
     }
 
+    if let Ok(number) = buf.parse::<u8>() {
+        return Ok(Token::Literal(Literal::Number(number)));
+    }
+
     for (s, token) in KEYWORDS {
         if buf == *s {
             return Ok(token.clone());

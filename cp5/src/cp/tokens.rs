@@ -20,6 +20,7 @@ pub enum Keyword {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Literal {
+    Number(u8),
     String(String),
 }
 
