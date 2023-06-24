@@ -1,4 +1,4 @@
-use super::{data_stack::Value, syntax::SyntaxElement};
+use super::data_stack::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Expressions {
@@ -13,5 +13,4 @@ pub enum Expression {
     EvalFunction { name: String },
     Module { name: String, body: Expressions },
     Value(Value),
-    RawSyntaxElement(SyntaxElement),
 }

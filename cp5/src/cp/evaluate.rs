@@ -1,7 +1,6 @@
 use super::{
     data_stack::{Array, Value},
     expressions::{Expression, Expressions},
-    syntax::SyntaxElement,
     Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
     PipelineError,
 };
@@ -76,12 +75,6 @@ impl Evaluator<'_> {
             Expression::Value(value) => {
                 self.data_stack.push(value.clone());
             }
-            Expression::RawSyntaxElement(SyntaxElement::Word(word)) => {
-                self.evaluate_word(word)?;
-            }
-            Expression::RawSyntaxElement(syntax_element) => {
-                panic!("Unexpected raw syntax element: {syntax_element:?}")
-            }
         }
 
         Ok(())
@@ -101,10 +94,6 @@ impl Evaluator<'_> {
         }
 
         Ok(())
-    }
-
-    pub fn evaluate_word(&mut self, word: &str) -> Result<(), EvaluatorError> {
-        Err(EvaluatorError::UnknownWord(word.into()))
     }
 }
 
