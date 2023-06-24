@@ -103,10 +103,7 @@ fn analyze_syntax_element(
 
             return None;
         }
-        SyntaxElement::Value(value) => {
-            let s = value.clone();
-            Expression::Value(s)
-        }
+        SyntaxElement::Value(value) => Expression::Value(value.clone()),
         SyntaxElement::Word(word) => {
             let refers_to_binding = bindings.is_declared(word);
             let refers_to_function = functions.is_declared(word);
