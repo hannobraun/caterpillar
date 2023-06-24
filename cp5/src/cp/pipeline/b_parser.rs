@@ -1,4 +1,5 @@
 use crate::cp::{
+    data_stack::Value,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{Keyword, Literal, Token},
 };
@@ -41,7 +42,7 @@ fn parse_syntax_element(
         }
         Token::Literal(Literal::String(_)) => {
             let s = parse_string(tokens)?;
-            SyntaxElement::Value(s)
+            SyntaxElement::Value(Value::String(s))
         }
         Token::Ident(_) => {
             let ident = parse_ident(tokens)?;

@@ -1,5 +1,7 @@
 use std::slice;
 
+use super::data_stack::Value;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
@@ -22,6 +24,6 @@ pub enum SyntaxElement {
     Function { name: String, body: SyntaxTree },
     Module { name: String, body: SyntaxTree },
     Test { name: String, body: SyntaxTree },
-    Value(String),
+    Value(Value),
     Word(String),
 }
