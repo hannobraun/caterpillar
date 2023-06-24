@@ -41,7 +41,7 @@ fn parse_syntax_element(
         }
         Token::Literal(Literal::String(_)) => {
             let s = parse_string(tokens)?;
-            SyntaxElement::String(s)
+            SyntaxElement::Value(s)
         }
         Token::Ident(_) => {
             let ident = parse_ident(tokens)?;

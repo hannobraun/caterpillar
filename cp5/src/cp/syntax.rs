@@ -21,7 +21,7 @@ pub enum SyntaxElement {
     Block { syntax_tree: SyntaxTree },
     Function { name: String, body: SyntaxTree },
     Module { name: String, body: SyntaxTree },
-    String(String),
     Test { name: String, body: SyntaxTree },
+    Value(String),
     Word(String),
 }

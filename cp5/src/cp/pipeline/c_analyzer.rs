@@ -94,10 +94,6 @@ fn analyze_syntax_element(
             );
             Expression::Module { name, body }
         }
-        SyntaxElement::String(s) => {
-            let s = s.clone();
-            Expression::Value(Value::String(s))
-        }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
             let body =
@@ -106,6 +102,10 @@ fn analyze_syntax_element(
             tests.define(module, name, body);
 
             return None;
+        }
+        SyntaxElement::Value(s) => {
+            let s = s.clone();
+            Expression::Value(Value::String(s))
         }
         SyntaxElement::Word(word) => {
             let refers_to_binding = bindings.is_declared(word);
