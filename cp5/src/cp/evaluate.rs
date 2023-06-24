@@ -1,9 +1,9 @@
 use super::{
     data_stack::{Array, Value},
-    pipeline::c_analyzer::Expressions,
+    pipeline::c_analyzer::{Expression, Expressions},
     syntax::SyntaxElement,
-    Bindings, DataStack, DataStackError, Expression, Function, FunctionBody,
-    Functions, PipelineError,
+    Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
+    PipelineError,
 };
 
 pub struct Evaluator<'r> {

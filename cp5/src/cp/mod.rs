@@ -13,7 +13,5 @@ pub use self::{
     evaluate::{Evaluator, EvaluatorError},
     execute::{execute, Error},
     functions::{Function, FunctionBody, Functions, IntrinsicBody, Module},
-    pipeline::{
-        c_analyzer::Expression, stage_input::StageInput, PipelineError,
-    },
+    pipeline::{stage_input::StageInput, PipelineError},
 };
