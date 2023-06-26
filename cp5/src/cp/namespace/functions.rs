@@ -28,7 +28,7 @@ impl Functions {
         self.definitions.insert(name, function);
     }
 
-    pub fn define_intrinsic(
+    pub fn register_intrinsic(
         &mut self,
         module: Module,
         name: String,

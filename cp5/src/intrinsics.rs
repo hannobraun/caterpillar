@@ -16,7 +16,7 @@ pub fn define(functions: &mut cp::Functions) {
     ];
 
     for (name, body) in intrinsics {
-        functions.define_intrinsic(cp::Module::none(), name.into(), body);
+        functions.register_intrinsic(cp::Module::none(), name.into(), body);
     }
 }
 
