@@ -13,17 +13,6 @@ pub struct Evaluator<'r> {
 }
 
 impl Evaluator<'_> {
-    pub fn evaluate_expressions(
-        &mut self,
-        block: &Expressions,
-    ) -> Result<(), EvaluatorError> {
-        for expression in &block.elements {
-            self.evaluate_expression(expression)?;
-        }
-
-        Ok(())
-    }
-
     pub fn evaluate_expression(
         &mut self,
         expression: &Expression,
@@ -75,6 +64,17 @@ impl Evaluator<'_> {
             Expression::Value(value) => {
                 self.data_stack.push(value.clone());
             }
+        }
+
+        Ok(())
+    }
+
+    pub fn evaluate_expressions(
+        &mut self,
+        block: &Expressions,
+    ) -> Result<(), EvaluatorError> {
+        for expression in &block.elements {
+            self.evaluate_expression(expression)?;
         }
 
         Ok(())
