@@ -12,8 +12,7 @@ pub use self::{
     evaluate::{Evaluator, EvaluatorError},
     execute::{execute, Error},
     namespace::{
-        functions::{Functions, Module},
-        Bindings, Function, FunctionBody, Intrinsic,
+        Bindings, Function, FunctionBody, Functions, Intrinsic, Module,
     },
     pipeline::{stage_input::StageInput, PipelineError},
 };
