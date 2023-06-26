@@ -1,7 +1,8 @@
 mod bindings;
+mod function;
 pub mod functions;
 
 pub use self::{
     bindings::Bindings,
-    functions::{Function, FunctionBody, IntrinsicBody},
+    function::{Function, FunctionBody, IntrinsicBody},
 };

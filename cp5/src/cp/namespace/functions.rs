@@ -1,6 +1,8 @@
 use std::collections::{btree_map, BTreeMap, BTreeSet};
 
-use crate::cp::{expressions::Expressions, Evaluator, EvaluatorError};
+use crate::cp::expressions::Expressions;
+
+use super::{Function, FunctionBody, IntrinsicBody};
 
 #[derive(Debug, Default)]
 pub struct Functions {
@@ -66,20 +68,6 @@ impl<'a> IntoIterator for &'a Functions {
         self.definitions.iter()
     }
 }
-
-#[derive(Clone, Debug)]
-pub struct Function {
-    pub module: String,
-    pub body: FunctionBody,
-}
-
-#[derive(Clone, Debug)]
-pub enum FunctionBody {
-    Intrinsic { body: IntrinsicBody },
-    UserDefined { body: Expressions },
-}
-
-pub type IntrinsicBody = fn(&mut Evaluator) -> Result<(), EvaluatorError>;
 
 #[derive(Clone, Copy)]
 pub struct Module<'r> {
