@@ -23,7 +23,7 @@ impl Functions {
         let module = module.name();
         let function = Function {
             module,
-            body: FunctionBody::UserDefined { body },
+            body: FunctionBody::UserDefined(body),
         };
         self.definitions.insert(name, function);
     }

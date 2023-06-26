@@ -9,7 +9,7 @@ pub struct Function {
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
     Intrinsic(IntrinsicBody),
-    UserDefined { body: Expressions },
+    UserDefined(Expressions),
 }
 
 pub type IntrinsicBody = fn(&mut Evaluator) -> Result<(), EvaluatorError>;
