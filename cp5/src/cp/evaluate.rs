@@ -13,7 +13,7 @@ pub struct Evaluator<'r> {
 }
 
 impl Evaluator<'_> {
-    pub fn evaluate_block(
+    pub fn evaluate_expressions(
         &mut self,
         block: &Expressions,
     ) -> Result<(), EvaluatorError> {
@@ -89,7 +89,7 @@ impl Evaluator<'_> {
                 intrinsic(self)?;
             }
             FunctionBody::UserDefined { body } => {
-                self.evaluate_block(body)?;
+                self.evaluate_expressions(body)?;
             }
         }
 
