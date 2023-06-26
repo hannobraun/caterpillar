@@ -1,4 +1,4 @@
-pub mod bindings;
+mod bindings;
 pub mod functions;
 
 pub use self::bindings::Bindings;
