@@ -1,6 +1,6 @@
 mod bindings;
 mod function;
-pub mod functions;
+mod functions;
 
 pub use self::{
     bindings::Bindings,
