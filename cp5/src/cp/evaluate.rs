@@ -71,9 +71,9 @@ impl Evaluator<'_> {
 
     pub fn evaluate_expressions(
         &mut self,
-        block: &Expressions,
+        expressions: &Expressions,
     ) -> Result<(), EvaluatorError> {
-        for expression in &block.elements {
+        for expression in &expressions.elements {
             self.evaluate_expression(expression)?;
         }
 
