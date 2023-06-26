@@ -8,7 +8,7 @@ pub struct Function {
 
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
-    Intrinsic { body: IntrinsicBody },
+    Intrinsic(IntrinsicBody),
     UserDefined { body: Expressions },
 }
 

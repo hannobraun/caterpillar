@@ -37,7 +37,7 @@ impl Functions {
         let module = module.name();
         let function = Function {
             module,
-            body: FunctionBody::Intrinsic { body },
+            body: FunctionBody::Intrinsic(body),
         };
         self.definitions.insert(name, function);
     }
