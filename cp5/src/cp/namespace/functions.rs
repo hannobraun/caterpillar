@@ -15,19 +15,6 @@ impl Functions {
         Self::default()
     }
 
-    pub fn declare(&mut self, name: String) {
-        self.declarations.insert(name);
-    }
-
-    pub fn define(&mut self, module: Module, name: String, body: Expressions) {
-        let module = module.name();
-        let function = Function {
-            module,
-            body: FunctionBody::UserDefined(body),
-        };
-        self.definitions.insert(name, function);
-    }
-
     pub fn register_intrinsic(
         &mut self,
         module: Module,
@@ -38,6 +25,19 @@ impl Functions {
         let function = Function {
             module,
             body: FunctionBody::Intrinsic(body),
+        };
+        self.definitions.insert(name, function);
+    }
+
+    pub fn declare(&mut self, name: String) {
+        self.declarations.insert(name);
+    }
+
+    pub fn define(&mut self, module: Module, name: String, body: Expressions) {
+        let module = module.name();
+        let function = Function {
+            module,
+            body: FunctionBody::UserDefined(body),
         };
         self.definitions.insert(name, function);
     }
