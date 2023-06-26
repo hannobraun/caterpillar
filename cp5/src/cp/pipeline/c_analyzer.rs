@@ -1,9 +1,8 @@
 use crate::cp::{
     data_stack::Value,
     expressions::{Expression, Expressions},
-    functions::Module,
     syntax::{SyntaxElement, SyntaxTree},
-    Bindings, Functions,
+    Bindings, Functions, Module,
 };
 
 use super::{stage_input::StageInputReader, PipelineError};
