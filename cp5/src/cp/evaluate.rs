@@ -88,8 +88,8 @@ impl Evaluator<'_> {
             FunctionBody::Intrinsic(intrinsic) => {
                 intrinsic(self)?;
             }
-            FunctionBody::UserDefined(body) => {
-                self.evaluate_expressions(body)?;
+            FunctionBody::UserDefined(expressions) => {
+                self.evaluate_expressions(expressions)?;
             }
         }
 
