@@ -13,7 +13,7 @@ pub use self::{
     execute::{execute, Error},
     namespace::{
         functions::{Functions, Module},
-        Bindings, Function, FunctionBody, IntrinsicBody,
+        Bindings, Function, FunctionBody, Intrinsic,
     },
     pipeline::{stage_input::StageInput, PipelineError},
 };

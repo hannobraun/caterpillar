@@ -2,7 +2,7 @@ use crate::cp;
 
 pub fn define(functions: &mut cp::Functions) {
     let intrinsics = [
-        ("clone", clone as cp::IntrinsicBody),
+        ("clone", clone as cp::Intrinsic),
         ("drop", drop),
         ("true", true_),
         ("false", false_),

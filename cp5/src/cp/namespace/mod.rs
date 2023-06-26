@@ -4,5 +4,5 @@ pub mod functions;
 
 pub use self::{
     bindings::Bindings,
-    function::{Function, FunctionBody, IntrinsicBody},
+    function::{Function, FunctionBody, Intrinsic},
 };

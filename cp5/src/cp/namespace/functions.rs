@@ -2,7 +2,7 @@ use std::collections::{btree_map, BTreeMap, BTreeSet};
 
 use crate::cp::expressions::Expressions;
 
-use super::{Function, FunctionBody, IntrinsicBody};
+use super::{Function, FunctionBody, Intrinsic};
 
 #[derive(Debug, Default)]
 pub struct Functions {
@@ -19,7 +19,7 @@ impl Functions {
         &mut self,
         module: Module,
         name: String,
-        body: IntrinsicBody,
+        body: Intrinsic,
     ) {
         let module = module.name();
         let function = Function {
