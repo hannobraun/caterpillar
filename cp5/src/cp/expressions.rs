@@ -16,6 +16,42 @@ impl Expressions {
     }
 }
 
+// This representation omits module, function, and test definitions, because the
+// evaluator (which is the consumer of this representation) doesn't need them.
+// This might be a problem.
+//
+// The idea is to have this be the canonical representation of the code. This
+// representation will be stored in some kind of "system image", and the human-
+// readable representation will be generated on the fly, whenever the developer
+// looks at a function.
+//
+// Not having important parts of the language as part of the canonical
+// representation seems like an obvious no-go at first, but it *could* actually
+// work.
+//
+// A normal language doesn't need a representation of the file that the source
+// code is defined in, because the concept of files exists "below" the actual
+// language. It's something the editor needs to know about, not the language
+// itself.
+//
+// In much the same way, the concept of a function could exist below the rest of
+// the language in Caterpillar. It's the unit of organization, a thing that the
+// system image and the editor need to understand, but not the language itself.
+// The language itself needs to understand that functions exist and can be
+// called, but it doesn't need to represent function definitions. The same
+// thinking can be applied to modules and tests.
+//
+// However, handling it like this would create limitations. It would not be
+// possible to have nested function definitions (because how would you represent
+// the outer function then). Same goes for modules that have anything in them
+// but function definitions (so no compile-time code that you can just write
+// into a module).
+//
+// Maybe these limitations are fine, at first. Or maybe the solution is to
+// broaden this representation beyond just what's needed by the evaluator. Maybe
+// it makes most sense long-term, if there is a more general canonical
+// representation, and the evaluator is just one of several consumers that only
+// care about a subset.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Array { expressions: Expressions },
