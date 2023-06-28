@@ -2,11 +2,11 @@ use std::convert::Infallible;
 
 use super::{
     pipeline::{
+        channel::{NoMoreInput, StageInput},
         ir::{
             analyzer_output::AnalyzerEvent, syntax::SyntaxElement,
             tokens::Token,
         },
-        channel::{NoMoreInput, StageInput},
         stages::{
             a_tokenizer::tokenize,
             b_parser::{parse, ParserError},

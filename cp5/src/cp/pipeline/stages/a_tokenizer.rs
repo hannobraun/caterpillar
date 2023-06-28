@@ -2,8 +2,8 @@ use std::convert::Infallible;
 
 use crate::cp::{
     pipeline::{
-        ir::tokens::{Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER},
         channel::{NoMoreInput, StageInputReader},
+        ir::tokens::{Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER},
     },
     PipelineError,
 };
