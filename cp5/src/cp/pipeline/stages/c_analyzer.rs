@@ -18,7 +18,7 @@ pub fn analyze(
 ) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.read()?;
-        let (expression, consumed_syntax_element) = analyze_syntax_element(
+        let (event, consumed_syntax_element) = analyze_syntax_element(
             syntax_element,
             Module::none(),
             bindings,
@@ -31,7 +31,7 @@ pub fn analyze(
             syntax_elements.take();
         }
 
-        match expression {
+        match event {
             Some(expression) => return Ok(expression),
             None => continue,
         }
