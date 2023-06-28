@@ -29,8 +29,8 @@ pub fn analyze(
         syntax_elements.take();
 
         match expression {
-            Some(expression) => return Ok(expression),
-            None => continue,
+            (Some(expression), _) => return Ok(expression),
+            (None, _) => continue,
         }
     }
 }
@@ -41,7 +41,7 @@ fn analyze_syntax_element(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Option<AnalyzerEvent>, AnalyzerError> {
+) -> Result<(Option<AnalyzerEvent>, bool), AnalyzerError> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions = analyze_syntax_tree(
@@ -135,7 +135,7 @@ fn analyze_syntax_element(
             )?;
             functions.define(Module::none(), name.clone(), body);
 
-            return Ok(None);
+            return Ok((None, true));
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
@@ -156,7 +156,7 @@ fn analyze_syntax_element(
             tests.declare(name.clone());
             tests.define(module, name, body);
 
-            return Ok(None);
+            return Ok((None, true));
         }
         SyntaxElement::Value(value) => AnalyzerEvent::Value(value.clone()),
         SyntaxElement::Word(word) => {
@@ -165,18 +165,18 @@ fn analyze_syntax_element(
 
             if refers_to_binding {
                 let event = AnalyzerEvent::EvalBinding { name: word.clone() };
-                return Ok(Some(event));
+                return Ok((Some(event), true));
             }
             if refers_to_function {
                 let event = AnalyzerEvent::EvalFunction { name: word.clone() };
-                return Ok(Some(event));
+                return Ok((Some(event), true));
             }
 
             return Err(AnalyzerError::UnrecognizedWord(word.clone()));
         }
     };
 
-    Ok(Some(expression))
+    Ok((Some(expression), true))
 }
 
 fn analyze_syntax_tree(
@@ -196,7 +196,7 @@ fn analyze_syntax_tree(
             functions,
             tests,
         )?;
-        if let Some(expression) = expression {
+        if let (Some(expression), _) = expression {
             expressions.events.push(expression);
         }
     }
