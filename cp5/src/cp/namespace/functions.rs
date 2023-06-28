@@ -1,6 +1,6 @@
 use std::collections::{btree_map, BTreeMap, BTreeSet};
 
-use crate::cp::pipeline::ir::analyzer_output::Expressions;
+use crate::cp::pipeline::ir::analyzer_output::AnalyzerOutput;
 
 use super::{Function, FunctionBody, Intrinsic};
 
@@ -33,7 +33,12 @@ impl Functions {
         self.declarations.insert(name);
     }
 
-    pub fn define(&mut self, module: Module, name: String, body: Expressions) {
+    pub fn define(
+        &mut self,
+        module: Module,
+        name: String,
+        body: AnalyzerOutput,
+    ) {
         let module = module.name();
         let function = Function {
             module,

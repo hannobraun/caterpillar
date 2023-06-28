@@ -1,5 +1,5 @@
 use crate::cp::{
-    pipeline::ir::analyzer_output::Expressions, Evaluator, EvaluatorError,
+    pipeline::ir::analyzer_output::AnalyzerOutput, Evaluator, EvaluatorError,
 };
 
 #[derive(Clone, Debug)]
@@ -11,7 +11,7 @@ pub struct Function {
 #[derive(Clone, Debug)]
 pub enum FunctionBody {
     Intrinsic(Intrinsic),
-    UserDefined(Expressions),
+    UserDefined(AnalyzerOutput),
 }
 
 pub type Intrinsic = fn(&mut Evaluator) -> Result<(), EvaluatorError>;

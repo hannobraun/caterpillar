@@ -1,6 +1,6 @@
 use super::{
     data_stack::{Array, Value},
-    pipeline::ir::analyzer_output::{Expression, Expressions},
+    pipeline::ir::analyzer_output::{AnalyzerOutput, Expression},
     Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
     PipelineError,
 };
@@ -71,7 +71,7 @@ impl Evaluator<'_> {
 
     pub fn evaluate_expressions(
         &mut self,
-        expressions: &Expressions,
+        expressions: &AnalyzerOutput,
     ) -> Result<(), EvaluatorError> {
         for expression in &expressions.elements {
             self.evaluate_expression(expression)?;

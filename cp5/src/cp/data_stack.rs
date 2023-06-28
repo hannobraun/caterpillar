@@ -1,6 +1,6 @@
 use core::fmt;
 
-use super::pipeline::ir::analyzer_output::Expressions;
+use super::pipeline::ir::analyzer_output::AnalyzerOutput;
 
 #[derive(Debug, Default)]
 pub struct DataStack {
@@ -41,7 +41,7 @@ impl DataStack {
         })
     }
 
-    pub fn pop_block(&mut self) -> Result<Expressions, DataStackError> {
+    pub fn pop_block(&mut self) -> Result<AnalyzerOutput, DataStackError> {
         self.pop_specific_type("block", |value| {
             let Value::Block(value) = value else {
                 return Err(value);
@@ -107,7 +107,7 @@ impl fmt::Display for DataStack {
 pub enum Value {
     Array(Array),
     Bool(bool),
-    Block(Expressions),
+    Block(AnalyzerOutput),
     String(String),
     U8(u8),
 }

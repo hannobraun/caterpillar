@@ -2,7 +2,7 @@ use crate::cp::{
     data_stack::Value,
     pipeline::{
         ir::{
-            analyzer_output::{Expression, Expressions},
+            analyzer_output::{AnalyzerOutput, Expression},
             syntax::{SyntaxElement, SyntaxTree},
         },
         stage_input::StageInputReader,
@@ -184,8 +184,8 @@ fn analyze_syntax_tree(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Expressions, AnalyzerError> {
-    let mut expressions = Expressions {
+) -> Result<AnalyzerOutput, AnalyzerError> {
+    let mut expressions = AnalyzerOutput {
         elements: Vec::new(),
     };
 

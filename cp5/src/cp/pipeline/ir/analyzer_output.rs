@@ -3,11 +3,11 @@ use std::{collections::VecDeque, slice};
 use crate::cp::data_stack::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Expressions {
+pub struct AnalyzerOutput {
     pub elements: Vec<Expression>,
 }
 
-impl Expressions {
+impl AnalyzerOutput {
     pub fn iter_recursive(&self) -> IterRecursive {
         let mut iters = VecDeque::new();
         iters.push_back(self.elements.iter());
@@ -59,11 +59,11 @@ impl Expressions {
 // canonical representation.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Array { expressions: Expressions },
+    Array { expressions: AnalyzerOutput },
     Binding { idents: Vec<String> },
     EvalBinding { name: String },
     EvalFunction { name: String },
-    Module { name: String, body: Expressions },
+    Module { name: String, body: AnalyzerOutput },
     Value(Value),
 }
 
