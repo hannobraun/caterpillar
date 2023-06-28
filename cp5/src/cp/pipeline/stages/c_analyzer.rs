@@ -143,6 +143,13 @@ fn analyze_syntax_element(
 
             if !functions.is_declared(name) {
                 functions.declare(name.clone());
+
+                return Ok(Analysis {
+                    event: Some(AnalyzerEvent::FunctionDeclare {
+                        name: name.clone(),
+                    }),
+                    consumed_syntax_element: false,
+                });
             }
 
             let body = analyze_syntax_tree(
