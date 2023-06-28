@@ -1,11 +1,11 @@
 use crate::cp::{
     evaluate::Evaluator,
-    pipeline::{channel::StageInputReader, ir::analyzer_output::AnalyzerEvent},
+    pipeline::{channel::StageInput, ir::analyzer_output::AnalyzerEvent},
     Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 
 pub fn evaluate(
-    mut expressions: StageInputReader<AnalyzerEvent>,
+    mut expressions: StageInput<AnalyzerEvent>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,

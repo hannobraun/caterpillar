@@ -2,19 +2,19 @@ use std::convert::Infallible;
 
 use crate::cp::{
     pipeline::{
-        channel::{NoMoreInput, StageInputReader},
+        channel::{NoMoreInput, StageInput},
         ir::tokens::{Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER},
     },
     PipelineError,
 };
 
-pub fn tokenize(mut chars: StageInputReader<char>) -> Result<Token> {
+pub fn tokenize(mut chars: StageInput<char>) -> Result<Token> {
     let token = tokenize_inner(&mut chars)?;
     chars.take();
     Ok(token)
 }
 
-fn tokenize_inner(chars: &mut StageInputReader<char>) -> Result<Token> {
+fn tokenize_inner(chars: &mut StageInput<char>) -> Result<Token> {
     loop {
         match *chars.peek()? {
             STRING_DELIMITER => return read_string(chars),
@@ -28,7 +28,7 @@ fn tokenize_inner(chars: &mut StageInputReader<char>) -> Result<Token> {
     }
 }
 
-fn read_string(chars: &mut StageInputReader<char>) -> Result<Token> {
+fn read_string(chars: &mut StageInput<char>) -> Result<Token> {
     // This method is only ever called, if this is true. If it isn't, that's a
     // bug in this module.
     assert_eq!(*chars.read()?, STRING_DELIMITER);
@@ -45,7 +45,7 @@ fn read_string(chars: &mut StageInputReader<char>) -> Result<Token> {
     }
 }
 
-fn read_other(chars: &mut StageInputReader<char>) -> Result<Token> {
+fn read_other(chars: &mut StageInput<char>) -> Result<Token> {
     let mut buf = String::new();
 
     while let Ok(&ch) = chars.peek() {

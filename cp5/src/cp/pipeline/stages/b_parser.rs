@@ -1,7 +1,7 @@
 use crate::cp::{
     data_stack::Value,
     pipeline::{
-        channel::StageInputReader,
+        channel::StageInput,
         ir::{
             syntax::{SyntaxElement, SyntaxTree},
             tokens::{Keyword, Literal, Token},
@@ -10,14 +10,14 @@ use crate::cp::{
     PipelineError,
 };
 
-pub fn parse(mut tokens: StageInputReader<Token>) -> Result<SyntaxElement> {
+pub fn parse(mut tokens: StageInput<Token>) -> Result<SyntaxElement> {
     let syntax_element = parse_syntax_element(&mut tokens)?;
     tokens.take();
     Ok(syntax_element)
 }
 
 fn parse_syntax_element(
-    tokens: &mut StageInputReader<Token>,
+    tokens: &mut StageInput<Token>,
 ) -> Result<SyntaxElement> {
     let syntax_element = match tokens.peek()? {
         Token::BindingOperator => {
@@ -66,7 +66,7 @@ fn parse_syntax_element(
     Ok(syntax_element)
 }
 
-fn parse_binding(tokens: &mut StageInputReader<Token>) -> Result<Vec<String>> {
+fn parse_binding(tokens: &mut StageInput<Token>) -> Result<Vec<String>> {
     expect_token(tokens, Token::BindingOperator)?;
 
     let mut idents = Vec::new();
@@ -85,7 +85,7 @@ fn parse_binding(tokens: &mut StageInputReader<Token>) -> Result<Vec<String>> {
     }
 }
 
-fn parse_array(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
+fn parse_array(tokens: &mut StageInput<Token>) -> Result<SyntaxTree> {
     expect_token(tokens, Token::SquareBracketOpen)?;
 
     let mut syntax_tree = SyntaxTree {
@@ -106,7 +106,7 @@ fn parse_array(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
     }
 }
 
-fn parse_block(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
+fn parse_block(tokens: &mut StageInput<Token>) -> Result<SyntaxTree> {
     expect_token(tokens, Token::CurlyBracketOpen)?;
 
     let mut syntax_tree = SyntaxTree {
@@ -127,9 +127,7 @@ fn parse_block(tokens: &mut StageInputReader<Token>) -> Result<SyntaxTree> {
     }
 }
 
-fn parse_fn(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<(String, SyntaxTree)> {
+fn parse_fn(tokens: &mut StageInput<Token>) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Fn))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
@@ -137,9 +135,7 @@ fn parse_fn(
     Ok((name, body))
 }
 
-fn parse_mod(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<(String, SyntaxTree)> {
+fn parse_mod(tokens: &mut StageInput<Token>) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Mod))?;
     let name = parse_ident(tokens)?;
     let body = parse_block(tokens)?;
@@ -147,9 +143,7 @@ fn parse_mod(
     Ok((name, body))
 }
 
-fn parse_test(
-    tokens: &mut StageInputReader<Token>,
-) -> Result<(String, SyntaxTree)> {
+fn parse_test(tokens: &mut StageInput<Token>) -> Result<(String, SyntaxTree)> {
     expect_token(tokens, Token::Keyword(Keyword::Test))?;
     let name = parse_string(tokens)?;
     let body = parse_block(tokens)?;
@@ -157,7 +151,7 @@ fn parse_test(
     Ok((name, body))
 }
 
-fn parse_number(tokens: &mut StageInputReader<Token>) -> Result<u8> {
+fn parse_number(tokens: &mut StageInput<Token>) -> Result<u8> {
     let token = tokens.read()?;
     let Token::Literal(Literal::Number(number)) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
@@ -167,7 +161,7 @@ fn parse_number(tokens: &mut StageInputReader<Token>) -> Result<u8> {
     Ok(*number)
 }
 
-fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {
+fn parse_string(tokens: &mut StageInput<Token>) -> Result<String> {
     let token = tokens.read()?;
     let Token::Literal(Literal::String(s)) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
@@ -177,7 +171,7 @@ fn parse_string(tokens: &mut StageInputReader<Token>) -> Result<String> {
     Ok(s.clone())
 }
 
-fn parse_ident(tokens: &mut StageInputReader<Token>) -> Result<String> {
+fn parse_ident(tokens: &mut StageInput<Token>) -> Result<String> {
     let token = tokens.read()?;
     let Token::Ident(ident) = token else {
         return Err(PipelineError::Stage(ParserError::UnexpectedToken(
@@ -187,10 +181,7 @@ fn parse_ident(tokens: &mut StageInputReader<Token>) -> Result<String> {
     Ok(ident.clone())
 }
 
-fn expect_token(
-    tokens: &mut StageInputReader<Token>,
-    expected: Token,
-) -> Result<()> {
+fn expect_token(tokens: &mut StageInput<Token>, expected: Token) -> Result<()> {
     let token = tokens.read()?;
 
     if token != &expected {

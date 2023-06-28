@@ -22,8 +22,8 @@ impl<T> PipelineChannel<T> {
         self.items.push_back(item)
     }
 
-    pub fn as_input(&mut self) -> StageInputReader<T> {
-        StageInputReader {
+    pub fn as_input(&mut self) -> StageInput<T> {
+        StageInput {
             inner: self,
             num_read: 0,
         }
@@ -47,12 +47,12 @@ impl From<AnalyzerOutput> for PipelineChannel<AnalyzerEvent> {
 }
 
 #[derive(Debug)]
-pub struct StageInputReader<'r, T> {
+pub struct StageInput<'r, T> {
     inner: &'r mut PipelineChannel<T>,
     num_read: usize,
 }
 
-impl<'r, T> StageInputReader<'r, T> {
+impl<'r, T> StageInput<'r, T> {
     pub fn peek(&self) -> Result<&T, NoMoreInput> {
         self.inner.items.get(self.num_read).ok_or(NoMoreInput)
     }

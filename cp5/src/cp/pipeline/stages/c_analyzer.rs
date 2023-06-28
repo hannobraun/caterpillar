@@ -1,7 +1,7 @@
 use crate::cp::{
     data_stack::Value,
     pipeline::{
-        channel::StageInputReader,
+        channel::StageInput,
         ir::{
             analyzer_output::{AnalyzerEvent, AnalyzerOutput},
             syntax::{SyntaxElement, SyntaxTree},
@@ -11,7 +11,7 @@ use crate::cp::{
 };
 
 pub fn analyze(
-    mut syntax_elements: StageInputReader<SyntaxElement>,
+    mut syntax_elements: StageInput<SyntaxElement>,
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
