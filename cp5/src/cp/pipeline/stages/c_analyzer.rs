@@ -18,7 +18,7 @@ pub fn analyze(
 ) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.read()?;
-        let expression = analyze_syntax_element(
+        let (expression, consumed_syntax_element) = analyze_syntax_element(
             syntax_element,
             Module::none(),
             bindings,
@@ -27,14 +27,13 @@ pub fn analyze(
         )
         .map_err(PipelineError::Stage)?;
 
-        let (_, consumed_syntax_element) = expression;
         if consumed_syntax_element {
             syntax_elements.take();
         }
 
         match expression {
-            (Some(expression), _) => return Ok(expression),
-            (None, _) => continue,
+            Some(expression) => return Ok(expression),
+            None => continue,
         }
     }
 }
