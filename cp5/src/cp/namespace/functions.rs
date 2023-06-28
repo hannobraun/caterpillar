@@ -59,8 +59,16 @@ impl Functions {
         self.declarations.contains(name)
     }
 
-    pub fn get(&self, name: &str) -> Option<&Function> {
-        self.definitions.get(name)
+    pub fn get(&self, name: &str) -> &Function {
+        match self.definitions.get(name) {
+            Some(function) => function,
+            None => {
+                let is_declared = self.is_declared(name);
+                panic!(
+                    "Function `{name}` not defined. Is declared: {is_declared}"
+                )
+            }
+        }
     }
 }
 

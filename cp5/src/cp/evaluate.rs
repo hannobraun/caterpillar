@@ -49,11 +49,7 @@ impl Evaluator<'_> {
                 self.data_stack.push(value.clone());
             }
             AnalyzerEvent::EvalFunction { name } => {
-                let function = self
-                    .functions
-                    .get(name)
-                    // This is a bug in the analyzer.
-                    .expect("Function eval must refer to function");
+                let function = self.functions.get(name);
                 self.evaluate_function(function)?;
             }
             AnalyzerEvent::FunctionDeclare { .. } => {
