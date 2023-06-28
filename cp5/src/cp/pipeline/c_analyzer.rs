@@ -69,6 +69,56 @@ fn analyze_syntax_element(
             Expression::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
+            // The analyzer directly mutates the namespace, here and in other
+            // places. This is not necessarily desirable.
+            //
+            // There are other pieces of code that want to be informed about
+            // these mutations, for example to know which functions were
+            // updated, which can then be used to calculate a list of tests that
+            // need to be run.
+            //
+            // For use cases like these, it would be better to generate a
+            // sequence of events, which can then be aggregated and applied to
+            // the namespace state, but also used to keep track of changes.
+            //
+            // However, this piece of code here is a bit problematic in that
+            // regard. It generates two events, declare function and define
+            // function, and needs the first one applied before it can generate
+            // the second one. So this would need to be distributed over two
+            // invocations of the analyzer.
+            //
+            // However, that the first event was generated is not reflected in
+            // the input, so the second invocation would not know that the
+            // function is already declared.
+            //
+            // I can think of several ways to address this:
+            //
+            // - Split function declaration into declaration and definition
+            //   before this stage.
+            //   - The parser could emit it like that, but this would be weird.
+            //     Then the syntax tree emitted by the parser would not reflect
+            //     the actual syntax. I don't know how much difference this
+            //     would make in practice.
+            //   - There could be another stage between parser and analyzer,
+            //     which normalizes the syntax tree. This would require another
+            //     intermediate representation, which seems like too much
+            //     overhead to be worth it. But maybe there would be other use
+            //     cases too.
+            // - Introduce another bit of state to track whether the function
+            //   was already declared. This would be awkward, as that state
+            //   would just be used for this specific thing, while for anything
+            //   else, the input tracks the state just fine.
+            // - Query the namespace to check whether the function is already
+            //   declared. If it is, skip the declaration and jump directly to
+            //   the definition.
+            //   This seems like a bit of a hack at first, but I actually can't
+            //   think of a reason why it wouldn't work well. It seems like the
+            //   most practical solution.
+            //   If a function is re-defined, then the declaration would always
+            //   be skipped. I don't think this matters. Any code that wants to
+            //   keep track of changes is most likely interested in the
+            //   definition anyway.
+
             functions.declare(name.clone());
 
             let body = analyze_syntax_tree(
