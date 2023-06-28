@@ -8,11 +8,11 @@ pub struct AnalyzerOutput {
 }
 
 impl AnalyzerOutput {
-    pub fn all_events_recursive(&self) -> IterRecursive {
+    pub fn all_events_recursive(&self) -> AllEventsRecursive {
         let mut iters = VecDeque::new();
         iters.push_back(self.events.iter());
 
-        IterRecursive { iters }
+        AllEventsRecursive { iters }
     }
 }
 
@@ -67,11 +67,11 @@ pub enum AnalyzerEvent {
     Value(Value),
 }
 
-pub struct IterRecursive<'r> {
+pub struct AllEventsRecursive<'r> {
     iters: VecDeque<slice::Iter<'r, AnalyzerEvent>>,
 }
 
-impl<'r> Iterator for IterRecursive<'r> {
+impl<'r> Iterator for AllEventsRecursive<'r> {
     type Item = &'r AnalyzerEvent;
 
     fn next(&mut self) -> Option<Self::Item> {
