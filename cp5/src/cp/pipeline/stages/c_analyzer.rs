@@ -206,8 +206,8 @@ fn analyze_syntax_tree(
             syntax_elements.next();
         }
 
-        if let Some(expression) = event {
-            expressions.events.push(expression);
+        if let Some(event) = event {
+            expressions.events.push(event);
         }
     }
 
