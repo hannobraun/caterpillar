@@ -151,6 +151,7 @@ fn analyze_syntax_element(
             let body =
                 analyze_syntax_tree(body, module, bindings, functions, tests)?;
 
+            tests.declare(name.clone());
             tests.define(module, name, body);
 
             return Ok(None);
