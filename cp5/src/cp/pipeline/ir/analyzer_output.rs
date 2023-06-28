@@ -63,6 +63,7 @@ pub enum AnalyzerEvent {
     Binding { idents: Vec<String> },
     EvalBinding { name: String },
     EvalFunction { name: String },
+    FunctionDeclare { name: String },
     Module { name: String, body: AnalyzerOutput },
     Value(Value),
 }

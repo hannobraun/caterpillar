@@ -56,6 +56,9 @@ impl Evaluator<'_> {
                     .expect("Function eval must refer to function");
                 self.evaluate_function(function)?;
             }
+            AnalyzerEvent::FunctionDeclare { .. } => {
+                // Not relevant for evaluation.
+            }
             AnalyzerEvent::Module { body, .. } => {
                 for expression in &body.events {
                     self.evaluate_expression(expression)?;
