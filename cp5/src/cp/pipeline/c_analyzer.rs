@@ -1,11 +1,10 @@
 use crate::cp::{
     data_stack::Value,
     expressions::{Expression, Expressions},
+    pipeline::stage_input::StageInputReader,
     syntax::{SyntaxElement, SyntaxTree},
-    Bindings, Functions, Module,
+    Bindings, Functions, Module, PipelineError,
 };
-
-use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn analyze(
     mut syntax_elements: StageInputReader<SyntaxElement>,

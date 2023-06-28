@@ -1,10 +1,10 @@
 use crate::cp::{
     data_stack::Value,
+    pipeline::stage_input::StageInputReader,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{Keyword, Literal, Token},
+    PipelineError,
 };
-
-use super::{stage_input::StageInputReader, PipelineError};
 
 pub fn parse(mut tokens: StageInputReader<Token>) -> Result<SyntaxElement> {
     let syntax_element = parse_syntax_element(&mut tokens)?;

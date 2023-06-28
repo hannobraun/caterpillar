@@ -1,11 +1,8 @@
 use std::convert::Infallible;
 
-use crate::cp::tokens::{
-    Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER,
-};
-
-use super::{
-    stage_input::{NoMoreInput, StageInputReader},
+use crate::cp::{
+    pipeline::stage_input::{NoMoreInput, StageInputReader},
+    tokens::{Literal, Token, DELIMITERS, KEYWORDS, STRING_DELIMITER},
     PipelineError,
 };
 
