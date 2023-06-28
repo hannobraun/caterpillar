@@ -2,7 +2,7 @@ use crate::cp::{
     data_stack::Value,
     pipeline::{
         ir::{
-            analyzer_output::{AnalyzerOutput, Expression},
+            analyzer_output::{AnalyzerEvent, AnalyzerOutput},
             syntax::{SyntaxElement, SyntaxTree},
         },
         stage_input::StageInputReader,
@@ -15,7 +15,7 @@ pub fn analyze(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Expression, PipelineError<AnalyzerError>> {
+) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.read()?;
         let expression = analyze_syntax_element(
@@ -41,7 +41,7 @@ fn analyze_syntax_element(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Option<Expression>, AnalyzerError> {
+) -> Result<Option<AnalyzerEvent>, AnalyzerError> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions = analyze_syntax_tree(
@@ -51,7 +51,7 @@ fn analyze_syntax_element(
                 functions,
                 tests,
             )?;
-            Expression::Array { expressions }
+            AnalyzerEvent::Array { expressions }
         }
         SyntaxElement::Binding { idents } => {
             for ident in idents {
@@ -59,7 +59,7 @@ fn analyze_syntax_element(
             }
 
             let idents = idents.clone();
-            Expression::Binding { idents }
+            AnalyzerEvent::Binding { idents }
         }
         SyntaxElement::Block { syntax_tree } => {
             let expressions = analyze_syntax_tree(
@@ -69,7 +69,7 @@ fn analyze_syntax_element(
                 functions,
                 tests,
             )?;
-            Expression::Value(Value::Block(expressions))
+            AnalyzerEvent::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
             // The analyzer directly mutates the namespace, here and in other
@@ -144,7 +144,7 @@ fn analyze_syntax_element(
                 functions,
                 tests,
             )?;
-            Expression::Module { name, body }
+            AnalyzerEvent::Module { name, body }
         }
         SyntaxElement::Test { name, body } => {
             let name = name.clone();
@@ -155,18 +155,18 @@ fn analyze_syntax_element(
 
             return Ok(None);
         }
-        SyntaxElement::Value(value) => Expression::Value(value.clone()),
+        SyntaxElement::Value(value) => AnalyzerEvent::Value(value.clone()),
         SyntaxElement::Word(word) => {
             let refers_to_binding = bindings.is_declared(word);
             let refers_to_function = functions.is_declared(word);
 
             if refers_to_binding {
-                return Ok(Some(Expression::EvalBinding {
+                return Ok(Some(AnalyzerEvent::EvalBinding {
                     name: word.clone(),
                 }));
             }
             if refers_to_function {
-                return Ok(Some(Expression::EvalFunction {
+                return Ok(Some(AnalyzerEvent::EvalFunction {
                     name: word.clone(),
                 }));
             }

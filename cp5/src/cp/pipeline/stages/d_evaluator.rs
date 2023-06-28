@@ -1,13 +1,13 @@
 use crate::cp::{
     evaluate::Evaluator,
     pipeline::{
-        ir::analyzer_output::Expression, stage_input::StageInputReader,
+        ir::analyzer_output::AnalyzerEvent, stage_input::StageInputReader,
     },
     Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 
 pub fn evaluate(
-    mut expressions: StageInputReader<Expression>,
+    mut expressions: StageInputReader<AnalyzerEvent>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,

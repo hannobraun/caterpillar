@@ -4,7 +4,7 @@ use crate::cp::data_stack::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AnalyzerOutput {
-    pub elements: Vec<Expression>,
+    pub elements: Vec<AnalyzerEvent>,
 }
 
 impl AnalyzerOutput {
@@ -58,7 +58,7 @@ impl AnalyzerOutput {
 // the analyzer emits, and those events would be aggregated to build up the new
 // canonical representation.
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Expression {
+pub enum AnalyzerEvent {
     Array { expressions: AnalyzerOutput },
     Binding { idents: Vec<String> },
     EvalBinding { name: String },
@@ -68,11 +68,11 @@ pub enum Expression {
 }
 
 pub struct IterRecursive<'r> {
-    iters: VecDeque<slice::Iter<'r, Expression>>,
+    iters: VecDeque<slice::Iter<'r, AnalyzerEvent>>,
 }
 
 impl<'r> Iterator for IterRecursive<'r> {
-    type Item = &'r Expression;
+    type Item = &'r AnalyzerEvent;
 
     fn next(&mut self) -> Option<Self::Item> {
         let next = loop {
@@ -87,8 +87,8 @@ impl<'r> Iterator for IterRecursive<'r> {
         };
 
         let expressions = match next {
-            Expression::Array { expressions } => Some(expressions),
-            Expression::Module { body, .. } => Some(body),
+            AnalyzerEvent::Array { expressions } => Some(expressions),
+            AnalyzerEvent::Module { body, .. } => Some(body),
             _ => None,
         };
         if let Some(iters) = expressions {

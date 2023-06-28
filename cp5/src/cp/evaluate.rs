@@ -1,6 +1,6 @@
 use super::{
     data_stack::{Array, Value},
-    pipeline::ir::analyzer_output::{AnalyzerOutput, Expression},
+    pipeline::ir::analyzer_output::{AnalyzerEvent, AnalyzerOutput},
     Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
     PipelineError,
 };
@@ -15,10 +15,10 @@ pub struct Evaluator<'r> {
 impl Evaluator<'_> {
     pub fn evaluate_expression(
         &mut self,
-        expression: &Expression,
+        expression: &AnalyzerEvent,
     ) -> Result<(), EvaluatorError> {
         match expression {
-            Expression::Array { expressions } => {
+            AnalyzerEvent::Array { expressions } => {
                 self.data_stack.mark();
 
                 for expression in &expressions.elements {
@@ -34,13 +34,13 @@ impl Evaluator<'_> {
                 let array = Value::Array(array);
                 self.data_stack.push(array);
             }
-            Expression::Binding { idents } => {
+            AnalyzerEvent::Binding { idents } => {
                 for ident in idents.iter().rev() {
                     let value = self.data_stack.pop_any()?;
                     self.bindings.define(ident.clone(), value);
                 }
             }
-            Expression::EvalBinding { name } => {
+            AnalyzerEvent::EvalBinding { name } => {
                 let value = self
                     .bindings
                     .get(name)
@@ -48,7 +48,7 @@ impl Evaluator<'_> {
                     .expect("Binding eval must refer to binding");
                 self.data_stack.push(value.clone());
             }
-            Expression::EvalFunction { name } => {
+            AnalyzerEvent::EvalFunction { name } => {
                 let function = self
                     .functions
                     .get(name)
@@ -56,12 +56,12 @@ impl Evaluator<'_> {
                     .expect("Function eval must refer to function");
                 self.evaluate_function(function)?;
             }
-            Expression::Module { body, .. } => {
+            AnalyzerEvent::Module { body, .. } => {
                 for expression in &body.elements {
                     self.evaluate_expression(expression)?;
                 }
             }
-            Expression::Value(value) => {
+            AnalyzerEvent::Value(value) => {
                 self.data_stack.push(value.clone());
             }
         }

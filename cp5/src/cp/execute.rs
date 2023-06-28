@@ -3,7 +3,8 @@ use std::convert::Infallible;
 use super::{
     pipeline::{
         ir::{
-            analyzer_output::Expression, syntax::SyntaxElement, tokens::Token,
+            analyzer_output::AnalyzerEvent, syntax::SyntaxElement,
+            tokens::Token,
         },
         stage_input::{NoMoreInput, StageInput},
         stages::{
@@ -65,7 +66,7 @@ fn execute_inner(
     chars: &mut StageInput<char>,
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
-    expressions: &mut StageInput<Expression>,
+    expressions: &mut StageInput<AnalyzerEvent>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,

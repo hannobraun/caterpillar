@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use super::ir::analyzer_output::{AnalyzerOutput, Expression};
+use super::ir::analyzer_output::{AnalyzerEvent, AnalyzerOutput};
 
 #[derive(Debug)]
 pub struct StageInput<T> {
@@ -38,7 +38,7 @@ impl<T> FromIterator<T> for StageInput<T> {
     }
 }
 
-impl From<AnalyzerOutput> for StageInput<Expression> {
+impl From<AnalyzerOutput> for StageInput<AnalyzerEvent> {
     fn from(expressions: AnalyzerOutput) -> Self {
         Self {
             elements: expressions.elements.into(),
