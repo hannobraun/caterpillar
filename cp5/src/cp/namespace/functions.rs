@@ -22,6 +22,9 @@ impl Functions {
         body: Intrinsic,
     ) {
         let module = module.name();
+
+        self.declarations.insert(name.clone());
+
         let function = Function {
             module,
             body: FunctionBody::Intrinsic(body),
