@@ -10,11 +10,10 @@ use super::{
             c_analyzer::{analyze, AnalyzerError},
             d_evaluator::evaluate,
         },
-        PipelineError,
     },
     syntax::SyntaxElement,
     tokens::Token,
-    Bindings, DataStack, EvaluatorError, Functions,
+    Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 
 pub fn execute(
