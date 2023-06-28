@@ -18,15 +18,15 @@ impl<T> PipelineChannel<T> {
         self.items.is_empty()
     }
 
-    pub fn add(&mut self, item: T) {
-        self.items.push_back(item)
-    }
-
     pub fn as_input(&mut self) -> StageInput<T> {
         StageInput {
             channel: self,
             num_read: 0,
         }
+    }
+
+    pub fn as_output(&mut self) -> StageOutput<T> {
+        StageOutput { channel: self }
     }
 }
 
@@ -77,3 +77,13 @@ impl<'r, T> StageInput<'r, T> {
 #[derive(Debug, thiserror::Error)]
 #[error("No more input")]
 pub struct NoMoreInput;
+
+pub struct StageOutput<'r, T> {
+    channel: &'r mut PipelineChannel<T>,
+}
+
+impl<T> StageOutput<'_, T> {
+    pub fn add(&mut self, item: T) {
+        self.channel.items.push_back(item)
+    }
+}
