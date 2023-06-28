@@ -1,7 +1,7 @@
 use crate::cp::{
     data_stack::Value,
     pipeline::{
-        channel::{StageInput, StageOutput},
+        channel::{NoMoreInput, StageInput, StageOutput},
         ir::{
             analyzer_output::{AnalyzerEvent, AnalyzerOutput},
             syntax::{SyntaxElement, SyntaxTree},
@@ -17,8 +17,19 @@ pub fn analyze(
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<(), PipelineError<AnalyzerError>> {
+    let mut produced_output = false;
+
     loop {
-        let syntax_element = syntax_elements.peek()?;
+        let syntax_element = match syntax_elements.peek() {
+            Ok(syntax_element) => syntax_element,
+            err @ Err(NoMoreInput) => {
+                if produced_output {
+                    return Ok(());
+                } else {
+                    err?
+                }
+            }
+        };
         let Analysis {
             event,
             consumed_syntax_element,
@@ -38,7 +49,7 @@ pub fn analyze(
 
         if let Some(event) = event {
             analyzer_events.push(event);
-            return Ok(());
+            produced_output = true;
         }
     }
 }
