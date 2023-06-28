@@ -66,7 +66,7 @@ fn execute_inner(
     chars: &mut StageInput<char>,
     tokens: &mut StageInput<Token>,
     syntax_elements: &mut StageInput<SyntaxElement>,
-    expressions: &mut StageInput<AnalyzerEvent>,
+    analyzer_events: &mut StageInput<AnalyzerEvent>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
@@ -80,9 +80,15 @@ fn execute_inner(
 
     let expression =
         analyze(syntax_elements.reader(), bindings, functions, tests)?;
-    expressions.add(expression);
+    analyzer_events.add(expression);
 
-    evaluate(expressions.reader(), data_stack, bindings, functions, tests)?;
+    evaluate(
+        analyzer_events.reader(),
+        data_stack,
+        bindings,
+        functions,
+        tests,
+    )?;
 
     Ok(())
 }
