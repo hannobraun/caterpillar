@@ -194,7 +194,7 @@ fn analyze_syntax_tree(
     let mut syntax_elements = syntax_tree.into_iter().peekable();
 
     while let Some(syntax_element) = syntax_elements.peek() {
-        let (expression, consumed_syntax_element) = analyze_syntax_element(
+        let (event, consumed_syntax_element) = analyze_syntax_element(
             syntax_element,
             module,
             bindings,
@@ -206,7 +206,7 @@ fn analyze_syntax_tree(
             syntax_elements.next();
         }
 
-        if let Some(expression) = expression {
+        if let Some(expression) = event {
             expressions.events.push(expression);
         }
     }
