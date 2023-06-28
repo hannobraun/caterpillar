@@ -122,7 +122,9 @@ fn analyze_syntax_element(
             //   keep track of changes is most likely interested in the
             //   definition anyway.
 
-            functions.declare(name.clone());
+            if !functions.is_declared(name) {
+                functions.declare(name.clone());
+            }
 
             let body = analyze_syntax_tree(
                 body,
