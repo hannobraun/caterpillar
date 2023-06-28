@@ -18,8 +18,8 @@ impl<T> StageInput<T> {
         self.items.is_empty()
     }
 
-    pub fn add(&mut self, element: T) {
-        self.items.push_back(element)
+    pub fn add(&mut self, item: T) {
+        self.items.push_back(item)
     }
 
     pub fn reader(&mut self) -> StageInputReader<T> {
