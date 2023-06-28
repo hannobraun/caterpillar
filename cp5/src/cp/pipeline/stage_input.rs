@@ -41,7 +41,7 @@ impl<T> FromIterator<T> for StageInput<T> {
 impl From<AnalyzerOutput> for StageInput<AnalyzerEvent> {
     fn from(expressions: AnalyzerOutput) -> Self {
         Self {
-            elements: expressions.elements.into(),
+            elements: expressions.events.into(),
         }
     }
 }

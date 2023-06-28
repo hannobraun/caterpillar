@@ -185,9 +185,7 @@ fn analyze_syntax_tree(
     functions: &mut Functions,
     tests: &mut Functions,
 ) -> Result<AnalyzerOutput, AnalyzerError> {
-    let mut expressions = AnalyzerOutput {
-        elements: Vec::new(),
-    };
+    let mut expressions = AnalyzerOutput { events: Vec::new() };
 
     for syntax_element in syntax_tree {
         let expression = analyze_syntax_element(
@@ -198,7 +196,7 @@ fn analyze_syntax_tree(
             tests,
         )?;
         if let Some(expression) = expression {
-            expressions.elements.push(expression);
+            expressions.events.push(expression);
         }
     }
 

@@ -21,7 +21,7 @@ impl Evaluator<'_> {
             AnalyzerEvent::Array { expressions } => {
                 self.data_stack.mark();
 
-                for expression in &expressions.elements {
+                for expression in &expressions.events {
                     self.evaluate_expression(expression)?;
                 }
 
@@ -57,7 +57,7 @@ impl Evaluator<'_> {
                 self.evaluate_function(function)?;
             }
             AnalyzerEvent::Module { body, .. } => {
-                for expression in &body.elements {
+                for expression in &body.events {
                     self.evaluate_expression(expression)?;
                 }
             }
@@ -73,7 +73,7 @@ impl Evaluator<'_> {
         &mut self,
         expressions: &AnalyzerOutput,
     ) -> Result<(), EvaluatorError> {
-        for expression in &expressions.elements {
+        for expression in &expressions.events {
             self.evaluate_expression(expression)?;
         }
 

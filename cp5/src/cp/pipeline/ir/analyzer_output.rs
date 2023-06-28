@@ -4,13 +4,13 @@ use crate::cp::data_stack::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AnalyzerOutput {
-    pub elements: Vec<AnalyzerEvent>,
+    pub events: Vec<AnalyzerEvent>,
 }
 
 impl AnalyzerOutput {
     pub fn iter_recursive(&self) -> IterRecursive {
         let mut iters = VecDeque::new();
-        iters.push_back(self.elements.iter());
+        iters.push_back(self.events.iter());
 
         IterRecursive { iters }
     }
@@ -92,7 +92,7 @@ impl<'r> Iterator for IterRecursive<'r> {
             _ => None,
         };
         if let Some(iters) = expressions {
-            self.iters.push_back(iters.elements.iter());
+            self.iters.push_back(iters.events.iter());
         }
 
         Some(next)
