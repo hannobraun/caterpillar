@@ -5,7 +5,7 @@ use crate::cp::{
             analyzer_output::{AnalyzerEvent, AnalyzerOutput},
             syntax::{SyntaxElement, SyntaxTree},
         },
-        stage_input::StageInputReader,
+        channel::StageInputReader,
     },
     Bindings, Functions, Module, PipelineError,
 };

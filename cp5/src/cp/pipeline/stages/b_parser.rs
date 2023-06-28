@@ -5,7 +5,7 @@ use crate::cp::{
             syntax::{SyntaxElement, SyntaxTree},
             tokens::{Keyword, Literal, Token},
         },
-        stage_input::StageInputReader,
+        channel::StageInputReader,
     },
     PipelineError,
 };

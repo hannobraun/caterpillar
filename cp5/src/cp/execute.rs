@@ -6,7 +6,7 @@ use super::{
             analyzer_output::AnalyzerEvent, syntax::SyntaxElement,
             tokens::Token,
         },
-        stage_input::{NoMoreInput, StageInput},
+        channel::{NoMoreInput, StageInput},
         stages::{
             a_tokenizer::tokenize,
             b_parser::{parse, ParserError},

@@ -1,4 +1,4 @@
-use super::stage_input::NoMoreInput;
+use super::channel::NoMoreInput;
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError<T> {
