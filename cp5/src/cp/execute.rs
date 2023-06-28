@@ -78,9 +78,13 @@ fn execute_inner(
     let syntax_element = parse(tokens.as_input())?;
     syntax_elements.as_output().push(syntax_element);
 
-    let analyzer_event =
-        analyze(syntax_elements.as_input(), bindings, functions, tests)?;
-    analyzer_events.as_output().push(analyzer_event);
+    analyze(
+        syntax_elements.as_input(),
+        analyzer_events.as_output(),
+        bindings,
+        functions,
+        tests,
+    )?;
 
     evaluate(
         analyzer_events.as_input(),
