@@ -164,14 +164,12 @@ fn analyze_syntax_element(
             let refers_to_function = functions.is_declared(word);
 
             if refers_to_binding {
-                return Ok(Some(AnalyzerEvent::EvalBinding {
-                    name: word.clone(),
-                }));
+                let event = AnalyzerEvent::EvalBinding { name: word.clone() };
+                return Ok(Some(event));
             }
             if refers_to_function {
-                return Ok(Some(AnalyzerEvent::EvalFunction {
-                    name: word.clone(),
-                }));
+                let event = AnalyzerEvent::EvalFunction { name: word.clone() };
+                return Ok(Some(event));
             }
 
             return Err(AnalyzerError::UnrecognizedWord(word.clone()));
