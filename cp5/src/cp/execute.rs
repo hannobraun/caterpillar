@@ -2,7 +2,7 @@ use std::convert::Infallible;
 
 use super::{
     pipeline::{
-        channel::{NoMoreInput, StageInput},
+        channel::{NoMoreInput, PipelineChannel},
         ir::{
             analyzer_output::AnalyzerEvent, syntax::SyntaxElement,
             tokens::Token,
@@ -25,9 +25,9 @@ pub fn execute(
     tests: &mut Functions,
 ) -> Result<(), Error> {
     let mut chars = code.chars().collect();
-    let mut tokens = StageInput::new();
-    let mut syntax_elements = StageInput::new();
-    let mut expressions = StageInput::new();
+    let mut tokens = PipelineChannel::new();
+    let mut syntax_elements = PipelineChannel::new();
+    let mut expressions = PipelineChannel::new();
 
     loop {
         match execute_inner(
@@ -63,10 +63,10 @@ pub fn execute(
 
 #[allow(clippy::too_many_arguments)]
 fn execute_inner(
-    chars: &mut StageInput<char>,
-    tokens: &mut StageInput<Token>,
-    syntax_elements: &mut StageInput<SyntaxElement>,
-    analyzer_events: &mut StageInput<AnalyzerEvent>,
+    chars: &mut PipelineChannel<char>,
+    tokens: &mut PipelineChannel<Token>,
+    syntax_elements: &mut PipelineChannel<SyntaxElement>,
+    analyzer_events: &mut PipelineChannel<AnalyzerEvent>,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &mut Functions,
@@ -97,9 +97,9 @@ fn execute_inner(
 #[error("{kind}\n\t{syntax_elements:?}\n\t{tokens:?}\n\t{chars:?}")]
 pub struct Error {
     pub kind: ErrorKind,
-    pub syntax_elements: StageInput<SyntaxElement>,
-    pub tokens: StageInput<Token>,
-    pub chars: StageInput<char>,
+    pub syntax_elements: PipelineChannel<SyntaxElement>,
+    pub tokens: PipelineChannel<Token>,
+    pub chars: PipelineChannel<char>,
 }
 
 #[derive(Debug, thiserror::Error)]

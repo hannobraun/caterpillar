@@ -3,11 +3,11 @@ use std::collections::VecDeque;
 use super::ir::analyzer_output::{AnalyzerEvent, AnalyzerOutput};
 
 #[derive(Debug)]
-pub struct StageInput<T> {
+pub struct PipelineChannel<T> {
     items: VecDeque<T>,
 }
 
-impl<T> StageInput<T> {
+impl<T> PipelineChannel<T> {
     pub fn new() -> Self {
         Self {
             items: VecDeque::new(),
@@ -30,7 +30,7 @@ impl<T> StageInput<T> {
     }
 }
 
-impl<T> FromIterator<T> for StageInput<T> {
+impl<T> FromIterator<T> for PipelineChannel<T> {
     fn from_iter<I: IntoIterator<Item = T>>(items: I) -> Self {
         Self {
             items: items.into_iter().collect(),
@@ -38,7 +38,7 @@ impl<T> FromIterator<T> for StageInput<T> {
     }
 }
 
-impl From<AnalyzerOutput> for StageInput<AnalyzerEvent> {
+impl From<AnalyzerOutput> for PipelineChannel<AnalyzerEvent> {
     fn from(expressions: AnalyzerOutput) -> Self {
         Self {
             items: expressions.events.into(),
@@ -48,7 +48,7 @@ impl From<AnalyzerOutput> for StageInput<AnalyzerEvent> {
 
 #[derive(Debug)]
 pub struct StageInputReader<'r, T> {
-    inner: &'r mut StageInput<T>,
+    inner: &'r mut PipelineChannel<T>,
     num_read: usize,
 }
 
