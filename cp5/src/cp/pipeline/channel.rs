@@ -24,7 +24,7 @@ impl<T> PipelineChannel<T> {
 
     pub fn as_input(&mut self) -> StageInput<T> {
         StageInput {
-            inner: self,
+            channel: self,
             num_read: 0,
         }
     }
@@ -48,17 +48,18 @@ impl From<AnalyzerOutput> for PipelineChannel<AnalyzerEvent> {
 
 #[derive(Debug)]
 pub struct StageInput<'r, T> {
-    inner: &'r mut PipelineChannel<T>,
+    channel: &'r mut PipelineChannel<T>,
     num_read: usize,
 }
 
 impl<'r, T> StageInput<'r, T> {
     pub fn peek(&self) -> Result<&T, NoMoreInput> {
-        self.inner.items.get(self.num_read).ok_or(NoMoreInput)
+        self.channel.items.get(self.num_read).ok_or(NoMoreInput)
     }
 
     pub fn read(&mut self) -> Result<&T, NoMoreInput> {
-        let element = self.inner.items.get(self.num_read).ok_or(NoMoreInput)?;
+        let element =
+            self.channel.items.get(self.num_read).ok_or(NoMoreInput)?;
         self.num_read += 1;
         Ok(element)
     }
@@ -68,7 +69,7 @@ impl<'r, T> StageInput<'r, T> {
     }
 
     pub fn take(&mut self) {
-        let _ = self.inner.items.drain(..self.num_read).last();
+        let _ = self.channel.items.drain(..self.num_read).last();
         self.num_read = 0;
     }
 }
