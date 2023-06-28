@@ -8,7 +8,7 @@ pub struct AnalyzerOutput {
 }
 
 impl AnalyzerOutput {
-    pub fn iter_recursive(&self) -> IterRecursive {
+    pub fn all_events_recursive(&self) -> IterRecursive {
         let mut iters = VecDeque::new();
         iters.push_back(self.events.iter());
 
