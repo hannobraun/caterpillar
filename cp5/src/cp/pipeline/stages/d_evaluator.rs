@@ -1,6 +1,8 @@
 use crate::cp::{
     evaluate::Evaluator,
-    pipeline::{ir::expressions::Expression, stage_input::StageInputReader},
+    pipeline::{
+        ir::analyzer_output::Expression, stage_input::StageInputReader,
+    },
     Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 

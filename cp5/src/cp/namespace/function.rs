@@ -1,5 +1,5 @@
 use crate::cp::{
-    pipeline::ir::expressions::Expressions, Evaluator, EvaluatorError,
+    pipeline::ir::analyzer_output::Expressions, Evaluator, EvaluatorError,
 };
 
 #[derive(Clone, Debug)]

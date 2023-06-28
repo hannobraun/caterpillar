@@ -2,7 +2,9 @@ use std::convert::Infallible;
 
 use super::{
     pipeline::{
-        ir::{expressions::Expression, syntax::SyntaxElement, tokens::Token},
+        ir::{
+            analyzer_output::Expression, syntax::SyntaxElement, tokens::Token,
+        },
         stage_input::{NoMoreInput, StageInput},
         stages::{
             a_tokenizer::tokenize,

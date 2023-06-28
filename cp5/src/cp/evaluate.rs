@@ -1,6 +1,6 @@
 use super::{
     data_stack::{Array, Value},
-    pipeline::ir::expressions::{Expression, Expressions},
+    pipeline::ir::analyzer_output::{Expression, Expressions},
     Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
     PipelineError,
 };

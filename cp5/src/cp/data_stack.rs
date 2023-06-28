@@ -1,6 +1,6 @@
 use core::fmt;
 
-use super::pipeline::ir::expressions::Expressions;
+use super::pipeline::ir::analyzer_output::Expressions;
 
 #[derive(Debug, Default)]
 pub struct DataStack {

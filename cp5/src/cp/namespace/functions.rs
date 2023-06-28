@@ -1,6 +1,6 @@
 use std::collections::{btree_map, BTreeMap, BTreeSet};
 
-use crate::cp::pipeline::ir::expressions::Expressions;
+use crate::cp::pipeline::ir::analyzer_output::Expressions;
 
 use super::{Function, FunctionBody, Intrinsic};
 

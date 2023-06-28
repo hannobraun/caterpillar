@@ -2,7 +2,7 @@ use crate::cp::{
     data_stack::Value,
     pipeline::{
         ir::{
-            expressions::{Expression, Expressions},
+            analyzer_output::{Expression, Expressions},
             syntax::{SyntaxElement, SyntaxTree},
         },
         stage_input::StageInputReader,
