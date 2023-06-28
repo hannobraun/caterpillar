@@ -26,7 +26,11 @@ pub fn analyze(
             tests,
         )
         .map_err(PipelineError::Stage)?;
-        syntax_elements.take();
+
+        let (_, consumed_syntax_element) = expression;
+        if consumed_syntax_element {
+            syntax_elements.take();
+        }
 
         match expression {
             (Some(expression), _) => return Ok(expression),
