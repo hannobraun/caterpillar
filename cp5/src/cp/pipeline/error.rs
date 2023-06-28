@@ -1,9 +1,9 @@
-use super::stage_input;
+use super::stage_input::NoMoreInput;
 
 #[derive(Debug, thiserror::Error)]
 pub enum PipelineError<T> {
     #[error(transparent)]
-    NotEnoughInput(#[from] stage_input::NoMoreInput),
+    NotEnoughInput(#[from] NoMoreInput),
 
     #[error(transparent)]
     Stage(T),
