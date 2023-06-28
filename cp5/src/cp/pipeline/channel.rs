@@ -39,9 +39,9 @@ impl<T> FromIterator<T> for PipelineChannel<T> {
 }
 
 impl From<AnalyzerOutput> for PipelineChannel<AnalyzerEvent> {
-    fn from(expressions: AnalyzerOutput) -> Self {
+    fn from(analyzer_output: AnalyzerOutput) -> Self {
         Self {
-            items: expressions.events.into(),
+            items: analyzer_output.events.into(),
         }
     }
 }
