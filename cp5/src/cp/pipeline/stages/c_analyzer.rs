@@ -35,9 +35,8 @@ pub fn analyze(
             syntax_elements.take();
         }
 
-        match event {
-            Some(event) => return Ok(event),
-            None => continue,
+        if let Some(event) = event {
+            return Ok(event);
         }
     }
 }
