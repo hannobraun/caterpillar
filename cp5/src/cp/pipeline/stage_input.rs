@@ -31,9 +31,9 @@ impl<T> StageInput<T> {
 }
 
 impl<T> FromIterator<T> for StageInput<T> {
-    fn from_iter<I: IntoIterator<Item = T>>(elements: I) -> Self {
+    fn from_iter<I: IntoIterator<Item = T>>(items: I) -> Self {
         Self {
-            items: elements.into_iter().collect(),
+            items: items.into_iter().collect(),
         }
     }
 }
