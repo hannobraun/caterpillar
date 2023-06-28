@@ -73,14 +73,14 @@ fn execute_inner(
     tests: &mut Functions,
 ) -> Result<(), ErrorKind> {
     let token = tokenize(chars.as_input())?;
-    tokens.as_output().add(token);
+    tokens.as_output().push(token);
 
     let syntax_element = parse(tokens.as_input())?;
-    syntax_elements.as_output().add(syntax_element);
+    syntax_elements.as_output().push(syntax_element);
 
     let analyzer_event =
         analyze(syntax_elements.as_input(), bindings, functions, tests)?;
-    analyzer_events.as_output().add(analyzer_event);
+    analyzer_events.as_output().push(analyzer_event);
 
     evaluate(
         analyzer_events.as_input(),

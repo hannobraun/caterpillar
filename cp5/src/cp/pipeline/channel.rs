@@ -83,7 +83,7 @@ pub struct StageOutput<'r, T> {
 }
 
 impl<T> StageOutput<'_, T> {
-    pub fn add(&mut self, item: T) {
+    pub fn push(&mut self, item: T) {
         self.channel.items.push_back(item)
     }
 }
