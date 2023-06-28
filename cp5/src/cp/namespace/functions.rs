@@ -51,7 +51,7 @@ impl Functions {
     }
 
     pub fn is_declared(&self, name: &str) -> bool {
-        self.declarations.contains(name) || self.definitions.contains_key(name)
+        self.declarations.contains(name)
     }
 
     pub fn get(&self, name: &str) -> Option<&Function> {
