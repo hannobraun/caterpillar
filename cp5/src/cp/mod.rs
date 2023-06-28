@@ -14,5 +14,5 @@ pub use self::{
     namespace::{
         Bindings, Function, FunctionBody, Functions, Intrinsic, Module,
     },
-    pipeline::{stage_input::StageInput, PipelineError},
+    pipeline::{error::PipelineError, stage_input::StageInput},
 };
