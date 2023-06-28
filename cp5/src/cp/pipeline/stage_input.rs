@@ -4,22 +4,22 @@ use super::ir::analyzer_output::{AnalyzerEvent, AnalyzerOutput};
 
 #[derive(Debug)]
 pub struct StageInput<T> {
-    elements: VecDeque<T>,
+    items: VecDeque<T>,
 }
 
 impl<T> StageInput<T> {
     pub fn new() -> Self {
         Self {
-            elements: VecDeque::new(),
+            items: VecDeque::new(),
         }
     }
 
     pub fn is_empty(&self) -> bool {
-        self.elements.is_empty()
+        self.items.is_empty()
     }
 
     pub fn add(&mut self, element: T) {
-        self.elements.push_back(element)
+        self.items.push_back(element)
     }
 
     pub fn reader(&mut self) -> StageInputReader<T> {
@@ -33,7 +33,7 @@ impl<T> StageInput<T> {
 impl<T> FromIterator<T> for StageInput<T> {
     fn from_iter<I: IntoIterator<Item = T>>(elements: I) -> Self {
         Self {
-            elements: elements.into_iter().collect(),
+            items: elements.into_iter().collect(),
         }
     }
 }
@@ -41,7 +41,7 @@ impl<T> FromIterator<T> for StageInput<T> {
 impl From<AnalyzerOutput> for StageInput<AnalyzerEvent> {
     fn from(expressions: AnalyzerOutput) -> Self {
         Self {
-            elements: expressions.events.into(),
+            items: expressions.events.into(),
         }
     }
 }
@@ -54,12 +54,11 @@ pub struct StageInputReader<'r, T> {
 
 impl<'r, T> StageInputReader<'r, T> {
     pub fn peek(&self) -> Result<&T, NoMoreInput> {
-        self.inner.elements.get(self.num_read).ok_or(NoMoreInput)
+        self.inner.items.get(self.num_read).ok_or(NoMoreInput)
     }
 
     pub fn read(&mut self) -> Result<&T, NoMoreInput> {
-        let element =
-            self.inner.elements.get(self.num_read).ok_or(NoMoreInput)?;
+        let element = self.inner.items.get(self.num_read).ok_or(NoMoreInput)?;
         self.num_read += 1;
         Ok(element)
     }
@@ -69,7 +68,7 @@ impl<'r, T> StageInputReader<'r, T> {
     }
 
     pub fn take(&mut self) {
-        let _ = self.inner.elements.drain(..self.num_read).last();
+        let _ = self.inner.items.drain(..self.num_read).last();
         self.num_read = 0;
     }
 }
