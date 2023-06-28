@@ -36,7 +36,7 @@ pub fn analyze(
         }
 
         match event {
-            Some(expression) => return Ok(expression),
+            Some(event) => return Ok(event),
             None => continue,
         }
     }
