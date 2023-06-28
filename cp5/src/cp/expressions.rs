@@ -52,6 +52,11 @@ impl Expressions {
 // it makes most sense long-term, if there is a more general canonical
 // representation, and the evaluator is just one of several consumers that only
 // care about a subset.
+//
+// If there was a more general canonical representation, then this would
+// probably not be it. Instead, this could be reframed as the set of events that
+// the analyzer emits, and those events would be aggregated to build up the new
+// canonical representation.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Array { expressions: Expressions },
