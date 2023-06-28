@@ -42,6 +42,11 @@ impl Functions {
         name: String,
         body: AnalyzerOutput,
     ) {
+        assert!(
+            self.is_declared(&name),
+            "Must declare function before defining it"
+        );
+
         let module = module.name();
         let function = Function {
             module,
