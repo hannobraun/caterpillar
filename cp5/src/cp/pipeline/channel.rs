@@ -22,7 +22,7 @@ impl<T> PipelineChannel<T> {
         self.items.push_back(item)
     }
 
-    pub fn reader(&mut self) -> StageInputReader<T> {
+    pub fn as_input(&mut self) -> StageInputReader<T> {
         StageInputReader {
             inner: self,
             num_read: 0,
