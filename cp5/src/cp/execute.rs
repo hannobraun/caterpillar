@@ -78,9 +78,9 @@ fn execute_inner(
     let syntax_element = parse(tokens.reader())?;
     syntax_elements.add(syntax_element);
 
-    let expression =
+    let analyzer_event =
         analyze(syntax_elements.reader(), bindings, functions, tests)?;
-    analyzer_events.add(expression);
+    analyzer_events.add(analyzer_event);
 
     evaluate(
         analyzer_events.reader(),
