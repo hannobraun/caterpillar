@@ -3,11 +3,13 @@ use std::convert::Infallible;
 use super::{
     expressions::Expression,
     pipeline::{
-        a_tokenizer::tokenize,
-        b_parser::{parse, ParserError},
-        c_analyzer::{analyze, AnalyzerError},
-        d_evaluator::evaluate,
         stage_input::{NoMoreInput, StageInput},
+        stages::{
+            a_tokenizer::tokenize,
+            b_parser::{parse, ParserError},
+            c_analyzer::{analyze, AnalyzerError},
+            d_evaluator::evaluate,
+        },
         PipelineError,
     },
     syntax::SyntaxElement,
