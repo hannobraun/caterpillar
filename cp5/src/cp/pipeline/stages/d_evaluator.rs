@@ -1,7 +1,7 @@
 use crate::cp::{
-    evaluate::Evaluator, expressions::Expression,
-    pipeline::stage_input::StageInputReader, Bindings, DataStack,
-    EvaluatorError, Functions, PipelineError,
+    evaluate::Evaluator,
+    pipeline::{ir::expressions::Expression, stage_input::StageInputReader},
+    Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 
 pub fn evaluate(

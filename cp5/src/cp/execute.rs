@@ -1,8 +1,8 @@
 use std::convert::Infallible;
 
 use super::{
-    expressions::Expression,
     pipeline::{
+        ir::{expressions::Expression, syntax::SyntaxElement, tokens::Token},
         stage_input::{NoMoreInput, StageInput},
         stages::{
             a_tokenizer::tokenize,
@@ -11,8 +11,6 @@ use super::{
             d_evaluator::evaluate,
         },
     },
-    syntax::SyntaxElement,
-    tokens::Token,
     Bindings, DataStack, EvaluatorError, Functions, PipelineError,
 };
 

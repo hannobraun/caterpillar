@@ -1,8 +1,12 @@
 use crate::cp::{
     data_stack::Value,
-    expressions::{Expression, Expressions},
-    pipeline::stage_input::StageInputReader,
-    syntax::{SyntaxElement, SyntaxTree},
+    pipeline::{
+        ir::{
+            expressions::{Expression, Expressions},
+            syntax::{SyntaxElement, SyntaxTree},
+        },
+        stage_input::StageInputReader,
+    },
     Bindings, Functions, Module, PipelineError,
 };
 

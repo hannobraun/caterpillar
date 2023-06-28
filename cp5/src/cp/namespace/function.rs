@@ -1,4 +1,6 @@
-use crate::cp::{expressions::Expressions, Evaluator, EvaluatorError};
+use crate::cp::{
+    pipeline::ir::expressions::Expressions, Evaluator, EvaluatorError,
+};
 
 #[derive(Clone, Debug)]
 pub struct Function {

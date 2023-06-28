@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::cp::expressions::{Expression, Expressions};
+use super::ir::expressions::{Expression, Expressions};
 
 #[derive(Debug)]
 pub struct StageInput<T> {
