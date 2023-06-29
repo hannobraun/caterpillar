@@ -78,13 +78,28 @@ fn execute_inner(
     let syntax_element = parse(tokens.as_input())?;
     syntax_elements.as_output().push(syntax_element);
 
-    analyze(
-        syntax_elements.as_input(),
-        analyzer_events.as_output(),
-        bindings,
-        functions,
-        tests,
-    )?;
+    let mut produced_output = false;
+    loop {
+        let result =
+            analyze(syntax_elements.as_input(), bindings, functions, tests);
+
+        match result {
+            Ok(analyzer_event) => {
+                analyzer_events.as_output().push(analyzer_event);
+                produced_output = true;
+            }
+            err @ Err(PipelineError::NotEnoughInput(NoMoreInput)) => {
+                if produced_output {
+                    break;
+                } else {
+                    err?;
+                }
+            }
+            err => {
+                err?;
+            }
+        }
+    }
 
     evaluate(
         analyzer_events.as_input(),
