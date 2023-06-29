@@ -88,15 +88,15 @@ fn execute_inner(
                 analyzer_events.as_output().push(analyzer_event);
                 produced_output = true;
             }
-            err @ Err(PipelineError::NotEnoughInput(NoMoreInput)) => {
+            Err(err @ PipelineError::NotEnoughInput(NoMoreInput)) => {
                 if produced_output {
                     break;
                 } else {
-                    err?;
+                    return Err(err.into());
                 }
             }
-            err => {
-                err?;
+            Err(err) => {
+                return Err(err.into());
             }
         }
     }
