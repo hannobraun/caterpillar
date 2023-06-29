@@ -83,11 +83,8 @@ fn execute_inner(
         let result =
             analyze(syntax_elements.as_input(), bindings, functions, tests);
 
-        match result {
-            Ok(analyzer_event) => {
-                analyzer_events.as_output().push(analyzer_event);
-                produced_output = true;
-            }
+        let analyzer_event = match result {
+            Ok(analyzer_event) => analyzer_event,
             Err(err @ PipelineError::NotEnoughInput(NoMoreInput)) => {
                 if produced_output {
                     break;
@@ -98,7 +95,10 @@ fn execute_inner(
             Err(err) => {
                 return Err(err.into());
             }
-        }
+        };
+
+        analyzer_events.as_output().push(analyzer_event);
+        produced_output = true;
     }
 
     evaluate(
