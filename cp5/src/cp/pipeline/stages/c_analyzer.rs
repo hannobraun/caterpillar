@@ -17,7 +17,7 @@ pub fn analyze(
     tests: &mut Functions,
 ) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
-        let syntax_element = syntax_elements.peek()?;
+        let syntax_element = syntax_elements.read()?;
         let event = analyze_syntax_element(
             syntax_element,
             Module::none(),
@@ -27,7 +27,6 @@ pub fn analyze(
         )
         .map_err(PipelineError::Stage)?;
 
-        syntax_elements.read()?;
         syntax_elements.take();
 
         if let Some(event) = event {
