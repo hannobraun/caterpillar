@@ -1,4 +1,4 @@
-use std::io::stdin;
+use std::{collections::BTreeSet, io::stdin};
 
 use crate::{
     cp::{self, AnalyzerEvent, FunctionBody},
@@ -53,7 +53,39 @@ pub fn run(
             }
         }
 
-        dbg!(updated);
+        let mut tests_to_run = BTreeSet::new();
+        let mut found_new_tests_to_run;
+
+        loop {
+            found_new_tests_to_run = false;
+
+            for (name, function) in &*tests {
+                if tests_to_run.contains(name) {
+                    continue;
+                }
+
+                if let FunctionBody::UserDefined(analyzer_output) =
+                    &function.body
+                {
+                    for event in analyzer_output.all_events_recursive() {
+                        if let AnalyzerEvent::EvalFunction { name: called } =
+                            event
+                        {
+                            if updated.contains(called) {
+                                tests_to_run.insert(name.clone());
+                                found_new_tests_to_run = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if !found_new_tests_to_run {
+                break;
+            }
+        }
+
+        dbg!(tests_to_run);
 
         let test_reports = tests::run(functions, tests)?;
         test_report::print(&test_reports);
