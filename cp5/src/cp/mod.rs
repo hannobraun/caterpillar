@@ -11,5 +11,5 @@ pub use self::{
     namespace::{
         Bindings, Function, FunctionBody, Functions, Intrinsic, Module,
     },
-    pipeline::error::PipelineError,
+    pipeline::{error::PipelineError, ir::analyzer_output::AnalyzerEvent},
 };

@@ -73,6 +73,12 @@ impl Functions {
             }
         }
     }
+
+    pub fn clear_updated(&mut self) -> BTreeSet<String> {
+        let updated = self.updated.clone();
+        self.updated.clear();
+        updated
+    }
 }
 
 impl IntoIterator for Functions {
