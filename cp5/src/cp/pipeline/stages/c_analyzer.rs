@@ -166,8 +166,7 @@ fn analyze_syntax_tree(
 ) -> Result<AnalyzerOutput, AnalyzerError> {
     let mut expressions = AnalyzerOutput { events: Vec::new() };
 
-    let mut syntax_elements = syntax_tree.into_iter().peekable();
-    while let Some(syntax_element) = syntax_elements.peek() {
+    for syntax_element in syntax_tree {
         // I've been moving towards a new way of declaring/defining functions
         // within `analyze_syntax_element`, which consists of emitting events
         // that can be applied to the namespace externally, instead of mutating
@@ -194,8 +193,6 @@ fn analyze_syntax_tree(
             functions,
             tests,
         )?;
-
-        syntax_elements.next();
 
         if let Some(event) = event {
             expressions.events.push(event);
