@@ -11,7 +11,7 @@ fn main() -> anyhow::Result<()> {
     std::define(&mut functions)?;
 
     let mut tests = tests::define(&mut functions)?;
-    let test_reports = tests::run(&functions, &tests)?;
+    let test_reports = tests::run(&mut functions, &tests)?;
     test_report::print(&test_reports);
 
     repl::run(&mut functions, &mut tests)?;
