@@ -100,33 +100,12 @@ fn analyze_syntax_element(
             // the input, so the second invocation would not know that the
             // function is already declared.
             //
-            // I can think of several ways to address this:
-            //
-            // - Split function declaration into declaration and definition
-            //   before this stage.
-            //   - The parser could emit it like that, but this would be weird.
-            //     Then the syntax tree emitted by the parser would not reflect
-            //     the actual syntax. I don't know how much difference this
-            //     would make in practice.
-            //   - There could be another stage between parser and analyzer,
-            //     which normalizes the syntax tree. This would require another
-            //     intermediate representation, which seems like too much
-            //     overhead to be worth it. But maybe there would be other use
-            //     cases too.
-            // - Introduce another bit of state to track whether the function
-            //   was already declared. This would be awkward, as that state
-            //   would just be used for this specific thing, while for anything
-            //   else, the input tracks the state just fine.
-            // - Query the namespace to check whether the function is already
-            //   declared. If it is, skip the declaration and jump directly to
-            //   the definition.
-            //   This seems like a bit of a hack at first, but I actually can't
-            //   think of a reason why it wouldn't work well. It seems like the
-            //   most practical solution.
-            //   If a function is re-defined, then the declaration would always
-            //   be skipped. I don't think this matters. Any code that wants to
-            //   keep track of changes is most likely interested in the
-            //   definition anyway.
+            // I've started addressing this, by querying the namespace to check
+            // whether the function is already declared. If it is, I skip the
+            // declaration and jump directly to the definition. This way, I can
+            // emit a declaration event that will be applied to the namespace
+            // outside of this function. The updated state will be available the
+            // next time this function is called.
 
             if !functions.is_declared(name) {
                 functions.declare(name.clone());
