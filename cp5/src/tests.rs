@@ -133,11 +133,11 @@ pub fn run(
         }
     }
 
-    dbg!(tests_to_run);
-
     let mut results = Vec::new();
 
-    for (name, function) in tests {
+    for name in tests_to_run {
+        let function = tests.get(&name);
+
         let mut data_stack = cp::DataStack::new();
         let mut bindings = cp::Bindings::new();
         let tests = cp::Functions::new();
