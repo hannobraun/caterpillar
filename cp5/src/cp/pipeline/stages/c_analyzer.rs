@@ -107,14 +107,7 @@ fn analyze_syntax_element(
             // outside of this function. The updated state will be available the
             // next time this function is called.
 
-            if !functions.is_declared(name) {
-                functions.declare(name.clone());
-
-                return Ok(Analysis {
-                    event: None,
-                    consumed_syntax_element: false,
-                });
-            }
+            functions.declare(name.clone());
 
             let body = analyze_syntax_tree(
                 body,
