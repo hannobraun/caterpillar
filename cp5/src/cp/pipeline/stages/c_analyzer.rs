@@ -111,9 +111,7 @@ fn analyze_syntax_element(
                 functions.declare(name.clone());
 
                 return Ok(Analysis {
-                    event: Some(AnalyzerEvent::FunctionDeclare {
-                        name: name.clone(),
-                    }),
+                    event: None,
                     consumed_syntax_element: false,
                 });
             }

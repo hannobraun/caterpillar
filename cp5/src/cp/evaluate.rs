@@ -52,9 +52,6 @@ impl Evaluator<'_> {
                 let function = self.functions.get(name);
                 self.evaluate_function(function)?;
             }
-            AnalyzerEvent::FunctionDeclare { .. } => {
-                // Not relevant for evaluation.
-            }
             AnalyzerEvent::Module { body, .. } => {
                 for expression in &body.events {
                     self.evaluate_expression(expression)?;
