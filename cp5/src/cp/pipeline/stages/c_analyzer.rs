@@ -217,7 +217,6 @@ fn analyze_syntax_tree(
     let mut expressions = AnalyzerOutput { events: Vec::new() };
 
     let mut syntax_elements = syntax_tree.into_iter().peekable();
-
     while let Some(syntax_element) = syntax_elements.peek() {
         let Analysis {
             event,
