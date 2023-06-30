@@ -18,7 +18,7 @@ pub fn analyze(
 ) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.peek()?;
-        let Analysis { event } = analyze_syntax_element(
+        let event = analyze_syntax_element(
             syntax_element,
             Module::none(),
             bindings,
@@ -42,7 +42,7 @@ fn analyze_syntax_element(
     bindings: &mut Bindings,
     functions: &mut Functions,
     tests: &mut Functions,
-) -> Result<Analysis, AnalyzerError> {
+) -> Result<Option<AnalyzerEvent>, AnalyzerError> {
     let expression = match syntax_element {
         SyntaxElement::Array { syntax_tree } => {
             let expressions = analyze_syntax_tree(
@@ -113,7 +113,7 @@ fn analyze_syntax_element(
             )?;
             functions.define(Module::none(), name.clone(), body);
 
-            return Ok(Analysis { event: None });
+            return Ok(None);
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
@@ -134,7 +134,7 @@ fn analyze_syntax_element(
             tests.declare(name.clone());
             tests.define(module, name, body);
 
-            return Ok(Analysis { event: None });
+            return Ok(None);
         }
         SyntaxElement::Value(value) => AnalyzerEvent::Value(value.clone()),
         SyntaxElement::Word(word) => {
@@ -143,20 +143,18 @@ fn analyze_syntax_element(
 
             if refers_to_binding {
                 let event = AnalyzerEvent::EvalBinding { name: word.clone() };
-                return Ok(Analysis { event: Some(event) });
+                return Ok(Some(event));
             }
             if refers_to_function {
                 let event = AnalyzerEvent::EvalFunction { name: word.clone() };
-                return Ok(Analysis { event: Some(event) });
+                return Ok(Some(event));
             }
 
             return Err(AnalyzerError::UnrecognizedWord(word.clone()));
         }
     };
 
-    Ok(Analysis {
-        event: Some(expression),
-    })
+    Ok(Some(expression))
 }
 
 fn analyze_syntax_tree(
@@ -189,7 +187,7 @@ fn analyze_syntax_tree(
         // I think that means the complete design is wrong. It's probably better
         // to just revert to what we had before, and just track events within
         // `Functions` instead.
-        let Analysis { event } = analyze_syntax_element(
+        let event = analyze_syntax_element(
             syntax_element,
             module,
             bindings,
@@ -205,10 +203,6 @@ fn analyze_syntax_tree(
     }
 
     Ok(expressions)
-}
-
-struct Analysis {
-    event: Option<AnalyzerEvent>,
 }
 
 #[derive(Debug, thiserror::Error)]
