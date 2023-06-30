@@ -18,10 +18,7 @@ pub fn analyze(
 ) -> Result<AnalyzerEvent, PipelineError<AnalyzerError>> {
     loop {
         let syntax_element = syntax_elements.peek()?;
-        let Analysis {
-            event,
-            consumed_syntax_element,
-        } = analyze_syntax_element(
+        let Analysis { event } = analyze_syntax_element(
             syntax_element,
             Module::none(),
             bindings,
@@ -30,10 +27,8 @@ pub fn analyze(
         )
         .map_err(PipelineError::Stage)?;
 
-        if consumed_syntax_element {
-            syntax_elements.read()?;
-            syntax_elements.take();
-        }
+        syntax_elements.read()?;
+        syntax_elements.take();
 
         if let Some(event) = event {
             return Ok(event);
@@ -118,10 +113,7 @@ fn analyze_syntax_element(
             )?;
             functions.define(Module::none(), name.clone(), body);
 
-            return Ok(Analysis {
-                event: None,
-                consumed_syntax_element: true,
-            });
+            return Ok(Analysis { event: None });
         }
         SyntaxElement::Module { name, body } => {
             let name = name.clone();
@@ -142,10 +134,7 @@ fn analyze_syntax_element(
             tests.declare(name.clone());
             tests.define(module, name, body);
 
-            return Ok(Analysis {
-                event: None,
-                consumed_syntax_element: true,
-            });
+            return Ok(Analysis { event: None });
         }
         SyntaxElement::Value(value) => AnalyzerEvent::Value(value.clone()),
         SyntaxElement::Word(word) => {
@@ -154,17 +143,11 @@ fn analyze_syntax_element(
 
             if refers_to_binding {
                 let event = AnalyzerEvent::EvalBinding { name: word.clone() };
-                return Ok(Analysis {
-                    event: Some(event),
-                    consumed_syntax_element: true,
-                });
+                return Ok(Analysis { event: Some(event) });
             }
             if refers_to_function {
                 let event = AnalyzerEvent::EvalFunction { name: word.clone() };
-                return Ok(Analysis {
-                    event: Some(event),
-                    consumed_syntax_element: true,
-                });
+                return Ok(Analysis { event: Some(event) });
             }
 
             return Err(AnalyzerError::UnrecognizedWord(word.clone()));
@@ -173,7 +156,6 @@ fn analyze_syntax_element(
 
     Ok(Analysis {
         event: Some(expression),
-        consumed_syntax_element: true,
     })
 }
 
@@ -207,10 +189,7 @@ fn analyze_syntax_tree(
         // I think that means the complete design is wrong. It's probably better
         // to just revert to what we had before, and just track events within
         // `Functions` instead.
-        let Analysis {
-            event,
-            consumed_syntax_element,
-        } = analyze_syntax_element(
+        let Analysis { event } = analyze_syntax_element(
             syntax_element,
             module,
             bindings,
@@ -218,9 +197,7 @@ fn analyze_syntax_tree(
             tests,
         )?;
 
-        if consumed_syntax_element {
-            syntax_elements.next();
-        }
+        syntax_elements.next();
 
         if let Some(event) = event {
             expressions.events.push(event);
@@ -232,7 +209,6 @@ fn analyze_syntax_tree(
 
 struct Analysis {
     event: Option<AnalyzerEvent>,
-    consumed_syntax_element: bool,
 }
 
 #[derive(Debug, thiserror::Error)]
