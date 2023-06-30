@@ -8,6 +8,7 @@ use super::{Function, FunctionBody, Intrinsic};
 pub struct Functions {
     declarations: BTreeSet<String>,
     definitions: BTreeMap<String, Function>,
+    updated: BTreeSet<String>,
 }
 
 impl Functions {
@@ -52,7 +53,9 @@ impl Functions {
             module,
             body: FunctionBody::UserDefined(body),
         };
-        self.definitions.insert(name, function);
+        self.definitions.insert(name.clone(), function);
+
+        self.updated.insert(name);
     }
 
     pub fn is_declared(&self, name: &str) -> bool {
