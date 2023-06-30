@@ -197,6 +197,25 @@ fn analyze_syntax_tree(
 
     let mut syntax_elements = syntax_tree.into_iter().peekable();
     while let Some(syntax_element) = syntax_elements.peek() {
+        // I've been moving towards a new way of declaring/defining functions
+        // within `analyze_syntax_element`, which consists of emitting events
+        // that can be applied to the namespace externally, instead of mutating
+        // the namespace directly. See the long comment about that within the
+        // function.
+        //
+        // However, I can't pull the trigger and finish that work, because of
+        // this use of the function here. The problem is that we're not applying
+        // those events the state here, causing an infinite loop, as functions
+        // will never be declared.
+        //
+        // I can't think of a way to fix this. If the event application
+        // machinery were passed in here, it would have to be threaded through
+        // all of the analyzer methods. At that point, we've made everything
+        // more complicated without gaining anything.
+        //
+        // I think that means the complete design is wrong. It's probably better
+        // to just revert to what we had before, and just track events within
+        // `Functions` instead.
         let Analysis {
             event,
             consumed_syntax_element,
