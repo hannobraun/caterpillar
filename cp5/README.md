@@ -18,7 +18,8 @@ of the language implementation.
 
 ## Status
 
-Work is ongoing.
+The objective has been reached. I'm currently looking into whether I want to
+continue with stretch goals or start the next prototype.
 
 ## Concept
 
