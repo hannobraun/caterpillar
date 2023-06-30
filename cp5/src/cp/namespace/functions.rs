@@ -30,7 +30,9 @@ impl Functions {
             module,
             body: FunctionBody::Intrinsic(body),
         };
-        self.definitions.insert(name, function);
+        self.definitions.insert(name.clone(), function);
+
+        self.updated.insert(name);
     }
 
     pub fn declare(&mut self, name: String) {
