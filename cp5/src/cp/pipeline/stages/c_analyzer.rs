@@ -72,35 +72,6 @@ fn analyze_syntax_element(
             AnalyzerEvent::Value(Value::Block(expressions))
         }
         SyntaxElement::Function { name, body } => {
-            // The analyzer directly mutates the namespace, here and in other
-            // places. This is not necessarily desirable.
-            //
-            // There are other pieces of code that want to be informed about
-            // these mutations, for example to know which functions were
-            // updated, which can then be used to calculate a list of tests that
-            // need to be run.
-            //
-            // For use cases like these, it would be better to generate a
-            // sequence of events, which can then be aggregated and applied to
-            // the namespace state, but also used to keep track of changes.
-            //
-            // However, this piece of code here is a bit problematic in that
-            // regard. It generates two events, declare function and define
-            // function, and needs the first one applied before it can generate
-            // the second one. So this would need to be distributed over two
-            // invocations of the analyzer.
-            //
-            // However, that the first event was generated is not reflected in
-            // the input, so the second invocation would not know that the
-            // function is already declared.
-            //
-            // I've started addressing this, by querying the namespace to check
-            // whether the function is already declared. If it is, I skip the
-            // declaration and jump directly to the definition. This way, I can
-            // emit a declaration event that will be applied to the namespace
-            // outside of this function. The updated state will be available the
-            // next time this function is called.
-
             functions.declare(name.clone());
 
             let body = analyze_syntax_tree(
@@ -166,25 +137,6 @@ fn analyze_syntax_tree(
     let mut expressions = AnalyzerOutput { events: Vec::new() };
 
     for syntax_element in syntax_tree {
-        // I've been moving towards a new way of declaring/defining functions
-        // within `analyze_syntax_element`, which consists of emitting events
-        // that can be applied to the namespace externally, instead of mutating
-        // the namespace directly. See the long comment about that within the
-        // function.
-        //
-        // However, I can't pull the trigger and finish that work, because of
-        // this use of the function here. The problem is that we're not applying
-        // those events the state here, causing an infinite loop, as functions
-        // will never be declared.
-        //
-        // I can't think of a way to fix this. If the event application
-        // machinery were passed in here, it would have to be threaded through
-        // all of the analyzer methods. At that point, we've made everything
-        // more complicated without gaining anything.
-        //
-        // I think that means the complete design is wrong. It's probably better
-        // to just revert to what we had before, and just track events within
-        // `Functions` instead.
         let event = analyze_syntax_element(
             syntax_element,
             module,
