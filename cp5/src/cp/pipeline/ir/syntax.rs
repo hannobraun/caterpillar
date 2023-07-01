@@ -1,6 +1,6 @@
 use std::slice;
 
-use crate::cp::data_stack::Value;
+use crate::cp::runtime::data_stack::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxTree {

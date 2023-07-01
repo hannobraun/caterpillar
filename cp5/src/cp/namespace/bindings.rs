@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use crate::cp::data_stack::Value;
+use crate::cp::runtime::data_stack::Value;
 
 #[derive(Default)]
 pub struct Bindings {

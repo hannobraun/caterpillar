@@ -1,5 +1,4 @@
 use crate::cp::{
-    data_stack::Value,
     pipeline::{
         channel::StageInput,
         ir::{
@@ -7,6 +6,7 @@ use crate::cp::{
             syntax::{SyntaxElement, SyntaxTree},
         },
     },
+    runtime::data_stack::Value,
     Bindings, Functions, Module, PipelineError,
 };
 
