@@ -1,6 +1,6 @@
 use core::fmt;
 
-use super::pipeline::ir::analyzer_output::AnalyzerOutput;
+use crate::cp::pipeline::ir::analyzer_output::AnalyzerOutput;
 
 #[derive(Debug, Default)]
 pub struct DataStack {

@@ -1,9 +1,10 @@
-use super::{
-    data_stack::{Array, Value},
-    pipeline::ir::analyzer_output::{AnalyzerEvent, AnalyzerOutput},
-    Bindings, DataStack, DataStackError, Function, FunctionBody, Functions,
+use crate::cp::{
+    pipeline::ir::analyzer_output::AnalyzerOutput, AnalyzerEvent, Bindings,
+    DataStack, DataStackError, Function, FunctionBody, Functions,
     PipelineError,
 };
+
+use super::data_stack::{Array, Value};
 
 pub struct Evaluator<'r> {
     pub data_stack: &'r mut DataStack,
