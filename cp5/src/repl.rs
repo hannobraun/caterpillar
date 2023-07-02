@@ -1,6 +1,6 @@
 use std::io::stdin;
 
-use crate::{cp, test_report, tests};
+use crate::{cp, test_report};
 
 pub fn run(
     functions: &mut cp::Functions,
@@ -16,7 +16,7 @@ pub fn run(
 
         println!("{data_stack}");
 
-        let test_reports = tests::run(functions, tests)?;
+        let test_reports = cp::tests::run(functions, tests)?;
         test_report::print(&test_reports);
     }
 

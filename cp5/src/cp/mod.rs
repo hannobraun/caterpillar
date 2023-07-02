@@ -1,9 +1,11 @@
+mod code;
 mod execute;
 mod namespace;
 mod pipeline;
 mod runtime;
 
 pub use self::{
+    code::{intrinsics, std, tests},
     execute::{execute, Error},
     namespace::{
         Bindings, Function, FunctionBody, Functions, Intrinsic, Module,
