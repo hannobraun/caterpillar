@@ -7,7 +7,7 @@ use crate::{
 
 use super::{AnalyzerEvent, FunctionBody};
 
-pub fn run(
+pub fn run_tests(
     functions: &mut cp::Functions,
     tests: &cp::Functions,
 ) -> anyhow::Result<Vec<TestReport>> {

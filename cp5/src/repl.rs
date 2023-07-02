@@ -16,7 +16,7 @@ pub fn run(
 
         println!("{data_stack}");
 
-        let test_reports = cp::run(functions, tests)?;
+        let test_reports = cp::run_tests(functions, tests)?;
         test_report::print(&test_reports);
     }
 
