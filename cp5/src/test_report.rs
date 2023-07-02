@@ -2,28 +2,7 @@ use crossterm::style::Stylize;
 
 use crate::cp;
 
-pub struct TestReport {
-    pub module: String,
-    pub name: String,
-    pub result: Result<(), Error>,
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error(transparent)]
-    Evaluator(cp::EvaluatorError),
-
-    #[error(transparent)]
-    ReturnValue(#[from] cp::DataStackError),
-
-    #[error("Test did not return `true`")]
-    TestFailed,
-
-    #[error("Test returned too many values")]
-    TestReturnedTooMuch,
-}
-
-pub fn print(test_reports: &[TestReport]) {
+pub fn print(test_reports: &[cp::TestReport]) {
     for test_report in test_reports {
         match &test_report.result {
             Ok(()) => {
