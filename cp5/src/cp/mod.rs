@@ -3,6 +3,7 @@ mod execute;
 mod namespace;
 mod pipeline;
 mod runtime;
+mod test_runner;
 
 pub use self::{
     code::{intrinsics, std, tests},
@@ -15,4 +16,5 @@ pub use self::{
         data_stack::{DataStack, DataStackError},
         evaluate::{Evaluator, EvaluatorError},
     },
+    test_runner::run,
 };
