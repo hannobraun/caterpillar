@@ -8,8 +8,6 @@ fn main() -> anyhow::Result<()> {
     cp::std::define(&mut functions)?;
 
     let mut tests = cp::tests::define(&mut functions)?;
-    let test_reports = cp::run_tests(&mut functions, &tests)?;
-    test_report::print(&test_reports);
 
     repl::run(&mut functions, &mut tests)?;
 

@@ -6,6 +6,9 @@ pub fn run(
     functions: &mut cp::Functions,
     tests: &mut cp::Functions,
 ) -> anyhow::Result<()> {
+    let test_reports = cp::run_tests(functions, tests)?;
+    test_report::print(&test_reports);
+
     let mut data_stack = cp::DataStack::new();
     let mut bindings = cp::Bindings::new();
 
