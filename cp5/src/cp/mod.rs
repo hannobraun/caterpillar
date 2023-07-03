@@ -6,7 +6,7 @@ mod runtime;
 mod test_runner;
 
 pub use self::{
-    code::{intrinsics, std, tests},
+    code::{define_code, intrinsics, std, tests},
     execute::{execute, Error},
     namespace::{
         Bindings, Function, FunctionBody, Functions, Intrinsic, Module,
