@@ -1,9 +1,11 @@
 use sycamore::prelude::*;
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     sycamore::render(|cx| {
         view! { cx,
             p { "Hello, world!" }
         }
-    })
+    });
+
+    Ok(())
 }
