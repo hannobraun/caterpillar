@@ -112,13 +112,14 @@ pub fn run_tests(
     Ok(results)
 }
 
+#[derive(Clone)]
 pub struct TestReport {
     pub module: String,
     pub name: String,
     pub result: Result<(), Error>,
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Clone, Debug, thiserror::Error)]
 pub enum Error {
     #[error(transparent)]
     Evaluator(cp::EvaluatorError),

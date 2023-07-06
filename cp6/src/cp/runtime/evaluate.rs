@@ -94,7 +94,7 @@ impl Evaluator<'_> {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Clone, Debug, thiserror::Error)]
 pub enum EvaluatorError {
     #[error(transparent)]
     DataStack(#[from] DataStackError),

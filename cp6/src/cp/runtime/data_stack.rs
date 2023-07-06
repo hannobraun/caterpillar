@@ -165,7 +165,7 @@ impl fmt::Display for Array {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Clone, Debug, thiserror::Error)]
 pub enum DataStackError {
     #[error("Tried to pop value from empty stack")]
     PopFromEmptyStack,
