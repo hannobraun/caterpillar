@@ -10,7 +10,6 @@ fn main() -> anyhow::Result<()> {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
-            p { "Hello, world!" }
             ul {
                 Indexed(
                     iterable=test_reports,
