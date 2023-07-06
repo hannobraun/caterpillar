@@ -46,5 +46,5 @@ prototype, here are some stretch goals I could work on:
 
 ## Status
 
-The objective has been reached. I'm currently looking into whether I want to
-continue with stretch goals or start the next prototype.
+The objective has been reached. Development is paused, while I look into porting
+everything to the web in a [follow-up prototype](../cp6/).
