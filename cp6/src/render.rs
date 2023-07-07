@@ -21,7 +21,7 @@ fn TestReports<'r, G: Html>(
         ul {
             Indexed(
                 iterable=props.test_reports,
-                view=|cx, test_report| view! {cx,
+                view=|cx, test_report| view! { cx,
                     li { (test_report.name) }
                 }
             )
