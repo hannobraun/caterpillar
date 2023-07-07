@@ -23,24 +23,7 @@ fn TestReports<'r, G: Html>(
                 iterable=props.test_reports,
                 view=|cx, test_report| view! { cx,
                     li {
-                        (
-                            if test_report.result.is_ok() {
-                                view! { cx,
-                                    span(class="font-bold text-green-500 mx-2")
-                                    {
-                                        "PASS"
-                                    }
-                                }
-                            }
-                            else {
-                                view! { cx,
-                                    span(class="font-bold text-red-500 mx-2") {
-                                        "FAIL"
-                                    }
-                                }
-                            }
-                        )
-                        (test_report.module) " - " (test_report.name)
+                        TestReport(test_report=test_report)
                     }
                 }
             )
@@ -51,4 +34,33 @@ fn TestReports<'r, G: Html>(
 #[derive(Prop)]
 struct TestReportsProps<'r> {
     test_reports: &'r ReadSignal<Vec<cp::TestReport>>,
+}
+
+#[component]
+fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
+    view! { cx,
+        (
+            if props.test_report.result.is_ok() {
+                view! { cx,
+                    span(class="font-bold text-green-500 mx-2")
+                    {
+                        "PASS"
+                    }
+                }
+            }
+            else {
+                view! { cx,
+                    span(class="font-bold text-red-500 mx-2") {
+                        "FAIL"
+                    }
+                }
+            }
+        )
+        (props.test_report.module) " - " (props.test_report.name)
+    }
+}
+
+#[derive(Prop)]
+struct TestReportProps {
+    test_report: cp::TestReport,
 }
