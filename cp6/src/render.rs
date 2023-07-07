@@ -22,7 +22,26 @@ fn TestReports<'r, G: Html>(
             Indexed(
                 iterable=props.test_reports,
                 view=|cx, test_report| view! { cx,
-                    li { (test_report.name) }
+                    li {
+                        (
+                            if test_report.result.is_ok() {
+                                view! { cx,
+                                    span(class="font-bold text-green-500 mx-2")
+                                    {
+                                        "PASS"
+                                    }
+                                }
+                            }
+                            else {
+                                view! { cx,
+                                    span(class="font-bold text-red-500 mx-2") {
+                                        "FAIL"
+                                    }
+                                }
+                            }
+                        )
+                        (test_report.module) " - " (test_report.name)
+                    }
                 }
             )
         }
