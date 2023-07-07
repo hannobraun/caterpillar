@@ -5,6 +5,13 @@
 This is (one of many) prototypes for the Caterpillar programming language. Check
 out the top-level README in this repository for more info.
 
+This prototype requires [`trunk`](https://crates.io/crates/trunk). Run the
+prototype using the following command (assuming you're in the repository root):
+
+```
+trunk serve cp6/index.html
+```
+
 ## Objective
 
 Create a basic web-based programming environment for Caterpillar, with the main
