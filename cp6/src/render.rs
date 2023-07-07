@@ -39,23 +39,7 @@ struct TestReportsProps<'r> {
 #[component]
 fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
     view! { cx,
-        (
-            if props.test_report.result.is_ok() {
-                view! { cx,
-                    span(class="font-bold text-green-500 mx-2")
-                    {
-                        "PASS"
-                    }
-                }
-            }
-            else {
-                view! { cx,
-                    span(class="font-bold text-red-500 mx-2") {
-                        "FAIL"
-                    }
-                }
-            }
-        )
+        PassFail(pass=props.test_report.result.is_ok())
         (props.test_report.module) " - " (props.test_report.name)
     }
 }
@@ -63,4 +47,27 @@ fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
 #[derive(Prop)]
 struct TestReportProps {
     test_report: cp::TestReport,
+}
+
+#[component]
+fn PassFail<G: Html>(cx: Scope, props: PassFailProps) -> View<G> {
+    let class = {
+        let color = if props.pass {
+            "text-green-500"
+        } else {
+            "text-red-500"
+        };
+
+        format!("font-bold mx-2 {color}")
+    };
+    let text = if props.pass { "PASS" } else { "FAIL" };
+
+    view! { cx,
+        span(class=class) { (text) }
+    }
+}
+
+#[derive(Prop)]
+struct PassFailProps {
+    pass: bool,
 }
