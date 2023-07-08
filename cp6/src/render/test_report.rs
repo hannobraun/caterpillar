@@ -3,7 +3,7 @@ use sycamore::{component, reactive::Scope, view, view::View, web::Html};
 use crate::{cp, render::pass_fail::PassFail};
 
 #[component]
-pub fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
+pub fn TestReport<G: Html>(cx: Scope, props: Props) -> View<G> {
     view! { cx,
         PassFail(pass=props.test_report.result.is_ok())
         (props.test_report.module) " - " (props.test_report.name)
@@ -11,6 +11,6 @@ pub fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
 }
 
 #[derive(sycamore::Prop)]
-pub struct TestReportProps {
+pub struct Props {
     test_report: cp::TestReport,
 }
