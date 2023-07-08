@@ -1,6 +1,8 @@
+mod pass_fail;
+
 use sycamore::prelude::*;
 
-use crate::cp;
+use crate::{cp, render::pass_fail::PassFail};
 
 pub fn render(test_reports: Vec<cp::TestReport>) {
     sycamore::render(|cx| {
@@ -47,27 +49,4 @@ fn TestReport<G: Html>(cx: Scope, props: TestReportProps) -> View<G> {
 #[derive(Prop)]
 struct TestReportProps {
     test_report: cp::TestReport,
-}
-
-#[component]
-fn PassFail<G: Html>(cx: Scope, props: PassFailProps) -> View<G> {
-    let class = {
-        let color = if props.pass {
-            "text-green-500"
-        } else {
-            "text-red-500"
-        };
-
-        format!("font-bold mx-2 {color}")
-    };
-    let text = if props.pass { "PASS" } else { "FAIL" };
-
-    view! { cx,
-        span(class=class) { (text) }
-    }
-}
-
-#[derive(Prop)]
-struct PassFailProps {
-    pass: bool,
 }
