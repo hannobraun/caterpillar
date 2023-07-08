@@ -10,13 +10,13 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
-            TestReports(test_reports=test_reports)
+            TestRunResult(test_reports=test_reports)
         }
     });
 }
 
 #[component]
-fn TestReports<'r, G: Html>(
+fn TestRunResult<'r, G: Html>(
     cx: Scope<'r>,
     props: TestReportsProps<'r>,
 ) -> View<G> {
