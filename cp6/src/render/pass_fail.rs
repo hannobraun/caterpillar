@@ -1,4 +1,4 @@
-use sycamore::{component, reactive::Scope, view, view::View, web::Html, Prop};
+use sycamore::{component, reactive::Scope, view, view::View, web::Html};
 
 #[component]
 pub fn PassFail<G: Html>(cx: Scope, props: PassFailProps) -> View<G> {
@@ -18,7 +18,7 @@ pub fn PassFail<G: Html>(cx: Scope, props: PassFailProps) -> View<G> {
     }
 }
 
-#[derive(Prop)]
+#[derive(sycamore::Prop)]
 pub struct PassFailProps {
     pass: bool,
 }
