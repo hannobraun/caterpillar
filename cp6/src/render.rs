@@ -1,9 +1,10 @@
 mod pass_fail;
 mod test_report;
+mod test_run_result;
 
 use sycamore::prelude::*;
 
-use crate::{cp, render::test_report::TestReport};
+use crate::{cp, render::test_run_result::TestRunResult};
 
 pub fn render(test_reports: Vec<cp::TestReport>) {
     sycamore::render(|cx| {
@@ -13,28 +14,4 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
             TestRunResult(test_reports=test_reports)
         }
     });
-}
-
-#[component]
-fn TestRunResult<'r, G: Html>(
-    cx: Scope<'r>,
-    props: TestReportsProps<'r>,
-) -> View<G> {
-    view! { cx,
-        ul {
-            Indexed(
-                iterable=props.test_reports,
-                view=|cx, test_report| view! { cx,
-                    li {
-                        TestReport(test_report=test_report)
-                    }
-                }
-            )
-        }
-    }
-}
-
-#[derive(Prop)]
-struct TestReportsProps<'r> {
-    test_reports: &'r ReadSignal<Vec<cp::TestReport>>,
 }
