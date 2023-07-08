@@ -10,10 +10,7 @@ use sycamore::{
 use crate::{cp, render::test_report::TestReport};
 
 #[component]
-pub fn TestRunResult<'r, G: Html>(
-    cx: Scope<'r>,
-    props: TestReportsProps<'r>,
-) -> View<G> {
+pub fn TestRunResult<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     view! { cx,
         ul {
             Indexed(
@@ -29,6 +26,6 @@ pub fn TestRunResult<'r, G: Html>(
 }
 
 #[derive(sycamore::Prop)]
-pub struct TestReportsProps<'r> {
+pub struct Props<'r> {
     test_reports: &'r ReadSignal<Vec<cp::TestReport>>,
 }
