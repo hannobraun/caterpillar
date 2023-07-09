@@ -11,6 +11,7 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
+            input(type="text")
             TestRunResult(test_reports=test_reports)
         }
     });
