@@ -11,7 +11,7 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
-            input(type="text")
+            input(type="text", class="m-4 ring-1")
             TestRunResult(test_reports=test_reports)
         }
     });
