@@ -59,6 +59,7 @@ dependencies = [
  "anyhow",
  "sycamore",
  "thiserror",
+ "web-sys",
 ]
 
 [[package]]

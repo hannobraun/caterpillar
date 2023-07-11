@@ -7,3 +7,7 @@ edition = "2021"
 anyhow = "*"
 sycamore = "*"
 thiserror = "*"
+
+[dependencies.web-sys]
+version = "*"
+features = ["KeyboardEvent"]
