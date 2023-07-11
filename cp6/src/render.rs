@@ -26,6 +26,7 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
                 on:keyup=detect_enter,
                 type="text",
                 class="m-4 ring-1",
+                autofocus=true,
             )
             TestRunResult(test_reports=test_reports)
         }
