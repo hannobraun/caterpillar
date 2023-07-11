@@ -25,7 +25,7 @@ pub fn render(test_reports: Vec<cp::TestReport>) {
                 bind:value=input,
                 on:keyup=detect_enter,
                 type="text",
-                class="m-4 ring-1"
+                class="m-4 ring-1",
             )
             TestRunResult(test_reports=test_reports)
         }
