@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 console_error_panic_hook = "*"
+console_log = "*"
+log = "*"
 sycamore = "*"
 thiserror = "*"
 
