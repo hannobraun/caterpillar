@@ -9,7 +9,7 @@ An experimental programming language that is inspired by two insights:
 
 I'm also exploring other aspects of programming language design, but those two are at the core of what this project is about.
 
-This iteration of Caterpillar is a more focused version of an [earlier prototype](../archive/cp2/). It simplifies the UI side of that prototype, while keeping most of the rest.
+This iteration of Caterpillar is a more focused version of an [earlier prototype](../cp2/). It simplifies the UI side of that prototype, while keeping most of the rest.
 
 
 ## Status
