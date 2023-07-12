@@ -16,8 +16,8 @@ trunk serve
 ## Objective
 
 Create a basic web-based programming environment for Caterpillar, with the main
-feature being a test runner. Basically, port the [previous prototype](../cp5/)
-to the web.
+feature being a test runner. Basically, port the
+[previous prototype](../archive/cp5/) to the web.
 
 Compared to the previous prototype, it would be nice to have a more powerful UI
 that goes beyond a simple command-line interface.
