@@ -1,5 +1,5 @@
 mod cp;
-mod render;
+mod ui;
 
 fn main() -> anyhow::Result<()> {
     console_error_panic_hook::set_once();
@@ -8,7 +8,7 @@ fn main() -> anyhow::Result<()> {
 
     let (mut functions, tests) = cp::define_code()?;
     let test_reports = cp::run_tests(&mut functions, &tests)?;
-    render::render(test_reports);
+    ui::render(test_reports);
 
     Ok(())
 }

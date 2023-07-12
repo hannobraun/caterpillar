@@ -5,7 +5,7 @@ mod test_run_result;
 use sycamore::{prelude::*, rt::JsCast};
 use web_sys::{Event, KeyboardEvent};
 
-use crate::{cp, render::test_run_result::TestRunResult};
+use crate::{cp, ui::test_run_result::TestRunResult};
 
 pub fn render(test_reports: Vec<cp::TestReport>) {
     sycamore::render(|cx| {

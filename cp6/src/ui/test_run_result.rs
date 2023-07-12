@@ -7,7 +7,7 @@ use sycamore::{
     web::Html,
 };
 
-use crate::{cp, render::test_report::TestReport};
+use crate::{cp, ui::test_report::TestReport};
 
 #[component]
 pub fn TestRunResult<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {

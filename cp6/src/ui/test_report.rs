@@ -1,6 +1,6 @@
 use sycamore::{component, reactive::Scope, view, view::View, web::Html};
 
-use crate::{cp, render::pass_fail::PassFail};
+use crate::{cp, ui::pass_fail::PassFail};
 
 #[component]
 pub fn TestReport<G: Html>(cx: Scope, props: Props) -> View<G> {
