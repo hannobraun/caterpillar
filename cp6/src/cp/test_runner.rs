@@ -66,7 +66,7 @@ pub fn run_tests(
         }
     }
 
-    let mut results = Vec::new();
+    let mut test_reports = Vec::new();
 
     for name in tests_to_run {
         let function = tests.get(&name);
@@ -102,14 +102,14 @@ pub fn run_tests(
                 }
             });
 
-        results.push(SingleTestReport {
+        test_reports.push(SingleTestReport {
             module: function.module.clone(),
             name: name.clone(),
             result,
         })
     }
 
-    results
+    test_reports
 }
 
 pub type TestReports = Vec<SingleTestReport>;
