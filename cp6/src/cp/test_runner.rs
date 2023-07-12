@@ -7,7 +7,7 @@ use super::{AnalyzerEvent, FunctionBody};
 pub fn run_tests(
     functions: &mut cp::Functions,
     tests: &cp::Functions,
-) -> anyhow::Result<Vec<TestReport>> {
+) -> Vec<TestReport> {
     let mut updated = functions.clear_updated();
     let mut found_new_updated;
 
@@ -109,7 +109,7 @@ pub fn run_tests(
         })
     }
 
-    Ok(results)
+    results
 }
 
 #[derive(Clone, Eq, PartialEq)]
