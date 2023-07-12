@@ -66,7 +66,7 @@ pub fn run_tests(
         }
     }
 
-    let mut test_reports = Vec::new();
+    let mut test_reports = TestReports { inner: Vec::new() };
 
     for name in tests_to_run {
         let function = tests.get(&name);
@@ -102,7 +102,7 @@ pub fn run_tests(
                 }
             });
 
-        test_reports.push(SingleTestReport {
+        test_reports.inner.push(SingleTestReport {
             module: function.module.clone(),
             name: name.clone(),
             result,
@@ -112,7 +112,9 @@ pub fn run_tests(
     test_reports
 }
 
-pub type TestReports = Vec<SingleTestReport>;
+pub struct TestReports {
+    pub inner: Vec<SingleTestReport>,
+}
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct SingleTestReport {

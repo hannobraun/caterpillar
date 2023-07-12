@@ -1,7 +1,7 @@
 use sycamore::{
     component,
     prelude::Indexed,
-    reactive::{ReadSignal, Scope},
+    reactive::{create_memo, ReadSignal, Scope},
     view,
     view::View,
     web::Html,
@@ -11,10 +11,13 @@ use crate::{cp, ui::test_report::TestReport};
 
 #[component]
 pub fn TestRunResult<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
+    let test_reports =
+        create_memo(cx, || props.test_reports.get().inner.clone());
+
     view! { cx,
         ul {
             Indexed(
-                iterable=props.test_reports,
+                iterable=test_reports,
                 view=|cx, test_report| view! { cx,
                     li {
                         TestReport(test_report=test_report)
