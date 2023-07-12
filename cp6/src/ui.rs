@@ -7,7 +7,7 @@ use web_sys::{Event, KeyboardEvent};
 
 use crate::{cp, ui::test_run_result::TestRunResult};
 
-pub fn render(test_reports: Vec<cp::TestReport>) {
+pub fn render(test_reports: Vec<cp::SingleTestReport>) {
     sycamore::render(|cx| {
         let input = create_signal(cx, String::new());
         let test_reports = create_signal(cx, test_reports);

@@ -12,5 +12,5 @@ pub fn TestReport<G: Html>(cx: Scope, props: Props) -> View<G> {
 
 #[derive(sycamore::Prop)]
 pub struct Props {
-    test_report: cp::TestReport,
+    test_report: cp::SingleTestReport,
 }
