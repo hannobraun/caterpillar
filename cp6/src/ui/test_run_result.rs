@@ -27,5 +27,5 @@ pub fn TestRunResult<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
 
 #[derive(sycamore::Prop)]
 pub struct Props<'r> {
-    test_reports: &'r ReadSignal<Vec<cp::SingleTestReport>>,
+    test_reports: &'r ReadSignal<cp::TestReports>,
 }

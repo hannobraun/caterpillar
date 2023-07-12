@@ -7,7 +7,7 @@ use super::{AnalyzerEvent, FunctionBody};
 pub fn run_tests(
     functions: &mut cp::Functions,
     tests: &cp::Functions,
-) -> Vec<SingleTestReport> {
+) -> TestReports {
     let mut updated = functions.clear_updated();
     let mut found_new_updated;
 
@@ -111,6 +111,8 @@ pub fn run_tests(
 
     results
 }
+
+pub type TestReports = Vec<SingleTestReport>;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct SingleTestReport {
