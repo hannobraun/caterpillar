@@ -5,6 +5,7 @@ use sycamore::{
     view,
     view::View,
     web::Html,
+    Prop,
 };
 use web_sys::{Event, KeyboardEvent};
 
@@ -41,7 +42,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
     }
 }
 
-#[derive(sycamore::Prop)]
+#[derive(Prop)]
 pub struct Props<'r> {
     test_runner: cp::TestRunner,
     test_reports: &'r Signal<cp::TestReports>,
