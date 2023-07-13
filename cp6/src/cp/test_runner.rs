@@ -5,14 +5,36 @@ use crate::cp;
 use super::{AnalyzerEvent, FunctionBody};
 
 pub struct TestRunner {
+    data_stack: cp::DataStack,
+    bindings: cp::Bindings,
     functions: cp::Functions,
     tests: cp::Functions,
 }
 
 impl TestRunner {
     pub fn new() -> anyhow::Result<Self> {
+        let data_stack = cp::DataStack::new();
+        let bindings = cp::Bindings::new();
         let (functions, tests) = cp::define_code()?;
-        Ok(Self { functions, tests })
+
+        Ok(Self {
+            data_stack,
+            bindings,
+            functions,
+            tests,
+        })
+    }
+
+    pub fn run_code(&mut self, code: &str) -> anyhow::Result<()> {
+        cp::execute(
+            code,
+            &mut self.data_stack,
+            &mut self.bindings,
+            &mut self.functions,
+            &mut self.tests,
+        )?;
+
+        Ok(())
     }
 
     pub fn run_tests(&mut self) -> TestReports {

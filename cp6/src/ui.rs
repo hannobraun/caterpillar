@@ -14,10 +14,16 @@ pub fn render(mut test_runner: cp::TestRunner) {
         let input = create_signal(cx, String::new());
         let test_reports = create_signal(cx, test_reports);
 
-        let detect_enter = |event: Event| {
+        let detect_enter = move |event: Event| {
             if let Some(event) = event.dyn_ref::<KeyboardEvent>() {
                 if event.key() == "Enter" {
+                    let code = input.get();
                     input.modify().clear();
+
+                    test_runner.run_code(&code).unwrap();
+                    let reports = test_runner.run_tests();
+
+                    test_reports.set(reports);
                 }
             }
         };
