@@ -4,25 +4,25 @@ use crate::cp;
 
 use super::{AnalyzerEvent, FunctionBody};
 
-pub struct TestRunner {}
+pub struct TestRunner {
+    functions: cp::Functions,
+    tests: cp::Functions,
+}
 
 impl TestRunner {
     pub fn new() -> anyhow::Result<Self> {
-        Ok(Self {})
+        let (functions, tests) = cp::define_code()?;
+        Ok(Self { functions, tests })
     }
 
-    pub fn run_tests(
-        &mut self,
-        functions: &mut cp::Functions,
-        tests: &cp::Functions,
-    ) -> TestReports {
-        let mut updated = functions.clear_updated();
+    pub fn run_tests(&mut self) -> TestReports {
+        let mut updated = self.functions.clear_updated();
         let mut found_new_updated;
 
         loop {
             found_new_updated = false;
 
-            for (name, function) in &*functions {
+            for (name, function) in &self.functions {
                 if updated.contains(name) {
                     continue;
                 }
@@ -54,7 +54,7 @@ impl TestRunner {
         loop {
             found_new_tests_to_run = false;
 
-            for (name, function) in tests {
+            for (name, function) in &self.tests {
                 if tests_to_run.contains(name) {
                     continue;
                 }
@@ -83,7 +83,7 @@ impl TestRunner {
         let mut test_reports = TestReports { inner: Vec::new() };
 
         for name in tests_to_run {
-            let function = tests.get(&name);
+            let function = self.tests.get(&name);
 
             let mut data_stack = cp::DataStack::new();
             let mut bindings = cp::Bindings::new();
@@ -92,7 +92,7 @@ impl TestRunner {
             let mut evaluator = cp::Evaluator {
                 data_stack: &mut data_stack,
                 bindings: &mut bindings,
-                functions,
+                functions: &self.functions,
                 tests: &tests,
             };
 
