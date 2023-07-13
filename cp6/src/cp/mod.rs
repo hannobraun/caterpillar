@@ -16,5 +16,5 @@ pub use self::{
         data_stack::{DataStack, DataStackError},
         evaluate::{Evaluator, EvaluatorError},
     },
-    test_runner::{run_tests, SingleTestReport, TestReports},
+    test_runner::{SingleTestReport, TestReports, TestRunner},
 };
