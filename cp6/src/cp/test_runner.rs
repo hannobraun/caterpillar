@@ -8,6 +8,7 @@ pub struct TestRunner {}
 
 impl TestRunner {
     pub fn run_tests(
+        &mut self,
         functions: &mut cp::Functions,
         tests: &cp::Functions,
     ) -> TestReports {

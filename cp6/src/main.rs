@@ -7,7 +7,7 @@ fn main() -> anyhow::Result<()> {
         .expect("Error initializing logging");
 
     let (mut functions, tests) = cp::define_code()?;
-    let test_reports = cp::TestRunner::run_tests(&mut functions, &tests);
+    let test_reports = cp::TestRunner {}.run_tests(&mut functions, &tests);
     ui::render(test_reports);
 
     Ok(())
