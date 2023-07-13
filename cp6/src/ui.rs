@@ -7,7 +7,9 @@ use web_sys::{Event, KeyboardEvent};
 
 use crate::{cp, ui::test_run_result::TestRunResult};
 
-pub fn render(test_reports: cp::TestReports) {
+pub fn render(mut test_runner: cp::TestRunner) {
+    let test_reports = test_runner.run_tests();
+
     sycamore::render(|cx| {
         let input = create_signal(cx, String::new());
         let test_reports = create_signal(cx, test_reports);
