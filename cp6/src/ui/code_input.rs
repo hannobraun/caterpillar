@@ -14,6 +14,7 @@ use crate::cp;
 #[component]
 pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
     let input = create_signal(cx, String::new());
+    let error = create_signal(cx, String::new());
 
     let detect_enter = move |event: Event| {
         if let Some(event) = event.dyn_ref::<KeyboardEvent>() {
@@ -22,7 +23,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 input.modify().clear();
 
                 if let Err(err) = props.test_runner.run_code(&code) {
-                    log::error!("{err}");
+                    error.set(err.to_string());
                 }
                 let reports = props.test_runner.run_tests();
 
@@ -39,6 +40,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
             class="m-4 ring-1",
             autofocus=true,
         )
+        textarea(readonly=true, class="resize-none") { (error.get()) }
     }
 }
 
