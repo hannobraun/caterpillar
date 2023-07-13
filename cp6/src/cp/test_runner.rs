@@ -7,6 +7,10 @@ use super::{AnalyzerEvent, FunctionBody};
 pub struct TestRunner {}
 
 impl TestRunner {
+    pub fn new() -> Self {
+        Self {}
+    }
+
     pub fn run_tests(
         &mut self,
         functions: &mut cp::Functions,
