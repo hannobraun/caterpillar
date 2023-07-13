@@ -7,8 +7,8 @@ use super::{AnalyzerEvent, FunctionBody};
 pub struct TestRunner {}
 
 impl TestRunner {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new() -> anyhow::Result<Self> {
+        Ok(Self {})
     }
 
     pub fn run_tests(
