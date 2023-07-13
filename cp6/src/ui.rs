@@ -20,7 +20,9 @@ pub fn render(mut test_runner: cp::TestRunner) {
                     let code = input.get();
                     input.modify().clear();
 
-                    test_runner.run_code(&code).unwrap();
+                    if let Err(err) = test_runner.run_code(&code) {
+                        log::error!("{err}");
+                    }
                     let reports = test_runner.run_tests();
 
                     test_reports.set(reports);
