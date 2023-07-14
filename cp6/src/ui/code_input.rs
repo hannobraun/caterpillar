@@ -23,6 +23,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 let code = input.get();
                 input.modify().clear();
 
+                error.modify().clear();
                 if let Err(err) = props.test_runner.run_code(&code) {
                     error.set(err.to_string());
                 }
