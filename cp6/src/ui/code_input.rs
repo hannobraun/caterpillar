@@ -33,14 +33,16 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
     };
 
     view! { cx,
-        input(
-            bind:value=input,
-            on:keyup=detect_enter,
-            type="text",
-            class="m-4 ring-1",
-            autofocus=true,
-        )
-        textarea(readonly=true, class="resize-none") { (error.get()) }
+        div {
+            input(
+                bind:value=input,
+                on:keyup=detect_enter,
+                type="text",
+                class="m-4 ring-1",
+                autofocus=true,
+            )
+            textarea(readonly=true, class="resize-none") { (error.get()) }
+        }
     }
 }
 
