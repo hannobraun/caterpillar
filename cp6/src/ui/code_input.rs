@@ -41,6 +41,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
             .map(ToString::to_string)
             .collect::<Vec<String>>()
     });
+    let hide_errors = error_lines.map(cx, |lines| lines.is_empty());
 
     view! { cx,
         div(class="flex flex-col") {
@@ -51,7 +52,10 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 class="m-4 ring-1",
                 autofocus=true,
             )
-            div(class="max-w-fit max-h-fit") {
+            div(
+                hidden=*hide_errors.get(),
+                class="max-w-fit max-h-fit bg-red-300 rounded mx-4 p-4"
+            ) {
                 Indexed(
                     iterable=error_lines,
                     view=|cx, line| view! { cx, p { (line) } },
