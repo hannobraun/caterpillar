@@ -30,8 +30,8 @@ different aspect of Caterpillar. If, however, I decide to stay with this
 prototype, here are some stretch goals I could work on:
 
 - **Persistence:** Manipulating a running program, loading new code into it, is
-  fine. But it's even better, if you can store that code you loaded into it,
-  preferably in a form that works with Git, so someone else can start their own
+  fine. But it's even better, if you can store that code you loaded into it.
+  Preferably in a form that works with Git, so someone else can start their own
   process with the same code.
 - **Affine/linear types:** Implement affine or linear types.
 - **Compile-time metaprogramming:** I'd like to experiment with writing a static
