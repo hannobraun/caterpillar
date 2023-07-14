@@ -42,7 +42,7 @@ Caterpillar aims to be a language with the following attributes:
   provided to it via dependency injection.
 - **Embeddable:** All I/O primitives are provided via an external platform, and
   the language itself doesn't care whether that's some kind of application it
-  extends, or a bare-metal microcontroller. (Inpsired by
+  extends, or a bare-metal microcontroller. (Inspired by
   [Roc](https://www.roc-lang.org/).)
 
 This list is not complete, and my vision keeps developing as I experiment.
