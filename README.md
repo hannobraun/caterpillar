@@ -47,19 +47,6 @@ Caterpillar aims to be a language with the following attributes:
 
 This list is not complete, and my vision keeps developing as I experiment.
 
-## Long-term goals
-
-I have some use cases in mind, that I think would be perfect applications of
-interactive programming:
-
-- **Synthesizer:** Define a code-based synthesizer that can be programmed in
-  Caterpillar.
-- **Fantasy Console:** Define a
-  [fantasy video game console](https://en.wikipedia.org/wiki/Fantasy_video_game_console)
-  that can be programmed in Caterpillar.
-- **Embedded Runtime:** Direct interaction with and development of a program
-  running on a microcontroller.
-
 ## Acknowledgements
 
 Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting
