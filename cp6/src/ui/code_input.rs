@@ -33,7 +33,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
     };
 
     view! { cx,
-        div {
+        div(class="flex flex-col") {
             input(
                 bind:value=input,
                 on:keyup=detect_enter,
