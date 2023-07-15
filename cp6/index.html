@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link data-trunk rel="tailwind-css" href="tailwind.css" />
+
+    <script>
+        const updateTestUpdateIndicator = () => {
+            document
+                .querySelectorAll(".test-update-indicator")
+                .forEach((element) => {
+                    const update = element.dataset.timestamp;
+
+                    const elapsed_ms = Date.now() - update;
+                    const elapsed_s = elapsed_ms / 1000;
+
+                    const opacity =
+                        1.0 - Math.min(Math.max(elapsed_s / 2, 0.0), 1.0);
+
+                    element.style.opacity = opacity;
+                });
+
+            requestAnimationFrame(updateTestUpdateIndicator);
+        };
+        requestAnimationFrame(updateTestUpdateIndicator);
+    </script>
 </head>
 
 <body>
