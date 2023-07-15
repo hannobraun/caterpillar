@@ -11,7 +11,8 @@ use crate::{
 };
 
 pub fn render(mut test_runner: cp::TestRunner) {
-    let test_reports = test_runner.run_tests();
+    let mut test_reports = cp::TestReports::new();
+    test_runner.run_tests(&mut test_reports);
 
     sycamore::render(|cx| {
         let test_reports = create_signal(cx, test_reports);

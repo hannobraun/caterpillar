@@ -27,7 +27,9 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 if let Err(err) = props.test_runner.run_code(&code) {
                     error.set(err.to_string());
                 }
-                let reports = props.test_runner.run_tests();
+
+                let mut reports = cp::TestReports::new();
+                props.test_runner.run_tests(&mut reports);
 
                 props.test_reports.set(reports);
             }

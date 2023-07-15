@@ -37,7 +37,7 @@ impl TestRunner {
         Ok(())
     }
 
-    pub fn run_tests(&mut self) -> TestReports {
+    pub fn run_tests(&mut self, test_reports: &mut TestReports) {
         let mut updated = self.functions.clear_updated();
         let mut found_new_updated;
 
@@ -102,8 +102,6 @@ impl TestRunner {
             }
         }
 
-        let mut test_reports = TestReports::new();
-
         for name in tests_to_run {
             let function = self.tests.get(&name);
 
@@ -144,8 +142,6 @@ impl TestRunner {
                 result,
             })
         }
-
-        test_reports
     }
 }
 
