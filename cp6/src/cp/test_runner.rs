@@ -168,7 +168,7 @@ impl TestReports {
     }
 }
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct SingleTestReport {
     pub module: String,
     pub name: String,
