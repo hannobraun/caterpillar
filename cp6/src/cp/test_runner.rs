@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::cp;
 
@@ -139,27 +139,32 @@ impl TestRunner {
             let module = function.module.clone();
             let name = name.clone();
 
-            test_reports.inner.push(SingleTestReport {
-                module,
-                name,
-                result,
-            });
+            test_reports.inner.insert(
+                (module.clone(), name.clone()),
+                SingleTestReport {
+                    module,
+                    name,
+                    result,
+                },
+            );
         }
     }
 }
 
 #[derive(Clone)]
 pub struct TestReports {
-    inner: Vec<SingleTestReport>,
+    inner: BTreeMap<(String, String), SingleTestReport>,
 }
 
 impl TestReports {
     pub fn new() -> Self {
-        Self { inner: Vec::new() }
+        Self {
+            inner: BTreeMap::new(),
+        }
     }
 
     pub fn reports(&self) -> Vec<SingleTestReport> {
-        self.inner.clone()
+        self.inner.values().cloned().collect()
     }
 }
 
