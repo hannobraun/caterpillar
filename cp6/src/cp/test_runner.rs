@@ -1,5 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
+use js_sys::Date;
+
 use crate::cp;
 
 use super::{AnalyzerEvent, FunctionBody};
@@ -145,6 +147,7 @@ impl TestRunner {
                     module,
                     name,
                     result,
+                    timestamp: Date::now(),
                 },
             );
         }
@@ -173,6 +176,7 @@ pub struct SingleTestReport {
     pub module: String,
     pub name: String,
     pub result: Result<(), Error>,
+    pub timestamp: f64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
