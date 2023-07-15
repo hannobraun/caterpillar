@@ -150,7 +150,7 @@ impl TestRunner {
 }
 
 pub struct TestReports {
-    pub inner: Vec<SingleTestReport>,
+    inner: Vec<SingleTestReport>,
 }
 
 impl TestReports {
