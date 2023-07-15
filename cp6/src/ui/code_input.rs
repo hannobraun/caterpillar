@@ -26,12 +26,10 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 error.modify().clear();
                 if let Err(err) = props.test_runner.run_code(&code) {
                     error.set(err.to_string());
-                }
-
-                let mut reports = cp::TestReports::new();
-                props.test_runner.run_tests(&mut reports);
-
-                props.test_reports.set(reports);
+                };
+                props
+                    .test_runner
+                    .run_tests(&mut props.test_reports.modify());
             }
         }
     };
