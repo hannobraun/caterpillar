@@ -11,8 +11,7 @@ use crate::{cp, ui::test_report::TestReport};
 
 #[component]
 pub fn TestRunResult<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
-    let test_reports =
-        create_memo(cx, || props.test_reports.get().inner.clone());
+    let test_reports = create_memo(cx, || props.test_reports.get().reports());
 
     view! { cx,
         ul {

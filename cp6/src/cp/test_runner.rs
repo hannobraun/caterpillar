@@ -157,6 +157,10 @@ impl TestReports {
     pub fn new() -> Self {
         Self { inner: Vec::new() }
     }
+
+    pub fn reports(&self) -> Vec<SingleTestReport> {
+        self.inner.clone()
+    }
 }
 
 #[derive(Clone, Eq, PartialEq)]
