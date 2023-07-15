@@ -7,6 +7,7 @@ pub fn TestReport<G: Html>(cx: Scope, props: Props) -> View<G> {
     view! { cx,
         PassFail(pass=props.test_report.result.is_ok())
         (props.test_report.module) " - " (props.test_report.name)
+        span(data-timestamp=props.test_report.timestamp)
     }
 }
 
