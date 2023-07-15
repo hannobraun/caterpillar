@@ -136,9 +136,12 @@ impl TestRunner {
                     }
                 });
 
+            let module = function.module.clone();
+            let name = name.clone();
+
             test_reports.inner.push(SingleTestReport {
-                module: function.module.clone(),
-                name: name.clone(),
+                module,
+                name,
                 result,
             })
         }
