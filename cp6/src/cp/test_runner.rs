@@ -102,7 +102,7 @@ impl TestRunner {
             }
         }
 
-        let mut test_reports = TestReports { inner: Vec::new() };
+        let mut test_reports = TestReports::new();
 
         for name in tests_to_run {
             let function = self.tests.get(&name);
@@ -151,6 +151,12 @@ impl TestRunner {
 
 pub struct TestReports {
     pub inner: Vec<SingleTestReport>,
+}
+
+impl TestReports {
+    pub fn new() -> Self {
+        Self { inner: Vec::new() }
+    }
 }
 
 #[derive(Clone, Eq, PartialEq)]
