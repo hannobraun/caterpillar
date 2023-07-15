@@ -143,7 +143,7 @@ impl TestRunner {
                 module,
                 name,
                 result,
-            })
+            });
         }
     }
 }
