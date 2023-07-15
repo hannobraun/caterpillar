@@ -145,6 +145,7 @@ impl TestRunner {
     }
 }
 
+#[derive(Clone)]
 pub struct TestReports {
     inner: Vec<SingleTestReport>,
 }
