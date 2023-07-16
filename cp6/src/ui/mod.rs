@@ -18,8 +18,10 @@ pub fn render(mut test_runner: cp::TestRunner) {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
-            CodeInput(test_runner=test_runner, test_reports=test_reports)
-            TestRunResult(test_reports=test_reports)
+            div {
+                CodeInput(test_runner=test_runner, test_reports=test_reports)
+                TestRunResult(test_reports=test_reports)
+            }
         }
     });
 }
