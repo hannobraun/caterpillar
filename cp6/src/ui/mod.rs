@@ -18,7 +18,7 @@ pub fn render(mut test_runner: cp::TestRunner) {
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,
-            div {
+            div(class="flex flex-row") {
                 CodeInput(test_runner=test_runner, test_reports=test_reports)
                 TestRunResult(test_reports=test_reports)
             }
