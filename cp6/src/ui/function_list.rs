@@ -21,7 +21,7 @@ pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     });
 
     view! { cx,
-        ul {
+        ul(class="h-full overflow-auto") {
             Indexed(
                 iterable=functions,
                 view=|cx, function| view! { cx,

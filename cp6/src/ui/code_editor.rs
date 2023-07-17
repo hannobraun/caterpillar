@@ -19,7 +19,7 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
         .map(cx, |test_runner| test_runner.functions().clone());
 
     view! { cx,
-        div(class="p-4") {
+        div(class="h-full p-4") {
             FunctionList(functions=functions)
             CodeInput(
                 test_runner=props.test_runner,

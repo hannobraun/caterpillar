@@ -23,7 +23,7 @@ pub fn render(mut test_runner: cp::TestRunner) {
 
         view! { cx,
             div(class="h-screen flex flex-row") {
-                div(class="basis-1/2") {
+                div(class="h-full basis-1/2") {
                     CodeEditor(
                         test_runner=test_runner,
                         test_reports=test_reports
