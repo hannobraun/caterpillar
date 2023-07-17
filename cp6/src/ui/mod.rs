@@ -3,7 +3,7 @@ mod pass_fail;
 mod test_report;
 mod test_run_result;
 
-use sycamore::prelude::*;
+use sycamore::{reactive::create_signal, view};
 
 use crate::{
     cp,
