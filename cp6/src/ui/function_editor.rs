@@ -4,11 +4,12 @@ use crate::cp;
 
 #[component]
 pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
+    let name = props.function.name;
     let body = format!("{:?}", props.function.body);
 
     view! { cx,
         div {
-            p { (props.function.name) }
+            p { (name) }
             p { (body) }
         }
     }
