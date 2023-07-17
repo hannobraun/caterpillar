@@ -16,7 +16,7 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
         test_runner
             .functions()
             .iter()
-            .map(|(name, _)| name)
+            .map(|(_, function)| function)
             .cloned()
             .collect::<Vec<_>>()
     });
@@ -25,7 +25,7 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
         div(class="p-4") {
             Indexed(
                 iterable=functions,
-                view=|cx, line| view! { cx, p { (line) } },
+                view=|cx, function| view! { cx, p { (function.name) } },
             )
             CodeInput(
                 test_runner=props.test_runner,
