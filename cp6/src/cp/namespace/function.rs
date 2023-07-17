@@ -5,6 +5,7 @@ use crate::cp::{
 #[derive(Clone, Debug)]
 pub struct Function {
     pub module: String,
+    pub name: String,
     pub body: FunctionBody,
 }
 
