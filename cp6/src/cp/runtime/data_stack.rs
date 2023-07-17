@@ -2,7 +2,7 @@ use core::fmt;
 
 use crate::cp::pipeline::ir::analyzer_output::AnalyzerOutput;
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
     marker: usize,

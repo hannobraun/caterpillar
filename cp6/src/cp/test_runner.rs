@@ -6,6 +6,7 @@ use crate::cp;
 
 use super::{AnalyzerEvent, FunctionBody};
 
+#[derive(Clone)]
 pub struct TestRunner {
     data_stack: cp::DataStack,
     bindings: cp::Bindings,

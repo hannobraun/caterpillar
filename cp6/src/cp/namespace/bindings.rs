@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::cp::runtime::data_stack::Value;
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 pub struct Bindings {
     declarations: BTreeSet<String>,
     definitions: BTreeMap<String, Value>,

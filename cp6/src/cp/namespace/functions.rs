@@ -4,7 +4,7 @@ use crate::cp::pipeline::ir::analyzer_output::AnalyzerOutput;
 
 use super::{Function, FunctionBody, Intrinsic};
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Functions {
     declarations: BTreeSet<String>,
     definitions: BTreeMap<String, Function>,
