@@ -51,6 +51,7 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
                 on:keyup=detect_enter,
                 type="text",
                 class="my-4 ring-1",
+                placeholder="Type code, execute with Enter key",
                 autofocus=true,
             )
             div(
