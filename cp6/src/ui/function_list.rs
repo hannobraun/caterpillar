@@ -21,10 +21,12 @@ pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     });
 
     view! { cx,
-        Indexed(
-            iterable=functions,
-            view=|cx, function| view! { cx, p { (function.name) } },
-        )
+        ul {
+            Indexed(
+                iterable=functions,
+                view=|cx, function| view! { cx, li { (function.name) } },
+            )
+        }
     }
 }
 
