@@ -81,6 +81,10 @@ impl Functions {
         self.updated.clear();
         updated
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = (&String, &Function)> {
+        self.into_iter()
+    }
 }
 
 impl IntoIterator for Functions {

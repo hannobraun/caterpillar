@@ -28,6 +28,10 @@ impl TestRunner {
         })
     }
 
+    pub fn functions(&self) -> &cp::Functions {
+        &self.functions
+    }
+
     pub fn run_code(&mut self, code: &str) -> anyhow::Result<()> {
         cp::execute(
             code,
