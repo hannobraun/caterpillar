@@ -5,7 +5,9 @@ use crate::cp;
 #[component]
 pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     view! { cx,
-        (props.function.name)
+        div {
+            p { (props.function.name) }
+        }
     }
 }
 
