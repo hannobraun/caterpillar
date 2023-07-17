@@ -16,6 +16,7 @@ pub fn render(mut test_runner: cp::TestRunner) {
     test_runner.run_tests(&mut test_reports);
 
     sycamore::render(|cx| {
+        let test_runner = create_signal(cx, test_runner);
         let test_reports = create_signal(cx, test_reports);
 
         view! { cx,

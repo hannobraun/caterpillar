@@ -13,7 +13,7 @@ use web_sys::{Event, KeyboardEvent};
 use crate::cp;
 
 #[component]
-pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
+pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     let input = create_signal(cx, String::new());
     let error = create_signal(cx, String::new());
 
@@ -24,11 +24,12 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
                 input.modify().clear();
 
                 error.modify().clear();
-                if let Err(err) = props.test_runner.run_code(&code) {
+                if let Err(err) = props.test_runner.modify().run_code(&code) {
                     error.set(err.to_string());
                 };
                 props
                     .test_runner
+                    .modify()
                     .run_tests(&mut props.test_reports.modify());
             }
         }
@@ -67,6 +68,6 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, mut props: Props<'r>) -> View<G> {
 
 #[derive(Prop)]
 pub struct Props<'r> {
-    test_runner: cp::TestRunner,
+    test_runner: &'r Signal<cp::TestRunner>,
     test_reports: &'r Signal<cp::TestReports>,
 }

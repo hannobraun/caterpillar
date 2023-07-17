@@ -23,6 +23,6 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
 
 #[derive(Prop)]
 pub struct Props<'r> {
-    test_runner: cp::TestRunner,
+    test_runner: &'r Signal<cp::TestRunner>,
     test_reports: &'r Signal<cp::TestReports>,
 }
