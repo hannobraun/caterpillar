@@ -2,14 +2,14 @@ use crate::cp::{
     pipeline::ir::analyzer_output::AnalyzerOutput, Evaluator, EvaluatorError,
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Function {
     pub module: String,
     pub name: String,
     pub body: FunctionBody,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum FunctionBody {
     Intrinsic(Intrinsic),
     UserDefined(AnalyzerOutput),
