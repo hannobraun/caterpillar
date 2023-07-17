@@ -8,7 +8,7 @@ use sycamore::{
     Prop,
 };
 
-use crate::cp;
+use crate::{cp, ui::function_editor::FunctionEditor};
 
 #[component]
 pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
@@ -24,7 +24,9 @@ pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
         ul {
             Indexed(
                 iterable=functions,
-                view=|cx, function| view! { cx, li { (function.name) } },
+                view=|cx, function| view! { cx,
+                    li { FunctionEditor(function=function) }
+                },
             )
         }
     }
