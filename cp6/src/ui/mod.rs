@@ -19,13 +19,13 @@ pub fn render(mut test_runner: cp::TestRunner) {
 
         view! { cx,
             div(class="flex flex-row") {
-                div {
+                div(class="basis-1/2") {
                     CodeInput(
                         test_runner=test_runner,
                         test_reports=test_reports
                     )
                 }
-                div {
+                div(class="basis-1/2") {
                     TestRunResult(test_reports=test_reports)
                 }
             }
