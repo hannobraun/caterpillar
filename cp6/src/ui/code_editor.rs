@@ -12,10 +12,12 @@ use crate::{cp, ui::code_input::CodeInput};
 #[component]
 pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     view! { cx,
-        CodeInput(
-            test_runner=props.test_runner,
-            test_reports=props.test_reports
-        )
+        div {
+            CodeInput(
+                test_runner=props.test_runner,
+                test_reports=props.test_reports
+            )
+        }
     }
 }
 
