@@ -1,3 +1,4 @@
+mod code_editor;
 mod code_input;
 mod pass_fail;
 mod test_report;
@@ -7,7 +8,7 @@ use sycamore::{reactive::create_signal, view};
 
 use crate::{
     cp,
-    ui::{code_input::CodeInput, test_run_result::TestRunResult},
+    ui::{code_editor::CodeEditor, test_run_result::TestRunResult},
 };
 
 pub fn render(mut test_runner: cp::TestRunner) {
@@ -20,7 +21,7 @@ pub fn render(mut test_runner: cp::TestRunner) {
         view! { cx,
             div(class="flex flex-row") {
                 div(class="basis-1/2") {
-                    CodeInput(
+                    CodeEditor(
                         test_runner=test_runner,
                         test_reports=test_reports
                     )
