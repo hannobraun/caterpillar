@@ -1,5 +1,6 @@
 mod code_editor;
 mod code_input;
+mod function_list;
 mod pass_fail;
 mod test_report;
 mod test_run_result;
