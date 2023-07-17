@@ -50,12 +50,12 @@ pub fn CodeInput<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
                 bind:value=input,
                 on:keyup=detect_enter,
                 type="text",
-                class="m-4 ring-1",
+                class="my-4 ring-1",
                 autofocus=true,
             )
             div(
                 hidden=*hide_errors.get(),
-                class="max-w-fit max-h-fit bg-red-300 rounded mx-4 p-4"
+                class="max-w-fit max-h-fit bg-red-300 rounded p-4"
             ) {
                 Indexed(
                     iterable=error_lines,

@@ -22,7 +22,7 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     });
 
     view! { cx,
-        div {
+        div(class="p-4") {
             Indexed(
                 iterable=functions,
                 view=|cx, line| view! { cx, p { (line) } },
