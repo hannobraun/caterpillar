@@ -20,7 +20,9 @@ pub fn CodeEditor<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
 
     view! { cx,
         div(class="h-full p-4") {
-            FunctionList(functions=functions)
+            div(class="h-full overflow-auto p-2") {
+                FunctionList(functions=functions)
+            }
             CodeInput(
                 test_runner=props.test_runner,
                 test_reports=props.test_reports
