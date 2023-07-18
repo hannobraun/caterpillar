@@ -82,13 +82,7 @@ fn execute_inner(
         analyze(syntax_elements.as_input(), bindings, functions, tests)?;
     analyzer_events.as_output().push(analyzer_event);
 
-    evaluate(
-        analyzer_events.as_input(),
-        data_stack,
-        bindings,
-        functions,
-        tests,
-    )?;
+    evaluate(analyzer_events.as_input(), data_stack, bindings, functions)?;
 
     Ok(())
 }

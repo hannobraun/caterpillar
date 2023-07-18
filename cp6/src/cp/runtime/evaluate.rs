@@ -10,7 +10,6 @@ pub struct Evaluator<'r> {
     pub data_stack: &'r mut DataStack,
     pub bindings: &'r mut Bindings,
     pub functions: &'r Functions,
-    pub tests: &'r Functions,
 }
 
 impl Evaluator<'_> {

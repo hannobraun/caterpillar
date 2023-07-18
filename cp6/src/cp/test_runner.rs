@@ -114,13 +114,11 @@ impl TestRunner {
 
             let mut data_stack = cp::DataStack::new();
             let mut bindings = cp::Bindings::new();
-            let tests = cp::Functions::new();
 
             let mut evaluator = cp::Evaluator {
                 data_stack: &mut data_stack,
                 bindings: &mut bindings,
                 functions: &self.functions,
-                tests: &tests,
             };
 
             let result = evaluator.evaluate_function(function);

@@ -9,7 +9,6 @@ pub fn evaluate(
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
     functions: &Functions,
-    tests: &Functions,
 ) -> Result<(), PipelineError<EvaluatorError>> {
     let expression = expressions.read()?;
 
@@ -17,7 +16,6 @@ pub fn evaluate(
         data_stack,
         bindings,
         functions,
-        tests,
     };
     evaluator
         .evaluate_expression(expression)
