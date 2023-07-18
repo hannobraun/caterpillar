@@ -5,7 +5,16 @@ use crate::cp;
 #[component]
 pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     let name = props.function.name;
-    let body = format!("{:?}", props.function.body);
+
+    let body = match &props.function.body {
+        cp::FunctionBody::Intrinsic(_) => {
+            view! { cx, }
+        }
+        body @ cp::FunctionBody::UserDefined(_) => {
+            let body = format!("{body:?}");
+            view! { cx, p { (body) } }
+        }
+    };
 
     let is_intrinsic =
         matches!(props.function.body, cp::FunctionBody::Intrinsic(_));
@@ -23,14 +32,7 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
                     }
                 )
             }
-            (
-                if is_intrinsic {
-                    view! { cx, }
-                }
-                else {
-                    view!{ cx, p { (body) } }
-                }
-            )
+            (body)
         }
     }
 }
