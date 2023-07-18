@@ -8,7 +8,7 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     let body = format!("{:?}", props.function.body);
 
     view! { cx,
-        div(class="ring-1 rounded mb-4") {
+        div(class="ring-1 rounded mb-4 divide-y") {
             p { (name) }
             p { (body) }
         }
