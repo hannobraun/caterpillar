@@ -12,7 +12,7 @@ use crate::{cp, ui::function_editor::FunctionEditor};
 
 #[component]
 pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
-    let functions = props.functions.map(cx, |functions| {
+    let function_list = props.functions.map(cx, |functions| {
         functions
             .iter()
             .map(|(_, function)| function)
@@ -23,7 +23,7 @@ pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
     view! { cx,
         ul {
             Indexed(
-                iterable=functions,
+                iterable=function_list,
                 view=|cx, function| view! { cx,
                     li { FunctionEditor(function=function) }
                 },
