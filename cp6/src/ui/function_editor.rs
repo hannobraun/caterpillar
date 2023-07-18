@@ -6,7 +6,7 @@ use crate::cp;
 pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     let name = props.function.name;
 
-    let (body, is_intrinsic) = match &props.function.body {
+    let (body, is_intrinsic) = match props.function.body {
         cp::FunctionBody::Intrinsic(_) => (view! { cx, }, true),
         body @ cp::FunctionBody::UserDefined(_) => {
             let body = format!("{body:?}");
