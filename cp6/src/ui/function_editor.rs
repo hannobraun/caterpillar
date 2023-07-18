@@ -36,7 +36,7 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
                 Indexed(
                     iterable=tags,
                     view=|cx, tag| view! { cx,
-                        span { (tag) }
+                        span(class="m-1 px-1.5 rounded-full bg-yellow-300") { (tag) }
                     }
                 )
             }
