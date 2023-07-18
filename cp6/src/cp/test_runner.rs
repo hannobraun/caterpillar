@@ -83,8 +83,8 @@ impl TestRunner {
         loop {
             found_new_tests_to_run = false;
 
-            for (name, function) in &self.tests {
-                if tests_to_run.contains(name) {
+            for (_, function) in &self.tests {
+                if tests_to_run.contains(&function.name) {
                     continue;
                 }
 
@@ -96,7 +96,7 @@ impl TestRunner {
                             event
                         {
                             if updated.contains(called) {
-                                tests_to_run.insert(name.clone());
+                                tests_to_run.insert(function.name.clone());
                                 found_new_tests_to_run = true;
                             }
                         }
