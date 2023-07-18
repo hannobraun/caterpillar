@@ -23,7 +23,14 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
                     }
                 )
             }
-            p { (body) }
+            (
+                if is_intrinsic {
+                    view! { cx, }
+                }
+                else {
+                    view!{ cx, p { (body) } }
+                }
+            )
         }
     }
 }
