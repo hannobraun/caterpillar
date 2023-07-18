@@ -16,7 +16,7 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
 
     let (body, is_intrinsic) = match props.function.body {
         cp::FunctionBody::Intrinsic(_) => (view! { cx, }, true),
-        body @ cp::FunctionBody::UserDefined(_) => {
+        cp::FunctionBody::UserDefined(body) => {
             let body = format!("{body:?}");
             (view! { cx, p { (body) } }, false)
         }
