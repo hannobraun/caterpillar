@@ -7,6 +7,7 @@ pub struct Function {
     pub module: String,
     pub name: String,
     pub body: FunctionBody,
+    pub is_test: bool,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

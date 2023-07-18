@@ -29,6 +29,7 @@ impl Functions {
         let function = Function {
             module,
             name: name.clone(),
+            is_test: false,
             body: FunctionBody::Intrinsic(body),
         };
         self.definitions.insert(name.clone(), function);
@@ -56,6 +57,7 @@ impl Functions {
             module,
             name: name.clone(),
             body: FunctionBody::UserDefined(body),
+            is_test: false,
         };
         self.definitions.insert(name.clone(), function);
 
