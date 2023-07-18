@@ -1,4 +1,12 @@
-use sycamore::{component, reactive::Scope, view, view::View, web::Html, Prop};
+use sycamore::{
+    component,
+    prelude::Indexed,
+    reactive::{create_signal, Scope},
+    view,
+    view::View,
+    web::Html,
+    Prop,
+};
 
 use crate::cp;
 
@@ -14,17 +22,20 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
         }
     };
 
+    let mut tags = Vec::new();
+    if is_intrinsic {
+        tags.push("intrinsic");
+    }
+
+    let tags = create_signal(cx, tags);
+
     view! { cx,
         div(class="ring-1 rounded mb-4 divide-y") {
             div(class="flex flex-row justify-between") {
                 span { (name) }
-                (
-                    if is_intrinsic {
-                        view! { cx, span { "intrinsic" } }
-                    }
-                    else {
-                        view! { cx, }
-                    }
+                Indexed(
+                    iterable=tags,
+                    view=|cx, tag| view! { cx, span { (tag) } }
                 )
             }
             (body)
