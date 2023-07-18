@@ -81,7 +81,9 @@ fn analyze_syntax_element(
                 functions,
                 tests,
             )?;
-            functions.define(Module::none(), name.clone(), body);
+            let is_test = false;
+
+            functions.define(Module::none(), name.clone(), body, is_test);
 
             return Ok(None);
         }
@@ -100,9 +102,10 @@ fn analyze_syntax_element(
             let name = name.clone();
             let body =
                 analyze_syntax_tree(body, module, bindings, functions, tests)?;
+            let is_test = true;
 
             tests.declare(name.clone());
-            tests.define(module, name, body);
+            tests.define(module, name, body, is_test);
 
             return Ok(None);
         }

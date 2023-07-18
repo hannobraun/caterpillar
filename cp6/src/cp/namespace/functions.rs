@@ -46,6 +46,7 @@ impl Functions {
         module: Module,
         name: String,
         body: AnalyzerOutput,
+        is_test: bool,
     ) {
         assert!(
             self.is_declared(&name),
@@ -57,7 +58,7 @@ impl Functions {
             module,
             name: name.clone(),
             body: FunctionBody::UserDefined(body),
-            is_test: false,
+            is_test,
         };
         self.definitions.insert(name.clone(), function);
 
