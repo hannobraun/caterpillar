@@ -1,6 +1,6 @@
 use core::fmt;
 
-use crate::cp::pipeline::ir::analyzer_output::AnalyzerOutput;
+use crate::cp::{pipeline::ir::analyzer_output::AnalyzerOutput, Formatter};
 
 #[derive(Clone, Debug, Default)]
 pub struct DataStack {
@@ -117,7 +117,7 @@ impl fmt::Display for Value {
         match self {
             Value::Array(value) => write!(f, "{value}"),
             Value::Bool(value) => write!(f, "{value}"),
-            Value::Block(value) => write!(f, "{value:?}"),
+            Value::Block(value) => write!(f, "{{ {} }}", Formatter(value)),
             Value::String(value) => write!(f, "{value}"),
             Value::U8(value) => write!(f, "{value}"),
         }
