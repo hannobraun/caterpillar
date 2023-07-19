@@ -12,11 +12,13 @@ use crate::{cp, ui::function_editor::FunctionEditor};
 
 #[component]
 pub fn FunctionList<'r, G: Html>(cx: Scope<'r>, props: Props<'r>) -> View<G> {
-    let function_list = props.functions.map(cx, |(functions, _)| {
+    let function_list = props.functions.map(cx, |(functions, tests)| {
         let mut function_list = Vec::new();
 
         function_list
             .extend(functions.iter().map(|(_, function)| function).cloned());
+        function_list
+            .extend(tests.iter().map(|(_, function)| function).cloned());
 
         function_list
     });
