@@ -26,6 +26,9 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     if is_intrinsic {
         tags.push("intrinsic");
     }
+    if props.function.is_test {
+        tags.push("test");
+    }
 
     let tags = create_signal(cx, tags);
 
