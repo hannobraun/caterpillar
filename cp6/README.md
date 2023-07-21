@@ -45,4 +45,5 @@ prototype, here are some stretch goals I could work on:
 
 ## Status
 
-In progress.
+Objective has been reached. I'm currently looking into stretch goals and other
+improvements.
