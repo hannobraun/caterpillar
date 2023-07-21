@@ -20,7 +20,7 @@ pub fn define(functions: &mut cp::Functions) {
     }
 }
 
-fn clone(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn clone(evaluator: &mut cp::Evaluator) -> Result {
     let a = evaluator.data_stack.pop_any()?;
 
     evaluator.data_stack.push(a.clone());
@@ -29,22 +29,22 @@ fn clone(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     Ok(())
 }
 
-fn drop(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn drop(evaluator: &mut cp::Evaluator) -> Result {
     evaluator.data_stack.pop_any()?;
     Ok(())
 }
 
-fn true_(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn true_(evaluator: &mut cp::Evaluator) -> Result {
     evaluator.data_stack.push(true);
     Ok(())
 }
 
-fn false_(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn false_(evaluator: &mut cp::Evaluator) -> Result {
     evaluator.data_stack.push(false);
     Ok(())
 }
 
-fn and(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn and(evaluator: &mut cp::Evaluator) -> Result {
     let a = evaluator.data_stack.pop_bool()?;
     let b = evaluator.data_stack.pop_bool()?;
 
@@ -53,14 +53,14 @@ fn and(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     Ok(())
 }
 
-fn not(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn not(evaluator: &mut cp::Evaluator) -> Result {
     let b = evaluator.data_stack.pop_bool()?;
     evaluator.data_stack.push(!b);
 
     Ok(())
 }
 
-fn if_(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn if_(evaluator: &mut cp::Evaluator) -> Result {
     let else_ = evaluator.data_stack.pop_block()?;
     let then_ = evaluator.data_stack.pop_block()?;
     let cond = evaluator.data_stack.pop_bool()?;
@@ -72,7 +72,7 @@ fn if_(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     Ok(())
 }
 
-fn unwrap(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn unwrap(evaluator: &mut cp::Evaluator) -> Result {
     let array = evaluator.data_stack.pop_array()?;
 
     for value in array.elements {
@@ -82,13 +82,13 @@ fn unwrap(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     Ok(())
 }
 
-fn eval(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn eval(evaluator: &mut cp::Evaluator) -> Result {
     let block = evaluator.data_stack.pop_block()?;
     evaluator.evaluate_expressions(&block)?;
     Ok(())
 }
 
-fn eq(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn eq(evaluator: &mut cp::Evaluator) -> Result {
     let b = evaluator.data_stack.pop_any()?;
     let a = evaluator.data_stack.pop_any()?;
 
@@ -99,7 +99,7 @@ fn eq(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
     Ok(())
 }
 
-fn sub(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
+fn sub(evaluator: &mut cp::Evaluator) -> Result {
     let b = evaluator.data_stack.pop_u8()?;
     let a = evaluator.data_stack.pop_u8()?;
 
@@ -107,3 +107,5 @@ fn sub(evaluator: &mut cp::Evaluator) -> Result<(), cp::EvaluatorError> {
 
     Ok(())
 }
+
+pub type Result = std::result::Result<(), cp::EvaluatorError>;
