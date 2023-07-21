@@ -34,7 +34,8 @@ pub fn define(functions: &mut cp::Functions) -> anyhow::Result<cp::Functions> {
         }
 
         mod fn_ {
-            test "fn" { fn f { true } f }
+            fn f { true }
+            test "fn" { f }
         }
 
         mod if_ {
