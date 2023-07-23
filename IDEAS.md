@@ -89,3 +89,18 @@ mod root(index) {
     }
 }
 ```
+
+
+## Persistence
+
+I think it might be time to actually store functions, not just load some hardcoded ones in at startup. Since the time to rewrite all software from the ground up has not come yet, that means storing the canonical representation in files, so they can be version-controlled using an external tool.
+
+I've found the File System Access API:
+
+- https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
+- https://developer.chrome.com/articles/file-system-access/
+
+Although it seems to be not very mature yet:
+https://caniuse.com/native-filesystem-api
+
+I don't have a full picture yet though. Maybe it can be used, or maybe it's necessary to run a local background service with a web API for the time being.
