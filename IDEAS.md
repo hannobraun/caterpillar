@@ -100,7 +100,8 @@ I've found the File System Access API:
 - https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
 - https://developer.chrome.com/articles/file-system-access/
 
-Although it seems to be not very mature yet:
+Unfortunately it's not sufficiently supported yet:
 https://caniuse.com/native-filesystem-api
 
-I don't have a full picture yet though. Maybe it can be used, or maybe it's necessary to run a local background service with a web API for the time being.
+The next best option is probably to run a local background service with a web API for the time being. It's probably possible to integrate this service into the build using Trunk hooks:
+https://trunkrs.dev/assets/#hooks
