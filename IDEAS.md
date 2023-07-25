@@ -107,4 +107,7 @@ https://caniuse.com/native-filesystem-api
 
 The next best option is probably to run a local background service with a web
 API for the time being. It's probably possible to integrate this service into
-the build using Trunk hooks: https://trunkrs.dev/assets/#hooks
+the build using a combination of Trunk features, hooks and proxy:
+
+- https://trunkrs.dev/assets/#hooks
+- https://trunkrs.dev/configuration/#proxy
