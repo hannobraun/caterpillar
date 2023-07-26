@@ -1,4 +1,0 @@
-[[hooks]]
-stage = "build"
-command = "cargo"
-command_arguments = ["run", "-p", "file-service"]
