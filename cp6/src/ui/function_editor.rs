@@ -35,7 +35,7 @@ pub fn FunctionEditor<G: Html>(cx: Scope, props: Props) -> View<G> {
     view! { cx,
         div(class="ring-1 rounded mb-4 divide-y") {
             div(class="flex flex-row justify-between") {
-                span { (name) }
+                span(class="font-bold") { (name) }
                 div(class="flex flex-row justify-end") {
                     Indexed(
                         iterable=tags,
