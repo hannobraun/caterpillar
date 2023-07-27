@@ -9,7 +9,7 @@ pub fn define_code() -> anyhow::Result<(Functions, Functions)> {
     let mut tests = Functions::new();
 
     intrinsics::define(&mut functions);
-    std::define(&mut functions)?;
+    std::define(&mut functions, &mut tests)?;
 
     tests::define(&mut functions, &mut tests)?;
 
