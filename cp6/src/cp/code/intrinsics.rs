@@ -1,6 +1,6 @@
 use crate::cp;
 
-pub fn define(functions: &mut cp::Functions) {
+pub fn define(functions: &mut cp::Functions) -> anyhow::Result<()> {
     let intrinsics = [
         ("clone", clone as cp::Intrinsic),
         ("drop", drop),
@@ -18,6 +18,8 @@ pub fn define(functions: &mut cp::Functions) {
     for (name, body) in intrinsics {
         functions.register_intrinsic(cp::Module::none(), name.into(), body);
     }
+
+    Ok(())
 }
 
 fn clone(evaluator: &mut cp::Evaluator) -> Result {
