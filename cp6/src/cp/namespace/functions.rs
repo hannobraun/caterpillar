@@ -120,8 +120,8 @@ impl<'r> Module<'r> {
         Self { inner: None }
     }
 
-    pub fn some(s: &'r str) -> Self {
-        Self { inner: Some(s) }
+    pub fn some(name: &'r str) -> Self {
+        Self { inner: Some(name) }
     }
 
     pub fn name(&self) -> String {
