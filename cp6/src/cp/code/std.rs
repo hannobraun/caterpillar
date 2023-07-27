@@ -17,6 +17,8 @@ pub fn define(
                     }
                         if
             }
+
+            test "times" { { true } 2 times drop }
         }
     "#;
 
