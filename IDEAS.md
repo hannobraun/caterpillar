@@ -92,10 +92,11 @@ mod root(index) {
 
 ## Persistence
 
-I think it might be time to actually store functions, not just load some
-hardcoded ones in at startup. Since the time to rewrite all software from the
-ground up has not come yet, that means storing the canonical representation in
-files, so they can be version-controlled using an external tool.
+At some point, we should store functions persistently, not just load some
+hardcoded ones in at startup and forget anything defined at runtime. Since the
+time to rewrite all software from the ground up has not come yet, that means
+storing the canonical representation in files, so they can be version-controlled
+using an external tool.
 
 I've found the File System Access API:
 
@@ -105,9 +106,5 @@ I've found the File System Access API:
 Unfortunately it's not sufficiently supported yet:
 https://caniuse.com/native-filesystem-api
 
-The next best option is probably to run a local background service with a web
-API for the time being. It's probably possible to integrate this service into
-the build using a combination of Trunk features, hooks and proxy:
-
-- https://trunkrs.dev/assets/#hooks
-- https://trunkrs.dev/configuration/#proxy
+At this point, it's probably best to wait and see. If we need persistency before
+this API is ready, we can do it through a background service.
