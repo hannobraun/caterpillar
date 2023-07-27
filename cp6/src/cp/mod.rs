@@ -7,7 +7,7 @@ mod runtime;
 mod test_runner;
 
 pub use self::{
-    code::{define_code, intrinsics, std, tests},
+    code::define_code,
     execute::{execute, Error},
     formatter::Formatter,
     namespace::{
