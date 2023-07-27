@@ -5,7 +5,7 @@ pub fn define(
     tests: &mut cp::Functions,
 ) -> anyhow::Result<()> {
     let code = r#"
-        mod root {
+        mod std {
             fn times {
                 => block num .
                 num 0 =
