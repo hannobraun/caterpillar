@@ -112,7 +112,7 @@ impl<'a> IntoIterator for &'a Functions {
 
 #[derive(Clone, Copy)]
 pub struct Module<'r> {
-    inner: Option<&'r str>,
+    inner: Option<ModuleInner<'r>>,
 }
 
 impl<'r> Module<'r> {
@@ -121,10 +121,20 @@ impl<'r> Module<'r> {
     }
 
     pub fn some(name: &'r str) -> Self {
-        Self { inner: Some(name) }
+        Self {
+            inner: Some(ModuleInner { name }),
+        }
     }
 
     pub fn name(&self) -> String {
-        self.inner.unwrap_or("<root>").into()
+        self.inner
+            .map(|inner| inner.name)
+            .unwrap_or("<root>")
+            .into()
     }
+}
+
+#[derive(Clone, Copy)]
+struct ModuleInner<'r> {
+    name: &'r str,
 }
