@@ -2,16 +2,18 @@ use crate::cp;
 
 pub fn define(functions: &mut cp::Functions) -> anyhow::Result<()> {
     let code = r#"
-        fn times {
-            => block num .
-            num 0 =
-                {}
-                {
-                    block eval
-                    num 1 - => num .
-                    block num times
-                }
-                    if
+        mod root {
+            fn times {
+                => block num .
+                num 0 =
+                    {}
+                    {
+                        block eval
+                        num 1 - => num .
+                        block num times
+                    }
+                        if
+            }
         }
     "#;
 
