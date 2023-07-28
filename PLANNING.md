@@ -109,10 +109,11 @@ https://caniuse.com/native-filesystem-api
 At this point, it's probably best to wait and see. If we need persistency before
 this API is ready, we can do it through a background service.
 
-
 ## Function Lookup
 
-I want to implement multiple dispatch, so a given function might only be one of a number of candidates for a call. As a result, the following won't work in the general case:
+I want to implement multiple dispatch, so a given function might only be one of
+a number of candidates for a call. As a result, the following won't work in the
+general case:
 
 ```
 mod my_mod(fs) {
@@ -122,9 +123,12 @@ mod my_mod(fs) {
 }
 ```
 
-This could be how some specific cases work, to call one specific function, but that would not be general enough to cover all cases, nor would it need to be in the language at all.
+This could be how some specific cases work, to call one specific function, but
+that would not be general enough to cover all cases, nor would it need to be in
+the language at all.
 
-Maybe there can be a `use` function that loads functions into the local scope, where they are available for lookup:
+Maybe there can be a `use` function that loads functions into the local scope,
+where they are available for lookup:
 
 ```
 mod my_mod(index) {
