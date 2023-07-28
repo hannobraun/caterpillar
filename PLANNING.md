@@ -1,4 +1,4 @@
-# Ideas
+# Planning
 
 ## Can functions and bindings be unified?
 
