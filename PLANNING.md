@@ -1,6 +1,8 @@
 # Planning
 
-## Can functions and bindings be unified?
+## Notes
+
+### Can functions and bindings be unified?
 
 It seems overly complicated to have _two_ concepts that bind a name to some kind
 of value. However, they work differently:
@@ -19,7 +21,7 @@ of value. However, they work differently:
   But there would be this notion of _evaluation_ that works differently for
   functions (and maybe other types, like modules) compares to all other values.
 
-## Module System
+### Module System
 
 One goal I have for Caterpillar is to sandbox all code. I want to achieve that
 by not allowing code to access anything global, and by that I don't only mean
@@ -90,7 +92,7 @@ mod root(index) {
 }
 ```
 
-## Persistence
+### Persistence
 
 At some point, we should store functions persistently, not just load some
 hardcoded ones in at startup and forget anything defined at runtime. Since the
@@ -109,7 +111,7 @@ https://caniuse.com/native-filesystem-api
 At this point, it's probably best to wait and see. If we need persistency before
 this API is ready, we can do it through a background service.
 
-## Function Lookup
+### Function Lookup
 
 I want to implement multiple dispatch, so a given function might only be one of
 a number of candidates for a call. As a result, the following won't work in the
