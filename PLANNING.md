@@ -1,5 +1,44 @@
 # Planning
 
+## Core Ideas
+
+My motivation for working on Caterpillar is built on top of a few ideas. None of
+them are original, but some of them were quite profound insights to me, as I
+started to understand them. In this section, I'd like to present those core
+ideas, while providing links to sources, where I can trace my insights back to
+them.
+
+The primary motivator for Caterpillar was the insight (which I haven't proven
+yet) that our usual mode of software development is outdated, and that
+programming can be much more effective and approachable using an **interactive
+programming** paradigm, where you always manipulate a running program.
+([Inventing on Principle](https://www.youtube.com/watch?v=PUv66718DII),
+[Stop Writing Dead Programs](https://www.youtube.com/watch?v=8Ab3ArE8W3s))
+
+When your program is interactive, it makes sense to **store code in a structured
+format**, as that makes it much easier to figure out what needs to happen when a
+given function is updated. ([Unison](https://www.unison-lang.org/))
+
+I'm interested in an interactive programming language that is just as universal
+as Rust is, while being no less safe. However, the complexity of Rust is a big
+drawback. I realized that by combining affine or **linear types with pure
+functions**, you can get the zero-overhead automatic memory management of Rust
+without the complexity. ([Rust](https://www.rust-lang.org/),
+[HVM](https://github.com/HigherOrderCO/HVM))
+
+As I kept working on Caterpillar, I realized that by providing all capabilities
+in terms of functions that exist in a namespace (as opposed to built-in
+operators) and that by exclusively using **dependency injection** for providing
+access to those functions (as opposed to importing them from a globally
+accessible namespace), I can address safety (like memory safety, but also other
+relevant effects like randomness) and security (by sandboxing all code by
+default). (Inspiration for this one came from many diverse sources that I was
+exposed to over many years and can no longer attribute. But more recently,
+[Roc](https://www.roc-lang.org/) served as inspiration here.)
+
+I expect this list of core ideas to change and grow, as I keep working on
+Caterpillar and refine my ideas.
+
 ## Notes
 
 ### Can functions and bindings be unified?
