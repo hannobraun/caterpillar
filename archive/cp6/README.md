@@ -81,5 +81,5 @@ prototype, here are some stretch goals I could work on:
 ## Status
 
 The objective has been reached and this prototype is completed. It has been
-succeeded by a [follow-up prototype](../cp7/) which aims to take a subset of the
-ideas explored here to a usable state.
+succeeded by a [follow-up prototype](../../cp7/) which aims to take a subset of
+the ideas explored here to a usable state.

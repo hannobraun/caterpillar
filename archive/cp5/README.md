@@ -47,4 +47,4 @@ prototype, here are some stretch goals I could work on:
 ## Status
 
 The objective has been reached. Work is continuing in a
-[follow-up prototype](../../cp6/).
+[follow-up prototype](../cp6/).
