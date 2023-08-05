@@ -2,6 +2,7 @@ use std::{fs::File, io::Read};
 
 use clap::Parser;
 
+mod data_stack;
 mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
@@ -11,7 +12,7 @@ fn main() -> anyhow::Result<()> {
     let mut code = String::new();
     File::open(path)?.read_to_string(&mut code)?;
 
-    let mut data_stack = Vec::new();
+    let mut data_stack = data_stack::DataStack::new();
 
     let tokens = tokenizer::tokenize(&code);
 
