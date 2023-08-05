@@ -10,10 +10,11 @@ pub fn tokenize(code: &str) -> Vec<Token> {
 }
 
 fn tokenize_token(token: &str) -> Token {
-    match token.split_once(':') {
-        Some(("", symbol)) => Token::Symbol(symbol.into()),
-        _ => Token::FnRef(token.into()),
+    if let Some(("", symbol)) = token.split_once(':') {
+        return Token::Symbol(symbol.into());
     }
+
+    Token::FnRef(token.into())
 }
 
 pub enum Token {
