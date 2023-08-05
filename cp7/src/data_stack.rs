@@ -12,7 +12,9 @@ impl DataStack {
     }
 
     pub fn pop(&mut self) -> Result<Value, DataStackError> {
-        self.values.pop().ok_or(DataStackError)
+        self.values.pop().ok_or(DataStackError {
+            kind: DataStackErrorKind::StackIsEmpty,
+        })
     }
 }
 
@@ -30,4 +32,11 @@ pub type Number = i64;
 
 #[derive(Debug, thiserror::Error)]
 #[error("Stack is empty")]
-pub struct DataStackError;
+pub struct DataStackError {
+    pub kind: DataStackErrorKind,
+}
+
+#[derive(Debug)]
+pub enum DataStackErrorKind {
+    StackIsEmpty,
+}
