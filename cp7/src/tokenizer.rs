@@ -10,8 +10,10 @@ pub fn tokenize(code: &str) -> Vec<Token> {
 }
 
 fn tokenize_token(token: &str) -> Token {
-    if token == "{" {
-        return Token::CurlyBracketOpen;
+    match token {
+        "{" => return Token::CurlyBracketOpen,
+        "}" => return Token::CurlyBracketClose,
+        _ => {}
     }
 
     if let Some(("", symbol)) = token.split_once(':') {
@@ -23,6 +25,7 @@ fn tokenize_token(token: &str) -> Token {
 
 pub enum Token {
     CurlyBracketOpen,
+    CurlyBracketClose,
     FnRef(String),
     Symbol(String),
 }

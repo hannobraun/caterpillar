@@ -38,6 +38,9 @@ fn main() -> anyhow::Result<()> {
             tokenizer::Token::CurlyBracketOpen => {
                 eprintln!("{{");
             }
+            tokenizer::Token::CurlyBracketClose => {
+                eprintln!("}}");
+            }
             tokenizer::Token::FnRef(fn_ref) => match fn_ref.as_str() {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),
