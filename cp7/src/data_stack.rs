@@ -14,15 +14,19 @@ impl DataStack {
     }
 
     pub fn pop_any(&mut self) -> DataStackResult<Value> {
-        self.values.pop().ok_or(DataStackError {
-            kind: DataStackErrorKind::StackIsEmpty,
-        })
+        self.pop_inner()
     }
 
     pub fn pop_number(&mut self) -> DataStackResult<Number> {
-        let value = self.pop_any()?;
+        let value = self.pop_inner()?;
         let Value::Number(number) = value;
         Ok(number)
+    }
+
+    fn pop_inner(&mut self) -> DataStackResult<Value> {
+        self.values.pop().ok_or(DataStackError {
+            kind: DataStackErrorKind::StackIsEmpty,
+        })
     }
 }
 
