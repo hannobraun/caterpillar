@@ -1,3 +1,5 @@
+use std::fmt;
+
 pub struct DataStack {
     values: Vec<Value>,
 }
@@ -26,6 +28,14 @@ impl DataStack {
 
 pub enum Value {
     Number(Number),
+}
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Value::Number(number) => number.fmt(f),
+        }
+    }
 }
 
 impl From<Number> for Value {

@@ -27,8 +27,7 @@ fn main() -> anyhow::Result<()> {
                     data_stack.push(a + b);
                 }
                 "print_line" => {
-                    let data_stack::Value::Number(value) =
-                        data_stack.pop_any()?;
+                    let value = data_stack.pop_any()?;
                     println!("{value}");
                 }
                 token => {
