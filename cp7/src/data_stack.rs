@@ -49,9 +49,16 @@ pub type Number = i64;
 pub type DataStackResult<T> = Result<T, DataStackError>;
 
 #[derive(Debug, thiserror::Error)]
-#[error("Stack is empty")]
 pub struct DataStackError {
     pub kind: DataStackErrorKind,
+}
+
+impl fmt::Display for DataStackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.kind {
+            DataStackErrorKind::StackIsEmpty => writeln!(f, "Stack is empty"),
+        }
+    }
 }
 
 #[derive(Debug)]
