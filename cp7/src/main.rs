@@ -22,8 +22,8 @@ fn main() -> anyhow::Result<()> {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),
                 "+" => {
-                    let data_stack::Value::Number(b) = data_stack.pop_any()?;
-                    let data_stack::Value::Number(a) = data_stack.pop_any()?;
+                    let b = data_stack.pop_number()?;
+                    let a = data_stack.pop_number()?;
                     data_stack.push(a + b);
                 }
                 "print_line" => {

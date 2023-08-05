@@ -16,6 +16,12 @@ impl DataStack {
             kind: DataStackErrorKind::StackIsEmpty,
         })
     }
+
+    pub fn pop_number(&mut self) -> DataStackResult<Number> {
+        let value = self.pop_any()?;
+        let Value::Number(number) = value;
+        Ok(number)
+    }
 }
 
 pub enum Value {
