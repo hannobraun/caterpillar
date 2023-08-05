@@ -13,7 +13,7 @@ fn main() -> anyhow::Result<()> {
 
     let example_dir = "cp7/examples";
     let path = if let Some(example) = args.example {
-        format!("cp7/examples/{}.cp", example)
+        format!("cp7/examples/{example}.cp")
     } else {
         eprintln!("Need to specify example. Available examples:");
 
