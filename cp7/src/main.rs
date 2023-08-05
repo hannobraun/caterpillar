@@ -22,15 +22,12 @@ fn main() -> anyhow::Result<()> {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),
                 "+" => {
-                    let data_stack::Value::Number(b) =
-                        data_stack.pop().unwrap();
-                    let data_stack::Value::Number(a) =
-                        data_stack.pop().unwrap();
+                    let data_stack::Value::Number(b) = data_stack.pop()?;
+                    let data_stack::Value::Number(a) = data_stack.pop()?;
                     data_stack.push(a + b);
                 }
                 "print_line" => {
-                    let data_stack::Value::Number(value) =
-                        data_stack.pop().unwrap();
+                    let data_stack::Value::Number(value) = data_stack.pop()?;
                     println!("{value}");
                 }
                 token => {

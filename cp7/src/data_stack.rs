@@ -11,8 +11,8 @@ impl DataStack {
         self.values.push(value.into())
     }
 
-    pub fn pop(&mut self) -> Option<Value> {
-        self.values.pop()
+    pub fn pop(&mut self) -> Result<Value, DataStackError> {
+        self.values.pop().ok_or(DataStackError)
     }
 }
 
@@ -27,3 +27,7 @@ impl From<Number> for Value {
 }
 
 pub type Number = i64;
+
+#[derive(Debug, thiserror::Error)]
+#[error("Stack is empty")]
+pub struct DataStackError;
