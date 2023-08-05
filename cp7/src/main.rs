@@ -1,4 +1,7 @@
-use std::{fs::File, io::Read};
+use std::{
+    fs::{self, File},
+    io::Read,
+};
 
 use clap::Parser;
 
@@ -9,7 +12,19 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let example_dir = "cp7/examples";
-    let path = format!("{example_dir}/{}.cp", args.example);
+    let path = if let Some(example) = args.example {
+        format!("cp7/examples/{}.cp", example)
+    } else {
+        eprintln!("Need to specify example. Available examples:");
+
+        for dir_entry in fs::read_dir(example_dir)? {
+            let path = dir_entry?.path();
+            let example = path.file_stem().unwrap().to_string_lossy();
+            eprintln!("- {example}");
+        }
+
+        return Ok(());
+    };
 
     let mut code = String::new();
     File::open(path)?.read_to_string(&mut code)?;
@@ -45,5 +60,5 @@ fn main() -> anyhow::Result<()> {
 
 #[derive(clap::Parser)]
 pub struct Args {
-    pub example: String,
+    pub example: Option<String>,
 }
