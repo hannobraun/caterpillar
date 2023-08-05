@@ -1,4 +1,4 @@
-# Caterpillar Prototype
+# Caterpillar - Prototype 6
 
 ## About
 
