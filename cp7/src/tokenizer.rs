@@ -1,9 +1,11 @@
-pub fn tokenize(code: &str) -> Vec<Token> {
-    let mut tokens = Vec::new();
+use std::collections::VecDeque;
+
+pub fn tokenize(code: &str) -> VecDeque<Token> {
+    let mut tokens = VecDeque::new();
 
     for token in code.split_whitespace() {
         let token = tokenize_token(token);
-        tokens.push(token);
+        tokens.push_back(token);
     }
 
     tokens
