@@ -12,7 +12,10 @@ pub fn parse(mut tokens: VecDeque<Token>) -> Vec<SyntaxElement> {
                 let fn_ref = parse_fn_ref(&mut tokens);
                 SyntaxElement::FnRef(fn_ref)
             }
-            Token::Symbol(_) => panic!("Parsing symbol not supported"),
+            Token::Symbol(_) => {
+                let symbol = parse_symbol(&mut tokens);
+                SyntaxElement::Symbol(symbol)
+            }
             token => panic!("Unexpected token: {token:?}"),
         };
 
@@ -29,6 +32,14 @@ fn parse_fn_ref(tokens: &mut VecDeque<Token>) -> String {
     }
 }
 
+fn parse_symbol(tokens: &mut VecDeque<Token>) -> String {
+    match tokens.pop_front().unwrap() {
+        Token::Symbol(symbol) => symbol,
+        token => panic!("Unexpected token: {token:?}"),
+    }
+}
+
 pub enum SyntaxElement {
     FnRef(String),
+    Symbol(String),
 }

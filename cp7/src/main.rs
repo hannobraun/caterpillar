@@ -54,6 +54,9 @@ fn main() -> anyhow::Result<()> {
                     break;
                 }
             },
+            parser::SyntaxElement::Symbol(symbol) => {
+                eprintln!("Symbol: {symbol}")
+            }
         }
     }
 
