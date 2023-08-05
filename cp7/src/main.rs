@@ -52,6 +52,9 @@ fn main() -> anyhow::Result<()> {
                     break;
                 }
             },
+            tokenizer::Token::Symbol(symbol) => {
+                println!("Symbol: {symbol}");
+            }
         }
     }
 
