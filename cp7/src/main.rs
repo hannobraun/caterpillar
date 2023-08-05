@@ -19,14 +19,14 @@ fn main() -> anyhow::Result<()> {
     for token in tokens {
         match token {
             tokenizer::Token::FnRef(fn_ref) => match fn_ref.as_str() {
-                "1" => data_stack.push(data_stack::Value::Number(1)),
-                "2" => data_stack.push(data_stack::Value::Number(2)),
+                "1" => data_stack.push(1),
+                "2" => data_stack.push(2),
                 "+" => {
                     let data_stack::Value::Number(b) =
                         data_stack.pop().unwrap();
                     let data_stack::Value::Number(a) =
                         data_stack.pop().unwrap();
-                    data_stack.push(data_stack::Value::Number(a + b));
+                    data_stack.push(a + b);
                 }
                 "print_line" => {
                     let data_stack::Value::Number(value) =
