@@ -2,6 +2,8 @@ use std::{fs::File, io::Read};
 
 use clap::Parser;
 
+mod tokenizer;
+
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
     let path = format!("cp7/examples/{}.cp", args.example);
@@ -11,8 +13,10 @@ fn main() -> anyhow::Result<()> {
 
     let mut data_stack = Vec::new();
 
-    for token in code.split_whitespace() {
-        match token {
+    let tokens = tokenizer::tokenize(&code);
+
+    for token in tokens {
+        match token.as_str() {
             "1" => data_stack.push(1),
             "2" => data_stack.push(2),
             "+" => {
