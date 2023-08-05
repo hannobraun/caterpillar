@@ -20,4 +20,10 @@ pub enum Value {
     Number(Number),
 }
 
+impl From<Number> for Value {
+    fn from(number: Number) -> Self {
+        Self::Number(number)
+    }
+}
+
 pub type Number = i64;
