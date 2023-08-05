@@ -16,22 +16,24 @@ fn main() -> anyhow::Result<()> {
     let tokens = tokenizer::tokenize(&code);
 
     for token in tokens {
-        match token.as_str() {
-            "1" => data_stack.push(1),
-            "2" => data_stack.push(2),
-            "+" => {
-                let b = data_stack.pop().unwrap();
-                let a = data_stack.pop().unwrap();
-                data_stack.push(a + b);
-            }
-            "print_line" => {
-                let value = data_stack.pop().unwrap();
-                println!("{value}");
-            }
-            token => {
-                eprintln!("Unexpected token: {token}");
-                break;
-            }
+        match token {
+            tokenizer::Token::FnRef(fn_ref) => match fn_ref.as_str() {
+                "1" => data_stack.push(1),
+                "2" => data_stack.push(2),
+                "+" => {
+                    let b = data_stack.pop().unwrap();
+                    let a = data_stack.pop().unwrap();
+                    data_stack.push(a + b);
+                }
+                "print_line" => {
+                    let value = data_stack.pop().unwrap();
+                    println!("{value}");
+                }
+                token => {
+                    eprintln!("Unexpected token: {token}");
+                    break;
+                }
+            },
         }
     }
 
