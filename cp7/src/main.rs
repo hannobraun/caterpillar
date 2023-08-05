@@ -7,7 +7,9 @@ mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    let path = format!("cp7/examples/{}.cp", args.example);
+
+    let example_dir = "cp7/examples";
+    let path = format!("{example_dir}/{}.cp", args.example);
 
     let mut code = String::new();
     File::open(path)?.read_to_string(&mut code)?;
