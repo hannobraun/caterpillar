@@ -1,7 +1,12 @@
 pub fn tokenize(code: &str) -> Vec<Token> {
-    code.split_whitespace()
-        .map(|token| Token::FnRef(token.into()))
-        .collect()
+    let mut tokens = Vec::new();
+
+    for token in code.split_whitespace() {
+        let token = Token::FnRef(token.into());
+        tokens.push(token);
+    }
+
+    tokens
 }
 
 pub enum Token {
