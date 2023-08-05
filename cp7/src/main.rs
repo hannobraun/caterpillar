@@ -1,8 +1,13 @@
 use std::{fs::File, io::Read};
 
+use clap::Parser;
+
 fn main() -> anyhow::Result<()> {
+    let args = Args::parse();
+    let path = format!("cp7/examples/{}.cp", args.example);
+
     let mut code = String::new();
-    File::open("cp7/examples/number.cp")?.read_to_string(&mut code)?;
+    File::open(path)?.read_to_string(&mut code)?;
 
     let mut data_stack = Vec::new();
 
@@ -27,4 +32,9 @@ fn main() -> anyhow::Result<()> {
     }
 
     Ok(())
+}
+
+#[derive(clap::Parser)]
+pub struct Args {
+    pub example: String,
 }
