@@ -11,7 +11,7 @@ impl DataStack {
         self.values.push(value.into())
     }
 
-    pub fn pop(&mut self) -> Result<Value, DataStackError> {
+    pub fn pop_any(&mut self) -> Result<Value, DataStackError> {
         self.values.pop().ok_or(DataStackError {
             kind: DataStackErrorKind::StackIsEmpty,
         })
