@@ -35,6 +35,9 @@ fn main() -> anyhow::Result<()> {
 
     for token in tokens {
         match token {
+            tokenizer::Token::CurlyBracketOpen => {
+                eprintln!("{{");
+            }
             tokenizer::Token::FnRef(fn_ref) => match fn_ref.as_str() {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),
