@@ -6,6 +6,7 @@ use std::{
 use clap::Parser;
 
 mod data_stack;
+mod parser;
 mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
@@ -32,16 +33,11 @@ fn main() -> anyhow::Result<()> {
     let mut data_stack = data_stack::DataStack::new();
 
     let tokens = tokenizer::tokenize(&code);
+    let syntax_tree = parser::parse(tokens);
 
-    for token in tokens {
-        match token {
-            tokenizer::Token::CurlyBracketOpen => {
-                eprintln!("{{");
-            }
-            tokenizer::Token::CurlyBracketClose => {
-                eprintln!("}}");
-            }
-            tokenizer::Token::FnRef(fn_ref) => match fn_ref.as_str() {
+    for syntax_element in syntax_tree {
+        match syntax_element {
+            parser::SyntaxElement::FnRef(fn_ref) => match fn_ref.as_str() {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),
                 "+" => {
@@ -58,9 +54,6 @@ fn main() -> anyhow::Result<()> {
                     break;
                 }
             },
-            tokenizer::Token::Symbol(symbol) => {
-                println!("Symbol: {symbol}");
-            }
         }
     }
 
