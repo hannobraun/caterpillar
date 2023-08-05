@@ -1,5 +1,5 @@
 pub struct DataStack {
-    values: Vec<i64>,
+    values: Vec<Number>,
 }
 
 impl DataStack {
@@ -7,11 +7,13 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
-    pub fn push(&mut self, value: i64) {
+    pub fn push(&mut self, value: Number) {
         self.values.push(value)
     }
 
-    pub fn pop(&mut self) -> Option<i64> {
+    pub fn pop(&mut self) -> Option<Number> {
         self.values.pop()
     }
 }
+
+pub type Number = i64;
