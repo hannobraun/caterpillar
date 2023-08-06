@@ -12,8 +12,8 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
         match syntax_element {
             SyntaxElement::FnRef(fn_ref) => {
                 let intrinsic = match functions.resolve(&fn_ref) {
-                    Some(intrinsic) => intrinsic,
-                    None => bail!("Unknown function: `{fn_ref}`"),
+                    Ok(intrinsic) => intrinsic,
+                    Err(_) => bail!("Unknown function: `{fn_ref}`"),
                 };
                 intrinsic(&mut data_stack)?;
             }

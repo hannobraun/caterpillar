@@ -16,12 +16,21 @@ impl Functions {
         Self { inner }
     }
 
-    pub fn resolve(&self, name: &str) -> Option<Intrinsic> {
-        self.inner.get(name).copied()
+    pub fn resolve(&self, name: &str) -> Result<Intrinsic, ResolveError> {
+        self.inner
+            .get(name)
+            .copied()
+            .ok_or(ResolveError { name: name.into() })
     }
 }
 
 pub type Intrinsic = fn(&mut DataStack) -> DataStackResult<()>;
+
+#[derive(Debug, thiserror::Error)]
+#[error("Error resolving function `{name}`")]
+pub struct ResolveError {
+    pub name: String,
+}
 
 fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
     let b = data_stack.pop_number()?;
