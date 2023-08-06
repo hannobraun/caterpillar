@@ -18,16 +18,13 @@ fn parse_syntax_tree(
 ) -> ParserResult<SyntaxTree> {
     let mut syntax_tree = SyntaxTree::new();
 
-    while tokens.peek().is_ok() {
-        match parse_fragment(terminator.clone(), tokens, syntax)? {
-            Some(handle) => {
-                let fragment = syntax.get(handle);
-                syntax_tree.elements.push(fragment);
-            }
-            None => {
-                break;
-            }
-        }
+    let mut current_handle = parse_fragment(terminator, tokens, syntax)?;
+
+    while let Some(handle) = current_handle {
+        let fragment = syntax.get(handle);
+        syntax_tree.elements.push(fragment.clone());
+
+        current_handle = fragment.next;
     }
 
     Ok(syntax_tree)
@@ -38,7 +35,19 @@ fn parse_fragment(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    let next_token = tokens.peek()?;
+    let next_token = match tokens.peek() {
+        Ok(token) => token,
+        Err(err) => {
+            if terminator.is_none() {
+                // If there is no terminator, then not having any more tokens is
+                // not an error condition. We've simply reached the end of the
+                // input.
+                return Ok(None);
+            }
+
+            return Err(err.into());
+        }
+    };
 
     let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
@@ -67,12 +76,10 @@ fn parse_fragment(
         }
     };
 
+    let next = parse_fragment(terminator, tokens, syntax)?;
     let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
-        // This is a placeholder. At some point, this needs to point to the
-        // syntax fragment that comes after this one, if this isn't the last in
-        // the function.
-        next: None,
+        next,
     });
 
     Ok(Some(handle))
