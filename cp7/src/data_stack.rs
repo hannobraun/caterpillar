@@ -2,6 +2,8 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
+use crate::parser::SyntaxTree;
+
 pub struct DataStack {
     values: Vec<Value>,
 }
@@ -39,6 +41,7 @@ impl DataStack {
 #[derive(Debug, EnumVariantType)]
 #[evt(module = "value")]
 pub enum Value {
+    Block(SyntaxTree),
     Number(i64),
     Symbol(String),
 }
@@ -58,6 +61,7 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            Value::Block(block) => write!(f, "{{ {block:?} }}"),
             Value::Number(number) => write!(f, "{number}"),
             Value::Symbol(symbol) => write!(f, ":{symbol}"),
         }
