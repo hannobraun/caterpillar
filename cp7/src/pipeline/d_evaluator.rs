@@ -11,12 +11,12 @@ pub fn evaluate(
     let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
-    evaluate_syntax_tree(start, &syntax, &mut functions, &mut data_stack)?;
+    evaluate_syntax(start, &syntax, &mut functions, &mut data_stack)?;
 
     Ok(())
 }
 
-fn evaluate_syntax_tree(
+fn evaluate_syntax(
     start: Option<SyntaxHandle>,
     syntax: &Syntax,
     functions: &mut Functions,
@@ -50,7 +50,7 @@ fn evaluate_syntax_element(
         SyntaxElement::FnRef(fn_ref) => match functions.resolve(&fn_ref)? {
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
-                evaluate_syntax_tree(body.0, syntax, functions, data_stack)?;
+                evaluate_syntax(body.0, syntax, functions, data_stack)?;
             }
         },
         SyntaxElement::Value(value) => {
