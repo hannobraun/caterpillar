@@ -9,7 +9,8 @@ pub fn run(path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
     let (syntax, start) = c_parser::parse(tokens)?;
 
     if let Some(start) = start {
-        d_evaluator::evaluate(start, syntax)?;
+        let mut evaluator = d_evaluator::Evaluator::new(start);
+        d_evaluator::evaluate_syntax(&mut evaluator, &syntax)?;
     }
 
     Ok(())
