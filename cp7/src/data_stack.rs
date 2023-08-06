@@ -1,5 +1,7 @@
 use std::fmt;
 
+use enum_variant_type::EnumVariantType;
+
 pub struct DataStack {
     values: Vec<Value>,
 }
@@ -19,8 +21,7 @@ impl DataStack {
 
     pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
         let value = self.pop_inner("number")?;
-        let Value::Number(number) = value;
-        Ok(number)
+        Ok(value.try_into().unwrap())
     }
 
     fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
@@ -31,9 +32,10 @@ impl DataStack {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, EnumVariantType)]
+#[evt(module = "value")]
 pub enum Value {
-    Number(value::Number),
+    Number(i64),
 }
 
 impl fmt::Display for Value {
@@ -42,16 +44,6 @@ impl fmt::Display for Value {
             Value::Number(number) => write!(f, "{number}"),
         }
     }
-}
-
-impl From<value::Number> for Value {
-    fn from(number: value::Number) -> Self {
-        Self::Number(number)
-    }
-}
-
-pub mod value {
-    pub type Number = i64;
 }
 
 pub type DataStackResult<T> = Result<T, DataStackError>;

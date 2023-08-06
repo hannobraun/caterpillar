@@ -4,6 +4,7 @@ use std::{
 };
 
 use clap::Parser;
+use data_stack::value;
 
 mod data_stack;
 mod parser;
@@ -41,12 +42,12 @@ fn main() -> anyhow::Result<()> {
                 eprintln!("Block: {block:?}")
             }
             parser::SyntaxElement::FnRef(fn_ref) => match fn_ref.as_str() {
-                "1" => data_stack.push(1),
-                "2" => data_stack.push(2),
+                "1" => data_stack.push(value::Number(1)),
+                "2" => data_stack.push(value::Number(2)),
                 "+" => {
                     let b = data_stack.pop_number()?;
                     let a = data_stack.pop_number()?;
-                    data_stack.push(a + b);
+                    data_stack.push(value::Number(a.0 + b.0));
                 }
                 "print_line" => {
                     let value = data_stack.pop_any()?;
