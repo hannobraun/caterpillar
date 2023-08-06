@@ -23,7 +23,7 @@ impl Functions {
 
 pub type Intrinsic = fn(&mut DataStack) -> DataStackResult<()>;
 
-pub fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
+fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
     let b = data_stack.pop_number()?;
     let a = data_stack.pop_number()?;
 
@@ -32,7 +32,7 @@ pub fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn print_line(data_stack: &mut DataStack) -> DataStackResult<()> {
+fn print_line(data_stack: &mut DataStack) -> DataStackResult<()> {
     let value = data_stack.pop_any()?;
     println!("{value}");
     Ok(())
