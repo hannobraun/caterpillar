@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, thread, time::Duration};
 
 use crate::{
     data_stack::{DataStack, DataStackResult},
@@ -16,6 +16,7 @@ impl Functions {
         let intrinsics = [
             ("+", add as Intrinsic),
             ("clone", clone),
+            ("delay_ms", delay_ms),
             ("print_line", print_line),
             ("fn", fn_),
         ];
@@ -67,6 +68,15 @@ fn clone(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
     data_stack.push(value.clone());
     data_stack.push(value);
 
+    Ok(())
+}
+
+fn delay_ms(
+    _: &mut Functions,
+    data_stack: &mut DataStack,
+) -> DataStackResult<()> {
+    let delay_ms = data_stack.pop_specific::<value::Number>()?;
+    thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
     Ok(())
 }
 
