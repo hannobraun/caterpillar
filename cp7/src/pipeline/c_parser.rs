@@ -45,7 +45,7 @@ fn parse_fragment(
     let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens, syntax)?;
-            SyntaxElement::Value(value::Block(block.first).into())
+            SyntaxElement::Value(value::Block(block).into())
         }
         Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
@@ -81,9 +81,9 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-) -> ParserResult<SyntaxTree> {
+) -> ParserResult<Option<SyntaxHandle>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
-    parse_syntax_tree(Some(Token::CurlyBracketClose), tokens, syntax)
+    parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
