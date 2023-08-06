@@ -8,10 +8,10 @@ mod parser;
 mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
-    let path = args::example()?;
+    let example = args::example()?;
 
     let mut code = String::new();
-    File::open(path)?.read_to_string(&mut code)?;
+    File::open(example)?.read_to_string(&mut code)?;
 
     let mut data_stack = data_stack::DataStack::new();
 
