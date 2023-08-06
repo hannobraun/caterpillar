@@ -10,15 +10,21 @@ pub struct Evaluator {
     data_stack: DataStack,
 }
 
+impl Evaluator {
+    pub fn new() -> Self {
+        Self {
+            functions: Functions::new(),
+            call_stack: CallStack::new(),
+            data_stack: DataStack::new(),
+        }
+    }
+}
+
 pub fn evaluate(
     start: Option<SyntaxHandle>,
     syntax: Syntax,
 ) -> anyhow::Result<()> {
-    let mut evaluator = Evaluator {
-        functions: Functions::new(),
-        call_stack: CallStack::new(),
-        data_stack: DataStack::new(),
-    };
+    let mut evaluator = Evaluator::new();
 
     if let Some(start) = start {
         evaluator.call_stack.push(start);
