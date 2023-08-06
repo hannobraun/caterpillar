@@ -1,6 +1,6 @@
 use crate::{
-    data_stack::DataStack,
     functions::{Function, Functions},
+    runtime::data_stack::DataStack,
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };
 

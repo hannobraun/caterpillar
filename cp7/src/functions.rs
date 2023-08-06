@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, thread, time::Duration};
 
 use crate::{
-    data_stack::{DataStack, DataStackResult},
+    runtime::data_stack::{DataStack, DataStackResult},
     value,
 };
 
