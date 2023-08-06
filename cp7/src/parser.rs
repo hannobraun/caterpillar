@@ -1,4 +1,7 @@
-use crate::tokenizer::{token, NoMoreTokens, Token, Tokens};
+use crate::{
+    data_stack::{value, Value},
+    tokenizer::{token, NoMoreTokens, Token, Tokens},
+};
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
     let mut syntax_elements = Vec::new();
@@ -20,7 +23,7 @@ fn parse_syntax_element(
     match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens)?;
-            Ok(SyntaxElement::Block(block))
+            Ok(SyntaxElement::Value(value::Block(block).into()))
         }
         Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
@@ -28,7 +31,7 @@ fn parse_syntax_element(
         }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
-            Ok(SyntaxElement::Symbol(symbol))
+            Ok(SyntaxElement::Value(value::Symbol(symbol).into()))
         }
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
@@ -84,9 +87,8 @@ pub struct SyntaxTree {
 
 #[derive(Debug)]
 pub enum SyntaxElement {
-    Block(SyntaxTree),
     FnRef(String),
-    Symbol(String),
+    Value(Value),
 }
 
 pub type ParserResult<T> = Result<T, ParserError>;
