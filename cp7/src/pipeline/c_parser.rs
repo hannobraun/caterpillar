@@ -9,8 +9,8 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
     let mut syntax_tree = SyntaxTree::new();
 
     while let Ok(token) = tokens.peek() {
-        let handle = parse_fragment(token, None, &mut tokens, &mut syntax)?;
-        let handle = handle.unwrap();
+        let handle = parse_fragment(token, None, &mut tokens, &mut syntax)?
+            .ok_or(NoMoreTokens)?;
         let fragment = syntax.get(handle);
         syntax_tree.elements.push(fragment);
     }
@@ -81,8 +81,8 @@ fn parse_block(
                     Some(Token::CurlyBracketClose),
                     tokens,
                     syntax,
-                )?;
-                let handle = handle.unwrap();
+                )?
+                .ok_or(NoMoreTokens)?;
                 let fragment = syntax.get(handle);
                 syntax_tree.elements.push(fragment);
             }
