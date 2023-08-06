@@ -9,7 +9,8 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
     let mut syntax_tree = SyntaxTree::new();
 
     while let Ok(token) = tokens.peek() {
-        let handle = parse_fragment(token, &mut tokens, &mut syntax)?;
+        let handle = parse_fragment(token, None, &mut tokens, &mut syntax)?;
+        let handle = handle.unwrap();
         let fragment = syntax.get(handle);
         syntax_tree.elements.push(fragment);
     }
@@ -19,9 +20,10 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
 
 fn parse_fragment(
     next_token: Token,
+    terminator: Option<Token>,
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-) -> ParserResult<SyntaxHandle> {
+) -> ParserResult<Option<SyntaxHandle>> {
     let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens, syntax)?;
@@ -40,6 +42,10 @@ fn parse_fragment(
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
+            if Some(&token) == terminator.as_ref() {
+                return Ok(None);
+            }
+
             return Err(ParserError::UnexpectedToken { actual: token });
         }
     };
@@ -52,7 +58,7 @@ fn parse_fragment(
         next: None,
     });
 
-    Ok(handle)
+    Ok(Some(handle))
 }
 
 fn parse_block(
@@ -70,7 +76,13 @@ fn parse_block(
                 break;
             }
             token => {
-                let handle = parse_fragment(token, tokens, syntax)?;
+                let handle = parse_fragment(
+                    token,
+                    Some(Token::CurlyBracketClose),
+                    tokens,
+                    syntax,
+                )?;
+                let handle = handle.unwrap();
                 let fragment = syntax.get(handle);
                 syntax_tree.elements.push(fragment);
             }
