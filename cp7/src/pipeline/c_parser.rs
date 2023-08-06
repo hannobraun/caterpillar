@@ -1,6 +1,6 @@
 use crate::{
-    data_stack::{value, Value},
     pipeline::b_tokenizer::{token, NoMoreTokens, Token, Tokens},
+    value::{self, Value},
 };
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
@@ -23,7 +23,7 @@ fn parse_syntax_element(
     match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens)?;
-            Ok(SyntaxElement::Value(value::Block(block).into()))
+            Ok(SyntaxElement::Value(value::value::Block(block).into()))
         }
         Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
@@ -35,7 +35,7 @@ fn parse_syntax_element(
         }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
-            Ok(SyntaxElement::Value(value::Symbol(symbol).into()))
+            Ok(SyntaxElement::Value(value::value::Symbol(symbol).into()))
         }
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
