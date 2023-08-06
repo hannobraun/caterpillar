@@ -1,4 +1,4 @@
-use crate::value::{self, TypeError, Value};
+use crate::value::{Type, TypeError, Value};
 
 pub struct DataStack {
     values: Vec<Value>,
@@ -17,12 +17,9 @@ impl DataStack {
         self.pop_inner("any value")
     }
 
-    pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
-        let ty = "number";
-
-        let value = self.pop_inner(ty)?;
-        let number = value.expect(ty)?;
-
+    pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {
+        let value = self.pop_inner(T::NAME)?;
+        let number = value.expect(T::NAME)?;
         Ok(number)
     }
 

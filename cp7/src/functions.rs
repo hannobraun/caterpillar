@@ -39,8 +39,8 @@ pub struct ResolveError {
 }
 
 fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
-    let b = data_stack.pop_number()?;
-    let a = data_stack.pop_number()?;
+    let b = data_stack.pop_specific::<value::Number>()?;
+    let a = data_stack.pop_specific::<value::Number>()?;
 
     data_stack.push(value::Number(a.0 + b.0));
 
