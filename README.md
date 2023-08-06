@@ -7,7 +7,7 @@ programming.
 
 ## Status & Organization
 
-Caterpillar is still in a state of early exploration. It's far off from being
+Caterpillar is still in a state of early exploration. It's far from being
 usable for anything yet.
 
 The project is organized as a series of prototypes, each labeled `cp<n>`, where
