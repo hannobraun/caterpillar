@@ -51,7 +51,7 @@ fn evaluate_syntax(
                     Function::UserDefined { body } => {
                         if let Some(body) = body.0 {
                             evaluator.call_stack.push(body);
-                            evaluate_syntax(evaluator, syntax)?;
+                            continue;
                         }
                     }
                 }
