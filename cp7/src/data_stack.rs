@@ -39,7 +39,7 @@ impl DataStack {
 }
 
 #[derive(Debug, EnumVariantType)]
-#[evt(module = "value")]
+#[evt(module = "value", derive(Debug))]
 pub enum Value {
     Block(SyntaxTree),
     Number(i64),
