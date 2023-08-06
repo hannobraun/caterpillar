@@ -45,7 +45,7 @@ impl Tokens {
     }
 }
 
-#[derive(Clone, Debug, EnumVariantType)]
+#[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(module = "token")]
 pub enum Token {
     CurlyBracketOpen,
