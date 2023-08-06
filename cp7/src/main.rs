@@ -56,7 +56,7 @@ fn main() -> anyhow::Result<()> {
                 }
             },
             parser::SyntaxElement::Value(value) => {
-                eprintln!("Value: {value}")
+                data_stack.push(value);
             }
         }
     }
