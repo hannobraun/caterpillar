@@ -23,12 +23,12 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, syntax: &Syntax) -> Result<bool, EvaluatorError> {
-        let fragment = match self.call_stack.current() {
+        let syntax_fragment = match self.call_stack.current() {
             Some(handle) => syntax.get(handle),
             None => return Ok(false),
         };
 
-        match fragment.payload {
+        match syntax_fragment.payload {
             SyntaxElement::FnRef(fn_ref) => {
                 match self.functions.resolve(&fn_ref)? {
                     Function::Intrinsic(intrinsic) => {
@@ -47,7 +47,7 @@ impl Evaluator {
             }
         };
 
-        match fragment.next {
+        match syntax_fragment.next {
             Some(handle) => {
                 self.call_stack.update(handle);
             }
