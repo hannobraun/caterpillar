@@ -23,7 +23,7 @@ impl DataStack {
         let ty = "number";
 
         let value = self.pop_inner(ty)?;
-        let number = value.expect()?;
+        let number = value.expect(ty)?;
 
         Ok(number)
     }
@@ -43,12 +43,14 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn expect<T>(self) -> DataStackResult<T>
+    pub fn expect<T>(self, expected: &'static str) -> DataStackResult<T>
     where
-        T: TryFrom<Value>,
-        <T as TryFrom<Value>>::Error: fmt::Debug,
+        T: TryFrom<Value, Error = Value>,
     {
-        Ok(self.try_into().unwrap())
+        self.try_into().map_err(|value| DataStackError {
+            kind: DataStackErrorKind::UnexpectedValue(value),
+            expected,
+        })
     }
 }
 
@@ -74,6 +76,9 @@ impl fmt::Display for DataStackError {
             DataStackErrorKind::StackIsEmpty => {
                 write!(f, "Stack is empty")?;
             }
+            DataStackErrorKind::UnexpectedValue(value) => {
+                writeln!(f, "Unexpected value: {value}")?;
+            }
         }
 
         writeln!(f, " (expected {})", self.expected)
@@ -83,4 +88,5 @@ impl fmt::Display for DataStackError {
 #[derive(Debug)]
 pub enum DataStackErrorKind {
     StackIsEmpty,
+    UnexpectedValue(Value),
 }
