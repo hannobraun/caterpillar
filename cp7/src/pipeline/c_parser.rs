@@ -6,21 +6,15 @@ use crate::{
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
     let mut syntax = Syntax::new();
-    let syntax_tree = parse_syntax_tree(None, &mut tokens, &mut syntax)?;
+    let syntax_tree = {
+        let current_handle = parse_fragment(None, &mut tokens, &mut syntax)?;
+
+        SyntaxTree {
+            first: current_handle,
+        }
+    };
 
     Ok((syntax, syntax_tree))
-}
-
-fn parse_syntax_tree(
-    terminator: Option<Token>,
-    tokens: &mut Tokens,
-    syntax: &mut Syntax,
-) -> ParserResult<SyntaxTree> {
-    let current_handle = parse_fragment(terminator, tokens, syntax)?;
-
-    Ok(SyntaxTree {
-        first: current_handle,
-    })
 }
 
 fn parse_fragment(
