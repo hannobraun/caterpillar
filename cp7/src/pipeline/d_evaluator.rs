@@ -1,6 +1,9 @@
 use crate::{
-    functions::{Function, Functions},
-    runtime::{call_stack::CallStack, data_stack::DataStack},
+    functions::{Function, Functions, ResolveError},
+    runtime::{
+        call_stack::CallStack,
+        data_stack::{DataStack, DataStackError},
+    },
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };
 
@@ -23,7 +26,7 @@ impl Evaluator {
         &mut self,
         handle: SyntaxHandle,
         syntax: &Syntax,
-    ) -> anyhow::Result<()> {
+    ) -> Result<(), EvaluatorError> {
         let fragment = syntax.get(handle);
 
         match fragment.payload {
@@ -67,4 +70,13 @@ pub fn evaluate_syntax(
     }
 
     Ok(())
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum EvaluatorError {
+    #[error("Error operating data stack")]
+    DataStack(#[from] DataStackError),
+
+    #[error("Error resolving function")]
+    ResolveFunction(#[from] ResolveError),
 }
