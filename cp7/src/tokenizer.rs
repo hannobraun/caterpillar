@@ -28,7 +28,7 @@ fn tokenize_token(token: &str) -> Token {
 }
 
 pub struct Tokens {
-    pub inner: VecDeque<Token>,
+    inner: VecDeque<Token>,
 }
 
 impl Tokens {
