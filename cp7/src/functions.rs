@@ -13,8 +13,11 @@ impl Functions {
     pub fn new() -> Self {
         let mut inner = BTreeMap::new();
 
-        inner.insert("+", Function::Intrinsic(add));
-        inner.insert("print_line", Function::Intrinsic(print_line));
+        let intrinsics = [("+", add as Intrinsic), ("print_line", print_line)];
+
+        for (name, intrinsic) in intrinsics {
+            inner.insert(name, Function::Intrinsic(intrinsic));
+        }
 
         Self { inner }
     }
