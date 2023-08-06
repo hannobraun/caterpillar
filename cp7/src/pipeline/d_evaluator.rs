@@ -18,6 +18,44 @@ impl Evaluator {
             data_stack: DataStack::new(),
         }
     }
+
+    pub fn step(
+        &mut self,
+        handle: SyntaxHandle,
+        syntax: &Syntax,
+    ) -> anyhow::Result<()> {
+        let fragment = syntax.get(handle);
+
+        match fragment.payload {
+            SyntaxElement::FnRef(fn_ref) => {
+                match self.functions.resolve(&fn_ref)? {
+                    Function::Intrinsic(intrinsic) => {
+                        intrinsic(&mut self.functions, &mut self.data_stack)?
+                    }
+                    Function::UserDefined { body } => {
+                        if let Some(body) = body.0 {
+                            self.call_stack.push(body);
+                            return Ok(());
+                        }
+                    }
+                }
+            }
+            SyntaxElement::Value(value) => {
+                self.data_stack.push(value);
+            }
+        };
+
+        match fragment.next {
+            Some(handle) => {
+                self.call_stack.update(handle);
+            }
+            None => {
+                self.call_stack.pop();
+            }
+        }
+
+        Ok(())
+    }
 }
 
 pub fn evaluate_syntax(
@@ -25,36 +63,7 @@ pub fn evaluate_syntax(
     syntax: &Syntax,
 ) -> anyhow::Result<()> {
     while let Some(handle) = evaluator.call_stack.current() {
-        let fragment = syntax.get(handle);
-
-        match fragment.payload {
-            SyntaxElement::FnRef(fn_ref) => {
-                match evaluator.functions.resolve(&fn_ref)? {
-                    Function::Intrinsic(intrinsic) => intrinsic(
-                        &mut evaluator.functions,
-                        &mut evaluator.data_stack,
-                    )?,
-                    Function::UserDefined { body } => {
-                        if let Some(body) = body.0 {
-                            evaluator.call_stack.push(body);
-                            continue;
-                        }
-                    }
-                }
-            }
-            SyntaxElement::Value(value) => {
-                evaluator.data_stack.push(value);
-            }
-        };
-
-        match fragment.next {
-            Some(handle) => {
-                evaluator.call_stack.update(handle);
-            }
-            None => {
-                evaluator.call_stack.pop();
-            }
-        }
+        evaluator.step(handle, syntax)?;
     }
 
     Ok(())
