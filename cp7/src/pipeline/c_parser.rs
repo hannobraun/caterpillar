@@ -1,20 +1,15 @@
 use crate::{
     pipeline::b_tokenizer::{token, NoMoreTokens, Token, Tokens},
-    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxTree},
+    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
 
-pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
+pub fn parse(
+    mut tokens: Tokens,
+) -> ParserResult<(Syntax, Option<SyntaxHandle>)> {
     let mut syntax = Syntax::new();
-    let syntax_tree = {
-        let current_handle = parse_fragment(None, &mut tokens, &mut syntax)?;
-
-        SyntaxTree {
-            first: current_handle,
-        }
-    };
-
-    Ok((syntax, syntax_tree))
+    let start = parse_fragment(None, &mut tokens, &mut syntax)?;
+    Ok((syntax, start))
 }
 
 fn parse_fragment(
