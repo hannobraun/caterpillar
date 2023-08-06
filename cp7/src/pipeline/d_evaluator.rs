@@ -30,9 +30,9 @@ fn evaluate_syntax(
     call_stack: &mut CallStack,
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
-    let mut next_handle = start;
+    call_stack.current = start;
 
-    while let Some(handle) = next_handle {
+    while let Some(handle) = call_stack.current {
         let fragment = syntax.get(handle);
 
         evaluate_syntax_element(
@@ -43,7 +43,7 @@ fn evaluate_syntax(
             data_stack,
         )?;
 
-        next_handle = fragment.next;
+        call_stack.current = fragment.next;
     }
 
     Ok(())
