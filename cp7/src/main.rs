@@ -37,6 +37,9 @@ fn main() -> anyhow::Result<()> {
 
     for syntax_element in syntax_tree {
         match syntax_element {
+            parser::SyntaxElement::Block(block) => {
+                eprintln!("Block: {block:?}")
+            }
             parser::SyntaxElement::FnRef(fn_ref) => match fn_ref.as_str() {
                 "1" => data_stack.push(1),
                 "2" => data_stack.push(2),

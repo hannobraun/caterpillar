@@ -16,7 +16,10 @@ fn parse_syntax_element(
     tokens: &mut Tokens,
 ) -> ParserResult<SyntaxElement> {
     match next_token {
-        Token::CurlyBracketOpen => panic!("Parsing block not supported"),
+        Token::CurlyBracketOpen => {
+            let block = parse_block(tokens)?;
+            Ok(SyntaxElement::Block(block))
+        }
         Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
             Ok(SyntaxElement::FnRef(fn_ref))
@@ -27,6 +30,27 @@ fn parse_syntax_element(
         }
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
+}
+
+fn parse_block(tokens: &mut Tokens) -> ParserResult<Vec<SyntaxElement>> {
+    expect::<token::CurlyBracketOpen>(tokens)?;
+
+    let mut syntax_elements = Vec::new();
+
+    loop {
+        match tokens.peek()? {
+            Token::CurlyBracketClose => {
+                tokens.next()?; // only peeked before; still need to consume
+                break;
+            }
+            token => {
+                let syntax_element = parse_syntax_element(token, tokens)?;
+                syntax_elements.push(syntax_element);
+            }
+        }
+    }
+
+    Ok(syntax_elements)
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
@@ -51,6 +75,7 @@ where
 
 #[derive(Debug)]
 pub enum SyntaxElement {
+    Block(Vec<SyntaxElement>),
     FnRef(String),
     Symbol(String),
 }
