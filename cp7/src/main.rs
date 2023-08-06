@@ -6,12 +6,13 @@ use std::{
 use clap::Parser;
 use data_stack::value;
 
+mod args;
 mod data_stack;
 mod parser;
 mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
-    let args = Args::parse();
+    let args = args::Args::parse();
 
     let example_dir = "cp7/examples";
     let path = if let Some(example) = args.example {
@@ -60,9 +61,4 @@ fn main() -> anyhow::Result<()> {
     }
 
     Ok(())
-}
-
-#[derive(clap::Parser)]
-pub struct Args {
-    pub example: Option<String>,
 }
