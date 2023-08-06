@@ -22,18 +22,7 @@ fn parse_fragment(
     next_token: Token,
     tokens: &mut Tokens,
 ) -> ParserResult<SyntaxFragment> {
-    let syntax_element = parse_syntax_element(next_token, tokens)?;
-
-    Ok(SyntaxFragment {
-        payload: syntax_element,
-    })
-}
-
-fn parse_syntax_element(
-    next_token: Token,
-    tokens: &mut Tokens,
-) -> ParserResult<SyntaxElement> {
-    match next_token {
+    let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens)?;
             Ok(SyntaxElement::Value(value::Block(block).into()))
@@ -51,7 +40,11 @@ fn parse_syntax_element(
             Ok(SyntaxElement::Value(value::Symbol(symbol).into()))
         }
         token => Err(ParserError::UnexpectedToken { actual: token }),
-    }
+    }?;
+
+    Ok(SyntaxFragment {
+        payload: syntax_element,
+    })
 }
 
 fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
