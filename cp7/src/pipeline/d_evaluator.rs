@@ -1,19 +1,17 @@
 use crate::{
     data_stack::DataStack,
     functions::{Function, Functions},
-    syntax::{Syntax, SyntaxElement, SyntaxHandle, SyntaxTree},
+    syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };
 
-pub fn evaluate(syntax: Syntax, syntax_tree: SyntaxTree) -> anyhow::Result<()> {
+pub fn evaluate(
+    start: Option<SyntaxHandle>,
+    syntax: Syntax,
+) -> anyhow::Result<()> {
     let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
-    evaluate_syntax_tree(
-        syntax_tree.first,
-        &syntax,
-        &mut functions,
-        &mut data_stack,
-    )?;
+    evaluate_syntax_tree(start, &syntax, &mut functions, &mut data_stack)?;
 
     Ok(())
 }
