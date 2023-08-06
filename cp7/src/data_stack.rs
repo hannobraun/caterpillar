@@ -21,7 +21,7 @@ impl DataStack {
 
     pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
         let value = self.pop_inner("number")?;
-        let number = value.expect();
+        let number = value.expect()?;
         Ok(number)
     }
 
@@ -40,12 +40,12 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn expect<T>(self) -> T
+    pub fn expect<T>(self) -> DataStackResult<T>
     where
         T: TryFrom<Value>,
         <T as TryFrom<Value>>::Error: fmt::Debug,
     {
-        self.try_into().unwrap()
+        Ok(self.try_into().unwrap())
     }
 }
 
