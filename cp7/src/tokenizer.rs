@@ -32,12 +32,12 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn peek(&self) -> Option<Token> {
-        self.inner.front().cloned()
+    pub fn peek(&self) -> Result<Token, NoMoreTokens> {
+        self.inner.front().cloned().ok_or(NoMoreTokens)
     }
 
-    pub fn next(&mut self) -> Option<Token> {
-        self.inner.pop_front()
+    pub fn next(&mut self) -> Result<Token, NoMoreTokens> {
+        self.inner.pop_front().ok_or(NoMoreTokens)
     }
 }
 
@@ -48,3 +48,6 @@ pub enum Token {
     FnRef(String),
     Symbol(String),
 }
+
+#[derive(Debug)]
+pub struct NoMoreTokens;
