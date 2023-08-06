@@ -1,3 +1,5 @@
+use anyhow::bail;
+
 use crate::data_stack::{value, DataStack};
 
 use super::c_parser::{SyntaxElement, SyntaxTree};
@@ -18,8 +20,7 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
                     println!("{value}");
                 }
                 fn_ref => {
-                    eprintln!("Unknown function: `{fn_ref}`");
-                    break;
+                    bail!("Unknown function: `{fn_ref}`");
                 }
             },
             SyntaxElement::Value(value) => {
