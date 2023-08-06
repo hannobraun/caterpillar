@@ -35,8 +35,7 @@ fn evaluate_syntax_element(
         SyntaxElement::FnRef(fn_ref) => match functions.resolve(&fn_ref)? {
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
-                eprintln!("User-defined function: {body:?}");
-                panic!("Evaluating user-defined function not supported");
+                evaluate_syntax_tree(body.0.clone(), functions, data_stack)?;
             }
         },
         SyntaxElement::Value(value) => {
