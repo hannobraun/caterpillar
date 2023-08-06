@@ -42,15 +42,7 @@ pub struct SyntaxHandle {
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree {
-    pub elements: Vec<SyntaxFragment>,
-}
-
-impl SyntaxTree {
-    pub fn new() -> Self {
-        Self {
-            elements: Vec::new(),
-        }
-    }
+    pub first: Option<SyntaxHandle>,
 }
 
 #[derive(Clone, Debug)]

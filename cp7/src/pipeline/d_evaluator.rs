@@ -24,13 +24,19 @@ fn evaluate_syntax_tree(
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
-    for fragment in syntax_tree.elements {
+    let mut next_handle = syntax_tree.first;
+
+    while let Some(handle) = next_handle {
+        let fragment = syntax.get(handle);
+
         evaluate_syntax_element(
             syntax,
             fragment.payload,
             functions,
             data_stack,
         )?;
+
+        next_handle = fragment.next;
     }
 
     Ok(())

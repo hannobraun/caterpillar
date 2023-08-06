@@ -16,18 +16,11 @@ fn parse_syntax_tree(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<SyntaxTree> {
-    let mut syntax_tree = SyntaxTree::new();
+    let current_handle = parse_fragment(terminator, tokens, syntax)?;
 
-    let mut current_handle = parse_fragment(terminator, tokens, syntax)?;
-
-    while let Some(handle) = current_handle {
-        let fragment = syntax.get(handle);
-        syntax_tree.elements.push(fragment.clone());
-
-        current_handle = fragment.next;
-    }
-
-    Ok(syntax_tree)
+    Ok(SyntaxTree {
+        first: current_handle,
+    })
 }
 
 fn parse_fragment(
