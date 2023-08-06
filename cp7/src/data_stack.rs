@@ -50,11 +50,9 @@ impl Value {
     where
         T: TryFrom<Value, Error = Value>,
     {
-        self.try_into()
-            .map_err(|value| DataStackError::UnexpectedValue {
-                value,
-                expected,
-            })
+        self.try_into().map_err(|value| {
+            DataStackError::UnexpectedValue(TypeError { value, expected })
+        })
     }
 }
 
@@ -68,6 +66,13 @@ impl fmt::Display for Value {
     }
 }
 
+#[derive(Debug, thiserror::Error)]
+#[error("Expected {expected}, found `{value}`")]
+pub struct TypeError {
+    pub value: Value,
+    pub expected: &'static str,
+}
+
 pub type DataStackResult<T> = Result<T, DataStackError>;
 
 #[derive(Debug, thiserror::Error)]
@@ -75,9 +80,6 @@ pub enum DataStackError {
     #[error("Stack is empty (expected {expected})")]
     StackIsEmpty { expected: &'static str },
 
-    #[error("Unexpected value: {value} (expected {expected})")]
-    UnexpectedValue {
-        value: Value,
-        expected: &'static str,
-    },
+    #[error("Unexpected value")]
+    UnexpectedValue(#[from] TypeError),
 }
