@@ -25,10 +25,12 @@ impl DataStack {
     }
 
     fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
-        self.values.pop().ok_or(DataStackError {
+        let value = self.values.pop().ok_or(DataStackError {
             kind: DataStackErrorKind::StackIsEmpty,
             expected,
-        })
+        })?;
+
+        Ok(value)
     }
 }
 
