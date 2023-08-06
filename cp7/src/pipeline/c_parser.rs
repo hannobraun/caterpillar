@@ -18,8 +18,8 @@ fn parse_syntax_tree(
 ) -> ParserResult<SyntaxTree> {
     let mut syntax_tree = SyntaxTree::new();
 
-    while let Ok(token) = tokens.peek() {
-        let handle = parse_fragment(token, terminator.clone(), tokens, syntax)?
+    while tokens.peek().is_ok() {
+        let handle = parse_fragment(terminator.clone(), tokens, syntax)?
             .ok_or(NoMoreTokens)?;
         let fragment = syntax.get(handle);
         syntax_tree.elements.push(fragment);
@@ -29,12 +29,11 @@ fn parse_syntax_tree(
 }
 
 fn parse_fragment(
-    next_token: Token,
     terminator: Option<Token>,
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    let syntax_element = match next_token {
+    let syntax_element = match tokens.peek()? {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens, syntax)?;
             SyntaxElement::Value(value::Block(block).into())
@@ -85,9 +84,8 @@ fn parse_block(
                 tokens.next()?; // only peeked before; still need to consume
                 break;
             }
-            token => {
+            _ => {
                 let handle = parse_fragment(
-                    token,
                     Some(Token::CurlyBracketClose),
                     tokens,
                     syntax,
