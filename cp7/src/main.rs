@@ -8,7 +8,7 @@ fn main() -> anyhow::Result<()> {
     let example = args::example()?;
 
     let code = pipeline::a_loader::load(example)?;
-    let tokens = pipeline::tokenizer::tokenize(&code);
+    let tokens = pipeline::b_tokenizer::tokenize(&code);
     let syntax_tree = pipeline::parser::parse(tokens)?;
 
     let mut data_stack = data_stack::DataStack::new();
