@@ -4,20 +4,24 @@ use crate::value::Value;
 
 pub struct Syntax {
     inner: HashMap<SyntaxHandle, SyntaxFragment>,
+    next_id: u64,
 }
 
 impl Syntax {
     pub fn new() -> Self {
         Self {
             inner: HashMap::new(),
+            next_id: 0,
         }
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
-        // This is a placeholder. Eventually, we need to add a hash that
-        // uniquely addresses the fragment.
-        let handle = SyntaxHandle {};
+        let id = self.next_id;
+        self.next_id += 1;
+
+        let handle = SyntaxHandle { id };
         self.inner.insert(handle, fragment);
+
         handle
     }
 
@@ -29,7 +33,12 @@ impl Syntax {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct SyntaxHandle {}
+pub struct SyntaxHandle {
+    // Eventually, this should be a hash of the `SyntaxFragment` that the handle
+    // references, thereby making `SyntaxFragment` content-addressed. For now, a
+    // simple unique ID will do.
+    id: u64,
+}
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree {
