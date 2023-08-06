@@ -8,4 +8,8 @@ impl CallStack {
     pub fn new(start: Option<SyntaxHandle>) -> Self {
         Self { current: start }
     }
+
+    pub fn current(&self) -> Option<SyntaxHandle> {
+        self.current
+    }
 }

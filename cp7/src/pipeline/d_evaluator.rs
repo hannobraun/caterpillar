@@ -32,7 +32,7 @@ fn evaluate_syntax(
 ) -> anyhow::Result<()> {
     call_stack.current = start;
 
-    while let Some(handle) = call_stack.current {
+    while let Some(handle) = call_stack.current() {
         let fragment = syntax.get(handle);
 
         evaluate_syntax_element(
