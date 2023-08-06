@@ -2,7 +2,7 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use crate::parser::SyntaxTree;
+use crate::pipeline::parser::SyntaxTree;
 
 pub struct DataStack {
     values: Vec<Value>,

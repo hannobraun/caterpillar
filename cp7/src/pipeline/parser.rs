@@ -1,6 +1,6 @@
 use crate::{
     data_stack::{value, Value},
-    tokenizer::{token, NoMoreTokens, Token, Tokens},
+    pipeline::tokenizer::{token, NoMoreTokens, Token, Tokens},
 };
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
