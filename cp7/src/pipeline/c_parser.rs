@@ -5,16 +5,16 @@ use crate::{
 };
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
-    let mut syntax_elements = Vec::new();
+    let mut syntax_tree = SyntaxTree {
+        elements: Vec::new(),
+    };
 
     while let Ok(token) = tokens.peek() {
         let syntax_element = parse_syntax_element(token.clone(), &mut tokens)?;
-        syntax_elements.push(syntax_element);
+        syntax_tree.elements.push(syntax_element);
     }
 
-    Ok(SyntaxTree {
-        elements: syntax_elements,
-    })
+    Ok(syntax_tree)
 }
 
 fn parse_syntax_element(
@@ -45,7 +45,9 @@ fn parse_syntax_element(
 fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
     expect::<token::CurlyBracketOpen>(tokens)?;
 
-    let mut syntax_elements = Vec::new();
+    let mut syntax_tree = SyntaxTree {
+        elements: Vec::new(),
+    };
 
     loop {
         match tokens.peek()? {
@@ -55,14 +57,12 @@ fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
             }
             token => {
                 let syntax_element = parse_syntax_element(token, tokens)?;
-                syntax_elements.push(syntax_element);
+                syntax_tree.elements.push(syntax_element);
             }
         }
     }
 
-    Ok(SyntaxTree {
-        elements: syntax_elements,
-    })
+    Ok(syntax_tree)
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
