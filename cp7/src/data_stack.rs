@@ -46,13 +46,12 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn expect<T>(self, expected: &'static str) -> DataStackResult<T>
+    pub fn expect<T>(self, expected: &'static str) -> Result<T, TypeError>
     where
         T: TryFrom<Value, Error = Value>,
     {
-        self.try_into().map_err(|value| {
-            DataStackError::UnexpectedValue(TypeError { value, expected })
-        })
+        self.try_into()
+            .map_err(|value| TypeError { value, expected })
     }
 }
 
