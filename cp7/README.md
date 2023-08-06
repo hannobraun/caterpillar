@@ -10,7 +10,7 @@ Check out the top-level README in this repository for more info.
 Previous prototypes have explored various aspects of the language design, with
 various levels of success. I think the project, along with my understanding of
 what I'd like to achieve, have reached a point where it's viable to try and get
-a less ambitious to a usable level.
+a less ambitious prototype to a usable level.
 
 The objective of this prototype is to implement a practical language that allows
 for exploring Caterpillar's core concept, interactive programming, while keeping
