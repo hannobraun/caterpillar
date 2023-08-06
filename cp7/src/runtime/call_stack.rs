@@ -16,7 +16,7 @@ impl CallStack {
     pub fn update(&mut self, next: SyntaxHandle) {
         match self.frames.last_mut() {
             Some(current) => *current = next,
-            None => self.frames.push(next),
+            None => self.push(next),
         }
     }
 
