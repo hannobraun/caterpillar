@@ -10,7 +10,7 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
 
     while let Ok(token) = tokens.peek() {
         let fragment = parse_fragment(token, &mut tokens, &mut syntax)?;
-        syntax_tree.elements.push(fragment.clone());
+        syntax_tree.elements.push(fragment);
     }
 
     Ok((syntax, syntax_tree))
