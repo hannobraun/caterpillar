@@ -9,7 +9,7 @@ pub fn evaluate(
     syntax: Syntax,
 ) -> anyhow::Result<()> {
     let mut functions = Functions::new();
-    let mut call_stack = CallStack::new();
+    let mut call_stack = CallStack::new(start);
     let mut data_stack = DataStack::new();
 
     evaluate_syntax(

@@ -5,7 +5,7 @@ pub struct CallStack {
 }
 
 impl CallStack {
-    pub fn new() -> Self {
-        Self { current: None }
+    pub fn new(start: Option<SyntaxHandle>) -> Self {
+        Self { current: start }
     }
 }
