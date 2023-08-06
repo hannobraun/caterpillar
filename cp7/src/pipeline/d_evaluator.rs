@@ -34,13 +34,26 @@ fn evaluate_syntax(
     while let Some(handle) = call_stack.current() {
         let fragment = syntax.get(handle);
 
-        evaluate_syntax_element(
-            fragment.payload,
-            syntax,
-            functions,
-            call_stack,
-            data_stack,
-        )?;
+        match fragment.payload {
+            SyntaxElement::FnRef(fn_ref) => {
+                match functions.resolve(&fn_ref)? {
+                    Function::Intrinsic(intrinsic) => {
+                        intrinsic(functions, data_stack)?
+                    }
+                    Function::UserDefined { body } => {
+                        if let Some(body) = body.0 {
+                            call_stack.push(body);
+                            evaluate_syntax(
+                                syntax, functions, call_stack, data_stack,
+                            )?;
+                        }
+                    }
+                }
+            }
+            SyntaxElement::Value(value) => {
+                data_stack.push(value);
+            }
+        };
 
         match fragment.next {
             Some(handle) => {
@@ -49,31 +62,6 @@ fn evaluate_syntax(
             None => {
                 call_stack.pop();
             }
-        }
-    }
-
-    Ok(())
-}
-
-fn evaluate_syntax_element(
-    syntax_element: SyntaxElement,
-    syntax: &Syntax,
-    functions: &mut Functions,
-    call_stack: &mut CallStack,
-    data_stack: &mut DataStack,
-) -> anyhow::Result<()> {
-    match syntax_element {
-        SyntaxElement::FnRef(fn_ref) => match functions.resolve(&fn_ref)? {
-            Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
-            Function::UserDefined { body } => {
-                if let Some(body) = body.0 {
-                    call_stack.push(body);
-                    evaluate_syntax(syntax, functions, call_stack, data_stack)?;
-                }
-            }
-        },
-        SyntaxElement::Value(value) => {
-            data_stack.push(value);
         }
     }
 
