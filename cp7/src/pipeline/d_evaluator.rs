@@ -1,4 +1,7 @@
-use crate::{data_stack::DataStack, functions::Functions};
+use crate::{
+    data_stack::DataStack,
+    functions::{Function, Functions},
+};
 
 use super::c_parser::{SyntaxElement, SyntaxTree};
 
@@ -9,7 +12,8 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
     for syntax_element in syntax_tree.elements {
         match syntax_element {
             SyntaxElement::FnRef(fn_ref) => {
-                let intrinsic = functions.resolve(&fn_ref)?;
+                let Function::Intrinsic(intrinsic) =
+                    functions.resolve(&fn_ref)?;
                 intrinsic(&mut data_stack)?;
             }
             SyntaxElement::Value(value) => {

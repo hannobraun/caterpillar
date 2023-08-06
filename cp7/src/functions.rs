@@ -3,24 +3,28 @@ use std::collections::BTreeMap;
 use crate::data_stack::{value, DataStack, DataStackResult};
 
 pub struct Functions {
-    inner: BTreeMap<&'static str, Intrinsic>,
+    inner: BTreeMap<&'static str, Function>,
 }
 
 impl Functions {
     pub fn new() -> Self {
         let mut inner = BTreeMap::new();
 
-        inner.insert("+", add as Intrinsic);
-        inner.insert("print_line", print_line);
+        inner.insert("+", Function::Intrinsic(add));
+        inner.insert("print_line", Function::Intrinsic(print_line));
 
         Self { inner }
     }
 
-    pub fn resolve(&self, name: &str) -> Result<&Intrinsic, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<&Function, ResolveError> {
         self.inner
             .get(name)
             .ok_or(ResolveError { name: name.into() })
     }
+}
+
+pub enum Function {
+    Intrinsic(Intrinsic),
 }
 
 pub type Intrinsic = fn(&mut DataStack) -> DataStackResult<()>;
