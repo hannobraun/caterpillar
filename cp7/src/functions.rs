@@ -13,13 +13,22 @@ impl Functions {
     pub fn new() -> Self {
         let mut inner = BTreeMap::new();
 
-        let intrinsics = [("+", add as Intrinsic), ("print_line", print_line)];
+        let intrinsics = [
+            ("+", add as Intrinsic),
+            ("print_line", print_line),
+            ("fn", fn_),
+        ];
 
         for (name, intrinsic) in intrinsics {
             inner.insert(name.into(), Function::Intrinsic(intrinsic));
         }
 
         Self { inner }
+    }
+
+    pub fn define(&mut self, name: value::Symbol, body: value::Block) {
+        let function = Function::UserDefined { body };
+        self.inner.insert(name.0, function);
     }
 
     pub fn resolve(&self, name: &str) -> Result<&Function, ResolveError> {
@@ -31,6 +40,7 @@ impl Functions {
 
 pub enum Function {
     Intrinsic(Intrinsic),
+    UserDefined { body: value::Block },
 }
 
 pub type Intrinsic = fn(&mut Functions, &mut DataStack) -> DataStackResult<()>;
@@ -46,6 +56,18 @@ fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
     let a = data_stack.pop_specific::<value::Number>()?;
 
     data_stack.push(value::Number(a.0 + b.0));
+
+    Ok(())
+}
+
+fn fn_(
+    functions: &mut Functions,
+    data_stack: &mut DataStack,
+) -> DataStackResult<()> {
+    let body = data_stack.pop_specific::<value::Block>()?;
+    let name = data_stack.pop_specific::<value::Symbol>()?;
+
+    functions.define(name, body);
 
     Ok(())
 }
