@@ -6,7 +6,7 @@ use crate::{
 };
 
 pub struct Functions {
-    inner: BTreeMap<&'static str, Function>,
+    inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
@@ -16,7 +16,7 @@ impl Functions {
         let intrinsics = [("+", add as Intrinsic), ("print_line", print_line)];
 
         for (name, intrinsic) in intrinsics {
-            inner.insert(name, Function::Intrinsic(intrinsic));
+            inner.insert(name.into(), Function::Intrinsic(intrinsic));
         }
 
         Self { inner }
