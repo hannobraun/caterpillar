@@ -34,5 +34,3 @@ pub enum Token {
     FnRef(String),
     Symbol(String),
 }
-
-pub type TokenTag = <Token as EnumTag>::Tag;

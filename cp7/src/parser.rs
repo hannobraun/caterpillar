@@ -1,14 +1,12 @@
 use std::collections::VecDeque;
 
-use enum_tag::EnumTag;
-
-use crate::tokenizer::{Token, TokenTag};
+use crate::tokenizer::Token;
 
 pub fn parse(mut tokens: VecDeque<Token>) -> ParserResult<Vec<SyntaxElement>> {
     let mut syntax_elements = Vec::new();
 
     while let Some(token) = tokens.front() {
-        let syntax_element = parse_syntax_element(token.tag(), &mut tokens)?;
+        let syntax_element = parse_syntax_element(token.clone(), &mut tokens)?;
         syntax_elements.push(syntax_element);
     }
 
@@ -16,16 +14,16 @@ pub fn parse(mut tokens: VecDeque<Token>) -> ParserResult<Vec<SyntaxElement>> {
 }
 
 fn parse_syntax_element(
-    next_token: TokenTag,
+    next_token: Token,
     tokens: &mut VecDeque<Token>,
 ) -> ParserResult<SyntaxElement> {
     match next_token {
-        TokenTag::CurlyBracketOpen => panic!("Parsing block not supported"),
-        TokenTag::FnRef => {
+        Token::CurlyBracketOpen => panic!("Parsing block not supported"),
+        Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
             Ok(SyntaxElement::FnRef(fn_ref))
         }
-        TokenTag::Symbol => {
+        Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
             Ok(SyntaxElement::Symbol(symbol))
         }
