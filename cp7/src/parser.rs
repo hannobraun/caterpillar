@@ -30,14 +30,14 @@ fn parse_syntax_element(
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
-    match tokens.inner.pop_front().unwrap() {
+    match tokens.next().unwrap() {
         Token::FnRef(fn_ref) => Ok(fn_ref),
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
-    match tokens.inner.pop_front().unwrap() {
+    match tokens.next().unwrap() {
         Token::Symbol(symbol) => Ok(symbol),
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
