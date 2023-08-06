@@ -15,6 +15,7 @@ impl Functions {
 
         let intrinsics = [
             ("+", add as Intrinsic),
+            ("clone", clone),
             ("print_line", print_line),
             ("fn", fn_),
         ];
@@ -56,6 +57,15 @@ fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
     let a = data_stack.pop_specific::<value::Number>()?;
 
     data_stack.push(value::Number(a.0 + b.0));
+
+    Ok(())
+}
+
+fn clone(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
+    let value = data_stack.pop_any()?;
+
+    data_stack.push(value.clone());
+    data_stack.push(value);
 
     Ok(())
 }
