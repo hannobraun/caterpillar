@@ -16,10 +16,9 @@ impl Functions {
         Self { inner }
     }
 
-    pub fn resolve(&self, name: &str) -> Result<Intrinsic, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<&Intrinsic, ResolveError> {
         self.inner
             .get(name)
-            .copied()
             .ok_or(ResolveError { name: name.into() })
     }
 }
