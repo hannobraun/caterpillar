@@ -20,16 +20,11 @@ impl Evaluator {
     }
 }
 
-pub fn evaluate(
-    start: Option<SyntaxHandle>,
-    syntax: Syntax,
-) -> anyhow::Result<()> {
+pub fn evaluate(start: SyntaxHandle, syntax: Syntax) -> anyhow::Result<()> {
     let mut evaluator = Evaluator::new();
 
-    if let Some(start) = start {
-        evaluator.call_stack.push(start);
-        evaluate_syntax(&mut evaluator, &syntax)?;
-    }
+    evaluator.call_stack.push(start);
+    evaluate_syntax(&mut evaluator, &syntax)?;
 
     Ok(())
 }
