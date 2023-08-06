@@ -52,7 +52,7 @@ impl Value {
         T: TryFrom<Value, Error = Value>,
     {
         self.try_into().map_err(|value| DataStackError {
-            kind: DataStackErrorKind::UnexpectedValue(value),
+            kind: DataStackErrorKind::UnexpectedValue { value },
             expected,
         })
     }
@@ -82,7 +82,7 @@ impl fmt::Display for DataStackError {
             DataStackErrorKind::StackIsEmpty => {
                 write!(f, "Stack is empty")?;
             }
-            DataStackErrorKind::UnexpectedValue(value) => {
+            DataStackErrorKind::UnexpectedValue { value } => {
                 writeln!(f, "Unexpected value: {value}")?;
             }
         }
@@ -94,5 +94,5 @@ impl fmt::Display for DataStackError {
 #[derive(Debug)]
 pub enum DataStackErrorKind {
     StackIsEmpty,
-    UnexpectedValue(Value),
+    UnexpectedValue { value: Value },
 }
