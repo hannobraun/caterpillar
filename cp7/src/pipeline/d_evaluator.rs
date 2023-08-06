@@ -1,6 +1,6 @@
 use anyhow::bail;
 
-use crate::data_stack::{value, DataStack};
+use crate::data_stack::{value, DataStack, DataStackResult};
 
 use super::c_parser::{SyntaxElement, SyntaxTree};
 
@@ -11,13 +11,10 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
         match syntax_element {
             SyntaxElement::FnRef(fn_ref) => match fn_ref.as_str() {
                 "+" => {
-                    let b = data_stack.pop_number()?;
-                    let a = data_stack.pop_number()?;
-                    data_stack.push(value::Number(a.0 + b.0));
+                    add(&mut data_stack)?;
                 }
                 "print_line" => {
-                    let value = data_stack.pop_any()?;
-                    println!("{value}");
+                    print_line(&mut data_stack)?;
                 }
                 fn_ref => {
                     bail!("Unknown function: `{fn_ref}`");
@@ -29,5 +26,20 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
         }
     }
 
+    Ok(())
+}
+
+fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
+    let b = data_stack.pop_number()?;
+    let a = data_stack.pop_number()?;
+
+    data_stack.push(value::Number(a.0 + b.0));
+
+    Ok(())
+}
+
+fn print_line(data_stack: &mut DataStack) -> DataStackResult<()> {
+    let value = data_stack.pop_any()?;
+    println!("{value}");
     Ok(())
 }
