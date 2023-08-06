@@ -32,6 +32,22 @@ impl fmt::Display for Value {
     }
 }
 
+pub trait Type {
+    const NAME: &'static str;
+}
+
+impl Type for Block {
+    const NAME: &'static str = "block";
+}
+
+impl Type for Number {
+    const NAME: &'static str = "number";
+}
+
+impl Type for Symbol {
+    const NAME: &'static str = "symbol";
+}
+
 #[derive(Debug, thiserror::Error)]
 #[error("Expected {expected}, found `{value}`")]
 pub struct TypeError {
