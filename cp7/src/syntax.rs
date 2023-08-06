@@ -41,11 +41,6 @@ pub struct SyntaxHandle {
 }
 
 #[derive(Clone, Debug)]
-pub struct SyntaxTree {
-    pub first: Option<SyntaxHandle>,
-}
-
-#[derive(Clone, Debug)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
     pub next: Option<SyntaxHandle>,
