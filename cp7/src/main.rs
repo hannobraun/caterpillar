@@ -33,7 +33,7 @@ fn main() -> anyhow::Result<()> {
     let mut data_stack = data_stack::DataStack::new();
 
     let tokens = tokenizer::tokenize(&code);
-    let syntax_tree = parser::parse(tokens);
+    let syntax_tree = parser::parse(tokens)?;
 
     for syntax_element in syntax_tree {
         match syntax_element {
