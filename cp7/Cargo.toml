@@ -7,6 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 enum-tag = "*"
+enum_variant_type = "*"
 thiserror = "*"
 
 [dependencies.clap]
