@@ -10,7 +10,7 @@ pub fn run(path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
 
     if let Some(start) = start {
         let mut evaluator = d_evaluator::Evaluator::new(start);
-        d_evaluator::evaluate_syntax(&mut evaluator, &syntax)?;
+        while evaluator.step(&syntax)? {}
     }
 
     Ok(())

@@ -61,15 +61,6 @@ impl Evaluator {
     }
 }
 
-pub fn evaluate_syntax(
-    evaluator: &mut Evaluator,
-    syntax: &Syntax,
-) -> anyhow::Result<()> {
-    while evaluator.step(syntax)? {}
-
-    Ok(())
-}
-
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
     #[error("Error operating data stack")]
