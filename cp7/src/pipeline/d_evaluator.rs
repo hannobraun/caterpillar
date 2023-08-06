@@ -22,11 +22,11 @@ impl Evaluator {
         }
     }
 
-    pub fn step(
-        &mut self,
-        handle: SyntaxHandle,
-        syntax: &Syntax,
-    ) -> Result<(), EvaluatorError> {
+    pub fn step(&mut self, syntax: &Syntax) -> Result<bool, EvaluatorError> {
+        let handle = match self.call_stack.current() {
+            Some(handle) => handle,
+            None => return Ok(false),
+        };
         let fragment = syntax.get(handle);
 
         match fragment.payload {
@@ -38,7 +38,7 @@ impl Evaluator {
                     Function::UserDefined { body } => {
                         if let Some(body) = body.0 {
                             self.call_stack.push(body);
-                            return Ok(());
+                            return Ok(true);
                         }
                     }
                 }
@@ -57,7 +57,7 @@ impl Evaluator {
             }
         }
 
-        Ok(())
+        Ok(true)
     }
 }
 
@@ -65,9 +65,7 @@ pub fn evaluate_syntax(
     evaluator: &mut Evaluator,
     syntax: &Syntax,
 ) -> anyhow::Result<()> {
-    while let Some(handle) = evaluator.call_stack.current() {
-        evaluator.step(handle, syntax)?;
-    }
+    while evaluator.step(syntax)? {}
 
     Ok(())
 }
