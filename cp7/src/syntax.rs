@@ -39,7 +39,7 @@ impl SyntaxTree {
 }
 
 pub struct SyntaxFragment {
-    pub kind: SyntaxElement,
+    pub payload: SyntaxElement,
 }
 
 #[derive(Clone, Debug)]
