@@ -64,8 +64,8 @@ fn parse_block(
                 break;
             }
             token => {
-                let syntax_element = parse_fragment(token, tokens, syntax)?;
-                syntax_tree.elements.push(syntax_element);
+                let fragment = parse_fragment(token, tokens, syntax)?;
+                syntax_tree.elements.push(fragment);
             }
         }
     }
