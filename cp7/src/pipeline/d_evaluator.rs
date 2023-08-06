@@ -4,21 +4,29 @@ use crate::{
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };
 
+pub struct Evaluator {
+    functions: Functions,
+    call_stack: CallStack,
+    data_stack: DataStack,
+}
+
 pub fn evaluate(
     start: Option<SyntaxHandle>,
     syntax: Syntax,
 ) -> anyhow::Result<()> {
-    let mut functions = Functions::new();
-    let mut call_stack = CallStack::new();
-    let mut data_stack = DataStack::new();
+    let mut evaluator = Evaluator {
+        functions: Functions::new(),
+        call_stack: CallStack::new(),
+        data_stack: DataStack::new(),
+    };
 
     if let Some(start) = start {
-        call_stack.push(start);
+        evaluator.call_stack.push(start);
         evaluate_syntax(
             &syntax,
-            &mut functions,
-            &mut call_stack,
-            &mut data_stack,
+            &mut evaluator.functions,
+            &mut evaluator.call_stack,
+            &mut evaluator.data_stack,
         )?;
     }
 
