@@ -28,7 +28,7 @@ impl Syntax {
     }
 }
 
-#[derive(Clone, Copy, Eq, PartialEq, Hash)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct SyntaxHandle {}
 
 #[derive(Clone, Debug)]
