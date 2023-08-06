@@ -1,6 +1,6 @@
 use crate::{
     pipeline::b_tokenizer::{token, NoMoreTokens, Token, Tokens},
-    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxTree},
+    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxTree},
     value::{self, Value},
 };
 
@@ -9,7 +9,8 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
     let mut syntax_tree = SyntaxTree::new();
 
     while let Ok(token) = tokens.peek() {
-        let fragment = parse_fragment(token, &mut tokens, &mut syntax)?;
+        let handle = parse_fragment(token, &mut tokens, &mut syntax)?;
+        let fragment = syntax.get(handle);
         syntax_tree.elements.push(fragment);
     }
 
@@ -20,7 +21,7 @@ fn parse_fragment(
     next_token: Token,
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-) -> ParserResult<SyntaxFragment> {
+) -> ParserResult<SyntaxHandle> {
     let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens, syntax)?;
@@ -44,9 +45,9 @@ fn parse_fragment(
     let fragment = SyntaxFragment {
         payload: syntax_element,
     };
-    syntax.add(fragment.clone());
+    let handle = syntax.add(fragment);
 
-    Ok(fragment)
+    Ok(handle)
 }
 
 fn parse_block(
@@ -64,7 +65,8 @@ fn parse_block(
                 break;
             }
             token => {
-                let fragment = parse_fragment(token, tokens, syntax)?;
+                let handle = parse_fragment(token, tokens, syntax)?;
+                let fragment = syntax.get(handle);
                 syntax_tree.elements.push(fragment);
             }
         }

@@ -20,6 +20,12 @@ impl Syntax {
         self.inner.insert(handle, fragment);
         handle
     }
+
+    pub fn get(&self, handle: SyntaxHandle) -> SyntaxFragment {
+        // This shouldn't ever panic, as we currently only ever add fragments,
+        // never remove them, and only ever create handles for fragments we add.
+        self.inner.get(&handle).cloned().unwrap()
+    }
 }
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash)]
