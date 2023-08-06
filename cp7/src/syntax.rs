@@ -12,6 +12,14 @@ impl Syntax {
             inner: HashMap::new(),
         }
     }
+
+    pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
+        // This is a placeholder. Eventually, we need to add a hash that
+        // uniquely addresses the fragment.
+        let handle = SyntaxHandle {};
+        self.inner.insert(handle, fragment);
+        handle
+    }
 }
 
 #[derive(Clone, Copy, Eq, PartialEq, Hash)]
