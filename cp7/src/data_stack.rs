@@ -20,8 +20,11 @@ impl DataStack {
     }
 
     pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
-        let value = self.pop_inner("number")?;
+        let ty = "number";
+
+        let value = self.pop_inner(ty)?;
         let number = value.expect()?;
+
         Ok(number)
     }
 
