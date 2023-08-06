@@ -20,20 +20,16 @@ impl DataStack {
     }
 
     pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
-        self.pop_inner("number")
+        let value = self.pop_inner("number")?;
+        let number = value.expect();
+        Ok(number)
     }
 
-    fn pop_inner<T>(&mut self, expected: &'static str) -> DataStackResult<T>
-    where
-        T: TryFrom<Value>,
-        <T as TryFrom<Value>>::Error: fmt::Debug,
-    {
+    fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
         let value = self.values.pop().ok_or(DataStackError {
             kind: DataStackErrorKind::StackIsEmpty,
             expected,
         })?;
-
-        let value = value.try_into().unwrap();
 
         Ok(value)
     }
@@ -43,6 +39,16 @@ impl DataStack {
 #[evt(module = "value")]
 pub enum Value {
     Number(i64),
+}
+
+impl Value {
+    pub fn expect<T>(self) -> T
+    where
+        T: TryFrom<Value>,
+        <T as TryFrom<Value>>::Error: fmt::Debug,
+    {
+        self.try_into().unwrap()
+    }
 }
 
 impl fmt::Display for Value {
