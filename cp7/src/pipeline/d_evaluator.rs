@@ -24,10 +24,10 @@ fn evaluate_syntax_tree(
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
-    for syntax_element in syntax_tree.elements {
+    for fragment in syntax_tree.elements {
         evaluate_syntax_element(
             syntax,
-            syntax_element.payload,
+            fragment.payload,
             functions,
             data_stack,
         )?;
