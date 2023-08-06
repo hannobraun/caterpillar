@@ -42,10 +42,9 @@ fn parse_fragment(
         token => return Err(ParserError::UnexpectedToken { actual: token }),
     };
 
-    let fragment = SyntaxFragment {
+    let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
-    };
-    let handle = syntax.add(fragment);
+    });
 
     Ok(handle)
 }
