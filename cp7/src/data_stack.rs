@@ -63,7 +63,7 @@ pub struct DataStackError {
 
 impl fmt::Display for DataStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self.kind {
+        match &self.kind {
             DataStackErrorKind::StackIsEmpty => {
                 write!(f, "Stack is empty")?;
             }
