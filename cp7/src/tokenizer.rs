@@ -1,6 +1,5 @@
 use std::collections::VecDeque;
 
-use enum_tag::EnumTag;
 use enum_variant_type::EnumVariantType;
 
 pub fn tokenize(code: &str) -> Tokens {
@@ -42,7 +41,7 @@ impl Tokens {
     }
 }
 
-#[derive(Clone, Debug, EnumTag, EnumVariantType)]
+#[derive(Clone, Debug, EnumVariantType)]
 #[evt(module = "token")]
 pub enum Token {
     CurlyBracketOpen,
