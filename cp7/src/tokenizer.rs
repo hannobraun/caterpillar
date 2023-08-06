@@ -49,5 +49,6 @@ pub enum Token {
     Symbol(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
+#[error("No more tokens")]
 pub struct NoMoreTokens;
