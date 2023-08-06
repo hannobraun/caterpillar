@@ -49,6 +49,7 @@ where
     }
 }
 
+#[derive(Debug)]
 pub enum SyntaxElement {
     FnRef(String),
     Symbol(String),
