@@ -28,8 +28,8 @@ fn evaluate_syntax(
         let fragment = syntax.get(handle);
 
         evaluate_syntax_element(
-            syntax,
             fragment.payload,
+            syntax,
             functions,
             data_stack,
         )?;
@@ -41,8 +41,8 @@ fn evaluate_syntax(
 }
 
 fn evaluate_syntax_element(
-    syntax: &Syntax,
     syntax_element: SyntaxElement,
+    syntax: &Syntax,
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
