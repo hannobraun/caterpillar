@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::value::Value;
 
 pub struct Syntax {
-    pub inner: HashMap<SyntaxHandle, SyntaxElement>,
+    pub inner: HashMap<SyntaxHandle, SyntaxFragment>,
 }
 
 impl Syntax {
@@ -27,6 +27,10 @@ impl SyntaxTree {
             elements: Vec::new(),
         }
     }
+}
+
+pub struct SyntaxFragment {
+    pub kind: SyntaxElement,
 }
 
 #[derive(Clone, Debug)]
