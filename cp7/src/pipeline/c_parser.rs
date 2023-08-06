@@ -89,12 +89,12 @@ where
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum SyntaxElement {
     FnRef(String),
     Value(Value),
