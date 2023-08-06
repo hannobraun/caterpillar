@@ -1,7 +1,7 @@
 use crate::{
     data_stack::DataStack,
     functions::{Function, Functions},
-    syntax::{Syntax, SyntaxElement, SyntaxTree},
+    syntax::{Syntax, SyntaxElement, SyntaxHandle, SyntaxTree},
 };
 
 pub fn evaluate(syntax: Syntax, syntax_tree: SyntaxTree) -> anyhow::Result<()> {
@@ -9,8 +9,8 @@ pub fn evaluate(syntax: Syntax, syntax_tree: SyntaxTree) -> anyhow::Result<()> {
     let mut data_stack = DataStack::new();
 
     evaluate_syntax_tree(
+        syntax_tree.first,
         &syntax,
-        syntax_tree,
         &mut functions,
         &mut data_stack,
     )?;
@@ -19,12 +19,12 @@ pub fn evaluate(syntax: Syntax, syntax_tree: SyntaxTree) -> anyhow::Result<()> {
 }
 
 fn evaluate_syntax_tree(
+    start: Option<SyntaxHandle>,
     syntax: &Syntax,
-    syntax_tree: SyntaxTree,
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
-    let mut next_handle = syntax_tree.first;
+    let mut next_handle = start;
 
     while let Some(handle) = next_handle {
         let fragment = syntax.get(handle);
@@ -53,8 +53,8 @@ fn evaluate_syntax_element(
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
                 evaluate_syntax_tree(
+                    body.0.clone().first,
                     syntax,
-                    body.0.clone(),
                     functions,
                     data_stack,
                 )?;
