@@ -13,10 +13,10 @@ fn main() -> anyhow::Result<()> {
     let mut code = String::new();
     File::open(example)?.read_to_string(&mut code)?;
 
-    let mut data_stack = data_stack::DataStack::new();
-
     let tokens = tokenizer::tokenize(&code);
     let syntax_tree = parser::parse(tokens)?;
+
+    let mut data_stack = data_stack::DataStack::new();
 
     for syntax_element in syntax_tree.elements {
         match syntax_element {
