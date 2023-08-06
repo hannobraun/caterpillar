@@ -17,7 +17,7 @@ impl DataStack {
         self.pop_inner("any value")
     }
 
-    pub fn pop_number(&mut self) -> DataStackResult<Number> {
+    pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
         let value = self.pop_inner("number")?;
         let Value::Number(number) = value;
         Ok(number)
@@ -32,7 +32,7 @@ impl DataStack {
 }
 
 pub enum Value {
-    Number(Number),
+    Number(value::Number),
 }
 
 impl fmt::Display for Value {
@@ -43,13 +43,15 @@ impl fmt::Display for Value {
     }
 }
 
-impl From<Number> for Value {
-    fn from(number: Number) -> Self {
+impl From<value::Number> for Value {
+    fn from(number: value::Number) -> Self {
         Self::Number(number)
     }
 }
 
-pub type Number = i64;
+pub mod value {
+    pub type Number = i64;
+}
 
 pub type DataStackResult<T> = Result<T, DataStackError>;
 
