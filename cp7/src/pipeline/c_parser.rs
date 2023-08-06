@@ -9,16 +9,24 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
     let mut syntax_tree = SyntaxTree::new();
 
     while let Ok(token) = tokens.peek() {
-        let syntax_element = parse_syntax_element(token.clone(), &mut tokens)?;
-        syntax_tree.elements.push(syntax_element.clone());
+        let syntax_fragment = parse_fragment(token, &mut tokens)?;
 
-        let syntax_fragment = SyntaxFragment {
-            kind: syntax_element,
-        };
+        syntax_tree.elements.push(syntax_fragment.kind.clone());
         syntax.add(syntax_fragment);
     }
 
     Ok((syntax, syntax_tree))
+}
+
+fn parse_fragment(
+    next_token: Token,
+    tokens: &mut Tokens,
+) -> ParserResult<SyntaxFragment> {
+    let syntax_element = parse_syntax_element(next_token, tokens)?;
+
+    Ok(SyntaxFragment {
+        kind: syntax_element,
+    })
 }
 
 fn parse_syntax_element(
