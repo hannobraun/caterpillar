@@ -1,10 +1,11 @@
 use crate::{
     pipeline::b_tokenizer::{token, NoMoreTokens, Token, Tokens},
-    syntax::{SyntaxElement, SyntaxTree},
+    syntax::{Syntax, SyntaxElement, SyntaxTree},
     value::{self, Value},
 };
 
-pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
+pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
+    let syntax = Syntax::new();
     let mut syntax_tree = SyntaxTree::new();
 
     while let Ok(token) = tokens.peek() {
@@ -12,7 +13,7 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
         syntax_tree.elements.push(syntax_element);
     }
 
-    Ok(syntax_tree)
+    Ok((syntax, syntax_tree))
 }
 
 fn parse_syntax_element(
