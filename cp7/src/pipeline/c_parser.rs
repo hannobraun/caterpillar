@@ -38,7 +38,9 @@ fn parse_fragment(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    let syntax_element = match tokens.peek()? {
+    let next_token = tokens.peek()?;
+
+    let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens, syntax)?;
             SyntaxElement::Value(value::Block(block).into())
