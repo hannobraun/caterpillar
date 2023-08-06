@@ -23,11 +23,10 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, syntax: &Syntax) -> Result<bool, EvaluatorError> {
-        let handle = match self.call_stack.current() {
-            Some(handle) => handle,
+        let fragment = match self.call_stack.current() {
+            Some(handle) => syntax.get(handle),
             None => return Ok(false),
         };
-        let fragment = syntax.get(handle);
 
         match fragment.payload {
             SyntaxElement::FnRef(fn_ref) => {
