@@ -1,9 +1,8 @@
 use crate::{
     data_stack::DataStack,
     functions::{Function, Functions},
+    syntax::{SyntaxElement, SyntaxTree},
 };
-
-use super::c_parser::{SyntaxElement, SyntaxTree};
 
 pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
     let mut functions = Functions::new();

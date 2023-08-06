@@ -2,7 +2,7 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use crate::pipeline::c_parser::SyntaxTree;
+use crate::syntax::SyntaxTree;
 
 #[derive(Clone, Debug, EnumVariantType)]
 #[evt(derive(Debug))]

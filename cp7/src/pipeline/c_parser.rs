@@ -1,5 +1,6 @@
 use crate::{
     pipeline::b_tokenizer::{token, NoMoreTokens, Token, Tokens},
+    syntax::{SyntaxElement, SyntaxTree},
     value::{self, Value},
 };
 
@@ -87,17 +88,6 @@ where
         Ok(token) => Ok(token),
         Err(token) => Err(ParserError::UnexpectedToken { actual: token }),
     }
-}
-
-#[derive(Clone, Debug)]
-pub struct SyntaxTree {
-    pub elements: Vec<SyntaxElement>,
-}
-
-#[derive(Clone, Debug)]
-pub enum SyntaxElement {
-    FnRef(String),
-    Value(Value),
 }
 
 pub type ParserResult<T> = Result<T, ParserError>;
