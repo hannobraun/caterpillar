@@ -20,15 +20,20 @@ impl DataStack {
     }
 
     pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
-        let value = self.pop_inner("number")?;
-        Ok(value.try_into().unwrap())
+        self.pop_inner("number")
     }
 
-    fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
+    fn pop_inner<T>(&mut self, expected: &'static str) -> DataStackResult<T>
+    where
+        T: TryFrom<Value>,
+        <T as TryFrom<Value>>::Error: fmt::Debug,
+    {
         let value = self.values.pop().ok_or(DataStackError {
             kind: DataStackErrorKind::StackIsEmpty,
             expected,
         })?;
+
+        let value = value.try_into().unwrap();
 
         Ok(value)
     }
