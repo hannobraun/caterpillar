@@ -27,7 +27,7 @@ pub enum Function {
     Intrinsic(Intrinsic),
 }
 
-pub type Intrinsic = fn(&mut DataStack) -> DataStackResult<()>;
+pub type Intrinsic = fn(&mut Functions, &mut DataStack) -> DataStackResult<()>;
 
 #[derive(Debug, thiserror::Error)]
 #[error("Error resolving function `{name}`")]
@@ -35,7 +35,7 @@ pub struct ResolveError {
     pub name: String,
 }
 
-fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
+fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
     let b = data_stack.pop_number()?;
     let a = data_stack.pop_number()?;
 
@@ -44,7 +44,10 @@ fn add(data_stack: &mut DataStack) -> DataStackResult<()> {
     Ok(())
 }
 
-fn print_line(data_stack: &mut DataStack) -> DataStackResult<()> {
+fn print_line(
+    _: &mut Functions,
+    data_stack: &mut DataStack,
+) -> DataStackResult<()> {
     let value = data_stack.pop_any()?;
     println!("{value}");
     Ok(())

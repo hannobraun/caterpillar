@@ -6,7 +6,7 @@ use crate::{
 use super::c_parser::{SyntaxElement, SyntaxTree};
 
 pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
-    let functions = Functions::new();
+    let mut functions = Functions::new();
     let mut data_stack = DataStack::new();
 
     for syntax_element in syntax_tree.elements {
@@ -14,7 +14,7 @@ pub fn evaluate(syntax_tree: SyntaxTree) -> anyhow::Result<()> {
             SyntaxElement::FnRef(fn_ref) => {
                 let Function::Intrinsic(intrinsic) =
                     functions.resolve(&fn_ref)?;
-                intrinsic(&mut data_stack)?;
+                intrinsic(&mut functions, &mut data_stack)?;
             }
             SyntaxElement::Value(value) => {
                 data_stack.push(value);
