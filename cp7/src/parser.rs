@@ -27,21 +27,21 @@ fn parse_syntax_element(
             let symbol = parse_symbol(tokens)?;
             Ok(SyntaxElement::Symbol(symbol))
         }
-        token => panic!("Unexpected token: {token:?}"),
+        token => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
 fn parse_fn_ref(tokens: &mut VecDeque<Token>) -> ParserResult<String> {
     match tokens.pop_front().unwrap() {
         Token::FnRef(fn_ref) => Ok(fn_ref),
-        token => panic!("Unexpected token: {token:?}"),
+        token => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
 fn parse_symbol(tokens: &mut VecDeque<Token>) -> ParserResult<String> {
     match tokens.pop_front().unwrap() {
         Token::Symbol(symbol) => Ok(symbol),
-        token => panic!("Unexpected token: {token:?}"),
+        token => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
@@ -53,4 +53,7 @@ pub enum SyntaxElement {
 pub type ParserResult<T> = Result<T, ParserError>;
 
 #[derive(Debug, thiserror::Error)]
-pub enum ParserError {}
+pub enum ParserError {
+    #[error("Unexpected token: {actual:?}")]
+    UnexpectedToken { actual: Token },
+}
