@@ -34,7 +34,14 @@ fn evaluate_syntax(
             data_stack,
         )?;
 
-        call_stack.update(fragment.next);
+        match fragment.next {
+            Some(handle) => {
+                call_stack.update(handle);
+            }
+            None => {
+                call_stack.pop();
+            }
+        }
     }
 
     Ok(())
@@ -52,7 +59,7 @@ fn evaluate_syntax_element(
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
                 if let Some(body) = body.0 {
-                    call_stack.update(Some(body));
+                    call_stack.update(body);
                     evaluate_syntax(syntax, functions, call_stack, data_stack)?;
                 }
             }
