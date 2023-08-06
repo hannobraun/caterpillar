@@ -25,22 +25,22 @@ fn parse_fragment(
     let syntax_element = match next_token {
         Token::CurlyBracketOpen => {
             let block = parse_block(tokens)?;
-            Ok(SyntaxElement::Value(value::Block(block).into()))
+            SyntaxElement::Value(value::Block(block).into())
         }
         Token::FnRef(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
-            Ok(SyntaxElement::FnRef(fn_ref))
+            SyntaxElement::FnRef(fn_ref)
         }
         Token::Number(_) => {
             let number = parse_number(tokens)?;
-            Ok(SyntaxElement::Value(Value::Number(number)))
+            SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
-            Ok(SyntaxElement::Value(value::Symbol(symbol).into()))
+            SyntaxElement::Value(value::Symbol(symbol).into())
         }
-        token => Err(ParserError::UnexpectedToken { actual: token }),
-    }?;
+        token => return Err(ParserError::UnexpectedToken { actual: token }),
+    };
 
     Ok(SyntaxFragment {
         payload: syntax_element,
