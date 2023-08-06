@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use enum_tag::EnumTag;
 
-pub fn tokenize(code: &str) -> VecDeque<Token> {
+pub fn tokenize(code: &str) -> Tokens {
     let mut tokens = VecDeque::new();
 
     for token in code.split_whitespace() {
@@ -10,7 +10,7 @@ pub fn tokenize(code: &str) -> VecDeque<Token> {
         tokens.push_back(token);
     }
 
-    tokens
+    Tokens { inner: tokens }
 }
 
 fn tokenize_token(token: &str) -> Token {
@@ -25,6 +25,10 @@ fn tokenize_token(token: &str) -> Token {
     }
 
     Token::FnRef(token.into())
+}
+
+pub struct Tokens {
+    pub inner: VecDeque<Token>,
 }
 
 #[derive(Clone, Debug, EnumTag)]

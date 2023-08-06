@@ -1,11 +1,9 @@
-use std::collections::VecDeque;
+use crate::tokenizer::{Token, Tokens};
 
-use crate::tokenizer::Token;
-
-pub fn parse(mut tokens: VecDeque<Token>) -> ParserResult<Vec<SyntaxElement>> {
+pub fn parse(mut tokens: Tokens) -> ParserResult<Vec<SyntaxElement>> {
     let mut syntax_elements = Vec::new();
 
-    while let Some(token) = tokens.front() {
+    while let Some(token) = tokens.inner.front() {
         let syntax_element = parse_syntax_element(token.clone(), &mut tokens)?;
         syntax_elements.push(syntax_element);
     }
@@ -15,7 +13,7 @@ pub fn parse(mut tokens: VecDeque<Token>) -> ParserResult<Vec<SyntaxElement>> {
 
 fn parse_syntax_element(
     next_token: Token,
-    tokens: &mut VecDeque<Token>,
+    tokens: &mut Tokens,
 ) -> ParserResult<SyntaxElement> {
     match next_token {
         Token::CurlyBracketOpen => panic!("Parsing block not supported"),
@@ -31,15 +29,15 @@ fn parse_syntax_element(
     }
 }
 
-fn parse_fn_ref(tokens: &mut VecDeque<Token>) -> ParserResult<String> {
-    match tokens.pop_front().unwrap() {
+fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
+    match tokens.inner.pop_front().unwrap() {
         Token::FnRef(fn_ref) => Ok(fn_ref),
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
-fn parse_symbol(tokens: &mut VecDeque<Token>) -> ParserResult<String> {
-    match tokens.pop_front().unwrap() {
+fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
+    match tokens.inner.pop_front().unwrap() {
         Token::Symbol(symbol) => Ok(symbol),
         token => Err(ParserError::UnexpectedToken { actual: token }),
     }
