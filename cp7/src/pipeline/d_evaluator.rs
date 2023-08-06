@@ -13,7 +13,7 @@ pub fn evaluate(
     let mut data_stack = DataStack::new();
 
     if let Some(start) = start {
-        call_stack.update(start);
+        call_stack.push(start);
         evaluate_syntax(
             &syntax,
             &mut functions,
@@ -67,7 +67,7 @@ fn evaluate_syntax_element(
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
                 if let Some(body) = body.0 {
-                    call_stack.update(body);
+                    call_stack.push(body);
                     evaluate_syntax(syntax, functions, call_stack, data_stack)?;
                 }
             }

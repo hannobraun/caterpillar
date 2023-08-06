@@ -13,6 +13,10 @@ impl CallStack {
         self.frames.last().copied()
     }
 
+    pub fn push(&mut self, next: SyntaxHandle) {
+        self.frames.push(next);
+    }
+
     pub fn update(&mut self, next: SyntaxHandle) {
         match self.frames.last_mut() {
             Some(current) => *current = next,
