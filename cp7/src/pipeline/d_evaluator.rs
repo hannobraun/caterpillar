@@ -11,19 +11,18 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
+    pub fn new(start: SyntaxHandle) -> Self {
         Self {
             functions: Functions::new(),
-            call_stack: CallStack::new(),
+            call_stack: CallStack::new(start),
             data_stack: DataStack::new(),
         }
     }
 }
 
 pub fn evaluate(start: SyntaxHandle, syntax: Syntax) -> anyhow::Result<()> {
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::new(start);
 
-    evaluator.call_stack.push(start);
     evaluate_syntax(&mut evaluator, &syntax)?;
 
     Ok(())
