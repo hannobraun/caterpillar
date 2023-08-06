@@ -34,10 +34,11 @@ Here's what I have in mind:
 - The language is **purely functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
-- Memory management is yet to be determined. I expect to get away with just
-  the stack for a while. After that, I'll probably go for reference counting, or
+- Memory management is yet to be determined. I expect to get away with just the
+  stack for a while. After that, I'll probably go for reference counting, or
   (runtime-managed) affine or linear types.
 
 ## Status
 
-In progress! Basic example exist and work. The language is neither Turing-complete nor interactive yet.
+In progress! Basic example exist and work. The language is neither
+Turing-complete nor interactive yet.
