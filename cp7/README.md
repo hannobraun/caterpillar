@@ -24,7 +24,7 @@ Here's what I have in mind:
 - All **code is stored in text files**. Even though the previous approach,
   making the code's canonical form a parsed/analyzed representation, has many
   advantages that I'd like to explore in the future, it requires too much custom
-  infrastructure to be viable. For now, we'll stick to text files, and thus get
+  infrastructure to be viable. For now, I'll stick to text files, and thus get
   editors and version control for free.
 - A language that is **unapologetically dynamic**. Interpreted, dynamically
   typed, and no design considerations made to change any of that. Even though
@@ -34,7 +34,7 @@ Here's what I have in mind:
 - The language is **purely functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
-- Memory management is yet to be determined. I expect I can get away with just
+- Memory management is yet to be determined. I expect to get away with just
   the stack for a while. After that, I'll probably go for reference counting, or
   (runtime-managed) affine or linear types.
 
