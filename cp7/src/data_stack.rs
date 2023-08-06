@@ -31,6 +31,7 @@ impl DataStack {
     }
 }
 
+#[derive(Debug)]
 pub enum Value {
     Number(value::Number),
 }
