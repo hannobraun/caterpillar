@@ -12,4 +12,8 @@ impl CallStack {
     pub fn current(&self) -> Option<SyntaxHandle> {
         self.current
     }
+
+    pub fn update(&mut self, next: Option<SyntaxHandle>) {
+        self.current = next;
+    }
 }
