@@ -9,13 +9,13 @@ fn main() -> anyhow::Result<()> {
 
     let code = pipeline::a_loader::load(example)?;
     let tokens = pipeline::b_tokenizer::tokenize(&code);
-    let syntax_tree = pipeline::parser::parse(tokens)?;
+    let syntax_tree = pipeline::c_parser::parse(tokens)?;
 
     let mut data_stack = data_stack::DataStack::new();
 
     for syntax_element in syntax_tree.elements {
         match syntax_element {
-            pipeline::parser::SyntaxElement::FnRef(fn_ref) => {
+            pipeline::c_parser::SyntaxElement::FnRef(fn_ref) => {
                 match fn_ref.as_str() {
                     "+" => {
                         let b = data_stack.pop_number()?;
@@ -32,7 +32,7 @@ fn main() -> anyhow::Result<()> {
                     }
                 }
             }
-            pipeline::parser::SyntaxElement::Value(value) => {
+            pipeline::c_parser::SyntaxElement::Value(value) => {
                 data_stack.push(value);
             }
         }
