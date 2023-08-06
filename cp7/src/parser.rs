@@ -1,4 +1,4 @@
-use crate::tokenizer::{NoMoreTokens, Token, Tokens};
+use crate::tokenizer::{token, NoMoreTokens, Token, Tokens};
 
 pub fn parse(mut tokens: Tokens) -> ParserResult<Vec<SyntaxElement>> {
     let mut syntax_elements = Vec::new();
@@ -30,16 +30,22 @@ fn parse_syntax_element(
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
-    match tokens.next()? {
-        Token::FnRef(fn_ref) => Ok(fn_ref),
-        token => Err(ParserError::UnexpectedToken { actual: token }),
-    }
+    let token = expect::<token::FnRef>(tokens)?;
+    Ok(token.0)
 }
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
-    match tokens.next()? {
-        Token::Symbol(symbol) => Ok(symbol),
-        token => Err(ParserError::UnexpectedToken { actual: token }),
+    let token = expect::<token::Symbol>(tokens)?;
+    Ok(token.0)
+}
+
+fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
+where
+    T: TryFrom<Token, Error = Token>,
+{
+    match tokens.next()?.try_into() {
+        Ok(token) => Ok(token),
+        Err(token) => Err(ParserError::UnexpectedToken { actual: token }),
     }
 }
 
