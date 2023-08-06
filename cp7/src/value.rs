@@ -2,12 +2,12 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use crate::syntax::SyntaxTree;
+use crate::syntax::SyntaxHandle;
 
 #[derive(Clone, Debug, EnumVariantType)]
 #[evt(derive(Debug))]
 pub enum Value {
-    Block(SyntaxTree),
+    Block(Option<SyntaxHandle>),
     Number(i64),
     Symbol(String),
 }

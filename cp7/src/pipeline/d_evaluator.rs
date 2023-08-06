@@ -50,12 +50,7 @@ fn evaluate_syntax_element(
         SyntaxElement::FnRef(fn_ref) => match functions.resolve(&fn_ref)? {
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
-                evaluate_syntax_tree(
-                    body.0.clone().first,
-                    syntax,
-                    functions,
-                    data_stack,
-                )?;
+                evaluate_syntax_tree(body.0, syntax, functions, data_stack)?;
             }
         },
         SyntaxElement::Value(value) => {
