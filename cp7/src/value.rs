@@ -13,10 +13,10 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn expect<T>(self, expected: &'static str) -> Result<T, TypeError>
-    where
-        T: TryFrom<Value, Error = Value>,
-    {
+    pub fn expect<T: Type>(
+        self,
+        expected: &'static str,
+    ) -> Result<T, TypeError> {
         self.try_into()
             .map_err(|value| TypeError { value, expected })
     }
@@ -32,7 +32,7 @@ impl fmt::Display for Value {
     }
 }
 
-pub trait Type {
+pub trait Type: TryFrom<Value, Error = Value> {
     const NAME: &'static str;
 }
 
