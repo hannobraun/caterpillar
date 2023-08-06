@@ -39,8 +39,6 @@ fn main() -> anyhow::Result<()> {
     for syntax_element in syntax_tree.elements {
         match syntax_element {
             parser::SyntaxElement::FnRef(fn_ref) => match fn_ref.as_str() {
-                "1" => data_stack.push(value::Number(1)),
-                "2" => data_stack.push(value::Number(2)),
                 "+" => {
                     let b = data_stack.pop_number()?;
                     let a = data_stack.pop_number()?;

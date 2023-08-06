@@ -24,6 +24,10 @@ fn tokenize_token(token: &str) -> Token {
         return Token::Symbol(symbol.into());
     }
 
+    if let Ok(number) = token.parse::<i64>() {
+        return Token::Number(number);
+    }
+
     Token::FnRef(token.into())
 }
 
@@ -47,6 +51,7 @@ pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
     FnRef(String),
+    Number(i64),
     Symbol(String),
 }
 

@@ -29,6 +29,10 @@ fn parse_syntax_element(
             let fn_ref = parse_fn_ref(tokens)?;
             Ok(SyntaxElement::FnRef(fn_ref))
         }
+        Token::Number(_) => {
+            let number = parse_number(tokens)?;
+            Ok(SyntaxElement::Value(Value::Number(number)))
+        }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
             Ok(SyntaxElement::Value(value::Symbol(symbol).into()))
@@ -62,6 +66,11 @@ fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::FnRef>(tokens)?;
+    Ok(token.0)
+}
+
+fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
+    let token = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
