@@ -47,6 +47,7 @@ impl SyntaxTree {
 #[derive(Clone, Debug)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
+    pub next: Option<SyntaxHandle>,
 }
 
 #[derive(Clone, Debug)]

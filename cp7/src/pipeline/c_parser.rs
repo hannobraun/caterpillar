@@ -46,6 +46,10 @@ fn parse_fragment(
 
     let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
+        // This is a placeholder. At some point, this needs to point to the
+        // syntax fragment that comes after this one, if this isn't the last in
+        // the function.
+        next: None,
     });
 
     Ok(handle)
