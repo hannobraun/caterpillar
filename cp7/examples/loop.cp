@@ -2,7 +2,7 @@
 {
     1 +
     clone print_line
-    1000 delay_ms loop
+    500 delay_ms loop
 }
     fn
 
