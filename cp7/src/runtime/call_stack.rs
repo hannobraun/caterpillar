@@ -5,10 +5,8 @@ pub struct CallStack {
 }
 
 impl CallStack {
-    pub fn new(start: Option<SyntaxHandle>) -> Self {
-        Self {
-            frames: start.into_iter().collect(),
-        }
+    pub fn new() -> Self {
+        Self { frames: Vec::new() }
     }
 
     pub fn current(&self) -> Option<SyntaxHandle> {

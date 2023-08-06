@@ -9,10 +9,18 @@ pub fn evaluate(
     syntax: Syntax,
 ) -> anyhow::Result<()> {
     let mut functions = Functions::new();
-    let mut call_stack = CallStack::new(start);
+    let mut call_stack = CallStack::new();
     let mut data_stack = DataStack::new();
 
-    evaluate_syntax(&syntax, &mut functions, &mut call_stack, &mut data_stack)?;
+    if let Some(start) = start {
+        call_stack.update(start);
+        evaluate_syntax(
+            &syntax,
+            &mut functions,
+            &mut call_stack,
+            &mut data_stack,
+        )?;
+    }
 
     Ok(())
 }
