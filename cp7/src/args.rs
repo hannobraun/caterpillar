@@ -25,6 +25,6 @@ pub fn example() -> anyhow::Result<PathBuf> {
 }
 
 #[derive(clap::Parser)]
-pub struct Args {
-    pub example: Option<String>,
+struct Args {
+    example: Option<String>,
 }
