@@ -52,6 +52,7 @@ fn parse_fragment(
         }
         token => {
             if Some(&token) == terminator.as_ref() {
+                tokens.next()?; // only peeked before; still need to consume
                 return Ok(None);
             }
 
