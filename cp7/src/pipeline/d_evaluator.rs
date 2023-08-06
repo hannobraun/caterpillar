@@ -51,8 +51,10 @@ fn evaluate_syntax_element(
         SyntaxElement::FnRef(fn_ref) => match functions.resolve(&fn_ref)? {
             Function::Intrinsic(intrinsic) => intrinsic(functions, data_stack)?,
             Function::UserDefined { body } => {
-                call_stack.update(body.0);
-                evaluate_syntax(syntax, functions, call_stack, data_stack)?;
+                if let Some(body) = body.0 {
+                    call_stack.update(Some(body));
+                    evaluate_syntax(syntax, functions, call_stack, data_stack)?;
+                }
             }
         },
         SyntaxElement::Value(value) => {
