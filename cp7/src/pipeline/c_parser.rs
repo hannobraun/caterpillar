@@ -19,9 +19,7 @@ fn parse_syntax_tree(
     let mut syntax_tree = SyntaxTree::new();
 
     while tokens.peek().is_ok() {
-        let handle = parse_fragment(terminator.clone(), tokens, syntax)?;
-
-        match handle {
+        match parse_fragment(terminator.clone(), tokens, syntax)? {
             Some(handle) => {
                 let fragment = syntax.get(handle);
                 syntax_tree.elements.push(fragment);
