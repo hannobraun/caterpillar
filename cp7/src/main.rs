@@ -52,8 +52,8 @@ fn main() -> anyhow::Result<()> {
                     let value = data_stack.pop_any()?;
                     println!("{value}");
                 }
-                token => {
-                    eprintln!("Unknown function: `{token}`");
+                fn_ref => {
+                    eprintln!("Unknown function: `{fn_ref}`");
                     break;
                 }
             },
