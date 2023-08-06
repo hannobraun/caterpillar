@@ -1,7 +1,7 @@
 use crate::syntax::SyntaxHandle;
 
 pub struct CallStack {
-    pub current: Option<SyntaxHandle>,
+    current: Option<SyntaxHandle>,
 }
 
 impl CallStack {
