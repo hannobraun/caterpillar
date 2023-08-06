@@ -12,7 +12,6 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<(Syntax, SyntaxTree)> {
         let fragment = parse_fragment(token, &mut tokens, &mut syntax)?;
 
         syntax_tree.elements.push(fragment.clone());
-        syntax.add(fragment);
     }
 
     Ok((syntax, syntax_tree))
@@ -46,6 +45,7 @@ fn parse_fragment(
     let fragment = SyntaxFragment {
         payload: syntax_element,
     };
+    syntax.add(fragment.clone());
 
     Ok(fragment)
 }
