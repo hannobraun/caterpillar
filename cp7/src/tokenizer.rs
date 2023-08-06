@@ -27,7 +27,7 @@ fn tokenize_token(token: &str) -> Token {
     Token::FnRef(token.into())
 }
 
-#[derive(Debug, EnumTag)]
+#[derive(Clone, Debug, EnumTag)]
 pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
