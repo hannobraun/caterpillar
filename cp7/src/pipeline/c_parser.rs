@@ -80,22 +80,7 @@ fn parse_block(
     syntax: &mut Syntax,
 ) -> ParserResult<SyntaxTree> {
     expect::<token::CurlyBracketOpen>(tokens)?;
-
-    let mut syntax_tree = SyntaxTree::new();
-
-    loop {
-        let handle =
-            parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
-
-        if let Some(handle) = handle {
-            let fragment = syntax.get(handle);
-            syntax_tree.elements.push(fragment);
-        } else {
-            break;
-        }
-    }
-
-    Ok(syntax_tree)
+    parse_syntax_tree(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
