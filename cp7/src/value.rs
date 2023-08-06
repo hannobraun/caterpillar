@@ -5,7 +5,7 @@ use enum_variant_type::EnumVariantType;
 use crate::pipeline::c_parser::SyntaxTree;
 
 #[derive(Debug, EnumVariantType)]
-#[evt(module = "value", derive(Debug))]
+#[evt(derive(Debug))]
 pub enum Value {
     Block(SyntaxTree),
     Number(i64),

@@ -17,7 +17,7 @@ impl DataStack {
         self.pop_inner("any value")
     }
 
-    pub fn pop_number(&mut self) -> DataStackResult<value::value::Number> {
+    pub fn pop_number(&mut self) -> DataStackResult<value::Number> {
         let ty = "number";
 
         let value = self.pop_inner(ty)?;

@@ -42,7 +42,7 @@ fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
     let b = data_stack.pop_number()?;
     let a = data_stack.pop_number()?;
 
-    data_stack.push(value::value::Number(a.0 + b.0));
+    data_stack.push(value::Number(a.0 + b.0));
 
     Ok(())
 }
