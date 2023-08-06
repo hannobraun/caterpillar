@@ -39,7 +39,9 @@ fn parse_fragment(
             let symbol = parse_symbol(tokens)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
-        token => return Err(ParserError::UnexpectedToken { actual: token }),
+        token => {
+            return Err(ParserError::UnexpectedToken { actual: token });
+        }
     };
 
     let handle = syntax.add(SyntaxFragment {
