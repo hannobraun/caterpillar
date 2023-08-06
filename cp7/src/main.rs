@@ -1,9 +1,5 @@
-use std::{
-    fs::{self, File},
-    io::Read,
-};
+use std::{fs::File, io::Read};
 
-use clap::Parser;
 use data_stack::value;
 
 mod args;
@@ -12,22 +8,7 @@ mod parser;
 mod tokenizer;
 
 fn main() -> anyhow::Result<()> {
-    let args = args::Args::parse();
-
-    let example_dir = "cp7/examples";
-    let path = if let Some(example) = args.example {
-        format!("cp7/examples/{example}.cp")
-    } else {
-        eprintln!("Need to specify example. Available examples:");
-
-        for dir_entry in fs::read_dir(example_dir)? {
-            let path = dir_entry?.path();
-            let example = path.file_stem().unwrap().to_string_lossy();
-            eprintln!("- {example}");
-        }
-
-        return Ok(());
-    };
+    let path = args::example()?;
 
     let mut code = String::new();
     File::open(path)?.read_to_string(&mut code)?;
