@@ -42,9 +42,11 @@ fn parse_fragment(
         token => return Err(ParserError::UnexpectedToken { actual: token }),
     };
 
-    Ok(SyntaxFragment {
+    let fragment = SyntaxFragment {
         payload: syntax_element,
-    })
+    };
+
+    Ok(fragment)
 }
 
 fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
