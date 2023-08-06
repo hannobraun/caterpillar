@@ -65,9 +65,11 @@ impl fmt::Display for DataStackError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.kind {
             DataStackErrorKind::StackIsEmpty => {
-                writeln!(f, "Stack is empty (expected {})", self.expected)
+                write!(f, "Stack is empty")?;
             }
         }
+
+        writeln!(f, " (expected {})", self.expected)
     }
 }
 
