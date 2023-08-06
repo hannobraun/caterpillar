@@ -72,24 +72,12 @@ pub type DataStackResult<T> = Result<T, DataStackError>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum DataStackError {
-    StackIsEmpty {
-        expected: &'static str,
-    },
+    #[error("Stack is empty (expected {expected})")]
+    StackIsEmpty { expected: &'static str },
+
+    #[error("Unexpected value: {value} (expected {expected})")]
     UnexpectedValue {
         value: Value,
         expected: &'static str,
     },
-}
-
-impl fmt::Display for DataStackError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::StackIsEmpty { expected } => {
-                write!(f, "Stack is empty (expected {expected})")
-            }
-            Self::UnexpectedValue { value, expected } => {
-                writeln!(f, "Unexpected value: {value} (expected {expected})")
-            }
-        }
-    }
 }
