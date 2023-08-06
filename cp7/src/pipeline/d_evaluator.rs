@@ -28,53 +28,45 @@ pub fn evaluate(
 
     if let Some(start) = start {
         evaluator.call_stack.push(start);
-        evaluate_syntax(
-            &syntax,
-            &mut evaluator.functions,
-            &mut evaluator.call_stack,
-            &mut evaluator.data_stack,
-        )?;
+        evaluate_syntax(&mut evaluator, &syntax)?;
     }
 
     Ok(())
 }
 
 fn evaluate_syntax(
+    evaluator: &mut Evaluator,
     syntax: &Syntax,
-    functions: &mut Functions,
-    call_stack: &mut CallStack,
-    data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
-    while let Some(handle) = call_stack.current() {
+    while let Some(handle) = evaluator.call_stack.current() {
         let fragment = syntax.get(handle);
 
         match fragment.payload {
             SyntaxElement::FnRef(fn_ref) => {
-                match functions.resolve(&fn_ref)? {
-                    Function::Intrinsic(intrinsic) => {
-                        intrinsic(functions, data_stack)?
-                    }
+                match evaluator.functions.resolve(&fn_ref)? {
+                    Function::Intrinsic(intrinsic) => intrinsic(
+                        &mut evaluator.functions,
+                        &mut evaluator.data_stack,
+                    )?,
                     Function::UserDefined { body } => {
                         if let Some(body) = body.0 {
-                            call_stack.push(body);
-                            evaluate_syntax(
-                                syntax, functions, call_stack, data_stack,
-                            )?;
+                            evaluator.call_stack.push(body);
+                            evaluate_syntax(evaluator, syntax)?;
                         }
                     }
                 }
             }
             SyntaxElement::Value(value) => {
-                data_stack.push(value);
+                evaluator.data_stack.push(value);
             }
         };
 
         match fragment.next {
             Some(handle) => {
-                call_stack.update(handle);
+                evaluator.call_stack.update(handle);
             }
             None => {
-                call_stack.pop();
+                evaluator.call_stack.pop();
             }
         }
     }
