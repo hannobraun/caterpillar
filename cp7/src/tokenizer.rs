@@ -31,6 +31,12 @@ pub struct Tokens {
     pub inner: VecDeque<Token>,
 }
 
+impl Tokens {
+    pub fn peek(&self) -> Option<Token> {
+        self.inner.front().cloned()
+    }
+}
+
 #[derive(Clone, Debug, EnumTag)]
 pub enum Token {
     CurlyBracketOpen,

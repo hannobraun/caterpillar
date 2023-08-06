@@ -3,7 +3,7 @@ use crate::tokenizer::{Token, Tokens};
 pub fn parse(mut tokens: Tokens) -> ParserResult<Vec<SyntaxElement>> {
     let mut syntax_elements = Vec::new();
 
-    while let Some(token) = tokens.inner.front() {
+    while let Some(token) = tokens.peek() {
         let syntax_element = parse_syntax_element(token.clone(), &mut tokens)?;
         syntax_elements.push(syntax_element);
     }
