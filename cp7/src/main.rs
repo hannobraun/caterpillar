@@ -1,5 +1,3 @@
-use std::{fs::File, io::Read};
-
 use data_stack::value;
 
 mod args;
@@ -9,9 +7,7 @@ mod pipeline;
 fn main() -> anyhow::Result<()> {
     let example = args::example()?;
 
-    let mut code = String::new();
-    File::open(example)?.read_to_string(&mut code)?;
-
+    let code = pipeline::a_loader::load(example)?;
     let tokens = pipeline::tokenizer::tokenize(&code);
     let syntax_tree = pipeline::parser::parse(tokens)?;
 
