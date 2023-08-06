@@ -53,7 +53,7 @@ fn main() -> anyhow::Result<()> {
                     println!("{value}");
                 }
                 token => {
-                    eprintln!("Unexpected token: {token}");
+                    eprintln!("Unknown function: `{token}`");
                     break;
                 }
             },
