@@ -40,4 +40,4 @@ Here's what I have in mind:
 
 ## Status
 
-Just finished writing the README.
+In progress! Basic example exist and work. The language is neither Turing-complete nor interactive yet.
