@@ -21,11 +21,14 @@ fn parse_syntax_tree(
     while tokens.peek().is_ok() {
         let handle = parse_fragment(terminator.clone(), tokens, syntax)?;
 
-        if let Some(handle) = handle {
-            let fragment = syntax.get(handle);
-            syntax_tree.elements.push(fragment);
-        } else {
-            break;
+        match handle {
+            Some(handle) => {
+                let fragment = syntax.get(handle);
+                syntax_tree.elements.push(fragment);
+            }
+            None => {
+                break;
+            }
         }
     }
 
