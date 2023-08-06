@@ -1,5 +1,6 @@
 mod args;
 mod data_stack;
+mod functions;
 mod pipeline;
 
 fn main() -> anyhow::Result<()> {
