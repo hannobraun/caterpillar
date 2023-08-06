@@ -28,7 +28,7 @@ pub fn evaluate(start: SyntaxHandle, syntax: Syntax) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn evaluate_syntax(
+pub fn evaluate_syntax(
     evaluator: &mut Evaluator,
     syntax: &Syntax,
 ) -> anyhow::Result<()> {
