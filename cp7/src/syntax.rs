@@ -27,7 +27,7 @@ pub struct SyntaxHandle {}
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree {
-    pub elements: Vec<SyntaxElement>,
+    pub elements: Vec<SyntaxFragment>,
 }
 
 impl SyntaxTree {

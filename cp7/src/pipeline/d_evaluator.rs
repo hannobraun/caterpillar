@@ -19,7 +19,7 @@ fn evaluate_syntax_tree(
     data_stack: &mut DataStack,
 ) -> anyhow::Result<()> {
     for syntax_element in syntax_tree.elements {
-        evaluate_syntax_element(syntax_element, functions, data_stack)?;
+        evaluate_syntax_element(syntax_element.payload, functions, data_stack)?;
     }
 
     Ok(())
