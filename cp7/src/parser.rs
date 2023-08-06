@@ -1,6 +1,6 @@
 use crate::tokenizer::{token, NoMoreTokens, Token, Tokens};
 
-pub fn parse(mut tokens: Tokens) -> ParserResult<Vec<SyntaxElement>> {
+pub fn parse(mut tokens: Tokens) -> ParserResult<SyntaxTree> {
     let mut syntax_elements = Vec::new();
 
     while let Ok(token) = tokens.peek() {
@@ -8,7 +8,9 @@ pub fn parse(mut tokens: Tokens) -> ParserResult<Vec<SyntaxElement>> {
         syntax_elements.push(syntax_element);
     }
 
-    Ok(syntax_elements)
+    Ok(SyntaxTree {
+        elements: syntax_elements,
+    })
 }
 
 fn parse_syntax_element(
@@ -32,7 +34,7 @@ fn parse_syntax_element(
     }
 }
 
-fn parse_block(tokens: &mut Tokens) -> ParserResult<Vec<SyntaxElement>> {
+fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
     expect::<token::CurlyBracketOpen>(tokens)?;
 
     let mut syntax_elements = Vec::new();
@@ -50,7 +52,9 @@ fn parse_block(tokens: &mut Tokens) -> ParserResult<Vec<SyntaxElement>> {
         }
     }
 
-    Ok(syntax_elements)
+    Ok(SyntaxTree {
+        elements: syntax_elements,
+    })
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
@@ -74,8 +78,13 @@ where
 }
 
 #[derive(Debug)]
+pub struct SyntaxTree {
+    pub elements: Vec<SyntaxElement>,
+}
+
+#[derive(Debug)]
 pub enum SyntaxElement {
-    Block(Vec<SyntaxElement>),
+    Block(SyntaxTree),
     FnRef(String),
     Symbol(String),
 }

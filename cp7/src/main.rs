@@ -36,7 +36,7 @@ fn main() -> anyhow::Result<()> {
     let tokens = tokenizer::tokenize(&code);
     let syntax_tree = parser::parse(tokens)?;
 
-    for syntax_element in syntax_tree {
+    for syntax_element in syntax_tree.elements {
         match syntax_element {
             parser::SyntaxElement::Block(block) => {
                 eprintln!("Block: {block:?}")
