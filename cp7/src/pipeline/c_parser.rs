@@ -6,10 +6,10 @@ use crate::{
 
 pub fn parse(
     mut tokens: Tokens,
-) -> ParserResult<(Syntax, Option<SyntaxHandle>)> {
-    let mut syntax = Syntax::new();
-    let start = parse_fragment(None, &mut tokens, &mut syntax)?;
-    Ok((syntax, start))
+    syntax: &mut Syntax,
+) -> ParserResult<Option<SyntaxHandle>> {
+    let start = parse_fragment(None, &mut tokens, syntax)?;
+    Ok(start)
 }
 
 fn parse_fragment(
