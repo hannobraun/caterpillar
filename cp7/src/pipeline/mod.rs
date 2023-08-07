@@ -1,4 +1,3 @@
-mod evaluator;
 mod run;
 mod stages;
 
@@ -8,7 +7,7 @@ pub fn run(path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
     let start = run::run(path, &mut syntax)?;
 
     if let Some(start) = start {
-        let mut evaluator = evaluator::Evaluator::new(start);
+        let mut evaluator = crate::runtime::evaluator::Evaluator::new(start);
         while evaluator.step(&syntax)? {}
     }
 
