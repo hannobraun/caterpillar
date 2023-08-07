@@ -7,6 +7,6 @@ mod value;
 
 fn main() -> anyhow::Result<()> {
     let example = args::example()?;
-    pipeline::run(example)?;
+    pipeline::start(example)?;
     Ok(())
 }
