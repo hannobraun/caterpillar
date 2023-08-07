@@ -1,7 +1,7 @@
-pub mod a_loader;
-pub mod b_tokenizer;
-pub mod c_parser;
-pub mod d_evaluator;
+mod a_loader;
+mod b_tokenizer;
+mod c_parser;
+mod d_evaluator;
 
 pub fn run(path: impl AsRef<std::path::Path>) -> anyhow::Result<()> {
     let mut syntax = crate::syntax::Syntax::new();
