@@ -20,6 +20,9 @@ pub fn tokenize(code: &str) -> Tokens {
                 '}' => {
                     tokens.push(Token::CurlyBracketClose);
                 }
+                '#' => {
+                    state = State::Comment;
+                }
                 ':' => {
                     state = State::Symbol { buf: String::new() };
                 }
@@ -29,6 +32,11 @@ pub fn tokenize(code: &str) -> Tokens {
                     };
                 }
             },
+            State::Comment => {
+                if ch == '\n' {
+                    state = State::Scanning;
+                }
+            }
             State::Symbol { mut buf } => {
                 if ch.is_whitespace() {
                     tokens.push(Token::Symbol(buf));
@@ -63,6 +71,7 @@ pub fn tokenize(code: &str) -> Tokens {
 
 enum State {
     Scanning,
+    Comment,
     Symbol { buf: String },
     WordOrNumber { buf: String },
 }
