@@ -9,6 +9,7 @@ anyhow = "*"
 blake3 = "*"
 enum_variant_type = "*"
 notify = "*"
+notify-debouncer-mini = "*"
 thiserror = "*"
 
 [dependencies.clap]

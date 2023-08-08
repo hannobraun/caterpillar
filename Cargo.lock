@@ -181,6 +181,7 @@ dependencies = [
  "clap",
  "enum_variant_type",
  "notify",
+ "notify-debouncer-mini",
  "thiserror",
 ]
 
@@ -397,6 +398,16 @@ dependencies = [
  "mio",
  "walkdir",
  "windows-sys 0.45.0",
+]
+
+[[package]]
+name = "notify-debouncer-mini"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e55ee272914f4563a2f8b8553eb6811f3c0caea81c756346bad15b7e3ef969f0"
+dependencies = [
+ "crossbeam-channel",
+ "notify",
 ]
 
 [[package]]
