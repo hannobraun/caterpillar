@@ -16,9 +16,11 @@ impl Tokens {
     }
 }
 
-impl From<VecDeque<Token>> for Tokens {
-    fn from(tokens: VecDeque<Token>) -> Self {
-        Self { inner: tokens }
+impl From<Vec<Token>> for Tokens {
+    fn from(tokens: Vec<Token>) -> Self {
+        Self {
+            inner: tokens.into(),
+        }
     }
 }
 

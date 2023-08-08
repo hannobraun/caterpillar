@@ -1,13 +1,11 @@
-use std::collections::VecDeque;
-
 use crate::pipeline::concepts::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
-    let mut tokens = VecDeque::new();
+    let mut tokens = Vec::new();
 
     for token in code.split_whitespace() {
         let token = tokenize_token(token);
-        tokens.push_back(token);
+        tokens.push(token);
     }
 
     Tokens::from(tokens)
