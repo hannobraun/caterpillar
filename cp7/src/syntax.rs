@@ -14,9 +14,9 @@ impl Syntax {
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
-        let hash = fragment.next_hash();
-
-        let handle = SyntaxHandle { hash };
+        let handle = SyntaxHandle {
+            hash: fragment.next_hash(),
+        };
 
         // A hash collision should be exceedingly unlikely, but I'm not sure
         // quite *how* unlikely. Also, I don't fully trust my code to work
