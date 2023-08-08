@@ -1,30 +1,68 @@
 use crate::pipeline::concepts::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
-    let mut tokens = Vec::new();
+    let mut chars = code.chars();
 
-    for token in code.split_whitespace() {
-        let token = tokenize_token(token);
-        tokens.push(token);
+    let mut tokens = Vec::new();
+    let mut state = State::Scanning;
+
+    loop {
+        let Some(ch) = chars.next() else { break };
+
+        match state {
+            State::Scanning => match ch {
+                ch if ch.is_whitespace() => {
+                    continue;
+                }
+                '{' => {
+                    tokens.push(Token::CurlyBracketOpen);
+                }
+                '}' => {
+                    tokens.push(Token::CurlyBracketClose);
+                }
+                ':' => {
+                    state = State::Symbol { buf: String::new() };
+                }
+                ch => {
+                    state = State::WordOrNumber {
+                        buf: String::from(ch),
+                    };
+                }
+            },
+            State::Symbol { mut buf } => {
+                if ch.is_whitespace() {
+                    tokens.push(Token::Symbol(buf));
+                    state = State::Scanning;
+                    continue;
+                }
+
+                buf.push(ch);
+                state = State::Symbol { buf };
+            }
+            State::WordOrNumber { mut buf } => {
+                if ch.is_whitespace() {
+                    let token = match buf.parse::<i64>() {
+                        Ok(number) => Token::Number(number),
+                        Err(_) => Token::Word(buf),
+                    };
+
+                    tokens.push(token);
+
+                    state = State::Scanning;
+                    continue;
+                }
+
+                buf.push(ch);
+                state = State::WordOrNumber { buf };
+            }
+        }
     }
 
     Tokens::from(tokens)
 }
 
-fn tokenize_token(token: &str) -> Token {
-    match token {
-        "{" => return Token::CurlyBracketOpen,
-        "}" => return Token::CurlyBracketClose,
-        _ => {}
-    }
-
-    if let Some(("", symbol)) = token.split_once(':') {
-        return Token::Symbol(symbol.into());
-    }
-
-    if let Ok(number) = token.parse::<i64>() {
-        return Token::Number(number);
-    }
-
-    Token::Word(token.into())
+enum State {
+    Scanning,
+    Symbol { buf: String },
+    WordOrNumber { buf: String },
 }
