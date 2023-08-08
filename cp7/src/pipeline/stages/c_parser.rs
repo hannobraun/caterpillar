@@ -1,9 +1,8 @@
 use crate::{
+    pipeline::concepts::tokens::{token, NoMoreTokens, Token, Tokens},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
-
-use super::b_tokenizer::{token, NoMoreTokens, Token, Tokens};
 
 pub fn parse(
     mut tokens: Tokens,
