@@ -14,16 +14,7 @@ impl Syntax {
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
-        let hash = {
-            let mut hasher = blake3::Hasher::new();
-
-            hasher.update(fragment.payload.to_string().as_bytes());
-            if let Some(next) = fragment.next {
-                hasher.update(next.hash.as_bytes());
-            }
-
-            hasher.finalize()
-        };
+        let hash = fragment.next_hash();
 
         let handle = SyntaxHandle { hash };
 
@@ -58,6 +49,19 @@ pub struct SyntaxHandle {
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
     pub next: Option<SyntaxHandle>,
+}
+
+impl SyntaxFragment {
+    fn next_hash(&self) -> blake3::Hash {
+        let mut hasher = blake3::Hasher::new();
+
+        hasher.update(self.payload.to_string().as_bytes());
+        if let Some(next) = self.next {
+            hasher.update(next.hash.as_bytes());
+        }
+
+        hasher.finalize()
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
