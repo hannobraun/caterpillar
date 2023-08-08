@@ -4,20 +4,16 @@ use crate::value::Value;
 
 pub struct Syntax {
     inner: HashMap<SyntaxHandle, SyntaxFragment>,
-    next_id: u64,
 }
 
 impl Syntax {
     pub fn new() -> Self {
         Self {
             inner: HashMap::new(),
-            next_id: 0,
         }
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
-        self.next_id += 1;
-
         let hash = {
             let mut hasher = blake3::Hasher::new();
 
