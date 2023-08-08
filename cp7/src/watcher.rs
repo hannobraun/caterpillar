@@ -1,4 +1,8 @@
-use std::{path::Path, time::Duration};
+use std::{
+    path::Path,
+    sync::mpsc::{sync_channel, Receiver},
+    time::Duration,
+};
 
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
@@ -7,15 +11,17 @@ use notify_debouncer_mini::{
 
 pub fn watch(
     path: impl AsRef<Path>,
-) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+) -> anyhow::Result<(Receiver<()>, Debouncer<RecommendedWatcher>)> {
+    let (sender, receiver) = sync_channel(0);
+
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
         None,
-        |result: DebounceEventResult| {
+        move |result: DebounceEventResult| {
             if let Ok(events) = result {
                 for event in events {
                     if let DebouncedEventKind::Any = event.kind {
-                        dbg!(event);
+                        sender.send(()).unwrap();
                     }
                 }
 
@@ -31,5 +37,5 @@ pub fn watch(
         .watcher()
         .watch(path.as_ref(), RecursiveMode::Recursive)?;
 
-    Ok(debouncer)
+    Ok((receiver, debouncer))
 }

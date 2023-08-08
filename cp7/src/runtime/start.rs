@@ -1,4 +1,7 @@
-use std::path::Path;
+use std::{
+    path::Path,
+    sync::mpsc::{Receiver, TryRecvError},
+};
 
 use crate::{
     pipeline::{self, PipelineError},
@@ -7,14 +10,30 @@ use crate::{
 
 use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
-pub fn start(path: impl AsRef<Path>) -> Result<(), RuntimeError> {
+pub fn start(
+    path: impl AsRef<Path>,
+    updates: Receiver<()>,
+) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
     let start = pipeline::run(path.as_ref(), &mut syntax)?;
 
     if let Some(start) = start {
         let mut evaluator = Evaluator::new(start);
-        while let EvaluatorState::InProgress = evaluator.step(&syntax)? {}
+        while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
+            match updates.try_recv() {
+                Ok(()) => {
+                    eprintln!("Running pipeline...");
+                    pipeline::run(path.as_ref(), &mut syntax)?;
+                }
+                Err(TryRecvError::Empty) => {
+                    // nothing to do; just continue with the next evaluator step
+                }
+                Err(TryRecvError::Disconnected) => {
+                    return Err(RuntimeError::UpdatesDisconnected);
+                }
+            }
+        }
     }
 
     Ok(())
@@ -27,4 +46,7 @@ pub enum RuntimeError {
 
     #[error("Evaluator error")]
     Evaluator(#[from] EvaluatorError),
+
+    #[error("Update channel is disconnected")]
+    UpdatesDisconnected,
 }
