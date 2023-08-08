@@ -28,5 +28,5 @@ fn tokenize_token(token: &str) -> Token {
         return Token::Number(number);
     }
 
-    Token::FnRef(token.into())
+    Token::Word(token.into())
 }

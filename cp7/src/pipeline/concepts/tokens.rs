@@ -27,9 +27,9 @@ impl From<VecDeque<Token>> for Tokens {
 pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
-    FnRef(String),
     Number(i64),
     Symbol(String),
+    Word(String),
 }
 
 #[derive(Debug, thiserror::Error)]

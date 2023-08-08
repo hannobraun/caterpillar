@@ -36,7 +36,7 @@ fn parse_fragment(
             let block = parse_block(tokens, syntax)?;
             SyntaxElement::Value(value::Block(block).into())
         }
-        Token::FnRef(_) => {
+        Token::Word(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
             SyntaxElement::FnRef(fn_ref)
         }
@@ -76,7 +76,7 @@ fn parse_block(
 }
 
 fn parse_fn_ref(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::FnRef>(tokens)?;
+    let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
