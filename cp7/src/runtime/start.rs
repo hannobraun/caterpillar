@@ -5,6 +5,7 @@ use std::{
 
 use crate::{
     pipeline::{self, PipelineError},
+    runtime::updater,
     syntax::Syntax,
 };
 
@@ -25,6 +26,7 @@ pub fn start(
                 Ok(()) => {
                     eprintln!("Running pipeline...");
                     pipeline::run(path.as_ref(), &mut syntax)?;
+                    updater::update(&syntax, &mut evaluator);
                 }
                 Err(TryRecvError::Empty) => {
                     // nothing to do; just continue with the next evaluator step
