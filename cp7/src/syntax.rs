@@ -2,6 +2,7 @@ use std::{collections::HashMap, fmt};
 
 use crate::value::Value;
 
+#[derive(Debug)]
 pub struct Syntax {
     inner: HashMap<SyntaxHandle, SyntaxFragment>,
 }
