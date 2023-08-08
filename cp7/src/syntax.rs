@@ -5,18 +5,21 @@ use crate::value::Value;
 #[derive(Debug)]
 pub struct Syntax {
     inner: HashMap<SyntaxHandle, SyntaxFragment>,
+    generation: u64,
 }
 
 impl Syntax {
     pub fn new() -> Self {
         Self {
             inner: HashMap::new(),
+            generation: 0,
         }
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
         let handle = SyntaxHandle {
             hash: fragment.next_hash(),
+            generation: self.generation,
         };
 
         // A hash collision should be exceedingly unlikely, but I'm not sure
@@ -44,6 +47,7 @@ impl Syntax {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct SyntaxHandle {
     hash: blake3::Hash,
+    generation: u64,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
