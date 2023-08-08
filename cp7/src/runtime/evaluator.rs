@@ -32,7 +32,7 @@ impl Evaluator {
         };
 
         match syntax_fragment.payload {
-            SyntaxElement::FnRef(fn_ref) => {
+            SyntaxElement::Word(fn_ref) => {
                 match self.functions.resolve(&fn_ref)? {
                     Function::Intrinsic(intrinsic) => {
                         intrinsic(&mut self.functions, &mut self.data_stack)?

@@ -38,7 +38,7 @@ fn parse_fragment(
         }
         Token::Word(_) => {
             let fn_ref = parse_fn_ref(tokens)?;
-            SyntaxElement::FnRef(fn_ref)
+            SyntaxElement::Word(fn_ref)
         }
         Token::Number(_) => {
             let number = parse_number(tokens)?;

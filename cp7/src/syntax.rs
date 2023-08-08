@@ -48,6 +48,6 @@ pub struct SyntaxFragment {
 
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
-    FnRef(String),
     Value(Value),
+    Word(String),
 }
