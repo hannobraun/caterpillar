@@ -4,14 +4,14 @@ use crate::value::Value;
 
 #[derive(Debug)]
 pub struct Syntax {
-    inner: HashMap<blake3::Hash, SyntaxFragment>,
+    fragments: HashMap<blake3::Hash, SyntaxFragment>,
     generation: u64,
 }
 
 impl Syntax {
     pub fn new() -> Self {
         Self {
-            inner: HashMap::new(),
+            fragments: HashMap::new(),
             generation: 0,
         }
     }
@@ -32,7 +32,7 @@ impl Syntax {
         //
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
-        if let Some(existing) = self.inner.get(&handle.hash) {
+        if let Some(existing) = self.fragments.get(&handle.hash) {
             // We can't just compare the two fragments directly here, as the
             // generation is allowed to be different. We have to go into a bit
             // of extra effort to make it work.
@@ -67,7 +67,7 @@ impl Syntax {
             }
         }
 
-        self.inner.insert(handle.hash, fragment);
+        self.fragments.insert(handle.hash, fragment);
 
         handle
     }
@@ -75,7 +75,7 @@ impl Syntax {
     pub fn get(&self, handle: SyntaxHandle) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create handles for fragments we add.
-        self.inner.get(&handle.hash).cloned().unwrap()
+        self.fragments.get(&handle.hash).cloned().unwrap()
     }
 }
 
