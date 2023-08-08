@@ -22,8 +22,8 @@ impl Syntax {
         // quite *how* unlikely. Also, I don't fully trust my code to work
         // perfectly.
         //
-        // Let's just make sure, just for now, there actually are no hash
-        // collisions, okay?
+        // Let's make sure, just for now, there actually are no hash collisions,
+        // okay?
         if let Some(existing) = self.inner.get(&handle) {
             assert_eq!(existing, &fragment);
         }
