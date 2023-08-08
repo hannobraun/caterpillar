@@ -5,7 +5,7 @@ use crate::{
     syntax::Syntax,
 };
 
-use super::evaluator::{Evaluator, EvaluatorError};
+use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
 pub fn start(path: impl AsRef<Path>) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
@@ -14,7 +14,7 @@ pub fn start(path: impl AsRef<Path>) -> Result<(), RuntimeError> {
 
     if let Some(start) = start {
         let mut evaluator = Evaluator::new(start);
-        while evaluator.step(&syntax)? {}
+        while let EvaluatorState::InProgress = evaluator.step(&syntax)? {}
     }
 
     Ok(())
