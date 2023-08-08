@@ -1,13 +1,22 @@
-use std::path::Path;
+use std::{path::Path, time::Duration};
 
-use notify::{Event, EventKind, RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{RecommendedWatcher, RecursiveMode};
+use notify_debouncer_mini::{
+    DebounceEventResult, DebouncedEventKind, Debouncer,
+};
 
-pub fn watch(path: impl AsRef<Path>) -> anyhow::Result<RecommendedWatcher> {
-    let mut watcher =
-        notify::recommended_watcher(|result: Result<Event, _>| {
-            if let Ok(event) = result {
-                if let EventKind::Modify(_) = event.kind {
-                    dbg!(event);
+pub fn watch(
+    path: impl AsRef<Path>,
+) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+    let mut debouncer = notify_debouncer_mini::new_debouncer(
+        Duration::from_millis(50),
+        None,
+        |result: DebounceEventResult| {
+            if let Ok(events) = result {
+                for event in events {
+                    if let DebouncedEventKind::Any = event.kind {
+                        dbg!(event);
+                    }
                 }
 
                 return;
@@ -15,9 +24,12 @@ pub fn watch(path: impl AsRef<Path>) -> anyhow::Result<RecommendedWatcher> {
 
             // Not sure what else we can do about it here.
             eprintln!("Error watching code: {result:?}");
-        })?;
+        },
+    )?;
 
-    watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
+    debouncer
+        .watcher()
+        .watch(path.as_ref(), RecursiveMode::Recursive)?;
 
-    Ok(watcher)
+    Ok(debouncer)
 }
