@@ -26,5 +26,5 @@ pub enum RuntimeError {
     Pipeline(#[from] PipelineError),
 
     #[error("Evaluator error")]
-    Error(#[from] EvaluatorError),
+    Evaluator(#[from] EvaluatorError),
 }
