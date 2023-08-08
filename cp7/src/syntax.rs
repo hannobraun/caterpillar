@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt};
 
 use crate::value::Value;
 
@@ -50,4 +50,13 @@ pub struct SyntaxFragment {
 pub enum SyntaxElement {
     Value(Value),
     Word(String),
+}
+
+impl fmt::Display for SyntaxElement {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SyntaxElement::Value(value) => write!(f, "{value}"),
+            SyntaxElement::Word(word) => write!(f, "{word}"),
+        }
+    }
 }
