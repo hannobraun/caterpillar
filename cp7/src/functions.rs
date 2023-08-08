@@ -5,6 +5,7 @@ use crate::{
     value,
 };
 
+#[derive(Debug)]
 pub struct Functions {
     inner: BTreeMap<String, Function>,
 }
@@ -40,6 +41,7 @@ impl Functions {
     }
 }
 
+#[derive(Debug)]
 pub enum Function {
     Intrinsic(Intrinsic),
     UserDefined { body: value::Block },

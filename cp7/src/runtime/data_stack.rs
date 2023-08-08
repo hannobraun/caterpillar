@@ -1,5 +1,6 @@
 use crate::value::{Type, TypeError, Value};
 
+#[derive(Debug)]
 pub struct DataStack {
     values: Vec<Value>,
 }

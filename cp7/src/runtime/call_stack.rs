@@ -1,5 +1,6 @@
 use crate::syntax::SyntaxHandle;
 
+#[derive(Debug)]
 pub struct CallStack {
     frames: Vec<SyntaxHandle>,
 }

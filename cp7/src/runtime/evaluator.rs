@@ -7,6 +7,7 @@ use crate::{
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };
 
+#[derive(Debug)]
 pub struct Evaluator {
     functions: Functions,
     call_stack: CallStack,
