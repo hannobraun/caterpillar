@@ -26,6 +26,17 @@ impl Syntax {
         };
 
         let handle = SyntaxHandle { hash };
+
+        // A hash collision should be exceedingly unlikely, but I'm not sure
+        // quite *how* unlikely. Also, I don't fully trust my code to work
+        // perfectly.
+        //
+        // Let's just make sure, just for now, there actually are no hash
+        // collisions, okay?
+        if let Some(existing) = self.inner.get(&handle) {
+            assert_eq!(existing, &fragment);
+        }
+
         self.inner.insert(handle, fragment);
 
         handle
