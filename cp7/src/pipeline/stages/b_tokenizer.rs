@@ -10,7 +10,7 @@ pub fn tokenize(code: &str) -> Tokens {
         tokens.push_back(token);
     }
 
-    Tokens { inner: tokens }
+    Tokens::from(tokens)
 }
 
 fn tokenize_token(token: &str) -> Token {
@@ -42,6 +42,12 @@ impl Tokens {
 
     pub fn next(&mut self) -> Result<Token, NoMoreTokens> {
         self.inner.pop_front().ok_or(NoMoreTokens)
+    }
+}
+
+impl From<VecDeque<Token>> for Tokens {
+    fn from(tokens: VecDeque<Token>) -> Self {
+        Self { inner: tokens }
     }
 }
 
