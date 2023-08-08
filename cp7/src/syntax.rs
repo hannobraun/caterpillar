@@ -33,9 +33,33 @@ impl Syntax {
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
         if let Some(existing) = self.inner.get(&handle) {
-            // The generation of `next` is allowed to be different. That's why
-            // we're not comparing the fragments whole.
-            assert_eq!(existing.payload, fragment.payload);
+            // We can't just compare the two fragments directly here, as the
+            // generation is allowed to be different. We have to go into a bit
+            // of extra effort to make it work.
+
+            // The payload might be a block, in which case the generation of its
+            // `SyntaxHandle` would make it into a regular old comparison.
+            match (&existing.payload, &fragment.payload) {
+                (
+                    SyntaxElement::Value(Value::Block(existing)),
+                    SyntaxElement::Value(Value::Block(new)),
+                ) => {
+                    assert_eq!(existing.map(hash), new.map(hash));
+                }
+                (SyntaxElement::Value(existing), SyntaxElement::Value(new)) => {
+                    assert_eq!(existing, new)
+                }
+                (SyntaxElement::Word(existing), SyntaxElement::Word(new)) => {
+                    assert_eq!(existing, new)
+                }
+                (SyntaxElement::Value(_), SyntaxElement::Word(_))
+                | (SyntaxElement::Word(_), SyntaxElement::Value(_)) => {
+                    panic!("Hash collision!")
+                }
+            }
+
+            // Here we are comparing handles, whose generation is allowed to be
+            // different.
             assert_eq!(existing.next.map(hash), fragment.next.map(hash));
 
             fn hash(handle: SyntaxHandle) -> blake3::Hash {
