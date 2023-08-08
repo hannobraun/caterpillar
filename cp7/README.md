@@ -29,8 +29,8 @@ Here's what I have in mind:
 - A language that is **unapologetically dynamic**. Interpreted, dynamically
   typed, and no design considerations made to change any of that. Even though
   I'd like to create a fully interactive language with static typing and zero
-  runtime overhead at some point, for now even thinking about this is making
-  things way too complicated.
+  runtime overhead (in addition to what is required for interactivity) at some
+  point, for now even thinking about this is making things way too complicated.
 - The language is **purely functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
