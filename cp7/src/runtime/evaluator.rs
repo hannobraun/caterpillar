@@ -9,9 +9,9 @@ use crate::{
 
 #[derive(Debug)]
 pub struct Evaluator {
-    functions: Functions,
-    call_stack: CallStack,
-    data_stack: DataStack,
+    pub functions: Functions,
+    pub call_stack: CallStack,
+    pub data_stack: DataStack,
 }
 
 impl Evaluator {
