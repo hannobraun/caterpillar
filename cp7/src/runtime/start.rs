@@ -24,7 +24,6 @@ pub fn start(
         while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
             match updates.try_recv() {
                 Ok(()) => {
-                    eprintln!("Running pipeline...");
                     pipeline::run(path.as_ref(), &mut syntax)?;
                     updater::update(&syntax, &mut evaluator);
                 }
