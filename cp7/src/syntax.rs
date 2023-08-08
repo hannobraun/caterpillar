@@ -77,6 +77,44 @@ impl Syntax {
         // never remove them, and only ever create handles for fragments we add.
         self.fragments.get(&handle.hash).cloned().unwrap().1
     }
+
+    pub fn find_replaced_fragments(
+        &self,
+    ) -> Vec<(
+        (SyntaxHandle, SyntaxFragment),
+        (SyntaxHandle, SyntaxFragment),
+    )> {
+        let old_fragments = self.fragments.values().filter(|(_, fragment)| {
+            match fragment.next {
+                Some(handle) => handle.generation != self.generation,
+                None => false,
+            }
+        });
+
+        let mut replaced_fragments = Vec::new();
+        for (handle, fragment) in old_fragments {
+            let mut potential_replacements =
+                self.fragments
+                    .values()
+                    .filter(|(_, potential_replacement)| {
+                        match (fragment.next, potential_replacement.next) {
+                            (Some(a), Some(b)) => {
+                                a.hash == b.hash && a.generation < b.generation
+                            }
+                            _ => false,
+                        }
+                    });
+
+            if let Some(replacement) = potential_replacements.next() {
+                replaced_fragments
+                    .push(((*handle, fragment.clone()), replacement.clone()));
+            }
+
+            assert!(potential_replacements.next().is_none());
+        }
+
+        replaced_fragments
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]

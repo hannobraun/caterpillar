@@ -2,6 +2,7 @@ use std::{collections::BTreeMap, thread, time::Duration};
 
 use crate::{
     runtime::data_stack::{DataStack, DataStackResult},
+    syntax::SyntaxHandle,
     value,
 };
 
@@ -38,6 +39,18 @@ impl Functions {
         self.inner
             .get(name)
             .ok_or(ResolveError { name: name.into() })
+    }
+
+    pub fn replace(&mut self, old: SyntaxHandle, new: SyntaxHandle) {
+        for function in self.inner.values_mut() {
+            if let Function::UserDefined { body } = function {
+                if let Some(handle) = &mut body.0 {
+                    if handle.hash == old.hash {
+                        *handle = new;
+                    }
+                }
+            }
+        }
     }
 }
 
