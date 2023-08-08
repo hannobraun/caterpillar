@@ -19,7 +19,18 @@ impl Syntax {
         let id = self.next_id;
         self.next_id += 1;
 
-        let handle = SyntaxHandle { id };
+        let hash = {
+            let mut hasher = blake3::Hasher::new();
+
+            hasher.update(fragment.payload.to_string().as_bytes());
+            if let Some(next) = fragment.next {
+                hasher.update(next.hash.as_bytes());
+            }
+
+            hasher.finalize()
+        };
+
+        let handle = SyntaxHandle { id, hash };
         self.inner.insert(handle, fragment);
 
         handle
@@ -38,6 +49,8 @@ pub struct SyntaxHandle {
     // references, thereby making `SyntaxFragment` content-addressed. For now, a
     // simple unique ID will do.
     id: u64,
+
+    hash: blake3::Hash,
 }
 
 #[derive(Clone, Debug)]
