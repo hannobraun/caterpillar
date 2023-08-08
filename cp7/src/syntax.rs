@@ -16,6 +16,10 @@ impl Syntax {
         }
     }
 
+    pub fn prepare_update(&mut self) {
+        self.generation += 1;
+    }
+
     pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
         let handle = SyntaxHandle {
             hash: fragment.next_hash(),
