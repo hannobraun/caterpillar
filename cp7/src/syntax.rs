@@ -43,13 +43,13 @@ pub struct SyntaxHandle {
     hash: blake3::Hash,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
     pub next: Option<SyntaxHandle>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxElement {
     Value(Value),
     Word(String),

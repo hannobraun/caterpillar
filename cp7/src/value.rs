@@ -4,7 +4,7 @@ use enum_variant_type::EnumVariantType;
 
 use crate::syntax::SyntaxHandle;
 
-#[derive(Clone, Debug, EnumVariantType)]
+#[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug))]
 pub enum Value {
     Block(Option<SyntaxHandle>),
