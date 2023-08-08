@@ -61,6 +61,15 @@ pub struct SyntaxHandle {
     generation: u64,
 }
 
+impl fmt::Display for SyntaxHandle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // The string representation of `SyntaxHandle` is used for hashing, so
+        // the generation, which must not influence the hash, must not show up
+        // here.
+        write!(f, "{}", self.hash)
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
