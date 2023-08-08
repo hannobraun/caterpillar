@@ -33,7 +33,14 @@ impl Syntax {
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
         if let Some(existing) = self.inner.get(&handle) {
-            assert_eq!(existing, &fragment);
+            // The generation of `next` is allowed to be different. That's why
+            // we're not comparing the fragments whole.
+            assert_eq!(existing.payload, fragment.payload);
+            assert_eq!(existing.next.map(hash), fragment.next.map(hash));
+
+            fn hash(handle: SyntaxHandle) -> blake3::Hash {
+                handle.hash
+            }
         }
 
         self.inner.insert(handle, fragment);
