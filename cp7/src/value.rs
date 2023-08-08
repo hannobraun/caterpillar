@@ -25,7 +25,7 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Value::Block(block) => write!(f, "{{ {block:?} }}"),
+            Value::Block(start) => write!(f, "{{ {start:?} }}"),
             Value::Number(number) => write!(f, "{number}"),
             Value::Symbol(symbol) => write!(f, ":{symbol}"),
         }
