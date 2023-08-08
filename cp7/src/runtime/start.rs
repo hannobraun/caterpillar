@@ -10,7 +10,7 @@ use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 pub fn start(path: impl AsRef<Path>) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
-    let start = pipeline::run(path, &mut syntax)?;
+    let start = pipeline::run(path.as_ref(), &mut syntax)?;
 
     if let Some(start) = start {
         let mut evaluator = Evaluator::new(start);
