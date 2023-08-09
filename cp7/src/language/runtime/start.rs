@@ -3,7 +3,7 @@ use std::{
     sync::mpsc::{Receiver, TryRecvError},
 };
 
-use crate::{
+use crate::language::{
     pipeline::{self, PipelineError},
     syntax::Syntax,
 };

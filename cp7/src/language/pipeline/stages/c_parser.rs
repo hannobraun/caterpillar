@@ -1,4 +1,4 @@
-use crate::{
+use crate::language::{
     pipeline::concepts::tokens::{token, NoMoreTokens, Token, Tokens},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},

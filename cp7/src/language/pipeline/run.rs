@@ -1,6 +1,6 @@
 use std::io;
 
-use crate::syntax::{Syntax, SyntaxHandle};
+use crate::language::syntax::{Syntax, SyntaxHandle};
 
 use super::stages::{
     a_loader::load,

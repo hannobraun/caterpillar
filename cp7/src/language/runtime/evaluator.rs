@@ -1,4 +1,4 @@
-use crate::{
+use crate::language::{
     functions::{Function, Functions, ResolveError},
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
 };

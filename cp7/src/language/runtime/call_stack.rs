@@ -1,4 +1,4 @@
-use crate::syntax::SyntaxHandle;
+use crate::language::syntax::SyntaxHandle;
 
 #[derive(Debug)]
 pub struct CallStack {

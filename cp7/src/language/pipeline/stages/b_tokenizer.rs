@@ -1,4 +1,4 @@
-use crate::pipeline::concepts::tokens::{Token, Tokens};
+use crate::language::pipeline::concepts::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
     let mut chars = code.chars();

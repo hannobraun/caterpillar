@@ -1,4 +1,4 @@
-use crate::syntax::Syntax;
+use crate::language::syntax::Syntax;
 
 use super::evaluator::Evaluator;
 
