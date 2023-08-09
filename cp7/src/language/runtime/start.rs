@@ -16,23 +16,23 @@ pub fn start(
 ) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
-    let start = pipeline::run(code, &mut syntax)?;
+    let Some(start) = pipeline::run(code, &mut syntax)? else {
+        return Ok(());
+    };
 
-    if let Some(start) = start {
-        let mut evaluator = Evaluator::new(start);
-        while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
-            match updates.try_recv() {
-                Ok(code) => {
-                    syntax.prepare_update();
-                    pipeline::run(&code, &mut syntax)?;
-                    updater::update(&syntax, &mut evaluator);
-                }
-                Err(TryRecvError::Empty) => {
-                    // nothing to do; just continue with the next evaluator step
-                }
-                Err(TryRecvError::Disconnected) => {
-                    return Err(RuntimeError::UpdatesDisconnected);
-                }
+    let mut evaluator = Evaluator::new(start);
+    while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
+        match updates.try_recv() {
+            Ok(code) => {
+                syntax.prepare_update();
+                pipeline::run(&code, &mut syntax)?;
+                updater::update(&syntax, &mut evaluator);
+            }
+            Err(TryRecvError::Empty) => {
+                // nothing to do; just continue with the next evaluator step
+            }
+            Err(TryRecvError::Disconnected) => {
+                return Err(RuntimeError::UpdatesDisconnected);
             }
         }
     }
