@@ -40,5 +40,10 @@ Here's what I have in mind:
 
 ## Status
 
-In progress! Basic example exist and work. The language is neither
-Turing-complete nor interactive yet.
+In progress! Interactivity has been achieved, in one simple case. The logic for
+recognizing which new code replaces which old code needs more refinement, but
+this is a great first step and partial proof of concept.
+
+Otherwise, the language is very basic, and not even Turing-complete yet (though
+adding Turing-completeness and other features should not make the interactivity
+aspect any more difficult).
