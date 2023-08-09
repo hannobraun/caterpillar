@@ -1,7 +1,4 @@
-use std::{
-    io,
-    sync::mpsc::{Receiver, TryRecvError},
-};
+use std::sync::mpsc::{Receiver, TryRecvError};
 
 use crate::language::{
     pipeline::{self, PipelineError},
@@ -45,9 +42,6 @@ pub fn start(
 
 #[derive(Debug, thiserror::Error)]
 pub enum RuntimeError {
-    #[error("Failed to load code from file")]
-    Loader(#[from] io::Error),
-
     #[error("Pipeline error")]
     Pipeline(#[from] PipelineError),
 
