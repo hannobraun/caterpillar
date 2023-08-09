@@ -1,7 +1,11 @@
+use std::iter;
+
 use crate::language::pipeline::concepts::tokens::{Token, Tokens};
 
 pub fn tokenize(code: &str) -> Tokens {
-    let mut chars = code.chars();
+    // Make sure that the code always ends on whitespace. Otherwise the
+    // tokenizer might miss the last token.
+    let mut chars = code.chars().chain(iter::once('\n'));
 
     let mut tokens = Vec::new();
     let mut state = State::Scanning;
