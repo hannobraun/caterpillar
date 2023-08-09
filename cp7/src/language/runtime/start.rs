@@ -1,11 +1,15 @@
 use std::{
+    io,
     path::Path,
     sync::mpsc::{Receiver, TryRecvError},
 };
 
-use crate::language::{
-    pipeline::{self, PipelineError},
-    syntax::Syntax,
+use crate::{
+    language::{
+        pipeline::{self, PipelineError},
+        syntax::Syntax,
+    },
+    loader::load::load,
 };
 
 use super::{
@@ -19,7 +23,8 @@ pub fn start(
 ) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
-    let start = pipeline::run(path.as_ref(), &mut syntax)?;
+    let code = load(path.as_ref())?;
+    let start = pipeline::run(&code, &mut syntax)?;
 
     if let Some(start) = start {
         let mut evaluator = Evaluator::new(start);
@@ -27,7 +32,8 @@ pub fn start(
             match updates.try_recv() {
                 Ok(()) => {
                     syntax.prepare_update();
-                    pipeline::run(path.as_ref(), &mut syntax)?;
+                    let code = load(path.as_ref())?;
+                    pipeline::run(&code, &mut syntax)?;
                     updater::update(&syntax, &mut evaluator);
                 }
                 Err(TryRecvError::Empty) => {
@@ -45,6 +51,9 @@ pub fn start(
 
 #[derive(Debug, thiserror::Error)]
 pub enum RuntimeError {
+    #[error("Failed to load code from file")]
+    Loader(#[from] io::Error),
+
     #[error("Pipeline error")]
     Pipeline(#[from] PipelineError),
 
