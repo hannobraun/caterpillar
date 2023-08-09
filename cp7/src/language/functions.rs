@@ -27,12 +27,15 @@ impl Functions {
         ];
 
         for (name, intrinsic) in intrinsics {
-            self_
-                .inner
-                .insert(name.into(), Function::Intrinsic(intrinsic));
+            self_.register_intrinsic(name, intrinsic)
         }
 
         self_
+    }
+
+    pub fn register_intrinsic(&mut self, name: &str, intrinsic: Intrinsic) {
+        self.inner
+            .insert(name.into(), Function::Intrinsic(intrinsic));
     }
 
     pub fn define(&mut self, name: value::Symbol, body: value::Block) {
