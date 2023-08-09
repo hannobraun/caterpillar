@@ -1,15 +1,11 @@
 use std::{
     io,
-    path::Path,
     sync::mpsc::{Receiver, TryRecvError},
 };
 
-use crate::{
-    language::{
-        pipeline::{self, PipelineError},
-        syntax::Syntax,
-    },
-    loader::load::load,
+use crate::language::{
+    pipeline::{self, PipelineError},
+    syntax::Syntax,
 };
 
 use super::{
@@ -18,13 +14,12 @@ use super::{
 };
 
 pub fn start(
-    path: impl AsRef<Path>,
+    code: &str,
     updates: Receiver<String>,
 ) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
-    let code = load(path.as_ref())?;
-    let start = pipeline::run(&code, &mut syntax)?;
+    let start = pipeline::run(code, &mut syntax)?;
 
     if let Some(start) = start {
         let mut evaluator = Evaluator::new(start);
