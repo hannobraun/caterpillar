@@ -17,17 +17,13 @@ impl CallStack {
     pub fn advance(&mut self, next: Option<SyntaxHandle>) {
         match next {
             Some(handle) => {
-                self.update(handle);
+                if let Some(current) = self.frames.last_mut() {
+                    *current = handle
+                }
             }
             None => {
                 self.pop();
             }
-        }
-    }
-
-    pub fn update(&mut self, next: SyntaxHandle) {
-        if let Some(current) = self.frames.last_mut() {
-            *current = next
         }
     }
 
