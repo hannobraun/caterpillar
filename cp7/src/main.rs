@@ -4,7 +4,7 @@ mod loader;
 
 fn main() -> anyhow::Result<()> {
     let example = args::example()?;
-    let (updates, _watcher) = loader::watch(&example)?;
+    let (updates, _watcher) = loader::watch::watch(&example)?;
     language::runtime::start::start(example, updates)?;
     Ok(())
 }
