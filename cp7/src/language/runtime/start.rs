@@ -19,7 +19,7 @@ use super::{
 
 pub fn start(
     path: impl AsRef<Path>,
-    updates: Receiver<()>,
+    updates: Receiver<String>,
 ) -> Result<(), RuntimeError> {
     let mut syntax = Syntax::new();
 
@@ -30,9 +30,8 @@ pub fn start(
         let mut evaluator = Evaluator::new(start);
         while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
             match updates.try_recv() {
-                Ok(()) => {
+                Ok(code) => {
                     syntax.prepare_update();
-                    let code = load(path.as_ref())?;
                     pipeline::run(&code, &mut syntax)?;
                     updater::update(&syntax, &mut evaluator);
                 }
