@@ -6,7 +6,7 @@ use crate::{
 };
 
 use super::stages::{
-    b_tokenizer::tokenize,
+    a_tokenizer::tokenize,
     c_parser::{parse, ParserError},
 };
 
