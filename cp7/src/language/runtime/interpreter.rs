@@ -3,7 +3,7 @@ use crate::language::{
     syntax::Syntax,
 };
 
-use super::evaluator::Evaluator;
+use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
 pub struct Interpreter {
     pub syntax: Syntax,
@@ -19,5 +19,9 @@ impl Interpreter {
         let evaluator = Evaluator::new(start);
 
         Ok(Some(Interpreter { syntax, evaluator }))
+    }
+
+    pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
+        self.evaluator.step(&self.syntax)
     }
 }

@@ -16,9 +16,7 @@ pub fn start(
         return Ok(())
     };
 
-    while let EvaluatorState::InProgress =
-        interpreter.evaluator.step(&interpreter.syntax)?
-    {
+    while let EvaluatorState::InProgress = interpreter.step()? {
         match updates.try_recv() {
             Ok(code) => {
                 interpreter.syntax.prepare_update();
