@@ -14,9 +14,9 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let inner = BTreeMap::new();
-
-        let mut self_ = Self { inner };
+        let mut self_ = Self {
+            inner: BTreeMap::new(),
+        };
 
         let intrinsics = [
             ("+", intrinsics::add as Intrinsic),
