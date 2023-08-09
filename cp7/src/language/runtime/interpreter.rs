@@ -1,5 +1,4 @@
 use crate::language::{
-    functions::Intrinsic,
     intrinsics,
     pipeline::{self, PipelineError},
     syntax::Syntax,
@@ -7,6 +6,7 @@ use crate::language::{
 
 use super::{
     evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    functions::Intrinsic,
     updater,
 };
 

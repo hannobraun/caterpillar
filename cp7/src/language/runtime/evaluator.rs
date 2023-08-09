@@ -1,11 +1,9 @@
-use crate::language::{
-    functions::{Function, Functions, ResolveError},
-    syntax::{Syntax, SyntaxElement},
-};
+use crate::language::syntax::{Syntax, SyntaxElement};
 
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
+    functions::{Function, Functions, ResolveError},
 };
 
 #[derive(Debug)]

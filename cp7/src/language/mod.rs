@@ -1,4 +1,3 @@
-pub mod functions;
 pub mod pipeline;
 pub mod intrinsics;
 pub mod runtime;

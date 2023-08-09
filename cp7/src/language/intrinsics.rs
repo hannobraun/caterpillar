@@ -1,8 +1,10 @@
 use std::{thread, time::Duration};
 
 use super::{
-    functions::Functions,
-    runtime::data_stack::{DataStack, DataStackResult},
+    runtime::{
+        data_stack::{DataStack, DataStackResult},
+        functions::Functions,
+    },
     value,
 };
 

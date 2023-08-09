@@ -1,10 +1,8 @@
 use std::collections::BTreeMap;
 
-use super::{
-    runtime::data_stack::{DataStack, DataStackResult},
-    syntax::SyntaxHandle,
-    value,
-};
+use crate::language::{syntax::SyntaxHandle, value};
+
+use super::data_stack::{DataStack, DataStackResult};
 
 #[derive(Debug)]
 pub struct Functions {
