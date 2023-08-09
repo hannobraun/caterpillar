@@ -3,7 +3,10 @@ use crate::language::{
     syntax::Syntax,
 };
 
-use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
+use super::{
+    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    updater,
+};
 
 pub struct Interpreter {
     pub syntax: Syntax,
@@ -23,5 +26,13 @@ impl Interpreter {
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
         self.evaluator.step(&self.syntax)
+    }
+
+    pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
+        self.syntax.prepare_update();
+        pipeline::run(code, &mut self.syntax)?;
+        updater::update(&self.syntax, &mut self.evaluator);
+
+        Ok(())
     }
 }
