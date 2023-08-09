@@ -14,7 +14,9 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let mut inner = BTreeMap::new();
+        let inner = BTreeMap::new();
+
+        let mut self_ = Self { inner };
 
         let intrinsics = [
             ("+", intrinsics::add as Intrinsic),
@@ -25,10 +27,12 @@ impl Functions {
         ];
 
         for (name, intrinsic) in intrinsics {
-            inner.insert(name.into(), Function::Intrinsic(intrinsic));
+            self_
+                .inner
+                .insert(name.into(), Function::Intrinsic(intrinsic));
         }
 
-        Self { inner }
+        self_
     }
 
     pub fn define(&mut self, name: value::Symbol, body: value::Block) {
