@@ -10,6 +10,7 @@ use super::{
     updater,
 };
 
+#[derive(Debug)]
 pub struct Interpreter {
     pub syntax: Syntax,
     pub evaluator: Evaluator,
