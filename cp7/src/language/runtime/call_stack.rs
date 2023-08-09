@@ -14,6 +14,17 @@ impl CallStack {
         self.frames.last().copied()
     }
 
+    pub fn advance(&mut self, next: Option<SyntaxHandle>) {
+        match next {
+            Some(handle) => {
+                self.update(handle);
+            }
+            None => {
+                self.pop();
+            }
+        }
+    }
+
     pub fn update(&mut self, next: SyntaxHandle) {
         match self.frames.last_mut() {
             Some(current) => *current = next,

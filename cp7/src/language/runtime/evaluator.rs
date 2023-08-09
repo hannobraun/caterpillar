@@ -50,14 +50,7 @@ impl Evaluator {
             }
         };
 
-        match syntax_fragment.next {
-            Some(handle) => {
-                self.call_stack.update(handle);
-            }
-            None => {
-                self.call_stack.pop();
-            }
-        }
+        self.call_stack.advance(syntax_fragment.next);
 
         Ok(EvaluatorState::InProgress)
     }
