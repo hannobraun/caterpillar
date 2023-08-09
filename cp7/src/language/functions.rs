@@ -1,6 +1,7 @@
-use std::{collections::BTreeMap, thread, time::Duration};
+use std::collections::BTreeMap;
 
 use super::{
+    intrinsics,
     runtime::data_stack::{DataStack, DataStackResult},
     syntax::SyntaxHandle,
     value,
@@ -16,11 +17,11 @@ impl Functions {
         let mut inner = BTreeMap::new();
 
         let intrinsics = [
-            ("+", add as Intrinsic),
-            ("clone", clone),
-            ("delay_ms", delay_ms),
-            ("print_line", print_line),
-            ("fn", fn_),
+            ("+", intrinsics::add as Intrinsic),
+            ("clone", intrinsics::clone),
+            ("delay_ms", intrinsics::delay_ms),
+            ("print_line", intrinsics::print_line),
+            ("fn", intrinsics::fn_),
         ];
 
         for (name, intrinsic) in intrinsics {
@@ -66,52 +67,4 @@ pub type Intrinsic = fn(&mut Functions, &mut DataStack) -> DataStackResult<()>;
 #[error("Error resolving function `{name}`")]
 pub struct ResolveError {
     pub name: String,
-}
-
-fn add(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
-    let b = data_stack.pop_specific::<value::Number>()?;
-    let a = data_stack.pop_specific::<value::Number>()?;
-
-    data_stack.push(value::Number(a.0 + b.0));
-
-    Ok(())
-}
-
-fn clone(_: &mut Functions, data_stack: &mut DataStack) -> DataStackResult<()> {
-    let value = data_stack.pop_any()?;
-
-    data_stack.push(value.clone());
-    data_stack.push(value);
-
-    Ok(())
-}
-
-fn delay_ms(
-    _: &mut Functions,
-    data_stack: &mut DataStack,
-) -> DataStackResult<()> {
-    let delay_ms = data_stack.pop_specific::<value::Number>()?;
-    thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
-    Ok(())
-}
-
-fn fn_(
-    functions: &mut Functions,
-    data_stack: &mut DataStack,
-) -> DataStackResult<()> {
-    let body = data_stack.pop_specific::<value::Block>()?;
-    let name = data_stack.pop_specific::<value::Symbol>()?;
-
-    functions.define(name, body);
-
-    Ok(())
-}
-
-fn print_line(
-    _: &mut Functions,
-    data_stack: &mut DataStack,
-) -> DataStackResult<()> {
-    let value = data_stack.pop_any()?;
-    println!("{value}");
-    Ok(())
 }
