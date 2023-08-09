@@ -39,6 +39,10 @@ impl Evaluator {
                     }
                     Function::UserDefined { body } => {
                         if let Some(body) = body.0 {
+                            // Need to advance the current stack frame before we
+                            // jump into the function, or we'll repeat it
+                            // endlessly when we come back.
+                            self.call_stack.advance(syntax_fragment.next);
                             self.call_stack.push(body);
                             return Ok(EvaluatorState::InProgress);
                         }
