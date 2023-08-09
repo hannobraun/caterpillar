@@ -19,7 +19,8 @@ impl Interpreter {
         let start = pipeline::run(code, &mut syntax)?;
 
         let Some(start) = start else { return Ok(None); };
-        let evaluator = Evaluator::new(start);
+        let mut evaluator = Evaluator::new();
+        evaluator.call_stack.push(start);
 
         Ok(Some(Interpreter { syntax, evaluator }))
     }

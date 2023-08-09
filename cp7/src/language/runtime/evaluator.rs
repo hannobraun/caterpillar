@@ -1,6 +1,6 @@
 use crate::language::{
     functions::{Function, Functions, ResolveError},
-    syntax::{Syntax, SyntaxElement, SyntaxHandle},
+    syntax::{Syntax, SyntaxElement},
 };
 
 use super::{
@@ -16,13 +16,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(start: SyntaxHandle) -> Self {
-        let mut call_stack = CallStack::new();
-        call_stack.push(start);
-
+    pub fn new() -> Self {
         Self {
             functions: Functions::new(),
-            call_stack,
+            call_stack: CallStack::new(),
             data_stack: DataStack::new(),
         }
     }
