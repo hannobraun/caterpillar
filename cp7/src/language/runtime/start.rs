@@ -7,6 +7,7 @@ use crate::language::{
 
 use super::{
     evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    interpreter::Interpreter,
     updater,
 };
 
@@ -47,11 +48,6 @@ pub fn start(
     }
 
     Ok(())
-}
-
-pub struct Interpreter {
-    pub syntax: Syntax,
-    pub evaluator: Evaluator,
 }
 
 #[derive(Debug, thiserror::Error)]
