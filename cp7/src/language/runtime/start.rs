@@ -20,13 +20,22 @@ pub fn start(
         return Ok(());
     };
 
-    let mut evaluator = Evaluator::new(start);
-    while let EvaluatorState::InProgress = evaluator.step(&syntax)? {
+    let mut interpreter = Interpreter {
+        syntax,
+        evaluator: Evaluator::new(start),
+    };
+
+    while let EvaluatorState::InProgress =
+        interpreter.evaluator.step(&interpreter.syntax)?
+    {
         match updates.try_recv() {
             Ok(code) => {
-                syntax.prepare_update();
-                pipeline::run(&code, &mut syntax)?;
-                updater::update(&syntax, &mut evaluator);
+                interpreter.syntax.prepare_update();
+                pipeline::run(&code, &mut interpreter.syntax)?;
+                updater::update(
+                    &interpreter.syntax,
+                    &mut interpreter.evaluator,
+                );
             }
             Err(TryRecvError::Empty) => {
                 // nothing to do; just continue with the next evaluator step
@@ -38,6 +47,11 @@ pub fn start(
     }
 
     Ok(())
+}
+
+pub struct Interpreter {
+    pub syntax: Syntax,
+    pub evaluator: Evaluator,
 }
 
 #[derive(Debug, thiserror::Error)]
