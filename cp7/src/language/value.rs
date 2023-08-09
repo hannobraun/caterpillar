@@ -5,7 +5,7 @@ use enum_variant_type::EnumVariantType;
 use super::syntax::SyntaxHandle;
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
-#[evt(derive(Debug))]
+#[evt(derive(Debug, Eq, PartialEq))]
 pub enum Value {
     Block(Option<SyntaxHandle>),
     Number(i64),
