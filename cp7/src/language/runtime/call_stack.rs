@@ -15,14 +15,14 @@ impl CallStack {
     }
 
     pub fn advance(&mut self, next: Option<SyntaxHandle>) {
-        match next {
-            Some(handle) => {
-                if let Some(current) = self.frames.last_mut() {
-                    *current = handle
+        if let Some(current) = self.frames.last_mut() {
+            match next {
+                Some(handle) => {
+                    *current = handle;
                 }
-            }
-            None => {
-                self.pop();
+                None => {
+                    self.pop();
+                }
             }
         }
     }
