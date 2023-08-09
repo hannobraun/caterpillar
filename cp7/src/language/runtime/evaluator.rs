@@ -68,6 +68,12 @@ pub enum EvaluatorState {
     Finished,
 }
 
+impl EvaluatorState {
+    pub fn in_progress(&self) -> bool {
+        matches!(self, Self::InProgress)
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorError {
     #[error("Error operating data stack")]

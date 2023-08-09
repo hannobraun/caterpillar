@@ -2,10 +2,7 @@ use std::sync::mpsc::{Receiver, TryRecvError};
 
 use crate::language::pipeline::PipelineError;
 
-use super::{
-    evaluator::{EvaluatorError, EvaluatorState},
-    interpreter::Interpreter,
-};
+use super::{evaluator::EvaluatorError, interpreter::Interpreter};
 
 pub fn start(
     code: &str,
@@ -13,7 +10,7 @@ pub fn start(
 ) -> Result<(), RuntimeError> {
     let mut interpreter = Interpreter::new(code)?;
 
-    while let EvaluatorState::InProgress = interpreter.step()? {
+    while interpreter.step()?.in_progress() {
         match updates.try_recv() {
             Ok(code) => {
                 interpreter.update(&code)?;
