@@ -14,7 +14,7 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn new(code: &str) -> Result<Option<Self>, PipelineError> {
+    pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut syntax = Syntax::new();
         let start = pipeline::run(code, &mut syntax)?;
 
@@ -23,7 +23,7 @@ impl Interpreter {
             evaluator.call_stack.push(start);
         }
 
-        Ok(Some(Interpreter { syntax, evaluator }))
+        Ok(Interpreter { syntax, evaluator })
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {

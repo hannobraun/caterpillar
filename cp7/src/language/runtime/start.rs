@@ -11,9 +11,7 @@ pub fn start(
     code: &str,
     updates: Receiver<String>,
 ) -> Result<(), RuntimeError> {
-    let Some(mut interpreter) = Interpreter::new(code)? else {
-        return Ok(())
-    };
+    let mut interpreter = Interpreter::new(code)?;
 
     while let EvaluatorState::InProgress = interpreter.step()? {
         match updates.try_recv() {
