@@ -18,9 +18,10 @@ impl Interpreter {
         let mut syntax = Syntax::new();
         let start = pipeline::run(code, &mut syntax)?;
 
-        let Some(start) = start else { return Ok(None); };
         let mut evaluator = Evaluator::new();
-        evaluator.call_stack.push(start);
+        if let Some(start) = start {
+            evaluator.call_stack.push(start);
+        }
 
         Ok(Some(Interpreter { syntax, evaluator }))
     }
