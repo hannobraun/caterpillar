@@ -1,9 +1,11 @@
 use std::io;
 
-use crate::language::syntax::{Syntax, SyntaxHandle};
+use crate::{
+    language::syntax::{Syntax, SyntaxHandle},
+    loader::load::load,
+};
 
 use super::stages::{
-    a_loader::load,
     b_tokenizer::tokenize,
     c_parser::{parse, ParserError},
 };
