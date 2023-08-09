@@ -6,10 +6,8 @@ pub struct CallStack {
 }
 
 impl CallStack {
-    pub fn new(start: SyntaxHandle) -> Self {
-        Self {
-            frames: vec![start],
-        }
+    pub fn new() -> Self {
+        Self { frames: Vec::new() }
     }
 
     pub fn current(&self) -> Option<SyntaxHandle> {

@@ -17,9 +17,12 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(start: SyntaxHandle) -> Self {
+        let mut call_stack = CallStack::new();
+        call_stack.push(start);
+
         Self {
             functions: Functions::new(),
-            call_stack: CallStack::new(start),
+            call_stack,
             data_stack: DataStack::new(),
         }
     }
