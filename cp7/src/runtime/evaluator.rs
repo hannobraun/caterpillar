@@ -1,10 +1,11 @@
 use crate::{
     functions::{Function, Functions, ResolveError},
-    runtime::{
-        call_stack::CallStack,
-        data_stack::{DataStack, DataStackError},
-    },
     syntax::{Syntax, SyntaxElement, SyntaxHandle},
+};
+
+use super::{
+    call_stack::CallStack,
+    data_stack::{DataStack, DataStackError},
 };
 
 #[derive(Debug)]

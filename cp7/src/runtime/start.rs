@@ -5,11 +5,13 @@ use std::{
 
 use crate::{
     pipeline::{self, PipelineError},
-    runtime::updater,
     syntax::Syntax,
 };
 
-use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
+use super::{
+    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    updater,
+};
 
 pub fn start(
     path: impl AsRef<Path>,

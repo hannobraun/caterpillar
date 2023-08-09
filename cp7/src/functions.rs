@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, thread, time::Duration};
 
-use crate::{
+use super::{
     runtime::data_stack::{DataStack, DataStackResult},
     syntax::SyntaxHandle,
     value,

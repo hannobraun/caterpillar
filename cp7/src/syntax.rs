@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use crate::value::Value;
+use super::value::Value;
 
 #[derive(Debug)]
 pub struct Syntax {
