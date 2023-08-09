@@ -1,4 +1,6 @@
 use crate::language::{
+    functions::Intrinsic,
+    intrinsics,
     pipeline::{self, PipelineError},
     syntax::Syntax,
 };
@@ -21,6 +23,18 @@ impl Interpreter {
         let mut evaluator = Evaluator::new();
         if let Some(start) = start {
             evaluator.call_stack.push(start);
+        }
+
+        let intrinsics = [
+            ("+", intrinsics::add as Intrinsic),
+            ("clone", intrinsics::clone),
+            ("delay_ms", intrinsics::delay_ms),
+            ("print_line", intrinsics::print_line),
+            ("fn", intrinsics::fn_),
+        ];
+
+        for (name, intrinsic) in intrinsics {
+            evaluator.functions.register_intrinsic(name, intrinsic)
         }
 
         Ok(Interpreter { syntax, evaluator })

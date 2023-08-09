@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 
 use super::{
-    intrinsics,
     runtime::data_stack::{DataStack, DataStackResult},
     syntax::SyntaxHandle,
     value,
@@ -14,23 +13,9 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let mut self_ = Self {
+        Self {
             inner: BTreeMap::new(),
-        };
-
-        let intrinsics = [
-            ("+", intrinsics::add as Intrinsic),
-            ("clone", intrinsics::clone),
-            ("delay_ms", intrinsics::delay_ms),
-            ("print_line", intrinsics::print_line),
-            ("fn", intrinsics::fn_),
-        ];
-
-        for (name, intrinsic) in intrinsics {
-            self_.register_intrinsic(name, intrinsic)
         }
-
-        self_
     }
 
     pub fn register_intrinsic(&mut self, name: &str, intrinsic: Intrinsic) {
