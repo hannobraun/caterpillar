@@ -1,12 +1,9 @@
 use std::sync::mpsc::{Receiver, TryRecvError};
 
-use crate::language::{
-    pipeline::{self, PipelineError},
-    syntax::Syntax,
-};
+use crate::language::pipeline::{self, PipelineError};
 
 use super::{
-    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    evaluator::{EvaluatorError, EvaluatorState},
     interpreter::Interpreter,
     updater,
 };
@@ -15,15 +12,8 @@ pub fn start(
     code: &str,
     updates: Receiver<String>,
 ) -> Result<(), RuntimeError> {
-    let mut syntax = Syntax::new();
-
-    let Some(start) = pipeline::run(code, &mut syntax)? else {
-        return Ok(());
-    };
-
-    let mut interpreter = Interpreter {
-        syntax,
-        evaluator: Evaluator::new(start),
+    let Some(mut interpreter) = Interpreter::new(code)? else {
+        return Ok(())
     };
 
     while let EvaluatorState::InProgress =
