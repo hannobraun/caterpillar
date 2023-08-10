@@ -63,12 +63,8 @@ impl Tokens<'_> {
             .get(&current)
             .map(|token| &token.token)
     }
-}
 
-impl Iterator for Tokens<'_> {
-    type Item = Token;
-
-    fn next(&mut self) -> Option<Token> {
+    pub fn next(&mut self) -> Option<Token> {
         let current = self.current?;
         let token = self.tokens.right_to_left.get(&current).cloned()?;
         self.current = token.right;
