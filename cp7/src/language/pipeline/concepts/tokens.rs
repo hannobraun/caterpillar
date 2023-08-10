@@ -1,22 +1,6 @@
-use std::{
-    collections::{HashMap, VecDeque},
-    fmt,
-};
+use std::{collections::HashMap, fmt};
 
 use enum_variant_type::EnumVariantType;
-
-#[derive(Clone)]
-pub struct Tokens {
-    pub inner: VecDeque<Token>,
-}
-
-impl From<Vec<Token>> for Tokens {
-    fn from(tokens: Vec<Token>) -> Self {
-        Self {
-            inner: tokens.into(),
-        }
-    }
-}
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(module = "token")]

@@ -1,8 +1,8 @@
 use std::iter;
 
-use crate::language::pipeline::concepts::tokens::{Token, Tokens};
+use crate::language::pipeline::concepts::tokens::Token;
 
-pub fn tokenize(code: &str) -> Tokens {
+pub fn tokenize(code: &str) -> Vec<Token> {
     // Make sure that the code always ends on whitespace. Otherwise the
     // tokenizer might miss the last token.
     let mut chars = code.chars().chain(iter::once('\n'));
@@ -70,7 +70,7 @@ pub fn tokenize(code: &str) -> Tokens {
         }
     }
 
-    Tokens::from(tokens)
+    tokens
 }
 
 enum State {
