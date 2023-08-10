@@ -2,6 +2,7 @@ use std::collections::VecDeque;
 
 use enum_variant_type::EnumVariantType;
 
+#[derive(Clone)]
 pub struct Tokens {
     inner: VecDeque<Token>,
 }
