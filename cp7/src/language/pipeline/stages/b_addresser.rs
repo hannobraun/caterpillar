@@ -25,10 +25,11 @@ fn address_token(
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
-    let address_left = build_address(&token, left.map(|address| address.0));
+    let address_left = build_address(&token, left.map(|address| address.hash));
     let right =
         address_token(Some(address_left), tokens, left_to_right, right_to_left);
-    let address_right = build_address(&token, right.map(|address| address.0));
+    let address_right =
+        build_address(&token, right.map(|address| address.hash));
 
     let addressed_token = AddressedToken { token, left, right };
 
@@ -50,5 +51,5 @@ fn build_address(
     }
 
     let hash = hasher.finalize();
-    TokenAddress(hash)
+    TokenAddress { hash }
 }
