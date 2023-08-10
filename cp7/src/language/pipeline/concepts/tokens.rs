@@ -10,12 +10,6 @@ pub struct Tokens {
     pub inner: VecDeque<Token>,
 }
 
-impl Tokens {
-    pub fn next(&mut self) -> Option<Token> {
-        self.inner.pop_front()
-    }
-}
-
 impl From<Vec<Token>> for Tokens {
     fn from(tokens: Vec<Token>) -> Self {
         Self {
