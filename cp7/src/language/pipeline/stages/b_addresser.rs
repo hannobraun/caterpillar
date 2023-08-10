@@ -36,8 +36,8 @@ fn address_token(
 
     let addressed_token = AddressedToken { token, left, right };
 
-    left_to_right.insert(address_left, addressed_token.clone());
-    right_to_left.insert(address_right, addressed_token);
+    left_to_right.insert(address_right, addressed_token.clone());
+    right_to_left.insert(address_left, addressed_token);
 
     Some(address_right)
 }
