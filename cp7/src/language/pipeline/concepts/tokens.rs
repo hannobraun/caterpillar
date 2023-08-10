@@ -11,6 +11,10 @@ pub struct Tokens {
 }
 
 impl Tokens {
+    pub fn iter(&mut self) -> TokenIter {
+        TokenIter { tokens: self }
+    }
+
     pub fn peek(&self) -> Option<Token> {
         self.inner.front().cloned()
     }
@@ -66,3 +70,15 @@ pub struct AddressedToken {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct Address(pub blake3::Hash);
+
+pub struct TokenIter<'r> {
+    tokens: &'r mut Tokens,
+}
+
+impl Iterator for TokenIter<'_> {
+    type Item = Token;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.tokens.next()
+    }
+}
