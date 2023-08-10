@@ -25,13 +25,13 @@ impl fmt::Display for Token {
 }
 
 #[derive(Debug)]
-pub struct AddressedTokens {
+pub struct Tokens {
     pub left: Option<Address>,
     pub left_to_right: HashMap<Address, AddressedToken>,
     pub right_to_left: HashMap<Address, AddressedToken>,
 }
 
-impl AddressedTokens {
+impl Tokens {
     pub fn iter(&mut self) -> TokenIter {
         TokenIter {
             current: self.left,
@@ -52,7 +52,7 @@ pub struct Address(pub blake3::Hash);
 
 pub struct TokenIter<'r> {
     current: Option<Address>,
-    tokens: &'r AddressedTokens,
+    tokens: &'r Tokens,
 }
 
 impl TokenIter<'_> {

@@ -1,17 +1,17 @@
 use std::collections::HashMap;
 
 use crate::language::pipeline::concepts::tokens::{
-    Address, AddressedToken, AddressedTokens, Token,
+    Address, AddressedToken, Token, Tokens,
 };
 
-pub fn address(tokens: impl IntoIterator<Item = Token>) -> AddressedTokens {
+pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
     let left =
         address_token(None, tokens, &mut left_to_right, &mut right_to_left);
 
-    AddressedTokens {
+    Tokens {
         left,
         left_to_right,
         right_to_left,
