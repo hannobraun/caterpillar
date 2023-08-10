@@ -10,10 +10,10 @@ pub fn run(
     code: &str,
     syntax: &mut Syntax,
 ) -> Result<Option<SyntaxHandle>, PipelineError> {
-    let tokens = tokenize(code);
+    let mut tokens = tokenize(code);
     let addressed_tokens = address(tokens.clone().iter());
     dbg!(addressed_tokens);
-    let start = parse(tokens, syntax)?;
+    let start = parse(tokens.iter(), syntax)?;
 
     Ok(start)
 }

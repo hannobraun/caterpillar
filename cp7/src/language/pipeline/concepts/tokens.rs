@@ -75,6 +75,12 @@ pub struct TokenIter<'r> {
     tokens: &'r mut Tokens,
 }
 
+impl TokenIter<'_> {
+    pub fn peek(&self) -> Option<&Token> {
+        self.tokens.peek()
+    }
+}
+
 impl Iterator for TokenIter<'_> {
     type Item = Token;
 

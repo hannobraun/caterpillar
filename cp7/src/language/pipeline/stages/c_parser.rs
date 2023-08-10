@@ -1,11 +1,11 @@
 use crate::language::{
-    pipeline::concepts::tokens::{token, Token, TokenIter, Tokens},
+    pipeline::concepts::tokens::{token, Token, TokenIter},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
 
 pub fn parse(
-    mut tokens: Tokens,
+    mut tokens: TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     let start = parse_fragment(None, &mut tokens, syntax)?;
@@ -14,7 +14,7 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     let next_token = match tokens.peek() {
@@ -37,15 +37,15 @@ fn parse_fragment(
             SyntaxElement::Value(value::Block(block).into())
         }
         Token::Word(_) => {
-            let word = parse_word(&mut tokens.iter())?;
+            let word = parse_word(tokens)?;
             SyntaxElement::Word(word)
         }
         Token::Number(_) => {
-            let number = parse_number(&mut tokens.iter())?;
+            let number = parse_number(tokens)?;
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let symbol = parse_symbol(&mut tokens.iter())?;
+            let symbol = parse_symbol(tokens)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -71,10 +71,10 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    expect::<token::CurlyBracketOpen>(&mut tokens.iter())?;
+    expect::<token::CurlyBracketOpen>(tokens)?;
     parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
