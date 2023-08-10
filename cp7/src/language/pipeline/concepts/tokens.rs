@@ -57,17 +57,13 @@ pub struct TokenIter<'r> {
 
 impl TokenIter<'_> {
     pub fn peek(&self) -> Option<AddressedToken> {
-        self.peek_inner()
+        let current = self.current?;
+        self.tokens.right_to_left.get(&current).cloned()
     }
 
     pub fn next(&mut self) -> Option<Token> {
         let token = self.peek()?;
         self.current = token.right;
         Some(token.token)
-    }
-
-    fn peek_inner(&self) -> Option<AddressedToken> {
-        let current = self.current?;
-        self.tokens.right_to_left.get(&current).cloned()
     }
 }
