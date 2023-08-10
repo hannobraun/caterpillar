@@ -15,8 +15,8 @@ impl Tokens {
         self.inner.front().cloned().ok_or(NoMoreTokens)
     }
 
-    pub fn next(&mut self) -> Result<Token, NoMoreTokens> {
-        self.inner.pop_front().ok_or(NoMoreTokens)
+    pub fn next(&mut self) -> Option<Token> {
+        self.inner.pop_front()
     }
 }
 

@@ -95,7 +95,7 @@ fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
-    match tokens.next()?.try_into() {
+    match tokens.next().ok_or(NoMoreTokens)?.try_into() {
         Ok(token) => Ok(token),
         Err(token) => Err(ParserError::UnexpectedToken { actual: token }),
     }

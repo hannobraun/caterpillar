@@ -28,7 +28,7 @@ fn address_token(
     left_to_right: &mut HashMap<Address, AddressedToken>,
     right_to_left: &mut HashMap<Address, AddressedToken>,
 ) -> Option<Address> {
-    let token = tokens.next().ok()?;
+    let token = tokens.next()?;
 
     let address_left = build_address(&token, left);
 
