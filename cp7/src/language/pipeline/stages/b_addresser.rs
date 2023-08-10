@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::language::pipeline::concepts::tokens::{
-    Address, AddressedToken, Token, Tokens,
+    AddressedToken, Token, TokenAddress, Tokens,
 };
 
 pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
@@ -19,11 +19,11 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
 }
 
 fn address_token(
-    left: Option<Address>,
+    left: Option<TokenAddress>,
     tokens: impl IntoIterator<Item = Token>,
-    left_to_right: &mut HashMap<Address, AddressedToken>,
-    right_to_left: &mut HashMap<Address, AddressedToken>,
-) -> Option<Address> {
+    left_to_right: &mut HashMap<TokenAddress, AddressedToken>,
+    right_to_left: &mut HashMap<TokenAddress, AddressedToken>,
+) -> Option<TokenAddress> {
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
@@ -40,7 +40,10 @@ fn address_token(
     Some(address_right)
 }
 
-fn build_address(token: &Token, neighbor: Option<Address>) -> Address {
+fn build_address(
+    token: &Token,
+    neighbor: Option<TokenAddress>,
+) -> TokenAddress {
     let mut hasher = blake3::Hasher::new();
 
     hasher.update(token.to_string().as_bytes());
@@ -49,5 +52,5 @@ fn build_address(token: &Token, neighbor: Option<Address>) -> Address {
     }
 
     let hash = hasher.finalize();
-    Address(hash)
+    TokenAddress(hash)
 }
