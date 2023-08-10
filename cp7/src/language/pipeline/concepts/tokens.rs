@@ -1,4 +1,7 @@
-use std::{collections::VecDeque, fmt};
+use std::{
+    collections::{HashMap, VecDeque},
+    fmt,
+};
 
 use enum_variant_type::EnumVariantType;
 
@@ -46,6 +49,23 @@ impl fmt::Display for Token {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct AddressedTokens {
+    pub left: Option<Address>,
+    pub left_to_right: HashMap<Address, AddressedToken>,
+    pub right_to_left: HashMap<Address, AddressedToken>,
+}
+
+#[derive(Clone, Debug)]
+pub struct AddressedToken {
+    pub token: Token,
+    pub left: Option<Address>,
+    pub right: Option<Address>,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub struct Address(pub blake3::Hash);
 
 #[derive(Debug, thiserror::Error)]
 #[error("No more tokens")]

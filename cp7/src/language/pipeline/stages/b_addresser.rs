@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-use crate::language::pipeline::concepts::tokens::{Token, Tokens};
+use crate::language::pipeline::concepts::tokens::{
+    Address, AddressedToken, AddressedTokens, Token, Tokens,
+};
 
 pub fn address(mut tokens: Tokens) -> AddressedTokens {
     let mut left_to_right = HashMap::new();
@@ -53,20 +55,3 @@ fn build_address(token: &Token, neighbor: Option<Address>) -> Address {
     let hash = hasher.finalize();
     Address(hash)
 }
-
-#[derive(Debug)]
-pub struct AddressedTokens {
-    pub left: Option<Address>,
-    pub left_to_right: HashMap<Address, AddressedToken>,
-    pub right_to_left: HashMap<Address, AddressedToken>,
-}
-
-#[derive(Clone, Debug)]
-pub struct AddressedToken {
-    pub token: Token,
-    pub left: Option<Address>,
-    pub right: Option<Address>,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct Address(pub blake3::Hash);
