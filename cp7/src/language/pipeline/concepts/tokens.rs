@@ -56,8 +56,8 @@ pub struct TokenIter<'r> {
 }
 
 impl TokenIter<'_> {
-    pub fn peek(&self) -> Option<Token> {
-        self.peek_inner().map(|token| token.token)
+    pub fn peek(&self) -> Option<AddressedToken> {
+        self.peek_inner()
     }
 
     pub fn next(&mut self) -> Option<Token> {
