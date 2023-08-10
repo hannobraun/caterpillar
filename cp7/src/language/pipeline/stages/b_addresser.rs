@@ -28,7 +28,6 @@ fn address_token(
     let token = tokens.next()?;
 
     let address_left = build_address(&token, left);
-
     let right =
         address_token(Some(address_left), tokens, left_to_right, right_to_left);
     let address_right = build_address(&token, right);
