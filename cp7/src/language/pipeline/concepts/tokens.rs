@@ -40,15 +40,15 @@ impl Tokens {
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub struct TokenAddress(pub blake3::Hash);
+
 #[derive(Clone, Debug)]
 pub struct AddressedToken {
     pub token: Token,
     pub left: Option<TokenAddress>,
     pub right: Option<TokenAddress>,
 }
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct TokenAddress(pub blake3::Hash);
 
 pub struct TokenIter<'r> {
     current: Option<TokenAddress>,
