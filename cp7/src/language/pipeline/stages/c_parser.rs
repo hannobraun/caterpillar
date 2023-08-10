@@ -45,7 +45,7 @@ fn parse_fragment(
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens)?;
+            let symbol = parse_symbol(tokens.iter())?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -88,8 +88,8 @@ fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
     Ok(token.0)
 }
 
-fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Symbol>(tokens.iter())?;
+fn parse_symbol(tokens: TokenIter) -> ParserResult<String> {
+    let token = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
 
