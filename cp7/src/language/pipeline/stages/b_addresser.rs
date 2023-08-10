@@ -25,11 +25,14 @@ fn address_token(
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
-    let address_left = build_address(&token, left.map(|address| address.hash));
+    let address_left = TokenAddress {
+        hash: build_address(&token, left.map(|address| address.hash)),
+    };
     let right =
         address_token(Some(address_left), tokens, left_to_right, right_to_left);
-    let address_right =
-        build_address(&token, right.map(|address| address.hash));
+    let address_right = TokenAddress {
+        hash: build_address(&token, right.map(|address| address.hash)),
+    };
 
     let addressed_token = AddressedToken { token, left, right };
 
@@ -42,7 +45,7 @@ fn address_token(
 fn build_address(
     token: &Token,
     neighbor: Option<blake3::Hash>,
-) -> TokenAddress {
+) -> blake3::Hash {
     let mut hasher = blake3::Hasher::new();
 
     hasher.update(token.to_string().as_bytes());
@@ -50,6 +53,5 @@ fn build_address(
         hasher.update(neighbor.as_bytes());
     }
 
-    let hash = hasher.finalize();
-    TokenAddress { hash }
+    hasher.finalize()
 }
