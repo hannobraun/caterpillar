@@ -37,15 +37,15 @@ fn parse_fragment(
             SyntaxElement::Value(value::Block(block).into())
         }
         Token::Word(_) => {
-            let word = parse_word(tokens.iter())?;
+            let word = parse_word(&mut tokens.iter())?;
             SyntaxElement::Word(word)
         }
         Token::Number(_) => {
-            let number = parse_number(tokens.iter())?;
+            let number = parse_number(&mut tokens.iter())?;
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens.iter())?;
+            let symbol = parse_symbol(&mut tokens.iter())?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -74,26 +74,26 @@ fn parse_block(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    expect::<token::CurlyBracketOpen>(tokens.iter())?;
+    expect::<token::CurlyBracketOpen>(&mut tokens.iter())?;
     parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
-fn parse_word(tokens: TokenIter) -> ParserResult<String> {
+fn parse_word(tokens: &mut TokenIter) -> ParserResult<String> {
     let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_number(tokens: TokenIter) -> ParserResult<i64> {
+fn parse_number(tokens: &mut TokenIter) -> ParserResult<i64> {
     let token = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_symbol(tokens: TokenIter) -> ParserResult<String> {
+fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<String> {
     let token = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
 
-fn expect<T>(mut tokens: TokenIter) -> ParserResult<T>
+fn expect<T>(tokens: &mut TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
