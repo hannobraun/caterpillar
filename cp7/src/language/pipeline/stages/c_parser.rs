@@ -1,5 +1,5 @@
 use crate::language::{
-    pipeline::concepts::tokens::{token, Token, Tokens},
+    pipeline::concepts::tokens::{token, Token, TokenIter, Tokens},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
@@ -74,26 +74,26 @@ fn parse_block(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    expect::<token::CurlyBracketOpen>(tokens)?;
+    expect::<token::CurlyBracketOpen>(tokens.iter())?;
     parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
 fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Word>(tokens)?;
+    let token = expect::<token::Word>(tokens.iter())?;
     Ok(token.0)
 }
 
 fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
-    let token = expect::<token::Number>(tokens)?;
+    let token = expect::<token::Number>(tokens.iter())?;
     Ok(token.0)
 }
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Symbol>(tokens)?;
+    let token = expect::<token::Symbol>(tokens.iter())?;
     Ok(token.0)
 }
 
-fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
+fn expect<T>(mut tokens: TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
