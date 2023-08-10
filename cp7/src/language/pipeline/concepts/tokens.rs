@@ -66,7 +66,3 @@ pub struct AddressedToken {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct Address(pub blake3::Hash);
-
-#[derive(Debug, thiserror::Error)]
-#[error("No more tokens")]
-pub struct NoMoreTokens;

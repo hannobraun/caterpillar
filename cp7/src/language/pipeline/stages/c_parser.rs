@@ -1,5 +1,5 @@
 use crate::language::{
-    pipeline::concepts::tokens::{token, NoMoreTokens, Token, Tokens},
+    pipeline::concepts::tokens::{token, Token, Tokens},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
@@ -111,3 +111,7 @@ pub enum ParserError {
     #[error("Unexpected token: {actual:?}")]
     UnexpectedToken { actual: Token },
 }
+
+#[derive(Debug, thiserror::Error)]
+#[error("No more tokens")]
+pub struct NoMoreTokens;
