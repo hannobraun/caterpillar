@@ -4,16 +4,12 @@ use crate::language::pipeline::concepts::tokens::{
     Address, AddressedToken, AddressedTokens, Token, Tokens,
 };
 
-pub fn address(mut tokens: Tokens) -> AddressedTokens {
+pub fn address(tokens: Tokens) -> AddressedTokens {
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
-    let left = address_token(
-        None,
-        &mut tokens,
-        &mut left_to_right,
-        &mut right_to_left,
-    );
+    let left =
+        address_token(None, tokens, &mut left_to_right, &mut right_to_left);
 
     AddressedTokens {
         left,
@@ -24,7 +20,7 @@ pub fn address(mut tokens: Tokens) -> AddressedTokens {
 
 fn address_token(
     left: Option<Address>,
-    tokens: &mut Tokens,
+    mut tokens: Tokens,
     left_to_right: &mut HashMap<Address, AddressedToken>,
     right_to_left: &mut HashMap<Address, AddressedToken>,
 ) -> Option<Address> {
