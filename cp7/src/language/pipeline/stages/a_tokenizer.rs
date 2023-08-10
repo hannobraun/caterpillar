@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::language::pipeline::concepts::tokens::Token;
+use crate::language::tokens::Token;
 
 pub fn tokenize(code: &str) -> Vec<Token> {
     // Make sure that the code always ends on whitespace. Otherwise the

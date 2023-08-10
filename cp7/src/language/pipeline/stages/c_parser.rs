@@ -1,6 +1,6 @@
 use crate::language::{
-    pipeline::concepts::tokens::{token, Token, TokenIter},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
+    tokens::{token, Token, TokenIter},
     value::{self, Value},
 };
 

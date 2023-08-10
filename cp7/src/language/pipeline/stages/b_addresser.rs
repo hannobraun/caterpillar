@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-use crate::language::pipeline::concepts::tokens::{
-    AddressedToken, Token, TokenAddress, Tokens,
-};
+use crate::language::tokens::{AddressedToken, Token, TokenAddress, Tokens};
 
 pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut left_to_right = HashMap::new();
