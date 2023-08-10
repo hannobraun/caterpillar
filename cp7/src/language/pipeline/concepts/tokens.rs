@@ -11,14 +11,6 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn iter(&mut self) -> TokenIter {
-        TokenIter { tokens: self }
-    }
-
-    pub fn peek(&self) -> Option<&Token> {
-        self.inner.front()
-    }
-
     pub fn next(&mut self) -> Option<Token> {
         self.inner.pop_front()
     }
@@ -61,6 +53,15 @@ pub struct AddressedTokens {
     pub right_to_left: HashMap<Address, AddressedToken>,
 }
 
+impl AddressedTokens {
+    pub fn iter(&mut self) -> TokenIter {
+        TokenIter {
+            current: self.left,
+            tokens: self,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct AddressedToken {
     pub token: Token,
@@ -72,12 +73,17 @@ pub struct AddressedToken {
 pub struct Address(pub blake3::Hash);
 
 pub struct TokenIter<'r> {
-    tokens: &'r mut Tokens,
+    current: Option<Address>,
+    tokens: &'r AddressedTokens,
 }
 
 impl TokenIter<'_> {
     pub fn peek(&self) -> Option<&Token> {
-        self.tokens.peek()
+        let current = self.current?;
+        self.tokens
+            .right_to_left
+            .get(&current)
+            .map(|token| &token.token)
     }
 }
 
@@ -85,6 +91,9 @@ impl Iterator for TokenIter<'_> {
     type Item = Token;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.tokens.next()
+        let current = self.current?;
+        let token = self.tokens.right_to_left.get(&current).cloned()?;
+        self.current = token.right;
+        Some(token.token)
     }
 }
