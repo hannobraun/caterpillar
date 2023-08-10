@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
 use crate::language::pipeline::concepts::tokens::{
-    Address, AddressedToken, AddressedTokens, Token, TokenIter,
+    Address, AddressedToken, AddressedTokens, Token, Tokens,
 };
 
-pub fn address(tokens: TokenIter) -> AddressedTokens {
+pub fn address(tokens: Tokens) -> AddressedTokens {
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
@@ -20,7 +20,7 @@ pub fn address(tokens: TokenIter) -> AddressedTokens {
 
 fn address_token(
     left: Option<Address>,
-    mut tokens: TokenIter,
+    mut tokens: Tokens,
     left_to_right: &mut HashMap<Address, AddressedToken>,
     right_to_left: &mut HashMap<Address, AddressedToken>,
 ) -> Option<Address> {
