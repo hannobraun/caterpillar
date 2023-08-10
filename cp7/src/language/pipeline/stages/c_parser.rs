@@ -1,11 +1,11 @@
 use crate::language::{
-    pipeline::concepts::tokens::{token, Token, Tokens},
+    pipeline::concepts::tokens::{token, Token, TokenIter},
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
     value::{self, Value},
 };
 
 pub fn parse(
-    mut tokens: Tokens,
+    mut tokens: TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     let start = parse_fragment(None, &mut tokens, syntax)?;
@@ -14,7 +14,7 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     let next_token = match tokens.peek() {
@@ -71,29 +71,29 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
     parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
-fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
+fn parse_word(tokens: &mut TokenIter) -> ParserResult<String> {
     let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
+fn parse_number(tokens: &mut TokenIter) -> ParserResult<i64> {
     let token = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
+fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<String> {
     let token = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
 
-fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
+fn expect<T>(tokens: &mut TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
