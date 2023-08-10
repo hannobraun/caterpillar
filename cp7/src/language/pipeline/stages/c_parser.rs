@@ -18,8 +18,8 @@ fn parse_fragment(
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     let next_token = match tokens.peek() {
-        Ok(token) => token,
-        Err(err) => {
+        Some(token) => token,
+        None => {
             if terminator.is_none() {
                 // If there is no terminator, then not having any more tokens is
                 // not an error condition. We've simply reached the end of the
@@ -27,7 +27,7 @@ fn parse_fragment(
                 return Ok(None);
             }
 
-            return Err(err.into());
+            return Err(NoMoreTokens.into());
         }
     };
 

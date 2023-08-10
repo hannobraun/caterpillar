@@ -11,8 +11,8 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn peek(&self) -> Result<Token, NoMoreTokens> {
-        self.inner.front().cloned().ok_or(NoMoreTokens)
+    pub fn peek(&self) -> Option<Token> {
+        self.inner.front().cloned()
     }
 
     pub fn next(&mut self) -> Option<Token> {
