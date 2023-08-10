@@ -68,7 +68,7 @@ impl Tokens<'_> {
 impl Iterator for Tokens<'_> {
     type Item = Token;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self) -> Option<Token> {
         let current = self.current?;
         let token = self.tokens.right_to_left.get(&current).cloned()?;
         self.current = token.right;
