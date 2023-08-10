@@ -15,8 +15,8 @@ impl Tokens {
         TokenIter { tokens: self }
     }
 
-    pub fn peek(&self) -> Option<Token> {
-        self.inner.front().cloned()
+    pub fn peek(&self) -> Option<&Token> {
+        self.inner.front()
     }
 
     pub fn next(&mut self) -> Option<Token> {

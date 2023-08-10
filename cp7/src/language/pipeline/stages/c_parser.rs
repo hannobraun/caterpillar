@@ -49,13 +49,15 @@ fn parse_fragment(
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
-            if Some(&token) == terminator.as_ref() {
+            if Some(token) == terminator.as_ref() {
                 // only peeked before; still need to consume
                 let _ = tokens.next();
                 return Ok(None);
             }
 
-            return Err(ParserError::UnexpectedToken { actual: token });
+            return Err(ParserError::UnexpectedToken {
+                actual: token.clone(),
+            });
         }
     };
 
