@@ -26,9 +26,9 @@ impl fmt::Display for Token {
 
 #[derive(Debug)]
 pub struct Tokens {
-    pub left: Option<TokenAddress>,
-    pub left_to_right: HashMap<TokenAddress, AddressedToken>,
-    pub right_to_left: HashMap<TokenAddress, AddressedToken>,
+    pub left: Option<TokenAddressRight>,
+    pub left_to_right: HashMap<TokenAddressRight, AddressedToken>,
+    pub right_to_left: HashMap<TokenAddressLeft, AddressedToken>,
 }
 
 impl Tokens {
@@ -41,19 +41,24 @@ impl Tokens {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct TokenAddress {
+pub struct TokenAddressRight {
+    pub hash: blake3::Hash,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub struct TokenAddressLeft {
     pub hash: blake3::Hash,
 }
 
 #[derive(Clone, Debug)]
 pub struct AddressedToken {
     pub token: Token,
-    pub left: Option<TokenAddress>,
-    pub right: Option<TokenAddress>,
+    pub left: Option<TokenAddressLeft>,
+    pub right: Option<TokenAddressRight>,
 }
 
 pub struct TokenIter<'r> {
-    current: Option<TokenAddress>,
+    current: Option<TokenAddressRight>,
     tokens: &'r Tokens,
 }
 
