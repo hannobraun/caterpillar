@@ -61,7 +61,7 @@ impl TokenIter<'_> {
     }
 
     pub fn next(&mut self) -> Option<Token> {
-        let token = self.peek_inner()?;
+        let token = self.peek()?;
         self.current = token.right;
         Some(token.token)
     }
