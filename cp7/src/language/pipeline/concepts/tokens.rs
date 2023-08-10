@@ -61,9 +61,9 @@ impl TokenIter<'_> {
         self.tokens.right_to_left.get(&current).cloned()
     }
 
-    pub fn next(&mut self) -> Option<Token> {
+    pub fn next(&mut self) -> Option<AddressedToken> {
         let token = self.peek()?;
         self.current = token.right;
-        Some(token.token)
+        Some(token)
     }
 }
