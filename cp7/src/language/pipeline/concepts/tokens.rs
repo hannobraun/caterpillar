@@ -7,7 +7,7 @@ use enum_variant_type::EnumVariantType;
 
 #[derive(Clone)]
 pub struct Tokens {
-    inner: VecDeque<Token>,
+    pub inner: VecDeque<Token>,
 }
 
 impl Tokens {
