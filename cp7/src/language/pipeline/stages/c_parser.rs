@@ -8,7 +8,7 @@ pub fn parse(
     mut tokens: TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
-    let start = parse_fragment(None, &mut tokens, syntax)?;
+    let (start, _) = parse_fragment(None, &mut tokens, syntax)?;
     Ok(start)
 }
 
@@ -16,7 +16,7 @@ fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
-) -> ParserResult<Option<SyntaxHandle>> {
+) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
         None => {
@@ -24,7 +24,7 @@ fn parse_fragment(
                 // If there is no terminator, then not having any more tokens is
                 // not an error condition. We've simply reached the end of the
                 // input.
-                return Ok(None);
+                return Ok((None, None));
             }
 
             return Err(NoMoreTokens.into());
@@ -51,21 +51,21 @@ fn parse_fragment(
         token => {
             if Some(&token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
-                let _ = tokens.next();
-                return Ok(None);
+                let token = tokens.next().unwrap();
+                return Ok((None, Some(token.hash())));
             }
 
             return Err(ParserError::UnexpectedToken { actual: token });
         }
     };
 
-    let next = parse_fragment(terminator, tokens, syntax)?;
+    let (next, hash) = parse_fragment(terminator, tokens, syntax)?;
     let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
         next,
     });
 
-    Ok(Some(handle))
+    Ok((Some(handle), hash))
 }
 
 fn parse_block(
@@ -73,7 +73,9 @@ fn parse_block(
     syntax: &mut Syntax,
 ) -> ParserResult<Option<SyntaxHandle>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
-    parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
+    let (handle, _) =
+        parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
+    Ok(handle)
 }
 
 fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
