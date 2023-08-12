@@ -96,10 +96,10 @@ where
     T: TryFrom<Token, Error = Token>,
 {
     let token = tokens.next().ok_or(NoMoreTokens)?;
-    match token.token.try_into() {
-        Ok(token) => Ok(token),
-        Err(token) => Err(ParserError::UnexpectedToken { actual: token }),
-    }
+    token
+        .token
+        .try_into()
+        .map_err(|token| ParserError::UnexpectedToken { actual: token })
 }
 
 pub type ParserResult<T> = Result<T, ParserError>;
