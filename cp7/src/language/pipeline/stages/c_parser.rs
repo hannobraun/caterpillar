@@ -31,22 +31,26 @@ fn parse_fragment(
         }
     };
 
-    let syntax_element = match next_token.token {
+    let (syntax_element, token_range) = match next_token.token {
         Token::CurlyBracketOpen => {
-            let (block, _) = parse_block(tokens, syntax)?;
-            SyntaxElement::Value(value::Block(block).into())
+            let (block, token_range) = parse_block(tokens, syntax)?;
+            let block = SyntaxElement::Value(value::Block(block).into());
+            (block, token_range)
         }
         Token::Word(_) => {
-            let (word, _) = parse_word(tokens)?;
-            SyntaxElement::Word(word)
+            let (word, token_range) = parse_word(tokens)?;
+            let word = SyntaxElement::Word(word);
+            (word, token_range)
         }
         Token::Number(_) => {
-            let (number, _) = parse_number(tokens)?;
-            SyntaxElement::Value(Value::Number(number))
+            let (number, token_range) = parse_number(tokens)?;
+            let number = SyntaxElement::Value(Value::Number(number));
+            (number, token_range)
         }
         Token::Symbol(_) => {
-            let (symbol, _) = parse_symbol(tokens)?;
-            SyntaxElement::Value(value::Symbol(symbol).into())
+            let (symbol, token_range) = parse_symbol(tokens)?;
+            let symbol = SyntaxElement::Value(value::Symbol(symbol).into());
+            (symbol, token_range)
         }
         token => {
             if Some(&token) == terminator.as_ref() {
@@ -61,6 +65,7 @@ fn parse_fragment(
 
     let (next, hash) = parse_fragment(terminator, tokens, syntax)?;
     let handle = syntax.add(SyntaxFragment {
+        token_range,
         payload: syntax_element,
         next,
     });
