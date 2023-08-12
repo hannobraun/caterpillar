@@ -77,29 +77,45 @@ fn parse_block(
 }
 
 fn parse_word(tokens: &mut TokenIter) -> ParserResult<String> {
-    let token = expect::<token::Word>(tokens)?;
+    let (token, _) = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
 fn parse_number(tokens: &mut TokenIter) -> ParserResult<i64> {
-    let token = expect::<token::Number>(tokens)?;
+    let (token, _) = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
 fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<String> {
-    let token = expect::<token::Symbol>(tokens)?;
+    let (token, _) = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
 
-fn expect<T>(tokens: &mut TokenIter) -> ParserResult<T>
+fn expect<T>(tokens: &mut TokenIter) -> ParserResult<(T, blake3::Hash)>
 where
     T: TryFrom<Token, Error = Token>,
 {
     let token = tokens.next().ok_or(NoMoreTokens)?;
-    token
+
+    let hash = {
+        let mut hasher = blake3::Hasher::new();
+
+        if let Some(left) = token.left {
+            hasher.update(left.hash.as_bytes());
+        }
+        if let Some(right) = token.right {
+            hasher.update(right.hash.as_bytes());
+        }
+
+        hasher.finalize()
+    };
+
+    let token = token
         .token
         .try_into()
-        .map_err(|token| ParserError::UnexpectedToken { actual: token })
+        .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
+
+    Ok((token, hash))
 }
 
 pub type ParserResult<T> = Result<T, ParserError>;
