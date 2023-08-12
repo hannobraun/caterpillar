@@ -152,6 +152,21 @@ impl SyntaxFragment {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TokenRange {
+    pub start: blake3::Hash,
+    pub end: blake3::Hash,
+}
+
+impl TokenRange {
+    pub fn one(hash: blake3::Hash) -> Self {
+        Self {
+            start: hash,
+            end: hash,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxElement {
     Value(Value),
     Word(String),

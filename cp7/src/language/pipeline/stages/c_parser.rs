@@ -1,5 +1,5 @@
 use crate::language::{
-    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle},
+    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange},
     tokens::{token, Token, TokenIter},
     value::{self, Value},
 };
@@ -37,15 +37,15 @@ fn parse_fragment(
             SyntaxElement::Value(value::Block(block).into())
         }
         Token::Word(_) => {
-            let word = parse_word(tokens)?;
+            let (word, _) = parse_word(tokens)?;
             SyntaxElement::Word(word)
         }
         Token::Number(_) => {
-            let number = parse_number(tokens)?;
+            let (number, _) = parse_number(tokens)?;
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens)?;
+            let (symbol, _) = parse_symbol(tokens)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -76,19 +76,19 @@ fn parse_block(
     parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)
 }
 
-fn parse_word(tokens: &mut TokenIter) -> ParserResult<String> {
-    let (token, _) = expect::<token::Word>(tokens)?;
-    Ok(token.0)
+fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
+    let (token, hash) = expect::<token::Word>(tokens)?;
+    Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_number(tokens: &mut TokenIter) -> ParserResult<i64> {
-    let (token, _) = expect::<token::Number>(tokens)?;
-    Ok(token.0)
+fn parse_number(tokens: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
+    let (token, hash) = expect::<token::Number>(tokens)?;
+    Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<String> {
-    let (token, _) = expect::<token::Symbol>(tokens)?;
-    Ok(token.0)
+fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
+    let (token, hash) = expect::<token::Symbol>(tokens)?;
+    Ok((token.0, TokenRange::one(hash)))
 }
 
 fn expect<T>(tokens: &mut TokenIter) -> ParserResult<(T, blake3::Hash)>
