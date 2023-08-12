@@ -97,18 +97,7 @@ where
 {
     let token = tokens.next().ok_or(NoMoreTokens)?;
 
-    let hash = {
-        let mut hasher = blake3::Hasher::new();
-
-        if let Some(left) = token.left {
-            hasher.update(left.hash.as_bytes());
-        }
-        if let Some(right) = token.right {
-            hasher.update(right.hash.as_bytes());
-        }
-
-        hasher.finalize()
-    };
+    let hash = token.hash();
 
     let token = token
         .token

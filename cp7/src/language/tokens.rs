@@ -57,6 +57,21 @@ pub struct AddressedToken {
     pub right: Option<TokenAddressRight>,
 }
 
+impl AddressedToken {
+    pub fn hash(&self) -> blake3::Hash {
+        let mut hasher = blake3::Hasher::new();
+
+        if let Some(left) = self.left {
+            hasher.update(left.hash.as_bytes());
+        }
+        if let Some(right) = self.right {
+            hasher.update(right.hash.as_bytes());
+        }
+
+        hasher.finalize()
+    }
+}
+
 pub struct TokenIter<'r> {
     current: Option<TokenAddressRight>,
     tokens: &'r Tokens,
