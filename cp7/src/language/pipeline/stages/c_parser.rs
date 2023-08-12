@@ -33,7 +33,7 @@ fn parse_fragment(
 
     let syntax_element = match next_token.token {
         Token::CurlyBracketOpen => {
-            let block = parse_block(tokens, syntax)?;
+            let (block, _) = parse_block(tokens, syntax)?;
             SyntaxElement::Value(value::Block(block).into())
         }
         Token::Word(_) => {
@@ -71,11 +71,16 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
-) -> ParserResult<Option<SyntaxHandle>> {
-    expect::<token::CurlyBracketOpen>(tokens)?;
-    let (handle, _) =
+) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
+    let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
+
+    let (handle, end) =
         parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
-    Ok(handle)
+
+    let end = end.unwrap();
+    let range = TokenRange { start, end };
+
+    Ok((handle, range))
 }
 
 fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
