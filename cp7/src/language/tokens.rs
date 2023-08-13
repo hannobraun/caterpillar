@@ -32,7 +32,7 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn iter(&mut self) -> TokenIter {
+    pub fn iter(&self) -> TokenIter {
         TokenIter {
             current: self.left,
             tokens: self,

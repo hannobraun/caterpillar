@@ -11,7 +11,7 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<Option<SyntaxHandle>, PipelineError> {
     let tokens = tokenize(code);
-    let mut addressed_tokens = address(tokens);
+    let addressed_tokens = address(tokens);
     let start = parse(addressed_tokens.iter(), syntax)?;
 
     Ok(start)
