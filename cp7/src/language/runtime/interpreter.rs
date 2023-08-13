@@ -2,6 +2,7 @@ use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError},
     syntax::Syntax,
+    tokens::Tokens,
 };
 
 use super::{
@@ -14,12 +15,13 @@ use super::{
 pub struct Interpreter {
     pub syntax: Syntax,
     pub evaluator: Evaluator,
+    pub tokens: Tokens,
 }
 
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut syntax = Syntax::new();
-        let (start, _) = pipeline::run(code, &mut syntax)?;
+        let (start, tokens) = pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();
         if let Some(start) = start {
@@ -38,7 +40,11 @@ impl Interpreter {
             evaluator.functions.register_intrinsic(name, intrinsic)
         }
 
-        Ok(Interpreter { syntax, evaluator })
+        Ok(Interpreter {
+            syntax,
+            evaluator,
+            tokens,
+        })
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
@@ -47,8 +53,9 @@ impl Interpreter {
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
         self.syntax.prepare_update();
-        pipeline::run(code, &mut self.syntax)?;
+        let (_, tokens) = pipeline::run(code, &mut self.syntax)?;
         updater::update(&self.syntax, &mut self.evaluator);
+        self.tokens = tokens;
 
         Ok(())
     }
