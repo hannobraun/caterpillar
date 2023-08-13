@@ -1,4 +1,7 @@
-use crate::language::syntax::{Syntax, SyntaxHandle};
+use crate::language::{
+    syntax::{Syntax, SyntaxHandle},
+    tokens::Tokens,
+};
 
 use super::stages::{
     a_tokenizer::tokenize,
@@ -9,12 +12,12 @@ use super::stages::{
 pub fn run(
     code: &str,
     syntax: &mut Syntax,
-) -> Result<Option<SyntaxHandle>, PipelineError> {
+) -> Result<(Option<SyntaxHandle>, Tokens), PipelineError> {
     let tokens = tokenize(code);
     let addressed_tokens = address(tokens);
     let start = parse(addressed_tokens.iter(), syntax)?;
 
-    Ok(start)
+    Ok((start, addressed_tokens))
 }
 
 #[derive(Debug, thiserror::Error)]
