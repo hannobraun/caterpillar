@@ -14,10 +14,10 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<(Option<SyntaxHandle>, Tokens), PipelineError> {
     let tokens = tokenize(code);
-    let addressed_tokens = address(tokens);
-    let start = parse(addressed_tokens.iter(), syntax)?;
+    let tokens = address(tokens);
+    let start = parse(tokens.iter(), syntax)?;
 
-    Ok((start, addressed_tokens))
+    Ok((start, tokens))
 }
 
 #[derive(Debug, thiserror::Error)]
