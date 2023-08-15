@@ -1,4 +1,4 @@
 mod run;
 mod stages;
 
-pub use self::run::{run, PipelineError};
+pub use self::run::{run, PipelineError, PipelineOutput};

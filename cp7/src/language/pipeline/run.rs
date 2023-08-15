@@ -12,12 +12,17 @@ use super::stages::{
 pub fn run(
     code: &str,
     syntax: &mut Syntax,
-) -> Result<(Option<SyntaxHandle>, Tokens), PipelineError> {
+) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let tokens = address(tokens);
     let start = parse(tokens.iter(), syntax)?;
 
-    Ok((start, tokens))
+    Ok(PipelineOutput { start, tokens })
+}
+
+pub struct PipelineOutput {
+    pub start: Option<SyntaxHandle>,
+    pub tokens: Tokens,
 }
 
 #[derive(Debug, thiserror::Error)]

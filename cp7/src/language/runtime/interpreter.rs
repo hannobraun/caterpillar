@@ -1,6 +1,6 @@
 use crate::language::{
     intrinsics,
-    pipeline::{self, PipelineError},
+    pipeline::{self, PipelineError, PipelineOutput},
     syntax::Syntax,
     tokens::Tokens,
 };
@@ -21,7 +21,8 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut syntax = Syntax::new();
-        let (start, tokens) = pipeline::run(code, &mut syntax)?;
+        let PipelineOutput { start, tokens } =
+            pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();
         if let Some(start) = start {
@@ -53,7 +54,8 @@ impl Interpreter {
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
         self.syntax.prepare_update();
-        let (_, tokens) = pipeline::run(code, &mut self.syntax)?;
+        let PipelineOutput { tokens, .. } =
+            pipeline::run(code, &mut self.syntax)?;
         updater::update(&self.syntax, &mut self.evaluator);
         self.tokens = tokens;
 
