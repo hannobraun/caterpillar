@@ -152,7 +152,7 @@ impl SyntaxFragment {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
     pub start: blake3::Hash,
     pub end: blake3::Hash,
