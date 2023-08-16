@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::language::{
     syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange},
     tokens::{token, Token, TokenIter},
@@ -8,14 +10,21 @@ pub fn parse(
     mut tokens: TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let (start, _) = parse_fragment(None, &mut tokens, syntax)?;
-    Ok(ParserOutput { start })
+    let mut tokens_to_syntax = HashMap::new();
+    let (start, _) =
+        parse_fragment(None, &mut tokens, syntax, &mut tokens_to_syntax)?;
+
+    Ok(ParserOutput {
+        start,
+        tokens_to_syntax,
+    })
 }
 
 fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
+    tokens_to_syntax: &mut HashMap<TokenRange, SyntaxHandle>,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -33,7 +42,8 @@ fn parse_fragment(
 
     let (syntax_element, token_range) = match next_token.token {
         Token::CurlyBracketOpen => {
-            let (block, token_range) = parse_block(tokens, syntax)?;
+            let (block, token_range) =
+                parse_block(tokens, syntax, tokens_to_syntax)?;
             let block = SyntaxElement::Value(value::Block(block).into());
             (block, token_range)
         }
@@ -63,12 +73,14 @@ fn parse_fragment(
         }
     };
 
-    let (next, hash) = parse_fragment(terminator, tokens, syntax)?;
+    let (next, hash) =
+        parse_fragment(terminator, tokens, syntax, tokens_to_syntax)?;
     let handle = syntax.add(SyntaxFragment {
         token_range,
         payload: syntax_element,
         next,
     });
+    tokens_to_syntax.insert(token_range, handle);
 
     Ok((Some(handle), hash))
 }
@@ -76,11 +88,16 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
+    tokens_to_syntax: &mut HashMap<TokenRange, SyntaxHandle>,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
 
-    let (handle, end) =
-        parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
+    let (handle, end) = parse_fragment(
+        Some(Token::CurlyBracketClose),
+        tokens,
+        syntax,
+        tokens_to_syntax,
+    )?;
 
     let end = end.unwrap();
     let range = TokenRange { start, end };
@@ -123,6 +140,7 @@ pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
     pub start: Option<SyntaxHandle>,
+    pub tokens_to_syntax: HashMap<TokenRange, SyntaxHandle>,
 }
 
 #[derive(Debug, thiserror::Error)]
