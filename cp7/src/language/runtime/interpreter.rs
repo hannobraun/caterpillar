@@ -21,7 +21,7 @@ pub struct Interpreter {
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut syntax = Syntax::new();
-        let PipelineOutput { start, tokens } =
+        let PipelineOutput { start, tokens, .. } =
             pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();
