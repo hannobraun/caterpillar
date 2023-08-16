@@ -1,7 +1,8 @@
-use std::collections::HashMap;
-
 use crate::language::{
-    syntax::{Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange},
+    syntax::{
+        Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange,
+        TokensToSyntax,
+    },
     tokens::{token, Token, TokenIter},
     value::{self, Value},
 };
@@ -10,7 +11,7 @@ pub fn parse(
     mut tokens: TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let mut tokens_to_syntax = HashMap::new();
+    let mut tokens_to_syntax = TokensToSyntax::new();
     let (start, _) =
         parse_fragment(None, &mut tokens, syntax, &mut tokens_to_syntax)?;
 
@@ -24,7 +25,7 @@ fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut HashMap<TokenRange, SyntaxHandle>,
+    tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -87,7 +88,7 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut TokenIter,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut HashMap<TokenRange, SyntaxHandle>,
+    tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
 
@@ -139,7 +140,7 @@ pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
     pub start: Option<SyntaxHandle>,
-    pub tokens_to_syntax: HashMap<TokenRange, SyntaxHandle>,
+    pub tokens_to_syntax: TokensToSyntax,
 }
 
 #[derive(Debug, thiserror::Error)]

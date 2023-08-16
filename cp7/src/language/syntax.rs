@@ -151,6 +151,8 @@ impl SyntaxFragment {
     }
 }
 
+pub type TokensToSyntax = HashMap<TokenRange, SyntaxHandle>;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
     pub start: blake3::Hash,
