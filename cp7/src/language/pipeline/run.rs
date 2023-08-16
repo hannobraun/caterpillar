@@ -15,7 +15,7 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let tokens = address(tokens);
-    let ParserOutput { start } = parse(tokens.iter(), syntax)?;
+    let ParserOutput { start, .. } = parse(tokens.iter(), syntax)?;
 
     Ok(PipelineOutput { start, tokens })
 }
