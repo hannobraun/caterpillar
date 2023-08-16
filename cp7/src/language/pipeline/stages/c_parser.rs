@@ -76,7 +76,6 @@ fn parse_fragment(
     let (next, hash) =
         parse_fragment(terminator, tokens, syntax, tokens_to_syntax)?;
     let handle = syntax.add(SyntaxFragment {
-        token_range,
         payload: syntax_element,
         next,
     });

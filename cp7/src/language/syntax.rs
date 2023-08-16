@@ -134,7 +134,6 @@ impl fmt::Display for SyntaxHandle {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxFragment {
-    pub token_range: TokenRange,
     pub payload: SyntaxElement,
     pub next: Option<SyntaxHandle>,
 }
