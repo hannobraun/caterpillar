@@ -13,9 +13,9 @@ use super::{
 
 #[derive(Debug)]
 pub struct Interpreter {
+    pub tokens: Tokens,
     pub syntax: Syntax,
     pub evaluator: Evaluator,
-    pub tokens: Tokens,
 }
 
 impl Interpreter {
@@ -42,9 +42,9 @@ impl Interpreter {
         }
 
         Ok(Interpreter {
+            tokens,
             syntax,
             evaluator,
-            tokens,
         })
     }
 
