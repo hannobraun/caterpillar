@@ -6,7 +6,7 @@ use crate::language::{
 use super::stages::{
     a_tokenizer::tokenize,
     b_addresser::address,
-    c_parser::{parse, ParserError},
+    c_parser::{parse, ParserError, ParserOutput},
 };
 
 pub fn run(
@@ -15,7 +15,7 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let tokens = address(tokens);
-    let start = parse(tokens.iter(), syntax)?;
+    let ParserOutput { start } = parse(tokens.iter(), syntax)?;
 
     Ok(PipelineOutput { start, tokens })
 }

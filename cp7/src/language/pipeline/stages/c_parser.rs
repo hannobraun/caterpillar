@@ -7,9 +7,9 @@ use crate::language::{
 pub fn parse(
     mut tokens: TokenIter,
     syntax: &mut Syntax,
-) -> ParserResult<Option<SyntaxHandle>> {
+) -> ParserResult<ParserOutput> {
     let (start, _) = parse_fragment(None, &mut tokens, syntax)?;
-    Ok(start)
+    Ok(ParserOutput { start })
 }
 
 fn parse_fragment(
@@ -120,6 +120,10 @@ where
 }
 
 pub type ParserResult<T> = Result<T, ParserError>;
+
+pub struct ParserOutput {
+    pub start: Option<SyntaxHandle>,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum ParserError {
