@@ -1,5 +1,5 @@
 use crate::language::{
-    syntax::{Syntax, SyntaxHandle},
+    syntax::{Syntax, SyntaxHandle, TokensToSyntax},
     tokens::Tokens,
 };
 
@@ -15,14 +15,22 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let tokens = address(tokens);
-    let ParserOutput { start, .. } = parse(tokens.iter(), syntax)?;
+    let ParserOutput {
+        start,
+        tokens_to_syntax,
+    } = parse(tokens.iter(), syntax)?;
 
-    Ok(PipelineOutput { start, tokens })
+    Ok(PipelineOutput {
+        start,
+        tokens,
+        tokens_to_syntax,
+    })
 }
 
 pub struct PipelineOutput {
     pub start: Option<SyntaxHandle>,
     pub tokens: Tokens,
+    pub tokens_to_syntax: TokensToSyntax,
 }
 
 #[derive(Debug, thiserror::Error)]
