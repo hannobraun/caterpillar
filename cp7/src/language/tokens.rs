@@ -83,9 +83,9 @@ impl TokensLeftToRight<'_> {
         self.tokens.left_to_right.get(&current)
     }
 
-    pub fn next(&mut self) -> Option<AddressedToken> {
+    pub fn next(&mut self) -> Option<&AddressedToken> {
         let current = self.current?;
-        let token = self.tokens.left_to_right.get(&current)?.clone();
+        let token = self.tokens.left_to_right.get(&current)?;
         self.current = token.right;
         Some(token)
     }

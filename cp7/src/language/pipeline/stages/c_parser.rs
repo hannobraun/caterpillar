@@ -138,6 +138,7 @@ where
 
     let token = token
         .token
+        .clone()
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
