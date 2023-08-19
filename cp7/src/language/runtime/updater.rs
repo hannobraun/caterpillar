@@ -11,8 +11,10 @@ pub fn update(
     syntax: &Syntax,
     evaluator: &mut Evaluator,
 ) {
-    let common_token_left =
-        search_common_token(old_tokens.left_to_right(), new_tokens);
+    let common_token_left = search_common_token(
+        old_tokens.left_to_right(),
+        new_tokens.left_to_right(),
+    );
 
     match common_token_left {
         Some(address) => {
@@ -35,10 +37,8 @@ pub fn update(
 
 fn search_common_token<'r>(
     mut old_tokens: impl Iterator<Item = &'r AddressedToken>,
-    new_tokens: &Tokens,
+    mut new_tokens_left_to_right: impl Iterator<Item = &'r AddressedToken>,
 ) -> Option<TokenAddressLeft> {
-    let mut new_tokens_left_to_right = new_tokens.left_to_right();
-
     let mut old_token_left = old_tokens.next();
     let mut new_token_left = new_tokens_left_to_right.next();
 
