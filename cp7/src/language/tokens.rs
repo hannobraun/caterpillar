@@ -32,7 +32,7 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn iter(&self) -> TokensLeftToRight {
+    pub fn left_to_right(&self) -> TokensLeftToRight {
         TokensLeftToRight {
             current: self.left,
             tokens: self,
