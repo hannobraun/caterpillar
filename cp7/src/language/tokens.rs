@@ -50,7 +50,7 @@ pub struct TokenAddressLeft {
     pub hash: blake3::Hash,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AddressedToken {
     pub token: Token,
     pub left: Option<TokenAddressLeft>,
