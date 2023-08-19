@@ -6,9 +6,12 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
-    let leftmost =
-        address_token(None, tokens, &mut left_to_right, &mut right_to_left)
-            .map(|(leftmost, _)| leftmost);
+    let addresser_output =
+        address_token(None, tokens, &mut left_to_right, &mut right_to_left);
+    let (leftmost, _) = match addresser_output {
+        Some((leftmost, rightmost)) => (Some(leftmost), Some(rightmost)),
+        None => (None, None),
+    };
 
     Tokens {
         leftmost,
