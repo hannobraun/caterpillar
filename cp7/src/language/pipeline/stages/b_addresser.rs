@@ -8,11 +8,11 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
-    let left =
+    let leftmost =
         address_token(None, tokens, &mut left_to_right, &mut right_to_left);
 
     Tokens {
-        left,
+        leftmost,
         left_to_right,
         right_to_left,
     }

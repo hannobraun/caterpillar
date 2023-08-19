@@ -26,7 +26,7 @@ impl fmt::Display for Token {
 
 #[derive(Debug)]
 pub struct Tokens {
-    pub left: Option<TokenAddressRight>,
+    pub leftmost: Option<TokenAddressRight>,
     pub left_to_right: HashMap<TokenAddressRight, AddressedToken>,
     pub right_to_left: HashMap<TokenAddressLeft, AddressedToken>,
 }
@@ -34,7 +34,7 @@ pub struct Tokens {
 impl Tokens {
     pub fn left_to_right(&self) -> TokensLeftToRight {
         TokensLeftToRight {
-            current: self.left,
+            current: self.leftmost,
             tokens: self,
         }
     }
