@@ -16,6 +16,11 @@ pub fn update(
         new_tokens.left_to_right(),
         |token| token.left_neighbor,
     );
+    let common_token_right = search_common_token(
+        old_tokens.right_to_left(),
+        new_tokens.right_to_left(),
+        |token| token.right_neighbor,
+    );
 
     match common_token_left {
         Some(address) => {
@@ -28,6 +33,19 @@ pub fn update(
         }
         None => {
             eprintln!("No common token on left side.");
+        }
+    }
+    match common_token_right {
+        Some(address) => {
+            let token = &old_tokens
+                .left_to_right
+                .get(&address)
+                .expect("Using address that I got from same map")
+                .token;
+            eprintln!("Common token on right side: {}", token);
+        }
+        None => {
+            eprintln!("No common token on right side.");
         }
     }
 
