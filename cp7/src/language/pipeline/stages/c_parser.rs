@@ -1,3 +1,5 @@
+use std::iter;
+
 use crate::language::{
     syntax::{
         Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange,
@@ -8,10 +10,12 @@ use crate::language::{
 };
 
 pub fn parse(
-    mut tokens: TokensLeftToRight,
+    tokens: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
+    let mut tokens = tokens.peekable();
     let mut tokens_to_syntax = TokensToSyntax::new();
+
     let (start, _) =
         parse_fragment(None, &mut tokens, syntax, &mut tokens_to_syntax)?;
 
@@ -139,7 +143,7 @@ where
     Ok((token, hash))
 }
 
-pub type Tokens<'r> = TokensLeftToRight<'r>;
+pub type Tokens<'r> = iter::Peekable<TokensLeftToRight<'r>>;
 
 pub type ParserResult<T> = Result<T, ParserError>;
 

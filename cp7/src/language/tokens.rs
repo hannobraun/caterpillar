@@ -77,13 +77,6 @@ pub struct TokensLeftToRight<'r> {
     tokens: &'r Tokens,
 }
 
-impl TokensLeftToRight<'_> {
-    pub fn peek(&self) -> Option<&AddressedToken> {
-        let current = self.current?;
-        self.tokens.left_to_right.get(&current)
-    }
-}
-
 impl<'r> Iterator for TokensLeftToRight<'r> {
     type Item = &'r AddressedToken;
 
