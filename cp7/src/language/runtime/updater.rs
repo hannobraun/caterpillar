@@ -39,7 +39,19 @@ pub fn update(
         new_token_left = new_tokens_left_to_right.next();
     }
 
-    dbg!(old_tokens, new_tokens, common_token_left);
+    match common_token_left {
+        Some(address) => {
+            let token = &old_tokens
+                .right_to_left
+                .get(&address)
+                .expect("Using address that I got from same map")
+                .token;
+            eprintln!("Common token on left side: {}", token);
+        }
+        None => {
+            eprintln!("No common token on left side.");
+        }
+    }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
