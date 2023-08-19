@@ -25,7 +25,7 @@ pub fn update(
 
         if old.left == new.left {
             // We found a commonality!
-            common_token_left = Some(old.left);
+            common_token_left = old.left;
 
             // Advance the old token, so we can check in the next loop iteration
             // whether there is a deeper commonality.
