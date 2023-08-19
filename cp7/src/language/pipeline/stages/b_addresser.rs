@@ -28,16 +28,16 @@ fn address_token(
     let address_left = tokens::LeftNeighborAddress {
         hash: hash(&token, left.map(|address| address.hash)),
     };
-    let right =
+    let right_neighbor =
         address_token(Some(address_left), tokens, left_to_right, right_to_left);
     let address_right = tokens::RightNeighborAddress {
-        hash: hash(&token, right.map(|address| address.hash)),
+        hash: hash(&token, right_neighbor.map(|address| address.hash)),
     };
 
     let addressed_token = AddressedToken {
         token,
         left_neighbor: left,
-        right_neighbor: right,
+        right_neighbor,
     };
 
     left_to_right.insert(address_right, addressed_token.clone());
