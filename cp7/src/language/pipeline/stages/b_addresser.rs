@@ -34,7 +34,7 @@ fn address_token(
         left_to_right,
         right_to_left,
     );
-    let address_right = tokens::RightNeighborAddress {
+    let token_as_right_neighbor = tokens::RightNeighborAddress {
         hash: hash(&token, right_neighbor.map(|address| address.hash)),
     };
 
@@ -44,10 +44,10 @@ fn address_token(
         right_neighbor,
     };
 
-    left_to_right.insert(address_right, addressed_token.clone());
+    left_to_right.insert(token_as_right_neighbor, addressed_token.clone());
     right_to_left.insert(token_as_left_neighbor, addressed_token);
 
-    Some(address_right)
+    Some(token_as_right_neighbor)
 }
 
 fn hash(token: &Token, neighbor: Option<blake3::Hash>) -> blake3::Hash {
