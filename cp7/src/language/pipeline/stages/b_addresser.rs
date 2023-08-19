@@ -30,13 +30,13 @@ fn address_token(
         hash: hash(&token, left_neighbor.map(|address| address.hash)),
     };
 
-    let next_address_output = address_token(
+    let addresser_output = address_token(
         Some(token_as_left_neighbor),
         tokens,
         left_to_right,
         right_to_left,
     );
-    let (right_neighbor, rightmost) = match next_address_output {
+    let (right_neighbor, rightmost) = match addresser_output {
         Some((right_neighbor, rightmost)) => (Some(right_neighbor), rightmost),
         None => (None, token_as_left_neighbor),
     };
