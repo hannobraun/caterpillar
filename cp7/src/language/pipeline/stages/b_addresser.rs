@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 
-use crate::language::tokens::{
-    self, AddressedToken, Token, TokenAddressLeft, Tokens,
-};
+use crate::language::tokens::{self, AddressedToken, Token, Tokens};
 
 pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut left_to_right = HashMap::new();
@@ -19,15 +17,15 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
 }
 
 fn address_token(
-    left: Option<TokenAddressLeft>,
+    left: Option<tokens::TokenAddressLeft>,
     tokens: impl IntoIterator<Item = Token>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
-    right_to_left: &mut HashMap<TokenAddressLeft, AddressedToken>,
+    right_to_left: &mut HashMap<tokens::TokenAddressLeft, AddressedToken>,
 ) -> Option<tokens::RightNeighborAddress> {
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
-    let address_left = TokenAddressLeft {
+    let address_left = tokens::TokenAddressLeft {
         hash: hash(&token, left.map(|address| address.hash)),
     };
     let right =
