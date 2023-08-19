@@ -23,7 +23,7 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut TokensLeftToRight,
+    tokens: &mut Tokens,
     syntax: &mut Syntax,
     tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
@@ -88,7 +88,7 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut TokensLeftToRight,
+    tokens: &mut Tokens,
     syntax: &mut Syntax,
     tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
@@ -107,28 +107,22 @@ fn parse_block(
     Ok((handle, range))
 }
 
-fn parse_word(
-    tokens: &mut TokensLeftToRight,
-) -> ParserResult<(String, TokenRange)> {
+fn parse_word(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
     let (token, hash) = expect::<token::Word>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_number(
-    tokens: &mut TokensLeftToRight,
-) -> ParserResult<(i64, TokenRange)> {
+fn parse_number(tokens: &mut Tokens) -> ParserResult<(i64, TokenRange)> {
     let (token, hash) = expect::<token::Number>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_symbol(
-    tokens: &mut TokensLeftToRight,
-) -> ParserResult<(String, TokenRange)> {
+fn parse_symbol(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
     let (token, hash) = expect::<token::Symbol>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn expect<T>(tokens: &mut TokensLeftToRight) -> ParserResult<(T, blake3::Hash)>
+fn expect<T>(tokens: &mut Tokens) -> ParserResult<(T, blake3::Hash)>
 where
     T: TryFrom<Token, Error = Token>,
 {
@@ -144,6 +138,8 @@ where
 
     Ok((token, hash))
 }
+
+pub type Tokens<'r> = TokensLeftToRight<'r>;
 
 pub type ParserResult<T> = Result<T, ParserError>;
 
