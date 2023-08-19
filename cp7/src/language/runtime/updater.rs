@@ -8,12 +8,11 @@ pub fn update(
     syntax: &Syntax,
     evaluator: &mut Evaluator,
 ) {
-    let mut old_token_left = old_tokens
-        .left
-        .and_then(|address| old_tokens.left_to_right.get(&address));
-    let mut new_token_left = new_tokens
-        .left
-        .and_then(|address| new_tokens.left_to_right.get(&address));
+    let mut old_tokens_left_to_right = old_tokens.left_to_right();
+    let mut new_tokens_left_to_right = new_tokens.left_to_right();
+
+    let mut old_token_left = old_tokens_left_to_right.next();
+    let mut new_token_left = new_tokens_left_to_right.next();
 
     let mut common_token_left = None;
 
@@ -30,18 +29,14 @@ pub fn update(
 
             // Advance the old token, so we can check in the next loop iteration
             // whether there is a deeper commonality.
-            old_token_left = old
-                .right
-                .and_then(|address| old_tokens.left_to_right.get(&address));
+            old_token_left = old_tokens_left_to_right.next();
 
             continue;
         }
 
         // The current new token is not the same as the current old one. Advance
         // the new token, maybe we'll find a commonality yet.
-        new_token_left = new
-            .right
-            .and_then(|address| new_tokens.left_to_right.get(&address));
+        new_token_left = new_tokens_left_to_right.next();
     }
 
     dbg!(old_tokens, new_tokens, common_token_left);
