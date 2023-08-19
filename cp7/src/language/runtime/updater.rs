@@ -1,8 +1,51 @@
-use crate::language::syntax::Syntax;
+use crate::language::{syntax::Syntax, tokens::Tokens};
 
 use super::evaluator::Evaluator;
 
-pub fn update(syntax: &Syntax, evaluator: &mut Evaluator) {
+pub fn update(
+    old_tokens: &Tokens,
+    new_tokens: &Tokens,
+    syntax: &Syntax,
+    evaluator: &mut Evaluator,
+) {
+    let mut old_token_left = old_tokens
+        .left
+        .and_then(|address| old_tokens.left_to_right.get(&address));
+    let mut new_token_left = new_tokens
+        .left
+        .and_then(|address| new_tokens.left_to_right.get(&address));
+
+    let mut common_token_left = None;
+
+    loop {
+        let (Some(old), Some(new)) = (old_token_left, new_token_left) else {
+            // We've reached the end of one of our token streams. Either we
+            // found a commonality of not, but either way, the search is over.
+            break;
+        };
+
+        if old.left == new.left {
+            // We found a commonality!
+            common_token_left = Some(old.left);
+
+            // Advance the old token, so we can check in the next loop iteration
+            // whether there is a deeper commonality.
+            old_token_left = old
+                .right
+                .and_then(|address| old_tokens.left_to_right.get(&address));
+
+            continue;
+        }
+
+        // The current new token is not the same as the current old one. Advance
+        // the new token, maybe we'll find a commonality yet.
+        new_token_left = new
+            .right
+            .and_then(|address| new_tokens.left_to_right.get(&address));
+    }
+
+    dbg!(old_tokens, new_tokens, common_token_left);
+
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
     }
