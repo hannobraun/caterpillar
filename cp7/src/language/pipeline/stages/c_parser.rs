@@ -3,12 +3,12 @@ use crate::language::{
         Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange,
         TokensToSyntax,
     },
-    tokens::{token, Token, TokenIter},
+    tokens::{token, Token, TokensLeftToRight},
     value::{self, Value},
 };
 
 pub fn parse(
-    mut tokens: TokenIter,
+    mut tokens: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut tokens_to_syntax = TokensToSyntax::new();
@@ -23,7 +23,7 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut TokenIter,
+    tokens: &mut TokensLeftToRight,
     syntax: &mut Syntax,
     tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
@@ -86,7 +86,7 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut TokenIter,
+    tokens: &mut TokensLeftToRight,
     syntax: &mut Syntax,
     tokens_to_syntax: &mut TokensToSyntax,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
@@ -105,22 +105,28 @@ fn parse_block(
     Ok((handle, range))
 }
 
-fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
+fn parse_word(
+    tokens: &mut TokensLeftToRight,
+) -> ParserResult<(String, TokenRange)> {
     let (token, hash) = expect::<token::Word>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_number(tokens: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
+fn parse_number(
+    tokens: &mut TokensLeftToRight,
+) -> ParserResult<(i64, TokenRange)> {
     let (token, hash) = expect::<token::Number>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
+fn parse_symbol(
+    tokens: &mut TokensLeftToRight,
+) -> ParserResult<(String, TokenRange)> {
     let (token, hash) = expect::<token::Symbol>(tokens)?;
     Ok((token.0, TokenRange::one(hash)))
 }
 
-fn expect<T>(tokens: &mut TokenIter) -> ParserResult<(T, blake3::Hash)>
+fn expect<T>(tokens: &mut TokensLeftToRight) -> ParserResult<(T, blake3::Hash)>
 where
     T: TryFrom<Token, Error = Token>,
 {

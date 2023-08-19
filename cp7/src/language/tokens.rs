@@ -32,8 +32,8 @@ pub struct Tokens {
 }
 
 impl Tokens {
-    pub fn iter(&self) -> TokenIter {
-        TokenIter {
+    pub fn iter(&self) -> TokensLeftToRight {
+        TokensLeftToRight {
             current: self.left,
             tokens: self,
         }
@@ -72,12 +72,12 @@ impl AddressedToken {
     }
 }
 
-pub struct TokenIter<'r> {
+pub struct TokensLeftToRight<'r> {
     current: Option<TokenAddressRight>,
     tokens: &'r Tokens,
 }
 
-impl TokenIter<'_> {
+impl TokensLeftToRight<'_> {
     pub fn peek(&self) -> Option<AddressedToken> {
         let current = self.current?;
         self.tokens.left_to_right.get(&current).cloned()
