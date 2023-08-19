@@ -82,8 +82,12 @@ impl TokensLeftToRight<'_> {
         let current = self.current?;
         self.tokens.left_to_right.get(&current)
     }
+}
 
-    pub fn next(&mut self) -> Option<&AddressedToken> {
+impl<'r> Iterator for TokensLeftToRight<'r> {
+    type Item = &'r AddressedToken;
+
+    fn next(&mut self) -> Option<Self::Item> {
         let current = self.current?;
         let token = self.tokens.left_to_right.get(&current)?;
         self.current = token.right;
