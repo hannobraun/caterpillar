@@ -21,9 +21,9 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
 fn address_token(
     left: Option<TokenAddressLeft>,
     tokens: impl IntoIterator<Item = Token>,
-    left_to_right: &mut HashMap<tokens::TokenAddressRight, AddressedToken>,
+    left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<TokenAddressLeft, AddressedToken>,
-) -> Option<tokens::TokenAddressRight> {
+) -> Option<tokens::RightNeighborAddress> {
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
@@ -32,7 +32,7 @@ fn address_token(
     };
     let right =
         address_token(Some(address_left), tokens, left_to_right, right_to_left);
-    let address_right = tokens::TokenAddressRight {
+    let address_right = tokens::RightNeighborAddress {
         hash: hash(&token, right.map(|address| address.hash)),
     };
 
