@@ -27,6 +27,7 @@ impl fmt::Display for Token {
 #[derive(Debug)]
 pub struct Tokens {
     pub leftmost: Option<RightNeighborAddress>,
+
     pub left_to_right: HashMap<RightNeighborAddress, AddressedToken>,
     pub right_to_left: HashMap<LeftNeighborAddress, AddressedToken>,
 }
