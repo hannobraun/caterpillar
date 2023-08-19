@@ -37,10 +37,10 @@ pub fn update(
 
 fn search_common_token<'r>(
     mut old_tokens: impl Iterator<Item = &'r AddressedToken>,
-    mut new_tokens_left_to_right: impl Iterator<Item = &'r AddressedToken>,
+    mut new_tokens: impl Iterator<Item = &'r AddressedToken>,
 ) -> Option<TokenAddressLeft> {
     let mut old_token_left = old_tokens.next();
-    let mut new_token_left = new_tokens_left_to_right.next();
+    let mut new_token_left = new_tokens.next();
 
     let mut common_token_left = None;
 
@@ -64,7 +64,7 @@ fn search_common_token<'r>(
 
         // The current new token is not the same as the current old one. Advance
         // the new token, maybe we'll find a commonality yet.
-        new_token_left = new_tokens_left_to_right.next();
+        new_token_left = new_tokens.next();
     }
 
     common_token_left
