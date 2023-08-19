@@ -28,12 +28,15 @@ fn address_token(
     let token_as_left_neighbor = tokens::LeftNeighborAddress {
         hash: hash(&token, left_neighbor.map(|address| address.hash)),
     };
-    let right_neighbor = address_token(
+
+    let next_address_output = address_token(
         Some(token_as_left_neighbor),
         tokens,
         left_to_right,
         right_to_left,
     );
+    let right_neighbor = next_address_output;
+
     let token_as_right_neighbor = tokens::RightNeighborAddress {
         hash: hash(&token, right_neighbor.map(|address| address.hash)),
     };
