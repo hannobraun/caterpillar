@@ -25,11 +25,15 @@ fn address_token(
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
-    let address_left = tokens::LeftNeighborAddress {
+    let token_as_left_neighbor = tokens::LeftNeighborAddress {
         hash: hash(&token, left_neighbor.map(|address| address.hash)),
     };
-    let right_neighbor =
-        address_token(Some(address_left), tokens, left_to_right, right_to_left);
+    let right_neighbor = address_token(
+        Some(token_as_left_neighbor),
+        tokens,
+        left_to_right,
+        right_to_left,
+    );
     let address_right = tokens::RightNeighborAddress {
         hash: hash(&token, right_neighbor.map(|address| address.hash)),
     };
@@ -41,7 +45,7 @@ fn address_token(
     };
 
     left_to_right.insert(address_right, addressed_token.clone());
-    right_to_left.insert(address_left, addressed_token);
+    right_to_left.insert(token_as_left_neighbor, addressed_token);
 
     Some(address_right)
 }
