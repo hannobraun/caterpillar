@@ -22,31 +22,22 @@ pub fn update(
         |token| token.right_neighbor,
     );
 
-    match common_token_left {
-        Some(address) => {
-            let token = &old_tokens
-                .right_to_left
-                .get(&address)
-                .expect("Using address that I got from same map")
-                .token;
-            eprintln!("Common token on left side: {}", token);
-        }
-        None => {
-            eprintln!("No common token on left side.");
-        }
+    if let Some(address) = common_token_left {
+        let token = &old_tokens
+            .right_to_left
+            .get(&address)
+            .expect("Using address that I got from same map")
+            .token;
+        eprint!("{}", token);
     }
-    match common_token_right {
-        Some(address) => {
-            let token = &old_tokens
-                .left_to_right
-                .get(&address)
-                .expect("Using address that I got from same map")
-                .token;
-            eprintln!("Common token on right side: {}", token);
-        }
-        None => {
-            eprintln!("No common token on right side.");
-        }
+    eprint!(" ... ");
+    if let Some(address) = common_token_right {
+        let token = &old_tokens
+            .left_to_right
+            .get(&address)
+            .expect("Using address that I got from same map")
+            .token;
+        eprintln!("{}", token);
     }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
