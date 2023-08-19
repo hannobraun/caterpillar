@@ -1,4 +1,7 @@
-use crate::language::{syntax::Syntax, tokens::Tokens};
+use crate::language::{
+    syntax::Syntax,
+    tokens::{TokenAddressLeft, Tokens},
+};
 
 use super::evaluator::Evaluator;
 
@@ -8,6 +11,31 @@ pub fn update(
     syntax: &Syntax,
     evaluator: &mut Evaluator,
 ) {
+    let common_token_left = search_common_token(old_tokens, new_tokens);
+
+    match common_token_left {
+        Some(address) => {
+            let token = &old_tokens
+                .right_to_left
+                .get(&address)
+                .expect("Using address that I got from same map")
+                .token;
+            eprintln!("Common token on left side: {}", token);
+        }
+        None => {
+            eprintln!("No common token on left side.");
+        }
+    }
+
+    for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
+        evaluator.functions.replace(old, new);
+    }
+}
+
+fn search_common_token(
+    old_tokens: &Tokens,
+    new_tokens: &Tokens,
+) -> Option<TokenAddressLeft> {
     let mut old_tokens_left_to_right = old_tokens.left_to_right();
     let mut new_tokens_left_to_right = new_tokens.left_to_right();
 
@@ -39,23 +67,7 @@ pub fn update(
         new_token_left = new_tokens_left_to_right.next();
     }
 
-    match common_token_left {
-        Some(address) => {
-            let token = &old_tokens
-                .right_to_left
-                .get(&address)
-                .expect("Using address that I got from same map")
-                .token;
-            eprintln!("Common token on left side: {}", token);
-        }
-        None => {
-            eprintln!("No common token on left side.");
-        }
-    }
-
-    for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
-        evaluator.functions.replace(old, new);
-    }
+    common_token_left
 }
 
 #[cfg(test)]
