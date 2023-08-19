@@ -1,6 +1,6 @@
 use crate::language::{
     syntax::Syntax,
-    tokens::{AddressedToken, TokenAddressLeft, Tokens},
+    tokens::{AddressedToken, Tokens},
 };
 
 use super::evaluator::Evaluator;
@@ -14,6 +14,7 @@ pub fn update(
     let common_token_left = search_common_token(
         old_tokens.left_to_right(),
         new_tokens.left_to_right(),
+        |token| token.left,
     );
 
     match common_token_left {
@@ -35,10 +36,14 @@ pub fn update(
     }
 }
 
-fn search_common_token<'r>(
+fn search_common_token<'r, T>(
     mut old_tokens: impl Iterator<Item = &'r AddressedToken>,
     mut new_tokens: impl Iterator<Item = &'r AddressedToken>,
-) -> Option<TokenAddressLeft> {
+    next: impl Fn(&AddressedToken) -> Option<T>,
+) -> Option<T>
+where
+    T: Eq,
+{
     let mut old_token_left = old_tokens.next();
     let mut new_token_left = new_tokens.next();
 
@@ -51,9 +56,9 @@ fn search_common_token<'r>(
             break;
         };
 
-        if old.left == new.left {
+        if next(old) == next(new) {
             // We found a commonality!
-            common_token_left = old.left;
+            common_token_left = next(old);
 
             // Advance the old token, so we can check in the next loop iteration
             // whether there is a deeper commonality.
