@@ -78,13 +78,13 @@ pub struct TokensLeftToRight<'r> {
 }
 
 impl TokensLeftToRight<'_> {
-    pub fn peek(&self) -> Option<AddressedToken> {
+    pub fn peek(&self) -> Option<&AddressedToken> {
         let current = self.current?;
-        self.tokens.left_to_right.get(&current).cloned()
+        self.tokens.left_to_right.get(&current)
     }
 
     pub fn next(&mut self) -> Option<AddressedToken> {
-        let token = self.peek()?;
+        let token = self.peek()?.clone();
         self.current = token.right;
         Some(token)
     }
