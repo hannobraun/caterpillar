@@ -39,7 +39,7 @@ fn address_token(
     let addressed_token = AddressedToken {
         token,
         left_neighbor: left,
-        right,
+        right_neighbor: right,
     };
 
     left_to_right.insert(address_right, addressed_token.clone());

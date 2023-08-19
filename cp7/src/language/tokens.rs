@@ -54,7 +54,7 @@ pub struct TokenAddressLeft {
 pub struct AddressedToken {
     pub token: Token,
     pub left_neighbor: Option<TokenAddressLeft>,
-    pub right: Option<TokenAddressRight>,
+    pub right_neighbor: Option<TokenAddressRight>,
 }
 
 impl AddressedToken {
@@ -64,7 +64,7 @@ impl AddressedToken {
         if let Some(left) = self.left_neighbor {
             hasher.update(left.hash.as_bytes());
         }
-        if let Some(right) = self.right {
+        if let Some(right) = self.right_neighbor {
             hasher.update(right.hash.as_bytes());
         }
 
@@ -83,7 +83,7 @@ impl<'r> Iterator for TokensLeftToRight<'r> {
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.current?;
         let token = self.tokens.left_to_right.get(&current)?;
-        self.current = token.right;
+        self.current = token.right_neighbor;
         Some(token)
     }
 }
