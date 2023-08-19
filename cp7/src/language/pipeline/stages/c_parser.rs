@@ -41,7 +41,7 @@ fn parse_fragment(
         }
     };
 
-    let (syntax_element, token_range) = match next_token.token {
+    let (syntax_element, token_range) = match &next_token.token {
         Token::CurlyBracketOpen => {
             let (block, token_range) =
                 parse_block(tokens, syntax, tokens_to_syntax)?;
@@ -64,13 +64,15 @@ fn parse_fragment(
             (symbol, token_range)
         }
         token => {
-            if Some(&token) == terminator.as_ref() {
+            if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
                 let token = tokens.next().unwrap();
                 return Ok((None, Some(token.hash())));
             }
 
-            return Err(ParserError::UnexpectedToken { actual: token });
+            return Err(ParserError::UnexpectedToken {
+                actual: token.clone(),
+            });
         }
     };
 
