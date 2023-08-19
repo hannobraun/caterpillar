@@ -1,6 +1,6 @@
 use crate::language::{
     syntax::Syntax,
-    tokens::{TokenAddressLeft, Tokens},
+    tokens::{AddressedToken, TokenAddressLeft, Tokens},
 };
 
 use super::evaluator::Evaluator;
@@ -11,7 +11,8 @@ pub fn update(
     syntax: &Syntax,
     evaluator: &mut Evaluator,
 ) {
-    let common_token_left = search_common_token(old_tokens, new_tokens);
+    let common_token_left =
+        search_common_token(old_tokens.left_to_right(), new_tokens);
 
     match common_token_left {
         Some(address) => {
@@ -32,11 +33,10 @@ pub fn update(
     }
 }
 
-fn search_common_token(
-    old_tokens: &Tokens,
+fn search_common_token<'r>(
+    mut old_tokens_left_to_right: impl Iterator<Item = &'r AddressedToken>,
     new_tokens: &Tokens,
 ) -> Option<TokenAddressLeft> {
-    let mut old_tokens_left_to_right = old_tokens.left_to_right();
     let mut new_tokens_left_to_right = new_tokens.left_to_right();
 
     let mut old_token_left = old_tokens_left_to_right.next();
