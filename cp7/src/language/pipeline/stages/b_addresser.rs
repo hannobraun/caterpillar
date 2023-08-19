@@ -36,7 +36,11 @@ fn address_token(
         hash: hash(&token, right.map(|address| address.hash)),
     };
 
-    let addressed_token = AddressedToken { token, left, right };
+    let addressed_token = AddressedToken {
+        token,
+        left_neighbor: left,
+        right,
+    };
 
     left_to_right.insert(address_right, addressed_token.clone());
     right_to_left.insert(address_left, addressed_token);

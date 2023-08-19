@@ -53,7 +53,7 @@ pub struct TokenAddressLeft {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AddressedToken {
     pub token: Token,
-    pub left: Option<TokenAddressLeft>,
+    pub left_neighbor: Option<TokenAddressLeft>,
     pub right: Option<TokenAddressRight>,
 }
 
@@ -61,7 +61,7 @@ impl AddressedToken {
     pub fn hash(&self) -> blake3::Hash {
         let mut hasher = blake3::Hasher::new();
 
-        if let Some(left) = self.left {
+        if let Some(left) = self.left_neighbor {
             hasher.update(left.hash.as_bytes());
         }
         if let Some(right) = self.right {

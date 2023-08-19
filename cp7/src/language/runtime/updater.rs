@@ -14,7 +14,7 @@ pub fn update(
     let common_token_left = search_common_token(
         old_tokens.left_to_right(),
         new_tokens.left_to_right(),
-        |token| token.left,
+        |token| token.left_neighbor,
     );
 
     match common_token_left {
