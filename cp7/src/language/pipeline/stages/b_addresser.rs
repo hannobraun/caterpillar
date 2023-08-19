@@ -8,13 +8,14 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
 
     let addresser_output =
         address_token(None, tokens, &mut left_to_right, &mut right_to_left);
-    let (leftmost, _) = match addresser_output {
+    let (leftmost, rightmost) = match addresser_output {
         Some((leftmost, rightmost)) => (Some(leftmost), Some(rightmost)),
         None => (None, None),
     };
 
     Tokens {
         leftmost,
+        rightmost,
         left_to_right,
         right_to_left,
     }
