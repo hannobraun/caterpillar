@@ -87,7 +87,8 @@ where
 #[cfg(test)]
 mod tests {
     use crate::language::runtime::{
-        functions::Function, interpreter::Interpreter,
+        functions::{self, Function},
+        interpreter::Interpreter,
     };
 
     #[test]
@@ -109,7 +110,9 @@ mod tests {
             interpreter: &Interpreter,
         ) -> anyhow::Result<blake3::Hash> {
             let function = interpreter.evaluator.functions.resolve("f")?;
-            let Function::UserDefined { body } = function else {
+            let Function::UserDefined(functions::UserDefined { body }) =
+                function
+            else {
                 panic!("Just defined function, but somehow not user-defined");
             };
             let handle =

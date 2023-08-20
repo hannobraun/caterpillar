@@ -3,7 +3,7 @@ use crate::language::syntax::{Syntax, SyntaxElement};
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    functions::{Function, Functions, ResolveError},
+    functions::{self, Function, Functions, ResolveError},
 };
 
 #[derive(Debug)]
@@ -37,7 +37,7 @@ impl Evaluator {
                     Function::Intrinsic(intrinsic) => {
                         intrinsic(&mut self.functions, &mut self.data_stack)?
                     }
-                    Function::UserDefined { body } => {
+                    Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(body) = body.0 {
                             // Need to advance the current stack frame before we
                             // jump into the function, or we'll repeat it

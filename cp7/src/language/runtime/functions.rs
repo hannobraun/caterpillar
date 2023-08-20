@@ -22,7 +22,7 @@ impl Functions {
     }
 
     pub fn define(&mut self, name: value::Symbol, body: value::Block) {
-        let function = Function::UserDefined { body };
+        let function = Function::UserDefined(UserDefined { body });
         self.inner.insert(name.0, function);
     }
 
@@ -34,7 +34,7 @@ impl Functions {
 
     pub fn replace(&mut self, old: SyntaxHandle, new: SyntaxHandle) {
         for function in self.inner.values_mut() {
-            if let Function::UserDefined { body } = function {
+            if let Function::UserDefined(UserDefined { body }) = function {
                 if let Some(handle) = &mut body.0 {
                     if handle.hash == old.hash {
                         *handle = new;
@@ -48,10 +48,15 @@ impl Functions {
 #[derive(Debug)]
 pub enum Function {
     Intrinsic(Intrinsic),
-    UserDefined { body: value::Block },
+    UserDefined(UserDefined),
 }
 
 pub type Intrinsic = fn(&mut Functions, &mut DataStack) -> DataStackResult<()>;
+
+#[derive(Debug)]
+pub struct UserDefined {
+    pub body: value::Block,
+}
 
 #[derive(Debug, thiserror::Error)]
 #[error("Error resolving function `{name}`")]
