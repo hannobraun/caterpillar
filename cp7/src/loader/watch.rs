@@ -20,7 +20,6 @@ pub fn watch(
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
-        None,
         move |result: DebounceEventResult| {
             let path = &path_for_watcher;
 
