@@ -61,7 +61,7 @@ where
     loop {
         let (Some(old), Some(new)) = (old_token_left, new_token_left) else {
             // We've reached the end of one of our token streams. Either we
-            // found a commonality of not, but either way, the search is over.
+            // found a commonality or not, but either way, the search is over.
             break;
         };
 
