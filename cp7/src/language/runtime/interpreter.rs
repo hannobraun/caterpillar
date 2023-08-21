@@ -1,7 +1,7 @@
 use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
-    syntax::{Syntax, TokensToSyntax},
+    syntax::{Syntax, SyntaxToTokens},
     tokens::Tokens,
 };
 
@@ -15,7 +15,7 @@ use super::{
 pub struct Interpreter {
     pub tokens: Tokens,
     pub syntax: Syntax,
-    pub tokens_to_syntax: TokensToSyntax,
+    pub tokens_to_syntax: SyntaxToTokens,
     pub evaluator: Evaluator,
 }
 

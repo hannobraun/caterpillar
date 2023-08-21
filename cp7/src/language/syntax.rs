@@ -151,7 +151,7 @@ impl SyntaxFragment {
     }
 }
 
-pub type TokensToSyntax = HashMap<SyntaxHandle, TokenRange>;
+pub type SyntaxToTokens = HashMap<SyntaxHandle, TokenRange>;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {

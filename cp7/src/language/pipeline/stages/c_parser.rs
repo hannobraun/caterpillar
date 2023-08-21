@@ -2,8 +2,8 @@ use std::iter;
 
 use crate::language::{
     syntax::{
-        Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, TokenRange,
-        TokensToSyntax,
+        Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxToTokens,
+        TokenRange,
     },
     tokens::{token, Token, TokensLeftToRight},
     value::{self, Value},
@@ -14,7 +14,7 @@ pub fn parse(
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut tokens = tokens.peekable();
-    let mut tokens_to_syntax = TokensToSyntax::new();
+    let mut tokens_to_syntax = SyntaxToTokens::new();
 
     let (start, _) =
         parse_fragment(None, &mut tokens, syntax, &mut tokens_to_syntax)?;
@@ -29,7 +29,7 @@ fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut TokensToSyntax,
+    tokens_to_syntax: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -94,7 +94,7 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut TokensToSyntax,
+    tokens_to_syntax: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
 
@@ -149,7 +149,7 @@ pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
     pub start: Option<SyntaxHandle>,
-    pub tokens_to_syntax: TokensToSyntax,
+    pub tokens_to_syntax: SyntaxToTokens,
 }
 
 #[derive(Debug, thiserror::Error)]
