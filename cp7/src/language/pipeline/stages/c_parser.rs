@@ -86,7 +86,7 @@ fn parse_fragment(
         payload: syntax_element,
         next,
     });
-    tokens_to_syntax.insert(token_range, handle);
+    tokens_to_syntax.insert(handle, token_range);
 
     Ok((Some(handle), hash))
 }
