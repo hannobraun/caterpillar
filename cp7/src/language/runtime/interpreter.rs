@@ -25,7 +25,7 @@ impl Interpreter {
         let PipelineOutput {
             start,
             tokens,
-            tokens_to_syntax,
+            syntax_to_tokens: tokens_to_syntax,
         } = pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();
@@ -61,7 +61,7 @@ impl Interpreter {
         self.syntax.prepare_update();
         let PipelineOutput {
             tokens,
-            tokens_to_syntax,
+            syntax_to_tokens,
             ..
         } = pipeline::run(code, &mut self.syntax)?;
         updater::update(
@@ -72,7 +72,7 @@ impl Interpreter {
         );
 
         self.tokens = tokens;
-        self.tokens_to_syntax = tokens_to_syntax;
+        self.tokens_to_syntax = syntax_to_tokens;
 
         Ok(())
     }

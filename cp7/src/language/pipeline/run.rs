@@ -17,20 +17,20 @@ pub fn run(
     let tokens = address(tokens);
     let ParserOutput {
         start,
-        tokens_to_syntax,
+        tokens_to_syntax: syntax_to_tokens,
     } = parse(tokens.left_to_right(), syntax)?;
 
     Ok(PipelineOutput {
         start,
         tokens,
-        tokens_to_syntax,
+        syntax_to_tokens,
     })
 }
 
 pub struct PipelineOutput {
     pub start: Option<SyntaxHandle>,
     pub tokens: Tokens,
-    pub tokens_to_syntax: SyntaxToTokens,
+    pub syntax_to_tokens: SyntaxToTokens,
 }
 
 #[derive(Debug, thiserror::Error)]
