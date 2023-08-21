@@ -17,7 +17,7 @@ pub fn run(
     let tokens = address(tokens);
     let ParserOutput {
         start,
-        tokens_to_syntax: syntax_to_tokens,
+        syntax_to_tokens,
     } = parse(tokens.left_to_right(), syntax)?;
 
     Ok(PipelineOutput {

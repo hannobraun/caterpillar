@@ -14,14 +14,14 @@ pub fn parse(
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut tokens = tokens.peekable();
-    let mut tokens_to_syntax = SyntaxToTokens::new();
+    let mut syntax_to_tokens = SyntaxToTokens::new();
 
     let (start, _) =
-        parse_fragment(None, &mut tokens, syntax, &mut tokens_to_syntax)?;
+        parse_fragment(None, &mut tokens, syntax, &mut syntax_to_tokens)?;
 
     Ok(ParserOutput {
         start,
-        tokens_to_syntax,
+        syntax_to_tokens,
     })
 }
 
@@ -149,7 +149,7 @@ pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
     pub start: Option<SyntaxHandle>,
-    pub tokens_to_syntax: SyntaxToTokens,
+    pub syntax_to_tokens: SyntaxToTokens,
 }
 
 #[derive(Debug, thiserror::Error)]
