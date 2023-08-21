@@ -29,7 +29,7 @@ fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut SyntaxToTokens,
+    syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -48,7 +48,7 @@ fn parse_fragment(
     let (syntax_element, token_range) = match &next_token.token {
         Token::CurlyBracketOpen => {
             let (block, token_range) =
-                parse_block(tokens, syntax, tokens_to_syntax)?;
+                parse_block(tokens, syntax, syntax_to_tokens)?;
             let block = SyntaxElement::Value(value::Block(block).into());
             (block, token_range)
         }
@@ -81,12 +81,12 @@ fn parse_fragment(
     };
 
     let (next, hash) =
-        parse_fragment(terminator, tokens, syntax, tokens_to_syntax)?;
+        parse_fragment(terminator, tokens, syntax, syntax_to_tokens)?;
     let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
         next,
     });
-    tokens_to_syntax.insert(handle, token_range);
+    syntax_to_tokens.insert(handle, token_range);
 
     Ok((Some(handle), hash))
 }
