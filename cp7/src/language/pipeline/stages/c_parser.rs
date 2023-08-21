@@ -94,7 +94,7 @@ fn parse_fragment(
 fn parse_block(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
-    tokens_to_syntax: &mut SyntaxToTokens,
+    syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
 
@@ -102,7 +102,7 @@ fn parse_block(
         Some(Token::CurlyBracketClose),
         tokens,
         syntax,
-        tokens_to_syntax,
+        syntax_to_tokens,
     )?;
 
     let end = end.unwrap();
