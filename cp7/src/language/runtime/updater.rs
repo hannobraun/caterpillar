@@ -22,6 +22,7 @@ pub fn update(
         |token| token.right_neighbor,
     );
 
+    eprint!("Updated token in range: ");
     if let Some(address) = common_token_left {
         let token = &old_tokens
             .right_to_left
