@@ -1,5 +1,5 @@
 use crate::language::{
-    syntax::Syntax,
+    syntax::{Syntax, SyntaxToTokens},
     tokens::{AddressedToken, Tokens},
 };
 
@@ -9,6 +9,7 @@ pub fn update(
     old_tokens: &Tokens,
     new_tokens: &Tokens,
     syntax: &Syntax,
+    _syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {
     let common_token_left = search_common_token(

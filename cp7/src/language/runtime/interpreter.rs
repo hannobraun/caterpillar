@@ -68,6 +68,7 @@ impl Interpreter {
             &self.tokens,
             &tokens,
             &self.syntax,
+            &self.syntax_to_tokens,
             &mut self.evaluator,
         );
 
