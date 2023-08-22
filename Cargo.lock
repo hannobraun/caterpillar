@@ -384,9 +384,9 @@ dependencies = [
 
 [[package]]
 name = "notify"
-version = "6.1.0"
+version = "6.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3dbf4f3b058c29e9642cf53217e0531cbfc78bc24e0a212a9837b7415b9d9007"
+checksum = "6205bd8bb1e454ad2e27422015fb5e4f2bcc7e08fa8f27058670d208324a4d2d"
 dependencies = [
  "bitflags 2.4.0",
  "crossbeam-channel",
@@ -403,9 +403,9 @@ dependencies = [
 
 [[package]]
 name = "notify-debouncer-mini"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e0e660a73afb95bac0736014cf9ad306ae18b03bdef7c51ac16a6e7dfd5198d"
+checksum = "5d40b221972a1fc5ef4d858a2f671fb34c75983eb385463dff3780eeff6a9d43"
 dependencies = [
  "crossbeam-channel",
  "log",
