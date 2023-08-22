@@ -1,6 +1,8 @@
 use crate::language::{
     syntax::{Syntax, SyntaxToTokens},
-    tokens::{AddressedToken, Tokens},
+    tokens::{
+        AddressedToken, LeftNeighborAddress, RightNeighborAddress, Tokens,
+    },
 };
 
 use super::evaluator::Evaluator;
@@ -24,23 +26,7 @@ pub fn update(
     );
 
     eprint!("Updated token in range: ");
-    if let Some(address) = common_token_left {
-        let token = &old_tokens
-            .right_to_left
-            .get(&address)
-            .expect("Using address that I got from same map")
-            .token;
-        eprint!("{}", token);
-    }
-    eprint!(" ... ");
-    if let Some(address) = common_token_right {
-        let token = &old_tokens
-            .left_to_right
-            .get(&address)
-            .expect("Using address that I got from same map")
-            .token;
-        eprintln!("{}", token);
-    }
+    print_token_range(common_token_left, common_token_right, old_tokens);
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
@@ -84,6 +70,30 @@ where
     }
 
     common_token_left
+}
+
+fn print_token_range(
+    left: Option<LeftNeighborAddress>,
+    right: Option<RightNeighborAddress>,
+    tokens: &Tokens,
+) {
+    if let Some(address) = left {
+        let token = &tokens
+            .right_to_left
+            .get(&address)
+            .expect("Using address that I got from same map")
+            .token;
+        eprint!("{}", token);
+    }
+    eprint!(" ... ");
+    if let Some(address) = right {
+        let token = &tokens
+            .left_to_right
+            .get(&address)
+            .expect("Using address that I got from same map")
+            .token;
+        eprintln!("{}", token);
+    }
 }
 
 #[cfg(test)]
