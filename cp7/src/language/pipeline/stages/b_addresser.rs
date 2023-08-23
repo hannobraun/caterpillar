@@ -23,8 +23,10 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
 
     Tokens {
         by_address,
+
         leftmost,
         rightmost,
+
         left_to_right,
         right_to_left,
     }
