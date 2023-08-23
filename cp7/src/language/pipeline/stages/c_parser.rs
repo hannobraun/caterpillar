@@ -5,7 +5,7 @@ use crate::language::{
         Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxToTokens,
         TokenRange,
     },
-    tokens::{token, Token, TokensLeftToRight},
+    tokens::{token, AddressedToken, Token, TokensLeftToRight},
     value::{self, Value},
 };
 
@@ -106,33 +106,34 @@ fn parse_block(
     )?;
 
     let end = end.unwrap();
-    let range = TokenRange { start, end };
+    let range = TokenRange {
+        start: start.hash(),
+        end,
+    };
 
     Ok((handle, range))
 }
 
 fn parse_word(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
     let (payload, hash) = expect::<token::Word>(tokens)?;
-    Ok((payload.0, TokenRange::one(hash)))
+    Ok((payload.0, TokenRange::one(hash.hash())))
 }
 
 fn parse_number(tokens: &mut Tokens) -> ParserResult<(i64, TokenRange)> {
     let (payload, hash) = expect::<token::Number>(tokens)?;
-    Ok((payload.0, TokenRange::one(hash)))
+    Ok((payload.0, TokenRange::one(hash.hash())))
 }
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
     let (payload, hash) = expect::<token::Symbol>(tokens)?;
-    Ok((payload.0, TokenRange::one(hash)))
+    Ok((payload.0, TokenRange::one(hash.hash())))
 }
 
-fn expect<T>(tokens: &mut Tokens) -> ParserResult<(T, blake3::Hash)>
+fn expect<T>(tokens: &mut Tokens) -> ParserResult<(T, AddressedToken)>
 where
     T: TryFrom<Token, Error = Token>,
 {
     let token = tokens.next().ok_or(NoMoreTokens)?;
-
-    let hash = token.hash();
 
     let payload = token
         .token
@@ -140,7 +141,7 @@ where
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok((payload, hash))
+    Ok((payload, token.clone()))
 }
 
 pub type Tokens<'r> = iter::Peekable<TokensLeftToRight<'r>>;
