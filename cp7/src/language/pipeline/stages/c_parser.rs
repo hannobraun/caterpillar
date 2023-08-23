@@ -30,7 +30,7 @@ fn parse_fragment(
     tokens: &mut Tokens,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
-) -> ParserResult<(Option<SyntaxHandle>, Option<blake3::Hash>)> {
+) -> ParserResult<(Option<SyntaxHandle>, Option<AddressedToken>)> {
     let next_token = match tokens.peek() {
         Some(token) => token,
         None => {
@@ -71,7 +71,7 @@ fn parse_fragment(
             if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
                 let token = tokens.next().unwrap();
-                return Ok((None, Some(token.hash())));
+                return Ok((None, Some(token.clone())));
             }
 
             return Err(ParserError::UnexpectedToken {
@@ -108,7 +108,7 @@ fn parse_block(
     let end = end.unwrap();
     let range = TokenRange {
         start: start.hash(),
-        end,
+        end: end.hash(),
     };
 
     Ok((handle, range))
