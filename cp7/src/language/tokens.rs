@@ -26,7 +26,7 @@ impl fmt::Display for Token {
 
 #[derive(Debug)]
 pub struct Tokens {
-    pub by_address: HashMap<AddressedToken, Token>,
+    pub by_address: HashMap<TokenAddress, Token>,
 
     pub leftmost: Option<RightNeighborAddress>,
     pub rightmost: Option<LeftNeighborAddress>,
@@ -49,6 +49,12 @@ impl Tokens {
             tokens: self,
         }
     }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
+pub struct TokenAddress {
+    pub as_left_neighbor: LeftNeighborAddress,
+    pub as_right_neighbor: RightNeighborAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
