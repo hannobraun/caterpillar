@@ -114,8 +114,10 @@ fn parse_block(
     Ok((handle, range))
 }
 
-fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
-    let (payload, token) = expect::<token::Word>(tokens)?;
+fn parse_word(
+    token_iter: &mut TokenIter,
+) -> ParserResult<(String, TokenRange)> {
+    let (payload, token) = expect::<token::Word>(token_iter)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
