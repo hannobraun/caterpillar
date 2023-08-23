@@ -160,10 +160,10 @@ pub struct TokenRange {
 }
 
 impl TokenRange {
-    pub fn one(token: TokenAddress) -> Self {
+    pub fn one(address: TokenAddress) -> Self {
         Self {
-            start: token,
-            end: token,
+            start: address,
+            end: address,
         }
     }
 }
