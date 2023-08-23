@@ -121,8 +121,8 @@ fn parse_word(
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn parse_number(tokens: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
-    let (payload, token) = expect::<token::Number>(tokens)?;
+fn parse_number(token_iter: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
+    let (payload, token) = expect::<token::Number>(token_iter)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
