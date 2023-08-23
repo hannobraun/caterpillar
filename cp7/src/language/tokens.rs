@@ -2,7 +2,7 @@ use std::{collections::HashMap, fmt};
 
 use enum_variant_type::EnumVariantType;
 
-#[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash, EnumVariantType)]
 #[evt(module = "token")]
 pub enum Token {
     CurlyBracketOpen,
@@ -59,7 +59,7 @@ pub struct LeftNeighborAddress {
     pub hash: blake3::Hash,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct AddressedToken {
     pub token: Token,
     pub left_neighbor: Option<LeftNeighborAddress>,
