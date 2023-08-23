@@ -136,7 +136,7 @@ fn parse_word(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Word>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token)))
+    Ok((payload.0, TokenRange::one(token.token)))
 }
 
 fn parse_number(
@@ -144,7 +144,7 @@ fn parse_number(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(i64, TokenRange)> {
     let (payload, token) = expect::<token::Number>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token)))
+    Ok((payload.0, TokenRange::one(token.token)))
 }
 
 fn parse_symbol(
@@ -152,7 +152,7 @@ fn parse_symbol(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Symbol>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token)))
+    Ok((payload.0, TokenRange::one(token.token)))
 }
 
 fn expect<T>(

@@ -1,9 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use super::{
-    tokens::{AddressedToken, TokenAddress},
-    value::Value,
-};
+use super::{tokens::TokenAddress, value::Value};
 
 #[derive(Debug)]
 pub struct Syntax {
@@ -163,10 +160,10 @@ pub struct TokenRange {
 }
 
 impl TokenRange {
-    pub fn one(token: AddressedToken) -> Self {
+    pub fn one(token: TokenAddress) -> Self {
         Self {
-            start: token.token,
-            end: token.token,
+            start: token,
+            end: token,
         }
     }
 }
