@@ -32,6 +32,15 @@ impl Functions {
             .ok_or(ResolveError { name: name.into() })
     }
 
+    pub fn user_defined_mut(
+        &mut self,
+    ) -> impl Iterator<Item = &'_ mut UserDefined> {
+        self.inner.values_mut().filter_map(|f| match f {
+            Function::Intrinsic(_) => None,
+            Function::UserDefined(f) => Some(f),
+        })
+    }
+
     pub fn replace(&mut self, old: SyntaxHandle, new: SyntaxHandle) {
         for function in self.inner.values_mut() {
             if let Function::UserDefined(UserDefined { body }) = function {

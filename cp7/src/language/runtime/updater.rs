@@ -11,7 +11,7 @@ pub fn update(
     old_tokens: &Tokens,
     new_tokens: &Tokens,
     syntax: &Syntax,
-    _syntax_to_tokens: &SyntaxToTokens,
+    syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {
     let common_token_left = search_common_token(
@@ -31,6 +31,22 @@ pub fn update(
         common_token_right,
         old_tokens,
     );
+
+    for function in evaluator.functions.user_defined_mut() {
+        if let Some(body) = &function.body.0 {
+            let token_range = syntax_to_tokens.get(body);
+
+            let (left, right) = match token_range {
+                Some(token_range) => {
+                    (Some(&token_range.start), Some(&token_range.end))
+                }
+                None => (None, None),
+            };
+
+            eprint!("Token range of user-defined function: ");
+            print_token_range_from_tokens(left, right);
+        }
+    }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
