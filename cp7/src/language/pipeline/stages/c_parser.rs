@@ -10,10 +10,10 @@ use crate::language::{
 };
 
 pub fn parse(
-    tokens: TokensLeftToRight,
+    token_iter: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let mut token_iter = tokens.peekable();
+    let mut token_iter = token_iter.peekable();
     let mut syntax_to_tokens = SyntaxToTokens::new();
 
     let (start, _) =
