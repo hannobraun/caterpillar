@@ -60,14 +60,14 @@ fn address_token(
         hash: hash(&token, right_neighbor.map(|address| address.hash)),
     };
 
+    let address = TokenAddress {
+        as_left_neighbor: token_as_left_neighbor,
+        as_right_neighbor: token_as_right_neighbor,
+    };
     let addressed_token = AddressedToken {
         token: token.clone(),
         left_neighbor,
         right_neighbor,
-    };
-    let address = TokenAddress {
-        as_left_neighbor: token_as_left_neighbor,
-        as_right_neighbor: token_as_right_neighbor,
     };
     by_address.insert(address, token);
 
