@@ -32,7 +32,7 @@ fn parse_fragment(
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<AddressedToken>)> {
     let next_token = match tokens.peek() {
-        Some(token) => token,
+        Some(token) => &token.token,
         None => {
             if terminator.is_none() {
                 // If there is no terminator, then not having any more tokens is
@@ -45,7 +45,7 @@ fn parse_fragment(
         }
     };
 
-    let (syntax_element, token_range) = match &next_token.token {
+    let (syntax_element, token_range) = match next_token {
         Token::CurlyBracketOpen => {
             let (start, token_range) =
                 parse_block(tokens, syntax, syntax_to_tokens)?;
