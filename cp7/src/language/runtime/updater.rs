@@ -118,11 +118,11 @@ fn print_token_range_from_addresses(
 
 fn print_token_range_from_tokens(left: Option<&Token>, right: Option<&Token>) {
     if let Some(token) = left {
-        eprint!("{}", token);
+        eprint!("{token}");
     }
     eprint!(" ... ");
     if let Some(token) = right {
-        eprintln!("{}", token);
+        eprintln!("{token}");
     }
 }
 
