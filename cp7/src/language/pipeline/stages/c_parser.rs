@@ -125,7 +125,7 @@ fn parse_block(
     let end = end.unwrap();
     let range = TokenRange {
         start: start.token,
-        end,
+        end: end.token,
     };
 
     Ok((handle, range))

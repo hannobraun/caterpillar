@@ -159,14 +159,14 @@ pub type SyntaxToTokens = HashMap<SyntaxHandle, TokenRange>;
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
     pub start: TokenAddress,
-    pub end: AddressedToken,
+    pub end: TokenAddress,
 }
 
 impl TokenRange {
     pub fn one(token: AddressedToken) -> Self {
         Self {
             start: token.token,
-            end: token,
+            end: token.token,
         }
     }
 }

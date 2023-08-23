@@ -39,7 +39,7 @@ pub fn update(
 
             let (left, right) = match token_range {
                 Some(token_range) => {
-                    (Some(&token_range.start), Some(&token_range.end.token))
+                    (Some(&token_range.start), Some(&token_range.end))
                 }
                 None => (None, None),
             };
