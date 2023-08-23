@@ -65,7 +65,7 @@ fn address_token(
         as_right_neighbor: token_as_right_neighbor,
     };
     let addressed_token = AddressedToken {
-        token: token.clone(),
+        token: address,
         left_neighbor,
         right_neighbor,
     };

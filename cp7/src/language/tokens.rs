@@ -59,7 +59,7 @@ pub struct TokenAddress {
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct AddressedToken {
-    pub token: Token,
+    pub token: TokenAddress,
     pub left_neighbor: Option<LeftNeighborAddress>,
     pub right_neighbor: Option<RightNeighborAddress>,
 }

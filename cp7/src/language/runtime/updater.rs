@@ -45,6 +45,9 @@ pub fn update(
                 None => (None, None),
             };
 
+            let left = old_tokens.by_address.get(left.unwrap());
+            let right = old_tokens.by_address.get(right.unwrap());
+
             eprint!("Token range of user-defined function: ");
             print_token_range_from_tokens(left, right);
         }
@@ -100,18 +103,20 @@ fn print_token_range_from_addresses(
     tokens: &Tokens,
 ) {
     let left = left.map(|address| {
-        &tokens
+        let address = &tokens
             .right_to_left
             .get(&address)
             .expect("Using address that I got from same map")
-            .token
+            .token;
+        tokens.by_address.get(address).unwrap()
     });
     let right = right.map(|address| {
-        &tokens
+        let address = &tokens
             .left_to_right
             .get(&address)
             .expect("Using address that I got from same map")
-            .token
+            .token;
+        tokens.by_address.get(address).unwrap()
     });
     print_token_range_from_tokens(left, right);
 }
