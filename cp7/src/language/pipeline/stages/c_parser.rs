@@ -133,11 +133,11 @@ fn parse_symbol(
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn expect<T>(tokens: &mut TokenIter) -> ParserResult<(T, AddressedToken)>
+fn expect<T>(token_iter: &mut TokenIter) -> ParserResult<(T, AddressedToken)>
 where
     T: TryFrom<Token, Error = Token>,
 {
-    let token = tokens.next().ok_or(NoMoreTokens)?;
+    let token = token_iter.next().ok_or(NoMoreTokens)?;
 
     let payload = token
         .token
