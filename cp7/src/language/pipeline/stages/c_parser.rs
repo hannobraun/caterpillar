@@ -27,7 +27,7 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<AddressedToken>)> {
@@ -95,7 +95,7 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut Tokens,
+    tokens: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
@@ -114,22 +114,22 @@ fn parse_block(
     Ok((handle, range))
 }
 
-fn parse_word(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
+fn parse_word(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Word>(tokens)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn parse_number(tokens: &mut Tokens) -> ParserResult<(i64, TokenRange)> {
+fn parse_number(tokens: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
     let (payload, token) = expect::<token::Number>(tokens)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn parse_symbol(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
+fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Symbol>(tokens)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn expect<T>(tokens: &mut Tokens) -> ParserResult<(T, AddressedToken)>
+fn expect<T>(tokens: &mut TokenIter) -> ParserResult<(T, AddressedToken)>
 where
     T: TryFrom<Token, Error = Token>,
 {
@@ -144,7 +144,7 @@ where
     Ok((payload, token.clone()))
 }
 
-pub type Tokens<'r> = iter::Peekable<TokensLeftToRight<'r>>;
+pub type TokenIter<'r> = iter::Peekable<TokensLeftToRight<'r>>;
 
 pub type ParserResult<T> = Result<T, ParserError>;
 
