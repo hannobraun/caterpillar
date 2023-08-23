@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
 use crate::language::tokens::{
-    self, AddressedToken, Token, TokenAddress, Tokens,
+    self, AddressedToken, RightNeighborAddress, Token, TokenAddress, Tokens,
 };
 
 pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     let mut by_address = HashMap::new();
+    let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
@@ -13,6 +14,7 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
         None,
         tokens,
         &mut by_address,
+        &mut right_neighbors,
         &mut left_to_right,
         &mut right_to_left,
     );
@@ -27,6 +29,8 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
         leftmost,
         rightmost,
 
+        right_neighbors,
+
         left_to_right,
         right_to_left,
     }
@@ -36,6 +40,7 @@ fn address_token(
     left_neighbor: Option<tokens::LeftNeighborAddress>,
     tokens: impl IntoIterator<Item = Token>,
     by_address: &mut HashMap<TokenAddress, Token>,
+    right_neighbors: &mut HashMap<TokenAddress, RightNeighborAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
 ) -> Option<(tokens::RightNeighborAddress, tokens::LeftNeighborAddress)> {
@@ -50,6 +55,7 @@ fn address_token(
         Some(token_as_left_neighbor),
         tokens,
         by_address,
+        right_neighbors,
         left_to_right,
         right_to_left,
     );
@@ -72,6 +78,10 @@ fn address_token(
         right_neighbor,
     };
     by_address.insert(address, token);
+
+    if let Some(right_neighbor) = right_neighbor {
+        right_neighbors.insert(address, right_neighbor);
+    }
 
     left_to_right.insert(token_as_right_neighbor, addressed_token.clone());
     right_to_left.insert(token_as_left_neighbor, addressed_token);
