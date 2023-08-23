@@ -49,7 +49,10 @@ fn parse_fragment(
         Token::CurlyBracketOpen => {
             let (start, token_range) =
                 parse_block(tokens, syntax, syntax_to_tokens)?;
-            let block = SyntaxElement::Value(value::Block { start }.into());
+
+            let block = value::Block { start };
+            let block = SyntaxElement::Value(block.into());
+
             (block, token_range)
         }
         Token::Word(_) => {
