@@ -81,22 +81,31 @@ fn print_token_range_from_addresses(
     right: Option<RightNeighborAddress>,
     tokens: &Tokens,
 ) {
-    if let Some(address) = left {
-        let token = &tokens
+    let left = left.map(|address| {
+        tokens
             .right_to_left
             .get(&address)
             .expect("Using address that I got from same map")
-            .token;
-        eprint!("{}", token);
-    }
-    eprint!(" ... ");
-    if let Some(address) = right {
-        let token = &tokens
+    });
+    let right = right.map(|address| {
+        tokens
             .left_to_right
             .get(&address)
             .expect("Using address that I got from same map")
-            .token;
-        eprintln!("{}", token);
+    });
+    print_token_range_from_tokens(left, right);
+}
+
+fn print_token_range_from_tokens(
+    left: Option<&AddressedToken>,
+    right: Option<&AddressedToken>,
+) {
+    if let Some(token) = left {
+        eprint!("{}", token.token);
+    }
+    eprint!(" ... ");
+    if let Some(token) = right {
+        eprintln!("{}", token.token);
     }
 }
 
