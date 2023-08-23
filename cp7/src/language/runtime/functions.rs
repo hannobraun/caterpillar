@@ -44,7 +44,7 @@ impl Functions {
     pub fn replace(&mut self, old: SyntaxHandle, new: SyntaxHandle) {
         for function in self.inner.values_mut() {
             if let Function::UserDefined(UserDefined { body }) = function {
-                if let Some(handle) = &mut body.0 {
+                if let Some(handle) = &mut body.start {
                     if handle.hash == old.hash {
                         *handle = new;
                     }

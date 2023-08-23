@@ -33,7 +33,7 @@ pub fn update(
     );
 
     for function in evaluator.functions.user_defined_mut() {
-        if let Some(body) = &function.body.0 {
+        if let Some(body) = &function.body.start {
             let token_range = syntax_to_tokens.get(body);
 
             let (left, right) = match token_range {
@@ -156,8 +156,9 @@ mod tests {
             else {
                 panic!("Just defined function, but somehow not user-defined");
             };
-            let handle =
-                body.0.expect("Function not empty, but body has no syntax");
+            let handle = body
+                .start
+                .expect("Function not empty, but body has no syntax");
 
             Ok(handle.hash)
         }

@@ -38,7 +38,7 @@ impl Evaluator {
                         intrinsic(&mut self.functions, &mut self.data_stack)?
                     }
                     Function::UserDefined(functions::UserDefined { body }) => {
-                        if let Some(start) = body.0 {
+                        if let Some(start) = body.start {
                             // Need to advance the current stack frame before we
                             // jump into the function, or we'll repeat it
                             // endlessly when we come back.
