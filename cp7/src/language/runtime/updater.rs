@@ -1,7 +1,8 @@
 use crate::language::{
     syntax::{Syntax, SyntaxToTokens},
     tokens::{
-        AddressedToken, LeftNeighborAddress, RightNeighborAddress, Tokens,
+        AddressedToken, LeftNeighborAddress, RightNeighborAddress, Token,
+        Tokens,
     },
 };
 
@@ -37,9 +38,10 @@ pub fn update(
             let token_range = syntax_to_tokens.get(body);
 
             let (left, right) = match token_range {
-                Some(token_range) => {
-                    (Some(&token_range.start), Some(&token_range.end))
-                }
+                Some(token_range) => (
+                    Some(&token_range.start.token),
+                    Some(&token_range.end.token),
+                ),
                 None => (None, None),
             };
 
@@ -98,30 +100,29 @@ fn print_token_range_from_addresses(
     tokens: &Tokens,
 ) {
     let left = left.map(|address| {
-        tokens
+        &tokens
             .right_to_left
             .get(&address)
             .expect("Using address that I got from same map")
+            .token
     });
     let right = right.map(|address| {
-        tokens
+        &tokens
             .left_to_right
             .get(&address)
             .expect("Using address that I got from same map")
+            .token
     });
     print_token_range_from_tokens(left, right);
 }
 
-fn print_token_range_from_tokens(
-    left: Option<&AddressedToken>,
-    right: Option<&AddressedToken>,
-) {
+fn print_token_range_from_tokens(left: Option<&Token>, right: Option<&Token>) {
     if let Some(token) = left {
-        eprint!("{}", token.token);
+        eprint!("{}", token);
     }
     eprint!(" ... ");
     if let Some(token) = right {
-        eprintln!("{}", token.token);
+        eprintln!("{}", token);
     }
 }
 
