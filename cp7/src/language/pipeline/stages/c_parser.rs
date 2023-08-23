@@ -126,8 +126,10 @@ fn parse_number(token_iter: &mut TokenIter) -> ParserResult<(i64, TokenRange)> {
     Ok((payload.0, TokenRange::one(token)))
 }
 
-fn parse_symbol(tokens: &mut TokenIter) -> ParserResult<(String, TokenRange)> {
-    let (payload, token) = expect::<token::Symbol>(tokens)?;
+fn parse_symbol(
+    token_iter: &mut TokenIter,
+) -> ParserResult<(String, TokenRange)> {
+    let (payload, token) = expect::<token::Symbol>(token_iter)?;
     Ok((payload.0, TokenRange::one(token)))
 }
 
