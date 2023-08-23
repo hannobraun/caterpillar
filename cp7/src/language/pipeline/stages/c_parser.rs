@@ -134,13 +134,13 @@ where
 
     let hash = token.hash();
 
-    let token = token
+    let payload = token
         .token
         .clone()
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok((token, hash))
+    Ok((payload, hash))
 }
 
 pub type Tokens<'r> = iter::Peekable<TokensLeftToRight<'r>>;
