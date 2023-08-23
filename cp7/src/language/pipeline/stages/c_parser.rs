@@ -5,9 +5,7 @@ use crate::language::{
         Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxToTokens,
         TokenRange,
     },
-    tokens::{
-        token, AddressedToken, Token, TokenAddress, Tokens, TokensLeftToRight,
-    },
+    tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
     value::{self, Value},
 };
 
@@ -39,7 +37,7 @@ fn parse_fragment(
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
-) -> ParserResult<(Option<SyntaxHandle>, Option<AddressedToken>)> {
+) -> ParserResult<(Option<SyntaxHandle>, Option<TokenAddress>)> {
     let next_token = match token_iter.peek() {
         Some(token) => tokens.by_address.get(&token.token).unwrap(),
         None => {
@@ -83,7 +81,7 @@ fn parse_fragment(
             if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
                 let token = token_iter.next().unwrap();
-                return Ok((None, Some(token.clone())));
+                return Ok((None, Some(token.token)));
             }
 
             return Err(ParserError::UnexpectedToken {
@@ -125,10 +123,7 @@ fn parse_block(
     )?;
 
     let end = end.unwrap();
-    let range = TokenRange {
-        start,
-        end: end.token,
-    };
+    let range = TokenRange { start, end };
 
     Ok((handle, range))
 }
