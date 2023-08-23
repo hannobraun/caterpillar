@@ -1,6 +1,9 @@
 use std::{collections::HashMap, fmt};
 
-use super::{tokens::AddressedToken, value::Value};
+use super::{
+    tokens::{AddressedToken, TokenAddress},
+    value::Value,
+};
 
 #[derive(Debug)]
 pub struct Syntax {
@@ -155,14 +158,14 @@ pub type SyntaxToTokens = HashMap<SyntaxHandle, TokenRange>;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
-    pub start: AddressedToken,
+    pub start: TokenAddress,
     pub end: AddressedToken,
 }
 
 impl TokenRange {
     pub fn one(token: AddressedToken) -> Self {
         Self {
-            start: token.clone(),
+            start: token.token,
             end: token,
         }
     }

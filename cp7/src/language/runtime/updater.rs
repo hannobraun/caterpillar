@@ -38,10 +38,9 @@ pub fn update(
             let token_range = syntax_to_tokens.get(body);
 
             let (left, right) = match token_range {
-                Some(token_range) => (
-                    Some(&token_range.start.token),
-                    Some(&token_range.end.token),
-                ),
+                Some(token_range) => {
+                    (Some(&token_range.start), Some(&token_range.end.token))
+                }
                 None => (None, None),
             };
 

@@ -123,7 +123,10 @@ fn parse_block(
     )?;
 
     let end = end.unwrap();
-    let range = TokenRange { start, end };
+    let range = TokenRange {
+        start: start.token,
+        end,
+    };
 
     Ok((handle, range))
 }
