@@ -27,11 +27,11 @@ pub fn parse(
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &mut TokenIter,
+    token_iter: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<AddressedToken>)> {
-    let next_token = match tokens.peek() {
+    let next_token = match token_iter.peek() {
         Some(token) => &token.token,
         None => {
             if terminator.is_none() {
@@ -48,7 +48,7 @@ fn parse_fragment(
     let (syntax_element, token_range) = match next_token {
         Token::CurlyBracketOpen => {
             let (start, token_range) =
-                parse_block(tokens, syntax, syntax_to_tokens)?;
+                parse_block(token_iter, syntax, syntax_to_tokens)?;
 
             let block = value::Block { start };
             let block = SyntaxElement::Value(block.into());
@@ -56,24 +56,24 @@ fn parse_fragment(
             (block, token_range)
         }
         Token::Word(_) => {
-            let (word, token_range) = parse_word(tokens)?;
+            let (word, token_range) = parse_word(token_iter)?;
             let word = SyntaxElement::Word(word);
             (word, token_range)
         }
         Token::Number(_) => {
-            let (number, token_range) = parse_number(tokens)?;
+            let (number, token_range) = parse_number(token_iter)?;
             let number = SyntaxElement::Value(Value::Number(number));
             (number, token_range)
         }
         Token::Symbol(_) => {
-            let (symbol, token_range) = parse_symbol(tokens)?;
+            let (symbol, token_range) = parse_symbol(token_iter)?;
             let symbol = SyntaxElement::Value(value::Symbol(symbol).into());
             (symbol, token_range)
         }
         token => {
             if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
-                let token = tokens.next().unwrap();
+                let token = token_iter.next().unwrap();
                 return Ok((None, Some(token.clone())));
             }
 
@@ -84,7 +84,7 @@ fn parse_fragment(
     };
 
     let (next, hash) =
-        parse_fragment(terminator, tokens, syntax, syntax_to_tokens)?;
+        parse_fragment(terminator, token_iter, syntax, syntax_to_tokens)?;
     let handle = syntax.add(SyntaxFragment {
         payload: syntax_element,
         next,
