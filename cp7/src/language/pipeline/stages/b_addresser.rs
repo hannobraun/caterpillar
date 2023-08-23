@@ -65,13 +65,11 @@ fn address_token(
         left_neighbor,
         right_neighbor,
     };
-    by_address.insert(
-        TokenAddress {
-            as_left_neighbor: token_as_left_neighbor,
-            as_right_neighbor: token_as_right_neighbor,
-        },
-        token,
-    );
+    let address = TokenAddress {
+        as_left_neighbor: token_as_left_neighbor,
+        as_right_neighbor: token_as_right_neighbor,
+    };
+    by_address.insert(address, token);
 
     left_to_right.insert(token_as_right_neighbor, addressed_token.clone());
     right_to_left.insert(token_as_left_neighbor, addressed_token);
