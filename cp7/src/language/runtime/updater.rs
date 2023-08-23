@@ -26,7 +26,11 @@ pub fn update(
     );
 
     eprint!("Updated token in range: ");
-    print_token_range(common_token_left, common_token_right, old_tokens);
+    print_token_range_from_addresses(
+        common_token_left,
+        common_token_right,
+        old_tokens,
+    );
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
@@ -72,7 +76,7 @@ where
     common_token_left
 }
 
-fn print_token_range(
+fn print_token_range_from_addresses(
     left: Option<LeftNeighborAddress>,
     right: Option<RightNeighborAddress>,
     tokens: &Tokens,
