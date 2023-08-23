@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use super::value::Value;
+use super::{tokens::AddressedToken, value::Value};
 
 #[derive(Debug)]
 pub struct Syntax {
@@ -160,7 +160,8 @@ pub struct TokenRange {
 }
 
 impl TokenRange {
-    pub fn one(hash: blake3::Hash) -> Self {
+    pub fn one(token: AddressedToken) -> Self {
+        let hash = token.hash();
         Self {
             start: hash,
             end: hash,
