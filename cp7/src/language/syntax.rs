@@ -155,16 +155,15 @@ pub type SyntaxToTokens = HashMap<SyntaxHandle, TokenRange>;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
-    pub start: blake3::Hash,
-    pub end: blake3::Hash,
+    pub start: AddressedToken,
+    pub end: AddressedToken,
 }
 
 impl TokenRange {
     pub fn one(token: AddressedToken) -> Self {
-        let hash = token.hash();
         Self {
-            start: hash,
-            end: hash,
+            start: token.clone(),
+            end: token,
         }
     }
 }

@@ -66,21 +66,6 @@ pub struct AddressedToken {
     pub right_neighbor: Option<RightNeighborAddress>,
 }
 
-impl AddressedToken {
-    pub fn hash(&self) -> blake3::Hash {
-        let mut hasher = blake3::Hasher::new();
-
-        if let Some(left) = self.left_neighbor {
-            hasher.update(left.hash.as_bytes());
-        }
-        if let Some(right) = self.right_neighbor {
-            hasher.update(right.hash.as_bytes());
-        }
-
-        hasher.finalize()
-    }
-}
-
 pub struct TokensLeftToRight<'r> {
     current: Option<RightNeighborAddress>,
     tokens: &'r Tokens,

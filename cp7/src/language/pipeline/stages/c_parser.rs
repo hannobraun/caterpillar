@@ -106,10 +106,7 @@ fn parse_block(
     )?;
 
     let end = end.unwrap();
-    let range = TokenRange {
-        start: start.hash(),
-        end: end.hash(),
-    };
+    let range = TokenRange { start, end };
 
     Ok((handle, range))
 }
