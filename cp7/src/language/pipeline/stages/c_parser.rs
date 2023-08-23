@@ -95,15 +95,15 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &mut TokenIter,
+    token_iter: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
-    let (_, start) = expect::<token::CurlyBracketOpen>(tokens)?;
+    let (_, start) = expect::<token::CurlyBracketOpen>(token_iter)?;
 
     let (handle, end) = parse_fragment(
         Some(Token::CurlyBracketClose),
-        tokens,
+        token_iter,
         syntax,
         syntax_to_tokens,
     )?;
