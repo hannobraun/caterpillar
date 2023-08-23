@@ -5,7 +5,9 @@ use crate::language::{
         Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxToTokens,
         TokenRange,
     },
-    tokens::{token, AddressedToken, Token, Tokens, TokensLeftToRight},
+    tokens::{
+        token, AddressedToken, Token, TokenAddress, Tokens, TokensLeftToRight,
+    },
     value::{self, Value},
 };
 
@@ -124,7 +126,7 @@ fn parse_block(
 
     let end = end.unwrap();
     let range = TokenRange {
-        start: start.token,
+        start,
         end: end.token,
     };
 
@@ -136,7 +138,7 @@ fn parse_word(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Word>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token.token)))
+    Ok((payload.0, TokenRange::one(token)))
 }
 
 fn parse_number(
@@ -144,7 +146,7 @@ fn parse_number(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(i64, TokenRange)> {
     let (payload, token) = expect::<token::Number>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token.token)))
+    Ok((payload.0, TokenRange::one(token)))
 }
 
 fn parse_symbol(
@@ -152,13 +154,13 @@ fn parse_symbol(
     token_iter: &mut TokenIter,
 ) -> ParserResult<(String, TokenRange)> {
     let (payload, token) = expect::<token::Symbol>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token.token)))
+    Ok((payload.0, TokenRange::one(token)))
 }
 
 fn expect<T>(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
-) -> ParserResult<(T, AddressedToken)>
+) -> ParserResult<(T, TokenAddress)>
 where
     T: TryFrom<Token, Error = Token>,
 {
@@ -172,7 +174,7 @@ where
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok((payload, token.clone()))
+    Ok((payload, token.token))
 }
 
 pub type TokenIter<'r> = iter::Peekable<TokensLeftToRight<'r>>;
