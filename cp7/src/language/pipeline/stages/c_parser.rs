@@ -13,11 +13,11 @@ pub fn parse(
     tokens: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let mut tokens = tokens.peekable();
+    let mut token_iter = tokens.peekable();
     let mut syntax_to_tokens = SyntaxToTokens::new();
 
     let (start, _) =
-        parse_fragment(None, &mut tokens, syntax, &mut syntax_to_tokens)?;
+        parse_fragment(None, &mut token_iter, syntax, &mut syntax_to_tokens)?;
 
     Ok(ParserOutput {
         start,
