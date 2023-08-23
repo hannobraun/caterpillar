@@ -112,18 +112,18 @@ fn parse_block(
 }
 
 fn parse_word(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
-    let (token, hash) = expect::<token::Word>(tokens)?;
-    Ok((token.0, TokenRange::one(hash)))
+    let (payload, hash) = expect::<token::Word>(tokens)?;
+    Ok((payload.0, TokenRange::one(hash)))
 }
 
 fn parse_number(tokens: &mut Tokens) -> ParserResult<(i64, TokenRange)> {
-    let (token, hash) = expect::<token::Number>(tokens)?;
-    Ok((token.0, TokenRange::one(hash)))
+    let (payload, hash) = expect::<token::Number>(tokens)?;
+    Ok((payload.0, TokenRange::one(hash)))
 }
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<(String, TokenRange)> {
-    let (token, hash) = expect::<token::Symbol>(tokens)?;
-    Ok((token.0, TokenRange::one(hash)))
+    let (payload, hash) = expect::<token::Symbol>(tokens)?;
+    Ok((payload.0, TokenRange::one(hash)))
 }
 
 fn expect<T>(tokens: &mut Tokens) -> ParserResult<(T, blake3::Hash)>
