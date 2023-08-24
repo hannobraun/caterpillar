@@ -1,11 +1,13 @@
 use std::collections::HashMap;
 
 use crate::language::tokens::{
-    self, AddressedToken, LeftNeighborAddress, Token, TokenAddress, Tokens,
+    self, AddressedToken, LeftNeighborAddress, RightNeighborAddress, Token,
+    TokenAddress, Tokens,
 };
 
 pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresses_as_left_neighbor = addresses_as_left_neighbor(&tokens);
+    let addresses_as_right_neighbor = addresses_as_right_neighbor(&tokens);
 
     let mut by_address = HashMap::new();
     let mut right_neighbors = HashMap::new();
@@ -16,6 +18,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         None,
         tokens,
         addresses_as_left_neighbor,
+        addresses_as_right_neighbor,
         &mut by_address,
         &mut right_neighbors,
         &mut left_to_right,
@@ -53,10 +56,27 @@ fn addresses_as_left_neighbor(tokens: &[Token]) -> Vec<LeftNeighborAddress> {
     addresses
 }
 
+fn addresses_as_right_neighbor(tokens: &[Token]) -> Vec<RightNeighborAddress> {
+    let mut addresses = Vec::new();
+    let mut current_hash = None;
+
+    for token in tokens.iter().rev() {
+        let hash = hash(token, current_hash);
+        current_hash = Some(hash);
+
+        addresses.push(RightNeighborAddress { hash });
+    }
+    addresses.reverse();
+
+    addresses
+}
+
+#[allow(clippy::too_many_arguments)]
 fn address_token(
     left_neighbor: Option<tokens::LeftNeighborAddress>,
     tokens: impl IntoIterator<Item = Token>,
     addresses_as_left_neighbor: impl IntoIterator<Item = LeftNeighborAddress>,
+    addresses_as_right_neighbor: impl IntoIterator<Item = RightNeighborAddress>,
     by_address: &mut HashMap<TokenAddress, Token>,
     right_neighbors: &mut HashMap<TokenAddress, TokenAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
@@ -64,14 +84,18 @@ fn address_token(
 ) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
     let mut tokens = tokens.into_iter();
     let mut addresses_as_left_neighbor = addresses_as_left_neighbor.into_iter();
+    let mut addresses_as_right_neighbor =
+        addresses_as_right_neighbor.into_iter();
 
     let token = tokens.next()?;
     let token_as_left_neighbor = addresses_as_left_neighbor.next()?;
+    let token_as_right_neighbor = addresses_as_right_neighbor.next()?;
 
     let addresser_output = address_token(
         Some(token_as_left_neighbor),
         tokens,
         addresses_as_left_neighbor,
+        addresses_as_right_neighbor,
         by_address,
         right_neighbors,
         left_to_right,
@@ -80,13 +104,6 @@ fn address_token(
     let (right_neighbor, rightmost) = match addresser_output {
         Some((right_neighbor, rightmost)) => (Some(right_neighbor), rightmost),
         None => (None, token_as_left_neighbor),
-    };
-
-    let token_as_right_neighbor = tokens::RightNeighborAddress {
-        hash: hash(
-            &token,
-            right_neighbor.map(|address| address.as_right_neighbor.hash),
-        ),
     };
 
     let address = TokenAddress {
