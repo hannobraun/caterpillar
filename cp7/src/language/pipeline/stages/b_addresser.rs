@@ -1,10 +1,12 @@
 use std::collections::HashMap;
 
 use crate::language::tokens::{
-    self, AddressedToken, Token, TokenAddress, Tokens,
+    self, AddressedToken, LeftNeighborAddress, Token, TokenAddress, Tokens,
 };
 
 pub fn address(tokens: Vec<Token>) -> Tokens {
+    let addresses_as_left_neighbor = addresses_as_left_neighbor(&tokens);
+
     let mut by_address = HashMap::new();
     let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
@@ -13,6 +15,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresser_output = address_token(
         None,
         tokens,
+        addresses_as_left_neighbor,
         &mut by_address,
         &mut right_neighbors,
         &mut left_to_right,
@@ -36,25 +39,39 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
     }
 }
 
+fn addresses_as_left_neighbor(tokens: &[Token]) -> Vec<LeftNeighborAddress> {
+    let mut addresses = Vec::new();
+    let mut current_hash = None;
+
+    for token in tokens {
+        let hash = hash(token, current_hash);
+        current_hash = Some(hash);
+
+        addresses.push(LeftNeighborAddress { hash });
+    }
+
+    addresses
+}
+
 fn address_token(
     left_neighbor: Option<tokens::LeftNeighborAddress>,
     tokens: impl IntoIterator<Item = Token>,
+    addresses_as_left_neighbor: impl IntoIterator<Item = LeftNeighborAddress>,
     by_address: &mut HashMap<TokenAddress, Token>,
     right_neighbors: &mut HashMap<TokenAddress, TokenAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
 ) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
     let mut tokens = tokens.into_iter();
+    let mut addresses_as_left_neighbor = addresses_as_left_neighbor.into_iter();
 
     let token = tokens.next()?;
-
-    let token_as_left_neighbor = tokens::LeftNeighborAddress {
-        hash: hash(&token, left_neighbor.map(|address| address.hash)),
-    };
+    let token_as_left_neighbor = addresses_as_left_neighbor.next()?;
 
     let addresser_output = address_token(
         Some(token_as_left_neighbor),
         tokens,
+        addresses_as_left_neighbor,
         by_address,
         right_neighbors,
         left_to_right,
