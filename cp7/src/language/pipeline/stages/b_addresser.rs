@@ -10,19 +10,17 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresses_as_right_neighbor = addresses_as_right_neighbor(&tokens);
     let addresses =
         addresses(&addresses_as_left_neighbor, &addresses_as_right_neighbor);
+    let by_address = addresses.clone().into_iter().zip(tokens).collect();
 
-    let mut by_address = HashMap::new();
     let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
     let addresser_output = address_token(
         None,
-        tokens,
         addresses_as_left_neighbor,
         addresses_as_right_neighbor,
         addresses,
-        &mut by_address,
         &mut right_neighbors,
         &mut left_to_right,
         &mut right_to_left,
@@ -97,33 +95,27 @@ fn addresses(
 #[allow(clippy::too_many_arguments)]
 fn address_token(
     left_neighbor: Option<tokens::LeftNeighborAddress>,
-    tokens: impl IntoIterator<Item = Token>,
     addresses_as_left_neighbor: impl IntoIterator<Item = LeftNeighborAddress>,
     addresses_as_right_neighbor: impl IntoIterator<Item = RightNeighborAddress>,
     addresses: impl IntoIterator<Item = TokenAddress>,
-    by_address: &mut HashMap<TokenAddress, Token>,
     right_neighbors: &mut HashMap<TokenAddress, TokenAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
 ) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
-    let mut tokens = tokens.into_iter();
     let mut addresses_as_left_neighbor = addresses_as_left_neighbor.into_iter();
     let mut addresses_as_right_neighbor =
         addresses_as_right_neighbor.into_iter();
     let mut addresses = addresses.into_iter();
 
-    let token = tokens.next()?;
     let token_as_left_neighbor = addresses_as_left_neighbor.next()?;
     let token_as_right_neighbor = addresses_as_right_neighbor.next()?;
     let address = addresses.next()?;
 
     let addresser_output = address_token(
         Some(token_as_left_neighbor),
-        tokens,
         addresses_as_left_neighbor,
         addresses_as_right_neighbor,
         addresses,
-        by_address,
         right_neighbors,
         left_to_right,
         right_to_left,
@@ -138,7 +130,6 @@ fn address_token(
         left_neighbor,
         right_neighbor: right_neighbor.map(|address| address.as_right_neighbor),
     };
-    by_address.insert(address, token);
 
     if let Some(right_neighbor) = right_neighbor {
         right_neighbors.insert(address, right_neighbor);
