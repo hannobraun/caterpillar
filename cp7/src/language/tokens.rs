@@ -31,7 +31,7 @@ pub struct Tokens {
     pub leftmost: Option<RightNeighborAddress>,
     pub rightmost: Option<LeftNeighborAddress>,
 
-    pub right_neighbors: HashMap<TokenAddress, RightNeighborAddress>,
+    pub right_neighbors: HashMap<TokenAddress, TokenAddress>,
 
     pub left_to_right: HashMap<RightNeighborAddress, AddressedToken>,
     pub right_to_left: HashMap<LeftNeighborAddress, AddressedToken>,
