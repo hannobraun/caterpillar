@@ -26,7 +26,7 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     Tokens {
         by_address,
 
-        leftmost,
+        leftmost: leftmost.map(|address| address.as_right_neighbor),
         rightmost,
 
         right_neighbors,
@@ -43,7 +43,7 @@ fn address_token(
     right_neighbors: &mut HashMap<TokenAddress, RightNeighborAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
-) -> Option<(tokens::RightNeighborAddress, tokens::LeftNeighborAddress)> {
+) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
     let mut tokens = tokens.into_iter();
     let token = tokens.next()?;
 
@@ -65,7 +65,10 @@ fn address_token(
     };
 
     let token_as_right_neighbor = tokens::RightNeighborAddress {
-        hash: hash(&token, right_neighbor.map(|address| address.hash)),
+        hash: hash(
+            &token,
+            right_neighbor.map(|address| address.as_right_neighbor.hash),
+        ),
     };
 
     let address = TokenAddress {
@@ -75,18 +78,18 @@ fn address_token(
     let addressed_token = AddressedToken {
         token: address,
         left_neighbor,
-        right_neighbor,
+        right_neighbor: right_neighbor.map(|address| address.as_right_neighbor),
     };
     by_address.insert(address, token);
 
     if let Some(right_neighbor) = right_neighbor {
-        right_neighbors.insert(address, right_neighbor);
+        right_neighbors.insert(address, right_neighbor.as_right_neighbor);
     }
 
     left_to_right.insert(token_as_right_neighbor, addressed_token.clone());
     right_to_left.insert(token_as_left_neighbor, addressed_token);
 
-    Some((token_as_right_neighbor, rightmost))
+    Some((address, rightmost))
 }
 
 fn hash(token: &Token, neighbor: Option<blake3::Hash>) -> blake3::Hash {
