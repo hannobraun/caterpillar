@@ -45,6 +45,7 @@ fn address_token(
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
 ) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
     let mut tokens = tokens.into_iter();
+
     let token = tokens.next()?;
 
     let token_as_left_neighbor = tokens::LeftNeighborAddress {
