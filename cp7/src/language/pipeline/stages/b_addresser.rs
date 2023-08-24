@@ -74,20 +74,15 @@ fn addresses(
     as_left_neighbor: &[LeftNeighborAddress],
     as_right_neighbor: &[RightNeighborAddress],
 ) -> Vec<TokenAddress> {
-    let mut addresses = Vec::new();
-
-    let iter = Iterator::zip(
-        as_left_neighbor.iter().copied(),
-        as_right_neighbor.iter().copied(),
-    );
-    for (as_left_neighbor, as_right_neighbor) in iter {
-        addresses.push(TokenAddress {
+    as_left_neighbor
+        .iter()
+        .copied()
+        .zip(as_right_neighbor.iter().copied())
+        .map(|(as_left_neighbor, as_right_neighbor)| TokenAddress {
             as_left_neighbor,
             as_right_neighbor,
-        });
-    }
-
-    addresses
+        })
+        .collect()
 }
 
 #[allow(clippy::too_many_arguments)]
