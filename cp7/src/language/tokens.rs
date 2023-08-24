@@ -86,8 +86,7 @@ impl<'r> Iterator for TokensLeftToRight<'r> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.next?;
-        let next = self.tokens.right_neighbors.get(&current).copied();
-        self.next = next;
+        self.next = self.tokens.right_neighbors.get(&current).copied();
         Some(current)
     }
 }
