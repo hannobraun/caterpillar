@@ -39,7 +39,7 @@ fn parse_fragment(
     syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<SyntaxHandle>, Option<TokenAddress>)> {
     let next_token = match token_iter.peek() {
-        Some(token) => tokens.by_address.get(&token.token).unwrap(),
+        Some(token) => tokens.by_address.get(token).unwrap(),
         None => {
             if terminator.is_none() {
                 // If there is no terminator, then not having any more tokens is
@@ -81,7 +81,7 @@ fn parse_fragment(
             if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
                 let token = token_iter.next().unwrap();
-                return Ok((None, Some(token.token)));
+                return Ok((None, Some(token)));
             }
 
             return Err(ParserError::UnexpectedToken {
@@ -163,13 +163,13 @@ where
 
     let payload = tokens
         .by_address
-        .get(&token.token)
+        .get(&token)
         .unwrap()
         .clone()
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok((payload, token.token))
+    Ok((payload, token))
 }
 
 pub type TokenIter<'r> = iter::Peekable<TokensLeftToRight<'r>>;

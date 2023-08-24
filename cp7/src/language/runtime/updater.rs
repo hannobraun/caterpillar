@@ -1,8 +1,7 @@
 use crate::language::{
     syntax::{Syntax, SyntaxToTokens},
     tokens::{
-        AddressedToken, LeftNeighborAddress, RightNeighborAddress, Token,
-        Tokens,
+        AddressedToken, RightNeighborAddress, Token, TokenAddress, Tokens,
     },
 };
 
@@ -15,10 +14,10 @@ pub fn update(
     syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {
-    let common_token_left = search_common_token(
+    let common_token_left = search_common_token2(
         old_tokens.left_to_right(),
         new_tokens.left_to_right(),
-        |token| token.left_neighbor,
+        |a, b| a.as_left_neighbor == b.as_left_neighbor,
     );
     let common_token_right = search_common_token(
         old_tokens.right_to_left(),
@@ -55,6 +54,41 @@ pub fn update(
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
     }
+}
+
+fn search_common_token2(
+    mut old_tokens: impl Iterator<Item = TokenAddress>,
+    mut new_tokens: impl Iterator<Item = TokenAddress>,
+    relevant_address_is_equal: impl Fn(&TokenAddress, &TokenAddress) -> bool,
+) -> Option<TokenAddress> {
+    let mut common_token = None;
+
+    let mut current_old = old_tokens.next();
+    let mut current_new = new_tokens.next();
+
+    loop {
+        let (Some(old), Some(new)) = (current_old, current_new) else {
+            // We've reached the end of one of our token streams. Whether we
+            // found a commonality or not, either way, the search is over.
+            break;
+        };
+
+        if relevant_address_is_equal(&old, &new) {
+            // We found a commonality!
+            common_token = Some(old);
+
+            // Advance the old token, and check in the next loop iteration
+            // whether there is a deeper commonality.
+            current_old = old_tokens.next();
+            continue;
+        }
+
+        // The current new token is not the same as the current old one. Advance
+        // the new token, maybe we'll find a commonality yet.
+        current_new = new_tokens.next();
+    }
+
+    common_token
 }
 
 fn search_common_token<'r, T>(
@@ -97,18 +131,11 @@ where
 }
 
 fn print_token_range_from_addresses(
-    left: Option<LeftNeighborAddress>,
+    left: Option<TokenAddress>,
     right: Option<RightNeighborAddress>,
     tokens: &Tokens,
 ) {
-    let left = left.map(|address| {
-        let address = &tokens
-            .right_to_left
-            .get(&address)
-            .expect("Using address that I got from same map")
-            .token;
-        tokens.by_address.get(address).unwrap()
-    });
+    let left = left.map(|address| tokens.by_address.get(&address).unwrap());
     let right = right.map(|address| {
         let address = &tokens
             .left_to_right
