@@ -4,7 +4,7 @@ use crate::language::tokens::{
     self, AddressedToken, Token, TokenAddress, Tokens,
 };
 
-pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
+pub fn address(tokens: Vec<Token>) -> Tokens {
     let mut by_address = HashMap::new();
     let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
