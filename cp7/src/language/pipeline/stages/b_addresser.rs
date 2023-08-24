@@ -44,17 +44,15 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
 }
 
 fn addresses_as_left_neighbor(tokens: &[Token]) -> Vec<LeftNeighborAddress> {
-    let mut addresses = Vec::new();
-    let mut current_hash = None;
+    tokens
+        .iter()
+        .scan(None, |current_hash, token| {
+            let hash = hash(token, *current_hash);
+            *current_hash = Some(hash);
 
-    for token in tokens {
-        let hash = hash(token, current_hash);
-        current_hash = Some(hash);
-
-        addresses.push(LeftNeighborAddress { hash });
-    }
-
-    addresses
+            Some(LeftNeighborAddress { hash })
+        })
+        .collect()
 }
 
 fn addresses_as_right_neighbor(tokens: &[Token]) -> Vec<RightNeighborAddress> {
