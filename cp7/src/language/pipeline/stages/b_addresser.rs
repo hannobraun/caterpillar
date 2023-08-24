@@ -26,7 +26,7 @@ pub fn address(tokens: impl IntoIterator<Item = Token>) -> Tokens {
     Tokens {
         by_address,
 
-        leftmost: leftmost.map(|address| address.as_right_neighbor),
+        leftmost,
         rightmost,
 
         right_neighbors,

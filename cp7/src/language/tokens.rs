@@ -28,7 +28,7 @@ impl fmt::Display for Token {
 pub struct Tokens {
     pub by_address: HashMap<TokenAddress, Token>,
 
-    pub leftmost: Option<RightNeighborAddress>,
+    pub leftmost: Option<TokenAddress>,
     pub rightmost: Option<LeftNeighborAddress>,
 
     pub right_neighbors: HashMap<TokenAddress, TokenAddress>,
@@ -40,7 +40,7 @@ pub struct Tokens {
 impl Tokens {
     pub fn left_to_right(&self) -> TokensLeftToRight {
         TokensLeftToRight {
-            current: self.leftmost,
+            current: self.leftmost.map(|address| address.as_right_neighbor),
             tokens: self,
         }
     }
