@@ -30,6 +30,8 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         .map(|(a, b)| (a, b))
         .collect();
 
+    let leftmost = addresses.first().copied();
+
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
@@ -41,7 +43,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         &mut left_to_right,
         &mut right_to_left,
     );
-    let (leftmost, rightmost) = match addresser_output {
+    let (_, rightmost) = match addresser_output {
         Some((leftmost, rightmost)) => (Some(leftmost), Some(rightmost)),
         None => (None, None),
     };
