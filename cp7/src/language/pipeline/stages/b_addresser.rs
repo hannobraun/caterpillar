@@ -10,9 +10,12 @@ use crate::language::tokens::{
 pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresses_as_left_neighbor = addresses_as_left_neighbor(&tokens);
     let addresses_as_right_neighbor = addresses_as_right_neighbor(&tokens);
+
     let addresses =
         addresses(&addresses_as_left_neighbor, &addresses_as_right_neighbor);
+
     let by_address = addresses.iter().copied().zip(tokens).collect();
+
     let right_neighbors = addresses
         .iter()
         .copied()
