@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use itertools::Itertools;
+
 use crate::language::tokens::{
     self, AddressedToken, LeftNeighborAddress, RightNeighborAddress, Token,
     TokenAddress, Tokens,
@@ -11,8 +13,13 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresses =
         addresses(&addresses_as_left_neighbor, &addresses_as_right_neighbor);
     let by_address = addresses.iter().copied().zip(tokens).collect();
+    let right_neighbors = addresses
+        .iter()
+        .copied()
+        .tuple_windows()
+        .map(|(a, b)| (a, b))
+        .collect();
 
-    let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
@@ -21,7 +28,6 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         addresses_as_left_neighbor,
         addresses_as_right_neighbor,
         addresses,
-        &mut right_neighbors,
         &mut left_to_right,
         &mut right_to_left,
     );
@@ -91,7 +97,6 @@ fn address_token(
     addresses_as_left_neighbor: impl IntoIterator<Item = LeftNeighborAddress>,
     addresses_as_right_neighbor: impl IntoIterator<Item = RightNeighborAddress>,
     addresses: impl IntoIterator<Item = TokenAddress>,
-    right_neighbors: &mut HashMap<TokenAddress, TokenAddress>,
     left_to_right: &mut HashMap<tokens::RightNeighborAddress, AddressedToken>,
     right_to_left: &mut HashMap<tokens::LeftNeighborAddress, AddressedToken>,
 ) -> Option<(TokenAddress, tokens::LeftNeighborAddress)> {
@@ -109,7 +114,6 @@ fn address_token(
         addresses_as_left_neighbor,
         addresses_as_right_neighbor,
         addresses,
-        right_neighbors,
         left_to_right,
         right_to_left,
     );
@@ -123,10 +127,6 @@ fn address_token(
         left_neighbor,
         right_neighbor: right_neighbor.map(|address| address.as_right_neighbor),
     };
-
-    if let Some(right_neighbor) = right_neighbor {
-        right_neighbors.insert(address, right_neighbor);
-    }
 
     left_to_right.insert(token_as_right_neighbor, addressed_token.clone());
     right_to_left.insert(token_as_left_neighbor, addressed_token);
