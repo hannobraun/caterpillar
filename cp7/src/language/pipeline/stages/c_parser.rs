@@ -57,7 +57,10 @@ fn parse_fragment(
             let (start, token_range) =
                 parse_block(tokens, token_iter, syntax, syntax_to_tokens)?;
 
-            let block = value::Block { start };
+            let block = value::Block {
+                start,
+                token_range: token_range.clone(),
+            };
             let block = SyntaxElement::Value(block.into());
 
             (block, token_range)

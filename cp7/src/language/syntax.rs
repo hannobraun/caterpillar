@@ -41,8 +41,10 @@ impl Syntax {
             // `SyntaxHandle` would make it into a regular old comparison.
             match (&existing.payload, &fragment.payload) {
                 (
-                    SyntaxElement::Value(Value::Block { start: existing }),
-                    SyntaxElement::Value(Value::Block { start: new }),
+                    SyntaxElement::Value(Value::Block {
+                        start: existing, ..
+                    }),
+                    SyntaxElement::Value(Value::Block { start: new, .. }),
                 ) => {
                     assert_eq!(existing.map(hash), new.map(hash));
                 }

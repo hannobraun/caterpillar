@@ -2,12 +2,15 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use super::syntax::SyntaxHandle;
+use super::syntax::{SyntaxHandle, TokenRange};
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
 pub enum Value {
-    Block { start: Option<SyntaxHandle> },
+    Block {
+        start: Option<SyntaxHandle>,
+        token_range: TokenRange,
+    },
     Number(i64),
     Symbol(String),
 }
@@ -26,7 +29,7 @@ impl Value {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Value::Block { start } => {
+            Value::Block { start, .. } => {
                 write!(f, "{{")?;
                 if let Some(start) = start {
                     write!(f, " {start}")?;
