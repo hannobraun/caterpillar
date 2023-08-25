@@ -19,6 +19,13 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         .tuple_windows()
         .map(|(a, b)| (a, b))
         .collect();
+    let left_neighbors = addresses
+        .iter()
+        .copied()
+        .rev()
+        .tuple_windows()
+        .map(|(a, b)| (a, b))
+        .collect();
 
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
@@ -43,6 +50,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         rightmost,
 
         right_neighbors,
+        left_neighbors,
 
         left_to_right,
         right_to_left,
