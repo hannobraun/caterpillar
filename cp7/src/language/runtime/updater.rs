@@ -29,16 +29,32 @@ pub fn update(
     for function in evaluator.functions.user_defined_mut() {
         let token_range = &function.body.token_range;
 
+        let mut change_starts_within_function = false;
+        let mut change_ends_within_function = false;
+
         for token in old_tokens.left_to_right_from(token_range.start) {
             if Some(token) == change_start {
-                eprintln!("Change starts within function.");
+                change_starts_within_function = true;
             }
         }
         for token in old_tokens.right_to_left_from(token_range.end) {
             if Some(token) == change_end {
-                eprintln!("Change ends within function.");
+                change_ends_within_function = true;
             }
         }
+
+        match (change_starts_within_function, change_ends_within_function) {
+            (true, true) => {}
+            (false, false) => continue,
+            _ => {
+                todo!(
+                    "Change overlaps function, but is not contained within it. \
+                    Not supported yet."
+                )
+            }
+        }
+
+        eprintln!("Function changed");
     }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
