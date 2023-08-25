@@ -48,7 +48,7 @@ impl Tokens {
 
     pub fn right_to_left(&self) -> TokensRightToLeft {
         TokensRightToLeft {
-            current: self.rightmost,
+            next: self.rightmost,
             tokens: self,
         }
     }
@@ -93,7 +93,7 @@ impl<'r> Iterator for TokensLeftToRight<'r> {
 }
 
 pub struct TokensRightToLeft<'r> {
-    current: Option<TokenAddress>,
+    next: Option<TokenAddress>,
     tokens: &'r Tokens,
 }
 
@@ -101,8 +101,8 @@ impl<'r> Iterator for TokensRightToLeft<'r> {
     type Item = TokenAddress;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let current = self.current?;
-        self.current = self.tokens.left_neighbors.get(&current).copied();
+        let current = self.next?;
+        self.next = self.tokens.left_neighbors.get(&current).copied();
         Some(current)
     }
 }
