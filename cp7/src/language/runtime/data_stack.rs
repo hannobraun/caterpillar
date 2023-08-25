@@ -20,7 +20,7 @@ impl DataStack {
 
     pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {
         let value = self.pop_inner(T::NAME)?;
-        let number = value.expect(T::NAME)?;
+        let number = value.expect(T::NAME).map_err(Box::new)?;
         Ok(number)
     }
 
@@ -39,5 +39,5 @@ pub enum DataStackError {
     StackIsEmpty { expected: &'static str },
 
     #[error("Unexpected value")]
-    UnexpectedValue(#[from] TypeError),
+    UnexpectedValue(#[from] Box<TypeError>),
 }
