@@ -31,11 +31,12 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         .collect();
 
     let leftmost = addresses.first().copied();
+    let rightmost = addresses.last().map(|address| address.as_left_neighbor);
 
     let mut left_to_right = HashMap::new();
     let mut right_to_left = HashMap::new();
 
-    let addresser_output = address_token(
+    address_token(
         None,
         addresses_as_left_neighbor,
         addresses_as_right_neighbor,
@@ -43,7 +44,6 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         &mut left_to_right,
         &mut right_to_left,
     );
-    let rightmost = addresser_output.map(|(_, rightmost)| rightmost);
 
     Tokens {
         by_address,
