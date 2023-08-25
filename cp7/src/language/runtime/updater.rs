@@ -12,12 +12,12 @@ pub fn update(
     syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {
-    let common_token_left = search_common_token2(
+    let common_token_left = search_common_token(
         old_tokens.left_to_right(),
         new_tokens.left_to_right(),
         |a, b| a.as_left_neighbor == b.as_left_neighbor,
     );
-    let common_token_right = search_common_token2(
+    let common_token_right = search_common_token(
         old_tokens.right_to_left(),
         new_tokens.right_to_left(),
         |a, b| a.as_right_neighbor == b.as_right_neighbor,
@@ -54,7 +54,7 @@ pub fn update(
     }
 }
 
-fn search_common_token2(
+fn search_common_token(
     mut old_tokens: impl Iterator<Item = TokenAddress>,
     mut new_tokens: impl Iterator<Item = TokenAddress>,
     relevant_address_is_equal: impl Fn(&TokenAddress, &TokenAddress) -> bool,
