@@ -10,7 +10,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
     let addresses_as_right_neighbor = addresses_as_right_neighbor(&tokens);
     let addresses =
         addresses(&addresses_as_left_neighbor, &addresses_as_right_neighbor);
-    let by_address = addresses.clone().into_iter().zip(tokens).collect();
+    let by_address = addresses.iter().copied().zip(tokens).collect();
 
     let mut right_neighbors = HashMap::new();
     let mut left_to_right = HashMap::new();
