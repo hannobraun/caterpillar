@@ -33,9 +33,6 @@ pub struct Tokens {
 
     pub right_neighbors: HashMap<TokenAddress, TokenAddress>,
     pub left_neighbors: HashMap<TokenAddress, TokenAddress>,
-
-    pub left_to_right: HashMap<RightNeighborAddress, AddressedToken>,
-    pub right_to_left: HashMap<LeftNeighborAddress, AddressedToken>,
 }
 
 impl Tokens {
@@ -58,13 +55,6 @@ impl Tokens {
 pub struct TokenAddress {
     pub as_left_neighbor: LeftNeighborAddress,
     pub as_right_neighbor: RightNeighborAddress,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct AddressedToken {
-    pub token: TokenAddress,
-    pub left_neighbor: Option<LeftNeighborAddress>,
-    pub right_neighbor: Option<RightNeighborAddress>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
