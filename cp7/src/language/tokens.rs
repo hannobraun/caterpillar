@@ -29,7 +29,7 @@ pub struct Tokens {
     pub by_address: HashMap<TokenAddress, Token>,
 
     pub leftmost: Option<TokenAddress>,
-    pub rightmost: Option<LeftNeighborAddress>,
+    pub rightmost: Option<TokenAddress>,
 
     pub right_neighbors: HashMap<TokenAddress, TokenAddress>,
     pub left_neighbors: HashMap<TokenAddress, TokenAddress>,
@@ -48,7 +48,7 @@ impl Tokens {
 
     pub fn right_to_left(&self) -> TokensRightToLeft {
         TokensRightToLeft {
-            current: self.rightmost,
+            current: self.rightmost.map(|address| address.as_left_neighbor),
             tokens: self,
         }
     }
