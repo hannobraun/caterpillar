@@ -16,9 +16,10 @@ impl Value {
     pub fn expect<T: Type>(
         self,
         expected: &'static str,
-    ) -> Result<T, TypeError> {
+    ) -> Result<T, Box<TypeError>> {
         self.try_into()
             .map_err(|value| TypeError { value, expected })
+            .map_err(Box::new)
     }
 }
 
