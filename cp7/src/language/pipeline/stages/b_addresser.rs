@@ -19,7 +19,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         .tuple_windows()
         .map(|(a, b)| (a, b))
         .collect();
-    let left_neighbors = addresses
+    let right_to_left = addresses
         .iter()
         .copied()
         .rev()
@@ -37,7 +37,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         rightmost,
 
         left_to_right,
-        left_neighbors,
+        right_to_left,
     }
 }
 
