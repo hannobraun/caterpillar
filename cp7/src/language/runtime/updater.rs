@@ -12,7 +12,7 @@ pub fn update(
     _syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {
-    let common_token_left = search_common_token(
+    let change_start = search_common_token(
         old_tokens.left_to_right(),
         new_tokens.left_to_right(),
         |a, b| a.as_left_neighbor == b.as_left_neighbor,
@@ -25,7 +25,7 @@ pub fn update(
 
     eprint!("Updated token in range: ");
     print_token_range_from_addresses(
-        common_token_left,
+        change_start,
         common_token_right,
         old_tokens,
     );
