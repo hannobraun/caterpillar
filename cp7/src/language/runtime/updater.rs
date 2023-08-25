@@ -17,18 +17,14 @@ pub fn update(
         new_tokens.left_to_right(),
         |a, b| a.as_left_neighbor == b.as_left_neighbor,
     );
-    let common_token_right = search_common_token(
+    let change_end = search_common_token(
         old_tokens.right_to_left(),
         new_tokens.right_to_left(),
         |a, b| a.as_right_neighbor == b.as_right_neighbor,
     );
 
     eprint!("Updated token in range: ");
-    print_token_range_from_addresses(
-        change_start,
-        common_token_right,
-        old_tokens,
-    );
+    print_token_range_from_addresses(change_start, change_end, old_tokens);
 
     for function in evaluator.functions.user_defined_mut() {
         let token_range = &function.body.token_range;
