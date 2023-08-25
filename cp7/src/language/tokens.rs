@@ -49,6 +49,20 @@ impl Tokens {
             tokens: self,
         }
     }
+
+    pub fn left_to_right_from(&self, token: TokenAddress) -> TokensLeftToRight {
+        TokensLeftToRight {
+            next: Some(token),
+            tokens: self,
+        }
+    }
+
+    pub fn right_to_left_from(&self, token: TokenAddress) -> TokensRightToLeft {
+        TokensRightToLeft {
+            next: Some(token),
+            tokens: self,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]

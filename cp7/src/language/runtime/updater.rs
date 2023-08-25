@@ -29,11 +29,16 @@ pub fn update(
     for function in evaluator.functions.user_defined_mut() {
         let token_range = &function.body.token_range;
 
-        let left = old_tokens.by_address.get(&token_range.start);
-        let right = old_tokens.by_address.get(&token_range.end);
-
-        eprint!("Token range of user-defined function: ");
-        print_token_range_from_tokens(left, right);
+        for token in old_tokens.left_to_right_from(token_range.start) {
+            if Some(token) == change_start {
+                eprintln!("Change starts within function.");
+            }
+        }
+        for token in old_tokens.right_to_left_from(token_range.end) {
+            if Some(token) == change_end {
+                eprintln!("Change ends within function.");
+            }
+        }
     }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
