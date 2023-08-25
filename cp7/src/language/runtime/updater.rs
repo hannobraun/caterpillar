@@ -96,8 +96,9 @@ fn print_token_range_from_tokens(left: Option<&Token>, right: Option<&Token>) {
     }
     eprint!(" ... ");
     if let Some(token) = right {
-        eprintln!("{token}");
+        eprint!("{token}");
     }
+    eprintln!();
 }
 
 #[cfg(test)]
