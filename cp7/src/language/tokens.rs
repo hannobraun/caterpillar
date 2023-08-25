@@ -31,7 +31,7 @@ pub struct Tokens {
     pub leftmost: Option<TokenAddress>,
     pub rightmost: Option<TokenAddress>,
 
-    pub right_neighbors: HashMap<TokenAddress, TokenAddress>,
+    pub left_to_right: HashMap<TokenAddress, TokenAddress>,
     pub left_neighbors: HashMap<TokenAddress, TokenAddress>,
 }
 
@@ -77,7 +77,7 @@ impl<'r> Iterator for TokensLeftToRight<'r> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.next?;
-        self.next = self.tokens.right_neighbors.get(&current).copied();
+        self.next = self.tokens.left_to_right.get(&current).copied();
         Some(current)
     }
 }
