@@ -43,10 +43,7 @@ pub fn address(tokens: Vec<Token>) -> Tokens {
         &mut left_to_right,
         &mut right_to_left,
     );
-    let (_, rightmost) = match addresser_output {
-        Some((leftmost, rightmost)) => (Some(leftmost), Some(rightmost)),
-        None => (None, None),
-    };
+    let rightmost = addresser_output.map(|(_, rightmost)| rightmost);
 
     Tokens {
         by_address,
