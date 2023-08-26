@@ -55,6 +55,22 @@ pub fn update(
         }
 
         eprintln!("Function changed");
+
+        // So, I made it this far, but I'm honestly not sure what to do from
+        // here. I think this might have been the wrong approach.
+        //
+        // To finish this, I would need to update the existing function to look
+        // like the new one. Specifically, I would need to update the `start`
+        // and `token_range` fields. At the very least, I don't have the
+        // information I need to do that available here, but currently I'm a bit
+        // hazy on *what* information I need in the first place.
+        //
+        // I will have to think about this more, but currently I suspect that
+        // addressing the tokens and wanting to do all decisions based on that,
+        // might have been the wrong approach. I still need to figure out which
+        // syntax replaces which other syntax, and while I *might* be able to
+        // use the tokens to do that, why didn't I uniquely address the syntax
+        // instead?
     }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
