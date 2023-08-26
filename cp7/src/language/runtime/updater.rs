@@ -71,6 +71,31 @@ pub fn update(
         // syntax replaces which other syntax, and while I *might* be able to
         // use the tokens to do that, why didn't I uniquely address the syntax
         // instead?
+        //
+        // To proceed, I see the following options:
+        //
+        // 1. Keep going along this path. Figure out how to do the update based
+        //    on the token replacement, and get whatever information I need to
+        //    do that here.
+        // 2. Uniquely address syntax fragments, figure out replacements, then
+        //    do the update based on this information.
+        // 3. Reconsider the general approach. Should I actually update the
+        //    existing functions? Maybe, instead of updating the existing
+        //    program, I can create a new program and inject my runtime data
+        //    there? The I would "just" have to figure out, how to transform
+        //    the data and call stacks to make them work with the new program.
+        //
+        // That last point would require a different approach to the language
+        // design. Right now, function definition is completely dynamic, which
+        // is probably both unnecessary and suboptimal. I could introduce a
+        // distinction between run- and "compile"-time (would need a different
+        // name, I guess, since there's no compilation), with function
+        // definition being a "compile"-time thing.
+        //
+        // On the other hand, that wouldn't help me with anonymous functions, I
+        // guess. So maybe it would just result in the language being more
+        // complicated, and the same problem re-appearing in the next step
+        // anyway.
     }
 
     for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
