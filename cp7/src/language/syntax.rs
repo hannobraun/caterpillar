@@ -152,6 +152,15 @@ pub struct SyntaxFragment {
     // is do we need to know the previous fragment in addition? Or does knowing
     // the parent and the next one uniquely identify every syntax fragment in
     // every situation?
+    //
+    // Additionally, is the next syntax fragment the best piece of information
+    // to know, in addition to the parent? Could it be better to know the
+    // previous one (in addition to the parent) instead?
+    //
+    // That would be easier on the parser, and I can't think of any difference
+    // as far as uniquely identifying syntax fragments goes. It would be
+    // problematic for the evaluator though, as it would need another means to
+    // know which syntax fragment to execute next.
     pub next: Option<SyntaxHandle>,
 }
 
