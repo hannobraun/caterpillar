@@ -137,6 +137,21 @@ impl fmt::Display for SyntaxHandle {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
+
+    // Knowing the next syntax fragment does not uniquely identify a syntax
+    // fragment. Multiple functions might end in the same way, and then for the
+    // syntax fragment preceding that common suffix, if one of them was changed,
+    // we won't be able to tell which one.
+    //
+    // Knowing the previous syntax fragment doesn't help either, as different
+    // functions might contain identical syntax. Then for any change in one of
+    // them, we won't know where that change occurred.
+    //
+    // We need to know the parent of the syntax element. That will enable us to
+    // uniquely identify syntax fragments in both of those cases. The question
+    // is do we need to know the previous fragment in addition? Or does knowing
+    // the parent and the next one uniquely identify every syntax fragment in
+    // every situation?
     pub next: Option<SyntaxHandle>,
 }
 
