@@ -90,7 +90,7 @@ impl Syntax {
         self.by_id.get(&handle.hash).cloned().unwrap().1
     }
 
-    pub fn find_replaced_fragments(&self) -> Vec<(FragmentId, FragmentId)> {
+    pub fn find_replaced_fragments(&mut self) -> Vec<(FragmentId, FragmentId)> {
         let old_fragments =
             self.by_id
                 .values()

@@ -8,7 +8,7 @@ use super::evaluator::Evaluator;
 pub fn update(
     old_tokens: &Tokens,
     new_tokens: &Tokens,
-    syntax: &Syntax,
+    syntax: &mut Syntax,
     _syntax_to_tokens: &SyntaxToTokens,
     evaluator: &mut Evaluator,
 ) {

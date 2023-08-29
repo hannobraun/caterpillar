@@ -67,7 +67,7 @@ impl Interpreter {
         updater::update(
             &self.tokens,
             &tokens,
-            &self.syntax,
+            &mut self.syntax,
             &self.syntax_to_tokens,
             &mut self.evaluator,
         );
