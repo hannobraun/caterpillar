@@ -4,14 +4,14 @@ use super::{tokens::TokenAddress, value::Value};
 
 #[derive(Debug)]
 pub struct Syntax {
-    fragments: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
+    by_id: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
     generation: u64,
 }
 
 impl Syntax {
     pub fn new() -> Self {
         Self {
-            fragments: HashMap::new(),
+            by_id: HashMap::new(),
             generation: 0,
         }
     }
@@ -32,7 +32,7 @@ impl Syntax {
         //
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
-        if let Some((_, existing)) = self.fragments.get(&handle.hash) {
+        if let Some((_, existing)) = self.by_id.get(&handle.hash) {
             // We can't just compare the two fragments directly here, as the
             // generation is allowed to be different. We have to go into a bit
             // of extra effort to make it work.
@@ -69,7 +69,7 @@ impl Syntax {
             }
         }
 
-        self.fragments.insert(handle.hash, (handle, fragment));
+        self.by_id.insert(handle.hash, (handle, fragment));
 
         handle
     }
@@ -77,32 +77,33 @@ impl Syntax {
     pub fn get(&self, handle: FragmentId) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create handles for fragments we add.
-        self.fragments.get(&handle.hash).cloned().unwrap().1
+        self.by_id.get(&handle.hash).cloned().unwrap().1
     }
 
     pub fn find_replaced_fragments(
         &self,
     ) -> Vec<((FragmentId, SyntaxFragment), (FragmentId, SyntaxFragment))> {
-        let old_fragments = self.fragments.values().filter(|(_, fragment)| {
-            match fragment.next() {
-                Some(handle) => handle.generation != self.generation,
-                None => false,
-            }
-        });
+        let old_fragments =
+            self.by_id
+                .values()
+                .filter(|(_, fragment)| match fragment.next() {
+                    Some(handle) => handle.generation != self.generation,
+                    None => false,
+                });
 
         let mut replaced_fragments = Vec::new();
         for (handle, fragment) in old_fragments {
-            let mut potential_replacements =
-                self.fragments
-                    .values()
-                    .filter(|(_, potential_replacement)| {
-                        match (fragment.next(), potential_replacement.next()) {
-                            (Some(a), Some(b)) => {
-                                a.hash == b.hash && a.generation < b.generation
-                            }
-                            _ => false,
-                        }
-                    });
+            let mut potential_replacements = self.by_id.values().filter(
+                |(_, potential_replacement)| match (
+                    fragment.next(),
+                    potential_replacement.next(),
+                ) {
+                    (Some(a), Some(b)) => {
+                        a.hash == b.hash && a.generation < b.generation
+                    }
+                    _ => false,
+                },
+            );
 
             if let Some(replacement) = potential_replacements.next() {
                 replaced_fragments
