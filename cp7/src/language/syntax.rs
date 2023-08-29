@@ -23,7 +23,7 @@ impl Syntax {
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
-        let handle = FragmentId {
+        let id = FragmentId {
             hash: fragment.hash(),
             generation: self.generation,
         };
@@ -35,7 +35,7 @@ impl Syntax {
         //
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
-        if let Some((_, existing)) = self.by_id.get(&handle.hash) {
+        if let Some((_, existing)) = self.by_id.get(&id.hash) {
             // We can't just compare the two fragments directly here, as the
             // generation is allowed to be different. We have to go into a bit
             // of extra effort to make it work.
@@ -72,16 +72,16 @@ impl Syntax {
             }
         }
 
-        self.by_id.insert(handle.hash, (handle, fragment));
+        self.by_id.insert(id.hash, (id, fragment));
 
         let address_hash = {
             let mut hasher = blake3::Hasher::new();
             address.hash(&mut hasher);
             hasher.finalize()
         };
-        self.by_address.insert(address_hash, (address, handle));
+        self.by_address.insert(address_hash, (address, id));
 
-        handle
+        id
     }
 
     pub fn get(&self, handle: FragmentId) -> SyntaxFragment {
