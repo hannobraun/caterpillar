@@ -31,40 +31,7 @@ impl Syntax {
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
         if let Some((_, existing)) = self.by_id.get(&id.hash) {
-            // We can't just compare the two fragments directly here, as the
-            // generation is allowed to be different. We have to go into a bit
-            // of extra effort to make it work.
-
-            // The payload might be a block, in which case the generation of its
-            // `FragmentId` would turn this into a regular old comparison.
-            match (&existing.payload, &fragment.payload) {
-                (
-                    SyntaxElement::Value(Value::Block {
-                        start: existing, ..
-                    }),
-                    SyntaxElement::Value(Value::Block { start: new, .. }),
-                ) => {
-                    assert_eq!(existing.map(hash), new.map(hash));
-                }
-                (SyntaxElement::Value(existing), SyntaxElement::Value(new)) => {
-                    assert_eq!(existing, new)
-                }
-                (SyntaxElement::Word(existing), SyntaxElement::Word(new)) => {
-                    assert_eq!(existing, new)
-                }
-                (SyntaxElement::Value(_), SyntaxElement::Word(_))
-                | (SyntaxElement::Word(_), SyntaxElement::Value(_)) => {
-                    panic!("Hash collision!")
-                }
-            }
-
-            // Here we are comparing handles, whose generation is allowed to be
-            // different.
-            assert_eq!(existing.next().map(hash), fragment.next().map(hash));
-
-            fn hash(handle: FragmentId) -> blake3::Hash {
-                handle.hash
-            }
+            assert_eq!(existing, &fragment);
         }
 
         self.by_id.insert(id.hash, (id, fragment));
