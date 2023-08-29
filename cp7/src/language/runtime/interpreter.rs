@@ -58,7 +58,6 @@ impl Interpreter {
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-        self.syntax.prepare_update();
         let PipelineOutput {
             tokens,
             syntax_to_tokens,

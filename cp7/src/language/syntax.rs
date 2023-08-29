@@ -7,7 +7,6 @@ pub struct Syntax {
     by_id: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
     by_address: HashMap<blake3::Hash, (FragmentAddress, FragmentId)>,
     replacements: HashMap<blake3::Hash, blake3::Hash>,
-    generation: u64,
 }
 
 impl Syntax {
@@ -16,12 +15,7 @@ impl Syntax {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
             replacements: HashMap::new(),
-            generation: 0,
         }
-    }
-
-    pub fn prepare_update(&mut self) {
-        self.generation += 1;
     }
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
