@@ -5,7 +5,7 @@ use super::{tokens::TokenAddress, value::Value};
 #[derive(Debug)]
 pub struct Syntax {
     by_id: HashMap<FragmentId, SyntaxFragment>,
-    by_address: HashMap<blake3::Hash, (FragmentAddress, FragmentId)>,
+    by_address: HashMap<FragmentAddress, FragmentId>,
     replacements: HashMap<blake3::Hash, blake3::Hash>,
 }
 
@@ -36,13 +36,7 @@ impl Syntax {
 
         self.by_id.insert(id, fragment);
 
-        let address_hash = {
-            let mut hasher = blake3::Hasher::new();
-            address.hash(&mut hasher);
-            hasher.finalize()
-        };
-
-        if let Some((_, existing)) = self.by_address.get(&address_hash) {
+        if let Some(existing) = self.by_address.get(&address) {
             // This is a bit too simplistic to detect changes of more than one
             // syntax fragment. It will do for now, but to make this more
             // general, we will eventually have to modify the address by looking
@@ -51,7 +45,7 @@ impl Syntax {
             self.replacements.insert(existing.hash, id.hash);
         }
 
-        self.by_address.insert(address_hash, (address, id));
+        self.by_address.insert(address, id);
 
         id
     }
