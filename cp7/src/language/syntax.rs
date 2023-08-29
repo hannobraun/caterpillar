@@ -161,6 +161,14 @@ pub struct FragmentAddress {
     pub next: Option<FragmentId>,
 }
 
+impl FragmentAddress {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        if let Some(next) = self.next {
+            hasher.update(next.hash.as_bytes());
+        }
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxFragment {
     pub payload: SyntaxElement,
@@ -180,9 +188,7 @@ impl SyntaxFragment {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.payload.to_string().as_bytes());
-        if let Some(next) = self.address.next {
-            hasher.update(next.hash.as_bytes());
-        }
+        self.address.hash(&mut hasher);
 
         hasher.finalize()
     }
