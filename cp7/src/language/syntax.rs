@@ -120,7 +120,7 @@ impl Syntax {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
     pub hash: blake3::Hash,
-    pub generation: u64,
+    generation: u64,
 }
 
 impl fmt::Display for FragmentId {
