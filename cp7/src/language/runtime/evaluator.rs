@@ -31,7 +31,7 @@ impl Evaluator {
             None => return Ok(EvaluatorState::Finished),
         };
 
-        let next_fragment = syntax_fragment.next;
+        let next_fragment = syntax_fragment.next();
 
         match syntax_fragment.payload {
             SyntaxElement::Word(word) => {
