@@ -102,7 +102,7 @@ impl Syntax {
         self.by_id.get(&handle.hash).cloned().unwrap().1
     }
 
-    pub fn find_replaced_fragments(&mut self) -> Vec<(FragmentId, FragmentId)> {
+    pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
         self.replacements
             .drain()
             .map(|(old, new)| {
