@@ -38,7 +38,7 @@ impl Syntax {
             // of extra effort to make it work.
 
             // The payload might be a block, in which case the generation of its
-            // `SyntaxHandle` would make it into a regular old comparison.
+            // `FragmentId` would turn this into a regular old comparison.
             match (&existing.payload, &fragment.payload) {
                 (
                     SyntaxElement::Value(Value::Block {
