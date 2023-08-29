@@ -22,7 +22,7 @@ impl Syntax {
 
     pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
         let handle = FragmentId {
-            hash: fragment.next_hash(),
+            hash: fragment.hash(),
             generation: self.generation,
         };
 
@@ -184,7 +184,7 @@ impl SyntaxFragment {
         self.address.next
     }
 
-    fn next_hash(&self) -> blake3::Hash {
+    fn hash(&self) -> blake3::Hash {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.payload.to_string().as_bytes());
