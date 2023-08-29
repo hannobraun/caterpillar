@@ -116,7 +116,7 @@ impl Syntax {
     }
 }
 
-/// A hash that uniquely identifies a syntax fragment
+/// Uniquely identifies a syntax fragment
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
     pub hash: blake3::Hash,
