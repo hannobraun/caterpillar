@@ -100,7 +100,7 @@ fn parse_fragment(
         syntax,
         syntax_to_tokens,
     )?;
-    let handle = syntax.add(SyntaxFragment { payload, next });
+    let handle = syntax.add(SyntaxFragment::new(payload, next));
     syntax_to_tokens.insert(handle, token_range);
 
     Ok((Some(handle), hash))

@@ -163,6 +163,10 @@ pub struct SyntaxFragment {
 }
 
 impl SyntaxFragment {
+    pub fn new(payload: SyntaxElement, next: Option<FragmentId>) -> Self {
+        Self { payload, next }
+    }
+
     fn next_hash(&self) -> blake3::Hash {
         let mut hasher = blake3::Hasher::new();
 
