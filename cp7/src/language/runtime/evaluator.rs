@@ -31,6 +31,8 @@ impl Evaluator {
             None => return Ok(EvaluatorState::Finished),
         };
 
+        let next_fragment = syntax_fragment.next;
+
         match syntax_fragment.payload {
             SyntaxElement::Word(word) => {
                 match self.functions.resolve(&word)? {
@@ -42,7 +44,7 @@ impl Evaluator {
                             // Need to advance the current stack frame before we
                             // jump into the function, or we'll repeat it
                             // endlessly when we come back.
-                            self.call_stack.advance(syntax_fragment.next);
+                            self.call_stack.advance(next_fragment);
                             self.call_stack.push(start);
                             return Ok(EvaluatorState::InProgress);
                         }
@@ -54,7 +56,7 @@ impl Evaluator {
             }
         };
 
-        self.call_stack.advance(syntax_fragment.next);
+        self.call_stack.advance(next_fragment);
 
         Ok(EvaluatorState::InProgress)
     }
