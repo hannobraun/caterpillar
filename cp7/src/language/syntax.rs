@@ -50,10 +50,10 @@ impl Syntax {
         id
     }
 
-    pub fn get(&self, handle: FragmentId) -> SyntaxFragment {
+    pub fn get(&self, id: FragmentId) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create handles for fragments we add.
-        self.by_id.get(&handle).cloned().unwrap()
+        self.by_id.get(&id).cloned().unwrap()
     }
 
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
