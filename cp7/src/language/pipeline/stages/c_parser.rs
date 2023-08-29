@@ -2,7 +2,7 @@ use std::iter;
 
 use crate::language::{
     syntax::{
-        Syntax, SyntaxElement, SyntaxFragment, SyntaxHandle, SyntaxToTokens,
+        FragmentId, Syntax, SyntaxElement, SyntaxFragment, SyntaxToTokens,
         TokenRange,
     },
     tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
@@ -37,7 +37,7 @@ fn parse_fragment(
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
-) -> ParserResult<(Option<SyntaxHandle>, Option<TokenAddress>)> {
+) -> ParserResult<(Option<FragmentId>, Option<TokenAddress>)> {
     let next_token = match token_iter.peek() {
         Some(token) => tokens.by_address.get(token).unwrap(),
         None => {
@@ -114,7 +114,7 @@ fn parse_block(
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
     syntax_to_tokens: &mut SyntaxToTokens,
-) -> ParserResult<(Option<SyntaxHandle>, TokenRange)> {
+) -> ParserResult<(Option<FragmentId>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens, token_iter)?;
 
     let (handle, end) = parse_fragment(
@@ -180,7 +180,7 @@ pub type TokenIter<'r> = iter::Peekable<TokensLeftToRight<'r>>;
 pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
-    pub start: Option<SyntaxHandle>,
+    pub start: Option<FragmentId>,
     pub syntax_to_tokens: SyntaxToTokens,
 }
 

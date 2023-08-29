@@ -1,8 +1,8 @@
-use crate::language::syntax::SyntaxHandle;
+use crate::language::syntax::FragmentId;
 
 #[derive(Debug)]
 pub struct CallStack {
-    frames: Vec<SyntaxHandle>,
+    frames: Vec<FragmentId>,
 }
 
 impl CallStack {
@@ -10,11 +10,11 @@ impl CallStack {
         Self { frames: Vec::new() }
     }
 
-    pub fn current(&self) -> Option<SyntaxHandle> {
+    pub fn current(&self) -> Option<FragmentId> {
         self.frames.last().copied()
     }
 
-    pub fn advance(&mut self, next: Option<SyntaxHandle>) {
+    pub fn advance(&mut self, next: Option<FragmentId>) {
         if let Some(current) = self.frames.last_mut() {
             match next {
                 Some(next) => {
@@ -27,7 +27,7 @@ impl CallStack {
         }
     }
 
-    pub fn push(&mut self, next: SyntaxHandle) {
+    pub fn push(&mut self, next: FragmentId) {
         self.frames.push(next);
     }
 

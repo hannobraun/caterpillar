@@ -2,13 +2,13 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use super::syntax::{SyntaxHandle, TokenRange};
+use super::syntax::{FragmentId, TokenRange};
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
 pub enum Value {
     Block {
-        start: Option<SyntaxHandle>,
+        start: Option<FragmentId>,
         token_range: TokenRange,
     },
     Number(i64),

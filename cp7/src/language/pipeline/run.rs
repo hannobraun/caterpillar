@@ -1,5 +1,5 @@
 use crate::language::{
-    syntax::{Syntax, SyntaxHandle, SyntaxToTokens},
+    syntax::{FragmentId, Syntax, SyntaxToTokens},
     tokens::Tokens,
 };
 
@@ -28,7 +28,7 @@ pub fn run(
 }
 
 pub struct PipelineOutput {
-    pub start: Option<SyntaxHandle>,
+    pub start: Option<FragmentId>,
     pub tokens: Tokens,
     pub syntax_to_tokens: SyntaxToTokens,
 }

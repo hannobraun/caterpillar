@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::language::{syntax::SyntaxHandle, value};
+use crate::language::{syntax::FragmentId, value};
 
 use super::data_stack::{DataStack, DataStackResult};
 
@@ -41,7 +41,7 @@ impl Functions {
         })
     }
 
-    pub fn replace(&mut self, old: SyntaxHandle, new: SyntaxHandle) {
+    pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for function in self.inner.values_mut() {
             if let Function::UserDefined(UserDefined { body }) = function {
                 if let Some(handle) = &mut body.start {

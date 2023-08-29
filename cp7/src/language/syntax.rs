@@ -4,7 +4,7 @@ use super::{tokens::TokenAddress, value::Value};
 
 #[derive(Debug)]
 pub struct Syntax {
-    fragments: HashMap<blake3::Hash, (SyntaxHandle, SyntaxFragment)>,
+    fragments: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
     generation: u64,
 }
 
@@ -20,8 +20,8 @@ impl Syntax {
         self.generation += 1;
     }
 
-    pub fn add(&mut self, fragment: SyntaxFragment) -> SyntaxHandle {
-        let handle = SyntaxHandle {
+    pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
+        let handle = FragmentId {
             hash: fragment.next_hash(),
             generation: self.generation,
         };
@@ -64,7 +64,7 @@ impl Syntax {
             // different.
             assert_eq!(existing.next.map(hash), fragment.next.map(hash));
 
-            fn hash(handle: SyntaxHandle) -> blake3::Hash {
+            fn hash(handle: FragmentId) -> blake3::Hash {
                 handle.hash
             }
         }
@@ -74,7 +74,7 @@ impl Syntax {
         handle
     }
 
-    pub fn get(&self, handle: SyntaxHandle) -> SyntaxFragment {
+    pub fn get(&self, handle: FragmentId) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create handles for fragments we add.
         self.fragments.get(&handle.hash).cloned().unwrap().1
@@ -82,10 +82,7 @@ impl Syntax {
 
     pub fn find_replaced_fragments(
         &self,
-    ) -> Vec<(
-        (SyntaxHandle, SyntaxFragment),
-        (SyntaxHandle, SyntaxFragment),
-    )> {
+    ) -> Vec<((FragmentId, SyntaxFragment), (FragmentId, SyntaxFragment))> {
         let old_fragments = self.fragments.values().filter(|(_, fragment)| {
             match fragment.next {
                 Some(handle) => handle.generation != self.generation,
@@ -120,12 +117,12 @@ impl Syntax {
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct SyntaxHandle {
+pub struct FragmentId {
     pub hash: blake3::Hash,
     pub generation: u64,
 }
 
-impl fmt::Display for SyntaxHandle {
+impl fmt::Display for FragmentId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // The string representation of `SyntaxHandle` is used for hashing, so
         // the generation, which must not influence the hash, must not show up
@@ -161,7 +158,7 @@ pub struct SyntaxFragment {
     // as far as uniquely identifying syntax fragments goes. It would be
     // problematic for the evaluator though, as it would need another means to
     // know which syntax fragment to execute next.
-    pub next: Option<SyntaxHandle>,
+    pub next: Option<FragmentId>,
 }
 
 impl SyntaxFragment {
@@ -177,7 +174,7 @@ impl SyntaxFragment {
     }
 }
 
-pub type SyntaxToTokens = HashMap<SyntaxHandle, TokenRange>;
+pub type SyntaxToTokens = HashMap<FragmentId, TokenRange>;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
