@@ -4,7 +4,7 @@ use super::{tokens::TokenAddress, value::Value};
 
 #[derive(Debug)]
 pub struct Syntax {
-    by_id: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
+    by_id: HashMap<FragmentId, SyntaxFragment>,
     by_address: HashMap<blake3::Hash, (FragmentAddress, FragmentId)>,
     replacements: HashMap<blake3::Hash, blake3::Hash>,
 }
@@ -30,11 +30,11 @@ impl Syntax {
         //
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
-        if let Some((_, existing)) = self.by_id.get(&id.hash) {
+        if let Some(existing) = self.by_id.get(&id) {
             assert_eq!(existing, &fragment);
         }
 
-        self.by_id.insert(id.hash, (id, fragment));
+        self.by_id.insert(id, fragment);
 
         let address_hash = {
             let mut hasher = blake3::Hasher::new();
@@ -59,7 +59,7 @@ impl Syntax {
     pub fn get(&self, handle: FragmentId) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create handles for fragments we add.
-        self.by_id.get(&handle.hash).cloned().unwrap().1
+        self.by_id.get(&handle).cloned().unwrap()
     }
 
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
