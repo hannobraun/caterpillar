@@ -6,6 +6,7 @@ use super::{tokens::TokenAddress, value::Value};
 pub struct Syntax {
     by_id: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
     by_address: HashMap<blake3::Hash, (FragmentAddress, FragmentId)>,
+    replacements: HashMap<blake3::Hash, blake3::Hash>,
     generation: u64,
 }
 
@@ -14,6 +15,7 @@ impl Syntax {
         Self {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
+            replacements: HashMap::new(),
             generation: 0,
         }
     }
@@ -79,6 +81,16 @@ impl Syntax {
             address.hash(&mut hasher);
             hasher.finalize()
         };
+
+        if let Some((_, existing)) = self.by_address.get(&address_hash) {
+            // This is a bit too simplistic to detect changes of more than one
+            // syntax fragment. It will do for now, but to make this more
+            // general, we will eventually have to modify the address by looking
+            // at the already detected replacements.
+
+            self.replacements.insert(existing.hash, id.hash);
+        }
+
         self.by_address.insert(address_hash, (address, id));
 
         id
@@ -91,38 +103,23 @@ impl Syntax {
     }
 
     pub fn find_replaced_fragments(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        let old_fragments =
-            self.by_id
-                .values()
-                .filter(|(_, fragment)| match fragment.next() {
-                    Some(handle) => handle.generation != self.generation,
-                    None => false,
-                });
-
-        let mut replaced_fragments = Vec::new();
-        for (handle, fragment) in old_fragments {
-            let mut potential_replacements = self.by_id.values().filter_map(
-                |(id, potential_replacement)| match (
-                    fragment.next(),
-                    potential_replacement.next(),
-                ) {
-                    (Some(a), Some(b))
-                        if a.hash == b.hash && a.generation < b.generation =>
-                    {
-                        Some(id)
-                    }
-                    _ => None,
-                },
-            );
-
-            if let Some(replacement) = potential_replacements.next() {
-                replaced_fragments.push((*handle, *replacement));
-            }
-
-            assert!(potential_replacements.next().is_none());
-        }
-
-        replaced_fragments
+        self.replacements
+            .drain()
+            .map(|(old, new)| {
+                (
+                    FragmentId {
+                        hash: old,
+                        // This field has become meaningless. Any value will do.
+                        generation: 0,
+                    },
+                    FragmentId {
+                        hash: new,
+                        // This field has become meaningless. Any value will do.
+                        generation: 0,
+                    },
+                )
+            })
+            .collect()
     }
 }
 
