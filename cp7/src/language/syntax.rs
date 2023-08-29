@@ -80,9 +80,7 @@ impl Syntax {
         self.by_id.get(&handle.hash).cloned().unwrap().1
     }
 
-    pub fn find_replaced_fragments(
-        &self,
-    ) -> Vec<((FragmentId, SyntaxFragment), (FragmentId, SyntaxFragment))> {
+    pub fn find_replaced_fragments(&self) -> Vec<(FragmentId, FragmentId)> {
         let old_fragments =
             self.by_id
                 .values()
@@ -93,21 +91,22 @@ impl Syntax {
 
         let mut replaced_fragments = Vec::new();
         for (handle, fragment) in old_fragments {
-            let mut potential_replacements = self.by_id.values().filter(
-                |(_, potential_replacement)| match (
+            let mut potential_replacements = self.by_id.values().filter_map(
+                |(id, potential_replacement)| match (
                     fragment.next(),
                     potential_replacement.next(),
                 ) {
-                    (Some(a), Some(b)) => {
-                        a.hash == b.hash && a.generation < b.generation
+                    (Some(a), Some(b))
+                        if a.hash == b.hash && a.generation < b.generation =>
+                    {
+                        Some(id)
                     }
-                    _ => false,
+                    _ => None,
                 },
             );
 
             if let Some(replacement) = potential_replacements.next() {
-                replaced_fragments
-                    .push(((*handle, fragment.clone()), replacement.clone()));
+                replaced_fragments.push((*handle, *replacement));
             }
 
             assert!(potential_replacements.next().is_none());

@@ -98,7 +98,7 @@ pub fn update(
         // anyway.
     }
 
-    for ((old, _), (new, _)) in syntax.find_replaced_fragments() {
+    for (old, new) in syntax.find_replaced_fragments() {
         evaluator.functions.replace(old, new);
     }
 }
