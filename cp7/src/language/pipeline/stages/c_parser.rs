@@ -2,8 +2,8 @@ use std::iter;
 
 use crate::language::{
     syntax::{
-        FragmentId, Syntax, SyntaxElement, SyntaxFragment, SyntaxToTokens,
-        TokenRange,
+        FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
+        SyntaxToTokens, TokenRange,
     },
     tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
     value::{self, Value},
@@ -100,7 +100,8 @@ fn parse_fragment(
         syntax,
         syntax_to_tokens,
     )?;
-    let handle = syntax.add(SyntaxFragment::new(payload, next));
+    let handle =
+        syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
     syntax_to_tokens.insert(handle, token_range);
 
     Ok((Some(handle), hash))

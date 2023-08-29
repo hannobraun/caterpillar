@@ -168,11 +168,8 @@ pub struct SyntaxFragment {
 }
 
 impl SyntaxFragment {
-    pub fn new(payload: SyntaxElement, next: Option<FragmentId>) -> Self {
-        Self {
-            payload,
-            address: FragmentAddress { next },
-        }
+    pub fn new(payload: SyntaxElement, address: FragmentAddress) -> Self {
+        Self { payload, address }
     }
 
     pub fn next(&self) -> Option<FragmentId> {
