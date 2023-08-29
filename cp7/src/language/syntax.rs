@@ -62,7 +62,7 @@ impl Syntax {
 
             // Here we are comparing handles, whose generation is allowed to be
             // different.
-            assert_eq!(existing.next.map(hash), fragment.next.map(hash));
+            assert_eq!(existing.next().map(hash), fragment.next().map(hash));
 
             fn hash(handle: FragmentId) -> blake3::Hash {
                 handle.hash
@@ -84,7 +84,7 @@ impl Syntax {
         &self,
     ) -> Vec<((FragmentId, SyntaxFragment), (FragmentId, SyntaxFragment))> {
         let old_fragments = self.fragments.values().filter(|(_, fragment)| {
-            match fragment.next {
+            match fragment.next() {
                 Some(handle) => handle.generation != self.generation,
                 None => false,
             }
@@ -96,7 +96,7 @@ impl Syntax {
                 self.fragments
                     .values()
                     .filter(|(_, potential_replacement)| {
-                        match (fragment.next, potential_replacement.next) {
+                        match (fragment.next(), potential_replacement.next()) {
                             (Some(a), Some(b)) => {
                                 a.hash == b.hash && a.generation < b.generation
                             }
