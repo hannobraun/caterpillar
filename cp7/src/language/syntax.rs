@@ -6,7 +6,7 @@ use super::{tokens::TokenAddress, value::Value};
 pub struct Syntax {
     by_id: HashMap<FragmentId, SyntaxFragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
-    replacements: HashMap<blake3::Hash, blake3::Hash>,
+    replacements: HashMap<FragmentId, FragmentId>,
 }
 
 impl Syntax {
@@ -42,7 +42,7 @@ impl Syntax {
             // general, we will eventually have to modify the address by looking
             // at the already detected replacements.
 
-            self.replacements.insert(existing.hash, id.hash);
+            self.replacements.insert(*existing, id);
         }
 
         self.by_address.insert(address, id);
@@ -57,12 +57,7 @@ impl Syntax {
     }
 
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        self.replacements
-            .drain()
-            .map(|(old, new)| {
-                (FragmentId { hash: old }, FragmentId { hash: new })
-            })
-            .collect()
+        self.replacements.drain().collect()
     }
 }
 
