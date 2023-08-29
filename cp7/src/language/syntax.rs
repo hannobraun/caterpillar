@@ -5,6 +5,7 @@ use super::{tokens::TokenAddress, value::Value};
 #[derive(Debug)]
 pub struct Syntax {
     by_id: HashMap<blake3::Hash, (FragmentId, SyntaxFragment)>,
+    by_address: HashMap<blake3::Hash, (FragmentAddress, FragmentId)>,
     generation: u64,
 }
 
@@ -12,6 +13,7 @@ impl Syntax {
     pub fn new() -> Self {
         Self {
             by_id: HashMap::new(),
+            by_address: HashMap::new(),
             generation: 0,
         }
     }
@@ -25,6 +27,7 @@ impl Syntax {
             hash: fragment.hash(),
             generation: self.generation,
         };
+        let address = fragment.address;
 
         // A hash collision should be exceedingly unlikely, but I'm not sure
         // quite *how* unlikely. Also, I don't fully trust my code to work
@@ -70,6 +73,13 @@ impl Syntax {
         }
 
         self.by_id.insert(handle.hash, (handle, fragment));
+
+        let address_hash = {
+            let mut hasher = blake3::Hasher::new();
+            address.hash(&mut hasher);
+            hasher.finalize()
+        };
+        self.by_address.insert(address_hash, (address, handle));
 
         handle
     }
