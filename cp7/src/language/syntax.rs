@@ -27,7 +27,6 @@ impl Syntax {
     pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
         let id = FragmentId {
             hash: fragment.hash(),
-            generation: self.generation,
         };
         let address = fragment.address;
 
@@ -106,18 +105,7 @@ impl Syntax {
         self.replacements
             .drain()
             .map(|(old, new)| {
-                (
-                    FragmentId {
-                        hash: old,
-                        // This field has become meaningless. Any value will do.
-                        generation: 0,
-                    },
-                    FragmentId {
-                        hash: new,
-                        // This field has become meaningless. Any value will do.
-                        generation: 0,
-                    },
-                )
+                (FragmentId { hash: old }, FragmentId { hash: new })
             })
             .collect()
     }
@@ -127,7 +115,6 @@ impl Syntax {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
     pub hash: blake3::Hash,
-    generation: u64,
 }
 
 impl fmt::Display for FragmentId {
