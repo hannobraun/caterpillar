@@ -88,7 +88,7 @@ impl fmt::Display for FragmentId {
 }
 
 /// Uniquely identifies the location of a syntax fragment in the code
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentAddress {
     // Knowing the next syntax fragment does not uniquely identify a syntax
     // fragment. Multiple functions might end in the same way, and then for the
