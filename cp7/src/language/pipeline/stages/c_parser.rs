@@ -52,7 +52,7 @@ fn parse_fragment(
         }
     };
 
-    let (syntax_element, token_range) = match next_token {
+    let (payload, token_range) = match next_token {
         Token::CurlyBracketOpen => {
             let (start, token_range) =
                 parse_block(tokens, token_iter, syntax, syntax_to_tokens)?;
@@ -100,10 +100,7 @@ fn parse_fragment(
         syntax,
         syntax_to_tokens,
     )?;
-    let handle = syntax.add(SyntaxFragment {
-        payload: syntax_element,
-        next,
-    });
+    let handle = syntax.add(SyntaxFragment { payload, next });
     syntax_to_tokens.insert(handle, token_range);
 
     Ok((Some(handle), hash))
