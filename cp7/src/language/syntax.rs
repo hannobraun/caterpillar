@@ -132,10 +132,9 @@ impl fmt::Display for FragmentId {
     }
 }
 
+/// Uniquely identifies the location of a syntax fragment in the code
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SyntaxFragment {
-    pub payload: SyntaxElement,
-
+pub struct FragmentAddress {
     // Knowing the next syntax fragment does not uniquely identify a syntax
     // fragment. Multiple functions might end in the same way, and then for the
     // syntax fragment preceding that common suffix, if one of them was changed,
@@ -162,20 +161,29 @@ pub struct SyntaxFragment {
     pub next: Option<FragmentId>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SyntaxFragment {
+    pub payload: SyntaxElement,
+    address: FragmentAddress,
+}
+
 impl SyntaxFragment {
     pub fn new(payload: SyntaxElement, next: Option<FragmentId>) -> Self {
-        Self { payload, next }
+        Self {
+            payload,
+            address: FragmentAddress { next },
+        }
     }
 
     pub fn next(&self) -> Option<FragmentId> {
-        self.next
+        self.address.next
     }
 
     fn next_hash(&self) -> blake3::Hash {
         let mut hasher = blake3::Hasher::new();
 
         hasher.update(self.payload.to_string().as_bytes());
-        if let Some(next) = self.next {
+        if let Some(next) = self.address.next {
             hasher.update(next.hash.as_bytes());
         }
 
