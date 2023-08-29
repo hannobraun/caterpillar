@@ -30,11 +30,9 @@ impl Syntax {
         //
         // Let's make sure, just for now, there actually are no hash collisions,
         // okay?
-        if let Some(existing) = self.by_id.get(&id) {
-            assert_eq!(existing, &fragment);
+        if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
+            assert_eq!(existing, fragment);
         }
-
-        self.by_id.insert(id, fragment);
 
         if let Some(existing) = self.by_address.get(&address) {
             // This is a bit too simplistic to detect changes of more than one
