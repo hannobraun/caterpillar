@@ -4,12 +4,11 @@ use crate::language::{
     syntax::{
         FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
     },
-    tokens::{token, Token, Tokens, TokensLeftToRight},
+    tokens::{token, Token, TokensLeftToRight},
     value::{self, Value},
 };
 
 pub fn parse(
-    _: &Tokens,
     token_iter: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
