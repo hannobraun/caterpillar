@@ -62,7 +62,7 @@ impl Syntax {
 /// Uniquely identifies a syntax fragment
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
-    pub hash: blake3::Hash,
+    hash: blake3::Hash,
 }
 
 impl fmt::Display for FragmentId {
