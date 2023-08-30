@@ -45,7 +45,7 @@ impl Functions {
         for function in self.inner.values_mut() {
             if let Function::UserDefined(UserDefined { body }) = function {
                 if let Some(fragment_id) = &mut body.start {
-                    if fragment_id.hash == old.hash {
+                    if *fragment_id == old {
                         *fragment_id = new;
                     }
                 }
