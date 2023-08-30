@@ -74,18 +74,3 @@ impl<'r> Iterator for TokensLeftToRight<'r> {
         Some(current)
     }
 }
-
-pub struct TokensRightToLeft<'r> {
-    next: Option<TokenAddress>,
-    tokens: &'r Tokens,
-}
-
-impl<'r> Iterator for TokensRightToLeft<'r> {
-    type Item = TokenAddress;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let current = self.next?;
-        self.next = self.tokens.right_to_left.get(&current).copied();
-        Some(current)
-    }
-}
