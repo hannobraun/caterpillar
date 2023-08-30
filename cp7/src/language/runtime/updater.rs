@@ -193,7 +193,7 @@ mod tests {
         let function = interpreter.evaluator.functions.resolve("f")?;
         let Function::UserDefined(functions::UserDefined { body }) = function
         else {
-            bail!("Just defined function, but somehow not user-defined")
+            bail!("Expected function `f` to be user-defined")
         };
         let id = body
             .start
