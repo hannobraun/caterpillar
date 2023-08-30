@@ -44,9 +44,7 @@ fn parse_fragment(
     let payload = match next_token {
         Token::CurlyBracketOpen => {
             let (start, _) = parse_block(tokens, token_iter, syntax)?;
-
             let block = value::Block { start };
-
             SyntaxElement::Value(block.into())
         }
         Token::Word(_) => {
