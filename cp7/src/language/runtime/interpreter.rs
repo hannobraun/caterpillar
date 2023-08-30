@@ -63,13 +63,7 @@ impl Interpreter {
             syntax_to_tokens,
             ..
         } = pipeline::run(code, &mut self.syntax)?;
-        updater::update(
-            &self.tokens,
-            &tokens,
-            &mut self.syntax,
-            &self.syntax_to_tokens,
-            &mut self.evaluator,
-        );
+        updater::update(&mut self.syntax, &mut self.evaluator);
 
         self.tokens = tokens;
         self.syntax_to_tokens = syntax_to_tokens;

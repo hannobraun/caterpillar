@@ -1,17 +1,8 @@
-use crate::language::{
-    syntax::{Syntax, SyntaxToTokens},
-    tokens::Tokens,
-};
+use crate::language::syntax::Syntax;
 
 use super::evaluator::Evaluator;
 
-pub fn update(
-    _old_tokens: &Tokens,
-    _new_tokens: &Tokens,
-    syntax: &mut Syntax,
-    _syntax_to_tokens: &SyntaxToTokens,
-    evaluator: &mut Evaluator,
-) {
+pub fn update(syntax: &mut Syntax, evaluator: &mut Evaluator) {
     for (old, new) in syntax.take_replacements() {
         evaluator.functions.replace(old, new);
     }
