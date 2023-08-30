@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt};
+use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
@@ -21,48 +21,5 @@ impl fmt::Display for Token {
             Token::Symbol(symbol) => write!(f, ":{symbol}"),
             Token::Word(word) => write!(f, "{word}"),
         }
-    }
-}
-
-#[derive(Debug)]
-pub struct Tokens {
-    pub by_address: HashMap<TokenAddress, Token>,
-
-    pub leftmost: Option<TokenAddress>,
-    pub rightmost: Option<TokenAddress>,
-
-    pub left_to_right: HashMap<TokenAddress, TokenAddress>,
-    pub right_to_left: HashMap<TokenAddress, TokenAddress>,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct TokenAddress {
-    pub as_left_neighbor: LeftNeighborAddress,
-    pub as_right_neighbor: RightNeighborAddress,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct RightNeighborAddress {
-    pub hash: blake3::Hash,
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct LeftNeighborAddress {
-    pub hash: blake3::Hash,
-}
-
-pub struct TokensLeftToRight<'r> {
-    next: Option<TokenAddress>,
-    tokens: &'r Tokens,
-}
-
-impl<'r> Iterator for TokensLeftToRight<'r> {
-    type Item = &'r Token;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let current = self.next?;
-        self.next = self.tokens.left_to_right.get(&current).copied();
-        let current = self.tokens.by_address.get(&current).unwrap();
-        Some(current)
     }
 }
