@@ -4,7 +4,7 @@ use crate::language::{
     syntax::{
         FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
     },
-    tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
+    tokens::{token, Token, Tokens, TokensLeftToRight},
     value::{self, Value},
 };
 
@@ -99,7 +99,7 @@ fn parse_word(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
 ) -> ParserResult<String> {
-    let (payload, _) = expect::<token::Word>(tokens, token_iter)?;
+    let payload = expect::<token::Word>(tokens, token_iter)?;
     Ok(payload.0)
 }
 
@@ -107,7 +107,7 @@ fn parse_number(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
 ) -> ParserResult<i64> {
-    let (payload, _) = expect::<token::Number>(tokens, token_iter)?;
+    let payload = expect::<token::Number>(tokens, token_iter)?;
     Ok(payload.0)
 }
 
@@ -115,14 +115,11 @@ fn parse_symbol(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
 ) -> ParserResult<String> {
-    let (payload, _) = expect::<token::Symbol>(tokens, token_iter)?;
+    let payload = expect::<token::Symbol>(tokens, token_iter)?;
     Ok(payload.0)
 }
 
-fn expect<T>(
-    tokens: &Tokens,
-    token_iter: &mut TokenIter,
-) -> ParserResult<(T, TokenAddress)>
+fn expect<T>(tokens: &Tokens, token_iter: &mut TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
@@ -136,7 +133,7 @@ where
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok((payload, token))
+    Ok(payload)
 }
 
 pub type TokenIter<'r> = iter::Peekable<TokensLeftToRight<'r>>;
