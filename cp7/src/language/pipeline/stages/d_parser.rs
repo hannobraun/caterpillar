@@ -14,9 +14,7 @@ pub fn parse(
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut token_iter = token_iter.peekable();
-
     let start = parse_fragment(None, tokens, &mut token_iter, syntax)?;
-
     Ok(ParserOutput { start })
 }
 
