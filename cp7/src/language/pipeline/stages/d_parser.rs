@@ -25,10 +25,7 @@ pub fn parse(
         &mut syntax_to_tokens,
     )?;
 
-    Ok(ParserOutput {
-        start,
-        syntax_to_tokens,
-    })
+    Ok(ParserOutput { start })
 }
 
 fn parse_fragment(
@@ -179,7 +176,6 @@ pub type ParserResult<T> = Result<T, ParserError>;
 
 pub struct ParserOutput {
     pub start: Option<FragmentId>,
-    pub syntax_to_tokens: SyntaxToTokens,
 }
 
 #[derive(Debug, thiserror::Error)]
