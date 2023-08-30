@@ -79,10 +79,10 @@ fn parse_block(
 ) -> ParserResult<Option<FragmentId>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
 
-    let handle =
+    let fragment_id =
         parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
 
-    Ok(handle)
+    Ok(fragment_id)
 }
 
 fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
