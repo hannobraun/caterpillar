@@ -133,8 +133,6 @@ impl SyntaxFragment {
     }
 }
 
-pub type SyntaxToTokens = HashMap<FragmentId, TokenRange>;
-
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TokenRange {
     pub start: TokenAddress,

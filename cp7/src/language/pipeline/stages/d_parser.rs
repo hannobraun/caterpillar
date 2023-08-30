@@ -3,7 +3,7 @@ use std::iter;
 use crate::language::{
     syntax::{
         FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
-        SyntaxToTokens, TokenRange,
+        TokenRange,
     },
     tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
     value::{self, Value},
@@ -15,15 +15,8 @@ pub fn parse(
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut token_iter = token_iter.peekable();
-    let mut syntax_to_tokens = SyntaxToTokens::new();
 
-    let (start, _) = parse_fragment(
-        None,
-        tokens,
-        &mut token_iter,
-        syntax,
-        &mut syntax_to_tokens,
-    )?;
+    let (start, _) = parse_fragment(None, tokens, &mut token_iter, syntax)?;
 
     Ok(ParserOutput { start })
 }
@@ -33,7 +26,6 @@ fn parse_fragment(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
-    syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<FragmentId>, Option<TokenAddress>)> {
     let next_token = match token_iter.peek() {
         Some(token) => tokens.by_address.get(token).unwrap(),
@@ -49,10 +41,9 @@ fn parse_fragment(
         }
     };
 
-    let (payload, token_range) = match next_token {
+    let (payload, _) = match next_token {
         Token::CurlyBracketOpen => {
-            let (start, token_range) =
-                parse_block(tokens, token_iter, syntax, syntax_to_tokens)?;
+            let (start, token_range) = parse_block(tokens, token_iter, syntax)?;
 
             let block = value::Block {
                 start,
@@ -90,16 +81,9 @@ fn parse_fragment(
         }
     };
 
-    let (next, hash) = parse_fragment(
-        terminator,
-        tokens,
-        token_iter,
-        syntax,
-        syntax_to_tokens,
-    )?;
+    let (next, hash) = parse_fragment(terminator, tokens, token_iter, syntax)?;
     let handle =
         syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
-    syntax_to_tokens.insert(handle, token_range);
 
     Ok((Some(handle), hash))
 }
@@ -108,7 +92,6 @@ fn parse_block(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
-    syntax_to_tokens: &mut SyntaxToTokens,
 ) -> ParserResult<(Option<FragmentId>, TokenRange)> {
     let (_, start) = expect::<token::CurlyBracketOpen>(tokens, token_iter)?;
 
@@ -117,7 +100,6 @@ fn parse_block(
         tokens,
         token_iter,
         syntax,
-        syntax_to_tokens,
     )?;
 
     let end = end.unwrap();
