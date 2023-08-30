@@ -1,4 +1,4 @@
-use std::{iter, slice};
+use std::{iter, vec};
 
 use crate::language::{
     syntax::{
@@ -9,7 +9,7 @@ use crate::language::{
 };
 
 pub fn parse(
-    tokens: slice::Iter<Token>,
+    tokens: vec::IntoIter<Token>,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut tokens = tokens.peekable();
@@ -23,7 +23,7 @@ fn parse_fragment(
     syntax: &mut Syntax,
 ) -> ParserResult<Option<FragmentId>> {
     let next_token = match tokens.peek() {
-        Some(token) => *token,
+        Some(token) => token,
         None => {
             if terminator.is_none() {
                 // If there is no terminator, then not having any more tokens is
@@ -115,7 +115,7 @@ where
     Ok(payload)
 }
 
-pub type Tokens<'r> = iter::Peekable<slice::Iter<'r, Token>>;
+pub type Tokens<'r> = iter::Peekable<vec::IntoIter<Token>>;
 
 pub type ParserResult<T> = Result<T, ParserError>;
 
