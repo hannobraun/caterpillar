@@ -139,15 +139,6 @@ pub struct TokenRange {
     pub end: TokenAddress,
 }
 
-impl TokenRange {
-    pub fn one(address: TokenAddress) -> Self {
-        Self {
-            start: address,
-            end: address,
-        }
-    }
-}
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxElement {
     Value(Value),

@@ -3,7 +3,6 @@ use std::iter;
 use crate::language::{
     syntax::{
         FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
-        TokenRange,
     },
     tokens::{token, Token, TokenAddress, Tokens, TokensLeftToRight},
     value::{self, Value},
@@ -56,7 +55,7 @@ fn parse_fragment(
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let (symbol, _) = parse_symbol(tokens, token_iter)?;
+            let symbol = parse_symbol(tokens, token_iter)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -115,9 +114,9 @@ fn parse_number(
 fn parse_symbol(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
-) -> ParserResult<(String, TokenRange)> {
-    let (payload, token) = expect::<token::Symbol>(tokens, token_iter)?;
-    Ok((payload.0, TokenRange::one(token)))
+) -> ParserResult<String> {
+    let (payload, _) = expect::<token::Symbol>(tokens, token_iter)?;
+    Ok(payload.0)
 }
 
 fn expect<T>(
