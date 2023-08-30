@@ -108,7 +108,6 @@ where
     let token = tokens.next().ok_or(NoMoreTokens)?;
 
     let payload = token
-        .clone()
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
