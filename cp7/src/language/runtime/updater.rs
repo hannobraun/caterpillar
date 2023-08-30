@@ -190,11 +190,11 @@ mod tests {
             else {
                 panic!("Just defined function, but somehow not user-defined");
             };
-            let handle = body
+            let id = body
                 .start
                 .expect("Function not empty, but body has no syntax");
 
-            Ok(handle.hash)
+            Ok(id.hash)
         }
 
         Ok(())
