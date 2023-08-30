@@ -15,7 +15,7 @@ pub fn parse(
 ) -> ParserResult<ParserOutput> {
     let mut token_iter = token_iter.peekable();
 
-    let (start, _) = parse_fragment(None, tokens, &mut token_iter, syntax)?;
+    let start = parse_fragment(None, tokens, &mut token_iter, syntax)?;
 
     Ok(ParserOutput { start })
 }
@@ -25,7 +25,7 @@ fn parse_fragment(
     tokens: &Tokens,
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
-) -> ParserResult<(Option<FragmentId>, Option<TokenAddress>)> {
+) -> ParserResult<Option<FragmentId>> {
     let next_token = match token_iter.peek() {
         Some(token) => tokens.by_address.get(token).unwrap(),
         None => {
@@ -33,7 +33,7 @@ fn parse_fragment(
                 // If there is no terminator, then not having any more tokens is
                 // not an error condition. We've simply reached the end of the
                 // input.
-                return Ok((None, None));
+                return Ok(None);
             }
 
             return Err(NoMoreTokens.into());
@@ -61,8 +61,8 @@ fn parse_fragment(
         token => {
             if Some(token) == terminator.as_ref() {
                 // Only peeked before; still need to consume.
-                let token = token_iter.next().unwrap();
-                return Ok((None, Some(token)));
+                token_iter.next().unwrap();
+                return Ok(None);
             }
 
             return Err(ParserError::UnexpectedToken {
@@ -71,11 +71,11 @@ fn parse_fragment(
         }
     };
 
-    let (next, hash) = parse_fragment(terminator, tokens, token_iter, syntax)?;
+    let next = parse_fragment(terminator, tokens, token_iter, syntax)?;
     let handle =
         syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
 
-    Ok((Some(handle), hash))
+    Ok(Some(handle))
 }
 
 fn parse_block(
@@ -85,7 +85,7 @@ fn parse_block(
 ) -> ParserResult<Option<FragmentId>> {
     expect::<token::CurlyBracketOpen>(tokens, token_iter)?;
 
-    let (handle, _) = parse_fragment(
+    let handle = parse_fragment(
         Some(Token::CurlyBracketClose),
         tokens,
         token_iter,
