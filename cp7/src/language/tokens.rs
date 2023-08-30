@@ -35,15 +35,6 @@ pub struct Tokens {
     pub right_to_left: HashMap<TokenAddress, TokenAddress>,
 }
 
-impl Tokens {
-    pub fn left_to_right(&self) -> TokensLeftToRight {
-        TokensLeftToRight {
-            next: self.leftmost,
-            tokens: self,
-        }
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct TokenAddress {
     pub as_left_neighbor: LeftNeighborAddress,

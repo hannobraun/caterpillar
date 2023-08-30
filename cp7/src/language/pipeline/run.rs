@@ -11,9 +11,8 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let addressed_tokens = address(tokens);
-    let ParserOutput { start } =
-        parse(addressed_tokens.left_to_right(), syntax)?;
+    let _ = address(tokens.clone());
+    let ParserOutput { start } = parse(tokens.iter(), syntax)?;
 
     Ok(PipelineOutput { start })
 }

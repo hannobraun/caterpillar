@@ -1,15 +1,15 @@
-use std::iter;
+use std::{iter, slice};
 
 use crate::language::{
     syntax::{
         FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
     },
-    tokens::{token, Token, TokensLeftToRight},
+    tokens::{token, Token},
     value::{self, Value},
 };
 
 pub fn parse(
-    tokens: TokensLeftToRight,
+    tokens: slice::Iter<Token>,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut tokens = tokens.peekable();
@@ -115,7 +115,7 @@ where
     Ok(payload)
 }
 
-pub type Tokens<'r> = iter::Peekable<TokensLeftToRight<'r>>;
+pub type Tokens<'r> = iter::Peekable<slice::Iter<'r, Token>>;
 
 pub type ParserResult<T> = Result<T, ParserError>;
 
