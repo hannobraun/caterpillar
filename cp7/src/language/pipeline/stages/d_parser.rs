@@ -12,8 +12,8 @@ pub fn parse(
     tokens: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let mut token_iter = tokens.peekable();
-    let start = parse_fragment(None, &mut token_iter, syntax)?;
+    let mut tokens = tokens.peekable();
+    let start = parse_fragment(None, &mut tokens, syntax)?;
     Ok(ParserOutput { start })
 }
 
