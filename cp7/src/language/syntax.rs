@@ -50,7 +50,7 @@ impl Syntax {
 
     pub fn get(&self, id: FragmentId) -> SyntaxFragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
-        // never remove them, and only ever create handles for fragments we add.
+        // never remove them, and only ever create IDs for fragments we add.
         self.by_id.get(&id).cloned().unwrap()
     }
 
