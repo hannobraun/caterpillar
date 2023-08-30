@@ -2,7 +2,7 @@ use crate::language::syntax::{FragmentId, Syntax};
 
 use super::stages::{
     a_tokenizer::tokenize,
-    d_parser::{parse, ParserError, ParserOutput},
+    b_parser::{parse, ParserError, ParserOutput},
 };
 
 pub fn run(
