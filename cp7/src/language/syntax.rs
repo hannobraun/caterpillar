@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use super::{tokens::TokenAddress, value::Value};
+use super::value::Value;
 
 #[derive(Debug)]
 pub struct Syntax {
@@ -131,12 +131,6 @@ impl SyntaxFragment {
 
         hasher.finalize()
     }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct TokenRange {
-    pub start: TokenAddress,
-    pub end: TokenAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
