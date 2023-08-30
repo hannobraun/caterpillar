@@ -14,15 +14,15 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let tokens = address(tokens);
+    let addressed_tokens = address(tokens);
     let ParserOutput {
         start,
         syntax_to_tokens,
-    } = parse(&tokens, tokens.left_to_right(), syntax)?;
+    } = parse(&addressed_tokens, addressed_tokens.left_to_right(), syntax)?;
 
     Ok(PipelineOutput {
         start,
-        tokens,
+        tokens: addressed_tokens,
         syntax_to_tokens,
     })
 }
