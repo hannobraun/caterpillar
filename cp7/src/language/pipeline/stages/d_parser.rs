@@ -62,9 +62,7 @@ fn parse_fragment(
                 return Ok(None);
             }
 
-            return Err(ParserError::UnexpectedToken {
-                actual: token.clone(),
-            });
+            return Err(ParserError::UnexpectedToken { actual: token });
         }
     };
 
