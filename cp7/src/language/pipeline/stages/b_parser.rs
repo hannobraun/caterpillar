@@ -67,10 +67,10 @@ fn parse_fragment(
     };
 
     let next = parse_fragment(terminator, tokens, syntax)?;
-    let handle =
+    let fragment_id =
         syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
 
-    Ok(Some(handle))
+    Ok(Some(fragment_id))
 }
 
 fn parse_block(
