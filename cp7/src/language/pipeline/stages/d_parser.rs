@@ -54,10 +54,11 @@ fn parse_fragment(
             let symbol = parse_symbol(tokens)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
-        token => {
-            if Some(token) == terminator.as_ref() {
-                // Only peeked before; still need to consume.
-                tokens.next().unwrap();
+        _ => {
+            // Only peeked before; still need to consume.
+            let token = tokens.next().unwrap();
+
+            if Some(&token) == terminator.as_ref() {
                 return Ok(None);
             }
 
