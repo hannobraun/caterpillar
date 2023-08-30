@@ -161,9 +161,12 @@ fn print_token_range_from_tokens(left: Option<&Token>, right: Option<&Token>) {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::runtime::{
-        functions::{self, Function},
-        interpreter::Interpreter,
+    use crate::language::{
+        runtime::{
+            functions::{self, Function},
+            interpreter::Interpreter,
+        },
+        syntax::FragmentId,
     };
 
     #[test]
@@ -181,9 +184,7 @@ mod tests {
 
         assert_ne!(f_original, f_updated);
 
-        fn extract_f(
-            interpreter: &Interpreter,
-        ) -> anyhow::Result<blake3::Hash> {
+        fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
             let function = interpreter.evaluator.functions.resolve("f")?;
             let Function::UserDefined(functions::UserDefined { body }) =
                 function
@@ -194,7 +195,7 @@ mod tests {
                 .start
                 .expect("Function not empty, but body has no syntax");
 
-            Ok(id.hash)
+            Ok(id)
         }
 
         Ok(())
