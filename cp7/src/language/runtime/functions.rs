@@ -44,9 +44,9 @@ impl Functions {
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for function in self.inner.values_mut() {
             if let Function::UserDefined(UserDefined { body }) = function {
-                if let Some(handle) = &mut body.start {
-                    if handle.hash == old.hash {
-                        *handle = new;
+                if let Some(fragment_id) = &mut body.start {
+                    if fragment_id.hash == old.hash {
+                        *fragment_id = new;
                     }
                 }
             }
