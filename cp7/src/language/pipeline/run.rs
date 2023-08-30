@@ -1,7 +1,4 @@
-use crate::language::{
-    syntax::{FragmentId, Syntax, SyntaxToTokens},
-    tokens::Tokens,
-};
+use crate::language::syntax::{FragmentId, Syntax};
 
 use super::stages::{
     a_tokenizer::tokenize,
@@ -15,22 +12,14 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let addressed_tokens = address(tokens);
-    let ParserOutput {
-        start,
-        syntax_to_tokens,
-    } = parse(&addressed_tokens, addressed_tokens.left_to_right(), syntax)?;
+    let ParserOutput { start, .. } =
+        parse(&addressed_tokens, addressed_tokens.left_to_right(), syntax)?;
 
-    Ok(PipelineOutput {
-        start,
-        tokens: addressed_tokens,
-        syntax_to_tokens,
-    })
+    Ok(PipelineOutput { start })
 }
 
 pub struct PipelineOutput {
     pub start: Option<FragmentId>,
-    pub tokens: Tokens,
-    pub syntax_to_tokens: SyntaxToTokens,
 }
 
 #[derive(Debug, thiserror::Error)]
