@@ -25,7 +25,7 @@ fn parse_fragment(
     syntax: &mut Syntax,
 ) -> ParserResult<Option<FragmentId>> {
     let next_token = match token_iter.peek() {
-        Some(token) => tokens.by_address.get(token).unwrap(),
+        Some(token) => *token,
         None => {
             if terminator.is_none() {
                 // If there is no terminator, then not having any more tokens is
@@ -117,16 +117,13 @@ fn parse_symbol(
     Ok(payload.0)
 }
 
-fn expect<T>(tokens: &Tokens, token_iter: &mut TokenIter) -> ParserResult<T>
+fn expect<T>(_: &Tokens, token_iter: &mut TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
     let token = token_iter.next().ok_or(NoMoreTokens)?;
 
-    let payload = tokens
-        .by_address
-        .get(&token)
-        .unwrap()
+    let payload = token
         .clone()
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;

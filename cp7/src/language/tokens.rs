@@ -66,11 +66,12 @@ pub struct TokensLeftToRight<'r> {
 }
 
 impl<'r> Iterator for TokensLeftToRight<'r> {
-    type Item = TokenAddress;
+    type Item = &'r Token;
 
     fn next(&mut self) -> Option<Self::Item> {
         let current = self.next?;
         self.next = self.tokens.left_to_right.get(&current).copied();
+        let current = self.tokens.by_address.get(&current).unwrap();
         Some(current)
     }
 }
