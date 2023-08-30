@@ -1,8 +1,7 @@
 use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
-    syntax::{Syntax, SyntaxToTokens},
-    tokens::Tokens,
+    syntax::Syntax,
 };
 
 use super::{
@@ -13,20 +12,14 @@ use super::{
 
 #[derive(Debug)]
 pub struct Interpreter {
-    pub tokens: Tokens,
     pub syntax: Syntax,
-    pub syntax_to_tokens: SyntaxToTokens,
     pub evaluator: Evaluator,
 }
 
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut syntax = Syntax::new();
-        let PipelineOutput {
-            start,
-            tokens,
-            syntax_to_tokens,
-        } = pipeline::run(code, &mut syntax)?;
+        let PipelineOutput { start, .. } = pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();
         if let Some(start) = start {
@@ -45,12 +38,7 @@ impl Interpreter {
             evaluator.functions.register_intrinsic(name, intrinsic)
         }
 
-        Ok(Interpreter {
-            tokens,
-            syntax,
-            syntax_to_tokens,
-            evaluator,
-        })
+        Ok(Interpreter { syntax, evaluator })
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
@@ -58,15 +46,8 @@ impl Interpreter {
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-        let PipelineOutput {
-            tokens,
-            syntax_to_tokens,
-            ..
-        } = pipeline::run(code, &mut self.syntax)?;
+        pipeline::run(code, &mut self.syntax)?;
         updater::update(&mut self.syntax, &mut self.evaluator);
-
-        self.tokens = tokens;
-        self.syntax_to_tokens = syntax_to_tokens;
 
         Ok(())
     }
