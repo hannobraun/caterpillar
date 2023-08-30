@@ -6,7 +6,7 @@ use crate::language::{
 use super::stages::{
     a_tokenizer::tokenize,
     b_addresser::address,
-    c_parser::{parse, ParserError, ParserOutput},
+    d_parser::{parse, ParserError, ParserOutput},
 };
 
 pub fn run(
