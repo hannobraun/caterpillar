@@ -184,20 +184,19 @@ mod tests {
 
         assert_ne!(f_original, f_updated);
 
-        fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
-            let function = interpreter.evaluator.functions.resolve("f")?;
-            let Function::UserDefined(functions::UserDefined { body }) =
-                function
-            else {
-                panic!("Just defined function, but somehow not user-defined");
-            };
-            let id = body
-                .start
-                .expect("Function not empty, but body has no syntax");
-
-            Ok(id)
-        }
-
         Ok(())
+    }
+
+    fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
+        let function = interpreter.evaluator.functions.resolve("f")?;
+        let Function::UserDefined(functions::UserDefined { body }) = function
+        else {
+            panic!("Just defined function, but somehow not user-defined");
+        };
+        let id = body
+            .start
+            .expect("Function not empty, but body has no syntax");
+
+        Ok(id)
     }
 }
