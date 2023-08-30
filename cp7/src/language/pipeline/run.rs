@@ -10,7 +10,7 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let ParserOutput { start } = parse(tokens.into_iter(), syntax)?;
+    let ParserOutput { start } = parse(tokens, syntax)?;
 
     Ok(PipelineOutput { start })
 }

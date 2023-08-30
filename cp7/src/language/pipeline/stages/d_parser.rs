@@ -9,10 +9,10 @@ use crate::language::{
 };
 
 pub fn parse(
-    tokens: vec::IntoIter<Token>,
+    tokens: Vec<Token>,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
-    let mut tokens = tokens.peekable();
+    let mut tokens = tokens.into_iter().peekable();
     let start = parse_fragment(None, &mut tokens, syntax)?;
     Ok(ParserOutput { start })
 }
