@@ -45,15 +45,15 @@ fn parse_fragment(
             SyntaxElement::Value(block.into())
         }
         Token::Word(_) => {
-            let word = parse_word(tokens, token_iter)?;
+            let word = parse_word(token_iter)?;
             SyntaxElement::Word(word)
         }
         Token::Number(_) => {
-            let number = parse_number(tokens, token_iter)?;
+            let number = parse_number(token_iter)?;
             SyntaxElement::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens, token_iter)?;
+            let symbol = parse_symbol(token_iter)?;
             SyntaxElement::Value(value::Symbol(symbol).into())
         }
         token => {
@@ -81,7 +81,7 @@ fn parse_block(
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<FragmentId>> {
-    expect::<token::CurlyBracketOpen>(tokens, token_iter)?;
+    expect::<token::CurlyBracketOpen>(token_iter)?;
 
     let handle = parse_fragment(
         Some(Token::CurlyBracketClose),
@@ -93,31 +93,22 @@ fn parse_block(
     Ok(handle)
 }
 
-fn parse_word(
-    tokens: &Tokens,
-    token_iter: &mut TokenIter,
-) -> ParserResult<String> {
-    let payload = expect::<token::Word>(tokens, token_iter)?;
+fn parse_word(token_iter: &mut TokenIter) -> ParserResult<String> {
+    let payload = expect::<token::Word>(token_iter)?;
     Ok(payload.0)
 }
 
-fn parse_number(
-    tokens: &Tokens,
-    token_iter: &mut TokenIter,
-) -> ParserResult<i64> {
-    let payload = expect::<token::Number>(tokens, token_iter)?;
+fn parse_number(token_iter: &mut TokenIter) -> ParserResult<i64> {
+    let payload = expect::<token::Number>(token_iter)?;
     Ok(payload.0)
 }
 
-fn parse_symbol(
-    tokens: &Tokens,
-    token_iter: &mut TokenIter,
-) -> ParserResult<String> {
-    let payload = expect::<token::Symbol>(tokens, token_iter)?;
+fn parse_symbol(token_iter: &mut TokenIter) -> ParserResult<String> {
+    let payload = expect::<token::Symbol>(token_iter)?;
     Ok(payload.0)
 }
 
-fn expect<T>(_: &Tokens, token_iter: &mut TokenIter) -> ParserResult<T>
+fn expect<T>(token_iter: &mut TokenIter) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
