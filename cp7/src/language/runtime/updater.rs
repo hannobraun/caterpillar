@@ -161,6 +161,8 @@ fn print_token_range_from_tokens(left: Option<&Token>, right: Option<&Token>) {
 
 #[cfg(test)]
 mod tests {
+    use anyhow::bail;
+
     use crate::language::{
         runtime::{
             functions::{self, Function},
@@ -191,7 +193,7 @@ mod tests {
         let function = interpreter.evaluator.functions.resolve("f")?;
         let Function::UserDefined(functions::UserDefined { body }) = function
         else {
-            panic!("Just defined function, but somehow not user-defined");
+            bail!("Just defined function, but somehow not user-defined")
         };
         let id = body
             .start
