@@ -9,18 +9,17 @@ use crate::language::{
 };
 
 pub fn parse(
-    tokens: &Tokens,
+    _: &Tokens,
     token_iter: TokensLeftToRight,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {
     let mut token_iter = token_iter.peekable();
-    let start = parse_fragment(None, tokens, &mut token_iter, syntax)?;
+    let start = parse_fragment(None, &mut token_iter, syntax)?;
     Ok(ParserOutput { start })
 }
 
 fn parse_fragment(
     terminator: Option<Token>,
-    tokens: &Tokens,
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<FragmentId>> {
@@ -40,7 +39,7 @@ fn parse_fragment(
 
     let payload = match next_token {
         Token::CurlyBracketOpen => {
-            let start = parse_block(tokens, token_iter, syntax)?;
+            let start = parse_block(token_iter, syntax)?;
             let block = value::Block { start };
             SyntaxElement::Value(block.into())
         }
@@ -69,7 +68,7 @@ fn parse_fragment(
         }
     };
 
-    let next = parse_fragment(terminator, tokens, token_iter, syntax)?;
+    let next = parse_fragment(terminator, token_iter, syntax)?;
     let handle =
         syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
 
@@ -77,18 +76,13 @@ fn parse_fragment(
 }
 
 fn parse_block(
-    tokens: &Tokens,
     token_iter: &mut TokenIter,
     syntax: &mut Syntax,
 ) -> ParserResult<Option<FragmentId>> {
     expect::<token::CurlyBracketOpen>(token_iter)?;
 
-    let handle = parse_fragment(
-        Some(Token::CurlyBracketClose),
-        tokens,
-        token_iter,
-        syntax,
-    )?;
+    let handle =
+        parse_fragment(Some(Token::CurlyBracketClose), token_iter, syntax)?;
 
     Ok(handle)
 }
