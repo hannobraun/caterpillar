@@ -197,9 +197,9 @@ mod tests {
             bail!("Expected function `f` to be user-defined")
         };
 
-        let id = body
-            .start
-            .expect("Function not empty, but body has no syntax");
+        let Some(id) = body.start else {
+            bail!("Expected function `f` to not be empty")
+        };
 
         Ok(id)
     }
