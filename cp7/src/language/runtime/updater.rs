@@ -191,10 +191,12 @@ mod tests {
 
     fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
         let function = interpreter.evaluator.functions.resolve("f")?;
+
         let Function::UserDefined(functions::UserDefined { body }) = function
         else {
             bail!("Expected function `f` to be user-defined")
         };
+
         let id = body
             .start
             .expect("Function not empty, but body has no syntax");
