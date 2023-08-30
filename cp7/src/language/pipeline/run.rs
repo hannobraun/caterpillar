@@ -12,7 +12,7 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let addressed_tokens = address(tokens);
-    let ParserOutput { start, .. } =
+    let ParserOutput { start } =
         parse(&addressed_tokens, addressed_tokens.left_to_right(), syntax)?;
 
     Ok(PipelineOutput { start })
