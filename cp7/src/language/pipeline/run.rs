@@ -15,8 +15,7 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens.clone())?;
-    dbg!(syntax_tree);
-    let AnalyzerOutput { start } = analyze(tokens, fragments)?;
+    let AnalyzerOutput { start } = analyze(syntax_tree, fragments);
 
     Ok(PipelineOutput { start })
 }

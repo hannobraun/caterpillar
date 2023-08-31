@@ -3,91 +3,56 @@ use crate::language::repr::{
         fragments::{
             Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
         },
-        value::{self, Value},
+        value::Value,
     },
-    tokens::{token, Token},
-};
-
-use super::b_parser::{
-    expect, parse_number, parse_symbol, parse_word, NoMoreTokens, ParserError,
-    ParserResult, Tokens,
+    syntax::{SyntaxElement, SyntaxTree},
 };
 
 pub fn analyze(
-    tokens: Vec<Token>,
+    syntax_tree: SyntaxTree,
     fragments: &mut Fragments,
-) -> ParserResult<AnalyzerOutput> {
-    let mut tokens = tokens.into_iter().peekable();
-    let start = parse_fragment(None, &mut tokens, fragments)?;
-    Ok(AnalyzerOutput { start })
+) -> AnalyzerOutput {
+    let start = analyze_syntax_tree(syntax_tree, fragments);
+    AnalyzerOutput { start }
 }
 
-fn parse_fragment(
-    terminator: Option<Token>,
-    tokens: &mut Tokens,
+fn analyze_syntax_tree(
+    syntax_tree: SyntaxTree,
     fragments: &mut Fragments,
-) -> ParserResult<Option<FragmentId>> {
-    let next_token = match tokens.peek() {
-        Some(token) => token,
-        None => {
-            if terminator.is_none() {
-                // If there is no terminator, then not having any more tokens is
-                // not an error condition. We've simply reached the end of the
-                // input.
-                return Ok(None);
-            }
+) -> Option<FragmentId> {
+    let mut next_fragment = None;
 
-            return Err(NoMoreTokens.into());
-        }
-    };
+    for syntax_element in syntax_tree.elements.into_iter().rev() {
+        next_fragment = Some(analyze_syntax_element(
+            syntax_element,
+            next_fragment,
+            fragments,
+        ));
+    }
 
-    let payload = match next_token {
-        Token::CurlyBracketOpen => {
-            let start = parse_block(tokens, fragments)?;
-            let block = value::Block { start };
-            FragmentPayload::Value(block.into())
+    next_fragment
+}
+
+fn analyze_syntax_element(
+    syntax_element: SyntaxElement,
+    next: Option<FragmentId>,
+    fragments: &mut Fragments,
+) -> FragmentId {
+    let payload = match syntax_element {
+        SyntaxElement::Block(syntax_tree) => {
+            let start = analyze_syntax_tree(syntax_tree, fragments);
+            FragmentPayload::Value(Value::Block { start })
         }
-        Token::Word(_) => {
-            let word = parse_word(tokens)?;
-            FragmentPayload::Word(word)
-        }
-        Token::Number(_) => {
-            let number = parse_number(tokens)?;
+        SyntaxElement::Number(number) => {
             FragmentPayload::Value(Value::Number(number))
         }
-        Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens)?;
-            FragmentPayload::Value(value::Symbol(symbol).into())
+        SyntaxElement::Symbol(symbol) => {
+            FragmentPayload::Value(Value::Symbol(symbol))
         }
-        _ => {
-            // Only peeked before; still need to consume.
-            let token = tokens.next().unwrap();
-
-            if Some(&token) == terminator.as_ref() {
-                return Ok(None);
-            }
-
-            return Err(ParserError::UnexpectedToken { actual: token });
-        }
+        SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
-    let next = parse_fragment(terminator, tokens, fragments)?;
-    let fragment_id =
-        fragments.add(Fragment::new(FragmentAddress { next }, payload));
-
-    Ok(Some(fragment_id))
-}
-
-fn parse_block(
-    tokens: &mut Tokens,
-    fragments: &mut Fragments,
-) -> ParserResult<Option<FragmentId>> {
-    expect::<token::CurlyBracketOpen>(tokens)?;
-
-    let fragment_id =
-        parse_fragment(Some(Token::CurlyBracketClose), tokens, fragments)?;
-
-    Ok(fragment_id)
+    fragments.add(Fragment::new(FragmentAddress { next }, payload))
 }
 
 pub struct AnalyzerOutput {
