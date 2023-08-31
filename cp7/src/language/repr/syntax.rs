@@ -78,7 +78,7 @@ pub struct Fragment {
 }
 
 impl Fragment {
-    pub fn new(payload: FragmentPayload, address: FragmentAddress) -> Self {
+    pub fn new(address: FragmentAddress, payload: FragmentPayload) -> Self {
         Self { address, payload }
     }
 

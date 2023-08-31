@@ -69,7 +69,7 @@ fn parse_fragment(
 
     let next = parse_fragment(terminator, tokens, syntax)?;
     let fragment_id =
-        syntax.add(Fragment::new(payload, FragmentAddress { next }));
+        syntax.add(Fragment::new(FragmentAddress { next }, payload));
 
     Ok(Some(fragment_id))
 }
