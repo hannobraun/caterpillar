@@ -1,6 +1,6 @@
 use crate::language::repr::{
     eval::value::{self, Value},
-    syntax::{Fragment, FragmentAddress, FragmentId, Syntax, SyntaxElement},
+    syntax::{Fragment, FragmentAddress, FragmentId, FragmentPayload, Syntax},
     tokens::{token, Token},
 };
 
@@ -41,19 +41,19 @@ fn parse_fragment(
         Token::CurlyBracketOpen => {
             let start = parse_block(tokens, syntax)?;
             let block = value::Block { start };
-            SyntaxElement::Value(block.into())
+            FragmentPayload::Value(block.into())
         }
         Token::Word(_) => {
             let word = parse_word(tokens)?;
-            SyntaxElement::Word(word)
+            FragmentPayload::Word(word)
         }
         Token::Number(_) => {
             let number = parse_number(tokens)?;
-            SyntaxElement::Value(Value::Number(number))
+            FragmentPayload::Value(Value::Number(number))
         }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
-            SyntaxElement::Value(value::Symbol(symbol).into())
+            FragmentPayload::Value(value::Symbol(symbol).into())
         }
         _ => {
             // Only peeked before; still need to consume.

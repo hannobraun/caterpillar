@@ -110,12 +110,12 @@ impl FragmentAddress {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Fragment {
-    pub payload: SyntaxElement,
+    pub payload: FragmentPayload,
     address: FragmentAddress,
 }
 
 impl Fragment {
-    pub fn new(payload: SyntaxElement, address: FragmentAddress) -> Self {
+    pub fn new(payload: FragmentPayload, address: FragmentAddress) -> Self {
         Self { payload, address }
     }
 
@@ -134,12 +134,12 @@ impl Fragment {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum SyntaxElement {
+pub enum FragmentPayload {
     Value(Value),
     Word(String),
 }
 
-impl fmt::Display for SyntaxElement {
+impl fmt::Display for FragmentPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::Value(value) => write!(f, "{value}"),

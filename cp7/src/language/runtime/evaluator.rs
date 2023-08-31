@@ -1,4 +1,4 @@
-use crate::language::repr::syntax::{Syntax, SyntaxElement};
+use crate::language::repr::syntax::{FragmentPayload, Syntax};
 
 use super::{
     call_stack::CallStack,
@@ -34,7 +34,7 @@ impl Evaluator {
         let next_fragment = syntax_fragment.next();
 
         match syntax_fragment.payload {
-            SyntaxElement::Word(word) => {
+            FragmentPayload::Word(word) => {
                 match self.functions.resolve(&word)? {
                     Function::Intrinsic(intrinsic) => {
                         intrinsic(&mut self.functions, &mut self.data_stack)?
@@ -51,7 +51,7 @@ impl Evaluator {
                     }
                 }
             }
-            SyntaxElement::Value(value) => {
+            FragmentPayload::Value(value) => {
                 self.data_stack.push(value);
             }
         };
