@@ -13,10 +13,10 @@ use super::b_parser::{
 
 pub fn analyze(
     tokens: Vec<Token>,
-    syntax: &mut Fragments,
+    fragments: &mut Fragments,
 ) -> ParserResult<AnalyzerOutput> {
     let mut tokens = tokens.into_iter().peekable();
-    let start = parse_fragment(None, &mut tokens, syntax)?;
+    let start = parse_fragment(None, &mut tokens, fragments)?;
     Ok(AnalyzerOutput { start })
 }
 
