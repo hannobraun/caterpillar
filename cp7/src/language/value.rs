@@ -2,7 +2,7 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use super::repr::syntax::FragmentId;
+use crate::language::repr::syntax::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
