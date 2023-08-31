@@ -1,7 +1,9 @@
 use crate::language::repr::{
-    eval::value::{self, Value},
-    fragments::{
-        Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
+    eval::{
+        fragments::{
+            Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
+        },
+        value::{self, Value},
     },
     tokens::{token, Token},
 };

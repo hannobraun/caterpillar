@@ -1,4 +1,4 @@
-use crate::language::repr::fragments::Fragments;
+use crate::language::repr::eval::fragments::Fragments;
 
 use super::evaluator::Evaluator;
 
@@ -13,7 +13,7 @@ mod tests {
     use anyhow::bail;
 
     use crate::language::{
-        repr::fragments::FragmentId,
+        repr::eval::fragments::FragmentId,
         runtime::{
             functions::{self, Function},
             interpreter::Interpreter,

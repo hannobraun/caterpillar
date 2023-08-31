@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use super::eval::value::Value;
+use super::value::Value;
 
 #[derive(Debug)]
 pub struct Fragments {
