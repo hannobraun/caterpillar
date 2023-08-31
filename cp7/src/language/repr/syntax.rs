@@ -4,7 +4,7 @@ use super::eval::value::Value;
 
 #[derive(Debug)]
 pub struct Syntax {
-    by_id: HashMap<FragmentId, SyntaxFragment>,
+    by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
     replacements: HashMap<FragmentId, FragmentId>,
 }
@@ -18,7 +18,7 @@ impl Syntax {
         }
     }
 
-    pub fn add(&mut self, fragment: SyntaxFragment) -> FragmentId {
+    pub fn add(&mut self, fragment: Fragment) -> FragmentId {
         let id = FragmentId {
             hash: fragment.hash(),
         };
@@ -48,7 +48,7 @@ impl Syntax {
         id
     }
 
-    pub fn get(&self, id: FragmentId) -> SyntaxFragment {
+    pub fn get(&self, id: FragmentId) -> Fragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create IDs for fragments we add.
         self.by_id.get(&id).cloned().unwrap()
@@ -109,12 +109,12 @@ impl FragmentAddress {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SyntaxFragment {
+pub struct Fragment {
     pub payload: SyntaxElement,
     address: FragmentAddress,
 }
 
-impl SyntaxFragment {
+impl Fragment {
     pub fn new(payload: SyntaxElement, address: FragmentAddress) -> Self {
         Self { payload, address }
     }

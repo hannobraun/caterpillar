@@ -1,8 +1,6 @@
 use crate::language::repr::{
     eval::value::{self, Value},
-    syntax::{
-        FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
-    },
+    syntax::{Fragment, FragmentAddress, FragmentId, Syntax, SyntaxElement},
     tokens::{token, Token},
 };
 
@@ -71,7 +69,7 @@ fn parse_fragment(
 
     let next = parse_fragment(terminator, tokens, syntax)?;
     let fragment_id =
-        syntax.add(SyntaxFragment::new(payload, FragmentAddress { next }));
+        syntax.add(Fragment::new(payload, FragmentAddress { next }));
 
     Ok(Some(fragment_id))
 }
