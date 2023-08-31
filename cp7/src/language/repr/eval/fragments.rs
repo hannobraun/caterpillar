@@ -89,8 +89,8 @@ impl Fragment {
     fn hash(&self) -> blake3::Hash {
         let mut hasher = blake3::Hasher::new();
 
-        hasher.update(self.payload.to_string().as_bytes());
         self.address.hash(&mut hasher);
+        self.payload.hash(&mut hasher);
 
         hasher.finalize()
     }
@@ -118,6 +118,31 @@ impl FragmentAddress {
 pub enum FragmentPayload {
     Value(Value),
     Word(String),
+}
+
+impl FragmentPayload {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        match self {
+            FragmentPayload::Value(Value::Block { start }) => {
+                hasher.update(b"block");
+                if let Some(start) = start {
+                    hasher.update(start.hash.as_bytes());
+                }
+            }
+            FragmentPayload::Value(Value::Number(number)) => {
+                hasher.update(b"number");
+                hasher.update(&number.to_le_bytes());
+            }
+            FragmentPayload::Value(Value::Symbol(symbol)) => {
+                hasher.update(b"symbol");
+                hasher.update(symbol.as_bytes());
+            }
+            FragmentPayload::Word(word) => {
+                hasher.update(b"word");
+                hasher.update(word.as_bytes());
+            }
+        }
+    }
 }
 
 impl fmt::Display for FragmentPayload {
