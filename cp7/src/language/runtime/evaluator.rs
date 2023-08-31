@@ -24,10 +24,10 @@ impl Evaluator {
 
     pub fn step(
         &mut self,
-        syntax: &Fragments,
+        fragments: &Fragments,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let syntax_fragment = match self.call_stack.current() {
-            Some(handle) => syntax.get(handle),
+            Some(handle) => fragments.get(handle),
             None => return Ok(EvaluatorState::Finished),
         };
 
