@@ -73,13 +73,13 @@ impl fmt::Display for FragmentId {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Fragment {
-    pub payload: FragmentPayload,
     address: FragmentAddress,
+    pub payload: FragmentPayload,
 }
 
 impl Fragment {
     pub fn new(payload: FragmentPayload, address: FragmentAddress) -> Self {
-        Self { payload, address }
+        Self { address, payload }
     }
 
     pub fn next(&self) -> Option<FragmentId> {
