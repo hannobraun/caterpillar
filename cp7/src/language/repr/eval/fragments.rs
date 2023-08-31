@@ -99,34 +99,15 @@ impl Fragment {
 /// Uniquely identifies the location of a syntax fragment in the code
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentAddress {
-    // Knowing the next syntax fragment does not uniquely identify a syntax
-    // fragment. Multiple functions might end in the same way, and then for the
-    // syntax fragment preceding that common suffix, if one of them was changed,
-    // we won't be able to tell which one.
-    //
-    // Knowing the previous syntax fragment doesn't help either, as different
-    // functions might contain identical syntax. Then for any change in one of
-    // them, we won't know where that change occurred.
-    //
-    // We need to know the parent of the syntax element. That will enable us to
-    // uniquely identify syntax fragments in both of those cases. The question
-    // is do we need to know the previous fragment in addition? Or does knowing
-    // the parent and the next one uniquely identify every syntax fragment in
-    // every situation?
-    //
-    // Additionally, is the next syntax fragment the best piece of information
-    // to know, in addition to the parent? Could it be better to know the
-    // previous one (in addition to the parent) instead?
-    //
-    // That would be easier on the parser, and I can't think of any difference
-    // as far as uniquely identifying syntax fragments goes. It would be
-    // problematic for the evaluator though, as it would need another means to
-    // know which syntax fragment to execute next.
+    pub parent: Option<FragmentId>,
     pub next: Option<FragmentId>,
 }
 
 impl FragmentAddress {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        if let Some(parent) = self.parent {
+            hasher.update(parent.hash.as_bytes());
+        }
         if let Some(next) = self.next {
             hasher.update(next.hash.as_bytes());
         }

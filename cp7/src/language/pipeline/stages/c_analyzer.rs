@@ -12,12 +12,14 @@ pub fn analyze(
     syntax_tree: SyntaxTree,
     fragments: &mut Fragments,
 ) -> AnalyzerOutput {
-    let start = analyze_syntax_tree(syntax_tree, fragments);
+    let parent = None;
+    let start = analyze_syntax_tree(syntax_tree, parent, fragments);
     AnalyzerOutput { start }
 }
 
 fn analyze_syntax_tree(
     syntax_tree: SyntaxTree,
+    parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> Option<FragmentId> {
     let mut next_fragment = None;
@@ -25,6 +27,7 @@ fn analyze_syntax_tree(
     for syntax_element in syntax_tree.elements.into_iter().rev() {
         next_fragment = Some(analyze_syntax_element(
             syntax_element,
+            parent,
             next_fragment,
             fragments,
         ));
@@ -35,12 +38,13 @@ fn analyze_syntax_tree(
 
 fn analyze_syntax_element(
     syntax_element: SyntaxElement,
+    parent: Option<FragmentId>,
     next: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
         SyntaxElement::Block(syntax_tree) => {
-            let start = analyze_syntax_tree(syntax_tree, fragments);
+            let start = analyze_syntax_tree(syntax_tree, next, fragments);
             FragmentPayload::Value(Value::Block { start })
         }
         SyntaxElement::Number(number) => {
@@ -52,7 +56,7 @@ fn analyze_syntax_element(
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
-    fragments.add(Fragment::new(FragmentAddress { next }, payload))
+    fragments.add(Fragment::new(FragmentAddress { parent, next }, payload))
 }
 
 pub struct AnalyzerOutput {
