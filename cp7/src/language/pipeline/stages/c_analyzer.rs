@@ -23,7 +23,7 @@ pub fn analyze(
 fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut Tokens,
-    syntax: &mut Fragments,
+    fragments: &mut Fragments,
 ) -> ParserResult<Option<FragmentId>> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -41,7 +41,7 @@ fn parse_fragment(
 
     let payload = match next_token {
         Token::CurlyBracketOpen => {
-            let start = parse_block(tokens, syntax)?;
+            let start = parse_block(tokens, fragments)?;
             let block = value::Block { start };
             FragmentPayload::Value(block.into())
         }
@@ -69,9 +69,9 @@ fn parse_fragment(
         }
     };
 
-    let next = parse_fragment(terminator, tokens, syntax)?;
+    let next = parse_fragment(terminator, tokens, fragments)?;
     let fragment_id =
-        syntax.add(Fragment::new(FragmentAddress { next }, payload));
+        fragments.add(Fragment::new(FragmentAddress { next }, payload));
 
     Ok(Some(fragment_id))
 }
