@@ -27,7 +27,7 @@ impl Evaluator {
         fragments: &Fragments,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let syntax_fragment = match self.call_stack.current() {
-            Some(handle) => fragments.get(handle),
+            Some(fragment_id) => fragments.get(fragment_id),
             None => return Ok(EvaluatorState::Finished),
         };
 
