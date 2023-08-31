@@ -1,4 +1,4 @@
-use crate::language::repr::syntax::{FragmentId, Fragments};
+use crate::language::repr::fragments::{FragmentId, Fragments};
 
 use super::stages::{
     a_tokenizer::tokenize,

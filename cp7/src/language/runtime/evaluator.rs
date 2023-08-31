@@ -1,4 +1,4 @@
-use crate::language::repr::syntax::{FragmentPayload, Fragments};
+use crate::language::repr::fragments::{FragmentPayload, Fragments};
 
 use super::{
     call_stack::CallStack,

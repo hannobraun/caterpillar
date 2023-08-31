@@ -1,7 +1,7 @@
 use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
-    repr::syntax::Fragments,
+    repr::fragments::Fragments,
 };
 
 use super::{
