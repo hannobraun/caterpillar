@@ -78,12 +78,12 @@ fn parse_fragment(
 
 fn parse_block(
     tokens: &mut Tokens,
-    syntax: &mut Fragments,
+    fragments: &mut Fragments,
 ) -> ParserResult<Option<FragmentId>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
 
     let fragment_id =
-        parse_fragment(Some(Token::CurlyBracketClose), tokens, syntax)?;
+        parse_fragment(Some(Token::CurlyBracketClose), tokens, fragments)?;
 
     Ok(fragment_id)
 }
