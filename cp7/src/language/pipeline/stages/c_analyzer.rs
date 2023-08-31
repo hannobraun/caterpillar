@@ -24,6 +24,9 @@ fn analyze_syntax_tree(
 ) -> Option<FragmentId> {
     let mut next_fragment = None;
 
+    // We're going through the syntax tree right-to-left here, since the ID of
+    // the *next* fragment is part of the address of every fragment (and thus
+    // its own ID).
     for syntax_element in syntax_tree.elements.into_iter().rev() {
         next_fragment = Some(analyze_syntax_element(
             syntax_element,
