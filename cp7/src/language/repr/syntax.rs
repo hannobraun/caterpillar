@@ -142,8 +142,8 @@ pub enum SyntaxElement {
 impl fmt::Display for SyntaxElement {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SyntaxElement::Value(value) => write!(f, "{value}"),
-            SyntaxElement::Word(word) => write!(f, "{word}"),
+            Self::Value(value) => write!(f, "{value}"),
+            Self::Word(word) => write!(f, "{word}"),
         }
     }
 }
