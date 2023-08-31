@@ -85,22 +85,22 @@ fn parse_block(
     Ok(fragment_id)
 }
 
-fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
+pub fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
+pub fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
     let token = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
+pub fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
 
-fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
+pub fn expect<T>(tokens: &mut Tokens) -> ParserResult<T>
 where
     T: TryFrom<Token, Error = Token>,
 {
