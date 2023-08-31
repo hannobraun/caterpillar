@@ -2,8 +2,8 @@ use crate::language::repr::syntax::Fragments;
 
 use super::evaluator::Evaluator;
 
-pub fn update(syntax: &mut Fragments, evaluator: &mut Evaluator) {
-    for (old, new) in syntax.take_replacements() {
+pub fn update(fragments: &mut Fragments, evaluator: &mut Evaluator) {
+    for (old, new) in fragments.take_replacements() {
         evaluator.functions.replace(old, new);
     }
 }
