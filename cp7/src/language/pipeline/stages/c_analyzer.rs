@@ -106,11 +106,11 @@ where
 {
     let token = tokens.next().ok_or(NoMoreTokens)?;
 
-    let payload = token
+    let token = token
         .try_into()
         .map_err(|token| ParserError::UnexpectedToken { actual: token })?;
 
-    Ok(payload)
+    Ok(token)
 }
 
 pub struct AnalyzerOutput {
