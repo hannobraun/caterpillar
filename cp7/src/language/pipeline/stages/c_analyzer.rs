@@ -1,6 +1,8 @@
 use crate::language::repr::{
     eval::value::{self, Value},
-    syntax::{Fragment, FragmentAddress, FragmentId, FragmentPayload, Syntax},
+    syntax::{
+        Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
+    },
     tokens::{token, Token},
 };
 
@@ -11,7 +13,7 @@ use super::b_parser::{
 
 pub fn analyze(
     tokens: Vec<Token>,
-    syntax: &mut Syntax,
+    syntax: &mut Fragments,
 ) -> ParserResult<AnalyzerOutput> {
     let mut tokens = tokens.into_iter().peekable();
     let start = parse_fragment(None, &mut tokens, syntax)?;
@@ -21,7 +23,7 @@ pub fn analyze(
 fn parse_fragment(
     terminator: Option<Token>,
     tokens: &mut Tokens,
-    syntax: &mut Syntax,
+    syntax: &mut Fragments,
 ) -> ParserResult<Option<FragmentId>> {
     let next_token = match tokens.peek() {
         Some(token) => token,
@@ -76,7 +78,7 @@ fn parse_fragment(
 
 fn parse_block(
     tokens: &mut Tokens,
-    syntax: &mut Syntax,
+    syntax: &mut Fragments,
 ) -> ParserResult<Option<FragmentId>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
 

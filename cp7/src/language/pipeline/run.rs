@@ -1,4 +1,4 @@
-use crate::language::repr::syntax::{FragmentId, Syntax};
+use crate::language::repr::syntax::{FragmentId, Fragments};
 
 use super::stages::{
     a_tokenizer::tokenize,
@@ -8,7 +8,7 @@ use super::stages::{
 
 pub fn run(
     code: &str,
-    syntax: &mut Syntax,
+    syntax: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let AnalyzerOutput { start } = analyze(tokens, syntax)?;

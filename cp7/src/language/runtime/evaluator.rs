@@ -1,4 +1,4 @@
-use crate::language::repr::syntax::{FragmentPayload, Syntax};
+use crate::language::repr::syntax::{FragmentPayload, Fragments};
 
 use super::{
     call_stack::CallStack,
@@ -24,7 +24,7 @@ impl Evaluator {
 
     pub fn step(
         &mut self,
-        syntax: &Syntax,
+        syntax: &Fragments,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let syntax_fragment = match self.call_stack.current() {
             Some(handle) => syntax.get(handle),

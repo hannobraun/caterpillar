@@ -1,7 +1,7 @@
 use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
-    repr::syntax::Syntax,
+    repr::syntax::Fragments,
 };
 
 use super::{
@@ -12,13 +12,13 @@ use super::{
 
 #[derive(Debug)]
 pub struct Interpreter {
-    pub syntax: Syntax,
+    pub syntax: Fragments,
     pub evaluator: Evaluator,
 }
 
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
-        let mut syntax = Syntax::new();
+        let mut syntax = Fragments::new();
         let PipelineOutput { start } = pipeline::run(code, &mut syntax)?;
 
         let mut evaluator = Evaluator::new();

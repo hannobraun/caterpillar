@@ -3,13 +3,13 @@ use std::{collections::HashMap, fmt};
 use super::eval::value::Value;
 
 #[derive(Debug)]
-pub struct Syntax {
+pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
     replacements: HashMap<FragmentId, FragmentId>,
 }
 
-impl Syntax {
+impl Fragments {
     pub fn new() -> Self {
         Self {
             by_id: HashMap::new(),
