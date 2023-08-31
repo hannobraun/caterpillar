@@ -12,7 +12,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Interpreter {
-    pub syntax: Fragments,
+    pub fragments: Fragments,
     pub evaluator: Evaluator,
 }
 
@@ -38,16 +38,19 @@ impl Interpreter {
             evaluator.functions.register_intrinsic(name, intrinsic)
         }
 
-        Ok(Interpreter { syntax, evaluator })
+        Ok(Interpreter {
+            fragments: syntax,
+            evaluator,
+        })
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
-        self.evaluator.step(&self.syntax)
+        self.evaluator.step(&self.fragments)
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-        pipeline::run(code, &mut self.syntax)?;
-        updater::update(&mut self.syntax, &mut self.evaluator);
+        pipeline::run(code, &mut self.fragments)?;
+        updater::update(&mut self.fragments, &mut self.evaluator);
 
         Ok(())
     }
