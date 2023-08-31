@@ -71,6 +71,31 @@ impl fmt::Display for FragmentId {
     }
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Fragment {
+    pub payload: FragmentPayload,
+    address: FragmentAddress,
+}
+
+impl Fragment {
+    pub fn new(payload: FragmentPayload, address: FragmentAddress) -> Self {
+        Self { payload, address }
+    }
+
+    pub fn next(&self) -> Option<FragmentId> {
+        self.address.next
+    }
+
+    fn hash(&self) -> blake3::Hash {
+        let mut hasher = blake3::Hasher::new();
+
+        hasher.update(self.payload.to_string().as_bytes());
+        self.address.hash(&mut hasher);
+
+        hasher.finalize()
+    }
+}
+
 /// Uniquely identifies the location of a syntax fragment in the code
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentAddress {
@@ -105,31 +130,6 @@ impl FragmentAddress {
         if let Some(next) = self.next {
             hasher.update(next.hash.as_bytes());
         }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Fragment {
-    pub payload: FragmentPayload,
-    address: FragmentAddress,
-}
-
-impl Fragment {
-    pub fn new(payload: FragmentPayload, address: FragmentAddress) -> Self {
-        Self { payload, address }
-    }
-
-    pub fn next(&self) -> Option<FragmentId> {
-        self.address.next
-    }
-
-    fn hash(&self) -> blake3::Hash {
-        let mut hasher = blake3::Hasher::new();
-
-        hasher.update(self.payload.to_string().as_bytes());
-        self.address.hash(&mut hasher);
-
-        hasher.finalize()
     }
 }
 
