@@ -18,8 +18,8 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
-        let mut syntax = Fragments::new();
-        let PipelineOutput { start } = pipeline::run(code, &mut syntax)?;
+        let mut fragments = Fragments::new();
+        let PipelineOutput { start } = pipeline::run(code, &mut fragments)?;
 
         let mut evaluator = Evaluator::new();
         if let Some(start) = start {
@@ -39,7 +39,7 @@ impl Interpreter {
         }
 
         Ok(Interpreter {
-            fragments: syntax,
+            fragments,
             evaluator,
         })
     }
