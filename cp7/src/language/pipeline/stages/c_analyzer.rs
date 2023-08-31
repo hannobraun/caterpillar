@@ -11,10 +11,10 @@ use super::b_parser::{NoMoreTokens, ParserError, ParserResult, Tokens};
 pub fn analyze(
     tokens: Vec<Token>,
     syntax: &mut Syntax,
-) -> ParserResult<ParserOutput> {
+) -> ParserResult<AnalyzerOutput> {
     let mut tokens = tokens.into_iter().peekable();
     let start = parse_fragment(None, &mut tokens, syntax)?;
-    Ok(ParserOutput { start })
+    Ok(AnalyzerOutput { start })
 }
 
 fn parse_fragment(
@@ -113,6 +113,6 @@ where
     Ok(payload)
 }
 
-pub struct ParserOutput {
+pub struct AnalyzerOutput {
     pub start: Option<FragmentId>,
 }
