@@ -1,4 +1,4 @@
-use crate::language::value::{Type, TypeError, Value};
+use crate::language::repr::eval::value::{Type, TypeError, Value};
 
 #[derive(Debug)]
 pub struct DataStack {

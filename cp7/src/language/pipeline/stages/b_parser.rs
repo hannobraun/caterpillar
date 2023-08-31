@@ -1,13 +1,11 @@
 use std::{iter, vec};
 
-use crate::language::{
-    repr::{
-        syntax::{
-            FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
-        },
-        tokens::{token, Token},
+use crate::language::repr::{
+    eval::value::{self, Value},
+    syntax::{
+        FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
     },
-    value::{self, Value},
+    tokens::{token, Token},
 };
 
 pub fn parse(
