@@ -8,7 +8,7 @@ use crate::language::repr::{
     tokens::{token, Token},
 };
 
-pub fn parse(
+pub fn analyze(
     tokens: Vec<Token>,
     syntax: &mut Syntax,
 ) -> ParserResult<ParserOutput> {

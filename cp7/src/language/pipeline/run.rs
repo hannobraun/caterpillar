@@ -2,7 +2,7 @@ use crate::language::repr::syntax::{FragmentId, Syntax};
 
 use super::stages::{
     a_tokenizer::tokenize,
-    c_analyzer::{parse, ParserError, ParserOutput},
+    c_analyzer::{analyze, ParserError, ParserOutput},
 };
 
 pub fn run(
@@ -10,7 +10,7 @@ pub fn run(
     syntax: &mut Syntax,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let ParserOutput { start } = parse(tokens, syntax)?;
+    let ParserOutput { start } = analyze(tokens, syntax)?;
 
     Ok(PipelineOutput { start })
 }
