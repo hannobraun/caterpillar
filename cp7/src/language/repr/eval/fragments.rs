@@ -144,12 +144,3 @@ impl FragmentPayload {
         }
     }
 }
-
-impl fmt::Display for FragmentPayload {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::Value(value) => write!(f, "{value}"),
-            Self::Word(word) => write!(f, "{word}"),
-        }
-    }
-}
