@@ -74,17 +74,17 @@ fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
     parse_syntax_tree(Some(Token::CurlyBracketClose), tokens)
 }
 
-pub fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
+fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
-pub fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
+fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
     let token = expect::<token::Number>(tokens)?;
     Ok(token.0)
 }
 
-pub fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
+fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::Symbol>(tokens)?;
     Ok(token.0)
 }
