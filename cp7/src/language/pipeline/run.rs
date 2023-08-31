@@ -8,10 +8,10 @@ use super::stages::{
 
 pub fn run(
     code: &str,
-    syntax: &mut Fragments,
+    fragments: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let AnalyzerOutput { start } = analyze(tokens, syntax)?;
+    let AnalyzerOutput { start } = analyze(tokens, fragments)?;
 
     Ok(PipelineOutput { start })
 }
