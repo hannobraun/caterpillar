@@ -1,10 +1,12 @@
 use std::{iter, vec};
 
 use crate::language::{
-    syntax::{
-        FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
+    repr::{
+        syntax::{
+            FragmentAddress, FragmentId, Syntax, SyntaxElement, SyntaxFragment,
+        },
+        tokens::{token, Token},
     },
-    tokens::{token, Token},
     value::{self, Value},
 };
 

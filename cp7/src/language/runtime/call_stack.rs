@@ -1,4 +1,4 @@
-use crate::language::syntax::FragmentId;
+use crate::language::repr::syntax::FragmentId;
 
 #[derive(Debug)]
 pub struct CallStack {

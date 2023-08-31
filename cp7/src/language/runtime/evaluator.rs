@@ -1,4 +1,4 @@
-use crate::language::syntax::{Syntax, SyntaxElement};
+use crate::language::repr::syntax::{Syntax, SyntaxElement};
 
 use super::{
     call_stack::CallStack,

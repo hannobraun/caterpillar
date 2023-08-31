@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::language::tokens::Token;
+use crate::language::repr::tokens::Token;
 
 pub fn tokenize(code: &str) -> Vec<Token> {
     // Make sure that the code always ends on whitespace. Otherwise the

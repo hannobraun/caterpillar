@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::language::{syntax::FragmentId, value};
+use crate::language::{repr::syntax::FragmentId, value};
 
 use super::data_stack::{DataStack, DataStackResult};
 

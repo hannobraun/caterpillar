@@ -1,4 +1,4 @@
-use crate::language::syntax::Syntax;
+use crate::language::repr::syntax::Syntax;
 
 use super::evaluator::Evaluator;
 
@@ -13,11 +13,11 @@ mod tests {
     use anyhow::bail;
 
     use crate::language::{
+        repr::syntax::FragmentId,
         runtime::{
             functions::{self, Function},
             interpreter::Interpreter,
         },
-        syntax::FragmentId,
     };
 
     #[test]
