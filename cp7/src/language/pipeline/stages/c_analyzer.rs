@@ -47,7 +47,8 @@ fn analyze_syntax_element(
 ) -> FragmentId {
     let payload = match syntax_element {
         SyntaxElement::Block(syntax_tree) => {
-            let start = analyze_syntax_tree(syntax_tree, next, fragments);
+            let parent = next;
+            let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Value(Value::Block { start })
         }
         SyntaxElement::Number(number) => {
