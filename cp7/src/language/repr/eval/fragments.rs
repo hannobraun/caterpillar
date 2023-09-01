@@ -34,6 +34,14 @@ impl Fragments {
             // Let's make sure, just for now, there actually are no hash
             // collisions, okay?
             assert_eq!(existing, fragment);
+
+            // If we replaced an existing entry, then let's end it here.
+            // Otherwise, the replacement machinery below will become confused,
+            // thinking the fragment replaces itself.
+            //
+            // Even if that wasn't the case, anything below here is redundant
+            // anyway, if there already was an existing entry.
+            return id;
         }
 
         {
