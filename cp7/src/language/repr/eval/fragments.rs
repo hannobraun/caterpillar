@@ -26,13 +26,13 @@ impl Fragments {
 
         let existing = self.by_id.insert(id, fragment.clone());
 
-        // A hash collision should be exceedingly unlikely, but I'm not sure
-        // quite *how* unlikely. Also, I don't fully trust my code to work
-        // perfectly.
-        //
-        // Let's make sure, just for now, there actually are no hash collisions,
-        // okay?
         if let Some(existing) = existing {
+            // A hash collision should be exceedingly unlikely, but I'm not sure
+            // quite *how* unlikely. Also, I don't fully trust my code to work
+            // perfectly.
+            //
+            // Let's make sure, just for now, there actually are no hash
+            // collisions, okay?
             assert_eq!(existing, fragment);
         }
 
