@@ -34,13 +34,15 @@ impl Fragments {
             assert_eq!(existing, fragment);
         }
 
-        if let Some(existing) = self.by_address.get(&address) {
-            // This is a bit too simplistic to detect changes of more than one
-            // syntax fragment. It will do for now, but to make this more
-            // general, we will eventually have to modify the address by looking
-            // at the already detected replacements.
+        {
+            if let Some(existing) = self.by_address.get(&address) {
+                // This is a bit too simplistic to detect changes of more than
+                // one syntax fragment. It will do for now, but to make this
+                // more general, we will eventually have to modify the address
+                // by looking at the already detected replacements.
 
-            self.replacements.insert(*existing, id);
+                self.replacements.insert(*existing, id);
+            }
         }
 
         self.by_address.insert(address, id);
