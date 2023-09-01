@@ -24,9 +24,7 @@ impl Fragments {
         };
         let address = fragment.address;
 
-        let existing = self.by_id.insert(id, fragment.clone());
-
-        if let Some(existing) = existing {
+        if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
             // A hash collision should be exceedingly unlikely, but I'm not sure
             // quite *how* unlikely. Also, I don't fully trust my code to work
             // perfectly.
