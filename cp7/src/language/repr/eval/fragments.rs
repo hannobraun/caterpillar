@@ -26,7 +26,7 @@ impl Fragments {
         };
         let address = fragment.address;
 
-        debug!("add {}", id);
+        debug!("add {}", id.display_short());
 
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
             // A hash collision should be exceedingly unlikely, but I'm not sure
@@ -77,6 +77,15 @@ impl Fragments {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
     hash: blake3::Hash,
+}
+
+impl FragmentId {
+    pub fn display_short(&self) -> String {
+        // We're returning a `String` here, because the allocation doesn't
+        // really matter at this point. If we need more efficiency, we can add a
+        // custom type with a custom `Display` implementation.
+        self.to_string().split_at(4).0.to_string()
+    }
 }
 
 impl fmt::Display for FragmentId {
