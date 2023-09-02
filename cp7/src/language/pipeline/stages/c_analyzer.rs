@@ -86,7 +86,7 @@ fn analyze_syntax_element(
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
-    fragments.add(Fragment::new(FragmentAddress { parent, next }, payload))
+    fragments.insert(Fragment::new(FragmentAddress { parent, next }, payload))
 }
 
 pub struct AnalyzerOutput {

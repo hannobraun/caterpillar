@@ -20,7 +20,7 @@ impl Fragments {
         }
     }
 
-    pub fn add(&mut self, fragment: Fragment) -> FragmentId {
+    pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
         let id = FragmentId {
             hash: fragment.hash(),
         };
