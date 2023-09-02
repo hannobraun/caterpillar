@@ -84,9 +84,6 @@ pub struct FragmentId {
 
 impl FragmentId {
     pub fn display_short(&self) -> String {
-        // We're returning a `String` here, because the allocation doesn't
-        // really matter at this point. If we need more efficiency, we can add a
-        // custom type with a custom `Display` implementation.
         self.to_string().split_at(4).0.to_string()
     }
 }
