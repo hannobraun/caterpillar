@@ -1,5 +1,7 @@
 use std::{collections::HashMap, fmt};
 
+use tracing::debug;
+
 use super::value::Value;
 
 #[derive(Debug)]
@@ -23,6 +25,8 @@ impl Fragments {
             hash: fragment.hash(),
         };
         let address = fragment.address;
+
+        debug!("add {}", id);
 
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
             // A hash collision should be exceedingly unlikely, but I'm not sure
