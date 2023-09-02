@@ -3,6 +3,12 @@ mod language;
 mod loader;
 
 fn main() -> anyhow::Result<()> {
+    tracing::subscriber::set_global_default(
+        tracing_subscriber::FmtSubscriber::builder()
+            .with_max_level(tracing::Level::DEBUG)
+            .finish(),
+    )?;
+
     let example = args::example()?;
 
     let code = loader::load::load(&example)?;
