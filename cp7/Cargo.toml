@@ -12,8 +12,6 @@ itertools = "*"
 notify = "*"
 notify-debouncer-mini = "*"
 thiserror = "*"
-tracing = "*"
-tracing-subscriber = "*"
 
 [dependencies.clap]
 version = "*"
