@@ -1,7 +1,5 @@
 use std::{collections::HashMap, fmt};
 
-use tracing::debug;
-
 use super::value::Value;
 
 #[derive(Debug)]
@@ -30,7 +28,7 @@ impl Fragments {
             let id = id.display_short();
             let address = address.display_short();
 
-            debug!("insert {id} at {address}");
+            eprintln!("insert {id} at {address}");
         }
 
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
