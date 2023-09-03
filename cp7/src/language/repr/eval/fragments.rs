@@ -26,9 +26,10 @@ impl Fragments {
 
         {
             let id = id.display_short();
+            let payload = fragment.payload.display_short();
             let address = address.display_short();
 
-            eprintln!("insert {id} at {address}");
+            eprintln!("insert {id} ({payload}) at {address}");
         }
 
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
@@ -152,6 +153,13 @@ pub enum FragmentPayload {
 }
 
 impl FragmentPayload {
+    pub fn display_short(&self) -> String {
+        match self {
+            FragmentPayload::Value(value) => format!("value `{value}`"),
+            FragmentPayload::Word(word) => format!("word `{word}`"),
+        }
+    }
+
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             FragmentPayload::Value(Value::Block { start }) => {
