@@ -155,7 +155,10 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     pub fn display_short(&self) -> String {
         match self {
-            FragmentPayload::Value(value) => format!("value `{value}`"),
+            FragmentPayload::Value(value) => {
+                let value = value.display_short();
+                format!("value `{value}`")
+            }
             FragmentPayload::Word(word) => format!("word `{word}`"),
         }
     }
