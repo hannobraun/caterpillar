@@ -24,14 +24,6 @@ impl Fragments {
         };
         let address = fragment.address;
 
-        {
-            let id = id.display_short();
-            let payload = fragment.payload.display_short();
-            let address = address.display_short();
-
-            eprintln!("insert {id} ({payload}) at {address}");
-        }
-
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {
             // A hash collision should be exceedingly unlikely, but I'm not sure
             // quite *how* unlikely. Also, I don't fully trust my code to work
@@ -48,6 +40,14 @@ impl Fragments {
             // Even if that wasn't the case, anything below here is redundant
             // anyway, if there already was an existing entry.
             return id;
+        }
+
+        {
+            let id = id.display_short();
+            let payload = fragment.payload.display_short();
+            let address = address.display_short();
+
+            eprintln!("insert {id} ({payload}) at {address}");
         }
 
         {
