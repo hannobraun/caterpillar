@@ -47,7 +47,16 @@ impl Fragments {
                 // more general, we will eventually have to modify the address
                 // by looking at the already detected replacements.
 
-                self.replacements.insert(*existing, id);
+                if *existing != id {
+                    self.replacements.insert(*existing, id);
+
+                    {
+                        let existing = existing.display_short();
+                        let id = id.display_short();
+
+                        eprintln!("Replace {existing} with {id}");
+                    }
+                }
             }
         }
 
