@@ -42,6 +42,11 @@ impl Fragments {
             return id;
         }
 
+        // If the code was changed already, and we're now changing it back to an
+        // earlier version, we *should* land here, as the insertions are valid
+        // and the replacements need to be registered. However, the early return
+        // above will still fire, because the previous fragments are still here.
+
         {
             let id = id.display_short();
             let payload = fragment.payload.display_short();
