@@ -38,6 +38,25 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
+        let original = ":f { 1 + } fn";
+        let updated = ":f { 2 + } fn";
+
+        let mut interpreter = Interpreter::new(original)?;
+        while interpreter.step()?.in_progress() {}
+
+        interpreter.update(updated)?;
+        let f_updated = extract_f(&interpreter)?;
+
+        interpreter.update(original)?;
+        let f_original = extract_f(&interpreter)?;
+
+        assert_ne!(f_updated, f_original);
+
+        Ok(())
+    }
+
     fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
         let function = interpreter.evaluator.functions.resolve("f")?;
 

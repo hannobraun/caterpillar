@@ -32,20 +32,7 @@ impl Fragments {
             // Let's make sure, just for now, there actually are no hash
             // collisions, okay?
             assert_eq!(existing, fragment);
-
-            // If we replaced an existing entry, then let's end it here.
-            // Otherwise, the replacement machinery below will become confused,
-            // thinking the fragment replaces itself.
-            //
-            // Even if that wasn't the case, anything below here is redundant
-            // anyway, if there already was an existing entry.
-            return id;
         }
-
-        // If the code was changed already, and we're now changing it back to an
-        // earlier version, we *should* land here, as the insertions are valid
-        // and the replacements need to be registered. However, the early return
-        // above will still fire, because the previous fragments are still here.
 
         {
             let id = id.display_short();
