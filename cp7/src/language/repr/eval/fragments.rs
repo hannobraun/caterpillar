@@ -32,9 +32,7 @@ impl Fragments {
             // Let's make sure, just for now, there actually are no hash
             // collisions, okay?
             assert_eq!(existing, fragment);
-        }
-
-        {
+        } else {
             let id = id.display_short();
             let payload = fragment.payload.display_short();
             let address = address.display_short();
