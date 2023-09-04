@@ -50,12 +50,9 @@ impl Fragments {
                 if existing != id {
                     self.replacements.insert(existing, id);
 
-                    {
-                        let existing = existing.display_short();
-                        let id = id.display_short();
-
-                        eprintln!("Replace {existing} with {id}");
-                    }
+                    let existing = existing.display_short();
+                    let id = id.display_short();
+                    eprintln!("Replace {existing} with {id}");
                 }
             }
         }
