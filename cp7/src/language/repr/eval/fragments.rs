@@ -41,14 +41,14 @@ impl Fragments {
         }
 
         {
-            if let Some(existing) = self.by_address.get(&address) {
+            if let Some(existing) = self.by_address.get(&address).copied() {
                 // This is a bit too simplistic to detect changes of more than
                 // one syntax fragment. It will do for now, but to make this
                 // more general, we will eventually have to modify the address
                 // by looking at the already detected replacements.
 
-                if *existing != id {
-                    self.replacements.insert(*existing, id);
+                if existing != id {
+                    self.replacements.insert(existing, id);
 
                     {
                         let existing = existing.display_short();
