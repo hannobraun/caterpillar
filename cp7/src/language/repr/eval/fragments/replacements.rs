@@ -4,21 +4,21 @@ use super::FragmentId;
 
 #[derive(Debug)]
 pub struct Replacements {
-    inner: HashMap<FragmentId, FragmentId>,
+    old_to_new: HashMap<FragmentId, FragmentId>,
 }
 
 impl Replacements {
     pub fn new() -> Self {
         Self {
-            inner: HashMap::new(),
+            old_to_new: HashMap::new(),
         }
     }
 
     pub fn insert(&mut self, old: FragmentId, new: FragmentId) {
-        self.inner.insert(old, new);
+        self.old_to_new.insert(old, new);
     }
 
     pub fn take(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        self.inner.drain().collect()
+        self.old_to_new.drain().collect()
     }
 }
