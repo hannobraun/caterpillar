@@ -58,7 +58,7 @@ impl Fragments {
                 // by looking at the already detected replacements.
 
                 if existing != id {
-                    self.replacements.inner.insert(existing, id);
+                    self.replacements.insert(existing, id);
 
                     let existing = existing.display_short();
                     let id = id.display_short();
