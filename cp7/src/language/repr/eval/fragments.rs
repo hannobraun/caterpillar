@@ -6,6 +6,7 @@ use super::value::Value;
 pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
+    by_next_fragment: HashMap<FragmentId, FragmentId>,
     replacements: HashMap<FragmentId, FragmentId>,
 }
 
@@ -14,6 +15,7 @@ impl Fragments {
         Self {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
+            by_next_fragment: HashMap::new(),
             replacements: HashMap::new(),
         }
     }
@@ -38,6 +40,10 @@ impl Fragments {
             let address = address.display_short();
 
             eprintln!("insert {id} ({payload}) at {address}");
+        }
+
+        if let Some(next) = address.next {
+            self.by_next_fragment.insert(next, id);
         }
 
         {
