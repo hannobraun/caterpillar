@@ -1,4 +1,8 @@
-use std::{collections::HashMap, fmt};
+mod id;
+
+pub use self::id::FragmentId;
+
+use std::collections::HashMap;
 
 use super::value::Value;
 
@@ -84,24 +88,6 @@ impl Fragments {
 #[derive(Debug)]
 struct Replacements {
     inner: HashMap<FragmentId, FragmentId>,
-}
-
-/// Uniquely identifies a syntax fragment
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct FragmentId {
-    hash: blake3::Hash,
-}
-
-impl FragmentId {
-    pub fn display_short(&self) -> String {
-        self.to_string().split_at(4).0.to_string()
-    }
-}
-
-impl fmt::Display for FragmentId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.hash)
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
