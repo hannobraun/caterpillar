@@ -4,7 +4,7 @@ use super::FragmentId;
 
 #[derive(Debug)]
 pub struct Replacements {
-    pub(super) inner: HashMap<FragmentId, FragmentId>,
+    inner: HashMap<FragmentId, FragmentId>,
 }
 
 impl Replacements {
