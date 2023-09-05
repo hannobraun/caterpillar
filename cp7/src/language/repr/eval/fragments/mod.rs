@@ -2,6 +2,7 @@ mod address;
 mod fragment;
 mod id;
 mod payload;
+mod replacements;
 
 pub use self::{
     address::FragmentAddress, fragment::Fragment, id::FragmentId,
@@ -9,6 +10,8 @@ pub use self::{
 };
 
 use std::collections::HashMap;
+
+use self::replacements::Replacements;
 
 #[derive(Debug)]
 pub struct Fragments {
@@ -87,9 +90,4 @@ impl Fragments {
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
         self.replacements.inner.drain().collect()
     }
-}
-
-#[derive(Debug)]
-struct Replacements {
-    inner: HashMap<FragmentId, FragmentId>,
 }
