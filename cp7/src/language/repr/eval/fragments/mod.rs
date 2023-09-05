@@ -1,7 +1,10 @@
+mod address;
 mod id;
 mod payload;
 
-pub use self::{id::FragmentId, payload::FragmentPayload};
+pub use self::{
+    address::FragmentAddress, id::FragmentId, payload::FragmentPayload,
+};
 
 use std::collections::HashMap;
 
@@ -111,31 +114,5 @@ impl Fragment {
         self.payload.hash(&mut hasher);
 
         hasher.finalize()
-    }
-}
-
-/// Uniquely identifies the location of a syntax fragment in the code
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
-pub struct FragmentAddress {
-    pub parent: Option<FragmentId>,
-    pub next: Option<FragmentId>,
-}
-
-impl FragmentAddress {
-    pub fn display_short(&self) -> String {
-        format!(
-            "{{ parent: {:?}, next: {:?} }}",
-            self.parent.map(|id| id.display_short()),
-            self.next.map(|id| id.display_short())
-        )
-    }
-
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        if let Some(parent) = self.parent {
-            hasher.update(parent.hash.as_bytes());
-        }
-        if let Some(next) = self.next {
-            hasher.update(next.hash.as_bytes());
-        }
     }
 }
