@@ -57,6 +57,24 @@ mod tests {
         Ok(())
     }
 
+    #[test]
+    fn update_in_middle_of_named_function() -> anyhow::Result<()> {
+        let original = ":f { 1 1 + } fn";
+        let updated = ":f { 1 2 + } fn";
+
+        let mut interpreter = Interpreter::new(original)?;
+        while interpreter.step()?.in_progress() {}
+
+        let f_original = extract_f(&interpreter)?;
+
+        interpreter.update(updated)?;
+        let f_updated = extract_f(&interpreter)?;
+
+        assert_ne!(f_original, f_updated);
+
+        Ok(())
+    }
+
     fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
         let function = interpreter.evaluator.functions.resolve("f")?;
 

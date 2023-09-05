@@ -21,6 +21,10 @@ impl Replacements {
         self.new_to_old.insert(new, old);
     }
 
+    pub fn replaced_by(&self, new: FragmentId) -> Option<FragmentId> {
+        self.new_to_old.get(&new).copied()
+    }
+
     pub fn take(&mut self) -> Vec<Replacement> {
         self.old_to_new
             .drain()

@@ -50,6 +50,17 @@ impl Fragments {
         }
 
         {
+            let old = address
+                .next
+                .and_then(|next| self.replacements.replaced_by(next))
+                .and_then(|replaced_by_next| {
+                    self.by_next_fragment.get(&replaced_by_next)
+                });
+            if let Some(&old) = old {
+                let new = id;
+                self.replacements.insert(old, new);
+            }
+
             if let Some(existing) = self.by_address.get(&address).copied() {
                 // This is a bit too simplistic to detect changes of more than
                 // one syntax fragment. It will do for now, but to make this
