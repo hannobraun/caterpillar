@@ -79,6 +79,6 @@ impl Fragments {
     }
 
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        self.replacements.inner.drain().collect()
+        self.replacements.take()
     }
 }
