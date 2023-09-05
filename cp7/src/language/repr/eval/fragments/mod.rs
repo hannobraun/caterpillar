@@ -7,5 +7,5 @@ mod replacements;
 
 pub use self::{
     address::FragmentAddress, collection::Fragments, fragment::Fragment,
-    id::FragmentId, payload::FragmentPayload,
+    id::FragmentId, payload::FragmentPayload, replacements::Replacement,
 };

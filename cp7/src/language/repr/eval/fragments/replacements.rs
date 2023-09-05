@@ -18,7 +18,15 @@ impl Replacements {
         self.old_to_new.insert(old, new);
     }
 
-    pub fn take(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        self.old_to_new.drain().collect()
+    pub fn take(&mut self) -> Vec<Replacement> {
+        self.old_to_new
+            .drain()
+            .map(|(old, new)| Replacement { old, new })
+            .collect()
     }
+}
+
+pub struct Replacement {
+    pub old: FragmentId,
+    pub new: FragmentId,
 }

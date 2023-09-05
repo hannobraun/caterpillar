@@ -1,9 +1,9 @@
-use crate::language::repr::eval::fragments::Fragments;
+use crate::language::repr::eval::fragments::{Fragments, Replacement};
 
 use super::evaluator::Evaluator;
 
 pub fn update(fragments: &mut Fragments, evaluator: &mut Evaluator) {
-    for (old, new) in fragments.take_replacements() {
+    for Replacement { old, new } in fragments.take_replacements() {
         evaluator.functions.replace(old, new);
     }
 }

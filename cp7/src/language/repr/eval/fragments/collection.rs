@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
 use super::{
-    replacements::Replacements, Fragment, FragmentAddress, FragmentId,
+    replacements::{Replacement, Replacements},
+    Fragment, FragmentAddress, FragmentId,
 };
 
 #[derive(Debug)]
@@ -76,7 +77,7 @@ impl Fragments {
         self.by_id.get(&id).cloned().unwrap()
     }
 
-    pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
+    pub fn take_replacements(&mut self) -> Vec<Replacement> {
         self.replacements.take()
     }
 }
