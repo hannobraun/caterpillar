@@ -7,7 +7,7 @@ pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
     by_next_fragment: HashMap<FragmentId, FragmentId>,
-    replacements: HashMap<FragmentId, FragmentId>,
+    replacements: Replacements,
 }
 
 impl Fragments {
@@ -16,7 +16,9 @@ impl Fragments {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
             by_next_fragment: HashMap::new(),
-            replacements: HashMap::new(),
+            replacements: Replacements {
+                inner: HashMap::new(),
+            },
         }
     }
 
@@ -54,7 +56,7 @@ impl Fragments {
                 // by looking at the already detected replacements.
 
                 if existing != id {
-                    self.replacements.insert(existing, id);
+                    self.replacements.inner.insert(existing, id);
 
                     let existing = existing.display_short();
                     let id = id.display_short();
@@ -75,8 +77,13 @@ impl Fragments {
     }
 
     pub fn take_replacements(&mut self) -> Vec<(FragmentId, FragmentId)> {
-        self.replacements.drain().collect()
+        self.replacements.inner.drain().collect()
     }
+}
+
+#[derive(Debug)]
+struct Replacements {
+    inner: HashMap<FragmentId, FragmentId>,
 }
 
 /// Uniquely identifies a syntax fragment
