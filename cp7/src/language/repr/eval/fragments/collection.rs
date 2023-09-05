@@ -18,9 +18,7 @@ impl Fragments {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
             by_next_fragment: HashMap::new(),
-            replacements: Replacements {
-                inner: HashMap::new(),
-            },
+            replacements: Replacements::new(),
         }
     }
 

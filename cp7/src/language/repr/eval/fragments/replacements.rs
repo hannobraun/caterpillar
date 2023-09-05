@@ -8,6 +8,12 @@ pub struct Replacements {
 }
 
 impl Replacements {
+    pub fn new() -> Self {
+        Self {
+            inner: HashMap::new(),
+        }
+    }
+
     pub fn insert(&mut self, old: FragmentId, new: FragmentId) {
         self.inner.insert(old, new);
     }
