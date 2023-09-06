@@ -63,13 +63,21 @@ impl Interpreter {
     ) -> Result<(), EvaluatorError> {
         self.evaluator.context.channels.clear();
 
+        let mut num_steps = 0;
+
         loop {
             if self.evaluator.context.channels.contains_key(&channel)
                 && self.evaluator.context.channels[&channel] == 1
             {
                 break;
             }
+
             self.step()?;
+            num_steps += 1;
+
+            if num_steps == 1024 {
+                panic!("Ping took too long");
+            }
         }
 
         Ok(())
