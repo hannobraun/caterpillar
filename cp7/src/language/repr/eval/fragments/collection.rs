@@ -72,8 +72,8 @@ impl Fragments {
                     self.replacements.insert(existing, new);
 
                     let existing = existing.display_short();
-                    let id = new.display_short();
-                    eprintln!("Replace {existing} with {id}");
+                    let new = new.display_short();
+                    eprintln!("Replace {existing} with {new}");
                 }
             }
         }
