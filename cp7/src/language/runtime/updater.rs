@@ -36,18 +36,14 @@ mod tests {
 
     #[test]
     fn update_in_middle_of_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 1 ping } fn f";
-        let updated = ":f { 1 2 ping } fn f";
+        let original = ":f { 1 1 ping f } fn f";
+        let updated = ":f { 1 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
-        while interpreter.step()?.in_progress() {}
-
-        let f_original = extract("f", &interpreter)?;
+        interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
-        let f_updated = extract("f", &interpreter)?;
-
-        assert_ne!(f_original, f_updated);
+        interpreter.wait_for_ping_on_channel(2)?;
 
         Ok(())
     }
