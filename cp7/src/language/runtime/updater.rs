@@ -22,8 +22,8 @@ mod tests {
 
     #[test]
     fn update_at_beginning_of_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 + } fn";
-        let updated = ":f { 2 + } fn";
+        let original = ":f { 1 ping } fn f";
+        let updated = ":f { 2 ping } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
         while interpreter.step()?.in_progress() {}
@@ -40,8 +40,8 @@ mod tests {
 
     #[test]
     fn update_in_middle_of_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 1 + } fn";
-        let updated = ":f { 1 2 + } fn";
+        let original = ":f { 1 1 ping } fn f";
+        let updated = ":f { 1 2 ping } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
         while interpreter.step()?.in_progress() {}
@@ -58,8 +58,8 @@ mod tests {
 
     #[test]
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
-        let original = ":f { 1 + } fn";
-        let updated = ":f { 2 + } fn";
+        let original = ":f { 1 ping } fn f";
+        let updated = ":f { 2 ping } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
         while interpreter.step()?.in_progress() {}
