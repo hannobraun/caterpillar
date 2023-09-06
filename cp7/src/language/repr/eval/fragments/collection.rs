@@ -68,10 +68,11 @@ impl Fragments {
 
             if let Some(existing) = self.by_address.get(&address).copied() {
                 if existing != id {
-                    self.replacements.insert(existing, id);
+                    let new = id;
+                    self.replacements.insert(existing, new);
 
                     let existing = existing.display_short();
-                    let id = id.display_short();
+                    let id = new.display_short();
                     eprintln!("Replace {existing} with {id}");
                 }
             }
