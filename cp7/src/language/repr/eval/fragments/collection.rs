@@ -9,7 +9,7 @@ use super::{
 pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
-    by_next_fragment: HashMap<FragmentId, FragmentId>,
+    by_next: HashMap<FragmentId, FragmentId>,
     replacements: Replacements,
 }
 
@@ -18,7 +18,7 @@ impl Fragments {
         Self {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
-            by_next_fragment: HashMap::new(),
+            by_next: HashMap::new(),
             replacements: Replacements::new(),
         }
     }
@@ -46,7 +46,7 @@ impl Fragments {
         }
 
         if let Some(next) = address.next {
-            self.by_next_fragment.insert(next, id);
+            self.by_next.insert(next, id);
         }
 
         {
@@ -54,7 +54,7 @@ impl Fragments {
                 .next
                 .and_then(|next| self.replacements.replaced_by(next))
                 .and_then(|replaced_by_next| {
-                    self.by_next_fragment.get(&replaced_by_next)
+                    self.by_next.get(&replaced_by_next)
                 });
             if let Some(&old) = old_whose_next_has_been_replaced {
                 let new = id;
