@@ -50,13 +50,13 @@ impl Fragments {
         }
 
         {
-            let old = address
+            let old_whose_next_has_been_replaced = address
                 .next
                 .and_then(|next| self.replacements.replaced_by(next))
                 .and_then(|replaced_by_next| {
                     self.by_next_fragment.get(&replaced_by_next)
                 });
-            if let Some(&old) = old {
+            if let Some(&old) = old_whose_next_has_been_replaced {
                 let new = id;
                 self.replacements.insert(old, new);
             }
