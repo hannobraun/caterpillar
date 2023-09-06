@@ -9,6 +9,7 @@ use super::{
 pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
+    by_parent: HashMap<FragmentId, FragmentId>,
     by_next: HashMap<FragmentId, FragmentId>,
     replacements: Replacements,
 }
@@ -18,6 +19,7 @@ impl Fragments {
         Self {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
+            by_parent: HashMap::new(),
             by_next: HashMap::new(),
             replacements: Replacements::new(),
         }
@@ -45,6 +47,9 @@ impl Fragments {
             eprintln!("insert {id} ({payload}) at {address}");
         }
 
+        if let Some(parent) = address.parent {
+            self.by_parent.insert(parent, id);
+        }
         if let Some(next) = address.next {
             self.by_next.insert(next, id);
         }
