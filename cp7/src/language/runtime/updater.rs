@@ -10,15 +10,7 @@ pub fn update(fragments: &mut Fragments, evaluator: &mut Evaluator) {
 
 #[cfg(test)]
 mod tests {
-    use anyhow::bail;
-
-    use crate::language::{
-        repr::eval::fragments::FragmentId,
-        runtime::{
-            functions::{self, Function},
-            interpreter::Interpreter,
-        },
-    };
+    use crate::language::runtime::interpreter::Interpreter;
 
     #[test]
     fn update_at_beginning_of_named_function() -> anyhow::Result<()> {
@@ -50,38 +42,18 @@ mod tests {
 
     #[test]
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
-        let original = ":f { 1 ping } fn f";
-        let updated = ":f { 2 ping } fn f";
+        let original = ":f { 1 ping f } fn f";
+        let updated = ":f { 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
-        while interpreter.step()?.in_progress() {}
+        interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
-        let f_updated = extract("f", &interpreter)?;
+        interpreter.wait_for_ping_on_channel(2)?;
 
         interpreter.update(original)?;
-        let f_original = extract("f", &interpreter)?;
-
-        assert_ne!(f_updated, f_original);
+        interpreter.wait_for_ping_on_channel(1)?;
 
         Ok(())
-    }
-
-    fn extract(
-        name: &str,
-        interpreter: &Interpreter,
-    ) -> anyhow::Result<FragmentId> {
-        let function = interpreter.evaluator.functions.resolve(name)?;
-
-        let Function::UserDefined(functions::UserDefined { body }) = function
-        else {
-            bail!("Expected function `{name}` to be user-defined")
-        };
-
-        let Some(id) = body.start else {
-            bail!("Expected function `{name}` to not be empty")
-        };
-
-        Ok(id)
     }
 }
