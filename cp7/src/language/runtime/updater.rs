@@ -83,11 +83,11 @@ mod tests {
 
         let Function::UserDefined(functions::UserDefined { body }) = function
         else {
-            bail!("Expected function `f` to be user-defined")
+            bail!("Expected function `{name}` to be user-defined")
         };
 
         let Some(id) = body.start else {
-            bail!("Expected function `f` to not be empty")
+            bail!("Expected function `{name}` to not be empty")
         };
 
         Ok(id)
