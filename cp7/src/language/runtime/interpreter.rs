@@ -76,7 +76,7 @@ impl Interpreter {
             num_steps += 1;
 
             if num_steps == 1024 {
-                panic!("Ping took too long");
+                panic!("Waiting for ping on channel {channel} took too long");
             }
         }
 
