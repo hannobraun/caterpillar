@@ -20,7 +20,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new() -> Self {
         Self {
-            context: Context {},
+            context: Context::new(),
             functions: Functions::new(),
             call_stack: CallStack::new(),
             data_stack: DataStack::new(),

@@ -11,6 +11,12 @@ use super::{
 #[derive(Debug)]
 pub struct Context {}
 
+impl Context {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 pub fn add(
     _: &mut Context,
     _: &mut Functions,
