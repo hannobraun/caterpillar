@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+use std::{collections::HashMap, thread, time::Duration};
 
 use super::{
     repr::eval::value,
@@ -9,11 +9,15 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct Context {}
+pub struct Context {
+    pub channels: HashMap<i64, i64>,
+}
 
 impl Context {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            channels: HashMap::new(),
+        }
     }
 }
 
