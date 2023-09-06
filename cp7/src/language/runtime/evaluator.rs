@@ -1,4 +1,7 @@
-use crate::language::repr::eval::fragments::{FragmentPayload, Fragments};
+use crate::language::{
+    intrinsics::Context,
+    repr::eval::fragments::{FragmentPayload, Fragments},
+};
 
 use super::{
     call_stack::CallStack,
@@ -36,9 +39,11 @@ impl Evaluator {
         match syntax_fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(&word)? {
-                    Function::Intrinsic(intrinsic) => {
-                        intrinsic(&mut self.functions, &mut self.data_stack)?
-                    }
+                    Function::Intrinsic(intrinsic) => intrinsic(
+                        &mut Context {},
+                        &mut self.functions,
+                        &mut self.data_stack,
+                    )?,
                     Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(start) = body.start {
                             // Need to advance the current stack frame before we

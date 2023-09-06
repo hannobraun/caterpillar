@@ -1,6 +1,9 @@
 use std::collections::BTreeMap;
 
-use crate::language::repr::eval::{fragments::FragmentId, value};
+use crate::language::{
+    intrinsics::Context,
+    repr::eval::{fragments::FragmentId, value},
+};
 
 use super::data_stack::{DataStack, DataStackResult};
 
@@ -51,7 +54,8 @@ pub enum Function {
     UserDefined(UserDefined),
 }
 
-pub type Intrinsic = fn(&mut Functions, &mut DataStack) -> DataStackResult<()>;
+pub type Intrinsic =
+    fn(&mut Context, &mut Functions, &mut DataStack) -> DataStackResult<()>;
 
 #[derive(Debug)]
 pub struct UserDefined {

@@ -8,7 +8,10 @@ use super::{
     },
 };
 
+pub struct Context {}
+
 pub fn add(
+    _: &mut Context,
     _: &mut Functions,
     data_stack: &mut DataStack,
 ) -> DataStackResult<()> {
@@ -21,6 +24,7 @@ pub fn add(
 }
 
 pub fn clone(
+    _: &mut Context,
     _: &mut Functions,
     data_stack: &mut DataStack,
 ) -> DataStackResult<()> {
@@ -33,6 +37,7 @@ pub fn clone(
 }
 
 pub fn delay_ms(
+    _: &mut Context,
     _: &mut Functions,
     data_stack: &mut DataStack,
 ) -> DataStackResult<()> {
@@ -42,6 +47,7 @@ pub fn delay_ms(
 }
 
 pub fn fn_(
+    _: &mut Context,
     functions: &mut Functions,
     data_stack: &mut DataStack,
 ) -> DataStackResult<()> {
@@ -54,6 +60,7 @@ pub fn fn_(
 }
 
 pub fn print_line(
+    _: &mut Context,
     _: &mut Functions,
     data_stack: &mut DataStack,
 ) -> DataStackResult<()> {
