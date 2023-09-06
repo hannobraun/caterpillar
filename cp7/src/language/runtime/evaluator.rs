@@ -11,6 +11,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator {
+    pub context: Context,
     pub functions: Functions,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
@@ -19,6 +20,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new() -> Self {
         Self {
+            context: Context {},
             functions: Functions::new(),
             call_stack: CallStack::new(),
             data_stack: DataStack::new(),
@@ -40,7 +42,7 @@ impl Evaluator {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(&word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(
-                        &mut Context {},
+                        &mut self.context,
                         &mut self.functions,
                         &mut self.data_stack,
                     )?,
