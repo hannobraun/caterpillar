@@ -28,10 +28,10 @@ mod tests {
         let mut interpreter = Interpreter::new(original)?;
         while interpreter.step()?.in_progress() {}
 
-        let f_original = extract_f(&interpreter)?;
+        let f_original = extract_f("f", &interpreter)?;
 
         interpreter.update(updated)?;
-        let f_updated = extract_f(&interpreter)?;
+        let f_updated = extract_f("f", &interpreter)?;
 
         assert_ne!(f_original, f_updated);
 
@@ -47,10 +47,10 @@ mod tests {
         while interpreter.step()?.in_progress() {}
 
         interpreter.update(updated)?;
-        let f_updated = extract_f(&interpreter)?;
+        let f_updated = extract_f("f", &interpreter)?;
 
         interpreter.update(original)?;
-        let f_original = extract_f(&interpreter)?;
+        let f_original = extract_f("f", &interpreter)?;
 
         assert_ne!(f_updated, f_original);
 
@@ -65,18 +65,21 @@ mod tests {
         let mut interpreter = Interpreter::new(original)?;
         while interpreter.step()?.in_progress() {}
 
-        let f_original = extract_f(&interpreter)?;
+        let f_original = extract_f("f", &interpreter)?;
 
         interpreter.update(updated)?;
-        let f_updated = extract_f(&interpreter)?;
+        let f_updated = extract_f("f", &interpreter)?;
 
         assert_ne!(f_original, f_updated);
 
         Ok(())
     }
 
-    fn extract_f(interpreter: &Interpreter) -> anyhow::Result<FragmentId> {
-        let function = interpreter.evaluator.functions.resolve("f")?;
+    fn extract_f(
+        name: &str,
+        interpreter: &Interpreter,
+    ) -> anyhow::Result<FragmentId> {
+        let function = interpreter.evaluator.functions.resolve(name)?;
 
         let Function::UserDefined(functions::UserDefined { body }) = function
         else {
