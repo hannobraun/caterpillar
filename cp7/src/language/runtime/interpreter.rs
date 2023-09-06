@@ -61,6 +61,8 @@ impl Interpreter {
         &mut self,
         channel: i64,
     ) -> Result<(), EvaluatorError> {
+        self.evaluator.context.channels.clear();
+
         loop {
             if self.evaluator.context.channels.contains_key(&channel)
                 && self.evaluator.context.channels[&channel] == 1
