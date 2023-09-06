@@ -26,24 +26,10 @@ mod tests {
         let updated = ":f { 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
-        loop {
-            if interpreter.evaluator.context.channels.contains_key(&1)
-                && interpreter.evaluator.context.channels[&1] == 1
-            {
-                break;
-            }
-            interpreter.step()?;
-        }
+        interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
-        loop {
-            if interpreter.evaluator.context.channels.contains_key(&2)
-                && interpreter.evaluator.context.channels[&2] == 1
-            {
-                break;
-            }
-            interpreter.step()?;
-        }
+        interpreter.wait_for_ping_on_channel(2)?;
 
         Ok(())
     }

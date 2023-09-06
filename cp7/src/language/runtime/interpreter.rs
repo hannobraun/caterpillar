@@ -55,4 +55,21 @@ impl Interpreter {
 
         Ok(())
     }
+
+    #[cfg(test)]
+    pub fn wait_for_ping_on_channel(
+        &mut self,
+        channel: i64,
+    ) -> Result<(), EvaluatorError> {
+        loop {
+            if self.evaluator.context.channels.contains_key(&channel)
+                && self.evaluator.context.channels[&channel] == 1
+            {
+                break;
+            }
+            self.step()?;
+        }
+
+        Ok(())
+    }
 }
