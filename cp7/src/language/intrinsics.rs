@@ -8,6 +8,7 @@ use super::{
     },
 };
 
+#[derive(Debug)]
 pub struct Context {}
 
 pub fn add(
