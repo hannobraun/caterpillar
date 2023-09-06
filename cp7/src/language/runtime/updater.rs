@@ -22,18 +22,28 @@ mod tests {
 
     #[test]
     fn update_at_beginning_of_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 ping } fn f";
-        let updated = ":f { 2 ping } fn f";
+        let original = ":f { 1 ping f } fn f";
+        let updated = ":f { 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
-        while interpreter.step()?.in_progress() {}
-
-        let f_original = extract("f", &interpreter)?;
+        loop {
+            if interpreter.evaluator.context.channels.contains_key(&1)
+                && interpreter.evaluator.context.channels[&1] == 1
+            {
+                break;
+            }
+            interpreter.step()?;
+        }
 
         interpreter.update(updated)?;
-        let f_updated = extract("f", &interpreter)?;
-
-        assert_ne!(f_original, f_updated);
+        loop {
+            if interpreter.evaluator.context.channels.contains_key(&2)
+                && interpreter.evaluator.context.channels[&2] == 1
+            {
+                break;
+            }
+            interpreter.step()?;
+        }
 
         Ok(())
     }
