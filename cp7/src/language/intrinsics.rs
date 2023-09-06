@@ -70,6 +70,16 @@ pub fn fn_(
     Ok(())
 }
 
+pub fn ping(
+    context: &mut Context,
+    _: &mut Functions,
+    data_stack: &mut DataStack,
+) -> DataStackResult<()> {
+    let channel = data_stack.pop_specific::<value::Number>()?;
+    *context.channels.entry(channel.0).or_insert(0) += 1;
+    Ok(())
+}
+
 pub fn print_line(
     _: &mut Context,
     _: &mut Functions,

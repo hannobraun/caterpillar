@@ -30,6 +30,7 @@ impl Interpreter {
             ("+", intrinsics::add as Intrinsic),
             ("clone", intrinsics::clone),
             ("delay_ms", intrinsics::delay_ms),
+            ("ping", intrinsics::ping),
             ("print_line", intrinsics::print_line),
             ("fn", intrinsics::fn_),
         ];
