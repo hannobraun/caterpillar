@@ -1,13 +1,12 @@
 use crate::language::{
     intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
-    repr::eval::fragments::Fragments,
+    repr::eval::fragments::{Fragments, Replacement},
 };
 
 use super::{
     evaluator::{Evaluator, EvaluatorError, EvaluatorState},
     functions::Intrinsic,
-    updater,
 };
 
 #[derive(Debug)]
@@ -51,10 +50,10 @@ impl Interpreter {
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
         pipeline::run(code, &mut self.fragments)?;
-        updater::update(
-            self.fragments.take_replacements(),
-            &mut self.evaluator,
-        );
+
+        for Replacement { old, new } in self.fragments.take_replacements() {
+            self.evaluator.functions.replace(old, new);
+        }
 
         Ok(())
     }
