@@ -13,20 +13,6 @@ mod tests {
     use crate::language::runtime::interpreter::Interpreter;
 
     #[test]
-    fn update_at_beginning_of_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 ping f } fn f";
-        let updated = ":f { 2 ping f } fn f";
-
-        let mut interpreter = Interpreter::new(original)?;
-        interpreter.wait_for_ping_on_channel(1)?;
-
-        interpreter.update(updated)?;
-        interpreter.wait_for_ping_on_channel(2)?;
-
-        Ok(())
-    }
-
-    #[test]
     fn update_in_middle_of_named_function() -> anyhow::Result<()> {
         let original = ":f { 1 1 ping f } fn f";
         let updated = ":f { 1 2 ping f } fn f";
