@@ -94,7 +94,7 @@ impl Fragments {
                 // context, things are more complicated:
                 //
                 // ```
-                // c b a -> e d a ()
+                // c b a -> e d a
                 // ```
                 //
                 // Here, `b` is replaced by `d`. It's impossible for `c` to stay
