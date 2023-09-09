@@ -68,6 +68,10 @@ impl Fragments {
                 });
             if let Some(&old) = old_whose_next_has_been_replaced {
                 self.replacements.insert(old, new);
+
+                let existing = old.display_short();
+                let new = new.display_short();
+                eprintln!("Replace {existing} with {new}");
             }
 
             {
