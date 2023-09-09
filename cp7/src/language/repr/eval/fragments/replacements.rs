@@ -26,6 +26,7 @@ impl Replacements {
     }
 
     pub fn take(&mut self) -> Vec<Replacement> {
+        self.new_to_old.clear();
         self.old_to_new
             .drain()
             .map(|(old, new)| Replacement { old, new })
