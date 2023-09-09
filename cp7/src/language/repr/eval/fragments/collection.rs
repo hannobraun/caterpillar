@@ -55,6 +55,8 @@ impl Fragments {
         }
 
         {
+            let new = id;
+
             let old_whose_next_has_been_replaced = address
                 .next
                 .and_then(|next| self.replacements.replaced_by(next))
@@ -62,17 +64,15 @@ impl Fragments {
                     self.by_next.get(&replaced_by_next)
                 });
             if let Some(&old) = old_whose_next_has_been_replaced {
-                let new = id;
                 self.replacements.insert(old, new);
             }
 
             if let Some(existing) = self.by_address.get(&address).copied() {
-                if existing != id {
+                if existing != new {
                     // Let's only do the update, if we new id is actually
                     // different from the existing one, i.e. we're actually
                     // replacing anything.
 
-                    let new = id;
                     self.replacements.insert(existing, new);
 
                     let existing = existing.display_short();
