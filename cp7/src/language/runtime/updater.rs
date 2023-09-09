@@ -17,7 +17,7 @@ mod tests {
     // exercising more of the relevant machinery.
 
     #[test]
-    fn update_in_middle_of_named_function() -> anyhow::Result<()> {
+    fn update_to_named_function() -> anyhow::Result<()> {
         let original = ":f { 1 1 ping f } fn f";
         let updated = ":f { 1 2 ping f } fn f";
 
