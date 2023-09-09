@@ -109,6 +109,14 @@ impl Fragments {
                 // in the address are known to have been replaced, modifies the
                 // address accordingly, then tries again.
 
+                let replaced_by_parent = address
+                    .parent
+                    .and_then(|parent| self.replacements.replaced_by(parent));
+                if let Some(replaced_by_parent) = replaced_by_parent {
+                    address.parent = Some(replaced_by_parent);
+                    continue;
+                }
+
                 let replaced_by_next = address
                     .next
                     .and_then(|next| self.replacements.replaced_by(next));
