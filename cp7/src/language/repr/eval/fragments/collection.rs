@@ -59,22 +59,9 @@ impl Fragments {
 
         {
             let new = id;
+            let mut address = address;
 
-            let old_whose_next_has_been_replaced = address
-                .next
-                .and_then(|next| self.replacements.replaced_by(next))
-                .and_then(|replaced_by_next| {
-                    self.by_next.get(&replaced_by_next)
-                });
-            if let Some(&old) = old_whose_next_has_been_replaced {
-                self.replacements.insert(old, new);
-
-                let existing = old.display_short();
-                let new = new.display_short();
-                eprintln!("Replace {existing} with {new}");
-            }
-
-            {
+            loop {
                 if let Some(existing) = self.by_address.get(&address).copied() {
                     if existing != new {
                         // Let's only do the update, if we new id is actually
@@ -88,6 +75,16 @@ impl Fragments {
                         eprintln!("Replace {existing} with {new}");
                     }
                 }
+
+                let old_whose_next_has_been_replaced = address
+                    .next
+                    .and_then(|next| self.replacements.replaced_by(next));
+                if let Some(old) = old_whose_next_has_been_replaced {
+                    address.next = Some(old);
+                    continue;
+                }
+
+                break;
             }
         }
 
