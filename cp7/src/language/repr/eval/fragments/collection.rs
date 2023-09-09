@@ -67,17 +67,19 @@ impl Fragments {
                 self.replacements.insert(old, new);
             }
 
-            if let Some(existing) = self.by_address.get(&address).copied() {
-                if existing != new {
-                    // Let's only do the update, if we new id is actually
-                    // different from the existing one, i.e. we're actually
-                    // replacing anything.
+            {
+                if let Some(existing) = self.by_address.get(&address).copied() {
+                    if existing != new {
+                        // Let's only do the update, if we new id is actually
+                        // different from the existing one, i.e. we're actually
+                        // replacing anything.
 
-                    self.replacements.insert(existing, new);
+                        self.replacements.insert(existing, new);
 
-                    let existing = existing.display_short();
-                    let new = new.display_short();
-                    eprintln!("Replace {existing} with {new}");
+                        let existing = existing.display_short();
+                        let new = new.display_short();
+                        eprintln!("Replace {existing} with {new}");
+                    }
                 }
             }
         }
