@@ -61,7 +61,17 @@ impl Fragments {
             let new = id;
             let mut address = address;
 
+            let mut i = 0;
             loop {
+                i += 1;
+                if i == 128 {
+                    // I guess we could reach this number of iterations with big
+                    // programs, so the number we panic at should probably
+                    // depend on the number of fragments. But this will do for
+                    // now.
+                    panic!("Possibly endless loop when replacing fragments");
+                }
+
                 if let Some(existing) = self.by_address.get(&address).copied() {
                     if existing != new {
                         // Let's only do the update, if we new id is actually
