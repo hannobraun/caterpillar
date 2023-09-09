@@ -61,6 +61,11 @@ impl Fragments {
                     panic!("Possibly endless loop when replacing fragments");
                 }
 
+                // For the update process to work, we need to know which
+                // fragments replaced which other fragments. Let's start by
+                // checking for the straight-forward case here. If there's
+                // already a different fragment with the same address, we know
+                // that the new fragment replaces it.
                 if let Some(existing) = self.by_address.get(&address).copied() {
                     if existing != new {
                         // Let's only do the update, if we new id is actually
@@ -74,6 +79,35 @@ impl Fragments {
                         eprintln!("Replace {existing} with {new}");
                     }
                 }
+
+                // The replacement above only catches very obvious replacements
+                // like this:
+                //
+                // ```
+                // b a -> c a
+                // ```
+                //
+                // Here, `b` is replaced by `c`. Straight-forward to detect,
+                // because they have the same address.
+                //
+                // However, if the replacement is not at the beginning of a
+                // context, things are more complicated:
+                //
+                // ```
+                // c b a -> e d a ()
+                // ```
+                //
+                // Here, `b` is replaced by `d`. It's impossible for `c` to stay
+                // there in this case, since the ID of a fragment depends on its
+                // next fragment (`b`/`d`), and that has changed.
+                //
+                // Therefore, `c` is replaced by `e`, but that replacement is
+                // more difficult to detect. They don't have the same address
+                // (one has `b` as next, the other `d`).
+                //
+                // That's what the following code is for. It checks whether IDs
+                // in the address are known to have been replaced, modifies the
+                // address accordingly, then tries again.
 
                 let replaced_by_next = address
                     .next
