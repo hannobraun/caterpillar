@@ -78,8 +78,8 @@ impl Fragments {
                 let replaced_by_next = address
                     .next
                     .and_then(|next| self.replacements.replaced_by(next));
-                if let Some(old) = replaced_by_next {
-                    address.next = Some(old);
+                if let Some(replaced_by_next) = replaced_by_next {
+                    address.next = Some(replaced_by_next);
                     continue;
                 }
 
