@@ -12,6 +12,10 @@ pub fn update(fragments: &mut Fragments, evaluator: &mut Evaluator) {
 mod tests {
     use crate::language::runtime::interpreter::Interpreter;
 
+    // Make sure all updates happen in the middle of their respective context,
+    // not the beginning. This is the more complex case, and leads to the test
+    // exercising more of the relevant machinery.
+
     #[test]
     fn update_in_middle_of_named_function() -> anyhow::Result<()> {
         let original = ":f { 1 1 ping f } fn f";
