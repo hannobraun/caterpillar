@@ -75,10 +75,10 @@ impl Fragments {
                     }
                 }
 
-                let old_whose_next_has_been_replaced = address
+                let replaced_by_next = address
                     .next
                     .and_then(|next| self.replacements.replaced_by(next));
-                if let Some(old) = old_whose_next_has_been_replaced {
+                if let Some(old) = replaced_by_next {
                     address.next = Some(old);
                     continue;
                 }
