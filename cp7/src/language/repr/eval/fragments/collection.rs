@@ -40,6 +40,9 @@ impl Fragments {
             // collisions, okay?
             assert_eq!(existing, fragment);
         } else {
+            // Only show the `insert` log message if we've actually inserted
+            // something new. This reduces log spam.
+
             let id = id.display_short();
             let payload = fragment.payload.display_short();
             let address = address.display_short();
