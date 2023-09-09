@@ -51,7 +51,10 @@ impl Interpreter {
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
         pipeline::run(code, &mut self.fragments)?;
-        updater::update(&mut self.fragments, &mut self.evaluator);
+        updater::update(
+            self.fragments.take_replacements(),
+            &mut self.evaluator,
+        );
 
         Ok(())
     }
