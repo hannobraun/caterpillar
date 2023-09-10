@@ -51,6 +51,17 @@ pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     Ok(())
 }
 
+pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
+    let top = evaluator.data_stack.pop_any()?;
+    let target = evaluator.data_stack.pop_any()?;
+
+    evaluator.data_stack.push(target.clone());
+    evaluator.data_stack.push(top);
+    evaluator.data_stack.push(target);
+
+    Ok(())
+}
+
 pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let channel = evaluator.data_stack.pop_specific::<value::Number>()?;
     *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;

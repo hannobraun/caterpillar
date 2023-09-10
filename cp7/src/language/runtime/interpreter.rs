@@ -28,6 +28,7 @@ impl Interpreter {
             ("clone", intrinsics::clone),
             ("delay_ms", intrinsics::delay_ms),
             ("fn", intrinsics::fn_),
+            ("over", intrinsics::over),
             ("ping", intrinsics::ping),
             ("print_line", intrinsics::print_line),
         ];
