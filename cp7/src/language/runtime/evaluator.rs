@@ -36,16 +36,16 @@ impl Evaluator {
             None => return Ok(EvaluatorState::Finished),
         };
 
+        // We're done with the call stack for this step. Let's advance it now,
+        // so that's out of the way.
+        self.call_stack.advance(syntax_fragment.next());
+
         match &syntax_fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(self)?,
                     Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(start) = body.start {
-                            // Need to advance the current stack frame before we
-                            // jump into the function, or we'll repeat it
-                            // endlessly when we come back.
-                            self.call_stack.advance(syntax_fragment.next());
                             self.call_stack.push(start);
                             return Ok(EvaluatorState::InProgress);
                         }
@@ -56,8 +56,6 @@ impl Evaluator {
                 self.data_stack.push(value.clone());
             }
         };
-
-        self.call_stack.advance(syntax_fragment.next());
 
         Ok(EvaluatorState::InProgress)
     }
