@@ -42,6 +42,12 @@ pub fn delay_ms(evaluator: &mut Evaluator) -> DataStackResult<()> {
     Ok(())
 }
 
+pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
+    let block = evaluator.data_stack.pop_specific::<value::Block>()?;
+    evaluator.call_stack.push(block.start);
+    Ok(())
+}
+
 pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let body = evaluator.data_stack.pop_specific::<value::Block>()?;
     let name = evaluator.data_stack.pop_specific::<value::Symbol>()?;

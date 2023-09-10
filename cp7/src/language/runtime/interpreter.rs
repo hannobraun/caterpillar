@@ -27,6 +27,7 @@ impl Interpreter {
             ("+", intrinsics::add as Intrinsic),
             ("clone", intrinsics::clone),
             ("delay_ms", intrinsics::delay_ms),
+            ("eval", intrinsics::eval),
             ("fn", intrinsics::fn_),
             ("over", intrinsics::over),
             ("ping", intrinsics::ping),
