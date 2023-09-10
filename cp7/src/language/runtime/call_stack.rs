@@ -21,7 +21,7 @@ impl CallStack {
                     *current = next;
                 }
                 None => {
-                    self.pop();
+                    self.frames.pop();
                 }
             }
         }
@@ -29,9 +29,5 @@ impl CallStack {
 
     pub fn push(&mut self, next: FragmentId) {
         self.frames.push(next);
-    }
-
-    pub fn pop(&mut self) {
-        self.frames.pop();
     }
 }
