@@ -57,6 +57,10 @@ pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     Ok(())
 }
 
+pub fn nop(_: &mut Evaluator) -> DataStackResult<()> {
+    Ok(())
+}
+
 pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let top = evaluator.data_stack.pop_any()?;
     let target = evaluator.data_stack.pop_any()?;

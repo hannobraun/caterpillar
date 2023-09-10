@@ -29,6 +29,7 @@ impl Interpreter {
             ("delay_ms", intrinsics::delay_ms),
             ("eval", intrinsics::eval),
             ("fn", intrinsics::fn_),
+            ("nop", intrinsics::nop),
             ("over", intrinsics::over),
             ("ping", intrinsics::ping),
             ("print_line", intrinsics::print_line),
