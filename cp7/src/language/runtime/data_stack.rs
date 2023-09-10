@@ -1,4 +1,7 @@
-use crate::language::repr::eval::value::{Type, TypeError, Value};
+use crate::language::repr::eval::{
+    fragments::FragmentId,
+    value::{Type, TypeError, Value},
+};
 
 #[derive(Debug)]
 pub struct DataStack {
@@ -28,6 +31,16 @@ impl DataStack {
         self.values
             .pop()
             .ok_or(DataStackError::StackIsEmpty { expected })
+    }
+
+    pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
+        for value in &mut self.values {
+            if let Value::Block { start: Some(start) } = value {
+                if *start == old {
+                    *start = new;
+                }
+            }
+        }
     }
 }
 

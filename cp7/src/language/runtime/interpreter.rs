@@ -53,6 +53,7 @@ impl Interpreter {
         pipeline::run(code, &mut self.fragments)?;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
+            self.evaluator.data_stack.replace(old, new);
             self.evaluator.functions.replace(old, new);
         }
 
@@ -144,6 +145,20 @@ mod tests {
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn update_to_block() -> anyhow::Result<()> {
+        let original = "{ nop 1 ping } clone eval eval";
+        let updated = "{ nop 2 ping } clone eval eval";
+
+        let mut interpreter = Interpreter::new(original)?;
+        interpreter.wait_for_ping_on_channel(1)?;
+
+        interpreter.update(updated)?;
+        interpreter.wait_for_ping_on_channel(2)?;
 
         Ok(())
     }
