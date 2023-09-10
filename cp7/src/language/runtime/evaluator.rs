@@ -38,9 +38,9 @@ impl Evaluator {
 
         let next_fragment = syntax_fragment.next();
 
-        match syntax_fragment.payload {
+        match &syntax_fragment.payload {
             FragmentPayload::Word(word) => {
-                match self.functions.resolve(&word)? {
+                match self.functions.resolve(word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(self)?,
                     Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(start) = body.start {
@@ -55,7 +55,7 @@ impl Evaluator {
                 }
             }
             FragmentPayload::Value(value) => {
-                self.data_stack.push(value);
+                self.data_stack.push(value.clone());
             }
         };
 

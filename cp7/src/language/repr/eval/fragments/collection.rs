@@ -134,10 +134,10 @@ impl Fragments {
         id
     }
 
-    pub fn get(&self, id: FragmentId) -> Fragment {
+    pub fn get(&self, id: FragmentId) -> &Fragment {
         // This shouldn't ever panic, as we currently only ever add fragments,
         // never remove them, and only ever create IDs for fragments we add.
-        self.by_id.get(&id).cloned().unwrap()
+        self.by_id.get(&id).unwrap()
     }
 
     pub fn take_replacements(&mut self) -> Vec<Replacement> {
