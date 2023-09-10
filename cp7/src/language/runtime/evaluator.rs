@@ -41,11 +41,7 @@ impl Evaluator {
         match syntax_fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(&word)? {
-                    Function::Intrinsic(intrinsic) => intrinsic(
-                        &mut self.context,
-                        &mut self.functions,
-                        &mut self.data_stack,
-                    )?,
+                    Function::Intrinsic(intrinsic) => intrinsic(self)?,
                     Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(start) = body.start {
                             // Need to advance the current stack frame before we
