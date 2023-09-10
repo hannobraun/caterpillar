@@ -45,9 +45,7 @@ impl Evaluator {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(self)?,
                     Function::UserDefined(functions::UserDefined { body }) => {
-                        if let Some(start) = body.start {
-                            self.call_stack.push(start);
-                        }
+                        self.call_stack.push(body.start);
                     }
                 }
             }
