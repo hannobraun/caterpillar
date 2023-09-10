@@ -47,7 +47,6 @@ impl Evaluator {
                     Function::UserDefined(functions::UserDefined { body }) => {
                         if let Some(start) = body.start {
                             self.call_stack.push(start);
-                            return Ok(EvaluatorState::InProgress);
                         }
                     }
                 }
