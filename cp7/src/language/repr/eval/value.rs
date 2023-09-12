@@ -1,4 +1,4 @@
-use std::fmt::{self, Write};
+use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
@@ -25,11 +25,7 @@ impl Value {
     pub fn display_short(&self) -> String {
         match self {
             Value::Block { start } => {
-                let mut display = String::new();
-
-                write!(display, "{{ {} }}", start.display_short()).unwrap();
-
-                display
+                format!("{{ {} }}", start.display_short())
             }
             value => value.to_string(),
         }
