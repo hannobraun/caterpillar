@@ -22,7 +22,10 @@ fn analyze_syntax_tree(
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> Option<FragmentId> {
-    let mut next_fragment = None;
+    let mut next_fragment = Some(fragments.insert(Fragment::new(
+        FragmentAddress { parent, next: None },
+        FragmentPayload::Terminator,
+    )));
 
     // We're going through the syntax tree right-to-left here, since the ID of
     // the *next* fragment is part of the address of every fragment (and thus

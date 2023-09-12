@@ -52,6 +52,11 @@ impl Evaluator {
             FragmentPayload::Value(value) => {
                 self.data_stack.push(value.clone());
             }
+            FragmentPayload::Terminator => {
+                // Nothing to do here. Terminators only exist for fragment
+                // addressing purposes and don't need to be handled during
+                // evaluation.
+            }
         };
 
         Ok(EvaluatorState::InProgress)

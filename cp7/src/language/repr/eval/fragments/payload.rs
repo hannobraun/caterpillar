@@ -4,6 +4,7 @@ use crate::language::repr::eval::value::Value;
 pub enum FragmentPayload {
     Value(Value),
     Word(String),
+    Terminator,
 }
 
 impl FragmentPayload {
@@ -14,6 +15,7 @@ impl FragmentPayload {
                 format!("value `{value}`")
             }
             Self::Word(word) => format!("word `{word}`"),
+            Self::Terminator => "terminator".to_string(),
         }
     }
 
@@ -36,6 +38,9 @@ impl FragmentPayload {
             Self::Word(word) => {
                 hasher.update(b"word");
                 hasher.update(word.as_bytes());
+            }
+            Self::Terminator => {
+                hasher.update(b"terminator");
             }
         }
     }
