@@ -27,10 +27,7 @@ impl Value {
             Value::Block { start } => {
                 let mut display = String::new();
 
-                write!(display, "{{").unwrap();
-                let start = start.display_short();
-                write!(display, " {start}").unwrap();
-                write!(display, " }}").unwrap();
+                write!(display, "{{ {} }}", start.display_short()).unwrap();
 
                 display
             }
