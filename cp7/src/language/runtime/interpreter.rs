@@ -21,7 +21,9 @@ impl Interpreter {
         let PipelineOutput { start } = pipeline::run(code, &mut fragments)?;
 
         let mut evaluator = Evaluator::new();
-        evaluator.call_stack.push(start);
+        if let Some(start) = start {
+            evaluator.call_stack.push(start);
+        }
 
         let intrinsics = [
             ("+", intrinsics::add as Intrinsic),

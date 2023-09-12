@@ -27,9 +27,7 @@ impl CallStack {
         }
     }
 
-    pub fn push(&mut self, next: Option<FragmentId>) {
-        if let Some(next) = next {
-            self.frames.push(next);
-        }
+    pub fn push(&mut self, next: FragmentId) {
+        self.frames.push(next);
     }
 }
