@@ -19,21 +19,21 @@ impl FragmentPayload {
 
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            FragmentPayload::Value(Value::Block { start }) => {
+            Self::Value(Value::Block { start }) => {
                 hasher.update(b"block");
                 if let Some(start) = start {
                     hasher.update(start.hash.as_bytes());
                 }
             }
-            FragmentPayload::Value(Value::Number(number)) => {
+            Self::Value(Value::Number(number)) => {
                 hasher.update(b"number");
                 hasher.update(&number.to_le_bytes());
             }
-            FragmentPayload::Value(Value::Symbol(symbol)) => {
+            Self::Value(Value::Symbol(symbol)) => {
                 hasher.update(b"symbol");
                 hasher.update(symbol.as_bytes());
             }
-            FragmentPayload::Word(word) => {
+            Self::Word(word) => {
                 hasher.update(b"word");
                 hasher.update(word.as_bytes());
             }
