@@ -34,7 +34,7 @@ fn analyze_syntax_tree(
         next_fragment = analyze_syntax_element(
             syntax_element,
             parent,
-            Some(next_fragment),
+            next_fragment,
             fragments,
         );
     }
@@ -45,7 +45,7 @@ fn analyze_syntax_tree(
 fn analyze_syntax_element(
     syntax_element: SyntaxElement,
     parent: Option<FragmentId>,
-    next: Option<FragmentId>,
+    next: FragmentId,
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
@@ -75,7 +75,7 @@ fn analyze_syntax_element(
             // block at the end of each context, that means every block will be
             // uniquely addressed again, regardless of whether it's identical to
             // any other blocks.
-            let parent = next;
+            let parent = Some(next);
 
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Value(Value::Block { start })
@@ -89,6 +89,7 @@ fn analyze_syntax_element(
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
+    let next = Some(next);
     fragments.insert(Fragment::new(FragmentAddress { parent, next }, payload))
 }
 
