@@ -7,7 +7,7 @@ use crate::language::repr::eval::fragments::FragmentId;
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
 pub enum Value {
-    Block { start: Option<FragmentId> },
+    Block { start: FragmentId },
     Number(i64),
     Symbol(String),
 }
@@ -28,10 +28,8 @@ impl Value {
                 let mut display = String::new();
 
                 write!(display, "{{").unwrap();
-                if let Some(start) = start {
-                    let start = start.display_short();
-                    write!(display, " {start}").unwrap();
-                }
+                let start = start.display_short();
+                write!(display, " {start}").unwrap();
                 write!(display, " }}").unwrap();
 
                 display
@@ -46,9 +44,7 @@ impl fmt::Display for Value {
         match self {
             Value::Block { start, .. } => {
                 write!(f, "{{")?;
-                if let Some(start) = start {
-                    write!(f, " {start}")?;
-                }
+                write!(f, " {start}")?;
                 write!(f, " }}")?;
                 Ok(())
             }

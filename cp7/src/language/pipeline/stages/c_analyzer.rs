@@ -78,7 +78,7 @@ fn analyze_syntax_element(
             let parent = Some(next);
 
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-            FragmentPayload::Value(Value::Block { start: Some(start) })
+            FragmentPayload::Value(Value::Block { start })
         }
         SyntaxElement::Number(number) => {
             FragmentPayload::Value(Value::Number(number))

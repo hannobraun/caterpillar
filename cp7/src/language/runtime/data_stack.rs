@@ -35,7 +35,7 @@ impl DataStack {
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for value in &mut self.values {
-            if let Value::Block { start: Some(start) } = value {
+            if let Value::Block { start } = value {
                 if *start == old {
                     *start = new;
                 }

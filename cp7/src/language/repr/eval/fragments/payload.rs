@@ -23,9 +23,7 @@ impl FragmentPayload {
         match self {
             Self::Value(Value::Block { start }) => {
                 hasher.update(b"block");
-                if let Some(start) = start {
-                    hasher.update(start.hash.as_bytes());
-                }
+                hasher.update(start.hash.as_bytes());
             }
             Self::Value(Value::Number(number)) => {
                 hasher.update(b"number");
