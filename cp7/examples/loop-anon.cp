@@ -7,7 +7,7 @@
 
 {
     clone print_line
-    500 delay_ms
+    200 delay_ms
     1 +
 }
 0
