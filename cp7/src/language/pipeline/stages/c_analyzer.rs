@@ -14,14 +14,14 @@ pub fn analyze(
 ) -> AnalyzerOutput {
     let parent = None;
     let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-    AnalyzerOutput { start }
+    AnalyzerOutput { start: Some(start) }
 }
 
 fn analyze_syntax_tree(
     syntax_tree: SyntaxTree,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
-) -> Option<FragmentId> {
+) -> FragmentId {
     let mut next_fragment = fragments.insert(Fragment::new(
         FragmentAddress { parent, next: None },
         FragmentPayload::Terminator,
@@ -39,7 +39,7 @@ fn analyze_syntax_tree(
         );
     }
 
-    Some(next_fragment)
+    next_fragment
 }
 
 fn analyze_syntax_element(
@@ -78,7 +78,7 @@ fn analyze_syntax_element(
             let parent = Some(next);
 
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-            FragmentPayload::Value(Value::Block { start })
+            FragmentPayload::Value(Value::Block { start: Some(start) })
         }
         SyntaxElement::Number(number) => {
             FragmentPayload::Value(Value::Number(number))
