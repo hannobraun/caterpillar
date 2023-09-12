@@ -4,6 +4,22 @@ use crate::language::repr::eval::value::Value;
 pub enum FragmentPayload {
     Value(Value),
     Word(String),
+
+    /// Terminates a context
+    ///
+    /// By convention, fragments within a block use the fragment *after* the
+    /// block as their parents. This is done for practical reasons, as the ID
+    /// of the next fragment is available when a parent ID is needed, as opposed
+    /// to the ID of the block itself or the fragment before it. And they can't
+    /// be made available either, as they depend on the block contents and that
+    /// would be a circular dependency.
+    ///
+    /// However, that means that blocks *must not* be the last fragment in a
+    /// context, or the parent will be `None`, and the items within such blocks
+    /// are no longer uniquely addressable.
+    ///
+    /// This is why terminators exist. They terminate every context, and thus
+    /// provide a unique parent for the fragments in any block.
     Terminator,
 }
 
