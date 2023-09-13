@@ -34,7 +34,7 @@ impl Functions {
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for (_, function) in self.inner.iter_mut() {
-            if let Function::UserDefined(UserDefined { body }) = function {
+            if let Function::UserDefined(UserDefined { body, .. }) = function {
                 if body.start == old {
                     body.start = new;
                 }

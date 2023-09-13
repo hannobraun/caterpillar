@@ -44,7 +44,10 @@ impl Evaluator {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(self)?,
-                    Function::UserDefined(functions::UserDefined { body }) => {
+                    Function::UserDefined(functions::UserDefined {
+                        body,
+                        ..
+                    }) => {
                         self.call_stack.push(body.start);
                     }
                 }
