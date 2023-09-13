@@ -21,14 +21,12 @@ impl Functions {
             .insert(name.into(), Function::Intrinsic(intrinsic));
     }
 
-    pub fn define(&mut self, name: value::Symbol, body: value::Block) {
+    pub fn define(&mut self, name: FunctionName, body: value::Block) {
         let function = Function::UserDefined(UserDefined {
-            name: FunctionName {
-                value: name.0.clone(),
-            },
+            name: name.clone(),
             body,
         });
-        self.inner.insert(name.0, function);
+        self.inner.insert(name.value, function);
     }
 
     pub fn resolve(&self, name: &str) -> Result<&Function, ResolveError> {

@@ -2,7 +2,10 @@ use std::{collections::HashMap, thread, time::Duration};
 
 use super::{
     repr::eval::value,
-    runtime::{data_stack::DataStackResult, evaluator::Evaluator},
+    runtime::{
+        data_stack::DataStackResult, evaluator::Evaluator,
+        functions::FunctionName,
+    },
 };
 
 #[derive(Debug)]
@@ -52,6 +55,7 @@ pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let body = evaluator.data_stack.pop_specific::<value::Block>()?;
     let name = evaluator.data_stack.pop_specific::<value::Symbol>()?;
 
+    let name = FunctionName { value: name.0 };
     evaluator.functions.define(name, body);
 
     Ok(())
