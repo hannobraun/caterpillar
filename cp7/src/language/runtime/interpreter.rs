@@ -100,8 +100,8 @@ mod tests {
 
     #[test]
     fn update_to_named_function() -> anyhow::Result<()> {
-        let original = ":f { 1 1 ping f } fn f";
-        let updated = ":f { 1 2 ping f } fn f";
+        let original = ":f { nop 1 ping f } fn f";
+        let updated = ":f { nop 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -136,8 +136,8 @@ mod tests {
 
     #[test]
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
-        let original = ":f { 1 1 ping f } fn f";
-        let updated = ":f { 1 2 ping f } fn f";
+        let original = ":f { nop 1 ping f } fn f";
+        let updated = ":f { nop 2 ping f } fn f";
 
         let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
