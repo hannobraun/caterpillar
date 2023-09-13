@@ -62,7 +62,7 @@ pub struct UserDefined {
     pub body: value::Block,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct FunctionName {
     pub value: String,
 }
