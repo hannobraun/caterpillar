@@ -22,7 +22,12 @@ impl Functions {
     }
 
     pub fn define(&mut self, name: value::Symbol, body: value::Block) {
-        let function = Function::UserDefined(UserDefined { body });
+        let function = Function::UserDefined(UserDefined {
+            name: FunctionName {
+                value: name.0.clone(),
+            },
+            body,
+        });
         self.inner.insert(name.0, function);
     }
 
@@ -53,7 +58,13 @@ pub type Intrinsic = fn(&mut Evaluator) -> DataStackResult<()>;
 
 #[derive(Debug)]
 pub struct UserDefined {
+    pub name: FunctionName,
     pub body: value::Block,
+}
+
+#[derive(Debug)]
+pub struct FunctionName {
+    pub value: String,
 }
 
 #[derive(Debug, thiserror::Error)]
