@@ -30,4 +30,12 @@ impl CallStack {
     pub fn push(&mut self, next: FragmentId) {
         self.frames.push(next);
     }
+
+    pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
+        for frame in &mut self.frames {
+            if *frame == old {
+                *frame = new;
+            }
+        }
+    }
 }
