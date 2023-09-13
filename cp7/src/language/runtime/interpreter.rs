@@ -116,13 +116,13 @@ mod tests {
     fn update_to_identical_functions() -> anyhow::Result<()> {
         let original = "
             :loop { f loop } fn
-            :f { 1 ping } fn
-            :g { 1 ping } fn
+            :f { nop 1 ping } fn
+            :g { nop 1 ping } fn
             loop";
         let updated = "
             :loop { g loop } fn
-            :f { 2 ping } fn
-            :g { 1 ping } fn
+            :f { nop 2 ping } fn
+            :g { nop 1 ping } fn
             loop";
 
         let mut interpreter = Interpreter::new(original)?;
