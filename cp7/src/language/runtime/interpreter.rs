@@ -168,14 +168,14 @@ mod tests {
     #[test]
     fn update_to_identical_blocks_at_end_of_context() -> anyhow::Result<()> {
         let original = "
-            :a { { nop 1 ping } } fn
-            :b { { nop 1 ping } } fn
+            :a { { nop 2 ping } } fn
+            :b { { nop 2 ping } } fn
             1 ping
             a eval
             b eval";
         let updated = "
-            :a { { nop 1 ping } } fn
-            :b { { nop 2 ping } } fn
+            :a { { nop 2 ping } } fn
+            :b { { nop 3 ping } } fn
             1 ping
             a eval
             b eval";
@@ -184,8 +184,8 @@ mod tests {
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
-        interpreter.wait_for_ping_on_channel(1)?;
         interpreter.wait_for_ping_on_channel(2)?;
+        interpreter.wait_for_ping_on_channel(3)?;
 
         Ok(())
     }
