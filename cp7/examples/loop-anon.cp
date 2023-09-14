@@ -6,7 +6,7 @@
     fn
 
 {
-    clone print
+    print
     200 delay_ms
     1 +
 }
