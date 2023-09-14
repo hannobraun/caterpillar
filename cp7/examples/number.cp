@@ -1,1 +1,1 @@
-1 2 + print_line
+1 2 + print

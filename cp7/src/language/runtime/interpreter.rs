@@ -34,7 +34,7 @@ impl Interpreter {
             ("nop", intrinsics::nop),
             ("over", intrinsics::over),
             ("ping", intrinsics::ping),
-            ("print_line", intrinsics::print_line),
+            ("print", intrinsics::print_line),
         ];
 
         for (name, intrinsic) in intrinsics {
