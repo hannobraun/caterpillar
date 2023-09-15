@@ -3,7 +3,7 @@ use crate::language::repr::{
         fragments::{
             Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
         },
-        value::Value,
+        value::ValueKind,
     },
     syntax::{SyntaxElement, SyntaxTree},
 };
@@ -58,13 +58,13 @@ fn analyze_syntax_element(
             let parent = Some(next);
 
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-            FragmentPayload::Value(Value::Block { start })
+            FragmentPayload::Value(ValueKind::Block { start })
         }
         SyntaxElement::Number(number) => {
-            FragmentPayload::Value(Value::Number(number))
+            FragmentPayload::Value(ValueKind::Number(number))
         }
         SyntaxElement::Symbol(symbol) => {
-            FragmentPayload::Value(Value::Symbol(symbol))
+            FragmentPayload::Value(ValueKind::Symbol(symbol))
         }
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };

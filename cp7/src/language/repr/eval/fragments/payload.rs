@@ -1,8 +1,8 @@
-use crate::language::repr::eval::value::Value;
+use crate::language::repr::eval::value::ValueKind;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum FragmentPayload {
-    Value(Value),
+    Value(ValueKind),
     Word(String),
 
     /// Terminates a context
@@ -37,15 +37,15 @@ impl FragmentPayload {
 
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Value(Value::Block { start }) => {
+            Self::Value(ValueKind::Block { start }) => {
                 hasher.update(b"block");
                 hasher.update(start.hash.as_bytes());
             }
-            Self::Value(Value::Number(number)) => {
+            Self::Value(ValueKind::Number(number)) => {
                 hasher.update(b"number");
                 hasher.update(&number.to_le_bytes());
             }
-            Self::Value(Value::Symbol(symbol)) => {
+            Self::Value(ValueKind::Symbol(symbol)) => {
                 hasher.update(b"symbol");
                 hasher.update(symbol.as_bytes());
             }

@@ -1,11 +1,11 @@
 use crate::language::repr::eval::{
     fragments::FragmentId,
-    value::{Type, TypeError, Value},
+    value::{Type, TypeError, ValueKind},
 };
 
 #[derive(Debug)]
 pub struct DataStack {
-    values: Vec<Value>,
+    values: Vec<ValueKind>,
 }
 
 impl DataStack {
@@ -13,11 +13,11 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
-    pub fn push(&mut self, value: impl Into<Value>) {
+    pub fn push(&mut self, value: impl Into<ValueKind>) {
         self.values.push(value.into())
     }
 
-    pub fn pop_any(&mut self) -> DataStackResult<Value> {
+    pub fn pop_any(&mut self) -> DataStackResult<ValueKind> {
         self.pop_inner("any value")
     }
 
@@ -27,7 +27,10 @@ impl DataStack {
         Ok(number)
     }
 
-    fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
+    fn pop_inner(
+        &mut self,
+        expected: &'static str,
+    ) -> DataStackResult<ValueKind> {
         self.values
             .pop()
             .ok_or(DataStackError::StackIsEmpty { expected })
@@ -35,7 +38,7 @@ impl DataStack {
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for value in &mut self.values {
-            if let Value::Block { start } = value {
+            if let ValueKind::Block { start } = value {
                 if *start == old {
                     *start = new;
                 }

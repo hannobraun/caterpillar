@@ -6,13 +6,13 @@ use crate::language::repr::eval::fragments::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
-pub enum Value {
+pub enum ValueKind {
     Block { start: FragmentId },
     Number(i64),
     Symbol(String),
 }
 
-impl Value {
+impl ValueKind {
     pub fn expect<T: Type>(
         self,
         expected: &'static str,
@@ -24,7 +24,7 @@ impl Value {
 
     pub fn display_short(&self) -> String {
         match self {
-            Value::Block { start } => {
+            ValueKind::Block { start } => {
                 format!("{{ {} }}", start.display_short())
             }
             value => value.to_string(),
@@ -32,17 +32,17 @@ impl Value {
     }
 }
 
-impl fmt::Display for Value {
+impl fmt::Display for ValueKind {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Value::Block { start, .. } => write!(f, "{{ {start} }}"),
-            Value::Number(number) => write!(f, "{number}"),
-            Value::Symbol(symbol) => write!(f, ":{symbol}"),
+            ValueKind::Block { start, .. } => write!(f, "{{ {start} }}"),
+            ValueKind::Number(number) => write!(f, "{number}"),
+            ValueKind::Symbol(symbol) => write!(f, ":{symbol}"),
         }
     }
 }
 
-pub trait Type: TryFrom<Value, Error = Value> {
+pub trait Type: TryFrom<ValueKind, Error = ValueKind> {
     const NAME: &'static str;
 }
 
@@ -61,6 +61,6 @@ impl Type for Symbol {
 #[derive(Debug, thiserror::Error)]
 #[error("Expected {expected}, found `{value}`")]
 pub struct TypeError {
-    pub value: Value,
+    pub value: ValueKind,
     pub expected: &'static str,
 }
