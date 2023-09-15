@@ -69,9 +69,13 @@ pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
 
 pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (body, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
-    let (name, _) = evaluator.data_stack.pop_specific::<value::Symbol>()?;
+    let (name, name_fragment) =
+        evaluator.data_stack.pop_specific::<value::Symbol>()?;
 
-    let name = FunctionName { value: name.0 };
+    let name = FunctionName {
+        value: name.0,
+        fragment: name_fragment,
+    };
     evaluator.functions.define(name, body);
 
     Ok(())

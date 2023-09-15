@@ -63,6 +63,7 @@ pub struct UserDefined {
 #[derive(Clone, Debug)]
 pub struct FunctionName {
     pub value: String,
+    pub fragment: Option<FragmentId>,
 }
 
 #[derive(Debug, thiserror::Error)]
