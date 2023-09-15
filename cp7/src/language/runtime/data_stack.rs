@@ -24,8 +24,8 @@ impl DataStack {
 
     pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {
         let value = self.pop_inner(T::NAME)?;
-        let number = value.kind.expect(T::NAME)?;
-        Ok(number)
+        let value = value.kind.expect(T::NAME)?;
+        Ok(value)
     }
 
     fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
