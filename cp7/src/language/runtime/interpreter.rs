@@ -58,7 +58,7 @@ impl Interpreter {
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
             self.evaluator.data_stack.replace(old, new);
-            self.evaluator.functions.replace(old, new);
+            self.evaluator.functions.replace(old, new, &self.fragments);
         }
 
         Ok(())
@@ -208,6 +208,20 @@ mod tests {
 
         interpreter.update(updated)?;
         interpreter.wait_for_ping_on_channel(2)?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn update_renamed_function() -> anyhow::Result<()> {
+        let original = ":f { nop 1 ping f } fn f";
+        let updated = ":g { nop 1 ping g } fn g";
+
+        let mut interpreter = Interpreter::new(original)?;
+        interpreter.wait_for_ping_on_channel(1)?;
+
+        interpreter.update(updated)?;
+        interpreter.wait_for_ping_on_channel(1)?;
 
         Ok(())
     }
