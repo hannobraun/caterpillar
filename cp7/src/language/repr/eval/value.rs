@@ -7,6 +7,7 @@ use crate::language::repr::eval::fragments::FragmentId;
 #[derive(Clone, Debug)]
 pub struct Value {
     pub kind: ValueKind,
+    pub fragment: Option<FragmentId>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
