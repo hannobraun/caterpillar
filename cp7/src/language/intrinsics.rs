@@ -22,8 +22,8 @@ impl Context {
 }
 
 pub fn add(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let b = evaluator.data_stack.pop_specific::<value::Number>()?;
-    let a = evaluator.data_stack.pop_specific::<value::Number>()?;
+    let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
+    let (a, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
 
     evaluator.data_stack.push_bare(value::Number(a.0 + b.0));
 
@@ -40,13 +40,13 @@ pub fn clone(evaluator: &mut Evaluator) -> DataStackResult<()> {
 }
 
 pub fn delay_ms(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let delay_ms = evaluator.data_stack.pop_specific::<value::Number>()?;
+    let (delay_ms, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
     Ok(())
 }
 
 pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let block = evaluator.data_stack.pop_specific::<value::Block>()?;
+    let (block, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
     evaluator.call_stack.push(block.start);
 
     // `eval` doesn't need to consume the block, so it would be nice, if we
@@ -68,8 +68,8 @@ pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
 }
 
 pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let body = evaluator.data_stack.pop_specific::<value::Block>()?;
-    let name = evaluator.data_stack.pop_specific::<value::Symbol>()?;
+    let (body, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
+    let (name, _) = evaluator.data_stack.pop_specific::<value::Symbol>()?;
 
     let name = FunctionName { value: name.0 };
     evaluator.functions.define(name, body);
@@ -93,7 +93,7 @@ pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
 }
 
 pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let channel = evaluator.data_stack.pop_specific::<value::Number>()?;
+    let (channel, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
     *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;
     Ok(())
 }

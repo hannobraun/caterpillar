@@ -29,10 +29,12 @@ impl DataStack {
         self.pop_inner("any value")
     }
 
-    pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {
+    pub fn pop_specific<T: Type>(
+        &mut self,
+    ) -> DataStackResult<(T, Option<FragmentId>)> {
         let value = self.pop_inner(T::NAME)?;
         let bare = value.kind.expect(T::NAME)?;
-        Ok(bare)
+        Ok((bare, value.fragment))
     }
 
     fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
