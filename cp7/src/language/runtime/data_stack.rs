@@ -19,23 +19,19 @@ impl DataStack {
     }
 
     pub fn pop_any(&mut self) -> DataStackResult<ValueKind> {
-        self.pop_inner("any value")
+        self.pop_inner("any value").map(|value| value.kind)
     }
 
     pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {
         let value = self.pop_inner(T::NAME)?;
-        let number = value.expect(T::NAME)?;
+        let number = value.kind.expect(T::NAME)?;
         Ok(number)
     }
 
-    fn pop_inner(
-        &mut self,
-        expected: &'static str,
-    ) -> DataStackResult<ValueKind> {
+    fn pop_inner(&mut self, expected: &'static str) -> DataStackResult<Value> {
         self.values
             .pop()
             .ok_or(DataStackError::StackIsEmpty { expected })
-            .map(|value| value.kind)
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
