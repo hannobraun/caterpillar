@@ -17,9 +17,9 @@ impl DataStack {
         self.values.push(value)
     }
 
-    pub fn push_bare(&mut self, value: impl Into<ValueKind>) {
+    pub fn push_bare(&mut self, kind: impl Into<ValueKind>) {
         let value = Value {
-            kind: value.into(),
+            kind: kind.into(),
             fragment: None,
         };
         self.push(value)
