@@ -31,16 +31,16 @@ impl Evaluator {
         &mut self,
         fragments: &Fragments,
     ) -> Result<EvaluatorState, EvaluatorError> {
-        let syntax_fragment = match self.call_stack.current() {
+        let fragment = match self.call_stack.current() {
             Some(fragment_id) => fragments.get(fragment_id),
             None => return Ok(EvaluatorState::Finished),
         };
 
         // We're done with the call stack for this step. Let's advance it now,
         // so that's out of the way.
-        self.call_stack.advance(syntax_fragment.next());
+        self.call_stack.advance(fragment.next());
 
-        match &syntax_fragment.payload {
+        match &fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(intrinsic) => intrinsic(self)?,
