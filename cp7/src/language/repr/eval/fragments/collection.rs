@@ -22,9 +22,7 @@ impl Fragments {
     }
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
-        let id = FragmentId {
-            hash: fragment.hash(),
-        };
+        let id = fragment.id();
         let address = fragment.address;
 
         if let Some(existing) = self.by_id.insert(id, fragment.clone()) {

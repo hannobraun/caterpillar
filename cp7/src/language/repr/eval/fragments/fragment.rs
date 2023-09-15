@@ -11,6 +11,11 @@ impl Fragment {
         Self { address, payload }
     }
 
+    pub fn id(&self) -> FragmentId {
+        let hash = self.hash();
+        FragmentId { hash }
+    }
+
     pub fn next(&self) -> Option<FragmentId> {
         self.address.next
     }
