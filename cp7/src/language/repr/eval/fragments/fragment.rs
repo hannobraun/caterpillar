@@ -2,7 +2,7 @@ use super::{FragmentAddress, FragmentId, FragmentPayload};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Fragment {
-    pub(super) address: FragmentAddress,
+    pub address: FragmentAddress,
     pub payload: FragmentPayload,
 }
 
