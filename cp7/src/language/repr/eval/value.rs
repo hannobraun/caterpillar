@@ -4,6 +4,11 @@ use enum_variant_type::EnumVariantType;
 
 use crate::language::repr::eval::fragments::FragmentId;
 
+#[derive(Debug)]
+pub struct Value {
+    pub kind: ValueKind,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
 pub enum ValueKind {
