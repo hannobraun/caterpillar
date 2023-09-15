@@ -12,20 +12,19 @@ impl Fragment {
     }
 
     pub fn id(&self) -> FragmentId {
-        let hash = self.hash();
+        let hash = {
+            let mut hasher = blake3::Hasher::new();
+
+            self.address.hash(&mut hasher);
+            self.payload.hash(&mut hasher);
+
+            hasher.finalize()
+        };
+
         FragmentId { hash }
     }
 
     pub fn next(&self) -> Option<FragmentId> {
         self.address.next
-    }
-
-    pub(super) fn hash(&self) -> blake3::Hash {
-        let mut hasher = blake3::Hasher::new();
-
-        self.address.hash(&mut hasher);
-        self.payload.hash(&mut hasher);
-
-        hasher.finalize()
     }
 }
