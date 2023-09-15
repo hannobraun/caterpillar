@@ -1,6 +1,9 @@
 use crate::language::{
     intrinsics::Context,
-    repr::eval::fragments::{FragmentPayload, Fragments},
+    repr::eval::{
+        fragments::{FragmentPayload, Fragments},
+        value::Value,
+    },
 };
 
 use super::{
@@ -31,8 +34,8 @@ impl Evaluator {
         &mut self,
         fragments: &Fragments,
     ) -> Result<EvaluatorState, EvaluatorError> {
-        let fragment = match self.call_stack.current() {
-            Some(fragment_id) => fragments.get(fragment_id),
+        let (fragment_id, fragment) = match self.call_stack.current() {
+            Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
             None => return Ok(EvaluatorState::Finished),
         };
 
@@ -53,7 +56,10 @@ impl Evaluator {
                 }
             }
             FragmentPayload::Value(value) => {
-                self.data_stack.push_bare(value.clone());
+                self.data_stack.push(Value {
+                    kind: value.clone(),
+                    fragment: Some(fragment_id),
+                });
             }
             FragmentPayload::Terminator => {
                 // Nothing to do here. Terminators only exist for fragment
