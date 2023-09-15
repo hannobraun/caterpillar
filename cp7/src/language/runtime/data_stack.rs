@@ -18,8 +18,8 @@ impl DataStack {
         self.values.push(value)
     }
 
-    pub fn pop_any(&mut self) -> DataStackResult<ValueKind> {
-        self.pop_inner("any value").map(|value| value.kind)
+    pub fn pop_any(&mut self) -> DataStackResult<Value> {
+        self.pop_inner("any value")
     }
 
     pub fn pop_specific<T: Type>(&mut self) -> DataStackResult<T> {

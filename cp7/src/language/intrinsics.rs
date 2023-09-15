@@ -33,8 +33,8 @@ pub fn add(evaluator: &mut Evaluator) -> DataStackResult<()> {
 pub fn clone(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let value = evaluator.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(value.clone());
-    evaluator.data_stack.push(value);
+    evaluator.data_stack.push(value.clone().kind);
+    evaluator.data_stack.push(value.kind);
 
     Ok(())
 }
@@ -85,9 +85,9 @@ pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let top = evaluator.data_stack.pop_any()?;
     let target = evaluator.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(target.clone());
-    evaluator.data_stack.push(top);
-    evaluator.data_stack.push(target);
+    evaluator.data_stack.push(target.clone().kind);
+    evaluator.data_stack.push(top.kind);
+    evaluator.data_stack.push(target.kind);
 
     Ok(())
 }
@@ -100,8 +100,8 @@ pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
 
 pub fn print(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let value = evaluator.data_stack.pop_any()?;
-    println!("{}", value);
-    evaluator.data_stack.push(value);
+    println!("{}", value.kind);
+    evaluator.data_stack.push(value.kind);
     Ok(())
 }
 
@@ -109,8 +109,8 @@ pub fn swap(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let b = evaluator.data_stack.pop_any()?;
     let a = evaluator.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(b);
-    evaluator.data_stack.push(a);
+    evaluator.data_stack.push(b.kind);
+    evaluator.data_stack.push(a.kind);
 
     Ok(())
 }
