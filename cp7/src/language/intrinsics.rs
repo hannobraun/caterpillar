@@ -88,3 +88,13 @@ pub fn print(evaluator: &mut Evaluator) -> DataStackResult<()> {
     evaluator.data_stack.push(value);
     Ok(())
 }
+
+pub fn swap(evaluator: &mut Evaluator) -> DataStackResult<()> {
+    let b = evaluator.data_stack.pop_any()?;
+    let a = evaluator.data_stack.pop_any()?;
+
+    evaluator.data_stack.push(b);
+    evaluator.data_stack.push(a);
+
+    Ok(())
+}

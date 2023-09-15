@@ -35,6 +35,7 @@ impl Interpreter {
             ("over", intrinsics::over),
             ("ping", intrinsics::ping),
             ("print", intrinsics::print),
+            ("swap", intrinsics::swap),
         ];
 
         for (name, intrinsic) in intrinsics {
