@@ -4,7 +4,7 @@ use enum_variant_type::EnumVariantType;
 
 use crate::language::repr::eval::fragments::FragmentId;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Value {
     pub kind: ValueKind,
 }
