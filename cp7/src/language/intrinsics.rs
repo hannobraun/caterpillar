@@ -100,7 +100,7 @@ pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
 
 pub fn print(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let value = evaluator.data_stack.pop_any()?;
-    println!("{value}");
+    println!("{}", value);
     evaluator.data_stack.push(value);
     Ok(())
 }
