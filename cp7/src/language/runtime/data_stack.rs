@@ -13,7 +13,7 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
-    pub fn push(&mut self, value: impl Into<ValueKind>) {
+    pub fn push_bare(&mut self, value: impl Into<ValueKind>) {
         let value = Value { kind: value.into() };
         self.values.push(value)
     }
