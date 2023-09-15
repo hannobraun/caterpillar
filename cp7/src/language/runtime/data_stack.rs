@@ -13,9 +13,13 @@ impl DataStack {
         Self { values: Vec::new() }
     }
 
+    pub fn push(&mut self, value: Value) {
+        self.values.push(value)
+    }
+
     pub fn push_bare(&mut self, value: impl Into<ValueKind>) {
         let value = Value { kind: value.into() };
-        self.values.push(value)
+        self.push(value)
     }
 
     pub fn pop_any(&mut self) -> DataStackResult<Value> {
