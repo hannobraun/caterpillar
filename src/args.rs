@@ -6,9 +6,9 @@ use clap::Parser;
 pub fn example() -> anyhow::Result<PathBuf> {
     let args = Args::parse();
 
-    let example_dir = "cp7/examples";
+    let example_dir = "examples";
     let path = if let Some(example) = args.example {
-        format!("cp7/examples/{example}.cp")
+        format!("examples/{example}.cp")
     } else {
         eprintln!("Need to specify example. Available examples:");
 
