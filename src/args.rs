@@ -8,7 +8,7 @@ pub fn example() -> anyhow::Result<PathBuf> {
 
     let example_dir = "examples";
     let path = if let Some(example) = args.example {
-        format!("examples/{example}.cp")
+        format!("{example_dir}/{example}.cp")
     } else {
         eprintln!("Need to specify example. Available examples:");
 
