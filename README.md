@@ -2,18 +2,37 @@
 
 ## About
 
-Caterpillar is an experimental language that aims to explore interactive
-programming.
+Caterpillar is an experimental programming language that aims to explore
+interactive programming.
 
-## Status & Organization
+## Status
 
-Caterpillar is still in a state of early exploration. It's far from being
-usable for anything yet.
+After [many experiments](archive/), I've decided to create a language that is
+practical, but as simple as it can be, to enable exploration of the core
+premise: interactivity.
 
-The project is organized as a series of prototypes, each labeled `cp<n>`, where
-`<n>` is a sequential integer. Check out the top-level directory for currently
-active prototypes, and the [`archive/`](archive/) directory for completed or
-abandoned ones.
+Here's what that means in practice:
+
+- Developing with the language is **fully interactive**. You manipulate a
+  running program, instead of having to restart to test your changes. This is
+  the core concept that is being explored.
+- All **code is stored in text files**. Previous prototypes followed the
+  approach of using a parsed/analyzed form of the code its canonical
+  representation. This has many advantages that I'd like to explore in the
+  future, but requires too much custom infrastructure to be viable.
+- A language that is **unapologetically dynamic**. Interpreted, dynamically
+  typed, and no design considerations made to change any of that. At some point,
+  I'd like to create a fully interactive language with static typing and zero
+  runtime overhead (beyond what is required for interactivity). For now, even
+  thinking about this would be too difficult.
+- The language is **purely functional, concatenative, and stack-based**. Besides
+  providing desirable properties, this is also as simple (and easy to implement)
+  as it gets.
+- Memory management is yet to be determined. I expect to get away with just the
+  stack for a while. After that, I'll probably go for reference counting, or
+  (runtime-managed) affine or linear types.
+
+Caterpillar is still in a state of early exploration, and barely usable.
 
 ## Acknowledgements
 
