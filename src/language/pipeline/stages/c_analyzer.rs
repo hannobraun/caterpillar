@@ -66,8 +66,8 @@ fn analyze_syntax_element(
         SyntaxElement::Symbol(symbol) => {
             FragmentPayload::Value(ValueKind::Symbol(symbol))
         }
-        SyntaxElement::Text(_text) => {
-            todo!("Text is not supported yet");
+        SyntaxElement::Text(text) => {
+            FragmentPayload::Value(ValueKind::Text(text))
         }
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
