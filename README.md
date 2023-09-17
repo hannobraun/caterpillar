@@ -5,6 +5,10 @@
 Caterpillar is an experimental programming language that aims to explore
 interactive programming.
 
+```
+"Hello, world!" print
+```
+
 ## Status
 
 After [many experiments](archive/), I've decided to create a language that is
