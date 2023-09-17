@@ -1,6 +1,7 @@
 use std::{iter, vec};
 
 use crate::language::repr::{
+    eval::value::ValueKind,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{token, Token},
 };
@@ -44,15 +45,15 @@ fn parse_syntax_element(
         }
         Token::Number(_) => {
             let number = parse_number(tokens)?;
-            SyntaxElement::Number(number)
+            SyntaxElement::Literal(ValueKind::Number(number))
         }
         Token::Symbol(_) => {
             let symbol = parse_symbol(tokens)?;
-            SyntaxElement::Symbol(symbol)
+            SyntaxElement::Literal(ValueKind::Symbol(symbol))
         }
         Token::Text(_) => {
             let text = parse_text(tokens)?;
-            SyntaxElement::Text(text)
+            SyntaxElement::Literal(ValueKind::Text(text))
         }
         Token::Word(_) => {
             let word = parse_word(tokens)?;

@@ -60,15 +60,7 @@ fn analyze_syntax_element(
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Value(ValueKind::Block { start })
         }
-        SyntaxElement::Number(number) => {
-            FragmentPayload::Value(ValueKind::Number(number))
-        }
-        SyntaxElement::Symbol(symbol) => {
-            FragmentPayload::Value(ValueKind::Symbol(symbol))
-        }
-        SyntaxElement::Text(text) => {
-            FragmentPayload::Value(ValueKind::Text(text))
-        }
+        SyntaxElement::Literal(value) => FragmentPayload::Value(value),
         SyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
