@@ -16,6 +16,7 @@ pub enum ValueKind {
     Block { start: FragmentId },
     Number(i64),
     Symbol(String),
+    Text(String),
 }
 
 impl ValueKind {
@@ -44,6 +45,7 @@ impl fmt::Display for ValueKind {
             ValueKind::Block { start, .. } => write!(f, "{{ {start} }}"),
             ValueKind::Number(number) => write!(f, "{number}"),
             ValueKind::Symbol(symbol) => write!(f, ":{symbol}"),
+            ValueKind::Text(text) => write!(f, "{text}"),
         }
     }
 }

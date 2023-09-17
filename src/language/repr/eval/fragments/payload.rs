@@ -49,6 +49,10 @@ impl FragmentPayload {
                 hasher.update(b"symbol");
                 hasher.update(symbol.as_bytes());
             }
+            Self::Value(ValueKind::Text(text)) => {
+                hasher.update(b"text");
+                hasher.update(text.as_bytes());
+            }
             Self::Word(word) => {
                 hasher.update(b"word");
                 hasher.update(word.as_bytes());
