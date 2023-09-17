@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::language::repr::tokens::Token;
+use crate::language::repr::{eval::value::ValueKind, tokens::Token};
 
 pub fn tokenize(code: &str) -> Vec<Token> {
     // Make sure that the code always ends on whitespace. Otherwise the
@@ -46,7 +46,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             }
             State::Symbol { mut buf } => {
                 if ch.is_whitespace() {
-                    tokens.push(Token::Symbol(buf));
+                    tokens.push(Token::Literal(ValueKind::Symbol(buf)));
                     state = State::Scanning;
                     continue;
                 }
@@ -56,7 +56,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             }
             State::Text { mut buf } => {
                 if ch == '"' {
-                    tokens.push(Token::Text(buf));
+                    tokens.push(Token::Literal(ValueKind::Text(buf)));
                     state = State::Scanning;
                     continue;
                 }
@@ -67,7 +67,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             State::WordOrNumber { mut buf } => {
                 if ch.is_whitespace() {
                     let token = match buf.parse::<i64>() {
-                        Ok(number) => Token::Number(number),
+                        Ok(number) => Token::Literal(ValueKind::Number(number)),
                         Err(_) => Token::Word(buf),
                     };
 

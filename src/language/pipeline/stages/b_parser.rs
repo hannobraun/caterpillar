@@ -43,17 +43,9 @@ fn parse_syntax_element(
             let syntax_tree = parse_block(tokens)?;
             SyntaxElement::Block(syntax_tree)
         }
-        Token::Number(_) => {
-            let number = parse_number(tokens)?;
-            SyntaxElement::Literal(ValueKind::Number(number))
-        }
-        Token::Symbol(_) => {
-            let symbol = parse_symbol(tokens)?;
-            SyntaxElement::Literal(ValueKind::Symbol(symbol))
-        }
-        Token::Text(_) => {
-            let text = parse_text(tokens)?;
-            SyntaxElement::Literal(ValueKind::Text(text))
+        Token::Literal(_) => {
+            let value = parse_literal(tokens)?;
+            SyntaxElement::Literal(value)
         }
         Token::Word(_) => {
             let word = parse_word(tokens)?;
@@ -84,18 +76,8 @@ fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
     Ok(token.0)
 }
 
-fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
-    let token = expect::<token::Number>(tokens)?;
-    Ok(token.0)
-}
-
-fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Symbol>(tokens)?;
-    Ok(token.0)
-}
-
-fn parse_text(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Text>(tokens)?;
+fn parse_literal(tokens: &mut Tokens) -> ParserResult<ValueKind> {
+    let token = expect::<token::Literal>(tokens)?;
     Ok(token.0)
 }
 
