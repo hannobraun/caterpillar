@@ -50,6 +50,10 @@ fn parse_syntax_element(
             let symbol = parse_symbol(tokens)?;
             SyntaxElement::Symbol(symbol)
         }
+        Token::Text(_) => {
+            let text = parse_text(tokens)?;
+            SyntaxElement::Text(text)
+        }
         Token::Word(_) => {
             let word = parse_word(tokens)?;
             SyntaxElement::Word(word)
@@ -86,6 +90,11 @@ fn parse_number(tokens: &mut Tokens) -> ParserResult<i64> {
 
 fn parse_symbol(tokens: &mut Tokens) -> ParserResult<String> {
     let token = expect::<token::Symbol>(tokens)?;
+    Ok(token.0)
+}
+
+fn parse_text(tokens: &mut Tokens) -> ParserResult<String> {
+    let token = expect::<token::Text>(tokens)?;
     Ok(token.0)
 }
 

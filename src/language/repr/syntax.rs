@@ -16,5 +16,6 @@ pub enum SyntaxElement {
     Block(SyntaxTree),
     Number(i64),
     Symbol(String),
+    Text(String),
     Word(String),
 }
