@@ -10,7 +10,7 @@ pub struct Value {
     pub fragment: Option<FragmentId>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash, EnumVariantType)]
 #[evt(derive(Debug, Eq, PartialEq))]
 pub enum ValueKind {
     Block { start: FragmentId },
