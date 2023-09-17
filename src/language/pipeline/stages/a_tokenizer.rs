@@ -30,6 +30,9 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ':' => {
                     state = State::Symbol { buf: String::new() };
                 }
+                '"' => {
+                    state = State::Text { buf: String::new() };
+                }
                 ch => {
                     state = State::WordOrNumber {
                         buf: String::from(ch),
@@ -50,6 +53,16 @@ pub fn tokenize(code: &str) -> Vec<Token> {
 
                 buf.push(ch);
                 state = State::Symbol { buf };
+            }
+            State::Text { mut buf } => {
+                if ch == '"' {
+                    tokens.push(Token::Text(buf));
+                    state = State::Scanning;
+                    continue;
+                }
+
+                buf.push(ch);
+                state = State::Text { buf }
             }
             State::WordOrNumber { mut buf } => {
                 if ch.is_whitespace() {
@@ -77,5 +90,6 @@ enum State {
     Scanning,
     Comment,
     Symbol { buf: String },
+    Text { buf: String },
     WordOrNumber { buf: String },
 }

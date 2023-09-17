@@ -7,5 +7,6 @@ pub enum Token {
     CurlyBracketClose,
     Number(i64),
     Symbol(String),
+    Text(String),
     Word(String),
 }
