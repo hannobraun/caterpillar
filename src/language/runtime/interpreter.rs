@@ -22,9 +22,7 @@ impl Interpreter {
             evaluator.call_stack.push(start);
         }
 
-        let intrinsics = libraries::all();
-
-        for (name, intrinsic) in intrinsics {
+        for (name, intrinsic) in libraries::all() {
             evaluator.functions.register_intrinsic(name, intrinsic)
         }
 
