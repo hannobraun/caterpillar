@@ -1,13 +1,10 @@
 use crate::language::{
-    intrinsics,
+    libraries,
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{Fragments, Replacement},
 };
 
-use super::{
-    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
-    functions::Intrinsic,
-};
+use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -25,18 +22,7 @@ impl Interpreter {
             evaluator.call_stack.push(start);
         }
 
-        let intrinsics = [
-            ("+", intrinsics::add as Intrinsic),
-            ("clone", intrinsics::clone),
-            ("delay_ms", intrinsics::delay_ms),
-            ("eval", intrinsics::eval),
-            ("fn", intrinsics::fn_),
-            ("nop", intrinsics::nop),
-            ("over", intrinsics::over),
-            ("ping", intrinsics::ping),
-            ("print", intrinsics::print),
-            ("swap", intrinsics::swap),
-        ];
+        let intrinsics = libraries::all();
 
         for (name, intrinsic) in intrinsics {
             evaluator.functions.register_intrinsic(name, intrinsic)
