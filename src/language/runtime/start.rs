@@ -17,10 +17,7 @@ pub fn start(
         let new_code = match interpreter.step()? {
             EvaluatorState::InProgress => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
-                Err(TryRecvError::Empty) => {
-                    // nothing to do; just continue with the next evaluator step
-                    None
-                }
+                Err(TryRecvError::Empty) => None,
                 Err(TryRecvError::Disconnected) => {
                     return Err(RuntimeError::UpdatesDisconnected);
                 }
