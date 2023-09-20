@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use tracing::debug;
+
 use super::{
     replacements::{Replacement, Replacements},
     Fragment, FragmentAddress, FragmentId,
@@ -41,7 +43,7 @@ impl Fragments {
             let payload = fragment.payload.display_short();
             let address = address.display_short();
 
-            eprintln!("insert {id} ({payload}) at {address}");
+            debug!("insert {id} ({payload}) at {address}");
         }
 
         {
@@ -74,7 +76,7 @@ impl Fragments {
 
                         let existing = existing.display_short();
                         let new = new.display_short();
-                        eprintln!("Replace {existing} with {new}");
+                        debug!("Replace {existing} with {new}");
                     }
                 }
 
