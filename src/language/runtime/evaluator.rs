@@ -30,6 +30,14 @@ impl Evaluator {
         }
     }
 
+    pub fn state(&self) -> EvaluatorState {
+        if self.call_stack.current().is_some() {
+            EvaluatorState::InProgress
+        } else {
+            EvaluatorState::Finished
+        }
+    }
+
     pub fn step(
         &mut self,
         fragments: &Fragments,

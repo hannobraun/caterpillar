@@ -35,12 +35,17 @@ impl Interpreter {
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-        pipeline::run(code, &mut self.fragments)?;
+        let PipelineOutput { start } =
+            pipeline::run(code, &mut self.fragments)?;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
             self.evaluator.data_stack.replace(old, new);
             self.evaluator.functions.replace(old, new, &self.fragments);
+        }
+
+        if !self.evaluator.state().in_progress() {
+            self.evaluator.call_stack.push(start);
         }
 
         Ok(())
