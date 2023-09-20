@@ -25,12 +25,15 @@ pub fn start(
                     return Err(RuntimeError::UpdatesDisconnected);
                 }
             },
-            EvaluatorState::Finished => match updates.recv() {
-                Ok(new_code) => Some(new_code),
-                Err(RecvError) => {
-                    return Err(RuntimeError::UpdatesDisconnected);
+            EvaluatorState::Finished => {
+                eprintln!("\n> Program finished.\n");
+                match updates.recv() {
+                    Ok(new_code) => Some(new_code),
+                    Err(RecvError) => {
+                        return Err(RuntimeError::UpdatesDisconnected);
+                    }
                 }
-            },
+            }
         };
 
         if let Some(new_code) = new_code {
