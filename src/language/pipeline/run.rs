@@ -17,11 +17,11 @@ pub fn run(
     let syntax_tree = parse(tokens.clone())?;
     let AnalyzerOutput { start } = analyze(syntax_tree, fragments);
 
-    Ok(PipelineOutput { start: Some(start) })
+    Ok(PipelineOutput { start })
 }
 
 pub struct PipelineOutput {
-    pub start: Option<FragmentId>,
+    pub start: FragmentId,
 }
 
 #[derive(Debug, thiserror::Error)]
