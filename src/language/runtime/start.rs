@@ -1,8 +1,11 @@
-use std::sync::mpsc::{Receiver, TryRecvError};
+use std::sync::mpsc::{Receiver, RecvError, TryRecvError};
 
 use crate::language::pipeline::PipelineError;
 
-use super::{evaluator::EvaluatorError, interpreter::Interpreter};
+use super::{
+    evaluator::{EvaluatorError, EvaluatorState},
+    interpreter::Interpreter,
+};
 
 pub fn start(
     code: &str,
@@ -10,21 +13,30 @@ pub fn start(
 ) -> Result<(), RuntimeError> {
     let mut interpreter = Interpreter::new(code)?;
 
-    while interpreter.step()?.in_progress() {
-        match updates.try_recv() {
-            Ok(new_code) => {
-                interpreter.update(&new_code)?;
-            }
-            Err(TryRecvError::Empty) => {
-                // nothing to do; just continue with the next evaluator step
-            }
-            Err(TryRecvError::Disconnected) => {
-                return Err(RuntimeError::UpdatesDisconnected);
-            }
+    loop {
+        let new_code = match interpreter.step()? {
+            EvaluatorState::InProgress => match updates.try_recv() {
+                Ok(new_code) => Some(new_code),
+                Err(TryRecvError::Empty) => {
+                    // nothing to do; just continue with the next evaluator step
+                    None
+                }
+                Err(TryRecvError::Disconnected) => {
+                    return Err(RuntimeError::UpdatesDisconnected);
+                }
+            },
+            EvaluatorState::Finished => match updates.recv() {
+                Ok(new_code) => Some(new_code),
+                Err(RecvError) => {
+                    return Err(RuntimeError::UpdatesDisconnected);
+                }
+            },
+        };
+
+        if let Some(new_code) = new_code {
+            interpreter.update(&new_code)?;
         }
     }
-
-    Ok(())
 }
 
 #[derive(Debug, thiserror::Error)]
