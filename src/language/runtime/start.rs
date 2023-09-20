@@ -12,8 +12,8 @@ pub fn start(
 
     while interpreter.step()?.in_progress() {
         match updates.try_recv() {
-            Ok(code) => {
-                interpreter.update(&code)?;
+            Ok(new_code) => {
+                interpreter.update(&new_code)?;
             }
             Err(TryRecvError::Empty) => {
                 // nothing to do; just continue with the next evaluator step
