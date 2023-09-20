@@ -17,7 +17,7 @@ pub fn run(
     let syntax_tree = parse(tokens.clone())?;
     let AnalyzerOutput { start } = analyze(syntax_tree, fragments);
 
-    Ok(PipelineOutput { start })
+    Ok(PipelineOutput { start: Some(start) })
 }
 
 pub struct PipelineOutput {

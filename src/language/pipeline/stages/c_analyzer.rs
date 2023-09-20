@@ -14,7 +14,7 @@ pub fn analyze(
 ) -> AnalyzerOutput {
     let parent = None;
     let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-    AnalyzerOutput { start: Some(start) }
+    AnalyzerOutput { start }
 }
 
 fn analyze_syntax_tree(
@@ -69,5 +69,5 @@ fn analyze_syntax_element(
 }
 
 pub struct AnalyzerOutput {
-    pub start: Option<FragmentId>,
+    pub start: FragmentId,
 }
