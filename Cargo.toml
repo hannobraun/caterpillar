@@ -12,7 +12,12 @@ itertools = "*"
 notify = "*"
 notify-debouncer-mini = "*"
 thiserror = "*"
+tracing = "*"
 
 [dependencies.clap]
 version = "*"
 features = ["derive"]
+
+[dependencies.tracing-subscriber]
+version = "*"
+features = ["env-filter"]
