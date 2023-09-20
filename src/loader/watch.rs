@@ -8,6 +8,7 @@ use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
 };
+use tracing::error;
 
 use crate::loader::load::load;
 
@@ -35,7 +36,7 @@ pub fn watch(
             }
 
             // Not sure what else we can do about it here.
-            eprintln!("Error watching code: {result:?}");
+            error!("Error watching code: {result:?}");
         },
     )?;
 
