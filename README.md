@@ -21,7 +21,7 @@ Here's what that means in practice:
   running program, instead of having to restart to test your changes. This is
   the core concept that is being explored.
 - All **code is stored in text files**. Previous prototypes followed the
-  approach of using a parsed/analyzed form of the code its canonical
+  approach of using a parsed/analyzed form of the code as its canonical
   representation. This has many advantages that I'd like to explore in the
   future, but requires too much custom infrastructure to be viable.
 - A language that is **unapologetically dynamic**. Interpreted, dynamically
