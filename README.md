@@ -28,7 +28,7 @@ Here's what that means in practice:
   typed, and no design considerations made to change any of that. At some point,
   I'd like to create a fully interactive language with static typing and zero
   runtime overhead (beyond what is required for interactivity). For now, even
-  thinking about this would be too difficult.
+  thinking about this has turned out to be too disruptive.
 - The language is **purely functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
