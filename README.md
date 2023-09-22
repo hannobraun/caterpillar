@@ -46,7 +46,7 @@ Here's what that means in practice:
   runtime overhead (beyond what is required for interactivity). But previous
   experiments have shown that for now, even thinking about this is too
   disruptive.
-- The language is **purely functional, concatenative, and stack-based**. Besides
+- The language is **functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
 
