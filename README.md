@@ -9,6 +9,20 @@ interactive programming.
 "Hello, world!" print
 ```
 
+The idealistic long-term goal is to create a highly productive programming
+language that is usable everywhere from microcontrollers, to browsers, to
+desktops and servers, while providing an interactive programming experience in
+all of these places.
+
+In interactive programming, you directly update a running program, instead of
+having to restart your program to test every single change. The core assumption
+of Caterpillar is that interactive programming can provide an additional boost
+in productivity, compared to traditional programming environments.
+
+Whether this goal can be achieved remains to be seen. The practical short-term
+goal is to explore interactive programming and figure out what it takes to make
+it practical.
+
 ## Status
 
 After [many experiments](archive/), I've decided to create a language that is
