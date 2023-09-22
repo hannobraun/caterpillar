@@ -25,30 +25,30 @@ it practical.
 
 ## Status
 
-After [many experiments](archive/), I've decided to create a language that is
-practical, but as simple as it can be, to enable exploration of the core
-premise: interactivity.
+After [quite a few experiments](archive/), I've decided to create a practical
+language that keeps things as simple as they can be, to enable exploration of
+the core premise: interactivity.
 
 Here's what that means in practice:
 
 - Developing with the language is **fully interactive**. You manipulate a
-  running program, instead of having to restart to test your changes. This is
-  the core concept that is being explored.
-- All **code is stored in text files**. Previous prototypes followed the
-  approach of using a parsed/analyzed form of the code as its canonical
-  representation. This has many advantages that I'd like to explore in the
-  future, but requires too much custom infrastructure to be viable.
-- A language that is **unapologetically dynamic**. Interpreted, dynamically
-  typed, and no design considerations made to change any of that. At some point,
-  I'd like to create a fully interactive language with static typing and zero
-  runtime overhead (beyond what is required for interactivity). For now, even
-  thinking about this has turned out to be too disruptive.
+  running program, instead of having to restart to test your changes.
+- For now, this interactive runtime is **only available on desktop operating
+  systems**. (I develop on Linux.)
+- All **code is stored in text files**. Previous prototypes explored the
+  approach of having a code database that stores a parsed/analyzed form of the
+  code as its canonical representation. This has many advantages that I'd like
+  to explore in the future, but requires too much custom infrastructure to be
+  viable in the short-term.
+- The language is **unapologetically dynamic**. Interpreted, dynamically typed,
+  and no design considerations made to change any of that. At some point, I'd
+  like to create a fully interactive language with static typing and zero
+  runtime overhead (beyond what is required for interactivity). But previous
+  experiments have shown that for now, even thinking about this is too
+  disruptive.
 - The language is **purely functional, concatenative, and stack-based**. Besides
   providing desirable properties, this is also as simple (and easy to implement)
   as it gets.
-- Memory management is yet to be determined. I expect to get away with just the
-  stack for a while. After that, I'll probably go for reference counting, or
-  (runtime-managed) affine or linear types.
 
 Caterpillar is still in a state of early exploration, and barely usable.
 
