@@ -52,6 +52,14 @@ Here's what that means in practice:
 
 Caterpillar is still in a state of early exploration, and barely usable.
 
+## Documentation
+
+For now, there's no documentation. The language is still very much in flux, and
+keeping it up-to-date would be very tedious.
+
+For now, check out the [examples](examples/) in the repository, as well as the
+Rust source code (especially unit tests) to see how it works.
+
 ## Acknowledgements
 
 Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting
