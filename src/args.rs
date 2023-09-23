@@ -4,12 +4,7 @@ use clap::Parser;
 
 pub fn example() -> anyhow::Result<PathBuf> {
     let args = Args::parse();
-
-    let example_dir = "examples";
-    let example = args.example;
-
-    let path = format!("{example_dir}/{example}.cp");
-    Ok(PathBuf::from(path))
+    Ok(PathBuf::from(args.example))
 }
 
 #[derive(clap::Parser)]
