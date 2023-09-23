@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 #[derive(clap::Parser)]
 pub struct Args {
-    pub example: PathBuf,
+    pub script: PathBuf,
 }
 
 impl Args {
