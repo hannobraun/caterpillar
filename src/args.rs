@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
-pub fn example() -> anyhow::Result<PathBuf> {
+pub fn example() -> PathBuf {
     let args = Args::parse();
-    Ok(args.example)
+    args.example
 }
 
 #[derive(clap::Parser)]
