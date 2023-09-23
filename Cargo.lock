@@ -103,6 +103,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "blake3",
+ "clap",
+ "enum_variant_type",
+ "itertools",
+ "notify",
+ "notify-debouncer-mini",
+ "thiserror",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "cc"
 version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -168,22 +184,6 @@ name = "constant_time_eq"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7144d30dcf0fafbce74250a3963025d8d52177934239851c917d29f1df280c2"
-
-[[package]]
-name = "cp7"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "blake3",
- "clap",
- "enum_variant_type",
- "itertools",
- "notify",
- "notify-debouncer-mini",
- "thiserror",
- "tracing",
- "tracing-subscriber",
-]
 
 [[package]]
 name = "crossbeam-channel"
