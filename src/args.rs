@@ -2,12 +2,12 @@ use std::path::PathBuf;
 
 pub fn example() -> anyhow::Result<PathBuf> {
     let args = Args::parse();
-    Ok(PathBuf::from(args.example))
+    Ok(args.example)
 }
 
 #[derive(clap::Parser)]
 struct Args {
-    example: String,
+    example: PathBuf,
 }
 
 impl Args {
