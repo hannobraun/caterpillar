@@ -10,7 +10,7 @@ fn main() -> anyhow::Result<()> {
     let args = args::Args::parse();
     let code = loader::load::load(&args.script)?;
     let (updates, _watcher) = loader::watch::watch(&args.script)?;
-
     language::runtime::start::start(&code, updates)?;
+
     Ok(())
 }
