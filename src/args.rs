@@ -6,8 +6,8 @@ pub fn example() -> PathBuf {
 }
 
 #[derive(clap::Parser)]
-struct Args {
-    example: PathBuf,
+pub struct Args {
+    pub example: PathBuf,
 }
 
 impl Args {
