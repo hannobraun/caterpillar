@@ -7,10 +7,9 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .init();
 
-    let example = args::Args::parse().script;
-
-    let code = loader::load::load(&example)?;
-    let (updates, _watcher) = loader::watch::watch(&example)?;
+    let args = args::Args::parse();
+    let code = loader::load::load(&args.script)?;
+    let (updates, _watcher) = loader::watch::watch(&args.script)?;
 
     language::runtime::start::start(&code, updates)?;
     Ok(())
