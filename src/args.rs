@@ -1,7 +1,5 @@
 use std::path::PathBuf;
 
-use clap::Parser;
-
 pub fn example() -> anyhow::Result<PathBuf> {
     let args = Args::parse();
     Ok(PathBuf::from(args.example))
@@ -10,4 +8,10 @@ pub fn example() -> anyhow::Result<PathBuf> {
 #[derive(clap::Parser)]
 struct Args {
     example: String,
+}
+
+impl Args {
+    pub fn parse() -> Self {
+        <Self as clap::Parser>::parse()
+    }
 }
