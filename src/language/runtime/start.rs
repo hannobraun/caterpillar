@@ -23,7 +23,10 @@ pub fn start(
                 }
             },
             EvaluatorState::Finished => {
-                eprintln!("\n> Program finished.\n");
+                eprintln!();
+                eprintln!("> Program finished.");
+                eprintln!();
+
                 match updates.recv() {
                     Ok(new_code) => Some(new_code),
                     Err(RecvError) => {
