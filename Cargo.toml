@@ -1,6 +1,6 @@
 [workspace]
 members = ["capi-core"]
-default-members = ["capi-core"]
+default-members = [".", "capi-core"]
 
 [package]
 name = "capi"
