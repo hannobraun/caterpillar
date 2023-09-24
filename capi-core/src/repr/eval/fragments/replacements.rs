@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::FragmentId;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Replacements {
     old_to_new: HashMap<FragmentId, FragmentId>,
     new_to_old: HashMap<FragmentId, FragmentId>,
@@ -10,10 +10,7 @@ pub struct Replacements {
 
 impl Replacements {
     pub fn new() -> Self {
-        Self {
-            old_to_new: HashMap::new(),
-            new_to_old: HashMap::new(),
-        }
+        Self::default()
     }
 
     pub fn insert(&mut self, old: FragmentId, new: FragmentId) {
