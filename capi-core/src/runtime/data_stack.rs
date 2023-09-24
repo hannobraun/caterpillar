@@ -3,14 +3,14 @@ use crate::repr::eval::{
     value::{Type, TypeError, Value, ValueKind},
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
 }
 
 impl DataStack {
     pub fn new() -> Self {
-        Self { values: Vec::new() }
+        Self::default()
     }
 
     pub fn push(&mut self, value: Value) {

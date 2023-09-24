@@ -8,16 +8,14 @@ use super::{
     },
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Context {
     pub channels: HashMap<i64, i64>,
 }
 
 impl Context {
     pub fn new() -> Self {
-        Self {
-            channels: HashMap::new(),
-        }
+        Self::default()
     }
 }
 

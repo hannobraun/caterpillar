@@ -1,13 +1,13 @@
 use crate::repr::eval::fragments::FragmentId;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct CallStack {
     frames: Vec<FragmentId>,
 }
 
 impl CallStack {
     pub fn new() -> Self {
-        Self { frames: Vec::new() }
+        Self::default()
     }
 
     pub fn current(&self) -> Option<FragmentId> {

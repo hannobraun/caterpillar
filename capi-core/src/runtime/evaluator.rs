@@ -12,7 +12,7 @@ use super::{
     functions::{self, Function, Functions, ResolveError},
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Evaluator {
     pub context: Context,
     pub functions: Functions,
@@ -22,12 +22,7 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new() -> Self {
-        Self {
-            context: Context::new(),
-            functions: Functions::new(),
-            call_stack: CallStack::new(),
-            data_stack: DataStack::new(),
-        }
+        Self::default()
     }
 
     pub fn state(&self) -> EvaluatorState {

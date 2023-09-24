@@ -1,15 +1,13 @@
 use super::eval::value::ValueKind;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
 }
 
 impl SyntaxTree {
     pub fn new() -> Self {
-        Self {
-            elements: Vec::new(),
-        }
+        Self::default()
     }
 }
 

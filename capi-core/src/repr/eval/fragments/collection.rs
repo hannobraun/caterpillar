@@ -7,7 +7,7 @@ use super::{
     Fragment, FragmentAddress, FragmentId,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
@@ -16,11 +16,7 @@ pub struct Fragments {
 
 impl Fragments {
     pub fn new() -> Self {
-        Self {
-            by_id: HashMap::new(),
-            by_address: HashMap::new(),
-            replacements: Replacements::default(),
-        }
+        Self::default()
     }
 
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
