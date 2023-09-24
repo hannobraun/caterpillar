@@ -19,7 +19,7 @@ impl Fragments {
         Self {
             by_id: HashMap::new(),
             by_address: HashMap::new(),
-            replacements: Replacements::new(),
+            replacements: Replacements::default(),
         }
     }
 

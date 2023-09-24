@@ -9,10 +9,6 @@ pub struct Replacements {
 }
 
 impl Replacements {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn insert(&mut self, old: FragmentId, new: FragmentId) {
         self.old_to_new.insert(old, new);
         self.new_to_old.insert(new, old);
