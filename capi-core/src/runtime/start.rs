@@ -25,8 +25,8 @@ pub fn start(
             EvaluatorState::Finished => {
                 eprintln!();
                 eprintln!("> Program finished.");
-                eprintln!("> - will restart on change to script");
-                eprintln!("> - press CTRL-C to abort");
+                eprintln!("  > will restart on change to script");
+                eprintln!("  > press CTRL-C to abort");
                 eprintln!();
 
                 match updates.recv() {
