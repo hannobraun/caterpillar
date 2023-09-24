@@ -7,16 +7,14 @@ use crate::repr::eval::{
 
 use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Functions {
     inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
     pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-        }
+        Self::default()
     }
 
     pub fn register_intrinsic(&mut self, name: &str, intrinsic: Intrinsic) {
