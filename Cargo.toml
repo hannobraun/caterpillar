@@ -10,7 +10,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-itertools = "*"
 notify = "*"
 notify-debouncer-mini = "*"
 tracing = "*"
