@@ -1,6 +1,7 @@
 mod args;
-mod language;
 mod loader;
+
+pub use capi_core as language;
 
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()

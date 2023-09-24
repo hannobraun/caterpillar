@@ -1,0 +1,13 @@
+[package]
+name = "capi-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+blake3 = "*"
+enum_variant_type = "*"
+thiserror = "*"
+tracing = "*"
+
+[dev-dependencies]
+anyhow = "*"

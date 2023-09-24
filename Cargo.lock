@@ -107,15 +107,24 @@ name = "capi"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "blake3",
+ "capi-core",
  "clap",
- "enum_variant_type",
  "itertools",
  "notify",
  "notify-debouncer-mini",
- "thiserror",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "capi-core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "blake3",
+ "enum_variant_type",
+ "thiserror",
+ "tracing",
 ]
 
 [[package]]

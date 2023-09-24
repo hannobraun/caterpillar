@@ -1,4 +1,4 @@
-use crate::language::{
+use crate::{
     libraries,
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{Fragments, Replacement},
@@ -81,7 +81,7 @@ impl Interpreter {
 
 #[cfg(test)]
 mod tests {
-    use crate::language::runtime::interpreter::Interpreter;
+    use crate::runtime::interpreter::Interpreter;
 
     // Make sure all updates happen in the middle of their respective context,
     // not the beginning. This is the more complex case, and leads to the test

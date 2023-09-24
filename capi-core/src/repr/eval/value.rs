@@ -2,7 +2,7 @@ use std::fmt;
 
 use enum_variant_type::EnumVariantType;
 
-use crate::language::repr::eval::fragments::FragmentId;
+use crate::repr::eval::fragments::FragmentId;
 
 #[derive(Clone, Debug)]
 pub struct Value {

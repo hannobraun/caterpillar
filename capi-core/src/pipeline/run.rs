@@ -1,4 +1,4 @@
-use crate::language::{
+use crate::{
     pipeline::stages::b_parser::parse,
     repr::eval::fragments::{FragmentId, Fragments},
 };

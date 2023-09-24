@@ -1,6 +1,6 @@
 use std::{iter, vec};
 
-use crate::language::repr::{
+use crate::repr::{
     eval::value::ValueKind,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{token, Token},

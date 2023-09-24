@@ -1,6 +1,6 @@
 use std::sync::mpsc::{Receiver, RecvError, TryRecvError};
 
-use crate::language::pipeline::PipelineError;
+use crate::pipeline::PipelineError;
 
 use super::{
     evaluator::{EvaluatorError, EvaluatorState},
