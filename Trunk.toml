@@ -1,0 +1,2 @@
+[build]
+target = "capi-web/index.html"
