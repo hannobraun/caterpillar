@@ -4,4 +4,4 @@ pub mod pipeline;
 pub mod repr;
 pub mod runtime;
 
-pub use self::runtime::interpreter::Interpreter;
+pub use self::runtime::{evaluator::EvaluatorState, interpreter::Interpreter};
