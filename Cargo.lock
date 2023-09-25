@@ -127,6 +127,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-web"
+version = "0.1.0"
+dependencies = [
+ "capi-core",
+]
+
+[[package]]
 name = "cc"
 version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"

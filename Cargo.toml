@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
-members = ["capi-cli", "capi-core"]
+members = ["capi-cli", "capi-core", "capi-web"]
 default-members = ["capi-cli", "capi-core"]
