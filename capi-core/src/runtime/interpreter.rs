@@ -44,7 +44,7 @@ impl Interpreter {
             self.evaluator.functions.replace(old, new, &self.fragments);
         }
 
-        if !self.evaluator.state().in_progress() {
+        if self.evaluator.state().finished() {
             self.evaluator.call_stack.push(start);
         }
 

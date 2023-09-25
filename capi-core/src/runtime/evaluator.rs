@@ -81,8 +81,8 @@ pub enum EvaluatorState {
 }
 
 impl EvaluatorState {
-    pub fn in_progress(&self) -> bool {
-        matches!(self, Self::InProgress)
+    pub fn finished(&self) -> bool {
+        matches!(self, Self::Finished)
     }
 }
 
