@@ -1,0 +1,22 @@
+[package]
+name = "capi"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+anyhow = "*"
+notify = "*"
+notify-debouncer-mini = "*"
+tracing = "*"
+
+[dependencies.capi-core]
+path = "../capi-core"
+
+[dependencies.clap]
+version = "*"
+features = ["derive"]
+
+[dependencies.tracing-subscriber]
+version = "*"
+features = ["env-filter"]
