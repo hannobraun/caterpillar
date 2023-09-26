@@ -12,7 +12,7 @@ use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
 #[derive(Debug)]
 pub struct Functions<C> {
-    native: BTreeMap<String, Function<C>>,
+    native: BTreeMap<String, NativeFunction<C>>,
     user_defined: BTreeMap<String, UserDefinedFunction>,
 }
 
@@ -31,7 +31,8 @@ impl<C> Functions<C> {
         ];
 
         for (name, intrinsic) in intrinsics {
-            native.insert(name.to_string(), Function::Intrinsic(intrinsic));
+            native
+                .insert(name.to_string(), NativeFunction::Intrinsic(intrinsic));
         }
 
         Self {
@@ -46,7 +47,7 @@ impl<C> Functions<C> {
     ) {
         for (name, function) in functions {
             self.native
-                .insert(name.into(), Function::Platform(function));
+                .insert(name.into(), NativeFunction::Platform(function));
         }
     }
 
@@ -62,7 +63,12 @@ impl<C> Functions<C> {
     where
         C: Clone,
     {
-        let native = self.native.get(name).cloned();
+        let native = self.native.get(name).map(|native| match native {
+            NativeFunction::Intrinsic(function) => {
+                Function::Intrinsic(*function)
+            }
+            NativeFunction::Platform(function) => Function::Platform(*function),
+        });
         let user_defined = self
             .user_defined
             .get(name)
@@ -123,6 +129,12 @@ pub enum Function<C> {
     Intrinsic(IntrinsicFunction),
     Platform(PlatformFunction<C>),
     UserDefined(UserDefinedFunction),
+}
+
+#[derive(Debug)]
+pub enum NativeFunction<C> {
+    Intrinsic(IntrinsicFunction),
+    Platform(PlatformFunction<C>),
 }
 
 pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
