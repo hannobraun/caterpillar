@@ -13,7 +13,7 @@ use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
 #[derive(Debug)]
 pub struct Functions {
-    inner: BTreeMap<String, Function>,
+    inner: BTreeMap<String, Function<Context>>,
 }
 
 impl Functions {
@@ -56,7 +56,10 @@ impl Functions {
         self.inner.insert(name.value, function);
     }
 
-    pub fn resolve(&self, name: &str) -> Result<&Function, ResolveError> {
+    pub fn resolve(
+        &self,
+        name: &str,
+    ) -> Result<&Function<Context>, ResolveError> {
         self.inner
             .get(name)
             .ok_or(ResolveError { name: name.into() })
@@ -109,9 +112,9 @@ impl Default for Functions {
 }
 
 #[derive(Debug)]
-pub enum Function {
+pub enum Function<C> {
     Intrinsic(IntrinsicFunction),
-    Platform(PlatformFunction<Context>),
+    Platform(PlatformFunction<C>),
     UserDefined(UserDefined),
 }
 
