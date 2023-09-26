@@ -13,7 +13,7 @@ use super::{
 
 #[derive(Debug, Default)]
 pub struct Evaluator {
-    pub functions: Functions,
+    pub functions: Functions<Context>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
 }

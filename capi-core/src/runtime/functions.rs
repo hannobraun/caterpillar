@@ -6,17 +6,16 @@ use crate::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::{self, ValueKind},
     },
-    Context,
 };
 
 use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
 #[derive(Debug)]
-pub struct Functions {
-    inner: BTreeMap<String, Function<Context>>,
+pub struct Functions<C> {
+    inner: BTreeMap<String, Function<C>>,
 }
 
-impl Functions {
+impl<C> Functions<C> {
     pub fn new() -> Self {
         let mut inner = BTreeMap::new();
 
@@ -39,9 +38,7 @@ impl Functions {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<
-            Item = (&'static str, PlatformFunction<Context>),
-        >,
+        functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
     ) {
         for (name, function) in functions {
             self.inner.insert(name.into(), Function::Platform(function));
@@ -56,10 +53,7 @@ impl Functions {
         self.inner.insert(name.value, function);
     }
 
-    pub fn resolve(
-        &self,
-        name: &str,
-    ) -> Result<&Function<Context>, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<&Function<C>, ResolveError> {
         self.inner
             .get(name)
             .ok_or(ResolveError { name: name.into() })
@@ -105,7 +99,7 @@ impl Functions {
     }
 }
 
-impl Default for Functions {
+impl<C> Default for Functions<C> {
     fn default() -> Self {
         Self::new()
     }
