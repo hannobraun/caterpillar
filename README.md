@@ -71,7 +71,7 @@ Run a Caterpillar script:
 capi path/to/script.capi
 ```
 
-For example, if you've cloned this repository you can run one of the included
+For example, if you've cloned this repository, you can run one of the included
 examples like this:
 
 ```shell
