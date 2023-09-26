@@ -5,11 +5,11 @@ use super::{
     runtime::{data_stack::DataStackResult, functions::FunctionName},
 };
 
-pub fn add(evaluator: RuntimeContext) -> DataStackResult<()> {
-    let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
-    let (a, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
+pub fn add(context: RuntimeContext) -> DataStackResult<()> {
+    let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
-    evaluator.data_stack.push_bare(value::Number(a.0 + b.0));
+    context.data_stack.push_bare(value::Number(a.0 + b.0));
 
     Ok(())
 }
