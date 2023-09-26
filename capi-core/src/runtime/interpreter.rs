@@ -10,7 +10,7 @@ use super::evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState};
 pub struct Interpreter {
     fragments: Fragments,
     evaluator: Evaluator<Context>,
-    platform_context: Context,
+    pub platform_context: Context,
 }
 
 impl Interpreter {
