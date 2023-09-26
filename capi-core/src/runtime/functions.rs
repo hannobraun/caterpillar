@@ -31,7 +31,7 @@ impl Functions {
         ];
 
         for (name, intrinsic) in intrinsics {
-            inner.insert(name.to_string(), Function::Native(intrinsic));
+            inner.insert(name.to_string(), Function::Intrinsic(intrinsic));
         }
 
         Self { inner }
@@ -42,7 +42,7 @@ impl Functions {
         functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
     ) {
         for (name, function) in functions {
-            self.inner.insert(name.into(), Function::Native(function));
+            self.inner.insert(name.into(), Function::Platform(function));
         }
     }
 
@@ -108,7 +108,8 @@ impl Default for Functions {
 
 #[derive(Debug)]
 pub enum Function {
-    Native(NativeFunction),
+    Intrinsic(NativeFunction),
+    Platform(NativeFunction),
     UserDefined(UserDefined),
 }
 
