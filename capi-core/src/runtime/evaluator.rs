@@ -8,7 +8,7 @@ use crate::repr::eval::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    functions::{self, Function, Functions, ResolveError},
+    functions::{self, Function, Functions, ResolveError, RuntimeContext},
 };
 
 #[derive(Debug, Default)]
@@ -44,7 +44,11 @@ impl Evaluator {
         match &fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
-                    Function::Intrinsic(f) => f(self)?,
+                    Function::Intrinsic(f) => f(RuntimeContext {
+                        functions: self.functions.user_defined(),
+                        call_stack: &mut self.call_stack,
+                        data_stack: &mut self.data_stack,
+                    })?,
                     Function::Platform(f) => f(self, platform_context)?,
                     Function::UserDefined(functions::UserDefinedFunction {
                         body,

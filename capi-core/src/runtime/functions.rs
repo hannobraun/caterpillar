@@ -8,7 +8,11 @@ use crate::{
     },
 };
 
-use super::{data_stack::DataStackResult, evaluator::Evaluator};
+use super::{
+    call_stack::CallStack,
+    data_stack::{DataStack, DataStackResult},
+    evaluator::Evaluator,
+};
 
 #[derive(Debug)]
 pub struct Functions<C> {
@@ -149,9 +153,15 @@ pub enum NativeFunction<C> {
     Platform(PlatformFunction<C>),
 }
 
-pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
+pub type IntrinsicFunction = fn(RuntimeContext) -> DataStackResult<()>;
 pub type PlatformFunction<C> =
     fn(&mut Evaluator, &mut C) -> DataStackResult<()>;
+
+pub struct RuntimeContext<'r> {
+    pub functions: UserDefinedFunctions<'r>,
+    pub call_stack: &'r mut CallStack,
+    pub data_stack: &'r mut DataStack,
+}
 
 #[derive(Clone, Debug)]
 pub struct UserDefinedFunction {
