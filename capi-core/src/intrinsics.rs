@@ -23,9 +23,9 @@ pub fn clone(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn eval(evaluator: RuntimeContext) -> DataStackResult<()> {
-    let (block, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
-    evaluator.call_stack.push(block.start);
+pub fn eval(context: RuntimeContext) -> DataStackResult<()> {
+    let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
+    context.call_stack.push(block.start);
 
     // `eval` doesn't need to consume the block, so it would be nice, if we
     // could put it back on the stack. However, if we were to do that here, that
