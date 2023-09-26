@@ -14,8 +14,7 @@ pub struct Functions {
 
 impl Functions {
     pub fn register_native(&mut self, name: &str, intrinsic: Intrinsic) {
-        self.inner
-            .insert(name.into(), Function::Intrinsic(intrinsic));
+        self.inner.insert(name.into(), Function::Native(intrinsic));
     }
 
     pub fn define(&mut self, name: FunctionName, body: value::Block) {
@@ -74,7 +73,7 @@ impl Functions {
 
 #[derive(Debug)]
 pub enum Function {
-    Intrinsic(Intrinsic),
+    Native(Intrinsic),
     UserDefined(UserDefined),
 }
 
