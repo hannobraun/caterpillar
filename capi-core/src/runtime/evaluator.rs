@@ -1,9 +1,8 @@
-use crate::{
-    intrinsics::Context,
-    repr::eval::{
-        fragments::{FragmentPayload, Fragments},
-        value::Value,
-    },
+use std::collections::HashMap;
+
+use crate::repr::eval::{
+    fragments::{FragmentPayload, Fragments},
+    value::Value,
 };
 
 use super::{
@@ -72,6 +71,17 @@ impl Evaluator {
         };
 
         Ok(EvaluatorState::InProgress)
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct Context {
+    pub channels: HashMap<i64, i64>,
+}
+
+impl Context {
+    pub fn new() -> Self {
+        Self::default()
     }
 }
 

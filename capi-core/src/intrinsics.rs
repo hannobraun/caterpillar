@@ -1,4 +1,4 @@
-use std::{collections::HashMap, thread, time::Duration};
+use std::{thread, time::Duration};
 
 use super::{
     repr::eval::value,
@@ -7,17 +7,6 @@ use super::{
         functions::FunctionName,
     },
 };
-
-#[derive(Debug, Default)]
-pub struct Context {
-    pub channels: HashMap<i64, i64>,
-}
-
-impl Context {
-    pub fn new() -> Self {
-        Self::default()
-    }
-}
 
 pub fn add(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
