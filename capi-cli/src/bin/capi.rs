@@ -12,10 +12,10 @@ fn main() -> anyhow::Result<()> {
     interpreter.register_platform([
         (
             "delay_ms",
-            capi_cli::functions::delay_ms
+            capi_cli::platform::delay_ms
                 as capi_core::PlatformFunction<capi_core::Context>,
         ),
-        ("print", capi_cli::functions::print),
+        ("print", capi_cli::platform::print),
     ]);
 
     loop {
