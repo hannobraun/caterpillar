@@ -55,7 +55,7 @@ pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
         value: name.0,
         fragment: name_fragment,
     };
-    evaluator.functions.define(name, body);
+    evaluator.functions.user_defined().define(name, body);
 
     Ok(())
 }

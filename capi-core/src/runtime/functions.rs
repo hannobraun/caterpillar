@@ -51,12 +51,10 @@ impl<C> Functions<C> {
         }
     }
 
-    pub fn define(&mut self, name: FunctionName, body: value::Block) {
-        let function = UserDefinedFunction {
-            name: name.clone(),
-            body,
-        };
-        self.user_defined.insert(name.value, function);
+    pub fn user_defined(&mut self) -> UserDefinedFunctions {
+        UserDefinedFunctions {
+            inner: &mut self.user_defined,
+        }
     }
 
     pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError>
@@ -121,6 +119,20 @@ impl<C> Functions<C> {
 impl<C> Default for Functions<C> {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct UserDefinedFunctions<'r> {
+    inner: &'r mut BTreeMap<String, UserDefinedFunction>,
+}
+
+impl UserDefinedFunctions<'_> {
+    pub fn define(&mut self, name: FunctionName, body: value::Block) {
+        let function = UserDefinedFunction {
+            name: name.clone(),
+            body,
+        };
+        self.inner.insert(name.value, function);
     }
 }
 
