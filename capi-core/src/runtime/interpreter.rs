@@ -1,12 +1,10 @@
 use crate::{
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{Fragments, Replacement},
+    PlatformFunction,
 };
 
-use super::{
-    evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState},
-    functions::NativeFunction,
-};
+use super::evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -32,7 +30,7 @@ impl Interpreter {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
+        functions: impl IntoIterator<Item = (&'static str, PlatformFunction)>,
     ) {
         self.evaluator.functions.register_platform(functions);
     }
@@ -90,7 +88,7 @@ impl Interpreter {
 mod tests {
     use crate::{
         runtime::interpreter::Interpreter, value, Context, DataStackResult,
-        Evaluator, NativeFunction,
+        Evaluator, PlatformFunction,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -225,7 +223,7 @@ mod tests {
 
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
         let mut interpreter = Interpreter::new(code)?;
-        interpreter.register_platform([("ping", ping as NativeFunction)]);
+        interpreter.register_platform([("ping", ping as PlatformFunction)]);
         Ok(interpreter)
     }
 

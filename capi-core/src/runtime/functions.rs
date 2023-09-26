@@ -21,7 +21,7 @@ impl Functions {
         let mut inner = BTreeMap::new();
 
         let intrinsics = [
-            ("+", intrinsics::add as NativeFunction),
+            ("+", intrinsics::add as IntrinsicFunction),
             ("clone", intrinsics::clone),
             ("eval", intrinsics::eval),
             ("fn", intrinsics::fn_),
@@ -39,7 +39,7 @@ impl Functions {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
+        functions: impl IntoIterator<Item = (&'static str, PlatformFunction)>,
     ) {
         for (name, function) in functions {
             self.inner.insert(name.into(), Function::Platform(function));
@@ -108,12 +108,14 @@ impl Default for Functions {
 
 #[derive(Debug)]
 pub enum Function {
-    Intrinsic(NativeFunction),
-    Platform(NativeFunction),
+    Intrinsic(IntrinsicFunction),
+    Platform(PlatformFunction),
     UserDefined(UserDefined),
 }
 
-pub type NativeFunction =
+pub type IntrinsicFunction =
+    fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
+pub type PlatformFunction =
     fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
 
 #[derive(Debug)]

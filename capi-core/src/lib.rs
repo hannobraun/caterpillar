@@ -8,7 +8,7 @@ pub use self::{
     runtime::{
         data_stack::DataStackResult,
         evaluator::{Context, Evaluator, EvaluatorState},
-        functions::NativeFunction,
+        functions::PlatformFunction,
         interpreter::Interpreter,
     },
 };
