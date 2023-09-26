@@ -1,5 +1,3 @@
-use crate::Context;
-
 use super::{
     repr::eval::value,
     runtime::{
@@ -8,7 +6,7 @@ use super::{
     },
 };
 
-pub fn add(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn add(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
     let (a, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
 
@@ -17,10 +15,7 @@ pub fn add(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn clone(
-    evaluator: &mut Evaluator,
-    _: &mut Context,
-) -> DataStackResult<()> {
+pub fn clone(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let value = evaluator.data_stack.pop_any()?;
 
     evaluator.data_stack.push(value.clone());
@@ -29,7 +24,7 @@ pub fn clone(
     Ok(())
 }
 
-pub fn eval(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (block, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
     evaluator.call_stack.push(block.start);
 
@@ -51,7 +46,7 @@ pub fn eval(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn fn_(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn fn_(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (body, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
         evaluator.data_stack.pop_specific::<value::Symbol>()?;
@@ -65,11 +60,11 @@ pub fn fn_(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn nop(_: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn nop(_: &mut Evaluator) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn over(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let top = evaluator.data_stack.pop_any()?;
     let target = evaluator.data_stack.pop_any()?;
 
@@ -80,7 +75,7 @@ pub fn over(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn swap(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
+pub fn swap(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let b = evaluator.data_stack.pop_any()?;
     let a = evaluator.data_stack.pop_any()?;
 

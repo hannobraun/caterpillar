@@ -113,8 +113,7 @@ pub enum Function {
     UserDefined(UserDefined),
 }
 
-pub type IntrinsicFunction =
-    fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
+pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
 pub type PlatformFunction =
     fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
 
