@@ -21,6 +21,7 @@ fn main_inner() -> anyhow::Result<()> {
 
 fn print(
     evaluator: &mut capi_core::Evaluator,
+    _: &mut capi_core::Context,
 ) -> Result<(), capi_core::runtime::data_stack::DataStackError> {
     let value = evaluator.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);

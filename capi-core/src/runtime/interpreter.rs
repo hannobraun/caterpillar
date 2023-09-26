@@ -5,7 +5,7 @@ use crate::{
 };
 
 use super::{
-    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState},
     functions::NativeFunction,
 };
 
@@ -13,6 +13,7 @@ use super::{
 pub struct Interpreter {
     fragments: Fragments,
     evaluator: Evaluator,
+    context: Context,
 }
 
 impl Interpreter {
@@ -30,6 +31,7 @@ impl Interpreter {
         Ok(Interpreter {
             fragments,
             evaluator,
+            context: Context::default(),
         })
     }
 
@@ -41,7 +43,7 @@ impl Interpreter {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
-        self.evaluator.step(&self.fragments)
+        self.evaluator.step(&self.fragments, &mut self.context)
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
@@ -66,13 +68,13 @@ impl Interpreter {
         &mut self,
         channel: i64,
     ) -> Result<(), EvaluatorError> {
-        self.evaluator.context.channels.clear();
+        self.context.channels.clear();
 
         let mut num_steps = 0;
 
         loop {
-            if self.evaluator.context.channels.contains_key(&channel)
-                && self.evaluator.context.channels[&channel] == 1
+            if self.context.channels.contains_key(&channel)
+                && self.context.channels[&channel] == 1
             {
                 break;
             }
@@ -92,8 +94,8 @@ impl Interpreter {
 #[cfg(test)]
 mod tests {
     use crate::{
-        runtime::interpreter::Interpreter, value, DataStackResult, Evaluator,
-        NativeFunction,
+        runtime::interpreter::Interpreter, value, Context, DataStackResult,
+        Evaluator, NativeFunction,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -232,10 +234,13 @@ mod tests {
         Ok(interpreter)
     }
 
-    pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
+    pub fn ping(
+        evaluator: &mut Evaluator,
+        context: &mut Context,
+    ) -> DataStackResult<()> {
         let (channel, _) =
             evaluator.data_stack.pop_specific::<value::Number>()?;
-        *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;
+        *context.channels.entry(channel.0).or_insert(0) += 1;
         Ok(())
     }
 }

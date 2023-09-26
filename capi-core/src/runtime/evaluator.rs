@@ -13,7 +13,6 @@ use super::{
 
 #[derive(Debug, Default)]
 pub struct Evaluator {
-    pub context: Context,
     pub functions: Functions,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
@@ -35,6 +34,7 @@ impl Evaluator {
     pub fn step(
         &mut self,
         fragments: &Fragments,
+        context: &mut Context,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
@@ -48,7 +48,7 @@ impl Evaluator {
         match &fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
-                    Function::Native(f) => f(self)?,
+                    Function::Native(f) => f(self, context)?,
                     Function::UserDefined(functions::UserDefined {
                         body,
                         ..

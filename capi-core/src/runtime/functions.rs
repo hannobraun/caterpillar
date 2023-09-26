@@ -1,8 +1,11 @@
 use std::collections::BTreeMap;
 
-use crate::repr::eval::{
-    fragments::{FragmentId, FragmentPayload, Fragments},
-    value::{self, ValueKind},
+use crate::{
+    repr::eval::{
+        fragments::{FragmentId, FragmentPayload, Fragments},
+        value::{self, ValueKind},
+    },
+    Context,
 };
 
 use super::{data_stack::DataStackResult, evaluator::Evaluator};
@@ -90,7 +93,8 @@ pub enum Function {
     UserDefined(UserDefined),
 }
 
-pub type NativeFunction = fn(&mut Evaluator) -> DataStackResult<()>;
+pub type NativeFunction =
+    fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
 
 #[derive(Debug)]
 pub struct UserDefined {
