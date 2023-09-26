@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
+    intrinsics,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::{self, ValueKind},
@@ -17,7 +18,12 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        let inner = BTreeMap::new();
+        let mut inner = BTreeMap::new();
+
+        for (name, intrinsic) in intrinsics::list() {
+            inner.insert(name.to_string(), Function::Native(intrinsic));
+        }
+
         Self { inner }
     }
 

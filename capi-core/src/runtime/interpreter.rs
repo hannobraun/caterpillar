@@ -1,5 +1,4 @@
 use crate::{
-    intrinsics,
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{Fragments, Replacement},
 };
@@ -23,10 +22,6 @@ impl Interpreter {
 
         let mut evaluator = Evaluator::default();
         evaluator.call_stack.push(start);
-
-        for (name, intrinsic) in intrinsics::list() {
-            evaluator.functions.register_native(name, intrinsic)
-        }
 
         Ok(Interpreter {
             fragments,
