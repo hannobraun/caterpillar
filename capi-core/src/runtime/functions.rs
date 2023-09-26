@@ -66,7 +66,7 @@ impl<C> Functions<C> {
         let user_defined = self
             .user_defined
             .get(name)
-            .map(|function| Function::UserDefined(function.clone()));
+            .map(|user_defined| Function::UserDefined(user_defined.clone()));
 
         native
             .or(user_defined)
