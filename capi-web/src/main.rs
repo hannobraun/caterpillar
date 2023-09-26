@@ -22,11 +22,11 @@ fn main_inner() -> anyhow::Result<()> {
 }
 
 fn print(
-    evaluator: capi_core::RuntimeContext,
+    context: capi_core::RuntimeContext,
     _: &mut capi_core::Context,
 ) -> Result<(), capi_core::runtime::data_stack::DataStackError> {
-    let value = evaluator.data_stack.pop_any()?;
+    let value = context.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);
-    evaluator.data_stack.push(value);
+    context.data_stack.push(value);
     Ok(())
 }
