@@ -90,8 +90,8 @@ impl Interpreter {
 #[cfg(test)]
 mod tests {
     use crate::{
-        runtime::interpreter::Interpreter, value, Context, DataStackResult,
-        PlatformFunction, RuntimeContext,
+        pipeline::PipelineError, runtime::evaluator::EvaluatorError, value,
+        Context, DataStackResult, PlatformFunction, RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -224,11 +224,28 @@ mod tests {
         Ok(())
     }
 
+    struct Interpreter {
+        inner: crate::Interpreter,
+    }
+
+    impl Interpreter {
+        pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
+            self.inner.update(code)
+        }
+
+        pub fn wait_for_ping_on_channel(
+            &mut self,
+            channel: i64,
+        ) -> Result<(), EvaluatorError> {
+            self.inner.wait_for_ping_on_channel(channel)
+        }
+    }
+
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
-        let mut interpreter = Interpreter::new(code)?;
+        let mut interpreter = crate::Interpreter::new(code)?;
         interpreter
             .register_platform([("ping", ping as PlatformFunction<Context>)]);
-        Ok(interpreter)
+        Ok(Interpreter { inner: interpreter })
     }
 
     pub fn ping(
