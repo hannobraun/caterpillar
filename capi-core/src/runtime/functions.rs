@@ -12,7 +12,7 @@ use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
 #[derive(Debug)]
 pub struct Functions<C> {
-    inner: BTreeMap<String, Function<C>>,
+    native: BTreeMap<String, Function<C>>,
     user_defined: BTreeMap<String, UserDefinedFunction>,
 }
 
@@ -35,7 +35,7 @@ impl<C> Functions<C> {
         }
 
         Self {
-            inner,
+            native: inner,
             user_defined: BTreeMap::new(),
         }
     }
@@ -45,7 +45,8 @@ impl<C> Functions<C> {
         functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
     ) {
         for (name, function) in functions {
-            self.inner.insert(name.into(), Function::Platform(function));
+            self.native
+                .insert(name.into(), Function::Platform(function));
         }
     }
 
@@ -61,7 +62,7 @@ impl<C> Functions<C> {
     where
         C: Clone,
     {
-        let native = self.inner.get(name).cloned();
+        let native = self.native.get(name).cloned();
         let user_defined = self
             .user_defined
             .get(name)
