@@ -58,33 +58,6 @@ impl Interpreter {
 
         Ok(())
     }
-
-    #[cfg(test)]
-    pub fn wait_for_ping_on_channel(
-        &mut self,
-        channel: i64,
-    ) -> Result<(), EvaluatorError> {
-        self.platform_context.channels.clear();
-
-        let mut num_steps = 0;
-
-        loop {
-            if self.platform_context.channels.contains_key(&channel)
-                && self.platform_context.channels[&channel] == 1
-            {
-                break;
-            }
-
-            self.step()?;
-            num_steps += 1;
-
-            if num_steps == 1024 {
-                panic!("Waiting for ping on channel {channel} took too long");
-            }
-        }
-
-        Ok(())
-    }
 }
 
 #[cfg(test)]
@@ -248,7 +221,28 @@ mod tests {
             &mut self,
             channel: i64,
         ) -> Result<(), EvaluatorError> {
-            self.inner.wait_for_ping_on_channel(channel)
+            self.inner.platform_context.channels.clear();
+
+            let mut num_steps = 0;
+
+            loop {
+                if self.inner.platform_context.channels.contains_key(&channel)
+                    && self.inner.platform_context.channels[&channel] == 1
+                {
+                    break;
+                }
+
+                self.inner.step()?;
+                num_steps += 1;
+
+                if num_steps == 1024 {
+                    panic!(
+                        "Waiting for ping on channel {channel} took too long"
+                    );
+                }
+            }
+
+            Ok(())
         }
     }
 
