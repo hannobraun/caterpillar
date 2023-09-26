@@ -30,7 +30,7 @@ impl Evaluator {
     pub fn step(
         &mut self,
         fragments: &Fragments,
-        context: &mut Context,
+        platform_context: &mut Context,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
@@ -45,7 +45,7 @@ impl Evaluator {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(f) => f(self)?,
-                    Function::Platform(f) => f(self, context)?,
+                    Function::Platform(f) => f(self, platform_context)?,
                     Function::UserDefined(functions::UserDefinedFunction {
                         body,
                         ..
