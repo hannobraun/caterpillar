@@ -231,10 +231,12 @@ mod tests {
     impl Interpreter {
         pub fn new(code: &str) -> anyhow::Result<Self> {
             let mut inner = crate::Interpreter::new(code)?;
+
             inner.register_platform([(
                 "ping",
                 ping as PlatformFunction<Context>,
             )]);
+
             Ok(Self { inner })
         }
 
