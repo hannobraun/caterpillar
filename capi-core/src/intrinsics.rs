@@ -1,4 +1,4 @@
-use crate::{runtime::functions::NativeFunction, Context};
+use crate::Context;
 
 use super::{
     repr::eval::value,
@@ -7,18 +7,6 @@ use super::{
         functions::FunctionName,
     },
 };
-
-pub fn list() -> impl IntoIterator<Item = (&'static str, NativeFunction)> {
-    [
-        ("+", add as NativeFunction),
-        ("clone", clone),
-        ("eval", eval),
-        ("fn", fn_),
-        ("nop", nop),
-        ("over", over),
-        ("swap", swap),
-    ]
-}
 
 pub fn add(evaluator: &mut Evaluator, _: &mut Context) -> DataStackResult<()> {
     let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;

@@ -20,7 +20,15 @@ impl Functions {
     pub fn new() -> Self {
         let mut inner = BTreeMap::new();
 
-        let intrinsics = intrinsics::list();
+        let intrinsics = [
+            ("+", intrinsics::add as NativeFunction),
+            ("clone", intrinsics::clone),
+            ("eval", intrinsics::eval),
+            ("fn", intrinsics::fn_),
+            ("nop", intrinsics::nop),
+            ("over", intrinsics::over),
+            ("swap", intrinsics::swap),
+        ];
 
         for (name, intrinsic) in intrinsics {
             inner.insert(name.to_string(), Function::Native(intrinsic));
