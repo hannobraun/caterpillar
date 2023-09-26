@@ -52,13 +52,34 @@ Here's what that means in practice:
 
 Caterpillar is still in a state of early exploration, and barely usable.
 
-## Documentation
+## Usage
 
-For now, there's no documentation. The language is still very much in flux, and
-keeping it up-to-date would be very tedious.
+Install the latest version of the Caterpillar CLI runtime from this repository:
 
-For now, check out the [examples](examples/) in the repository, as well as the
-Rust source code (especially unit tests) to see how it works.
+```shell
+cargo install \
+  --force \
+  --git https://github.com/hannobraun/caterpillar.git capi-cli
+```
+
+You don't need the `--force` for the initial install, but it's going to be
+required to overwrite your existing version when you upgrade later.
+
+Run a Caterpillar script:
+
+```shell
+capi <path to script>
+```
+
+For example, if you've cloned this repository you can run one of the included
+examples like this:
+
+```shell
+capi examples/hello.capi
+```
+
+Feel free to edit the script. Your changes will be applied to the running
+process immediately.
 
 ## Acknowledgements
 
