@@ -48,7 +48,7 @@ impl Evaluator {
         match &fragment.payload {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
-                    Function::Native(intrinsic) => intrinsic(self)?,
+                    Function::Native(f) => f(self)?,
                     Function::UserDefined(functions::UserDefined {
                         body,
                         ..
