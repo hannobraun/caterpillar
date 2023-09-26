@@ -63,13 +63,13 @@ pub fn nop(_: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn over(evaluator: RuntimeContext) -> DataStackResult<()> {
-    let top = evaluator.data_stack.pop_any()?;
-    let target = evaluator.data_stack.pop_any()?;
+pub fn over(context: RuntimeContext) -> DataStackResult<()> {
+    let top = context.data_stack.pop_any()?;
+    let target = context.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(target.clone());
-    evaluator.data_stack.push(top);
-    evaluator.data_stack.push(target);
+    context.data_stack.push(target.clone());
+    context.data_stack.push(top);
+    context.data_stack.push(target);
 
     Ok(())
 }
