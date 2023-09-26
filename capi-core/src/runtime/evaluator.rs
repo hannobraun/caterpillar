@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::repr::eval::{
     fragments::{FragmentPayload, Fragments},
     value::Value,
@@ -89,11 +87,6 @@ impl<C> Default for Evaluator<C> {
             data_stack: Default::default(),
         }
     }
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct Context {
-    pub channels: HashMap<i64, i64>,
 }
 
 pub enum EvaluatorState {

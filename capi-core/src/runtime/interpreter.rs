@@ -60,9 +60,11 @@ impl<C> Interpreter<C> {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::{
         pipeline::PipelineError, runtime::evaluator::EvaluatorError, value,
-        Context, DataStackResult, PlatformFunction, RuntimeContext,
+        DataStackResult, PlatformFunction, RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -246,6 +248,11 @@ mod tests {
 
             Ok(())
         }
+    }
+
+    #[derive(Clone, Debug, Default)]
+    pub struct Context {
+        pub channels: HashMap<i64, i64>,
     }
 
     pub fn ping(
