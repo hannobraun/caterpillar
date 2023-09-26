@@ -198,8 +198,8 @@ mod tests {
     }
 
     struct Interpreter {
-        inner: crate::Interpreter<Context>,
-        platform_context: Context,
+        inner: crate::Interpreter<PlatformContext>,
+        platform_context: PlatformContext,
     }
 
     impl Interpreter {
@@ -208,12 +208,12 @@ mod tests {
 
             inner.register_platform([(
                 "ping",
-                ping as PlatformFunction<Context>,
+                ping as PlatformFunction<PlatformContext>,
             )]);
 
             Ok(Self {
                 inner,
-                platform_context: Context::default(),
+                platform_context: PlatformContext::default(),
             })
         }
 
@@ -251,13 +251,13 @@ mod tests {
     }
 
     #[derive(Clone, Debug, Default)]
-    pub struct Context {
+    pub struct PlatformContext {
         pub channels: HashMap<i64, i64>,
     }
 
     pub fn ping(
         runtime_context: RuntimeContext,
-        platform_context: &mut Context,
+        platform_context: &mut PlatformContext,
     ) -> DataStackResult<()> {
         let (channel, _) =
             runtime_context.data_stack.pop_specific::<value::Number>()?;
