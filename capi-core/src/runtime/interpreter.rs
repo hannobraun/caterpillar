@@ -8,8 +8,8 @@ use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
 #[derive(Debug)]
 pub struct Interpreter {
-    pub fragments: Fragments,
-    pub evaluator: Evaluator,
+    fragments: Fragments,
+    evaluator: Evaluator,
 }
 
 impl Interpreter {
