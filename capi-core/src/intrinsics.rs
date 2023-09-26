@@ -1,5 +1,3 @@
-use std::{thread, time::Duration};
-
 use crate::runtime::functions::NativeFunction;
 
 use super::{
@@ -14,7 +12,6 @@ pub fn list() -> impl IntoIterator<Item = (&'static str, NativeFunction)> {
     [
         ("+", add as NativeFunction),
         ("clone", clone),
-        ("delay_ms", delay_ms),
         ("eval", eval),
         ("fn", fn_),
         ("nop", nop),
@@ -39,12 +36,6 @@ pub fn clone(evaluator: &mut Evaluator) -> DataStackResult<()> {
     evaluator.data_stack.push(value.clone());
     evaluator.data_stack.push(value);
 
-    Ok(())
-}
-
-pub fn delay_ms(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let (delay_ms, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
-    thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
     Ok(())
 }
 

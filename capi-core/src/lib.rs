@@ -3,9 +3,12 @@ pub mod pipeline;
 pub mod repr;
 pub mod runtime;
 
-pub use self::runtime::{
-    data_stack::DataStackResult,
-    evaluator::{Evaluator, EvaluatorState},
-    functions::NativeFunction,
-    interpreter::Interpreter,
+pub use self::{
+    repr::eval::value,
+    runtime::{
+        data_stack::DataStackResult,
+        evaluator::{Evaluator, EvaluatorState},
+        functions::NativeFunction,
+        interpreter::Interpreter,
+    },
 };

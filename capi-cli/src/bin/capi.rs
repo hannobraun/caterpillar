@@ -9,10 +9,13 @@ fn main() -> anyhow::Result<()> {
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
 
-    interpreter.register_native_functions([(
-        "print",
-        capi_cli::functions::print as capi_core::NativeFunction,
-    )]);
+    interpreter.register_native_functions([
+        (
+            "print",
+            capi_cli::functions::print as capi_core::NativeFunction,
+        ),
+        ("delay_ms", capi_cli::functions::delay_ms),
+    ]);
 
     loop {
         let new_code = match interpreter.step()? {
