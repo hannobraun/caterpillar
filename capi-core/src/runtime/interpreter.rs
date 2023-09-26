@@ -20,7 +20,7 @@ impl Interpreter {
         let mut evaluator = Evaluator::new();
         evaluator.call_stack.push(start);
 
-        for (name, intrinsic) in intrinsics::all() {
+        for (name, intrinsic) in intrinsics::list() {
             evaluator.functions.register_intrinsic(name, intrinsic)
         }
 

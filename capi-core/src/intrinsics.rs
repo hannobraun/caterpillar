@@ -10,7 +10,7 @@ use super::{
     },
 };
 
-pub fn all() -> impl IntoIterator<Item = (&'static str, Intrinsic)> {
+pub fn list() -> impl IntoIterator<Item = (&'static str, Intrinsic)> {
     [
         ("+", add as Intrinsic),
         ("clone", clone),
