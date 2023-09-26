@@ -19,10 +19,6 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn state(&self) -> EvaluatorState {
         if self.call_stack.current().is_some() {
             EvaluatorState::InProgress
