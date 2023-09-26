@@ -4,15 +4,15 @@ use crate::{
     PlatformFunction,
 };
 
-use super::evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState};
+use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
 
 #[derive(Debug)]
-pub struct Interpreter {
+pub struct Interpreter<C> {
     fragments: Fragments,
-    evaluator: Evaluator<Context>,
+    evaluator: Evaluator<C>,
 }
 
-impl Interpreter {
+impl<C> Interpreter<C> {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
         let mut fragments = Fragments::new();
         let PipelineOutput { start } = pipeline::run(code, &mut fragments)?;
@@ -28,16 +28,14 @@ impl Interpreter {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<
-            Item = (&'static str, PlatformFunction<Context>),
-        >,
+        functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
     ) {
         self.evaluator.functions.register_platform(functions);
     }
 
     pub fn step(
         &mut self,
-        platform_context: &mut Context,
+        platform_context: &mut C,
     ) -> Result<EvaluatorState, EvaluatorError> {
         self.evaluator.step(&self.fragments, platform_context)
     }
@@ -198,7 +196,7 @@ mod tests {
     }
 
     struct Interpreter {
-        inner: crate::Interpreter,
+        inner: crate::Interpreter<Context>,
         platform_context: Context,
     }
 
