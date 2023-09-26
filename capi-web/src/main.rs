@@ -3,7 +3,7 @@ fn main() {
     tracing_wasm::set_as_global_default();
 
     if let Err(err) = main_inner() {
-        panic!("Error: {err}")
+        panic!("Error: {err:?}");
     }
 }
 
