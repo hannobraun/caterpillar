@@ -232,11 +232,11 @@ mod tests {
     }
 
     pub fn ping(
-        evaluator: RuntimeContext,
+        runtime_context: RuntimeContext,
         context: &mut Context,
     ) -> DataStackResult<()> {
         let (channel, _) =
-            evaluator.data_stack.pop_specific::<value::Number>()?;
+            runtime_context.data_stack.pop_specific::<value::Number>()?;
         *context.channels.entry(channel.0).or_insert(0) += 1;
         Ok(())
     }
