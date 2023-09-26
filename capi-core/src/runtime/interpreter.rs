@@ -21,7 +21,7 @@ impl Interpreter {
         evaluator.call_stack.push(start);
 
         for (name, intrinsic) in intrinsics::list() {
-            evaluator.functions.register_intrinsic(name, intrinsic)
+            evaluator.functions.register_native(name, intrinsic)
         }
 
         Ok(Interpreter {
