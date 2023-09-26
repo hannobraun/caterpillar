@@ -37,10 +37,7 @@ impl Interpreter {
         &mut self,
         functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
     ) -> &mut Self {
-        for (name, function) in functions {
-            self.evaluator.functions.register_native(name, function);
-        }
-
+        self.evaluator.functions.register_platform(functions);
         self
     }
 

@@ -21,6 +21,15 @@ impl Functions {
         self.inner.insert(name.into(), Function::Native(function));
     }
 
+    pub fn register_platform(
+        &mut self,
+        functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
+    ) {
+        for (name, function) in functions {
+            self.inner.insert(name.into(), Function::Native(function));
+        }
+    }
+
     pub fn define(&mut self, name: FunctionName, body: value::Block) {
         let function = Function::UserDefined(UserDefined {
             name: name.clone(),
