@@ -18,7 +18,7 @@ pub struct Functions<C> {
 
 impl<C> Functions<C> {
     pub fn new() -> Self {
-        let mut inner = BTreeMap::new();
+        let mut native = BTreeMap::new();
 
         let intrinsics = [
             ("+", intrinsics::add as IntrinsicFunction),
@@ -31,11 +31,11 @@ impl<C> Functions<C> {
         ];
 
         for (name, intrinsic) in intrinsics {
-            inner.insert(name.to_string(), Function::Intrinsic(intrinsic));
+            native.insert(name.to_string(), Function::Intrinsic(intrinsic));
         }
 
         Self {
-            native: inner,
+            native,
             user_defined: BTreeMap::new(),
         }
     }
