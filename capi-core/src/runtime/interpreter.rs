@@ -10,7 +10,7 @@ use super::evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState};
 pub struct Interpreter {
     fragments: Fragments,
     evaluator: Evaluator,
-    context: Context,
+    platform_context: Context,
 }
 
 impl Interpreter {
@@ -24,7 +24,7 @@ impl Interpreter {
         Ok(Interpreter {
             fragments,
             evaluator,
-            context: Context::default(),
+            platform_context: Context::default(),
         })
     }
 
@@ -38,7 +38,8 @@ impl Interpreter {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
-        self.evaluator.step(&self.fragments, &mut self.context)
+        self.evaluator
+            .step(&self.fragments, &mut self.platform_context)
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
@@ -63,13 +64,13 @@ impl Interpreter {
         &mut self,
         channel: i64,
     ) -> Result<(), EvaluatorError> {
-        self.context.channels.clear();
+        self.platform_context.channels.clear();
 
         let mut num_steps = 0;
 
         loop {
-            if self.context.channels.contains_key(&channel)
-                && self.context.channels[&channel] == 1
+            if self.platform_context.channels.contains_key(&channel)
+                && self.platform_context.channels[&channel] == 1
             {
                 break;
             }
