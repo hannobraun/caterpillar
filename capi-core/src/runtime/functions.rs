@@ -13,8 +13,8 @@ pub struct Functions {
 }
 
 impl Functions {
-    pub fn register_native(&mut self, name: &str, native: NativeFunction) {
-        self.inner.insert(name.into(), Function::Native(native));
+    pub fn register_native(&mut self, name: &str, function: NativeFunction) {
+        self.inner.insert(name.into(), Function::Native(function));
     }
 
     pub fn define(&mut self, name: FunctionName, body: value::Block) {
