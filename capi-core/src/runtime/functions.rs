@@ -60,10 +60,7 @@ impl<C> Functions<C> {
         }
     }
 
-    pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError>
-    where
-        C: Clone,
-    {
+    pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError> {
         let native = self.native.get(name).map(|native| match native {
             NativeFunction::Intrinsic(function) => {
                 Function::Intrinsic(function)
