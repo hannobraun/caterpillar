@@ -11,10 +11,8 @@ fn main() {
 
 fn main_inner() -> anyhow::Result<()> {
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
-    interpreter.register_native_functions([(
-        "print",
-        print as capi_core::NativeFunction,
-    )]);
+    interpreter
+        .register_platform([("print", print as capi_core::NativeFunction)]);
 
     while !interpreter.step()?.finished() {}
 

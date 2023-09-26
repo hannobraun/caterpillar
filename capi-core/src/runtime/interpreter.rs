@@ -33,7 +33,7 @@ impl Interpreter {
         })
     }
 
-    pub fn register_native_functions(
+    pub fn register_platform(
         &mut self,
         functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
     ) -> &mut Self {
@@ -229,8 +229,7 @@ mod tests {
 
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
         let mut interpreter = Interpreter::new(code)?;
-        interpreter
-            .register_native_functions([("ping", ping as NativeFunction)]);
+        interpreter.register_platform([("ping", ping as NativeFunction)]);
         Ok(interpreter)
     }
 

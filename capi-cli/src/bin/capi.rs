@@ -9,7 +9,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
 
-    interpreter.register_native_functions([
+    interpreter.register_platform([
         (
             "print",
             capi_cli::functions::print as capi_core::NativeFunction,
