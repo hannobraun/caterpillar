@@ -21,7 +21,7 @@ in productivity, compared to traditional programming environments.
 
 Whether this goal can be achieved remains to be seen. The practical short-term
 goal is to explore interactive programming and figure out what it takes to make
-it practical.
+it work.
 
 ## Status
 
