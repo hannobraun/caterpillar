@@ -10,12 +10,17 @@ use crate::{
 
 use super::{data_stack::DataStackResult, evaluator::Evaluator};
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Functions {
     inner: BTreeMap<String, Function>,
 }
 
 impl Functions {
+    pub fn new() -> Self {
+        let inner = BTreeMap::new();
+        Self { inner }
+    }
+
     pub fn register_native(
         &mut self,
         name: impl Into<String>,
@@ -84,6 +89,12 @@ impl Functions {
             let function = self.inner.remove(&old).unwrap();
             self.inner.insert(new, function);
         }
+    }
+}
+
+impl Default for Functions {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
