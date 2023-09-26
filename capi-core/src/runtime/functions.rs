@@ -39,7 +39,9 @@ impl Functions {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, PlatformFunction)>,
+        functions: impl IntoIterator<
+            Item = (&'static str, PlatformFunction<Context>),
+        >,
     ) {
         for (name, function) in functions {
             self.inner.insert(name.into(), Function::Platform(function));
@@ -109,13 +111,13 @@ impl Default for Functions {
 #[derive(Debug)]
 pub enum Function {
     Intrinsic(IntrinsicFunction),
-    Platform(PlatformFunction),
+    Platform(PlatformFunction<Context>),
     UserDefined(UserDefined),
 }
 
 pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
-pub type PlatformFunction =
-    fn(&mut Evaluator, &mut Context) -> DataStackResult<()>;
+pub type PlatformFunction<C> =
+    fn(&mut Evaluator, &mut C) -> DataStackResult<()>;
 
 #[derive(Debug)]
 pub struct UserDefined {

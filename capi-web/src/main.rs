@@ -11,8 +11,10 @@ fn main() {
 
 fn main_inner() -> anyhow::Result<()> {
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
-    interpreter
-        .register_platform([("print", print as capi_core::PlatformFunction)]);
+    interpreter.register_platform([(
+        "print",
+        print as capi_core::PlatformFunction<capi_core::Context>,
+    )]);
 
     while !interpreter.step()?.finished() {}
 

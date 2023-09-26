@@ -30,7 +30,9 @@ impl Interpreter {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, PlatformFunction)>,
+        functions: impl IntoIterator<
+            Item = (&'static str, PlatformFunction<Context>),
+        >,
     ) {
         self.evaluator.functions.register_platform(functions);
     }
@@ -223,7 +225,8 @@ mod tests {
 
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
         let mut interpreter = Interpreter::new(code)?;
-        interpreter.register_platform([("ping", ping as PlatformFunction)]);
+        interpreter
+            .register_platform([("ping", ping as PlatformFunction<Context>)]);
         Ok(interpreter)
     }
 
