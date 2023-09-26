@@ -74,12 +74,12 @@ pub fn over(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn swap(evaluator: RuntimeContext) -> DataStackResult<()> {
-    let b = evaluator.data_stack.pop_any()?;
-    let a = evaluator.data_stack.pop_any()?;
+pub fn swap(context: RuntimeContext) -> DataStackResult<()> {
+    let b = context.data_stack.pop_any()?;
+    let a = context.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(b);
-    evaluator.data_stack.push(a);
+    context.data_stack.push(b);
+    context.data_stack.push(a);
 
     Ok(())
 }
