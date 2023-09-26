@@ -27,14 +27,6 @@ impl Functions {
         Self { inner }
     }
 
-    pub fn register_native(
-        &mut self,
-        name: impl Into<String>,
-        function: NativeFunction,
-    ) {
-        self.inner.insert(name.into(), Function::Native(function));
-    }
-
     pub fn register_platform(
         &mut self,
         functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
