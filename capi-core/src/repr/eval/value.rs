@@ -11,7 +11,7 @@ pub struct Value {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash, EnumVariantType)]
-#[evt(derive(Debug, Eq, PartialEq))]
+#[evt(derive(Clone, Debug, Eq, PartialEq))]
 pub enum ValueKind {
     Block { start: FragmentId },
     Number(i64),

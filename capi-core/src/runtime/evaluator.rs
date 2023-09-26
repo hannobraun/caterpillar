@@ -71,7 +71,7 @@ impl Evaluator {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Context {
     pub channels: HashMap<i64, i64>,
 }

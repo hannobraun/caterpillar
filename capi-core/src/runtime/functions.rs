@@ -106,7 +106,7 @@ impl<C> Default for Functions<C> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Function<C> {
     Intrinsic(IntrinsicFunction),
     Platform(PlatformFunction<C>),
@@ -117,7 +117,7 @@ pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
 pub type PlatformFunction<C> =
     fn(&mut Evaluator, &mut C) -> DataStackResult<()>;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct UserDefinedFunction {
     pub name: FunctionName,
     pub body: value::Block,
