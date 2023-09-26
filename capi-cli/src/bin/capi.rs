@@ -11,10 +11,10 @@ fn main() -> anyhow::Result<()> {
 
     interpreter.register_platform([
         (
-            "print",
-            capi_cli::functions::print as capi_core::NativeFunction,
+            "delay_ms",
+            capi_cli::functions::delay_ms as capi_core::NativeFunction,
         ),
-        ("delay_ms", capi_cli::functions::delay_ms),
+        ("print", capi_cli::functions::print),
     ]);
 
     loop {
