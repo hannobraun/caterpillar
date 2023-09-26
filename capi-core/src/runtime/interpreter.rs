@@ -10,7 +10,6 @@ use super::evaluator::{Context, Evaluator, EvaluatorError, EvaluatorState};
 pub struct Interpreter {
     fragments: Fragments,
     evaluator: Evaluator<Context>,
-    pub platform_context: Context,
 }
 
 impl Interpreter {
@@ -24,7 +23,6 @@ impl Interpreter {
         Ok(Interpreter {
             fragments,
             evaluator,
-            platform_context: Context::default(),
         })
     }
 
@@ -37,9 +35,11 @@ impl Interpreter {
         self.evaluator.functions.register_platform(functions);
     }
 
-    pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
-        self.evaluator
-            .step(&self.fragments, &mut self.platform_context)
+    pub fn step(
+        &mut self,
+        platform_context: &mut Context,
+    ) -> Result<EvaluatorState, EvaluatorError> {
+        self.evaluator.step(&self.fragments, platform_context)
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
@@ -199,6 +199,7 @@ mod tests {
 
     struct Interpreter {
         inner: crate::Interpreter,
+        platform_context: Context,
     }
 
     impl Interpreter {
@@ -210,7 +211,10 @@ mod tests {
                 ping as PlatformFunction<Context>,
             )]);
 
-            Ok(Self { inner })
+            Ok(Self {
+                inner,
+                platform_context: Context::default(),
+            })
         }
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
@@ -221,18 +225,18 @@ mod tests {
             &mut self,
             channel: i64,
         ) -> Result<(), EvaluatorError> {
-            self.inner.platform_context.channels.clear();
+            self.platform_context.channels.clear();
 
             let mut num_steps = 0;
 
             loop {
-                if self.inner.platform_context.channels.contains_key(&channel)
-                    && self.inner.platform_context.channels[&channel] == 1
+                if self.platform_context.channels.contains_key(&channel)
+                    && self.platform_context.channels[&channel] == 1
                 {
                     break;
                 }
 
-                self.inner.step()?;
+                self.inner.step(&mut self.platform_context)?;
                 num_steps += 1;
 
                 if num_steps == 1024 {

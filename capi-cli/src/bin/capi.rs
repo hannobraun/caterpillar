@@ -19,7 +19,9 @@ fn main() -> anyhow::Result<()> {
     ]);
 
     loop {
-        let new_code = match interpreter.step()? {
+        let new_code = match interpreter
+            .step(&mut capi_core::Context::default())?
+        {
             capi_core::EvaluatorState::InProgress => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
                 Err(std::sync::mpsc::TryRecvError::Empty) => None,

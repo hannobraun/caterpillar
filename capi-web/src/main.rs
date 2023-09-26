@@ -16,7 +16,10 @@ fn main_inner() -> anyhow::Result<()> {
         print as capi_core::PlatformFunction<capi_core::Context>,
     )]);
 
-    while !interpreter.step()?.finished() {}
+    while !interpreter
+        .step(&mut capi_core::Context::default())?
+        .finished()
+    {}
 
     Ok(())
 }
