@@ -95,7 +95,10 @@ impl Interpreter {
 
 #[cfg(test)]
 mod tests {
-    use crate::runtime::interpreter::Interpreter;
+    use crate::{
+        runtime::interpreter::Interpreter, value, DataStackResult, Evaluator,
+        NativeFunction,
+    };
 
     // Make sure all updates happen in the middle of their respective context,
     // not the beginning. This is the more complex case, and leads to the test
@@ -228,7 +231,16 @@ mod tests {
     }
 
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
-        let interpreter = Interpreter::new(code)?;
+        let mut interpreter = Interpreter::new(code)?;
+        interpreter
+            .register_native_functions([("ping", ping as NativeFunction)]);
         Ok(interpreter)
+    }
+
+    pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
+        let (channel, _) =
+            evaluator.data_stack.pop_specific::<value::Number>()?;
+        *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;
+        Ok(())
     }
 }

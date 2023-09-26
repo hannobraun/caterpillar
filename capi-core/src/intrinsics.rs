@@ -16,7 +16,6 @@ pub fn list() -> impl IntoIterator<Item = (&'static str, NativeFunction)> {
         ("fn", fn_),
         ("nop", nop),
         ("over", over),
-        ("ping", ping),
         ("swap", swap),
     ]
 }
@@ -87,12 +86,6 @@ pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
     evaluator.data_stack.push(top);
     evaluator.data_stack.push(target);
 
-    Ok(())
-}
-
-pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let (channel, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
-    *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;
     Ok(())
 }
 
