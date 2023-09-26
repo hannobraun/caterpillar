@@ -68,7 +68,7 @@ required to overwrite your existing version when you upgrade later.
 Run a Caterpillar script:
 
 ```shell
-capi <path to script>
+capi path/to/script.capi
 ```
 
 For example, if you've cloned this repository you can run one of the included
