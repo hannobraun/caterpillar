@@ -242,10 +242,9 @@ mod tests {
     }
 
     fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
-        let mut interpreter = crate::Interpreter::new(code)?;
-        interpreter
-            .register_platform([("ping", ping as PlatformFunction<Context>)]);
-        Ok(Interpreter { inner: interpreter })
+        let mut inner = crate::Interpreter::new(code)?;
+        inner.register_platform([("ping", ping as PlatformFunction<Context>)]);
+        Ok(Interpreter { inner })
     }
 
     pub fn ping(
