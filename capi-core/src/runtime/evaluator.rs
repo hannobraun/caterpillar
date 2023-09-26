@@ -46,7 +46,7 @@ impl Evaluator {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(f) => f(self)?,
                     Function::Platform(f) => f(self, context)?,
-                    Function::UserDefined(functions::UserDefined {
+                    Function::UserDefined(functions::UserDefinedFunction {
                         body,
                         ..
                     }) => {

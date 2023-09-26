@@ -46,7 +46,7 @@ impl<C> Functions<C> {
     }
 
     pub fn define(&mut self, name: FunctionName, body: value::Block) {
-        let function = Function::UserDefined(UserDefined {
+        let function = Function::UserDefined(UserDefinedFunction {
             name: name.clone(),
             body,
         });
@@ -68,7 +68,8 @@ impl<C> Functions<C> {
         let mut renames = Vec::new();
 
         for (old_name, function) in self.inner.iter_mut() {
-            if let Function::UserDefined(UserDefined { name, body }) = function
+            if let Function::UserDefined(UserDefinedFunction { name, body }) =
+                function
             {
                 if name.fragment == Some(old) {
                     let fragment = fragments.get(new);
@@ -109,7 +110,7 @@ impl<C> Default for Functions<C> {
 pub enum Function<C> {
     Intrinsic(IntrinsicFunction),
     Platform(PlatformFunction<C>),
-    UserDefined(UserDefined),
+    UserDefined(UserDefinedFunction),
 }
 
 pub type IntrinsicFunction = fn(&mut Evaluator) -> DataStackResult<()>;
@@ -117,7 +118,7 @@ pub type PlatformFunction<C> =
     fn(&mut Evaluator, &mut C) -> DataStackResult<()>;
 
 #[derive(Debug)]
-pub struct UserDefined {
+pub struct UserDefinedFunction {
     pub name: FunctionName,
     pub body: value::Block,
 }
