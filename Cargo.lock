@@ -139,6 +139,7 @@ dependencies = [
  "anyhow",
  "capi-core",
  "console_error_panic_hook",
+ "tracing",
  "tracing-wasm",
 ]
 
