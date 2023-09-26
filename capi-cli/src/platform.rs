@@ -11,12 +11,9 @@ pub fn delay_ms(
     Ok(())
 }
 
-pub fn print(
-    evaluator: RuntimeContext,
-    _: &mut Context,
-) -> DataStackResult<()> {
-    let value = evaluator.data_stack.pop_any()?;
+pub fn print(context: RuntimeContext, _: &mut Context) -> DataStackResult<()> {
+    let value = context.data_stack.pop_any()?;
     println!("{}", value.kind);
-    evaluator.data_stack.push(value);
+    context.data_stack.push(value);
     Ok(())
 }
