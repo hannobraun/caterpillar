@@ -1,5 +1,7 @@
 use std::{thread, time::Duration};
 
+use crate::runtime::functions::Intrinsic;
+
 use super::{
     repr::eval::value,
     runtime::{
@@ -7,6 +9,21 @@ use super::{
         functions::FunctionName,
     },
 };
+
+pub fn all() -> impl IntoIterator<Item = (&'static str, Intrinsic)> {
+    [
+        ("+", add as Intrinsic),
+        ("clone", clone),
+        ("delay_ms", delay_ms),
+        ("eval", eval),
+        ("fn", fn_),
+        ("nop", nop),
+        ("over", over),
+        ("ping", ping),
+        ("print", print),
+        ("swap", swap),
+    ]
+}
 
 pub fn add(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (b, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
