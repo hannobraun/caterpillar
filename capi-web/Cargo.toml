@@ -7,6 +7,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 console_error_panic_hook = "*"
+tracing-wasm = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"
