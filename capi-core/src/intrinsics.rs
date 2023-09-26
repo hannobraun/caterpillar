@@ -1,6 +1,6 @@
 use std::{thread, time::Duration};
 
-use crate::runtime::functions::Intrinsic;
+use crate::runtime::functions::NativeFunction;
 
 use super::{
     repr::eval::value,
@@ -10,9 +10,9 @@ use super::{
     },
 };
 
-pub fn list() -> impl IntoIterator<Item = (&'static str, Intrinsic)> {
+pub fn list() -> impl IntoIterator<Item = (&'static str, NativeFunction)> {
     [
-        ("+", add as Intrinsic),
+        ("+", add as NativeFunction),
         ("clone", clone),
         ("delay_ms", delay_ms),
         ("eval", eval),

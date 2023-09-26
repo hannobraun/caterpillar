@@ -13,7 +13,7 @@ pub struct Functions {
 }
 
 impl Functions {
-    pub fn register_native(&mut self, name: &str, intrinsic: Intrinsic) {
+    pub fn register_native(&mut self, name: &str, intrinsic: NativeFunction) {
         self.inner.insert(name.into(), Function::Native(intrinsic));
     }
 
@@ -73,11 +73,11 @@ impl Functions {
 
 #[derive(Debug)]
 pub enum Function {
-    Native(Intrinsic),
+    Native(NativeFunction),
     UserDefined(UserDefined),
 }
 
-pub type Intrinsic = fn(&mut Evaluator) -> DataStackResult<()>;
+pub type NativeFunction = fn(&mut Evaluator) -> DataStackResult<()>;
 
 #[derive(Debug)]
 pub struct UserDefined {
