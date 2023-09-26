@@ -65,9 +65,9 @@ impl<C> Functions<C> {
     {
         let native = self.native.get(name).map(|native| match native {
             NativeFunction::Intrinsic(function) => {
-                Function::Intrinsic(*function)
+                Function::Intrinsic(function)
             }
-            NativeFunction::Platform(function) => Function::Platform(*function),
+            NativeFunction::Platform(function) => Function::Platform(function),
         });
         let user_defined = self
             .user_defined
@@ -125,9 +125,9 @@ impl<C> Default for Functions<C> {
 }
 
 #[derive(Clone, Debug)]
-pub enum Function<C> {
-    Intrinsic(IntrinsicFunction),
-    Platform(PlatformFunction<C>),
+pub enum Function<'r, C> {
+    Intrinsic(&'r IntrinsicFunction),
+    Platform(&'r PlatformFunction<C>),
     UserDefined(UserDefinedFunction),
 }
 
