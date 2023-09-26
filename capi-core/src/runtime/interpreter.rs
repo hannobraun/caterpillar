@@ -233,11 +233,11 @@ mod tests {
 
     pub fn ping(
         runtime_context: RuntimeContext,
-        context: &mut Context,
+        platform_context: &mut Context,
     ) -> DataStackResult<()> {
         let (channel, _) =
             runtime_context.data_stack.pop_specific::<value::Number>()?;
-        *context.channels.entry(channel.0).or_insert(0) += 1;
+        *platform_context.channels.entry(channel.0).or_insert(0) += 1;
         Ok(())
     }
 }
