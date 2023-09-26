@@ -78,8 +78,8 @@ examples like this:
 capi examples/hello.capi
 ```
 
-Feel free to edit the script. Your changes will be applied to the running
-process immediately.
+If you edit the script, your changes will be applied to the running process
+immediately.
 
 ## Acknowledgements
 
