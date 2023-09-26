@@ -136,6 +136,7 @@ dependencies = [
 name = "capi-web"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "capi-core",
  "console_error_panic_hook",
 ]
