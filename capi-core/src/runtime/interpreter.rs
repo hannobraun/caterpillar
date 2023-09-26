@@ -36,9 +36,8 @@ impl Interpreter {
     pub fn register_platform(
         &mut self,
         functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
-    ) -> &mut Self {
+    ) {
         self.evaluator.functions.register_platform(functions);
-        self
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {
