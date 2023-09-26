@@ -43,11 +43,11 @@ pub fn eval(evaluator: &mut Evaluator) -> DataStackResult<()> {
     evaluator.call_stack.push(block.start);
 
     // `eval` doesn't need to consume the block, so it would be nice, if we
-    // could it back on the stack. However, if we were to do that here, that
+    // could put it back on the stack. However, if we were to do that here, that
     // would happen *before* the block is evaluated, and hence the block would
     // have itself on the stack when it starts. This sounds like it could
-    // possibly be useful, rarely in devious ways, but it certainly will just be
-    // annoying in the common case.
+    // possibly be useful, rarely and in devious ways, but it certainly will
+    // just be annoying in the common case.
     //
     // What we *could* do is add another frame to the call stack, which puts the
     // block back on the stack after the block itself returns. That would
