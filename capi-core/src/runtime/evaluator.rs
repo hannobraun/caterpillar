@@ -11,7 +11,7 @@ use super::{
     functions::{self, Function, Functions, ResolveError, RuntimeContext},
 };
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Evaluator<C> {
     pub functions: Functions<C>,
     pub call_stack: CallStack,
@@ -77,6 +77,16 @@ impl<C> Evaluator<C> {
             functions: self.functions.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
+        }
+    }
+}
+
+impl<C> Default for Evaluator<C> {
+    fn default() -> Self {
+        Self {
+            functions: Default::default(),
+            call_stack: Default::default(),
+            data_stack: Default::default(),
         }
     }
 }
