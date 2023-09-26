@@ -4,7 +4,10 @@ use crate::{
     repr::eval::fragments::{Fragments, Replacement},
 };
 
-use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
+use super::{
+    evaluator::{Evaluator, EvaluatorError, EvaluatorState},
+    functions::NativeFunction,
+};
 
 #[derive(Debug)]
 pub struct Interpreter {
@@ -28,6 +31,17 @@ impl Interpreter {
             fragments,
             evaluator,
         })
+    }
+
+    pub fn register_native_functions(
+        &mut self,
+        functions: impl IntoIterator<Item = (&'static str, NativeFunction)>,
+    ) -> &mut Self {
+        for (name, function) in functions {
+            self.evaluator.functions.register_native(name, function);
+        }
+
+        self
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorError> {

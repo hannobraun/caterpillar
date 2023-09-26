@@ -1,4 +1,5 @@
 mod args;
+mod functions;
 mod loader;
 
 fn main() -> anyhow::Result<()> {
@@ -11,6 +12,11 @@ fn main() -> anyhow::Result<()> {
     let (updates, _watcher) = loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
+
+    interpreter.register_native_functions([(
+        "print",
+        functions::print as capi_core::NativeFunction,
+    )]);
 
     loop {
         let new_code = match interpreter.step()? {

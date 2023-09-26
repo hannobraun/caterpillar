@@ -20,7 +20,6 @@ pub fn list() -> impl IntoIterator<Item = (&'static str, NativeFunction)> {
         ("nop", nop),
         ("over", over),
         ("ping", ping),
-        ("print", print),
         ("swap", swap),
     ]
 }
@@ -103,13 +102,6 @@ pub fn over(evaluator: &mut Evaluator) -> DataStackResult<()> {
 pub fn ping(evaluator: &mut Evaluator) -> DataStackResult<()> {
     let (channel, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
     *evaluator.context.channels.entry(channel.0).or_insert(0) += 1;
-    Ok(())
-}
-
-pub fn print(evaluator: &mut Evaluator) -> DataStackResult<()> {
-    let value = evaluator.data_stack.pop_any()?;
-    println!("{}", value.kind);
-    evaluator.data_stack.push(value);
     Ok(())
 }
 
