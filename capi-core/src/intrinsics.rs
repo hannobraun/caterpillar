@@ -45,16 +45,16 @@ pub fn eval(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn fn_(mut evaluator: RuntimeContext) -> DataStackResult<()> {
-    let (body, _) = evaluator.data_stack.pop_specific::<value::Block>()?;
+pub fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
+    let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
-        evaluator.data_stack.pop_specific::<value::Symbol>()?;
+        context.data_stack.pop_specific::<value::Symbol>()?;
 
     let name = FunctionName {
         value: name.0,
         fragment: name_fragment,
     };
-    evaluator.functions.define(name, body);
+    context.functions.define(name, body);
 
     Ok(())
 }
