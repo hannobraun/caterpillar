@@ -14,11 +14,11 @@ pub fn add(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn clone(evaluator: RuntimeContext) -> DataStackResult<()> {
-    let value = evaluator.data_stack.pop_any()?;
+pub fn clone(context: RuntimeContext) -> DataStackResult<()> {
+    let value = context.data_stack.pop_any()?;
 
-    evaluator.data_stack.push(value.clone());
-    evaluator.data_stack.push(value);
+    context.data_stack.push(value.clone());
+    context.data_stack.push(value);
 
     Ok(())
 }
