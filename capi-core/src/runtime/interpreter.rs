@@ -103,7 +103,7 @@ mod tests {
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":f { nop 2 ping f } fn f";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -125,7 +125,7 @@ mod tests {
             :g { nop 1 ping } fn
             loop";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -139,7 +139,7 @@ mod tests {
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":f { nop 2 ping f } fn f";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -156,7 +156,7 @@ mod tests {
         let original = "{ nop 1 ping } clone eval eval";
         let updated = "{ nop 2 ping } clone eval eval";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -180,7 +180,7 @@ mod tests {
             f eval
             g eval";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -201,7 +201,7 @@ mod tests {
             f
             2 ping";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -215,7 +215,7 @@ mod tests {
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":g { nop 1 ping g } fn g";
 
-        let mut interpreter = interpreter(original)?;
+        let mut interpreter = Interpreter::new(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
         interpreter.update(updated)?;
@@ -229,6 +229,15 @@ mod tests {
     }
 
     impl Interpreter {
+        pub fn new(code: &str) -> anyhow::Result<Self> {
+            let mut inner = crate::Interpreter::new(code)?;
+            inner.register_platform([(
+                "ping",
+                ping as PlatformFunction<Context>,
+            )]);
+            Ok(Self { inner })
+        }
+
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             self.inner.update(code)
         }
@@ -239,12 +248,6 @@ mod tests {
         ) -> Result<(), EvaluatorError> {
             self.inner.wait_for_ping_on_channel(channel)
         }
-    }
-
-    fn interpreter(code: &str) -> anyhow::Result<Interpreter> {
-        let mut inner = crate::Interpreter::new(code)?;
-        inner.register_platform([("ping", ping as PlatformFunction<Context>)]);
-        Ok(Interpreter { inner })
     }
 
     pub fn ping(
