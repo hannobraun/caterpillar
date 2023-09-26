@@ -1,21 +1,17 @@
-mod args;
-mod functions;
-mod loader;
-
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .init();
 
-    let args = args::Args::parse();
-    let code = loader::load::load(&args.script)?;
-    let (updates, _watcher) = loader::watch::watch(&args.script)?;
+    let args = capi_cli::args::Args::parse();
+    let code = capi_cli::loader::load::load(&args.script)?;
+    let (updates, _watcher) = capi_cli::loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
 
     interpreter.register_native_functions([(
         "print",
-        functions::print as capi_core::NativeFunction,
+        capi_cli::functions::print as capi_core::NativeFunction,
     )]);
 
     loop {
