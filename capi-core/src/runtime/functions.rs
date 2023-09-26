@@ -72,7 +72,7 @@ impl<C> Functions<C> {
         let user_defined = self
             .user_defined
             .get(name)
-            .map(|user_defined| Function::UserDefined(user_defined.clone()));
+            .map(|user_defined| Function::UserDefined(user_defined));
 
         native
             .or(user_defined)
@@ -128,7 +128,7 @@ impl<C> Default for Functions<C> {
 pub enum Function<'r, C> {
     Intrinsic(&'r IntrinsicFunction),
     Platform(&'r PlatformFunction<C>),
-    UserDefined(UserDefinedFunction),
+    UserDefined(&'r UserDefinedFunction),
 }
 
 #[derive(Debug)]
