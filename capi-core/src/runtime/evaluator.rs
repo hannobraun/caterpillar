@@ -96,12 +96,6 @@ pub struct Context {
     pub channels: HashMap<i64, i64>,
 }
 
-impl Context {
-    pub fn new() -> Self {
-        Self::default()
-    }
-}
-
 pub enum EvaluatorState {
     InProgress,
     Finished,
