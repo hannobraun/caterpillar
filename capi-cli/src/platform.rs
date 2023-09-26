@@ -1,9 +1,9 @@
 use std::{thread, time::Duration};
 
-use capi_core::{value, Context, DataStackResult, Evaluator};
+use capi_core::{value, Context, DataStackResult, RuntimeContext};
 
 pub fn delay_ms(
-    evaluator: &mut Evaluator,
+    evaluator: RuntimeContext,
     _: &mut Context,
 ) -> DataStackResult<()> {
     let (delay_ms, _) = evaluator.data_stack.pop_specific::<value::Number>()?;
@@ -12,7 +12,7 @@ pub fn delay_ms(
 }
 
 pub fn print(
-    evaluator: &mut Evaluator,
+    evaluator: RuntimeContext,
     _: &mut Context,
 ) -> DataStackResult<()> {
     let value = evaluator.data_stack.pop_any()?;

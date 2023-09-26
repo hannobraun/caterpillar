@@ -45,7 +45,9 @@ impl Evaluator {
             FragmentPayload::Word(word) => {
                 match self.functions.resolve(word)? {
                     Function::Intrinsic(f) => f(self.runtime_context())?,
-                    Function::Platform(f) => f(self, platform_context)?,
+                    Function::Platform(f) => {
+                        f(self.runtime_context(), platform_context)?
+                    }
                     Function::UserDefined(functions::UserDefinedFunction {
                         body,
                         ..

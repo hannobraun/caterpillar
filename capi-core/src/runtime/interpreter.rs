@@ -91,7 +91,7 @@ impl Interpreter {
 mod tests {
     use crate::{
         runtime::interpreter::Interpreter, value, Context, DataStackResult,
-        Evaluator, PlatformFunction,
+        PlatformFunction, RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -232,7 +232,7 @@ mod tests {
     }
 
     pub fn ping(
-        evaluator: &mut Evaluator,
+        evaluator: RuntimeContext,
         context: &mut Context,
     ) -> DataStackResult<()> {
         let (channel, _) =
