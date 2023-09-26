@@ -53,9 +53,13 @@ impl<C> Functions<C> {
         self.inner.insert(name.value, function);
     }
 
-    pub fn resolve(&self, name: &str) -> Result<&Function<C>, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError>
+    where
+        C: Clone,
+    {
         self.inner
             .get(name)
+            .cloned()
             .ok_or(ResolveError { name: name.into() })
     }
 
