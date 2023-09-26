@@ -12,13 +12,13 @@ use super::{
 };
 
 #[derive(Debug, Default)]
-pub struct Evaluator {
-    pub functions: Functions<Context>,
+pub struct Evaluator<C> {
+    pub functions: Functions<C>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
 }
 
-impl Evaluator {
+impl<C> Evaluator<C> {
     pub fn state(&self) -> EvaluatorState {
         if self.call_stack.current().is_some() {
             EvaluatorState::InProgress
@@ -30,7 +30,7 @@ impl Evaluator {
     pub fn step(
         &mut self,
         fragments: &Fragments,
-        platform_context: &mut Context,
+        platform_context: &mut C,
     ) -> Result<EvaluatorState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
