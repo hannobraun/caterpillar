@@ -1,3 +1,5 @@
+include!(concat!(env!("OUT_DIR"), "/script.rs"));
+
 fn main() {
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
@@ -8,8 +10,7 @@ fn main() {
 }
 
 fn main_inner() -> anyhow::Result<()> {
-    let mut interpreter =
-        capi_core::Interpreter::new(r#""Hello, world!" print"#)?;
+    let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
     interpreter.register_native_functions([(
         "print",
         print as capi_core::NativeFunction,

@@ -12,3 +12,7 @@ tracing-wasm = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"
+
+
+[build-dependencies]
+anyhow = "*"
