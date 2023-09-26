@@ -13,6 +13,7 @@ use super::{data_stack::DataStackResult, evaluator::Evaluator};
 #[derive(Debug)]
 pub struct Functions<C> {
     inner: BTreeMap<String, Function<C>>,
+    user_defined: BTreeMap<String, UserDefinedFunction>,
 }
 
 impl<C> Functions<C> {
@@ -33,7 +34,10 @@ impl<C> Functions<C> {
             inner.insert(name.to_string(), Function::Intrinsic(intrinsic));
         }
 
-        Self { inner }
+        Self {
+            inner,
+            user_defined: BTreeMap::new(),
+        }
     }
 
     pub fn register_platform(
@@ -46,20 +50,25 @@ impl<C> Functions<C> {
     }
 
     pub fn define(&mut self, name: FunctionName, body: value::Block) {
-        let function = Function::UserDefined(UserDefinedFunction {
+        let function = UserDefinedFunction {
             name: name.clone(),
             body,
-        });
-        self.inner.insert(name.value, function);
+        };
+        self.user_defined.insert(name.value, function);
     }
 
     pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError>
     where
         C: Clone,
     {
-        self.inner
+        let native = self.inner.get(name).cloned();
+        let user_defined = self
+            .user_defined
             .get(name)
-            .cloned()
+            .map(|function| Function::UserDefined(function.clone()));
+
+        native
+            .or(user_defined)
             .ok_or(ResolveError { name: name.into() })
     }
 
@@ -71,35 +80,33 @@ impl<C> Functions<C> {
     ) {
         let mut renames = Vec::new();
 
-        for (old_name, function) in self.inner.iter_mut() {
-            if let Function::UserDefined(UserDefinedFunction { name, body }) =
-                function
-            {
-                if name.fragment == Some(old) {
-                    let fragment = fragments.get(new);
-                    let FragmentPayload::Value(ValueKind::Symbol(new_name)) =
-                        &fragment.payload
-                    else {
-                        // If the new fragment is not a symbol, then it's not
-                        // supposed to be a function name. Not sure if we can
-                        // handle this any smarter.
-                        continue;
-                    };
+        for (old_name, UserDefinedFunction { name, body }) in
+            self.user_defined.iter_mut()
+        {
+            if name.fragment == Some(old) {
+                let fragment = fragments.get(new);
+                let FragmentPayload::Value(ValueKind::Symbol(new_name)) =
+                    &fragment.payload
+                else {
+                    // If the new fragment is not a symbol, then it's not
+                    // supposed to be a function name. Not sure if we can
+                    // handle this any smarter.
+                    continue;
+                };
 
-                    name.value = new_name.clone();
-                    name.fragment = Some(new);
+                name.value = new_name.clone();
+                name.fragment = Some(new);
 
-                    renames.push((old_name.clone(), new_name.clone()));
-                }
-                if body.start == old {
-                    body.start = new;
-                }
+                renames.push((old_name.clone(), new_name.clone()));
+            }
+            if body.start == old {
+                body.start = new;
             }
         }
 
         for (old, new) in renames {
-            let function = self.inner.remove(&old).unwrap();
-            self.inner.insert(new, function);
+            let function = self.user_defined.remove(&old).unwrap();
+            self.user_defined.insert(new, function);
         }
     }
 }
