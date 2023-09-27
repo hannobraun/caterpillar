@@ -1,10 +1,10 @@
-use sycamore::view;
+use sycamore::{reactive::RcSignal, view};
 
-pub fn render() {
+pub fn render(output: RcSignal<String>) {
     sycamore::render(|cx| {
         view! { cx,
             p() {
-                "Hello, world!"
+                (output.get())
             }
         }
     });

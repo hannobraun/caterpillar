@@ -5,10 +5,13 @@ use capi_core::{
     RuntimeContext, RuntimeState,
 };
 use gloo_timers::future::sleep;
+use sycamore::reactive::RcSignal;
 use tracing::debug;
 
-pub async fn run(script: &str) -> anyhow::Result<()> {
+pub async fn run(script: &str, output: RcSignal<String>) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
+
+    output.set("Hello, world!".into());
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
