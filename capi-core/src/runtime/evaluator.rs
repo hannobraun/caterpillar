@@ -1,6 +1,9 @@
-use crate::repr::eval::{
-    fragments::{FragmentPayload, Fragments},
-    value::Value,
+use crate::{
+    repr::eval::{
+        fragments::{FragmentPayload, Fragments},
+        value::Value,
+    },
+    RuntimeState,
 };
 
 use super::{
@@ -41,8 +44,11 @@ impl<C> Evaluator<C> {
 
         match &fragment.payload {
             FragmentPayload::Word(word) => {
-                match self.functions.resolve(word)? {
-                    Function::Intrinsic(f) => f(self.runtime_context())?,
+                let RuntimeState::Resume = match self.functions.resolve(word)? {
+                    Function::Intrinsic(f) => {
+                        f(self.runtime_context())?;
+                        RuntimeState::Resume
+                    }
                     Function::Platform(f) => {
                         f(self.runtime_context(), platform_context)?
                     }
@@ -51,8 +57,9 @@ impl<C> Evaluator<C> {
                         ..
                     }) => {
                         self.call_stack.push(body.start);
+                        RuntimeState::Resume
                     }
-                }
+                };
             }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {

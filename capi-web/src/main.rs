@@ -24,9 +24,9 @@ fn main_inner() -> anyhow::Result<()> {
 fn print(
     context: capi_core::RuntimeContext,
     _: &mut (),
-) -> capi_core::DataStackResult<()> {
+) -> capi_core::DataStackResult<capi_core::RuntimeState> {
     let value = context.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);
     context.data_stack.push(value);
-    Ok(())
+    Ok(capi_core::RuntimeState::Resume)
 }
