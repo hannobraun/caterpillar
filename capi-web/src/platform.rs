@@ -36,7 +36,6 @@ pub async fn run(script: &str) -> anyhow::Result<()> {
     Ok(())
 }
 
-#[derive(Default)]
 pub struct Context {
     pub sleep_duration: Option<Duration>,
 }
