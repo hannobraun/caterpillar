@@ -20,11 +20,11 @@ pub struct Evaluator<C> {
 }
 
 impl<C> Evaluator<C> {
-    pub fn state(&self) -> EvaluatorState {
+    pub fn state(&self) -> RuntimeState {
         if self.call_stack.current().is_some() {
-            EvaluatorState::InProgress
+            RuntimeState::InProgress
         } else {
-            EvaluatorState::Finished
+            RuntimeState::Finished
         }
     }
 
@@ -32,10 +32,10 @@ impl<C> Evaluator<C> {
         &mut self,
         fragments: &Fragments,
         platform_context: &mut C,
-    ) -> Result<EvaluatorState, EvaluatorError> {
+    ) -> Result<RuntimeState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
-            None => return Ok(EvaluatorState::Finished),
+            None => return Ok(RuntimeState::Finished),
         };
 
         // We're done with the call stack for this step. Let's advance it now,
@@ -74,7 +74,7 @@ impl<C> Evaluator<C> {
             }
         };
 
-        Ok(EvaluatorState::InProgress)
+        Ok(RuntimeState::InProgress)
     }
 
     fn runtime_context(&mut self) -> RuntimeContext {
@@ -96,12 +96,12 @@ impl<C> Default for Evaluator<C> {
     }
 }
 
-pub enum EvaluatorState {
+pub enum RuntimeState {
     InProgress,
     Finished,
 }
 
-impl EvaluatorState {
+impl RuntimeState {
     pub fn finished(&self) -> bool {
         matches!(self, Self::Finished)
     }

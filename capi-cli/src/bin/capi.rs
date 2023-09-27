@@ -19,12 +19,12 @@ fn main() -> anyhow::Result<()> {
 
     loop {
         let new_code = match interpreter.step(&mut ())? {
-            capi_core::EvaluatorState::InProgress => match updates.try_recv() {
+            capi_core::RuntimeState::InProgress => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
                 Err(std::sync::mpsc::TryRecvError::Empty) => None,
                 Err(std::sync::mpsc::TryRecvError::Disconnected) => break,
             },
-            capi_core::EvaluatorState::Finished => {
+            capi_core::RuntimeState::Finished => {
                 eprintln!();
                 eprintln!("> Program finished.");
                 eprintln!("  > will restart on change to script");

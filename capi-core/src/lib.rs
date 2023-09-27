@@ -7,7 +7,7 @@ pub use self::{
     repr::eval::value,
     runtime::{
         data_stack::DataStackResult,
-        evaluator::{Evaluator, EvaluatorState},
+        evaluator::{Evaluator, RuntimeState},
         functions::{FunctionState, PlatformFunction, RuntimeContext},
         interpreter::Interpreter,
     },

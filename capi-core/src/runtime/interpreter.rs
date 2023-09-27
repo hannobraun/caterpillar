@@ -4,7 +4,7 @@ use crate::{
     PlatformFunction,
 };
 
-use super::evaluator::{Evaluator, EvaluatorError, EvaluatorState};
+use super::evaluator::{Evaluator, EvaluatorError, RuntimeState};
 
 #[derive(Debug)]
 pub struct Interpreter<C> {
@@ -36,7 +36,7 @@ impl<C> Interpreter<C> {
     pub fn step(
         &mut self,
         platform_context: &mut C,
-    ) -> Result<EvaluatorState, EvaluatorError> {
+    ) -> Result<RuntimeState, EvaluatorError> {
         self.evaluator.step(&self.fragments, platform_context)
     }
 
