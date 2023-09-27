@@ -23,12 +23,14 @@ async fn main_inner() -> anyhow::Result<()> {
     )]);
 
     loop {
-        match interpreter.step(&mut context)? {
-            capi_core::RuntimeState::Running => {}
-            capi_core::RuntimeState::Sleeping => {
-                unreachable!("No web platform functions put runtime to sleep")
-            }
+        let sleep_duration = match interpreter.step(&mut context)? {
+            capi_core::RuntimeState::Running => None,
+            capi_core::RuntimeState::Sleeping => context.sleep_duration.take(),
             capi_core::RuntimeState::Finished => break,
+        };
+
+        if let Some(sleep_duration) = sleep_duration {
+            gloo_timers::future::sleep(sleep_duration).await
         }
     }
 
