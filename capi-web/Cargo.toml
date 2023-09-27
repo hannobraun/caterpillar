@@ -9,6 +9,7 @@ anyhow = "*"
 console_error_panic_hook = "*"
 tracing = "*"
 tracing-wasm = "*"
+wasm-bindgen-futures = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"
