@@ -42,7 +42,7 @@ impl<C> Evaluator<C> {
         // so that's out of the way.
         self.call_stack.advance(fragment.next());
 
-        match &fragment.payload {
+        let runtime_state = match &fragment.payload {
             FragmentPayload::Word(word) => {
                 let FunctionState::Done = match self.functions.resolve(word)? {
                     Function::Intrinsic(f) => {
@@ -60,21 +60,26 @@ impl<C> Evaluator<C> {
                         FunctionState::Done
                     }
                 };
+
+                RuntimeState::InProgress
             }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {
                     kind: value.clone(),
                     fragment: Some(fragment_id),
                 });
+
+                RuntimeState::InProgress
             }
             FragmentPayload::Terminator => {
                 // Nothing to do here. Terminators only exist for fragment
                 // addressing purposes and don't need to be handled during
                 // evaluation.
+                RuntimeState::InProgress
             }
         };
 
-        Ok(RuntimeState::InProgress)
+        Ok(runtime_state)
     }
 
     fn runtime_context(&mut self) -> RuntimeContext {
