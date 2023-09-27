@@ -1,7 +1,11 @@
+use std::time::Duration;
+
 use capi_core::{DataStackResult, FunctionState, RuntimeContext};
 
 #[derive(Default)]
-pub struct Context {}
+pub struct Context {
+    pub sleep_duration: Option<Duration>,
+}
 
 pub fn print(
     context: RuntimeContext,
