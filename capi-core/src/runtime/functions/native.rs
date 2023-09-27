@@ -13,7 +13,7 @@ pub enum NativeFunction<C> {
 
 pub type IntrinsicFunction = fn(RuntimeContext) -> DataStackResult<()>;
 pub type PlatformFunction<C> =
-    fn(RuntimeContext, &mut C) -> DataStackResult<RuntimeState>;
+    fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
 
 pub struct RuntimeContext<'r> {
     pub functions: UserDefinedFunctions<'r>,
@@ -21,6 +21,6 @@ pub struct RuntimeContext<'r> {
     pub data_stack: &'r mut DataStack,
 }
 
-pub enum RuntimeState {
+pub enum FunctionState {
     Resume,
 }
