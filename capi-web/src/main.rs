@@ -1,4 +1,5 @@
 mod platform;
+mod ui;
 
 include!(concat!(env!("OUT_DIR"), "/script.rs"));
 
@@ -11,4 +12,5 @@ fn main() {
             panic!("Error: {err:?}");
         }
     });
+    ui::render();
 }
