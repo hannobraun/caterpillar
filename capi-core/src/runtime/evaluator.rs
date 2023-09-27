@@ -22,7 +22,7 @@ pub struct Evaluator<C> {
 impl<C> Evaluator<C> {
     pub fn state(&self) -> RuntimeState {
         if self.call_stack.current().is_some() {
-            RuntimeState::InProgress
+            RuntimeState::Running
         } else {
             RuntimeState::Finished
         }
@@ -62,7 +62,7 @@ impl<C> Evaluator<C> {
                 };
 
                 match function_state {
-                    FunctionState::Done => RuntimeState::InProgress,
+                    FunctionState::Done => RuntimeState::Running,
                     FunctionState::Sleeping => RuntimeState::Sleeping,
                 }
             }
@@ -72,13 +72,13 @@ impl<C> Evaluator<C> {
                     fragment: Some(fragment_id),
                 });
 
-                RuntimeState::InProgress
+                RuntimeState::Running
             }
             FragmentPayload::Terminator => {
                 // Nothing to do here. Terminators only exist for fragment
                 // addressing purposes and don't need to be handled during
                 // evaluation.
-                RuntimeState::InProgress
+                RuntimeState::Running
             }
         };
 
@@ -105,7 +105,7 @@ impl<C> Default for Evaluator<C> {
 }
 
 pub enum RuntimeState {
-    InProgress,
+    Running,
     Sleeping,
     Finished,
 }

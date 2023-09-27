@@ -19,7 +19,7 @@ fn main() -> anyhow::Result<()> {
 
     loop {
         let new_code = match interpreter.step(&mut ())? {
-            capi_core::RuntimeState::InProgress => match updates.try_recv() {
+            capi_core::RuntimeState::Running => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
                 Err(std::sync::mpsc::TryRecvError::Empty) => None,
                 Err(std::sync::mpsc::TryRecvError::Disconnected) => break,
