@@ -17,10 +17,14 @@ async fn main_inner() -> anyhow::Result<()> {
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
     let mut context = platform::Context::default();
 
-    interpreter.register_platform([(
-        "print",
-        platform::print as capi_core::PlatformFunction<platform::Context>,
-    )]);
+    interpreter.register_platform([
+        (
+            "delay_ms",
+            platform::delay_ms
+                as capi_core::PlatformFunction<platform::Context>,
+        ),
+        ("print", platform::print),
+    ]);
 
     loop {
         let sleep_duration = match interpreter.step(&mut context)? {
