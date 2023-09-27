@@ -1,3 +1,9 @@
+mod native;
+
+pub use self::native::{
+    IntrinsicFunction, NativeFunction, PlatformFunction, RuntimeContext,
+};
+
 use std::collections::BTreeMap;
 
 use crate::{
@@ -6,11 +12,6 @@ use crate::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::{self, ValueKind},
     },
-};
-
-use super::{
-    call_stack::CallStack,
-    data_stack::{DataStack, DataStackResult},
 };
 
 #[derive(Debug)]
@@ -141,22 +142,6 @@ pub enum Function<'r, C> {
     Intrinsic(&'r IntrinsicFunction),
     Platform(&'r PlatformFunction<C>),
     UserDefined(&'r UserDefinedFunction),
-}
-
-#[derive(Debug)]
-pub enum NativeFunction<C> {
-    Intrinsic(IntrinsicFunction),
-    Platform(PlatformFunction<C>),
-}
-
-pub type IntrinsicFunction = fn(RuntimeContext) -> DataStackResult<()>;
-pub type PlatformFunction<C> =
-    fn(RuntimeContext, &mut C) -> DataStackResult<()>;
-
-pub struct RuntimeContext<'r> {
-    pub functions: UserDefinedFunctions<'r>,
-    pub call_stack: &'r mut CallStack,
-    pub data_stack: &'r mut DataStack,
 }
 
 #[derive(Clone, Debug)]
