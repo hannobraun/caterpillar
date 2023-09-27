@@ -20,3 +20,7 @@ pub struct RuntimeContext<'r> {
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
 }
+
+pub enum RuntimeState {
+    Resume,
+}
