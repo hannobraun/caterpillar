@@ -35,9 +35,11 @@ async fn main_inner() -> anyhow::Result<()> {
             capi_core::RuntimeState::Finished => break,
         };
 
-        if let Some(sleep_duration) = sleep_duration {
-            gloo_timers::future::sleep(sleep_duration).await
-        }
+        // Always sleep, even if it's for zero duration, to give the rest of the
+        // website a chance to do its thing between steps.
+        let sleep_duration =
+            sleep_duration.unwrap_or(std::time::Duration::from_millis(0));
+        gloo_timers::future::sleep(sleep_duration).await
     }
 
     Ok(())
