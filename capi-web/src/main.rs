@@ -14,6 +14,8 @@ fn main() {
 }
 
 async fn main_inner() -> anyhow::Result<()> {
+    tracing::debug!("Running script:\n{SCRIPT}");
+
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
     let mut context = platform::Context::default();
 
