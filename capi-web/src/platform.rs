@@ -11,7 +11,9 @@ pub async fn run(script: &str) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
     let mut interpreter = Interpreter::new(script)?;
-    let mut context = Context::default();
+    let mut context = Context {
+        sleep_duration: None,
+    };
 
     interpreter.register_platform([
         ("delay_ms", delay_ms as PlatformFunction<Context>),
