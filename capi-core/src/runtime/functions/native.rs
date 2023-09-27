@@ -22,5 +22,5 @@ pub struct RuntimeContext<'r> {
 }
 
 pub enum FunctionState {
-    Resume,
+    Done,
 }

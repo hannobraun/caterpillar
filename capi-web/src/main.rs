@@ -28,5 +28,5 @@ fn print(
     let value = context.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);
     context.data_stack.push(value);
-    Ok(capi_core::FunctionState::Resume)
+    Ok(capi_core::FunctionState::Done)
 }

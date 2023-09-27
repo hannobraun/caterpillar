@@ -44,22 +44,22 @@ impl<C> Evaluator<C> {
 
         match &fragment.payload {
             FragmentPayload::Word(word) => {
-                let FunctionState::Resume =
-                    match self.functions.resolve(word)? {
-                        Function::Intrinsic(f) => {
-                            f(self.runtime_context())?;
-                            FunctionState::Resume
-                        }
-                        Function::Platform(f) => {
-                            f(self.runtime_context(), platform_context)?
-                        }
-                        Function::UserDefined(
-                            functions::UserDefinedFunction { body, .. },
-                        ) => {
-                            self.call_stack.push(body.start);
-                            FunctionState::Resume
-                        }
-                    };
+                let FunctionState::Done = match self.functions.resolve(word)? {
+                    Function::Intrinsic(f) => {
+                        f(self.runtime_context())?;
+                        FunctionState::Done
+                    }
+                    Function::Platform(f) => {
+                        f(self.runtime_context(), platform_context)?
+                    }
+                    Function::UserDefined(functions::UserDefinedFunction {
+                        body,
+                        ..
+                    }) => {
+                        self.call_stack.push(body.start);
+                        FunctionState::Done
+                    }
+                };
             }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {
