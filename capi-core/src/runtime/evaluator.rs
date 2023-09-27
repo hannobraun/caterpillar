@@ -44,7 +44,7 @@ impl<C> Evaluator<C> {
 
         let runtime_state = match &fragment.payload {
             FragmentPayload::Word(word) => {
-                let FunctionState::Done = match self.functions.resolve(word)? {
+                let function_state = match self.functions.resolve(word)? {
                     Function::Intrinsic(f) => {
                         f(self.runtime_context())?;
                         FunctionState::Done
@@ -61,7 +61,10 @@ impl<C> Evaluator<C> {
                     }
                 };
 
-                RuntimeState::InProgress
+                match function_state {
+                    FunctionState::Done => RuntimeState::InProgress,
+                    FunctionState::Sleeping => RuntimeState::Sleeping,
+                }
             }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {
@@ -103,6 +106,7 @@ impl<C> Default for Evaluator<C> {
 
 pub enum RuntimeState {
     InProgress,
+    Sleeping,
     Finished,
 }
 

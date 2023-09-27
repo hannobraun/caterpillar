@@ -23,4 +23,5 @@ pub struct RuntimeContext<'r> {
 
 pub enum FunctionState {
     Done,
+    Sleeping,
 }
