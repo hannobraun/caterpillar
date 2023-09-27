@@ -1,30 +1,34 @@
 use std::time::Duration;
 
-use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
+use capi_core::{
+    value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
+    RuntimeContext, RuntimeState,
+};
+use gloo_timers::future::sleep;
+use tracing::debug;
 
 pub async fn run(script: &str) -> anyhow::Result<()> {
-    tracing::debug!("Running script:\n{script}");
+    debug!("Running script:\n{script}");
 
-    let mut interpreter = capi_core::Interpreter::new(script)?;
+    let mut interpreter = Interpreter::new(script)?;
     let mut context = Context::default();
 
     interpreter.register_platform([
-        ("delay_ms", delay_ms as capi_core::PlatformFunction<Context>),
+        ("delay_ms", delay_ms as PlatformFunction<Context>),
         ("print", print),
     ]);
 
     loop {
         let sleep_duration = match interpreter.step(&mut context)? {
-            capi_core::RuntimeState::Running => None,
-            capi_core::RuntimeState::Sleeping => context.sleep_duration.take(),
-            capi_core::RuntimeState::Finished => break,
+            RuntimeState::Running => None,
+            RuntimeState::Sleeping => context.sleep_duration.take(),
+            RuntimeState::Finished => break,
         };
 
         // Always sleep, even if it's for zero duration, to give the rest of the
         // website a chance to do its thing between steps.
-        let sleep_duration =
-            sleep_duration.unwrap_or(std::time::Duration::from_millis(0));
-        gloo_timers::future::sleep(sleep_duration).await
+        let sleep_duration = sleep_duration.unwrap_or(Duration::from_millis(0));
+        sleep(sleep_duration).await
     }
 
     Ok(())
