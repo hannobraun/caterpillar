@@ -7,16 +7,16 @@ fn main() {
     tracing_wasm::set_as_global_default();
 
     wasm_bindgen_futures::spawn_local(async {
-        if let Err(err) = run().await {
+        if let Err(err) = run(SCRIPT).await {
             panic!("Error: {err:?}");
         }
     })
 }
 
-async fn run() -> anyhow::Result<()> {
-    tracing::debug!("Running script:\n{SCRIPT}");
+async fn run(script: &str) -> anyhow::Result<()> {
+    tracing::debug!("Running script:\n{script}");
 
-    let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
+    let mut interpreter = capi_core::Interpreter::new(script)?;
     let mut context = platform::Context::default();
 
     interpreter.register_platform([
