@@ -1,5 +1,6 @@
 use capi_core::{DataStackResult, FunctionState, RuntimeContext};
 
+#[derive(Default)]
 pub struct Context {}
 
 pub fn print(

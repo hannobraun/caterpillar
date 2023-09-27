@@ -15,7 +15,7 @@ fn main() {
 
 async fn main_inner() -> anyhow::Result<()> {
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
-    let mut context = platform::Context {};
+    let mut context = platform::Context::default();
 
     interpreter.register_platform([(
         "print",
