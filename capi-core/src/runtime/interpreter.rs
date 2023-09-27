@@ -50,6 +50,8 @@ impl<C> Interpreter<C> {
             self.evaluator.functions.replace(old, new, &self.fragments);
         }
 
+        // If the program has finished running, restart it in response to this
+        // update.
         if self.evaluator.state().finished() {
             self.evaluator.call_stack.push(start);
         }
