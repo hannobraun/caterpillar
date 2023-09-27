@@ -7,13 +7,13 @@ fn main() {
     tracing_wasm::set_as_global_default();
 
     wasm_bindgen_futures::spawn_local(async {
-        if let Err(err) = main_inner().await {
+        if let Err(err) = run().await {
             panic!("Error: {err:?}");
         }
     })
 }
 
-async fn main_inner() -> anyhow::Result<()> {
+async fn run() -> anyhow::Result<()> {
     tracing::debug!("Running script:\n{SCRIPT}");
 
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
