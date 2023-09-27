@@ -8,11 +8,11 @@ pub struct Context {
 }
 
 pub fn print(
-    context: RuntimeContext,
+    runtime_context: RuntimeContext,
     _: &mut Context,
 ) -> DataStackResult<FunctionState> {
-    let value = context.data_stack.pop_any()?;
+    let value = runtime_context.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);
-    context.data_stack.push(value);
+    runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
