@@ -20,14 +20,6 @@ pub struct Evaluator<C> {
 }
 
 impl<C> Evaluator<C> {
-    pub fn state(&self) -> RuntimeState {
-        if self.call_stack.current().is_some() {
-            RuntimeState::Running
-        } else {
-            RuntimeState::Finished
-        }
-    }
-
     pub fn step(
         &mut self,
         fragments: &Fragments,

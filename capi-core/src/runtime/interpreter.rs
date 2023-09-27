@@ -10,6 +10,7 @@ use super::evaluator::{Evaluator, EvaluatorError, RuntimeState};
 pub struct Interpreter<C> {
     fragments: Fragments,
     evaluator: Evaluator<C>,
+    state: RuntimeState,
 }
 
 impl<C> Interpreter<C> {
@@ -23,6 +24,7 @@ impl<C> Interpreter<C> {
         Ok(Interpreter {
             fragments,
             evaluator,
+            state: RuntimeState::Running,
         })
     }
 
@@ -37,7 +39,8 @@ impl<C> Interpreter<C> {
         &mut self,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
-        self.evaluator.step(&self.fragments, platform_context)
+        self.state = self.evaluator.step(&self.fragments, platform_context)?;
+        Ok(self.state)
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
@@ -52,7 +55,7 @@ impl<C> Interpreter<C> {
 
         // If the program has finished running, restart it in response to this
         // update.
-        if self.evaluator.state().finished() {
+        if self.state.finished() {
             self.evaluator.call_stack.push(start);
         }
 
