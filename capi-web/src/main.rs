@@ -18,7 +18,15 @@ async fn main_inner() -> anyhow::Result<()> {
         print as capi_core::PlatformFunction<()>,
     )]);
 
-    while !interpreter.step(&mut ())?.finished() {}
+    loop {
+        match interpreter.step(&mut ())? {
+            capi_core::RuntimeState::Running => {}
+            capi_core::RuntimeState::Sleeping => {
+                unreachable!("No web platform functions put runtime to sleep")
+            }
+            capi_core::RuntimeState::Finished => break,
+        }
+    }
 
     Ok(())
 }
