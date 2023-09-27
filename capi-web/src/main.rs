@@ -10,5 +10,5 @@ fn main() {
         if let Err(err) = platform::run(SCRIPT).await {
             panic!("Error: {err:?}");
         }
-    })
+    });
 }
