@@ -104,6 +104,7 @@ impl<C> Default for Evaluator<C> {
     }
 }
 
+#[derive(Debug)]
 pub enum RuntimeState {
     Running,
     Sleeping,
