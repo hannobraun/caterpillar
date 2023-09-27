@@ -17,11 +17,11 @@ async fn main_inner() -> anyhow::Result<()> {
     let mut interpreter = capi_core::Interpreter::new(SCRIPT)?;
     interpreter.register_platform([(
         "print",
-        platform::print as capi_core::PlatformFunction<()>,
+        platform::print as capi_core::PlatformFunction<platform::Context>,
     )]);
 
     loop {
-        match interpreter.step(&mut ())? {
+        match interpreter.step(&mut platform::Context {})? {
             capi_core::RuntimeState::Running => {}
             capi_core::RuntimeState::Sleeping => {
                 unreachable!("No web platform functions put runtime to sleep")

@@ -1,8 +1,10 @@
 use capi_core::{DataStackResult, FunctionState, RuntimeContext};
 
+pub struct Context {}
+
 pub fn print(
     context: RuntimeContext,
-    _: &mut (),
+    _: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let value = context.data_stack.pop_any()?;
     tracing::info!("{}", value.kind);
