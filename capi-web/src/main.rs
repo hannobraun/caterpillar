@@ -11,9 +11,9 @@ fn main() {
     let output2 = output.clone();
 
     wasm_bindgen_futures::spawn_local(async {
-        if let Err(err) = platform::run(SCRIPT, output2).await {
+        if let Err(err) = platform::run(SCRIPT, output).await {
             panic!("Error: {err:?}");
         }
     });
-    ui::render(output);
+    ui::render(output2);
 }
