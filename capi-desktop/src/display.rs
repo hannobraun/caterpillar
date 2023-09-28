@@ -1,8 +1,8 @@
 pub struct Display {}
 
 impl Display {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new() -> anyhow::Result<Self> {
+        Ok(Self {})
     }
 
     pub fn set(&mut self, position: [i64; 2]) {
@@ -12,6 +12,6 @@ impl Display {
 
 impl Default for Display {
     fn default() -> Self {
-        Self::new()
+        Self::new().unwrap()
     }
 }

@@ -25,8 +25,9 @@ fn main() -> anyhow::Result<()> {
         let runtime_state = interpreter.step(&mut context)?;
 
         for position in context.pixel_operations.drain(..) {
-            let mut d =
-                display.unwrap_or_else(capi_desktop::display::Display::new);
+            let mut d = display
+                .map(Ok)
+                .unwrap_or_else(capi_desktop::display::Display::new)?;
 
             d.set(position);
 
