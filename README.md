@@ -54,32 +54,9 @@ Caterpillar is still in a state of early exploration, and barely usable.
 
 ## Usage
 
-Install the latest version of the Caterpillar CLI runtime from this repository:
-
-```shell
-cargo install \
-  --force \
-  --git https://github.com/hannobraun/caterpillar.git capi-cli
-```
-
-You don't need the `--force` for the initial install, but it's going to be
-required to overwrite your existing version when you upgrade later.
-
-Run a Caterpillar script:
-
-```shell
-capi path/to/script.capi
-```
-
-For example, if you've cloned this repository, you can run one of the included
-examples like this:
-
-```shell
-capi examples/hello.capi
-```
-
-If you edit the script, your changes will be applied to the running process
-immediately.
+Caterpillar currently runs on [desktop operating systems](capi-desktop/) and in
+[browser](capi-web/). Please check out the respective README (see links in the
+preceding sentence) for more information.
 
 ## Acknowledgements
 
