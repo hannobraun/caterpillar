@@ -55,7 +55,7 @@ Caterpillar is still in a state of early exploration, and barely usable.
 ## Usage
 
 Caterpillar currently runs on [desktop operating systems](capi-desktop/) and in
-[browser](capi-web/). Please check out the respective README (see links in the
+[browsers](capi-web/). Please check out the respective README (see links in the
 preceding sentence) for more information.
 
 ## Acknowledgements
