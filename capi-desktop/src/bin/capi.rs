@@ -8,6 +8,7 @@ fn main() -> anyhow::Result<()> {
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
+    let mut context = capi_desktop::platform::Context {};
 
     interpreter.register_platform([
         (
@@ -19,9 +20,7 @@ fn main() -> anyhow::Result<()> {
     ]);
 
     loop {
-        let new_code = match interpreter
-            .step(&mut capi_desktop::platform::Context {})?
-        {
+        let new_code = match interpreter.step(&mut context)? {
             capi_core::RuntimeState::Running => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
                 Err(std::sync::mpsc::TryRecvError::Empty) => None,
