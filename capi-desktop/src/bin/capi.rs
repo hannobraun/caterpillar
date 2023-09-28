@@ -29,7 +29,7 @@ fn main() -> anyhow::Result<()> {
                 .map(Ok)
                 .unwrap_or_else(capi_desktop::display::Display::new)?;
 
-            d.set(position);
+            d.set(position)?;
 
             display = Some(d);
         }

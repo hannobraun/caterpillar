@@ -5,7 +5,8 @@ impl Display {
         Ok(Self {})
     }
 
-    pub fn set(&mut self, position: [i64; 2]) {
+    pub fn set(&mut self, position: [i64; 2]) -> anyhow::Result<()> {
         tracing::info!("Should set pixel at {position:?}");
+        Ok(())
     }
 }
