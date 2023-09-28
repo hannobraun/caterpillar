@@ -3,20 +3,21 @@ use std::{thread, time::Duration};
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 
 pub fn delay_ms(
-    context: RuntimeContext,
+    runtime_context: RuntimeContext,
     _: &mut (),
 ) -> DataStackResult<FunctionState> {
-    let (delay_ms, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let (delay_ms, _) =
+        runtime_context.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
     Ok(FunctionState::Done)
 }
 
 pub fn print(
-    context: RuntimeContext,
+    runtime_context: RuntimeContext,
     _: &mut (),
 ) -> DataStackResult<FunctionState> {
-    let value = context.data_stack.pop_any()?;
+    let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.kind);
-    context.data_stack.push(value);
+    runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
