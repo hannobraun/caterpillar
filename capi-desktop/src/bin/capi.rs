@@ -3,18 +3,18 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
         .init();
 
-    let args = capi_cli::args::Args::parse();
-    let code = capi_cli::loader::load::load(&args.script)?;
-    let (updates, _watcher) = capi_cli::loader::watch::watch(&args.script)?;
+    let args = capi_desktop::args::Args::parse();
+    let code = capi_desktop::loader::load::load(&args.script)?;
+    let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
 
     interpreter.register_platform([
         (
             "delay_ms",
-            capi_cli::platform::delay_ms as capi_core::PlatformFunction<()>,
+            capi_desktop::platform::delay_ms as capi_core::PlatformFunction<()>,
         ),
-        ("print", capi_cli::platform::print),
+        ("print", capi_desktop::platform::print),
     ]);
 
     loop {
