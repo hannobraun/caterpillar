@@ -9,9 +9,3 @@ impl Display {
         tracing::info!("Should set pixel at {position:?}");
     }
 }
-
-impl Default for Display {
-    fn default() -> Self {
-        Self::new().unwrap()
-    }
-}
