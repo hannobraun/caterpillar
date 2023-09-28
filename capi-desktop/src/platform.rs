@@ -2,9 +2,11 @@ use std::{thread, time::Duration};
 
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 
+pub struct Context {}
+
 pub fn delay_ms(
     runtime_context: RuntimeContext,
-    _: &mut (),
+    _: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
@@ -14,7 +16,7 @@ pub fn delay_ms(
 
 pub fn print(
     runtime_context: RuntimeContext,
-    _: &mut (),
+    _: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.kind);

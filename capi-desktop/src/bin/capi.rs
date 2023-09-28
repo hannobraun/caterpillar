@@ -12,13 +12,16 @@ fn main() -> anyhow::Result<()> {
     interpreter.register_platform([
         (
             "delay_ms",
-            capi_desktop::platform::delay_ms as capi_core::PlatformFunction<()>,
+            capi_desktop::platform::delay_ms
+                as capi_core::PlatformFunction<capi_desktop::platform::Context>,
         ),
         ("print", capi_desktop::platform::print),
     ]);
 
     loop {
-        let new_code = match interpreter.step(&mut ())? {
+        let new_code = match interpreter
+            .step(&mut capi_desktop::platform::Context {})?
+        {
             capi_core::RuntimeState::Running => match updates.try_recv() {
                 Ok(new_code) => Some(new_code),
                 Err(std::sync::mpsc::TryRecvError::Empty) => None,
