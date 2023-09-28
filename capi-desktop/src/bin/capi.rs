@@ -9,6 +9,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
     let mut context = capi_desktop::platform::Context::default();
+    let mut display = None;
 
     interpreter.register_platform([
         (
@@ -22,6 +23,15 @@ fn main() -> anyhow::Result<()> {
 
     loop {
         let runtime_state = interpreter.step(&mut context)?;
+
+        for position in context.pixel_operations.drain(..) {
+            let mut d =
+                display.unwrap_or_else(capi_desktop::display::Display::new);
+
+            d.set(position);
+
+            display = Some(d);
+        }
 
         let new_code = match runtime_state {
             capi_core::RuntimeState::Running => match updates.try_recv() {
