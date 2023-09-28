@@ -2,6 +2,7 @@ use std::{thread, time::Duration};
 
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 
+#[derive(Default)]
 pub struct Context {}
 
 pub fn delay_ms(
