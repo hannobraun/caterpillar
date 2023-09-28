@@ -3,7 +3,21 @@ use std::{thread, time::Duration};
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 
 #[derive(Default)]
-pub struct Context {}
+pub struct Context {
+    pub pixel_operations: Vec<[i64; 2]>,
+}
+
+pub fn pixel_set(
+    runtime_context: RuntimeContext,
+    platform_context: &mut Context,
+) -> DataStackResult<FunctionState> {
+    let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+    let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+
+    platform_context.pixel_operations.push([x.0, y.0]);
+
+    Ok(FunctionState::Done)
+}
 
 pub fn delay_ms(
     runtime_context: RuntimeContext,

@@ -16,6 +16,7 @@ fn main() -> anyhow::Result<()> {
             capi_desktop::platform::delay_ms
                 as capi_core::PlatformFunction<capi_desktop::platform::Context>,
         ),
+        ("pixel_set", capi_desktop::platform::pixel_set),
         ("print", capi_desktop::platform::print),
     ]);
 
