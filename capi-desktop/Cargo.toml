@@ -10,6 +10,7 @@ notify = "*"
 notify-debouncer-mini = "*"
 pixels = "*"
 tracing = "*"
+winit = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"
