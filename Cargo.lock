@@ -126,7 +126,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f30e7476521f6f8af1a1c4c0b8cc94f0bee37d91763d0ca2665f299b6cd8aec"
 
 [[package]]
-name = "capi-cli"
+name = "capi-core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "blake3",
+ "enum_variant_type",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "capi-desktop"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -136,17 +147,6 @@ dependencies = [
  "notify-debouncer-mini",
  "tracing",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "capi-core"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "blake3",
- "enum_variant_type",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
