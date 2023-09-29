@@ -15,5 +15,7 @@ fn main() {
             panic!("Error: {err:?}");
         }
     });
-    ui::render(output2);
+    wasm_bindgen_futures::spawn_local(async {
+        ui::render(output2).await;
+    });
 }

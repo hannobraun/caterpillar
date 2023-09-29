@@ -1,6 +1,6 @@
 use sycamore::{reactive::RcSignal, view};
 
-pub fn render(output: RcSignal<String>) {
+pub async fn render(output: RcSignal<String>) {
     sycamore::render(|cx| {
         view! { cx,
             ul {
