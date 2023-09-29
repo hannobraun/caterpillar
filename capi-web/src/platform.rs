@@ -8,10 +8,10 @@ use capi_core::{
 use gloo_timers::future::sleep;
 use tracing::debug;
 
-pub async fn run(script: &str, output2: Sender<String>) -> anyhow::Result<()> {
+pub async fn run(script: &str, output: Sender<String>) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
-    output2.send("Hello, world!".into()).await?;
+    output.send("Hello, world!".into()).await?;
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
