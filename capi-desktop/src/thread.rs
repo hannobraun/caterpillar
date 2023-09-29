@@ -6,10 +6,10 @@ use crate::{
     platform::{self, Context, PixelOp},
 };
 
-pub fn run(code: &str, updates: Receiver<String>) -> anyhow::Result<()> {
+pub fn run(code: String, updates: Receiver<String>) -> anyhow::Result<()> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
 
-    let mut interpreter = Interpreter::new(code)?;
+    let mut interpreter = Interpreter::new(&code)?;
     let mut context = Context {
         pixel_ops: pixel_ops_tx,
     };

@@ -7,7 +7,7 @@ fn main() -> anyhow::Result<()> {
     let code = capi_desktop::loader::load::load(&args.script)?;
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
-    capi_desktop::thread::run(&code, updates)?;
+    capi_desktop::thread::run(code, updates)?;
 
     Ok(())
 }
