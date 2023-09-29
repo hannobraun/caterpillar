@@ -10,9 +10,7 @@ pub fn run(
     updates: Receiver<String>,
 ) -> anyhow::Result<Receiver<PixelOp>> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
-
     thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
-
     Ok(pixel_ops_rx)
 }
 
