@@ -17,7 +17,7 @@ pub async fn run(
     debug!("Running script:\n{script}");
 
     output.set("Hello, world!".into());
-    output2.send("Hello,world!".into()).await?;
+    output2.send("Hello, world!".into()).await?;
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
