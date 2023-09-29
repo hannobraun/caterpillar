@@ -1,11 +1,12 @@
 use async_channel::Receiver;
-use sycamore::{reactive::RcSignal, view};
+use sycamore::{reactive::create_rc_signal, view};
 
-pub async fn render(
-    output: RcSignal<String>,
-    output2: Receiver<String>,
-) -> anyhow::Result<()> {
+pub async fn render(output2: Receiver<String>) -> anyhow::Result<()> {
+    let output_signal = create_rc_signal(String::new());
+
     sycamore::render(|cx| {
+        let output = output_signal.clone();
+
         view! { cx,
             ul {
                 li { (output.get()) }
@@ -15,6 +16,6 @@ pub async fn render(
 
     loop {
         let line = output2.recv().await?;
-        tracing::debug!("Output: {line}");
+        output_signal.set(line);
     }
 }
