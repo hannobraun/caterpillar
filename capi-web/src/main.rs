@@ -16,6 +16,8 @@ fn main() {
         }
     });
     wasm_bindgen_futures::spawn_local(async {
-        ui::render(output2).await;
+        if let Err(err) = ui::render(output2).await {
+            panic!("UI error: {err:?}");
+        }
     });
 }
