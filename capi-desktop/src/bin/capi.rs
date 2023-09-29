@@ -41,7 +41,9 @@ fn main() -> anyhow::Result<()> {
                 Err(std::sync::mpsc::TryRecvError::Disconnected) => break,
             },
             capi_core::RuntimeState::Sleeping => {
-                unreachable!("No CLI platform functions put runtime to sleep")
+                unreachable!(
+                    "No desktop platform functions put runtime to sleep"
+                )
             }
             capi_core::RuntimeState::Finished => {
                 eprintln!();
