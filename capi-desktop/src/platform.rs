@@ -4,7 +4,11 @@ use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 use crossbeam_channel::Sender;
 
 pub struct Context {
-    pub pixel_ops: Sender<[i64; 2]>,
+    pub pixel_ops: Sender<PixelOp>,
+}
+
+pub enum PixelOp {
+    Set([i64; 2]),
 }
 
 pub fn pixel_set(
@@ -16,7 +20,7 @@ pub fn pixel_set(
 
     platform_context
         .pixel_ops
-        .send([x.0, y.0])
+        .send(PixelOp::Set([x.0, y.0]))
         .expect("Channel for pixel operations disconnected");
 
     Ok(FunctionState::Done)

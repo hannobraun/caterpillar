@@ -3,7 +3,7 @@ use crossbeam_channel::{Receiver, RecvError, TryRecvError};
 
 use crate::{
     display::Display,
-    platform::{self, Context},
+    platform::{self, Context, PixelOp},
 };
 
 pub fn run(code: &str, updates: Receiver<String>) -> anyhow::Result<()> {
@@ -26,7 +26,7 @@ pub fn run(code: &str, updates: Receiver<String>) -> anyhow::Result<()> {
     loop {
         let runtime_state = interpreter.step(&mut context)?;
 
-        for position in pixel_ops_rx.try_iter() {
+        for PixelOp::Set(position) in pixel_ops_rx.try_iter() {
             let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
 
             d.set(position)?;
