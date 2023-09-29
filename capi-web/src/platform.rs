@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use async_channel::Sender;
 use capi_core::{
     value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
     RuntimeContext, RuntimeState,
@@ -8,10 +9,15 @@ use gloo_timers::future::sleep;
 use sycamore::reactive::RcSignal;
 use tracing::debug;
 
-pub async fn run(script: &str, output: RcSignal<String>) -> anyhow::Result<()> {
+pub async fn run(
+    script: &str,
+    output: RcSignal<String>,
+    output2: Sender<String>,
+) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
     output.set("Hello, world!".into());
+    output2.send("Hello,world!".into()).await?;
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
