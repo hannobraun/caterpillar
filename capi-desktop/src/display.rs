@@ -14,14 +14,14 @@ impl Display {
 
         let buffer_to_surface = |size| size * factor;
 
+        let surface_width = buffer_to_surface(WIDTH);
+        let surface_height = buffer_to_surface(HEIGHT);
+
         let event_loop = EventLoop::new();
         let window = Window::new(&event_loop)?;
 
-        let surface_texture = SurfaceTexture::new(
-            buffer_to_surface(WIDTH),
-            buffer_to_surface(HEIGHT),
-            &window,
-        );
+        let surface_texture =
+            SurfaceTexture::new(surface_width, surface_height, &window);
         let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
         Ok(Self {
