@@ -12,7 +12,7 @@ fn main() {
 
     wasm_bindgen_futures::spawn_local(async {
         if let Err(err) = platform::run(SCRIPT, output).await {
-            panic!("Error: {err:?}");
+            panic!("Platform error: {err:?}");
         }
     });
     wasm_bindgen_futures::spawn_local(async {
