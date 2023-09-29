@@ -8,7 +8,9 @@ fn main() -> anyhow::Result<()> {
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
-    let mut context = capi_desktop::platform::Context::default();
+    let mut context = capi_desktop::platform::Context {
+        pixel_operations: Vec::new(),
+    };
     let mut display = None;
 
     interpreter.register_platform([

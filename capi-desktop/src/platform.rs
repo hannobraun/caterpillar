@@ -2,7 +2,6 @@ use std::{thread, time::Duration};
 
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
 
-#[derive(Default)]
 pub struct Context {
     pub pixel_operations: Vec<[i64; 2]>,
 }
