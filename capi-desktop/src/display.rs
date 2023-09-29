@@ -1,7 +1,24 @@
 use std::cmp;
 
+use crossbeam_channel::Receiver;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{event_loop::EventLoop, window::Window};
+
+use crate::platform::PixelOp;
+
+pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
+    let mut display = None;
+
+    for PixelOp::Set(position) in pixel_ops.iter() {
+        let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
+
+        d.set(position)?;
+
+        display = Some(d);
+    }
+
+    Ok(())
+}
 
 pub struct Display {
     _event_loop: EventLoop<()>,
