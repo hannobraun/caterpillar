@@ -8,8 +8,9 @@ fn main() -> anyhow::Result<()> {
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
     let mut interpreter = capi_core::Interpreter::new(&code)?;
+    let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
     let mut context = capi_desktop::platform::Context {
-        pixel_operations: Vec::new(),
+        pixel_operations: pixel_ops_tx,
     };
     let mut display = None;
 
@@ -26,7 +27,7 @@ fn main() -> anyhow::Result<()> {
     loop {
         let runtime_state = interpreter.step(&mut context)?;
 
-        for position in context.pixel_operations.drain(..) {
+        for position in pixel_ops_rx.try_iter() {
             let mut d = display
                 .map(Ok)
                 .unwrap_or_else(capi_desktop::display::Display::new)?;

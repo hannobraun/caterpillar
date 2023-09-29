@@ -1,9 +1,10 @@
 use std::{thread, time::Duration};
 
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
+use crossbeam_channel::Sender;
 
 pub struct Context {
-    pub pixel_operations: Vec<[i64; 2]>,
+    pub pixel_operations: Sender<[i64; 2]>,
 }
 
 pub fn pixel_set(
@@ -13,7 +14,10 @@ pub fn pixel_set(
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
-    platform_context.pixel_operations.push([x.0, y.0]);
+    platform_context
+        .pixel_operations
+        .send([x.0, y.0])
+        .expect("Channel for pixel operations disconnected");
 
     Ok(FunctionState::Done)
 }
