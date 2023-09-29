@@ -1,5 +1,7 @@
+use std::thread;
+
 use capi_core::{Interpreter, PlatformFunction, RuntimeState};
-use crossbeam_channel::{Receiver, RecvError, TryRecvError};
+use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
     display::Display,
@@ -9,11 +11,27 @@ use crate::{
 pub fn run(code: String, updates: Receiver<String>) -> anyhow::Result<()> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
 
-    let mut interpreter = Interpreter::new(&code)?;
-    let mut context = Context {
-        pixel_ops: pixel_ops_tx,
-    };
+    thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
+
     let mut display = None;
+    for PixelOp::Set(position) in pixel_ops_rx.iter() {
+        let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
+
+        d.set(position)?;
+
+        display = Some(d);
+    }
+
+    Ok(())
+}
+
+fn run_inner(
+    code: String,
+    updates: Receiver<String>,
+    pixel_ops: Sender<PixelOp>,
+) -> anyhow::Result<()> {
+    let mut interpreter = Interpreter::new(&code)?;
+    let mut context = Context { pixel_ops };
 
     interpreter.register_platform([
         (
@@ -26,14 +44,6 @@ pub fn run(code: String, updates: Receiver<String>) -> anyhow::Result<()> {
 
     loop {
         let runtime_state = interpreter.step(&mut context)?;
-
-        for PixelOp::Set(position) in pixel_ops_rx.try_iter() {
-            let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
-
-            d.set(position)?;
-
-            display = Some(d);
-        }
 
         let new_code = match runtime_state {
             RuntimeState::Running => match updates.try_recv() {
