@@ -7,14 +7,17 @@ use winit::{event_loop::EventLoop, window::Window};
 use crate::platform::PixelOp;
 
 pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
-    let mut display = None;
+    // Block until the first pixel op is sent.
+    let first_pixel_op = pixel_ops.recv()?;
 
-    for PixelOp::Set(position) in pixel_ops.iter() {
-        let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
+    // If a pixel op has been sent, initialize the display and start handling
+    // pixel ops for real.
 
-        d.set(position)?;
+    let mut display = Display::new()?;
+    let pixel_ops = [first_pixel_op].into_iter().chain(pixel_ops.iter());
 
-        display = Some(d);
+    for PixelOp::Set(position) in pixel_ops {
+        display.set(position)?;
     }
 
     Ok(())
