@@ -10,7 +10,7 @@ pub fn run(code: &str, updates: Receiver<String>) -> anyhow::Result<()> {
     let mut interpreter = Interpreter::new(code)?;
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
     let mut context = Context {
-        pixel_operations: pixel_ops_tx,
+        pixel_ops: pixel_ops_tx,
     };
     let mut display = None;
 
