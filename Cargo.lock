@@ -319,6 +319,7 @@ dependencies = [
  "anyhow",
  "capi-core",
  "clap",
+ "crossbeam-channel",
  "notify",
  "notify-debouncer-mini",
  "pixels",
