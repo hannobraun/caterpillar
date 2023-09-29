@@ -7,7 +7,18 @@ fn main() -> anyhow::Result<()> {
     let code = capi_desktop::loader::load::load(&args.script)?;
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
-    capi_desktop::thread::run(code, updates)?;
+    let pixel_ops = capi_desktop::thread::run(code, updates)?;
+
+    let mut display = None;
+    for capi_desktop::platform::PixelOp::Set(position) in pixel_ops.iter() {
+        let mut d = display
+            .map(Ok)
+            .unwrap_or_else(capi_desktop::display::Display::new)?;
+
+        d.set(position)?;
+
+        display = Some(d);
+    }
 
     Ok(())
 }

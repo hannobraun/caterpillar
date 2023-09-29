@@ -3,26 +3,17 @@ use std::thread;
 use capi_core::{Interpreter, PlatformFunction, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
-use crate::{
-    display::Display,
-    platform::{self, Context, PixelOp},
-};
+use crate::platform::{self, Context, PixelOp};
 
-pub fn run(code: String, updates: Receiver<String>) -> anyhow::Result<()> {
+pub fn run(
+    code: String,
+    updates: Receiver<String>,
+) -> anyhow::Result<Receiver<PixelOp>> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
 
     thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
 
-    let mut display = None;
-    for PixelOp::Set(position) in pixel_ops_rx.iter() {
-        let mut d = display.map(Ok).unwrap_or_else(Display::new)?;
-
-        d.set(position)?;
-
-        display = Some(d);
-    }
-
-    Ok(())
+    Ok(pixel_ops_rx)
 }
 
 fn run_inner(
