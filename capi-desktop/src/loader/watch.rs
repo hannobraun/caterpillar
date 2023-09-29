@@ -1,9 +1,9 @@
 use std::{
     path::{Path, PathBuf},
-    sync::mpsc::{sync_channel, Receiver},
     time::Duration,
 };
 
+use crossbeam_channel::Receiver;
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
@@ -17,7 +17,7 @@ pub fn watch(
 ) -> anyhow::Result<(Receiver<String>, Debouncer<RecommendedWatcher>)> {
     let path_for_watcher = PathBuf::from(path.as_ref());
 
-    let (sender, receiver) = sync_channel(0);
+    let (sender, receiver) = crossbeam_channel::bounded(0);
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),

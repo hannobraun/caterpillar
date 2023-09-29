@@ -1,6 +1,5 @@
-use std::sync::mpsc::{Receiver, RecvError, TryRecvError};
-
 use capi_core::{Interpreter, PlatformFunction, RuntimeState};
+use crossbeam_channel::{Receiver, RecvError, TryRecvError};
 
 use crate::{
     display::Display,
