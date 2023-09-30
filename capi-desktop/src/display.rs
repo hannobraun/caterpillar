@@ -27,30 +27,32 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         SurfaceTexture::new(surface_width, surface_height, &window);
     let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    let pixel_ops = [first_pixel_op].into_iter().chain(pixel_ops.iter());
+    let mut queued_pixel_ops = vec![first_pixel_op];
 
-    for PixelOp::Set(position) in pixel_ops {
-        let [x, y] = position.map(|value| {
-            let min = 0;
-            let max = cmp::max(WIDTH, HEIGHT).into();
+    event_loop.run(move |_, _, _| {
+        queued_pixel_ops.extend(pixel_ops.try_iter());
 
-            value.max(min).min(max) as usize
-        });
+        for PixelOp::Set(position) in queued_pixel_ops.drain(..) {
+            let [x, y] = position.map(|value| {
+                let min = 0;
+                let max = cmp::max(WIDTH, HEIGHT).into();
 
-        let r = y * WIDTH as usize + x;
-        let g = r + 1;
-        let b = r + 2;
-        let a = r + 3;
+                value.max(min).min(max) as usize
+            });
 
-        pixels.frame_mut()[r] = 255;
-        pixels.frame_mut()[g] = 255;
-        pixels.frame_mut()[b] = 255;
-        pixels.frame_mut()[a] = 255;
+            let r = y * WIDTH as usize + x;
+            let g = r + 1;
+            let b = r + 2;
+            let a = r + 3;
 
-        pixels.render()?;
-    }
+            pixels.frame_mut()[r] = 255;
+            pixels.frame_mut()[g] = 255;
+            pixels.frame_mut()[b] = 255;
+            pixels.frame_mut()[a] = 255;
 
-    Ok(())
+            pixels.render().unwrap();
+        }
+    })
 }
 
 const WIDTH: u32 = 10;
