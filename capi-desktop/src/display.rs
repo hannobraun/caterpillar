@@ -25,9 +25,8 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
 
     let surface_texture =
         SurfaceTexture::new(surface_width, surface_height, &window);
-    let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
+    let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    let mut display = Display { pixels };
     let pixel_ops = [first_pixel_op].into_iter().chain(pixel_ops.iter());
 
     for PixelOp::Set(position) in pixel_ops {
@@ -43,19 +42,15 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         let b = r + 2;
         let a = r + 3;
 
-        display.pixels.frame_mut()[r] = 255;
-        display.pixels.frame_mut()[g] = 255;
-        display.pixels.frame_mut()[b] = 255;
-        display.pixels.frame_mut()[a] = 255;
+        pixels.frame_mut()[r] = 255;
+        pixels.frame_mut()[g] = 255;
+        pixels.frame_mut()[b] = 255;
+        pixels.frame_mut()[a] = 255;
 
-        display.pixels.render()?;
+        pixels.render()?;
     }
 
     Ok(())
-}
-
-pub struct Display {
-    pixels: Pixels,
 }
 
 const WIDTH: u32 = 10;
