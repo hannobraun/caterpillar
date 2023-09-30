@@ -36,19 +36,6 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     let pixel_ops = [first_pixel_op].into_iter().chain(pixel_ops.iter());
 
     for PixelOp::Set(position) in pixel_ops {
-        display.set(position)?;
-    }
-
-    Ok(())
-}
-
-pub struct Display {
-    _event_loop: EventLoop<()>,
-    pixels: Pixels,
-}
-
-impl Display {
-    pub fn set(&mut self, position: [i64; 2]) -> anyhow::Result<()> {
         let [x, y] = position.map(|value| {
             let min = 0;
             let max = cmp::max(WIDTH, HEIGHT).into();
@@ -61,15 +48,20 @@ impl Display {
         let b = r + 2;
         let a = r + 3;
 
-        self.pixels.frame_mut()[r] = 255;
-        self.pixels.frame_mut()[g] = 255;
-        self.pixels.frame_mut()[b] = 255;
-        self.pixels.frame_mut()[a] = 255;
+        display.pixels.frame_mut()[r] = 255;
+        display.pixels.frame_mut()[g] = 255;
+        display.pixels.frame_mut()[b] = 255;
+        display.pixels.frame_mut()[a] = 255;
 
-        self.pixels.render()?;
-
-        Ok(())
+        display.pixels.render()?;
     }
+
+    Ok(())
+}
+
+pub struct Display {
+    _event_loop: EventLoop<()>,
+    pixels: Pixels,
 }
 
 const WIDTH: u32 = 10;
