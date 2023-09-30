@@ -81,6 +81,9 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             } => {
                 control_flow.set_exit();
             }
+            Event::MainEventsCleared => {
+                window.request_redraw();
+            }
             Event::RedrawRequested(_) => {
                 pixels.render().unwrap();
             }
