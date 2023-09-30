@@ -42,8 +42,12 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         queued_pixel_ops.extend(pixel_ops.try_iter());
 
         for PixelOp::Set([x, y]) in queued_pixel_ops.drain(..) {
-            let x = cmp::max(0, cmp::min(x as usize, WIDTH as usize - 1));
-            let y = cmp::max(0, cmp::min(y as usize, HEIGHT as usize - 1));
+            let clamp = |value, max| {
+                cmp::min(max as usize - 1, cmp::max(0, value) as usize)
+            };
+
+            let x = clamp(x, WIDTH);
+            let y = clamp(y, HEIGHT);
 
             let r = (y * WIDTH as usize + x) * 4;
             let g = r + 1;
