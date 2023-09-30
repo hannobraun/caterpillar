@@ -3,6 +3,7 @@ use std::cmp;
 use crossbeam_channel::Receiver;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
+    dpi::PhysicalSize,
     event::{Event, KeyboardInput, VirtualKeyCode, WindowEvent},
     event_loop::EventLoop,
     window::WindowBuilder,
@@ -25,7 +26,10 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     let surface_height = buffer_to_surface(HEIGHT);
 
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop)?;
+    let window = WindowBuilder::new()
+        .with_inner_size(PhysicalSize::new(surface_width, surface_height))
+        .with_resizable(false)
+        .build(&event_loop)?;
 
     let surface_texture =
         SurfaceTexture::new(surface_width, surface_height, &window);
