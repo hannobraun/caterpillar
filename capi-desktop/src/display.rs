@@ -2,7 +2,7 @@ use std::cmp;
 
 use crossbeam_channel::Receiver;
 use pixels::{Pixels, SurfaceTexture};
-use winit::{event_loop::EventLoop, window::Window};
+use winit::{event::Event, event_loop::EventLoop, window::Window};
 
 use crate::platform::PixelOp;
 
@@ -29,7 +29,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
 
     let mut queued_pixel_ops = vec![first_pixel_op];
 
-    event_loop.run(move |_, _, _| {
+    event_loop.run(move |event, _, _| {
         queued_pixel_ops.extend(pixel_ops.try_iter());
 
         for PixelOp::Set(position) in queued_pixel_ops.drain(..) {
@@ -49,8 +49,14 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             pixels.frame_mut()[g] = 255;
             pixels.frame_mut()[b] = 255;
             pixels.frame_mut()[a] = 255;
+        }
 
-            pixels.render().unwrap();
+        #[allow(clippy::single_match)]
+        match event {
+            Event::RedrawRequested(_) => {
+                pixels.render().unwrap();
+            }
+            _ => {}
         }
     })
 }
