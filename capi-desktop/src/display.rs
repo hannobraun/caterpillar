@@ -27,6 +27,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
 
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
+        .with_title("Caterpillar")
         .with_inner_size(PhysicalSize::new(surface_width, surface_height))
         .with_resizable(false)
         .build(&event_loop)?;
