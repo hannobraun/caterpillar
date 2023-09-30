@@ -5,7 +5,7 @@ use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyboardInput, VirtualKeyCode, WindowEvent},
     event_loop::EventLoop,
-    window::Window,
+    window::WindowBuilder,
 };
 
 use crate::platform::PixelOp;
@@ -25,7 +25,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     let surface_height = buffer_to_surface(HEIGHT);
 
     let event_loop = EventLoop::new();
-    let window = Window::new(&event_loop)?;
+    let window = WindowBuilder::new().build(&event_loop)?;
 
     let surface_texture =
         SurfaceTexture::new(surface_width, surface_height, &window);
