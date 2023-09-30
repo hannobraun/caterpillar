@@ -1,0 +1,11 @@
+:loop
+{
+    print
+    clone 0 pixel_set
+    1 +
+    200 delay_ms
+    loop
+}
+    fn
+
+0 loop
