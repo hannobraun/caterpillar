@@ -27,10 +27,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         SurfaceTexture::new(surface_width, surface_height, &window);
     let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    let mut display = Display {
-        _event_loop: event_loop,
-        pixels,
-    };
+    let mut display = Display { pixels };
     let pixel_ops = [first_pixel_op].into_iter().chain(pixel_ops.iter());
 
     for PixelOp::Set(position) in pixel_ops {
@@ -58,7 +55,6 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
 }
 
 pub struct Display {
-    _event_loop: EventLoop<()>,
     pixels: Pixels,
 }
 
