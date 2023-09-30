@@ -55,7 +55,6 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             pixels.frame_mut()[a] = 255;
         }
 
-        #[allow(clippy::single_match)]
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
