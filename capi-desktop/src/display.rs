@@ -45,7 +45,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             let x = cmp::max(0, cmp::min(x as usize, WIDTH as usize - 1));
             let y = cmp::max(0, cmp::min(y as usize, HEIGHT as usize - 1));
 
-            let r = y * WIDTH as usize + x;
+            let r = (y * WIDTH as usize + x) * 4;
             let g = r + 1;
             let b = r + 2;
             let a = r + 3;
