@@ -3,7 +3,7 @@ use std::cmp;
 use crossbeam_channel::Receiver;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
-    event::{Event, WindowEvent},
+    event::{Event, KeyboardInput, VirtualKeyCode, WindowEvent},
     event_loop::EventLoop,
     window::Window,
 };
@@ -58,6 +58,20 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
+                ..
+            } => {
+                control_flow.set_exit();
+            }
+            Event::WindowEvent {
+                event:
+                    WindowEvent::KeyboardInput {
+                        input:
+                            KeyboardInput {
+                                virtual_keycode: Some(VirtualKeyCode::Escape),
+                                ..
+                            },
+                        ..
+                    },
                 ..
             } => {
                 control_flow.set_exit();
