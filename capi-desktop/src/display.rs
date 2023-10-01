@@ -1,5 +1,6 @@
 use std::cmp;
 
+use anyhow::Context;
 use crossbeam_channel::{Receiver, TryRecvError};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
@@ -13,7 +14,9 @@ use crate::platform::PixelOp;
 
 pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     // Block until the first pixel op is sent.
-    let first_pixel_op = pixel_ops.recv()?;
+    let first_pixel_op = pixel_ops
+        .recv()
+        .context("Waiting for first pixel operation")?;
 
     // If a pixel op has been sent, initialize the display and start handling
     // pixel ops for real.
