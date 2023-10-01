@@ -1,7 +1,6 @@
 use std::cmp;
 
-use anyhow::Context;
-use crossbeam_channel::{Receiver, TryRecvError};
+use crossbeam_channel::{Receiver, RecvError, TryRecvError};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     dpi::PhysicalSize,
@@ -14,9 +13,16 @@ use crate::platform::PixelOp;
 
 pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     // Block until the first pixel op is sent.
-    let first_pixel_op = pixel_ops
-        .recv()
-        .context("Waiting for first pixel operation")?;
+    let first_pixel_op = match pixel_ops.recv() {
+        Ok(pixel_op) => pixel_op,
+        Err(RecvError) => {
+            // This happens if the other end is disconnected, for example
+            // when the application shuts down. If this happens here, then
+            // the Caterpillar program never needed the services of this
+            // code, and we can just quietly quit.
+            return Ok(());
+        }
+    };
 
     // If a pixel op has been sent, initialize the display and start handling
     // pixel ops for real.
