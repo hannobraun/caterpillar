@@ -7,8 +7,21 @@ fn main() -> anyhow::Result<()> {
     let code = capi_desktop::loader::load::load(&args.script)?;
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
-    let (pixel_ops, _) = capi_desktop::thread::run(code, updates)?;
+    let (pixel_ops, join_handle) = capi_desktop::thread::run(code, updates)?;
     capi_desktop::display::start(pixel_ops)?;
+
+    // If we reach this point, then the main thread returned from the graphics
+    // subsystem. This must mean the Caterpillar thread ended.
+    match join_handle.join() {
+        Ok(result) => {
+            // The result that the thread returned, which is possibly an error.
+            result?
+        }
+        Err(err) => {
+            // The thread panicked! Let's make sure this bubbles up to the user.
+            std::panic::resume_unwind(err)
+        }
+    }
 
     Ok(())
 }
