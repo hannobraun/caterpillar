@@ -36,12 +36,12 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
         SurfaceTexture::new(surface_width, surface_height, &window);
     let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    let mut queued_pixel_ops = vec![first_pixel_op];
+    let mut pixel_ops_buffer = vec![first_pixel_op];
 
     event_loop.run(move |event, _, control_flow| {
-        queued_pixel_ops.extend(pixel_ops.try_iter());
+        pixel_ops_buffer.extend(pixel_ops.try_iter());
 
-        for PixelOp::Set([x, y]) in queued_pixel_ops.drain(..) {
+        for PixelOp::Set([x, y]) in pixel_ops_buffer.drain(..) {
             let clamp = |value, max| {
                 cmp::min(max as usize - 1, cmp::max(0, value) as usize)
             };
