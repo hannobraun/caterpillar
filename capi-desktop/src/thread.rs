@@ -1,4 +1,4 @@
-use std::thread;
+use std::thread::{self, JoinHandle};
 
 use capi_core::{Interpreter, PlatformFunction, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
@@ -8,10 +8,10 @@ use crate::platform::{self, Context, PixelOp};
 pub fn run(
     code: String,
     updates: Receiver<String>,
-) -> anyhow::Result<Receiver<PixelOp>> {
+) -> anyhow::Result<(Receiver<PixelOp>, JoinHandle<anyhow::Result<()>>)> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
-    thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
-    Ok(pixel_ops_rx)
+    let join_handle = thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
+    Ok((pixel_ops_rx, join_handle))
 }
 
 fn run_inner(
