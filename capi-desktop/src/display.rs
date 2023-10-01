@@ -1,6 +1,6 @@
 use std::cmp;
 
-use crossbeam_channel::Receiver;
+use crossbeam_channel::{Receiver, TryRecvError};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     dpi::PhysicalSize,
@@ -39,7 +39,18 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     let mut pixel_ops_buffer = vec![first_pixel_op];
 
     event_loop.run(move |event, _, control_flow| {
-        pixel_ops_buffer.extend(pixel_ops.try_iter());
+        loop {
+            match pixel_ops.try_recv() {
+                Ok(pixel_op) => pixel_ops_buffer.push(pixel_op),
+                Err(TryRecvError::Empty) => break,
+                Err(TryRecvError::Disconnected) => {
+                    // This happens if the other end is dropped, for example
+                    // when the application is shutting down.
+                    control_flow.set_exit();
+                    return;
+                }
+            }
+        }
 
         for PixelOp::Set([x, y]) in pixel_ops_buffer.drain(..) {
             let clamp = |value, max| {
