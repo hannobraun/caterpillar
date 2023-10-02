@@ -18,10 +18,9 @@ pub fn pixel_set(
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
-    platform_context
-        .pixel_ops
-        .send(PixelOp::Set([x.0, y.0]))
-        .expect("Channel for pixel operations disconnected");
+    // Can return an error, if the channel is disconnected. This regularly
+    // happens on shutdown, so let's just ignore it.
+    let _ = platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
     Ok(FunctionState::Done)
 }
