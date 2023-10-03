@@ -27,6 +27,9 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 '[' => {
                     tokens.push(Token::SquareBracketOpen);
                 }
+                ']' => {
+                    tokens.push(Token::SquareBracketClose);
+                }
                 '#' => {
                     state = State::Comment;
                 }

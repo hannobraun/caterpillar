@@ -9,6 +9,7 @@ pub enum Token {
     CurlyBracketClose,
 
     SquareBracketOpen,
+    SquareBracketClose,
 
     /// A literal value
     ///
