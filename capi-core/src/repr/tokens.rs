@@ -8,6 +8,8 @@ pub enum Token {
     CurlyBracketOpen,
     CurlyBracketClose,
 
+    SquareBracketOpen,
+
     /// A literal value
     ///
     /// This variant can represent `Token`s that are not actually valid, as
