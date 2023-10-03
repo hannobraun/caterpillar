@@ -49,6 +49,9 @@ fn analyze_syntax_element(
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
+        SyntaxElement::Array(_syntax_tree) => {
+            todo!("Analyzing arrays is not supported yet");
+        }
         SyntaxElement::Block(syntax_tree) => {
             // By convention, we're using the ID of the *next* fragment as the
             // parent ID for fragments within the block. Why not use the ID of

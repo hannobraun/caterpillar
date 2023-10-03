@@ -13,6 +13,7 @@ impl SyntaxTree {
 
 #[derive(Debug)]
 pub enum SyntaxElement {
+    Array(SyntaxTree),
     Block(SyntaxTree),
 
     /// A literal value
