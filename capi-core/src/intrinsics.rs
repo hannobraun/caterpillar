@@ -17,7 +17,7 @@ pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
     ]
 }
 
-pub fn add(context: RuntimeContext) -> DataStackResult<()> {
+fn add(context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
@@ -26,7 +26,7 @@ pub fn add(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn clone(context: RuntimeContext) -> DataStackResult<()> {
+fn clone(context: RuntimeContext) -> DataStackResult<()> {
     let value = context.data_stack.pop_any()?;
 
     context.data_stack.push(value.clone());
@@ -35,7 +35,7 @@ pub fn clone(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn eval(context: RuntimeContext) -> DataStackResult<()> {
+fn eval(context: RuntimeContext) -> DataStackResult<()> {
     let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
     context.call_stack.push(block.start);
 
@@ -57,7 +57,7 @@ pub fn eval(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
+fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
         context.data_stack.pop_specific::<value::Symbol>()?;
@@ -73,11 +73,11 @@ pub fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn nop(_: RuntimeContext) -> DataStackResult<()> {
+fn nop(_: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn over(context: RuntimeContext) -> DataStackResult<()> {
+fn over(context: RuntimeContext) -> DataStackResult<()> {
     let top = context.data_stack.pop_any()?;
     let target = context.data_stack.pop_any()?;
 
@@ -88,7 +88,7 @@ pub fn over(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-pub fn swap(context: RuntimeContext) -> DataStackResult<()> {
+fn swap(context: RuntimeContext) -> DataStackResult<()> {
     let b = context.data_stack.pop_any()?;
     let a = context.data_stack.pop_any()?;
 
