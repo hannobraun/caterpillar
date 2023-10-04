@@ -19,7 +19,9 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     // Whitespace is ignored in this state.
                 }
                 ch if is_special_char(ch) => {
-                    if let Some(s) = process_special_char(ch, &mut tokens) {
+                    let s = process_special_char(ch, &mut tokens);
+
+                    if let Some(s) = s {
                         state = s;
                     }
                 }
