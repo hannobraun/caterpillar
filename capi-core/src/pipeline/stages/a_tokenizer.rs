@@ -47,16 +47,17 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Symbol { buf };
                 }
             },
-            State::Text { mut buf } => {
-                if ch == '"' {
+            State::Text { mut buf } => match ch {
+                '"' => {
                     tokens.push(Token::Literal(ValuePayload::Text(buf)));
                     state = State::Scanning;
                     continue;
                 }
-
-                buf.push(ch);
-                state = State::Text { buf }
-            }
+                ch => {
+                    buf.push(ch);
+                    state = State::Text { buf }
+                }
+            },
             State::WordOrNumber { mut buf } => {
                 if ch.is_whitespace() {
                     let token = match buf.parse::<i64>() {
