@@ -19,11 +19,13 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     // Whitespace is ignored in this state.
                 }
                 ch if is_special_char(ch) => {
-                    let s = process_special_char(ch, &mut tokens);
+                    let (s, t) = process_special_char(ch);
 
                     if let Some(s) = s {
                         state = s;
                     }
+
+                    tokens.extend(t);
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -44,7 +46,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Scanning;
                 }
                 ch if is_special_char(ch) => {
-                    let s = process_special_char(ch, &mut tokens);
+                    let (s, t) = process_special_char(ch);
 
                     match s {
                         Some(s) => {
@@ -54,6 +56,8 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                             state = State::Symbol { buf };
                         }
                     }
+
+                    tokens.extend(t);
                 }
                 ch => {
                     buf.push(ch);
@@ -98,33 +102,33 @@ fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
-fn process_special_char(ch: char, tokens: &mut Vec<Token>) -> Option<State> {
+fn process_special_char(ch: char) -> (Option<State>, Option<Token>) {
     match ch {
         '{' => {
-            tokens.push(Token::CurlyBracketOpen);
+            return (None, Some(Token::CurlyBracketOpen));
         }
         '}' => {
-            tokens.push(Token::CurlyBracketClose);
+            return (None, Some(Token::CurlyBracketClose));
         }
         '[' => {
-            tokens.push(Token::SquareBracketOpen);
+            return (None, Some(Token::SquareBracketOpen));
         }
         ']' => {
-            tokens.push(Token::SquareBracketClose);
+            return (None, Some(Token::SquareBracketClose));
         }
         '#' => {
-            return Some(State::Comment);
+            return (Some(State::Comment), None);
         }
         ':' => {
-            return Some(State::Symbol { buf: String::new() });
+            return (Some(State::Symbol { buf: String::new() }), None);
         }
         '"' => {
-            return Some(State::Text { buf: String::new() });
+            return (Some(State::Text { buf: String::new() }), None);
         }
         _ => {}
     }
 
-    None
+    (None, None)
 }
 
 enum State {
