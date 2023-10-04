@@ -58,8 +58,8 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Text { buf }
                 }
             },
-            State::WordOrNumber { mut buf } => {
-                if ch.is_whitespace() {
+            State::WordOrNumber { mut buf } => match ch {
+                ch if ch.is_whitespace() => {
                     let token = match buf.parse::<i64>() {
                         Ok(number) => {
                             Token::Literal(ValuePayload::Number(number))
@@ -72,10 +72,11 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Scanning;
                     continue;
                 }
-
-                buf.push(ch);
-                state = State::WordOrNumber { buf };
-            }
+                ch => {
+                    buf.push(ch);
+                    state = State::WordOrNumber { buf };
+                }
+            },
         }
     }
 
