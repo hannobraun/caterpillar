@@ -19,7 +19,9 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     // Whitespace is ignored in this state.
                 }
                 ch if is_special_char(ch) => {
-                    process_special_char(ch, &mut tokens, &mut state);
+                    if let Some(s) = process_special_char(ch, &mut tokens) {
+                        state = s;
+                    }
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -82,7 +84,7 @@ fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
-fn process_special_char(ch: char, tokens: &mut Vec<Token>, state: &mut State) {
+fn process_special_char(ch: char, tokens: &mut Vec<Token>) -> Option<State> {
     match ch {
         '{' => {
             tokens.push(Token::CurlyBracketOpen);
@@ -97,16 +99,18 @@ fn process_special_char(ch: char, tokens: &mut Vec<Token>, state: &mut State) {
             tokens.push(Token::SquareBracketClose);
         }
         '#' => {
-            *state = State::Comment;
+            return Some(State::Comment);
         }
         ':' => {
-            *state = State::Symbol { buf: String::new() };
+            return Some(State::Symbol { buf: String::new() });
         }
         '"' => {
-            *state = State::Text { buf: String::new() };
+            return Some(State::Text { buf: String::new() });
         }
         _ => {}
     }
+
+    None
 }
 
 enum State {
