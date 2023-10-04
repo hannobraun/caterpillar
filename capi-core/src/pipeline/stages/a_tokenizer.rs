@@ -18,7 +18,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ch if ch.is_whitespace() => {
                     // Whitespace is ignore in this state.
                 }
-                ch if process_eager_token(ch, &mut tokens, &mut state) => {
+                ch if process_char_eagerly(ch, &mut tokens, &mut state) => {
                     // That call to `process_eager_token` already performs all
                     // the work that's needed for this case. Nothing else left
                     // to do here!
@@ -80,7 +80,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     tokens
 }
 
-fn process_eager_token(
+fn process_char_eagerly(
     ch: char,
     tokens: &mut Vec<Token>,
     state: &mut State,
