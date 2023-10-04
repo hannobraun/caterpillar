@@ -19,7 +19,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     // Whitespace is ignore in this state.
                 }
                 ch if is_special_char(ch) => {
-                    process_char_eagerly(ch, &mut tokens, &mut state);
+                    process_special_char(ch, &mut tokens, &mut state);
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -82,7 +82,7 @@ fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
-fn process_char_eagerly(ch: char, tokens: &mut Vec<Token>, state: &mut State) {
+fn process_special_char(ch: char, tokens: &mut Vec<Token>, state: &mut State) {
     match ch {
         '{' => {
             tokens.push(Token::CurlyBracketOpen);
