@@ -14,6 +14,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (false_, "false"),
         (fn_, "fn"),
         (nop, "nop"),
+        (not, "not"),
         (over, "over"),
         (swap, "swap"),
         (test, "test"),
@@ -108,6 +109,14 @@ fn test(mut context: RuntimeContext) -> DataStackResult<()> {
 }
 
 fn nop(_: RuntimeContext) -> DataStackResult<()> {
+    Ok(())
+}
+
+fn not(context: RuntimeContext) -> DataStackResult<()> {
+    let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
+
+    context.data_stack.push_bare(value::Bool(!a.0));
+
     Ok(())
 }
 
