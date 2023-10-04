@@ -66,6 +66,10 @@ impl Type for Symbol {
     const NAME: &'static str = "symbol";
 }
 
+impl Type for Text {
+    const NAME: &'static str = "test";
+}
+
 #[derive(Debug, thiserror::Error)]
 #[error("Expected {expected}, found `{value}`")]
 pub struct TypeError {
