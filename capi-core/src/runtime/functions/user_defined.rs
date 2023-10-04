@@ -20,6 +20,10 @@ impl UserDefinedFunctions<'_> {
         };
         self.inner.insert(name.value, function);
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = &UserDefinedFunction> {
+        self.inner.values()
+    }
 }
 
 #[derive(Clone, Debug)]
