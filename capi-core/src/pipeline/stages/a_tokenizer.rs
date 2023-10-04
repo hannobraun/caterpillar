@@ -82,11 +82,7 @@ fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
-fn process_char_eagerly(
-    ch: char,
-    tokens: &mut Vec<Token>,
-    state: &mut State,
-) -> bool {
+fn process_char_eagerly(ch: char, tokens: &mut Vec<Token>, state: &mut State) {
     match ch {
         '{' => {
             tokens.push(Token::CurlyBracketOpen);
@@ -109,12 +105,8 @@ fn process_char_eagerly(
         '"' => {
             *state = State::Text { buf: String::new() };
         }
-        _ => {
-            return false;
-        }
+        _ => {}
     }
-
-    true
 }
 
 enum State {
