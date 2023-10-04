@@ -6,7 +6,7 @@ use crate::repr::eval::fragments::FragmentId;
 
 #[derive(Clone, Debug)]
 pub struct Value {
-    pub kind: ValueKind,
+    pub payload: ValueKind,
     pub fragment: Option<FragmentId>,
 }
 

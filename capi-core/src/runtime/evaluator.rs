@@ -60,7 +60,7 @@ impl<C> Evaluator<C> {
             }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {
-                    kind: value.clone(),
+                    payload: value.clone(),
                     fragment: Some(fragment_id),
                 });
 

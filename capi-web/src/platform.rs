@@ -64,7 +64,7 @@ pub fn print(
     _: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
-    tracing::info!("{}", value.kind);
+    tracing::info!("{}", value.payload);
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }

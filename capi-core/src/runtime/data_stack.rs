@@ -23,7 +23,7 @@ impl DataStack {
 
     pub fn push_bare(&mut self, kind: impl Into<ValueKind>) {
         let value = Value {
-            kind: kind.into(),
+            payload: kind.into(),
             fragment: None,
         };
         self.push(value)
@@ -37,7 +37,7 @@ impl DataStack {
         &mut self,
     ) -> DataStackResult<(T, Option<FragmentId>)> {
         let value = self.pop_inner(T::NAME)?;
-        let bare = value.kind.expect(T::NAME)?;
+        let bare = value.payload.expect(T::NAME)?;
         Ok((bare, value.fragment))
     }
 
@@ -49,7 +49,7 @@ impl DataStack {
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for value in &mut self.values {
-            if let ValueKind::Block { start } = &mut value.kind {
+            if let ValueKind::Block { start } = &mut value.payload {
                 if *start == old {
                     *start = new;
                 }

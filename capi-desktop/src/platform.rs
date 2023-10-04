@@ -40,7 +40,7 @@ pub fn print(
     _: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
-    println!("{}", value.kind);
+    println!("{}", value.payload);
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
