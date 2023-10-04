@@ -8,6 +8,7 @@ use super::{
 pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
         (add, "+"),
+        (and, "and"),
         (clone, "clone"),
         (eval, "eval"),
         (false_, "false"),
@@ -25,6 +26,15 @@ fn add(context: RuntimeContext) -> DataStackResult<()> {
     let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
     context.data_stack.push_bare(value::Number(a.0 + b.0));
+
+    Ok(())
+}
+
+fn and(context: RuntimeContext) -> DataStackResult<()> {
+    let (b, _) = context.data_stack.pop_specific::<value::Bool>()?;
+    let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
+
+    context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
     Ok(())
 }
