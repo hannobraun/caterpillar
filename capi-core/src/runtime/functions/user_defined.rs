@@ -11,6 +11,7 @@ impl UserDefinedFunctions<'_> {
         let function = UserDefinedFunction {
             name: name.clone(),
             body,
+            is_test: false,
         };
         self.inner.insert(name.value, function);
     }
@@ -20,6 +21,7 @@ impl UserDefinedFunctions<'_> {
 pub struct UserDefinedFunction {
     pub name: FunctionName,
     pub body: value::Block,
+    pub is_test: bool,
 }
 
 #[derive(Clone, Debug)]
