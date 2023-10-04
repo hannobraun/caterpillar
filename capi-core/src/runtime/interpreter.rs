@@ -64,6 +64,35 @@ impl<C> Interpreter<C> {
 }
 
 #[cfg(test)]
+impl Interpreter<()> {
+    pub fn run_tests(&mut self) -> anyhow::Result<()> {
+        use crate::value;
+        use anyhow::bail;
+
+        while !self.step(&mut ())?.finished() {}
+
+        for function in self.evaluator.functions.user_defined().iter() {
+            let mut evaluator = Evaluator::default();
+            evaluator.call_stack.push(function.body.start);
+
+            while !evaluator.step(&self.fragments, &mut ())?.finished() {}
+
+            let (result, _) =
+                evaluator.data_stack.pop_specific::<value::Bool>()?;
+
+            if !evaluator.data_stack.is_empty() {
+                bail!("Test returned more than one `bool`");
+            }
+            if !result.0 {
+                bail!("Test returned `false`");
+            }
+        }
+
+        Ok(())
+    }
+}
+
+#[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
