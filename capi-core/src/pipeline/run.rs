@@ -14,7 +14,7 @@ pub fn run(
     fragments: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
-    let syntax_tree = parse(tokens.clone())?;
+    let syntax_tree = parse(tokens)?;
     let AnalyzerOutput { start } = analyze(syntax_tree, fragments);
 
     Ok(PipelineOutput { start })
