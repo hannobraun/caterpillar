@@ -54,7 +54,9 @@ pub fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
         value: name.0,
         fragment: name_fragment,
     };
-    context.functions.define(name, body);
+    let is_test = false;
+
+    context.functions.define(name, body, is_test);
 
     Ok(())
 }

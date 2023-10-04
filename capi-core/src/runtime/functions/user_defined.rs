@@ -7,11 +7,16 @@ pub struct UserDefinedFunctions<'r> {
 }
 
 impl UserDefinedFunctions<'_> {
-    pub fn define(&mut self, name: FunctionName, body: value::Block) {
+    pub fn define(
+        &mut self,
+        name: FunctionName,
+        body: value::Block,
+        is_test: bool,
+    ) {
         let function = UserDefinedFunction {
             name: name.clone(),
             body,
-            is_test: false,
+            is_test,
         };
         self.inner.insert(name.value, function);
     }
