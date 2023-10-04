@@ -43,17 +43,13 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             }
             State::Symbol { mut buf } => match ch {
                 ch if ch.is_whitespace() => {
-                    tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
-                    state = State::Scanning;
+                    state = finalize_symbol(buf, &mut tokens);
                 }
                 ch if is_special_char(ch) => match process_special_char(ch) {
                     Some(update) => match update {
                         SpecialCharUpdate::Token(token) => {
-                            tokens.push(Token::Literal(ValuePayload::Symbol(
-                                buf,
-                            )));
+                            state = finalize_symbol(buf, &mut tokens);
                             tokens.push(token);
-                            state = State::Scanning;
                         }
                         SpecialCharUpdate::State(s) => state = s,
                     },
@@ -130,4 +126,9 @@ fn process_special_char(ch: char) -> Option<SpecialCharUpdate> {
 enum SpecialCharUpdate {
     Token(Token),
     State(State),
+}
+
+fn finalize_symbol(buf: String, tokens: &mut Vec<Token>) -> State {
+    tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
+    State::Scanning
 }
