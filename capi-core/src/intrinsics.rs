@@ -11,6 +11,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (and, "and"),
         (clone, "clone"),
         (drop, "drop"),
+        (eq, "="),
         (eval, "eval"),
         (false_, "false"),
         (fn_, "fn"),
@@ -52,6 +53,17 @@ fn clone(context: RuntimeContext) -> DataStackResult<()> {
 
 fn drop(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.pop_any()?;
+    Ok(())
+}
+
+fn eq(context: RuntimeContext) -> DataStackResult<()> {
+    let b = context.data_stack.pop_any()?;
+    let a = context.data_stack.pop_any()?;
+
+    context
+        .data_stack
+        .push_bare(value::Bool(a.payload == b.payload));
+
     Ok(())
 }
 
