@@ -5,18 +5,18 @@ use super::{
     runtime::{data_stack::DataStackResult, functions::FunctionName},
 };
 
-pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
+pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
-        ("+", add),
-        ("clone", clone),
-        ("eval", eval),
-        ("false", false_),
-        ("fn", fn_),
-        ("nop", nop),
-        ("over", over),
-        ("swap", swap),
-        ("test", test),
-        ("true", true_),
+        (add, "+"),
+        (clone, "clone"),
+        (eval, "eval"),
+        (false_, "false"),
+        (fn_, "fn"),
+        (nop, "nop"),
+        (over, "over"),
+        (swap, "swap"),
+        (test, "test"),
+        (true_, "true"),
     ]
 }
 
