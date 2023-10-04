@@ -16,7 +16,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
         match state {
             State::Scanning => match ch {
                 ch if ch.is_whitespace() => {
-                    continue;
+                    // Whitespace is ignore in this state.
                 }
                 ch if process_eager_token(ch, &mut tokens, &mut state) => {
                     // That call to `process_eager_token` already performs all
