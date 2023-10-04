@@ -16,7 +16,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
         match state {
             State::Scanning => match ch {
                 ch if ch.is_whitespace() => {
-                    // Whitespace is ignore in this state.
+                    // Whitespace is ignored in this state.
                 }
                 ch if is_special_char(ch) => {
                     process_special_char(ch, &mut tokens, &mut state);
