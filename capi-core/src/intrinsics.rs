@@ -14,6 +14,7 @@ pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
         ("nop", nop),
         ("over", over),
         ("swap", swap),
+        ("test", test),
     ]
 }
 
@@ -67,6 +68,22 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
         fragment: name_fragment,
     };
     let is_test = false;
+
+    context.functions.define(name, body, is_test);
+
+    Ok(())
+}
+
+fn test(mut context: RuntimeContext) -> DataStackResult<()> {
+    let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
+    let (name, name_fragment) =
+        context.data_stack.pop_specific::<value::Text>()?;
+
+    let name = FunctionName {
+        value: name.0,
+        fragment: name_fragment,
+    };
+    let is_test = true;
 
     context.functions.define(name, body, is_test);
 
