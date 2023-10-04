@@ -1,0 +1,3 @@
+"eval" { { true } eval } test
+"lazy evaluation" { true { drop } drop } test
+"tokenization" { {true}eval{true}eval and } test
