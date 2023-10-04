@@ -46,13 +46,11 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = finalize_symbol(buf, &mut tokens);
                 }
                 ch if is_special_char(ch) => match process_special_char(ch) {
-                    Some(update) => match update {
-                        SpecialCharUpdate::Token(token) => {
-                            state = finalize_symbol(buf, &mut tokens);
-                            tokens.push(token);
-                        }
-                        SpecialCharUpdate::State(s) => state = s,
-                    },
+                    Some(SpecialCharUpdate::Token(token)) => {
+                        state = finalize_symbol(buf, &mut tokens);
+                        tokens.push(token);
+                    }
+                    Some(SpecialCharUpdate::State(s)) => state = s,
                     None => state = State::Symbol { buf },
                 },
                 ch => {
