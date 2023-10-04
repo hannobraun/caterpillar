@@ -60,6 +60,10 @@ impl Type for Block {
     const NAME: &'static str = "block";
 }
 
+impl Type for Bool {
+    const NAME: &'static str = "bool";
+}
+
 impl Type for Number {
     const NAME: &'static str = "number";
 }
