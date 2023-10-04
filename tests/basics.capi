@@ -1,0 +1,2 @@
+"drop" { true false drop } test
+"clone" { true clone drop } test
