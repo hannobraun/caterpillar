@@ -1,9 +1,21 @@
-use crate::runtime::functions::RuntimeContext;
+use crate::runtime::functions::{IntrinsicFunction, RuntimeContext};
 
 use super::{
     repr::eval::value,
     runtime::{data_stack::DataStackResult, functions::FunctionName},
 };
+
+pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
+    vec![
+        ("+", add as IntrinsicFunction),
+        ("clone", clone),
+        ("eval", eval),
+        ("fn", fn_),
+        ("nop", nop),
+        ("over", over),
+        ("swap", swap),
+    ]
+}
 
 pub fn add(context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Number>()?;

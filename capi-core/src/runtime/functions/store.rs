@@ -24,15 +24,7 @@ impl<C> Functions<C> {
     pub fn new() -> Self {
         let mut native = BTreeMap::new();
 
-        let intrinsics = [
-            ("+", intrinsics::add as IntrinsicFunction),
-            ("clone", intrinsics::clone),
-            ("eval", intrinsics::eval),
-            ("fn", intrinsics::fn_),
-            ("nop", intrinsics::nop),
-            ("over", intrinsics::over),
-            ("swap", intrinsics::swap),
-        ];
+        let intrinsics = intrinsics::all();
 
         for (name, intrinsic) in intrinsics {
             native
