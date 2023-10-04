@@ -41,6 +41,10 @@ impl FragmentPayload {
                 hasher.update(b"block");
                 hasher.update(start.hash.as_bytes());
             }
+            Self::Value(ValueKind::Bool(value)) => {
+                hasher.update(b"bool");
+                hasher.update(&[(*value).into()]);
+            }
             Self::Value(ValueKind::Number(number)) => {
                 hasher.update(b"number");
                 hasher.update(&number.to_le_bytes());

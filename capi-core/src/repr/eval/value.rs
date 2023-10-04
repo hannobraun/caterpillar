@@ -14,6 +14,7 @@ pub struct Value {
 #[evt(derive(Clone, Debug, Eq, PartialEq))]
 pub enum ValueKind {
     Block { start: FragmentId },
+    Bool(bool),
     Number(i64),
     Symbol(String),
     Text(String),
@@ -43,6 +44,7 @@ impl fmt::Display for ValueKind {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             ValueKind::Block { start, .. } => write!(f, "{{ {start} }}"),
+            ValueKind::Bool(value) => write!(f, "{value}"),
             ValueKind::Number(number) => write!(f, "{number}"),
             ValueKind::Symbol(symbol) => write!(f, ":{symbol}"),
             ValueKind::Text(text) => write!(f, "\"{text}\""),
