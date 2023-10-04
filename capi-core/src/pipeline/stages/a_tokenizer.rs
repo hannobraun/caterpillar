@@ -98,6 +98,14 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     tokens
 }
 
+enum State {
+    Scanning,
+    Comment,
+    Symbol { buf: String },
+    Text { buf: String },
+    WordOrNumber { buf: String },
+}
+
 fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
@@ -113,12 +121,4 @@ fn process_special_char(ch: char) -> (Option<State>, Option<Token>) {
         '"' => (Some(State::Text { buf: String::new() }), None),
         _ => (None, None),
     }
-}
-
-enum State {
-    Scanning,
-    Comment,
-    Symbol { buf: String },
-    Text { buf: String },
-    WordOrNumber { buf: String },
 }
