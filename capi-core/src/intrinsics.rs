@@ -10,6 +10,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (add, "+"),
         (and, "and"),
         (clone, "clone"),
+        (drop, "drop"),
         (eval, "eval"),
         (false_, "false"),
         (fn_, "fn"),
@@ -46,6 +47,11 @@ fn clone(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push(value.clone());
     context.data_stack.push(value);
 
+    Ok(())
+}
+
+fn drop(context: RuntimeContext) -> DataStackResult<()> {
+    context.data_stack.pop_any()?;
     Ok(())
 }
 
