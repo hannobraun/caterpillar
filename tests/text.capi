@@ -1,0 +1,2 @@
+"=" { "a" "a" = } test
+"= not" { "a" "b" = not } test
