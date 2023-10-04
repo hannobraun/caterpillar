@@ -40,7 +40,6 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ch if ch.is_whitespace() => {
                     tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
                     state = State::Scanning;
-                    continue;
                 }
                 ch => {
                     buf.push(ch);
@@ -51,7 +50,6 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 '"' => {
                     tokens.push(Token::Literal(ValuePayload::Text(buf)));
                     state = State::Scanning;
-                    continue;
                 }
                 ch => {
                     buf.push(ch);
@@ -70,7 +68,6 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     tokens.push(token);
 
                     state = State::Scanning;
-                    continue;
                 }
                 ch => {
                     buf.push(ch);
