@@ -4,7 +4,7 @@ use crate::{
     intrinsics,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
-        value::ValueKind,
+        value::ValuePayload,
     },
     PlatformFunction,
 };
@@ -81,7 +81,7 @@ impl<C> Functions<C> {
         {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
-                let FragmentPayload::Value(ValueKind::Symbol(new_name)) =
+                let FragmentPayload::Value(ValuePayload::Symbol(new_name)) =
                     &fragment.payload
                 else {
                     // If the new fragment is not a symbol, then it's not

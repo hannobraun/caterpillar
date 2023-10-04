@@ -1,6 +1,6 @@
 use enum_variant_type::EnumVariantType;
 
-use super::eval::value::ValueKind;
+use super::eval::value::ValuePayload;
 
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(module = "token")]
@@ -19,7 +19,7 @@ pub enum Token {
     /// Such an invalid `Token` is never produced by the tokenizer, and doing it
     /// like this makes the code handling `Token`s simpler, and that's probably
     /// worth the small inconsistency.
-    Literal(ValueKind),
+    Literal(ValuePayload),
 
     Word(String),
 }

@@ -3,7 +3,7 @@ use crate::repr::{
         fragments::{
             Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
         },
-        value::ValueKind,
+        value::ValuePayload,
     },
     syntax::{SyntaxElement, SyntaxTree},
 };
@@ -61,7 +61,7 @@ fn analyze_syntax_element(
             let parent = Some(next);
 
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-            FragmentPayload::Value(ValueKind::Block { start })
+            FragmentPayload::Value(ValuePayload::Block { start })
         }
         SyntaxElement::Literal(value) => FragmentPayload::Value(value),
         SyntaxElement::Word(word) => FragmentPayload::Word(word),

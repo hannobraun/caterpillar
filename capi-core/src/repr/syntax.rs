@@ -1,4 +1,4 @@
-use super::eval::value::ValueKind;
+use super::eval::value::ValuePayload;
 
 #[derive(Debug, Default)]
 pub struct SyntaxTree {
@@ -25,7 +25,7 @@ pub enum SyntaxElement {
     /// Such an invalid `SyntaxElement` is never produced by the parser, and
     /// doing it like this makes the code handling `SyntaxElement`s simpler, and
     /// that's probably worth the small inconsistency.
-    Literal(ValueKind),
+    Literal(ValuePayload),
 
     Word(String),
 }

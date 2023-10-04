@@ -1,7 +1,7 @@
 use std::{iter, vec};
 
 use crate::repr::{
-    eval::value::ValueKind,
+    eval::value::ValuePayload,
     syntax::{SyntaxElement, SyntaxTree},
     tokens::{token, Token},
 };
@@ -85,7 +85,7 @@ fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
     Ok(token.0)
 }
 
-fn parse_literal(tokens: &mut Tokens) -> ParserResult<ValueKind> {
+fn parse_literal(tokens: &mut Tokens) -> ParserResult<ValuePayload> {
     let token = expect::<token::Literal>(tokens)?;
     Ok(token.0)
 }

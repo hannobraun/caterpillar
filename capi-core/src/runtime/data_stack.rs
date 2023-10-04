@@ -1,6 +1,6 @@
 use crate::repr::eval::{
     fragments::FragmentId,
-    value::{Type, TypeError, Value, ValueKind},
+    value::{Type, TypeError, Value, ValuePayload},
 };
 
 #[derive(Debug, Default)]
@@ -21,7 +21,7 @@ impl DataStack {
         self.values.push(value)
     }
 
-    pub fn push_bare(&mut self, payload: impl Into<ValueKind>) {
+    pub fn push_bare(&mut self, payload: impl Into<ValuePayload>) {
         let value = Value {
             payload: payload.into(),
             fragment: None,
@@ -49,7 +49,7 @@ impl DataStack {
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for value in &mut self.values {
-            if let ValueKind::Block { start } = &mut value.payload {
+            if let ValuePayload::Block { start } = &mut value.payload {
                 if *start == old {
                     *start = new;
                 }
