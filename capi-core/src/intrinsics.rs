@@ -10,11 +10,13 @@ pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
         ("+", add),
         ("clone", clone),
         ("eval", eval),
+        ("false", false_),
         ("fn", fn_),
         ("nop", nop),
         ("over", over),
         ("swap", swap),
         ("test", test),
+        ("true", true_),
     ]
 }
 
@@ -55,6 +57,11 @@ fn eval(context: RuntimeContext) -> DataStackResult<()> {
     // Not sure if it's worth it. Maybe if the need for this comes up in more
     // cases.
 
+    Ok(())
+}
+
+fn false_(context: RuntimeContext) -> DataStackResult<()> {
+    context.data_stack.push_bare(value::Bool(false));
     Ok(())
 }
 
@@ -112,5 +119,10 @@ fn swap(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push(b);
     context.data_stack.push(a);
 
+    Ok(())
+}
+
+fn true_(context: RuntimeContext) -> DataStackResult<()> {
+    context.data_stack.push_bare(value::Bool(true));
     Ok(())
 }
