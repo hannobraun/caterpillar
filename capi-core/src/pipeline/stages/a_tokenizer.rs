@@ -30,6 +30,8 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 }
             },
             State::Comment => {
+                // Comments are ended by a newline. Anything else doesn't
+                // matter here.
                 if ch == '\n' {
                     state = State::Scanning;
                 }
