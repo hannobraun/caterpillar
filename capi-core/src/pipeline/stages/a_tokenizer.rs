@@ -47,11 +47,16 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Scanning;
                 }
                 ch if is_special_char(ch) => match process_special_char(ch) {
-                    Some(SpecialCharUpdate::Token(token)) => {
-                        state = State::Symbol { buf };
-                        tokens.push(token)
-                    }
-                    Some(SpecialCharUpdate::State(s)) => state = s,
+                    Some(update) => match update {
+                        SpecialCharUpdate::Token(token) => {
+                            tokens.push(Token::Literal(ValuePayload::Symbol(
+                                buf,
+                            )));
+                            tokens.push(token);
+                            state = State::Scanning;
+                        }
+                        SpecialCharUpdate::State(s) => state = s,
+                    },
                     None => state = State::Symbol { buf },
                 },
                 ch => {
