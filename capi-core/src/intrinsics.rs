@@ -7,7 +7,7 @@ use super::{
 
 pub fn all() -> Vec<(&'static str, IntrinsicFunction)> {
     vec![
-        ("+", add as IntrinsicFunction),
+        ("+", add),
         ("clone", clone),
         ("eval", eval),
         ("fn", fn_),
