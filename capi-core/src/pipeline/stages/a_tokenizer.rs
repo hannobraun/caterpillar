@@ -36,16 +36,17 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Scanning;
                 }
             }
-            State::Symbol { mut buf } => {
-                if ch.is_whitespace() {
+            State::Symbol { mut buf } => match ch {
+                ch if ch.is_whitespace() => {
                     tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
                     state = State::Scanning;
                     continue;
                 }
-
-                buf.push(ch);
-                state = State::Symbol { buf };
-            }
+                ch => {
+                    buf.push(ch);
+                    state = State::Symbol { buf };
+                }
+            },
             State::Text { mut buf } => {
                 if ch == '"' {
                     tokens.push(Token::Literal(ValuePayload::Text(buf)));
