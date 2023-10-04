@@ -72,16 +72,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             },
             State::WordOrNumber { mut buf } => match ch {
                 ch if ch.is_whitespace() => {
-                    let token = match buf.parse::<i64>() {
-                        Ok(number) => {
-                            Token::Literal(ValuePayload::Number(number))
-                        }
-                        Err(_) => Token::Word(buf),
-                    };
-
-                    tokens.push(token);
-
-                    state = State::Scanning;
+                    state = finalize_word_or_number(buf, &mut tokens);
                 }
                 ch => {
                     buf.push(ch);
@@ -130,5 +121,16 @@ enum SpecialCharUpdate {
 
 fn finalize_symbol(buf: String, tokens: &mut Vec<Token>) -> State {
     tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
+    State::Scanning
+}
+
+fn finalize_word_or_number(buf: String, tokens: &mut Vec<Token>) -> State {
+    let token = match buf.parse::<i64>() {
+        Ok(number) => Token::Literal(ValuePayload::Number(number)),
+        Err(_) => Token::Word(buf),
+    };
+
+    tokens.push(token);
+
     State::Scanning
 }
