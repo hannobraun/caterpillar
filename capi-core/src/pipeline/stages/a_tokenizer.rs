@@ -18,26 +18,10 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ch if ch.is_whitespace() => {
                     continue;
                 }
-                '{' => {
-                    tokens.push(Token::CurlyBracketOpen);
-                }
-                '}' => {
-                    tokens.push(Token::CurlyBracketClose);
-                }
-                '[' => {
-                    tokens.push(Token::SquareBracketOpen);
-                }
-                ']' => {
-                    tokens.push(Token::SquareBracketClose);
-                }
-                '#' => {
-                    state = State::Comment;
-                }
-                ':' => {
-                    state = State::Symbol { buf: String::new() };
-                }
-                '"' => {
-                    state = State::Text { buf: String::new() };
+                ch if process_eager_token(ch, &mut tokens, &mut state) => {
+                    // That call to `process_eager_token` already performs all
+                    // the work that's needed for this case. Nothing else left
+                    // to do here!
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -92,6 +76,41 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     }
 
     tokens
+}
+
+fn process_eager_token(
+    ch: char,
+    tokens: &mut Vec<Token>,
+    state: &mut State,
+) -> bool {
+    match ch {
+        '{' => {
+            tokens.push(Token::CurlyBracketOpen);
+        }
+        '}' => {
+            tokens.push(Token::CurlyBracketClose);
+        }
+        '[' => {
+            tokens.push(Token::SquareBracketOpen);
+        }
+        ']' => {
+            tokens.push(Token::SquareBracketClose);
+        }
+        '#' => {
+            *state = State::Comment;
+        }
+        ':' => {
+            *state = State::Symbol { buf: String::new() };
+        }
+        '"' => {
+            *state = State::Text { buf: String::new() };
+        }
+        _ => {
+            return false;
+        }
+    }
+
+    true
 }
 
 enum State {
