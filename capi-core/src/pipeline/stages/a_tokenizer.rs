@@ -19,13 +19,14 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     // Whitespace is ignored in this state.
                 }
                 ch if is_special_char(ch) => {
-                    let (s, t) = process_special_char(ch);
-
-                    if let Some(s) = s {
-                        state = s;
+                    if let Some(update) = process_special_char(ch) {
+                        match update {
+                            SpecialCharUpdate::Token(token) => {
+                                tokens.push(token)
+                            }
+                            SpecialCharUpdate::State(s) => state = s,
+                        }
                     }
-
-                    tokens.extend(t);
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -45,20 +46,14 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     tokens.push(Token::Literal(ValuePayload::Symbol(buf)));
                     state = State::Scanning;
                 }
-                ch if is_special_char(ch) => {
-                    let (s, t) = process_special_char(ch);
-
-                    match s {
-                        Some(s) => {
-                            state = s;
-                        }
-                        None => {
-                            state = State::Symbol { buf };
-                        }
+                ch if is_special_char(ch) => match process_special_char(ch) {
+                    Some(SpecialCharUpdate::Token(token)) => {
+                        state = State::Symbol { buf };
+                        tokens.push(token)
                     }
-
-                    tokens.extend(t);
-                }
+                    Some(SpecialCharUpdate::State(s)) => state = s,
+                    None => state = State::Symbol { buf },
+                },
                 ch => {
                     buf.push(ch);
                     state = State::Symbol { buf };
@@ -110,15 +105,24 @@ fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
-fn process_special_char(ch: char) -> (Option<State>, Option<Token>) {
+fn process_special_char(ch: char) -> Option<SpecialCharUpdate> {
     match ch {
-        '{' => (None, Some(Token::CurlyBracketOpen)),
-        '}' => (None, Some(Token::CurlyBracketClose)),
-        '[' => (None, Some(Token::SquareBracketOpen)),
-        ']' => (None, Some(Token::SquareBracketClose)),
-        '#' => (Some(State::Comment), None),
-        ':' => (Some(State::Symbol { buf: String::new() }), None),
-        '"' => (Some(State::Text { buf: String::new() }), None),
-        _ => (None, None),
+        '{' => Some(SpecialCharUpdate::Token(Token::CurlyBracketOpen)),
+        '}' => Some(SpecialCharUpdate::Token(Token::CurlyBracketClose)),
+        '[' => Some(SpecialCharUpdate::Token(Token::SquareBracketOpen)),
+        ']' => Some(SpecialCharUpdate::Token(Token::SquareBracketClose)),
+        '#' => Some(SpecialCharUpdate::State(State::Comment)),
+        ':' => Some(SpecialCharUpdate::State(State::Symbol {
+            buf: String::new(),
+        })),
+        '"' => {
+            Some(SpecialCharUpdate::State(State::Text { buf: String::new() }))
+        }
+        _ => None,
     }
+}
+
+enum SpecialCharUpdate {
+    Token(Token),
+    State(State),
 }
