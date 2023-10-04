@@ -44,7 +44,9 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Scanning;
                 }
                 ch if is_special_char(ch) => {
-                    match process_special_char(ch, &mut tokens) {
+                    let s = process_special_char(ch, &mut tokens);
+
+                    match s {
                         Some(s) => {
                             state = s;
                         }
