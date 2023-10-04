@@ -104,31 +104,15 @@ fn is_special_char(ch: char) -> bool {
 
 fn process_special_char(ch: char) -> (Option<State>, Option<Token>) {
     match ch {
-        '{' => {
-            return (None, Some(Token::CurlyBracketOpen));
-        }
-        '}' => {
-            return (None, Some(Token::CurlyBracketClose));
-        }
-        '[' => {
-            return (None, Some(Token::SquareBracketOpen));
-        }
-        ']' => {
-            return (None, Some(Token::SquareBracketClose));
-        }
-        '#' => {
-            return (Some(State::Comment), None);
-        }
-        ':' => {
-            return (Some(State::Symbol { buf: String::new() }), None);
-        }
-        '"' => {
-            return (Some(State::Text { buf: String::new() }), None);
-        }
-        _ => {}
+        '{' => (None, Some(Token::CurlyBracketOpen)),
+        '}' => (None, Some(Token::CurlyBracketClose)),
+        '[' => (None, Some(Token::SquareBracketOpen)),
+        ']' => (None, Some(Token::SquareBracketClose)),
+        '#' => (Some(State::Comment), None),
+        ':' => (Some(State::Symbol { buf: String::new() }), None),
+        '"' => (Some(State::Text { buf: String::new() }), None),
+        _ => (None, None),
     }
-
-    (None, None)
 }
 
 enum State {
