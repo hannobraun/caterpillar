@@ -1,0 +1,2 @@
+# Make sure that special characters are processed eagerly around symbols.
+"tokenization" {:symbol{ true } eval swap drop } test
