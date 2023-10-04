@@ -27,6 +27,8 @@ mod tests {
         for dir_entry in fs::read_dir("../tests")? {
             let dir_entry = dir_entry?;
 
+            println!("Running test suite `{}`...", dir_entry.path().display());
+
             let mut code = String::new();
             File::open(dir_entry.path())?.read_to_string(&mut code)?;
 
