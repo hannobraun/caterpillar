@@ -18,10 +18,8 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ch if ch.is_whitespace() => {
                     // Whitespace is ignore in this state.
                 }
-                ch if process_char_eagerly(ch, &mut tokens, &mut state) => {
-                    // That call to `process_char_eagerly` already performs all
-                    // the work that's needed for this case. Nothing else left
-                    // to do here!
+                ch if is_special_char(ch) => {
+                    process_char_eagerly(ch, &mut tokens, &mut state);
                 }
                 ch => {
                     state = State::WordOrNumber {
@@ -78,6 +76,10 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     }
 
     tokens
+}
+
+fn is_special_char(ch: char) -> bool {
+    matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
 
 fn process_char_eagerly(
