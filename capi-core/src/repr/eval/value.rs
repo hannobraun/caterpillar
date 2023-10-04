@@ -45,7 +45,7 @@ impl fmt::Display for ValueKind {
             ValueKind::Block { start, .. } => write!(f, "{{ {start} }}"),
             ValueKind::Number(number) => write!(f, "{number}"),
             ValueKind::Symbol(symbol) => write!(f, ":{symbol}"),
-            ValueKind::Text(text) => write!(f, "{text}"),
+            ValueKind::Text(text) => write!(f, "\"{text}\""),
         }
     }
 }
