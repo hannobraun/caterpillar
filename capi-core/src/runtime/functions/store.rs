@@ -86,7 +86,7 @@ impl<C> Functions<C> {
     ) {
         let mut renames = Vec::new();
 
-        for (old_name, UserDefinedFunction { name, body }) in
+        for (old_name, UserDefinedFunction { name, body, .. }) in
             self.user_defined.iter_mut()
         {
             if name.fragment == Some(old) {
