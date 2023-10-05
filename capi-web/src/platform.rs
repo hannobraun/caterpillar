@@ -66,7 +66,7 @@ pub fn print(
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .output
-        .send_blocking(format!("{}", value.payload))
+        .send_blocking(format!("{}\n", value.payload))
         .unwrap();
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
