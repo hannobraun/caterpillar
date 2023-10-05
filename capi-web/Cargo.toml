@@ -12,6 +12,7 @@ sycamore = "*"
 tracing = "*"
 tracing-wasm = "*"
 wasm-bindgen-futures = "*"
+web-sys = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"
