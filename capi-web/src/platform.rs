@@ -15,6 +15,7 @@ pub async fn run(script: &str, output: Sender<String>) -> anyhow::Result<()> {
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
+        output,
         sleep_duration: None,
     };
 
@@ -40,6 +41,7 @@ pub async fn run(script: &str, output: Sender<String>) -> anyhow::Result<()> {
 }
 
 pub struct Context {
+    pub output: Sender<String>,
     pub sleep_duration: Option<Duration>,
 }
 
@@ -61,10 +63,13 @@ pub fn delay_ms(
 
 pub fn print(
     runtime_context: RuntimeContext,
-    _: &mut Context,
+    platform_context: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
-    tracing::info!("{}", value.payload);
+    platform_context
+        .output
+        .send_blocking(format!("{}", value.payload))
+        .unwrap();
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
