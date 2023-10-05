@@ -3,7 +3,7 @@ use std::fmt;
 /// Uniquely identifies a syntax fragment
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentId {
-    pub(super) hash: blake3::Hash,
+    pub(crate) hash: blake3::Hash,
 }
 
 impl FragmentId {
