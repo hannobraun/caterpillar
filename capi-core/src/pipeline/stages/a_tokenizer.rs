@@ -72,6 +72,14 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                 ch if ch.is_whitespace() => {
                     state = finalize_word_or_number(buf, &mut tokens);
                 }
+                ch if is_special_char(ch) => match process_special_char(ch) {
+                    Some(SpecialCharUpdate::Token(token)) => {
+                        state = finalize_word_or_number(buf, &mut tokens);
+                        tokens.push(token);
+                    }
+                    Some(SpecialCharUpdate::State(s)) => state = s,
+                    None => state = State::WordOrNumber { buf },
+                },
                 ch => {
                     buf.push(ch);
                     state = State::WordOrNumber { buf };
