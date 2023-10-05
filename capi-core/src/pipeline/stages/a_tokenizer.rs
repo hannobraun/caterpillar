@@ -77,7 +77,10 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                         state = finalize_word_or_number(buf, &mut tokens);
                         tokens.push(token);
                     }
-                    Some(SpecialCharUpdate::State(s)) => state = s,
+                    Some(SpecialCharUpdate::State(s)) => {
+                        finalize_word_or_number(buf, &mut tokens);
+                        state = s
+                    }
                     None => state = State::WordOrNumber { buf },
                 },
                 ch => {
