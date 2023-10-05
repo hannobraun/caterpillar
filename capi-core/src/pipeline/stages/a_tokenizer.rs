@@ -91,6 +91,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
     tokens
 }
 
+#[derive(Debug)]
 enum State {
     Scanning,
     Comment,
