@@ -11,8 +11,6 @@ use tracing::debug;
 pub async fn run(script: &str, output: Sender<String>) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
-    output.send("Hello, world!".into()).await?;
-
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
         output,
