@@ -35,6 +35,9 @@ impl<C> Evaluator<C> {
         self.call_stack.advance(fragment.next());
 
         let runtime_state = match &fragment.payload {
+            FragmentPayload::Array { .. } => {
+                todo!("Evaluating arrays is not supported yet.");
+            }
             FragmentPayload::Value(value) => {
                 self.data_stack.push(Value {
                     payload: value.clone(),
