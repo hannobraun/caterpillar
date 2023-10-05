@@ -16,6 +16,6 @@ pub async fn render(output_channel: Receiver<String>) -> anyhow::Result<()> {
 
     loop {
         let line = output_channel.recv().await?;
-        output_signal.set(line);
+        output_signal.modify().push_str(&line);
     }
 }
