@@ -8,8 +8,8 @@ pub async fn render(output_channel: Receiver<String>) -> anyhow::Result<()> {
         let output = output_signal.clone();
 
         view! { cx,
-            ul {
-                li { (output.get()) }
+            textarea(readonly=true) {
+                (output.get())
             }
         }
     });
