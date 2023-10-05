@@ -43,11 +43,11 @@ impl ValuePayload {
 impl fmt::Display for ValuePayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            ValuePayload::Block { start, .. } => write!(f, "{{ {start} }}"),
-            ValuePayload::Bool(value) => write!(f, "{value}"),
-            ValuePayload::Number(number) => write!(f, "{number}"),
-            ValuePayload::Symbol(symbol) => write!(f, ":{symbol}"),
-            ValuePayload::Text(text) => write!(f, "\"{text}\""),
+            Self::Block { start, .. } => write!(f, "{{ {start} }}"),
+            Self::Bool(value) => write!(f, "{value}"),
+            Self::Number(number) => write!(f, "{number}"),
+            Self::Symbol(symbol) => write!(f, ":{symbol}"),
+            Self::Text(text) => write!(f, "\"{text}\""),
         }
     }
 }
