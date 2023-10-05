@@ -37,25 +37,9 @@ impl FragmentPayload {
 
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Value(ValuePayload::Block { start }) => {
-                hasher.update(b"block");
-                hasher.update(start.hash.as_bytes());
-            }
-            Self::Value(ValuePayload::Bool(value)) => {
-                hasher.update(b"bool");
-                hasher.update(&[(*value).into()]);
-            }
-            Self::Value(ValuePayload::Number(number)) => {
-                hasher.update(b"number");
-                hasher.update(&number.to_le_bytes());
-            }
-            Self::Value(ValuePayload::Symbol(symbol)) => {
-                hasher.update(b"symbol");
-                hasher.update(symbol.as_bytes());
-            }
-            Self::Value(ValuePayload::Text(text)) => {
-                hasher.update(b"text");
-                hasher.update(text.as_bytes());
+            Self::Value(value) => {
+                hasher.update(b"value");
+                value.hash(hasher);
             }
             Self::Word(word) => {
                 hasher.update(b"word");

@@ -38,6 +38,31 @@ impl ValuePayload {
             value => value.to_string(),
         }
     }
+
+    pub(crate) fn hash(&self, hasher: &mut blake3::Hasher) {
+        match self {
+            Self::Block { start } => {
+                hasher.update(b"block");
+                hasher.update(start.hash.as_bytes());
+            }
+            Self::Bool(value) => {
+                hasher.update(b"bool");
+                hasher.update(&[(*value).into()]);
+            }
+            Self::Number(number) => {
+                hasher.update(b"number");
+                hasher.update(&number.to_le_bytes());
+            }
+            Self::Symbol(symbol) => {
+                hasher.update(b"symbol");
+                hasher.update(symbol.as_bytes());
+            }
+            Self::Text(text) => {
+                hasher.update(b"text");
+                hasher.update(text.as_bytes());
+            }
+        }
+    }
 }
 
 impl fmt::Display for ValuePayload {
