@@ -1,2 +1,3 @@
 "=" { "a" "a" = } test
 "= not" { "a" "b" = not } test
+"tokenization" { "a""a"="b""b"= and } test
