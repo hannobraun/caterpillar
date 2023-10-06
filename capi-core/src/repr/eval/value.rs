@@ -90,7 +90,7 @@ impl fmt::Display for ValuePayload {
             Self::Bool(value) => write!(f, "{value}"),
             Self::Number(number) => write!(f, "{number}"),
             Self::Symbol(symbol) => write!(f, ":{symbol}"),
-            Self::Text(text) => write!(f, "\"{text}\""),
+            Self::Text(text) => write!(f, "{text}"),
         }
     }
 }
