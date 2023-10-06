@@ -4,7 +4,11 @@ use sycamore::{
     view,
 };
 
-pub async fn render(output_channel: Receiver<String>) -> anyhow::Result<()> {
+pub async fn render(
+    script: &str,
+    output_channel: Receiver<String>,
+) -> anyhow::Result<()> {
+    let script = script.to_string();
     let output_signal = create_rc_signal(String::new());
 
     sycamore::render(|cx| {
@@ -25,6 +29,9 @@ pub async fn render(output_channel: Receiver<String>) -> anyhow::Result<()> {
         });
 
         view! { cx,
+            textarea(readonly=true) {
+                (script)
+            }
             textarea(class="output", readonly=true) {
                 (output.get())
             }

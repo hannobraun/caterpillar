@@ -15,7 +15,7 @@ fn main() {
         }
     });
     wasm_bindgen_futures::spawn_local(async {
-        if let Err(err) = ui::render(output_rx).await {
+        if let Err(err) = ui::render(SCRIPT, output_rx).await {
             panic!("UI error: {err:?}");
         }
     });
