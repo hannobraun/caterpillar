@@ -7,7 +7,7 @@ fn main() {
     console_error_panic_hook::set_once();
     tracing_wasm::set_as_global_default();
 
-    let (_, code_rx) = async_channel::unbounded();
+    let (code_tx, code_rx) = async_channel::unbounded();
     let (output_tx, output_rx) = async_channel::unbounded();
 
     wasm_bindgen_futures::spawn_local(async {
@@ -16,7 +16,7 @@ fn main() {
         }
     });
     wasm_bindgen_futures::spawn_local(async {
-        if let Err(err) = ui::render(SCRIPT, output_rx).await {
+        if let Err(err) = ui::render(SCRIPT, code_tx, output_rx).await {
             panic!("UI error: {err:?}");
         }
     });

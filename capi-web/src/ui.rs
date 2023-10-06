@@ -1,11 +1,12 @@
-use async_channel::Receiver;
+use async_channel::{Receiver, Sender};
 use sycamore::{
-    reactive::{create_effect, create_rc_signal},
+    reactive::{create_effect, create_rc_signal, create_signal},
     view,
 };
 
 pub async fn render(
     script: &str,
+    code_channel: Sender<String>,
     output_channel: Receiver<String>,
 ) -> anyhow::Result<()> {
     let script = script.to_string();
@@ -13,6 +14,13 @@ pub async fn render(
 
     sycamore::render(|cx| {
         let output = output_signal.clone();
+
+        let code_signal = create_signal(cx, script.clone());
+        create_effect(cx, move || {
+            code_channel
+                .send_blocking(code_signal.get().as_ref().clone())
+                .unwrap();
+        });
 
         let output2 = output.clone();
         create_effect(cx, move || {
@@ -29,7 +37,7 @@ pub async fn render(
         });
 
         view! { cx,
-            textarea(readonly=true) {
+            textarea(bind:value=code_signal) {
                 (script)
             }
             textarea(class="output", readonly=true) {
