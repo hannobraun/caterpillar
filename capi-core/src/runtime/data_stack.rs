@@ -6,6 +6,7 @@ use crate::repr::eval::{
 #[derive(Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
+    marker: usize,
 }
 
 impl DataStack {
@@ -45,6 +46,17 @@ impl DataStack {
         self.values
             .pop()
             .ok_or(DataStackError::StackIsEmpty { expected })
+    }
+
+    pub fn mark(&mut self) {
+        self.marker = self.values.len();
+    }
+
+    pub fn drain_values_from_marker(
+        &mut self,
+    ) -> impl Iterator<Item = Value> + '_ {
+        let index = usize::min(self.marker, self.values.len());
+        self.values.drain(index..)
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
