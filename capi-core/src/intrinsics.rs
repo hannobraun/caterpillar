@@ -21,6 +21,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (swap, "swap"),
         (test, "test"),
         (true_, "true"),
+        (unwrap, "unwrap"),
     ]
 }
 
@@ -161,5 +162,15 @@ fn swap(context: RuntimeContext) -> DataStackResult<()> {
 
 fn true_(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push_bare(value::Bool(true));
+    Ok(())
+}
+
+fn unwrap(context: RuntimeContext) -> DataStackResult<()> {
+    let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
+
+    for item in array.0 {
+        context.data_stack.push_bare(item);
+    }
+
     Ok(())
 }
