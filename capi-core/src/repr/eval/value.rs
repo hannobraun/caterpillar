@@ -99,6 +99,10 @@ pub trait Type: TryFrom<ValuePayload, Error = ValuePayload> {
     const NAME: &'static str;
 }
 
+impl Type for Array {
+    const NAME: &'static str = "array";
+}
+
 impl Type for Block {
     const NAME: &'static str = "block";
 }
