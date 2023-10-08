@@ -63,6 +63,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
 
         for pixel_op in pixel_ops_buffer.drain(..) {
             let PixelOp::Set([x, y]) = pixel_op;
+            let value = 255;
 
             let clamp = |value, max| {
                 cmp::min(max as usize - 1, cmp::max(0, value) as usize)
@@ -76,10 +77,10 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             let b = r + 2;
             let a = r + 3;
 
-            pixels.frame_mut()[r] = 255;
-            pixels.frame_mut()[g] = 255;
-            pixels.frame_mut()[b] = 255;
-            pixels.frame_mut()[a] = 255;
+            pixels.frame_mut()[r] = value;
+            pixels.frame_mut()[g] = value;
+            pixels.frame_mut()[b] = value;
+            pixels.frame_mut()[a] = value;
         }
 
         match event {
