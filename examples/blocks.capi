@@ -1,4 +1,4 @@
-:init_state
+:init
 {
     # This would be better as:  [ { 0 } 18 times ]
     [ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
@@ -20,4 +20,4 @@
 }
     fn
 
-init_state loop
+init loop
