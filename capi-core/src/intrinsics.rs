@@ -11,6 +11,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (and, "and"),
         (clone, "clone"),
         (drop, "drop"),
+        (each, "each"),
         (eq, "="),
         (eval, "eval"),
         (false_, "false"),
@@ -55,6 +56,22 @@ fn clone(context: RuntimeContext) -> DataStackResult<()> {
 
 fn drop(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.pop_any()?;
+    Ok(())
+}
+
+fn each(context: RuntimeContext) -> DataStackResult<()> {
+    let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
+    let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
+
+    for (i, value) in array.0.into_iter().enumerate() {
+        context
+            .data_stack
+            .push_bare(value::Number(i.try_into().unwrap()));
+        context.data_stack.push_bare(value);
+
+        context.call_stack.push(block.start);
+    }
+
     Ok(())
 }
 
