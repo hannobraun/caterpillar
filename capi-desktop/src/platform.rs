@@ -19,6 +19,7 @@ impl Sender {
 }
 
 pub enum PixelOp {
+    Clear([i64; 2]),
     Set([i64; 2]),
 }
 
