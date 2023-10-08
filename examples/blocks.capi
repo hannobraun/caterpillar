@@ -5,7 +5,7 @@
 }
     fn
 
-:loop
+:draw
 {
     clone
     {
@@ -15,6 +15,12 @@
             if
     }
         each
+}
+    fn
+
+:loop
+{
+    draw
     200 delay_ms
     loop
 }
