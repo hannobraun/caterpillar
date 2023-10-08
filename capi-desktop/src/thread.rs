@@ -20,7 +20,9 @@ fn run_inner(
     pixel_ops: Sender<PixelOp>,
 ) -> anyhow::Result<()> {
     let mut interpreter = Interpreter::new(&code)?;
-    let mut context = Context { pixel_ops };
+    let mut context = Context {
+        pixel_ops: platform::Sender { inner: pixel_ops },
+    };
 
     interpreter.register_platform([
         (

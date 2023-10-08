@@ -1,10 +1,21 @@
 use std::{thread, time::Duration};
 
 use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
-use crossbeam_channel::Sender;
 
 pub struct Context {
-    pub pixel_ops: Sender<PixelOp>,
+    pub pixel_ops: Sender,
+}
+
+pub struct Sender {
+    pub inner: crossbeam_channel::Sender<PixelOp>,
+}
+
+impl Sender {
+    pub fn send(&self, message: PixelOp) {
+        // Can return an error, if the channel is disconnected. This regularly
+        // happens on shutdown, so let's just ignore it.
+        let _ = self.inner.send(message);
+    }
 }
 
 pub enum PixelOp {
@@ -18,9 +29,7 @@ pub fn set_pixel(
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
-    // Can return an error, if the channel is disconnected. This regularly
-    // happens on shutdown, so let's just ignore it.
-    let _ = platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
+    platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
     Ok(FunctionState::Done)
 }
