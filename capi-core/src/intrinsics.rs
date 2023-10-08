@@ -15,6 +15,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (eval, "eval"),
         (false_, "false"),
         (fn_, "fn"),
+        (if_, "if"),
         (nop, "nop"),
         (not, "not"),
         (over, "over"),
@@ -107,6 +108,17 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     let is_test = false;
 
     context.functions.define(name, body, is_test);
+
+    Ok(())
+}
+
+fn if_(context: RuntimeContext) -> DataStackResult<()> {
+    let (else_, _) = context.data_stack.pop_specific::<value::Block>()?;
+    let (then, _) = context.data_stack.pop_specific::<value::Block>()?;
+    let (condition, _) = context.data_stack.pop_specific::<value::Bool>()?;
+
+    let start = if condition.0 { then.start } else { else_.start };
+    context.call_stack.push(start);
 
     Ok(())
 }

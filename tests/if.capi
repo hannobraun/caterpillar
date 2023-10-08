@@ -1,0 +1,2 @@
+"then" { true { true } { false } if } test
+"else" { false { false } { true } if } test
