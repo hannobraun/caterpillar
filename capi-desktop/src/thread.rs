@@ -27,7 +27,7 @@ fn run_inner(
             "delay_ms",
             platform::delay_ms as PlatformFunction<platform::Context>,
         ),
-        ("pixel_set", platform::pixel_set),
+        ("set_pixel", platform::set_pixel),
         ("print", platform::print),
     ]);
 

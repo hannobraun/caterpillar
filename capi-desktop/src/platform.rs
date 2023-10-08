@@ -11,7 +11,7 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
-pub fn pixel_set(
+pub fn set_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
 ) -> DataStackResult<FunctionState> {
