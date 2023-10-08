@@ -61,7 +61,9 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             }
         }
 
-        for PixelOp::Set([x, y]) in pixel_ops_buffer.drain(..) {
+        for pixel_op in pixel_ops_buffer.drain(..) {
+            let PixelOp::Set([x, y]) = pixel_op;
+
             let clamp = |value, max| {
                 cmp::min(max as usize - 1, cmp::max(0, value) as usize)
             };
