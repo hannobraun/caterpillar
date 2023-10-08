@@ -26,9 +26,10 @@ fn run_inner(
 
     interpreter.register_platform([
         (
-            "delay_ms",
-            platform::delay_ms as PlatformFunction<platform::Context>,
+            "clear_pixel",
+            platform::clear_pixel as PlatformFunction<platform::Context>,
         ),
+        ("delay_ms", platform::delay_ms),
         ("set_pixel", platform::set_pixel),
         ("print", platform::print),
     ]);

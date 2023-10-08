@@ -23,6 +23,18 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
+pub fn clear_pixel(
+    runtime_context: RuntimeContext,
+    platform_context: &mut Context,
+) -> DataStackResult<FunctionState> {
+    let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+    let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+
+    platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
+
+    Ok(FunctionState::Done)
+}
+
 pub fn set_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
