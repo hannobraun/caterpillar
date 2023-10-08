@@ -7,12 +7,17 @@
 
 :loop
 {
-    clone 0 set_pixel
-    1 +
+    clone
+    {
+        0 =
+        { 0 swap clear_pixel }
+        { 0 swap set_pixel }
+            if
+    }
+        each
     200 delay_ms
     loop
 }
     fn
 
-init_state
-0 loop
+init_state loop
