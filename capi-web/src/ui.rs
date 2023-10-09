@@ -37,11 +37,11 @@ pub async fn render(
         });
 
         view! { cx,
-            div {
-                textarea(bind:value=code_signal) {
+            div(class="h-screen") {
+                textarea(class="h-full w-1/2", bind:value=code_signal) {
                     (script)
                 }
-                textarea(class="output", readonly=true) {
+                textarea(class="output h-full w-1/2", readonly=true) {
                     (output.get())
                 }
             }
