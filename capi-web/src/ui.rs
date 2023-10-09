@@ -37,11 +37,13 @@ pub async fn render(
         });
 
         view! { cx,
-            textarea(bind:value=code_signal) {
-                (script)
-            }
-            textarea(class="output", readonly=true) {
-                (output.get())
+            div {
+                textarea(bind:value=code_signal) {
+                    (script)
+                }
+                textarea(class="output", readonly=true) {
+                    (output.get())
+                }
             }
         }
     });
