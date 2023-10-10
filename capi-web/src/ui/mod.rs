@@ -9,7 +9,7 @@ use crate::platform::Event;
 pub async fn render(
     script: &str,
     code_channel: Sender<String>,
-    output_channel: Receiver<Event>,
+    event_channel: Receiver<Event>,
 ) -> anyhow::Result<()> {
     let script = script.to_string();
     let output_signal = create_rc_signal(String::new());
@@ -63,7 +63,7 @@ pub async fn render(
     });
 
     loop {
-        let Event::Output(output) = output_channel.recv().await?;
+        let Event::Output(output) = event_channel.recv().await?;
         output_signal.modify().push_str(&output);
     }
 }
