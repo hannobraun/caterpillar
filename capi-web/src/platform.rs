@@ -29,20 +29,6 @@ pub async fn run(
     let mut new_code: Option<String> = None;
 
     loop {
-        match code.try_recv() {
-            Ok(code) => {
-                new_code = Some(code);
-            }
-            Err(TryRecvError::Empty) => {
-                // No problem that we don't have a code update. Just continue.
-            }
-            Err(TryRecvError::Closed) => {
-                // The channel was closed. However this happened, it means our
-                // work here is done.
-                break;
-            }
-        }
-
         if let Some(code) = new_code.take() {
             interpreter.update(&code)?;
         }
@@ -57,6 +43,20 @@ pub async fn run(
         // website a chance to do its thing between steps.
         let sleep_duration = sleep_duration.unwrap_or(Duration::from_millis(0));
         sleep(sleep_duration).await;
+
+        match code.try_recv() {
+            Ok(code) => {
+                new_code = Some(code);
+            }
+            Err(TryRecvError::Empty) => {
+                // No problem that we don't have a code update. Just continue.
+            }
+            Err(TryRecvError::Closed) => {
+                // The channel was closed. However this happened, it means our
+                // work here is done.
+                break;
+            }
+        }
     }
 
     Ok(())
