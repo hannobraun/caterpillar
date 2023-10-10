@@ -5,6 +5,7 @@ use capi_core::{
     value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
     RuntimeContext, RuntimeState,
 };
+use chrono::Local;
 use gloo_timers::future::sleep;
 use tracing::debug;
 
@@ -94,9 +95,12 @@ impl Events {
     }
 
     pub fn status(&self, message: impl Into<String>) {
-        self.inner
-            .send_blocking(Event::Status(message.into()))
-            .unwrap()
+        let message = format!(
+            "{}: {}",
+            Local::now().format("%Y-%m-%d %H:%M:%S"),
+            message.into()
+        );
+        self.inner.send_blocking(Event::Status(message)).unwrap()
     }
 }
 
