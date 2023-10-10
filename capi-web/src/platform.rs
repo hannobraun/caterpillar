@@ -17,7 +17,7 @@ pub async fn run(
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
-        output: Events { inner: output },
+        events: Events { inner: output },
         sleep_duration: None,
     };
 
@@ -57,7 +57,7 @@ pub async fn run(
 }
 
 pub struct Context {
-    pub output: Events,
+    pub events: Events,
     pub sleep_duration: Option<Duration>,
 }
 
@@ -93,7 +93,7 @@ pub fn print(
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
-        .output
+        .events
         .print(format!("{}\n", value.payload));
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
