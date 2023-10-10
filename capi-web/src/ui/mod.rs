@@ -32,7 +32,7 @@ pub async fn render(
             output2.track();
 
             let document = web_sys::window().unwrap().document().unwrap();
-            let outputs = document.get_elements_by_class_name("output");
+            let outputs = document.get_elements_by_class_name("auto-scroll");
 
             let mut i = 0;
             while let Some(output) = outputs.item(i) {
@@ -51,7 +51,7 @@ pub async fn render(
                         (script)
                     }
                     textarea(
-                        class="output h-full w-1/2 resize-none",
+                        class="auto-scroll h-full w-1/2 resize-none",
                         readonly=true,
                     ) {
                         (output.get())
