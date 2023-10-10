@@ -11,7 +11,7 @@ use tracing::debug;
 pub async fn run(
     script: &str,
     code: Receiver<String>,
-    output: Sender<String>,
+    output: Sender<Event>,
 ) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
@@ -62,13 +62,17 @@ pub struct Context {
 }
 
 pub struct Events {
-    pub output: Sender<String>,
+    pub output: Sender<Event>,
 }
 
 impl Events {
     pub fn output(&self, message: String) {
-        self.output.send_blocking(message).unwrap()
+        self.output.send_blocking(Event::Output(message)).unwrap()
     }
+}
+
+pub enum Event {
+    Output(String),
 }
 
 pub fn delay_ms(

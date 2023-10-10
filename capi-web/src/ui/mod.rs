@@ -4,10 +4,12 @@ use sycamore::{
     view,
 };
 
+use crate::platform::Event;
+
 pub async fn render(
     script: &str,
     code_channel: Sender<String>,
-    output_channel: Receiver<String>,
+    output_channel: Receiver<Event>,
 ) -> anyhow::Result<()> {
     let script = script.to_string();
     let output_signal = create_rc_signal(String::new());
@@ -61,7 +63,7 @@ pub async fn render(
     });
 
     loop {
-        let line = output_channel.recv().await?;
+        let Event::Output(line) = output_channel.recv().await?;
         output_signal.modify().push_str(&line);
     }
 }
