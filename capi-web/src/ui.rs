@@ -38,10 +38,16 @@ pub async fn render(
 
         view! { cx,
             div(class="h-screen") {
-                textarea(class="h-full w-1/2", bind:value=code_signal) {
+                textarea(
+                    class="h-full w-1/2 resize-none",
+                    bind:value=code_signal,
+                ) {
                     (script)
                 }
-                textarea(class="output h-full w-1/2", readonly=true) {
+                textarea(
+                    class="output h-full w-1/2 resize-none",
+                    readonly=true,
+                ) {
                     (output.get())
                 }
             }
