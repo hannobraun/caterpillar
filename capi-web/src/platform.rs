@@ -17,7 +17,7 @@ pub async fn run(
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
-        events: Events { output: events },
+        events: Events { inner: events },
         sleep_duration: None,
     };
 
@@ -62,12 +62,12 @@ pub struct Context {
 }
 
 pub struct Events {
-    pub output: Sender<Event>,
+    pub inner: Sender<Event>,
 }
 
 impl Events {
     pub fn output(&self, message: String) {
-        self.output.send_blocking(Event::Output(message)).unwrap()
+        self.inner.send_blocking(Event::Output(message)).unwrap()
     }
 }
 
