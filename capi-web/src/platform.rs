@@ -56,7 +56,7 @@ pub async fn run(
         // Always sleep, even if it's for zero duration, to give the rest of the
         // website a chance to do its thing between steps.
         let sleep_duration = sleep_duration.unwrap_or(Duration::from_millis(0));
-        sleep(sleep_duration).await
+        sleep(sleep_duration).await;
     }
 
     Ok(())
