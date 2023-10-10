@@ -37,7 +37,7 @@ pub async fn render(
         });
 
         view! { cx,
-            div(class="h-screen") {
+            div(class="h-screen flex flex-col") {
                 div(class="h-full") {
                     textarea(
                         class="h-full w-1/2 resize-none",
