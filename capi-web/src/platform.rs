@@ -36,7 +36,14 @@ pub async fn run(
         let sleep_duration = match interpreter.step(&mut context)? {
             RuntimeState::Running => None,
             RuntimeState::Sleeping => context.sleep_duration.take(),
-            RuntimeState::Finished => break,
+            RuntimeState::Finished => {
+                match code.recv().await {
+                    Ok(code) => new_code = Some(code),
+                    Err(RecvError) => break,
+                }
+
+                continue;
+            }
         };
 
         // Always sleep, even if it's for zero duration, to give the rest of the
