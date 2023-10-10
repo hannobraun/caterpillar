@@ -36,10 +36,10 @@ pub async fn run(
             }
         }
 
-        let sleep_duration = match interpreter.step(&mut context)? {
-            RuntimeState::Running => None,
-            RuntimeState::Sleeping => context.sleep_duration.take(),
-            RuntimeState::Finished => {
+        let sleep_duration = match interpreter.step(&mut context) {
+            Ok(RuntimeState::Running) => None,
+            Ok(RuntimeState::Sleeping) => context.sleep_duration.take(),
+            Ok(RuntimeState::Finished) => {
                 context.events.status(
                     "Program finished (will restart on change to script)\n",
                 );
@@ -56,6 +56,10 @@ pub async fn run(
                 context.events.status("Change detected. Restarting.\n");
 
                 continue;
+            }
+            Err(err) => {
+                context.events.status(format!("Runtime error:\n{err:?}\n"));
+                break;
             }
         };
 
