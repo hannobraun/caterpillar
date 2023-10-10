@@ -17,7 +17,7 @@ pub async fn run(
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
-        output,
+        output: Output { inner: output },
         sleep_duration: None,
     };
 
@@ -57,8 +57,12 @@ pub async fn run(
 }
 
 pub struct Context {
-    pub output: Sender<String>,
+    pub output: Output,
     pub sleep_duration: Option<Duration>,
+}
+
+pub struct Output {
+    pub inner: Sender<String>,
 }
 
 pub fn delay_ms(
@@ -84,6 +88,7 @@ pub fn print(
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .output
+        .inner
         .send_blocking(format!("{}\n", value.payload))
         .unwrap();
     runtime_context.data_stack.push(value);
