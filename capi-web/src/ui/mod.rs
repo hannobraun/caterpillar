@@ -57,7 +57,10 @@ pub async fn render(
                         (output.get())
                     }
                 }
-                textarea(class="basis-1/5 resize-none", readonly=true) {
+                textarea(
+                    class="auto-scroll basis-1/5 resize-none",
+                    readonly=true,
+                ) {
                     (status.get())
                 }
             }
