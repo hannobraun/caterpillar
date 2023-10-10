@@ -66,7 +66,7 @@ pub struct Events {
 }
 
 impl Events {
-    pub fn print(&self, message: String) {
+    pub fn output(&self, message: String) {
         self.output.send_blocking(message).unwrap()
     }
 }
@@ -94,7 +94,7 @@ pub fn print(
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .events
-        .print(format!("{}\n", value.payload));
+        .output(format!("{}\n", value.payload));
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
