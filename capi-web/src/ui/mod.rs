@@ -38,7 +38,7 @@ pub async fn render(
 
         view! { cx,
             div(class="h-screen flex flex-col") {
-                div(class="h-full") {
+                div(class="basis-4/5") {
                     textarea(
                         class="h-full w-1/2 resize-none",
                         bind:value=code_signal,
@@ -51,6 +51,10 @@ pub async fn render(
                     ) {
                         (output.get())
                     }
+                }
+                textarea(class="basis-1/5 resize-none", readonly=true) {
+                    "This is a placeholder. "
+                    "Eventually, errors and status messages can be shown here."
                 }
             }
         }
