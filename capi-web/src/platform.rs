@@ -31,7 +31,9 @@ pub async fn run(
 
     loop {
         if let Some(code) = new_code.take() {
-            interpreter.update(&code)?;
+            if let Err(err) = interpreter.update(&code) {
+                context.events.status(format!("Pipeline error:\n{err:?}\n"));
+            }
         }
 
         let sleep_duration = match interpreter.step(&mut context)? {
