@@ -26,7 +26,7 @@ pub async fn run(
         ("print", print),
     ]);
 
-    let mut new_code = None;
+    let mut new_code: Option<String> = None;
 
     loop {
         match code.try_recv() {
