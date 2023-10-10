@@ -65,6 +65,12 @@ pub struct Output {
     pub inner: Sender<String>,
 }
 
+impl Output {
+    pub fn print(&self, message: String) {
+        self.inner.send_blocking(message).unwrap()
+    }
+}
+
 pub fn delay_ms(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
@@ -88,9 +94,7 @@ pub fn print(
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .output
-        .inner
-        .send_blocking(format!("{}\n", value.payload))
-        .unwrap();
+        .print(format!("{}\n", value.payload));
     runtime_context.data_stack.push(value);
     Ok(FunctionState::Done)
 }
