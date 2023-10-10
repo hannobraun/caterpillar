@@ -46,6 +46,8 @@ pub async fn run(
                     Err(RecvError) => break,
                 }
 
+                context.events.status("Change detected. Restarting.\n");
+
                 continue;
             }
         };
