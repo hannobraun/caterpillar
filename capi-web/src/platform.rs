@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use async_channel::{Receiver, Sender, TryRecvError};
+use async_channel::{Receiver, RecvError, Sender, TryRecvError};
 use capi_core::{
     value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
     RuntimeContext, RuntimeState,
@@ -37,6 +37,10 @@ pub async fn run(
             RuntimeState::Running => None,
             RuntimeState::Sleeping => context.sleep_duration.take(),
             RuntimeState::Finished => {
+                context.events.status(
+                    "Program finished (will restart on change to script)\n",
+                );
+
                 match code.recv().await {
                     Ok(code) => new_code = Some(code),
                     Err(RecvError) => break,
@@ -82,10 +86,17 @@ impl Events {
     pub fn output(&self, message: String) {
         self.inner.send_blocking(Event::Output(message)).unwrap()
     }
+
+    pub fn status(&self, message: impl Into<String>) {
+        self.inner
+            .send_blocking(Event::Status(message.into()))
+            .unwrap()
+    }
 }
 
 pub enum Event {
     Output(String),
+    Status(String),
 }
 
 pub fn delay_ms(

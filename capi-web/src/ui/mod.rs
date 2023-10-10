@@ -12,10 +12,13 @@ pub async fn render(
     event_channel: Receiver<Event>,
 ) -> anyhow::Result<()> {
     let script = script.to_string();
+
     let output_signal = create_rc_signal(String::new());
+    let status_signal = create_rc_signal(String::new());
 
     sycamore::render(|cx| {
         let output = output_signal.clone();
+        let status = status_signal.clone();
 
         let code_signal = create_signal(cx, script.clone());
         create_effect(cx, move || {
@@ -55,15 +58,16 @@ pub async fn render(
                     }
                 }
                 textarea(class="basis-1/5 resize-none", readonly=true) {
-                    "This is a placeholder. "
-                    "Eventually, errors and status messages can be shown here."
+                    (status.get())
                 }
             }
         }
     });
 
     loop {
-        let Event::Output(output) = event_channel.recv().await?;
-        output_signal.modify().push_str(&output);
+        match event_channel.recv().await? {
+            Event::Output(output) => output_signal.modify().push_str(&output),
+            Event::Status(status) => status_signal.modify().push_str(&status),
+        }
     }
 }
