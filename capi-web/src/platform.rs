@@ -11,13 +11,13 @@ use tracing::debug;
 pub async fn run(
     script: &str,
     code: Receiver<String>,
-    output: Sender<Event>,
+    events: Sender<Event>,
 ) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
     let mut interpreter = Interpreter::new(script)?;
     let mut context = Context {
-        events: Events { output },
+        events: Events { output: events },
         sleep_duration: None,
     };
 
