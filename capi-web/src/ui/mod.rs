@@ -63,7 +63,7 @@ pub async fn render(
     });
 
     loop {
-        let Event::Output(line) = output_channel.recv().await?;
-        output_signal.modify().push_str(&line);
+        let Event::Output(output) = output_channel.recv().await?;
+        output_signal.modify().push_str(&output);
     }
 }
