@@ -26,10 +26,12 @@ pub async fn run(
         ("print", print),
     ]);
 
+    let mut new_code = None;
+
     loop {
         match code.try_recv() {
             Ok(code) => {
-                interpreter.update(&code)?;
+                new_code = Some(code);
             }
             Err(TryRecvError::Empty) => {
                 // No problem that we don't have a code update. Just continue.
@@ -39,6 +41,10 @@ pub async fn run(
                 // work here is done.
                 break;
             }
+        }
+
+        if let Some(code) = new_code.take() {
+            interpreter.update(&code)?;
         }
 
         let sleep_duration = match interpreter.step(&mut context)? {
