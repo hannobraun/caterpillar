@@ -38,17 +38,19 @@ pub async fn render(
 
         view! { cx,
             div(class="h-screen") {
-                textarea(
-                    class="h-full w-1/2 resize-none",
-                    bind:value=code_signal,
-                ) {
-                    (script)
-                }
-                textarea(
-                    class="output h-full w-1/2 resize-none",
-                    readonly=true,
-                ) {
-                    (output.get())
+                div(class="h-full") {
+                    textarea(
+                        class="h-full w-1/2 resize-none",
+                        bind:value=code_signal,
+                    ) {
+                        (script)
+                    }
+                    textarea(
+                        class="output h-full w-1/2 resize-none",
+                        readonly=true,
+                    ) {
+                        (output.get())
+                    }
                 }
             }
         }
