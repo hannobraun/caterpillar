@@ -43,7 +43,11 @@ pub async fn run(
 
                 match code.recv().await {
                     Ok(code) => new_code = Some(code),
-                    Err(RecvError) => break,
+                    Err(RecvError) => {
+                        // The channel was closed. However this happened, it
+                        // means our work here is done.
+                        break;
+                    }
                 }
 
                 context.events.status("Change detected. Restarting.\n");
