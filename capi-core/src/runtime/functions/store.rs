@@ -64,10 +64,10 @@ impl<C> Namespace<C> {
                     NamespaceItem::PlatformFunction(function)
                 }
             });
-        let user_defined_function = self
-            .user_defined_functions
-            .get(name)
-            .map(|user_defined| NamespaceItem::UserDefined(user_defined));
+        let user_defined_function =
+            self.user_defined_functions.get(name).map(|user_defined| {
+                NamespaceItem::UserDefinedFunction(user_defined)
+            });
 
         native_function
             .or(user_defined_function)
@@ -123,7 +123,7 @@ impl<C> Default for Namespace<C> {
 pub enum NamespaceItem<'r, C> {
     IntrinsicFunction(&'r IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
-    UserDefined(&'r UserDefinedFunction),
+    UserDefinedFunction(&'r UserDefinedFunction),
 }
 
 #[derive(Debug, thiserror::Error)]

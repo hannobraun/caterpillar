@@ -77,7 +77,7 @@ impl<C> Evaluator<C> {
                     NamespaceItem::PlatformFunction(f) => {
                         f(self.runtime_context(), platform_context)?
                     }
-                    NamespaceItem::UserDefined(
+                    NamespaceItem::UserDefinedFunction(
                         functions::UserDefinedFunction { body, .. },
                     ) => {
                         self.call_stack.push(body.start);
