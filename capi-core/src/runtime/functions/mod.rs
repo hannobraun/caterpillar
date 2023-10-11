@@ -7,6 +7,6 @@ pub use self::{
         FunctionState, IntrinsicFunction, NativeFunction, PlatformFunction,
         RuntimeContext,
     },
-    store::{Function, Functions, ResolveError},
+    store::{Function, Namespace, ResolveError},
     user_defined::{FunctionName, UserDefinedFunction, UserDefinedFunctions},
 };
