@@ -14,7 +14,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator<C> {
-    pub functions: Namespace<C>,
+    pub namespace: Namespace<C>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
 }
@@ -69,7 +69,7 @@ impl<C> Evaluator<C> {
                 RuntimeState::Running
             }
             FragmentPayload::Word(word) => {
-                let function_state = match self.functions.resolve(word)? {
+                let function_state = match self.namespace.resolve(word)? {
                     Function::Intrinsic(f) => {
                         f(self.runtime_context())?;
                         FunctionState::Done
@@ -104,7 +104,7 @@ impl<C> Evaluator<C> {
 
     fn runtime_context(&mut self) -> RuntimeContext {
         RuntimeContext {
-            functions: self.functions.user_defined(),
+            functions: self.namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
         }
@@ -114,7 +114,7 @@ impl<C> Evaluator<C> {
 impl<C> Default for Evaluator<C> {
     fn default() -> Self {
         Self {
-            functions: Default::default(),
+            namespace: Default::default(),
             call_stack: Default::default(),
             data_stack: Default::default(),
         }
