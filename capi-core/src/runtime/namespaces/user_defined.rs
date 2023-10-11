@@ -1,12 +1,20 @@
 use std::collections::BTreeMap;
 
-use crate::{repr::eval::fragments::FragmentId, value};
+use crate::{
+    repr::eval::fragments::FragmentId,
+    value::{self, Value},
+};
 
 pub struct UserDefined<'r> {
+    pub bindings: &'r mut BTreeMap<String, Value>,
     pub functions: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
 impl UserDefined<'_> {
+    pub fn define_binding(&mut self, name: String, value: Value) {
+        self.bindings.insert(name, value);
+    }
+
     pub fn define_function(
         &mut self,
         name: FunctionName,

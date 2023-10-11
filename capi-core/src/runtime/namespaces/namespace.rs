@@ -6,6 +6,7 @@ use crate::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::ValuePayload,
     },
+    value::Value,
     PlatformFunction,
 };
 
@@ -15,6 +16,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Namespace<C> {
+    bindings: BTreeMap<String, Value>,
     native_functions: BTreeMap<String, NativeFunction<C>>,
     user_defined_functions: BTreeMap<String, UserDefinedFunction>,
 }
@@ -29,6 +31,7 @@ impl<C> Namespace<C> {
         }
 
         Self {
+            bindings: BTreeMap::new(),
             native_functions,
             user_defined_functions: BTreeMap::new(),
         }
@@ -46,6 +49,7 @@ impl<C> Namespace<C> {
 
     pub fn user_defined(&mut self) -> UserDefined {
         UserDefined {
+            bindings: &mut self.bindings,
             functions: &mut self.user_defined_functions,
         }
     }
