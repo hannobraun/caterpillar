@@ -45,7 +45,7 @@ impl<C> Namespace<C> {
         }
     }
 
-    pub fn user_defined(&mut self) -> UserDefinedFunctions {
+    pub fn user_defined_functions(&mut self) -> UserDefinedFunctions {
         UserDefinedFunctions {
             inner: &mut self.user_defined_functions,
         }
