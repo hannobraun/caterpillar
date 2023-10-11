@@ -16,7 +16,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Namespace<C> {
-    native: BTreeMap<String, NativeFunction<C>>,
+    native_functions: BTreeMap<String, NativeFunction<C>>,
     user_defined: BTreeMap<String, UserDefinedFunction>,
 }
 
@@ -30,7 +30,7 @@ impl<C> Namespace<C> {
         }
 
         Self {
-            native,
+            native_functions: native,
             user_defined: BTreeMap::new(),
         }
     }
@@ -40,7 +40,7 @@ impl<C> Namespace<C> {
         functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
     ) {
         for (name, function) in functions {
-            self.native
+            self.native_functions
                 .insert(name.into(), NativeFunction::Platform(function));
         }
     }
@@ -52,7 +52,7 @@ impl<C> Namespace<C> {
     }
 
     pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError> {
-        let native = self.native.get(name).map(|native| match native {
+        let native = self.native_functions.get(name).map(|native| match native {
             NativeFunction::Intrinsic(function) => {
                 Function::Intrinsic(function)
             }
