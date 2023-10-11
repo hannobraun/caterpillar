@@ -71,9 +71,14 @@ impl<C> Namespace<C> {
             self.user_defined_functions.get(name).map(|user_defined| {
                 NamespaceItem::UserDefinedFunction(user_defined)
             });
+        let binding = self
+            .bindings
+            .get(name)
+            .map(|binding| NamespaceItem::Binding(binding.clone()));
 
         native_function
             .or(user_defined_function)
+            .or(binding)
             .ok_or(ResolveError { name: name.into() })
     }
 
