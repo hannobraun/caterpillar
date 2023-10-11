@@ -9,7 +9,7 @@ use crate::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    functions::{self, Function, Namespace, ResolveError, RuntimeContext},
+    functions::{self, Namespace, NamespaceItem, ResolveError, RuntimeContext},
 };
 
 #[derive(Debug)]
@@ -70,17 +70,16 @@ impl<C> Evaluator<C> {
             }
             FragmentPayload::Word(word) => {
                 let function_state = match self.namespace.resolve(word)? {
-                    Function::Intrinsic(f) => {
+                    NamespaceItem::Intrinsic(f) => {
                         f(self.runtime_context())?;
                         FunctionState::Done
                     }
-                    Function::Platform(f) => {
+                    NamespaceItem::Platform(f) => {
                         f(self.runtime_context(), platform_context)?
                     }
-                    Function::UserDefined(functions::UserDefinedFunction {
-                        body,
-                        ..
-                    }) => {
+                    NamespaceItem::UserDefined(
+                        functions::UserDefinedFunction { body, .. },
+                    ) => {
                         self.call_stack.push(body.start);
                         FunctionState::Done
                     }

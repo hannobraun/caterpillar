@@ -51,20 +51,23 @@ impl<C> Namespace<C> {
         }
     }
 
-    pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError> {
+    pub fn resolve(
+        &self,
+        name: &str,
+    ) -> Result<NamespaceItem<C>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
                 NativeFunction::Intrinsic(function) => {
-                    Function::Intrinsic(function)
+                    NamespaceItem::Intrinsic(function)
                 }
                 NativeFunction::Platform(function) => {
-                    Function::Platform(function)
+                    NamespaceItem::Platform(function)
                 }
             });
         let user_defined_function = self
             .user_defined_functions
             .get(name)
-            .map(|user_defined| Function::UserDefined(user_defined));
+            .map(|user_defined| NamespaceItem::UserDefined(user_defined));
 
         native_function
             .or(user_defined_function)
@@ -117,7 +120,7 @@ impl<C> Default for Namespace<C> {
 }
 
 #[derive(Clone, Debug)]
-pub enum Function<'r, C> {
+pub enum NamespaceItem<'r, C> {
     Intrinsic(&'r IntrinsicFunction),
     Platform(&'r PlatformFunction<C>),
     UserDefined(&'r UserDefinedFunction),
