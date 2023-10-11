@@ -72,8 +72,9 @@ impl<C> Evaluator<C> {
             }
             FragmentPayload::Word(word) => {
                 let function_state = match self.namespace.resolve(word)? {
-                    NamespaceItem::Binding(_value) => {
-                        todo!("Evaluating bindings is not supported yet.");
+                    NamespaceItem::Binding(value) => {
+                        self.data_stack.push(value);
+                        FunctionState::Done
                     }
                     NamespaceItem::IntrinsicFunction(f) => {
                         f(self.runtime_context())?;
