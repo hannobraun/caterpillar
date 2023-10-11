@@ -16,7 +16,7 @@ pub type PlatformFunction<C> =
     fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
 
 pub struct RuntimeContext<'r> {
-    pub functions: UserDefined<'r>,
+    pub namespace: UserDefined<'r>,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
 }
