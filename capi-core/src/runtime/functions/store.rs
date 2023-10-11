@@ -52,7 +52,7 @@ impl<C> Namespace<C> {
     }
 
     pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError> {
-        let native =
+        let native_function =
             self.native_functions.get(name).map(|native| match native {
                 NativeFunction::Intrinsic(function) => {
                     Function::Intrinsic(function)
@@ -66,7 +66,7 @@ impl<C> Namespace<C> {
             .get(name)
             .map(|user_defined| Function::UserDefined(user_defined));
 
-        native
+        native_function
             .or(user_defined)
             .ok_or(ResolveError { name: name.into() })
     }
