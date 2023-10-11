@@ -21,7 +21,7 @@ impl UserDefined<'_> {
         self.inner.insert(name.value, function);
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &UserDefinedFunction> {
+    pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
         self.inner.values()
     }
 }
