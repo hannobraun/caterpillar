@@ -10,8 +10,7 @@ use crate::{
 };
 
 use super::{
-    IntrinsicFunction, NativeFunction, UserDefinedFunction,
-    UserDefinedFunctions,
+    IntrinsicFunction, NativeFunction, UserDefined, UserDefinedFunction,
 };
 
 #[derive(Debug)]
@@ -45,8 +44,8 @@ impl<C> Namespace<C> {
         }
     }
 
-    pub fn user_defined_functions(&mut self) -> UserDefinedFunctions {
-        UserDefinedFunctions {
+    pub fn user_defined_functions(&mut self) -> UserDefined {
+        UserDefined {
             inner: &mut self.user_defined_functions,
         }
     }

@@ -2,11 +2,11 @@ use std::collections::BTreeMap;
 
 use crate::{repr::eval::fragments::FragmentId, value};
 
-pub struct UserDefinedFunctions<'r> {
+pub struct UserDefined<'r> {
     pub inner: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
-impl UserDefinedFunctions<'_> {
+impl UserDefined<'_> {
     pub fn define(
         &mut self,
         name: FunctionName,

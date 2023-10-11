@@ -8,5 +8,5 @@ pub use self::{
         FunctionState, IntrinsicFunction, NativeFunction, PlatformFunction,
         RuntimeContext,
     },
-    user_defined::{FunctionName, UserDefinedFunction, UserDefinedFunctions},
+    user_defined::{FunctionName, UserDefined, UserDefinedFunction},
 };
