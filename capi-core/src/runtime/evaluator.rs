@@ -74,7 +74,7 @@ impl<C> Evaluator<C> {
                         f(self.runtime_context())?;
                         FunctionState::Done
                     }
-                    NamespaceItem::Platform(f) => {
+                    NamespaceItem::PlatformFunction(f) => {
                         f(self.runtime_context(), platform_context)?
                     }
                     NamespaceItem::UserDefined(
