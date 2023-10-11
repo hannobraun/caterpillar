@@ -9,6 +9,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
         (add, "+"),
         (and, "and"),
+        (bind, "bind"),
         (clone, "clone"),
         (drop, "drop"),
         (each, "each"),
@@ -41,6 +42,18 @@ fn and(context: RuntimeContext) -> DataStackResult<()> {
     let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
     context.data_stack.push_bare(value::Bool(a.0 && b.0));
+
+    Ok(())
+}
+
+fn bind(mut context: RuntimeContext) -> DataStackResult<()> {
+    let (symbols, _) = context.data_stack.pop_specific::<value::Array>()?;
+
+    for symbol in symbols.0.into_iter().rev() {
+        let symbol = symbol.expect::<value::Symbol>()?;
+        let value = context.data_stack.pop_any()?;
+        context.namespace.define_binding(symbol.0, value);
+    }
 
     Ok(())
 }
