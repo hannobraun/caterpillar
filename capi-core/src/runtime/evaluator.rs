@@ -105,7 +105,7 @@ impl<C> Evaluator<C> {
 
     fn runtime_context(&mut self) -> RuntimeContext {
         RuntimeContext {
-            namespace: self.namespace.user_defined_functions(),
+            namespace: self.namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
         }

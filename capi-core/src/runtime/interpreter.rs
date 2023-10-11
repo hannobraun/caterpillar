@@ -71,8 +71,7 @@ impl Interpreter<()> {
 
         while !self.step(&mut ())?.finished() {}
 
-        for function in self.evaluator.namespace.user_defined_functions().iter()
-        {
+        for function in self.evaluator.namespace.user_defined().iter() {
             let mut evaluator = Evaluator::default();
             evaluator.call_stack.push(function.body.start);
 
