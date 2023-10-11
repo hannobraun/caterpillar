@@ -124,6 +124,7 @@ impl<C> Default for Namespace<C> {
 
 #[derive(Clone, Debug)]
 pub enum NamespaceItem<'r, C> {
+    Binding(Value),
     IntrinsicFunction(&'r IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
     UserDefinedFunction(&'r UserDefinedFunction),
