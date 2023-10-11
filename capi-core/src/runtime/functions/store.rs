@@ -22,15 +22,15 @@ pub struct Namespace<C> {
 
 impl<C> Namespace<C> {
     pub fn new() -> Self {
-        let mut native = BTreeMap::new();
+        let mut native_functions = BTreeMap::new();
 
         for (intrinsic, name) in intrinsics::all() {
-            native
+            native_functions
                 .insert(name.to_string(), NativeFunction::Intrinsic(intrinsic));
         }
 
         Self {
-            native_functions: native,
+            native_functions,
             user_defined_functions: BTreeMap::new(),
         }
     }
@@ -52,12 +52,15 @@ impl<C> Namespace<C> {
     }
 
     pub fn resolve(&self, name: &str) -> Result<Function<C>, ResolveError> {
-        let native = self.native_functions.get(name).map(|native| match native {
-            NativeFunction::Intrinsic(function) => {
-                Function::Intrinsic(function)
-            }
-            NativeFunction::Platform(function) => Function::Platform(function),
-        });
+        let native =
+            self.native_functions.get(name).map(|native| match native {
+                NativeFunction::Intrinsic(function) => {
+                    Function::Intrinsic(function)
+                }
+                NativeFunction::Platform(function) => {
+                    Function::Platform(function)
+                }
+            });
         let user_defined = self
             .user_defined_functions
             .get(name)
