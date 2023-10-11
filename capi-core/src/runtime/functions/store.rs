@@ -61,13 +61,13 @@ impl<C> Namespace<C> {
                     Function::Platform(function)
                 }
             });
-        let user_defined = self
+        let user_defined_function = self
             .user_defined_functions
             .get(name)
             .map(|user_defined| Function::UserDefined(user_defined));
 
         native_function
-            .or(user_defined)
+            .or(user_defined_function)
             .ok_or(ResolveError { name: name.into() })
     }
 
