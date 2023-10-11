@@ -38,7 +38,7 @@ impl DataStack {
         &mut self,
     ) -> DataStackResult<(T, Option<FragmentId>)> {
         let value = self.pop_inner(T::NAME)?;
-        let bare = value.payload.expect(T::NAME)?;
+        let bare = value.payload.expect()?;
         Ok((bare, value.fragment))
     }
 
