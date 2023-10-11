@@ -70,7 +70,7 @@ impl<C> Evaluator<C> {
             }
             FragmentPayload::Word(word) => {
                 let function_state = match self.namespace.resolve(word)? {
-                    NamespaceItem::Intrinsic(f) => {
+                    NamespaceItem::IntrinsicFunction(f) => {
                         f(self.runtime_context())?;
                         FunctionState::Done
                     }
