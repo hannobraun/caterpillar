@@ -1,0 +1,1 @@
+"bind" { true false [ :t :f ] bind t } test
