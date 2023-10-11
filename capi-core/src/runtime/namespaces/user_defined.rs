@@ -7,7 +7,7 @@ pub struct UserDefined<'r> {
 }
 
 impl UserDefined<'_> {
-    pub fn define(
+    pub fn define_function(
         &mut self,
         name: FunctionName,
         body: value::Block,
