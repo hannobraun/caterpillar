@@ -17,7 +17,7 @@ use super::{
 #[derive(Debug)]
 pub struct Namespace<C> {
     native_functions: BTreeMap<String, NativeFunction<C>>,
-    user_defined: BTreeMap<String, UserDefinedFunction>,
+    user_defined_functions: BTreeMap<String, UserDefinedFunction>,
 }
 
 impl<C> Namespace<C> {
@@ -31,7 +31,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions: native,
-            user_defined: BTreeMap::new(),
+            user_defined_functions: BTreeMap::new(),
         }
     }
 
@@ -47,7 +47,7 @@ impl<C> Namespace<C> {
 
     pub fn user_defined(&mut self) -> UserDefinedFunctions {
         UserDefinedFunctions {
-            inner: &mut self.user_defined,
+            inner: &mut self.user_defined_functions,
         }
     }
 
@@ -59,7 +59,7 @@ impl<C> Namespace<C> {
             NativeFunction::Platform(function) => Function::Platform(function),
         });
         let user_defined = self
-            .user_defined
+            .user_defined_functions
             .get(name)
             .map(|user_defined| Function::UserDefined(user_defined));
 
@@ -77,7 +77,7 @@ impl<C> Namespace<C> {
         let mut renames = Vec::new();
 
         for (old_name, UserDefinedFunction { name, body, .. }) in
-            self.user_defined.iter_mut()
+            self.user_defined_functions.iter_mut()
         {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
@@ -101,8 +101,8 @@ impl<C> Namespace<C> {
         }
 
         for (old, new) in renames {
-            let function = self.user_defined.remove(&old).unwrap();
-            self.user_defined.insert(new, function);
+            let function = self.user_defined_functions.remove(&old).unwrap();
+            self.user_defined_functions.insert(new, function);
         }
     }
 }
