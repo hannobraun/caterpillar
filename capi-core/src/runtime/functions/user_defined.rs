@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::{repr::eval::fragments::FragmentId, value};
 
 pub struct UserDefinedFunctions<'r> {
-    pub(super) inner: &'r mut BTreeMap<String, UserDefinedFunction>,
+    pub inner: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
 impl UserDefinedFunctions<'_> {
