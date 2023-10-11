@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::{repr::eval::fragments::FragmentId, value};
 
 pub struct UserDefined<'r> {
-    pub inner: &'r mut BTreeMap<String, UserDefinedFunction>,
+    pub functions: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
 impl UserDefined<'_> {
@@ -18,11 +18,11 @@ impl UserDefined<'_> {
             body,
             is_test,
         };
-        self.inner.insert(name.value, function);
+        self.functions.insert(name.value, function);
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
-        self.inner.values()
+        self.functions.values()
     }
 }
 
