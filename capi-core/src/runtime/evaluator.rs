@@ -9,7 +9,9 @@ use crate::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    namespaces::{self, Namespace, NamespaceItem, ResolveError, RuntimeContext},
+    namespaces::{
+        self, Namespace, NamespaceItem, ResolveError, RuntimeContext,
+    },
 };
 
 #[derive(Debug)]

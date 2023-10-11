@@ -8,8 +8,8 @@ pub use self::{
     runtime::{
         data_stack::DataStackResult,
         evaluator::RuntimeState,
-        namespaces::{FunctionState, PlatformFunction, RuntimeContext},
         interpreter::Interpreter,
+        namespaces::{FunctionState, PlatformFunction, RuntimeContext},
     },
 };
 
