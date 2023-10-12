@@ -11,10 +11,11 @@
     {
         [ :y :is_block ] bind
 
-        is_block 0 =
-        { 0 y clear_pixel }
-        { 0 y set_pixel }
-            if
+        0 y
+            is_block 0 =
+            { clear_pixel }
+            { set_pixel }
+                if
     }
         each
 }
