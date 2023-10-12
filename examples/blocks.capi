@@ -1,6 +1,6 @@
 :init
 {
-    # This would be better as:  [ { 0 } 18 times ]
+    # This would be better as:  [ 1 { 0 } 17 times ]
     [ 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
 }
     fn
