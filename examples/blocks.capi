@@ -9,10 +9,10 @@
 {
     clone
     {
-        [ :y :is_block ] bind
+        [ :y :block ] bind
 
         0 y
-            is_block 0 =
+            block 0 =
             { clear_pixel }
             { set_pixel }
                 if
