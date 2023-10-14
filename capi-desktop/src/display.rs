@@ -1,6 +1,6 @@
 use std::cmp;
 
-use crossbeam_channel::{Receiver, RecvError, TryRecvError};
+use crossbeam_channel::{RecvError, TryRecvError};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     dpi::PhysicalSize,
@@ -9,7 +9,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::platform::PixelOp;
+use crate::{platform::PixelOp, thread::JoinHandle, DesktopThread};
 
 /// Start the display
 ///
@@ -24,7 +24,12 @@ use crate::platform::PixelOp;
 ///
 /// This is probably an argument for representing the display as a value within
 /// Caterpillar, which will require some extensions to the value system.
-pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
+pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<JoinHandle> {
+    let DesktopThread {
+        pixel_ops,
+        join_handle,
+    } = desktop_thread;
+
     // Block until the first pixel op is sent.
     let first_pixel_op = match pixel_ops.recv() {
         Ok(pixel_op) => pixel_op,
@@ -33,7 +38,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             // when the application shuts down. If this happens here, then
             // the Caterpillar program never needed the services of this
             // code, and we can just quietly quit.
-            return Ok(());
+            return Ok(join_handle);
         }
     };
 
