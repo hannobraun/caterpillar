@@ -5,13 +5,22 @@ use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::platform::{self, Context, PixelOp};
 
+pub struct DesktopThread {
+    pub pixel_ops: Receiver<PixelOp>,
+    pub join_handle: JoinHandle<anyhow::Result<()>>,
+}
+
 pub fn run(
     code: String,
     updates: Receiver<String>,
-) -> anyhow::Result<(Receiver<PixelOp>, JoinHandle<anyhow::Result<()>>)> {
+) -> anyhow::Result<DesktopThread> {
     let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
     let join_handle = thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
-    Ok((pixel_ops_rx, join_handle))
+
+    Ok(DesktopThread {
+        pixel_ops: pixel_ops_rx,
+        join_handle,
+    })
 }
 
 fn run_inner(
