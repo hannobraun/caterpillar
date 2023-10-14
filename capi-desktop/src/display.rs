@@ -59,18 +59,21 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
         SurfaceTexture::new(surface_width, surface_height, &window);
     let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
+    let desktop_thread = Some(desktop_thread);
     let mut pixel_ops_buffer = vec![first_pixel_op];
 
     event_loop.run(move |event, _, control_flow| {
-        loop {
-            match desktop_thread.pixel_ops.try_recv() {
-                Ok(pixel_op) => pixel_ops_buffer.push(pixel_op),
-                Err(TryRecvError::Empty) => break,
-                Err(TryRecvError::Disconnected) => {
-                    // This happens if the other end is dropped, for example
-                    // when the application is shutting down.
-                    prepare_exit(control_flow);
-                    return;
+        if let Some(desktop_thread) = desktop_thread.as_ref() {
+            loop {
+                match desktop_thread.pixel_ops.try_recv() {
+                    Ok(pixel_op) => pixel_ops_buffer.push(pixel_op),
+                    Err(TryRecvError::Empty) => break,
+                    Err(TryRecvError::Disconnected) => {
+                        // This happens if the other end is dropped, for example
+                        // when the application is shutting down.
+                        prepare_exit(control_flow);
+                        return;
+                    }
                 }
             }
         }
