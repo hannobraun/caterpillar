@@ -11,6 +11,19 @@ use winit::{
 
 use crate::platform::PixelOp;
 
+/// Start the display
+///
+/// This method blocks until the first pixel op is received, then initializes
+/// the display and starts the normal event handling. Once it reaches that point
+/// it will never return.
+///
+/// Unfortunately, due to that weird "block, maybe do nothing, or initialize"
+/// behavior, it's not possible to express this "never return" thing in the
+/// method signature, as the method might return (both `Ok` or `Err`) before
+/// initialization is done.
+///
+/// This is probably an argument for representing the display as a value within
+/// Caterpillar, which will require some extensions to the value system.
 pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
     // Block until the first pixel op is sent.
     let first_pixel_op = match pixel_ops.recv() {
