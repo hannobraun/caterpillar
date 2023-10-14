@@ -7,7 +7,7 @@ use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
     pub pixel_ops: Receiver<PixelOp>,
-    pub join_handle: thread::JoinHandle<anyhow::Result<()>>,
+    join_handle: thread::JoinHandle<anyhow::Result<()>>,
 }
 
 impl DesktopThread {
