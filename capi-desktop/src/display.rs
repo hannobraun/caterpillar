@@ -59,19 +59,19 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
         SurfaceTexture::new(surface_width, surface_height, &window);
     let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    let desktop_thread = Some(desktop_thread);
+    let mut desktop_thread = Some(desktop_thread);
     let mut pixel_ops_buffer = vec![first_pixel_op];
 
     event_loop.run(move |event, _, control_flow| {
-        if let Some(desktop_thread) = desktop_thread.as_ref() {
+        if let Some(DesktopThread { pixel_ops, .. }) = desktop_thread.as_ref() {
             loop {
-                match desktop_thread.pixel_ops.try_recv() {
+                match pixel_ops.try_recv() {
                     Ok(pixel_op) => pixel_ops_buffer.push(pixel_op),
                     Err(TryRecvError::Empty) => break,
                     Err(TryRecvError::Disconnected) => {
                         // This happens if the other end is dropped, for example
                         // when the application is shutting down.
-                        prepare_exit(control_flow);
+                        prepare_exit(&mut desktop_thread, control_flow);
                         return;
                     }
                 }
@@ -107,7 +107,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                prepare_exit(control_flow);
+                prepare_exit(&mut desktop_thread, control_flow);
             }
             Event::WindowEvent {
                 event:
@@ -121,7 +121,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
                     },
                 ..
             } => {
-                prepare_exit(control_flow);
+                prepare_exit(&mut desktop_thread, control_flow);
             }
             Event::MainEventsCleared => {
                 window.request_redraw();
@@ -134,7 +134,18 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
     })
 }
 
-fn prepare_exit(control_flow: &mut ControlFlow) {
+fn prepare_exit(
+    desktop_thread: &mut Option<DesktopThread>,
+    control_flow: &mut ControlFlow,
+) {
+    if let Some(desktop_thread) = desktop_thread.take() {
+        match desktop_thread.join() {
+            Ok(()) => {}
+            Err(err) => {
+                eprintln!("{err:?}");
+            }
+        }
+    }
     control_flow.set_exit();
 }
 
