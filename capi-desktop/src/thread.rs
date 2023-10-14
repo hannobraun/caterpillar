@@ -1,4 +1,4 @@
-use std::thread::{self, JoinHandle};
+use std::thread;
 
 use capi_core::{Interpreter, PlatformFunction, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
@@ -7,7 +7,7 @@ use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
     pub pixel_ops: Receiver<PixelOp>,
-    pub join_handle: JoinHandle<anyhow::Result<()>>,
+    pub join_handle: JoinHandle,
 }
 
 impl DesktopThread {
@@ -21,8 +21,17 @@ impl DesktopThread {
 
         Ok(Self {
             pixel_ops: pixel_ops_rx,
-            join_handle,
+            join_handle: JoinHandle(join_handle),
         })
+    }
+}
+
+#[must_use]
+pub struct JoinHandle(thread::JoinHandle<anyhow::Result<()>>);
+
+impl JoinHandle {
+    pub fn join(self) -> thread::Result<anyhow::Result<()>> {
+        self.0.join()
     }
 }
 
