@@ -120,7 +120,7 @@ impl Type for Symbol {
 }
 
 impl Type for Text {
-    const NAME: &'static str = "test";
+    const NAME: &'static str = "text";
 }
 
 #[derive(Debug, thiserror::Error)]
