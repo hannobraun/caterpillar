@@ -25,20 +25,15 @@ use crate::{platform::PixelOp, thread::JoinHandle, DesktopThread};
 /// This is probably an argument for representing the display as a value within
 /// Caterpillar, which will require some extensions to the value system.
 pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<JoinHandle> {
-    let DesktopThread {
-        pixel_ops,
-        join_handle,
-    } = desktop_thread;
-
     // Block until the first pixel op is sent.
-    let first_pixel_op = match pixel_ops.recv() {
+    let first_pixel_op = match desktop_thread.pixel_ops.recv() {
         Ok(pixel_op) => pixel_op,
         Err(RecvError) => {
             // This happens if the other end is disconnected, for example
             // when the application shuts down. If this happens here, then
             // the Caterpillar program never needed the services of this
             // code, and we can just quietly quit.
-            return Ok(join_handle);
+            return Ok(desktop_thread.join_handle);
         }
     };
 
@@ -67,7 +62,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<JoinHandle> {
 
     event_loop.run(move |event, _, control_flow| {
         loop {
-            match pixel_ops.try_recv() {
+            match desktop_thread.pixel_ops.try_recv() {
                 Ok(pixel_op) => pixel_ops_buffer.push(pixel_op),
                 Err(TryRecvError::Empty) => break,
                 Err(TryRecvError::Disconnected) => {
