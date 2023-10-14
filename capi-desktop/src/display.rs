@@ -63,6 +63,12 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
     let mut pixel_ops_buffer = vec![first_pixel_op];
 
     event_loop.run(move |event, _, control_flow| {
+        // `desktop_threads` should always be `Some(...)`, unless we've called
+        // `prepare_exit` in a previous loop iteration. I don't know if this can
+        // ever happen, and that's going to depend on winit internals.
+        //
+        // In any case, *if* it can happen, we're already about to exit, so it
+        // doesn't matter if we don't receive any more pixel operations.
         if let Some(DesktopThread { pixel_ops, .. }) = desktop_thread.as_ref() {
             loop {
                 match pixel_ops.try_recv() {
