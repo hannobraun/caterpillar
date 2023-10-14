@@ -5,7 +5,7 @@ use pixels::{Pixels, SurfaceTexture};
 use winit::{
     dpi::PhysicalSize,
     event::{Event, KeyboardInput, VirtualKeyCode, WindowEvent},
-    event_loop::EventLoop,
+    event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
 
@@ -55,7 +55,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
                 Err(TryRecvError::Disconnected) => {
                     // This happens if the other end is dropped, for example
                     // when the application is shutting down.
-                    control_flow.set_exit();
+                    prepare_exit(control_flow);
                     return;
                 }
             }
@@ -90,7 +90,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                control_flow.set_exit();
+                prepare_exit(control_flow);
             }
             Event::WindowEvent {
                 event:
@@ -104,7 +104,7 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
                     },
                 ..
             } => {
-                control_flow.set_exit();
+                prepare_exit(control_flow);
             }
             Event::MainEventsCleared => {
                 window.request_redraw();
@@ -115,6 +115,10 @@ pub fn start(pixel_ops: Receiver<PixelOp>) -> anyhow::Result<()> {
             _ => {}
         }
     })
+}
+
+fn prepare_exit(control_flow: &mut ControlFlow) {
+    control_flow.set_exit();
 }
 
 const WIDTH: u32 = 10;
