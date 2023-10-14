@@ -144,6 +144,16 @@ fn prepare_exit(
     desktop_thread: &mut Option<DesktopThread>,
     control_flow: &mut ControlFlow,
 ) {
+    // In principle, this function should just receive a `DesktopThread`, but
+    // all its call sites are in the event handling closure, and it's not
+    // possible to move out of a variable there. (Because it's not an `FnOnce`,
+    // and hence the type system can't know it won't be called again.)
+    //
+    // This also means this function can get called multiple times, and only the
+    // first call will join the `DesktopThread`. This might or might not ever
+    // happen, depending on the implementation details of winit, and it doesn't
+    // matter anyway. The first call will take care of the `DesktopThread`, and
+    // any subsequent calls are just idempotent.
     if let Some(desktop_thread) = desktop_thread.take() {
         match desktop_thread.join() {
             Ok(()) => {}
