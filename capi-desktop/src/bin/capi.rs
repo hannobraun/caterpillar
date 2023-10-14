@@ -7,8 +7,7 @@ fn main() -> anyhow::Result<()> {
     let code = capi_desktop::loader::load::load(&args.script)?;
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
-    let desktop_thread =
-        capi_desktop::thread::DesktopThread::run(code, updates)?;
+    let desktop_thread = capi_desktop::DesktopThread::run(code, updates)?;
     capi_desktop::display::start(desktop_thread.pixel_ops)?;
 
     // If we reach this point, then the main thread returned from the graphics
