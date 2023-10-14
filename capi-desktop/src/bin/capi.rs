@@ -8,11 +8,11 @@ fn main() -> anyhow::Result<()> {
     let (updates, _watcher) = capi_desktop::loader::watch::watch(&args.script)?;
 
     let desktop_thread = capi_desktop::DesktopThread::run(code, updates)?;
-    let join_handle = capi_desktop::display::start(desktop_thread)?;
+    let desktop_thread = capi_desktop::display::start(desktop_thread)?;
 
     // If we reach this point, then the main thread returned from the graphics
     // subsystem. This must mean the Caterpillar thread ended.
-    match join_handle.join() {
+    match desktop_thread.join_handle.join() {
         Ok(result) => {
             // The result that the thread returned, which is possibly an error.
             result?

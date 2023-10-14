@@ -9,7 +9,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::{platform::PixelOp, thread::JoinHandle, DesktopThread};
+use crate::{platform::PixelOp, DesktopThread};
 
 /// Start the display
 ///
@@ -24,7 +24,7 @@ use crate::{platform::PixelOp, thread::JoinHandle, DesktopThread};
 ///
 /// This is probably an argument for representing the display as a value within
 /// Caterpillar, which will require some extensions to the value system.
-pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<JoinHandle> {
+pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<DesktopThread> {
     // Block until the first pixel op is sent.
     let first_pixel_op = match desktop_thread.pixel_ops.recv() {
         Ok(pixel_op) => pixel_op,
@@ -33,7 +33,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<JoinHandle> {
             // when the application shuts down. If this happens here, then
             // the Caterpillar program never needed the services of this
             // code, and we can just quietly quit.
-            return Ok(desktop_thread.join_handle);
+            return Ok(desktop_thread);
         }
     };
 
