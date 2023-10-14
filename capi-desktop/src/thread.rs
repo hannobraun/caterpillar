@@ -24,6 +24,22 @@ impl DesktopThread {
             join_handle: JoinHandle(join_handle),
         })
     }
+
+    pub fn join(self) -> anyhow::Result<()> {
+        match self.join_handle.join() {
+            Ok(result) => {
+                // The result that the thread returned, which is possibly an
+                // error.
+                result?
+            }
+            Err(err) => {
+                // The thread panicked! Let's make sure this bubbles up to the user.
+                std::panic::resume_unwind(err)
+            }
+        }
+
+        Ok(())
+    }
 }
 
 #[must_use]
