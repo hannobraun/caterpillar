@@ -7,7 +7,7 @@ use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
     pub pixel_ops: Receiver<PixelOp>,
-    pub join_handle: JoinHandle,
+    pub join_handle: thread::JoinHandle<anyhow::Result<()>>,
 }
 
 impl DesktopThread {
@@ -21,7 +21,7 @@ impl DesktopThread {
 
         Ok(Self {
             pixel_ops: pixel_ops_rx,
-            join_handle: JoinHandle(join_handle),
+            join_handle,
         })
     }
 
@@ -39,15 +39,6 @@ impl DesktopThread {
         }
 
         Ok(())
-    }
-}
-
-#[must_use]
-pub struct JoinHandle(thread::JoinHandle<anyhow::Result<()>>);
-
-impl JoinHandle {
-    pub fn join(self) -> thread::Result<anyhow::Result<()>> {
-        self.0.join()
     }
 }
 
