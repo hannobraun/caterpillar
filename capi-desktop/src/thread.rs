@@ -10,17 +10,20 @@ pub struct DesktopThread {
     pub join_handle: JoinHandle<anyhow::Result<()>>,
 }
 
-pub fn run(
-    code: String,
-    updates: Receiver<String>,
-) -> anyhow::Result<DesktopThread> {
-    let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
-    let join_handle = thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
+impl DesktopThread {
+    pub fn run(
+        code: String,
+        updates: Receiver<String>,
+    ) -> anyhow::Result<DesktopThread> {
+        let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
+        let join_handle =
+            thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
 
-    Ok(DesktopThread {
-        pixel_ops: pixel_ops_rx,
-        join_handle,
-    })
+        Ok(DesktopThread {
+            pixel_ops: pixel_ops_rx,
+            join_handle,
+        })
+    }
 }
 
 fn run_inner(
