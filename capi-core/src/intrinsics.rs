@@ -21,6 +21,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (nop, "nop"),
         (not, "not"),
         (over, "over"),
+        (set, "set"),
         (swap, "swap"),
         (test, "test"),
         (true_, "true"),
@@ -188,6 +189,18 @@ fn over(context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push(target.clone());
     context.data_stack.push(top);
     context.data_stack.push(target);
+
+    Ok(())
+}
+
+fn set(context: RuntimeContext) -> DataStackResult<()> {
+    let (mut array, _) = context.data_stack.pop_specific::<value::Array>()?;
+    let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let value = context.data_stack.pop_any()?;
+
+    array.0[index.0 as usize] = value.payload;
+
+    context.data_stack.push_bare(array);
 
     Ok(())
 }
