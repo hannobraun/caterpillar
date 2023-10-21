@@ -6,7 +6,7 @@ use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
-    pub lifeline: Sender<()>,
+    lifeline: Sender<()>,
     pub pixel_ops: Receiver<PixelOp>,
     join_handle: JoinHandle,
 }
