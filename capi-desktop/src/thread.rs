@@ -39,7 +39,7 @@ impl DesktopThread {
             }
             Err(err) => {
                 // The thread panicked! Let's make sure this bubbles up to the
-                // user.
+                // caller.
                 std::panic::resume_unwind(err)
             }
         }
