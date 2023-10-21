@@ -6,6 +6,7 @@ use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
+    pub lifeline: Sender<()>,
     pub pixel_ops: Receiver<PixelOp>,
     join_handle: thread::JoinHandle<anyhow::Result<()>>,
 }
@@ -15,11 +16,15 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
+        let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
-        let join_handle =
-            thread::spawn(|| run_inner(code, updates, pixel_ops_tx));
+
+        let join_handle = thread::spawn(|| {
+            run_inner(code, updates, lifeline_rx, pixel_ops_tx)
+        });
 
         Ok(Self {
+            lifeline: lifeline_tx,
             pixel_ops: pixel_ops_rx,
             join_handle,
         })
@@ -46,6 +51,7 @@ impl DesktopThread {
 fn run_inner(
     code: String,
     updates: Receiver<String>,
+    lifeline: Receiver<()>,
     pixel_ops: Sender<PixelOp>,
 ) -> anyhow::Result<()> {
     let mut interpreter = Interpreter::new(&code)?;
@@ -64,6 +70,12 @@ fn run_inner(
     ]);
 
     loop {
+        if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
+            // If the other end of the lifeline got dropped, that means we're
+            // supposed to stop.
+            break;
+        }
+
         let runtime_state = interpreter.step(&mut context)?;
 
         let new_code = match runtime_state {
