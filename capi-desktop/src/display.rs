@@ -155,11 +155,8 @@ fn prepare_exit(
     // matter anyway. The first call will take care of the `DesktopThread`, and
     // any subsequent calls are just idempotent.
     if let Some(desktop_thread) = desktop_thread.take() {
-        match desktop_thread.join() {
-            Ok(()) => {}
-            Err(err) => {
-                eprintln!("{err:?}");
-            }
+        if let Err(err) = desktop_thread.join() {
+            eprintln!("{err:?}");
         }
     }
     control_flow.set_exit();
