@@ -31,18 +31,7 @@ impl DesktopThread {
     }
 
     pub fn join(self) -> anyhow::Result<()> {
-        match self.join_handle.join() {
-            Ok(result) => {
-                // The result that the thread returned, which is possibly an
-                // error.
-                result
-            }
-            Err(err) => {
-                // The thread panicked! Let's make sure this bubbles up to the
-                // caller.
-                std::panic::resume_unwind(err)
-            }
-        }
+        join_inner(self.join_handle)
     }
 }
 
@@ -109,4 +98,19 @@ fn run_inner(
     }
 
     Ok(())
+}
+
+fn join_inner(join_handle: JoinHandle) -> anyhow::Result<()> {
+    match join_handle.join() {
+        Ok(result) => {
+            // The result that the thread returned, which is possibly an
+            // error.
+            result
+        }
+        Err(err) => {
+            // The thread panicked! Let's make sure this bubbles up to the
+            // caller.
+            std::panic::resume_unwind(err)
+        }
+    }
 }
