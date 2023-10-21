@@ -8,7 +8,7 @@ use crate::platform::{self, Context, PixelOp};
 pub struct DesktopThread {
     pub lifeline: Sender<()>,
     pub pixel_ops: Receiver<PixelOp>,
-    join_handle: thread::JoinHandle<anyhow::Result<()>>,
+    join_handle: JoinHandle,
 }
 
 impl DesktopThread {
@@ -45,6 +45,8 @@ impl DesktopThread {
         }
     }
 }
+
+type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
 
 fn run_inner(
     code: String,
