@@ -6,8 +6,8 @@ use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 use crate::platform::{self, Context, PixelOp};
 
 pub struct DesktopThread {
-    lifeline: Sender<()>,
     pub pixel_ops: Receiver<PixelOp>,
+    lifeline: Sender<()>,
     join_handle: JoinHandle,
 }
 
@@ -16,16 +16,16 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
-        let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
+        let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
 
         let join_handle = thread::spawn(|| {
             run_inner(code, updates, lifeline_rx, pixel_ops_tx)
         });
 
         Ok(Self {
-            lifeline: lifeline_tx,
             pixel_ops: pixel_ops_rx,
+            lifeline: lifeline_tx,
             join_handle,
         })
     }
