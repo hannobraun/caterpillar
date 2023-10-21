@@ -33,6 +33,13 @@ impl DesktopThread {
     pub fn join(self) -> anyhow::Result<()> {
         join_inner(self.join_handle)
     }
+
+    pub fn quit(self) -> anyhow::Result<()> {
+        // This will signal the thread that it should stop.
+        drop(self.lifeline);
+
+        join_inner(self.join_handle)
+    }
 }
 
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;

@@ -155,7 +155,7 @@ fn prepare_exit(
     // matter anyway. The first call will take care of the `DesktopThread`, and
     // any subsequent calls are just idempotent.
     if let Some(desktop_thread) = desktop_thread.take() {
-        if let Err(err) = desktop_thread.join() {
+        if let Err(err) = desktop_thread.quit() {
             eprintln!("{err:?}");
         }
     }
