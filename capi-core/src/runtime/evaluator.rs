@@ -150,6 +150,7 @@ impl RuntimeState {
 #[derive(Debug, thiserror::Error)]
 #[error(transparent)]
 pub struct EvaluatorError {
+    #[from]
     pub kind: EvaluatorErrorKind,
 }
 
