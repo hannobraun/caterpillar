@@ -26,7 +26,7 @@ impl<C> Evaluator<C> {
         &mut self,
         fragments: &Fragments,
         platform_context: &mut C,
-    ) -> Result<RuntimeState, EvaluatorErrorKind> {
+    ) -> Result<RuntimeState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
             None => return Ok(RuntimeState::Finished),
@@ -71,17 +71,25 @@ impl<C> Evaluator<C> {
                 RuntimeState::Running
             }
             FragmentPayload::Word(word) => {
-                let function_state = match self.namespace.resolve(word)? {
+                let function_state = match self
+                    .namespace
+                    .resolve(word)
+                    .map_err(|err| EvaluatorError { kind: err.into() })?
+                {
                     NamespaceItem::Binding(value) => {
                         self.data_stack.push(value);
                         FunctionState::Done
                     }
                     NamespaceItem::IntrinsicFunction(f) => {
-                        f(self.runtime_context())?;
+                        f(self.runtime_context()).map_err(|err| {
+                            EvaluatorError { kind: err.into() }
+                        })?;
                         FunctionState::Done
                     }
                     NamespaceItem::PlatformFunction(f) => {
-                        f(self.runtime_context(), platform_context)?
+                        f(self.runtime_context(), platform_context).map_err(
+                            |err| EvaluatorError { kind: err.into() },
+                        )?
                     }
                     NamespaceItem::UserDefinedFunction(
                         namespaces::UserDefinedFunction { body, .. },
@@ -137,6 +145,12 @@ impl RuntimeState {
     pub fn finished(&self) -> bool {
         matches!(self, Self::Finished)
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+#[error(transparent)]
+pub struct EvaluatorError {
+    pub kind: EvaluatorErrorKind,
 }
 
 #[derive(Debug, thiserror::Error)]

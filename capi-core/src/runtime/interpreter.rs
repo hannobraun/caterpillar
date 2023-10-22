@@ -4,7 +4,7 @@ use crate::{
     PlatformFunction,
 };
 
-use super::evaluator::{Evaluator, EvaluatorErrorKind, RuntimeState};
+use super::evaluator::{Evaluator, EvaluatorError, RuntimeState};
 
 #[derive(Debug)]
 pub struct Interpreter<C> {
@@ -38,7 +38,7 @@ impl<C> Interpreter<C> {
     pub fn step(
         &mut self,
         platform_context: &mut C,
-    ) -> Result<RuntimeState, EvaluatorErrorKind> {
+    ) -> Result<RuntimeState, EvaluatorError> {
         self.state = self.evaluator.step(&self.fragments, platform_context)?;
         Ok(self.state)
     }
@@ -97,7 +97,7 @@ mod tests {
     use std::collections::HashMap;
 
     use crate::{
-        pipeline::PipelineError, runtime::evaluator::EvaluatorErrorKind, value,
+        pipeline::PipelineError, runtime::evaluator::EvaluatorError, value,
         DataStackResult, FunctionState, PlatformFunction, RuntimeContext,
     };
 
@@ -258,7 +258,7 @@ mod tests {
         pub fn wait_for_ping_on_channel(
             &mut self,
             channel: i64,
-        ) -> Result<(), EvaluatorErrorKind> {
+        ) -> Result<(), EvaluatorError> {
             self.platform_context.channels.clear();
 
             let mut num_steps = 0;
