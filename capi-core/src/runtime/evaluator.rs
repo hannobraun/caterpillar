@@ -26,7 +26,7 @@ impl<C> Evaluator<C> {
         &mut self,
         fragments: &Fragments,
         platform_context: &mut C,
-    ) -> Result<RuntimeState, EvaluatorError> {
+    ) -> Result<RuntimeState, EvaluatorErrorKind> {
         let (fragment_id, fragment) = match self.call_stack.current() {
             Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
             None => return Ok(RuntimeState::Finished),
@@ -140,7 +140,7 @@ impl RuntimeState {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum EvaluatorError {
+pub enum EvaluatorErrorKind {
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
 
