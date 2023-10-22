@@ -1,6 +1,6 @@
 use crate::{
     repr::eval::{
-        fragments::{FragmentPayload, Fragments},
+        fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
     },
     FunctionState,
@@ -71,33 +71,40 @@ impl<C> Evaluator<C> {
                 RuntimeState::Running
             }
             FragmentPayload::Word(word) => {
-                let function_state = match self
-                    .namespace
-                    .resolve(word)
-                    .map_err(|err| EvaluatorError { kind: err.into() })?
-                {
-                    NamespaceItem::Binding(value) => {
-                        self.data_stack.push(value);
-                        FunctionState::Done
-                    }
-                    NamespaceItem::IntrinsicFunction(f) => {
-                        f(self.runtime_context()).map_err(|err| {
-                            EvaluatorError { kind: err.into() }
-                        })?;
-                        FunctionState::Done
-                    }
-                    NamespaceItem::PlatformFunction(f) => {
-                        f(self.runtime_context(), platform_context).map_err(
-                            |err| EvaluatorError { kind: err.into() },
-                        )?
-                    }
-                    NamespaceItem::UserDefinedFunction(
-                        namespaces::UserDefinedFunction { body, .. },
-                    ) => {
-                        self.call_stack.push(body.start);
-                        FunctionState::Done
-                    }
-                };
+                let function_state =
+                    match self.namespace.resolve(word).map_err(|err| {
+                        EvaluatorError {
+                            kind: err.into(),
+                            fragment: fragment_id,
+                        }
+                    })? {
+                        NamespaceItem::Binding(value) => {
+                            self.data_stack.push(value);
+                            FunctionState::Done
+                        }
+                        NamespaceItem::IntrinsicFunction(f) => {
+                            f(self.runtime_context()).map_err(|err| {
+                                EvaluatorError {
+                                    kind: err.into(),
+                                    fragment: fragment_id,
+                                }
+                            })?;
+                            FunctionState::Done
+                        }
+                        NamespaceItem::PlatformFunction(f) => {
+                            f(self.runtime_context(), platform_context)
+                                .map_err(|err| EvaluatorError {
+                                    kind: err.into(),
+                                    fragment: fragment_id,
+                                })?
+                        }
+                        NamespaceItem::UserDefinedFunction(
+                            namespaces::UserDefinedFunction { body, .. },
+                        ) => {
+                            self.call_stack.push(body.start);
+                            FunctionState::Done
+                        }
+                    };
 
                 match function_state {
                     FunctionState::Done => RuntimeState::Running,
@@ -152,6 +159,7 @@ impl RuntimeState {
 pub struct EvaluatorError {
     #[source]
     pub kind: EvaluatorErrorKind,
+    pub fragment: FragmentId,
 }
 
 #[derive(Debug, thiserror::Error)]
