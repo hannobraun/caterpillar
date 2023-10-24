@@ -4,8 +4,9 @@ use crossbeam_channel::{RecvError, TryRecvError};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     dpi::PhysicalSize,
-    event::{Event, KeyboardInput, VirtualKeyCode, WindowEvent},
-    event_loop::{ControlFlow, EventLoop},
+    event::{Event, KeyEvent, WindowEvent},
+    event_loop::{EventLoop, EventLoopWindowTarget},
+    keyboard::{Key, NamedKey},
     window::WindowBuilder,
 };
 
@@ -48,7 +49,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
     let surface_width = buffer_to_surface(WIDTH);
     let surface_height = buffer_to_surface(HEIGHT);
 
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
         .with_title("Caterpillar")
         .with_inner_size(PhysicalSize::new(surface_width, surface_height))
@@ -62,7 +63,7 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
     let mut desktop_thread = Some(desktop_thread);
     let mut pixel_ops_buffer = vec![first_pixel_op];
 
-    event_loop.run(move |event, _, control_flow| {
+    event_loop.run(move |event, event_loop_window_target| {
         // `desktop_threads` should always be `Some(...)`, unless we've called
         // `prepare_exit` in a previous loop iteration. I don't know if this can
         // ever happen, and that's going to depend on winit internals.
@@ -77,7 +78,10 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
                     Err(TryRecvError::Disconnected) => {
                         // This happens if the other end is dropped, for example
                         // when the application is shutting down.
-                        prepare_exit(&mut desktop_thread, control_flow);
+                        prepare_exit(
+                            &mut desktop_thread,
+                            event_loop_window_target,
+                        );
                         return;
                     }
                 }
@@ -113,36 +117,39 @@ pub fn start(desktop_thread: DesktopThread) -> anyhow::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                prepare_exit(&mut desktop_thread, control_flow);
+                prepare_exit(&mut desktop_thread, event_loop_window_target);
             }
             Event::WindowEvent {
                 event:
                     WindowEvent::KeyboardInput {
-                        input:
-                            KeyboardInput {
-                                virtual_keycode: Some(VirtualKeyCode::Escape),
+                        event:
+                            KeyEvent {
+                                logical_key: Key::Named(NamedKey::Escape),
                                 ..
                             },
                         ..
                     },
                 ..
             } => {
-                prepare_exit(&mut desktop_thread, control_flow);
+                prepare_exit(&mut desktop_thread, event_loop_window_target);
             }
-            Event::MainEventsCleared => {
-                window.request_redraw();
-            }
-            Event::RedrawRequested(_) => {
+            Event::WindowEvent {
+                event: WindowEvent::RedrawRequested,
+                ..
+            } => {
                 pixels.render().unwrap();
+                window.request_redraw();
             }
             _ => {}
         }
-    })
+    })?;
+
+    Ok(())
 }
 
 fn prepare_exit(
     desktop_thread: &mut Option<DesktopThread>,
-    control_flow: &mut ControlFlow,
+    event_loop_window_target: &EventLoopWindowTarget<()>,
 ) {
     // In principle, this function should just receive a `DesktopThread`, but
     // all its call sites are in the event handling closure, and it's not
@@ -160,7 +167,7 @@ fn prepare_exit(
         }
     }
 
-    control_flow.set_exit();
+    event_loop_window_target.exit();
 }
 
 const WIDTH: u32 = 10;
