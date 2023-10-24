@@ -159,6 +159,7 @@ fn prepare_exit(
             eprintln!("{err:?}");
         }
     }
+
     control_flow.set_exit();
 }
 
