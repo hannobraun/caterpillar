@@ -11,9 +11,6 @@ notify = "*"
 notify-debouncer-mini = "*"
 pixels = "*"
 tracing = "*"
-# `winit` 0.29 uses `raw-window-handle` 0.6, which `pixels` is still on 0.5.
-# Once a version of `pixels` is available that supports 0.6, the version here
-# can be replaced with `*` again.
 winit = "<0.29.0"
 
 [dependencies.capi-core]
