@@ -194,9 +194,9 @@ fn over(context: RuntimeContext) -> DataStackResult<()> {
 }
 
 fn set(context: RuntimeContext) -> DataStackResult<()> {
-    let (mut array, _) = context.data_stack.pop_specific::<value::Array>()?;
-    let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
     let value = context.data_stack.pop_any()?;
+    let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let (mut array, _) = context.data_stack.pop_specific::<value::Array>()?;
 
     array.0[index.0 as usize] = value.payload;
 
