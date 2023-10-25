@@ -155,7 +155,7 @@ impl RuntimeState {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Evaluator error at {}", .fragment.display_short())]
+#[error("Evaluator error at `{}`", .fragment.display_short())]
 pub struct EvaluatorError {
     #[source]
     pub kind: EvaluatorErrorKind,
