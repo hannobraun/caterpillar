@@ -1,6 +1,6 @@
 use std::thread;
 
-use capi_core::{Interpreter, PlatformFunction, RuntimeState};
+use capi_core::{Interpreter, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::platform::{self, Context, PixelOp};
@@ -55,15 +55,7 @@ fn run_inner(
         pixel_ops: platform::Sender { inner: pixel_ops },
     };
 
-    interpreter.register_platform([
-        (
-            "clear_pixel",
-            platform::clear_pixel as PlatformFunction<platform::Context>,
-        ),
-        ("delay_ms", platform::delay_ms),
-        ("set_pixel", platform::set_pixel),
-        ("print", platform::print),
-    ]);
+    platform::register(&mut interpreter);
 
     loop {
         if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {

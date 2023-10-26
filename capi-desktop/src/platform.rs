@@ -1,6 +1,9 @@
 use std::{thread, time::Duration};
 
-use capi_core::{value, DataStackResult, FunctionState, RuntimeContext};
+use capi_core::{
+    value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
+    RuntimeContext,
+};
 
 pub struct Context {
     pub pixel_ops: Sender,
@@ -21,6 +24,15 @@ impl Sender {
 pub enum PixelOp {
     Clear([i64; 2]),
     Set([i64; 2]),
+}
+
+pub fn register(interpreter: &mut Interpreter<Context>) {
+    interpreter.register_platform([
+        ("clear_pixel", clear_pixel as PlatformFunction<Context>),
+        ("delay_ms", delay_ms),
+        ("set_pixel", set_pixel),
+        ("print", print),
+    ]);
 }
 
 pub fn clear_pixel(
