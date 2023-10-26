@@ -35,7 +35,7 @@ pub fn register(interpreter: &mut Interpreter<Context>) {
     ]);
 }
 
-pub fn clear_pixel(
+fn clear_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
 ) -> DataStackResult<FunctionState> {
@@ -47,7 +47,7 @@ pub fn clear_pixel(
     Ok(FunctionState::Done)
 }
 
-pub fn set_pixel(
+fn set_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
 ) -> DataStackResult<FunctionState> {
@@ -59,7 +59,7 @@ pub fn set_pixel(
     Ok(FunctionState::Done)
 }
 
-pub fn delay_ms(
+fn delay_ms(
     runtime_context: RuntimeContext,
     _: &mut Context,
 ) -> DataStackResult<FunctionState> {
@@ -69,7 +69,7 @@ pub fn delay_ms(
     Ok(FunctionState::Done)
 }
 
-pub fn print(
+fn print(
     runtime_context: RuntimeContext,
     _: &mut Context,
 ) -> DataStackResult<FunctionState> {
