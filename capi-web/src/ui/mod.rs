@@ -1,4 +1,5 @@
 use async_channel::{Receiver, Sender};
+use futures::executor::block_on;
 use sycamore::{
     reactive::{create_effect, create_rc_signal, create_signal},
     view,
@@ -22,8 +23,7 @@ pub async fn render(
 
         let code_signal = create_signal(cx, script.clone());
         create_effect(cx, move || {
-            code_channel
-                .send_blocking(code_signal.get().as_ref().clone())
+            block_on(code_channel.send(code_signal.get().as_ref().clone()))
                 .unwrap();
         });
 

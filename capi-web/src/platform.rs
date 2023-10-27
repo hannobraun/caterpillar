@@ -6,6 +6,7 @@ use capi_core::{
     RuntimeContext, RuntimeState,
 };
 use chrono::Local;
+use futures::executor::block_on;
 use gloo_timers::future::sleep;
 use tracing::debug;
 
@@ -97,7 +98,7 @@ pub struct Events {
 
 impl Events {
     pub fn output(&self, message: String) {
-        self.inner.send_blocking(Event::Output(message)).unwrap()
+        block_on(self.inner.send(Event::Output(message))).unwrap()
     }
 
     pub fn status(&self, message: impl Into<String>) {
@@ -106,7 +107,7 @@ impl Events {
             Local::now().format("%Y-%m-%d %H:%M:%S"),
             message.into()
         );
-        self.inner.send_blocking(Event::Status(message)).unwrap()
+        block_on(self.inner.send(Event::Status(message))).unwrap()
     }
 }
 
