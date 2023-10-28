@@ -21,9 +21,27 @@
 }
     fn
 
+:update
+{
+    [ :old_state ] bind
+    [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ] [ :new_state ] bind
+
+    # This doesn't work. `new_state` ends up with only zeros.
+    old_state
+    {
+        [ :i :block ] bind
+        new_state i block set
+    }
+        each
+
+    new_state
+}
+    fn
+
 :loop
 {
     draw
+    #update
     200 delay_ms
     loop
 }
