@@ -77,6 +77,48 @@ fn each(context: RuntimeContext) -> DataStackResult<()> {
     let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
 
+    // Turns out, this doesn't work as intended. What I want this to do is to
+    // execute `block` for each element of the array, in order. But, quite
+    // obviously, if you actually look at this, it doesn't. Instead it loads the
+
+    // Turns out this doesn't work as intended. Here's what I wanted this to do:
+    //
+    // 1. Put `0` and first array value on data stack.
+    // 2. Execute `block`.
+    // 3. Put `1` and second array value on data stack.
+    // 4. Execute `block`.
+    // 5. ...
+    //
+    // Here's what it actually does:
+    //
+    // 1. Put `0` and first array value on data stack.
+    // 2. Put `1` and second array value on data stack.
+    // 3. ...
+    // 4. Execute block.
+    // 5. Execute block.
+    // 6. ...
+    //
+    // There are two specific problems here:
+    //
+    // 1. All of the indices and array values are available on the stack all the
+    //    time, increasing the change for `block` mess everything up, if it
+    //    accesses something that it shouldn't.
+    // 2. Even if `block` works correctly, the array elements are accessed
+    //    backwards.
+    //
+    // Unfortunately, solving this isn't trivial. We'd need to do one operation
+    // of this loop, return control to the evaluator, then make sure the
+    // evaluator returns control here afterwards, while keeping our state here.
+    // There is currently no mechanism for making this happen.
+    //
+    // We could solve this, if intrinsics were able to put arbitrary code on the
+    // call stack somehow. There's also an issue with `eval` (see comment there)
+    // that could be solved with the same solution, so maybe that's worth doing
+    // now.
+    //
+    // Another option would be to not implement `each` as an intrinsic. We can
+    // already do simple loop through recursion, so why not use that to
+    // implement `each` in Caterpillar.
     for (i, value) in array.0.into_iter().enumerate() {
         context
             .data_stack
