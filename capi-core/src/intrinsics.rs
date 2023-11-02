@@ -77,10 +77,6 @@ fn each(context: RuntimeContext) -> DataStackResult<()> {
     let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
 
-    // Turns out, this doesn't work as intended. What I want this to do is to
-    // execute `block` for each element of the array, in order. But, quite
-    // obviously, if you actually look at this, it doesn't. Instead it loads the
-
     // Turns out this doesn't work as intended. Here's what I wanted this to do:
     //
     // 1. Put `0` and first array value on data stack.
