@@ -18,13 +18,18 @@ mod tests {
     use std::{
         fs::{self, File},
         io::Read,
+        path::Path,
     };
 
     use crate::Interpreter;
 
     #[test]
     fn for_language_features() -> anyhow::Result<()> {
-        for dir_entry in fs::read_dir("../tests")? {
+        run_tests_from_dir("../tests")
+    }
+
+    fn run_tests_from_dir(path: impl AsRef<Path>) -> anyhow::Result<()> {
+        for dir_entry in fs::read_dir(path)? {
             let dir_entry = dir_entry?;
 
             println!("Running test suite `{}`...", dir_entry.path().display());
