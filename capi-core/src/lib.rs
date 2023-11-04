@@ -23,7 +23,7 @@ mod tests {
     use crate::Interpreter;
 
     #[test]
-    fn capi_tests() -> anyhow::Result<()> {
+    fn for_language_features() -> anyhow::Result<()> {
         for dir_entry in fs::read_dir("../tests")? {
             let dir_entry = dir_entry?;
 
