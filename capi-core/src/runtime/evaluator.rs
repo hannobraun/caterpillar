@@ -167,6 +167,6 @@ pub enum EvaluatorErrorKind {
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
 
-    #[error("Error resolving function")]
+    #[error(transparent)]
     ResolveFunction(#[from] ResolveError),
 }
