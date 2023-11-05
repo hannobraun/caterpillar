@@ -80,27 +80,14 @@ impl Interpreter<()> {
             .collect::<Vec<_>>();
 
         for function in tests {
-            // This is creating a completely new evaluator to run each test.
-            // Which works fine for what it's doing to so far, but it won't work
-            // for tests that live alongside the code they test. A function
-            // defined before the test won't be known here, because it's stored
-            // in `self.evaluator`, not the `evaluator` created here.
+            // We can just reuse the evaluator here, without fearing that the
+            // evaluation of the previous test interferes with the next one:
             //
-            // The reason a new evaluator is created here, is basically to
-            // create a fresh data stack. (Creating a fresh call stack is not
-            // necessary. We finished the previous evaluation, whether this is
-            // the first loop iteration and that was the initial evaluation of
-            // the file, or the previous evaluation was of a test in the
-            // previous loop iteration. Which leaves the call stack empty either
-            // way.)
-            //
-            // So we could just use `self.evaluator` and reset the data stack,
-            // but `self.evaluator` is borrowed for the whole duration of the
-            // loop. Meaning we can't `step` it, as that requires a mutable
-            // reference.
-            //
-            // The most straight-forward solution is probably to make a copy of
-            // the tests before the loop, then we have a free hand here.
+            // 1. When evaluation is finished then, by definition, the call
+            //    stack is empty.
+            // 2. Making sure that the data stack is also empty is part of
+            //    checking each test result. If it weren't, we would have exited
+            //    this function with an error in the previous loop iteration.
             self.evaluator.call_stack.push(function.body.start);
 
             while !self.evaluator.step(&self.fragments, &mut ())?.finished() {}
