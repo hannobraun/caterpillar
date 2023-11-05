@@ -71,7 +71,15 @@ impl Interpreter<()> {
 
         while !self.step(&mut ())?.finished() {}
 
-        for function in self.evaluator.namespace.user_defined().functions() {
+        let tests = self
+            .evaluator
+            .namespace
+            .user_defined()
+            .functions()
+            .cloned()
+            .collect::<Vec<_>>();
+
+        for function in tests {
             // This is creating a completely new evaluator to run each test.
             // Which works fine for what it's doing to so far, but it won't work
             // for tests that live alongside the code they test. A function
