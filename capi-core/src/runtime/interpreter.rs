@@ -80,14 +80,11 @@ impl Interpreter<()> {
             .collect::<Vec<_>>();
 
         for function in tests {
-            // We can just reuse the evaluator here, without fearing that the
-            // evaluation of the previous test interferes with the next one:
-            //
-            // 1. When evaluation is finished then, by definition, the call
-            //    stack is empty.
-            // 2. Making sure that the data stack is also empty is part of
-            //    checking each test result. If it weren't, we would have exited
-            //    this function with an error in the previous loop iteration.
+            // We don't need to worry about any call stack contents from the
+            // initial module evaluation, or the evaluation of the previous
+            // test, interfering with the evaluation of the next test. When
+            // evaluation is finished then, by definition, the call stack is
+            // empty.
             self.evaluator.data_stack.clear();
             self.evaluator.call_stack.push(function.body.start);
 
