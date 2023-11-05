@@ -85,8 +85,8 @@ impl Interpreter<()> {
             // test, interfering with the evaluation of the next test. When
             // evaluation is finished then, by definition, the call stack is
             // empty.
-            self.evaluator.data_stack.clear();
             self.evaluator.call_stack.push(function.body.start);
+            self.evaluator.data_stack.clear();
 
             while !self.evaluator.step(&self.fragments, &mut ())?.finished() {}
 
