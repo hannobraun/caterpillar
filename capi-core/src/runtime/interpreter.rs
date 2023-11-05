@@ -101,15 +101,14 @@ impl Interpreter<()> {
             //
             // The most straight-forward solution is probably to make a copy of
             // the tests before the loop, then we have a free hand here.
-            let mut evaluator = Evaluator::default();
-            evaluator.call_stack.push(function.body.start);
+            self.evaluator.call_stack.push(function.body.start);
 
-            while !evaluator.step(&self.fragments, &mut ())?.finished() {}
+            while !self.evaluator.step(&self.fragments, &mut ())?.finished() {}
 
             let (result, _) =
-                evaluator.data_stack.pop_specific::<value::Bool>()?;
+                self.evaluator.data_stack.pop_specific::<value::Bool>()?;
 
-            if !evaluator.data_stack.is_empty() {
+            if !self.evaluator.data_stack.is_empty() {
                 bail!("Test returned more than one `bool`");
             }
             if !result.0 {
