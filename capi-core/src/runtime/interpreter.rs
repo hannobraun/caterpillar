@@ -88,6 +88,7 @@ impl Interpreter<()> {
             // 2. Making sure that the data stack is also empty is part of
             //    checking each test result. If it weren't, we would have exited
             //    this function with an error in the previous loop iteration.
+            self.evaluator.data_stack.clear();
             self.evaluator.call_stack.push(function.body.start);
 
             while !self.evaluator.step(&self.fragments, &mut ())?.finished() {}

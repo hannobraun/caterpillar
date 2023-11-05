@@ -18,6 +18,10 @@ impl DataStack {
         self.values.is_empty()
     }
 
+    pub fn clear(&mut self) {
+        self.values.clear();
+    }
+
     pub fn push(&mut self, value: Value) {
         self.values.push(value)
     }
