@@ -75,7 +75,7 @@ impl Interpreter<()> {
             .evaluator
             .namespace
             .user_defined()
-            .functions()
+            .tests()
             .cloned()
             .collect::<Vec<_>>();
 

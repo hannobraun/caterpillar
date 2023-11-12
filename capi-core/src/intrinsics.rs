@@ -201,7 +201,7 @@ fn test(mut context: RuntimeContext) -> DataStackResult<()> {
         fragment: name_fragment,
     };
 
-    context.namespace.define_function(name, body);
+    context.namespace.define_test(name, body);
 
     Ok(())
 }

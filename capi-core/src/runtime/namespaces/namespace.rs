@@ -19,6 +19,7 @@ pub struct Namespace<C> {
     bindings: BTreeMap<String, Value>,
     native_functions: BTreeMap<String, NativeFunction<C>>,
     user_defined_functions: BTreeMap<String, UserDefinedFunction>,
+    tests: BTreeMap<String, UserDefinedFunction>,
 }
 
 impl<C> Namespace<C> {
@@ -34,6 +35,7 @@ impl<C> Namespace<C> {
             bindings: BTreeMap::new(),
             native_functions,
             user_defined_functions: BTreeMap::new(),
+            tests: BTreeMap::new(),
         }
     }
 
@@ -51,6 +53,7 @@ impl<C> Namespace<C> {
         UserDefined {
             bindings: &mut self.bindings,
             functions: &mut self.user_defined_functions,
+            tests: &mut self.tests,
         }
     }
 

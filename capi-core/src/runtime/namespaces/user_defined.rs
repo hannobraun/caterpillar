@@ -8,6 +8,7 @@ use crate::{
 pub struct UserDefined<'r> {
     pub bindings: &'r mut BTreeMap<String, Value>,
     pub functions: &'r mut BTreeMap<String, UserDefinedFunction>,
+    pub tests: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
 impl UserDefined<'_> {
@@ -23,8 +24,20 @@ impl UserDefined<'_> {
         self.functions.insert(name.value, function);
     }
 
+    pub fn define_test(&mut self, name: FunctionName, body: value::Block) {
+        let function = UserDefinedFunction {
+            name: name.clone(),
+            body,
+        };
+        self.tests.insert(name.value, function);
+    }
+
     pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
         self.functions.values()
+    }
+
+    pub fn tests(&self) -> impl Iterator<Item = &UserDefinedFunction> {
+        self.tests.values()
     }
 }
 
