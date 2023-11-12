@@ -15,16 +15,10 @@ impl UserDefined<'_> {
         self.bindings.insert(name, value);
     }
 
-    pub fn define_function(
-        &mut self,
-        name: FunctionName,
-        body: value::Block,
-        is_test: bool,
-    ) {
+    pub fn define_function(&mut self, name: FunctionName, body: value::Block) {
         let function = UserDefinedFunction {
             name: name.clone(),
             body,
-            is_test,
         };
         self.functions.insert(name.value, function);
     }
@@ -38,7 +32,6 @@ impl UserDefined<'_> {
 pub struct UserDefinedFunction {
     pub name: FunctionName,
     pub body: value::Block,
-    pub is_test: bool,
 }
 
 #[derive(Clone, Debug)]

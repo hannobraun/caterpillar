@@ -174,9 +174,8 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
         value: name.0,
         fragment: name_fragment,
     };
-    let is_test = false;
 
-    context.namespace.define_function(name, body, is_test);
+    context.namespace.define_function(name, body);
 
     Ok(())
 }
@@ -201,9 +200,8 @@ fn test(mut context: RuntimeContext) -> DataStackResult<()> {
         value: name.0,
         fragment: name_fragment,
     };
-    let is_test = true;
 
-    context.namespace.define_function(name, body, is_test);
+    context.namespace.define_function(name, body);
 
     Ok(())
 }
