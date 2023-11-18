@@ -1,7 +1,6 @@
 "times"
 {
-    0
-        { 1 + } 5 times
+    0 { 1 + } 5 times
         5 =
 }
     test
