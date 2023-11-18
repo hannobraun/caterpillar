@@ -28,6 +28,11 @@ mod tests {
         run_tests_from_dir("../tests")
     }
 
+    #[test]
+    fn for_libraries() -> anyhow::Result<()> {
+        run_tests_from_dir("../lib")
+    }
+
     fn run_tests_from_dir(path: impl AsRef<Path>) -> anyhow::Result<()> {
         for dir_entry in fs::read_dir(path)? {
             let dir_entry = dir_entry?;
