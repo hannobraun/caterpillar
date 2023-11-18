@@ -17,6 +17,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (eval, "eval"),
         (false_, "false"),
         (fn_, "fn"),
+        (gt, ">"),
         (if_, "if"),
         (nop, "nop"),
         (not, "not"),
@@ -176,6 +177,15 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     };
 
     context.namespace.define_function(name, body);
+
+    Ok(())
+}
+
+fn gt(context: RuntimeContext) -> DataStackResult<()> {
+    let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
+
+    context.data_stack.push_bare(value::Bool(a.0 > b.0));
 
     Ok(())
 }
