@@ -1,3 +1,19 @@
+:times
+{
+    [ :block :num_times ] bind
+
+    num_times 0 >
+    {
+        block eval
+        block
+        num_times 1 -
+            times
+    }
+    {}
+        if
+}
+    fn
+
 "times"
 {
     0 { 1 + } 5 times
