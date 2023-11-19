@@ -94,7 +94,10 @@ impl Interpreter<()> {
                 self.evaluator.data_stack.pop_specific::<value::Bool>()?;
 
             if !self.evaluator.data_stack.is_empty() {
-                bail!("Test returned more than one `bool`");
+                bail!(
+                    "Expected test to return one `bool`; left on stack: {:?}",
+                    self.evaluator.data_stack
+                );
             }
             if !result.0 {
                 bail!("Test returned `false`");
