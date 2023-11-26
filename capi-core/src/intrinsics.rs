@@ -202,21 +202,6 @@ fn if_(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn test(mut context: RuntimeContext) -> DataStackResult<()> {
-    let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
-    let (name, name_fragment) =
-        context.data_stack.pop_specific::<value::Text>()?;
-
-    let name = FunctionName {
-        value: name.0,
-        fragment: name_fragment,
-    };
-
-    context.namespace.define_test(name, body);
-
-    Ok(())
-}
-
 fn nop(_: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
@@ -267,6 +252,21 @@ fn swap(context: RuntimeContext) -> DataStackResult<()> {
 
     context.data_stack.push(b);
     context.data_stack.push(a);
+
+    Ok(())
+}
+
+fn test(mut context: RuntimeContext) -> DataStackResult<()> {
+    let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
+    let (name, name_fragment) =
+        context.data_stack.pop_specific::<value::Text>()?;
+
+    let name = FunctionName {
+        value: name.0,
+        fragment: name_fragment,
+    };
+
+    context.namespace.define_test(name, body);
 
     Ok(())
 }
