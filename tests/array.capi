@@ -16,6 +16,13 @@
 }
     test
 
+"unwrap - nested"
+{
+    [ [ 0 ] [ 1 ] ] len 2 =
+        swap drop
+}
+    test
+
 "eager evaluation"
 {
     true

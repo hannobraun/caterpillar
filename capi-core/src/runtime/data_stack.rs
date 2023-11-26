@@ -8,7 +8,7 @@ use crate::repr::eval::{
 #[derive(Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
-    marker: usize,
+    markers: Vec<usize>,
 }
 
 impl DataStack {
@@ -55,13 +55,14 @@ impl DataStack {
     }
 
     pub fn mark(&mut self) {
-        self.marker = self.values.len();
+        self.markers.push(self.values.len());
     }
 
     pub fn drain_values_from_marker(
         &mut self,
     ) -> impl Iterator<Item = Value> + '_ {
-        let index = usize::min(self.marker, self.values.len());
+        let marker = self.markers.pop().unwrap_or(self.values.len());
+        let index = usize::min(marker, self.values.len());
         self.values.drain(index..)
     }
 
