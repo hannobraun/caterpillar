@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::repr::eval::{
     fragments::FragmentId,
     value::{Type, TypeError, Value, ValuePayload},
@@ -71,6 +73,20 @@ impl DataStack {
                 }
             }
         }
+    }
+}
+
+impl fmt::Display for DataStack {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for (i, value) in self.values.iter().enumerate() {
+            if i > 0 {
+                write!(f, " ")?;
+            }
+
+            write!(f, "{}", value.payload)?;
+        }
+
+        Ok(())
     }
 }
 
