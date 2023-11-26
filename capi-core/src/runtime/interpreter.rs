@@ -79,6 +79,17 @@ impl Interpreter<()> {
             .cloned()
             .collect::<Vec<_>>();
 
+        if !self.evaluator.data_stack.is_empty() {
+            // This happens easily, if you do most of the work of defining a
+            // test, but then forgot to actually write `test` at the end.
+            // Without this error, it would result in dead code that's never
+            // actually run.
+            bail!(
+                "Data stack not empty after evaluating test definitions: {}",
+                self.evaluator.data_stack
+            );
+        }
+
         for function in tests {
             // We don't need to worry about any call stack contents from the
             // initial module evaluation, or the evaluation of the previous
