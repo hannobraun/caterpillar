@@ -1,3 +1,13 @@
+"len"
+{
+    [ 0 1 ] len
+        [ :result ] bind
+        drop
+
+    result 2 =
+}
+    test
+
 "unwrap"
 {
     [ true false ]

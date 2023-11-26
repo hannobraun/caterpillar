@@ -1,4 +1,7 @@
-use crate::runtime::namespaces::{IntrinsicFunction, RuntimeContext};
+use crate::{
+    runtime::namespaces::{IntrinsicFunction, RuntimeContext},
+    value::{Value, ValuePayload},
+};
 
 use super::{
     repr::eval::value,
@@ -19,6 +22,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (fn_, "fn"),
         (gt, ">"),
         (if_, "if"),
+        (len, "len"),
         (nop, "nop"),
         (not, "not"),
         (over, "over"),
@@ -198,6 +202,21 @@ fn if_(context: RuntimeContext) -> DataStackResult<()> {
 
     let start = if condition.0 { then.start } else { else_.start };
     context.call_stack.push(start);
+
+    Ok(())
+}
+
+fn len(context: RuntimeContext) -> DataStackResult<()> {
+    let (array, fragment) =
+        context.data_stack.pop_specific::<value::Array>()?;
+
+    let len: i64 = array.0.len().try_into().unwrap();
+
+    context.data_stack.push(Value {
+        payload: array.into(),
+        fragment,
+    });
+    context.data_stack.push_bare(ValuePayload::Number(len));
 
     Ok(())
 }
