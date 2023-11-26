@@ -95,7 +95,7 @@ impl Interpreter<()> {
 
             if !self.evaluator.data_stack.is_empty() {
                 bail!(
-                    "Expected test to return one `bool`; left on stack: {:?}",
+                    "Expected test to return one `bool`; left on stack: {:}",
                     self.evaluator.data_stack
                 );
             }
