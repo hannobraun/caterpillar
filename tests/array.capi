@@ -1,3 +1,22 @@
-"unwrap" { [ true false ] unwrap drop } test
-"eager evaluation" { true false [ drop ] drop } test
-"tokenization" { [true]unwrap[true]unwrap and } test
+"unwrap"
+{
+    [ true false ]
+        unwrap
+        drop
+}
+    test
+
+"eager evaluation"
+{
+    true
+    false
+        [ drop ]
+        drop
+}
+    test
+
+"tokenization"
+{
+    [true]unwrap[true]unwrap and
+}
+    test
