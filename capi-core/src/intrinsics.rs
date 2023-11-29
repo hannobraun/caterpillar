@@ -20,6 +20,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (eval, "eval"),
         (false_, "false"),
         (fn_, "fn"),
+        (get, "get"),
         (gt, ">"),
         (if_, "if"),
         (len, "len"),
@@ -182,6 +183,23 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     };
 
     context.namespace.define_function(name, body);
+
+    Ok(())
+}
+
+fn get(context: RuntimeContext) -> DataStackResult<()> {
+    let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
+    let (array, fragment) =
+        context.data_stack.pop_specific::<value::Array>()?;
+
+    dbg!(index.0);
+    let value = array.0[index.0 as usize].clone();
+
+    context.data_stack.push(Value {
+        payload: ValuePayload::Array(array.0),
+        fragment,
+    });
+    context.data_stack.push_bare(value);
 
     Ok(())
 }
