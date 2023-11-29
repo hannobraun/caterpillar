@@ -91,6 +91,8 @@ impl Interpreter<()> {
         }
 
         for function in tests {
+            println!("    Running test `{}`...", function.name.value);
+
             // We don't need to worry about any call stack contents from the
             // initial module evaluation, or the evaluation of the previous
             // test, interfering with the evaluation of the next test. When
