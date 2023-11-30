@@ -6,6 +6,14 @@ fn main() -> anyhow::Result<()> {
         .init();
 
     let args = Args::parse();
+
+    match args.command {
+        capi_desktop::args::Command::Run => {}
+        capi_desktop::args::Command::Test => {
+            todo!("The `test` command is not implemented yet.")
+        }
+    }
+
     let code = loader::load(&args.script)?;
     let (updates, _watcher) = loader::watch(&args.script)?;
 
