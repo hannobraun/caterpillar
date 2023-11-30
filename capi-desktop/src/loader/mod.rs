@@ -1,4 +1,4 @@
-pub mod load;
-pub mod watch;
+mod load;
+mod watch;
 
 pub use self::{load::load, watch::watch};
