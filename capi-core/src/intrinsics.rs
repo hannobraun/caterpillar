@@ -192,7 +192,6 @@ fn get(context: RuntimeContext) -> DataStackResult<()> {
     let (array, fragment) =
         context.data_stack.pop_specific::<value::Array>()?;
 
-    dbg!(index.0);
     let value = array.0[index.0 as usize].clone();
 
     context.data_stack.push(Value {
