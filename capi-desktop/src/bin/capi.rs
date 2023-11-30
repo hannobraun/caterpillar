@@ -1,5 +1,5 @@
 use capi_desktop::{
-    args::{self, Args},
+    args::{Args, Command},
     display, loader, DesktopThread,
 };
 
@@ -9,7 +9,7 @@ fn main() -> anyhow::Result<()> {
         .init();
 
     let args = Args::parse();
-    let args::Command::Run { script } = args.command;
+    let Command::Run { script } = args.command;
     let code = loader::load(&script)?;
     let (updates, _watcher) = loader::watch(&script)?;
 
