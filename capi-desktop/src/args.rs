@@ -3,7 +3,7 @@ use std::path::PathBuf;
 /// Interactive Caterpillar Runtime
 #[derive(clap::Parser)]
 pub struct Args {
-    /// Path of the Caterpillar script
+    /// Path to a Caterpillar script
     pub script: PathBuf,
 
     #[clap(subcommand)]
@@ -18,6 +18,6 @@ impl Args {
 
 #[derive(clap::Subcommand)]
 pub enum Command {
-    /// Run a Caterpillar script
+    /// Run the Caterpillar script
     Run,
 }
