@@ -17,7 +17,7 @@ impl Args {
 pub enum Command {
     /// Run a Caterpillar script
     Run {
-        /// path of the Caterpillar script
+        /// Path of the Caterpillar script
         script: PathBuf,
     },
 }
