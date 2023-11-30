@@ -20,4 +20,7 @@ impl Args {
 pub enum Command {
     /// Run the Caterpillar script
     Run,
+
+    /// Run all tests from the Caterpillar script
+    Test,
 }
