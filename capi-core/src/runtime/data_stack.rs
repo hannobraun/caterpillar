@@ -5,7 +5,7 @@ use crate::repr::eval::{
     value::{Type, TypeError, Value, ValuePayload},
 };
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct DataStack {
     values: Vec<Value>,
     markers: Vec<usize>,
