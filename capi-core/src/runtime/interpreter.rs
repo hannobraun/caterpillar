@@ -1,7 +1,7 @@
 use crate::{
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{Fragments, Replacement},
-    PlatformFunction,
+    value, PlatformFunction,
 };
 
 use super::{
@@ -68,8 +68,6 @@ impl<C> Interpreter<C> {
 
 impl Interpreter<()> {
     pub fn run_tests(&mut self) -> Result<(), TestError> {
-        use crate::value;
-
         while !self.step(&mut ())?.finished() {}
 
         let tests = self
