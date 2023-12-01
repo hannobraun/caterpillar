@@ -7,15 +7,15 @@ fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
+    let code = loader::load(&args.script)?;
+    let (updates, _watcher) = loader::watch(&args.script)?;
+
     match args.command {
         capi_desktop::args::Command::Run => {}
         capi_desktop::args::Command::Test => {
             todo!("The `test` command is not implemented yet.")
         }
     }
-
-    let code = loader::load(&args.script)?;
-    let (updates, _watcher) = loader::watch(&args.script)?;
 
     let desktop_thread = DesktopThread::run(code, updates)?;
     display::start(desktop_thread)?;
