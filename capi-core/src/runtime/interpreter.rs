@@ -4,7 +4,10 @@ use crate::{
     PlatformFunction,
 };
 
-use super::evaluator::{Evaluator, EvaluatorError, RuntimeState};
+use super::{
+    data_stack::{DataStack, DataStackError},
+    evaluator::{Evaluator, EvaluatorError, RuntimeState},
+};
 
 #[derive(Debug)]
 pub struct Interpreter<C> {
@@ -65,9 +68,8 @@ impl<C> Interpreter<C> {
 
 #[cfg(test)]
 impl Interpreter<()> {
-    pub fn run_tests(&mut self) -> anyhow::Result<()> {
+    pub fn run_tests(&mut self) -> Result<(), TestError> {
         use crate::value;
-        use anyhow::bail;
 
         while !self.step(&mut ())?.finished() {}
 
@@ -84,10 +86,9 @@ impl Interpreter<()> {
             // test, but then forgot to actually write `test` at the end.
             // Without this error, it would result in dead code that's never
             // actually run.
-            bail!(
-                "Data stack not empty after evaluating test definitions: {}",
-                self.evaluator.data_stack
-            );
+            return Err(TestError::DataStackNotEmptyAfterScriptEvaluation {
+                data_stack: self.evaluator.data_stack.clone(),
+            });
         }
 
         for function in tests {
@@ -107,18 +108,37 @@ impl Interpreter<()> {
                 self.evaluator.data_stack.pop_specific::<value::Bool>()?;
 
             if !self.evaluator.data_stack.is_empty() {
-                bail!(
-                    "Expected test to return one `bool`; left on stack: {:}",
-                    self.evaluator.data_stack
-                );
+                return Err(TestError::DataStackNotEmptyAfterTestRun {
+                    data_stack: self.evaluator.data_stack.clone(),
+                });
             }
             if !result.0 {
-                bail!("Test returned `false`");
+                return Err(TestError::TestFailed);
             }
         }
 
         Ok(())
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum TestError {
+    #[error(transparent)]
+    Evaluator(#[from] EvaluatorError),
+
+    #[error(transparent)]
+    DataStack(#[from] DataStackError),
+
+    #[error(
+        "Data stack not empty after evaluating test definitions: {data_stack}"
+    )]
+    DataStackNotEmptyAfterScriptEvaluation { data_stack: DataStack },
+
+    #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
+    DataStackNotEmptyAfterTestRun { data_stack: DataStack },
+
+    #[error("Test returned `false`")]
+    TestFailed,
 }
 
 #[cfg(test)]
