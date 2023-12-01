@@ -1,3 +1,4 @@
+use capi_core::Interpreter;
 use capi_desktop::{args::Args, display, loader, DesktopThread};
 
 fn main() -> anyhow::Result<()> {
@@ -16,7 +17,8 @@ fn main() -> anyhow::Result<()> {
             display::start(desktop_thread)?;
         }
         capi_desktop::args::Command::Test => {
-            todo!("The `test` command is not implemented yet.")
+            let mut interpreter = Interpreter::new(&code)?;
+            interpreter.run_tests()?;
         }
     }
 
