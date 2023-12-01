@@ -89,7 +89,7 @@ impl Interpreter<()> {
         }
 
         for function in tests {
-            println!("    Running test `{}`...", function.name.value);
+            print!("Running test `{}`...", function.name.value);
 
             // We don't need to worry about any call stack contents from the
             // initial module evaluation, or the evaluation of the previous
@@ -112,6 +112,8 @@ impl Interpreter<()> {
             if !result.0 {
                 return Err(TestError::TestFailed);
             }
+
+            println!(" PASS");
         }
 
         Ok(())
