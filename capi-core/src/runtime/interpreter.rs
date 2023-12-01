@@ -66,7 +66,6 @@ impl<C> Interpreter<C> {
     }
 }
 
-#[cfg(test)]
 impl Interpreter<()> {
     pub fn run_tests(&mut self) -> Result<(), TestError> {
         use crate::value;
