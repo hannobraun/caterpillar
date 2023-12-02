@@ -1,0 +1,23 @@
+# This is an entry point script that includes all Caterpillar scripts that have
+# tests in them. It is intended to be run like this:
+#
+# ```
+# capi tests.capi test
+# ```
+#
+# Or, if you haven't `cargo install`ed `capi`, like this:
+#
+# ```
+# cargo run -- tests.capi test
+# ```
+
+:lib/std mod
+:tests/array mod
+:tests/basics mod
+:tests/binding mod
+:tests/block mod
+:tests/bool mod
+:tests/fn mod
+:tests/if mod
+:tests/symbol mod
+:tests/text mod
