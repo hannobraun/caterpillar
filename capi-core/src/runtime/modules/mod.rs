@@ -3,7 +3,7 @@ mod native;
 mod user_defined;
 
 pub use self::{
-    module::{Module, NamespaceItem, ResolveError},
+    module::{ItemInModule, Module, ResolveError},
     native::{
         FunctionState, IntrinsicFunction, NativeFunction, PlatformFunction,
         RuntimeContext,

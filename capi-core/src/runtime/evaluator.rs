@@ -9,7 +9,7 @@ use crate::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    modules::{self, Module, NamespaceItem, ResolveError, RuntimeContext},
+    modules::{self, ItemInModule, Module, ResolveError, RuntimeContext},
 };
 
 #[derive(Debug)]
@@ -76,11 +76,11 @@ impl<C> Evaluator<C> {
                             fragment: fragment_id,
                         }
                     })? {
-                        NamespaceItem::Binding(value) => {
+                        ItemInModule::Binding(value) => {
                             self.data_stack.push(value);
                             FunctionState::Done
                         }
-                        NamespaceItem::IntrinsicFunction(f) => {
+                        ItemInModule::IntrinsicFunction(f) => {
                             f(self.runtime_context()).map_err(|err| {
                                 EvaluatorError {
                                     kind: err.into(),
@@ -89,14 +89,14 @@ impl<C> Evaluator<C> {
                             })?;
                             FunctionState::Done
                         }
-                        NamespaceItem::PlatformFunction(f) => {
+                        ItemInModule::PlatformFunction(f) => {
                             f(self.runtime_context(), platform_context)
                                 .map_err(|err| EvaluatorError {
                                     kind: err.into(),
                                     fragment: fragment_id,
                                 })?
                         }
-                        NamespaceItem::UserDefinedFunction(
+                        ItemInModule::UserDefinedFunction(
                             modules::UserDefinedFunction { body, .. },
                         ) => {
                             self.call_stack.push(body.start);

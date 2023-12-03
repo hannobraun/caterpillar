@@ -57,27 +57,24 @@ impl<C> Module<C> {
         }
     }
 
-    pub fn resolve(
-        &self,
-        name: &str,
-    ) -> Result<NamespaceItem<C>, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<ItemInModule<C>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
                 NativeFunction::Intrinsic(function) => {
-                    NamespaceItem::IntrinsicFunction(function)
+                    ItemInModule::IntrinsicFunction(function)
                 }
                 NativeFunction::Platform(function) => {
-                    NamespaceItem::PlatformFunction(function)
+                    ItemInModule::PlatformFunction(function)
                 }
             });
         let user_defined_function =
             self.user_defined_functions.get(name).map(|user_defined| {
-                NamespaceItem::UserDefinedFunction(user_defined)
+                ItemInModule::UserDefinedFunction(user_defined)
             });
         let binding = self
             .bindings
             .get(name)
-            .map(|binding| NamespaceItem::Binding(binding.clone()));
+            .map(|binding| ItemInModule::Binding(binding.clone()));
 
         native_function
             .or(user_defined_function)
@@ -131,7 +128,7 @@ impl<C> Default for Module<C> {
 }
 
 #[derive(Clone, Debug)]
-pub enum NamespaceItem<'r, C> {
+pub enum ItemInModule<'r, C> {
     Binding(Value),
     IntrinsicFunction(&'r IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
