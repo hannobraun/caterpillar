@@ -35,7 +35,7 @@ impl<C> Interpreter<C> {
         &mut self,
         functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
     ) {
-        self.evaluator.namespace.register_platform(functions);
+        self.evaluator.root_module.register_platform(functions);
     }
 
     pub fn step(
@@ -53,7 +53,9 @@ impl<C> Interpreter<C> {
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
             self.evaluator.data_stack.replace(old, new);
-            self.evaluator.namespace.replace(old, new, &self.fragments);
+            self.evaluator
+                .root_module
+                .replace(old, new, &self.fragments);
         }
 
         // If the program has finished running, restart it in response to this
@@ -72,7 +74,7 @@ impl Interpreter<()> {
 
         let tests = self
             .evaluator
-            .namespace
+            .root_module
             .user_defined()
             .tests()
             .cloned()
