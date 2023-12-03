@@ -1,11 +1,11 @@
 use crate::{
-    runtime::namespaces::{IntrinsicFunction, RuntimeContext},
+    runtime::modules::{IntrinsicFunction, RuntimeContext},
     value::{Value, ValuePayload},
 };
 
 use super::{
     repr::eval::value,
-    runtime::{data_stack::DataStackResult, namespaces::FunctionName},
+    runtime::{data_stack::DataStackResult, modules::FunctionName},
 };
 
 pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
