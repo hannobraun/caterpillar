@@ -1,9 +1,9 @@
-mod namespace;
+mod module;
 mod native;
 mod user_defined;
 
 pub use self::{
-    namespace::{Module, NamespaceItem, ResolveError},
+    module::{Module, NamespaceItem, ResolveError},
     native::{
         FunctionState, IntrinsicFunction, NativeFunction, PlatformFunction,
         RuntimeContext,
