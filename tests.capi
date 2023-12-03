@@ -11,13 +11,13 @@
 # cargo run -- tests.capi test
 # ```
 
-:lib/std mod
-:tests/array mod
-:tests/basics mod
-:tests/binding mod
-:tests/block mod
-:tests/bool mod
-:tests/fn mod
-:tests/if mod
-:tests/symbol mod
-:tests/text mod
+[ :lib :std ] mod
+[ :tests :array ] mod
+[ :tests :basics ] mod
+[ :tests :binding ] mod
+[ :tests :block ] mod
+[ :tests :bool ] mod
+[ :tests :fn ] mod
+[ :tests :if ] mod
+[ :tests :symbol ] mod
+[ :tests :text ] mod
