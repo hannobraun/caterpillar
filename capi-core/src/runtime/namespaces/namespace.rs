@@ -15,14 +15,14 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct Namespace<C> {
+pub struct Module<C> {
     bindings: BTreeMap<String, Value>,
     native_functions: BTreeMap<String, NativeFunction<C>>,
     user_defined_functions: BTreeMap<String, UserDefinedFunction>,
     tests: BTreeMap<String, UserDefinedFunction>,
 }
 
-impl<C> Namespace<C> {
+impl<C> Module<C> {
     pub fn new() -> Self {
         let mut native_functions = BTreeMap::new();
 
@@ -124,7 +124,7 @@ impl<C> Namespace<C> {
     }
 }
 
-impl<C> Default for Namespace<C> {
+impl<C> Default for Module<C> {
     fn default() -> Self {
         Self::new()
     }
