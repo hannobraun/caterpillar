@@ -9,7 +9,10 @@ use crate::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    namespaces::{self, ItemInModule, Namespace, ResolveError, RuntimeContext},
+    namespaces::{
+        ItemInModule, Namespace, ResolveError, RuntimeContext,
+        UserDefinedFunction,
+    },
 };
 
 #[derive(Debug)]
@@ -97,7 +100,7 @@ impl<C> Evaluator<C> {
                                 })?
                         }
                         ItemInModule::UserDefinedFunction(
-                            namespaces::UserDefinedFunction { body, .. },
+                            UserDefinedFunction { body, .. },
                         ) => {
                             self.call_stack.push(body.start);
                             FunctionState::Done
