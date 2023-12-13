@@ -9,12 +9,12 @@ use crate::{
 use super::{
     call_stack::CallStack,
     data_stack::{DataStack, DataStackError},
-    modules::{self, ItemInModule, Module, ResolveError, RuntimeContext},
+    modules::{self, ItemInModule, Namespace, ResolveError, RuntimeContext},
 };
 
 #[derive(Debug)]
 pub struct Evaluator<C> {
-    pub root_module: Module<C>,
+    pub root_module: Namespace<C>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
 }
