@@ -17,7 +17,7 @@ use super::{
 
 #[derive(Debug)]
 pub struct Evaluator<C> {
-    pub root_module: Namespace<C>,
+    pub global_namespace: Namespace<C>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
 }
@@ -73,12 +73,12 @@ impl<C> Evaluator<C> {
             }
             FragmentPayload::Word(word) => {
                 let function_state =
-                    match self.root_module.resolve(word).map_err(|err| {
-                        EvaluatorError {
+                    match self.global_namespace.resolve(word).map_err(
+                        |err| EvaluatorError {
                             kind: err.into(),
                             fragment: fragment_id,
-                        }
-                    })? {
+                        },
+                    )? {
                         ItemInModule::Binding(value) => {
                             self.data_stack.push(value);
                             FunctionState::Done
@@ -125,7 +125,7 @@ impl<C> Evaluator<C> {
 
     fn runtime_context(&mut self) -> RuntimeContext {
         RuntimeContext {
-            namespace: self.root_module.user_defined(),
+            namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
         }
@@ -135,7 +135,7 @@ impl<C> Evaluator<C> {
 impl<C> Default for Evaluator<C> {
     fn default() -> Self {
         Self {
-            root_module: Default::default(),
+            global_namespace: Default::default(),
             call_stack: Default::default(),
             data_stack: Default::default(),
         }
