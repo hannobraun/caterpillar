@@ -1,10 +1,10 @@
 mod module;
-mod native;
+mod native_items;
 mod user_defined_items;
 
 pub use self::{
     module::{ItemInModule, Module, ResolveError},
-    native::{
+    native_items::{
         FunctionState, IntrinsicFunction, NativeFunction, PlatformFunction,
         RuntimeContext,
     },
