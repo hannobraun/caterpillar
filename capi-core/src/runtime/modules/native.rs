@@ -3,7 +3,7 @@ use crate::{
     DataStackResult,
 };
 
-use super::UserDefined;
+use super::UserDefinedItems;
 
 #[derive(Debug)]
 pub enum NativeFunction<C> {
@@ -16,7 +16,7 @@ pub type PlatformFunction<C> =
     fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
 
 pub struct RuntimeContext<'r> {
-    pub namespace: UserDefined<'r>,
+    pub namespace: UserDefinedItems<'r>,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
 }

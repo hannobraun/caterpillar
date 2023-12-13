@@ -11,7 +11,7 @@ use crate::{
 };
 
 use super::{
-    IntrinsicFunction, NativeFunction, UserDefined, UserDefinedFunction,
+    IntrinsicFunction, NativeFunction, UserDefinedFunction, UserDefinedItems,
 };
 
 #[derive(Debug)]
@@ -49,8 +49,8 @@ impl<C> Module<C> {
         }
     }
 
-    pub fn user_defined(&mut self) -> UserDefined {
-        UserDefined {
+    pub fn user_defined(&mut self) -> UserDefinedItems {
+        UserDefinedItems {
             bindings: &mut self.bindings,
             functions: &mut self.user_defined_functions,
             tests: &mut self.tests,

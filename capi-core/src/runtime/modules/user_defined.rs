@@ -5,13 +5,13 @@ use crate::{
     value::{self, Value},
 };
 
-pub struct UserDefined<'r> {
+pub struct UserDefinedItems<'r> {
     pub bindings: &'r mut BTreeMap<String, Value>,
     pub functions: &'r mut BTreeMap<String, UserDefinedFunction>,
     pub tests: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
-impl UserDefined<'_> {
+impl UserDefinedItems<'_> {
     pub fn define_binding(&mut self, name: String, value: Value) {
         self.bindings.insert(name, value);
     }
