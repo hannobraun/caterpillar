@@ -9,7 +9,7 @@ pub use self::{
         data_stack::DataStackResult,
         evaluator::RuntimeState,
         interpreter::Interpreter,
-        modules::{FunctionState, PlatformFunction, RuntimeContext},
+        namespaces::{FunctionState, PlatformFunction, RuntimeContext},
     },
 };
 
