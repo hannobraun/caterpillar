@@ -24,8 +24,8 @@ pub async fn run(
     };
 
     interpreter.register_platform([
-        ("delay_ms", delay_ms as PlatformFunction<Context>),
-        ("print", print),
+        (delay_ms as PlatformFunction<Context>, "delay_ms"),
+        (print, "print"),
     ]);
 
     let mut new_code: Option<String> = None;

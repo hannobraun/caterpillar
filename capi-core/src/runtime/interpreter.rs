@@ -33,7 +33,7 @@ impl<C> Interpreter<C> {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
+        functions: impl IntoIterator<Item = (PlatformFunction<C>, &'static str)>,
     ) {
         self.evaluator.global_namespace.register_platform(functions);
     }
@@ -291,8 +291,8 @@ mod tests {
             let mut inner = crate::Interpreter::new(code)?;
 
             inner.register_platform([(
-                "ping",
                 ping as PlatformFunction<PlatformContext>,
+                "ping",
             )]);
 
             Ok(Self {

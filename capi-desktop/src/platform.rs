@@ -28,10 +28,10 @@ pub enum PixelOp {
 
 pub fn register(interpreter: &mut Interpreter<Context>) {
     interpreter.register_platform([
-        ("clear_pixel", clear_pixel as PlatformFunction<Context>),
-        ("delay_ms", delay_ms),
-        ("set_pixel", set_pixel),
-        ("print", print),
+        (clear_pixel as PlatformFunction<Context>, "clear_pixel"),
+        (delay_ms, "delay_ms"),
+        (set_pixel, "set_pixel"),
+        (print, "print"),
     ]);
 }
 

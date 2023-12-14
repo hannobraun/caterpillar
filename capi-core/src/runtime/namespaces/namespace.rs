@@ -41,9 +41,9 @@ impl<C> Namespace<C> {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (&'static str, PlatformFunction<C>)>,
+        functions: impl IntoIterator<Item = (PlatformFunction<C>, &'static str)>,
     ) {
-        for (name, function) in functions {
+        for (function, name) in functions {
             self.native_functions
                 .insert(name.into(), NativeFunction::Platform(function));
         }
