@@ -47,18 +47,6 @@ fn clear_pixel(
     Ok(FunctionState::Done)
 }
 
-fn set_pixel(
-    runtime_context: RuntimeContext,
-    platform_context: &mut Context,
-) -> DataStackResult<FunctionState> {
-    let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
-    let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
-
-    platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
-
-    Ok(FunctionState::Done)
-}
-
 fn delay_ms(
     runtime_context: RuntimeContext,
     _: &mut Context,
@@ -76,5 +64,17 @@ fn print(
     let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.payload);
     runtime_context.data_stack.push(value);
+    Ok(FunctionState::Done)
+}
+
+fn set_pixel(
+    runtime_context: RuntimeContext,
+    platform_context: &mut Context,
+) -> DataStackResult<FunctionState> {
+    let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+    let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
+
+    platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
+
     Ok(FunctionState::Done)
 }
