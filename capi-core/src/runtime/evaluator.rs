@@ -72,40 +72,40 @@ impl<C> Evaluator<C> {
                 RuntimeState::Running
             }
             FragmentPayload::Word(word) => {
-                let function_state =
-                    match self.global_namespace.resolve(word).map_err(
-                        |err| EvaluatorError {
-                            kind: err.into(),
-                            fragment: fragment_id,
-                        },
-                    )? {
-                        ItemInModule::Binding(value) => {
-                            self.data_stack.push(value);
-                            FunctionState::Done
-                        }
-                        ItemInModule::IntrinsicFunction(f) => {
-                            f(self.runtime_context()).map_err(|err| {
-                                EvaluatorError {
-                                    kind: err.into(),
-                                    fragment: fragment_id,
-                                }
-                            })?;
-                            FunctionState::Done
-                        }
-                        ItemInModule::PlatformFunction(f) => {
-                            f(self.runtime_context(), platform_context)
-                                .map_err(|err| EvaluatorError {
-                                    kind: err.into(),
-                                    fragment: fragment_id,
-                                })?
-                        }
-                        ItemInModule::UserDefinedFunction(
-                            UserDefinedFunction { body, .. },
-                        ) => {
-                            self.call_stack.push(body.start);
-                            FunctionState::Done
-                        }
-                    };
+                let function_state = match self
+                    .global_namespace
+                    .resolve(word)
+                    .map_err(|err| EvaluatorError {
+                    kind: err.into(),
+                    fragment: fragment_id,
+                })? {
+                    ItemInModule::Binding(value) => {
+                        self.data_stack.push(value);
+                        FunctionState::Done
+                    }
+                    ItemInModule::IntrinsicFunction(f) => {
+                        f(self.runtime_context(fragments)).map_err(|err| {
+                            EvaluatorError {
+                                kind: err.into(),
+                                fragment: fragment_id,
+                            }
+                        })?;
+                        FunctionState::Done
+                    }
+                    ItemInModule::PlatformFunction(f) => {
+                        f(self.runtime_context(fragments), platform_context)
+                            .map_err(|err| EvaluatorError {
+                                kind: err.into(),
+                                fragment: fragment_id,
+                            })?
+                    }
+                    ItemInModule::UserDefinedFunction(
+                        UserDefinedFunction { body, .. },
+                    ) => {
+                        self.call_stack.push(body.start);
+                        FunctionState::Done
+                    }
+                };
 
                 match function_state {
                     FunctionState::Done => RuntimeState::Running,
@@ -123,8 +123,12 @@ impl<C> Evaluator<C> {
         Ok(runtime_state)
     }
 
-    fn runtime_context(&mut self) -> RuntimeContext {
+    fn runtime_context<'r>(
+        &'r mut self,
+        fragments: &'r mut Fragments,
+    ) -> RuntimeContext<'r> {
         RuntimeContext {
+            fragments,
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
