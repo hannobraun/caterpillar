@@ -42,7 +42,8 @@ impl<C> Interpreter<C> {
         &mut self,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
-        self.state = self.evaluator.step(&self.fragments, platform_context)?;
+        self.state =
+            self.evaluator.step(&mut self.fragments, platform_context)?;
         Ok(self.state)
     }
 
@@ -101,7 +102,11 @@ impl Interpreter<()> {
             self.evaluator.call_stack.push(function.body.start);
             self.evaluator.data_stack.clear();
 
-            while !self.evaluator.step(&self.fragments, &mut ())?.finished() {}
+            while !self
+                .evaluator
+                .step(&mut self.fragments, &mut ())?
+                .finished()
+            {}
 
             let (result, _) =
                 self.evaluator.data_stack.pop_specific::<value::Bool>()?;

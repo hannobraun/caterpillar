@@ -25,7 +25,7 @@ pub struct Evaluator<C> {
 impl<C> Evaluator<C> {
     pub fn step(
         &mut self,
-        fragments: &Fragments,
+        fragments: &mut Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
