@@ -17,6 +17,11 @@ impl Context {
             pixel_ops: Sender { inner: pixel_ops },
         }
     }
+
+    pub fn dummy() -> Self {
+        let (pixel_ops, _) = crossbeam_channel::unbounded();
+        Self::from_pixel_ops_sender(pixel_ops)
+    }
 }
 
 pub struct Sender {

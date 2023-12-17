@@ -25,10 +25,7 @@ fn main() -> anyhow::Result<()> {
             let mut interpreter = Interpreter::new(&code)?;
             platform::register(&mut interpreter);
 
-            let mut context = {
-                let (pixel_ops, _) = crossbeam_channel::unbounded();
-                Context::from_pixel_ops_sender(pixel_ops)
-            };
+            let mut context = Context::dummy();
             interpreter.run_tests(&mut context)?;
         }
     }
