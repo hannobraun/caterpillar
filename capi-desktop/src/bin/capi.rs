@@ -1,5 +1,10 @@
 use capi_core::Interpreter;
-use capi_desktop::{args::Args, display, loader, DesktopThread};
+use capi_desktop::{
+    args::Args,
+    display, loader,
+    platform::{self, Context},
+    DesktopThread,
+};
 
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
@@ -18,7 +23,13 @@ fn main() -> anyhow::Result<()> {
         }
         capi_desktop::args::Command::Test => {
             let mut interpreter = Interpreter::new(&code)?;
-            interpreter.run_tests(&mut ())?;
+            platform::register(&mut interpreter);
+
+            let mut context = {
+                let (pixel_ops, _) = crossbeam_channel::unbounded();
+                Context::from_pixel_ops_sender(pixel_ops)
+            };
+            interpreter.run_tests(&mut context)?;
         }
     }
 
