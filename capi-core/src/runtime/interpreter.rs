@@ -70,8 +70,11 @@ impl<C> Interpreter<C> {
 }
 
 impl Interpreter<()> {
-    pub fn run_tests(&mut self) -> Result<(), TestError> {
-        while !self.step(&mut ())?.finished() {}
+    pub fn run_tests(
+        &mut self,
+        platform_context: &mut (),
+    ) -> Result<(), TestError> {
+        while !self.step(platform_context)?.finished() {}
 
         let tests = self
             .evaluator
@@ -104,7 +107,7 @@ impl Interpreter<()> {
 
             while !self
                 .evaluator
-                .step(&mut self.fragments, &mut ())?
+                .step(&mut self.fragments, platform_context)?
                 .finished()
             {}
 

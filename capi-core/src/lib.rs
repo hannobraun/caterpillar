@@ -43,7 +43,7 @@ mod tests {
             File::open(dir_entry.path())?.read_to_string(&mut code)?;
 
             let mut interpreter = Interpreter::new(&code)?;
-            interpreter.run_tests()?;
+            interpreter.run_tests(&mut ())?;
         }
 
         Ok(())

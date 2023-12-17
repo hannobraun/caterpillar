@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
         }
         capi_desktop::args::Command::Test => {
             let mut interpreter = Interpreter::new(&code)?;
-            interpreter.run_tests()?;
+            interpreter.run_tests(&mut ())?;
         }
     }
 
