@@ -1,9 +1,12 @@
-use std::{thread, time::Duration};
+use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
+    pipeline::{self, PipelineOutput},
     value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
     RuntimeContext,
 };
+
+use crate::loader;
 
 pub struct Context {
     pub pixel_ops: Sender,
@@ -45,6 +48,7 @@ pub fn register(interpreter: &mut Interpreter<Context>) {
     interpreter.register_platform([
         (clear_pixel as PlatformFunction<Context>, "clear_pixel"),
         (delay_ms, "delay_ms"),
+        (mod_, "mod"),
         (print, "print"),
         (set_pixel, "set_pixel"),
     ]);
@@ -69,6 +73,40 @@ fn delay_ms(
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
+    Ok(FunctionState::Done)
+}
+
+fn mod_(
+    runtime_context: RuntimeContext,
+    _: &mut Context,
+) -> DataStackResult<FunctionState> {
+    let (path_segments, _) =
+        runtime_context.data_stack.pop_specific::<value::Array>()?;
+
+    let num_segments = path_segments.0.len();
+    let mut path = PathBuf::new();
+
+    for (i, segment) in path_segments.0.into_iter().enumerate() {
+        let segment = segment.expect::<value::Symbol>()?;
+
+        let is_last_segment = i == num_segments - 1;
+        let segment = if is_last_segment {
+            format!("{}.capi", segment.0)
+        } else {
+            segment.0
+        };
+
+        path.push(segment);
+    }
+
+    // The error handling here is not great, but we can only return
+    // `DataStackError`. It might be best to make the return value platform-
+    // specific too. Then we can return a platform-specific error value.
+    let code = loader::load(path).unwrap();
+    let PipelineOutput { start } =
+        pipeline::run(&code, runtime_context.fragments).unwrap();
+    runtime_context.call_stack.push(start);
+
     Ok(FunctionState::Done)
 }
 
