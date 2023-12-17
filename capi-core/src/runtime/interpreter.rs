@@ -67,12 +67,10 @@ impl<C> Interpreter<C> {
 
         Ok(())
     }
-}
 
-impl Interpreter<()> {
     pub fn run_tests(
         &mut self,
-        platform_context: &mut (),
+        platform_context: &mut C,
     ) -> Result<(), TestError> {
         while !self.step(platform_context)?.finished() {}
 
