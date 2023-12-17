@@ -9,6 +9,16 @@ pub struct Context {
     pub pixel_ops: Sender,
 }
 
+impl Context {
+    pub fn from_pixel_ops_sender(
+        pixel_ops: crossbeam_channel::Sender<PixelOp>,
+    ) -> Self {
+        Self {
+            pixel_ops: Sender { inner: pixel_ops },
+        }
+    }
+}
+
 pub struct Sender {
     pub inner: crossbeam_channel::Sender<PixelOp>,
 }
