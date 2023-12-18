@@ -24,7 +24,6 @@ fn main() -> anyhow::Result<()> {
         capi_desktop::args::Command::Test => {
             let mut interpreter = Interpreter::new(&code)?;
             platform::register(&mut interpreter);
-
             interpreter.run_tests(&mut Context::dummy())?;
         }
     }
