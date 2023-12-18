@@ -25,8 +25,7 @@ fn main() -> anyhow::Result<()> {
             let mut interpreter = Interpreter::new(&code)?;
             platform::register(&mut interpreter);
 
-            let mut context = Context::dummy();
-            interpreter.run_tests(&mut context)?;
+            interpreter.run_tests(&mut Context::dummy())?;
         }
     }
 
