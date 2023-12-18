@@ -9,5 +9,9 @@ enum_variant_type = "*"
 thiserror = "*"
 tracing = "*"
 
+
 [dev-dependencies]
 anyhow = "*"
+
+[dev-dependencies.capi-desktop]
+path = "../capi-desktop"
