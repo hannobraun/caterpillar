@@ -21,7 +21,7 @@ mod tests {
         path::Path,
     };
 
-    use crate::Interpreter;
+    use capi_desktop::{platform::Context, Interpreter};
 
     #[test]
     fn for_language_features() -> anyhow::Result<()> {
@@ -43,7 +43,7 @@ mod tests {
             File::open(dir_entry.path())?.read_to_string(&mut code)?;
 
             let mut interpreter = Interpreter::new(&code)?;
-            interpreter.run_tests(&mut ())?;
+            interpreter.run_tests(&mut Context::dummy())?;
         }
 
         Ok(())
