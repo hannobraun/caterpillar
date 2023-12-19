@@ -18,10 +18,23 @@ mod tests {
     use std::{
         fs::{self, File},
         io::Read,
-        path::Path,
+        path::{Path, PathBuf},
     };
 
-    use capi_desktop::{platform::Context, Interpreter};
+    use capi_desktop::{loader, platform::Context, Interpreter};
+
+    #[test]
+    fn native_capi_test_suite() -> anyhow::Result<()> {
+        let script_path = PathBuf::from("../tests.capi");
+        let code = loader::load(&script_path)?;
+
+        let mut interpreter = Interpreter::new(&code)?;
+        capi_desktop::platform::register(&mut interpreter);
+
+        interpreter.run_tests(&mut Context::new(script_path))?;
+
+        Ok(())
+    }
 
     #[test]
     fn for_language_features() -> anyhow::Result<()> {
