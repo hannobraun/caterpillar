@@ -89,8 +89,9 @@ fn mod_(
     let (path_segments, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
 
-    let num_segments = path_segments.0.len();
     let mut path = PathBuf::new();
+
+    let num_segments = path_segments.0.len();
 
     for (i, segment) in path_segments.0.into_iter().enumerate() {
         let segment = segment.expect::<value::Symbol>()?;
