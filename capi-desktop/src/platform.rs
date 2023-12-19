@@ -84,12 +84,13 @@ fn delay_ms(
 
 fn mod_(
     runtime_context: RuntimeContext,
-    _: &mut Context,
+    platform_context: &mut Context,
 ) -> DataStackResult<FunctionState> {
     let (path_segments, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
 
-    let mut path = PathBuf::new();
+    let mut path = platform_context.script_path.clone();
+    path.pop(); // remove script itself, so we're left with the folder it's in
 
     let num_segments = path_segments.0.len();
 
