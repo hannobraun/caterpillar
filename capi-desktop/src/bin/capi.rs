@@ -18,13 +18,14 @@ fn main() -> anyhow::Result<()> {
 
     match args.command {
         capi_desktop::args::Command::Run => {
-            let desktop_thread = DesktopThread::run(code, updates)?;
+            let desktop_thread =
+                DesktopThread::run(args.script, code, updates)?;
             display::start(desktop_thread)?;
         }
         capi_desktop::args::Command::Test => {
             let mut interpreter = Interpreter::new(&code)?;
             platform::register(&mut interpreter);
-            interpreter.run_tests(&mut Context::new())?;
+            interpreter.run_tests(&mut Context::new(args.script))?;
         }
     }
 

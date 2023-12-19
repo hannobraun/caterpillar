@@ -9,15 +9,17 @@ use capi_core::{
 use crate::loader;
 
 pub struct Context {
+    pub script_path: PathBuf,
     pub pixel_ops: Sender,
 }
 
 impl Context {
     #[allow(clippy::new_without_default)] // I'm about to add an argument here
-    pub fn new() -> Self {
+    pub fn new(script_path: impl Into<PathBuf>) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
+            script_path: script_path.into(),
             pixel_ops: Sender { inner: pixel_ops },
         }
     }

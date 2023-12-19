@@ -1,4 +1,4 @@
-use std::thread;
+use std::{path::PathBuf, thread};
 
 use capi_core::{Interpreter, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
@@ -13,6 +13,7 @@ pub struct DesktopThread {
 
 impl DesktopThread {
     pub fn run(
+        script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
@@ -20,7 +21,7 @@ impl DesktopThread {
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
 
         let join_handle = thread::spawn(|| {
-            run_inner(code, updates, lifeline_rx, pixel_ops_tx)
+            run_inner(script_path, code, updates, lifeline_rx, pixel_ops_tx)
         });
 
         Ok(Self {
@@ -45,13 +46,15 @@ impl DesktopThread {
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
 
 fn run_inner(
+    script_path: PathBuf,
     code: String,
     updates: Receiver<String>,
     lifeline: Receiver<()>,
     pixel_ops: Sender<PixelOp>,
 ) -> anyhow::Result<()> {
     let mut interpreter = Interpreter::new(&code)?;
-    let mut context = Context::new().with_pixel_ops_sender(pixel_ops);
+    let mut context =
+        Context::new(script_path).with_pixel_ops_sender(pixel_ops);
 
     platform::register(&mut interpreter);
 
