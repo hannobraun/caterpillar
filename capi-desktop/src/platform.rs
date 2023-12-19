@@ -22,12 +22,12 @@ impl Context {
         }
     }
 
-    pub fn from_pixel_ops_sender(
+    pub fn with_pixel_ops_sender(
+        mut self,
         pixel_ops: crossbeam_channel::Sender<PixelOp>,
     ) -> Self {
-        Self {
-            pixel_ops: Sender { inner: pixel_ops },
-        }
+        self.pixel_ops.inner = pixel_ops;
+        self
     }
 }
 
