@@ -14,7 +14,6 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    #[allow(clippy::new_without_default)] // I'm about to add an argument here
     pub fn new(script_path: impl Into<PathBuf>) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
