@@ -21,7 +21,13 @@ impl DesktopThread {
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
 
         let join_handle = thread::spawn(|| {
-            run_inner(script_path, code, updates, lifeline_rx, pixel_ops_tx)
+            Self::run_inner(
+                script_path,
+                code,
+                updates,
+                lifeline_rx,
+                pixel_ops_tx,
+            )
         });
 
         Ok(Self {
@@ -29,6 +35,61 @@ impl DesktopThread {
             lifeline: lifeline_tx,
             join_handle,
         })
+    }
+
+    fn run_inner(
+        script_path: PathBuf,
+        code: String,
+        updates: Receiver<String>,
+        lifeline: Receiver<()>,
+        pixel_ops: Sender<PixelOp>,
+    ) -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new(&code)?;
+        let mut context =
+            Context::new(script_path).with_pixel_ops_sender(pixel_ops);
+
+        platform::register(&mut interpreter);
+
+        loop {
+            if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
+                // If the other end of the lifeline got dropped, that means we're
+                // supposed to stop.
+                break;
+            }
+
+            let runtime_state = interpreter.step(&mut context)?;
+
+            let new_code = match runtime_state {
+                RuntimeState::Running => match updates.try_recv() {
+                    Ok(new_code) => Some(new_code),
+                    Err(TryRecvError::Empty) => None,
+                    Err(TryRecvError::Disconnected) => break,
+                },
+                RuntimeState::Sleeping => {
+                    unreachable!(
+                        "No desktop platform functions put runtime to sleep"
+                    )
+                }
+                RuntimeState::Finished => {
+                    eprintln!();
+                    eprintln!("> Program finished.");
+                    eprintln!("  > will restart on change to script");
+                    eprintln!("  > press CTRL-C to abort");
+                    eprintln!();
+
+                    match updates.recv() {
+                        Ok(new_code) => Some(new_code),
+                        Err(RecvError) => break,
+                    }
+                }
+            };
+
+            if let Some(new_code) = new_code {
+                interpreter.update(&new_code)?;
+            }
+        }
+
+        Ok(())
     }
 
     pub fn join(self) -> anyhow::Result<()> {
@@ -44,61 +105,6 @@ impl DesktopThread {
 }
 
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
-
-fn run_inner(
-    script_path: PathBuf,
-    code: String,
-    updates: Receiver<String>,
-    lifeline: Receiver<()>,
-    pixel_ops: Sender<PixelOp>,
-) -> anyhow::Result<()> {
-    let mut interpreter = Interpreter::new(&code)?;
-    let mut context =
-        Context::new(script_path).with_pixel_ops_sender(pixel_ops);
-
-    platform::register(&mut interpreter);
-
-    loop {
-        if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
-            // If the other end of the lifeline got dropped, that means we're
-            // supposed to stop.
-            break;
-        }
-
-        let runtime_state = interpreter.step(&mut context)?;
-
-        let new_code = match runtime_state {
-            RuntimeState::Running => match updates.try_recv() {
-                Ok(new_code) => Some(new_code),
-                Err(TryRecvError::Empty) => None,
-                Err(TryRecvError::Disconnected) => break,
-            },
-            RuntimeState::Sleeping => {
-                unreachable!(
-                    "No desktop platform functions put runtime to sleep"
-                )
-            }
-            RuntimeState::Finished => {
-                eprintln!();
-                eprintln!("> Program finished.");
-                eprintln!("  > will restart on change to script");
-                eprintln!("  > press CTRL-C to abort");
-                eprintln!();
-
-                match updates.recv() {
-                    Ok(new_code) => Some(new_code),
-                    Err(RecvError) => break,
-                }
-            }
-        };
-
-        if let Some(new_code) = new_code {
-            interpreter.update(&new_code)?;
-        }
-    }
-
-    Ok(())
-}
 
 fn join_inner(join_handle: JoinHandle) -> anyhow::Result<()> {
     match join_handle.join() {
