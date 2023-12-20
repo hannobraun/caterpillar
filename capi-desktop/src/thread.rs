@@ -31,15 +31,17 @@ impl DesktopThread {
                 let runtime_state = interpreter.step(platform_context)?;
                 Ok(runtime_state)
             }
+
+            fn finish(&self) {
+                eprintln!();
+                eprintln!("> Program finished.");
+                eprintln!("  > will restart on change to script");
+                eprintln!("  > press CTRL-C to abort");
+                eprintln!();
+            }
         }
 
-        Self::new(script_path, code, updates, RunProgram, || {
-            eprintln!();
-            eprintln!("> Program finished.");
-            eprintln!("  > will restart on change to script");
-            eprintln!("  > press CTRL-C to abort");
-            eprintln!();
-        })
+        Self::new(script_path, code, updates, RunProgram)
     }
 
     fn new(
@@ -47,7 +49,6 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
         run_target: impl RunTarget,
-        print_finished_message: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
@@ -60,7 +61,6 @@ impl DesktopThread {
                 lifeline_rx,
                 pixel_ops_tx,
                 run_target,
-                print_finished_message,
             )
         });
 
@@ -78,7 +78,6 @@ impl DesktopThread {
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
-        finish: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
         let mut platform_context =
@@ -108,7 +107,7 @@ impl DesktopThread {
                     )
                 }
                 RuntimeState::Finished => {
-                    finish();
+                    run_target.finish();
 
                     match updates.recv() {
                         Ok(new_code) => Some(new_code),
@@ -160,6 +159,8 @@ trait RunTarget: Send + 'static {
         interpreter: &mut Interpreter,
         platform_context: &mut PlatformContext,
     ) -> anyhow::Result<RuntimeState>;
+
+    fn finish(&self);
 }
 
 trait PrintFinishedMessageFn: Fn() + Send + 'static {}
