@@ -52,8 +52,8 @@ impl DesktopThread {
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
-                // If the other end of the lifeline got dropped, that means we're
-                // supposed to stop.
+                // If the other end of the lifeline got dropped, that means
+                // we're supposed to stop.
                 break;
             }
 
