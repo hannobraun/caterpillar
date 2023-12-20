@@ -28,6 +28,13 @@ impl DesktopThread {
                 let runtime_state = interpreter.step(platform_context)?;
                 Ok(runtime_state)
             },
+            || {
+                eprintln!();
+                eprintln!("> Program finished.");
+                eprintln!("  > will restart on change to script");
+                eprintln!("  > press CTRL-C to abort");
+                eprintln!();
+            },
         )
     }
 
@@ -36,6 +43,7 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
         step: impl StepFn,
+        print_finished_message: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
@@ -48,6 +56,7 @@ impl DesktopThread {
                 lifeline_rx,
                 pixel_ops_tx,
                 step,
+                print_finished_message,
             )
         });
 
@@ -65,6 +74,7 @@ impl DesktopThread {
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
         step: impl StepFn,
+        print_finished_message: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
         let mut platform_context =
@@ -93,11 +103,7 @@ impl DesktopThread {
                     )
                 }
                 RuntimeState::Finished => {
-                    eprintln!();
-                    eprintln!("> Program finished.");
-                    eprintln!("  > will restart on change to script");
-                    eprintln!("  > press CTRL-C to abort");
-                    eprintln!();
+                    print_finished_message();
 
                     match updates.recv() {
                         Ok(new_code) => Some(new_code),
@@ -159,3 +165,7 @@ impl<T> StepFn for T where
         + 'static
 {
 }
+
+trait PrintFinishedMessageFn: Fn() + Send + 'static {}
+
+impl<T> PrintFinishedMessageFn for T where T: Fn() + Send + 'static {}
