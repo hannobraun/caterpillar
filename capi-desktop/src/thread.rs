@@ -20,13 +20,22 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
-        Self::new(script_path, code, updates)
+        Self::new(
+            script_path,
+            code,
+            updates,
+            |interpreter, platform_context| {
+                let runtime_state = interpreter.step(platform_context)?;
+                Ok(runtime_state)
+            },
+        )
     }
 
     fn new(
         script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
+        step: impl StepFn,
     ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
@@ -38,6 +47,7 @@ impl DesktopThread {
                 updates,
                 lifeline_rx,
                 pixel_ops_tx,
+                step,
             )
         });
 
@@ -54,6 +64,7 @@ impl DesktopThread {
         updates: Receiver<String>,
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
+        step: impl StepFn,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
         let mut platform_context =
@@ -68,7 +79,7 @@ impl DesktopThread {
                 break;
             }
 
-            let runtime_state = interpreter.step(&mut platform_context)?;
+            let runtime_state = step(&mut interpreter, &mut platform_context)?;
 
             let new_code = match runtime_state {
                 RuntimeState::Running => match updates.try_recv() {
@@ -131,3 +142,20 @@ impl DesktopThread {
 }
 
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
+
+trait StepFn:
+    Fn(&mut Interpreter, &mut PlatformContext) -> anyhow::Result<RuntimeState>
+    + Send
+    + 'static
+{
+}
+
+impl<T> StepFn for T where
+    T: Fn(
+            &mut Interpreter,
+            &mut PlatformContext,
+        ) -> anyhow::Result<RuntimeState>
+        + Send
+        + 'static
+{
+}
