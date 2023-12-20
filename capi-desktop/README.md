@@ -8,7 +8,7 @@ Linux, macOS, and Windows. Support for other platforms is
 To try this out, run the following from the repository root:
 
 ```shell
-cargo run examples/hello.capi
+cargo run -- examples/hello.capi run
 ```
 
 This runs the "Hello, world!" example, but you can also run
@@ -28,10 +28,17 @@ cargo install \
 You don't need the `--force` for the initial install, but it's going to be
 required to overwrite your existing version, if you upgrade later.
 
-If the installation was successful, you can run any Caterpillar script like this:
+If the installation was successful, you can run any Caterpillar script like
+this:
 
 ```shell
-capi path/to/script.capi
+capi path/to/script.capi run
+```
+
+If a script defines tests, you can run those tests like this:
+
+```shell
+capi path/to/script.capi test
 ```
 
 For more information about Caterpillar, check out the
