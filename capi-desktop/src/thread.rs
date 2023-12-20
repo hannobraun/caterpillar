@@ -1,9 +1,12 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::{Interpreter, RuntimeState};
+use capi_core::RuntimeState;
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
-use crate::platform::{self, PixelOp, PlatformContext};
+use crate::{
+    platform::{self, PixelOp, PlatformContext},
+    Interpreter,
+};
 
 pub struct DesktopThread {
     pub pixel_ops: Receiver<PixelOp>,
