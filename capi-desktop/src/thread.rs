@@ -162,7 +162,3 @@ trait RunTarget: Send + 'static {
 
     fn finish(&self);
 }
-
-trait PrintFinishedMessageFn: Fn() + Send + 'static {}
-
-impl<T> PrintFinishedMessageFn for T where T: Fn() + Send + 'static {}
