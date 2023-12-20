@@ -20,29 +20,33 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
-        Self::new(
-            script_path,
-            code,
-            updates,
-            |interpreter, platform_context| {
+        struct RunProgram;
+
+        impl RunTarget for RunProgram {
+            fn step(
+                &self,
+                interpreter: &mut Interpreter,
+                platform_context: &mut PlatformContext,
+            ) -> anyhow::Result<RuntimeState> {
                 let runtime_state = interpreter.step(platform_context)?;
                 Ok(runtime_state)
-            },
-            || {
-                eprintln!();
-                eprintln!("> Program finished.");
-                eprintln!("  > will restart on change to script");
-                eprintln!("  > press CTRL-C to abort");
-                eprintln!();
-            },
-        )
+            }
+        }
+
+        Self::new(script_path, code, updates, RunProgram, || {
+            eprintln!();
+            eprintln!("> Program finished.");
+            eprintln!("  > will restart on change to script");
+            eprintln!("  > press CTRL-C to abort");
+            eprintln!();
+        })
     }
 
     fn new(
         script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
-        step: impl StepFn,
+        run_target: impl RunTarget,
         print_finished_message: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
@@ -55,7 +59,7 @@ impl DesktopThread {
                 updates,
                 lifeline_rx,
                 pixel_ops_tx,
-                step,
+                run_target,
                 print_finished_message,
             )
         });
@@ -73,7 +77,7 @@ impl DesktopThread {
         updates: Receiver<String>,
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
-        step: impl StepFn,
+        run_target: impl RunTarget,
         print_finished_message: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
@@ -89,7 +93,8 @@ impl DesktopThread {
                 break;
             }
 
-            let runtime_state = step(&mut interpreter, &mut platform_context)?;
+            let runtime_state =
+                run_target.step(&mut interpreter, &mut platform_context)?;
 
             let new_code = match runtime_state {
                 RuntimeState::Running => match updates.try_recv() {
@@ -148,6 +153,14 @@ impl DesktopThread {
 }
 
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
+
+trait RunTarget: Send + 'static {
+    fn step(
+        &self,
+        interpreter: &mut Interpreter,
+        platform_context: &mut PlatformContext,
+    ) -> anyhow::Result<RuntimeState>;
+}
 
 trait StepFn:
     Fn(&mut Interpreter, &mut PlatformContext) -> anyhow::Result<RuntimeState>
