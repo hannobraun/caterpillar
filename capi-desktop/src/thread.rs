@@ -162,23 +162,6 @@ trait RunTarget: Send + 'static {
     ) -> anyhow::Result<RuntimeState>;
 }
 
-trait StepFn:
-    Fn(&mut Interpreter, &mut PlatformContext) -> anyhow::Result<RuntimeState>
-    + Send
-    + 'static
-{
-}
-
-impl<T> StepFn for T where
-    T: Fn(
-            &mut Interpreter,
-            &mut PlatformContext,
-        ) -> anyhow::Result<RuntimeState>
-        + Send
-        + 'static
-{
-}
-
 trait PrintFinishedMessageFn: Fn() + Send + 'static {}
 
 impl<T> PrintFinishedMessageFn for T where T: Fn() + Send + 'static {}
