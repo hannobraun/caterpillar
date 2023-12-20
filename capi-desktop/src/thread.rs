@@ -44,6 +44,35 @@ impl DesktopThread {
         Self::new(script_path, code, updates, RunProgram)
     }
 
+    pub fn test(
+        script_path: PathBuf,
+        code: String,
+        updates: Receiver<String>,
+    ) -> anyhow::Result<Self> {
+        struct RunTests;
+
+        impl RunTarget for RunTests {
+            fn step(
+                &self,
+                interpreter: &mut Interpreter,
+                platform_context: &mut PlatformContext,
+            ) -> anyhow::Result<RuntimeState> {
+                interpreter.run_tests(platform_context)?;
+                Ok(RuntimeState::Finished)
+            }
+
+            fn finish(&self) {
+                eprintln!();
+                eprintln!("> Test run finished.");
+                eprintln!("  > will re-run on change to script");
+                eprintln!("  > press CTRL-C to abort");
+                eprintln!();
+            }
+        }
+
+        Self::new(script_path, code, updates, RunTests)
+    }
+
     fn new(
         script_path: PathBuf,
         code: String,

@@ -1,10 +1,4 @@
-use capi_core::Interpreter;
-use capi_desktop::{
-    args::Args,
-    display, loader,
-    platform::{self, PlatformContext},
-    DesktopThread,
-};
+use capi_desktop::{args::Args, display, loader, DesktopThread};
 
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
@@ -23,9 +17,9 @@ fn main() -> anyhow::Result<()> {
             display::start(desktop_thread)?;
         }
         capi_desktop::args::Command::Test => {
-            let mut interpreter = Interpreter::new(&code)?;
-            platform::register(&mut interpreter);
-            interpreter.run_tests(&mut PlatformContext::new(args.script))?;
+            let desktop_thread =
+                DesktopThread::test(args.script, code, updates)?;
+            desktop_thread.join()?;
         }
     }
 
