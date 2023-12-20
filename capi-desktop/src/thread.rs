@@ -53,7 +53,7 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
-        let mut context =
+        let mut platform_context =
             PlatformContext::new(script_path).with_pixel_ops_sender(pixel_ops);
 
         platform::register(&mut interpreter);
@@ -65,7 +65,7 @@ impl DesktopThread {
                 break;
             }
 
-            let runtime_state = interpreter.step(&mut context)?;
+            let runtime_state = interpreter.step(&mut platform_context)?;
 
             let new_code = match runtime_state {
                 RuntimeState::Running => match updates.try_recv() {
