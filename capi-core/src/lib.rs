@@ -17,7 +17,7 @@ pub use self::{
 mod tests {
     use std::path::PathBuf;
 
-    use capi_desktop::{loader, platform::Context, Interpreter};
+    use capi_desktop::{loader, platform::PlatformContext, Interpreter};
 
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
@@ -27,7 +27,7 @@ mod tests {
         let mut interpreter = Interpreter::new(&code)?;
         capi_desktop::platform::register(&mut interpreter);
 
-        interpreter.run_tests(&mut Context::new(script_path))?;
+        interpreter.run_tests(&mut PlatformContext::new(script_path))?;
 
         Ok(())
     }

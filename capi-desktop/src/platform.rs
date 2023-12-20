@@ -8,12 +8,12 @@ use capi_core::{
 
 use crate::loader;
 
-pub struct Context {
+pub struct PlatformContext {
     pub script_path: PathBuf,
     pub pixel_ops: Sender,
 }
 
-impl Context {
+impl PlatformContext {
     #[allow(clippy::new_without_default)] // I'm about to add an argument here
     pub fn new(script_path: impl Into<PathBuf>) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
@@ -50,9 +50,12 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
-pub fn register(interpreter: &mut Interpreter<Context>) {
+pub fn register(interpreter: &mut Interpreter<PlatformContext>) {
     interpreter.register_platform([
-        (clear_pixel as PlatformFunction<Context>, "clear_pixel"),
+        (
+            clear_pixel as PlatformFunction<PlatformContext>,
+            "clear_pixel",
+        ),
         (delay_ms, "delay_ms"),
         (mod_, "mod"),
         (print, "print"),
@@ -62,7 +65,7 @@ pub fn register(interpreter: &mut Interpreter<Context>) {
 
 fn clear_pixel(
     runtime_context: RuntimeContext,
-    platform_context: &mut Context,
+    platform_context: &mut PlatformContext,
 ) -> DataStackResult<FunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
@@ -74,7 +77,7 @@ fn clear_pixel(
 
 fn delay_ms(
     runtime_context: RuntimeContext,
-    _: &mut Context,
+    _: &mut PlatformContext,
 ) -> DataStackResult<FunctionState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
@@ -84,7 +87,7 @@ fn delay_ms(
 
 fn mod_(
     runtime_context: RuntimeContext,
-    platform_context: &mut Context,
+    platform_context: &mut PlatformContext,
 ) -> DataStackResult<FunctionState> {
     let (path_segments, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
@@ -120,7 +123,7 @@ fn mod_(
 
 fn print(
     runtime_context: RuntimeContext,
-    _: &mut Context,
+    _: &mut PlatformContext,
 ) -> DataStackResult<FunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.payload);
@@ -130,7 +133,7 @@ fn print(
 
 fn set_pixel(
     runtime_context: RuntimeContext,
-    platform_context: &mut Context,
+    platform_context: &mut PlatformContext,
 ) -> DataStackResult<FunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;

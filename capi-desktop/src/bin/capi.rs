@@ -2,7 +2,7 @@ use capi_core::Interpreter;
 use capi_desktop::{
     args::Args,
     display, loader,
-    platform::{self, Context},
+    platform::{self, PlatformContext},
     DesktopThread,
 };
 
@@ -25,7 +25,7 @@ fn main() -> anyhow::Result<()> {
         capi_desktop::args::Command::Test => {
             let mut interpreter = Interpreter::new(&code)?;
             platform::register(&mut interpreter);
-            interpreter.run_tests(&mut Context::new(args.script))?;
+            interpreter.run_tests(&mut PlatformContext::new(args.script))?;
         }
     }
 

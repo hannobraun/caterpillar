@@ -26,4 +26,4 @@ pub use self::thread::DesktopThread;
 /// With this type definition, we make `capi-desktop`'s understanding of what
 /// `Interpreter` is available to the `capi-core` test suite, resolving the type
 /// error.
-pub type Interpreter = capi_core::Interpreter<platform::Context>;
+pub type Interpreter = capi_core::Interpreter<platform::PlatformContext>;

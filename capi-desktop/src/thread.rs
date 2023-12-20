@@ -3,7 +3,7 @@ use std::{path::PathBuf, thread};
 use capi_core::{Interpreter, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
-use crate::platform::{self, Context, PixelOp};
+use crate::platform::{self, PixelOp, PlatformContext};
 
 pub struct DesktopThread {
     pub pixel_ops: Receiver<PixelOp>,
@@ -54,7 +54,7 @@ impl DesktopThread {
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
         let mut context =
-            Context::new(script_path).with_pixel_ops_sender(pixel_ops);
+            PlatformContext::new(script_path).with_pixel_ops_sender(pixel_ops);
 
         platform::register(&mut interpreter);
 
