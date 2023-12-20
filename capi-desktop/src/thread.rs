@@ -17,6 +17,14 @@ impl DesktopThread {
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
+        Self::new(script_path, code, updates)
+    }
+
+    fn new(
+        script_path: PathBuf,
+        code: String,
+        updates: Receiver<String>,
+    ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
 
