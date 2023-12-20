@@ -78,7 +78,7 @@ impl DesktopThread {
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
-        print_finished_message: impl PrintFinishedMessageFn,
+        finish: impl PrintFinishedMessageFn,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
         let mut platform_context =
@@ -108,7 +108,7 @@ impl DesktopThread {
                     )
                 }
                 RuntimeState::Finished => {
-                    print_finished_message();
+                    finish();
 
                     match updates.recv() {
                         Ok(new_code) => Some(new_code),
