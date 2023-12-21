@@ -84,21 +84,21 @@ impl<C> Evaluator<C> {
                         FunctionState::Done
                     }
                     ItemInModule::IntrinsicFunction(f) => {
-                        f(self.runtime_context(fragments)).map_err(|err| {
-                            EvaluatorError {
-                                kind: err.into(),
-                                fragment: fragment_id,
-                            }
-                        })?;
-                        FunctionState::Done
-                    }
-                    ItemInModule::PlatformFunction(f) => {
-                        f(self.runtime_context(fragments), platform_context)
+                        f(self.runtime_context(fragment_id, fragments))
                             .map_err(|err| EvaluatorError {
                                 kind: err.into(),
                                 fragment: fragment_id,
-                            })?
+                            })?;
+                        FunctionState::Done
                     }
+                    ItemInModule::PlatformFunction(f) => f(
+                        self.runtime_context(fragment_id, fragments),
+                        platform_context,
+                    )
+                    .map_err(|err| EvaluatorError {
+                        kind: err.into(),
+                        fragment: fragment_id,
+                    })?,
                     ItemInModule::UserDefinedFunction(
                         UserDefinedFunction { body, .. },
                     ) => {
@@ -125,9 +125,11 @@ impl<C> Evaluator<C> {
 
     fn runtime_context<'r>(
         &'r mut self,
+        this: FragmentId,
         fragments: &'r mut Fragments,
     ) -> RuntimeContext<'r> {
         RuntimeContext {
+            this,
             fragments,
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,

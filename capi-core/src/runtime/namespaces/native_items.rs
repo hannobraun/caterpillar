@@ -1,5 +1,5 @@
 use crate::{
-    repr::eval::fragments::Fragments,
+    repr::eval::fragments::{FragmentId, Fragments},
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,
 };
@@ -17,6 +17,7 @@ pub type PlatformFunction<C> =
     fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
 
 pub struct RuntimeContext<'r> {
+    pub this: FragmentId,
     pub fragments: &'r mut Fragments,
     pub namespace: UserDefinedItems<'r>,
     pub call_stack: &'r mut CallStack,
