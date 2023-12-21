@@ -67,7 +67,7 @@ impl Fragments {
                 // that the new fragment replaces it.
                 if let Some(existing) = self.by_address.get(&address).copied() {
                     if existing != new {
-                        // Let's only do the update, if we new id is actually
+                        // Let's only do the update, if the new id is actually
                         // different from the existing one, i.e. we're actually
                         // replacing anything.
 
