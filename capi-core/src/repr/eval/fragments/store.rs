@@ -33,7 +33,7 @@ impl Fragments {
     /// Detecting replacements is non-trivial, however. Let's consider some
     /// examples, starting with a simple one:
     ///
-    /// ```
+    /// ``` ignore
     /// b a -> c a
     /// ```
     ///
@@ -50,7 +50,7 @@ impl Fragments {
     /// But by itself, this is not enough. Let's consider this slightly more
     /// complicated case:
     ///
-    /// ```
+    /// ``` ignore
     /// c b a -> e d a
     /// ```
     ///
