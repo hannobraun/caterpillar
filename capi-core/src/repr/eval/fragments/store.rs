@@ -19,6 +19,89 @@ impl Fragments {
         Self::default()
     }
 
+    /// # Insert fragment, detecting replaced fragments
+    ///
+    /// If this fragment replaced another one, this is noted, and this
+    /// information can later be retrieved via [`Fragments::take_replacements`].
+    ///
+    /// ## Algorithm
+    ///
+    /// The insertion itself is straight-forward: The fragment is inserted into
+    /// a map, indexed by its ID (and also a second map, indexed by its
+    /// address). Done.
+    ///
+    /// Detecting replacements is non-trivial, however. Let's consider some
+    /// examples, starting with a simple one:
+    ///
+    /// ```
+    /// b a -> c a
+    /// ```
+    ///
+    /// Here, the letters are placeholders for fragments, while `->` separates
+    /// the old version of the example code (on the left) from the new version
+    /// (on the right).
+    ///
+    /// Here, `c` replaces `b`, which is rather straight-forward to detect. They
+    /// have the same `parent` (as both are in the same context), and they are
+    /// both followed by the same `next` element, `a`. As a result, they have
+    /// the same address. Hence, checking if there already was a fragment at the
+    /// the new fragment's address is the first step in detecting a replacement.
+    ///
+    /// But by itself, this is not enough. Let's consider this slightly more
+    /// complicated case:
+    ///
+    /// ```
+    /// c b a -> e d a
+    /// ```
+    ///
+    /// Here, `b` is replaced by `d`. Even if `c` stays the same on a syntactic
+    /// level, it has a new `next` fragment, and thus must become a new fragment
+    /// itself. Hence, `c` is replaced by `e`.
+    ///
+    /// The replacement `b` -> `d` is again trivially detected by the address
+    /// lookup step. But this won't detect the replacement `c` -> `e`. Their
+    /// `next` fragments differ (they are `b` and `d`, respectively), meaning
+    /// they have different addresses.
+    ///
+    /// So what can we do? Since syntax is analyzed (and hence, fragments are
+    /// created) right-to-left, the replacement `b` -> `d` is already known by
+    /// the point we consider the replacement `c` -> `e`. We can use this to
+    /// update the address of `e`, after which it will be found by the address
+    /// lookup.
+    ///
+    /// Let's take a closer look at what happens, step by step. Since all the
+    /// fragments in this example have the same parent, we'll ignore that part
+    /// of the address, for the sake of simplicity. In the implementation, the
+    /// `parent` is handled exactly the same as the `next` fragment.
+    ///
+    /// 1. Insert `a` at address `next: none`
+    ///    1. no fragment already at address `next: none`
+    ///    2. no `next` fragment available
+    /// 2. Insert `b` at address `next: a`
+    ///    1. no fragment already at address `next: a`
+    ///    2. no known replacements of `a`
+    /// 3. Insert `c` at address `next: b`
+    ///    1. no fragment already at address `next: b`
+    ///    2. no known replacements of `b`
+    ///
+    /// At this point, our initial script (`c b a`) has been fully analyzed and
+    /// is running. Now the user is makes a change to the original code,
+    /// resulting in more fragments being inserted.
+    ///
+    /// 4. Insert `a` at address `next: none`
+    ///    1. fragment `a` at address `next: none` is identical; no replacement
+    ///    2. no `next` fragment available
+    /// 5. Insert `d` at address `next: a`
+    ///    1. fragment `b` at address `next: a`; note replacement `b` -> `d`
+    ///    2. no known replacements of `a`
+    /// 6. Insert `e` at address `next: d`
+    ///    1. no fragment already at address `next: d`
+    ///    2. `d` is known to replace `b`; substitute address to `next: b`
+    ///    3. fragment `c` at address `next: b`; note replacement `c` -> `e`
+    ///
+    /// And that's it! We've detected both replacements (`b` -> `d` and `c` ->
+    /// `e`). This scales up to more complicated cases, requiring more
+    /// substitutions of the address each time.
     pub fn insert(&mut self, fragment: Fragment) -> FragmentId {
         let id = fragment.id();
         let address = fragment.address;
