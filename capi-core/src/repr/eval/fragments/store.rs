@@ -146,7 +146,7 @@ impl Fragments {
                     // programs, so the number we panic at should probably
                     // depend on the number of fragments. But this will do for
                     // now.
-                    panic!("Possibly endless loop when replacing fragments");
+                    panic!("Possibly endless loop while replacing fragments");
                 }
 
                 // Look up the address, to find any fragments that this one
