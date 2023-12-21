@@ -167,34 +167,9 @@ impl Fragments {
                     }
                 }
 
-                // The replacement above only catches very obvious replacements
-                // like this:
-                //
-                // ```
-                // b a -> c a
-                // ```
-                //
-                // Here, `b` is replaced by `c`. Straight-forward to detect,
-                // because they have the same address.
-                //
-                // However, if the replacement is not at the beginning of a
-                // context, things are more complicated:
-                //
-                // ```
-                // c b a -> e d a
-                // ```
-                //
-                // Here, `b` is replaced by `d`. It's impossible for `c` to stay
-                // there in this case, since the ID of a fragment depends on its
-                // next fragment (`b`/`d`), and that has changed.
-                //
-                // Therefore, `c` is replaced by `e`, but that replacement is
-                // more difficult to detect. They don't have the same address
-                // (one has `b` as next, the other `d`).
-                //
-                // That's what the following code is for. It checks whether IDs
-                // in the address are known to have been replaced, modifies the
-                // address accordingly, then tries again.
+                // No straight replacement found. Let's see if we need to
+                // substitute the address. If substitutions are found, try
+                // again.
 
                 let replaced_by_parent = address
                     .parent
