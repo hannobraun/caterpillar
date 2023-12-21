@@ -12,20 +12,12 @@ pub enum FragmentPayload {
 
     /// Terminates a context
     ///
-    /// By convention, fragments within a block use the fragment *after* the
-    /// block as their parents. This is done for practical reasons, as the ID
-    /// of the next fragment is available when a parent ID is needed, while the
-    /// ID of the block itself or the fragment before it isn't. And they can't
-    /// be made available either, as they depend on the block contents, which
-    /// would result in a circular dependency.
+    /// Terminators are added to the end of every context, to make sure that no
+    /// block is ever the last fragment in the context. This is required to
+    /// provide unique addresses for all fragments within blocks.
     ///
-    /// However, this means that blocks *must not* be the last fragment in a
-    /// context, or the items within such blocks are no longer uniquely
-    /// addressable.
-    ///
-    /// This is why terminators exist. They terminate every context, and thus
-    /// make sure that a unique parent is provided for the fragments in any
-    /// block.
+    /// Please refer to the documentation of [`FragmentAddress`] for more
+    /// information.
     Terminator,
 }
 
