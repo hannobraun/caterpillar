@@ -22,13 +22,8 @@ fn analyze_syntax_tree(
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> FragmentId {
-    // By convention, we use the fragment after a block as the parent of all
-    // fragments within the block. Please refer to the implementation of that
-    // below for an explanation.
-    //
-    // To make sure that such a parent is always available, even if the block is
-    // the last syntax element in its respective context, we add a special
-    // "terminator" fragment to the end of every block.
+    // Add terminator as last fragment within the block. See documentation of
+    // `FragmentPayload::Terminator` for an explanation.
     let mut next_fragment = fragments.insert(Fragment::new(
         FragmentAddress { parent, next: None },
         FragmentPayload::Terminator,
