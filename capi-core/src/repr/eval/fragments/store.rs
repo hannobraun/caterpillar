@@ -30,7 +30,10 @@ impl Fragments {
             //
             // Let's make sure, just for now, there actually are no hash
             // collisions, okay?
-            assert_eq!(existing, fragment);
+            assert_eq!(
+                existing, fragment,
+                "Inserting fragment caused hash collision"
+            );
         } else {
             // Only show the `insert` log message if we've actually inserted
             // something new. This reduces log spam.
