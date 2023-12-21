@@ -35,8 +35,8 @@ impl Fragments {
                 "Inserting fragment caused hash collision"
             );
         } else {
-            // Only show the `insert` log message if we've actually inserted
-            // something new. This reduces log spam.
+            // Reduce log spam by only showing the `insert` log message if we've
+            // actually inserted a new fragment.
 
             let id = id.display_short();
             let payload = fragment.payload.display_short();
