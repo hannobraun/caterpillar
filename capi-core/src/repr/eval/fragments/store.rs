@@ -138,6 +138,8 @@ impl Fragments {
 
             let mut i = 0;
             loop {
+                // Let's make sure that a bug in this algorithm doesn't cause it
+                // to hang mysteriously.
                 i += 1;
                 if i == 128 {
                     // I guess we could reach this number of iterations with big
