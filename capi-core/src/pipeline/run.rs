@@ -11,11 +11,11 @@ use super::stages::{
 
 pub fn run(
     code: &str,
+    parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
-    let parent = None;
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
 
     Ok(PipelineOutput { start })

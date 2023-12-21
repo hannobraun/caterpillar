@@ -18,8 +18,10 @@ pub struct Interpreter<C> {
 
 impl<C> Interpreter<C> {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
+        let parent = None;
         let mut fragments = Fragments::new();
-        let PipelineOutput { start } = pipeline::run(code, &mut fragments)?;
+        let PipelineOutput { start } =
+            pipeline::run(code, parent, &mut fragments)?;
 
         let mut evaluator = Evaluator::default();
         evaluator.call_stack.push(start);
@@ -48,8 +50,9 @@ impl<C> Interpreter<C> {
     }
 
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
+        let parent = None;
         let PipelineOutput { start } =
-            pipeline::run(code, &mut self.fragments)?;
+            pipeline::run(code, parent, &mut self.fragments)?;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
