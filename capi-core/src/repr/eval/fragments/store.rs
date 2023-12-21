@@ -42,7 +42,7 @@ impl Fragments {
             let payload = fragment.payload.display_short();
             let address = address.display_short();
 
-            debug!("insert {id} ({payload}) at {address}");
+            debug!("Insert {id} ({payload}) at {address}");
         }
 
         {
