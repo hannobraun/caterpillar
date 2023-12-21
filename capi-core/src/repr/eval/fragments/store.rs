@@ -69,7 +69,7 @@ impl Fragments {
                     if existing != new {
                         // Let's only do the update, if the new id is actually
                         // different from the existing one, i.e. we're actually
-                        // replacing anything.
+                        // replacing something.
 
                         self.replacements.insert(existing, new);
 
