@@ -187,6 +187,9 @@ impl Fragments {
                     continue;
                 }
 
+                // No replacement found, and no substitutions found either.
+                // We're done!
+
                 break;
             }
         }
