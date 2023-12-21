@@ -164,6 +164,8 @@ impl Fragments {
                         let existing = existing.display_short();
                         let new = new.display_short();
                         debug!("Replace {existing} with {new}");
+
+                        break;
                     }
                 }
 
