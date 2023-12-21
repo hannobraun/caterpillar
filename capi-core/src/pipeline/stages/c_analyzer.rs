@@ -10,9 +10,9 @@ use crate::repr::{
 
 pub fn analyze(
     syntax_tree: SyntaxTree,
+    parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> AnalyzerOutput {
-    let parent = None;
     let start = analyze_syntax_tree(syntax_tree, parent, fragments);
     AnalyzerOutput { start }
 }
