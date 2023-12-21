@@ -113,7 +113,7 @@ fn mod_(
     // `DataStackError`. It might be best to make the return value platform-
     // specific too. Then we can return a platform-specific error value.
     let code = loader::load(path).unwrap();
-    let parent = None;
+    let parent = Some(runtime_context.this);
     let PipelineOutput { start } =
         pipeline::run(&code, parent, runtime_context.fragments).unwrap();
     runtime_context.call_stack.push(start);
