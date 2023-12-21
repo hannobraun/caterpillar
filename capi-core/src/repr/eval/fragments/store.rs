@@ -147,11 +147,10 @@ impl Fragments {
                     panic!("Possibly endless loop when replacing fragments");
                 }
 
-                // For the update process to work, we need to know which
-                // fragments replaced which other fragments. Let's start by
-                // checking for the straight-forward case here. If there's
-                // already a different fragment with the same address, we know
-                // that the new fragment replaces it.
+                // Look up the address, to find any fragments that this one
+                // replaces. This might be the actual address of the inserted
+                // fragment, or one substituted in an earlier iteration of the
+                // loop.
                 if let Some(existing) = self.by_address.get(&address).copied() {
                     if existing != new {
                         // Let's only do the update, if the new id is actually
