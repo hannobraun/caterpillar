@@ -1,6 +1,6 @@
 use super::FragmentId;
 
-/// Uniquely identifies the location of a syntax fragment in the code
+/// Uniquely identifies the location of a code fragment
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub struct FragmentAddress {
     pub parent: Option<FragmentId>,
