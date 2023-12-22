@@ -27,12 +27,12 @@ impl Loader {
 
     pub fn load(
         &mut self,
-        path: impl AsRef<Path>,
+        path: impl Into<PathBuf>,
     ) -> anyhow::Result<(String, Receiver<String>)> {
-        let path = path.as_ref();
+        let path = path.into();
 
-        let code = load(path)?;
-        let ScriptWatcher { updates, watcher } = watch(PathBuf::from(path))?;
+        let code = load(&path)?;
+        let ScriptWatcher { updates, watcher } = watch(path)?;
 
         self.watchers.push(watcher);
         Ok((code, updates))
