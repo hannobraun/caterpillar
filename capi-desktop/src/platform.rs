@@ -9,7 +9,7 @@ use capi_core::{
 use crate::loader::Loader;
 
 pub struct PlatformContext {
-    pub script_path: PathBuf,
+    pub entry_script_path: PathBuf,
     pub pixel_ops: Sender,
 }
 
@@ -18,7 +18,7 @@ impl PlatformContext {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
-            script_path: script_path.into(),
+            entry_script_path: script_path.into(),
             pixel_ops: Sender { inner: pixel_ops },
         }
     }
@@ -91,7 +91,7 @@ fn mod_(
     let (path_segments, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
 
-    let mut path = platform_context.script_path.clone();
+    let mut path = platform_context.entry_script_path.clone();
     path.pop(); // remove script itself, so we're left with the folder it's in
 
     let num_segments = path_segments.0.len();
