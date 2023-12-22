@@ -16,7 +16,7 @@ pub struct DesktopThread {
 
 impl DesktopThread {
     pub fn run(
-        script_path: PathBuf,
+        entry_script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
@@ -41,7 +41,7 @@ impl DesktopThread {
             }
         }
 
-        Self::new(script_path, code, updates, RunProgram)
+        Self::new(entry_script_path, code, updates, RunProgram)
     }
 
     pub fn test(
