@@ -84,7 +84,7 @@ fn watch(path: &Path) -> anyhow::Result<ScriptWatcher> {
 
     debouncer
         .watcher()
-        .watch(path.as_ref(), RecursiveMode::NonRecursive)?;
+        .watch(path, RecursiveMode::NonRecursive)?;
 
     Ok(ScriptWatcher {
         updates: receiver,
