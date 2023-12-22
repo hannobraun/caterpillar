@@ -27,8 +27,7 @@ impl Loader {
     }
 }
 
-fn load(path: impl AsRef<Path>) -> anyhow::Result<String> {
-    let path = path.as_ref();
+fn load(path: &Path) -> anyhow::Result<String> {
     let code = load_inner(path)
         .with_context(|| format!("Loading script `{}`", path.display()))?;
     Ok(code)
