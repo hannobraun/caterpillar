@@ -32,11 +32,16 @@ impl Loader {
         let path = path.as_ref();
 
         let code = load(path)?;
-        let (updates, watcher) = watch(path)?;
+        let ScriptWatcher { updates, watcher } = watch(path)?;
 
         self.watchers.push(watcher);
         Ok((code, updates))
     }
+}
+
+struct ScriptWatcher {
+    pub updates: Receiver<String>,
+    pub watcher: Debouncer<RecommendedWatcher>,
 }
 
 fn load(path: &Path) -> anyhow::Result<String> {
@@ -51,9 +56,7 @@ fn load_inner(path: &Path) -> io::Result<String> {
     Ok(code)
 }
 
-fn watch(
-    path: impl AsRef<Path>,
-) -> anyhow::Result<(Receiver<String>, Debouncer<RecommendedWatcher>)> {
+fn watch(path: impl AsRef<Path>) -> anyhow::Result<ScriptWatcher> {
     let path_for_watcher = PathBuf::from(path.as_ref());
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
@@ -83,5 +86,8 @@ fn watch(
         .watcher()
         .watch(path.as_ref(), RecursiveMode::NonRecursive)?;
 
-    Ok((receiver, debouncer))
+    Ok(ScriptWatcher {
+        updates: receiver,
+        watcher: debouncer,
+    })
 }
