@@ -14,11 +14,11 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    pub fn new(script_path: impl Into<PathBuf>) -> Self {
+    pub fn new(entry_script_path: impl Into<PathBuf>) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
-            entry_script_path: script_path.into(),
+            entry_script_path: entry_script_path.into(),
             pixel_ops: Sender { inner: pixel_ops },
         }
     }
