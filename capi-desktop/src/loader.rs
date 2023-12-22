@@ -32,7 +32,7 @@ impl Loader {
         let path = path.as_ref();
 
         let code = load(path)?;
-        let ScriptWatcher { updates, watcher } = watch(path)?;
+        let ScriptWatcher { updates, watcher } = watch(PathBuf::from(path))?;
 
         self.watchers.push(watcher);
         Ok((code, updates))
@@ -56,8 +56,8 @@ fn load_inner(path: &Path) -> io::Result<String> {
     Ok(code)
 }
 
-fn watch(path: &Path) -> anyhow::Result<ScriptWatcher> {
-    let path_for_watcher = PathBuf::from(path);
+fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
+    let path_for_watcher = path.clone();
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
 
@@ -84,7 +84,7 @@ fn watch(path: &Path) -> anyhow::Result<ScriptWatcher> {
 
     debouncer
         .watcher()
-        .watch(path, RecursiveMode::NonRecursive)?;
+        .watch(&path, RecursiveMode::NonRecursive)?;
 
     Ok(ScriptWatcher {
         updates: receiver,
