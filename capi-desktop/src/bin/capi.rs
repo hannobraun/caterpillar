@@ -12,7 +12,8 @@ fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    let code = Loader::new().load(&args.script)?;
+    let mut loader = Loader::new();
+    let code = loader.load(&args.script)?;
     let (updates, _watcher) = loader::watch(&args.script)?;
 
     match args.command {
