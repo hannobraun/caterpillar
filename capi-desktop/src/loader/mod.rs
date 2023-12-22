@@ -1,7 +1,7 @@
 mod load;
 mod watch;
 
-pub use self::{load::load, watch::watch};
+pub use self::watch::watch;
 
 use std::path::Path;
 
