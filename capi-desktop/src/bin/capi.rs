@@ -12,7 +12,7 @@ fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    let code = Loader.load(&args.script)?;
+    let code = Loader::new().load(&args.script)?;
     let (updates, _watcher) = loader::watch(&args.script)?;
 
     match args.command {

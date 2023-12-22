@@ -17,6 +17,10 @@ use tracing::error;
 pub struct Loader;
 
 impl Loader {
+    pub fn new() -> Self {
+        Self
+    }
+
     pub fn load(&mut self, path: impl AsRef<Path>) -> anyhow::Result<String> {
         load(path)
     }
