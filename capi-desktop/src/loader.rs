@@ -56,8 +56,8 @@ fn load_inner(path: &Path) -> io::Result<String> {
     Ok(code)
 }
 
-fn watch(path: impl AsRef<Path>) -> anyhow::Result<ScriptWatcher> {
-    let path_for_watcher = PathBuf::from(path.as_ref());
+fn watch(path: &Path) -> anyhow::Result<ScriptWatcher> {
+    let path_for_watcher = PathBuf::from(path);
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
 
