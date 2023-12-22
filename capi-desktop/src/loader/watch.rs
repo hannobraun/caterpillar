@@ -10,7 +10,7 @@ use notify_debouncer_mini::{
 };
 use tracing::error;
 
-use crate::loader::load::load;
+use crate::loader::load;
 
 pub fn watch(
     path: impl AsRef<Path>,
