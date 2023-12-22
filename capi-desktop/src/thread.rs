@@ -101,7 +101,7 @@ impl DesktopThread {
     }
 
     fn run_inner(
-        script_path: PathBuf,
+        entry_script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
         lifeline: Receiver<()>,
@@ -109,8 +109,8 @@ impl DesktopThread {
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new(&code)?;
-        let mut platform_context =
-            PlatformContext::new(script_path).with_pixel_ops_sender(pixel_ops);
+        let mut platform_context = PlatformContext::new(entry_script_path)
+            .with_pixel_ops_sender(pixel_ops);
 
         platform::register(&mut interpreter);
 
