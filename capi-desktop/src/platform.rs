@@ -9,7 +9,12 @@ use capi_core::{
 use crate::loader::Loader;
 
 pub struct PlatformContext {
+    /// The path of the script that was the entry point into the current program
+    ///
+    /// The entry script is the top-level script that was loaded first. Its path
+    /// is used as the base for all `mod` declarations.
     pub entry_script_path: PathBuf,
+
     pub pixel_ops: Sender,
 }
 
