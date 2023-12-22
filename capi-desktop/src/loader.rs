@@ -22,6 +22,7 @@ impl Loader {
     }
 
     pub fn load(&mut self, path: impl AsRef<Path>) -> anyhow::Result<String> {
+        let path = path.as_ref();
         load(path)
     }
 }
