@@ -69,7 +69,7 @@ pub fn watch(
 
     debouncer
         .watcher()
-        .watch(path.as_ref(), RecursiveMode::Recursive)?;
+        .watch(path.as_ref(), RecursiveMode::NonRecursive)?;
 
     Ok((receiver, debouncer))
 }
