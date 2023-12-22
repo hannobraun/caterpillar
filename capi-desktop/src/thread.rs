@@ -74,7 +74,7 @@ impl DesktopThread {
     }
 
     fn new(
-        script_path: PathBuf,
+        entry_script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
         run_target: impl RunTarget,
@@ -84,7 +84,7 @@ impl DesktopThread {
 
         let join_handle = thread::spawn(|| {
             Self::run_inner(
-                script_path,
+                entry_script_path,
                 code,
                 updates,
                 lifeline_rx,
