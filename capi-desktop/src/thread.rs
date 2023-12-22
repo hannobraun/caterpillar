@@ -45,7 +45,7 @@ impl DesktopThread {
     }
 
     pub fn test(
-        script_path: PathBuf,
+        entry_script_path: PathBuf,
         code: String,
         updates: Receiver<String>,
     ) -> anyhow::Result<Self> {
@@ -70,7 +70,7 @@ impl DesktopThread {
             }
         }
 
-        Self::new(script_path, code, updates, RunTests)
+        Self::new(entry_script_path, code, updates, RunTests)
     }
 
     fn new(
