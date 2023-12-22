@@ -14,17 +14,28 @@ use notify_debouncer_mini::{
 use tracing::error;
 
 #[derive(Default)]
-pub struct Loader;
+pub struct Loader {
+    watchers: Vec<Debouncer<RecommendedWatcher>>,
+}
 
 impl Loader {
     pub fn new() -> Self {
-        Self
+        Self {
+            watchers: Vec::new(),
+        }
     }
 
-    pub fn load(&mut self, path: impl AsRef<Path>) -> anyhow::Result<String> {
+    pub fn load(
+        &mut self,
+        path: impl AsRef<Path>,
+    ) -> anyhow::Result<(String, Receiver<String>)> {
         let path = path.as_ref();
+
         let code = load(path)?;
-        Ok(code)
+        let (updates, watcher) = watch(path)?;
+
+        self.watchers.push(watcher);
+        Ok((code, updates))
     }
 }
 

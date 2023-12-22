@@ -1,9 +1,4 @@
-use capi_desktop::{
-    args::Args,
-    display,
-    loader::{self, Loader},
-    DesktopThread,
-};
+use capi_desktop::{args::Args, display, loader::Loader, DesktopThread};
 
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
@@ -13,8 +8,7 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let mut loader = Loader::new();
-    let code = loader.load(&args.script)?;
-    let (updates, _watcher) = loader::watch(&args.script)?;
+    let (code, updates) = loader.load(&args.script)?;
 
     match args.command {
         capi_desktop::args::Command::Run => {
