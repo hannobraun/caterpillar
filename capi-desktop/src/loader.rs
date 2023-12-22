@@ -51,7 +51,7 @@ fn load_inner(path: &Path) -> io::Result<String> {
     Ok(code)
 }
 
-pub fn watch(
+fn watch(
     path: impl AsRef<Path>,
 ) -> anyhow::Result<(Receiver<String>, Debouncer<RecommendedWatcher>)> {
     let path_for_watcher = PathBuf::from(path.as_ref());
