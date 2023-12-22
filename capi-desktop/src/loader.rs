@@ -13,6 +13,7 @@ use notify_debouncer_mini::{
 };
 use tracing::error;
 
+#[derive(Default)]
 pub struct Loader;
 
 impl Loader {
