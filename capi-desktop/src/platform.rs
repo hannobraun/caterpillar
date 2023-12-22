@@ -6,7 +6,7 @@ use capi_core::{
     RuntimeContext,
 };
 
-use crate::loader;
+use crate::loader::Loader;
 
 pub struct PlatformContext {
     pub script_path: PathBuf,
@@ -112,7 +112,7 @@ fn mod_(
     // The error handling here is not great, but we can only return
     // `DataStackError`. It might be best to make the return value platform-
     // specific too. Then we can return a platform-specific error value.
-    let code = loader::load(path).unwrap();
+    let code = Loader::load(path).unwrap();
     let parent = Some(runtime_context.this);
     let PipelineOutput { start } =
         pipeline::run(&code, parent, runtime_context.fragments).unwrap();

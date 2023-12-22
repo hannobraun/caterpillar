@@ -17,12 +17,14 @@ pub use self::{
 mod tests {
     use std::path::PathBuf;
 
-    use capi_desktop::{loader, platform::PlatformContext, Interpreter};
+    use capi_desktop::{
+        loader::Loader, platform::PlatformContext, Interpreter,
+    };
 
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
         let script_path = PathBuf::from("../tests.capi");
-        let code = loader::load(&script_path)?;
+        let code = Loader::load(&script_path)?;
 
         let mut interpreter = Interpreter::new(&code)?;
         capi_desktop::platform::register(&mut interpreter);
