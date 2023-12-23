@@ -18,12 +18,13 @@ pub struct Interpreter<C> {
 
 impl<C> Interpreter<C> {
     pub fn new(code: &str) -> Result<Self, PipelineError> {
-        let parent = None;
         let mut fragments = Fragments::new();
+        let mut evaluator = Evaluator::default();
+
+        let parent = None;
         let PipelineOutput { start } =
             pipeline::run(code, parent, &mut fragments)?;
 
-        let mut evaluator = Evaluator::default();
         evaluator.call_stack.push(start);
 
         Ok(Interpreter {
