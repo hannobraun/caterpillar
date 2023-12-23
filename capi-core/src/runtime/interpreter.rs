@@ -18,12 +18,9 @@ pub struct Interpreter<C> {
 
 impl<C> Interpreter<C> {
     pub fn new() -> Result<Self, PipelineError> {
-        let fragments = Fragments::new();
-        let evaluator = Evaluator::default();
-
         Ok(Interpreter {
-            fragments,
-            evaluator,
+            fragments: Fragments::new(),
+            evaluator: Evaluator::default(),
             state: RuntimeState::Finished,
         })
     }
