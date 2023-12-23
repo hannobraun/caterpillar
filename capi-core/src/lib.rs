@@ -23,11 +23,11 @@ mod tests {
 
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
-        let script_path = PathBuf::from("../tests.capi");
-        let (code, _) = Loader::new().load(&script_path)?;
-
         let mut interpreter = Interpreter::new()?;
         capi_desktop::platform::register(&mut interpreter);
+
+        let script_path = PathBuf::from("../tests.capi");
+        let (code, _) = Loader::new().load(&script_path)?;
 
         interpreter.update(&code)?;
         interpreter.run_tests(&mut PlatformContext::new(script_path))?;
