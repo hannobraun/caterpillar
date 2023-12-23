@@ -27,9 +27,9 @@ mod tests {
         let (code, _) = Loader::new().load(&script_path)?;
 
         let mut interpreter = Interpreter::new()?;
-        interpreter.update(&code)?;
         capi_desktop::platform::register(&mut interpreter);
 
+        interpreter.update(&code)?;
         interpreter.run_tests(&mut PlatformContext::new(script_path))?;
 
         Ok(())
