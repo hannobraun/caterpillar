@@ -4,7 +4,7 @@ use std::path::PathBuf;
 #[derive(clap::Parser)]
 pub struct Args {
     /// Path to a Caterpillar script
-    pub script: PathBuf,
+    pub entry_script: PathBuf,
 
     #[clap(subcommand)]
     pub command: Command,

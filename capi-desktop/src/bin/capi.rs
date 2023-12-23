@@ -8,17 +8,17 @@ fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let mut loader = Loader::new();
-    let (code, updates) = loader.load(&args.script)?;
+    let (code, updates) = loader.load(&args.entry_script)?;
 
     match args.command {
         capi_desktop::args::Command::Run => {
             let desktop_thread =
-                DesktopThread::run(args.script, code, updates)?;
+                DesktopThread::run(args.entry_script, code, updates)?;
             display::start(desktop_thread)?;
         }
         capi_desktop::args::Command::Test => {
             let desktop_thread =
-                DesktopThread::test(args.script, code, updates)?;
+                DesktopThread::test(args.entry_script, code, updates)?;
             desktop_thread.join()?;
         }
     }
