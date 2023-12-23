@@ -17,20 +17,14 @@ pub struct Interpreter<C> {
 }
 
 impl<C> Interpreter<C> {
-    pub fn new(code: &str) -> Result<Self, PipelineError> {
-        let mut fragments = Fragments::new();
-        let mut evaluator = Evaluator::default();
-
-        let parent = None;
-        let PipelineOutput { start } =
-            pipeline::run(code, parent, &mut fragments)?;
-
-        evaluator.call_stack.push(start);
+    pub fn new() -> Result<Self, PipelineError> {
+        let fragments = Fragments::new();
+        let evaluator = Evaluator::default();
 
         Ok(Interpreter {
             fragments,
             evaluator,
-            state: RuntimeState::Running,
+            state: RuntimeState::Finished,
         })
     }
 
@@ -298,7 +292,8 @@ mod tests {
 
     impl Interpreter {
         pub fn new(code: &str) -> anyhow::Result<Self> {
-            let mut inner = crate::Interpreter::new(code)?;
+            let mut inner = crate::Interpreter::new()?;
+            inner.update(code)?;
 
             inner.register_platform([(
                 ping as PlatformFunction<PlatformContext>,

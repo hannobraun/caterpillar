@@ -98,7 +98,8 @@ impl DesktopThread {
         let mut loader = Loader::new();
         let (code, updates) = loader.load(&entry_script_path)?;
 
-        let mut interpreter = Interpreter::new(&code)?;
+        let mut interpreter = Interpreter::new()?;
+        interpreter.update(&code)?;
         let mut platform_context = PlatformContext::new(entry_script_path)
             .with_pixel_ops_sender(pixel_ops);
 

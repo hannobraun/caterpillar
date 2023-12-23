@@ -17,7 +17,8 @@ pub async fn run(
 ) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
-    let mut interpreter = Interpreter::new(script)?;
+    let mut interpreter = Interpreter::new()?;
+    interpreter.update(script)?;
     let mut context = Context {
         events: Events { inner: events },
         sleep_duration: None,
