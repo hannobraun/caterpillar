@@ -32,15 +32,6 @@ impl<C> Interpreter<C> {
         self.evaluator.global_namespace.register_platform(functions);
     }
 
-    pub fn step(
-        &mut self,
-        platform_context: &mut C,
-    ) -> Result<RuntimeState, EvaluatorError> {
-        self.state =
-            self.evaluator.step(&mut self.fragments, platform_context)?;
-        Ok(self.state)
-    }
-
     pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
         let parent = None;
         let PipelineOutput { start } =
@@ -61,6 +52,15 @@ impl<C> Interpreter<C> {
         }
 
         Ok(())
+    }
+
+    pub fn step(
+        &mut self,
+        platform_context: &mut C,
+    ) -> Result<RuntimeState, EvaluatorError> {
+        self.state =
+            self.evaluator.step(&mut self.fragments, platform_context)?;
+        Ok(self.state)
     }
 
     pub fn run_tests(
