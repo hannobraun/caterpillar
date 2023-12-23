@@ -45,9 +45,8 @@ impl<C> Interpreter<C> {
                 .replace(old, new, &self.fragments);
         }
 
-        // If the program has finished running, restart it in response to this
-        // update.
         if self.state.finished() {
+            // Restart the program.
             self.evaluator.call_stack.push(start);
         }
 
