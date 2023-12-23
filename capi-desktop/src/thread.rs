@@ -4,6 +4,7 @@ use capi_core::RuntimeState;
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
+    loader::Loader,
     platform::{self, PixelOp, PlatformContext},
     Interpreter,
 };
@@ -15,11 +16,7 @@ pub struct DesktopThread {
 }
 
 impl DesktopThread {
-    pub fn run(
-        entry_script_path: PathBuf,
-        code: String,
-        updates: Receiver<String>,
-    ) -> anyhow::Result<Self> {
+    pub fn run(entry_script_path: PathBuf) -> anyhow::Result<Self> {
         struct RunProgram;
 
         impl RunTarget for RunProgram {
@@ -41,14 +38,10 @@ impl DesktopThread {
             }
         }
 
-        Self::new(entry_script_path, code, updates, RunProgram)
+        Self::new(entry_script_path, RunProgram)
     }
 
-    pub fn test(
-        entry_script_path: PathBuf,
-        code: String,
-        updates: Receiver<String>,
-    ) -> anyhow::Result<Self> {
+    pub fn test(entry_script_path: PathBuf) -> anyhow::Result<Self> {
         struct RunTests;
 
         impl RunTarget for RunTests {
@@ -70,13 +63,11 @@ impl DesktopThread {
             }
         }
 
-        Self::new(entry_script_path, code, updates, RunTests)
+        Self::new(entry_script_path, RunTests)
     }
 
     fn new(
         entry_script_path: PathBuf,
-        code: String,
-        updates: Receiver<String>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<Self> {
         let (pixel_ops_tx, pixel_ops_rx) = crossbeam_channel::unbounded();
@@ -85,8 +76,6 @@ impl DesktopThread {
         let join_handle = thread::spawn(|| {
             Self::run_inner(
                 entry_script_path,
-                code,
-                updates,
                 lifeline_rx,
                 pixel_ops_tx,
                 run_target,
@@ -102,12 +91,13 @@ impl DesktopThread {
 
     fn run_inner(
         entry_script_path: PathBuf,
-        code: String,
-        updates: Receiver<String>,
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
+        let mut loader = Loader::new();
+        let (code, updates) = loader.load(&entry_script_path)?;
+
         let mut interpreter = Interpreter::new(&code)?;
         let mut platform_context = PlatformContext::new(entry_script_path)
             .with_pixel_ops_sender(pixel_ops);
