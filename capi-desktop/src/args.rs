@@ -3,7 +3,7 @@ use std::path::PathBuf;
 /// Interactive Caterpillar Runtime
 #[derive(clap::Parser)]
 pub struct Args {
-    /// Path to a Caterpillar script
+    /// Path to the Caterpillar script that serves as the program's entry point
     pub entry_script: PathBuf,
 
     #[clap(subcommand)]
