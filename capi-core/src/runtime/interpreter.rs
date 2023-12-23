@@ -161,10 +161,11 @@ mod tests {
 
     #[test]
     fn update_to_named_function() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":f { nop 2 ping f } fn f";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -176,6 +177,8 @@ mod tests {
 
     #[test]
     fn update_to_identical_functions() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = "
             :loop { f loop } fn
             :f { nop 1 ping } fn
@@ -187,7 +190,6 @@ mod tests {
             :g { nop 1 ping } fn
             loop";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -199,10 +201,11 @@ mod tests {
 
     #[test]
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":f { nop 2 ping f } fn f";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -217,10 +220,11 @@ mod tests {
 
     #[test]
     fn update_to_block() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = "{ nop 1 ping } clone eval eval";
         let updated = "{ nop 2 ping } clone eval eval";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -232,6 +236,8 @@ mod tests {
 
     #[test]
     fn update_to_identical_blocks_at_end_of_context() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = "
             :f { { nop 2 ping } } fn
             :g { { nop 2 ping } } fn
@@ -245,7 +251,6 @@ mod tests {
             f eval
             g eval";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -258,6 +263,8 @@ mod tests {
 
     #[test]
     fn update_function_caller() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = "
             :f { nop 1 ping } fn
             f
@@ -267,7 +274,6 @@ mod tests {
             f
             2 ping";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
@@ -279,10 +285,11 @@ mod tests {
 
     #[test]
     fn update_renamed_function() -> anyhow::Result<()> {
+        let mut interpreter = Interpreter::new()?;
+
         let original = ":f { nop 1 ping f } fn f";
         let updated = ":g { nop 1 ping g } fn g";
 
-        let mut interpreter = Interpreter::new()?;
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
 
