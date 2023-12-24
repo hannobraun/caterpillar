@@ -126,7 +126,7 @@ fn each(context: RuntimeContext) -> DataStackResult<()> {
     // now.
     //
     // Another option would be to not implement `each` as an intrinsic. We can
-    // already do simple loop through recursion, so why not use that to
+    // already do simple loops through recursion, so why not use that to
     // implement `each` in Caterpillar?
     for (i, value) in array.0.into_iter().enumerate() {
         context
