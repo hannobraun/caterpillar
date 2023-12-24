@@ -69,7 +69,7 @@ fn parse_syntax_element(
         }
     };
 
-    syntax_elements.push(syntax_element.clone());
+    syntax_elements.push(syntax_element);
     Ok(Some(()))
 }
 
