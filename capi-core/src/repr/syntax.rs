@@ -1,6 +1,6 @@
 use super::eval::value::ValuePayload;
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
 }
@@ -11,7 +11,7 @@ impl SyntaxTree {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum SyntaxElement {
     Array(SyntaxTree),
     Block(SyntaxTree),
