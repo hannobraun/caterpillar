@@ -22,8 +22,7 @@ fn parse_syntax_tree(
             terminator.as_ref(),
             tokens,
             &mut syntax_tree.elements,
-        )?
-        .is_some();
+        )?;
 
         if !produced_syntax_element {
             break;
@@ -37,9 +36,9 @@ fn parse_syntax_element(
     terminator: Option<&Token>,
     tokens: &mut Tokens,
     syntax_elements: &mut Vec<SyntaxElement>,
-) -> ParserResult<Option<()>> {
+) -> ParserResult<bool> {
     let Some(next_token) = tokens.peek() else {
-        return Ok(None);
+        return Ok(false);
     };
 
     let syntax_element = match next_token {
@@ -64,7 +63,7 @@ fn parse_syntax_element(
             let token = tokens.next().unwrap();
 
             if Some(&token) == terminator {
-                return Ok(None);
+                return Ok(false);
             }
 
             return Err(ParserError::UnexpectedToken { actual: token });
@@ -72,7 +71,7 @@ fn parse_syntax_element(
     };
 
     syntax_elements.push(syntax_element);
-    Ok(Some(()))
+    Ok(true)
 }
 
 fn parse_array(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
