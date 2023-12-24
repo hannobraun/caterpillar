@@ -12,6 +12,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
         (add, "+"),
         (and, "and"),
+        (array, "[]"),
         (bind, "bind"),
         (clone, "clone"),
         (drop, "drop"),
@@ -51,6 +52,11 @@ fn and(context: RuntimeContext) -> DataStackResult<()> {
 
     context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
+    Ok(())
+}
+
+fn array(context: RuntimeContext) -> DataStackResult<()> {
+    context.data_stack.push_bare(value::Array(Vec::new()));
     Ok(())
 }
 
