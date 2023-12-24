@@ -18,14 +18,16 @@ fn parse_syntax_tree(
     let mut syntax_tree = SyntaxTree::new();
 
     loop {
-        let Some(_) = parse_syntax_element(
+        let produced_syntax_element = parse_syntax_element(
             terminator.as_ref(),
             tokens,
             &mut syntax_tree.elements,
         )?
-        else {
+        .is_some();
+
+        if !produced_syntax_element {
             break;
-        };
+        }
     }
 
     Ok(syntax_tree)
