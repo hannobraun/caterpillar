@@ -23,8 +23,8 @@ pub enum SyntaxElement {
     /// dedicated variant.
     ///
     /// Such an invalid `SyntaxElement` is never produced by the parser, and
-    /// doing it like this makes the code handling `SyntaxElement`s simpler, and
-    /// that's probably worth the small inconsistency.
+    /// doing it like this makes the code handling `SyntaxElement`s simpler.
+    /// That is probably worth the small inconsistency.
     Literal(ValuePayload),
 
     Word(String),
