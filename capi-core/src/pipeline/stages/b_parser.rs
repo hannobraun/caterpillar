@@ -43,7 +43,7 @@ fn parse_syntax_element(
 
     let syntax_element = match next_token {
         Token::SquareBracketOpen => {
-            let syntax_tree = parse_array(tokens)?;
+            let syntax_tree = parse_array_expression(tokens)?;
             SyntaxElement::Array(syntax_tree)
         }
         Token::CurlyBracketOpen => {
@@ -74,7 +74,7 @@ fn parse_syntax_element(
     Ok(true)
 }
 
-fn parse_array(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
+fn parse_array_expression(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
     expect::<token::SquareBracketOpen>(tokens)?;
     parse_syntax_tree(Some(Token::SquareBracketClose), tokens)
 }
