@@ -11,8 +11,6 @@ fn simplify_syntax_tree(
 ) -> SyntaxTree<SimpleSyntaxElement> {
     let mut simple_syntax_tree = SyntaxTree::new();
 
-    // This is a no-op right now. In the future, it will lower some syntax into
-    // simplified forms.
     for syntax_element in syntax_tree.elements {
         let syntax_element = match syntax_element {
             SyntaxElement::Array(syntax_tree) => {
@@ -38,6 +36,8 @@ fn simplify_syntax_tree(
 fn simplify_array(
     syntax_tree: SyntaxTree<SyntaxElement>,
 ) -> SyntaxTree<SimpleSyntaxElement> {
+    // This is a no-op right now. In the future, it will lower array expressions
+    // into a simplified form.
     simplify_syntax_tree(syntax_tree)
 }
 
