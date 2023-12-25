@@ -18,15 +18,14 @@ fn parse_syntax_tree(
     let mut syntax_tree = SyntaxTree::new();
 
     loop {
-        let produced_syntax_element = parse_syntax_element(
+        let Some(_) = parse_syntax_element(
             terminator.as_ref(),
             tokens,
             &mut syntax_tree.elements,
-        )?;
-
-        if !produced_syntax_element {
+        )?
+        else {
             break;
-        }
+        };
     }
 
     Ok(syntax_tree)
@@ -36,9 +35,9 @@ fn parse_syntax_element(
     terminator: Option<&Token>,
     tokens: &mut Tokens,
     syntax_elements: &mut Vec<SyntaxElement>,
-) -> ParserResult<bool> {
+) -> ParserResult<Option<()>> {
     let Some(next_token) = tokens.peek() else {
-        return Ok(false);
+        return Ok(None);
     };
 
     let syntax_element = match next_token {
@@ -63,7 +62,7 @@ fn parse_syntax_element(
             let token = tokens.next().unwrap();
 
             if Some(&token) == terminator {
-                return Ok(false);
+                return Ok(None);
             }
 
             return Err(ParserError::UnexpectedToken { actual: token });
@@ -71,7 +70,7 @@ fn parse_syntax_element(
     };
 
     syntax_elements.push(syntax_element);
-    Ok(true)
+    Ok(Some(()))
 }
 
 fn parse_array_expression(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
