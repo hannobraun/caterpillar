@@ -19,7 +19,7 @@ fn simplify_syntax_tree(
             }
             SyntaxElement::BlockExpression(syntax_tree) => {
                 let syntax_tree = simplify_block(syntax_tree);
-                SimpleSyntaxElement::Block(syntax_tree)
+                SimpleSyntaxElement::BlockExpression(syntax_tree)
             }
             SyntaxElement::Literal(value) => {
                 SimpleSyntaxElement::Literal(value)

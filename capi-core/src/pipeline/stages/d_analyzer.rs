@@ -59,7 +59,7 @@ fn analyze_syntax_element(
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Array { start }
         }
-        SimpleSyntaxElement::Block(syntax_tree) => {
+        SimpleSyntaxElement::BlockExpression(syntax_tree) => {
             // By convention, we're using the ID of the *next* fragment as the
             // parent ID for fragments within the block. Why not use the ID of
             // the block fragment itself? Well, that hasn't been computed yet,
