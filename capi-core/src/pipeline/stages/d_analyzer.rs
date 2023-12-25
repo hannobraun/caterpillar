@@ -51,7 +51,7 @@ fn analyze_syntax_element(
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
-        SimpleSyntaxElement::Array(syntax_tree) => {
+        SimpleSyntaxElement::ArrayExpression(syntax_tree) => {
             // See comment about parent of blocks down below. The same applies
             // here.
             let parent = Some(next);

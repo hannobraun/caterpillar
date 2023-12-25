@@ -39,7 +39,7 @@ pub enum SyntaxElement {
 }
 
 pub enum SimpleSyntaxElement {
-    Array(SyntaxTree<Self>),
+    ArrayExpression(SyntaxTree<Self>),
     Block(SyntaxTree<Self>),
     Literal(ValuePayload),
     Word(String),
