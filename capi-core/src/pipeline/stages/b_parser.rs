@@ -35,7 +35,7 @@ fn parse_syntax_element(
     terminator: Option<&Token>,
     tokens: &mut Tokens,
     syntax_elements: &mut Vec<SyntaxElement>,
-) -> ParserResult<Option<()>> {
+) -> ParserResult<Option<SyntaxElement>> {
     let Some(next_token) = tokens.peek() else {
         return Ok(None);
     };
@@ -69,8 +69,8 @@ fn parse_syntax_element(
         }
     };
 
-    syntax_elements.push(syntax_element);
-    Ok(Some(()))
+    syntax_elements.push(syntax_element.clone());
+    Ok(Some(syntax_element))
 }
 
 fn parse_array_expression(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
