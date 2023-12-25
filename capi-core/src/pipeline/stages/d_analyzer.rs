@@ -5,11 +5,11 @@ use crate::repr::{
         },
         value::ValuePayload,
     },
-    syntax::{SyntaxElement, SyntaxTree},
+    syntax::{SimpleSyntaxElement, SyntaxTree},
 };
 
 pub fn analyze(
-    syntax_tree: SyntaxTree<SyntaxElement>,
+    syntax_tree: SyntaxTree<SimpleSyntaxElement>,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> AnalyzerOutput {
@@ -18,7 +18,7 @@ pub fn analyze(
 }
 
 fn analyze_syntax_tree(
-    syntax_tree: SyntaxTree<SyntaxElement>,
+    syntax_tree: SyntaxTree<SimpleSyntaxElement>,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> FragmentId {
@@ -45,13 +45,13 @@ fn analyze_syntax_tree(
 }
 
 fn analyze_syntax_element(
-    syntax_element: SyntaxElement,
+    syntax_element: SimpleSyntaxElement,
     parent: Option<FragmentId>,
     next: FragmentId,
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
-        SyntaxElement::Array(syntax_tree) => {
+        SimpleSyntaxElement::Array(syntax_tree) => {
             // See comment about parent of blocks down below. The same applies
             // here.
             let parent = Some(next);
@@ -59,7 +59,7 @@ fn analyze_syntax_element(
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Array { start }
         }
-        SyntaxElement::Block(syntax_tree) => {
+        SimpleSyntaxElement::Block(syntax_tree) => {
             // By convention, we're using the ID of the *next* fragment as the
             // parent ID for fragments within the block. Why not use the ID of
             // the block fragment itself? Well, that hasn't been computed yet,
@@ -70,8 +70,8 @@ fn analyze_syntax_element(
             let start = analyze_syntax_tree(syntax_tree, parent, fragments);
             FragmentPayload::Value(ValuePayload::Block { start })
         }
-        SyntaxElement::Literal(value) => FragmentPayload::Value(value),
-        SyntaxElement::Word(word) => FragmentPayload::Word(word),
+        SimpleSyntaxElement::Literal(value) => FragmentPayload::Value(value),
+        SimpleSyntaxElement::Word(word) => FragmentPayload::Word(word),
     };
 
     let next = Some(next);
