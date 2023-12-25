@@ -6,7 +6,7 @@ use crate::repr::{
     tokens::{token, Token},
 };
 
-pub fn parse(tokens: Vec<Token>) -> ParserResult<SyntaxTree> {
+pub fn parse(tokens: Vec<Token>) -> ParserResult<SyntaxTree<SyntaxElement>> {
     let mut tokens = tokens.into_iter().peekable();
     parse_syntax_tree(None, &mut tokens)
 }
@@ -14,7 +14,7 @@ pub fn parse(tokens: Vec<Token>) -> ParserResult<SyntaxTree> {
 fn parse_syntax_tree(
     terminator: Option<Token>,
     tokens: &mut Tokens,
-) -> ParserResult<SyntaxTree> {
+) -> ParserResult<SyntaxTree<SyntaxElement>> {
     let mut syntax_tree = SyntaxTree::new();
 
     loop {
@@ -70,12 +70,14 @@ fn parse_syntax_element(
     Ok(Some(syntax_element))
 }
 
-fn parse_array_expression(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
+fn parse_array_expression(
+    tokens: &mut Tokens,
+) -> ParserResult<SyntaxTree<SyntaxElement>> {
     expect::<token::SquareBracketOpen>(tokens)?;
     parse_syntax_tree(Some(Token::SquareBracketClose), tokens)
 }
 
-fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree> {
+fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree<SyntaxElement>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
     parse_syntax_tree(Some(Token::CurlyBracketClose), tokens)
 }

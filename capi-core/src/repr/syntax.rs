@@ -1,18 +1,18 @@
 use super::eval::value::ValuePayload;
 
 #[derive(Clone, Debug)]
-pub struct SyntaxTree {
-    pub elements: Vec<SyntaxElement>,
+pub struct SyntaxTree<T> {
+    pub elements: Vec<T>,
 }
 
-impl SyntaxTree {
+impl<T> SyntaxTree<T> {
     pub fn new() -> Self {
         Self::default()
     }
 }
 
 #[allow(clippy::derivable_impls)]
-impl Default for SyntaxTree {
+impl<T> Default for SyntaxTree<T> {
     fn default() -> Self {
         Self {
             elements: Vec::new(),
@@ -22,8 +22,8 @@ impl Default for SyntaxTree {
 
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
-    Array(SyntaxTree),
-    Block(SyntaxTree),
+    Array(SyntaxTree<Self>),
+    Block(SyntaxTree<Self>),
 
     /// A literal value
     ///

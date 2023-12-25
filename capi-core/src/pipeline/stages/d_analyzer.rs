@@ -9,7 +9,7 @@ use crate::repr::{
 };
 
 pub fn analyze(
-    syntax_tree: SyntaxTree,
+    syntax_tree: SyntaxTree<SyntaxElement>,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> AnalyzerOutput {
@@ -18,7 +18,7 @@ pub fn analyze(
 }
 
 fn analyze_syntax_tree(
-    syntax_tree: SyntaxTree,
+    syntax_tree: SyntaxTree<SyntaxElement>,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> FragmentId {
