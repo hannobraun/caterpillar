@@ -22,7 +22,7 @@ impl<T> Default for SyntaxTree<T> {
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
     ArrayExpression(SyntaxTree<Self>),
-    Block(SyntaxTree<Self>),
+    BlockExpression(SyntaxTree<Self>),
 
     /// A literal value
     ///

@@ -17,7 +17,7 @@ fn simplify_syntax_tree(
                 let syntax_tree = simplify_array(syntax_tree);
                 SimpleSyntaxElement::Array(syntax_tree)
             }
-            SyntaxElement::Block(syntax_tree) => {
+            SyntaxElement::BlockExpression(syntax_tree) => {
                 let syntax_tree = simplify_block(syntax_tree);
                 SimpleSyntaxElement::Block(syntax_tree)
             }

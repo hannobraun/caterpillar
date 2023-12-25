@@ -45,7 +45,7 @@ fn parse_syntax_element(
         }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;
-            SyntaxElement::Block(syntax_tree)
+            SyntaxElement::BlockExpression(syntax_tree)
         }
         Token::Literal(_) => {
             let value = parse_literal(tokens)?;
