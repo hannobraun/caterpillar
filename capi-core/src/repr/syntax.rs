@@ -11,7 +11,6 @@ impl<T> SyntaxTree<T> {
     }
 }
 
-#[allow(clippy::derivable_impls)]
 impl<T> Default for SyntaxTree<T> {
     fn default() -> Self {
         Self {
