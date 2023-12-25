@@ -37,7 +37,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     ]
 }
 
-fn add(context: RuntimeContext) -> DataStackResult<()> {
+fn add(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
@@ -46,7 +46,7 @@ fn add(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn and(context: RuntimeContext) -> DataStackResult<()> {
+fn and(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Bool>()?;
     let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
@@ -55,12 +55,12 @@ fn and(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn array(context: RuntimeContext) -> DataStackResult<()> {
+fn array(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push_bare(value::Array(Vec::new()));
     Ok(())
 }
 
-fn bind(mut context: RuntimeContext) -> DataStackResult<()> {
+fn bind(_step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
     let (symbols, _) = context.data_stack.pop_specific::<value::Array>()?;
 
     for symbol in symbols.0.into_iter().rev() {
@@ -72,7 +72,7 @@ fn bind(mut context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn clone(context: RuntimeContext) -> DataStackResult<()> {
+fn clone(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let value = context.data_stack.pop_any()?;
 
     context.data_stack.push(value.clone());
@@ -81,12 +81,12 @@ fn clone(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn drop(context: RuntimeContext) -> DataStackResult<()> {
+fn drop(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.pop_any()?;
     Ok(())
 }
 
-fn each(context: RuntimeContext) -> DataStackResult<()> {
+fn each(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
 
@@ -140,7 +140,7 @@ fn each(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn eq(context: RuntimeContext) -> DataStackResult<()> {
+fn eq(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let b = context.data_stack.pop_any()?;
     let a = context.data_stack.pop_any()?;
 
@@ -151,7 +151,7 @@ fn eq(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn eval(context: RuntimeContext) -> DataStackResult<()> {
+fn eval(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (block, _) = context.data_stack.pop_specific::<value::Block>()?;
     context.call_stack.push(block.start);
 
@@ -173,12 +173,12 @@ fn eval(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn false_(context: RuntimeContext) -> DataStackResult<()> {
+fn false_(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push_bare(value::Bool(false));
     Ok(())
 }
 
-fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
+fn fn_(_step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
     let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
         context.data_stack.pop_specific::<value::Symbol>()?;
@@ -193,7 +193,7 @@ fn fn_(mut context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn get(context: RuntimeContext) -> DataStackResult<()> {
+fn get(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (array, fragment) =
         context.data_stack.pop_specific::<value::Array>()?;
@@ -209,7 +209,7 @@ fn get(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn gt(context: RuntimeContext) -> DataStackResult<()> {
+fn gt(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
@@ -218,7 +218,7 @@ fn gt(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn if_(context: RuntimeContext) -> DataStackResult<()> {
+fn if_(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (else_, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (then, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (condition, _) = context.data_stack.pop_specific::<value::Bool>()?;
@@ -229,7 +229,7 @@ fn if_(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn len(context: RuntimeContext) -> DataStackResult<()> {
+fn len(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (array, fragment) =
         context.data_stack.pop_specific::<value::Array>()?;
 
@@ -244,11 +244,11 @@ fn len(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn nop(_: RuntimeContext) -> DataStackResult<()> {
+fn nop(_step: usize, _: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn not(context: RuntimeContext) -> DataStackResult<()> {
+fn not(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
     context.data_stack.push_bare(value::Bool(!a.0));
@@ -256,7 +256,7 @@ fn not(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn over(context: RuntimeContext) -> DataStackResult<()> {
+fn over(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let top = context.data_stack.pop_any()?;
     let target = context.data_stack.pop_any()?;
 
@@ -267,7 +267,7 @@ fn over(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn set(context: RuntimeContext) -> DataStackResult<()> {
+fn set(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let value = context.data_stack.pop_any()?;
     let (index, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (mut array, _) = context.data_stack.pop_specific::<value::Array>()?;
@@ -279,7 +279,7 @@ fn set(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn sub(context: RuntimeContext) -> DataStackResult<()> {
+fn sub(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
     let (a, _) = context.data_stack.pop_specific::<value::Number>()?;
 
@@ -288,7 +288,7 @@ fn sub(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn swap(context: RuntimeContext) -> DataStackResult<()> {
+fn swap(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let b = context.data_stack.pop_any()?;
     let a = context.data_stack.pop_any()?;
 
@@ -298,7 +298,7 @@ fn swap(context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn test(mut context: RuntimeContext) -> DataStackResult<()> {
+fn test(_step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
     let (body, _) = context.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
         context.data_stack.pop_specific::<value::Text>()?;
@@ -313,12 +313,12 @@ fn test(mut context: RuntimeContext) -> DataStackResult<()> {
     Ok(())
 }
 
-fn true_(context: RuntimeContext) -> DataStackResult<()> {
+fn true_(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     context.data_stack.push_bare(value::Bool(true));
     Ok(())
 }
 
-fn unwrap(context: RuntimeContext) -> DataStackResult<()> {
+fn unwrap(_step: usize, context: RuntimeContext) -> DataStackResult<()> {
     let (array, _) = context.data_stack.pop_specific::<value::Array>()?;
 
     for item in array.0 {

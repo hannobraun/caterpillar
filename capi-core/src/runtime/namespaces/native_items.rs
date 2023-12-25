@@ -12,7 +12,8 @@ pub enum NativeFunction<C> {
     Platform(PlatformFunction<C>),
 }
 
-pub type IntrinsicFunction = fn(RuntimeContext) -> DataStackResult<()>;
+pub type IntrinsicFunction =
+    fn(step: usize, RuntimeContext) -> DataStackResult<()>;
 pub type PlatformFunction<C> =
     fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
 
