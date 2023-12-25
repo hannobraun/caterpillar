@@ -6,7 +6,7 @@ use crate::{
 use super::stages::{
     a_tokenizer::tokenize,
     b_parser::ParserError,
-    c_analyzer::{analyze, AnalyzerOutput},
+    d_analyzer::{analyze, AnalyzerOutput},
 };
 
 pub fn run(
