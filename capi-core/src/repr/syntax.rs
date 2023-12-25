@@ -1,6 +1,6 @@
 use super::eval::value::ValuePayload;
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct SyntaxTree {
     pub elements: Vec<SyntaxElement>,
 }
@@ -8,6 +8,15 @@ pub struct SyntaxTree {
 impl SyntaxTree {
     pub fn new() -> Self {
         Self::default()
+    }
+}
+
+#[allow(clippy::derivable_impls)]
+impl Default for SyntaxTree {
+    fn default() -> Self {
+        Self {
+            elements: Vec::new(),
+        }
     }
 }
 
