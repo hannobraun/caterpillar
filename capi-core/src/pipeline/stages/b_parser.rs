@@ -41,7 +41,7 @@ fn parse_syntax_element(
     let syntax_element = match next_token {
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array_expression(tokens)?;
-            SyntaxElement::Array(syntax_tree)
+            SyntaxElement::ArrayExpression(syntax_tree)
         }
         Token::CurlyBracketOpen => {
             let syntax_tree = parse_block(tokens)?;

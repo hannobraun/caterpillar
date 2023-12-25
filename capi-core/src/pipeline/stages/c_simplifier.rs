@@ -13,7 +13,7 @@ fn simplify_syntax_tree(
 
     for syntax_element in syntax_tree.elements {
         let syntax_element = match syntax_element {
-            SyntaxElement::Array(syntax_tree) => {
+            SyntaxElement::ArrayExpression(syntax_tree) => {
                 let syntax_tree = simplify_array(syntax_tree);
                 SimpleSyntaxElement::Array(syntax_tree)
             }
