@@ -6,6 +6,7 @@ use crate::{
 use super::stages::{
     a_tokenizer::tokenize,
     b_parser::ParserError,
+    c_simplifier::simplify,
     d_analyzer::{analyze, AnalyzerOutput},
 };
 
@@ -16,6 +17,7 @@ pub fn run(
 ) -> Result<PipelineOutput, PipelineError> {
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
+    let syntax_tree = simplify(syntax_tree);
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
 
     Ok(PipelineOutput { start })
