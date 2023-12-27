@@ -28,10 +28,11 @@ impl<C> Evaluator<C> {
         fragments: &mut Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
-        let Some(StackFrame::Fragment(fragment_id)) = self.call_stack.current()
-        else {
+        let Some(stack_frame) = self.call_stack.current() else {
             return Ok(RuntimeState::Finished);
         };
+
+        let StackFrame::Fragment(fragment_id) = stack_frame;
         let fragment = fragments.get(fragment_id);
 
         // We're done with the call stack for this step. Let's advance it now,
