@@ -103,6 +103,7 @@ impl<C> Evaluator<C> {
                                         kind: err.into(),
                                         fragment: fragment_id,
                                     })?;
+
                                     FunctionState::Done
                                 }
                                 ItemInModule::PlatformFunction(f) => {
