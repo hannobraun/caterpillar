@@ -132,6 +132,12 @@ impl<C> Evaluator<C> {
                     }
                 }
             }
+            StackFrame::IntrinsicFunction {
+                function: _,
+                step: _,
+            } => {
+                todo!("Can't handle intrinsic functions within call stack yet")
+            }
         };
 
         Ok(runtime_state)

@@ -1,5 +1,7 @@
 use crate::repr::eval::fragments::FragmentId;
 
+use super::namespaces::IntrinsicFunction;
+
 #[derive(Debug, Default)]
 pub struct CallStack {
     frames: Vec<StackFrame>,
@@ -42,5 +44,11 @@ impl CallStack {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum StackFrame {
-    Fragment { fragment_id: FragmentId },
+    Fragment {
+        fragment_id: FragmentId,
+    },
+    IntrinsicFunction {
+        function: IntrinsicFunction,
+        step: usize,
+    },
 }
