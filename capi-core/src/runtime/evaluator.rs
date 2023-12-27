@@ -75,13 +75,15 @@ impl<C> Evaluator<C> {
                     FragmentPayload::Word(word) => {
                         self.call_stack.advance(fragment.next());
 
-                        let function_state = match self
+                        let item = self
                             .global_namespace
                             .resolve(word)
                             .map_err(|err| EvaluatorError {
                                 kind: err.into(),
                                 fragment: fragment_id,
-                            })? {
+                            })?;
+
+                        let function_state = match item {
                             ItemInModule::Binding(value) => {
                                 self.data_stack.push(value);
                                 FunctionState::Done
