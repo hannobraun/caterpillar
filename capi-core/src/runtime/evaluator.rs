@@ -32,7 +32,7 @@ impl<C> Evaluator<C> {
             return Ok(RuntimeState::Finished);
         };
 
-        match stack_frame {
+        let runtime_state = match stack_frame {
             StackFrame::Fragment(fragment_id) => {
                 let fragment = fragments.get(fragment_id);
 
@@ -40,7 +40,7 @@ impl<C> Evaluator<C> {
                 // it now, so that's out of the way.
                 self.call_stack.advance(fragment.next());
 
-                let runtime_state = match &fragment.payload {
+                match &fragment.payload {
                     FragmentPayload::Array { start } => {
                         // Remember the current stack frame, so we know when
                         // we're done evaluating the array.
@@ -130,11 +130,11 @@ impl<C> Evaluator<C> {
                         // handled during evaluation.
                         RuntimeState::Running
                     }
-                };
-
-                Ok(runtime_state)
+                }
             }
-        }
+        };
+
+        Ok(runtime_state)
     }
 
     fn runtime_context<'r>(
