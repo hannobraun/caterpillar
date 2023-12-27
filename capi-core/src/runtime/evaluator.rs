@@ -36,12 +36,10 @@ impl<C> Evaluator<C> {
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
-                // We're done with the call stack for this step. Let's advance
-                // it now, so that's out of the way.
-                self.call_stack.advance(fragment.next());
-
                 match &fragment.payload {
                     FragmentPayload::Array { start } => {
+                        self.call_stack.advance(fragment.next());
+
                         // Remember the current stack frame, so we know when
                         // we're done evaluating the array.
                         let current = self.call_stack.current();
@@ -67,6 +65,8 @@ impl<C> Evaluator<C> {
                         RuntimeState::Running
                     }
                     FragmentPayload::Value(value) => {
+                        self.call_stack.advance(fragment.next());
+
                         self.data_stack.push(Value {
                             payload: value.clone(),
                             fragment: Some(fragment_id),
@@ -75,6 +75,8 @@ impl<C> Evaluator<C> {
                         RuntimeState::Running
                     }
                     FragmentPayload::Word(word) => {
+                        self.call_stack.advance(fragment.next());
+
                         let function_state = match self
                             .global_namespace
                             .resolve(word)
@@ -125,6 +127,8 @@ impl<C> Evaluator<C> {
                         }
                     }
                     FragmentPayload::Terminator => {
+                        self.call_stack.advance(fragment.next());
+
                         // Nothing to do here. Terminators only exist for
                         // fragment addressing purposes and don't need to be
                         // handled during evaluation.
