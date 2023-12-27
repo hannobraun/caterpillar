@@ -33,7 +33,7 @@ impl<C> Evaluator<C> {
         };
 
         let runtime_state = match stack_frame {
-            StackFrame::Fragment(fragment_id) => {
+            StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
                 // We're done with the call stack for this step. Let's advance

@@ -18,7 +18,7 @@ impl CallStack {
         if let Some(current) = self.frames.last_mut() {
             match next {
                 Some(next) => {
-                    *current = StackFrame::Fragment(next);
+                    *current = StackFrame::Fragment { fragment_id: next };
                 }
                 None => {
                     self.frames.pop();
@@ -28,13 +28,13 @@ impl CallStack {
     }
 
     pub fn push(&mut self, next: FragmentId) {
-        self.frames.push(StackFrame::Fragment(next));
+        self.frames.push(StackFrame::Fragment { fragment_id: next });
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
         for frame in &mut self.frames {
-            if *frame == StackFrame::Fragment(old) {
-                *frame = StackFrame::Fragment(new);
+            if *frame == (StackFrame::Fragment { fragment_id: old }) {
+                *frame = StackFrame::Fragment { fragment_id: new };
             }
         }
     }
@@ -42,5 +42,5 @@ impl CallStack {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum StackFrame {
-    Fragment(FragmentId),
+    Fragment { fragment_id: FragmentId },
 }
