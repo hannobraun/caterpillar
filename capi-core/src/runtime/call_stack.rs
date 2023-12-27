@@ -10,11 +10,8 @@ impl CallStack {
         Self::default()
     }
 
-    pub fn current(&self) -> Option<FragmentId> {
-        self.frames.last().copied().map(|stack_frame| {
-            let StackFrame::Fragment(fragment_id) = stack_frame;
-            fragment_id
-        })
+    pub fn current(&self) -> Option<StackFrame> {
+        self.frames.last().copied()
     }
 
     pub fn advance(&mut self, next: Option<FragmentId>) {

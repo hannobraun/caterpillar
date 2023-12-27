@@ -7,7 +7,7 @@ use crate::{
 };
 
 use super::{
-    call_stack::CallStack,
+    call_stack::{CallStack, StackFrame},
     data_stack::{DataStack, DataStackError},
     namespaces::{
         ItemInModule, Namespace, ResolveError, RuntimeContext,
@@ -29,7 +29,9 @@ impl<C> Evaluator<C> {
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
         let (fragment_id, fragment) = match self.call_stack.current() {
-            Some(fragment_id) => (fragment_id, fragments.get(fragment_id)),
+            Some(StackFrame::Fragment(fragment_id)) => {
+                (fragment_id, fragments.get(fragment_id))
+            }
             None => return Ok(RuntimeState::Finished),
         };
 
