@@ -32,98 +32,109 @@ impl<C> Evaluator<C> {
             return Ok(RuntimeState::Finished);
         };
 
-        let StackFrame::Fragment(fragment_id) = stack_frame;
-        let fragment = fragments.get(fragment_id);
+        match stack_frame {
+            StackFrame::Fragment(fragment_id) => {
+                let fragment = fragments.get(fragment_id);
 
-        // We're done with the call stack for this step. Let's advance it now,
-        // so that's out of the way.
-        self.call_stack.advance(fragment.next());
+                // We're done with the call stack for this step. Let's advance
+                // it now, so that's out of the way.
+                self.call_stack.advance(fragment.next());
 
-        let runtime_state = match &fragment.payload {
-            FragmentPayload::Array { start } => {
-                // Remember the current stack frame, so we know when we're done
-                // evaluating the array.
-                let current = self.call_stack.current();
+                let runtime_state = match &fragment.payload {
+                    FragmentPayload::Array { start } => {
+                        // Remember the current stack frame, so we know when
+                        // we're done evaluating the array.
+                        let current = self.call_stack.current();
 
-                // Evaluate the array.
-                self.data_stack.mark();
-                self.call_stack.push(*start);
-                while current != self.call_stack.current() {
-                    self.step(fragments, platform_context)?;
-                }
+                        // Evaluate the array.
+                        self.data_stack.mark();
+                        self.call_stack.push(*start);
+                        while current != self.call_stack.current() {
+                            self.step(fragments, platform_context)?;
+                        }
 
-                let items = self
-                    .data_stack
-                    .drain_values_from_marker()
-                    .map(|value| value.payload)
-                    .collect();
+                        let items = self
+                            .data_stack
+                            .drain_values_from_marker()
+                            .map(|value| value.payload)
+                            .collect();
 
-                self.data_stack.push(Value {
-                    payload: crate::value::ValuePayload::Array(items),
-                    fragment: Some(fragment_id),
-                });
+                        self.data_stack.push(Value {
+                            payload: crate::value::ValuePayload::Array(items),
+                            fragment: Some(fragment_id),
+                        });
 
-                RuntimeState::Running
-            }
-            FragmentPayload::Value(value) => {
-                self.data_stack.push(Value {
-                    payload: value.clone(),
-                    fragment: Some(fragment_id),
-                });
-
-                RuntimeState::Running
-            }
-            FragmentPayload::Word(word) => {
-                let function_state = match self
-                    .global_namespace
-                    .resolve(word)
-                    .map_err(|err| EvaluatorError {
-                    kind: err.into(),
-                    fragment: fragment_id,
-                })? {
-                    ItemInModule::Binding(value) => {
-                        self.data_stack.push(value);
-                        FunctionState::Done
+                        RuntimeState::Running
                     }
-                    ItemInModule::IntrinsicFunction(f) => {
-                        let step = 0;
-                        f(step, self.runtime_context(fragment_id, fragments))
+                    FragmentPayload::Value(value) => {
+                        self.data_stack.push(Value {
+                            payload: value.clone(),
+                            fragment: Some(fragment_id),
+                        });
+
+                        RuntimeState::Running
+                    }
+                    FragmentPayload::Word(word) => {
+                        let function_state = match self
+                            .global_namespace
+                            .resolve(word)
                             .map_err(|err| EvaluatorError {
-                            kind: err.into(),
-                            fragment: fragment_id,
-                        })?;
-                        FunctionState::Done
+                                kind: err.into(),
+                                fragment: fragment_id,
+                            })? {
+                            ItemInModule::Binding(value) => {
+                                self.data_stack.push(value);
+                                FunctionState::Done
+                            }
+                            ItemInModule::IntrinsicFunction(f) => {
+                                let step = 0;
+                                f(
+                                    step,
+                                    self.runtime_context(
+                                        fragment_id,
+                                        fragments,
+                                    ),
+                                )
+                                .map_err(
+                                    |err| EvaluatorError {
+                                        kind: err.into(),
+                                        fragment: fragment_id,
+                                    },
+                                )?;
+                                FunctionState::Done
+                            }
+                            ItemInModule::PlatformFunction(f) => f(
+                                self.runtime_context(fragment_id, fragments),
+                                platform_context,
+                            )
+                            .map_err(|err| EvaluatorError {
+                                kind: err.into(),
+                                fragment: fragment_id,
+                            })?,
+                            ItemInModule::UserDefinedFunction(
+                                UserDefinedFunction { body, .. },
+                            ) => {
+                                self.call_stack.push(body.start);
+                                FunctionState::Done
+                            }
+                        };
+
+                        match function_state {
+                            FunctionState::Done => RuntimeState::Running,
+                            FunctionState::Sleeping => RuntimeState::Sleeping,
+                        }
                     }
-                    ItemInModule::PlatformFunction(f) => f(
-                        self.runtime_context(fragment_id, fragments),
-                        platform_context,
-                    )
-                    .map_err(|err| EvaluatorError {
-                        kind: err.into(),
-                        fragment: fragment_id,
-                    })?,
-                    ItemInModule::UserDefinedFunction(
-                        UserDefinedFunction { body, .. },
-                    ) => {
-                        self.call_stack.push(body.start);
-                        FunctionState::Done
+                    FragmentPayload::Terminator => {
+                        // Nothing to do here. Terminators only exist for
+                        // fragment addressing purposes and don't need to be
+                        // handled during evaluation.
+                        RuntimeState::Running
                     }
                 };
 
-                match function_state {
-                    FunctionState::Done => RuntimeState::Running,
-                    FunctionState::Sleeping => RuntimeState::Sleeping,
-                }
+                Ok(runtime_state)
             }
-            FragmentPayload::Terminator => {
-                // Nothing to do here. Terminators only exist for fragment
-                // addressing purposes and don't need to be handled during
-                // evaluation.
-                RuntimeState::Running
-            }
-        };
-
-        Ok(runtime_state)
+        }
     }
 
     fn runtime_context<'r>(
