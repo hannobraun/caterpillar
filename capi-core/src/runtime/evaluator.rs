@@ -73,8 +73,6 @@ impl<C> Evaluator<C> {
                         RuntimeState::Running
                     }
                     FragmentPayload::Word(word) => {
-                        self.call_stack.advance(fragment.next());
-
                         let item = self
                             .global_namespace
                             .resolve(word)
@@ -83,43 +81,55 @@ impl<C> Evaluator<C> {
                                 fragment: fragment_id,
                             })?;
 
-                        let function_state = match item {
-                            ItemInModule::Binding(value) => {
-                                self.data_stack.push(value);
-                                FunctionState::Done
-                            }
-                            ItemInModule::IntrinsicFunction(f) => {
-                                let step = 0;
-                                f(
-                                    step,
-                                    self.runtime_context(
-                                        fragment_id,
-                                        fragments,
-                                    ),
-                                )
-                                .map_err(
-                                    |err| EvaluatorError {
+                        let function_state =
+                            match item {
+                                ItemInModule::Binding(value) => {
+                                    self.call_stack.advance(fragment.next());
+
+                                    self.data_stack.push(value);
+                                    FunctionState::Done
+                                }
+                                ItemInModule::IntrinsicFunction(f) => {
+                                    self.call_stack.advance(fragment.next());
+
+                                    let step = 0;
+                                    f(
+                                        step,
+                                        self.runtime_context(
+                                            fragment_id,
+                                            fragments,
+                                        ),
+                                    )
+                                    .map_err(|err| EvaluatorError {
                                         kind: err.into(),
                                         fragment: fragment_id,
-                                    },
-                                )?;
-                                FunctionState::Done
-                            }
-                            ItemInModule::PlatformFunction(f) => f(
-                                self.runtime_context(fragment_id, fragments),
-                                platform_context,
-                            )
-                            .map_err(|err| EvaluatorError {
-                                kind: err.into(),
-                                fragment: fragment_id,
-                            })?,
-                            ItemInModule::UserDefinedFunction(
-                                UserDefinedFunction { body, .. },
-                            ) => {
-                                self.call_stack.push(body.start);
-                                FunctionState::Done
-                            }
-                        };
+                                    })?;
+                                    FunctionState::Done
+                                }
+                                ItemInModule::PlatformFunction(f) => {
+                                    self.call_stack.advance(fragment.next());
+
+                                    f(
+                                        self.runtime_context(
+                                            fragment_id,
+                                            fragments,
+                                        ),
+                                        platform_context,
+                                    )
+                                    .map_err(|err| EvaluatorError {
+                                        kind: err.into(),
+                                        fragment: fragment_id,
+                                    })?
+                                }
+                                ItemInModule::UserDefinedFunction(
+                                    UserDefinedFunction { body, .. },
+                                ) => {
+                                    self.call_stack.advance(fragment.next());
+
+                                    self.call_stack.push(body.start);
+                                    FunctionState::Done
+                                }
+                            };
 
                         match function_state {
                             FunctionState::Done => RuntimeState::Running,
