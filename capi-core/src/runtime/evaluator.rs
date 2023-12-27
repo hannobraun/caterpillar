@@ -84,9 +84,8 @@ impl<C> Evaluator<C> {
                         let function_state =
                             match item {
                                 ItemInModule::Binding(value) => {
-                                    self.call_stack.advance(fragment.next());
-
                                     self.data_stack.push(value);
+                                    self.call_stack.advance(fragment.next());
                                     FunctionState::Done
                                 }
                                 ItemInModule::IntrinsicFunction(f) => {
