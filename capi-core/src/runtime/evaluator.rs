@@ -64,13 +64,12 @@ impl<C> Evaluator<C> {
                         RuntimeState::Running
                     }
                     FragmentPayload::Value(value) => {
-                        self.call_stack.advance(fragment.next());
-
                         self.data_stack.push(Value {
                             payload: value.clone(),
                             fragment: Some(fragment_id),
                         });
 
+                        self.call_stack.advance(fragment.next());
                         RuntimeState::Running
                     }
                     FragmentPayload::Word(word) => {
