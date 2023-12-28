@@ -45,7 +45,9 @@ impl<C> Evaluator<C> {
 
                         // Evaluate the array.
                         self.data_stack.mark();
-                        self.call_stack.push(*start);
+                        self.call_stack.push(StackFrame::Fragment {
+                            fragment_id: *start,
+                        });
                         while current != self.call_stack.current() {
                             self.step(fragments, platform_context)?;
                         }
@@ -125,7 +127,11 @@ impl<C> Evaluator<C> {
                                     UserDefinedFunction { body, .. },
                                 ) => {
                                     self.call_stack.advance(fragment.next());
-                                    self.call_stack.push(body.start);
+                                    self.call_stack.push(
+                                        StackFrame::Fragment {
+                                            fragment_id: body.start,
+                                        },
+                                    );
                                     PlatformFunctionState::Done
                                 }
                             };

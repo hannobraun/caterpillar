@@ -5,6 +5,7 @@ use crate::{
 };
 
 use super::{
+    call_stack::StackFrame,
     data_stack::{DataStack, DataStackError},
     evaluator::{Evaluator, EvaluatorError, RuntimeState},
 };
@@ -47,7 +48,9 @@ impl<C> Interpreter<C> {
 
         if self.state.finished() {
             // Restart the program.
-            self.evaluator.call_stack.push(start);
+            self.evaluator
+                .call_stack
+                .push(StackFrame::Fragment { fragment_id: start });
         }
 
         Ok(())
@@ -94,7 +97,9 @@ impl<C> Interpreter<C> {
             // test, interfering with the evaluation of the next test. When
             // evaluation is finished then, by definition, the call stack is
             // empty.
-            self.evaluator.call_stack.push(function.body.start);
+            self.evaluator.call_stack.push(StackFrame::Fragment {
+                fragment_id: function.body.start,
+            });
             self.evaluator.data_stack.clear();
 
             while !self

@@ -2,6 +2,7 @@ use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
     pipeline::{self, PipelineOutput},
+    runtime::call_stack::StackFrame,
     value, DataStackResult, Interpreter, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
 };
@@ -121,7 +122,9 @@ fn mod_(
     let parent = Some(runtime_context.this);
     let PipelineOutput { start } =
         pipeline::run(&code, parent, runtime_context.fragments).unwrap();
-    runtime_context.call_stack.push(start);
+    runtime_context
+        .call_stack
+        .push(StackFrame::Fragment { fragment_id: start });
 
     Ok(PlatformFunctionState::Done)
 }

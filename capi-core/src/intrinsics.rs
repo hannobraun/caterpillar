@@ -1,6 +1,9 @@
 use crate::{
-    runtime::namespaces::{
-        IntrinsicFunction, IntrinsicFunctionState, RuntimeContext,
+    runtime::{
+        call_stack::StackFrame,
+        namespaces::{
+            IntrinsicFunction, IntrinsicFunctionState, RuntimeContext,
+        },
     },
     value::{Value, ValuePayload},
 };
@@ -194,7 +197,9 @@ fn each(
                     .push_bare(value::Number(i.try_into().unwrap()));
                 context.data_stack.push_bare(value);
 
-                context.call_stack.push(block.start);
+                context.call_stack.push(StackFrame::Fragment {
+                    fragment_id: block.start,
+                });
             }
 
             Ok(IntrinsicFunctionState::StepDone)
@@ -230,7 +235,9 @@ fn eval(
         0 => {
             let (block, _) =
                 context.data_stack.pop_specific::<value::Block>()?;
-            context.call_stack.push(block.start);
+            context.call_stack.push(StackFrame::Fragment {
+                fragment_id: block.start,
+            });
 
             // `eval` doesn't need to consume the block, so it would be nice, if
             // we could put it back on the stack. However, if we were to do that
@@ -347,7 +354,9 @@ fn if_(
                 context.data_stack.pop_specific::<value::Bool>()?;
 
             let start = if condition.0 { then.start } else { else_.start };
-            context.call_stack.push(start);
+            context
+                .call_stack
+                .push(StackFrame::Fragment { fragment_id: start });
 
             Ok(IntrinsicFunctionState::StepDone)
         }

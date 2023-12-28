@@ -29,8 +29,8 @@ impl CallStack {
         }
     }
 
-    pub fn push(&mut self, next: FragmentId) {
-        self.frames.push(StackFrame::Fragment { fragment_id: next });
+    pub fn push(&mut self, next: StackFrame) {
+        self.frames.push(next);
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
