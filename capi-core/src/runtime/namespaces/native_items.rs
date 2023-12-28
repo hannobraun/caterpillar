@@ -25,6 +25,10 @@ pub struct RuntimeContext<'r> {
     pub data_stack: &'r mut DataStack,
 }
 
+pub enum IntrinsicFunctionState {
+    FullyCompleted,
+}
+
 pub enum PlatformFunctionState {
     Done,
     Sleeping,
