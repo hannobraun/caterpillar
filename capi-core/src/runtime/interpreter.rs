@@ -148,7 +148,8 @@ mod tests {
 
     use crate::{
         pipeline::PipelineError, runtime::evaluator::EvaluatorError, value,
-        DataStackResult, FunctionState, PlatformFunction, RuntimeContext,
+        DataStackResult, PlatformFunction, PlatformFunctionState,
+        RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -355,10 +356,10 @@ mod tests {
     pub fn ping(
         runtime_context: RuntimeContext,
         platform_context: &mut PlatformContext,
-    ) -> DataStackResult<FunctionState> {
+    ) -> DataStackResult<PlatformFunctionState> {
         let (channel, _) =
             runtime_context.data_stack.pop_specific::<value::Number>()?;
         *platform_context.channels.entry(channel.0).or_insert(0) += 1;
-        Ok(FunctionState::Done)
+        Ok(PlatformFunctionState::Done)
     }
 }

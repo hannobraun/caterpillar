@@ -15,7 +15,7 @@ pub enum NativeFunction<C> {
 pub type IntrinsicFunction =
     fn(step: usize, RuntimeContext) -> DataStackResult<()>;
 pub type PlatformFunction<C> =
-    fn(RuntimeContext, &mut C) -> DataStackResult<FunctionState>;
+    fn(RuntimeContext, &mut C) -> DataStackResult<PlatformFunctionState>;
 
 pub struct RuntimeContext<'r> {
     pub this: FragmentId,
@@ -25,7 +25,7 @@ pub struct RuntimeContext<'r> {
     pub data_stack: &'r mut DataStack,
 }
 
-pub enum FunctionState {
+pub enum PlatformFunctionState {
     Done,
     Sleeping,
 }

@@ -3,7 +3,7 @@ use crate::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
     },
-    FunctionState,
+    PlatformFunctionState,
 };
 
 use super::{
@@ -86,7 +86,7 @@ impl<C> Evaluator<C> {
                                 ItemInModule::Binding(value) => {
                                     self.data_stack.push(value);
                                     self.call_stack.advance(fragment.next());
-                                    FunctionState::Done
+                                    PlatformFunctionState::Done
                                 }
                                 ItemInModule::IntrinsicFunction(f) => {
                                     self.call_stack.advance(fragment.next());
@@ -104,7 +104,7 @@ impl<C> Evaluator<C> {
                                         fragment: fragment_id,
                                     })?;
 
-                                    FunctionState::Done
+                                    PlatformFunctionState::Done
                                 }
                                 ItemInModule::PlatformFunction(f) => {
                                     self.call_stack.advance(fragment.next());
@@ -126,13 +126,17 @@ impl<C> Evaluator<C> {
                                 ) => {
                                     self.call_stack.advance(fragment.next());
                                     self.call_stack.push(body.start);
-                                    FunctionState::Done
+                                    PlatformFunctionState::Done
                                 }
                             };
 
                         match function_state {
-                            FunctionState::Done => RuntimeState::Running,
-                            FunctionState::Sleeping => RuntimeState::Sleeping,
+                            PlatformFunctionState::Done => {
+                                RuntimeState::Running
+                            }
+                            PlatformFunctionState::Sleeping => {
+                                RuntimeState::Sleeping
+                            }
                         }
                     }
                     FragmentPayload::Terminator => {

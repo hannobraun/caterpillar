@@ -2,8 +2,8 @@ use std::time::Duration;
 
 use async_channel::{Receiver, RecvError, Sender, TryRecvError};
 use capi_core::{
-    value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
-    RuntimeContext, RuntimeState,
+    value, DataStackResult, Interpreter, PlatformFunction,
+    PlatformFunctionState, RuntimeContext, RuntimeState,
 };
 use chrono::Local;
 use futures::executor::block_on;
@@ -120,7 +120,7 @@ pub enum Event {
 pub fn delay_ms(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
 
@@ -130,17 +130,17 @@ pub fn delay_ms(
         .expect("Negative sleep duration is invalid");
     platform_context.sleep_duration = Some(Duration::from_millis(delay_ms));
 
-    Ok(FunctionState::Sleeping)
+    Ok(PlatformFunctionState::Sleeping)
 }
 
 pub fn print(
     runtime_context: RuntimeContext,
     platform_context: &mut Context,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .events
         .output(format!("{}\n", value.payload));
     runtime_context.data_stack.push(value);
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }

@@ -2,8 +2,8 @@ use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
     pipeline::{self, PipelineOutput},
-    value, DataStackResult, FunctionState, Interpreter, PlatformFunction,
-    RuntimeContext,
+    value, DataStackResult, Interpreter, PlatformFunction,
+    PlatformFunctionState, RuntimeContext,
 };
 
 use crate::loader::Loader;
@@ -70,29 +70,29 @@ pub fn register(interpreter: &mut Interpreter<PlatformContext>) {
 fn clear_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
     platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
 
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }
 
 fn delay_ms(
     runtime_context: RuntimeContext,
     _: &mut PlatformContext,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }
 
 fn mod_(
     runtime_context: RuntimeContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let (path_segments, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
 
@@ -123,27 +123,27 @@ fn mod_(
         pipeline::run(&code, parent, runtime_context.fragments).unwrap();
     runtime_context.call_stack.push(start);
 
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }
 
 fn print(
     runtime_context: RuntimeContext,
     _: &mut PlatformContext,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.payload);
     runtime_context.data_stack.push(value);
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }
 
 fn set_pixel(
     runtime_context: RuntimeContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<FunctionState> {
+) -> DataStackResult<PlatformFunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
     platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
-    Ok(FunctionState::Done)
+    Ok(PlatformFunctionState::Done)
 }
