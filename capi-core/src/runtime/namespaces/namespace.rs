@@ -61,7 +61,7 @@ impl<C> Namespace<C> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
                 NativeFunction::Intrinsic(function) => {
-                    ItemInModule::IntrinsicFunction(function)
+                    ItemInModule::IntrinsicFunction(*function)
                 }
                 NativeFunction::Platform(function) => {
                     ItemInModule::PlatformFunction(function)
@@ -130,7 +130,7 @@ impl<C> Default for Namespace<C> {
 #[derive(Clone, Debug)]
 pub enum ItemInModule<'r, C> {
     Binding(Value),
-    IntrinsicFunction(&'r IntrinsicFunction),
+    IntrinsicFunction(IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
     UserDefinedFunction(&'r UserDefinedFunction),
 }
