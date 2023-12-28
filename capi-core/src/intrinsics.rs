@@ -1,5 +1,7 @@
 use crate::{
-    runtime::namespaces::{IntrinsicFunction, RuntimeContext},
+    runtime::namespaces::{
+        IntrinsicFunction, IntrinsicFunctionState, RuntimeContext,
+    },
     value::{Value, ValuePayload},
 };
 
@@ -37,7 +39,10 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     ]
 }
 
-fn add(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn add(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -45,13 +50,16 @@ fn add(step: usize, context: RuntimeContext) -> DataStackResult<()> {
 
             context.data_stack.push_bare(value::Number(a.0 + b.0));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn and(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn and(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Bool>()?;
@@ -59,23 +67,29 @@ fn and(step: usize, context: RuntimeContext) -> DataStackResult<()> {
 
             context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn array(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn array(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Array(Vec::new()));
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn bind(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
+fn bind(
+    step: usize,
+    mut context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (symbols, _) =
@@ -87,13 +101,16 @@ fn bind(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
                 context.namespace.define_binding(symbol.0, value);
             }
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn clone(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn clone(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -101,23 +118,29 @@ fn clone(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             context.data_stack.push(value.clone());
             context.data_stack.push(value);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn drop(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn drop(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             context.data_stack.pop_any()?;
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn each(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn each(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (block, _) =
@@ -174,13 +197,16 @@ fn each(step: usize, context: RuntimeContext) -> DataStackResult<()> {
                 context.call_stack.push(block.start);
             }
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn eq(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn eq(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -190,13 +216,16 @@ fn eq(step: usize, context: RuntimeContext) -> DataStackResult<()> {
                 .data_stack
                 .push_bare(value::Bool(a.payload == b.payload));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn eval(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn eval(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (block, _) =
@@ -219,23 +248,29 @@ fn eval(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             // Not sure if it's worth it. Maybe if the need for this comes up in
             // more cases.
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn false_(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn false_(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(false));
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn fn_(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
+fn fn_(
+    step: usize,
+    mut context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (body, _) =
@@ -250,13 +285,16 @@ fn fn_(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
 
             context.namespace.define_function(name, body);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn get(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn get(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (index, _) =
@@ -272,13 +310,16 @@ fn get(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             });
             context.data_stack.push_bare(value);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn gt(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn gt(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -286,13 +327,16 @@ fn gt(step: usize, context: RuntimeContext) -> DataStackResult<()> {
 
             context.data_stack.push_bare(value::Bool(a.0 > b.0));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn if_(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn if_(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (else_, _) =
@@ -305,13 +349,16 @@ fn if_(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             let start = if condition.0 { then.start } else { else_.start };
             context.call_stack.push(start);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn len(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn len(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (array, fragment) =
@@ -325,33 +372,42 @@ fn len(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             });
             context.data_stack.push_bare(ValuePayload::Number(len));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn nop(step: usize, _: RuntimeContext) -> DataStackResult<()> {
+fn nop(
+    step: usize,
+    _: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
-        0 => Ok(()),
+        0 => Ok(IntrinsicFunctionState::FullyCompleted),
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn not(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn not(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
             context.data_stack.push_bare(value::Bool(!a.0));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn over(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn over(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let top = context.data_stack.pop_any()?;
@@ -361,13 +417,16 @@ fn over(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             context.data_stack.push(top);
             context.data_stack.push(target);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn set(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn set(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -380,13 +439,16 @@ fn set(step: usize, context: RuntimeContext) -> DataStackResult<()> {
 
             context.data_stack.push_bare(array);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn sub(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn sub(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -394,13 +456,16 @@ fn sub(step: usize, context: RuntimeContext) -> DataStackResult<()> {
 
             context.data_stack.push_bare(value::Number(a.0 - b.0));
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn swap(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn swap(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -409,13 +474,16 @@ fn swap(step: usize, context: RuntimeContext) -> DataStackResult<()> {
             context.data_stack.push(b);
             context.data_stack.push(a);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn test(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
+fn test(
+    step: usize,
+    mut context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (body, _) =
@@ -430,23 +498,29 @@ fn test(step: usize, mut context: RuntimeContext) -> DataStackResult<()> {
 
             context.namespace.define_test(name, body);
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn true_(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn true_(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(true));
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
 }
 
-fn unwrap(step: usize, context: RuntimeContext) -> DataStackResult<()> {
+fn unwrap(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
             let (array, _) =
@@ -456,7 +530,7 @@ fn unwrap(step: usize, context: RuntimeContext) -> DataStackResult<()> {
                 context.data_stack.push_bare(item);
             }
 
-            Ok(())
+            Ok(IntrinsicFunctionState::FullyCompleted)
         }
         _ => unreachable!("invalid step: {step}"),
     }
