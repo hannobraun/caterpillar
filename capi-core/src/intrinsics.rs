@@ -50,7 +50,7 @@ fn add(
 
             context.data_stack.push_bare(value::Number(a.0 + b.0));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -67,7 +67,7 @@ fn and(
 
             context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -80,7 +80,7 @@ fn array(
     match step {
         0 => {
             context.data_stack.push_bare(value::Array(Vec::new()));
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -101,7 +101,7 @@ fn bind(
                 context.namespace.define_binding(symbol.0, value);
             }
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -118,7 +118,7 @@ fn clone(
             context.data_stack.push(value.clone());
             context.data_stack.push(value);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -131,7 +131,7 @@ fn drop(
     match step {
         0 => {
             context.data_stack.pop_any()?;
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -197,7 +197,7 @@ fn each(
                 context.call_stack.push(block.start);
             }
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -216,7 +216,7 @@ fn eq(
                 .data_stack
                 .push_bare(value::Bool(a.payload == b.payload));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -248,7 +248,7 @@ fn eval(
             // Not sure if it's worth it. Maybe if the need for this comes up in
             // more cases.
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -261,7 +261,7 @@ fn false_(
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(false));
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -285,7 +285,7 @@ fn fn_(
 
             context.namespace.define_function(name, body);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -310,7 +310,7 @@ fn get(
             });
             context.data_stack.push_bare(value);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -327,7 +327,7 @@ fn gt(
 
             context.data_stack.push_bare(value::Bool(a.0 > b.0));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -349,7 +349,7 @@ fn if_(
             let start = if condition.0 { then.start } else { else_.start };
             context.call_stack.push(start);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -372,7 +372,7 @@ fn len(
             });
             context.data_stack.push_bare(ValuePayload::Number(len));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -383,7 +383,7 @@ fn nop(
     _: RuntimeContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
-        0 => Ok(IntrinsicFunctionState::FullyCompleted),
+        0 => Ok(IntrinsicFunctionState::StepDone),
         _ => unreachable!("invalid step: {step}"),
     }
 }
@@ -398,7 +398,7 @@ fn not(
 
             context.data_stack.push_bare(value::Bool(!a.0));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -417,7 +417,7 @@ fn over(
             context.data_stack.push(top);
             context.data_stack.push(target);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -439,7 +439,7 @@ fn set(
 
             context.data_stack.push_bare(array);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -456,7 +456,7 @@ fn sub(
 
             context.data_stack.push_bare(value::Number(a.0 - b.0));
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -474,7 +474,7 @@ fn swap(
             context.data_stack.push(b);
             context.data_stack.push(a);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -498,7 +498,7 @@ fn test(
 
             context.namespace.define_test(name, body);
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -511,7 +511,7 @@ fn true_(
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(true));
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }
@@ -530,7 +530,7 @@ fn unwrap(
                 context.data_stack.push_bare(item);
             }
 
-            Ok(IntrinsicFunctionState::FullyCompleted)
+            Ok(IntrinsicFunctionState::StepDone)
         }
         _ => unreachable!("invalid step: {step}"),
     }

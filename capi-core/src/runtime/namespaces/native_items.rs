@@ -26,6 +26,7 @@ pub struct RuntimeContext<'r> {
 }
 
 pub enum IntrinsicFunctionState {
+    StepDone,
     FullyCompleted,
 }
 
