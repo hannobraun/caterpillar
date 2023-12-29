@@ -18,7 +18,7 @@ pub type PlatformFunction<C> =
     fn(RuntimeContext, &mut C) -> DataStackResult<PlatformFunctionState>;
 
 pub struct RuntimeContext<'r> {
-    pub this: FragmentId,
+    pub word: FragmentId,
     pub fragments: &'r mut Fragments,
     pub namespace: UserDefinedItems<'r>,
     pub call_stack: &'r mut CallStack,

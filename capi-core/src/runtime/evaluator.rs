@@ -172,7 +172,7 @@ impl<C> Evaluator<C> {
         fragments: &'r mut Fragments,
     ) -> RuntimeContext<'r> {
         RuntimeContext {
-            this,
+            word: this,
             fragments,
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
