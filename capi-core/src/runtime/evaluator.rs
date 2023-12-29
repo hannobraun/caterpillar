@@ -156,6 +156,7 @@ impl<C> Evaluator<C> {
                 }
             }
             StackFrame::IntrinsicFunction {
+                word: _,
                 function: _,
                 step: _,
             } => {

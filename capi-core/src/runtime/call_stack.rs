@@ -48,6 +48,7 @@ pub enum StackFrame {
         fragment_id: FragmentId,
     },
     IntrinsicFunction {
+        word: FragmentId,
         function: IntrinsicFunction,
         step: usize,
     },
