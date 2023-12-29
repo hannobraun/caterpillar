@@ -23,7 +23,7 @@ impl CallStack {
                     *current = StackFrame::Fragment { fragment_id: next };
                 }
                 None => {
-                    self.frames.pop();
+                    self.pop();
                 }
             }
         }
@@ -31,6 +31,10 @@ impl CallStack {
 
     pub fn push(&mut self, next: StackFrame) {
         self.frames.push(next);
+    }
+
+    pub fn pop(&mut self) {
+        self.frames.pop();
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
