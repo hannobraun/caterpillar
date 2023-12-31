@@ -32,11 +32,12 @@ impl<C> Evaluator<C> {
             return Ok(RuntimeState::Finished);
         };
 
+        self.call_stack.pop();
+
         let runtime_state = match stack_frame {
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
-                self.call_stack.pop();
                 if let Some(next) = fragment.next() {
                     self.call_stack
                         .push(StackFrame::Fragment { fragment_id: next });
@@ -150,7 +151,6 @@ impl<C> Evaluator<C> {
                 // The intrinsic could put something on the call stack. We need
                 // to advance the current stack frame before that can happen, so
                 // we end up returning to the right place.
-                self.call_stack.pop();
                 self.call_stack.push(StackFrame::IntrinsicFunction {
                     word,
                     function,
