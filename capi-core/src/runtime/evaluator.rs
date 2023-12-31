@@ -28,11 +28,9 @@ impl<C> Evaluator<C> {
         fragments: &mut Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
-        let Some(stack_frame) = self.call_stack.current() else {
+        let Some(stack_frame) = self.call_stack.pop() else {
             return Ok(RuntimeState::Finished);
         };
-
-        self.call_stack.pop();
 
         let runtime_state = match stack_frame {
             StackFrame::Fragment { fragment_id } => {
