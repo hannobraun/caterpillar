@@ -131,6 +131,7 @@ impl<C> Evaluator<C> {
                                 UserDefinedFunction { body, .. },
                             ) => {
                                 self.call_stack.advance(fragment.next());
+
                                 self.call_stack.push(StackFrame::Fragment {
                                     fragment_id: body.start,
                                 });
