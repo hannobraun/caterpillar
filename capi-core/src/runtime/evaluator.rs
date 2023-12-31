@@ -75,6 +75,8 @@ impl<C> Evaluator<C> {
                         RuntimeState::Running
                     }
                     FragmentPayload::Word(word) => {
+                        self.call_stack.advance(fragment.next());
+
                         let item_in_namespace = self
                             .global_namespace
                             .resolve(word)
@@ -82,8 +84,6 @@ impl<C> Evaluator<C> {
                                 kind: err.into(),
                                 fragment: fragment_id,
                             })?;
-
-                        self.call_stack.advance(fragment.next());
 
                         match item_in_namespace {
                             ItemInModule::Binding(value) => {
