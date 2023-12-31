@@ -32,7 +32,11 @@ impl<C> Evaluator<C> {
             return Ok(RuntimeState::Finished);
         };
 
-        let runtime_state = match stack_frame {
+        // We just removed the current stack frame, but we can't leave it at
+        // that. Advance it, so that whatever happens next, we'll either execute
+        // the subsequent stack frame next, or directly jump to it, if we push
+        // something else to the call stack in between.
+        match stack_frame {
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
@@ -40,6 +44,23 @@ impl<C> Evaluator<C> {
                     self.call_stack
                         .push(StackFrame::Fragment { fragment_id: next });
                 };
+            }
+            StackFrame::IntrinsicFunction {
+                word,
+                function,
+                step,
+            } => {
+                self.call_stack.push(StackFrame::IntrinsicFunction {
+                    word,
+                    function,
+                    step: step + 1,
+                });
+            }
+        }
+
+        let runtime_state = match stack_frame {
+            StackFrame::Fragment { fragment_id } => {
+                let fragment = fragments.get(fragment_id);
 
                 match &fragment.payload {
                     FragmentPayload::Array { start } => {
@@ -146,15 +167,6 @@ impl<C> Evaluator<C> {
                 function,
                 step,
             } => {
-                // The intrinsic could put something on the call stack. We need
-                // to advance the current stack frame before that can happen, so
-                // we end up returning to the right place.
-                self.call_stack.push(StackFrame::IntrinsicFunction {
-                    word,
-                    function,
-                    step: step + 1,
-                });
-
                 let state =
                     function(step, self.runtime_context(word, fragments))
                         .map_err(|err| EvaluatorError {
