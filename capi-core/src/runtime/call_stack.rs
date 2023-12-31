@@ -33,8 +33,8 @@ impl CallStack {
         self.frames.push(next);
     }
 
-    pub fn pop(&mut self) {
-        self.frames.pop();
+    pub fn pop(&mut self) -> Option<StackFrame> {
+        self.frames.pop()
     }
 
     pub fn replace(&mut self, old: FragmentId, new: FragmentId) {
