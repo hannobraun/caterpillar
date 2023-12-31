@@ -28,35 +28,39 @@ impl<C> Evaluator<C> {
         fragments: &mut Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
-        let Some(stack_frame) = self.call_stack.pop() else {
-            return Ok(RuntimeState::Finished);
-        };
+        let stack_frame = {
+            let Some(stack_frame) = self.call_stack.pop() else {
+                return Ok(RuntimeState::Finished);
+            };
 
-        // We just removed the current stack frame, but we can't leave it at
-        // that. Advance it, so that whatever happens next, we'll either execute
-        // the subsequent stack frame next, or directly jump to it, if we push
-        // something else to the call stack in between.
-        match stack_frame {
-            StackFrame::Fragment { fragment_id } => {
-                let fragment = fragments.get(fragment_id);
+            // We just removed the current stack frame, but we can't leave it at
+            // that. Advance it, so that whatever happens next, we'll either
+            // execute the subsequent stack frame next, or directly jump to it,
+            // if we push something else to the call stack in between.
+            match stack_frame {
+                StackFrame::Fragment { fragment_id } => {
+                    let fragment = fragments.get(fragment_id);
 
-                if let Some(next) = fragment.next() {
-                    self.call_stack
-                        .push(StackFrame::Fragment { fragment_id: next });
-                };
-            }
-            StackFrame::IntrinsicFunction {
-                word,
-                function,
-                step,
-            } => {
-                self.call_stack.push(StackFrame::IntrinsicFunction {
+                    if let Some(next) = fragment.next() {
+                        self.call_stack
+                            .push(StackFrame::Fragment { fragment_id: next });
+                    };
+                }
+                StackFrame::IntrinsicFunction {
                     word,
                     function,
-                    step: step + 1,
-                });
+                    step,
+                } => {
+                    self.call_stack.push(StackFrame::IntrinsicFunction {
+                        word,
+                        function,
+                        step: step + 1,
+                    });
+                }
             }
-        }
+
+            stack_frame
+        };
 
         let runtime_state = match stack_frame {
             StackFrame::Fragment { fragment_id } => {
