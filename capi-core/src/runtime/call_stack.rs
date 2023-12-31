@@ -16,13 +16,6 @@ impl CallStack {
         self.frames.last().copied()
     }
 
-    pub fn advance(&mut self, next: Option<FragmentId>) {
-        self.pop();
-        if let Some(next) = next {
-            self.push(StackFrame::Fragment { fragment_id: next });
-        }
-    }
-
     pub fn push(&mut self, next: StackFrame) {
         self.frames.push(next);
     }

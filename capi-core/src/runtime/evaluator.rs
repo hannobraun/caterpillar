@@ -36,7 +36,11 @@ impl<C> Evaluator<C> {
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
-                self.call_stack.advance(fragment.next());
+                self.call_stack.pop();
+                if let Some(next) = fragment.next() {
+                    self.call_stack
+                        .push(StackFrame::Fragment { fragment_id: next });
+                };
 
                 match &fragment.payload {
                     FragmentPayload::Array { start } => {
