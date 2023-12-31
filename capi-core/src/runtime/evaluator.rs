@@ -83,16 +83,14 @@ impl<C> Evaluator<C> {
                                 fragment: fragment_id,
                             })?;
 
+                        self.call_stack.advance(fragment.next());
+
                         match item_in_namespace {
                             ItemInModule::Binding(value) => {
-                                self.call_stack.advance(fragment.next());
-
                                 self.data_stack.push(value);
                                 RuntimeState::Running
                             }
                             ItemInModule::IntrinsicFunction(f) => {
-                                self.call_stack.advance(fragment.next());
-
                                 self.call_stack.push(
                                     StackFrame::IntrinsicFunction {
                                         word: fragment_id,
@@ -104,8 +102,6 @@ impl<C> Evaluator<C> {
                                 RuntimeState::Running
                             }
                             ItemInModule::PlatformFunction(f) => {
-                                self.call_stack.advance(fragment.next());
-
                                 let function_state = f(
                                     self.runtime_context(
                                         fragment_id,
@@ -130,8 +126,6 @@ impl<C> Evaluator<C> {
                             ItemInModule::UserDefinedFunction(
                                 UserDefinedFunction { body, .. },
                             ) => {
-                                self.call_stack.advance(fragment.next());
-
                                 self.call_stack.push(StackFrame::Fragment {
                                     fragment_id: body.start,
                                 });
