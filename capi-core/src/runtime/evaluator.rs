@@ -36,7 +36,7 @@ impl<C> Evaluator<C> {
         // next, or whether we end up adding more stack frames first, we can be
         // sure that the current stack frame already points to the correct
         // place.
-        let stack_frame = {
+        let current_stack_frame = {
             let Some(current_stack_frame) = self.call_stack.pop() else {
                 return Ok(RuntimeState::Finished);
             };
@@ -66,7 +66,7 @@ impl<C> Evaluator<C> {
             current_stack_frame
         };
 
-        let runtime_state = match stack_frame {
+        let runtime_state = match current_stack_frame {
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
