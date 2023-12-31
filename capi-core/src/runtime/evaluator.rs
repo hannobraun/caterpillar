@@ -28,15 +28,19 @@ impl<C> Evaluator<C> {
         fragments: &mut Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
+        // What we need to do next depends on what's on top of the call stack.
+        // Let's get the current stack frame off, and replace it with a stack
+        // frame that points to the subsequent piece of code.
+        //
+        // That way, whether we want to execute that subsequent piece of code
+        // next, or whether we end up adding more stack frames first, we can be
+        // sure that the current stack frame already points to the correct
+        // place.
         let stack_frame = {
             let Some(stack_frame) = self.call_stack.pop() else {
                 return Ok(RuntimeState::Finished);
             };
 
-            // We just removed the current stack frame, but we can't leave it at
-            // that. Advance it, so that whatever happens next, we'll either
-            // execute the subsequent stack frame next, or directly jump to it,
-            // if we push something else to the call stack in between.
             match stack_frame {
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = fragments.get(fragment_id);
