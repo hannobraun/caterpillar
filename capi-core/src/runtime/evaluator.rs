@@ -85,8 +85,9 @@ impl<C> Evaluator<C> {
 
                         match item_in_namespace {
                             ItemInModule::Binding(value) => {
-                                self.data_stack.push(value);
                                 self.call_stack.advance(fragment.next());
+
+                                self.data_stack.push(value);
                                 RuntimeState::Running
                             }
                             ItemInModule::IntrinsicFunction(f) => {
