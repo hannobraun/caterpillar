@@ -10,8 +10,8 @@ use super::{
     call_stack::{CallStack, StackFrame},
     data_stack::{DataStack, DataStackError},
     namespaces::{
-        ItemInModule, Namespace, ResolveError, RuntimeContext,
-        UserDefinedFunction,
+        IntrinsicFunctionState, ItemInModule, Namespace, ResolveError,
+        RuntimeContext, UserDefinedFunction,
     },
 };
 
@@ -92,20 +92,13 @@ impl<C> Evaluator<C> {
                             ItemInModule::IntrinsicFunction(f) => {
                                 self.call_stack.advance(fragment.next());
 
-                                let step = 0;
-                                f(
-                                    step,
-                                    self.runtime_context(
-                                        fragment_id,
-                                        fragments,
-                                    ),
-                                )
-                                .map_err(
-                                    |err| EvaluatorError {
-                                        kind: err.into(),
-                                        fragment: fragment_id,
+                                self.call_stack.push(
+                                    StackFrame::IntrinsicFunction {
+                                        word: fragment_id,
+                                        function: f,
+                                        step: 0,
                                     },
-                                )?;
+                                );
 
                                 RuntimeState::Running
                             }
@@ -155,11 +148,37 @@ impl<C> Evaluator<C> {
                 }
             }
             StackFrame::IntrinsicFunction {
-                word: _,
-                function: _,
-                step: _,
+                word,
+                function,
+                step,
             } => {
-                todo!("Can't handle intrinsic functions within call stack yet")
+                // The intrinsic could put something on the call stack. We need
+                // to advance the current stack frame before that can happen, so
+                // we end up returning to the right place.
+                self.call_stack.pop();
+                self.call_stack.push(StackFrame::IntrinsicFunction {
+                    word,
+                    function,
+                    step: step + 1,
+                });
+
+                let state =
+                    function(step, self.runtime_context(word, fragments))
+                        .map_err(|err| EvaluatorError {
+                            kind: err.into(),
+                            fragment: word,
+                        })?;
+
+                match state {
+                    IntrinsicFunctionState::StepDone => {
+                        // Nothing to do. We already advanced the stack frame.
+                    }
+                    IntrinsicFunctionState::FullyCompleted => {
+                        self.call_stack.pop();
+                    }
+                }
+
+                RuntimeState::Running
             }
         };
 
