@@ -17,15 +17,9 @@ impl CallStack {
     }
 
     pub fn advance(&mut self, next: Option<FragmentId>) {
-        if let Some(current) = self.frames.last_mut() {
-            match next {
-                Some(next) => {
-                    *current = StackFrame::Fragment { fragment_id: next };
-                }
-                None => {
-                    self.pop();
-                }
-            }
+        self.pop();
+        if let Some(next) = next {
+            self.push(StackFrame::Fragment { fragment_id: next });
         }
     }
 
