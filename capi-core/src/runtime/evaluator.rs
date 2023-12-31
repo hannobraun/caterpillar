@@ -38,9 +38,10 @@ impl<C> Evaluator<C> {
 
                 match &fragment.payload {
                     FragmentPayload::Array { start } => {
+                        self.call_stack.advance(fragment.next());
+
                         // Remember the current stack frame, so we know when
                         // we're done evaluating the array.
-                        self.call_stack.advance(fragment.next());
                         let current = self.call_stack.current();
 
                         // Evaluate the array.
