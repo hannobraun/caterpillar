@@ -37,11 +37,11 @@ impl<C> Evaluator<C> {
         // sure that the current stack frame already points to the correct
         // place.
         let stack_frame = {
-            let Some(stack_frame) = self.call_stack.pop() else {
+            let Some(current_stack_frame) = self.call_stack.pop() else {
                 return Ok(RuntimeState::Finished);
             };
 
-            match stack_frame {
+            match current_stack_frame {
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = fragments.get(fragment_id);
 
@@ -63,7 +63,7 @@ impl<C> Evaluator<C> {
                 }
             }
 
-            stack_frame
+            current_stack_frame
         };
 
         let runtime_state = match stack_frame {
