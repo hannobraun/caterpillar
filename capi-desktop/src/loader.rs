@@ -6,7 +6,7 @@ use std::{
 };
 
 use anyhow::Context;
-use crossbeam_channel::Receiver;
+use crossbeam_channel::{Receiver, SendError};
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
@@ -76,8 +76,15 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
             let events = match result {
                 Ok(events) => events,
                 Err(err) => {
-                    // Not sure what else we can do about it here.
-                    error!("Error watching code: {err:?}");
+                    if let Err(SendError(err)) = sender.send(Err(err)) {
+                        // If we end up here, the channel has been disconnected.
+                        // Nothing we can do about it here, but log the error.
+                        //
+                        // If the channel is disconnected, the watcher should
+                        // have been dropped too, which would mean this whole
+                        // thread is about to die anyway.
+                        error!("Failed to send code watching error: {err:?}");
+                    }
                     return;
                 }
             };
