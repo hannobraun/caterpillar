@@ -73,19 +73,20 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
         move |result: DebounceEventResult| {
             let path = &path_for_watcher;
 
-            if let Ok(events) = result {
-                for event in events {
-                    if let DebouncedEventKind::Any = event.kind {
-                        let code = load(path).unwrap();
-                        sender.send(code).unwrap();
+            match result {
+                Ok(events) => {
+                    for event in events {
+                        if let DebouncedEventKind::Any = event.kind {
+                            let code = load(path).unwrap();
+                            sender.send(code).unwrap();
+                        }
                     }
                 }
-
-                return;
+                Err(err) => {
+                    // Not sure what else we can do about it here.
+                    error!("Error watching code: {err:?}");
+                }
             }
-
-            // Not sure what else we can do about it here.
-            error!("Error watching code: {result:?}");
         },
     )?;
 
