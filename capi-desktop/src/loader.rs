@@ -94,7 +94,15 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
                     let code_or_err = load(path);
-                    sender.send(code_or_err).unwrap();
+
+                    if let Err(SendError(code_or_err)) =
+                        sender.send(code_or_err)
+                    {
+                        error!(
+                            "Failed to send code loading result: {:?}",
+                            code_or_err
+                        );
+                    }
                 }
             }
         },
