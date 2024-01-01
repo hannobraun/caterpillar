@@ -137,7 +137,9 @@ impl DesktopThread {
                 }
             };
 
-            if let Some(Ok(new_code)) = maybe_new_code_or_err {
+            let maybe_new_code = maybe_new_code_or_err.transpose()?;
+
+            if let Some(new_code) = maybe_new_code {
                 let parent = None;
                 interpreter.update(&new_code, parent)?;
             }
