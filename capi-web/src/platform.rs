@@ -18,7 +18,8 @@ pub async fn run(
     debug!("Running script:\n{script}");
 
     let mut interpreter = Interpreter::new()?;
-    interpreter.update(script)?;
+    let parent = None;
+    interpreter.update(script, parent)?;
     let mut context = Context {
         events: Events { inner: events },
         sleep_duration: None,
@@ -33,7 +34,8 @@ pub async fn run(
 
     loop {
         if let Some(code) = new_code.take() {
-            if let Err(err) = interpreter.update(&code) {
+            let parent = None;
+            if let Err(err) = interpreter.update(&code, parent) {
                 context.events.status(format!("Pipeline error:\n{err:?}\n"));
             }
         }

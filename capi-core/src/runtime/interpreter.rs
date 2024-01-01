@@ -1,6 +1,6 @@
 use crate::{
     pipeline::{self, PipelineError, PipelineOutput},
-    repr::eval::fragments::{Fragments, Replacement},
+    repr::eval::fragments::{FragmentId, Fragments, Replacement},
     value, PlatformFunction,
 };
 
@@ -33,8 +33,11 @@ impl<C> Interpreter<C> {
         self.evaluator.global_namespace.register_platform(functions);
     }
 
-    pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-        let parent = None;
+    pub fn update(
+        &mut self,
+        code: &str,
+        parent: Option<FragmentId>,
+    ) -> Result<(), PipelineError> {
         let PipelineOutput { start } =
             pipeline::run(code, parent, &mut self.fragments)?;
 
@@ -321,7 +324,8 @@ mod tests {
         }
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-            self.inner.update(code)
+            let parent = None;
+            self.inner.update(code, parent)
         }
 
         pub fn wait_for_ping_on_channel(

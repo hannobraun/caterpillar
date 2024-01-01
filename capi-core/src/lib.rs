@@ -29,7 +29,8 @@ mod tests {
         let script_path = PathBuf::from("../tests.capi");
         let (code, _) = Loader::new().load(&script_path)?;
 
-        interpreter.update(&code)?;
+        let parent = None;
+        interpreter.update(&code, parent)?;
         interpreter.run_tests(&mut PlatformContext::new(script_path))?;
 
         Ok(())

@@ -99,7 +99,8 @@ impl DesktopThread {
         let (code, updates) = loader.load(&entry_script_path)?;
 
         let mut interpreter = Interpreter::new()?;
-        interpreter.update(&code)?;
+        let parent = None;
+        interpreter.update(&code, parent)?;
         let mut platform_context = PlatformContext::new(entry_script_path)
             .with_pixel_ops_sender(pixel_ops);
 
@@ -137,7 +138,8 @@ impl DesktopThread {
             };
 
             if let Some(new_code) = new_code {
-                interpreter.update(&new_code)?;
+                let parent = None;
+                interpreter.update(&new_code, parent)?;
             }
         }
 
