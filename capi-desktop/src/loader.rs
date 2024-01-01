@@ -35,7 +35,7 @@ impl Loader {
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
-    ) -> anyhow::Result<(String, Receiver<Result<String, ()>>)> {
+    ) -> anyhow::Result<(String, Receiver<Result<String, notify::Error>>)> {
         let path = path.into();
 
         let code = load(&path)?;
@@ -47,7 +47,7 @@ impl Loader {
 }
 
 struct ScriptWatcher {
-    pub updates: Receiver<Result<String, ()>>,
+    pub updates: Receiver<Result<String, notify::Error>>,
     pub watcher: Debouncer<RecommendedWatcher>,
 }
 
