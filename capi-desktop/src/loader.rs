@@ -98,6 +98,8 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
                     if let Err(SendError(code_or_err)) =
                         sender.send(code_or_err)
                     {
+                        // See comment above on why this is the appropriate way
+                        // to handle this.
                         error!(
                             "Failed to send code loading result: {:?}",
                             code_or_err
