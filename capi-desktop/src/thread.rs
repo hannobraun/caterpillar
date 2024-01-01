@@ -116,7 +116,7 @@ impl DesktopThread {
             let runtime_state =
                 run_target.step(&mut interpreter, &mut platform_context)?;
 
-            let new_code = match runtime_state {
+            let maybe_new_code_or_err = match runtime_state {
                 RuntimeState::Running => match updates.try_recv() {
                     Ok(new_code) => Some(new_code),
                     Err(TryRecvError::Empty) => None,
@@ -137,7 +137,7 @@ impl DesktopThread {
                 }
             };
 
-            if let Some(Ok(new_code)) = new_code {
+            if let Some(Ok(new_code)) = maybe_new_code_or_err {
                 let parent = None;
                 interpreter.update(&new_code, parent)?;
             }
