@@ -26,6 +26,12 @@ impl Loader {
     }
 
     /// Load the script at the given path
+    ///
+    /// # Implementation Note
+    ///
+    /// It would be better to not return the code as a `String` here, and
+    /// instead trigger the first update through the channel. Then we only have
+    /// to support one code path for loading code.
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
