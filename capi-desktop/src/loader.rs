@@ -35,7 +35,7 @@ impl Loader {
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
-    ) -> anyhow::Result<(String, Receiver<String>)> {
+    ) -> anyhow::Result<(String, Receiver<Result<String, ()>>)> {
         let path = path.into();
 
         let code = load(&path)?;
@@ -47,7 +47,7 @@ impl Loader {
 }
 
 struct ScriptWatcher {
-    pub updates: Receiver<String>,
+    pub updates: Receiver<Result<String, ()>>,
     pub watcher: Debouncer<RecommendedWatcher>,
 }
 
@@ -78,7 +78,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
                     for event in events {
                         if let DebouncedEventKind::Any = event.kind {
                             let code = load(path).unwrap();
-                            sender.send(code).unwrap();
+                            sender.send(Ok(code)).unwrap();
                         }
                     }
                 }

@@ -137,7 +137,7 @@ impl DesktopThread {
                 }
             };
 
-            if let Some(new_code) = new_code {
+            if let Some(Ok(new_code)) = new_code {
                 let parent = None;
                 interpreter.update(&new_code, parent)?;
             }
