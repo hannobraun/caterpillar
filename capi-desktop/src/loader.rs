@@ -35,7 +35,7 @@ impl Loader {
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
-    ) -> anyhow::Result<(String, Receiver<Result<String, notify::Error>>)> {
+    ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
         let path = path.into();
 
         let code = load(&path)?;
@@ -47,7 +47,7 @@ impl Loader {
 }
 
 struct ScriptWatcher {
-    pub updates: Receiver<Result<String, notify::Error>>,
+    pub updates: Receiver<anyhow::Result<String>>,
     pub watcher: Debouncer<RecommendedWatcher>,
 }
 
@@ -76,6 +76,8 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
             let events = match result {
                 Ok(events) => events,
                 Err(err) => {
+                    let err = anyhow::Error::from(err);
+
                     if let Err(SendError(err)) = sender.send(Err(err)) {
                         // If we end up here, the channel has been disconnected.
                         // Nothing we can do about it here, but log the error.
