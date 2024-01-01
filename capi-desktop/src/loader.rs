@@ -93,8 +93,8 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
 
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
-                    let code = load(path).unwrap();
-                    sender.send(Ok(code)).unwrap();
+                    let code_or_err = load(path);
+                    sender.send(code_or_err).unwrap();
                 }
             }
         },
