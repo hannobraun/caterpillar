@@ -96,10 +96,8 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
 
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
-                    let code_or_err = load(path);
-
                     if let Err(SendError(code_or_err)) =
-                        script_loader.sender.send(code_or_err)
+                        script_loader.on_change(path)
                     {
                         // See comment above on why this is the appropriate way
                         // to handle this.
