@@ -42,8 +42,8 @@ impl Loader {
     ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
         let path = path.into();
 
-        let code = load(&path)?;
         let ScriptWatcher { updates, watcher } = watch(path)?;
+        let code = updates.recv()??;
 
         self.watchers.push(watcher);
         Ok((code, updates))
