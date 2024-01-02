@@ -98,8 +98,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
                         // See comment above on why this is the appropriate way
                         // to handle this.
                         error!(
-                            "Failed to send code loading result: {:?}",
-                            result
+                            "Failed to send code loading result: {result:?}"
                         );
                     }
                 }
