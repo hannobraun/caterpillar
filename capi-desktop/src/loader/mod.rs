@@ -81,11 +81,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
             let events = match result {
                 Ok(events) => events,
                 Err(err) => {
-                    let err = anyhow::Error::from(err);
-
-                    if let Err(SendError(err)) =
-                        script_loader.sender.send(Err(err))
-                    {
+                    if let Err(SendError(err)) = script_loader.on_error(err) {
                         // If we end up here, the channel has been disconnected.
                         // Nothing we can do about it here, but log the error.
                         //
