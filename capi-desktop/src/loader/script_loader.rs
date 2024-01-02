@@ -10,10 +10,12 @@ pub struct ScriptLoader {
 }
 
 impl ScriptLoader {
-    pub fn new(path: PathBuf) -> (Self, Receiver<anyhow::Result<String>>) {
+    pub fn new(
+        path: PathBuf,
+    ) -> anyhow::Result<(Self, Receiver<anyhow::Result<String>>)> {
         let (sender, receiver) = crossbeam_channel::bounded(1);
         let self_ = Self { path, sender };
-        (self_, receiver)
+        Ok((self_, receiver))
     }
 
     pub fn on_error(
