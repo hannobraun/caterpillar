@@ -6,7 +6,7 @@ use std::{
 };
 
 use anyhow::Context;
-use crossbeam_channel::{Receiver, SendError};
+use crossbeam_channel::{Receiver, SendError, Sender};
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
@@ -67,6 +67,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
     let path_for_watcher = path.clone();
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
+    let script_loader = ScriptLoader { sender };
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
@@ -78,7 +79,9 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
                 Err(err) => {
                     let err = anyhow::Error::from(err);
 
-                    if let Err(SendError(err)) = sender.send(Err(err)) {
+                    if let Err(SendError(err)) =
+                        script_loader.sender.send(Err(err))
+                    {
                         // If we end up here, the channel has been disconnected.
                         // Nothing we can do about it here, but log the error.
                         //
@@ -96,7 +99,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
                     let code_or_err = load(path);
 
                     if let Err(SendError(code_or_err)) =
-                        sender.send(code_or_err)
+                        script_loader.sender.send(code_or_err)
                     {
                         // See comment above on why this is the appropriate way
                         // to handle this.
@@ -118,4 +121,8 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
         updates: receiver,
         watcher: debouncer,
     })
+}
+
+struct ScriptLoader {
+    sender: Sender<anyhow::Result<String>>,
 }
