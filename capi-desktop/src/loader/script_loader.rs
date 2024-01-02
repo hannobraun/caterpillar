@@ -23,6 +23,10 @@ impl ScriptLoader {
         self.sender.send(Err(err.into()))
     }
 
+    /// Trigger a code update
+    ///
+    /// This method may block indefinitely while waiting for the code update to
+    /// be processed!
     pub fn trigger(&self) -> Result<(), SendError<anyhow::Result<String>>> {
         let code_or_err = load(&self.path);
         self.sender.send(code_or_err)
