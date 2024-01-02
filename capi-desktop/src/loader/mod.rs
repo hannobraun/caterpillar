@@ -7,7 +7,6 @@ use std::{
     time::Duration,
 };
 
-use anyhow::Context;
 use crossbeam_channel::{Receiver, SendError};
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
@@ -53,12 +52,6 @@ impl Loader {
 struct ScriptWatcher {
     pub updates: Receiver<anyhow::Result<String>>,
     pub watcher: Debouncer<RecommendedWatcher>,
-}
-
-fn load(path: &Path) -> anyhow::Result<String> {
-    let code = load_inner(path)
-        .with_context(|| format!("Loading script `{}`", path.display()))?;
-    Ok(code)
 }
 
 fn load_inner(path: &Path) -> io::Result<String> {
