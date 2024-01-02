@@ -71,7 +71,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
     let path_for_watcher = path.clone();
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
-    let script_loader = ScriptLoader { sender };
+    let script_loader = ScriptLoader::new(sender);
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
