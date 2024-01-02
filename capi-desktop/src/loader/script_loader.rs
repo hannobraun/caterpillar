@@ -39,14 +39,14 @@ impl ScriptLoader {
     /// This method may block indefinitely while waiting for the code update to
     /// be processed!
     pub fn trigger(&self) -> Result<(), SendError<anyhow::Result<String>>> {
-        let code_or_err = load_inner(&self.path).with_context(|| {
+        let code_or_err = load(&self.path).with_context(|| {
             format!("Loading script `{}`", self.path.display())
         });
         self.sender.send(code_or_err)
     }
 }
 
-fn load_inner(path: &Path) -> io::Result<String> {
+fn load(path: &Path) -> io::Result<String> {
     let mut code = String::new();
     File::open(path)?.read_to_string(&mut code)?;
     Ok(code)
