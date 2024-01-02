@@ -36,7 +36,7 @@ impl Loader {
     ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
         let path = path.into();
 
-        let ScriptWatcher { updates, watcher } = watch(path)?;
+        let ScriptUpdates { updates, watcher } = watch(path)?;
         let code = updates.recv()??;
 
         self.watchers.push(watcher);
@@ -44,12 +44,12 @@ impl Loader {
     }
 }
 
-struct ScriptWatcher {
+struct ScriptUpdates {
     pub updates: Receiver<anyhow::Result<String>>,
     pub watcher: Debouncer<RecommendedWatcher>,
 }
 
-fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
+fn watch(path: PathBuf) -> anyhow::Result<ScriptUpdates> {
     let (script_loader, receiver) = ScriptLoader::new(path.clone())?;
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
@@ -89,7 +89,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
         .watcher()
         .watch(&path, RecursiveMode::NonRecursive)?;
 
-    Ok(ScriptWatcher {
+    Ok(ScriptUpdates {
         updates: receiver,
         watcher: debouncer,
     })
