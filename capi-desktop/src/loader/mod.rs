@@ -1,3 +1,5 @@
+mod script_loader;
+
 use std::{
     fs::File,
     io::{self, Read},
@@ -6,12 +8,14 @@ use std::{
 };
 
 use anyhow::Context;
-use crossbeam_channel::{Receiver, SendError, Sender};
+use crossbeam_channel::{Receiver, SendError};
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
 };
 use tracing::error;
+
+use self::script_loader::ScriptLoader;
 
 #[derive(Default)]
 pub struct Loader {
@@ -121,8 +125,4 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
         updates: receiver,
         watcher: debouncer,
     })
-}
-
-struct ScriptLoader {
-    sender: Sender<anyhow::Result<String>>,
 }
