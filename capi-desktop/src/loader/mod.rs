@@ -71,13 +71,11 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
     let path_for_watcher = path.clone();
 
     let (sender, receiver) = crossbeam_channel::bounded(0);
-    let script_loader = ScriptLoader::new(sender);
+    let script_loader = ScriptLoader::new(path_for_watcher, sender);
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
         move |result: DebounceEventResult| {
-            let path = &path_for_watcher;
-
             let events = match result {
                 Ok(events) => events,
                 Err(err) => {
@@ -97,7 +95,7 @@ fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
                     if let Err(SendError(code_or_err)) =
-                        script_loader.on_change(path)
+                        script_loader.on_change()
                     {
                         // See comment above on why this is the appropriate way
                         // to handle this.
