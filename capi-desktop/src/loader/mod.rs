@@ -1,11 +1,6 @@
 mod script_loader;
 
-use std::{
-    fs::File,
-    io::{self, Read},
-    path::{Path, PathBuf},
-    time::Duration,
-};
+use std::{path::PathBuf, time::Duration};
 
 use crossbeam_channel::{Receiver, SendError};
 use notify::{RecommendedWatcher, RecursiveMode};
@@ -52,12 +47,6 @@ impl Loader {
 struct ScriptWatcher {
     pub updates: Receiver<anyhow::Result<String>>,
     pub watcher: Debouncer<RecommendedWatcher>,
-}
-
-fn load_inner(path: &Path) -> io::Result<String> {
-    let mut code = String::new();
-    File::open(path)?.read_to_string(&mut code)?;
-    Ok(code)
 }
 
 fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {

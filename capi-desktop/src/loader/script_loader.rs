@@ -1,9 +1,11 @@
-use std::path::PathBuf;
+use std::{
+    fs::File,
+    io::{self, Read},
+    path::{Path, PathBuf},
+};
 
 use anyhow::Context;
 use crossbeam_channel::{Receiver, SendError, Sender};
-
-use super::load_inner;
 
 pub struct ScriptLoader {
     path: PathBuf,
@@ -42,4 +44,10 @@ impl ScriptLoader {
         });
         self.sender.send(code_or_err)
     }
+}
+
+fn load_inner(path: &Path) -> io::Result<String> {
+    let mut code = String::new();
+    File::open(path)?.read_to_string(&mut code)?;
+    Ok(code)
 }
