@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crossbeam_channel::{SendError, Sender};
+use crossbeam_channel::{Receiver, SendError, Sender};
 
 use super::load;
 
@@ -10,8 +10,10 @@ pub struct ScriptLoader {
 }
 
 impl ScriptLoader {
-    pub fn new(path: PathBuf, sender: Sender<anyhow::Result<String>>) -> Self {
-        Self { path, sender }
+    pub fn new(path: PathBuf) -> (Self, Receiver<anyhow::Result<String>>) {
+        let (sender, receiver) = crossbeam_channel::bounded(1);
+        let self_ = Self { path, sender };
+        (self_, receiver)
     }
 
     pub fn on_error(
