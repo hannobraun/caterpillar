@@ -68,10 +68,8 @@ fn load_inner(path: &Path) -> io::Result<String> {
 }
 
 fn watch(path: PathBuf) -> anyhow::Result<ScriptWatcher> {
-    let path_for_watcher = path.clone();
-
     let (sender, receiver) = crossbeam_channel::bounded(0);
-    let script_loader = ScriptLoader::new(path_for_watcher, sender);
+    let script_loader = ScriptLoader::new(path.clone(), sender);
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
