@@ -21,7 +21,7 @@ impl ScriptLoader {
         self.sender.send(Err(err.into()))
     }
 
-    pub fn on_change(&self) -> Result<(), SendError<anyhow::Result<String>>> {
+    pub fn trigger(&self) -> Result<(), SendError<anyhow::Result<String>>> {
         let code_or_err = load(&self.path);
         self.sender.send(code_or_err)
     }
