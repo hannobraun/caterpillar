@@ -14,7 +14,10 @@ impl ScriptLoader {
         path: PathBuf,
     ) -> anyhow::Result<(Self, Receiver<anyhow::Result<String>>)> {
         let (sender, receiver) = crossbeam_channel::bounded(1);
+
         let self_ = Self { path, sender };
+        self_.trigger()?;
+
         Ok((self_, receiver))
     }
 
