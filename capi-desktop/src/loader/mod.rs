@@ -36,14 +36,11 @@ impl Loader {
     ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
         let path = path.into();
 
-        let ScriptUpdates {
-            receiver: updates,
-            watcher,
-        } = watch(path)?;
-        let code = updates.recv()??;
+        let ScriptUpdates { receiver, watcher } = watch(path)?;
+        let code = receiver.recv()??;
 
         self.watchers.push(watcher);
-        Ok((code, updates))
+        Ok((code, receiver))
     }
 }
 
