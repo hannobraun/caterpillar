@@ -16,15 +16,17 @@ pub struct PlatformContext {
     /// is used as the base for all `mod` declarations.
     pub entry_script_path: PathBuf,
 
+    pub loader: Loader,
     pub pixel_ops: Sender,
 }
 
 impl PlatformContext {
-    pub fn new(entry_script_path: impl Into<PathBuf>) -> Self {
+    pub fn new(entry_script_path: impl Into<PathBuf>, loader: Loader) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
             entry_script_path: entry_script_path.into(),
+            loader,
             pixel_ops: Sender { inner: pixel_ops },
         }
     }

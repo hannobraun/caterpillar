@@ -32,7 +32,8 @@ mod tests {
 
         let parent = None;
         interpreter.update(&code, parent)?;
-        interpreter.run_tests(&mut PlatformContext::new(script_path))?;
+        interpreter
+            .run_tests(&mut PlatformContext::new(script_path, loader))?;
 
         Ok(())
     }

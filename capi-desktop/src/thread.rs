@@ -101,8 +101,9 @@ impl DesktopThread {
         let mut interpreter = Interpreter::new()?;
         let parent = None;
         interpreter.update(&code, parent)?;
-        let mut platform_context = PlatformContext::new(entry_script_path)
-            .with_pixel_ops_sender(pixel_ops);
+        let mut platform_context =
+            PlatformContext::new(entry_script_path, loader)
+                .with_pixel_ops_sender(pixel_ops);
 
         platform::register(&mut interpreter);
 
