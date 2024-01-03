@@ -27,7 +27,8 @@ mod tests {
         capi_desktop::platform::register(&mut interpreter);
 
         let script_path = PathBuf::from("../tests.capi");
-        let (code, _) = Loader::new().load(&script_path)?;
+        let mut loader = Loader::new();
+        let (code, _) = loader.load(&script_path)?;
 
         let parent = None;
         interpreter.update(&code, parent)?;
