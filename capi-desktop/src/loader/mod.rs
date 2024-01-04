@@ -31,7 +31,7 @@ impl Loader {
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
-    ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
+    ) -> anyhow::Result<(String, UpdateReceiver)> {
         let path = path.into();
 
         let (sender, receiver) = crossbeam_channel::unbounded();
@@ -42,3 +42,5 @@ impl Loader {
         Ok((code, receiver))
     }
 }
+
+pub type UpdateReceiver = Receiver<anyhow::Result<String>>;
