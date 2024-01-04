@@ -8,7 +8,8 @@ use tracing::error;
 use super::{script_loader::ScriptLoader, ScriptUpdates};
 
 pub fn watch(path: PathBuf) -> anyhow::Result<ScriptUpdates> {
-    let (script_loader, receiver) = ScriptLoader::new(path.clone())?;
+    let (sender, receiver) = crossbeam_channel::unbounded();
+    let script_loader = ScriptLoader::new(path.clone(), sender)?;
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
