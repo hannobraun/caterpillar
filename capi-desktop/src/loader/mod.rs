@@ -34,7 +34,9 @@ impl Loader {
     ) -> anyhow::Result<(String, Receiver<anyhow::Result<String>>)> {
         let path = path.into();
 
-        let ScriptUpdates { receiver, watcher } = watch(path)?;
+        let (sender, receiver) = crossbeam_channel::unbounded();
+        let ScriptUpdates { receiver, watcher } =
+            watch(path, sender, receiver)?;
         let code = receiver.recv()??;
 
         self.watchers.push(watcher);
