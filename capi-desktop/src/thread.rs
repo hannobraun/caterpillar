@@ -98,7 +98,7 @@ impl DesktopThread {
         let parent = None;
 
         let mut loader = Loader::new();
-        let (code, updates) = loader.load(&entry_script_path, parent)?;
+        let (code, _) = loader.load(&entry_script_path, parent)?;
 
         let mut interpreter = Interpreter::new()?;
         interpreter.update(&code, parent)?;
@@ -119,11 +119,13 @@ impl DesktopThread {
                 run_target.step(&mut interpreter, &mut platform_context)?;
 
             let maybe_new_code_or_err = match runtime_state {
-                RuntimeState::Running => match updates.try_recv() {
-                    Ok(new_code) => Some(new_code),
-                    Err(TryRecvError::Empty) => None,
-                    Err(TryRecvError::Disconnected) => break,
-                },
+                RuntimeState::Running => {
+                    match platform_context.loader.updates().try_recv() {
+                        Ok(new_code) => Some(new_code),
+                        Err(TryRecvError::Empty) => None,
+                        Err(TryRecvError::Disconnected) => break,
+                    }
+                }
                 RuntimeState::Sleeping => {
                     unreachable!(
                         "No desktop platform functions put runtime to sleep"
@@ -132,7 +134,7 @@ impl DesktopThread {
                 RuntimeState::Finished => {
                     run_target.finish();
 
-                    match updates.recv() {
+                    match platform_context.loader.updates().recv() {
                         Ok(new_code) => Some(new_code),
                         Err(RecvError) => break,
                     }

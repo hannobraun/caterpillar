@@ -47,6 +47,10 @@ impl Loader {
         self.watchers.push(watcher);
         Ok((code, self.receiver.clone()))
     }
+
+    pub fn updates(&self) -> &UpdateReceiver {
+        &self.receiver
+    }
 }
 
 impl Default for Loader {
