@@ -5,18 +5,17 @@ use std::{
 };
 
 use anyhow::Context;
-use crossbeam_channel::{SendError, Sender};
+use crossbeam_channel::SendError;
+
+use super::UpdateSender;
 
 pub struct ScriptLoader {
     path: PathBuf,
-    sender: Sender<anyhow::Result<String>>,
+    sender: UpdateSender,
 }
 
 impl ScriptLoader {
-    pub fn new(
-        path: PathBuf,
-        sender: Sender<anyhow::Result<String>>,
-    ) -> anyhow::Result<Self> {
+    pub fn new(path: PathBuf, sender: UpdateSender) -> anyhow::Result<Self> {
         let self_ = Self { path, sender };
         self_.trigger()?;
 

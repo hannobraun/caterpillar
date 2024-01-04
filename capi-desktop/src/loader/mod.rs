@@ -3,7 +3,7 @@ mod watch;
 
 use std::path::PathBuf;
 
-use crossbeam_channel::Receiver;
+use crossbeam_channel::{Receiver, Sender};
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 
@@ -43,4 +43,5 @@ impl Loader {
     }
 }
 
+pub type UpdateSender = Sender<anyhow::Result<String>>;
 pub type UpdateReceiver = Receiver<anyhow::Result<String>>;

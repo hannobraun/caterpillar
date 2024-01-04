@@ -1,17 +1,17 @@
 use std::{path::PathBuf, time::Duration};
 
-use crossbeam_channel::{SendError, Sender};
+use crossbeam_channel::SendError;
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
 };
 use tracing::error;
 
-use super::script_loader::ScriptLoader;
+use super::{script_loader::ScriptLoader, UpdateSender};
 
 pub fn watch(
     path: PathBuf,
-    sender: Sender<anyhow::Result<String>>,
+    sender: UpdateSender,
 ) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
     let script_loader = ScriptLoader::new(path.clone(), sender)?;
 
