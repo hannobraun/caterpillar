@@ -10,7 +10,6 @@ use notify_debouncer_mini::Debouncer;
 
 use self::watch::watch;
 
-#[derive(Default)]
 pub struct Loader {
     watchers: Vec<Debouncer<RecommendedWatcher>>,
 }
@@ -42,6 +41,12 @@ impl Loader {
 
         self.watchers.push(watcher);
         Ok((code, receiver))
+    }
+}
+
+impl Default for Loader {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
