@@ -143,8 +143,7 @@ impl DesktopThread {
 
             let maybe_new_code = maybe_new_code_or_err.transpose()?;
 
-            if let Some((_, new_code)) = maybe_new_code {
-                let parent = None;
+            if let Some((parent, new_code)) = maybe_new_code {
                 interpreter.update(&new_code, parent)?;
             }
         }
