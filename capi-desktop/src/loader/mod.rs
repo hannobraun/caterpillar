@@ -35,14 +35,10 @@ impl Loader {
         let path = path.into();
 
         let (sender, receiver) = crossbeam_channel::unbounded();
-        let ScriptUpdates { watcher } = watch(path, sender)?;
+        let watcher = watch(path, sender)?;
         let code = receiver.recv()??;
 
         self.watchers.push(watcher);
         Ok((code, receiver))
     }
-}
-
-struct ScriptUpdates {
-    pub watcher: Debouncer<RecommendedWatcher>,
 }
