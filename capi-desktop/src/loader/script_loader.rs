@@ -16,10 +16,7 @@ impl ScriptLoader {
     pub fn new(
         path: PathBuf,
     ) -> anyhow::Result<(Self, Receiver<anyhow::Result<String>>)> {
-        // The channel buffer is size 1, so the initial call to `trigger` within
-        // this constructor is guaranteed not to block. Subsequent calls may
-        // block, as per the documentation of that method.
-        let (sender, receiver) = crossbeam_channel::bounded(1);
+        let (sender, receiver) = crossbeam_channel::unbounded();
 
         let self_ = Self { path, sender };
         self_.trigger()?;
