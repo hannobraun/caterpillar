@@ -29,10 +29,6 @@ impl ScriptLoader {
         self.sender.send(Err(err.into()))
     }
 
-    /// Trigger a code update
-    ///
-    /// This method may block indefinitely while waiting for the code update to
-    /// be processed!
     pub fn trigger(&self) -> Result<(), SendError<Update>> {
         let code_or_err = load(&self.path).with_context(|| {
             format!("Loading script `{}`", self.path.display())
