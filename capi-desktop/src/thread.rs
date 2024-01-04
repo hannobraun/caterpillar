@@ -98,7 +98,7 @@ impl DesktopThread {
         let parent = None;
 
         let mut loader = Loader::new();
-        let (code, updates) = loader.load(&entry_script_path)?;
+        let (code, updates) = loader.load(&entry_script_path, parent)?;
 
         let mut interpreter = Interpreter::new()?;
         interpreter.update(&code, parent)?;
@@ -141,7 +141,7 @@ impl DesktopThread {
 
             let maybe_new_code = maybe_new_code_or_err.transpose()?;
 
-            if let Some(new_code) = maybe_new_code {
+            if let Some((_, new_code)) = maybe_new_code {
                 let parent = None;
                 interpreter.update(&new_code, parent)?;
             }

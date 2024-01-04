@@ -3,6 +3,7 @@ mod watch;
 
 use std::path::PathBuf;
 
+use capi_core::repr::eval::fragments::FragmentId;
 use crossbeam_channel::{Receiver, Sender};
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
@@ -31,18 +32,19 @@ impl Loader {
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
+        parent: Option<FragmentId>,
     ) -> anyhow::Result<(String, UpdateReceiver)> {
         let path = path.into();
 
         let (sender, receiver) = crossbeam_channel::unbounded();
-        let watcher = watch(path, sender)?;
-        let code = receiver.recv()??;
+        let watcher = watch(path, parent, sender)?;
+        let (_, code) = receiver.recv()??;
 
         self.watchers.push(watcher);
         Ok((code, receiver))
     }
 }
 
-pub type Update = anyhow::Result<String>;
+pub type Update = anyhow::Result<(Option<FragmentId>, String)>;
 pub type UpdateSender = Sender<Update>;
 pub type UpdateReceiver = Receiver<Update>;

@@ -5,18 +5,28 @@ use std::{
 };
 
 use anyhow::Context;
+use capi_core::repr::eval::fragments::FragmentId;
 use crossbeam_channel::SendError;
 
 use super::{Update, UpdateSender};
 
 pub struct ScriptLoader {
     path: PathBuf,
+    parent: Option<FragmentId>,
     sender: UpdateSender,
 }
 
 impl ScriptLoader {
-    pub fn new(path: PathBuf, sender: UpdateSender) -> anyhow::Result<Self> {
-        let self_ = Self { path, sender };
+    pub fn new(
+        path: PathBuf,
+        parent: Option<FragmentId>,
+        sender: UpdateSender,
+    ) -> anyhow::Result<Self> {
+        let self_ = Self {
+            path,
+            parent,
+            sender,
+        };
         self_.trigger()?;
 
         Ok(self_)
@@ -30,9 +40,11 @@ impl ScriptLoader {
     }
 
     pub fn trigger(&self) -> Result<(), SendError<Update>> {
-        let code_or_err = load(&self.path).with_context(|| {
-            format!("Loading script `{}`", self.path.display())
-        });
+        let code_or_err = load(&self.path)
+            .with_context(|| {
+                format!("Loading script `{}`", self.path.display())
+            })
+            .map(|code| (self.parent, code));
         self.sender.send(code_or_err)
     }
 }

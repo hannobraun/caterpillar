@@ -1,5 +1,6 @@
 use std::{path::PathBuf, time::Duration};
 
+use capi_core::repr::eval::fragments::FragmentId;
 use crossbeam_channel::SendError;
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
@@ -11,9 +12,10 @@ use super::{script_loader::ScriptLoader, UpdateSender};
 
 pub fn watch(
     path: PathBuf,
+    parent: Option<FragmentId>,
     sender: UpdateSender,
 ) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
-    let script_loader = ScriptLoader::new(path.clone(), sender)?;
+    let script_loader = ScriptLoader::new(path.clone(), parent, sender)?;
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
