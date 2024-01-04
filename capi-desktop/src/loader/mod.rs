@@ -11,12 +11,18 @@ use notify_debouncer_mini::Debouncer;
 use self::watch::watch;
 
 pub struct Loader {
+    sender: UpdateSender,
+    receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
 }
 
 impl Loader {
     pub fn new() -> Self {
+        let (sender, receiver) = crossbeam_channel::unbounded();
+
         Self {
+            sender,
+            receiver,
             watchers: Vec::new(),
         }
     }
@@ -35,12 +41,11 @@ impl Loader {
     ) -> anyhow::Result<(String, UpdateReceiver)> {
         let path = path.into();
 
-        let (sender, receiver) = crossbeam_channel::unbounded();
-        let watcher = watch(path, parent, sender)?;
-        let (_, code) = receiver.recv()??;
+        let watcher = watch(path, parent, self.sender.clone())?;
+        let (_, code) = self.receiver.recv()??;
 
         self.watchers.push(watcher);
-        Ok((code, receiver))
+        Ok((code, self.receiver.clone()))
     }
 }
 
