@@ -7,7 +7,7 @@ use std::{
 use anyhow::Context;
 use crossbeam_channel::SendError;
 
-use super::UpdateSender;
+use super::{Update, UpdateSender};
 
 pub struct ScriptLoader {
     path: PathBuf,
@@ -25,7 +25,7 @@ impl ScriptLoader {
     pub fn on_error(
         &self,
         err: impl Into<anyhow::Error>,
-    ) -> Result<(), SendError<anyhow::Result<String>>> {
+    ) -> Result<(), SendError<Update>> {
         self.sender.send(Err(err.into()))
     }
 
@@ -33,7 +33,7 @@ impl ScriptLoader {
     ///
     /// This method may block indefinitely while waiting for the code update to
     /// be processed!
-    pub fn trigger(&self) -> Result<(), SendError<anyhow::Result<String>>> {
+    pub fn trigger(&self) -> Result<(), SendError<Update>> {
         let code_or_err = load(&self.path).with_context(|| {
             format!("Loading script `{}`", self.path.display())
         });

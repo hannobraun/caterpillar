@@ -43,5 +43,6 @@ impl Loader {
     }
 }
 
-pub type UpdateSender = Sender<anyhow::Result<String>>;
-pub type UpdateReceiver = Receiver<anyhow::Result<String>>;
+pub type Update = anyhow::Result<String>;
+pub type UpdateSender = Sender<Update>;
+pub type UpdateReceiver = Receiver<Update>;
