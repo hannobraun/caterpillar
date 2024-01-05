@@ -2,6 +2,7 @@ use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
     pipeline::{self, PipelineOutput},
+    repr::eval::fragments::FragmentId,
     runtime::call_stack::StackFrame,
     value, DataStackResult, Interpreter, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
@@ -18,6 +19,7 @@ pub struct PlatformContext {
 
     pub loader: Loader,
     pub pixel_ops: Sender,
+    pub loading_script: Option<Option<FragmentId>>,
 }
 
 impl PlatformContext {
@@ -28,6 +30,7 @@ impl PlatformContext {
             entry_script_path: entry_script_path.into(),
             loader,
             pixel_ops: Sender { inner: pixel_ops },
+            loading_script: None,
         }
     }
 
