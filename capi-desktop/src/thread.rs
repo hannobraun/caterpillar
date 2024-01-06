@@ -138,8 +138,8 @@ impl DesktopThread {
                     run_target.finish();
 
                     match platform_context.loader.updates().recv() {
-                        Ok(new_code) => {
-                            let (parent, new_code) = new_code?;
+                        Ok(update) => {
+                            let (parent, new_code) = update?;
                             interpreter.update(&new_code, parent)?;
                         }
                         Err(RecvError) => break,
