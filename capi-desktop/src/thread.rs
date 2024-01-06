@@ -108,7 +108,9 @@ impl DesktopThread {
 
         platform::register(&mut interpreter);
 
-        let mut maybe_new_code: Option<(Option<FragmentId>, String)> = None;
+        let mut maybe_new_code_or_err: Option<
+            anyhow::Result<(Option<FragmentId>, String)>,
+        > = None;
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
@@ -117,14 +119,16 @@ impl DesktopThread {
                 break;
             }
 
-            if let Some((parent, new_code)) = maybe_new_code.take() {
+            let maybe_new_code = maybe_new_code_or_err.take().transpose()?;
+
+            if let Some((parent, new_code)) = maybe_new_code {
                 interpreter.update(&new_code, parent)?;
             }
 
             let runtime_state =
                 run_target.step(&mut interpreter, &mut platform_context)?;
 
-            let maybe_new_code_or_err = match runtime_state {
+            maybe_new_code_or_err = match runtime_state {
                 RuntimeState::Running => {
                     match platform_context.loader.updates().try_recv() {
                         Ok(new_code) => Some(new_code),
@@ -146,8 +150,6 @@ impl DesktopThread {
                     }
                 }
             };
-
-            maybe_new_code = maybe_new_code_or_err.transpose()?;
         }
 
         Ok(())
