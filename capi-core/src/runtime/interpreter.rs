@@ -329,7 +329,8 @@ mod tests {
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             let parent = None;
-            self.inner.update(code, parent)
+            self.inner.update(code, parent)?;
+            Ok(())
         }
 
         pub fn wait_for_ping_on_channel(
