@@ -41,7 +41,7 @@ impl<C> Interpreter<C> {
         &mut self,
         code: &str,
         parent: Option<FragmentId>,
-    ) -> Result<(), PipelineError> {
+    ) -> Result<FragmentId, PipelineError> {
         let PipelineOutput { start } =
             pipeline::run(code, parent, &mut self.fragments)?;
 
@@ -60,7 +60,7 @@ impl<C> Interpreter<C> {
                 .push(StackFrame::Fragment { fragment_id: start });
         }
 
-        Ok(())
+        Ok(start)
     }
 
     pub fn step(
