@@ -17,6 +17,7 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
         (add, "+"),
         (and, "and"),
+        (append, "append"),
         (array, "[]"),
         (bind, "bind"),
         (clone, "clone"),
@@ -69,6 +70,45 @@ fn and(
             let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
             context.data_stack.push_bare(value::Bool(a.0 && b.0));
+
+            Ok(IntrinsicFunctionState::StepDone)
+        }
+        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+    }
+}
+
+fn append(
+    step: usize,
+    context: RuntimeContext,
+) -> DataStackResult<IntrinsicFunctionState> {
+    match step {
+        0 => {
+            let (block, _) =
+                context.data_stack.pop_specific::<value::Block>()?;
+
+            context.data_stack.mark();
+            context.call_stack.push(StackFrame::Fragment {
+                fragment_id: block.start,
+            });
+
+            Ok(IntrinsicFunctionState::StepDone)
+        }
+        1 => {
+            let items = context
+                .data_stack
+                .drain_values_from_marker()
+                .map(|value| value.payload)
+                .collect::<Vec<_>>();
+
+            let (mut array, fragment) =
+                context.data_stack.pop_specific::<value::Array>()?;
+
+            array.0.extend(items);
+
+            context.data_stack.push(Value {
+                payload: array.into(),
+                fragment,
+            });
 
             Ok(IntrinsicFunctionState::StepDone)
         }
