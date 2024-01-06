@@ -26,6 +26,10 @@ impl<C> Interpreter<C> {
         })
     }
 
+    pub fn evaluator(&mut self) -> &mut Evaluator<C> {
+        &mut self.evaluator
+    }
+
     pub fn register_platform(
         &mut self,
         functions: impl IntoIterator<Item = (PlatformFunction<C>, &'static str)>,
