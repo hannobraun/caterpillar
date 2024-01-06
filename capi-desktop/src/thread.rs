@@ -1,6 +1,6 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::RuntimeState;
+use capi_core::{repr::eval::fragments::FragmentId, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
@@ -108,11 +108,17 @@ impl DesktopThread {
 
         platform::register(&mut interpreter);
 
+        let mut maybe_new_code: Option<(Option<FragmentId>, String)> = None;
+
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
                 // If the other end of the lifeline got dropped, that means
                 // we're supposed to stop.
                 break;
+            }
+
+            if let Some((parent, new_code)) = maybe_new_code.take() {
+                interpreter.update(&new_code, parent)?;
             }
 
             let runtime_state =
@@ -141,11 +147,7 @@ impl DesktopThread {
                 }
             };
 
-            let maybe_new_code = maybe_new_code_or_err.transpose()?;
-
-            if let Some((parent, new_code)) = maybe_new_code {
-                interpreter.update(&new_code, parent)?;
-            }
+            maybe_new_code = maybe_new_code_or_err.transpose()?;
         }
 
         Ok(())
