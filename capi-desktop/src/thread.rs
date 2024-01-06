@@ -1,6 +1,6 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::{repr::eval::fragments::FragmentId, RuntimeState};
+use capi_core::RuntimeState;
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
@@ -108,9 +108,6 @@ impl DesktopThread {
 
         platform::register(&mut interpreter);
 
-        let mut maybe_new_code_or_err: Option<(Option<FragmentId>, String)> =
-            None;
-
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
                 // If the other end of the lifeline got dropped, that means
@@ -120,15 +117,11 @@ impl DesktopThread {
 
             match platform_context.loader.updates().try_recv() {
                 Ok(new_code) => {
-                    let new_code = new_code?;
-                    maybe_new_code_or_err = Some(new_code)
+                    let (parent, new_code) = new_code?;
+                    interpreter.update(&new_code, parent)?;
                 }
                 Err(TryRecvError::Empty) => {}
                 Err(TryRecvError::Disconnected) => break,
-            }
-
-            if let Some((parent, new_code)) = maybe_new_code_or_err.take() {
-                interpreter.update(&new_code, parent)?;
             }
 
             let runtime_state =
@@ -146,8 +139,8 @@ impl DesktopThread {
 
                     match platform_context.loader.updates().recv() {
                         Ok(new_code) => {
-                            let new_code = new_code?;
-                            maybe_new_code_or_err = Some(new_code);
+                            let (parent, new_code) = new_code?;
+                            interpreter.update(&new_code, parent)?;
                         }
                         Err(RecvError) => break,
                     }
