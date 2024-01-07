@@ -72,33 +72,6 @@ impl<C> Evaluator<C> {
                 let fragment = fragments.get(fragment_id);
 
                 match &fragment.payload {
-                    FragmentPayload::Array { start } => {
-                        // Remember the current stack frame, so we know when
-                        // we're done evaluating the array.
-                        let current = self.call_stack.current();
-
-                        // Evaluate the array.
-                        self.data_stack.mark();
-                        self.call_stack.push(StackFrame::Fragment {
-                            fragment_id: *start,
-                        });
-                        while current != self.call_stack.current() {
-                            self.step(fragments, platform_context)?;
-                        }
-
-                        let items = self
-                            .data_stack
-                            .drain_values_from_marker()
-                            .map(|value| value.payload)
-                            .collect();
-
-                        self.data_stack.push(Value {
-                            payload: crate::value::ValuePayload::Array(items),
-                            fragment: Some(fragment_id),
-                        });
-
-                        RuntimeState::Running
-                    }
                     FragmentPayload::Value(value) => {
                         self.data_stack.push(Value {
                             payload: value.clone(),

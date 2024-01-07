@@ -1,12 +1,7 @@
 use crate::repr::eval::value::ValuePayload;
 
-use super::FragmentId;
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum FragmentPayload {
-    Array {
-        start: FragmentId,
-    },
     Value(ValuePayload),
     Word(String),
 
@@ -24,10 +19,6 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     pub fn display_short(&self) -> String {
         match self {
-            Self::Array { start } => {
-                let start = start.display_short();
-                format!("array [ {start} ]")
-            }
             Self::Value(value) => {
                 let value = value.display_short();
                 format!("value `{value}`")
@@ -39,10 +30,6 @@ impl FragmentPayload {
 
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Array { start } => {
-                hasher.update(b"array");
-                hasher.update(start.hash.as_bytes());
-            }
             Self::Value(value) => {
                 hasher.update(b"value");
                 value.hash(hasher);
