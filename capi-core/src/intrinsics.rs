@@ -223,16 +223,10 @@ fn each(
             // 2. Even if `block` works correctly, the array elements are
             //    accessed backwards.
             //
-            // Unfortunately, solving this isn't trivial. We'd need to do one
-            // operation of this loop, return control to the evaluator, then
-            // make sure the evaluator returns control here afterwards, while
-            // keeping our state here. There is currently no mechanism for
-            // making this happen.
-            //
-            // We could solve this, if intrinsics were able to put arbitrary
-            // code on the call stack somehow. There's also an issue with `eval`
-            // (see comment there) that could be solved with the same solution,
-            // so maybe that's worth doing now.
+            // We could solve this by running a single loop iteration, returning
+            // control to the evaluator, then make sure the evaluator returns
+            // control here afterwards, while keeping our state here. This
+            // should now be possible using steps and the side stack.
             //
             // Another option would be to not implement `each` as an intrinsic.
             // We can already do simple loops through recursion, so why not use
