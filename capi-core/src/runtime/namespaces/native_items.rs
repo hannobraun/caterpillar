@@ -25,6 +25,7 @@ pub struct RuntimeContext<'r> {
     pub namespace: UserDefinedItems<'r>,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
+    pub side_stack: &'r mut DataStack,
 }
 
 pub enum IntrinsicFunctionState {

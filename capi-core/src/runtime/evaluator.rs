@@ -210,6 +210,7 @@ impl<C> Evaluator<C> {
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
+            side_stack: &mut self.side_stack,
         }
     }
 }
