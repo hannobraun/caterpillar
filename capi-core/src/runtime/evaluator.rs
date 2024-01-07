@@ -20,6 +20,7 @@ pub struct Evaluator<C> {
     pub global_namespace: Namespace<C>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
+    pub side_stack: DataStack,
 }
 
 impl<C> Evaluator<C> {
@@ -219,6 +220,7 @@ impl<C> Default for Evaluator<C> {
             global_namespace: Default::default(),
             call_stack: Default::default(),
             data_stack: Default::default(),
+            side_stack: Default::default(),
         }
     }
 }
