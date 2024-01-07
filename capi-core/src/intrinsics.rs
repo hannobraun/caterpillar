@@ -218,7 +218,7 @@ fn each(
             // There are two specific problems here:
             //
             // 1. All of the indices and array values are available on the stack
-            //    all the time, increasing the chance for `block` mess
+            //    all the time, increasing the chance for `block` to mess
             //    everything up, if it accesses something that it shouldn't.
             // 2. Even if `block` works correctly, the array elements are
             //    accessed backwards.
