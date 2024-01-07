@@ -104,8 +104,7 @@ fn append(
             let items = context
                 .data_stack
                 .drain_values_from_marker()
-                .map(|value| value.payload)
-                .collect::<Vec<_>>();
+                .map(|value| value.payload);
 
             let (mut array, fragment) =
                 context.side_stack.pop_specific::<value::Array>()?;
