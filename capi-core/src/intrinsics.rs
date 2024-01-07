@@ -85,6 +85,13 @@ fn append(
         0 => {
             let (block, _) =
                 context.data_stack.pop_specific::<value::Block>()?;
+            let (array, fragment) =
+                context.data_stack.pop_specific::<value::Array>()?;
+
+            context.side_stack.push(Value {
+                payload: array.into(),
+                fragment,
+            });
 
             context.data_stack.mark();
             context.call_stack.push(StackFrame::Fragment {
@@ -101,7 +108,7 @@ fn append(
                 .collect::<Vec<_>>();
 
             let (mut array, fragment) =
-                context.data_stack.pop_specific::<value::Array>()?;
+                context.side_stack.pop_specific::<value::Array>()?;
 
             array.0.extend(items);
 
