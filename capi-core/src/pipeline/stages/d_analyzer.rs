@@ -51,14 +51,6 @@ fn analyze_syntax_element(
     fragments: &mut Fragments,
 ) -> FragmentId {
     let payload = match syntax_element {
-        SimpleSyntaxElement::ArrayExpression(syntax_tree) => {
-            // See comment about parent of blocks down below. The same applies
-            // here.
-            let parent = Some(next);
-
-            let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-            FragmentPayload::Array { start }
-        }
         SimpleSyntaxElement::BlockExpression(syntax_tree) => {
             // By convention, we're using the ID of the *next* fragment as the
             // parent ID for fragments within the block. Why not use the ID of
