@@ -14,8 +14,9 @@ fn simplify_syntax_tree(
     for syntax_element in syntax_tree.elements {
         let syntax_element = match syntax_element {
             SyntaxElement::ArrayExpression(syntax_tree) => {
-                let syntax_tree = simplify_array(syntax_tree);
-                SimpleSyntaxElement::ArrayExpression(syntax_tree)
+                let syntax_elements = simplify_array(syntax_tree);
+                simple_syntax_tree.elements.extend(syntax_elements);
+                continue;
             }
             SyntaxElement::BlockExpression(syntax_tree) => {
                 let syntax_tree = simplify_block(syntax_tree);
@@ -35,10 +36,14 @@ fn simplify_syntax_tree(
 
 fn simplify_array(
     syntax_tree: SyntaxTree<SyntaxElement>,
-) -> SyntaxTree<SimpleSyntaxElement> {
-    // This is a no-op right now. In the future, it will lower array expressions
-    // into a simplified form.
-    simplify_syntax_tree(syntax_tree)
+) -> [SimpleSyntaxElement; 3] {
+    let syntax_tree = simplify_syntax_tree(syntax_tree);
+
+    [
+        SimpleSyntaxElement::Word(String::from("[]")),
+        SimpleSyntaxElement::BlockExpression(syntax_tree),
+        SimpleSyntaxElement::Word(String::from("append")),
+    ]
 }
 
 fn simplify_block(
