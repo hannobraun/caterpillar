@@ -42,8 +42,8 @@ impl Loader {
         let path = path.into();
 
         let watcher = watch(path, parent, self.sender.clone())?;
-
         self.watchers.push(watcher);
+
         Ok(())
     }
 
