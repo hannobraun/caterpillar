@@ -29,12 +29,14 @@ impl DesktopThread {
                 Ok(runtime_state)
             }
 
-            fn finish(&self) {
+            fn finish(&self) -> anyhow::Result<()> {
                 eprintln!();
                 eprintln!("> Program finished.");
                 eprintln!("  > will restart on change to script");
                 eprintln!("  > press CTRL-C to abort");
                 eprintln!();
+
+                Ok(())
             }
         }
 
@@ -54,12 +56,14 @@ impl DesktopThread {
                 Ok(RuntimeState::Finished)
             }
 
-            fn finish(&self) {
+            fn finish(&self) -> anyhow::Result<()> {
                 eprintln!();
                 eprintln!("> Test run finished.");
                 eprintln!("  > will re-run on change to script");
                 eprintln!("  > press CTRL-C to abort");
                 eprintln!();
+
+                Ok(())
             }
         }
 
@@ -135,7 +139,7 @@ impl DesktopThread {
                     )
                 }
                 RuntimeState::Finished => {
-                    run_target.finish();
+                    run_target.finish()?;
 
                     match platform_context.loader.updates().recv() {
                         Ok(update) => {
@@ -187,5 +191,5 @@ trait RunTarget: Send + 'static {
         platform_context: &mut PlatformContext,
     ) -> anyhow::Result<RuntimeState>;
 
-    fn finish(&self);
+    fn finish(&self) -> anyhow::Result<()>;
 }
