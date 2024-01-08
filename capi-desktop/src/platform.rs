@@ -1,11 +1,8 @@
 use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
-    pipeline::{self, PipelineOutput},
-    repr::eval::fragments::FragmentId,
-    runtime::call_stack::StackFrame,
-    value, DataStackResult, Interpreter, PlatformFunction,
-    PlatformFunctionState, RuntimeContext,
+    repr::eval::fragments::FragmentId, value, DataStackResult, Interpreter,
+    PlatformFunction, PlatformFunctionState, RuntimeContext,
 };
 
 use crate::loader::Loader;
@@ -125,14 +122,9 @@ fn mod_(
     // specific too. Then we can return a platform-specific error value.
     let parent = Some(runtime_context.word);
     platform_context.loader.load(path, parent).unwrap();
-    let (_, code) = platform_context.loader.updates().recv().unwrap().unwrap();
-    let PipelineOutput { start } =
-        pipeline::run(&code, parent, runtime_context.fragments).unwrap();
-    runtime_context
-        .call_stack
-        .push(StackFrame::Fragment { fragment_id: start });
+    platform_context.loading_script = Some(parent);
 
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformFunctionState::Sleeping)
 }
 
 fn print(

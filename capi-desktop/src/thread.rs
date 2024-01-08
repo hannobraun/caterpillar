@@ -1,6 +1,6 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::RuntimeState;
+use capi_core::{runtime::call_stack::StackFrame, RuntimeState};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
@@ -124,9 +124,25 @@ impl DesktopThread {
             match runtime_state {
                 RuntimeState::Running => {}
                 RuntimeState::Sleeping => {
-                    unreachable!(
-                        "No desktop platform functions put runtime to sleep"
-                    )
+                    if let Some(loading_parent) =
+                        platform_context.loading_script.take()
+                    {
+                        while let Ok(update) =
+                            platform_context.loader.updates().recv()
+                        {
+                            let (parent, new_code) = update?;
+
+                            let start =
+                                interpreter.update(&new_code, parent)?;
+
+                            if parent == loading_parent {
+                                interpreter.evaluator().call_stack.push(
+                                    StackFrame::Fragment { fragment_id: start },
+                                );
+                                break;
+                            }
+                        }
+                    }
                 }
                 RuntimeState::Finished => {
                     run_target
