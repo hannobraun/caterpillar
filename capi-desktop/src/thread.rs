@@ -56,15 +56,17 @@ impl DesktopThread {
                 interpreter: &mut Interpreter,
                 platform_context: &mut PlatformContext,
             ) -> anyhow::Result<RuntimeState> {
-                interpreter.run_tests(platform_context)?;
-                Ok(RuntimeState::Finished)
+                let runtime_state = interpreter.step(platform_context)?;
+                Ok(runtime_state)
             }
 
             fn finish(
                 &self,
-                _: &mut Interpreter,
-                _: &mut PlatformContext,
+                interpreter: &mut Interpreter,
+                platform_context: &mut PlatformContext,
             ) -> anyhow::Result<()> {
+                interpreter.run_tests(platform_context)?;
+
                 eprintln!();
                 eprintln!("> Test run finished.");
                 eprintln!("  > will re-run on change to script");
