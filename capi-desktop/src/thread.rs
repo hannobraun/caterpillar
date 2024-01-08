@@ -20,15 +20,6 @@ impl DesktopThread {
         struct RunProgram;
 
         impl RunTarget for RunProgram {
-            fn step(
-                &self,
-                interpreter: &mut Interpreter,
-                platform_context: &mut PlatformContext,
-            ) -> anyhow::Result<RuntimeState> {
-                let runtime_state = interpreter.step(platform_context)?;
-                Ok(runtime_state)
-            }
-
             fn finish(
                 &self,
                 _: &mut Interpreter,
@@ -51,15 +42,6 @@ impl DesktopThread {
         struct RunTests;
 
         impl RunTarget for RunTests {
-            fn step(
-                &self,
-                interpreter: &mut Interpreter,
-                platform_context: &mut PlatformContext,
-            ) -> anyhow::Result<RuntimeState> {
-                let runtime_state = interpreter.step(platform_context)?;
-                Ok(runtime_state)
-            }
-
             fn finish(
                 &self,
                 interpreter: &mut Interpreter,
@@ -138,8 +120,7 @@ impl DesktopThread {
                 Err(TryRecvError::Disconnected) => break,
             }
 
-            let runtime_state =
-                run_target.step(&mut interpreter, &mut platform_context)?;
+            let runtime_state = interpreter.step(&mut platform_context)?;
 
             match runtime_state {
                 RuntimeState::Running => {}
@@ -196,12 +177,6 @@ impl DesktopThread {
 type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
 
 trait RunTarget: Send + 'static {
-    fn step(
-        &self,
-        interpreter: &mut Interpreter,
-        platform_context: &mut PlatformContext,
-    ) -> anyhow::Result<RuntimeState>;
-
     fn finish(
         &self,
         interpreter: &mut Interpreter,
