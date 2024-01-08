@@ -94,7 +94,8 @@ impl DesktopThread {
         let parent = None;
 
         let mut loader = Loader::new();
-        let code = loader.load(&entry_script_path, parent)?;
+        loader.load(&entry_script_path, parent)?;
+        let (_, code) = loader.updates().recv()??;
 
         let mut interpreter = Interpreter::new()?;
         interpreter.update(&code, parent)?;

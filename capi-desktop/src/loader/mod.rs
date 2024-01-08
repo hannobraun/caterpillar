@@ -38,14 +38,13 @@ impl Loader {
         &mut self,
         path: impl Into<PathBuf>,
         parent: Option<FragmentId>,
-    ) -> anyhow::Result<String> {
+    ) -> anyhow::Result<()> {
         let path = path.into();
 
         let watcher = watch(path, parent, self.sender.clone())?;
-        let (_, code) = self.receiver.recv()??;
 
         self.watchers.push(watcher);
-        Ok(code)
+        Ok(())
     }
 
     pub fn updates(&self) -> &UpdateReceiver {
