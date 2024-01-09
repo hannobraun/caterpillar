@@ -88,6 +88,10 @@ impl<C> Namespace<C> {
         new: FragmentId,
         fragments: &Fragments,
     ) {
+        // This function only detects *renames*. It does not detect *removals*.
+        // Maybe we need to take an `Option<FragmentId>` as the `new` argument,
+        // and handle that here accordingly.
+
         let mut renames = Vec::new();
 
         for (old_name, UserDefinedFunction { name, body, .. }) in
