@@ -119,7 +119,9 @@ impl<C> Namespace<C> {
         }
 
         for (old, new) in renames {
-            let function = self.user_defined_functions.remove(&old).unwrap();
+            let function = self.user_defined_functions.remove(&old).expect(
+                "Found `old` in the map; expecting it to still be there",
+            );
             self.user_defined_functions.insert(new, function);
         }
     }
