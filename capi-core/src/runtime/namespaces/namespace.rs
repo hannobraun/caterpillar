@@ -88,9 +88,12 @@ impl<C> Namespace<C> {
         new: FragmentId,
         fragments: &Fragments,
     ) {
-        // This function only detects *renames*. It does not detect *removals*.
-        // Maybe we need to take an `Option<FragmentId>` as the `new` argument,
-        // and handle that here accordingly.
+        // This function has at least two limitations:
+        //
+        // - It only detects *renames*. It does not detect *removals*. Maybe we
+        //   need to take an `Option<FragmentId>` as the `new` argument, and
+        //   handle that here accordingly.
+        // - It does not detect renamed tests.
 
         let mut renames = Vec::new();
 
