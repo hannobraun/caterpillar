@@ -35,8 +35,8 @@ impl<C> Namespace<C> {
         Self {
             bindings: BTreeMap::new(),
             native_functions,
-            user_defined_functions: BTreeMap::new(),
-            tests: BTreeMap::new(),
+            user_defined_functions: Functions(BTreeMap::new()),
+            tests: Functions(BTreeMap::new()),
         }
     }
 
@@ -53,8 +53,8 @@ impl<C> Namespace<C> {
     pub fn user_defined(&mut self) -> UserDefinedItems {
         UserDefinedItems {
             bindings: &mut self.bindings,
-            functions: &mut self.user_defined_functions,
-            tests: &mut self.tests,
+            functions: &mut self.user_defined_functions.0,
+            tests: &mut self.tests.0,
         }
     }
 
@@ -69,7 +69,7 @@ impl<C> Namespace<C> {
                 }
             });
         let user_defined_function =
-            self.user_defined_functions.get(name).map(|user_defined| {
+            self.user_defined_functions.0.get(name).map(|user_defined| {
                 ItemInModule::UserDefinedFunction(user_defined)
             });
         let binding = self
@@ -99,7 +99,7 @@ impl<C> Namespace<C> {
         let mut renames = Vec::new();
 
         for (old_name, UserDefinedFunction { name, body, .. }) in
-            self.user_defined_functions.iter_mut()
+            self.user_defined_functions.0.iter_mut()
         {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
@@ -123,10 +123,10 @@ impl<C> Namespace<C> {
         }
 
         for (old, new) in renames {
-            let function = self.user_defined_functions.remove(&old).expect(
+            let function = self.user_defined_functions.0.remove(&old).expect(
                 "Found `old` in the map; expecting it to still be there",
             );
-            self.user_defined_functions.insert(new, function);
+            self.user_defined_functions.0.insert(new, function);
         }
     }
 }
