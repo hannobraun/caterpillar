@@ -35,8 +35,8 @@ impl<C> Namespace<C> {
         Self {
             bindings: BTreeMap::new(),
             native_functions,
-            user_defined_functions: Functions(BTreeMap::new()),
-            tests: Functions(BTreeMap::new()),
+            user_defined_functions: Functions::new(),
+            tests: Functions::new(),
         }
     }
 
