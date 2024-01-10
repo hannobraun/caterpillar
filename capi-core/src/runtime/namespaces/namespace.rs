@@ -2,10 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     intrinsics,
-    repr::eval::{
-        fragments::{FragmentId, FragmentPayload, Fragments},
-        value::ValuePayload,
-    },
+    repr::eval::fragments::{FragmentId, Fragments},
     value::Value,
     PlatformFunction,
 };
@@ -96,38 +93,7 @@ impl<C> Namespace<C> {
         //   handle that here accordingly.
         // - It does not detect renamed tests.
 
-        let mut renames = Vec::new();
-
-        for (old_name, UserDefinedFunction { name, body, .. }) in
-            self.user_defined_functions.0.iter_mut()
-        {
-            if name.fragment == Some(old) {
-                let fragment = fragments.get(new);
-                let FragmentPayload::Value(ValuePayload::Symbol(new_name)) =
-                    &fragment.payload
-                else {
-                    // If the new fragment is not a symbol, then it's not
-                    // supposed to be a function name. Not sure if we can
-                    // handle this any smarter.
-                    continue;
-                };
-
-                name.value = new_name.clone();
-                name.fragment = Some(new);
-
-                renames.push((old_name.clone(), new_name.clone()));
-            }
-            if body.start == old {
-                body.start = new;
-            }
-        }
-
-        for (old, new) in renames {
-            let function = self.user_defined_functions.0.remove(&old).expect(
-                "Found `old` in the map; expecting it to still be there",
-            );
-            self.user_defined_functions.0.insert(new, function);
-        }
+        self.user_defined_functions.replace(old, new, fragments);
     }
 }
 
