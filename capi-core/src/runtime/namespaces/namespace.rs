@@ -11,15 +11,16 @@ use crate::{
 };
 
 use super::{
-    IntrinsicFunction, NativeFunction, UserDefinedFunction, UserDefinedItems,
+    functions::Functions, IntrinsicFunction, NativeFunction,
+    UserDefinedFunction, UserDefinedItems,
 };
 
 #[derive(Debug)]
 pub struct Namespace<C> {
     bindings: BTreeMap<String, Value>,
     native_functions: BTreeMap<String, NativeFunction<C>>,
-    user_defined_functions: BTreeMap<String, UserDefinedFunction>,
-    tests: BTreeMap<String, UserDefinedFunction>,
+    user_defined_functions: Functions,
+    tests: Functions,
 }
 
 impl<C> Namespace<C> {
