@@ -28,8 +28,11 @@ impl Functions {
         {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
-                let FragmentPayload::Value(ValuePayload::Symbol(new_name)) =
-                    &fragment.payload
+
+                let FragmentPayload::Value(
+                    ValuePayload::Symbol(new_name)
+                    | ValuePayload::Text(new_name),
+                ) = &fragment.payload
                 else {
                     // If the new fragment is not a symbol, then it's not
                     // supposed to be a function name. Not sure if we can

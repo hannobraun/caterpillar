@@ -94,6 +94,7 @@ impl<C> Namespace<C> {
         // - It does not detect renamed tests.
 
         self.user_defined_functions.replace(old, new, fragments);
+        self.tests.replace(old, new, fragments);
     }
 }
 
