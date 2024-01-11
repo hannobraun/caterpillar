@@ -29,6 +29,9 @@ impl Functions {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
 
+                // This struct can contain either user-defined functions or
+                // tests. Functions have symbols as names, while tests have text
+                // names.
                 let FragmentPayload::Value(
                     ValuePayload::Symbol(new_name)
                     | ValuePayload::Text(new_name),
