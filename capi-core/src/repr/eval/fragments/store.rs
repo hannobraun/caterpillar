@@ -128,8 +128,8 @@ impl Fragments {
             debug!("Insert {id} ({payload}) at {address}");
         }
 
-        // We've done the actual inserting, but that's actually the easy part.
-        // What follows is the core of this method: Check whether the inserted
+        // We've done the actual inserting, but that's the easy part. What
+        // follows is the core of this method: Check whether the inserted
         // fragment has replaced another. This is required information for the
         // code update that happens after the insertion.
         {
