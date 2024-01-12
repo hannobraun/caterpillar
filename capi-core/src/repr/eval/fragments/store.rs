@@ -85,8 +85,8 @@ impl Fragments {
     ///    2. no known replacements of `b`
     ///
     /// At this point, our initial script (`c b a`) has been fully analyzed and
-    /// is running. Now the user is makes a change to the original code,
-    /// resulting in more fragments being inserted.
+    /// is running. Now the user makes a change to the original code, resulting
+    /// in more fragments being inserted.
     ///
     /// 4. Insert `a` at address `next: none`
     ///    1. fragment `a` at address `next: none` is identical; no replacement
