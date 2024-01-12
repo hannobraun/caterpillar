@@ -21,8 +21,8 @@ impl Fragments {
 
     /// # Insert fragment, detecting replaced fragments
     ///
-    /// If this fragment replaced another one, this is noted, and this
-    /// information can later be retrieved via [`Fragments::take_replacements`].
+    /// If this fragment replaced another one, that information is stored, and
+    /// can later be retrieved via [`Fragments::take_replacements`].
     ///
     /// ## Algorithm
     ///
