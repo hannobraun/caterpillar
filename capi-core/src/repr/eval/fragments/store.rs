@@ -65,9 +65,9 @@ impl Fragments {
     ///
     /// So what can we do? Since syntax is analyzed (and hence, fragments are
     /// created) right-to-left, the replacement `b` -> `d` is already known by
-    /// the point we consider the replacement `c` -> `e`. We can use this to
-    /// update the address of `e`, after which it will be found by the address
-    /// lookup.
+    /// the point we consider the replacement `c` -> `e`. We can use this
+    /// knowledge to update the address of `e`. After that update, we can find
+    /// the replacement using another address lookup.
     ///
     /// Let's take a closer look at what happens, step by step. Since all the
     /// fragments in this example have the same parent, we'll ignore that part
