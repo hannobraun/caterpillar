@@ -15,7 +15,7 @@ pub struct Module {
 
     // It's unnecessary and somewhat misleading that we store tests by name,
     // same as functions. While they *have* a name, they can't be *called by*
-    // their name.
+    // it.
     //
     // This was a deliberate design decision:
     //
