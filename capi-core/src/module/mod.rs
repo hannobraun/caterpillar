@@ -1,5 +1,5 @@
 pub mod function;
 pub mod functions;
-mod user_defined_items;
+mod module;
 
-pub use self::user_defined_items::Module;
+pub use self::module::Module;
