@@ -7,7 +7,7 @@ use crate::{
 
 use super::functions::Functions;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct UserDefinedItems {
     pub bindings: BTreeMap<String, Value>,
     pub functions: Functions,
