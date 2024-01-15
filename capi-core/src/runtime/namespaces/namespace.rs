@@ -31,8 +31,8 @@ impl<C> Namespace<C> {
             native_functions,
             user_defined_items: UserDefinedItems {
                 bindings: BTreeMap::new(),
-                functions: Functions::new(),
-                tests: Functions::new(),
+                functions: Functions::default(),
+                tests: Functions::default(),
             },
         }
     }
