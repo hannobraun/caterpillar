@@ -8,8 +8,7 @@ use crate::{
 };
 
 use super::{
-    functions::Functions, IntrinsicFunction, NativeFunction,
-    UserDefinedFunction, UserDefinedItems,
+    IntrinsicFunction, NativeFunction, UserDefinedFunction, UserDefinedItems,
 };
 
 #[derive(Debug)]
@@ -29,11 +28,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions,
-            user_defined_items: UserDefinedItems {
-                bindings: BTreeMap::new(),
-                functions: Functions::default(),
-                tests: Functions::default(),
-            },
+            user_defined_items: UserDefinedItems::default(),
         }
     }
 
