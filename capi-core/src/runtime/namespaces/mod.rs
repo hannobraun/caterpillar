@@ -1,4 +1,3 @@
-mod functions;
 mod namespace;
 mod native_items;
 mod user_defined_items;

@@ -1,11 +1,12 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    module::function::{Function, FunctionName},
+    module::{
+        function::{Function, FunctionName},
+        functions::Functions,
+    },
     value::{self, Value},
 };
-
-use super::functions::Functions;
 
 #[derive(Debug, Default)]
 pub struct UserDefinedItems {
