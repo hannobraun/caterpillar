@@ -2,13 +2,13 @@ use std::collections::BTreeMap;
 
 use crate::{
     intrinsics,
-    module::function::Function,
+    module::{function::Function, user_defined_items::UserDefinedItems},
     repr::eval::fragments::{FragmentId, Fragments},
     value::Value,
     PlatformFunction,
 };
 
-use super::{IntrinsicFunction, NativeFunction, UserDefinedItems};
+use super::{IntrinsicFunction, NativeFunction};
 
 #[derive(Debug)]
 pub struct Namespace<C> {

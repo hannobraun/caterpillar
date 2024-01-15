@@ -1,10 +1,9 @@
 use crate::{
+    module::user_defined_items::UserDefinedItems,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,
 };
-
-use super::UserDefinedItems;
 
 #[derive(Debug)]
 pub enum NativeFunction<C> {
