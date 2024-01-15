@@ -26,4 +26,9 @@ pub fn evaluate() {
     // compile-time. What we need to make this work is a `main` or `start`
     // function (or whatever is appropriate for the platform) for doing the
     // run-time stuff.
+    //
+    // Once that is in place, and we can evaluate the top-level context here, we
+    // can return a data structure here that represents the module defined in
+    // the script. That data structure would contain the functions, tests,
+    // bindings, etc.
 }
