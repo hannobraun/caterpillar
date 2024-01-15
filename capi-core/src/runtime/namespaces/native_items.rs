@@ -1,5 +1,5 @@
 use crate::{
-    module::user_defined_items::UserDefinedItems,
+    module::UserDefinedItems,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,

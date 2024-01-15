@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     intrinsics,
-    module::{function::Function, user_defined_items::UserDefinedItems},
+    module::{function::Function, UserDefinedItems},
     repr::eval::fragments::{FragmentId, Fragments},
     value::Value,
     PlatformFunction,
