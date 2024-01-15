@@ -1,4 +1,4 @@
-pub mod function;
+mod function;
 mod functions;
 mod module;
 
