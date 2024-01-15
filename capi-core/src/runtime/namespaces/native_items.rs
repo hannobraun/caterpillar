@@ -1,5 +1,5 @@
 use crate::{
-    module::UserDefinedItems,
+    module::Module,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,
@@ -21,7 +21,7 @@ pub struct RuntimeContext<'r> {
     pub word: FragmentId,
 
     pub fragments: &'r mut Fragments,
-    pub namespace: &'r mut UserDefinedItems,
+    pub namespace: &'r mut Module,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
     pub side_stack: &'r mut DataStack,

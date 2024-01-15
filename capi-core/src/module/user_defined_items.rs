@@ -9,7 +9,7 @@ use crate::{
 };
 
 #[derive(Debug, Default)]
-pub struct UserDefinedItems {
+pub struct Module {
     pub bindings: BTreeMap<String, Value>,
     pub functions: Functions,
 
@@ -40,7 +40,7 @@ pub struct UserDefinedItems {
     pub tests: Functions,
 }
 
-impl UserDefinedItems {
+impl Module {
     pub fn define_binding(&mut self, name: String, value: Value) {
         self.bindings.insert(name, value);
     }

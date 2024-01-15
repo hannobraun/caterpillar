@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     intrinsics,
-    module::{function::Function, UserDefinedItems},
+    module::{function::Function, Module},
     repr::eval::fragments::{FragmentId, Fragments},
     value::Value,
     PlatformFunction,
@@ -13,7 +13,7 @@ use super::{IntrinsicFunction, NativeFunction};
 #[derive(Debug)]
 pub struct Namespace<C> {
     native_functions: BTreeMap<String, NativeFunction<C>>,
-    user_defined_items: UserDefinedItems,
+    user_defined_items: Module,
 }
 
 impl<C> Namespace<C> {
@@ -27,7 +27,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions,
-            user_defined_items: UserDefinedItems::default(),
+            user_defined_items: Module::default(),
         }
     }
 
@@ -41,7 +41,7 @@ impl<C> Namespace<C> {
         }
     }
 
-    pub fn user_defined(&mut self) -> &mut UserDefinedItems {
+    pub fn user_defined(&mut self) -> &mut Module {
         &mut self.user_defined_items
     }
 
