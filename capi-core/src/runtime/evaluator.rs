@@ -1,4 +1,5 @@
 use crate::{
+    module::function::UserDefinedFunction,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -11,7 +12,7 @@ use super::{
     data_stack::{DataStack, DataStackError},
     namespaces::{
         IntrinsicFunctionState, ItemInModule, Namespace, ResolveError,
-        RuntimeContext, UserDefinedFunction,
+        RuntimeContext,
     },
 };
 

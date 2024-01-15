@@ -9,7 +9,7 @@ pub use self::{
         IntrinsicFunction, IntrinsicFunctionState, NativeFunction,
         PlatformFunction, PlatformFunctionState, RuntimeContext,
     },
-    user_defined_items::{UserDefinedFunction, UserDefinedItems},
+    user_defined_items::UserDefinedItems,
 };
 
 // I'm working on a larger refactoring (adding evaluation of the top-level

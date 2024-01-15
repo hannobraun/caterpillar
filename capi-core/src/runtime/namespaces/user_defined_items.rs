@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    module::function::FunctionName,
+    module::function::{FunctionName, UserDefinedFunction},
     value::{self, Value},
 };
 
@@ -67,10 +67,4 @@ impl UserDefinedItems {
     pub fn tests(&self) -> impl Iterator<Item = &UserDefinedFunction> {
         self.tests.0.values()
     }
-}
-
-#[derive(Clone, Debug)]
-pub struct UserDefinedFunction {
-    pub name: FunctionName,
-    pub body: value::Block,
 }

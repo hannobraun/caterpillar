@@ -1,4 +1,10 @@
-use crate::repr::eval::fragments::FragmentId;
+use crate::{repr::eval::fragments::FragmentId, value};
+
+#[derive(Clone, Debug)]
+pub struct UserDefinedFunction {
+    pub name: FunctionName,
+    pub body: value::Block,
+}
 
 #[derive(Clone, Debug)]
 pub struct FunctionName {
