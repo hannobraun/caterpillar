@@ -1,5 +1,5 @@
 use crate::{
-    module::function::Function,
+    module::Function,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
