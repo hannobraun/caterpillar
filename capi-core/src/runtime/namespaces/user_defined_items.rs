@@ -10,7 +10,7 @@ use super::functions::Functions;
 pub struct UserDefinedItems<'r> {
     pub bindings: &'r mut BTreeMap<String, Value>,
     pub functions: &'r mut Functions,
-    pub tests: &'r mut BTreeMap<String, UserDefinedFunction>,
+    pub tests: &'r mut Functions,
 }
 
 impl UserDefinedItems<'_> {
@@ -31,7 +31,7 @@ impl UserDefinedItems<'_> {
             name: name.clone(),
             body,
         };
-        self.tests.insert(name.value, function);
+        self.tests.0.insert(name.value, function);
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
@@ -39,7 +39,7 @@ impl UserDefinedItems<'_> {
     }
 
     pub fn tests(&self) -> impl Iterator<Item = &UserDefinedFunction> {
-        self.tests.values()
+        self.tests.0.values()
     }
 }
 

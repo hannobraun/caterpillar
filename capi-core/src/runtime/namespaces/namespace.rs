@@ -51,7 +51,7 @@ impl<C> Namespace<C> {
         UserDefinedItems {
             bindings: &mut self.bindings,
             functions: &mut self.user_defined_functions,
-            tests: &mut self.tests.0,
+            tests: &mut self.tests,
         }
     }
 
