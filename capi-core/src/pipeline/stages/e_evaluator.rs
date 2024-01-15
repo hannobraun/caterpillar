@@ -8,10 +8,10 @@ pub fn evaluate() {
     // - Functions are defined during evaluation. If we were to always evaluate
     //   after analyzing, we would have a full picture of which functions are
     //   defined in the current code.
-    //   This is relevant because there's at least one bugs in the current
+    //   This is relevant because there's at least one bug in the current
     //   implementation, and by always having a full picture after each update,
     //   we could simplify that implementation and fix the bug.
-    //   The known bug, for references:
+    //   The known bug, for reference:
     //   https://github.com/hannobraun/caterpillar/issues/15
     // - Same goes for modules. There are probably more holes in the current
     //   concept, that will be exposed as Caterpillar's functionality gets
