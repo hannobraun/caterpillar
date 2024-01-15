@@ -22,7 +22,7 @@ pub struct RuntimeContext<'r> {
     pub word: FragmentId,
 
     pub fragments: &'r mut Fragments,
-    pub namespace: UserDefinedItems<'r>,
+    pub namespace: &'r mut UserDefinedItems,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
     pub side_stack: &'r mut DataStack,

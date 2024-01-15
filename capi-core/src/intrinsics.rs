@@ -137,7 +137,7 @@ fn array(
 
 fn bind(
     step: usize,
-    mut context: RuntimeContext,
+    context: RuntimeContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -316,7 +316,7 @@ fn false_(
 
 fn fn_(
     step: usize,
-    mut context: RuntimeContext,
+    context: RuntimeContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -531,7 +531,7 @@ fn swap(
 
 fn test(
     step: usize,
-    mut context: RuntimeContext,
+    context: RuntimeContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {

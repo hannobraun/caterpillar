@@ -8,13 +8,13 @@ use crate::{
 use super::functions::Functions;
 
 #[derive(Debug)]
-pub struct UserDefinedItems<'r> {
-    pub bindings: &'r mut BTreeMap<String, Value>,
-    pub functions: &'r mut Functions,
-    pub tests: &'r mut Functions,
+pub struct UserDefinedItems {
+    pub bindings: BTreeMap<String, Value>,
+    pub functions: Functions,
+    pub tests: Functions,
 }
 
-impl UserDefinedItems<'_> {
+impl UserDefinedItems {
     pub fn define_binding(&mut self, name: String, value: Value) {
         self.bindings.insert(name, value);
     }
