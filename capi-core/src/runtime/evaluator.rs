@@ -1,5 +1,5 @@
 use crate::{
-    module::function::UserDefinedFunction,
+    module::function::Function,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -127,9 +127,10 @@ impl<C> Evaluator<C> {
                                     }
                                 }
                             }
-                            ItemInModule::UserDefinedFunction(
-                                UserDefinedFunction { body, .. },
-                            ) => {
+                            ItemInModule::UserDefinedFunction(Function {
+                                body,
+                                ..
+                            }) => {
                                 self.call_stack.push(StackFrame::Fragment {
                                     fragment_id: body.start,
                                 });

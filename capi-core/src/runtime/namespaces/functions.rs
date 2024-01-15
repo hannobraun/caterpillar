@@ -1,13 +1,13 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    module::function::UserDefinedFunction,
+    module::function::Function,
     repr::eval::fragments::{FragmentId, FragmentPayload, Fragments},
     value::ValuePayload,
 };
 
 #[derive(Debug, Default)]
-pub struct Functions(pub BTreeMap<String, UserDefinedFunction>);
+pub struct Functions(pub BTreeMap<String, Function>);
 
 impl Functions {
     pub fn replace(
@@ -18,9 +18,7 @@ impl Functions {
     ) {
         let mut renames = Vec::new();
 
-        for (old_name, UserDefinedFunction { name, body, .. }) in
-            self.0.iter_mut()
-        {
+        for (old_name, Function { name, body, .. }) in self.0.iter_mut() {
             if name.fragment == Some(old) {
                 let fragment = fragments.get(new);
 

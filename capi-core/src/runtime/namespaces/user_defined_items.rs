@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    module::function::{FunctionName, UserDefinedFunction},
+    module::function::{Function, FunctionName},
     value::{self, Value},
 };
 
@@ -45,7 +45,7 @@ impl UserDefinedItems {
     }
 
     pub fn define_function(&mut self, name: FunctionName, body: value::Block) {
-        let function = UserDefinedFunction {
+        let function = Function {
             name: name.clone(),
             body,
         };
@@ -53,18 +53,18 @@ impl UserDefinedItems {
     }
 
     pub fn define_test(&mut self, name: FunctionName, body: value::Block) {
-        let function = UserDefinedFunction {
+        let function = Function {
             name: name.clone(),
             body,
         };
         self.tests.0.insert(name.value, function);
     }
 
-    pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
+    pub fn functions(&self) -> impl Iterator<Item = &Function> {
         self.functions.0.values()
     }
 
-    pub fn tests(&self) -> impl Iterator<Item = &UserDefinedFunction> {
+    pub fn tests(&self) -> impl Iterator<Item = &Function> {
         self.tests.0.values()
     }
 }

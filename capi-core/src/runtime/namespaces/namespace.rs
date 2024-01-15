@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     intrinsics,
-    module::function::UserDefinedFunction,
+    module::function::Function,
     repr::eval::fragments::{FragmentId, Fragments},
     value::Value,
     PlatformFunction,
@@ -103,7 +103,7 @@ pub enum ItemInModule<'r, C> {
     Binding(Value),
     IntrinsicFunction(IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
-    UserDefinedFunction(&'r UserDefinedFunction),
+    UserDefinedFunction(&'r Function),
 }
 
 #[derive(Debug, thiserror::Error)]
