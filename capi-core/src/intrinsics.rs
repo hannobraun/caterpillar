@@ -1,5 +1,5 @@
 use crate::{
-    module::function::FunctionName,
+    module::FunctionName,
     runtime::{
         call_stack::StackFrame,
         namespaces::{

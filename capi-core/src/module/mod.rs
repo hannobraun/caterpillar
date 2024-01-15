@@ -2,4 +2,4 @@ pub mod function;
 mod functions;
 mod module;
 
-pub use self::module::Module;
+pub use self::{function::FunctionName, module::Module};
