@@ -7,12 +7,12 @@ use crate::{
 
 use super::UserDefinedFunction;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Functions(pub BTreeMap<String, UserDefinedFunction>);
 
 impl Functions {
     pub fn new() -> Self {
-        Self(BTreeMap::new())
+        Self::default()
     }
 
     pub fn replace(
