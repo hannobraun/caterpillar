@@ -11,10 +11,6 @@ use super::UserDefinedFunction;
 pub struct Functions(pub BTreeMap<String, UserDefinedFunction>);
 
 impl Functions {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn replace(
         &mut self,
         old: FragmentId,
