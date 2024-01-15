@@ -1,4 +1,5 @@
 use crate::{
+    module::function::FunctionName,
     runtime::{
         call_stack::StackFrame,
         namespaces::{
@@ -8,10 +9,7 @@ use crate::{
     value::{Value, ValuePayload},
 };
 
-use super::{
-    repr::eval::value,
-    runtime::{data_stack::DataStackResult, namespaces::FunctionName},
-};
+use super::{repr::eval::value, runtime::data_stack::DataStackResult};
 
 pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    repr::eval::fragments::FragmentId,
+    module::function::FunctionName,
     value::{self, Value},
 };
 
@@ -73,10 +73,4 @@ impl UserDefinedItems {
 pub struct UserDefinedFunction {
     pub name: FunctionName,
     pub body: value::Block,
-}
-
-#[derive(Clone, Debug)]
-pub struct FunctionName {
-    pub value: String,
-    pub fragment: Option<FragmentId>,
 }

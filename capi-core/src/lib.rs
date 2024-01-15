@@ -1,4 +1,5 @@
 pub mod intrinsics;
+pub mod module;
 pub mod pipeline;
 pub mod repr;
 pub mod runtime;
