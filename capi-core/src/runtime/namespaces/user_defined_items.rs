@@ -5,9 +5,11 @@ use crate::{
     value::{self, Value},
 };
 
+use super::functions::Functions;
+
 pub struct UserDefinedItems<'r> {
     pub bindings: &'r mut BTreeMap<String, Value>,
-    pub functions: &'r mut BTreeMap<String, UserDefinedFunction>,
+    pub functions: &'r mut Functions,
     pub tests: &'r mut BTreeMap<String, UserDefinedFunction>,
 }
 
@@ -21,7 +23,7 @@ impl UserDefinedItems<'_> {
             name: name.clone(),
             body,
         };
-        self.functions.insert(name.value, function);
+        self.functions.0.insert(name.value, function);
     }
 
     pub fn define_test(&mut self, name: FunctionName, body: value::Block) {
@@ -33,7 +35,7 @@ impl UserDefinedItems<'_> {
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &UserDefinedFunction> {
-        self.functions.values()
+        self.functions.0.values()
     }
 
     pub fn tests(&self) -> impl Iterator<Item = &UserDefinedFunction> {

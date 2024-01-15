@@ -50,7 +50,7 @@ impl<C> Namespace<C> {
     pub fn user_defined(&mut self) -> UserDefinedItems {
         UserDefinedItems {
             bindings: &mut self.bindings,
-            functions: &mut self.user_defined_functions.0,
+            functions: &mut self.user_defined_functions,
             tests: &mut self.tests.0,
         }
     }
