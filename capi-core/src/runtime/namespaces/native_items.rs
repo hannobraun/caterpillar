@@ -1,6 +1,6 @@
 use crate::{
     module::Module,
-    repr::eval::fragments::{FragmentId, Fragments},
+    repr::eval::fragments::FragmentId,
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,
 };
@@ -20,7 +20,6 @@ pub struct RuntimeContext<'r> {
     /// The fragment ID of the word that refers to this intrinsic or platform fn
     pub word: FragmentId,
 
-    pub fragments: &'r mut Fragments,
     pub namespace: &'r mut Module,
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,

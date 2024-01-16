@@ -177,11 +177,10 @@ impl<C> Evaluator<C> {
     fn runtime_context<'r>(
         &'r mut self,
         word: FragmentId,
-        fragments: &'r mut Fragments,
+        _: &'r mut Fragments,
     ) -> RuntimeContext<'r> {
         RuntimeContext {
             word,
-            fragments,
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
