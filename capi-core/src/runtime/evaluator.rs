@@ -107,10 +107,7 @@ impl<C> Evaluator<C> {
                             }
                             ItemInModule::PlatformFunction(f) => {
                                 let function_state = f(
-                                    self.runtime_context(
-                                        fragment_id,
-                                        fragments,
-                                    ),
+                                    self.runtime_context(fragment_id),
                                     platform_context,
                                 )
                                 .map_err(|err| EvaluatorError {
@@ -151,12 +148,11 @@ impl<C> Evaluator<C> {
                 function,
                 step,
             } => {
-                let state =
-                    function(step, self.runtime_context(word, fragments))
-                        .map_err(|err| EvaluatorError {
-                            kind: err.into(),
-                            fragment: word,
-                        })?;
+                let state = function(step, self.runtime_context(word))
+                    .map_err(|err| EvaluatorError {
+                        kind: err.into(),
+                        fragment: word,
+                    })?;
 
                 match state {
                     IntrinsicFunctionState::StepDone => {
@@ -174,10 +170,10 @@ impl<C> Evaluator<C> {
         Ok(runtime_state)
     }
 
+    #[allow(clippy::needless_lifetimes)]
     fn runtime_context<'r>(
         &'r mut self,
         word: FragmentId,
-        _: &'r mut Fragments,
     ) -> RuntimeContext<'r> {
         RuntimeContext {
             word,
