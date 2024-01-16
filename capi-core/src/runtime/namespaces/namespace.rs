@@ -92,12 +92,6 @@ impl<C> Namespace<C> {
     }
 }
 
-impl<C> Default for Namespace<C> {
-    fn default() -> Self {
-        Self::new(Module::default())
-    }
-}
-
 #[derive(Clone, Debug)]
 pub enum ItemInModule<'r, C> {
     Binding(Value),
