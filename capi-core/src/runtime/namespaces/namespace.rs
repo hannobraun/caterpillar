@@ -17,7 +17,7 @@ pub struct Namespace<C> {
 }
 
 impl<C> Namespace<C> {
-    pub fn new() -> Self {
+    pub fn new(module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
         for (intrinsic, name) in intrinsics::all() {
@@ -27,7 +27,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions,
-            user_defined_items: Module::default(),
+            user_defined_items: module,
         }
     }
 
@@ -94,7 +94,7 @@ impl<C> Namespace<C> {
 
 impl<C> Default for Namespace<C> {
     fn default() -> Self {
-        Self::new()
+        Self::new(Module::default())
     }
 }
 
