@@ -190,12 +190,6 @@ impl<C> Evaluator<C> {
     }
 }
 
-impl<C> Default for Evaluator<C> {
-    fn default() -> Self {
-        Self::new(Module::default())
-    }
-}
-
 #[derive(Clone, Copy, Debug)]
 pub enum RuntimeState {
     Running,
