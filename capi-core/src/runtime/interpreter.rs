@@ -1,4 +1,5 @@
 use crate::{
+    module::Module,
     pipeline::{self, PipelineError, PipelineOutput},
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
     value, PlatformFunction,
@@ -21,7 +22,7 @@ impl<C> Interpreter<C> {
     pub fn new() -> Result<Self, PipelineError> {
         Ok(Interpreter {
             fragments: Fragments::new(),
-            evaluator: Evaluator::default(),
+            evaluator: Evaluator::new(Module::default()),
             state: RuntimeState::Finished,
         })
     }
