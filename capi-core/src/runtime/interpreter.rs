@@ -42,7 +42,7 @@ impl<C> Interpreter<C> {
         code: &str,
         parent: Option<FragmentId>,
     ) -> Result<FragmentId, PipelineError> {
-        let PipelineOutput { start } =
+        let PipelineOutput { start, .. } =
             pipeline::run(code, parent, &mut self.fragments)?;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
