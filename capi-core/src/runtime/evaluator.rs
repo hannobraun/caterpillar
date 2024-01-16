@@ -1,5 +1,5 @@
 use crate::{
-    module::Function,
+    module::{Function, Module},
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -25,9 +25,9 @@ pub struct Evaluator<C> {
 }
 
 impl<C> Evaluator<C> {
-    pub fn new() -> Self {
+    pub fn new(module: Module) -> Self {
         Self {
-            global_namespace: Namespace::new(Default::default()),
+            global_namespace: Namespace::new(module),
             call_stack: Default::default(),
             data_stack: Default::default(),
             side_stack: Default::default(),
@@ -192,7 +192,7 @@ impl<C> Evaluator<C> {
 
 impl<C> Default for Evaluator<C> {
     fn default() -> Self {
-        Self::new()
+        Self::new(Module::default())
     }
 }
 
