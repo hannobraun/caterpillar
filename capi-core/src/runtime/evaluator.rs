@@ -170,11 +170,7 @@ impl<C> Evaluator<C> {
         Ok(runtime_state)
     }
 
-    #[allow(clippy::needless_lifetimes)]
-    fn runtime_context<'r>(
-        &'r mut self,
-        word: FragmentId,
-    ) -> RuntimeContext<'r> {
+    fn runtime_context(&mut self, word: FragmentId) -> RuntimeContext {
         RuntimeContext {
             word,
             namespace: self.global_namespace.user_defined(),
