@@ -1,4 +1,6 @@
-pub fn evaluate() {
+use crate::repr::eval::fragments::{FragmentId, Fragments};
+
+pub fn evaluate(_start: FragmentId, _fragments: &Fragments) {
     // This is only a placeholder, and the pipeline essentially stops after the
     // `analyze` step. What should happen here, is the evaluation of the
     // top-level context, to determine which functions and modules were defined.
