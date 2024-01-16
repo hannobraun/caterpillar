@@ -25,6 +25,15 @@ pub struct Evaluator<C> {
 }
 
 impl<C> Evaluator<C> {
+    pub fn new() -> Self {
+        Self {
+            global_namespace: Namespace::new(Default::default()),
+            call_stack: Default::default(),
+            data_stack: Default::default(),
+            side_stack: Default::default(),
+        }
+    }
+
     pub fn step(
         &mut self,
         fragments: &Fragments,
@@ -183,12 +192,7 @@ impl<C> Evaluator<C> {
 
 impl<C> Default for Evaluator<C> {
     fn default() -> Self {
-        Self {
-            global_namespace: Namespace::new(Default::default()),
-            call_stack: Default::default(),
-            data_stack: Default::default(),
-            side_stack: Default::default(),
-        }
+        Self::new()
     }
 }
 
