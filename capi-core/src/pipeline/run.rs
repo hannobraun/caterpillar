@@ -1,4 +1,5 @@
 use crate::{
+    module::Module,
     pipeline::stages::b_parser::parse,
     repr::eval::fragments::{FragmentId, Fragments},
 };
@@ -23,11 +24,12 @@ pub fn run(
     let module = evaluate(start, fragments);
     dbg!(&module);
 
-    Ok(PipelineOutput { start })
+    Ok(PipelineOutput { start, module })
 }
 
 pub struct PipelineOutput {
     pub start: FragmentId,
+    pub module: Module,
 }
 
 #[derive(Debug, thiserror::Error)]
