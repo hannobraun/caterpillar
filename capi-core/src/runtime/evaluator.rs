@@ -27,7 +27,7 @@ pub struct Evaluator<C> {
 impl<C> Evaluator<C> {
     pub fn step(
         &mut self,
-        fragments: &mut Fragments,
+        fragments: &Fragments,
         platform_context: &mut C,
     ) -> Result<RuntimeState, EvaluatorError> {
         // What we need to do next depends on what's on top of the call stack.
