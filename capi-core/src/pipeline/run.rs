@@ -20,8 +20,8 @@ pub fn run(
     let syntax_tree = parse(tokens)?;
     let syntax_tree = simplify(syntax_tree);
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
-    let _module = evaluate(start, &fragments);
-    dbg!(_module);
+    let module = evaluate(start, &fragments);
+    dbg!(module);
 
     Ok(PipelineOutput { start })
 }
