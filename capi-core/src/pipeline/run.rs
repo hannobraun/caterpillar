@@ -22,7 +22,6 @@ pub fn run(
     let syntax_tree = simplify(syntax_tree);
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
     let module = evaluate(start, fragments);
-    dbg!(&module);
 
     Ok(PipelineOutput { start, module })
 }

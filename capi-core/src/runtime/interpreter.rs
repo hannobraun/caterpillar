@@ -42,8 +42,9 @@ impl<C> Interpreter<C> {
         code: &str,
         parent: Option<FragmentId>,
     ) -> Result<FragmentId, PipelineError> {
-        let PipelineOutput { start, .. } =
+        let PipelineOutput { start, module } =
             pipeline::run(code, parent, &mut self.fragments)?;
+        dbg!(&module);
 
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
