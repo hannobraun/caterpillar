@@ -184,7 +184,7 @@ impl<C> Evaluator<C> {
 impl<C> Default for Evaluator<C> {
     fn default() -> Self {
         Self {
-            global_namespace: Default::default(),
+            global_namespace: Namespace::new(Default::default()),
             call_stack: Default::default(),
             data_stack: Default::default(),
             side_stack: Default::default(),
