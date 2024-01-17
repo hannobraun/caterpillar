@@ -1,9 +1,13 @@
 use crate::{
     module::Module,
     repr::eval::fragments::{FragmentId, Fragments},
+    runtime::evaluator::EvaluatorError,
 };
 
-pub fn evaluate(_start: FragmentId, _fragments: &Fragments) -> Module {
+pub fn evaluate(
+    _start: FragmentId,
+    _fragments: &Fragments,
+) -> Result<Module, EvaluatorError> {
     // This is only a placeholder, and the pipeline essentially stops after the
     // `analyze` step. What should happen here, is the evaluation of the
     // top-level context, to determine which functions and modules were defined.
@@ -37,5 +41,5 @@ pub fn evaluate(_start: FragmentId, _fragments: &Fragments) -> Module {
     // the script. That data structure would contain the functions, tests,
     // bindings, etc.
 
-    Module::default()
+    Ok(Module::default())
 }
