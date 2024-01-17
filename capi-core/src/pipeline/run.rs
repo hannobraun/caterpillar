@@ -2,6 +2,7 @@ use crate::{
     module::Module,
     pipeline::stages::b_parser::parse,
     repr::eval::fragments::{FragmentId, Fragments},
+    runtime::evaluator::EvaluatorError,
 };
 
 use super::stages::{
@@ -35,4 +36,7 @@ pub struct PipelineOutput {
 pub enum PipelineError {
     #[error("Failed to parse")]
     Parser(#[from] ParserError),
+
+    #[error("Failed to evaluate top-level context")]
+    Evaluator(#[from] EvaluatorError),
 }
