@@ -175,10 +175,12 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            f";
+            :main { f } fn
+            main";
         let updated = "
             :f { nop 2 ping f } fn
-            f";
+            :main { f } fn
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -197,12 +199,14 @@ mod tests {
             :loop { f loop } fn
             :f { nop 1 ping } fn
             :g { nop 1 ping } fn
-            loop";
+            :main { loop } fn
+            main";
         let updated = "
             :loop { g loop } fn
             :f { nop 2 ping } fn
             :g { nop 1 ping } fn
-            loop";
+            :main { loop } fn
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -219,10 +223,12 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            f";
+            :main { f } fn
+            main";
         let updated = "
             :f { nop 2 ping f } fn
-            f";
+            :main { f } fn
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -241,15 +247,27 @@ mod tests {
         let mut interpreter = Interpreter::new()?;
 
         let original = "
-            { nop 1 ping }
-                clone
-                eval
-                eval";
+            :main
+            {
+                { nop 1 ping }
+                    clone
+                    eval
+                    eval
+            }
+                fn
+
+            main";
         let updated = "
-            { nop 2 ping }
-                clone
-                eval
-                eval";
+            :main
+            {
+                { nop 2 ping }
+                    clone
+                    eval
+                    eval
+            }
+                fn
+
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -267,15 +285,29 @@ mod tests {
         let original = "
             :f { { nop 2 ping } } fn
             :g { { nop 2 ping } } fn
-            1 ping
-            f eval
-            g eval";
+
+            :main
+            {
+                1 ping
+                f eval
+                g eval
+            }
+                fn
+
+            main";
         let updated = "
             :f { { nop 2 ping } } fn
             :g { { nop 3 ping } } fn
-            1 ping
-            f eval
-            g eval";
+
+            :main
+            {
+                1 ping
+                f eval
+                g eval
+            }
+                fn
+
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -293,12 +325,26 @@ mod tests {
 
         let original = "
             :f { nop 1 ping } fn
-            f
-            1 ping";
+
+            :main
+            {
+                f
+                1 ping
+            }
+                fn
+
+            main";
         let updated = "
             :f { nop 1 ping } fn
-            f
-            2 ping";
+
+            :main
+            {
+                f
+                2 ping
+            }
+                fn
+
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -315,10 +361,12 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            f";
+            :main { f } fn
+            main";
         let updated = "
             :g { nop 1 ping g } fn
-            g";
+            :main { g } fn
+            main";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
