@@ -173,8 +173,12 @@ mod tests {
     fn update_to_named_function() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new()?;
 
-        let original = ":f { nop 1 ping f } fn f";
-        let updated = ":f { nop 2 ping f } fn f";
+        let original = "
+            :f { nop 1 ping f } fn
+            f";
+        let updated = "
+            :f { nop 2 ping f } fn
+            f";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -213,8 +217,12 @@ mod tests {
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new()?;
 
-        let original = ":f { nop 1 ping f } fn f";
-        let updated = ":f { nop 2 ping f } fn f";
+        let original = "
+            :f { nop 1 ping f } fn
+            f";
+        let updated = "
+            :f { nop 2 ping f } fn
+            f";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -232,8 +240,16 @@ mod tests {
     fn update_to_block() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new()?;
 
-        let original = "{ nop 1 ping } clone eval eval";
-        let updated = "{ nop 2 ping } clone eval eval";
+        let original = "
+            { nop 1 ping }
+                clone
+                eval
+                eval";
+        let updated = "
+            { nop 2 ping }
+                clone
+                eval
+                eval";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -297,8 +313,12 @@ mod tests {
     fn update_renamed_function() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::new()?;
 
-        let original = ":f { nop 1 ping f } fn f";
-        let updated = ":g { nop 1 ping g } fn g";
+        let original = "
+            :f { nop 1 ping f } fn
+            f";
+        let updated = "
+            :g { nop 1 ping g } fn
+            g";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
