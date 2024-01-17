@@ -90,6 +90,10 @@ impl<C> Namespace<C> {
             .replace(old, new, fragments);
         self.user_defined_items.tests.replace(old, new, fragments);
     }
+
+    pub fn into_module(self) -> Module {
+        self.user_defined_items
+    }
 }
 
 #[derive(Clone, Debug)]
