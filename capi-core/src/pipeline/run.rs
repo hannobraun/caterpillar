@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     module::Module,
     pipeline::stages::b_parser::parse,
@@ -18,11 +20,14 @@ pub fn run(
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
+    // This is a placeholder. It needs to be populated before the pipeline runs.
+    let scripts = BTreeMap::new();
+
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
     let syntax_tree = simplify(syntax_tree);
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
-    let module = evaluate(start, fragments)?;
+    let module = evaluate(start, fragments, &scripts)?;
 
     Ok(PipelineOutput { start, module })
 }
