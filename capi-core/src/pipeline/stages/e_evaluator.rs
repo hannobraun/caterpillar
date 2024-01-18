@@ -1,16 +1,14 @@
-use std::collections::BTreeMap;
-
 use crate::{
     module::Module,
+    pipeline::scripts::Scripts,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::evaluator::EvaluatorError,
-    value,
 };
 
 pub fn evaluate(
     _start: FragmentId,
     _fragments: &Fragments,
-    _scripts: &BTreeMap<Vec<value::Symbol>, String>,
+    _scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
     // This is only a placeholder, and the pipeline essentially stops after the
     // `analyze` step. What should happen here, is the evaluation of the
