@@ -20,15 +20,13 @@ pub fn run(
     code: &str,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
+    scripts: &Scripts,
 ) -> Result<PipelineOutput, PipelineError> {
-    // This is a placeholder. It needs to be populated before the pipeline runs.
-    let scripts = Scripts::new();
-
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
     let syntax_tree = simplify(syntax_tree);
     let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
-    let module = evaluate(start, fragments, &scripts)?;
+    let module = evaluate(start, fragments, scripts)?;
 
     Ok(PipelineOutput { start, module })
 }

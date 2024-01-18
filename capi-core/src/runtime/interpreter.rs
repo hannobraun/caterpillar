@@ -1,6 +1,6 @@
 use crate::{
     module::Module,
-    pipeline::{self, PipelineError, PipelineOutput},
+    pipeline::{self, PipelineError, PipelineOutput, Scripts},
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
     value, PlatformFunction,
 };
@@ -43,8 +43,12 @@ impl<C> Interpreter<C> {
         code: &str,
         parent: Option<FragmentId>,
     ) -> Result<FragmentId, PipelineError> {
+        // This is a placeholder. It needs to be populated before the pipeline
+        // runs.
+        let scripts = Scripts::new();
+
         let PipelineOutput { start, module } =
-            pipeline::run(code, parent, &mut self.fragments)?;
+            pipeline::run(code, parent, &mut self.fragments, &scripts)?;
         dbg!(&module);
 
         for Replacement { old, new } in self.fragments.take_replacements() {
