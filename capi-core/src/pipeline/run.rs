@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::{
     module::Module,
     pipeline::stages::b_parser::parse,
@@ -7,12 +5,15 @@ use crate::{
     runtime::evaluator::EvaluatorError,
 };
 
-use super::stages::{
-    a_tokenizer::tokenize,
-    b_parser::ParserError,
-    c_simplifier::simplify,
-    d_analyzer::{analyze, AnalyzerOutput},
-    e_evaluator::evaluate,
+use super::{
+    scripts::Scripts,
+    stages::{
+        a_tokenizer::tokenize,
+        b_parser::ParserError,
+        c_simplifier::simplify,
+        d_analyzer::{analyze, AnalyzerOutput},
+        e_evaluator::evaluate,
+    },
 };
 
 pub fn run(
@@ -21,7 +22,7 @@ pub fn run(
     fragments: &mut Fragments,
 ) -> Result<PipelineOutput, PipelineError> {
     // This is a placeholder. It needs to be populated before the pipeline runs.
-    let scripts = BTreeMap::new();
+    let scripts = Scripts::new();
 
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
