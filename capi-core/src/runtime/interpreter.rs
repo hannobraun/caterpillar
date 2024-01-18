@@ -402,7 +402,9 @@ mod tests {
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             let parent = None;
+
             self.inner.update(code, parent)?;
+
             Ok(())
         }
 
