@@ -18,8 +18,10 @@ pub async fn run(
     debug!("Running script:\n{script}");
 
     let mut interpreter = Interpreter::new()?;
+
     let parent = None;
     interpreter.update(script, parent)?;
+
     let mut context = Context {
         events: Events { inner: events },
         sleep_duration: None,
