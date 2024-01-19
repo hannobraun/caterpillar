@@ -1,10 +1,11 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    module::function::Function,
     repr::eval::fragments::{FragmentId, FragmentPayload, Fragments},
     value::ValuePayload,
 };
+
+use super::Function;
 
 #[derive(Debug, Default)]
 pub struct Functions(pub BTreeMap<String, Function>);
