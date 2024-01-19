@@ -23,7 +23,7 @@ pub use self::thread::DesktopThread;
 /// "regular `capi-core`" <- "regular `capi-desktop" <- "test-mode `capi-core`"
 ///
 /// That is a very important distinction, because the two different build
-/// configurations of `capi-core` means that, as far as the type system is
+/// configurations of `capi-core` mean that, as far as the type system is
 /// concerned, those are essentially different crates.
 ///
 /// As a consequence, if the test suite constructs a `crate::Interpreter` (test)
