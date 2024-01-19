@@ -1,4 +1,4 @@
-pub mod module;
+mod module;
 mod run;
 mod scripts;
 mod stages;
