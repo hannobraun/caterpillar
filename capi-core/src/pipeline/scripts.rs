@@ -9,5 +9,7 @@ pub struct Scripts {
     //
     // (Actually, once we store the entry script path here, we don't need to
     // pass its code in a separate variable at all.)
-    pub inner: BTreeMap<Vec<value::Symbol>, String>,
+    pub inner: BTreeMap<ScriptPath, String>,
 }
+
+pub type ScriptPath = Vec<value::Symbol>;
