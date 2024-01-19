@@ -27,7 +27,9 @@ mod tests {
     use std::path::PathBuf;
 
     use capi_desktop::{
-        loader::Loader, platform::PlatformContext, Interpreter, Scripts,
+        core::{pipeline::Scripts, Interpreter},
+        loader::Loader,
+        platform::PlatformContext,
     };
 
     #[test]
