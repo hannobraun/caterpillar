@@ -1,10 +1,12 @@
+mod channel;
 mod script_loader;
 mod watch;
+
+pub use self::channel::{Update, UpdateReceiver, UpdateSender};
 
 use std::path::PathBuf;
 
 use capi_core::repr::eval::fragments::FragmentId;
-use crossbeam_channel::{Receiver, Sender};
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 
@@ -57,7 +59,3 @@ impl Default for Loader {
         Self::new()
     }
 }
-
-pub type Update = anyhow::Result<(Option<FragmentId>, String)>;
-pub type UpdateSender = Sender<Update>;
-pub type UpdateReceiver = Receiver<Update>;
