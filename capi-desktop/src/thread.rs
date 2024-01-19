@@ -102,6 +102,14 @@ impl DesktopThread {
         let parent = None;
         loader.load(&entry_script_path, parent)?;
 
+        // I'm guessing that this is where the pre-loading of all the reachable
+        // scripts will go. But doing it with the current `Loader` API will be a
+        // pain.
+        //
+        // I'm not sure if it's better to power through and clean up `Loader`
+        // later, or if I should refactor `Loader` first, to make the change
+        // here easier.
+
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =
             PlatformContext::new(entry_script_path, loader)
