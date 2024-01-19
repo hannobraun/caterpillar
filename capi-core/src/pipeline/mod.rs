@@ -1,3 +1,4 @@
+pub mod module;
 mod run;
 mod scripts;
 mod stages;

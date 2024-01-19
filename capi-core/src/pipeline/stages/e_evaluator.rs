@@ -1,6 +1,5 @@
 use crate::{
-    module::Module,
-    pipeline::scripts::Scripts,
+    pipeline::{module::Module, scripts::Scripts},
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::evaluator::EvaluatorError,
 };

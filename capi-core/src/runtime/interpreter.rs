@@ -1,6 +1,5 @@
 use crate::{
-    module::Module,
-    pipeline::{self, PipelineError, PipelineOutput, Scripts},
+    pipeline::{self, module::Module, PipelineError, PipelineOutput, Scripts},
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
     value, PlatformFunction,
 };

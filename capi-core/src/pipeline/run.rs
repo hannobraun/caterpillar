@@ -1,11 +1,11 @@
 use crate::{
-    module::Module,
     pipeline::stages::b_parser::parse,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::evaluator::EvaluatorError,
 };
 
 use super::{
+    module::Module,
     scripts::Scripts,
     stages::{
         a_tokenizer::tokenize,
