@@ -1,6 +1,8 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::{runtime::call_stack::StackFrame, RuntimeState};
+use capi_core::{
+    pipeline::Scripts, runtime::call_stack::StackFrame, RuntimeState,
+};
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
@@ -91,6 +93,10 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
+        // This is a placeholder. We'll need to preload all scripts that are
+        // reachable from the entry script and put them in here.
+        let scripts = Scripts::default();
+
         let mut loader = Loader::new();
 
         let parent = None;
@@ -113,7 +119,7 @@ impl DesktopThread {
             match platform_context.loader.updates().try_recv() {
                 Ok(update) => {
                     let (_path, parent, new_code) = update?;
-                    interpreter.update(&new_code, parent)?;
+                    interpreter.update(&new_code, parent, &scripts)?;
                 }
                 Err(TryRecvError::Empty) => {}
                 Err(TryRecvError::Disconnected) => break,
@@ -132,8 +138,8 @@ impl DesktopThread {
                         {
                             let (_path, parent, new_code) = update?;
 
-                            let start =
-                                interpreter.update(&new_code, parent)?;
+                            let start = interpreter
+                                .update(&new_code, parent, &scripts)?;
 
                             if parent == loading_parent {
                                 interpreter.evaluator().call_stack.push(
@@ -151,7 +157,7 @@ impl DesktopThread {
                     match platform_context.loader.updates().recv() {
                         Ok(update) => {
                             let (_path, parent, new_code) = update?;
-                            interpreter.update(&new_code, parent)?;
+                            interpreter.update(&new_code, parent, &scripts)?;
                         }
                         Err(RecvError) => break,
                     }

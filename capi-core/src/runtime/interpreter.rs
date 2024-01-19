@@ -42,6 +42,7 @@ impl<C> Interpreter<C> {
         &mut self,
         code: &str,
         parent: Option<FragmentId>,
+        scripts: &Scripts,
     ) -> Result<FragmentId, PipelineError> {
         // I'm currently working on adding compile-time evaluation to the
         // pipeline, meaning that at the end of the pipeline, the top-level
@@ -111,10 +112,9 @@ impl<C> Interpreter<C> {
         // Maybe it's a good idea to implement the pre-loading change first, see
         // if it's possible to prepare the API here for what's to come, then
         // implement the pipeline changes afterwards.
-        let scripts = Scripts::default();
 
         let PipelineOutput { start, module } =
-            pipeline::run(code, parent, &mut self.fragments, &scripts)?;
+            pipeline::run(code, parent, &mut self.fragments, scripts)?;
         dbg!(&module);
 
         for Replacement { old, new } in self.fragments.take_replacements() {
@@ -230,8 +230,9 @@ mod tests {
     use std::collections::HashMap;
 
     use crate::{
-        pipeline::PipelineError, runtime::evaluator::EvaluatorError, value,
-        DataStackResult, PlatformFunction, PlatformFunctionState,
+        pipeline::{PipelineError, Scripts},
+        runtime::evaluator::EvaluatorError,
+        value, DataStackResult, PlatformFunction, PlatformFunctionState,
         RuntimeContext,
     };
 
@@ -468,8 +469,9 @@ mod tests {
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             let parent = None;
+            let scripts = Scripts::default();
 
-            self.inner.update(code, parent)?;
+            self.inner.update(code, parent, &scripts)?;
 
             Ok(())
         }

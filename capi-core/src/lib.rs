@@ -27,7 +27,7 @@ mod tests {
     use std::path::PathBuf;
 
     use capi_desktop::{
-        loader::Loader, platform::PlatformContext, Interpreter,
+        loader::Loader, platform::PlatformContext, Interpreter, Scripts,
     };
 
     #[test]
@@ -38,12 +38,13 @@ mod tests {
         let script_path = PathBuf::from("../tests.capi");
         let parent = None;
 
+        let scripts = Scripts::default();
         let mut loader = Loader::new();
 
         loader.load(&script_path, parent)?;
         let (_, _, code) = loader.updates().recv()??;
 
-        interpreter.update(&code, parent)?;
+        interpreter.update(&code, parent, &scripts)?;
         interpreter
             .run_tests(&mut PlatformContext::new(script_path, loader))?;
 

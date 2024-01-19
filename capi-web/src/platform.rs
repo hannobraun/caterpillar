@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use async_channel::{Receiver, RecvError, Sender, TryRecvError};
 use capi_core::{
-    value, DataStackResult, Interpreter, PlatformFunction,
+    pipeline::Scripts, value, DataStackResult, Interpreter, PlatformFunction,
     PlatformFunctionState, RuntimeContext, RuntimeState,
 };
 use chrono::Local;
@@ -17,10 +17,11 @@ pub async fn run(
 ) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
+    let scripts = Scripts::default();
     let mut interpreter = Interpreter::new()?;
 
     let parent = None;
-    interpreter.update(script, parent)?;
+    interpreter.update(script, parent, &scripts)?;
 
     let mut context = Context {
         events: Events { inner: events },
@@ -37,7 +38,7 @@ pub async fn run(
     loop {
         if let Some(code) = new_code.take() {
             let parent = None;
-            if let Err(err) = interpreter.update(&code, parent) {
+            if let Err(err) = interpreter.update(&code, parent, &scripts) {
                 context.events.status(format!("Pipeline error:\n{err:?}\n"));
             }
         }
