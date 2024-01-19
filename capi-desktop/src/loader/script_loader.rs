@@ -44,7 +44,7 @@ impl ScriptLoader {
             .with_context(|| {
                 format!("Loading script `{}`", self.path.display())
             })
-            .map(|code| (self.parent, code));
+            .map(|code| (self.path.clone(), self.parent, code));
         self.sender.send(code_or_err)
     }
 }

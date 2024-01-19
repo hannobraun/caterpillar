@@ -112,7 +112,7 @@ impl DesktopThread {
 
             match platform_context.loader.updates().try_recv() {
                 Ok(update) => {
-                    let (parent, new_code) = update?;
+                    let (_path, parent, new_code) = update?;
                     interpreter.update(&new_code, parent)?;
                 }
                 Err(TryRecvError::Empty) => {}
@@ -130,7 +130,7 @@ impl DesktopThread {
                         while let Ok(update) =
                             platform_context.loader.updates().recv()
                         {
-                            let (parent, new_code) = update?;
+                            let (_path, parent, new_code) = update?;
 
                             let start =
                                 interpreter.update(&new_code, parent)?;
@@ -150,7 +150,7 @@ impl DesktopThread {
 
                     match platform_context.loader.updates().recv() {
                         Ok(update) => {
-                            let (parent, new_code) = update?;
+                            let (_path, parent, new_code) = update?;
                             interpreter.update(&new_code, parent)?;
                         }
                         Err(RecvError) => break,
