@@ -1,12 +1,8 @@
 use std::collections::BTreeMap;
 
-use crate::{
-    module::{
-        function::{Function, FunctionName},
-        functions::Functions,
-    },
-    value::{self, Value},
-};
+use crate::value::{self, Value};
+
+use super::{functions::Functions, Function, FunctionName};
 
 #[derive(Debug, Default)]
 pub struct Module {
