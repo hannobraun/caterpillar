@@ -1,4 +1,4 @@
-// I don't see the point of this link. That weird case they present in its
+// I don't see the point of this lint. That weird case they present in its
 // documentation certainly doesn't apply to me, and I've also never seen it
 // anywhere else.
 //
