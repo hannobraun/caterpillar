@@ -1,5 +1,5 @@
 use crate::{
-    pipeline::module::FunctionName,
+    pipeline::FunctionName,
     runtime::{
         call_stack::StackFrame,
         namespaces::{
