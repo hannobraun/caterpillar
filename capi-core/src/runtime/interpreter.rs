@@ -43,7 +43,7 @@ impl<C> Interpreter<C> {
         code: &str,
         parent: Option<FragmentId>,
     ) -> Result<FragmentId, PipelineError> {
-        // I'm current working on adding compile-time evaluation to the
+        // I'm currently working on adding compile-time evaluation to the
         // pipeline, meaning that at the end of the pipeline, the top-level
         // context is evaluated, so any functions and modules defined in the
         // code are known then. This aids in the update process, which is
