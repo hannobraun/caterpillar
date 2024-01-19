@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     module::Module,
     pipeline::{self, PipelineError, PipelineOutput, Scripts},
@@ -111,7 +113,9 @@ impl<C> Interpreter<C> {
         // Maybe it's a good idea to implement the pre-loading change first, see
         // if it's possible to prepare the API here for what's to come, then
         // implement the pipeline changes afterwards.
-        let scripts = Scripts::new();
+        let scripts = Scripts {
+            inner: BTreeMap::new(),
+        };
 
         let PipelineOutput { start, module } =
             pipeline::run(code, parent, &mut self.fragments, &scripts)?;
