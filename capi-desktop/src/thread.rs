@@ -109,6 +109,9 @@ impl DesktopThread {
         // I'm not sure if it's better to power through and clean up `Loader`
         // later, or if I should refactor `Loader` first, to make the change
         // here easier.
+        //
+        // Whatever option I choose, I should be careful not to disrupt the
+        // current runtime `mod`, as to not require too big of a change at once.
         dbg!(&scripts);
 
         let mut interpreter = Interpreter::new()?;
