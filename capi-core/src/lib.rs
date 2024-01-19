@@ -39,6 +39,7 @@ mod tests {
         let parent = None;
 
         let mut loader = Loader::new();
+
         loader.load(&script_path, parent)?;
         let (_, _, code) = loader.updates().recv()??;
 
