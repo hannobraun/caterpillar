@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::value;
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Scripts {
     // Eventually, I'm going to need to store the path of the entry script here,
     // so the `Interpreter` always knows where to start the pipeline.
