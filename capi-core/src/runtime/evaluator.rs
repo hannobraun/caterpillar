@@ -1,5 +1,5 @@
 use crate::{
-    pipeline::module::{Function, Module},
+    pipeline::{module::Module, Function},
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,

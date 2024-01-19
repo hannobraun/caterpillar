@@ -4,7 +4,7 @@ mod scripts;
 mod stages;
 
 pub use self::{
-    module::FunctionName,
+    module::{Function, FunctionName},
     run::{run, PipelineError, PipelineOutput},
     scripts::Scripts,
 };
