@@ -23,7 +23,6 @@ impl Loader {
         }
     }
 
-    /// Load the script at the given path
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
