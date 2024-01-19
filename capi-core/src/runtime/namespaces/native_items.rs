@@ -1,5 +1,5 @@
 use crate::{
-    pipeline::module::Module,
+    pipeline::Module,
     repr::eval::fragments::FragmentId,
     runtime::{call_stack::CallStack, data_stack::DataStack},
     DataStackResult,
