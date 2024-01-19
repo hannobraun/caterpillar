@@ -35,3 +35,8 @@ pub use self::thread::DesktopThread;
 /// `Interpreter` is available to the `capi-core` test suite, resolving the type
 /// error.
 pub type Interpreter = capi_core::Interpreter<platform::PlatformContext>;
+
+/// Re-definition of [`capi_core::pipeline::Script`]
+///
+/// See [`Interpreter`]` for a detailed explanation on why this is needed.
+pub type Scripts = capi_core::pipeline::Scripts;
