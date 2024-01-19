@@ -4,6 +4,6 @@ mod script_loader;
 mod watch;
 
 pub use self::{
-    channel::{Update, UpdateReceiver, UpdateSender},
+    channel::{Update, UpdateReceiver},
     loader::Loader,
 };
