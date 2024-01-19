@@ -1,14 +1,14 @@
 use std::{path::PathBuf, thread};
 
 use capi_core::{
-    pipeline::Scripts, runtime::call_stack::StackFrame, RuntimeState,
+    pipeline::Scripts, runtime::call_stack::StackFrame, Interpreter,
+    RuntimeState,
 };
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
     loader::Loader,
     platform::{self, PixelOp, PlatformContext},
-    Interpreter,
 };
 
 pub struct DesktopThread {
@@ -24,7 +24,7 @@ impl DesktopThread {
         impl RunTarget for RunProgram {
             fn finish(
                 &self,
-                _: &mut Interpreter,
+                _: &mut Interpreter<PlatformContext>,
                 _: &mut PlatformContext,
             ) -> anyhow::Result<()> {
                 eprintln!();
@@ -46,7 +46,7 @@ impl DesktopThread {
         impl RunTarget for RunTests {
             fn finish(
                 &self,
-                interpreter: &mut Interpreter,
+                interpreter: &mut Interpreter<PlatformContext>,
                 platform_context: &mut PlatformContext,
             ) -> anyhow::Result<()> {
                 interpreter.run_tests(platform_context)?;
@@ -200,7 +200,7 @@ type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
 trait RunTarget: Send + 'static {
     fn finish(
         &self,
-        interpreter: &mut Interpreter,
+        interpreter: &mut Interpreter<PlatformContext>,
         platform_context: &mut PlatformContext,
     ) -> anyhow::Result<()>;
 }
