@@ -4,7 +4,7 @@ use capi_core::repr::eval::fragments::FragmentId;
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 
-use super::{watch::watch, UpdateReceiver, UpdateSender};
+use super::{channel::UpdateSender, watch::watch, UpdateReceiver};
 
 pub struct Loader {
     sender: UpdateSender,

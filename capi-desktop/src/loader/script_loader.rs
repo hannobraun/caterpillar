@@ -8,7 +8,7 @@ use anyhow::Context;
 use capi_core::repr::eval::fragments::FragmentId;
 use crossbeam_channel::SendError;
 
-use super::{Update, UpdateSender};
+use super::{channel::UpdateSender, Update};
 
 pub struct ScriptLoader {
     path: PathBuf,

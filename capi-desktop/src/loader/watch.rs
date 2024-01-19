@@ -8,7 +8,7 @@ use notify_debouncer_mini::{
 };
 use tracing::error;
 
-use super::{script_loader::ScriptLoader, UpdateSender};
+use super::{channel::UpdateSender, script_loader::ScriptLoader};
 
 pub fn watch(
     path: PathBuf,
