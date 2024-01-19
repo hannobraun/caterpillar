@@ -109,6 +109,7 @@ impl DesktopThread {
         // I'm not sure if it's better to power through and clean up `Loader`
         // later, or if I should refactor `Loader` first, to make the change
         // here easier.
+        dbg!(&scripts);
 
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =
