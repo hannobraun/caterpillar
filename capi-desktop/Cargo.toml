@@ -11,6 +11,7 @@ notify = "*"
 notify-debouncer-mini = "*"
 pixels = "*"
 tracing = "*"
+walkdir = "*"
 
 [dependencies.capi-core]
 path = "../capi-core"

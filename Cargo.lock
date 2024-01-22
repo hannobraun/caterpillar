@@ -369,6 +369,7 @@ dependencies = [
  "pixels",
  "tracing",
  "tracing-subscriber",
+ "walkdir",
  "winit",
 ]
 
