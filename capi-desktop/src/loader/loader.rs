@@ -35,14 +35,14 @@ pub struct Loader {
 // careful not to interfere with the current workings. I can run the same code,
 // but I can't use the same channel.
 impl Loader {
-    pub fn new(_entry_script_path: impl Into<PathBuf>) -> Self {
+    pub fn new(_entry_script_path: impl Into<PathBuf>) -> anyhow::Result<Self> {
         let (old_sender, old_receiver) = crossbeam_channel::unbounded();
 
-        Self {
+        Ok(Self {
             old_sender,
             old_receiver,
             watchers: Vec::new(),
-        }
+        })
     }
 
     pub fn load(
