@@ -8,7 +8,7 @@ use super::{channel::UpdateSender, watch::watch, UpdateReceiver};
 
 pub struct Loader {
     old_sender: UpdateSender,
-    receiver: UpdateReceiver,
+    old_receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
 }
 
@@ -40,7 +40,7 @@ impl Loader {
 
         Self {
             old_sender,
-            receiver,
+            old_receiver: receiver,
             watchers: Vec::new(),
         }
     }
@@ -59,7 +59,7 @@ impl Loader {
     }
 
     pub fn updates(&self) -> &UpdateReceiver {
-        &self.receiver
+        &self.old_receiver
     }
 }
 
