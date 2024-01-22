@@ -37,11 +37,12 @@ pub struct Loader {
 impl Loader {
     pub fn new(_entry_script_path: impl Into<PathBuf>) -> anyhow::Result<Self> {
         let (old_sender, old_receiver) = crossbeam_channel::unbounded();
+        let watchers = Vec::new();
 
         Ok(Self {
             old_sender,
             old_receiver,
-            watchers: Vec::new(),
+            watchers,
         })
     }
 
