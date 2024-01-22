@@ -36,11 +36,11 @@ pub struct Loader {
 // but I can't use the same channel.
 impl Loader {
     pub fn new() -> Self {
-        let (old_sender, receiver) = crossbeam_channel::unbounded();
+        let (old_sender, old_receiver) = crossbeam_channel::unbounded();
 
         Self {
             old_sender,
-            old_receiver: receiver,
+            old_receiver,
             watchers: Vec::new(),
         }
     }
