@@ -97,7 +97,7 @@ impl DesktopThread {
         // reachable from the entry script and put them in here.
         let scripts = Scripts::default();
 
-        let mut loader = Loader::new();
+        let mut loader = Loader::new(&entry_script_path);
 
         let parent = None;
         loader.load(&entry_script_path, parent)?;
