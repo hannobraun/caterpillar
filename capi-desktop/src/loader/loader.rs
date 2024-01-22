@@ -35,6 +35,7 @@ pub struct Loader {
 // careful not to interfere with the current workings. I can run the same code,
 // but I can't use the same channel.
 impl Loader {
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         let (old_sender, old_receiver) = crossbeam_channel::unbounded();
 
@@ -60,11 +61,5 @@ impl Loader {
 
     pub fn updates(&self) -> &UpdateReceiver {
         &self.old_receiver
-    }
-}
-
-impl Default for Loader {
-    fn default() -> Self {
-        Self::new()
     }
 }
