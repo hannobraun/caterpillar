@@ -3,12 +3,14 @@ use std::path::PathBuf;
 use capi_core::repr::eval::fragments::FragmentId;
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
+use walkdir::WalkDir;
 
 use super::{channel::UpdateSender, watch::watch, UpdateReceiver};
 
 pub struct Loader {
     old_sender: UpdateSender,
     old_receiver: UpdateReceiver,
+    receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
 }
 
@@ -36,14 +38,43 @@ pub struct Loader {
 // but I can't use the same channel.
 impl Loader {
     pub fn new(_entry_script_path: impl Into<PathBuf>) -> anyhow::Result<Self> {
+        let entry_script_path = _entry_script_path.into();
+
         let (old_sender, old_receiver) = crossbeam_channel::unbounded();
-        let watchers = Vec::new();
+        let (sender, receiver) = crossbeam_channel::unbounded();
+        let mut watchers = Vec::new();
+
+        let mut entry_script_dir = entry_script_path.clone();
+        entry_script_dir.pop();
+
+        for entry in WalkDir::new(entry_script_dir) {
+            let entry = entry?;
+
+            if entry.file_type().is_dir() {
+                continue;
+            }
+
+            if !entry.file_name().as_encoded_bytes().ends_with(b".capi") {
+                continue;
+            }
+
+            let watcher =
+                watch(entry.path().to_path_buf(), None, sender.clone())?;
+            watchers.push(watcher);
+        }
 
         Ok(Self {
             old_sender,
             old_receiver,
+            receiver,
             watchers,
         })
+    }
+
+    pub fn scripts(&mut self) {
+        for update in self.receiver.try_iter() {
+            dbg!(&update);
+        }
     }
 
     pub fn load(
