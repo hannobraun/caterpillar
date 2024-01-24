@@ -58,8 +58,9 @@ impl Loader {
                 continue;
             }
 
-            let watcher =
-                watch(entry.path().to_path_buf(), None, sender.clone())?;
+            let path = entry.path().to_path_buf();
+
+            let watcher = watch(path, None, sender.clone())?;
             watchers.push(watcher);
         }
 
