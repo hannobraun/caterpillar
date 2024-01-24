@@ -8,7 +8,7 @@ use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 use walkdir::WalkDir;
 
-use super::{channel::UpdateSender, watch::watch, UpdateReceiver};
+use super::{channel::UpdateSender, watch::watch, Update, UpdateReceiver};
 
 pub struct Loader {
     old_sender: UpdateSender,
@@ -107,12 +107,7 @@ impl Loader {
         let mut update_received = false;
 
         for update in self.receiver.try_iter() {
-            let (path, _, code) = update?;
-            let path = fs_path_to_script_path(path);
-            *self.scripts.inner.get_mut(&path).expect(
-                "Receiving update for script; expected it to be known",
-            ) = code;
-
+            handle_update(update, &mut self.scripts)?;
             update_received = true;
         }
 
@@ -139,6 +134,16 @@ impl Loader {
     pub fn updates(&self) -> &UpdateReceiver {
         &self.old_receiver
     }
+}
+
+fn handle_update(update: Update, scripts: &mut Scripts) -> anyhow::Result<()> {
+    let (path, _, code) = update?;
+    let path = fs_path_to_script_path(path);
+    *scripts
+        .inner
+        .get_mut(&path)
+        .expect("Receiving update for script; expected it to be known") = code;
+    Ok(())
 }
 
 fn fs_path_to_script_path(path: PathBuf) -> ScriptPath {
