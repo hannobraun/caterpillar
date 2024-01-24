@@ -10,7 +10,9 @@ pub struct Value {
     pub fragment: Option<FragmentId>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash, EnumVariantType)]
+#[derive(
+    Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, EnumVariantType,
+)]
 #[evt(derive(Clone, Debug, Eq, PartialEq))]
 pub enum ValuePayload {
     Array(Vec<ValuePayload>),
