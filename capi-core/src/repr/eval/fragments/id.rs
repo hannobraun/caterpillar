@@ -17,3 +17,15 @@ impl fmt::Display for FragmentId {
         write!(f, "{}", self.hash)
     }
 }
+
+impl Ord for FragmentId {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.hash.as_bytes().cmp(other.hash.as_bytes())
+    }
+}
+
+impl PartialOrd for FragmentId {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
