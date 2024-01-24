@@ -103,6 +103,21 @@ impl Loader {
         })
     }
 
+    pub fn wait_for_updated_scripts(&mut self) -> anyhow::Result<&Scripts> {
+        loop {
+            let update = self.receiver.recv()?;
+            handle_update(update, &mut self.scripts)?;
+
+            if !self.receiver.is_empty() {
+                continue;
+            }
+
+            break;
+        }
+
+        Ok(&self.scripts)
+    }
+
     pub fn scripts_if_updated(&mut self) -> anyhow::Result<Option<&Scripts>> {
         let mut update_received = false;
 

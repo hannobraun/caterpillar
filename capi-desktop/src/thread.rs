@@ -169,6 +169,12 @@ impl DesktopThread {
 
                     match platform_context.loader.updates().recv() {
                         Ok(update) => {
+                            // This is a placeholder, just to get debug output.
+                            let scripts = platform_context
+                                .loader
+                                .wait_for_updated_scripts()?;
+                            dbg!(scripts);
+
                             let (_path, parent, new_code) = update?;
                             interpreter.update(
                                 &new_code,
