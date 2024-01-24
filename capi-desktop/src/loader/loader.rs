@@ -71,10 +71,12 @@ impl Loader {
         })
     }
 
-    pub fn scripts_if_changed(&mut self) {
+    pub fn scripts_if_changed(&mut self) -> anyhow::Result<()> {
         for update in self.receiver.try_iter() {
             dbg!(&update);
         }
+
+        Ok(())
     }
 
     pub fn load(
