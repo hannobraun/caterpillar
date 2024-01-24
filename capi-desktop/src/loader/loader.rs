@@ -103,7 +103,7 @@ impl Loader {
         })
     }
 
-    pub fn scripts_if_changed(&mut self) -> anyhow::Result<Option<&Scripts>> {
+    pub fn scripts_if_updated(&mut self) -> anyhow::Result<Option<&Scripts>> {
         let mut update_received = false;
 
         for update in self.receiver.try_iter() {

@@ -166,7 +166,7 @@ impl DesktopThread {
                         Ok(update) => {
                             // This is a placeholder, just to get debug output.
                             let scripts =
-                                platform_context.loader.scripts_if_changed()?;
+                                platform_context.loader.scripts_if_updated()?;
                             dbg!(scripts);
 
                             let (_path, parent, new_code) = update?;
