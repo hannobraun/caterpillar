@@ -101,17 +101,6 @@ impl DesktopThread {
         // This is a placeholder. We'll need to preload all scripts that are
         // reachable from the entry script and put them in here.
         let scripts_placeholder = Scripts::default();
-
-        // I'm guessing that this is where the pre-loading of all the reachable
-        // scripts will go. But doing it with the current `Loader` API will be a
-        // pain.
-        //
-        // I'm not sure if it's better to power through and clean up `Loader`
-        // later, or if I should refactor `Loader` first, to make the change
-        // here easier.
-        //
-        // Whatever option I choose, I should be careful not to disrupt the
-        // current runtime `mod`, as to not require too big of a change at once.
         dbg!(&scripts_placeholder);
 
         let mut interpreter = Interpreter::new()?;
