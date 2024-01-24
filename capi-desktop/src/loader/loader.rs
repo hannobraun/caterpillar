@@ -71,7 +71,7 @@ impl Loader {
         })
     }
 
-    pub fn scripts(&mut self) {
+    pub fn scripts_if_changed(&mut self) {
         for update in self.receiver.try_iter() {
             dbg!(&update);
         }
