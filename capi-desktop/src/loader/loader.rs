@@ -15,6 +15,7 @@ pub struct Loader {
     old_receiver: UpdateReceiver,
     receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
+    scripts: Scripts,
 }
 
 // To adapt the `Loader` API for the ongoing changes to pipeline, we'll probably
@@ -100,23 +101,20 @@ impl Loader {
             old_receiver,
             receiver,
             watchers,
+            scripts,
         })
     }
 
     pub fn scripts_if_changed(&mut self) -> anyhow::Result<()> {
         for update in self.receiver.try_iter() {
-            let (path, _, _) = update?;
-
-            let path = path
-                .iter()
-                .map(|os_str| {
-                    let string = os_str.to_string_lossy().into_owned();
-                    value::Symbol(string)
-                })
-                .collect::<Vec<_>>();
-
-            dbg!(path);
+            let (path, _, code) = update?;
+            let path = fs_path_to_script_path(path);
+            *self.scripts.inner.get_mut(&path).expect(
+                "Receiving update for script; expected it to be known",
+            ) = code;
         }
+
+        dbg!(&self.scripts);
 
         Ok(())
     }
