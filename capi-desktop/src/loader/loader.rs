@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, path::PathBuf};
 
 use capi_core::{
-    pipeline::ScriptPath,
+    pipeline::{ScriptPath, Scripts},
     repr::eval::{fragments::FragmentId, value},
 };
 use notify::RecommendedWatcher;
@@ -83,6 +83,15 @@ impl Loader {
             let path = fs_path_to_script_path(path);
             scripts.insert(path, Some(code));
         }
+
+        let scripts = scripts
+            .into_iter()
+            .map(|(path, code)| {
+                let code = code.expect("Made sure scripts are complete");
+                (path, code)
+            })
+            .collect();
+        let scripts = Scripts { inner: scripts };
 
         dbg!(scripts);
 
