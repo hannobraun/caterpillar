@@ -165,7 +165,9 @@ impl DesktopThread {
                     match platform_context.loader.updates().recv() {
                         Ok(update) => {
                             // This is a placeholder, just to get debug output.
-                            platform_context.loader.scripts_if_changed()?;
+                            let scripts =
+                                platform_context.loader.scripts_if_changed()?;
+                            dbg!(scripts);
 
                             let (_path, parent, new_code) = update?;
                             interpreter.update(

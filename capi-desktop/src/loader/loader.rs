@@ -103,18 +103,24 @@ impl Loader {
         })
     }
 
-    pub fn scripts_if_changed(&mut self) -> anyhow::Result<()> {
+    pub fn scripts_if_changed(&mut self) -> anyhow::Result<Option<&Scripts>> {
+        let mut update_received = false;
+
         for update in self.receiver.try_iter() {
             let (path, _, code) = update?;
             let path = fs_path_to_script_path(path);
             *self.scripts.inner.get_mut(&path).expect(
                 "Receiving update for script; expected it to be known",
             ) = code;
+
+            update_received = true;
         }
 
-        dbg!(&self.scripts);
-
-        Ok(())
+        if update_received {
+            Ok(Some(&self.scripts))
+        } else {
+            Ok(None)
+        }
     }
 
     pub fn load(
