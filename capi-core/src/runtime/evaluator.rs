@@ -208,6 +208,7 @@ impl RuntimeState {
 pub struct EvaluatorError {
     #[source]
     pub kind: EvaluatorErrorKind,
+
     pub fragment: FragmentId,
 }
 
