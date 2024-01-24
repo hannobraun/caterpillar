@@ -93,14 +93,14 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
-        // This is a placeholder. We'll need to preload all scripts that are
-        // reachable from the entry script and put them in here.
-        let scripts = Scripts::default();
-
         let mut loader = Loader::new(&entry_script_path)?;
 
         let parent = None;
         loader.load(&entry_script_path, parent)?;
+
+        // This is a placeholder. We'll need to preload all scripts that are
+        // reachable from the entry script and put them in here.
+        let scripts = Scripts::default();
 
         // I'm guessing that this is where the pre-loading of all the reachable
         // scripts will go. But doing it with the current `Loader` API will be a
