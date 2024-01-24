@@ -94,8 +94,6 @@ impl Loader {
             .collect();
         let scripts = Scripts { inner: scripts };
 
-        dbg!(scripts);
-
         Ok(Self {
             old_sender,
             old_receiver,
