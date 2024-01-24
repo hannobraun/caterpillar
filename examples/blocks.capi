@@ -47,4 +47,5 @@
 }
     fn
 
-init loop
+:main { init loop } fn
+main

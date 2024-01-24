@@ -5,10 +5,16 @@
 }
     fn
 
+:main
 {
-    print
-    200 delay_ms
-    1 +
+    {
+        print
+        200 delay_ms
+        1 +
+    }
+    0
+        loop
 }
-0
-    loop
+    fn
+
+main

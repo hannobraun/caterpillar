@@ -1,1 +1,2 @@
-1 2 + print
+:main { 1 2 + print } fn
+main

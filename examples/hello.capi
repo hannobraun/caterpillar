@@ -1,1 +1,2 @@
-"Hello, world!" print
+:main { "Hello, world!" print } fn
+main
