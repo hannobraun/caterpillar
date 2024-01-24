@@ -13,7 +13,7 @@ pub struct Value {
 #[derive(
     Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, EnumVariantType,
 )]
-#[evt(derive(Clone, Debug, Eq, PartialEq))]
+#[evt(derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd))]
 pub enum ValuePayload {
     Array(Vec<ValuePayload>),
     Block { start: FragmentId },
