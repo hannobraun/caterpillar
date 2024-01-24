@@ -100,7 +100,7 @@ impl DesktopThread {
 
         // This is a placeholder. We'll need to preload all scripts that are
         // reachable from the entry script and put them in here.
-        let scripts = Scripts::default();
+        let scripts_placeholder = Scripts::default();
 
         // I'm guessing that this is where the pre-loading of all the reachable
         // scripts will go. But doing it with the current `Loader` API will be a
@@ -112,7 +112,7 @@ impl DesktopThread {
         //
         // Whatever option I choose, I should be careful not to disrupt the
         // current runtime `mod`, as to not require too big of a change at once.
-        dbg!(&scripts);
+        dbg!(&scripts_placeholder);
 
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =
@@ -131,7 +131,11 @@ impl DesktopThread {
             match platform_context.loader.updates().try_recv() {
                 Ok(update) => {
                     let (_path, parent, new_code) = update?;
-                    interpreter.update(&new_code, parent, &scripts)?;
+                    interpreter.update(
+                        &new_code,
+                        parent,
+                        &scripts_placeholder,
+                    )?;
                 }
                 Err(TryRecvError::Empty) => {}
                 Err(TryRecvError::Disconnected) => break,
@@ -150,8 +154,11 @@ impl DesktopThread {
                         {
                             let (_path, parent, new_code) = update?;
 
-                            let start = interpreter
-                                .update(&new_code, parent, &scripts)?;
+                            let start = interpreter.update(
+                                &new_code,
+                                parent,
+                                &scripts_placeholder,
+                            )?;
 
                             if parent == loading_parent {
                                 interpreter.evaluator().call_stack.push(
@@ -172,7 +179,11 @@ impl DesktopThread {
                             platform_context.loader.scripts();
 
                             let (_path, parent, new_code) = update?;
-                            interpreter.update(&new_code, parent, &scripts)?;
+                            interpreter.update(
+                                &new_code,
+                                parent,
+                                &scripts_placeholder,
+                            )?;
                         }
                         Err(RecvError) => break,
                     }
