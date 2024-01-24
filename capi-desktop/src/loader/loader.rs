@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use capi_core::repr::eval::fragments::FragmentId;
+use capi_core::repr::eval::{fragments::FragmentId, value};
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 use walkdir::WalkDir;
@@ -74,6 +74,15 @@ impl Loader {
     pub fn scripts_if_changed(&mut self) -> anyhow::Result<()> {
         for update in self.receiver.try_iter() {
             let (path, _, _) = update?;
+
+            let path = path
+                .iter()
+                .map(|os_str| {
+                    let string = os_str.to_string_lossy().into_owned();
+                    value::Symbol(string)
+                })
+                .collect::<Vec<_>>();
+
             dbg!(path);
         }
 
