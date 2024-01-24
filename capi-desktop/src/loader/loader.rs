@@ -1,6 +1,9 @@
-use std::path::PathBuf;
+use std::{collections::BTreeMap, path::PathBuf};
 
-use capi_core::repr::eval::{fragments::FragmentId, value};
+use capi_core::{
+    pipeline::ScriptPath,
+    repr::eval::{fragments::FragmentId, value},
+};
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 use walkdir::WalkDir;
@@ -47,6 +50,8 @@ impl Loader {
         let mut entry_script_dir = entry_script_path.clone();
         entry_script_dir.pop();
 
+        let mut scripts = BTreeMap::new();
+
         for entry in WalkDir::new(entry_script_dir) {
             let entry = entry?;
 
@@ -60,9 +65,26 @@ impl Loader {
 
             let path = entry.path().to_path_buf();
 
-            let watcher = watch(path, None, sender.clone())?;
+            let watcher = watch(path.clone(), None, sender.clone())?;
             watchers.push(watcher);
+
+            let path = fs_path_to_script_path(path);
+            scripts.insert(path, None);
         }
+
+        loop {
+            let all_scripts_loaded =
+                scripts.values().all(|code| code.is_some());
+            if all_scripts_loaded {
+                break;
+            }
+
+            let (path, _, code) = receiver.recv()??;
+            let path = fs_path_to_script_path(path);
+            scripts.insert(path, Some(code));
+        }
+
+        dbg!(scripts);
 
         Ok(Self {
             old_sender,
@@ -106,4 +128,13 @@ impl Loader {
     pub fn updates(&self) -> &UpdateReceiver {
         &self.old_receiver
     }
+}
+
+fn fs_path_to_script_path(path: PathBuf) -> ScriptPath {
+    path.iter()
+        .map(|os_str| {
+            let string = os_str.to_string_lossy().into_owned();
+            value::Symbol(string)
+        })
+        .collect::<Vec<_>>()
 }
