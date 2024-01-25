@@ -106,6 +106,14 @@ impl Loader {
     }
 
     pub fn wait_for_updated_scripts(&mut self) -> anyhow::Result<&Scripts> {
+        if self.update_available {
+            // An update is already available. We don't need to wait for the
+            // next one, as the loop below would do.
+            self.apply_available_update()?;
+            self.update_available = false;
+            return Ok(&self.scripts);
+        }
+
         loop {
             let update = self.receiver.recv()?;
             handle_update(update, &mut self.scripts)?;
