@@ -1,11 +1,18 @@
 use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
-    repr::eval::fragments::FragmentId, value, DataStackResult, Interpreter,
-    PlatformFunction, PlatformFunctionState, RuntimeContext,
+    platform::Platform, repr::eval::fragments::FragmentId, value,
+    DataStackResult, Interpreter, PlatformFunction, PlatformFunctionState,
+    RuntimeContext,
 };
 
 use crate::loader::Loader;
+
+pub struct DesktopPlatform;
+
+impl Platform for DesktopPlatform {
+    type Context = PlatformContext;
+}
 
 pub struct PlatformContext {
     /// The path of the script that was the entry point into the current program
