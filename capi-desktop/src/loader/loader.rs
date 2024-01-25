@@ -95,13 +95,15 @@ impl Loader {
             .collect();
         let scripts = Scripts { inner: scripts };
 
+        let update_available = false;
+
         Ok(Self {
             old_sender,
             old_receiver,
             receiver,
             watchers,
             scripts,
-            update_available: false,
+            update_available,
         })
     }
 
