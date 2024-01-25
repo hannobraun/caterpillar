@@ -137,7 +137,29 @@ impl<C> Interpreter<C> {
 
         if self.state.finished() {
             // Restart the program.
+
+            // We need some way to tell the evaluator to run main after the top-
+            // level context was evaluated. We do this by pushing a stack frame
+            // to the bottom of the call stack.
+            //
+            // But this can't be a regular `StackFrame::Fragment` because the
+            // `main` function isn't known yet. It won't be, until the
+            // evaluation of the top-level context has finished, at which point
+            // it will be too late to tell the evaluator anything. (Unless we
+            // make some larger changes to `Interpreter`, which is not desirable
+            // at this point.)
+            //
+            // As a solution, we have this special `StackFrame::Main` as a
+            // stopgap. We push it to the bottom of the call stack, then the
+            // top-level context evaluation on top. As a result, it will tell
+            // the evaluator to run the `main` function once the evaluation of
+            // the top-level function has finished.
+            //
+            // Once compile-time evaluation of the top-level context is working,
+            // all of this can be removed, and we can just push the `main`
+            // function's first body fragment here directly.
             self.evaluator.call_stack.push(StackFrame::Main);
+
             self.evaluator
                 .call_stack
                 .push(StackFrame::Fragment { fragment_id: start });
