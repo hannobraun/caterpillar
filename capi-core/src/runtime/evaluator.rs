@@ -53,6 +53,25 @@ impl<C> Evaluator<C> {
             };
 
             match current_stack_frame {
+                StackFrame::Main { start } => {
+                    let main = self.global_namespace.resolve("main").map_err(
+                        |err| EvaluatorError {
+                            kind: err.into(),
+                            fragment: start,
+                        },
+                    )?;
+
+                    match main {
+                        ItemInModule::UserDefinedFunction(main) => {
+                            self.call_stack.push(StackFrame::Fragment {
+                                fragment_id: main.body.start,
+                            })
+                        }
+                        item => {
+                            panic!("Expected `main` function, got {item:?}")
+                        }
+                    }
+                }
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = fragments.get(fragment_id);
 
@@ -78,6 +97,11 @@ impl<C> Evaluator<C> {
         };
 
         let runtime_state = match current_stack_frame {
+            StackFrame::Main { .. } => {
+                // Nothing to do. Already set the appropriate next stack frame
+                // above.
+                RuntimeState::Running
+            }
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
