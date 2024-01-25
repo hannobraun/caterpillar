@@ -13,7 +13,7 @@ use super::{
 
 pub struct Interpreter<P: Platform> {
     fragments: Fragments,
-    evaluator: Evaluator<P::Context>,
+    evaluator: Evaluator<P>,
     state: RuntimeState,
 }
 
@@ -37,7 +37,7 @@ impl<P: Platform> Interpreter<P> {
         })
     }
 
-    pub fn evaluator(&mut self) -> &mut Evaluator<P::Context> {
+    pub fn evaluator(&mut self) -> &mut Evaluator<P> {
         &mut self.evaluator
     }
 

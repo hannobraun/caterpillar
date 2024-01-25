@@ -1,5 +1,6 @@
 use crate::{
     pipeline::{Function, Module},
+    platform::Platform,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -17,14 +18,14 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct Evaluator<C> {
-    pub global_namespace: Namespace<C>,
+pub struct Evaluator<P: Platform> {
+    pub global_namespace: Namespace<P::Context>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
     pub side_stack: DataStack,
 }
 
-impl<C> Evaluator<C> {
+impl<P: Platform> Evaluator<P> {
     pub fn new(module: Module) -> Self {
         Self {
             global_namespace: Namespace::new(module),
@@ -37,7 +38,7 @@ impl<C> Evaluator<C> {
     pub fn step(
         &mut self,
         fragments: &Fragments,
-        platform_context: &mut C,
+        platform_context: &mut P::Context,
     ) -> Result<RuntimeState, EvaluatorError> {
         // What we need to do next depends on what's on top of the call stack.
         // Let's get the current stack frame off, and replace it with a stack
