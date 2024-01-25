@@ -16,6 +16,7 @@ pub struct Loader {
     receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
     scripts: Scripts,
+    update_received: bool,
 }
 
 // To adapt the `Loader` API for the ongoing changes to pipeline, we'll probably
@@ -100,6 +101,7 @@ impl Loader {
             receiver,
             watchers,
             scripts,
+            update_received: false,
         })
     }
 
@@ -119,14 +121,13 @@ impl Loader {
     }
 
     pub fn scripts_if_updated(&mut self) -> anyhow::Result<Option<&Scripts>> {
-        let mut update_received = false;
-
         for update in self.receiver.try_iter() {
             handle_update(update, &mut self.scripts)?;
-            update_received = true;
+            self.update_received = true;
         }
 
-        if update_received {
+        if self.update_received {
+            self.update_received = false;
             Ok(Some(&self.scripts))
         } else {
             Ok(None)
