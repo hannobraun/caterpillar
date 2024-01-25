@@ -264,6 +264,7 @@ mod tests {
 
     use crate::{
         pipeline::{PipelineError, Scripts},
+        platform::Platform,
         runtime::evaluator::EvaluatorError,
         value, DataStackResult, PlatformFunction, PlatformFunctionState,
         RuntimeContext,
@@ -516,6 +517,12 @@ mod tests {
 
             Ok(())
         }
+    }
+
+    pub struct TestPlatform;
+
+    impl Platform for TestPlatform {
+        type Context = PlatformContext;
     }
 
     #[derive(Clone, Debug, Default)]
