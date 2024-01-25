@@ -118,17 +118,14 @@ impl DesktopThread {
 
             match platform_context.loader.updates().try_recv() {
                 Ok(update) => {
-                    // This is a placeholder, just to get debug output.
+                    // This shouldn't block for too long, as we know at this
+                    // point that there has been a change, via the legacy update
+                    // mechanism.
                     let scripts =
-                        platform_context.loader.scripts_if_updated()?;
-                    dbg!(scripts);
+                        platform_context.loader.wait_for_updated_scripts()?;
 
                     let (_path, parent, new_code) = update?;
-                    interpreter.update(
-                        &new_code,
-                        parent,
-                        &scripts_placeholder,
-                    )?;
+                    interpreter.update(&new_code, parent, scripts)?;
                 }
                 Err(TryRecvError::Empty) => {}
                 Err(TryRecvError::Disconnected) => break,
