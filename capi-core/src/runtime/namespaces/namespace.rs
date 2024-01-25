@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, fmt};
 
 use crate::{
     intrinsics,
@@ -96,12 +96,34 @@ impl<C> Namespace<C> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub enum ItemInModule<'r, C> {
     Binding(Value),
     IntrinsicFunction(IntrinsicFunction),
     PlatformFunction(&'r PlatformFunction<C>),
     UserDefinedFunction(&'r Function),
+}
+
+impl<C> fmt::Debug for ItemInModule<'_, C> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Binding(value) => {
+                f.debug_tuple("Binding").field(value).finish()
+            }
+            Self::IntrinsicFunction(intrinsic_function) => f
+                .debug_tuple("IntrinsicFunction")
+                .field(intrinsic_function)
+                .finish(),
+            Self::PlatformFunction(platform_function) => f
+                .debug_tuple("PlatformFunction")
+                .field(platform_function)
+                .finish(),
+            Self::UserDefinedFunction(user_defined_function) => f
+                .debug_tuple("UserDefinedFunction")
+                .field(user_defined_function)
+                .finish(),
+        }
+    }
 }
 
 #[derive(Debug, thiserror::Error)]
