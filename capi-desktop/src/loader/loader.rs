@@ -121,10 +121,7 @@ impl Loader {
     }
 
     pub fn scripts_if_updated(&mut self) -> anyhow::Result<Option<&Scripts>> {
-        for update in self.receiver.try_iter() {
-            handle_update(update, &mut self.scripts)?;
-            self.update_available = true;
-        }
+        self.apply_available_update()?;
 
         if self.update_available {
             self.update_available = false;
@@ -132,6 +129,15 @@ impl Loader {
         } else {
             Ok(None)
         }
+    }
+
+    fn apply_available_update(&mut self) -> anyhow::Result<()> {
+        for update in self.receiver.try_iter() {
+            handle_update(update, &mut self.scripts)?;
+            self.update_available = true;
+        }
+
+        Ok(())
     }
 
     pub fn load(
