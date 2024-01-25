@@ -1,3 +1,2 @@
 :print_number { 1 2 + print } fn
 :main { print_number } fn
-main

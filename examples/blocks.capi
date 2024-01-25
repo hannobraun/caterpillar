@@ -48,4 +48,3 @@
     fn
 
 :main { init loop } fn
-main

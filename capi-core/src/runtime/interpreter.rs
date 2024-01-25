@@ -137,6 +137,7 @@ impl<C> Interpreter<C> {
 
         if self.state.finished() {
             // Restart the program.
+            self.evaluator.call_stack.push(StackFrame::Main);
             self.evaluator
                 .call_stack
                 .push(StackFrame::Fragment { fragment_id: start });
@@ -256,12 +257,10 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            :main { f } fn
-            main";
+            :main { f } fn";
         let updated = "
             :f { nop 2 ping f } fn
-            :main { f } fn
-            main";
+            :main { f } fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -280,14 +279,12 @@ mod tests {
             :loop { f loop } fn
             :f { nop 1 ping } fn
             :g { nop 1 ping } fn
-            :main { loop } fn
-            main";
+            :main { loop } fn";
         let updated = "
             :loop { g loop } fn
             :f { nop 2 ping } fn
             :g { nop 1 ping } fn
-            :main { loop } fn
-            main";
+            :main { loop } fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -304,12 +301,10 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            :main { f } fn
-            main";
+            :main { f } fn";
         let updated = "
             :f { nop 2 ping f } fn
-            :main { f } fn
-            main";
+            :main { f } fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -335,9 +330,7 @@ mod tests {
                     eval
                     eval
             }
-                fn
-
-            main";
+                fn";
         let updated = "
             :main
             {
@@ -346,9 +339,7 @@ mod tests {
                     eval
                     eval
             }
-                fn
-
-            main";
+                fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -373,9 +364,7 @@ mod tests {
                 f eval
                 g eval
             }
-                fn
-
-            main";
+                fn";
         let updated = "
             :f { { nop 2 ping } } fn
             :g { { nop 3 ping } } fn
@@ -386,9 +375,7 @@ mod tests {
                 f eval
                 g eval
             }
-                fn
-
-            main";
+                fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -412,9 +399,7 @@ mod tests {
                 f
                 1 ping
             }
-                fn
-
-            main";
+                fn";
         let updated = "
             :f { nop 1 ping } fn
 
@@ -423,9 +408,7 @@ mod tests {
                 f
                 2 ping
             }
-                fn
-
-            main";
+                fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
@@ -442,12 +425,10 @@ mod tests {
 
         let original = "
             :f { nop 1 ping f } fn
-            :main { f } fn
-            main";
+            :main { f } fn";
         let updated = "
             :g { nop 1 ping g } fn
-            :main { g } fn
-            main";
+            :main { g } fn";
 
         interpreter.update(original)?;
         interpreter.wait_for_ping_on_channel(1)?;
