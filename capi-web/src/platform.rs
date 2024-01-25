@@ -2,11 +2,17 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    value, DataStackResult, Interpreter, PlatformFunction,
+    platform::Platform, value, DataStackResult, Interpreter, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
 };
 use chrono::Local;
 use futures::executor::block_on;
+
+pub struct WebPlatform;
+
+impl Platform for WebPlatform {
+    type Context = Context;
+}
 
 pub fn register(interpreter: &mut Interpreter<Context>) {
     interpreter.register_platform([
