@@ -39,13 +39,7 @@ pub enum StackFrame {
     ///
     /// This is a transitionary feature to ease the introduction of `main`
     /// functions. It can be removed, once compile-time evaluation is finished.
-    Main {
-        /// The initial fragment
-        ///
-        /// Just so we have something to put into the resolve error, if
-        /// necessary.
-        start: FragmentId,
-    },
+    Main,
 
     Fragment {
         fragment_id: FragmentId,
