@@ -8,7 +8,7 @@ use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
     loader::Loader,
-    platform::{self, PixelOp, PlatformContext},
+    platform::{self, DesktopPlatform, PixelOp, PlatformContext},
 };
 
 pub struct DesktopThread {
@@ -24,7 +24,7 @@ impl DesktopThread {
         impl RunTarget for RunProgram {
             fn finish(
                 &self,
-                _: &mut Interpreter<PlatformContext>,
+                _: &mut Interpreter<DesktopPlatform>,
                 _: &mut PlatformContext,
             ) -> anyhow::Result<()> {
                 eprintln!();
@@ -46,7 +46,7 @@ impl DesktopThread {
         impl RunTarget for RunTests {
             fn finish(
                 &self,
-                interpreter: &mut Interpreter<PlatformContext>,
+                interpreter: &mut Interpreter<DesktopPlatform>,
                 platform_context: &mut PlatformContext,
             ) -> anyhow::Result<()> {
                 interpreter.run_tests(platform_context)?;
@@ -223,7 +223,7 @@ type JoinHandle = thread::JoinHandle<anyhow::Result<()>>;
 trait RunTarget: Send + 'static {
     fn finish(
         &self,
-        interpreter: &mut Interpreter<PlatformContext>,
+        interpreter: &mut Interpreter<DesktopPlatform>,
         platform_context: &mut PlatformContext,
     ) -> anyhow::Result<()>;
 }

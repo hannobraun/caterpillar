@@ -14,7 +14,7 @@ impl Platform for WebPlatform {
     type Context = Context;
 }
 
-pub fn register(interpreter: &mut Interpreter<Context>) {
+pub fn register(interpreter: &mut Interpreter<WebPlatform>) {
     interpreter.register_platform([
         (delay_ms as PlatformFunction<Context>, "delay_ms"),
         (print, "print"),

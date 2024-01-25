@@ -64,7 +64,7 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
-pub fn register(interpreter: &mut Interpreter<PlatformContext>) {
+pub fn register(interpreter: &mut Interpreter<DesktopPlatform>) {
     interpreter.register_platform([
         (
             clear_pixel as PlatformFunction<PlatformContext>,

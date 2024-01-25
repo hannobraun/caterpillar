@@ -1,5 +1,6 @@
 use crate::{
     pipeline::{self, Module, PipelineError, PipelineOutput, Scripts},
+    platform::Platform,
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
     value, PlatformFunction,
 };
@@ -11,9 +12,9 @@ use super::{
 };
 
 #[derive(Debug)]
-pub struct Interpreter<C> {
+pub struct Interpreter<P: Platform> {
     fragments: Fragments,
-    evaluator: Evaluator<C>,
+    evaluator: Evaluator<P::Context>,
     state: RuntimeState,
 }
 
@@ -28,7 +29,7 @@ pub struct Interpreter<C> {
 // Then `Loader` can load all reachable scripts (instead of needing to be told
 // every single script it's supposed to load) and provide a whole `Scripts` on
 // every update.
-impl<C> Interpreter<C> {
+impl<P: Platform> Interpreter<P> {
     pub fn new() -> Result<Self, PipelineError> {
         Ok(Interpreter {
             fragments: Fragments::new(),
@@ -37,13 +38,15 @@ impl<C> Interpreter<C> {
         })
     }
 
-    pub fn evaluator(&mut self) -> &mut Evaluator<C> {
+    pub fn evaluator(&mut self) -> &mut Evaluator<P::Context> {
         &mut self.evaluator
     }
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (PlatformFunction<C>, &'static str)>,
+        functions: impl IntoIterator<
+            Item = (PlatformFunction<P::Context>, &'static str),
+        >,
     ) {
         self.evaluator.global_namespace.register_platform(functions);
     }
@@ -170,7 +173,7 @@ impl<C> Interpreter<C> {
 
     pub fn step(
         &mut self,
-        platform_context: &mut C,
+        platform_context: &mut P::Context,
     ) -> Result<RuntimeState, EvaluatorError> {
         self.state = self.evaluator.step(&self.fragments, platform_context)?;
         Ok(self.state)
@@ -178,7 +181,7 @@ impl<C> Interpreter<C> {
 
     pub fn run_tests(
         &mut self,
-        platform_context: &mut C,
+        platform_context: &mut P::Context,
     ) -> Result<(), TestError> {
         while !self.step(platform_context)?.finished() {}
 
@@ -463,7 +466,7 @@ mod tests {
     }
 
     struct Interpreter {
-        inner: crate::Interpreter<PlatformContext>,
+        inner: crate::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
 
