@@ -11,7 +11,6 @@ use super::{
     evaluator::{Evaluator, EvaluatorError, RuntimeState},
 };
 
-#[derive(Debug)]
 pub struct Interpreter<P: Platform> {
     fragments: Fragments,
     evaluator: Evaluator<P::Context>,
