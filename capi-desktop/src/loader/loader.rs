@@ -95,7 +95,12 @@ impl Loader {
             .collect();
         let scripts = Scripts { inner: scripts };
 
-        let update_available = false;
+        // We just loaded the initial code, so if a caller asks us now to return
+        // the current `Scripts`, we don't need that to wait for changes.
+        //
+        // By setting this flag, we signal that updates are currently available,
+        // and make that happen.
+        let update_available = true;
 
         Ok(Self {
             old_sender,
