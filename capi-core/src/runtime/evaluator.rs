@@ -68,6 +68,8 @@ impl<C> Evaluator<C> {
                             })
                         }
                         item => {
+                            // This isn't great error handling, but since
+                            // `StackFrame::Main` is just a stopgap, it'll do.
                             panic!("Expected `main` function, got {item:?}")
                         }
                     }
