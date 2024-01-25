@@ -155,6 +155,8 @@ impl Loader {
         Ok(())
     }
 
+    /// This is a legacy method. It needs to be removed, once all callers have
+    /// migrated to the new API.
     pub fn load(
         &mut self,
         path: impl Into<PathBuf>,
@@ -168,6 +170,8 @@ impl Loader {
         Ok(())
     }
 
+    /// This is a legacy method. It needs to be removed, once all callers have
+    /// migrated to the new API.
     pub fn updates(&self) -> &UpdateReceiver {
         &self.old_receiver
     }
