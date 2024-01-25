@@ -28,10 +28,7 @@ pub async fn run(
         sleep_duration: None,
     };
 
-    interpreter.register_platform([
-        (delay_ms as PlatformFunction<Context>, "delay_ms"),
-        (print, "print"),
-    ]);
+    register(&mut interpreter);
 
     let mut new_code: Option<String> = None;
 
@@ -91,6 +88,13 @@ pub async fn run(
     }
 
     Ok(())
+}
+
+pub fn register(interpreter: &mut Interpreter<Context>) {
+    interpreter.register_platform([
+        (delay_ms as PlatformFunction<Context>, "delay_ms"),
+        (print, "print"),
+    ]);
 }
 
 pub struct Context {
