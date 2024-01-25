@@ -136,6 +136,13 @@ impl DesktopThread {
             match runtime_state {
                 RuntimeState::Running => {}
                 RuntimeState::Sleeping => {
+                    // We don't need to port this code to the new updates API.
+                    // It handles the initial module update after one was
+                    // loaded through the `mod` platform function, and that's no
+                    // longer going to be necessary once we transitioned to
+                    // compile-time evaluation of the top-level context, as
+                    // we'll have a compile-time `mod` then.
+
                     if let Some(loading_parent) =
                         platform_context.loading_script.take()
                     {
