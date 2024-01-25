@@ -101,7 +101,6 @@ impl DesktopThread {
         // This is a placeholder. We'll need to preload all scripts that are
         // reachable from the entry script and put them in here.
         let scripts_placeholder = Scripts::default();
-        dbg!(&scripts_placeholder);
 
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =

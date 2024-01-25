@@ -42,5 +42,7 @@ pub fn evaluate(
     // the script. That data structure would contain the functions, tests,
     // bindings, etc.
 
+    dbg!(_scripts);
+
     Ok(Module::default())
 }
