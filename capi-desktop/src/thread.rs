@@ -107,7 +107,7 @@ impl DesktopThread {
             PlatformContext::new(entry_script_path, loader)
                 .with_pixel_ops_sender(pixel_ops);
 
-        platform::register(&mut interpreter);
+        interpreter.register_platform(platform::register());
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {

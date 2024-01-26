@@ -2,8 +2,7 @@ use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
     platform::Platform, repr::eval::fragments::FragmentId, value,
-    DataStackResult, Interpreter, PlatformFunction, PlatformFunctionState,
-    RuntimeContext,
+    DataStackResult, PlatformFunction, PlatformFunctionState, RuntimeContext,
 };
 
 use crate::loader::Loader;
@@ -64,8 +63,10 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
-pub fn register(interpreter: &mut Interpreter<DesktopPlatform>) {
-    interpreter.register_platform([
+pub fn register(
+) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
+{
+    [
         (
             clear_pixel as PlatformFunction<PlatformContext>,
             "clear_pixel",
@@ -74,7 +75,7 @@ pub fn register(interpreter: &mut Interpreter<DesktopPlatform>) {
         (mod_, "mod"),
         (print, "print"),
         (set_pixel, "set_pixel"),
-    ]);
+    ]
 }
 
 fn clear_pixel(

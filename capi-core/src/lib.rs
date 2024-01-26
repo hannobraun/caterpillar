@@ -29,13 +29,13 @@ mod tests {
     use capi_desktop::{
         core::{pipeline::Scripts, Interpreter},
         loader::Loader,
-        platform::PlatformContext,
+        platform::{DesktopPlatform, PlatformContext},
     };
 
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
-        capi_desktop::platform::register(&mut interpreter);
+        let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
+        interpreter.register_platform(capi_desktop::platform::register());
 
         let script_path = PathBuf::from("../tests.capi");
         let parent = None;
