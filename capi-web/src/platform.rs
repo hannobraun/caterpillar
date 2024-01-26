@@ -14,7 +14,7 @@ impl Platform for WebPlatform {
     type Context = Context;
 }
 
-pub fn register(
+pub fn functions(
 ) -> impl IntoIterator<Item = (PlatformFunction<Context>, &'static str)> {
     [
         (delay_ms as PlatformFunction<Context>, "delay_ms"),

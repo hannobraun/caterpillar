@@ -5,7 +5,7 @@ use capi_core::{pipeline::Scripts, Interpreter, RuntimeState};
 use gloo_timers::future::sleep;
 use tracing::debug;
 
-use crate::platform::{register, Context, Event, Events, WebPlatform};
+use crate::platform::{functions, Context, Event, Events, WebPlatform};
 
 pub async fn run(
     script: &str,
@@ -25,7 +25,7 @@ pub async fn run(
         sleep_duration: None,
     };
 
-    interpreter.register_platform(register());
+    interpreter.register_platform(functions());
 
     let mut new_code: Option<String> = None;
 
