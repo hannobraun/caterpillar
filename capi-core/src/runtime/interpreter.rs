@@ -472,7 +472,7 @@ mod tests {
     impl Interpreter {
         pub fn new() -> anyhow::Result<Self> {
             let mut inner = crate::Interpreter::new()?;
-            inner.register_platform(functions());
+            inner.register_platform(TestPlatform::functions());
 
             Ok(Self {
                 inner,
@@ -522,17 +522,17 @@ mod tests {
 
     impl Platform for TestPlatform {
         type Context = PlatformContext;
+
+        fn functions() -> impl IntoIterator<
+            Item = (PlatformFunction<PlatformContext>, &'static str),
+        > {
+            [(ping as PlatformFunction<PlatformContext>, "ping")]
+        }
     }
 
     #[derive(Clone, Debug, Default)]
     pub struct PlatformContext {
         pub channels: HashMap<i64, i64>,
-    }
-
-    pub fn functions(
-    ) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
-    {
-        [(ping as PlatformFunction<PlatformContext>, "ping")]
     }
 
     pub fn ping(

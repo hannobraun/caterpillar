@@ -1,14 +1,14 @@
 use std::{path::PathBuf, thread};
 
 use capi_core::{
-    pipeline::Scripts, runtime::call_stack::StackFrame, Interpreter,
-    RuntimeState,
+    pipeline::Scripts, platform::Platform, runtime::call_stack::StackFrame,
+    Interpreter, RuntimeState,
 };
 use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
 
 use crate::{
     loader::Loader,
-    platform::{self, DesktopPlatform, PixelOp, PlatformContext},
+    platform::{DesktopPlatform, PixelOp, PlatformContext},
 };
 
 pub struct DesktopThread {
@@ -107,7 +107,7 @@ impl DesktopThread {
             PlatformContext::new(entry_script_path, loader)
                 .with_pixel_ops_sender(pixel_ops);
 
-        interpreter.register_platform(platform::functions());
+        interpreter.register_platform(DesktopPlatform::functions());
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {

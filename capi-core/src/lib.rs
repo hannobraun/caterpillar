@@ -27,7 +27,7 @@ mod tests {
     use std::path::PathBuf;
 
     use capi_desktop::{
-        core::{pipeline::Scripts, Interpreter},
+        core::{pipeline::Scripts, platform::Platform, Interpreter},
         loader::Loader,
         platform::{DesktopPlatform, PlatformContext},
     };
@@ -35,7 +35,7 @@ mod tests {
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
-        interpreter.register_platform(capi_desktop::platform::functions());
+        interpreter.register_platform(DesktopPlatform::functions());
 
         let script_path = PathBuf::from("../tests.capi");
         let parent = None;

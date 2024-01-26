@@ -11,6 +11,21 @@ pub struct DesktopPlatform;
 
 impl Platform for DesktopPlatform {
     type Context = PlatformContext;
+
+    fn functions(
+    ) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
+    {
+        [
+            (
+                clear_pixel as PlatformFunction<PlatformContext>,
+                "clear_pixel",
+            ),
+            (delay_ms, "delay_ms"),
+            (mod_, "mod"),
+            (print, "print"),
+            (set_pixel, "set_pixel"),
+        ]
+    }
 }
 
 pub struct PlatformContext {
@@ -61,21 +76,6 @@ impl Sender {
 pub enum PixelOp {
     Clear([i64; 2]),
     Set([i64; 2]),
-}
-
-pub fn functions(
-) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
-{
-    [
-        (
-            clear_pixel as PlatformFunction<PlatformContext>,
-            "clear_pixel",
-        ),
-        (delay_ms, "delay_ms"),
-        (mod_, "mod"),
-        (print, "print"),
-        (set_pixel, "set_pixel"),
-    ]
 }
 
 fn clear_pixel(
