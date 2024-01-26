@@ -27,8 +27,10 @@ pub struct Evaluator<P: Platform> {
 
 impl<P: Platform> Evaluator<P> {
     pub fn new(module: Module) -> Self {
+        let global_namespace = Namespace::new(module);
+
         Self {
-            global_namespace: Namespace::new(module),
+            global_namespace,
             call_stack: Default::default(),
             data_stack: Default::default(),
             side_stack: Default::default(),
