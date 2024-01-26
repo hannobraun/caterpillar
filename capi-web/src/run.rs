@@ -1,9 +1,7 @@
 use std::time::Duration;
 
 use async_channel::{Receiver, RecvError, Sender, TryRecvError};
-use capi_core::{
-    pipeline::Scripts, platform::Platform, Interpreter, RuntimeState,
-};
+use capi_core::{pipeline::Scripts, Interpreter, RuntimeState};
 use gloo_timers::future::sleep;
 use tracing::debug;
 
@@ -27,7 +25,7 @@ pub async fn run(
         sleep_duration: None,
     };
 
-    interpreter.register_platform(WebPlatform::functions());
+    interpreter.register_platform();
 
     let mut new_code: Option<String> = None;
 

@@ -2,7 +2,7 @@ use crate::{
     pipeline::{self, Module, PipelineError, PipelineOutput, Scripts},
     platform::Platform,
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
-    value, PlatformFunction,
+    value,
 };
 
 use super::{
@@ -41,13 +41,10 @@ impl<P: Platform> Interpreter<P> {
         &mut self.evaluator
     }
 
-    pub fn register_platform(
-        &mut self,
-        functions: impl IntoIterator<
-            Item = (PlatformFunction<P::Context>, &'static str),
-        >,
-    ) {
-        self.evaluator.global_namespace.register_platform(functions);
+    pub fn register_platform(&mut self) {
+        self.evaluator
+            .global_namespace
+            .register_platform(P::functions());
     }
 
     pub fn update(
@@ -472,7 +469,7 @@ mod tests {
     impl Interpreter {
         pub fn new() -> anyhow::Result<Self> {
             let mut inner = crate::Interpreter::new()?;
-            inner.register_platform(TestPlatform::functions());
+            inner.register_platform();
 
             Ok(Self {
                 inner,
