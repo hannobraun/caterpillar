@@ -35,7 +35,6 @@ mod tests {
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
         let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
-        interpreter.register_platform();
 
         let script_path = PathBuf::from("../tests.capi");
         let parent = None;

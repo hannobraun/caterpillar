@@ -107,8 +107,6 @@ impl DesktopThread {
             PlatformContext::new(entry_script_path, loader)
                 .with_pixel_ops_sender(pixel_ops);
 
-        interpreter.register_platform();
-
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
                 // If the other end of the lifeline got dropped, that means

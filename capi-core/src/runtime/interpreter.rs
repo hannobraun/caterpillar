@@ -41,12 +41,6 @@ impl<P: Platform> Interpreter<P> {
         &mut self.evaluator
     }
 
-    pub fn register_platform(&mut self) {
-        self.evaluator
-            .global_namespace
-            .register_platform(P::functions());
-    }
-
     pub fn update(
         &mut self,
         code: &str,
@@ -468,8 +462,7 @@ mod tests {
 
     impl Interpreter {
         pub fn new() -> anyhow::Result<Self> {
-            let mut inner = crate::Interpreter::new()?;
-            inner.register_platform();
+            let inner = crate::Interpreter::new()?;
 
             Ok(Self {
                 inner,

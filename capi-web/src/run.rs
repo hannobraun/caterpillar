@@ -25,8 +25,6 @@ pub async fn run(
         sleep_duration: None,
     };
 
-    interpreter.register_platform();
-
     let mut new_code: Option<String> = None;
 
     loop {
