@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    platform::Platform, value, DataStackResult, Interpreter, PlatformFunction,
+    platform::Platform, value, DataStackResult, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
 };
 use chrono::Local;
@@ -14,11 +14,12 @@ impl Platform for WebPlatform {
     type Context = Context;
 }
 
-pub fn register(interpreter: &mut Interpreter<WebPlatform>) {
-    interpreter.register_platform([
+pub fn register(
+) -> impl IntoIterator<Item = (PlatformFunction<Context>, &'static str)> {
+    [
         (delay_ms as PlatformFunction<Context>, "delay_ms"),
         (print, "print"),
-    ]);
+    ]
 }
 
 pub struct Context {
