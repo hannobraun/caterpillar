@@ -63,7 +63,7 @@ pub enum PixelOp {
     Set([i64; 2]),
 }
 
-pub fn register(
+pub fn functions(
 ) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
 {
     [
