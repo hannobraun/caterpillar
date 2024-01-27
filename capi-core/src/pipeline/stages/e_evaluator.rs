@@ -44,5 +44,7 @@ pub fn evaluate(
 
     dbg!(_scripts);
 
-    Ok(Module::default())
+    let module = Module::default();
+
+    Ok(module)
 }
