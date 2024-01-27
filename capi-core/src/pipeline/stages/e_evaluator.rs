@@ -56,7 +56,7 @@ pub fn evaluate(
 struct CompileTimePlatform;
 
 impl Platform for CompileTimePlatform {
-    type Context = ();
+    type Context = Context;
 
     fn functions(
     ) -> impl IntoIterator<Item = (PlatformFunction<Self::Context>, &'static str)>
@@ -64,3 +64,5 @@ impl Platform for CompileTimePlatform {
         []
     }
 }
+
+struct Context;
