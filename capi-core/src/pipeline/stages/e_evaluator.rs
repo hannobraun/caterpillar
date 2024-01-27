@@ -1,7 +1,9 @@
 use crate::{
     pipeline::{module::Module, scripts::Scripts},
+    platform::Platform,
     repr::eval::fragments::{FragmentId, Fragments},
-    runtime::evaluator::EvaluatorError,
+    runtime::evaluator::{Evaluator, EvaluatorError},
+    PlatformFunction,
 };
 
 pub fn evaluate(
@@ -45,6 +47,20 @@ pub fn evaluate(
     dbg!(_scripts);
 
     let module = Module::default();
+    let evaluator = Evaluator::<CompileTimePlatform>::new(module);
 
+    let module = evaluator.global_namespace.into_module();
     Ok(module)
+}
+
+struct CompileTimePlatform;
+
+impl Platform for CompileTimePlatform {
+    type Context = ();
+
+    fn functions(
+    ) -> impl IntoIterator<Item = (PlatformFunction<Self::Context>, &'static str)>
+    {
+        []
+    }
 }
