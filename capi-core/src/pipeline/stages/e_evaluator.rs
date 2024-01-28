@@ -8,7 +8,7 @@ use crate::{
 
 pub fn evaluate(
     _start: FragmentId,
-    _fragments: &Fragments,
+    _fragments: &mut Fragments,
     _scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
     // This is only a placeholder, and the pipeline essentially stops after the
