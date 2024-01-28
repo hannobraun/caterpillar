@@ -141,7 +141,10 @@ impl<P: Platform> Evaluator<P> {
                             }
                             ItemInModule::PlatformFunction(f) => {
                                 let function_state = f(
-                                    self.runtime_context(fragment_id),
+                                    self.runtime_context(
+                                        fragment_id,
+                                        fragments,
+                                    ),
                                     platform_context,
                                 )
                                 .map_err(|err| EvaluatorError {
@@ -182,11 +185,12 @@ impl<P: Platform> Evaluator<P> {
                 function,
                 step,
             } => {
-                let state = function(step, self.runtime_context(word))
-                    .map_err(|err| EvaluatorError {
-                        kind: err.into(),
-                        fragment: word,
-                    })?;
+                let state =
+                    function(step, self.runtime_context(word, fragments))
+                        .map_err(|err| EvaluatorError {
+                            kind: err.into(),
+                            fragment: word,
+                        })?;
 
                 match state {
                     IntrinsicFunctionState::StepDone => {
@@ -204,9 +208,14 @@ impl<P: Platform> Evaluator<P> {
         Ok(runtime_state)
     }
 
-    fn runtime_context(&mut self, word: FragmentId) -> RuntimeContext {
+    fn runtime_context<'r>(
+        &'r mut self,
+        word: FragmentId,
+        fragments: &'r mut Fragments,
+    ) -> RuntimeContext<'r> {
         RuntimeContext {
             word,
+            fragments,
             namespace: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
