@@ -41,7 +41,7 @@ impl<P: Platform> Evaluator<P> {
 
     pub fn step(
         &mut self,
-        fragments: &Fragments,
+        fragments: &mut Fragments,
         platform_context: &mut P::Context,
     ) -> Result<RuntimeState, EvaluatorError> {
         // What we need to do next depends on what's on top of the call stack.

@@ -165,7 +165,8 @@ impl<P: Platform> Interpreter<P> {
         &mut self,
         platform_context: &mut P::Context,
     ) -> Result<RuntimeState, EvaluatorError> {
-        self.state = self.evaluator.step(&self.fragments, platform_context)?;
+        self.state =
+            self.evaluator.step(&mut self.fragments, platform_context)?;
         Ok(self.state)
     }
 
@@ -208,7 +209,7 @@ impl<P: Platform> Interpreter<P> {
 
             while !self
                 .evaluator
-                .step(&self.fragments, platform_context)?
+                .step(&mut self.fragments, platform_context)?
                 .finished()
             {}
 
