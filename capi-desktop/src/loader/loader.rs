@@ -32,7 +32,7 @@ impl Loader {
 
         let mut scripts = BTreeMap::new();
 
-        for entry in WalkDir::new(entry_script_dir) {
+        for entry in WalkDir::new(&entry_script_dir) {
             let entry = entry?;
 
             if entry.file_type().is_dir() {
