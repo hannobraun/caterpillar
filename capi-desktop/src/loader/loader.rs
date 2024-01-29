@@ -1,4 +1,7 @@
-use std::{collections::BTreeMap, path::PathBuf};
+use std::{
+    collections::BTreeMap,
+    path::{Path, PathBuf},
+};
 
 use capi_core::{
     pipeline::{ScriptPath, Scripts},
@@ -166,10 +169,15 @@ fn handle_update(update: Update, scripts: &mut Scripts) -> anyhow::Result<()> {
 }
 
 fn fs_path_to_script_path(path: PathBuf) -> ScriptPath {
-    path.iter()
+    fs_path_to_symbols(path)
+}
+
+fn fs_path_to_symbols(path: impl AsRef<Path>) -> Vec<value::Symbol> {
+    path.as_ref()
+        .iter()
         .map(|os_str| {
             let string = os_str.to_string_lossy().into_owned();
             value::Symbol(string)
         })
-        .collect::<Vec<_>>()
+        .collect()
 }
