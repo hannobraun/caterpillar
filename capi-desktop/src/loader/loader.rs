@@ -201,6 +201,12 @@ fn fs_path_to_script_path(
         break;
     }
 
+    if let Some(file_name) = script_path_symbols.last_mut() {
+        if let Some(index) = file_name.0.rfind('.') {
+            file_name.0.truncate(index);
+        }
+    }
+
     script_path_symbols
 }
 
