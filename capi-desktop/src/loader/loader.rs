@@ -18,6 +18,7 @@ pub struct Loader {
     old_receiver: UpdateReceiver,
     receiver: UpdateReceiver,
     watchers: Vec<Debouncer<RecommendedWatcher>>,
+    entry_script_dir: PathBuf,
     scripts: Scripts,
     update_available: bool,
 }
@@ -51,7 +52,7 @@ impl Loader {
             let watcher = watch(path.clone(), None, sender.clone())?;
             watchers.push(watcher);
 
-            let path = fs_path_to_script_path(path);
+            let path = fs_path_to_script_path(&entry_script_dir, path);
             scripts.insert(path, None);
         }
 
@@ -63,7 +64,7 @@ impl Loader {
             }
 
             let (path, _, code) = receiver.recv()??;
-            let path = fs_path_to_script_path(path);
+            let path = fs_path_to_script_path(&entry_script_dir, path);
             scripts.insert(path, Some(code));
         }
 
@@ -88,6 +89,7 @@ impl Loader {
             old_receiver,
             receiver,
             watchers,
+            entry_script_dir,
             scripts,
             update_available,
         })
@@ -104,7 +106,7 @@ impl Loader {
 
         loop {
             let update = self.receiver.recv()?;
-            handle_update(update, &mut self.scripts)?;
+            handle_update(update, &self.entry_script_dir, &mut self.scripts)?;
 
             if !self.receiver.is_empty() {
                 continue;
@@ -129,7 +131,7 @@ impl Loader {
 
     fn apply_available_update(&mut self) -> anyhow::Result<()> {
         for update in self.receiver.try_iter() {
-            handle_update(update, &mut self.scripts)?;
+            handle_update(update, &self.entry_script_dir, &mut self.scripts)?;
             self.update_available = true;
         }
 
@@ -158,9 +160,13 @@ impl Loader {
     }
 }
 
-fn handle_update(update: Update, scripts: &mut Scripts) -> anyhow::Result<()> {
+fn handle_update(
+    update: Update,
+    entry_script_dir: impl AsRef<Path>,
+    scripts: &mut Scripts,
+) -> anyhow::Result<()> {
     let (path, _, code) = update?;
-    let path = fs_path_to_script_path(path);
+    let path = fs_path_to_script_path(entry_script_dir, path);
     *scripts
         .inner
         .get_mut(&path)
@@ -168,8 +174,34 @@ fn handle_update(update: Update, scripts: &mut Scripts) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn fs_path_to_script_path(path: PathBuf) -> ScriptPath {
-    fs_path_to_symbols(path)
+fn fs_path_to_script_path(
+    entry_script_dir: impl AsRef<Path>,
+    path: PathBuf,
+) -> ScriptPath {
+    let mut entry_script_dir_symbols = fs_path_to_symbols(entry_script_dir);
+    let mut script_path_symbols = fs_path_to_symbols(path);
+
+    loop {
+        let first_entry_script_dir_symbol = entry_script_dir_symbols.first();
+        let first_script_path_symbol = script_path_symbols.first();
+
+        if let (
+            Some(first_entry_script_dir_symbol),
+            Some(first_script_path_symbol),
+        ) = (first_entry_script_dir_symbol, first_script_path_symbol)
+        {
+            if first_entry_script_dir_symbol == first_script_path_symbol {
+                entry_script_dir_symbols.remove(0);
+                script_path_symbols.remove(0);
+
+                continue;
+            }
+        }
+
+        break;
+    }
+
+    script_path_symbols
 }
 
 fn fs_path_to_symbols(path: impl AsRef<Path>) -> Vec<value::Symbol> {
