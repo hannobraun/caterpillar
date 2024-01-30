@@ -15,7 +15,7 @@ use crate::{
 pub fn evaluate(
     _start: FragmentId,
     _fragments: &mut Fragments,
-    _scripts: &Scripts,
+    scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
     // This is only a placeholder, and the pipeline essentially stops after the
     // `analyze` step. What should happen here, is the evaluation of the
@@ -53,7 +53,7 @@ pub fn evaluate(
     let module = Module::default();
     let mut evaluator = Evaluator::<CompileTimePlatform>::new(module);
 
-    let mut context = Context { scripts: _scripts };
+    let mut context = Context { scripts };
 
     evaluator.call_stack.push(StackFrame::Fragment {
         fragment_id: _start,
