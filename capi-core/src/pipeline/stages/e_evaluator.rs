@@ -62,7 +62,7 @@ struct CompileTimePlatform<'r> {
     _r: PhantomData<&'r ()>,
 }
 
-impl Platform for CompileTimePlatform<'_> {
+impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context;
 
     fn functions(
