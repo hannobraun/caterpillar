@@ -50,8 +50,6 @@ pub fn evaluate(
     // the script. That data structure would contain the functions, tests,
     // bindings, etc.
 
-    dbg!(_scripts);
-
     let module = Module::default();
     let mut evaluator = Evaluator::<CompileTimePlatform>::new(module);
 
