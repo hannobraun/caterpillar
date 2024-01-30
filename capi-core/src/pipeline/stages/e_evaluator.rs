@@ -14,7 +14,7 @@ use crate::{
 
 pub fn evaluate(
     _start: FragmentId,
-    _fragments: &mut Fragments,
+    fragments: &mut Fragments,
     scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
     // This is only a placeholder, and the pipeline essentially stops after the
@@ -58,7 +58,7 @@ pub fn evaluate(
     evaluator.call_stack.push(StackFrame::Fragment {
         fragment_id: _start,
     });
-    while !evaluator.step(_fragments, &mut context)?.finished() {}
+    while !evaluator.step(fragments, &mut context)?.finished() {}
 
     let module = evaluator.global_namespace.into_module();
     Ok(module)
