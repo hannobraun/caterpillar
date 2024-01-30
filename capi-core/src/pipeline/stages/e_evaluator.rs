@@ -13,7 +13,7 @@ use crate::{
 };
 
 pub fn evaluate(
-    _start: FragmentId,
+    start: FragmentId,
     fragments: &mut Fragments,
     scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
@@ -55,9 +55,9 @@ pub fn evaluate(
 
     let mut context = Context { scripts };
 
-    evaluator.call_stack.push(StackFrame::Fragment {
-        fragment_id: _start,
-    });
+    evaluator
+        .call_stack
+        .push(StackFrame::Fragment { fragment_id: start });
     while !evaluator.step(fragments, &mut context)?.finished() {}
 
     let module = evaluator.global_namespace.into_module();
