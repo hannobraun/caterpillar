@@ -90,16 +90,16 @@ fn mod_(
     // For now, everything lives in a single global namespace, so we just merge
     // the two modules together.
     runtime_context
-        .namespace
+        .global_module
         .bindings
         .append(&mut module.bindings);
     runtime_context
-        .namespace
+        .global_module
         .functions
         .0
         .append(&mut module.functions.0);
     runtime_context
-        .namespace
+        .global_module
         .tests
         .0
         .append(&mut module.tests.0);

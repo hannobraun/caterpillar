@@ -145,7 +145,7 @@ fn bind(
             for symbol in symbols.0.into_iter().rev() {
                 let symbol = symbol.expect::<value::Symbol>()?;
                 let value = context.data_stack.pop_any()?;
-                context.namespace.define_binding(symbol.0, value);
+                context.global_module.define_binding(symbol.0, value);
             }
 
             Ok(IntrinsicFunctionState::StepDone)
@@ -328,7 +328,7 @@ fn fn_(
                 fragment: name_fragment,
             };
 
-            context.namespace.define_function(name, body);
+            context.global_module.define_function(name, body);
 
             Ok(IntrinsicFunctionState::StepDone)
         }
@@ -543,7 +543,7 @@ fn test(
                 fragment: name_fragment,
             };
 
-            context.namespace.define_test(name, body);
+            context.global_module.define_test(name, body);
 
             Ok(IntrinsicFunctionState::StepDone)
         }

@@ -216,7 +216,7 @@ impl<P: Platform> Evaluator<P> {
         RuntimeContext {
             word,
             fragments,
-            namespace: self.global_namespace.user_defined(),
+            global_module: self.global_namespace.user_defined(),
             call_stack: &mut self.call_stack,
             data_stack: &mut self.data_stack,
             side_stack: &mut self.side_stack,
