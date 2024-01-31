@@ -57,8 +57,7 @@ pub async fn run(
                         *scripts
                             .inner
                             .get_mut(&entry_script_path)
-                            .expect("Code for entry script not found") =
-                            code.clone();
+                            .expect("Code for entry script not found") = code;
                         scripts_updated = true;
                     }
                     Err(RecvError) => {
@@ -88,7 +87,7 @@ pub async fn run(
                 *scripts
                     .inner
                     .get_mut(&entry_script_path)
-                    .expect("Code for entry script not found") = code.clone();
+                    .expect("Code for entry script not found") = code;
                 scripts_updated = true;
             }
             Err(TryRecvError::Empty) => {
