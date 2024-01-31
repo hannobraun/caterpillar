@@ -1,7 +1,7 @@
-use std::time::Duration;
+use std::{collections::BTreeMap, time::Duration};
 
 use async_channel::{Receiver, RecvError, Sender, TryRecvError};
-use capi_core::{pipeline::Scripts, Interpreter, RuntimeState};
+use capi_core::{pipeline::Scripts, value, Interpreter, RuntimeState};
 use gloo_timers::future::sleep;
 use tracing::debug;
 
@@ -14,7 +14,17 @@ pub async fn run(
 ) -> anyhow::Result<()> {
     debug!("Running script:\n{script}");
 
-    let scripts = Scripts::default();
+    let entry_script_path = vec![value::Symbol(String::from("default"))];
+    let mut scripts = {
+        let mut inner = BTreeMap::new();
+        inner.insert(entry_script_path.clone(), String::new());
+
+        Scripts {
+            entry_script_path: entry_script_path.clone(),
+            inner,
+        }
+    };
+
     let mut interpreter = Interpreter::<WebPlatform>::new()?;
 
     interpreter.update(&scripts)?;
@@ -42,7 +52,14 @@ pub async fn run(
                 );
 
                 match code.recv().await {
-                    Ok(code) => new_code = Some(code),
+                    Ok(code) => {
+                        *scripts
+                            .inner
+                            .get_mut(&entry_script_path)
+                            .expect("Code for entry script not found") =
+                            code.clone();
+                        new_code = Some(code);
+                    }
                     Err(RecvError) => {
                         // The channel was closed. However this happened, it
                         // means our work here is done.
