@@ -24,7 +24,6 @@ pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
         (eq, "="),
         (eval, "eval"),
         (false_, "false"),
-        (fn_, "fn"),
         (get, "get"),
         (gt, ">"),
         (if_, "if"),
@@ -306,30 +305,6 @@ fn false_(
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(false));
-            Ok(IntrinsicFunctionState::StepDone)
-        }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
-    }
-}
-
-fn fn_(
-    step: usize,
-    context: RuntimeContext,
-) -> DataStackResult<IntrinsicFunctionState> {
-    match step {
-        0 => {
-            let (body, _) =
-                context.data_stack.pop_specific::<value::Block>()?;
-            let (name, name_fragment) =
-                context.data_stack.pop_specific::<value::Symbol>()?;
-
-            let name = FunctionName {
-                value: name.0,
-                fragment: name_fragment,
-            };
-
-            context.global_module.define_function(name, body);
-
             Ok(IntrinsicFunctionState::StepDone)
         }
         _ => Ok(IntrinsicFunctionState::FullyCompleted),

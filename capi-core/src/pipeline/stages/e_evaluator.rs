@@ -1,7 +1,9 @@
 use std::marker::PhantomData;
 
 use crate::{
-    pipeline::{self, module::Module, scripts::Scripts, PipelineOutput},
+    pipeline::{
+        self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
+    },
     platform::Platform,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{
@@ -56,12 +58,34 @@ impl<'r> Platform for CompileTimePlatform<'r> {
     fn functions(
     ) -> impl IntoIterator<Item = (PlatformFunction<Self::Context>, &'static str)>
     {
-        [(mod_ as PlatformFunction<Self::Context>, "mod")]
+        [
+            (fn_ as PlatformFunction<Self::Context>, "fn"),
+            (mod_, "mod"),
+        ]
     }
 }
 
 struct Context<'r> {
     scripts: &'r Scripts,
+}
+
+fn fn_(
+    runtime_context: RuntimeContext,
+    _platform_context: &mut Context,
+) -> DataStackResult<PlatformFunctionState> {
+    let (body, _) =
+        runtime_context.data_stack.pop_specific::<value::Block>()?;
+    let (name, name_fragment) =
+        runtime_context.data_stack.pop_specific::<value::Symbol>()?;
+
+    let name = FunctionName {
+        value: name.0,
+        fragment: name_fragment,
+    };
+
+    runtime_context.global_module.define_function(name, body);
+
+    Ok(PlatformFunctionState::Done)
 }
 
 fn mod_(
