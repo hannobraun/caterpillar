@@ -17,6 +17,18 @@ pub fn evaluate(
     fragments: &mut Fragments,
     scripts: &Scripts,
 ) -> Result<Module, EvaluatorError> {
+    // This function evaluates the top-level context at compile-time. The way
+    // that is implemented, means modules are implicit, and there are platform
+    // functions like `fn` and `mod` that update this implicit module.
+    //
+    // I'd prefer it, if modules where actually explicit data structures, `fn`
+    // and `mod` would create anonymous functions and modules explicitly, and
+    // those anonymous items were named by adding them into named fields of the
+    // module.
+    //
+    // Then a module, as written in the code, would just become a function,
+    // evaluated at compile-time, that returns such a module data structure.
+
     let module = Module::default();
     let mut evaluator = Evaluator::<CompileTimePlatform>::new(module);
 
