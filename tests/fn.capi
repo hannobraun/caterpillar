@@ -1,6 +1,7 @@
+:f { true } fn
+
 "fn"
 {
-    :f { true } fn
     f
 }
     test
