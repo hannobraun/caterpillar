@@ -1,4 +1,4 @@
-use std::{path::PathBuf, thread, time::Duration};
+use std::{thread, time::Duration};
 
 use capi_core::{
     platform::Platform, value, DataStackResult, PlatformFunction,
@@ -33,9 +33,7 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    pub fn new(entry_script_path: impl Into<PathBuf>, loader: Loader) -> Self {
-        let _ = entry_script_path;
-
+    pub fn new(loader: Loader) -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
