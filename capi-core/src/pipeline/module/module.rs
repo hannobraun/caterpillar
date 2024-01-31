@@ -37,6 +37,12 @@ pub struct Module {
 }
 
 impl Module {
+    pub fn merge(&mut self, other: &mut Self) {
+        self.bindings.append(&mut other.bindings);
+        self.functions.0.append(&mut other.functions.0);
+        self.tests.0.append(&mut other.tests.0);
+    }
+
     pub fn define_binding(&mut self, name: String, value: Value) {
         self.bindings.insert(name, value);
     }
