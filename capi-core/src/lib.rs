@@ -42,7 +42,6 @@ mod tests {
         let mut loader = Loader::new(&script_path)?;
 
         loader.load(&script_path, parent)?;
-        let (_, _, _) = loader.updates().recv()??;
         let scripts = loader.wait_for_updated_scripts()?;
 
         interpreter.update(parent, scripts)?;
