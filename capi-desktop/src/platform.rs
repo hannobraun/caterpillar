@@ -30,7 +30,6 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
@@ -45,6 +44,12 @@ impl PlatformContext {
     ) -> Self {
         self.pixel_ops.inner = pixel_ops;
         self
+    }
+}
+
+impl Default for PlatformContext {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
