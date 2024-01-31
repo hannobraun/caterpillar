@@ -51,6 +51,7 @@ impl<P: Platform> Interpreter<P> {
             .inner
             .get(&scripts.entry_script_path)
             .expect("Code for entry script not found");
+
         let PipelineOutput { start, mut module } =
             pipeline::run(code, parent, &mut self.fragments, scripts)?;
 
