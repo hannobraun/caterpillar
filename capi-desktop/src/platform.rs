@@ -21,7 +21,6 @@ impl Platform for DesktopPlatform {
                 "clear_pixel",
             ),
             (delay_ms, "delay_ms"),
-            (mod_, "mod"),
             (print, "print"),
             (set_pixel, "set_pixel"),
         ]
@@ -98,41 +97,6 @@ fn delay_ms(
         runtime_context.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
     Ok(PlatformFunctionState::Done)
-}
-
-fn mod_(
-    runtime_context: RuntimeContext,
-    platform_context: &mut PlatformContext,
-) -> DataStackResult<PlatformFunctionState> {
-    let (path_segments, _) =
-        runtime_context.data_stack.pop_specific::<value::Array>()?;
-
-    let mut path = platform_context.entry_script_path.clone();
-    path.pop(); // remove script itself, so we're left with the folder it's in
-
-    let num_segments = path_segments.0.len();
-
-    for (i, segment) in path_segments.0.into_iter().enumerate() {
-        let segment = segment.expect::<value::Symbol>()?;
-
-        let is_last_segment = i == num_segments - 1;
-        let segment = if is_last_segment {
-            format!("{}.capi", segment.0)
-        } else {
-            segment.0
-        };
-
-        path.push(segment);
-    }
-
-    // The error handling here is not great, but we can only return
-    // `DataStackError`. It might be best to make the return value platform-
-    // specific too. Then we can return a platform-specific error value.
-    let parent = Some(runtime_context.word);
-    platform_context.loader.load(path, parent).unwrap();
-    platform_context.loading_script = Some(parent);
-
-    Ok(PlatformFunctionState::Sleeping)
 }
 
 fn print(
