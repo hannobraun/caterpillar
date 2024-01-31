@@ -37,11 +37,8 @@ mod tests {
         let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
 
         let script_path = PathBuf::from("../tests.capi");
-        let parent = None;
+        let mut loader = Loader::new(script_path)?;
 
-        let mut loader = Loader::new(&script_path)?;
-
-        loader.load(&script_path, parent)?;
         let scripts = loader.wait_for_updated_scripts()?;
 
         interpreter.update(scripts)?;
