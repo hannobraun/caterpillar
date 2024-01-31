@@ -17,8 +17,7 @@ pub async fn run(
     let scripts = Scripts::default();
     let mut interpreter = Interpreter::<WebPlatform>::new()?;
 
-    let parent = None;
-    interpreter.update(parent, &scripts)?;
+    interpreter.update(&scripts)?;
 
     let mut context = Context {
         events: Events { inner: events },
@@ -29,8 +28,7 @@ pub async fn run(
 
     loop {
         if new_code.take().is_some() {
-            let parent = None;
-            if let Err(err) = interpreter.update(parent, &scripts) {
+            if let Err(err) = interpreter.update(&scripts) {
                 context.events.status(format!("Pipeline error:\n{err:?}\n"));
             }
         }

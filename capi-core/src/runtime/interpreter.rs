@@ -44,7 +44,6 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn update(
         &mut self,
-        _parent: Option<FragmentId>,
         scripts: &Scripts,
     ) -> Result<FragmentId, PipelineError> {
         let code = scripts
@@ -413,7 +412,6 @@ mod tests {
         }
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-            let parent = None;
             let scripts = {
                 let entry_script_path =
                     vec![value::Symbol(String::from("entry"))];
@@ -427,7 +425,7 @@ mod tests {
                 }
             };
 
-            self.inner.update(parent, &scripts)?;
+            self.inner.update(&scripts)?;
 
             Ok(())
         }
