@@ -17,7 +17,7 @@ pub struct Loader {
     old_sender: UpdateSender,
     old_receiver: UpdateReceiver,
     receiver: UpdateReceiver,
-    watchers: Vec<Debouncer<RecommendedWatcher>>,
+    _watchers: Vec<Debouncer<RecommendedWatcher>>,
     entry_script_dir: PathBuf,
     scripts: Scripts,
     update_available: bool,
@@ -94,7 +94,7 @@ impl Loader {
             old_sender,
             old_receiver,
             receiver,
-            watchers,
+            _watchers: watchers,
             entry_script_dir,
             scripts,
             update_available,
@@ -154,7 +154,7 @@ impl Loader {
         let path = path.into();
 
         let watcher = watch(path, parent, self.old_sender.clone())?;
-        self.watchers.push(watcher);
+        self._watchers.push(watcher);
 
         Ok(())
     }
