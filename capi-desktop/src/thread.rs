@@ -1,7 +1,7 @@
 use std::{path::PathBuf, thread};
 
 use capi_core::{Interpreter, RuntimeState};
-use crossbeam_channel::{Receiver, RecvError, Sender, TryRecvError};
+use crossbeam_channel::{Receiver, Sender, TryRecvError};
 
 use crate::{
     loader::Loader,
@@ -123,17 +123,8 @@ impl DesktopThread {
                     run_target
                         .finish(&mut interpreter, &mut platform_context)?;
 
-                    match loader.updates().recv() {
-                        Ok(_) => {
-                            // This shouldn't block for too long, as we know at
-                            // this point that there has been a change, via the
-                            // legacy update mechanism.
-                            let scripts = loader.wait_for_updated_scripts()?;
-
-                            interpreter.update(scripts)?;
-                        }
-                        Err(RecvError) => break,
-                    }
+                    let scripts = loader.wait_for_updated_scripts()?;
+                    interpreter.update(scripts)?;
                 }
             };
         }
