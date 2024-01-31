@@ -106,17 +106,8 @@ impl DesktopThread {
                 break;
             }
 
-            match loader.updates().try_recv() {
-                Ok(_) => {
-                    // This shouldn't block for too long, as we know at this
-                    // point that there has been a change, via the legacy update
-                    // mechanism.
-                    let scripts = loader.wait_for_updated_scripts()?;
-
-                    interpreter.update(scripts)?;
-                }
-                Err(TryRecvError::Empty) => {}
-                Err(TryRecvError::Disconnected) => break,
+            if let Some(scripts) = loader.scripts_if_updated()? {
+                interpreter.update(scripts)?;
             }
 
             let runtime_state = interpreter.step(&mut platform_context)?;
