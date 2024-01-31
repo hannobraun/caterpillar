@@ -124,13 +124,12 @@ impl DesktopThread {
                         .finish(&mut interpreter, &mut platform_context)?;
 
                     match loader.updates().recv() {
-                        Ok(update) => {
+                        Ok(_) => {
                             // This shouldn't block for too long, as we know at
                             // this point that there has been a change, via the
                             // legacy update mechanism.
                             let scripts = loader.wait_for_updated_scripts()?;
 
-                            let (_path, _, _) = update?;
                             interpreter.update(scripts)?;
                         }
                         Err(RecvError) => break,
