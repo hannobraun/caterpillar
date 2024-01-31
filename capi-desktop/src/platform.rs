@@ -5,8 +5,6 @@ use capi_core::{
     PlatformFunctionState, RuntimeContext,
 };
 
-use crate::loader::Loader;
-
 pub struct DesktopPlatform;
 
 impl Platform for DesktopPlatform {
@@ -28,16 +26,15 @@ impl Platform for DesktopPlatform {
 }
 
 pub struct PlatformContext {
-    pub loader: Loader,
     pub pixel_ops: Sender,
 }
 
 impl PlatformContext {
-    pub fn new(loader: Loader) -> Self {
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> Self {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
-            loader,
             pixel_ops: Sender { inner: pixel_ops },
         }
     }

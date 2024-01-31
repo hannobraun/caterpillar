@@ -97,7 +97,7 @@ impl DesktopThread {
 
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =
-            PlatformContext::new(loader).with_pixel_ops_sender(pixel_ops);
+            PlatformContext::new().with_pixel_ops_sender(pixel_ops);
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
@@ -106,13 +106,12 @@ impl DesktopThread {
                 break;
             }
 
-            match platform_context.loader.updates().try_recv() {
+            match loader.updates().try_recv() {
                 Ok(update) => {
                     // This shouldn't block for too long, as we know at this
                     // point that there has been a change, via the legacy update
                     // mechanism.
-                    let scripts =
-                        platform_context.loader.wait_for_updated_scripts()?;
+                    let scripts = loader.wait_for_updated_scripts()?;
 
                     let (_path, parent, new_code) = update?;
                     interpreter.update(&new_code, parent, scripts)?;
@@ -134,14 +133,12 @@ impl DesktopThread {
                     run_target
                         .finish(&mut interpreter, &mut platform_context)?;
 
-                    match platform_context.loader.updates().recv() {
+                    match loader.updates().recv() {
                         Ok(update) => {
                             // This shouldn't block for too long, as we know at
                             // this point that there has been a change, via the
                             // legacy update mechanism.
-                            let scripts = platform_context
-                                .loader
-                                .wait_for_updated_scripts()?;
+                            let scripts = loader.wait_for_updated_scripts()?;
 
                             let (_path, parent, new_code) = update?;
                             interpreter.update(&new_code, parent, scripts)?;

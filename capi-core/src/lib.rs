@@ -46,7 +46,7 @@ mod tests {
         let scripts = loader.wait_for_updated_scripts()?;
 
         interpreter.update(&code, parent, scripts)?;
-        interpreter.run_tests(&mut PlatformContext::new(loader))?;
+        interpreter.run_tests(&mut PlatformContext::new())?;
 
         Ok(())
     }
