@@ -42,10 +42,10 @@ mod tests {
         let mut loader = Loader::new(&script_path)?;
 
         loader.load(&script_path, parent)?;
-        let (_, _, code) = loader.updates().recv()??;
+        let (_, _, _) = loader.updates().recv()??;
         let scripts = loader.wait_for_updated_scripts()?;
 
-        interpreter.update(&code, parent, scripts)?;
+        interpreter.update(parent, scripts)?;
         interpreter.run_tests(&mut PlatformContext::new())?;
 
         Ok(())

@@ -113,8 +113,8 @@ impl DesktopThread {
                     // mechanism.
                     let scripts = loader.wait_for_updated_scripts()?;
 
-                    let (_path, parent, new_code) = update?;
-                    interpreter.update(&new_code, parent, scripts)?;
+                    let (_path, parent, _) = update?;
+                    interpreter.update(parent, scripts)?;
                 }
                 Err(TryRecvError::Empty) => {}
                 Err(TryRecvError::Disconnected) => break,
@@ -140,8 +140,8 @@ impl DesktopThread {
                             // legacy update mechanism.
                             let scripts = loader.wait_for_updated_scripts()?;
 
-                            let (_path, parent, new_code) = update?;
-                            interpreter.update(&new_code, parent, scripts)?;
+                            let (_path, parent, _) = update?;
+                            interpreter.update(parent, scripts)?;
                         }
                         Err(RecvError) => break,
                     }

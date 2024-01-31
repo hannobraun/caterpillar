@@ -44,7 +44,6 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn update(
         &mut self,
-        _code: &str,
         parent: Option<FragmentId>,
         scripts: &Scripts,
     ) -> Result<FragmentId, PipelineError> {
@@ -426,7 +425,7 @@ mod tests {
                 }
             };
 
-            self.inner.update(code, parent, &scripts)?;
+            self.inner.update(parent, &scripts)?;
 
             Ok(())
         }
