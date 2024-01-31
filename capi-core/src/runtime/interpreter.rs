@@ -88,7 +88,6 @@ impl<P: Platform> Interpreter<P> {
             if let Ok(ItemInModule::UserDefinedFunction(main)) =
                 self.evaluator.global_namespace.resolve("main")
             {
-                dbg!(&main);
                 self.evaluator.call_stack.push(StackFrame::Fragment {
                     fragment_id: main.body.start,
                 })
