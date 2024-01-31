@@ -119,7 +119,6 @@ impl<P: Platform> Interpreter<P> {
 
         let PipelineOutput { start, mut module } =
             pipeline::run(code, parent, &mut self.fragments, scripts)?;
-        dbg!(&module);
 
         // This just blindly merges the new module into the old one, overwriting
         // functions. What we actually want here is for this to be smarter, and
