@@ -84,6 +84,10 @@ pub async fn run(
 
         match code.try_recv() {
             Ok(code) => {
+                *scripts
+                    .inner
+                    .get_mut(&entry_script_path)
+                    .expect("Code for entry script not found") = code.clone();
                 new_code = Some(code);
             }
             Err(TryRecvError::Empty) => {
