@@ -17,7 +17,7 @@ pub struct Namespace<C> {
 }
 
 impl<C> Namespace<C> {
-    pub fn new(module: Module) -> Self {
+    pub fn new(global_module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
         for (intrinsic, name) in intrinsics::all() {
@@ -27,7 +27,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions,
-            global_module: module,
+            global_module,
         }
     }
 
