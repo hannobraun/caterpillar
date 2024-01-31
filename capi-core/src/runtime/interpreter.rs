@@ -190,7 +190,7 @@ pub enum TestError {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
+    use std::collections::{BTreeMap, HashMap};
 
     use crate::{
         pipeline::{PipelineError, Scripts},
@@ -409,7 +409,18 @@ mod tests {
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             let parent = None;
-            let scripts = Scripts::default();
+            let scripts = {
+                let entry_script_path =
+                    vec![value::Symbol(String::from("entry"))];
+
+                let mut inner = BTreeMap::new();
+                inner.insert(entry_script_path.clone(), code.to_string());
+
+                Scripts {
+                    entry_script_path,
+                    inner,
+                }
+            };
 
             self.inner.update(code, parent, &scripts)?;
 
