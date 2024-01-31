@@ -17,7 +17,7 @@ fn main() -> anyhow::Result<()> {
     let script = match script_path {
         Some(path) => load_script(&path)
             .with_context(|| format!("Loading script `{path}`"))?,
-        None => String::from(r#""Hello, world!" print"#),
+        None => String::from(r#":main { "Hello, world!" print } fn"#),
     };
 
     let out_dir = env::var_os("OUT_DIR").expect("Cargo did not set `OUT_DIR`");
