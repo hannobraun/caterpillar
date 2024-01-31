@@ -75,7 +75,13 @@ impl Loader {
                 (path, code)
             })
             .collect();
-        let scripts = Scripts { inner: scripts };
+        let scripts = Scripts {
+            entry_script_path: fs_path_to_script_path(
+                &entry_script_dir,
+                entry_script_path,
+            ),
+            inner: scripts,
+        };
 
         // We just loaded the initial code, so if a caller asks us now to return
         // the current `Scripts`, we don't need that to wait for changes.

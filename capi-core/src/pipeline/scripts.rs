@@ -4,11 +4,7 @@ use crate::value;
 
 #[derive(Debug, Default)]
 pub struct Scripts {
-    // Eventually, I'm going to need to store the path of the entry script here,
-    // so the `Interpreter` always knows where to start the pipeline.
-    //
-    // (Actually, once we store the entry script path here, we don't need to
-    // pass its code in a separate variable at all.)
+    pub entry_script_path: ScriptPath,
     pub inner: BTreeMap<ScriptPath, String>,
 }
 
