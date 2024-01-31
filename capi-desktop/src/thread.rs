@@ -90,10 +90,7 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
-        let mut loader = Loader::new(&entry_script_path)?;
-
-        let parent = None;
-        loader.load(&entry_script_path, parent)?;
+        let mut loader = Loader::new(entry_script_path)?;
 
         let mut interpreter = Interpreter::new()?;
         let mut platform_context =
