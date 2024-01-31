@@ -1,8 +1,8 @@
 use std::{path::PathBuf, thread, time::Duration};
 
 use capi_core::{
-    platform::Platform, repr::eval::fragments::FragmentId, value,
-    DataStackResult, PlatformFunction, PlatformFunctionState, RuntimeContext,
+    platform::Platform, value, DataStackResult, PlatformFunction,
+    PlatformFunctionState, RuntimeContext,
 };
 
 use crate::loader::Loader;
@@ -28,26 +28,19 @@ impl Platform for DesktopPlatform {
 }
 
 pub struct PlatformContext {
-    /// The path of the script that was the entry point into the current program
-    ///
-    /// The entry script is the top-level script that was loaded first. Its path
-    /// is used as the base for all `mod` declarations.
-    pub entry_script_path: PathBuf,
-
     pub loader: Loader,
     pub pixel_ops: Sender,
-    pub loading_script: Option<Option<FragmentId>>,
 }
 
 impl PlatformContext {
     pub fn new(entry_script_path: impl Into<PathBuf>, loader: Loader) -> Self {
+        let _ = entry_script_path;
+
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         Self {
-            entry_script_path: entry_script_path.into(),
             loader,
             pixel_ops: Sender { inner: pixel_ops },
-            loading_script: None,
         }
     }
 
