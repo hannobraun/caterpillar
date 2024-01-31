@@ -13,7 +13,7 @@ use super::{IntrinsicFunction, NativeFunction};
 #[derive(Debug)]
 pub struct Namespace<C> {
     native_functions: BTreeMap<String, NativeFunction<C>>,
-    user_defined_items: Module,
+    global_module: Module,
 }
 
 impl<C> Namespace<C> {
@@ -27,7 +27,7 @@ impl<C> Namespace<C> {
 
         Self {
             native_functions,
-            user_defined_items: module,
+            global_module: module,
         }
     }
 
@@ -42,7 +42,7 @@ impl<C> Namespace<C> {
     }
 
     pub fn global_module(&mut self) -> &mut Module {
-        &mut self.user_defined_items
+        &mut self.global_module
     }
 
     pub fn resolve(&self, name: &str) -> Result<ItemInModule<C>, ResolveError> {
@@ -56,7 +56,7 @@ impl<C> Namespace<C> {
                 }
             });
         let user_defined_function = self
-            .user_defined_items
+            .global_module
             .functions
             .0
             .get(name)
@@ -64,7 +64,7 @@ impl<C> Namespace<C> {
                 ItemInModule::UserDefinedFunction(user_defined)
             });
         let binding = self
-            .user_defined_items
+            .global_module
             .bindings
             .get(name)
             .map(|binding| ItemInModule::Binding(binding.clone()));
@@ -85,14 +85,12 @@ impl<C> Namespace<C> {
         // Maybe we need to take an `Option<FragmentId>` as the `new` argument,
         // and handle that here accordingly.
 
-        self.user_defined_items
-            .functions
-            .replace(old, new, fragments);
-        self.user_defined_items.tests.replace(old, new, fragments);
+        self.global_module.functions.replace(old, new, fragments);
+        self.global_module.tests.replace(old, new, fragments);
     }
 
     pub fn into_module(self) -> Module {
-        self.user_defined_items
+        self.global_module
     }
 }
 
