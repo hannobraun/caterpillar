@@ -2,6 +2,7 @@ use crate::{
     pipeline::{self, Module, PipelineError, PipelineOutput, Scripts},
     platform::Platform,
     repr::eval::fragments::{FragmentId, Fragments, Replacement},
+    runtime::namespaces::ItemInModule,
     value,
 };
 
@@ -116,9 +117,25 @@ impl<P: Platform> Interpreter<P> {
         // if it's possible to prepare the API here for what's to come, then
         // implement the pipeline changes afterwards.
 
-        let PipelineOutput { start, module } =
+        let PipelineOutput { start, mut module } =
             pipeline::run(code, parent, &mut self.fragments, scripts)?;
         dbg!(&module);
+
+        // This just blindly merges the new module into the old one, overwriting
+        // functions. What we actually want here is for this to be smarter, and
+        // to result into a some kind of report on which functions got replaced
+        // or removed.
+        //
+        // If we had this, we could resolve #15. Also, we'd probably no longer
+        // need the `Namespace::replace` call below. In fact, it might even
+        // conflict with our new module merging thing.
+        //
+        // Link for #15:
+        // https://github.com/hannobraun/caterpillar/issues/15
+        self.evaluator
+            .global_namespace
+            .global_module()
+            .merge(&mut module);
 
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
@@ -131,31 +148,21 @@ impl<P: Platform> Interpreter<P> {
         if self.state.finished() {
             // Restart the program.
 
-            // We need some way to tell the evaluator to run main after the top-
-            // level context was evaluated. We do this by pushing a stack frame
-            // to the bottom of the call stack.
+            // We might not always have a `main` function. Either by design, if
+            // this is a library module, and we're just running its tests, or by
+            // accident, if the user misspelled it.
             //
-            // But this can't be a regular `StackFrame::Fragment` because the
-            // `main` function isn't known yet. It won't be, until the
-            // evaluation of the top-level context has finished, at which point
-            // it will be too late to tell the evaluator anything. (Unless we
-            // make some larger changes to `Interpreter`, which is not desirable
-            // at this point.)
-            //
-            // As a solution, we have this special `StackFrame::Main` as a
-            // stopgap. We push it to the bottom of the call stack, then the
-            // top-level context evaluation on top. As a result, it will tell
-            // the evaluator to run the `main` function once the evaluation of
-            // the top-level function has finished.
-            //
-            // Once compile-time evaluation of the top-level context is working,
-            // all of this can be removed, and we can just push the `main`
-            // function's first body fragment here directly.
-            self.evaluator.call_stack.push(StackFrame::Main);
-
-            self.evaluator
-                .call_stack
-                .push(StackFrame::Fragment { fragment_id: start });
+            // It would be nice to be more explicit about what we're trying to
+            // do with the module, so we can detect misspellings. But for now,
+            // this will do.
+            if let Ok(ItemInModule::UserDefinedFunction(main)) =
+                self.evaluator.global_namespace.resolve("main")
+            {
+                dbg!(&main);
+                self.evaluator.call_stack.push(StackFrame::Fragment {
+                    fragment_id: main.body.start,
+                })
+            }
         }
 
         Ok(start)
