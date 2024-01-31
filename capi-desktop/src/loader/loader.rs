@@ -5,17 +5,15 @@ use std::{
 
 use capi_core::{
     pipeline::{ScriptPath, Scripts},
-    repr::eval::{fragments::FragmentId, value},
+    repr::eval::value,
 };
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 use walkdir::WalkDir;
 
-use super::{channel::UpdateSender, watch::watch, Update, UpdateReceiver};
+use super::{watch::watch, Update, UpdateReceiver};
 
 pub struct Loader {
-    old_sender: UpdateSender,
-    old_receiver: UpdateReceiver,
     receiver: UpdateReceiver,
     _watchers: Vec<Debouncer<RecommendedWatcher>>,
     entry_script_dir: PathBuf,
@@ -27,7 +25,6 @@ impl Loader {
     pub fn new(entry_script_path: impl Into<PathBuf>) -> anyhow::Result<Self> {
         let entry_script_path = entry_script_path.into();
 
-        let (old_sender, old_receiver) = crossbeam_channel::unbounded();
         let (sender, receiver) = crossbeam_channel::unbounded();
         let mut watchers = Vec::new();
 
@@ -91,8 +88,6 @@ impl Loader {
         let update_available = true;
 
         Ok(Self {
-            old_sender,
-            old_receiver,
             receiver,
             _watchers: watchers,
             entry_script_dir,
@@ -142,27 +137,6 @@ impl Loader {
         }
 
         Ok(())
-    }
-
-    /// This is a legacy method. It needs to be removed, once all callers have
-    /// migrated to the new API.
-    pub fn load(
-        &mut self,
-        path: impl Into<PathBuf>,
-        parent: Option<FragmentId>,
-    ) -> anyhow::Result<()> {
-        let path = path.into();
-
-        let watcher = watch(path, parent, self.old_sender.clone())?;
-        self._watchers.push(watcher);
-
-        Ok(())
-    }
-
-    /// This is a legacy method. It needs to be removed, once all callers have
-    /// migrated to the new API.
-    pub fn updates(&self) -> &UpdateReceiver {
-        &self.old_receiver
     }
 }
 
