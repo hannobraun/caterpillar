@@ -18,17 +18,6 @@ pub struct Interpreter<P: Platform> {
     state: RuntimeState,
 }
 
-// I think we need to end up with the following API here, roughly, to support
-// the ongoing pipeline changes:
-//
-// - The constructor takes the pase (`pipeline::ScriptPath`) of the entry
-//   script, and nothing else. It stores the path for later reference.
-// - The `update` method takes `&Scripts` (and nothing else). It then runs the
-//   pipeline for the entry script (and thus the whole program).
-//
-// Then `Loader` can load all reachable scripts (instead of needing to be told
-// every single script it's supposed to load) and provide a whole `Scripts` on
-// every update.
 impl<P: Platform> Interpreter<P> {
     pub fn new() -> Result<Self, PipelineError> {
         Ok(Interpreter {
