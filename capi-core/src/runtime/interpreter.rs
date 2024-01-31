@@ -44,10 +44,14 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn update(
         &mut self,
-        code: &str,
+        _code: &str,
         parent: Option<FragmentId>,
         scripts: &Scripts,
     ) -> Result<FragmentId, PipelineError> {
+        let code = scripts
+            .inner
+            .get(&scripts.entry_script_path)
+            .expect("Code for entry script not found");
         let PipelineOutput { start, mut module } =
             pipeline::run(code, parent, &mut self.fragments, scripts)?;
 
