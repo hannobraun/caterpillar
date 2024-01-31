@@ -35,12 +35,6 @@ impl CallStack {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum StackFrame {
-    /// This stack frame tells the evaluator to run the `main` function
-    ///
-    /// This is a transitionary feature to ease the introduction of `main`
-    /// functions. It can be removed, once compile-time evaluation is finished.
-    Main,
-
     Fragment {
         fragment_id: FragmentId,
     },

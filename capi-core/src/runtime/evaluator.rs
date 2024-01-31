@@ -58,21 +58,6 @@ impl<P: Platform> Evaluator<P> {
             };
 
             match current_stack_frame {
-                StackFrame::Main { .. } => {
-                    if let Ok(ItemInModule::UserDefinedFunction(main)) =
-                        self.global_namespace.resolve("main")
-                    {
-                        self.call_stack.push(StackFrame::Fragment {
-                            fragment_id: main.body.start,
-                        })
-                    }
-
-                    // If there's no `main` function, there's nothing to run.
-                    //
-                    // This could lead to silent errors, if someone misspelled
-                    // `main` or something like that, but it's okay for now.
-                    // `StackFrame::Main` is just a stopgap anyway.
-                }
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = fragments.get(fragment_id);
 
@@ -98,11 +83,6 @@ impl<P: Platform> Evaluator<P> {
         };
 
         let runtime_state = match current_stack_frame {
-            StackFrame::Main { .. } => {
-                // Nothing to do. Already set the appropriate next stack frame
-                // above.
-                RuntimeState::Running
-            }
             StackFrame::Fragment { fragment_id } => {
                 let fragment = fragments.get(fragment_id);
 
