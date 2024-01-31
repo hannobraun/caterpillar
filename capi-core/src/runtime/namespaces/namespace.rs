@@ -41,7 +41,7 @@ impl<C> Namespace<C> {
         }
     }
 
-    pub fn user_defined(&mut self) -> &mut Module {
+    pub fn global_module(&mut self) -> &mut Module {
         &mut self.user_defined_items
     }
 

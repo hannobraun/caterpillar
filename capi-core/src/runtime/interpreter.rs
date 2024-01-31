@@ -179,7 +179,7 @@ impl<P: Platform> Interpreter<P> {
         let tests = self
             .evaluator
             .global_namespace
-            .user_defined()
+            .global_module()
             .tests()
             .cloned()
             .collect::<Vec<_>>();
