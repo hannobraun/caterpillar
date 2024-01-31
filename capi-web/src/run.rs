@@ -34,11 +34,11 @@ pub async fn run(
         sleep_duration: None,
     };
 
-    let mut new_code = false;
+    let mut scripts_updated = false;
 
     loop {
-        if new_code {
-            new_code = false;
+        if scripts_updated {
+            scripts_updated = false;
             if let Err(err) = interpreter.update(&scripts) {
                 context.events.status(format!("Pipeline error:\n{err:?}\n"));
             }
@@ -59,7 +59,7 @@ pub async fn run(
                             .get_mut(&entry_script_path)
                             .expect("Code for entry script not found") =
                             code.clone();
-                        new_code = true;
+                        scripts_updated = true;
                     }
                     Err(RecvError) => {
                         // The channel was closed. However this happened, it
@@ -89,7 +89,7 @@ pub async fn run(
                     .inner
                     .get_mut(&entry_script_path)
                     .expect("Code for entry script not found") = code.clone();
-                new_code = true;
+                scripts_updated = true;
             }
             Err(TryRecvError::Empty) => {
                 // No problem that we don't have a code update. Just continue.
