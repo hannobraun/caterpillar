@@ -2,7 +2,8 @@ use std::{collections::BTreeMap, time::Duration};
 
 use async_channel::{Receiver, RecvError, Sender, TryRecvError};
 use capi_core::{
-    pipeline::Scripts, repr::eval::value, Interpreter, RuntimeState,
+    pipeline::Scripts, repr::eval::value, runtime::evaluator::RuntimeState,
+    Interpreter,
 };
 use gloo_timers::future::sleep;
 use tracing::debug;

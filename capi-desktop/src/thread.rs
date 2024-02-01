@@ -1,6 +1,6 @@
 use std::{path::PathBuf, thread};
 
-use capi_core::{Interpreter, RuntimeState};
+use capi_core::{runtime::evaluator::RuntimeState, Interpreter};
 use crossbeam_channel::{Receiver, Sender, TryRecvError};
 
 use crate::{
