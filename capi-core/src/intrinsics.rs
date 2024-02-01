@@ -11,7 +11,7 @@ use crate::{
 
 use super::{repr::eval::value, runtime::data_stack::DataStackResult};
 
-pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
+pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
     vec![
         (add as IntrinsicFunction, "+"),
         (and, "and"),
