@@ -13,9 +13,8 @@ use crate::{
         call_stack::StackFrame,
         data_stack::DataStackResult,
         evaluator::{Evaluator, EvaluatorError},
-        namespaces::{PlatformFunction, PlatformFunctionState},
+        namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},
     },
-    RuntimeContext,
 };
 
 pub fn evaluate(

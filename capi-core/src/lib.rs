@@ -12,8 +12,6 @@ pub mod platform;
 pub mod repr;
 pub mod runtime;
 
-pub use self::runtime::namespaces::RuntimeContext;
-
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;

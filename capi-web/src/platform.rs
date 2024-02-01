@@ -6,9 +6,8 @@ use capi_core::{
     repr::eval::value,
     runtime::{
         data_stack::DataStackResult,
-        namespaces::{PlatformFunction, PlatformFunctionState},
+        namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},
     },
-    RuntimeContext,
 };
 use chrono::Local;
 use futures::executor::block_on;
