@@ -13,7 +13,7 @@ use super::{repr::eval::value, runtime::data_stack::DataStackResult};
 
 pub fn all() -> Vec<(IntrinsicFunction, &'static str)> {
     vec![
-        (add, "+"),
+        (add as IntrinsicFunction, "+"),
         (and, "and"),
         (append, "append"),
         (array, "[]"),
