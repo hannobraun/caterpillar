@@ -3,8 +3,11 @@ use std::{thread, time::Duration};
 use capi_core::{
     platform::Platform,
     repr::eval::value,
-    runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
-    PlatformFunctionState, RuntimeContext,
+    runtime::{
+        data_stack::DataStackResult,
+        namespaces::{PlatformFunction, PlatformFunctionState},
+    },
+    RuntimeContext,
 };
 
 pub struct DesktopPlatform;

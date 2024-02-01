@@ -4,8 +4,11 @@ use async_channel::Sender;
 use capi_core::{
     platform::Platform,
     repr::eval::value,
-    runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
-    PlatformFunctionState, RuntimeContext,
+    runtime::{
+        data_stack::DataStackResult,
+        namespaces::{PlatformFunction, PlatformFunctionState},
+    },
+    RuntimeContext,
 };
 use chrono::Local;
 use futures::executor::block_on;

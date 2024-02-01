@@ -192,10 +192,11 @@ mod tests {
         platform::Platform,
         repr::eval::value,
         runtime::{
-            data_stack::DataStackResult, evaluator::EvaluatorError,
-            namespaces::PlatformFunction,
+            data_stack::DataStackResult,
+            evaluator::EvaluatorError,
+            namespaces::{PlatformFunction, PlatformFunctionState},
         },
-        PlatformFunctionState, RuntimeContext,
+        RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,

@@ -5,7 +5,7 @@ use crate::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
     },
-    PlatformFunctionState,
+    runtime::namespaces::PlatformFunctionState,
 };
 
 use super::{
