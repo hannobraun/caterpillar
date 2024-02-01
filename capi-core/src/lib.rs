@@ -13,7 +13,6 @@ pub mod repr;
 pub mod runtime;
 
 pub use self::runtime::{
-    data_stack::DataStackResult,
     evaluator::RuntimeState,
     interpreter::Interpreter,
     namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},

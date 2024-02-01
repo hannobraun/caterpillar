@@ -1,8 +1,10 @@
 use crate::{
     pipeline::Module,
     repr::eval::fragments::{FragmentId, Fragments},
-    runtime::{call_stack::CallStack, data_stack::DataStack},
-    DataStackResult,
+    runtime::{
+        call_stack::CallStack,
+        data_stack::{DataStack, DataStackResult},
+    },
 };
 
 #[derive(Debug)]
