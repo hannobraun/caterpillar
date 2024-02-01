@@ -12,9 +12,8 @@ pub mod platform;
 pub mod repr;
 pub mod runtime;
 
-pub use self::runtime::{
-    interpreter::Interpreter,
-    namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},
+pub use self::runtime::namespaces::{
+    PlatformFunction, PlatformFunctionState, RuntimeContext,
 };
 
 #[cfg(test)]
@@ -22,7 +21,7 @@ mod tests {
     use std::path::PathBuf;
 
     use capi_desktop::{
-        core::Interpreter,
+        core::runtime::interpreter::Interpreter,
         loader::Loader,
         platform::{DesktopPlatform, PlatformContext},
     };

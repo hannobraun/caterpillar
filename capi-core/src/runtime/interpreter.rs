@@ -388,13 +388,13 @@ mod tests {
     }
 
     struct Interpreter {
-        inner: crate::Interpreter<TestPlatform>,
+        inner: crate::runtime::interpreter::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
 
     impl Interpreter {
         pub fn new() -> anyhow::Result<Self> {
-            let inner = crate::Interpreter::new()?;
+            let inner = crate::runtime::interpreter::Interpreter::new()?;
 
             Ok(Self {
                 inner,
