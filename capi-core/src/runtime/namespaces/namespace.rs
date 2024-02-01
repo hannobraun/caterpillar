@@ -7,7 +7,7 @@ use crate::{
         fragments::{FragmentId, Fragments},
         value::Value,
     },
-    PlatformFunction,
+    runtime::namespaces::PlatformFunction,
 };
 
 use super::{IntrinsicFunction, NativeFunction};

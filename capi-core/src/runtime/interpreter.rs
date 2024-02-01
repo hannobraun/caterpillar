@@ -191,8 +191,11 @@ mod tests {
         pipeline::{PipelineError, Scripts},
         platform::Platform,
         repr::eval::value,
-        runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
-        PlatformFunction, PlatformFunctionState, RuntimeContext,
+        runtime::{
+            data_stack::DataStackResult, evaluator::EvaluatorError,
+            namespaces::PlatformFunction,
+        },
+        PlatformFunctionState, RuntimeContext,
     };
 
     // Make sure all updates happen in the middle of their respective context,

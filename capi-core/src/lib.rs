@@ -12,9 +12,7 @@ pub mod platform;
 pub mod repr;
 pub mod runtime;
 
-pub use self::runtime::namespaces::{
-    PlatformFunction, PlatformFunctionState, RuntimeContext,
-};
+pub use self::runtime::namespaces::{PlatformFunctionState, RuntimeContext};
 
 #[cfg(test)]
 mod tests {
