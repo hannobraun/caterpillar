@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    platform::Platform, value, DataStackResult, PlatformFunction,
+    platform::Platform, repr::eval::value, DataStackResult, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
 };
 use chrono::Local;

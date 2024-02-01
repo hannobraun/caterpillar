@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::value::{self, Value};
+use crate::repr::eval::value::{self, Value};
 
 use super::{functions::Functions, Function, FunctionName};
 

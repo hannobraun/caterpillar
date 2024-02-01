@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
-use crate::{
-    repr::eval::fragments::{FragmentId, FragmentPayload, Fragments},
+use crate::repr::eval::{
+    fragments::{FragmentId, FragmentPayload, Fragments},
     value::ValuePayload,
 };
 

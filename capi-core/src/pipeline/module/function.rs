@@ -1,4 +1,4 @@
-use crate::{repr::eval::fragments::FragmentId, value};
+use crate::repr::eval::{fragments::FragmentId, value};
 
 #[derive(Clone, Debug)]
 pub struct Function {

@@ -1,12 +1,12 @@
 use crate::{
     pipeline::FunctionName,
+    repr::eval::value::{Value, ValuePayload},
     runtime::{
         call_stack::StackFrame,
         namespaces::{
             IntrinsicFunction, IntrinsicFunctionState, RuntimeContext,
         },
     },
-    value::{Value, ValuePayload},
 };
 
 use super::{repr::eval::value, runtime::data_stack::DataStackResult};

@@ -5,13 +5,15 @@ use crate::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
     platform::Platform,
-    repr::eval::fragments::{FragmentId, Fragments},
+    repr::eval::{
+        fragments::{FragmentId, Fragments},
+        value,
+    },
     runtime::{
         call_stack::StackFrame,
         evaluator::{Evaluator, EvaluatorError},
     },
-    value, DataStackResult, PlatformFunction, PlatformFunctionState,
-    RuntimeContext,
+    DataStackResult, PlatformFunction, PlatformFunctionState, RuntimeContext,
 };
 
 pub fn evaluate(

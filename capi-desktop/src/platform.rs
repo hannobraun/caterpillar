@@ -1,7 +1,7 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    platform::Platform, value, DataStackResult, PlatformFunction,
+    platform::Platform, repr::eval::value, DataStackResult, PlatformFunction,
     PlatformFunctionState, RuntimeContext,
 };
 

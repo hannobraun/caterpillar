@@ -1,9 +1,11 @@
 use crate::{
     pipeline::{self, Module, PipelineError, PipelineOutput, Scripts},
     platform::Platform,
-    repr::eval::fragments::{FragmentId, Fragments, Replacement},
+    repr::eval::{
+        fragments::{FragmentId, Fragments, Replacement},
+        value,
+    },
     runtime::namespaces::ItemInModule,
-    value,
 };
 
 use super::{
@@ -188,8 +190,9 @@ mod tests {
     use crate::{
         pipeline::{PipelineError, Scripts},
         platform::Platform,
+        repr::eval::value,
         runtime::evaluator::EvaluatorError,
-        value, DataStackResult, PlatformFunction, PlatformFunctionState,
+        DataStackResult, PlatformFunction, PlatformFunctionState,
         RuntimeContext,
     };
 
