@@ -13,7 +13,6 @@ use crate::{
     },
 };
 
-#[derive(Debug)]
 pub struct Namespace<P: Platform> {
     native_functions: BTreeMap<String, Builtin<P::Context>>,
     global_module: Module,
