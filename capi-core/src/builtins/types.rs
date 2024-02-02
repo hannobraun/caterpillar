@@ -4,8 +4,6 @@ use super::core::CorePlatform;
 
 #[derive(Debug)]
 pub enum Builtin<P: Platform> {
-    Core(CoreBuiltin),
+    Core(BuiltinFn<CorePlatform>),
     Platform(BuiltinFn<P>),
 }
-
-pub type CoreBuiltin = BuiltinFn<CorePlatform>;

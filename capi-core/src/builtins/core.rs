@@ -1,11 +1,9 @@
 use crate::{
     pipeline::FunctionName,
-    platform::{BuiltinFnState, BuiltinFns, CoreContext, Platform},
+    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::value::{self, Value, ValuePayload},
     runtime::{call_stack::StackFrame, data_stack::DataStackResult},
 };
-
-use super::types::CoreBuiltin;
 
 pub struct CorePlatform;
 
@@ -14,7 +12,7 @@ impl Platform for CorePlatform {
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [
-            (add as CoreBuiltin, "+"),
+            (add as BuiltinFn<Self>, "+"),
             (and, "and"),
             (append, "append"),
             (array, "[]"),

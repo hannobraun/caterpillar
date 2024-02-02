@@ -1,10 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins::{
-        core::CorePlatform,
-        types::{Builtin, CoreBuiltin},
-    },
+    builtins::{core::CorePlatform, types::Builtin},
     pipeline::{Function, Module},
     platform::{BuiltinFn, Platform},
     repr::eval::{
@@ -98,7 +95,7 @@ impl<P: Platform> Namespace<P> {
 #[derive(Clone)]
 pub enum ItemInModule<'r, P: Platform> {
     Binding(Value),
-    IntrinsicFunction(CoreBuiltin),
+    IntrinsicFunction(BuiltinFn<CorePlatform>),
     PlatformFunction(&'r BuiltinFn<P>),
     UserDefinedFunction(&'r Function),
 }
