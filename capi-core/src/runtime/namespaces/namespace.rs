@@ -14,7 +14,7 @@ use crate::{
 };
 
 pub struct Namespace<P: Platform> {
-    native_functions: BTreeMap<String, Builtin<P::Context>>,
+    native_functions: BTreeMap<String, Builtin<P>>,
     global_module: Module,
 }
 
