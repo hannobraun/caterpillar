@@ -172,14 +172,14 @@ impl<P: Platform> Evaluator<P> {
                         })?;
 
                 match state {
-                    BuiltinFnState::Stepped => {
-                        // Nothing to do. We already advanced the stack frame.
-                    }
                     BuiltinFnState::Completed => {
                         self.call_stack.pop();
                     }
                     BuiltinFnState::Sleeping => {
                         unreachable!()
+                    }
+                    BuiltinFnState::Stepped => {
+                        // Nothing to do. We already advanced the stack frame.
                     }
                 }
 
