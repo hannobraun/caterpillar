@@ -1,5 +1,4 @@
 use crate::{
-    builtins::types::CoreBuiltinState,
     pipeline::{Function, Module},
     platform::{BuiltinFnState, CoreContext, Platform},
     repr::eval::{
@@ -173,11 +172,14 @@ impl<P: Platform> Evaluator<P> {
                         })?;
 
                 match state {
-                    CoreBuiltinState::Stepped => {
+                    BuiltinFnState::Stepped => {
                         // Nothing to do. We already advanced the stack frame.
                     }
-                    CoreBuiltinState::Completed => {
+                    BuiltinFnState::Completed => {
                         self.call_stack.pop();
+                    }
+                    BuiltinFnState::Sleeping => {
+                        unreachable!()
                     }
                 }
 

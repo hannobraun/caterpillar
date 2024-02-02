@@ -1,5 +1,5 @@
 use crate::{
-    platform::{BuiltinFn, CoreContext, Platform},
+    platform::{BuiltinFn, BuiltinFnState, CoreContext, Platform},
     runtime::data_stack::DataStackResult,
 };
 
@@ -10,9 +10,4 @@ pub enum Builtin<P: Platform> {
 }
 
 pub type CoreBuiltin =
-    fn(step: usize, CoreContext) -> DataStackResult<CoreBuiltinState>;
-
-pub enum CoreBuiltinState {
-    Stepped,
-    Completed,
-}
+    fn(step: usize, CoreContext) -> DataStackResult<BuiltinFnState>;
