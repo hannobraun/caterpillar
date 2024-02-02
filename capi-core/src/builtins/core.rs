@@ -7,7 +7,7 @@ use crate::{
     },
 };
 
-use super::types::{BuiltinContext, IntrinsicFunctionState};
+use super::types::{BuiltinContext, CoreBuiltinState};
 
 pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
     [
@@ -41,7 +41,7 @@ pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
 fn add(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -49,16 +49,16 @@ fn add(
 
             context.data_stack.push_bare(value::Number(a.0 + b.0));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn and(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Bool>()?;
@@ -66,16 +66,16 @@ fn and(
 
             context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn append(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (block, _) =
@@ -93,7 +93,7 @@ fn append(
                 fragment_id: block.start,
             });
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
         1 => {
             let items = context
@@ -111,29 +111,29 @@ fn append(
                 fragment,
             });
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn array(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Array(Vec::new()));
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn bind(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (symbols, _) =
@@ -145,16 +145,16 @@ fn bind(
                 context.global_module.define_binding(symbol.0, value);
             }
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn clone(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -162,29 +162,29 @@ fn clone(
             context.data_stack.push(value.clone());
             context.data_stack.push(value);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn drop(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             context.data_stack.pop_any()?;
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn each(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (block, _) =
@@ -237,16 +237,16 @@ fn each(
                 });
             }
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn eq(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -256,16 +256,16 @@ fn eq(
                 .data_stack
                 .push_bare(value::Bool(a.payload == b.payload));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn eval(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (block, _) =
@@ -290,29 +290,29 @@ fn eval(
             // Not sure if it's worth it. Maybe if the need for this comes up in
             // more cases.
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn false_(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(false));
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn get(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (index, _) =
@@ -328,16 +328,16 @@ fn get(
             });
             context.data_stack.push_bare(value);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn gt(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -345,16 +345,16 @@ fn gt(
 
             context.data_stack.push_bare(value::Bool(a.0 > b.0));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn if_(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (else_, _) =
@@ -369,16 +369,16 @@ fn if_(
                 .call_stack
                 .push(StackFrame::Fragment { fragment_id: start });
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn len(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (array, fragment) =
@@ -392,42 +392,39 @@ fn len(
             });
             context.data_stack.push_bare(ValuePayload::Number(len));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
-fn nop(
-    step: usize,
-    _: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+fn nop(step: usize, _: BuiltinContext) -> DataStackResult<CoreBuiltinState> {
     match step {
-        0 => Ok(IntrinsicFunctionState::StepDone),
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        0 => Ok(CoreBuiltinState::StepDone),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn not(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
 
             context.data_stack.push_bare(value::Bool(!a.0));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn over(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let top = context.data_stack.pop_any()?;
@@ -437,16 +434,16 @@ fn over(
             context.data_stack.push(top);
             context.data_stack.push(target);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn set(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -459,16 +456,16 @@ fn set(
 
             context.data_stack.push_bare(array);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn sub(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -476,16 +473,16 @@ fn sub(
 
             context.data_stack.push_bare(value::Number(a.0 - b.0));
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn swap(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -494,16 +491,16 @@ fn swap(
             context.data_stack.push(b);
             context.data_stack.push(a);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn test(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (body, _) =
@@ -518,29 +515,29 @@ fn test(
 
             context.global_module.define_test(name, body);
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn true_(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(true));
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
 
 fn unwrap(
     step: usize,
     context: BuiltinContext,
-) -> DataStackResult<IntrinsicFunctionState> {
+) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => {
             let (array, _) =
@@ -550,8 +547,8 @@ fn unwrap(
                 context.data_stack.push_bare(item);
             }
 
-            Ok(IntrinsicFunctionState::StepDone)
+            Ok(CoreBuiltinState::StepDone)
         }
-        _ => Ok(IntrinsicFunctionState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }

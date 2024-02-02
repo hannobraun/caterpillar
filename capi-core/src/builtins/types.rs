@@ -15,7 +15,7 @@ pub struct BuiltinContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
-pub enum IntrinsicFunctionState {
+pub enum CoreBuiltinState {
     StepDone,
     FullyCompleted,
 }

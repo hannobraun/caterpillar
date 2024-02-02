@@ -1,7 +1,5 @@
 use crate::{
-    builtins::types::{
-        BuiltinContext, IntrinsicFunctionState, PlatformBuiltinState,
-    },
+    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformBuiltinState},
     pipeline::{Function, Module},
     platform::Platform,
     repr::eval::{
@@ -172,10 +170,10 @@ impl<P: Platform> Evaluator<P> {
                         })?;
 
                 match state {
-                    IntrinsicFunctionState::StepDone => {
+                    CoreBuiltinState::StepDone => {
                         // Nothing to do. We already advanced the stack frame.
                     }
-                    IntrinsicFunctionState::FullyCompleted => {
+                    CoreBuiltinState::FullyCompleted => {
                         self.call_stack.pop();
                     }
                 }
