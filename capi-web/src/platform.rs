@@ -2,13 +2,10 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    builtins::types::BuiltinContext,
+    builtins::types::{BuiltinContext, PlatformFunctionState},
     platform::Platform,
     repr::eval::value,
-    runtime::{
-        data_stack::DataStackResult,
-        namespaces::{PlatformFunction, PlatformFunctionState},
-    },
+    runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
 };
 use chrono::Local;
 use futures::executor::block_on;

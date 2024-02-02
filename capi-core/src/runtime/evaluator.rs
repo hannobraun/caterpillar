@@ -1,12 +1,11 @@
 use crate::{
-    builtins::types::BuiltinContext,
+    builtins::types::{BuiltinContext, PlatformFunctionState},
     pipeline::{Function, Module},
     platform::Platform,
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
     },
-    runtime::namespaces::PlatformFunctionState,
 };
 
 use super::{

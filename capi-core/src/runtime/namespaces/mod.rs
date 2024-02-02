@@ -5,7 +5,7 @@ pub use self::{
     namespace::{ItemInModule, Namespace, ResolveError},
     native_items::{
         IntrinsicFunction, IntrinsicFunctionState, NativeFunction,
-        PlatformFunction, PlatformFunctionState,
+        PlatformFunction,
     },
 };
 

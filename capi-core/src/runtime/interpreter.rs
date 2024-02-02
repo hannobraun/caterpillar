@@ -188,14 +188,13 @@ mod tests {
     use std::collections::{BTreeMap, HashMap};
 
     use crate::{
-        builtins::types::BuiltinContext,
+        builtins::types::{BuiltinContext, PlatformFunctionState},
         pipeline::{PipelineError, Scripts},
         platform::Platform,
         repr::eval::value,
         runtime::{
-            data_stack::DataStackResult,
-            evaluator::EvaluatorError,
-            namespaces::{PlatformFunction, PlatformFunctionState},
+            data_stack::DataStackResult, evaluator::EvaluatorError,
+            namespaces::PlatformFunction,
         },
     };
 

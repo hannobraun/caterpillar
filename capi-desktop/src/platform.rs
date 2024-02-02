@@ -1,13 +1,10 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    builtins::types::BuiltinContext,
+    builtins::types::{BuiltinContext, PlatformFunctionState},
     platform::Platform,
     repr::eval::value,
-    runtime::{
-        data_stack::DataStackResult,
-        namespaces::{PlatformFunction, PlatformFunctionState},
-    },
+    runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
 };
 
 pub struct DesktopPlatform;
