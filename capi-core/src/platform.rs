@@ -50,4 +50,5 @@ pub struct CoreContext<'r> {
 pub enum BuiltinFnState {
     Completed,
     Sleeping,
+    Stepped,
 }

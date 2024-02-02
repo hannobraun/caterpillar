@@ -136,6 +136,9 @@ impl<P: Platform> Evaluator<P> {
                                     BuiltinFnState::Sleeping => {
                                         RuntimeState::Sleeping
                                     }
+                                    BuiltinFnState::Stepped => {
+                                        unreachable!()
+                                    }
                                 }
                             }
                             ItemInModule::UserDefinedFunction(Function {
