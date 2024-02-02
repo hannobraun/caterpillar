@@ -34,7 +34,7 @@ pub type BuiltinFn<P: Platform> = fn(
     // designed the same way.
     core_context: CoreContext,
     platform_context: &mut P::Context,
-) -> DataStackResult<PlatformBuiltinState>;
+) -> DataStackResult<BuiltinFnState>;
 
 pub struct CoreContext<'r> {
     /// The fragment ID of the word that refers to this intrinsic or platform fn
@@ -47,7 +47,7 @@ pub struct CoreContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
-pub enum PlatformBuiltinState {
+pub enum BuiltinFnState {
     Done,
     Sleeping,
 }

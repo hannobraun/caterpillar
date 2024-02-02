@@ -190,7 +190,7 @@ mod tests {
     use crate::{
         pipeline::{PipelineError, Scripts},
         platform::{
-            BuiltinFn, BuiltinFns, CoreContext, Platform, PlatformBuiltinState,
+            BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform,
         },
         repr::eval::value,
         runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
@@ -470,14 +470,14 @@ mod tests {
         step: usize,
         runtime_context: CoreContext,
         platform_context: &mut PlatformContext,
-    ) -> DataStackResult<PlatformBuiltinState> {
+    ) -> DataStackResult<BuiltinFnState> {
         match step {
             0 => {
                 let (channel, _) = runtime_context
                     .data_stack
                     .pop_specific::<value::Number>()?;
                 *platform_context.channels.entry(channel.0).or_insert(0) += 1;
-                Ok(PlatformBuiltinState::Done)
+                Ok(BuiltinFnState::Done)
             }
             _ => unreachable!(),
         }

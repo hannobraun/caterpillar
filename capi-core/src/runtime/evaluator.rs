@@ -1,7 +1,7 @@
 use crate::{
     builtins::types::CoreBuiltinState,
     pipeline::{Function, Module},
-    platform::{CoreContext, Platform, PlatformBuiltinState},
+    platform::{BuiltinFnState, CoreContext, Platform},
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -130,10 +130,10 @@ impl<P: Platform> Evaluator<P> {
                                 })?;
 
                                 match function_state {
-                                    PlatformBuiltinState::Done => {
+                                    BuiltinFnState::Done => {
                                         RuntimeState::Running
                                     }
-                                    PlatformBuiltinState::Sleeping => {
+                                    BuiltinFnState::Sleeping => {
                                         RuntimeState::Sleeping
                                     }
                                 }

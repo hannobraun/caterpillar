@@ -2,9 +2,7 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    platform::{
-        BuiltinFn, BuiltinFns, CoreContext, Platform, PlatformBuiltinState,
-    },
+    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -54,7 +52,7 @@ pub fn delay_ms(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -67,7 +65,7 @@ pub fn delay_ms(
             platform_context.sleep_duration =
                 Some(Duration::from_millis(delay_ms));
 
-            Ok(PlatformBuiltinState::Sleeping)
+            Ok(BuiltinFnState::Sleeping)
         }
         _ => unreachable!(),
     }
@@ -77,7 +75,7 @@ pub fn print(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let value = runtime_context.data_stack.pop_any()?;
@@ -85,7 +83,7 @@ pub fn print(
                 .events
                 .output(format!("{}\n", value.payload));
             runtime_context.data_stack.push(value);
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }

@@ -4,9 +4,7 @@ use crate::{
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
-    platform::{
-        BuiltinFn, BuiltinFns, CoreContext, Platform, PlatformBuiltinState,
-    },
+    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value,
@@ -73,7 +71,7 @@ fn fn_(
     step: usize,
     runtime_context: CoreContext,
     _platform_context: &mut Context,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (body, _) =
@@ -88,7 +86,7 @@ fn fn_(
 
             runtime_context.global_module.define_function(name, body);
 
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
 
         _ => unreachable!(),
@@ -99,7 +97,7 @@ fn mod_(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (path_as_values, _) =
@@ -137,7 +135,7 @@ fn mod_(
             // so we just merge the two modules together.
             runtime_context.global_module.merge(&mut module);
 
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }

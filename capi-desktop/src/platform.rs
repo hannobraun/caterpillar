@@ -1,9 +1,7 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    platform::{
-        BuiltinFn, BuiltinFns, CoreContext, Platform, PlatformBuiltinState,
-    },
+    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -72,7 +70,7 @@ fn clear_pixel(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (y, _) =
@@ -82,7 +80,7 @@ fn clear_pixel(
 
             platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
 
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }
@@ -92,7 +90,7 @@ fn delay_ms(
     step: usize,
     runtime_context: CoreContext,
     _: &mut PlatformContext,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -100,7 +98,7 @@ fn delay_ms(
             thread::sleep(Duration::from_millis(
                 delay_ms.0.try_into().unwrap(),
             ));
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }
@@ -110,13 +108,13 @@ fn print(
     step: usize,
     runtime_context: CoreContext,
     _: &mut PlatformContext,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let value = runtime_context.data_stack.pop_any()?;
             println!("{}", value.payload);
             runtime_context.data_stack.push(value);
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }
@@ -126,7 +124,7 @@ fn set_pixel(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<PlatformBuiltinState> {
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (y, _) =
@@ -136,7 +134,7 @@ fn set_pixel(
 
             platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
-            Ok(PlatformBuiltinState::Done)
+            Ok(BuiltinFnState::Done)
         }
         _ => unreachable!(),
     }
