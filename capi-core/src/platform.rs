@@ -36,6 +36,11 @@ pub type BuiltinFn<P: Platform> = fn(
     platform_context: &mut P::Context,
 ) -> DataStackResult<BuiltinFnState>;
 
+// I don't like how `CoreContext` looks here. Everything else here is nice and
+// self-contained, but `CoreContext` depends on a whole lot of stuff.
+//
+// The problematic part is the dependency on stuff in `runtime`. Some of
+// `runtime` depends back on this module. That muddles the dependency graph.
 pub struct CoreContext<'r> {
     /// The fragment ID of the word that refers to this intrinsic or platform fn
     pub word: FragmentId,
