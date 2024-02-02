@@ -13,13 +13,10 @@ impl Platform for DesktopPlatform {
     type Context = PlatformContext;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<PlatformContext>, &'static str)>
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>
     {
         [
-            (
-                clear_pixel as PlatformBuiltin<PlatformContext>,
-                "clear_pixel",
-            ),
+            (clear_pixel as PlatformBuiltin<Self::Context>, "clear_pixel"),
             (delay_ms, "delay_ms"),
             (print, "print"),
             (set_pixel, "set_pixel"),
