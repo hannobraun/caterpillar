@@ -37,12 +37,13 @@ pub fn evaluate(
     let module = Module::default();
     let mut evaluator = Evaluator::<CompileTimePlatform>::new(module);
 
-    let mut context = Context { scripts };
-
     evaluator
         .call_stack
         .push(StackFrame::Fragment { fragment_id: start });
-    while !evaluator.step(fragments, &mut context)?.finished() {}
+    while !evaluator
+        .step(fragments, &mut Context { scripts })?
+        .finished()
+    {}
 
     let module = evaluator.global_namespace.into_module();
     Ok(module)
