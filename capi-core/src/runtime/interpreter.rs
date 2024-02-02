@@ -190,7 +190,7 @@ mod tests {
     use crate::{
         builtins::types::{CoreContext, PlatformBuiltinState},
         pipeline::{PipelineError, Scripts},
-        platform::{BuiltinFns, Platform, PlatformBuiltin},
+        platform::{BuiltinFn, BuiltinFns, Platform},
         repr::eval::value,
         runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
     };
@@ -456,7 +456,7 @@ mod tests {
         type Context = PlatformContext;
 
         fn builtin_fns() -> impl BuiltinFns<Self> {
-            [(ping as PlatformBuiltin<Self>, "ping")]
+            [(ping as BuiltinFn<Self>, "ping")]
         }
     }
 

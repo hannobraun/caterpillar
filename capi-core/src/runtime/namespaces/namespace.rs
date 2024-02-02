@@ -6,7 +6,7 @@ use crate::{
         types::{Builtin, CoreBuiltin},
     },
     pipeline::{Function, Module},
-    platform::{Platform, PlatformBuiltin},
+    platform::{BuiltinFn, Platform},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value::Value,
@@ -34,7 +34,7 @@ impl<P: Platform> Namespace<P> {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (PlatformBuiltin<P>, &'static str)>,
+        functions: impl IntoIterator<Item = (BuiltinFn<P>, &'static str)>,
     ) {
         for (function, name) in functions {
             self.native_functions
@@ -99,7 +99,7 @@ impl<P: Platform> Namespace<P> {
 pub enum ItemInModule<'r, P: Platform> {
     Binding(Value),
     IntrinsicFunction(CoreBuiltin),
-    PlatformFunction(&'r PlatformBuiltin<P>),
+    PlatformFunction(&'r BuiltinFn<P>),
     UserDefinedFunction(&'r Function),
 }
 

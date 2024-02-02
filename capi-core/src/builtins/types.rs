@@ -1,6 +1,6 @@
 use crate::{
     pipeline::Module,
-    platform::{Platform, PlatformBuiltin},
+    platform::{BuiltinFn, Platform},
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{
         call_stack::CallStack,
@@ -22,7 +22,7 @@ pub struct CoreContext<'r> {
 #[derive(Debug)]
 pub enum Builtin<P: Platform> {
     Core(CoreBuiltin),
-    Platform(PlatformBuiltin<P>),
+    Platform(BuiltinFn<P>),
 }
 
 pub type CoreBuiltin =

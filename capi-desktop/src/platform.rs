@@ -2,7 +2,7 @@ use std::{thread, time::Duration};
 
 use capi_core::{
     builtins::types::{CoreContext, PlatformBuiltinState},
-    platform::{BuiltinFns, Platform, PlatformBuiltin},
+    platform::{BuiltinFn, BuiltinFns, Platform},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -14,7 +14,7 @@ impl Platform for DesktopPlatform {
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [
-            (clear_pixel as PlatformBuiltin<Self>, "clear_pixel"),
+            (clear_pixel as BuiltinFn<Self>, "clear_pixel"),
             (delay_ms, "delay_ms"),
             (print, "print"),
             (set_pixel, "set_pixel"),
