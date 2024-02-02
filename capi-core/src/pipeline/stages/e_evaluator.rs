@@ -58,7 +58,7 @@ struct CompileTimePlatform<'r> {
 impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context<'r>;
 
-    fn functions(
+    fn builtins(
     ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
         [(fn_ as PlatformBuiltin<Self>, "fn"), (mod_, "mod")]
     }

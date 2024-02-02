@@ -457,7 +457,7 @@ mod tests {
     impl Platform for TestPlatform {
         type Context = PlatformContext;
 
-        fn functions(
+        fn builtins(
         ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)>
         {
             [(ping as PlatformBuiltin<Self>, "ping")]

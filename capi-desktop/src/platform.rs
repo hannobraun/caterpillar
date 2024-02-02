@@ -12,7 +12,7 @@ pub struct DesktopPlatform;
 impl Platform for DesktopPlatform {
     type Context = PlatformContext;
 
-    fn functions(
+    fn builtins(
     ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
         [
             (clear_pixel as PlatformBuiltin<Self>, "clear_pixel"),

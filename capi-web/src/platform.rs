@@ -15,7 +15,7 @@ pub struct WebPlatform;
 impl Platform for WebPlatform {
     type Context = Context;
 
-    fn functions(
+    fn builtins(
     ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
         [
             (delay_ms as PlatformBuiltin<Self>, "delay_ms"),
