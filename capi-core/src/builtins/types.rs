@@ -18,6 +18,12 @@ pub struct BuiltinContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
+#[derive(Debug)]
+pub enum NativeFunction<C> {
+    Intrinsic(CoreBuiltin),
+    Platform(PlatformBuiltin<C>),
+}
+
 pub type CoreBuiltin =
     fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
 pub type PlatformBuiltin<C> =

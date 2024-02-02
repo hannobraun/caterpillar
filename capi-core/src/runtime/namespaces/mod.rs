@@ -1,10 +1,6 @@
 mod namespace;
-mod native_items;
 
-pub use self::{
-    namespace::{ItemInModule, Namespace, ResolveError},
-    native_items::NativeFunction,
-};
+pub use self::namespace::{ItemInModule, Namespace, ResolveError};
 
 // I'm working on a larger refactoring (adding evaluation of the top-level
 // context to the pipeline, to eventually simplify the update code; there's a
