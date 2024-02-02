@@ -44,7 +44,7 @@ fn add(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(value::Number(a.0 + b.0));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -58,7 +58,7 @@ fn and(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(value::Bool(a.0 && b.0));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -85,7 +85,7 @@ fn append(
                 fragment_id: block.start,
             });
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         1 => {
             let items = context
@@ -103,7 +103,7 @@ fn append(
                 fragment,
             });
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -116,7 +116,7 @@ fn array(
     match step {
         0 => {
             context.data_stack.push_bare(value::Array(Vec::new()));
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -137,7 +137,7 @@ fn bind(
                 context.global_module.define_binding(symbol.0, value);
             }
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -154,7 +154,7 @@ fn clone(
             context.data_stack.push(value.clone());
             context.data_stack.push(value);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -167,7 +167,7 @@ fn drop(
     match step {
         0 => {
             context.data_stack.pop_any()?;
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -229,7 +229,7 @@ fn each(
                 });
             }
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -245,7 +245,7 @@ fn eq(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
                 .data_stack
                 .push_bare(value::Bool(a.payload == b.payload));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -279,7 +279,7 @@ fn eval(
             // Not sure if it's worth it. Maybe if the need for this comes up in
             // more cases.
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -292,7 +292,7 @@ fn false_(
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(false));
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -314,7 +314,7 @@ fn get(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
             });
             context.data_stack.push_bare(value);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -328,7 +328,7 @@ fn gt(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(value::Bool(a.0 > b.0));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -349,7 +349,7 @@ fn if_(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
                 .call_stack
                 .push(StackFrame::Fragment { fragment_id: start });
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -369,7 +369,7 @@ fn len(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
             });
             context.data_stack.push_bare(ValuePayload::Number(len));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -377,7 +377,7 @@ fn len(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
 fn nop(step: usize, _: CoreContext) -> DataStackResult<CoreBuiltinState> {
     match step {
-        0 => Ok(CoreBuiltinState::StepDone),
+        0 => Ok(CoreBuiltinState::Stepped),
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
 }
@@ -389,7 +389,7 @@ fn not(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(value::Bool(!a.0));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -408,7 +408,7 @@ fn over(
             context.data_stack.push(top);
             context.data_stack.push(target);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -427,7 +427,7 @@ fn set(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(array);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -441,7 +441,7 @@ fn sub(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             context.data_stack.push_bare(value::Number(a.0 - b.0));
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -459,7 +459,7 @@ fn swap(
             context.data_stack.push(b);
             context.data_stack.push(a);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -483,7 +483,7 @@ fn test(
 
             context.global_module.define_test(name, body);
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -496,7 +496,7 @@ fn true_(
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(true));
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }
@@ -515,7 +515,7 @@ fn unwrap(
                 context.data_stack.push_bare(item);
             }
 
-            Ok(CoreBuiltinState::StepDone)
+            Ok(CoreBuiltinState::Stepped)
         }
         _ => Ok(CoreBuiltinState::FullyCompleted),
     }

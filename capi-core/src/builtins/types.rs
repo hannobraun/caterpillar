@@ -13,6 +13,6 @@ pub type CoreBuiltin =
     fn(step: usize, CoreContext) -> DataStackResult<CoreBuiltinState>;
 
 pub enum CoreBuiltinState {
-    StepDone,
+    Stepped,
     FullyCompleted,
 }

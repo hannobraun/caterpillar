@@ -170,7 +170,7 @@ impl<P: Platform> Evaluator<P> {
                         })?;
 
                 match state {
-                    CoreBuiltinState::StepDone => {
+                    CoreBuiltinState::Stepped => {
                         // Nothing to do. We already advanced the stack frame.
                     }
                     CoreBuiltinState::FullyCompleted => {
