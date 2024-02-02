@@ -1,8 +1,8 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    builtins::types::{CoreContext, PlatformBuiltin, PlatformBuiltinState},
-    platform::{BuiltinFns, Platform},
+    builtins::types::{CoreContext, PlatformBuiltinState},
+    platform::{BuiltinFns, Platform, PlatformBuiltin},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };

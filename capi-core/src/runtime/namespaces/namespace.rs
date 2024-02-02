@@ -3,10 +3,10 @@ use std::{collections::BTreeMap, fmt};
 use crate::{
     builtins::{
         self,
-        types::{Builtin, CoreBuiltin, PlatformBuiltin},
+        types::{Builtin, CoreBuiltin},
     },
     pipeline::{Function, Module},
-    platform::Platform,
+    platform::{Platform, PlatformBuiltin},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value::Value,

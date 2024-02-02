@@ -1,6 +1,6 @@
 use crate::{
     pipeline::Module,
-    platform::Platform,
+    platform::{Platform, PlatformBuiltin},
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{
         call_stack::CallStack,
@@ -27,12 +27,6 @@ pub enum Builtin<P: Platform> {
 
 pub type CoreBuiltin =
     fn(step: usize, CoreContext) -> DataStackResult<CoreBuiltinState>;
-
-// According to the warning, the bound is not enforced in the type alias. We
-// still need it here, however, so we can refer to its associated types.
-#[allow(type_alias_bounds)]
-pub type PlatformBuiltin<P: Platform> =
-    fn(CoreContext, &mut P::Context) -> DataStackResult<PlatformBuiltinState>;
 
 pub enum CoreBuiltinState {
     StepDone,
