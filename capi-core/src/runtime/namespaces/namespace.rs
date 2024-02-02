@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, fmt};
 
 use crate::{
     builtins::{
-        self,
+        core::CorePlatform,
         types::{Builtin, CoreBuiltin},
     },
     pipeline::{Function, Module},
@@ -22,7 +22,7 @@ impl<P: Platform> Namespace<P> {
     pub fn new(global_module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
-        for (intrinsic, name) in builtins::core::all() {
+        for (intrinsic, name) in CorePlatform::builtin_fns() {
             native_functions.insert(name.to_string(), Builtin::Core(intrinsic));
         }
 

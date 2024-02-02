@@ -1,5 +1,3 @@
-use std::iter;
-
 use crate::{
     pipeline::FunctionName,
     platform::{BuiltinFnState, CoreContext, Platform},
@@ -15,37 +13,33 @@ impl Platform for CorePlatform {
     type Context = ();
 
     fn builtin_fns() -> impl crate::platform::BuiltinFns<Self> {
-        iter::empty()
+        [
+            (add as CoreBuiltin, "+"),
+            (and, "and"),
+            (append, "append"),
+            (array, "[]"),
+            (bind, "bind"),
+            (clone, "clone"),
+            (drop, "drop"),
+            (each, "each"),
+            (eq, "="),
+            (eval, "eval"),
+            (false_, "false"),
+            (get, "get"),
+            (gt, ">"),
+            (if_, "if"),
+            (len, "len"),
+            (nop, "nop"),
+            (not, "not"),
+            (over, "over"),
+            (set, "set"),
+            (sub, "-"),
+            (swap, "swap"),
+            (test, "test"),
+            (true_, "true"),
+            (unwrap, "unwrap"),
+        ]
     }
-}
-
-pub fn all() -> impl IntoIterator<Item = (CoreBuiltin, &'static str)> {
-    [
-        (add as CoreBuiltin, "+"),
-        (and, "and"),
-        (append, "append"),
-        (array, "[]"),
-        (bind, "bind"),
-        (clone, "clone"),
-        (drop, "drop"),
-        (each, "each"),
-        (eq, "="),
-        (eval, "eval"),
-        (false_, "false"),
-        (get, "get"),
-        (gt, ">"),
-        (if_, "if"),
-        (len, "len"),
-        (nop, "nop"),
-        (not, "not"),
-        (over, "over"),
-        (set, "set"),
-        (sub, "-"),
-        (swap, "swap"),
-        (test, "test"),
-        (true_, "true"),
-        (unwrap, "unwrap"),
-    ]
 }
 
 fn add(
