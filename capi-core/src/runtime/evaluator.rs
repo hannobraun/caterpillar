@@ -15,7 +15,7 @@ use super::{
 };
 
 pub struct Evaluator<P: Platform> {
-    pub global_namespace: Namespace<P::Context>,
+    pub global_namespace: Namespace<P>,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
     pub side_stack: DataStack,

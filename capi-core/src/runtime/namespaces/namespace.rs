@@ -6,6 +6,7 @@ use crate::{
         types::{Builtin, CoreBuiltin, PlatformBuiltin},
     },
     pipeline::{Function, Module},
+    platform::Platform,
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value::Value,
@@ -13,12 +14,12 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub struct Namespace<C> {
-    native_functions: BTreeMap<String, Builtin<C>>,
+pub struct Namespace<P: Platform> {
+    native_functions: BTreeMap<String, Builtin<P::Context>>,
     global_module: Module,
 }
 
-impl<C> Namespace<C> {
+impl<P: Platform> Namespace<P> {
     pub fn new(global_module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
@@ -35,7 +36,9 @@ impl<C> Namespace<C> {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (PlatformBuiltin<C>, &'static str)>,
+        functions: impl IntoIterator<
+            Item = (PlatformBuiltin<P::Context>, &'static str),
+        >,
     ) {
         for (function, name) in functions {
             self.native_functions
@@ -47,7 +50,10 @@ impl<C> Namespace<C> {
         &mut self.global_module
     }
 
-    pub fn resolve(&self, name: &str) -> Result<ItemInModule<C>, ResolveError> {
+    pub fn resolve(
+        &self,
+        name: &str,
+    ) -> Result<ItemInModule<P::Context>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
                 Builtin::Intrinsic(function) => {
