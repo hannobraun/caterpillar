@@ -49,10 +49,7 @@ impl<P: Platform> Namespace<P> {
         &mut self.global_module
     }
 
-    pub fn resolve(
-        &self,
-        name: &str,
-    ) -> Result<ItemInModule<P::Context>, ResolveError> {
+    pub fn resolve(&self, name: &str) -> Result<ItemInModule<P>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
                 Builtin::Intrinsic(function) => {
@@ -102,14 +99,14 @@ impl<P: Platform> Namespace<P> {
 }
 
 #[derive(Clone)]
-pub enum ItemInModule<'r, C> {
+pub enum ItemInModule<'r, P: Platform> {
     Binding(Value),
     IntrinsicFunction(CoreBuiltin),
-    PlatformFunction(&'r PlatformBuiltin<C>),
+    PlatformFunction(&'r PlatformBuiltin<P::Context>),
     UserDefinedFunction(&'r Function),
 }
 
-impl<C> fmt::Debug for ItemInModule<'_, C> {
+impl<P: Platform> fmt::Debug for ItemInModule<'_, P> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Binding(value) => {
