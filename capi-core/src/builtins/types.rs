@@ -27,6 +27,7 @@ pub enum Builtin<P: Platform> {
 
 pub type CoreBuiltin =
     fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
+
 pub type PlatformBuiltin<C> =
     fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
 
