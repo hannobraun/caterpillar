@@ -1,4 +1,5 @@
 use crate::{
+    builtins::types::RuntimeContext,
     pipeline::{Function, Module},
     platform::Platform,
     repr::eval::{
@@ -13,7 +14,6 @@ use super::{
     data_stack::{DataStack, DataStackError},
     namespaces::{
         IntrinsicFunctionState, ItemInModule, Namespace, ResolveError,
-        RuntimeContext,
     },
 };
 

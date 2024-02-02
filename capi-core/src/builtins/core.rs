@@ -4,11 +4,11 @@ use crate::{
     runtime::{
         call_stack::StackFrame,
         data_stack::DataStackResult,
-        namespaces::{
-            IntrinsicFunction, IntrinsicFunctionState, RuntimeContext,
-        },
+        namespaces::{IntrinsicFunction, IntrinsicFunctionState},
     },
 };
+
+use super::types::RuntimeContext;
 
 pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
     [

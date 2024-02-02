@@ -1,11 +1,12 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
+    builtins::types::RuntimeContext,
     platform::Platform,
     repr::eval::value,
     runtime::{
         data_stack::DataStackResult,
-        namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},
+        namespaces::{PlatformFunction, PlatformFunctionState},
     },
 };
 

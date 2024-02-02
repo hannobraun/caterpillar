@@ -2,11 +2,12 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
+    builtins::types::RuntimeContext,
     platform::Platform,
     repr::eval::value,
     runtime::{
         data_stack::DataStackResult,
-        namespaces::{PlatformFunction, PlatformFunctionState, RuntimeContext},
+        namespaces::{PlatformFunction, PlatformFunctionState},
     },
 };
 use chrono::Local;
