@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins::{core::CorePlatform, types::Builtin},
+    builtins::core::CorePlatform,
     pipeline::{Function, Module},
     platform::{BuiltinFn, Platform},
     repr::eval::{
@@ -120,6 +120,12 @@ impl<P: Platform> fmt::Debug for ItemInModule<'_, P> {
                 .finish(),
         }
     }
+}
+
+#[derive(Debug)]
+pub enum Builtin<P: Platform> {
+    Core(BuiltinFn<CorePlatform>),
+    Platform(BuiltinFn<P>),
 }
 
 #[derive(Debug, thiserror::Error)]
