@@ -1,5 +1,4 @@
 use crate::{
-    builtins::types::PlatformBuiltinState,
     pipeline::Module,
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{
@@ -46,4 +45,9 @@ pub struct CoreContext<'r> {
     pub call_stack: &'r mut CallStack,
     pub data_stack: &'r mut DataStack,
     pub side_stack: &'r mut DataStack,
+}
+
+pub enum PlatformBuiltinState {
+    Done,
+    Sleeping,
 }

@@ -16,8 +16,3 @@ pub enum CoreBuiltinState {
     StepDone,
     FullyCompleted,
 }
-
-pub enum PlatformBuiltinState {
-    Done,
-    Sleeping,
-}

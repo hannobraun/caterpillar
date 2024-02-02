@@ -1,7 +1,7 @@
 use crate::{
-    builtins::types::{CoreBuiltinState, PlatformBuiltinState},
+    builtins::types::CoreBuiltinState,
     pipeline::{Function, Module},
-    platform::{CoreContext, Platform},
+    platform::{CoreContext, Platform, PlatformBuiltinState},
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
