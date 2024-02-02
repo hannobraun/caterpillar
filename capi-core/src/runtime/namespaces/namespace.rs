@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    intrinsics,
+    builtins,
     pipeline::{Function, Module},
     repr::eval::{
         fragments::{FragmentId, Fragments},
@@ -22,7 +22,7 @@ impl<C> Namespace<C> {
     pub fn new(global_module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
-        for (intrinsic, name) in intrinsics::all() {
+        for (intrinsic, name) in builtins::all() {
             native_functions
                 .insert(name.to_string(), NativeFunction::Intrinsic(intrinsic));
         }
