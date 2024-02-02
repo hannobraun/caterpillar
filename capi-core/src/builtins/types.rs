@@ -19,7 +19,7 @@ pub struct BuiltinContext<'r> {
 }
 
 #[derive(Debug)]
-pub enum NativeFunction<C> {
+pub enum Builtin<C> {
     Intrinsic(CoreBuiltin),
     Platform(PlatformBuiltin<C>),
 }

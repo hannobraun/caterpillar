@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, fmt};
 use crate::{
     builtins::{
         self,
-        types::{CoreBuiltin, NativeFunction, PlatformBuiltin},
+        types::{Builtin, CoreBuiltin, PlatformBuiltin},
     },
     pipeline::{Function, Module},
     repr::eval::{
@@ -14,7 +14,7 @@ use crate::{
 
 #[derive(Debug)]
 pub struct Namespace<C> {
-    native_functions: BTreeMap<String, NativeFunction<C>>,
+    native_functions: BTreeMap<String, Builtin<C>>,
     global_module: Module,
 }
 
@@ -24,7 +24,7 @@ impl<C> Namespace<C> {
 
         for (intrinsic, name) in builtins::core::all() {
             native_functions
-                .insert(name.to_string(), NativeFunction::Intrinsic(intrinsic));
+                .insert(name.to_string(), Builtin::Intrinsic(intrinsic));
         }
 
         Self {
@@ -39,7 +39,7 @@ impl<C> Namespace<C> {
     ) {
         for (function, name) in functions {
             self.native_functions
-                .insert(name.into(), NativeFunction::Platform(function));
+                .insert(name.into(), Builtin::Platform(function));
         }
     }
 
@@ -50,10 +50,10 @@ impl<C> Namespace<C> {
     pub fn resolve(&self, name: &str) -> Result<ItemInModule<C>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
-                NativeFunction::Intrinsic(function) => {
+                Builtin::Intrinsic(function) => {
                     ItemInModule::IntrinsicFunction(*function)
                 }
-                NativeFunction::Platform(function) => {
+                Builtin::Platform(function) => {
                     ItemInModule::PlatformFunction(function)
                 }
             });
