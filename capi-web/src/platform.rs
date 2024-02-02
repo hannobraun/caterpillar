@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    builtins::types::RuntimeContext,
+    builtins::types::BuiltinContext,
     platform::Platform,
     repr::eval::value,
     runtime::{
@@ -58,7 +58,7 @@ pub enum Event {
 }
 
 pub fn delay_ms(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformFunctionState> {
     let (delay_ms, _) =
@@ -74,7 +74,7 @@ pub fn delay_ms(
 }
 
 pub fn print(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformFunctionState> {
     let value = runtime_context.data_stack.pop_any()?;

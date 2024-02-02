@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    builtins::types::RuntimeContext,
+    builtins::types::BuiltinContext,
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
@@ -74,7 +74,7 @@ struct Context<'r> {
 }
 
 fn fn_(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     _platform_context: &mut Context,
 ) -> DataStackResult<PlatformFunctionState> {
     let (body, _) =
@@ -93,7 +93,7 @@ fn fn_(
 }
 
 fn mod_(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformFunctionState> {
     let (path_as_values, _) =

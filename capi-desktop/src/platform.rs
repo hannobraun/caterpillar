@@ -1,7 +1,7 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    builtins::types::RuntimeContext,
+    builtins::types::BuiltinContext,
     platform::Platform,
     repr::eval::value,
     runtime::{
@@ -76,7 +76,7 @@ pub enum PixelOp {
 }
 
 fn clear_pixel(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     platform_context: &mut PlatformContext,
 ) -> DataStackResult<PlatformFunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
@@ -88,7 +88,7 @@ fn clear_pixel(
 }
 
 fn delay_ms(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     _: &mut PlatformContext,
 ) -> DataStackResult<PlatformFunctionState> {
     let (delay_ms, _) =
@@ -98,7 +98,7 @@ fn delay_ms(
 }
 
 fn print(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     _: &mut PlatformContext,
 ) -> DataStackResult<PlatformFunctionState> {
     let value = runtime_context.data_stack.pop_any()?;
@@ -108,7 +108,7 @@ fn print(
 }
 
 fn set_pixel(
-    runtime_context: RuntimeContext,
+    runtime_context: BuiltinContext,
     platform_context: &mut PlatformContext,
 ) -> DataStackResult<PlatformFunctionState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;

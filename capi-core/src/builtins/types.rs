@@ -4,7 +4,7 @@ use crate::{
     runtime::{call_stack::CallStack, data_stack::DataStack},
 };
 
-pub struct RuntimeContext<'r> {
+pub struct BuiltinContext<'r> {
     /// The fragment ID of the word that refers to this intrinsic or platform fn
     pub word: FragmentId,
 

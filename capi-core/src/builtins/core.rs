@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-use super::types::RuntimeContext;
+use super::types::BuiltinContext;
 
 pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
     [
@@ -41,7 +41,7 @@ pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
 
 fn add(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -58,7 +58,7 @@ fn add(
 
 fn and(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -75,7 +75,7 @@ fn and(
 
 fn append(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -120,7 +120,7 @@ fn append(
 
 fn array(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -133,7 +133,7 @@ fn array(
 
 fn bind(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -154,7 +154,7 @@ fn bind(
 
 fn clone(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -171,7 +171,7 @@ fn clone(
 
 fn drop(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -184,7 +184,7 @@ fn drop(
 
 fn each(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -246,7 +246,7 @@ fn each(
 
 fn eq(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -265,7 +265,7 @@ fn eq(
 
 fn eval(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -299,7 +299,7 @@ fn eval(
 
 fn false_(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -312,7 +312,7 @@ fn false_(
 
 fn get(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -337,7 +337,7 @@ fn get(
 
 fn gt(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -354,7 +354,7 @@ fn gt(
 
 fn if_(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -378,7 +378,7 @@ fn if_(
 
 fn len(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -401,7 +401,7 @@ fn len(
 
 fn nop(
     step: usize,
-    _: RuntimeContext,
+    _: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => Ok(IntrinsicFunctionState::StepDone),
@@ -411,7 +411,7 @@ fn nop(
 
 fn not(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -427,7 +427,7 @@ fn not(
 
 fn over(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -446,7 +446,7 @@ fn over(
 
 fn set(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -468,7 +468,7 @@ fn set(
 
 fn sub(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -485,7 +485,7 @@ fn sub(
 
 fn swap(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -503,7 +503,7 @@ fn swap(
 
 fn test(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -527,7 +527,7 @@ fn test(
 
 fn true_(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
@@ -540,7 +540,7 @@ fn true_(
 
 fn unwrap(
     step: usize,
-    context: RuntimeContext,
+    context: BuiltinContext,
 ) -> DataStackResult<IntrinsicFunctionState> {
     match step {
         0 => {
