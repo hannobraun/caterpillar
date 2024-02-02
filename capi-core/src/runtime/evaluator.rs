@@ -14,7 +14,6 @@ use super::{
     namespaces::{ItemInModule, Namespace, ResolveError},
 };
 
-#[derive(Debug)]
 pub struct Evaluator<P: Platform> {
     pub global_namespace: Namespace<P::Context>,
     pub call_stack: CallStack,
