@@ -21,7 +21,7 @@ pub struct BuiltinContext<'r> {
 
 #[derive(Debug)]
 pub enum Builtin<P: Platform> {
-    Intrinsic(CoreBuiltin),
+    Core(CoreBuiltin),
     Platform(PlatformBuiltin<P>),
 }
 

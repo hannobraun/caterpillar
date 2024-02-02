@@ -23,8 +23,7 @@ impl<P: Platform> Namespace<P> {
         let mut native_functions = BTreeMap::new();
 
         for (intrinsic, name) in builtins::core::all() {
-            native_functions
-                .insert(name.to_string(), Builtin::Intrinsic(intrinsic));
+            native_functions.insert(name.to_string(), Builtin::Core(intrinsic));
         }
 
         Self {
@@ -50,7 +49,7 @@ impl<P: Platform> Namespace<P> {
     pub fn resolve(&self, name: &str) -> Result<ItemInModule<P>, ResolveError> {
         let native_function =
             self.native_functions.get(name).map(|native| match native {
-                Builtin::Intrinsic(function) => {
+                Builtin::Core(function) => {
                     ItemInModule::IntrinsicFunction(*function)
                 }
                 Builtin::Platform(function) => {
