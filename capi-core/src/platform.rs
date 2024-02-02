@@ -22,5 +22,8 @@ impl<T, P: Platform> BuiltinFns<P> for T where
 // According to the warning, the bound is not enforced in the type alias. We
 // still need it here, however, so we can refer to its associated types.
 #[allow(type_alias_bounds)]
-pub type BuiltinFn<P: Platform> =
-    fn(CoreContext, &mut P::Context) -> DataStackResult<PlatformBuiltinState>;
+pub type BuiltinFn<P: Platform> = fn(
+    step: usize,
+    CoreContext,
+    &mut P::Context,
+) -> DataStackResult<PlatformBuiltinState>;

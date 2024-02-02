@@ -117,6 +117,7 @@ impl<P: Platform> Evaluator<P> {
                             }
                             ItemInModule::PlatformFunction(f) => {
                                 let function_state = f(
+                                    0, // placeholder!
                                     self.runtime_context(
                                         fragment_id,
                                         fragments,

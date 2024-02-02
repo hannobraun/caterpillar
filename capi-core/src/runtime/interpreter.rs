@@ -466,12 +466,19 @@ mod tests {
     }
 
     pub fn ping(
+        step: usize,
         runtime_context: CoreContext,
         platform_context: &mut PlatformContext,
     ) -> DataStackResult<PlatformBuiltinState> {
-        let (channel, _) =
-            runtime_context.data_stack.pop_specific::<value::Number>()?;
-        *platform_context.channels.entry(channel.0).or_insert(0) += 1;
-        Ok(PlatformBuiltinState::Done)
+        match step {
+            0 => {
+                let (channel, _) = runtime_context
+                    .data_stack
+                    .pop_specific::<value::Number>()?;
+                *platform_context.channels.entry(channel.0).or_insert(0) += 1;
+                Ok(PlatformBuiltinState::Done)
+            }
+            _ => unreachable!(),
+        }
     }
 }

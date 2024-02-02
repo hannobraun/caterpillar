@@ -68,62 +68,75 @@ struct Context<'r> {
 }
 
 fn fn_(
+    step: usize,
     runtime_context: CoreContext,
     _platform_context: &mut Context,
 ) -> DataStackResult<PlatformBuiltinState> {
-    let (body, _) =
-        runtime_context.data_stack.pop_specific::<value::Block>()?;
-    let (name, name_fragment) =
-        runtime_context.data_stack.pop_specific::<value::Symbol>()?;
+    match step {
+        0 => {
+            let (body, _) =
+                runtime_context.data_stack.pop_specific::<value::Block>()?;
+            let (name, name_fragment) =
+                runtime_context.data_stack.pop_specific::<value::Symbol>()?;
 
-    let name = FunctionName {
-        value: name.0,
-        fragment: name_fragment,
-    };
+            let name = FunctionName {
+                value: name.0,
+                fragment: name_fragment,
+            };
 
-    runtime_context.global_module.define_function(name, body);
+            runtime_context.global_module.define_function(name, body);
 
-    Ok(PlatformBuiltinState::Done)
+            Ok(PlatformBuiltinState::Done)
+        }
+
+        _ => unreachable!(),
+    }
 }
 
 fn mod_(
+    step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformBuiltinState> {
-    let (path_as_values, _) =
-        runtime_context.data_stack.pop_specific::<value::Array>()?;
+    match step {
+        0 => {
+            let (path_as_values, _) =
+                runtime_context.data_stack.pop_specific::<value::Array>()?;
 
-    let mut path = Vec::new();
-    for value in path_as_values.0 {
-        let symbol = value.expect::<value::Symbol>()?;
-        path.push(symbol);
+            let mut path = Vec::new();
+            for value in path_as_values.0 {
+                let symbol = value.expect::<value::Symbol>()?;
+                path.push(symbol);
+            }
+
+            // The error handling here is not great, since the return value of
+            // platform functions doesn't give us a lot of flexibility.
+            //
+            // We'll need a platform-specific return value before long,
+            // probably, but this will do for now.
+            let code = platform_context.scripts.inner.get(&path).unwrap();
+
+            // The error handling here is not great, since the return value of
+            // platform functions doesn't give us a lot of flexibility.
+            //
+            // We'll need a platform-specific return value before long,
+            // probably, but this will do for now.
+            let parent = Some(runtime_context.word);
+            let PipelineOutput { mut module, .. } = pipeline::run(
+                code,
+                parent,
+                runtime_context.fragments,
+                platform_context.scripts,
+            )
+            .unwrap();
+
+            // Eventually, we'd want to add `module` as a child to the existing
+            // module. For now, everything lives in a single global namespace,
+            // so we just merge the two modules together.
+            runtime_context.global_module.merge(&mut module);
+
+            Ok(PlatformBuiltinState::Done)
+        }
+        _ => unreachable!(),
     }
-
-    // The error handling here is not great, since the return value of platform
-    // functions doesn't give us a lot of flexibility.
-    //
-    // We'll need a platform-specific return value before long, probably, but
-    // this will do for now.
-    let code = platform_context.scripts.inner.get(&path).unwrap();
-
-    // The error handling here is not great, since the return value of platform
-    // functions doesn't give us a lot of flexibility.
-    //
-    // We'll need a platform-specific return value before long, probably, but
-    // this will do for now.
-    let parent = Some(runtime_context.word);
-    let PipelineOutput { mut module, .. } = pipeline::run(
-        code,
-        parent,
-        runtime_context.fragments,
-        platform_context.scripts,
-    )
-    .unwrap();
-
-    // Eventually, we'd want to add `module` as a child to the existing module.
-    // For now, everything lives in a single global namespace, so we just merge
-    // the two modules together.
-    runtime_context.global_module.merge(&mut module);
-
-    Ok(PlatformBuiltinState::Done)
 }

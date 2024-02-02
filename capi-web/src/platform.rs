@@ -50,29 +50,42 @@ pub enum Event {
 }
 
 pub fn delay_ms(
+    step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformBuiltinState> {
-    let (delay_ms, _) =
-        runtime_context.data_stack.pop_specific::<value::Number>()?;
+    match step {
+        0 => {
+            let (delay_ms, _) =
+                runtime_context.data_stack.pop_specific::<value::Number>()?;
 
-    let delay_ms = delay_ms
-        .0
-        .try_into()
-        .expect("Negative sleep duration is invalid");
-    platform_context.sleep_duration = Some(Duration::from_millis(delay_ms));
+            let delay_ms = delay_ms
+                .0
+                .try_into()
+                .expect("Negative sleep duration is invalid");
+            platform_context.sleep_duration =
+                Some(Duration::from_millis(delay_ms));
 
-    Ok(PlatformBuiltinState::Sleeping)
+            Ok(PlatformBuiltinState::Sleeping)
+        }
+        _ => unreachable!(),
+    }
 }
 
 pub fn print(
+    step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
 ) -> DataStackResult<PlatformBuiltinState> {
-    let value = runtime_context.data_stack.pop_any()?;
-    platform_context
-        .events
-        .output(format!("{}\n", value.payload));
-    runtime_context.data_stack.push(value);
-    Ok(PlatformBuiltinState::Done)
+    match step {
+        0 => {
+            let value = runtime_context.data_stack.pop_any()?;
+            platform_context
+                .events
+                .output(format!("{}\n", value.payload));
+            runtime_context.data_stack.push(value);
+            Ok(PlatformBuiltinState::Done)
+        }
+        _ => unreachable!(),
+    }
 }
