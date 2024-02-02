@@ -7,7 +7,7 @@ use crate::{
 
 use super::types::CoreBuiltin;
 
-pub struct CorePlatform {}
+pub struct CorePlatform;
 
 impl Platform for CorePlatform {
     type Context = ();
