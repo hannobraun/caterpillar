@@ -1,7 +1,6 @@
-use crate::{
-    platform::{BuiltinFn, BuiltinFnState, CoreContext, Platform},
-    runtime::data_stack::DataStackResult,
-};
+use crate::platform::{BuiltinFn, Platform};
+
+use super::core::CorePlatform;
 
 #[derive(Debug)]
 pub enum Builtin<P: Platform> {
@@ -9,5 +8,4 @@ pub enum Builtin<P: Platform> {
     Platform(BuiltinFn<P>),
 }
 
-pub type CoreBuiltin =
-    fn(step: usize, CoreContext, &mut ()) -> DataStackResult<BuiltinFnState>;
+pub type CoreBuiltin = BuiltinFn<CorePlatform>;
