@@ -15,7 +15,7 @@ pub struct BuiltinContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
-pub enum PlatformFunctionState {
+pub enum PlatformBuiltinState {
     Done,
     Sleeping,
 }

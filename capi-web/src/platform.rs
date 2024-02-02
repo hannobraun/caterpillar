@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    builtins::types::{BuiltinContext, PlatformFunctionState},
+    builtins::types::{BuiltinContext, PlatformBuiltinState},
     platform::Platform,
     repr::eval::value,
     runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
@@ -57,7 +57,7 @@ pub enum Event {
 pub fn delay_ms(
     runtime_context: BuiltinContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
 
@@ -67,17 +67,17 @@ pub fn delay_ms(
         .expect("Negative sleep duration is invalid");
     platform_context.sleep_duration = Some(Duration::from_millis(delay_ms));
 
-    Ok(PlatformFunctionState::Sleeping)
+    Ok(PlatformBuiltinState::Sleeping)
 }
 
 pub fn print(
     runtime_context: BuiltinContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let value = runtime_context.data_stack.pop_any()?;
     platform_context
         .events
         .output(format!("{}\n", value.payload));
     runtime_context.data_stack.push(value);
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }

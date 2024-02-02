@@ -188,7 +188,7 @@ mod tests {
     use std::collections::{BTreeMap, HashMap};
 
     use crate::{
-        builtins::types::{BuiltinContext, PlatformFunctionState},
+        builtins::types::{BuiltinContext, PlatformBuiltinState},
         pipeline::{PipelineError, Scripts},
         platform::Platform,
         repr::eval::value,
@@ -473,10 +473,10 @@ mod tests {
     pub fn ping(
         runtime_context: BuiltinContext,
         platform_context: &mut PlatformContext,
-    ) -> DataStackResult<PlatformFunctionState> {
+    ) -> DataStackResult<PlatformBuiltinState> {
         let (channel, _) =
             runtime_context.data_stack.pop_specific::<value::Number>()?;
         *platform_context.channels.entry(channel.0).or_insert(0) += 1;
-        Ok(PlatformFunctionState::Done)
+        Ok(PlatformBuiltinState::Done)
     }
 }

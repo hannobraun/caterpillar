@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    builtins::types::{BuiltinContext, PlatformFunctionState},
+    builtins::types::{BuiltinContext, PlatformBuiltinState},
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
@@ -76,7 +76,7 @@ struct Context<'r> {
 fn fn_(
     runtime_context: BuiltinContext,
     _platform_context: &mut Context,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (body, _) =
         runtime_context.data_stack.pop_specific::<value::Block>()?;
     let (name, name_fragment) =
@@ -89,13 +89,13 @@ fn fn_(
 
     runtime_context.global_module.define_function(name, body);
 
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }
 
 fn mod_(
     runtime_context: BuiltinContext,
     platform_context: &mut Context,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (path_as_values, _) =
         runtime_context.data_stack.pop_specific::<value::Array>()?;
 
@@ -131,5 +131,5 @@ fn mod_(
     // the two modules together.
     runtime_context.global_module.merge(&mut module);
 
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }

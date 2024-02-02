@@ -1,7 +1,7 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    builtins::types::{BuiltinContext, PlatformFunctionState},
+    builtins::types::{BuiltinContext, PlatformBuiltinState},
     platform::Platform,
     repr::eval::value,
     runtime::{data_stack::DataStackResult, namespaces::PlatformFunction},
@@ -75,43 +75,43 @@ pub enum PixelOp {
 fn clear_pixel(
     runtime_context: BuiltinContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
     platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
 
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }
 
 fn delay_ms(
     runtime_context: BuiltinContext,
     _: &mut PlatformContext,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (delay_ms, _) =
         runtime_context.data_stack.pop_specific::<value::Number>()?;
     thread::sleep(Duration::from_millis(delay_ms.0.try_into().unwrap()));
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }
 
 fn print(
     runtime_context: BuiltinContext,
     _: &mut PlatformContext,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let value = runtime_context.data_stack.pop_any()?;
     println!("{}", value.payload);
     runtime_context.data_stack.push(value);
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }
 
 fn set_pixel(
     runtime_context: BuiltinContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<PlatformFunctionState> {
+) -> DataStackResult<PlatformBuiltinState> {
     let (y, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
     let (x, _) = runtime_context.data_stack.pop_specific::<value::Number>()?;
 
     platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
-    Ok(PlatformFunctionState::Done)
+    Ok(PlatformBuiltinState::Done)
 }
