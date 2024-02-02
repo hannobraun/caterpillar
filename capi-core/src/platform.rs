@@ -1,6 +1,11 @@
 use crate::{
-    builtins::types::{CoreContext, PlatformBuiltinState},
-    runtime::data_stack::DataStackResult,
+    builtins::types::PlatformBuiltinState,
+    pipeline::Module,
+    repr::eval::fragments::{FragmentId, Fragments},
+    runtime::{
+        call_stack::CallStack,
+        data_stack::{DataStack, DataStackResult},
+    },
 };
 
 pub trait Platform: Sized {
@@ -31,3 +36,14 @@ pub type BuiltinFn<P: Platform> = fn(
     core_context: CoreContext,
     platform_context: &mut P::Context,
 ) -> DataStackResult<PlatformBuiltinState>;
+
+pub struct CoreContext<'r> {
+    /// The fragment ID of the word that refers to this intrinsic or platform fn
+    pub word: FragmentId,
+
+    pub fragments: &'r mut Fragments,
+    pub global_module: &'r mut Module,
+    pub call_stack: &'r mut CallStack,
+    pub data_stack: &'r mut DataStack,
+    pub side_stack: &'r mut DataStack,
+}

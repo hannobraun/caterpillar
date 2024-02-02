@@ -2,8 +2,8 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    builtins::types::{CoreContext, PlatformBuiltinState},
-    platform::{BuiltinFn, BuiltinFns, Platform},
+    builtins::types::PlatformBuiltinState,
+    platform::{BuiltinFn, BuiltinFns, CoreContext, Platform},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };

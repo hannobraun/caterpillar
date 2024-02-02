@@ -1,10 +1,11 @@
 use crate::{
     pipeline::FunctionName,
+    platform::CoreContext,
     repr::eval::value::{self, Value, ValuePayload},
     runtime::{call_stack::StackFrame, data_stack::DataStackResult},
 };
 
-use super::types::{CoreBuiltin, CoreBuiltinState, CoreContext};
+use super::types::{CoreBuiltin, CoreBuiltinState};
 
 pub fn all() -> impl IntoIterator<Item = (CoreBuiltin, &'static str)> {
     [

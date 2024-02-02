@@ -1,11 +1,11 @@
 use std::marker::PhantomData;
 
 use crate::{
-    builtins::types::{CoreContext, PlatformBuiltinState},
+    builtins::types::PlatformBuiltinState,
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
-    platform::{BuiltinFn, BuiltinFns, Platform},
+    platform::{BuiltinFn, BuiltinFns, CoreContext, Platform},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value,
