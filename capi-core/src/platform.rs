@@ -1,6 +1,6 @@
 use crate::builtins::types::PlatformBuiltin;
 
-pub trait Platform {
+pub trait Platform: Sized {
     type Context;
 
     fn builtins(
