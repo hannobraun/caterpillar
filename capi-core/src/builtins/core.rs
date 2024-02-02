@@ -36,7 +36,11 @@ pub fn all() -> impl IntoIterator<Item = (CoreBuiltin, &'static str)> {
     ]
 }
 
-fn add(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn add(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -50,7 +54,11 @@ fn add(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn and(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn and(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Bool>()?;
@@ -67,6 +75,7 @@ fn and(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
 fn append(
     step: usize,
     context: CoreContext,
+    _platform_context: &mut (),
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
@@ -109,7 +118,11 @@ fn append(
     }
 }
 
-fn array(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn array(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Array(Vec::new()));
@@ -119,7 +132,11 @@ fn array(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn bind(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn bind(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (symbols, _) =
@@ -137,7 +154,11 @@ fn bind(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn clone(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn clone(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -151,7 +172,11 @@ fn clone(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn drop(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn drop(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             context.data_stack.pop_any()?;
@@ -161,7 +186,11 @@ fn drop(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn each(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn each(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (block, _) =
@@ -220,7 +249,11 @@ fn each(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn eq(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn eq(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -236,7 +269,11 @@ fn eq(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn eval(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn eval(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (block, _) =
@@ -270,6 +307,7 @@ fn eval(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
 fn false_(
     step: usize,
     context: CoreContext,
+    _platform_context: &mut (),
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
@@ -280,7 +318,11 @@ fn false_(
     }
 }
 
-fn get(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn get(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (index, _) =
@@ -302,7 +344,11 @@ fn get(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn gt(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn gt(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -316,7 +362,11 @@ fn gt(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn if_(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn if_(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (else_, _) =
@@ -337,7 +387,11 @@ fn if_(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn len(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn len(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (array, fragment) =
@@ -357,14 +411,22 @@ fn len(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn nop(step: usize, _: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn nop(
+    step: usize,
+    _: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => Ok(BuiltinFnState::Stepped),
         _ => Ok(BuiltinFnState::Completed),
     }
 }
 
-fn not(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn not(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (a, _) = context.data_stack.pop_specific::<value::Bool>()?;
@@ -377,7 +439,11 @@ fn not(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn over(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn over(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let top = context.data_stack.pop_any()?;
@@ -393,7 +459,11 @@ fn over(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn set(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn set(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let value = context.data_stack.pop_any()?;
@@ -412,7 +482,11 @@ fn set(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn sub(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn sub(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (b, _) = context.data_stack.pop_specific::<value::Number>()?;
@@ -426,7 +500,11 @@ fn sub(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn swap(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn swap(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let b = context.data_stack.pop_any()?;
@@ -441,7 +519,11 @@ fn swap(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn test(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn test(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (body, _) =
@@ -462,7 +544,11 @@ fn test(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
     }
 }
 
-fn true_(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
+fn true_(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut (),
+) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             context.data_stack.push_bare(value::Bool(true));
@@ -475,6 +561,7 @@ fn true_(step: usize, context: CoreContext) -> DataStackResult<BuiltinFnState> {
 fn unwrap(
     step: usize,
     context: CoreContext,
+    _platform_context: &mut (),
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {

@@ -164,12 +164,15 @@ impl<P: Platform> Evaluator<P> {
                 function,
                 step,
             } => {
-                let state =
-                    function(step, self.runtime_context(word, fragments))
-                        .map_err(|err| EvaluatorError {
-                            kind: err.into(),
-                            fragment: word,
-                        })?;
+                let state = function(
+                    step,
+                    self.runtime_context(word, fragments),
+                    &mut (),
+                )
+                .map_err(|err| EvaluatorError {
+                    kind: err.into(),
+                    fragment: word,
+                })?;
 
                 match state {
                     BuiltinFnState::Completed => {
