@@ -68,15 +68,15 @@ pub enum PixelOp {
 
 fn clear_pixel(
     step: usize,
-    runtime_context: CoreContext,
+    core_context: CoreContext,
     platform_context: &mut PlatformContext,
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (y, _) =
-                runtime_context.data_stack.pop_specific::<value::Number>()?;
+                core_context.data_stack.pop_specific::<value::Number>()?;
             let (x, _) =
-                runtime_context.data_stack.pop_specific::<value::Number>()?;
+                core_context.data_stack.pop_specific::<value::Number>()?;
 
             platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
 
@@ -88,13 +88,13 @@ fn clear_pixel(
 
 fn delay_ms(
     step: usize,
-    runtime_context: CoreContext,
+    core_context: CoreContext,
     _: &mut PlatformContext,
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (delay_ms, _) =
-                runtime_context.data_stack.pop_specific::<value::Number>()?;
+                core_context.data_stack.pop_specific::<value::Number>()?;
             thread::sleep(Duration::from_millis(
                 delay_ms.0.try_into().unwrap(),
             ));
@@ -106,14 +106,14 @@ fn delay_ms(
 
 fn print(
     step: usize,
-    runtime_context: CoreContext,
+    core_context: CoreContext,
     _: &mut PlatformContext,
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
-            let value = runtime_context.data_stack.pop_any()?;
+            let value = core_context.data_stack.pop_any()?;
             println!("{}", value.payload);
-            runtime_context.data_stack.push(value);
+            core_context.data_stack.push(value);
             Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
@@ -122,15 +122,15 @@ fn print(
 
 fn set_pixel(
     step: usize,
-    runtime_context: CoreContext,
+    core_context: CoreContext,
     platform_context: &mut PlatformContext,
 ) -> DataStackResult<BuiltinFnState> {
     match step {
         0 => {
             let (y, _) =
-                runtime_context.data_stack.pop_specific::<value::Number>()?;
+                core_context.data_stack.pop_specific::<value::Number>()?;
             let (x, _) =
-                runtime_context.data_stack.pop_specific::<value::Number>()?;
+                core_context.data_stack.pop_specific::<value::Number>()?;
 
             platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
