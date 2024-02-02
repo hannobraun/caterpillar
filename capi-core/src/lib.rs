@@ -6,7 +6,6 @@
 // but it doesn't seem to work. Or I'm holding it wrong. I don't know.
 #![allow(clippy::module_inception)]
 
-pub mod builtins;
 pub mod pipeline;
 pub mod platform;
 pub mod repr;

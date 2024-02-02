@@ -1,5 +1,5 @@
 use crate::{
-    builtins::core::CorePlatform, platform::BuiltinFn,
+    platform::{core::CorePlatform, BuiltinFn},
     repr::eval::fragments::FragmentId,
 };
 

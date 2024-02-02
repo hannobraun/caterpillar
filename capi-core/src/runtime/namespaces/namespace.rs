@@ -1,9 +1,8 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins::core::CorePlatform,
     pipeline::{Function, Module},
-    platform::{BuiltinFn, Platform},
+    platform::{core::CorePlatform, BuiltinFn, Platform},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value::Value,
