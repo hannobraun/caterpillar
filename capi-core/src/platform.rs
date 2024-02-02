@@ -3,7 +3,7 @@ use crate::builtins::types::PlatformBuiltin;
 pub trait Platform: Sized {
     type Context;
 
-    fn builtins() -> impl PlatformBuiltins<Self>;
+    fn builtin_fns() -> impl PlatformBuiltins<Self>;
 }
 
 pub trait PlatformBuiltins<P: Platform>:

@@ -457,7 +457,7 @@ mod tests {
     impl Platform for TestPlatform {
         type Context = PlatformContext;
 
-        fn builtins() -> impl PlatformBuiltins<Self> {
+        fn builtin_fns() -> impl PlatformBuiltins<Self> {
             [(ping as PlatformBuiltin<Self>, "ping")]
         }
     }

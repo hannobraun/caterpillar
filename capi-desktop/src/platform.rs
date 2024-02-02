@@ -12,7 +12,7 @@ pub struct DesktopPlatform;
 impl Platform for DesktopPlatform {
     type Context = PlatformContext;
 
-    fn builtins() -> impl PlatformBuiltins<Self> {
+    fn builtin_fns() -> impl PlatformBuiltins<Self> {
         [
             (clear_pixel as PlatformBuiltin<Self>, "clear_pixel"),
             (delay_ms, "delay_ms"),

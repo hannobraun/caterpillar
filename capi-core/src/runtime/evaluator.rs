@@ -25,7 +25,7 @@ impl<P: Platform> Evaluator<P> {
     pub fn new(module: Module) -> Self {
         let mut global_namespace = Namespace::new(module);
 
-        global_namespace.register_platform(P::builtins());
+        global_namespace.register_platform(P::builtin_fns());
 
         Self {
             global_namespace,
