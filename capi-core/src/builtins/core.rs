@@ -1,6 +1,6 @@
 use crate::{
     pipeline::FunctionName,
-    platform::{BuiltinFnState, CoreContext, Platform},
+    platform::{BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::value::{self, Value, ValuePayload},
     runtime::{call_stack::StackFrame, data_stack::DataStackResult},
 };
@@ -12,7 +12,7 @@ pub struct CorePlatform {}
 impl Platform for CorePlatform {
     type Context = ();
 
-    fn builtin_fns() -> impl crate::platform::BuiltinFns<Self> {
+    fn builtin_fns() -> impl BuiltinFns<Self> {
         [
             (add as CoreBuiltin, "+"),
             (and, "and"),
