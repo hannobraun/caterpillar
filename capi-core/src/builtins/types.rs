@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-pub struct BuiltinContext<'r> {
+pub struct CoreContext<'r> {
     /// The fragment ID of the word that refers to this intrinsic or platform fn
     pub word: FragmentId,
 
@@ -26,16 +26,13 @@ pub enum Builtin<P: Platform> {
 }
 
 pub type CoreBuiltin =
-    fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
+    fn(step: usize, CoreContext) -> DataStackResult<CoreBuiltinState>;
 
 // According to the warning, the bound is not enforced in the type alias. We
 // still need it here, however, so we can refer to its associated types.
 #[allow(type_alias_bounds)]
 pub type PlatformBuiltin<P: Platform> =
-    fn(
-        BuiltinContext,
-        &mut P::Context,
-    ) -> DataStackResult<PlatformBuiltinState>;
+    fn(CoreContext, &mut P::Context) -> DataStackResult<PlatformBuiltinState>;
 
 pub enum CoreBuiltinState {
     StepDone,

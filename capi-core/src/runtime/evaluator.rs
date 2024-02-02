@@ -1,5 +1,5 @@
 use crate::{
-    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformBuiltinState},
+    builtins::types::{CoreBuiltinState, CoreContext, PlatformBuiltinState},
     pipeline::{Function, Module},
     platform::Platform,
     repr::eval::{
@@ -188,8 +188,8 @@ impl<P: Platform> Evaluator<P> {
         &'r mut self,
         word: FragmentId,
         fragments: &'r mut Fragments,
-    ) -> BuiltinContext<'r> {
-        BuiltinContext {
+    ) -> CoreContext<'r> {
+        CoreContext {
             word,
             fragments,
             global_module: self.global_namespace.global_module(),
