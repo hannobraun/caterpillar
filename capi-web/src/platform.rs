@@ -3,7 +3,7 @@ use std::time::Duration;
 use async_channel::Sender;
 use capi_core::{
     builtins::types::{BuiltinContext, PlatformBuiltin, PlatformBuiltinState},
-    platform::{Platform, PlatformBuiltins},
+    platform::{BuiltinFns, Platform},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -15,7 +15,7 @@ pub struct WebPlatform;
 impl Platform for WebPlatform {
     type Context = Context;
 
-    fn builtin_fns() -> impl PlatformBuiltins<Self> {
+    fn builtin_fns() -> impl BuiltinFns<Self> {
         [
             (delay_ms as PlatformBuiltin<Self>, "delay_ms"),
             (print, "print"),

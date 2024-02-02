@@ -5,7 +5,7 @@ use crate::{
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
-    platform::{Platform, PlatformBuiltins},
+    platform::{BuiltinFns, Platform},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value,
@@ -58,7 +58,7 @@ struct CompileTimePlatform<'r> {
 impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context<'r>;
 
-    fn builtin_fns() -> impl PlatformBuiltins<Self> {
+    fn builtin_fns() -> impl BuiltinFns<Self> {
         [(fn_ as PlatformBuiltin<Self>, "fn"), (mod_, "mod")]
     }
 }

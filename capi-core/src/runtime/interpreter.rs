@@ -192,7 +192,7 @@ mod tests {
             BuiltinContext, PlatformBuiltin, PlatformBuiltinState,
         },
         pipeline::{PipelineError, Scripts},
-        platform::{Platform, PlatformBuiltins},
+        platform::{BuiltinFns, Platform},
         repr::eval::value,
         runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
     };
@@ -457,7 +457,7 @@ mod tests {
     impl Platform for TestPlatform {
         type Context = PlatformContext;
 
-        fn builtin_fns() -> impl PlatformBuiltins<Self> {
+        fn builtin_fns() -> impl BuiltinFns<Self> {
             [(ping as PlatformBuiltin<Self>, "ping")]
         }
     }
