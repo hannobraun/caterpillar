@@ -14,5 +14,5 @@ pub type CoreBuiltin =
 
 pub enum CoreBuiltinState {
     Stepped,
-    FullyCompleted,
+    Completed,
 }

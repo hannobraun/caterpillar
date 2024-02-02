@@ -173,7 +173,7 @@ impl<P: Platform> Evaluator<P> {
                     CoreBuiltinState::Stepped => {
                         // Nothing to do. We already advanced the stack frame.
                     }
-                    CoreBuiltinState::FullyCompleted => {
+                    CoreBuiltinState::Completed => {
                         self.call_stack.pop();
                     }
                 }

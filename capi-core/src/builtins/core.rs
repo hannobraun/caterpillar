@@ -46,7 +46,7 @@ fn add(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -60,7 +60,7 @@ fn and(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -105,7 +105,7 @@ fn append(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -118,7 +118,7 @@ fn array(
             context.data_stack.push_bare(value::Array(Vec::new()));
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -139,7 +139,7 @@ fn bind(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -156,7 +156,7 @@ fn clone(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -169,7 +169,7 @@ fn drop(
             context.data_stack.pop_any()?;
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -231,7 +231,7 @@ fn each(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -247,7 +247,7 @@ fn eq(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -281,7 +281,7 @@ fn eval(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -294,7 +294,7 @@ fn false_(
             context.data_stack.push_bare(value::Bool(false));
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -316,7 +316,7 @@ fn get(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -330,7 +330,7 @@ fn gt(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -351,7 +351,7 @@ fn if_(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -371,14 +371,14 @@ fn len(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
 fn nop(step: usize, _: CoreContext) -> DataStackResult<CoreBuiltinState> {
     match step {
         0 => Ok(CoreBuiltinState::Stepped),
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -391,7 +391,7 @@ fn not(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -410,7 +410,7 @@ fn over(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -429,7 +429,7 @@ fn set(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -443,7 +443,7 @@ fn sub(step: usize, context: CoreContext) -> DataStackResult<CoreBuiltinState> {
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -461,7 +461,7 @@ fn swap(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -485,7 +485,7 @@ fn test(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -498,7 +498,7 @@ fn true_(
             context.data_stack.push_bare(value::Bool(true));
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
 
@@ -517,6 +517,6 @@ fn unwrap(
 
             Ok(CoreBuiltinState::Stepped)
         }
-        _ => Ok(CoreBuiltinState::FullyCompleted),
+        _ => Ok(CoreBuiltinState::Completed),
     }
 }
