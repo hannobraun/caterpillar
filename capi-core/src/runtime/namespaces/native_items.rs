@@ -1,5 +1,5 @@
 use crate::{
-    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformBuiltinState},
+    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformFunction},
     runtime::data_stack::DataStackResult,
 };
 
@@ -11,5 +11,3 @@ pub enum NativeFunction<C> {
 
 pub type IntrinsicFunction =
     fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
-pub type PlatformFunction<C> =
-    fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;

@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    builtins::types::{BuiltinContext, PlatformBuiltinState},
+    builtins::types::{BuiltinContext, PlatformBuiltinState, PlatformFunction},
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
@@ -14,7 +14,6 @@ use crate::{
         call_stack::StackFrame,
         data_stack::DataStackResult,
         evaluator::{Evaluator, EvaluatorError},
-        namespaces::PlatformFunction,
     },
 };
 

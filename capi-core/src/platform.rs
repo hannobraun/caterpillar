@@ -1,4 +1,4 @@
-use crate::runtime::namespaces::PlatformFunction;
+use crate::builtins::types::PlatformFunction;
 
 pub trait Platform {
     type Context;

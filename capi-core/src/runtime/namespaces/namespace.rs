@@ -1,13 +1,12 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins,
+    builtins::{self, types::PlatformFunction},
     pipeline::{Function, Module},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value::Value,
     },
-    runtime::namespaces::PlatformFunction,
 };
 
 use super::{IntrinsicFunction, NativeFunction};

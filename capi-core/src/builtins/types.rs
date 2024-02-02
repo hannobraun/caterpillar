@@ -1,7 +1,10 @@
 use crate::{
     pipeline::Module,
     repr::eval::fragments::{FragmentId, Fragments},
-    runtime::{call_stack::CallStack, data_stack::DataStack},
+    runtime::{
+        call_stack::CallStack,
+        data_stack::{DataStack, DataStackResult},
+    },
 };
 
 pub struct BuiltinContext<'r> {
@@ -14,6 +17,9 @@ pub struct BuiltinContext<'r> {
     pub data_stack: &'r mut DataStack,
     pub side_stack: &'r mut DataStack,
 }
+
+pub type PlatformFunction<C> =
+    fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
 
 pub enum CoreBuiltinState {
     StepDone,
