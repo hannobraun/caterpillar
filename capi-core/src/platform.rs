@@ -24,6 +24,6 @@ impl<T, P: Platform> BuiltinFns<P> for T where
 #[allow(type_alias_bounds)]
 pub type BuiltinFn<P: Platform> = fn(
     step: usize,
-    CoreContext,
-    &mut P::Context,
+    core_context: CoreContext,
+    platform_context: &mut P::Context,
 ) -> DataStackResult<PlatformBuiltinState>;
