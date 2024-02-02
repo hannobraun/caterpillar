@@ -18,7 +18,7 @@ pub struct BuiltinContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
-pub type PlatformFunction<C> =
+pub type PlatformBuiltin<C> =
     fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
 
 pub enum CoreBuiltinState {

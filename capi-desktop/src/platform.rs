@@ -1,7 +1,7 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    builtins::types::{BuiltinContext, PlatformBuiltinState, PlatformFunction},
+    builtins::types::{BuiltinContext, PlatformBuiltin, PlatformBuiltinState},
     platform::Platform,
     repr::eval::value,
     runtime::data_stack::DataStackResult,
@@ -13,11 +13,11 @@ impl Platform for DesktopPlatform {
     type Context = PlatformContext;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformFunction<PlatformContext>, &'static str)>
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<PlatformContext>, &'static str)>
     {
         [
             (
-                clear_pixel as PlatformFunction<PlatformContext>,
+                clear_pixel as PlatformBuiltin<PlatformContext>,
                 "clear_pixel",
             ),
             (delay_ms, "delay_ms"),

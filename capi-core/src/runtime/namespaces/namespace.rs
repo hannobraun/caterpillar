@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins::{self, types::PlatformFunction},
+    builtins::{self, types::PlatformBuiltin},
     pipeline::{Function, Module},
     repr::eval::{
         fragments::{FragmentId, Fragments},
@@ -34,7 +34,7 @@ impl<C> Namespace<C> {
 
     pub fn register_platform(
         &mut self,
-        functions: impl IntoIterator<Item = (PlatformFunction<C>, &'static str)>,
+        functions: impl IntoIterator<Item = (PlatformBuiltin<C>, &'static str)>,
     ) {
         for (function, name) in functions {
             self.native_functions
@@ -99,7 +99,7 @@ impl<C> Namespace<C> {
 pub enum ItemInModule<'r, C> {
     Binding(Value),
     IntrinsicFunction(IntrinsicFunction),
-    PlatformFunction(&'r PlatformFunction<C>),
+    PlatformFunction(&'r PlatformBuiltin<C>),
     UserDefinedFunction(&'r Function),
 }
 

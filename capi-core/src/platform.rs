@@ -1,8 +1,8 @@
-use crate::builtins::types::PlatformFunction;
+use crate::builtins::types::PlatformBuiltin;
 
 pub trait Platform {
     type Context;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformFunction<Self::Context>, &'static str)>;
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>;
 }

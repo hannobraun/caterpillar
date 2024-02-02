@@ -1,12 +1,12 @@
 use crate::{
-    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformFunction},
+    builtins::types::{BuiltinContext, CoreBuiltinState, PlatformBuiltin},
     runtime::data_stack::DataStackResult,
 };
 
 #[derive(Debug)]
 pub enum NativeFunction<C> {
     Intrinsic(IntrinsicFunction),
-    Platform(PlatformFunction<C>),
+    Platform(PlatformBuiltin<C>),
 }
 
 pub type IntrinsicFunction =

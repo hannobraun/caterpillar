@@ -189,7 +189,7 @@ mod tests {
 
     use crate::{
         builtins::types::{
-            BuiltinContext, PlatformBuiltinState, PlatformFunction,
+            BuiltinContext, PlatformBuiltin, PlatformBuiltinState,
         },
         pipeline::{PipelineError, Scripts},
         platform::Platform,
@@ -457,10 +457,10 @@ mod tests {
     impl Platform for TestPlatform {
         type Context = PlatformContext;
 
-        fn functions() -> impl IntoIterator<
-            Item = (PlatformFunction<PlatformContext>, &'static str),
-        > {
-            [(ping as PlatformFunction<PlatformContext>, "ping")]
+        fn functions(
+        ) -> impl IntoIterator<Item = (PlatformBuiltin<PlatformContext>, &'static str)>
+        {
+            [(ping as PlatformBuiltin<PlatformContext>, "ping")]
         }
     }
 

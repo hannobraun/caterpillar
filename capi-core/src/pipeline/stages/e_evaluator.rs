@@ -1,7 +1,7 @@
 use std::marker::PhantomData;
 
 use crate::{
-    builtins::types::{BuiltinContext, PlatformBuiltinState, PlatformFunction},
+    builtins::types::{BuiltinContext, PlatformBuiltin, PlatformBuiltinState},
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
@@ -59,12 +59,9 @@ impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context<'r>;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformFunction<Self::Context>, &'static str)>
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>
     {
-        [
-            (fn_ as PlatformFunction<Self::Context>, "fn"),
-            (mod_, "mod"),
-        ]
+        [(fn_ as PlatformBuiltin<Self::Context>, "fn"), (mod_, "mod")]
     }
 }
 
