@@ -4,11 +4,11 @@ use crate::{
     runtime::{call_stack::StackFrame, data_stack::DataStackResult},
 };
 
-use super::types::{BuiltinContext, CoreBuiltinState, IntrinsicFunction};
+use super::types::{BuiltinContext, CoreBuiltin, CoreBuiltinState};
 
-pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
+pub fn all() -> impl IntoIterator<Item = (CoreBuiltin, &'static str)> {
     [
-        (add as IntrinsicFunction, "+"),
+        (add as CoreBuiltin, "+"),
         (and, "and"),
         (append, "append"),
         (array, "[]"),

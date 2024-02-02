@@ -1,7 +1,7 @@
-use crate::builtins::types::{IntrinsicFunction, PlatformBuiltin};
+use crate::builtins::types::{CoreBuiltin, PlatformBuiltin};
 
 #[derive(Debug)]
 pub enum NativeFunction<C> {
-    Intrinsic(IntrinsicFunction),
+    Intrinsic(CoreBuiltin),
     Platform(PlatformBuiltin<C>),
 }

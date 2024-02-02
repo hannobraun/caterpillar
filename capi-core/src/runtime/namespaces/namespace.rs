@@ -3,7 +3,7 @@ use std::{collections::BTreeMap, fmt};
 use crate::{
     builtins::{
         self,
-        types::{IntrinsicFunction, PlatformBuiltin},
+        types::{CoreBuiltin, PlatformBuiltin},
     },
     pipeline::{Function, Module},
     repr::eval::{
@@ -101,7 +101,7 @@ impl<C> Namespace<C> {
 #[derive(Clone)]
 pub enum ItemInModule<'r, C> {
     Binding(Value),
-    IntrinsicFunction(IntrinsicFunction),
+    IntrinsicFunction(CoreBuiltin),
     PlatformFunction(&'r PlatformBuiltin<C>),
     UserDefinedFunction(&'r Function),
 }

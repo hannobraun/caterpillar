@@ -1,6 +1,4 @@
-use crate::{
-    builtins::types::IntrinsicFunction, repr::eval::fragments::FragmentId,
-};
+use crate::{builtins::types::CoreBuiltin, repr::eval::fragments::FragmentId};
 
 #[derive(Debug, Default)]
 pub struct CallStack {
@@ -40,7 +38,7 @@ pub enum StackFrame {
     },
     IntrinsicFunction {
         word: FragmentId,
-        function: IntrinsicFunction,
+        function: CoreBuiltin,
         step: usize,
     },
 }
