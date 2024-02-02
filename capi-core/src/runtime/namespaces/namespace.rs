@@ -22,7 +22,7 @@ impl<C> Namespace<C> {
     pub fn new(global_module: Module) -> Self {
         let mut native_functions = BTreeMap::new();
 
-        for (intrinsic, name) in builtins::all() {
+        for (intrinsic, name) in builtins::core::all() {
             native_functions
                 .insert(name.to_string(), NativeFunction::Intrinsic(intrinsic));
         }
