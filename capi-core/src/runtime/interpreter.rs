@@ -477,7 +477,7 @@ mod tests {
                     .data_stack
                     .pop_specific::<value::Number>()?;
                 *platform_context.channels.entry(channel.0).or_insert(0) += 1;
-                Ok(BuiltinFnState::Done)
+                Ok(BuiltinFnState::Completed)
             }
             _ => unreachable!(),
         }

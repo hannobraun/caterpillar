@@ -80,7 +80,7 @@ fn clear_pixel(
 
             platform_context.pixel_ops.send(PixelOp::Clear([x.0, y.0]));
 
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }
@@ -98,7 +98,7 @@ fn delay_ms(
             thread::sleep(Duration::from_millis(
                 delay_ms.0.try_into().unwrap(),
             ));
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }
@@ -114,7 +114,7 @@ fn print(
             let value = runtime_context.data_stack.pop_any()?;
             println!("{}", value.payload);
             runtime_context.data_stack.push(value);
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }
@@ -134,7 +134,7 @@ fn set_pixel(
 
             platform_context.pixel_ops.send(PixelOp::Set([x.0, y.0]));
 
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }

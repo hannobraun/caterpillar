@@ -86,7 +86,7 @@ fn fn_(
 
             runtime_context.global_module.define_function(name, body);
 
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
 
         _ => unreachable!(),
@@ -135,7 +135,7 @@ fn mod_(
             // so we just merge the two modules together.
             runtime_context.global_module.merge(&mut module);
 
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }

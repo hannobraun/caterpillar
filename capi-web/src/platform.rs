@@ -83,7 +83,7 @@ pub fn print(
                 .events
                 .output(format!("{}\n", value.payload));
             runtime_context.data_stack.push(value);
-            Ok(BuiltinFnState::Done)
+            Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
     }

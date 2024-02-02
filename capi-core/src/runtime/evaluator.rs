@@ -130,7 +130,7 @@ impl<P: Platform> Evaluator<P> {
                                 })?;
 
                                 match function_state {
-                                    BuiltinFnState::Done => {
+                                    BuiltinFnState::Completed => {
                                         RuntimeState::Running
                                     }
                                     BuiltinFnState::Sleeping => {
