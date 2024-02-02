@@ -16,10 +16,9 @@ impl Platform for WebPlatform {
     type Context = Context;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>
-    {
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
         [
-            (delay_ms as PlatformBuiltin<Self::Context>, "delay_ms"),
+            (delay_ms as PlatformBuiltin<Self>, "delay_ms"),
             (print, "print"),
         ]
     }

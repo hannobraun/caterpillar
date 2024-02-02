@@ -22,14 +22,20 @@ pub struct BuiltinContext<'r> {
 #[derive(Debug)]
 pub enum Builtin<P: Platform> {
     Intrinsic(CoreBuiltin),
-    Platform(PlatformBuiltin<P::Context>),
+    Platform(PlatformBuiltin<P>),
 }
 
 pub type CoreBuiltin =
     fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
 
-pub type PlatformBuiltin<C> =
-    fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
+// According to the warning, the bound is not enforced in the type alias. We
+// still need it here, however, so we can refer to its associated types.
+#[allow(type_alias_bounds)]
+pub type PlatformBuiltin<P: Platform> =
+    fn(
+        BuiltinContext,
+        &mut P::Context,
+    ) -> DataStackResult<PlatformBuiltinState>;
 
 pub enum CoreBuiltinState {
     StepDone,

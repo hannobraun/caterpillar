@@ -4,5 +4,5 @@ pub trait Platform {
     type Context;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>;
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)>;
 }

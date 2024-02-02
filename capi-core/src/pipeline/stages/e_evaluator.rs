@@ -59,9 +59,8 @@ impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context<'r>;
 
     fn functions(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>
-    {
-        [(fn_ as PlatformBuiltin<Self::Context>, "fn"), (mod_, "mod")]
+    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
+        [(fn_ as PlatformBuiltin<Self>, "fn"), (mod_, "mod")]
     }
 }
 

@@ -458,9 +458,9 @@ mod tests {
         type Context = PlatformContext;
 
         fn functions(
-        ) -> impl IntoIterator<Item = (PlatformBuiltin<Self::Context>, &'static str)>
+        ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)>
         {
-            [(ping as PlatformBuiltin<Self::Context>, "ping")]
+            [(ping as PlatformBuiltin<Self>, "ping")]
         }
     }
 
