@@ -18,6 +18,8 @@ pub struct BuiltinContext<'r> {
     pub side_stack: &'r mut DataStack,
 }
 
+pub type IntrinsicFunction =
+    fn(step: usize, BuiltinContext) -> DataStackResult<CoreBuiltinState>;
 pub type PlatformBuiltin<C> =
     fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
 

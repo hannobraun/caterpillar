@@ -1,7 +1,10 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    builtins::{self, types::PlatformBuiltin},
+    builtins::{
+        self,
+        types::{IntrinsicFunction, PlatformBuiltin},
+    },
     pipeline::{Function, Module},
     repr::eval::{
         fragments::{FragmentId, Fragments},
@@ -9,7 +12,7 @@ use crate::{
     },
 };
 
-use super::{IntrinsicFunction, NativeFunction};
+use super::NativeFunction;
 
 #[derive(Debug)]
 pub struct Namespace<C> {

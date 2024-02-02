@@ -1,6 +1,6 @@
-use crate::repr::eval::fragments::FragmentId;
-
-use super::namespaces::IntrinsicFunction;
+use crate::{
+    builtins::types::IntrinsicFunction, repr::eval::fragments::FragmentId,
+};
 
 #[derive(Debug, Default)]
 pub struct CallStack {
