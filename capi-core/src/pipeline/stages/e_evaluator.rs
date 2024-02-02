@@ -5,7 +5,7 @@ use crate::{
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
-    platform::Platform,
+    platform::{Platform, PlatformBuiltins},
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value,
@@ -58,8 +58,7 @@ struct CompileTimePlatform<'r> {
 impl<'r> Platform for CompileTimePlatform<'r> {
     type Context = Context<'r>;
 
-    fn builtins(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
+    fn builtins() -> impl PlatformBuiltins<Self> {
         [(fn_ as PlatformBuiltin<Self>, "fn"), (mod_, "mod")]
     }
 }

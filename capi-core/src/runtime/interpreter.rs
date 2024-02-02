@@ -192,7 +192,7 @@ mod tests {
             BuiltinContext, PlatformBuiltin, PlatformBuiltinState,
         },
         pipeline::{PipelineError, Scripts},
-        platform::Platform,
+        platform::{Platform, PlatformBuiltins},
         repr::eval::value,
         runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
     };
@@ -457,9 +457,7 @@ mod tests {
     impl Platform for TestPlatform {
         type Context = PlatformContext;
 
-        fn builtins(
-        ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)>
-        {
+        fn builtins() -> impl PlatformBuiltins<Self> {
             [(ping as PlatformBuiltin<Self>, "ping")]
         }
     }

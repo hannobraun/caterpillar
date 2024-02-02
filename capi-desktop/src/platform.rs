@@ -2,7 +2,7 @@ use std::{thread, time::Duration};
 
 use capi_core::{
     builtins::types::{BuiltinContext, PlatformBuiltin, PlatformBuiltinState},
-    platform::Platform,
+    platform::{Platform, PlatformBuiltins},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -12,8 +12,7 @@ pub struct DesktopPlatform;
 impl Platform for DesktopPlatform {
     type Context = PlatformContext;
 
-    fn builtins(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
+    fn builtins() -> impl PlatformBuiltins<Self> {
         [
             (clear_pixel as PlatformBuiltin<Self>, "clear_pixel"),
             (delay_ms, "delay_ms"),

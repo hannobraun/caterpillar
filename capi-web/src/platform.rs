@@ -3,7 +3,7 @@ use std::time::Duration;
 use async_channel::Sender;
 use capi_core::{
     builtins::types::{BuiltinContext, PlatformBuiltin, PlatformBuiltinState},
-    platform::Platform,
+    platform::{Platform, PlatformBuiltins},
     repr::eval::value,
     runtime::data_stack::DataStackResult,
 };
@@ -15,8 +15,7 @@ pub struct WebPlatform;
 impl Platform for WebPlatform {
     type Context = Context;
 
-    fn builtins(
-    ) -> impl IntoIterator<Item = (PlatformBuiltin<Self>, &'static str)> {
+    fn builtins() -> impl PlatformBuiltins<Self> {
         [
             (delay_ms as PlatformBuiltin<Self>, "delay_ms"),
             (print, "print"),
