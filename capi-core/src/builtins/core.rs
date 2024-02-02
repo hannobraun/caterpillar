@@ -1,11 +1,23 @@
+use std::iter;
+
 use crate::{
     pipeline::FunctionName,
-    platform::{BuiltinFnState, CoreContext},
+    platform::{BuiltinFnState, CoreContext, Platform},
     repr::eval::value::{self, Value, ValuePayload},
     runtime::{call_stack::StackFrame, data_stack::DataStackResult},
 };
 
 use super::types::CoreBuiltin;
+
+pub struct CorePlatform {}
+
+impl Platform for CorePlatform {
+    type Context = ();
+
+    fn builtin_fns() -> impl crate::platform::BuiltinFns<Self> {
+        iter::empty()
+    }
+}
 
 pub fn all() -> impl IntoIterator<Item = (CoreBuiltin, &'static str)> {
     [
