@@ -3,10 +3,7 @@ mod native_items;
 
 pub use self::{
     namespace::{ItemInModule, Namespace, ResolveError},
-    native_items::{
-        IntrinsicFunction, IntrinsicFunctionState, NativeFunction,
-        PlatformFunction,
-    },
+    native_items::{IntrinsicFunction, NativeFunction, PlatformFunction},
 };
 
 // I'm working on a larger refactoring (adding evaluation of the top-level

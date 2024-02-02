@@ -2,13 +2,12 @@ use crate::{
     pipeline::FunctionName,
     repr::eval::value::{self, Value, ValuePayload},
     runtime::{
-        call_stack::StackFrame,
-        data_stack::DataStackResult,
-        namespaces::{IntrinsicFunction, IntrinsicFunctionState},
+        call_stack::StackFrame, data_stack::DataStackResult,
+        namespaces::IntrinsicFunction,
     },
 };
 
-use super::types::BuiltinContext;
+use super::types::{BuiltinContext, IntrinsicFunctionState};
 
 pub fn all() -> impl IntoIterator<Item = (IntrinsicFunction, &'static str)> {
     [

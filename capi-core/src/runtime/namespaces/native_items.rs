@@ -1,5 +1,7 @@
 use crate::{
-    builtins::types::{BuiltinContext, PlatformBuiltinState},
+    builtins::types::{
+        BuiltinContext, IntrinsicFunctionState, PlatformBuiltinState,
+    },
     runtime::data_stack::DataStackResult,
 };
 
@@ -13,8 +15,3 @@ pub type IntrinsicFunction =
     fn(step: usize, BuiltinContext) -> DataStackResult<IntrinsicFunctionState>;
 pub type PlatformFunction<C> =
     fn(BuiltinContext, &mut C) -> DataStackResult<PlatformBuiltinState>;
-
-pub enum IntrinsicFunctionState {
-    StepDone,
-    FullyCompleted,
-}

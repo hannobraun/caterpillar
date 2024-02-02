@@ -1,5 +1,7 @@
 use crate::{
-    builtins::types::{BuiltinContext, PlatformBuiltinState},
+    builtins::types::{
+        BuiltinContext, IntrinsicFunctionState, PlatformBuiltinState,
+    },
     pipeline::{Function, Module},
     platform::Platform,
     repr::eval::{
@@ -11,9 +13,7 @@ use crate::{
 use super::{
     call_stack::{CallStack, StackFrame},
     data_stack::{DataStack, DataStackError},
-    namespaces::{
-        IntrinsicFunctionState, ItemInModule, Namespace, ResolveError,
-    },
+    namespaces::{ItemInModule, Namespace, ResolveError},
 };
 
 #[derive(Debug)]
