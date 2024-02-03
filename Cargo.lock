@@ -374,6 +374,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "capi-core",
+ "capi-desktop",
+]
+
+[[package]]
 name = "capi-web"
 version = "0.1.0"
 dependencies = [

@@ -1,0 +1,14 @@
+[package]
+name = "capi-tests"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+anyhow = "*"
+
+[dependencies.capi-core]
+path = "../capi-core"
+
+[dependencies.capi-desktop]
+path = "../capi-desktop"
