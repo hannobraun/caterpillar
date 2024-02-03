@@ -2,8 +2,8 @@
 mod tests {
     use std::path::PathBuf;
 
+    use capi_core::runtime::interpreter::Interpreter;
     use capi_desktop::{
-        core::runtime::interpreter::Interpreter,
         loader::Loader,
         platform::{DesktopPlatform, PlatformContext},
     };
