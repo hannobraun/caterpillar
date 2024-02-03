@@ -12,6 +12,3 @@ tracing = "*"
 
 [dev-dependencies]
 anyhow = "*"
-
-[dev-dependencies.capi-desktop]
-path = "../capi-desktop"
