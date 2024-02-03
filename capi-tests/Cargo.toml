@@ -6,6 +6,7 @@ edition = "2021"
 
 [dev-dependencies]
 anyhow = "*"
+crossbeam-channel = "*"
 
 [dev-dependencies.capi-core]
 path = "../capi-core"
