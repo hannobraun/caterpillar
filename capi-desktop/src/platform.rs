@@ -36,12 +36,10 @@ impl PlatformContext {
         }
     }
 
-    pub fn with_pixel_ops_sender(
-        mut self,
-        pixel_ops: crossbeam_channel::Sender<PixelOp>,
-    ) -> Self {
-        self.pixel_ops.inner = pixel_ops;
-        self
+    pub fn new2(pixel_ops: crossbeam_channel::Sender<PixelOp>) -> Self {
+        Self {
+            pixel_ops: Sender { inner: pixel_ops },
+        }
     }
 }
 

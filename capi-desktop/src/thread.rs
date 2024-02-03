@@ -93,8 +93,7 @@ impl DesktopThread {
         let mut loader = Loader::new(entry_script_path)?;
 
         let mut interpreter = Interpreter::new()?;
-        let mut platform_context =
-            PlatformContext::new().with_pixel_ops_sender(pixel_ops);
+        let mut platform_context = PlatformContext::new2(pixel_ops);
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
