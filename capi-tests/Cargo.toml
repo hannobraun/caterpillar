@@ -4,11 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 
-[dependencies]
+[dev-dependencies]
 anyhow = "*"
 
-[dependencies.capi-core]
+[dev-dependencies.capi-core]
 path = "../capi-core"
 
-[dependencies.capi-desktop]
+[dev-dependencies.capi-desktop]
 path = "../capi-desktop"
