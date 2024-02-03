@@ -28,24 +28,10 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    pub fn new() -> Self {
-        let (pixel_ops, _) = crossbeam_channel::unbounded();
-
-        Self {
-            pixel_ops: Sender { inner: pixel_ops },
-        }
-    }
-
     pub fn new2(pixel_ops: crossbeam_channel::Sender<PixelOp>) -> Self {
         Self {
             pixel_ops: Sender { inner: pixel_ops },
         }
-    }
-}
-
-impl Default for PlatformContext {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
