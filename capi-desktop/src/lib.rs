@@ -13,25 +13,3 @@ pub mod platform;
 pub mod thread;
 
 pub use self::thread::DesktopThread;
-
-/// Re-export of [`capi_core`]
-///
-/// `capi-core` has a (quasi-circular) dev-dependency on this crate, for the
-/// test suite. I'm saying "quasi", because it's not really circular. The
-/// dependency chain goes like this:
-///
-/// regular `capi-core` <- regular `capi-desktop <- test-mode `capi-core`
-///
-/// The distinction between "regular" and "test-mode" is very important, because
-/// the two different build configurations of `capi-core` are, as far as the
-/// type system is concerned, essentially different crates.
-///
-/// As a consequence, if the test suite constructs a `crate::Interpreter` (test)
-/// and passes it to a `capi-desktop` function which expects a
-/// `capi_core::Interpreter` (regular), this will result in a "mismatched types"
-/// error.
-///
-/// With this type definition, we make `capi-desktop`'s understanding of what
-/// `capi_core` is available to the `capi-core` test suite, resolving the type
-/// error.
-pub use capi_core as core;
