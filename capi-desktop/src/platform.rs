@@ -97,9 +97,11 @@ fn delay_ms(
         0 => {
             let (delay_ms, _) =
                 core_context.data_stack.pop_specific::<value::Number>()?;
+
             thread::sleep(Duration::from_millis(
                 delay_ms.0.try_into().unwrap(),
             ));
+
             Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
@@ -116,6 +118,7 @@ fn print(
             let value = core_context.data_stack.pop_any()?;
             println!("{}", value.payload);
             core_context.data_stack.push(value);
+
             Ok(BuiltinFnState::Completed)
         }
         _ => unreachable!(),
