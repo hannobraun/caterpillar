@@ -29,7 +29,7 @@ impl<T, P: Platform> BuiltinFns<P> for T where
 pub type BuiltinFn<P: Platform> = fn(
     step: usize,
     // The lack of symmetry between the following two arguments lacks elegance.
-    // The way `CoreContext` is designed if probably the more elegant way for a
+    // The way `CoreContext` is designed is probably the more elegant way for a
     // type like this, so I think it makes sense to have platform contexts
     // designed the same way.
     core_context: CoreContext,
