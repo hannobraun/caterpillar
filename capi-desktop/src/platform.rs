@@ -28,7 +28,7 @@ pub struct PlatformContext {
 }
 
 impl PlatformContext {
-    pub fn new2(pixel_ops: crossbeam_channel::Sender<PixelOp>) -> Self {
+    pub fn new(pixel_ops: crossbeam_channel::Sender<PixelOp>) -> Self {
         Self {
             pixel_ops: Sender { inner: pixel_ops },
         }
