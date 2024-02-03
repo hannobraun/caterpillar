@@ -2,9 +2,11 @@ use std::time::Duration;
 
 use async_channel::Sender;
 use capi_core::{
-    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
+    platform::{
+        BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns, CoreContext,
+        Platform,
+    },
     repr::eval::value,
-    runtime::data_stack::DataStackResult,
 };
 use chrono::Local;
 use futures::executor::block_on;
@@ -52,7 +54,7 @@ pub fn delay_ms(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -75,7 +77,7 @@ pub fn print(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let value = runtime_context.data_stack.pop_any()?;

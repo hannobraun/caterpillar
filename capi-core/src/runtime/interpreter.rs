@@ -190,10 +190,11 @@ mod tests {
     use crate::{
         pipeline::{PipelineError, Scripts},
         platform::{
-            BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform,
+            BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns,
+            CoreContext, Platform,
         },
         repr::eval::value,
-        runtime::{data_stack::DataStackResult, evaluator::EvaluatorError},
+        runtime::evaluator::EvaluatorError,
     };
 
     // Make sure all updates happen in the middle of their respective context,
@@ -470,7 +471,7 @@ mod tests {
         step: usize,
         runtime_context: CoreContext,
         platform_context: &mut PlatformContext,
-    ) -> DataStackResult<BuiltinFnState> {
+    ) -> BuiltinFnResult {
         match step {
             0 => {
                 let (channel, _) = runtime_context

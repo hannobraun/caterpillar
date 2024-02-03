@@ -4,14 +4,16 @@ use crate::{
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
     },
-    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
+    platform::{
+        BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns, CoreContext,
+        Platform,
+    },
     repr::eval::{
         fragments::{FragmentId, Fragments},
         value,
     },
     runtime::{
         call_stack::StackFrame,
-        data_stack::DataStackResult,
         evaluator::{Evaluator, EvaluatorError},
     },
 };
@@ -71,7 +73,7 @@ fn fn_(
     step: usize,
     runtime_context: CoreContext,
     _platform_context: &mut Context,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (body, _) =
@@ -97,7 +99,7 @@ fn mod_(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (path_as_values, _) =

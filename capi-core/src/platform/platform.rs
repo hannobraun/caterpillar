@@ -34,7 +34,9 @@ pub type BuiltinFn<P: Platform> = fn(
     // designed the same way.
     core_context: CoreContext,
     platform_context: &mut P::Context,
-) -> DataStackResult<BuiltinFnState>;
+) -> BuiltinFnResult;
+
+pub type BuiltinFnResult = DataStackResult<BuiltinFnState>;
 
 // I don't like how `CoreContext` looks here. Everything else here is nice and
 // self-contained, but `CoreContext` depends on a whole lot of stuff.

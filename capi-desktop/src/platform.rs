@@ -1,9 +1,11 @@
 use std::{thread, time::Duration};
 
 use capi_core::{
-    platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
+    platform::{
+        BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns, CoreContext,
+        Platform,
+    },
     repr::eval::value,
-    runtime::data_stack::DataStackResult,
 };
 
 pub struct DesktopPlatform;
@@ -70,7 +72,7 @@ fn clear_pixel(
     step: usize,
     core_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (y, _) =
@@ -90,7 +92,7 @@ fn delay_ms(
     step: usize,
     core_context: CoreContext,
     _: &mut PlatformContext,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -108,7 +110,7 @@ fn print(
     step: usize,
     core_context: CoreContext,
     _: &mut PlatformContext,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let value = core_context.data_stack.pop_any()?;
@@ -124,7 +126,7 @@ fn set_pixel(
     step: usize,
     core_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> DataStackResult<BuiltinFnState> {
+) -> BuiltinFnResult {
     match step {
         0 => {
             let (y, _) =
