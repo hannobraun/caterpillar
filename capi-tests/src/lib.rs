@@ -16,9 +16,10 @@ mod tests {
         let mut loader = Loader::new(script_path)?;
 
         let scripts = loader.wait_for_updated_scripts()?;
+        let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update(scripts)?;
-        interpreter.run_tests(&mut PlatformContext::new())?;
+        interpreter.run_tests(&mut PlatformContext::new2(pixel_ops))?;
 
         Ok(())
     }
