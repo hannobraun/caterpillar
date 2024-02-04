@@ -16,7 +16,7 @@ pub struct DesktopPlatform<'r> {
 }
 
 impl<'r> Platform for DesktopPlatform<'r> {
-    type Context = PlatformContext;
+    type Context<'tmp> = PlatformContext;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [

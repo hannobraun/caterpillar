@@ -8,7 +8,7 @@ use crate::{
 };
 
 pub trait Platform: Sized {
-    type Context;
+    type Context<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self>;
 }
@@ -33,7 +33,7 @@ pub type BuiltinFn<P: Platform> = fn(
     // type like this, so I think it makes sense to have platform contexts
     // designed the same way.
     core_context: CoreContext,
-    platform_context: &mut P::Context,
+    platform_context: &mut P::Context<'_>,
 ) -> BuiltinFnResult;
 
 pub type BuiltinFnResult = DataStackResult<BuiltinFnState>;

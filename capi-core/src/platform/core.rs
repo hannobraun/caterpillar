@@ -10,7 +10,7 @@ use super::BuiltinFnResult;
 pub struct CorePlatform;
 
 impl Platform for CorePlatform {
-    type Context = ();
+    type Context<'r> = ();
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [

@@ -14,7 +14,7 @@ use futures::executor::block_on;
 pub struct WebPlatform;
 
 impl Platform for WebPlatform {
-    type Context = Context;
+    type Context<'r> = Context;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [(delay_ms as BuiltinFn<Self>, "delay_ms"), (print, "print")]

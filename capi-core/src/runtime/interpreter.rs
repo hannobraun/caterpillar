@@ -94,7 +94,7 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn step(
         &mut self,
-        platform_context: &mut P::Context,
+        platform_context: &mut P::Context<'_>,
     ) -> Result<RuntimeState, EvaluatorError> {
         self.state =
             self.evaluator.step(&mut self.fragments, platform_context)?;
@@ -103,7 +103,7 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn run_tests(
         &mut self,
-        platform_context: &mut P::Context,
+        platform_context: &mut P::Context<'_>,
     ) -> Result<(), TestError> {
         while !self.step(platform_context)?.finished() {}
 
@@ -455,7 +455,7 @@ mod tests {
     pub struct TestPlatform;
 
     impl Platform for TestPlatform {
-        type Context = PlatformContext;
+        type Context<'r> = PlatformContext;
 
         fn builtin_fns() -> impl BuiltinFns<Self> {
             [(ping as BuiltinFn<Self>, "ping")]

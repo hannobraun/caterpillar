@@ -58,7 +58,7 @@ struct CompileTimePlatform<'r> {
 }
 
 impl<'r> Platform for CompileTimePlatform<'r> {
-    type Context = PlatformContext<'r>;
+    type Context<'tmp> = PlatformContext<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [(fn_ as BuiltinFn<Self>, "fn"), (mod_, "mod")]
