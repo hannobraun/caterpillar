@@ -51,9 +51,9 @@ pub fn evaluate(
 }
 
 struct CompileTimePlatform<'r> {
-    // We need a lifetime here, so we have one available for `Context` in the
-    // `Platform` trait implementation. Not sure if there's a better way, but
-    // this seems to work.
+    // We need a lifetime here, so we have one available for `PlatformContext`
+    // in the `Platform` trait implementation. Not sure if there's a better way,
+    // but this seems to work.
     _r: PhantomData<&'r ()>,
 }
 
