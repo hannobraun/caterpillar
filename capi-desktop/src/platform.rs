@@ -11,7 +11,7 @@ use capi_core::{
 pub struct DesktopPlatform;
 
 impl Platform for DesktopPlatform {
-    type Context<'tmp> = PlatformContext;
+    type Context<'r> = PlatformContext;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [
