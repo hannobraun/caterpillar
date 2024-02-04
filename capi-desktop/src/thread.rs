@@ -93,7 +93,6 @@ impl DesktopThread {
         let mut loader = Loader::new(entry_script_path)?;
 
         let mut interpreter = Interpreter::new()?;
-        let mut platform_context = PlatformContext::new(&pixel_ops);
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
@@ -106,7 +105,8 @@ impl DesktopThread {
                 interpreter.update(scripts)?;
             }
 
-            let runtime_state = interpreter.step(&mut platform_context)?;
+            let runtime_state =
+                interpreter.step(&mut PlatformContext::new(&pixel_ops))?;
 
             match runtime_state {
                 RuntimeState::Running => {}
@@ -116,8 +116,10 @@ impl DesktopThread {
                     unreachable!()
                 }
                 RuntimeState::Finished => {
-                    run_target
-                        .finish(&mut interpreter, &mut platform_context)?;
+                    run_target.finish(
+                        &mut interpreter,
+                        &mut PlatformContext::new(&pixel_ops),
+                    )?;
 
                     let scripts = loader.wait_for_updated_scripts()?;
                     interpreter.update(scripts)?;
