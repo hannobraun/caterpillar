@@ -11,7 +11,7 @@ use capi_core::{
 pub struct DesktopPlatform;
 
 impl Platform for DesktopPlatform {
-    type Context<'r> = PlatformContext;
+    type Context<'r> = PlatformContext<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [
@@ -23,23 +23,23 @@ impl Platform for DesktopPlatform {
     }
 }
 
-pub struct PlatformContext {
-    pub pixel_ops: Sender,
+pub struct PlatformContext<'r> {
+    pub pixel_ops: Sender<'r>,
 }
 
-impl PlatformContext {
-    pub fn new(pixel_ops: crossbeam_channel::Sender<PixelOp>) -> Self {
+impl<'r> PlatformContext<'r> {
+    pub fn new(pixel_ops: &'r crossbeam_channel::Sender<PixelOp>) -> Self {
         Self {
             pixel_ops: Sender { inner: pixel_ops },
         }
     }
 }
 
-pub struct Sender {
-    pub inner: crossbeam_channel::Sender<PixelOp>,
+pub struct Sender<'r> {
+    pub inner: &'r crossbeam_channel::Sender<PixelOp>,
 }
 
-impl Sender {
+impl Sender<'_> {
     pub fn send(&self, message: PixelOp) {
         // Can return an error, if the channel is disconnected. This regularly
         // happens on shutdown, so let's just ignore it.
