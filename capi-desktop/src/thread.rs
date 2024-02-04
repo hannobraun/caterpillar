@@ -91,7 +91,6 @@ impl DesktopThread {
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
         let mut loader = Loader::new(entry_script_path)?;
-
         let mut interpreter = Interpreter::new()?;
 
         loop {
