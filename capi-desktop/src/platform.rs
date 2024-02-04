@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+use std::{marker::PhantomData, thread, time::Duration};
 
 use capi_core::{
     platform::{
@@ -8,9 +8,14 @@ use capi_core::{
     repr::eval::value,
 };
 
-pub struct DesktopPlatform;
+pub struct DesktopPlatform<'r> {
+    // We need a lifetime here, so we have one available for `PlatformContext`
+    // in the `Platform` trait implementation. Not sure if there's a better way,
+    // but this seems to work.
+    _r: PhantomData<&'r ()>,
+}
 
-impl Platform for DesktopPlatform {
+impl Platform for DesktopPlatform<'_> {
     type Context = PlatformContext;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
