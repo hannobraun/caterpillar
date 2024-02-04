@@ -1,5 +1,3 @@
-use std::marker::PhantomData;
-
 use crate::{
     pipeline::{
         self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
@@ -50,14 +48,9 @@ pub fn evaluate(
     Ok(module)
 }
 
-struct CompileTimePlatform<'r> {
-    // We need a lifetime here, so we have one available for `PlatformContext`
-    // in the `Platform` trait implementation. Not sure if there's a better way,
-    // but this seems to work.
-    _r: PhantomData<&'r ()>,
-}
+struct CompileTimePlatform;
 
-impl Platform for CompileTimePlatform<'_> {
+impl Platform for CompileTimePlatform {
     type Context<'r> = PlatformContext<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
