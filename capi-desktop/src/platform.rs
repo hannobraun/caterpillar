@@ -15,7 +15,7 @@ pub struct DesktopPlatform<'r> {
     _r: PhantomData<&'r ()>,
 }
 
-impl Platform for DesktopPlatform<'_> {
+impl<'r> Platform for DesktopPlatform<'r> {
     type Context = PlatformContext;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
