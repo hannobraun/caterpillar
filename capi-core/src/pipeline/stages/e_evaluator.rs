@@ -42,7 +42,7 @@ pub fn evaluate(
         .call_stack
         .push(StackFrame::Fragment { fragment_id: start });
     while !evaluator
-        .step(fragments, &mut Context { scripts })?
+        .step(fragments, &mut PlatformContext { scripts })?
         .finished()
     {}
 
@@ -58,21 +58,21 @@ struct CompileTimePlatform<'r> {
 }
 
 impl<'r> Platform for CompileTimePlatform<'r> {
-    type Context = Context<'r>;
+    type Context = PlatformContext<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [(fn_ as BuiltinFn<Self>, "fn"), (mod_, "mod")]
     }
 }
 
-struct Context<'r> {
+struct PlatformContext<'r> {
     scripts: &'r Scripts,
 }
 
 fn fn_(
     step: usize,
     runtime_context: CoreContext,
-    _platform_context: &mut Context,
+    _platform_context: &mut PlatformContext,
 ) -> BuiltinFnResult {
     match step {
         0 => {
@@ -98,7 +98,7 @@ fn fn_(
 fn mod_(
     step: usize,
     runtime_context: CoreContext,
-    platform_context: &mut Context,
+    platform_context: &mut PlatformContext,
 ) -> BuiltinFnResult {
     match step {
         0 => {
