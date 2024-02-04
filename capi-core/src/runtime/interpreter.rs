@@ -103,9 +103,9 @@ impl<P: Platform> Interpreter<P> {
 
     pub fn run_tests(
         &mut self,
-        platform_context: &mut P::Context<'_>,
+        mut platform_context: P::Context<'_>,
     ) -> Result<(), TestError> {
-        while !self.step(platform_context)?.finished() {}
+        while !self.step(&mut platform_context)?.finished() {}
 
         let tests = self
             .evaluator
@@ -140,7 +140,7 @@ impl<P: Platform> Interpreter<P> {
 
             while !self
                 .evaluator
-                .step(&mut self.fragments, platform_context)?
+                .step(&mut self.fragments, &mut platform_context)?
                 .finished()
             {}
 

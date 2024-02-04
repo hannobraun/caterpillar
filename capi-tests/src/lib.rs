@@ -19,7 +19,7 @@ mod tests {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update(scripts)?;
-        interpreter.run_tests(&mut PlatformContext::new(&pixel_ops))?;
+        interpreter.run_tests(PlatformContext::new(&pixel_ops))?;
 
         Ok(())
     }

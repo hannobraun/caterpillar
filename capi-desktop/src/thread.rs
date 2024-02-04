@@ -44,9 +44,9 @@ impl DesktopThread {
             fn finish(
                 &self,
                 interpreter: &mut Interpreter<DesktopPlatform>,
-                mut platform_context: PlatformContext,
+                platform_context: PlatformContext,
             ) -> anyhow::Result<()> {
-                interpreter.run_tests(&mut platform_context)?;
+                interpreter.run_tests(platform_context)?;
 
                 eprintln!();
                 eprintln!("> Test run finished.");
