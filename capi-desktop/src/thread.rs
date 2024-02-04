@@ -22,7 +22,7 @@ impl DesktopThread {
             fn finish(
                 &self,
                 _: &mut Interpreter<DesktopPlatform>,
-                _: &mut PlatformContext,
+                _: PlatformContext,
             ) -> anyhow::Result<()> {
                 eprintln!();
                 eprintln!("> Program finished.");
@@ -44,9 +44,9 @@ impl DesktopThread {
             fn finish(
                 &self,
                 interpreter: &mut Interpreter<DesktopPlatform>,
-                platform_context: &mut PlatformContext,
+                mut platform_context: PlatformContext,
             ) -> anyhow::Result<()> {
-                interpreter.run_tests(platform_context)?;
+                interpreter.run_tests(&mut platform_context)?;
 
                 eprintln!();
                 eprintln!("> Test run finished.");
@@ -117,7 +117,7 @@ impl DesktopThread {
                 RuntimeState::Finished => {
                     run_target.finish(
                         &mut interpreter,
-                        &mut PlatformContext::new(&pixel_ops),
+                        PlatformContext::new(&pixel_ops),
                     )?;
 
                     let scripts = loader.wait_for_updated_scripts()?;
@@ -162,6 +162,6 @@ trait RunTarget: Send + 'static {
     fn finish(
         &self,
         interpreter: &mut Interpreter<DesktopPlatform>,
-        platform_context: &mut PlatformContext,
+        platform_context: PlatformContext,
     ) -> anyhow::Result<()>;
 }
