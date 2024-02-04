@@ -57,8 +57,8 @@ struct CompileTimePlatform<'r> {
     _r: PhantomData<&'r ()>,
 }
 
-impl<'r> Platform for CompileTimePlatform<'r> {
-    type Context<'tmp> = PlatformContext<'r>;
+impl Platform for CompileTimePlatform<'_> {
+    type Context<'r> = PlatformContext<'r>;
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [(fn_ as BuiltinFn<Self>, "fn"), (mod_, "mod")]
