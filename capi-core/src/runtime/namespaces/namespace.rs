@@ -92,7 +92,7 @@ impl<P: Platform> Namespace<P> {
 }
 
 #[derive(Clone)]
-pub enum ItemInModule<'r, P: Platform> {
+pub enum ItemInModule<'r, P: Platform + 'r> {
     Binding(Value),
     IntrinsicFunction(BuiltinFn<CorePlatform>),
     PlatformFunction(&'r BuiltinFn<P>),
