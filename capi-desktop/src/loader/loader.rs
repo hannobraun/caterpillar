@@ -181,6 +181,9 @@ fn fs_path_to_script_path(
     entry_script_dir: impl AsRef<Path>,
     path: PathBuf,
 ) -> anyhow::Result<ScriptPath> {
+    let entry_script_dir = entry_script_dir.as_ref().canonicalize()?;
+    let path = path.canonicalize()?;
+
     let mut entry_script_dir_symbols = fs_path_to_symbols(entry_script_dir);
     let mut script_path_symbols = fs_path_to_symbols(path);
 
