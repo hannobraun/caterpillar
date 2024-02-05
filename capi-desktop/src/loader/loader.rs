@@ -3,6 +3,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use anyhow::Context;
 use capi_core::{
     pipeline::{ScriptPath, Scripts},
     repr::eval::value,
@@ -38,7 +39,13 @@ impl Loader {
             &sender,
             &mut watchers,
             &mut scripts,
-        )?;
+        )
+        .with_context(|| {
+            format!(
+                "Error while walking entry script directory `{}`",
+                entry_script_dir.display()
+            )
+        })?;
 
         loop {
             let all_scripts_loaded =
