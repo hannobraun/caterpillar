@@ -55,7 +55,7 @@ impl Loader {
             }
 
             let (path, _, code) = receiver.recv()??;
-            let path = fs_path_to_script_path(&entry_script_dir, path);
+            let path = fs_path_to_script_path(&entry_script_dir, path)?;
             scripts.insert(path, Some(code));
         }
 
@@ -70,7 +70,7 @@ impl Loader {
             entry_script_path: fs_path_to_script_path(
                 &entry_script_dir,
                 entry_script_path,
-            ),
+            )?,
             inner: scripts,
         };
 
@@ -156,7 +156,7 @@ fn walk_entry_script_dir(
         let watcher = watch(path.clone(), None, sender.clone())?;
         watchers.push(watcher);
 
-        let path = fs_path_to_script_path(&entry_script_dir, path);
+        let path = fs_path_to_script_path(&entry_script_dir, path)?;
         scripts.insert(path, None);
     }
 
@@ -169,7 +169,7 @@ fn handle_update(
     scripts: &mut Scripts,
 ) -> anyhow::Result<()> {
     let (path, _, code) = update?;
-    let path = fs_path_to_script_path(entry_script_dir, path);
+    let path = fs_path_to_script_path(entry_script_dir, path)?;
     *scripts
         .inner
         .get_mut(&path)
@@ -180,7 +180,7 @@ fn handle_update(
 fn fs_path_to_script_path(
     entry_script_dir: impl AsRef<Path>,
     path: PathBuf,
-) -> ScriptPath {
+) -> anyhow::Result<ScriptPath> {
     let mut entry_script_dir_symbols = fs_path_to_symbols(entry_script_dir);
     let mut script_path_symbols = fs_path_to_symbols(path);
 
@@ -210,7 +210,7 @@ fn fs_path_to_script_path(
         }
     }
 
-    script_path_symbols
+    Ok(script_path_symbols)
 }
 
 fn fs_path_to_symbols(path: impl AsRef<Path>) -> Vec<value::Symbol> {
