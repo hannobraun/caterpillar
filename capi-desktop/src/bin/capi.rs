@@ -1,3 +1,4 @@
+use anyhow::Context;
 use capi_desktop::{args::Args, display, DesktopThread};
 
 fn main() -> anyhow::Result<()> {
@@ -9,12 +10,17 @@ fn main() -> anyhow::Result<()> {
 
     match args.command {
         capi_desktop::args::Command::Run => {
-            let desktop_thread = DesktopThread::run(args.entry_script)?;
-            display::start(desktop_thread)?;
+            let desktop_thread = DesktopThread::run(args.entry_script)
+                .context("Failed to set up desktop thread for running")?;
+            display::start(desktop_thread)
+                .context("Failed to start display")?;
         }
         capi_desktop::args::Command::Test => {
-            let desktop_thread = DesktopThread::test(args.entry_script)?;
-            desktop_thread.join()?;
+            let desktop_thread = DesktopThread::test(args.entry_script)
+                .context("Failed to set up desktop thread for testing")?;
+            desktop_thread
+                .join()
+                .context("Error while running desktop thread")?;
         }
     }
 
