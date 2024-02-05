@@ -3,7 +3,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anyhow::Context;
+use anyhow::{anyhow, Context};
 use capi_core::{
     pipeline::{ScriptPath, Scripts},
     repr::eval::value,
@@ -29,8 +29,16 @@ impl Loader {
         let (sender, receiver) = crossbeam_channel::unbounded();
         let mut watchers = Vec::new();
 
-        let mut entry_script_dir = entry_script_path.clone();
-        entry_script_dir.pop();
+        let entry_script_dir = entry_script_path
+            .canonicalize()?
+            .parent()
+            .ok_or_else(|| {
+                anyhow!(
+                    "Invalid entry script path `{}`; no parent",
+                    entry_script_path.display()
+                )
+            })?
+            .to_path_buf();
 
         let mut scripts = BTreeMap::new();
 
