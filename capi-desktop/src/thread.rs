@@ -1,5 +1,6 @@
 use std::{path::PathBuf, thread};
 
+use anyhow::Context;
 use capi_core::runtime::{evaluator::RuntimeState, interpreter::Interpreter};
 use crossbeam_channel::{Receiver, Sender, TryRecvError};
 
@@ -90,8 +91,10 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
-        let mut loader = Loader::new(entry_script_path)?;
-        let mut interpreter = Interpreter::new()?;
+        let mut loader = Loader::new(entry_script_path)
+            .context("Failed to initialize loader")?;
+        let mut interpreter =
+            Interpreter::new().context("Failed to create interpreter")?;
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
@@ -100,12 +103,18 @@ impl DesktopThread {
                 break;
             }
 
-            if let Some(scripts) = loader.scripts_if_updated()? {
-                interpreter.update(scripts)?;
+            if let Some(scripts) = loader
+                .scripts_if_updated()
+                .context("Error while checking for updated scripts")?
+            {
+                interpreter
+                    .update(scripts)
+                    .context("Failed to update scripts while running")?;
             }
 
-            let runtime_state =
-                interpreter.step(&mut PlatformContext::new(&pixel_ops))?;
+            let runtime_state = interpreter
+                .step(&mut PlatformContext::new(&pixel_ops))
+                .context("Error while stepping interpreter")?;
 
             match runtime_state {
                 RuntimeState::Running => {}
@@ -120,8 +129,12 @@ impl DesktopThread {
                         PlatformContext::new(&pixel_ops),
                     )?;
 
-                    let scripts = loader.wait_for_updated_scripts()?;
-                    interpreter.update(scripts)?;
+                    let scripts = loader
+                        .wait_for_updated_scripts()
+                        .context("Error while waiting for updated scripts")?;
+                    interpreter
+                        .update(scripts)
+                        .context("Failed to update scripts while finished")?;
                 }
             };
         }
