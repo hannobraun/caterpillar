@@ -11,7 +11,7 @@ use notify::RecommendedWatcher;
 use notify_debouncer_mini::Debouncer;
 use walkdir::WalkDir;
 
-use super::{watch::watch, Update, UpdateReceiver};
+use super::{channel::UpdateSender, watch::watch, Update, UpdateReceiver};
 
 pub struct Loader {
     receiver: UpdateReceiver,
@@ -33,25 +33,12 @@ impl Loader {
 
         let mut scripts = BTreeMap::new();
 
-        for entry in WalkDir::new(&entry_script_dir) {
-            let entry = entry?;
-
-            if entry.file_type().is_dir() {
-                continue;
-            }
-
-            if !entry.file_name().as_encoded_bytes().ends_with(b".capi") {
-                continue;
-            }
-
-            let path = entry.path().to_path_buf();
-
-            let watcher = watch(path.clone(), None, sender.clone())?;
-            watchers.push(watcher);
-
-            let path = fs_path_to_script_path(&entry_script_dir, path);
-            scripts.insert(path, None);
-        }
+        walk_entry_script_dir(
+            &entry_script_dir,
+            &sender,
+            &mut watchers,
+            &mut scripts,
+        )?;
 
         loop {
             let all_scripts_loaded =
@@ -138,6 +125,35 @@ impl Loader {
 
         Ok(())
     }
+}
+
+fn walk_entry_script_dir(
+    entry_script_dir: impl AsRef<Path>,
+    sender: &UpdateSender,
+    watchers: &mut Vec<Debouncer<RecommendedWatcher>>,
+    scripts: &mut BTreeMap<ScriptPath, Option<String>>,
+) -> anyhow::Result<()> {
+    for entry in WalkDir::new(&entry_script_dir) {
+        let entry = entry?;
+
+        if entry.file_type().is_dir() {
+            continue;
+        }
+
+        if !entry.file_name().as_encoded_bytes().ends_with(b".capi") {
+            continue;
+        }
+
+        let path = entry.path().to_path_buf();
+
+        let watcher = watch(path.clone(), None, sender.clone())?;
+        watchers.push(watcher);
+
+        let path = fs_path_to_script_path(&entry_script_dir, path);
+        scripts.insert(path, None);
+    }
+
+    Ok(())
 }
 
 fn handle_update(
