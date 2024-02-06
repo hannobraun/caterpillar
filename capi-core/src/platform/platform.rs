@@ -1,6 +1,9 @@
 use crate::{
     pipeline::Module,
-    repr::eval::fragments::{FragmentId, Fragments},
+    repr::eval::{
+        fragments::{FragmentId, Fragments},
+        value::TypeError,
+    },
     runtime::{
         call_stack::CallStack,
         data_stack::{DataStack, DataStackError},
@@ -37,6 +40,15 @@ pub type BuiltinFn<P: Platform> = fn(
 ) -> BuiltinFnResult;
 
 pub type BuiltinFnResult = Result<BuiltinFnState, DataStackError>;
+
+#[derive(Debug, thiserror::Error)]
+pub enum BuiltinFnError {
+    #[error("Error operating data stack")]
+    DataStack(#[from] DataStackError),
+
+    #[error("Type error")]
+    Type(#[from] TypeError),
+}
 
 // I don't like how `CoreContext` looks here. Everything else here is nice and
 // self-contained, but `CoreContext` depends on a whole lot of stuff.
