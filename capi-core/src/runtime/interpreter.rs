@@ -456,6 +456,7 @@ mod tests {
 
     impl Platform for TestPlatform {
         type Context<'r> = PlatformContext;
+        type Error = ();
 
         fn builtin_fns() -> impl BuiltinFns<Self> {
             [(ping as BuiltinFn<Self>, "ping")]

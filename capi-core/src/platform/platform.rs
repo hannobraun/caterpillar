@@ -12,6 +12,7 @@ use crate::{
 
 pub trait Platform: Sized {
     type Context<'r>;
+    type Error;
 
     fn builtin_fns() -> impl BuiltinFns<Self>;
 }

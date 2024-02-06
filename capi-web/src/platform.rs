@@ -15,6 +15,7 @@ pub struct WebPlatform;
 
 impl Platform for WebPlatform {
     type Context<'r> = Context;
+    type Error = ();
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [(delay_ms as BuiltinFn<Self>, "delay_ms"), (print, "print")]

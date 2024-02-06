@@ -12,6 +12,7 @@ pub struct DesktopPlatform;
 
 impl Platform for DesktopPlatform {
     type Context<'r> = PlatformContext<'r>;
+    type Error = ();
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [

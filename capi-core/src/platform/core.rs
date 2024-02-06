@@ -11,6 +11,7 @@ pub struct CorePlatform;
 
 impl Platform for CorePlatform {
     type Context<'r> = ();
+    type Error = ();
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
         [
