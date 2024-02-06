@@ -3,7 +3,7 @@ use crate::{
     repr::eval::fragments::{FragmentId, Fragments},
     runtime::{
         call_stack::CallStack,
-        data_stack::{DataStack, DataStackResult},
+        data_stack::{DataStack, DataStackError},
     },
 };
 
@@ -36,7 +36,7 @@ pub type BuiltinFn<P: Platform> = fn(
     platform_context: &mut P::Context<'_>,
 ) -> BuiltinFnResult;
 
-pub type BuiltinFnResult = DataStackResult<BuiltinFnState>;
+pub type BuiltinFnResult = Result<BuiltinFnState, DataStackError>;
 
 // I don't like how `CoreContext` looks here. Everything else here is nice and
 // self-contained, but `CoreContext` depends on a whole lot of stuff.
