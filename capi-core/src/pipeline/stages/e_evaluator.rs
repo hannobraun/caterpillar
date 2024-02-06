@@ -20,7 +20,7 @@ pub fn evaluate(
     start: FragmentId,
     fragments: &mut Fragments,
     scripts: &Scripts,
-) -> Result<Module, EvaluatorError> {
+) -> Result<Module, EvaluatorError<()>> {
     // This function evaluates the top-level context at compile-time. In the
     // current implementation, modules are implicit, and there are builtin
     // functions like `fn` and `mod` that update these implicit modules.

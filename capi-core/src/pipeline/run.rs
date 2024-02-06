@@ -42,5 +42,5 @@ pub enum PipelineError {
     Parser(#[from] ParserError),
 
     #[error("Failed to evaluate top-level context")]
-    Evaluator(#[from] EvaluatorError),
+    Evaluator(#[from] EvaluatorError<()>),
 }

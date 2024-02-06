@@ -95,7 +95,7 @@ impl<P: Platform> Interpreter<P> {
     pub fn step(
         &mut self,
         platform_context: &mut P::Context<'_>,
-    ) -> Result<RuntimeState, EvaluatorError> {
+    ) -> Result<RuntimeState, EvaluatorError<()>> {
         self.state =
             self.evaluator.step(&mut self.fragments, platform_context)?;
         Ok(self.state)
@@ -166,7 +166,7 @@ impl<P: Platform> Interpreter<P> {
 #[derive(Debug, thiserror::Error)]
 pub enum TestError {
     #[error(transparent)]
-    Evaluator(#[from] EvaluatorError),
+    Evaluator(#[from] EvaluatorError<()>),
 
     #[error(transparent)]
     DataStack(#[from] DataStackError),
@@ -426,7 +426,7 @@ mod tests {
         pub fn wait_for_ping_on_channel(
             &mut self,
             channel: i64,
-        ) -> Result<(), EvaluatorError> {
+        ) -> Result<(), EvaluatorError<()>> {
             self.platform_context.channels.clear();
 
             let mut num_steps = 0;
