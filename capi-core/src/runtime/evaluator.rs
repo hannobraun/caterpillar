@@ -234,7 +234,7 @@ pub struct EvaluatorError {
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind {
     #[error("Error originating from built-in function")]
-    BuiltinFn(#[from] BuiltinFnError),
+    BuiltinFn(#[from] BuiltinFnError<()>),
 
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),

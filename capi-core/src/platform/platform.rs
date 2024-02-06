@@ -39,15 +39,18 @@ pub type BuiltinFn<P: Platform> = fn(
     platform_context: &mut P::Context<'_>,
 ) -> BuiltinFnResult;
 
-pub type BuiltinFnResult = Result<BuiltinFnState, BuiltinFnError>;
+pub type BuiltinFnResult = Result<BuiltinFnState, BuiltinFnError<()>>;
 
 #[derive(Debug, thiserror::Error)]
-pub enum BuiltinFnError {
+pub enum BuiltinFnError<T> {
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
 
     #[error("Type error")]
     Type(#[from] TypeError),
+
+    #[error("Platform-specific error from builtin function")]
+    PlatformSpecific(T),
 }
 
 // I don't like how `CoreContext` looks here. Everything else here is nice and
