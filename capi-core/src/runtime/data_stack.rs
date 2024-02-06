@@ -99,5 +99,5 @@ pub enum DataStackError {
     StackIsEmpty { expected: &'static str },
 
     #[error("Unexpected value")]
-    UnexpectedValue(#[from] Box<TypeError>),
+    UnexpectedValue(#[from] TypeError),
 }

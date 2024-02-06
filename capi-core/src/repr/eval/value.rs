@@ -24,13 +24,11 @@ pub enum ValuePayload {
 }
 
 impl ValuePayload {
-    pub fn expect<T: Type>(self) -> Result<T, Box<TypeError>> {
-        self.try_into()
-            .map_err(|value| TypeError {
-                value,
-                expected: T::NAME,
-            })
-            .map_err(Box::new)
+    pub fn expect<T: Type>(self) -> Result<T, TypeError> {
+        self.try_into().map_err(|value| TypeError {
+            value,
+            expected: T::NAME,
+        })
     }
 
     pub fn display_short(&self) -> String {
