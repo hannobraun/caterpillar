@@ -1,6 +1,6 @@
 use crate::{
     pipeline::{Function, Module},
-    platform::{BuiltinFnState, CoreContext, Platform},
+    platform::{BuiltinFnError, BuiltinFnState, CoreContext, Platform},
     repr::eval::{
         fragments::{FragmentId, FragmentPayload, Fragments},
         value::Value,
@@ -233,6 +233,9 @@ pub struct EvaluatorError {
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind {
+    #[error("Error originating from built-in function")]
+    BuiltinFn(#[from] BuiltinFnError),
+
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
 
