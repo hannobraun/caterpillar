@@ -39,7 +39,7 @@ pub type BuiltinFn<P: Platform> = fn(
     platform_context: &mut P::Context<'_>,
 ) -> BuiltinFnResult;
 
-pub type BuiltinFnResult = Result<BuiltinFnState, DataStackError>;
+pub type BuiltinFnResult = Result<BuiltinFnState, BuiltinFnError>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum BuiltinFnError {
