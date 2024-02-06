@@ -54,7 +54,7 @@ pub fn delay_ms(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -77,7 +77,7 @@ pub fn print(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut Context,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let value = runtime_context.data_stack.pop_any()?;

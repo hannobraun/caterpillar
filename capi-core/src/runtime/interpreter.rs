@@ -471,7 +471,7 @@ mod tests {
         step: usize,
         runtime_context: CoreContext,
         platform_context: &mut PlatformContext,
-    ) -> BuiltinFnResult {
+    ) -> BuiltinFnResult<()> {
         match step {
             0 => {
                 let (channel, _) = runtime_context

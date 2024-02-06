@@ -37,9 +37,9 @@ pub type BuiltinFn<P: Platform> = fn(
     // designed the same way.
     core_context: CoreContext,
     platform_context: &mut P::Context<'_>,
-) -> BuiltinFnResult;
+) -> BuiltinFnResult<()>;
 
-pub type BuiltinFnResult = Result<BuiltinFnState, BuiltinFnError<()>>;
+pub type BuiltinFnResult<E> = Result<BuiltinFnState, BuiltinFnError<E>>;
 
 #[derive(Debug, thiserror::Error)]
 pub enum BuiltinFnError<T> {

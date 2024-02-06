@@ -56,7 +56,7 @@ fn clear_pixel(
     step: usize,
     core_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (y, _) =
@@ -76,7 +76,7 @@ fn delay_ms(
     step: usize,
     core_context: CoreContext,
     _: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (delay_ms, _) =
@@ -96,7 +96,7 @@ fn print(
     step: usize,
     core_context: CoreContext,
     _: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let value = core_context.data_stack.pop_any()?;
@@ -113,7 +113,7 @@ fn set_pixel(
     step: usize,
     core_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (y, _) =

@@ -66,7 +66,7 @@ fn fn_(
     step: usize,
     runtime_context: CoreContext,
     _platform_context: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (body, _) =
@@ -92,7 +92,7 @@ fn mod_(
     step: usize,
     runtime_context: CoreContext,
     platform_context: &mut PlatformContext,
-) -> BuiltinFnResult {
+) -> BuiltinFnResult<()> {
     match step {
         0 => {
             let (path_as_values, _) =
