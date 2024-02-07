@@ -95,7 +95,7 @@ impl<P: Platform> Interpreter<P> {
     pub fn step(
         &mut self,
         platform_context: &mut P::Context<'_>,
-    ) -> Result<RuntimeState, EvaluatorError<()>> {
+    ) -> Result<RuntimeState, EvaluatorError<P::Error>> {
         self.state =
             self.evaluator.step(&mut self.fragments, platform_context)?;
         Ok(self.state)
@@ -104,7 +104,7 @@ impl<P: Platform> Interpreter<P> {
     pub fn run_tests(
         &mut self,
         mut platform_context: P::Context<'_>,
-    ) -> Result<(), TestError<()>> {
+    ) -> Result<(), TestError<P::Error>> {
         while !self.step(&mut platform_context)?.finished() {}
 
         let tests = self

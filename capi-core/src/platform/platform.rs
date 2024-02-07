@@ -38,7 +38,7 @@ pub type BuiltinFn<P: Platform> = fn(
     // designed the same way.
     core_context: CoreContext,
     platform_context: &mut P::Context<'_>,
-) -> BuiltinFnResult<()>;
+) -> BuiltinFnResult<P::Error>;
 
 pub type BuiltinFnResult<E> = Result<BuiltinFnState, BuiltinFnError<E>>;
 

@@ -38,7 +38,7 @@ impl<P: Platform> Evaluator<P> {
         &mut self,
         fragments: &mut Fragments,
         platform_context: &mut P::Context<'_>,
-    ) -> Result<RuntimeState, EvaluatorError<()>> {
+    ) -> Result<RuntimeState, EvaluatorError<P::Error>> {
         // What we need to do next depends on what's on top of the call stack.
         // Let's get the current stack frame off, and replace it with a stack
         // frame that points to the subsequent piece of code.
