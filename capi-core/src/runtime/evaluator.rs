@@ -170,7 +170,7 @@ impl<P: Platform> Evaluator<P> {
                     &mut (),
                 )
                 .map_err(|err| EvaluatorError {
-                    kind: err.into(),
+                    kind: EvaluatorErrorKind::CoreBuiltinFn(err),
                     fragment: word,
                 })?;
 
