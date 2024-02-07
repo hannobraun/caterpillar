@@ -104,7 +104,7 @@ impl<P: Platform> Interpreter<P> {
     pub fn run_tests(
         &mut self,
         mut platform_context: P::Context<'_>,
-    ) -> Result<(), TestError> {
+    ) -> Result<(), TestError<()>> {
         while !self.step(&mut platform_context)?.finished() {}
 
         let tests = self
@@ -164,9 +164,9 @@ impl<P: Platform> Interpreter<P> {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum TestError {
+pub enum TestError<T> {
     #[error(transparent)]
-    Evaluator(#[from] EvaluatorError<()>),
+    Evaluator(#[from] EvaluatorError<T>),
 
     #[error(transparent)]
     DataStack(#[from] DataStackError),
