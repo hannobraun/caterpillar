@@ -233,6 +233,9 @@ pub struct EvaluatorError<E> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind<E> {
+    #[error("Error originating from core builtin function")]
+    CoreBuiltinFn(BuiltinFnError<()>),
+
     #[error("Error originating from built-in function")]
     BuiltinFn(#[from] BuiltinFnError<E>),
 
