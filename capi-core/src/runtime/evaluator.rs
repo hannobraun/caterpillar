@@ -236,7 +236,7 @@ pub enum EvaluatorErrorKind<E> {
     #[error("Error originating from core builtin function")]
     CoreBuiltinFn(BuiltinFnError<()>),
 
-    #[error("Error originating from built-in function")]
+    #[error("Error originating from builtin function")]
     BuiltinFn(#[from] BuiltinFnError<E>),
 
     #[error("Error operating data stack")]
