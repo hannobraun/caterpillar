@@ -133,6 +133,9 @@ impl<P: Platform> Interpreter<P> {
             // test, interfering with the evaluation of the next test. When
             // evaluation is finished then, by definition, the call stack is
             // empty.
+            //
+            // (We have to clear the data stack before the next test run
+            // though.)
             self.evaluator.call_stack.push(StackFrame::Fragment {
                 fragment_id: function.body.start,
             });
