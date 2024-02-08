@@ -404,13 +404,13 @@ mod tests {
     // [#15]: https://github.com/hannobraun/caterpillar/issues/15
 
     struct Interpreter {
-        inner: crate::runtime::interpreter::Interpreter<TestPlatform>,
+        inner: super::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
 
     impl Interpreter {
         pub fn new() -> anyhow::Result<Self> {
-            let inner = crate::runtime::interpreter::Interpreter::new()?;
+            let inner = super::Interpreter::new()?;
 
             Ok(Self {
                 inner,
