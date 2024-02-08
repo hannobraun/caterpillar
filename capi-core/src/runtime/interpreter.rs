@@ -392,6 +392,17 @@ mod tests {
         Ok(())
     }
 
+    // Functions and modules are now known at compile-time, and I need to use
+    // that to resolve [#15]. I don't want to do that without test coverage
+    // though, which means I need to be able to check for the existence of
+    // errors in the tests.
+    //
+    // As a result, I think I need to beef up the error reporting infrastructure
+    // in general, and the following `Interpreter` test infrastructure in
+    // particular.
+    //
+    // [#15]: https://github.com/hannobraun/caterpillar/issues/15
+
     struct Interpreter {
         inner: crate::runtime::interpreter::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
