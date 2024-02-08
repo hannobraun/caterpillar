@@ -206,7 +206,7 @@ mod tests {
 
     #[test]
     fn update_to_named_function() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :f { nop 1 ping f } fn
@@ -226,7 +226,7 @@ mod tests {
 
     #[test]
     fn update_to_identical_functions() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :loop { f loop } fn
@@ -250,7 +250,7 @@ mod tests {
 
     #[test]
     fn update_that_reverts_back_to_an_earlier_version() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :f { nop 1 ping f } fn
@@ -273,7 +273,7 @@ mod tests {
 
     #[test]
     fn update_to_block() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :main
@@ -305,7 +305,7 @@ mod tests {
 
     #[test]
     fn update_to_identical_blocks_at_end_of_context() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :f { { nop 2 ping } } fn
@@ -342,7 +342,7 @@ mod tests {
 
     #[test]
     fn update_function_caller() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :f { nop 1 ping } fn
@@ -374,7 +374,7 @@ mod tests {
 
     #[test]
     fn update_renamed_function() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::new()?;
+        let mut interpreter = TestInterpreter::new()?;
 
         let original = "
             :f { nop 1 ping f } fn
@@ -403,12 +403,12 @@ mod tests {
     //
     // [#15]: https://github.com/hannobraun/caterpillar/issues/15
 
-    struct Interpreter {
+    struct TestInterpreter {
         inner: super::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
 
-    impl Interpreter {
+    impl TestInterpreter {
         pub fn new() -> anyhow::Result<Self> {
             let inner = super::Interpreter::new()?;
 
