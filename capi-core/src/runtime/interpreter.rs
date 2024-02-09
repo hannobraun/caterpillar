@@ -457,9 +457,7 @@ mod tests {
             let mut num_steps = 0;
 
             loop {
-                if self.platform_context.channels.contains_key(&channel)
-                    && self.platform_context.channels[&channel] == 1
-                {
+                if let Some(1) = self.platform_context.channels.get(&channel) {
                     break;
                 }
 
