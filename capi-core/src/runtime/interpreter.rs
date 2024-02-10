@@ -403,6 +403,32 @@ mod tests {
         Ok(())
     }
 
+    // The functionality tested here doesn't work yet. Un-ignore it, once this
+    // works.
+    #[test]
+    #[ignore]
+    fn remove_function() -> anyhow::Result<()> {
+        let mut interpreter = TestInterpreter::new()?;
+
+        let original = "
+            :f { nop 1 ping f } fn
+            :main { f } fn";
+        let updated = "
+            :main { f } fn";
+
+        interpreter.update(original)?;
+        interpreter.wait_for_ping_on_channel(1)?;
+
+        interpreter.update(updated)?;
+        let err = interpreter.wait_for_error();
+
+        // Waiting for *any* error is too unspecific. We need to inspect the
+        // error, making sure it's about `f` not being found.
+        dbg!(err);
+
+        Ok(())
+    }
+
     // Functions and modules are now known at compile-time, and I need to use
     // that to resolve [#15]. I don't want to do that without test coverage
     // though, which means I need to be able to check for the existence of
@@ -472,6 +498,22 @@ mod tests {
             }
 
             Ok(())
+        }
+
+        pub fn wait_for_error(&mut self) -> EvaluatorError<()> {
+            let mut num_steps = 0;
+
+            loop {
+                if let Err(err) = self.inner.step(&mut self.platform_context) {
+                    return err;
+                }
+
+                num_steps += 1;
+
+                if num_steps == 1024 {
+                    panic!("Waiting for error took too long");
+                }
+            }
         }
     }
 
