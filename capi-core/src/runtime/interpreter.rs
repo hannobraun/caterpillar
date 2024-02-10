@@ -59,8 +59,8 @@ impl<P: Platform> Interpreter<P> {
 
         // This just blindly merges the new module into the old one, overwriting
         // functions. What we actually want here is for this to be smarter, and
-        // to result into a some kind of report on which functions got replaced
-        // or removed.
+        // to result in some kind of report on which functions got replaced or
+        // removed.
         //
         // If we had this, we could resolve #15. Also, we'd probably no longer
         // need the `Namespace::replace` call below. In fact, it might even
