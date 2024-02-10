@@ -20,7 +20,7 @@ use super::{
 // Maybe it would be better to do the following:
 //
 // - Add `Scripts` as a field to `Interpreter`.
-// - Take entry script path as argument to constructor.
+// - Take `Scripts` instance with preloaded scripts in constructor.
 // - Change `update` to take `ScriptPath` and `String`, increasing its
 //   granularity.
 // - Then, in `update`, update the `Scripts` instance and re-run the pipeline.
