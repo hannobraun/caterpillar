@@ -10,10 +10,10 @@ mod tests {
 
     #[test]
     fn native_capi_test_suite() -> anyhow::Result<()> {
-        let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
-
         let script_path = PathBuf::from("../tests.capi");
         let (mut loader, mut scripts) = Loader::new(script_path)?;
+
+        let mut interpreter = Interpreter::<DesktopPlatform>::new()?;
 
         loader.wait_for_update(&mut scripts)?;
         let (pixel_ops, _) = crossbeam_channel::unbounded();
