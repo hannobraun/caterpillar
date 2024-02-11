@@ -101,16 +101,16 @@ impl Loader {
         ))
     }
 
-    pub fn wait_for_updated_scripts<'r>(
+    pub fn wait_for_updated_scripts(
         &mut self,
-        scripts: &'r mut Scripts,
-    ) -> anyhow::Result<&'r Scripts> {
+        scripts: &mut Scripts,
+    ) -> anyhow::Result<()> {
         if self.update_available {
             // An update is already available. We don't need to wait for the
             // next one, as the loop below would do.
             self.apply_available_update(scripts)?;
             self.update_available = false;
-            return Ok(scripts);
+            return Ok(());
         }
 
         loop {
@@ -124,7 +124,7 @@ impl Loader {
             break;
         }
 
-        Ok(scripts)
+        Ok(())
     }
 
     pub fn scripts_if_updated<'r>(

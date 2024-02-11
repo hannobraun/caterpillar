@@ -129,11 +129,11 @@ impl DesktopThread {
                         PlatformContext::new(&pixel_ops),
                     )?;
 
-                    let scripts = loader
+                    loader
                         .wait_for_updated_scripts(&mut scripts)
                         .context("Error while waiting for updated scripts")?;
                     interpreter
-                        .update(scripts)
+                        .update(&scripts)
                         .context("Failed to update scripts while finished")?;
                 }
             };
