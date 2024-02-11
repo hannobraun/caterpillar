@@ -19,7 +19,7 @@ pub async fn run(
     debug!("Running script:\n{script}");
 
     let entry_script_path = vec![value::Symbol(String::from("default"))];
-    let mut scripts = {
+    let scripts = {
         let mut inner = BTreeMap::new();
         inner.insert(entry_script_path.clone(), String::new());
 
@@ -29,9 +29,9 @@ pub async fn run(
         }
     };
 
-    let mut interpreter = Interpreter::<WebPlatform>::new()?;
+    let mut interpreter = Interpreter::<WebPlatform>::new(scripts)?;
 
-    interpreter.update(&scripts)?;
+    interpreter.update()?;
 
     let mut context = Context {
         events: Events { inner: events },
@@ -43,7 +43,7 @@ pub async fn run(
     loop {
         if scripts_updated {
             scripts_updated = false;
-            if let Err(err) = interpreter.update(&scripts) {
+            if let Err(err) = interpreter.update() {
                 context.events.status(format!("Pipeline error:\n{err:?}\n"));
             }
         }
@@ -58,7 +58,8 @@ pub async fn run(
 
                 match code.recv().await {
                     Ok(code) => {
-                        *scripts
+                        *interpreter
+                            .scripts
                             .inner
                             .get_mut(&entry_script_path)
                             .expect("Code for entry script not found") = code;
@@ -88,7 +89,8 @@ pub async fn run(
 
         match code.try_recv() {
             Ok(code) => {
-                *scripts
+                *interpreter
+                    .scripts
                     .inner
                     .get_mut(&entry_script_path)
                     .expect("Code for entry script not found") = code;

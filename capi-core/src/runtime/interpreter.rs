@@ -29,14 +29,17 @@ pub struct Interpreter<P: Platform> {
     fragments: Fragments,
     evaluator: Evaluator<P>,
     state: RuntimeState,
+
+    pub scripts: Scripts,
 }
 
 impl<P: Platform> Interpreter<P> {
-    pub fn new() -> Result<Self, PipelineError> {
+    pub fn new(scripts: Scripts) -> Result<Self, PipelineError> {
         Ok(Interpreter {
             fragments: Fragments::new(),
             evaluator: Evaluator::new(Module::default()),
             state: RuntimeState::Finished,
+            scripts,
         })
     }
 
@@ -44,18 +47,16 @@ impl<P: Platform> Interpreter<P> {
         &mut self.evaluator
     }
 
-    pub fn update(
-        &mut self,
-        scripts: &Scripts,
-    ) -> Result<FragmentId, PipelineError> {
-        let code = scripts
+    pub fn update(&mut self) -> Result<FragmentId, PipelineError> {
+        let code = self
+            .scripts
             .inner
-            .get(&scripts.entry_script_path)
+            .get(&self.scripts.entry_script_path)
             .expect("Code for entry script not found");
         let parent = None;
 
         let PipelineOutput { start, mut module } =
-            pipeline::run(code, parent, &mut self.fragments, scripts)?;
+            pipeline::run(code, parent, &mut self.fragments, &self.scripts)?;
 
         // This just blindly merges the new module into the old one, overwriting
         // functions. What we actually want here is for this to be smarter, and
@@ -442,7 +443,6 @@ mod tests {
 
     struct TestInterpreter {
         entry_script_path: ScriptPath,
-        scripts: Scripts,
         inner: super::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
@@ -455,22 +455,22 @@ mod tests {
                 inner: BTreeMap::new(),
             };
 
-            let inner = super::Interpreter::new()?;
+            let inner = super::Interpreter::new(scripts)?;
 
             Ok(Self {
                 entry_script_path,
-                scripts,
                 inner,
                 platform_context: PlatformContext::default(),
             })
         }
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-            self.scripts
+            self.inner
+                .scripts
                 .inner
                 .insert(self.entry_script_path.clone(), code.to_string());
 
-            self.inner.update(&self.scripts)?;
+            self.inner.update()?;
 
             Ok(())
         }

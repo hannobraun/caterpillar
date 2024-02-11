@@ -91,10 +91,10 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
-        let (mut loader, mut scripts) = Loader::new(entry_script_path)
+        let (mut loader, scripts) = Loader::new(entry_script_path)
             .context("Failed to initialize loader")?;
-        let mut interpreter =
-            Interpreter::new().context("Failed to create interpreter")?;
+        let mut interpreter = Interpreter::new(scripts)
+            .context("Failed to create interpreter")?;
 
         loop {
             if let Err(TryRecvError::Disconnected) = lifeline.try_recv() {
@@ -104,11 +104,11 @@ impl DesktopThread {
             }
 
             if loader
-                .apply_update_if_available(&mut scripts)
+                .apply_update_if_available(&mut interpreter.scripts)
                 .context("Error while checking for updated scripts")?
             {
                 interpreter
-                    .update(&scripts)
+                    .update()
                     .context("Failed to update scripts while running")?;
             }
 
@@ -130,10 +130,10 @@ impl DesktopThread {
                     )?;
 
                     loader
-                        .wait_for_update(&mut scripts)
+                        .wait_for_update(&mut interpreter.scripts)
                         .context("Error while waiting for updated scripts")?;
                     interpreter
-                        .update(&scripts)
+                        .update()
                         .context("Failed to update scripts while finished")?;
                 }
             };
