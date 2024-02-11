@@ -18,12 +18,13 @@ pub struct Loader {
     receiver: UpdateReceiver,
     _watchers: Vec<Debouncer<RecommendedWatcher>>,
     entry_script_dir: PathBuf,
-    scripts: Scripts,
     update_available: bool,
 }
 
 impl Loader {
-    pub fn new(entry_script_path: impl Into<PathBuf>) -> anyhow::Result<Self> {
+    pub fn new(
+        entry_script_path: impl Into<PathBuf>,
+    ) -> anyhow::Result<(Self, Scripts)> {
         let entry_script_path = entry_script_path.into();
 
         let (sender, receiver) = crossbeam_channel::unbounded();
@@ -89,27 +90,32 @@ impl Loader {
         // and make that happen.
         let update_available = true;
 
-        Ok(Self {
-            receiver,
-            _watchers: watchers,
-            entry_script_dir,
+        Ok((
+            Self {
+                receiver,
+                _watchers: watchers,
+                entry_script_dir,
+                update_available,
+            },
             scripts,
-            update_available,
-        })
+        ))
     }
 
-    pub fn wait_for_updated_scripts(&mut self) -> anyhow::Result<&Scripts> {
+    pub fn wait_for_updated_scripts<'r>(
+        &mut self,
+        scripts: &'r mut Scripts,
+    ) -> anyhow::Result<&'r Scripts> {
         if self.update_available {
             // An update is already available. We don't need to wait for the
             // next one, as the loop below would do.
-            self.apply_available_update()?;
+            self.apply_available_update(scripts)?;
             self.update_available = false;
-            return Ok(&self.scripts);
+            return Ok(scripts);
         }
 
         loop {
             let update = self.receiver.recv()?;
-            handle_update(update, &self.entry_script_dir, &mut self.scripts)?;
+            handle_update(update, &self.entry_script_dir, scripts)?;
 
             if !self.receiver.is_empty() {
                 continue;
@@ -118,23 +124,29 @@ impl Loader {
             break;
         }
 
-        Ok(&self.scripts)
+        Ok(scripts)
     }
 
-    pub fn scripts_if_updated(&mut self) -> anyhow::Result<Option<&Scripts>> {
-        self.apply_available_update()?;
+    pub fn scripts_if_updated<'r>(
+        &mut self,
+        scripts: &'r mut Scripts,
+    ) -> anyhow::Result<Option<&'r Scripts>> {
+        self.apply_available_update(scripts)?;
 
         if self.update_available {
             self.update_available = false;
-            Ok(Some(&self.scripts))
+            Ok(Some(scripts))
         } else {
             Ok(None)
         }
     }
 
-    fn apply_available_update(&mut self) -> anyhow::Result<()> {
+    fn apply_available_update(
+        &mut self,
+        scripts: &mut Scripts,
+    ) -> anyhow::Result<()> {
         for update in self.receiver.try_iter() {
-            handle_update(update, &self.entry_script_dir, &mut self.scripts)?;
+            handle_update(update, &self.entry_script_dir, scripts)?;
             self.update_available = true;
         }
 

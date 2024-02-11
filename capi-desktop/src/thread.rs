@@ -91,7 +91,7 @@ impl DesktopThread {
         pixel_ops: Sender<PixelOp>,
         run_target: impl RunTarget,
     ) -> anyhow::Result<()> {
-        let mut loader = Loader::new(entry_script_path)
+        let (mut loader, mut scripts) = Loader::new(entry_script_path)
             .context("Failed to initialize loader")?;
         let mut interpreter =
             Interpreter::new().context("Failed to create interpreter")?;
@@ -104,7 +104,7 @@ impl DesktopThread {
             }
 
             if let Some(scripts) = loader
-                .scripts_if_updated()
+                .scripts_if_updated(&mut scripts)
                 .context("Error while checking for updated scripts")?
             {
                 interpreter
@@ -130,7 +130,7 @@ impl DesktopThread {
                     )?;
 
                     let scripts = loader
-                        .wait_for_updated_scripts()
+                        .wait_for_updated_scripts(&mut scripts)
                         .context("Error while waiting for updated scripts")?;
                     interpreter
                         .update(scripts)
