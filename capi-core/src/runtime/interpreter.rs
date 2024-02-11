@@ -442,6 +442,7 @@ mod tests {
 
     struct TestInterpreter {
         entry_script_path: ScriptPath,
+        scripts: Scripts,
         inner: super::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
@@ -449,27 +450,27 @@ mod tests {
     impl TestInterpreter {
         pub fn new() -> anyhow::Result<Self> {
             let entry_script_path = vec![value::Symbol(String::from("entry"))];
+            let scripts = Scripts {
+                entry_script_path: entry_script_path.clone(),
+                inner: BTreeMap::new(),
+            };
+
             let inner = super::Interpreter::new()?;
 
             Ok(Self {
                 entry_script_path,
+                scripts,
                 inner,
                 platform_context: PlatformContext::default(),
             })
         }
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
-            let scripts = {
-                let mut inner = BTreeMap::new();
-                inner.insert(self.entry_script_path.clone(), code.to_string());
+            self.scripts
+                .inner
+                .insert(self.entry_script_path.clone(), code.to_string());
 
-                Scripts {
-                    entry_script_path: self.entry_script_path.clone(),
-                    inner,
-                }
-            };
-
-            self.inner.update(&scripts)?;
+            self.inner.update(&self.scripts)?;
 
             Ok(())
         }
