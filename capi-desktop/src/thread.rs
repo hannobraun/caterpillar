@@ -103,12 +103,12 @@ impl DesktopThread {
                 break;
             }
 
-            if let Some(scripts) = loader
+            if let Some(()) = loader
                 .scripts_if_updated(&mut scripts)
                 .context("Error while checking for updated scripts")?
             {
                 interpreter
-                    .update(scripts)
+                    .update(&scripts)
                     .context("Failed to update scripts while running")?;
             }
 
