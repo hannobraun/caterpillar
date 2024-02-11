@@ -130,14 +130,14 @@ impl Loader {
     pub fn scripts_if_updated(
         &mut self,
         scripts: &mut Scripts,
-    ) -> anyhow::Result<Option<()>> {
+    ) -> anyhow::Result<bool> {
         self.apply_available_update(scripts)?;
 
         if self.update_available {
             self.update_available = false;
-            Ok(Some(()))
+            Ok(true)
         } else {
-            Ok(None)
+            Ok(false)
         }
     }
 
