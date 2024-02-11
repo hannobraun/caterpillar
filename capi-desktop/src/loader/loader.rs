@@ -127,7 +127,7 @@ impl Loader {
         Ok(())
     }
 
-    pub fn scripts_if_updated(
+    pub fn apply_update_if_available(
         &mut self,
         scripts: &mut Scripts,
     ) -> anyhow::Result<bool> {

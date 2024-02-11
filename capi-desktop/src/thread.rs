@@ -104,7 +104,7 @@ impl DesktopThread {
             }
 
             if loader
-                .scripts_if_updated(&mut scripts)
+                .apply_update_if_available(&mut scripts)
                 .context("Error while checking for updated scripts")?
             {
                 interpreter
