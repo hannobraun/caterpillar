@@ -15,7 +15,7 @@ mod tests {
         let script_path = PathBuf::from("../tests.capi");
         let (mut loader, mut scripts) = Loader::new(script_path)?;
 
-        loader.wait_for_updated_scripts(&mut scripts)?;
+        loader.wait_for_update(&mut scripts)?;
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update(&scripts)?;

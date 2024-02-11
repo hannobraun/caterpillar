@@ -101,7 +101,7 @@ impl Loader {
         ))
     }
 
-    pub fn wait_for_updated_scripts(
+    pub fn wait_for_update(
         &mut self,
         scripts: &mut Scripts,
     ) -> anyhow::Result<()> {

@@ -130,7 +130,7 @@ impl DesktopThread {
                     )?;
 
                     loader
-                        .wait_for_updated_scripts(&mut scripts)
+                        .wait_for_update(&mut scripts)
                         .context("Error while waiting for updated scripts")?;
                     interpreter
                         .update(&scripts)
