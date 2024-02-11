@@ -202,7 +202,7 @@ mod tests {
     use std::collections::{BTreeMap, HashMap};
 
     use crate::{
-        pipeline::{PipelineError, Scripts},
+        pipeline::{PipelineError, ScriptPath, Scripts},
         platform::{
             BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns,
             CoreContext, Platform,
@@ -441,15 +441,18 @@ mod tests {
     // [#15]: https://github.com/hannobraun/caterpillar/issues/15
 
     struct TestInterpreter {
+        entry_script_path: ScriptPath,
         inner: super::Interpreter<TestPlatform>,
         platform_context: PlatformContext,
     }
 
     impl TestInterpreter {
         pub fn new() -> anyhow::Result<Self> {
+            let entry_script_path = vec![value::Symbol(String::from("entry"))];
             let inner = super::Interpreter::new()?;
 
             Ok(Self {
+                entry_script_path,
                 inner,
                 platform_context: PlatformContext::default(),
             })
@@ -457,14 +460,11 @@ mod tests {
 
         pub fn update(&mut self, code: &str) -> Result<(), PipelineError> {
             let scripts = {
-                let entry_script_path =
-                    vec![value::Symbol(String::from("entry"))];
-
                 let mut inner = BTreeMap::new();
-                inner.insert(entry_script_path.clone(), code.to_string());
+                inner.insert(self.entry_script_path.clone(), code.to_string());
 
                 Scripts {
-                    entry_script_path,
+                    entry_script_path: self.entry_script_path.clone(),
                     inner,
                 }
             };
