@@ -14,16 +14,12 @@ use super::{
     evaluator::{Evaluator, EvaluatorError, RuntimeState},
 };
 
-// Maybe the API here isn't quite right. The way it works now, it forces callers
-// to manage a `Scripts` instance.
+// This API is in the middle of a refactor. Here's what remains to be done:
 //
-// Maybe it would be better to do the following:
-//
-// - Add `Scripts` as a field to `Interpreter`.
-// - Take `Scripts` instance with preloaded scripts in constructor.
 // - Change `update` to take `ScriptPath` and `String`, increasing its
 //   granularity.
 // - Then, in `update`, update the `Scripts` instance and re-run the pipeline.
+// - Make `scripts` field private.`
 
 pub struct Interpreter<P: Platform> {
     fragments: Fragments,
