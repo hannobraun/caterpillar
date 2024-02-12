@@ -127,18 +127,7 @@ impl Loader {
         // Before we actually return the updates to the caller, let's make them
         // more palatable. Nothing outside of `crate::loader` should need to
         // deal with file system paths.
-        let updates = updates
-            .into_iter()
-            .map(|result| {
-                result.and_then(|(path, _, code)| {
-                    fs_path_to_script_path(&self.entry_script_dir, path)
-                        .map(|path| (path, code))
-                })
-            })
-            .collect::<anyhow::Result<Vec<(ScriptPath, String)>>>()?
-            .into_iter();
-
-        Ok(updates)
+        convert_updates(updates, &self.entry_script_dir)
     }
 
     pub fn apply_update_if_available(
@@ -195,6 +184,24 @@ fn walk_entry_script_dir(
     }
 
     Ok(())
+}
+
+fn convert_updates(
+    updates: Vec<Update>,
+    entry_script_dir: &Path,
+) -> anyhow::Result<impl Iterator<Item = (ScriptPath, String)>> {
+    let updates = updates
+        .into_iter()
+        .map(|result| {
+            result.and_then(|(path, _, code)| {
+                fs_path_to_script_path(entry_script_dir, path)
+                    .map(|path| (path, code))
+            })
+        })
+        .collect::<anyhow::Result<Vec<(ScriptPath, String)>>>()?
+        .into_iter();
+
+    Ok(updates)
 }
 
 fn handle_update(
