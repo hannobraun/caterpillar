@@ -12,9 +12,7 @@ mod tests {
     fn native_capi_test_suite() -> anyhow::Result<()> {
         let script_path = PathBuf::from("../tests.capi");
         let (_, scripts) = Loader::new(script_path)?;
-
         let mut interpreter = Interpreter::<DesktopPlatform>::new(scripts)?;
-
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update()?;
