@@ -124,9 +124,6 @@ impl Loader {
             self.receiver.try_iter().collect::<Vec<_>>()
         };
 
-        // Before we actually return the updates to the caller, let's make them
-        // more palatable. Nothing outside of `crate::loader` should need to
-        // deal with file system paths.
         convert_updates(updates, &self.entry_script_dir)
     }
 
