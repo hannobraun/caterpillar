@@ -129,9 +129,14 @@ impl DesktopThread {
                         PlatformContext::new(&pixel_ops),
                     )?;
 
-                    loader
-                        .wait_for_update(&mut interpreter.scripts)
-                        .context("Error while waiting for updated scripts")?;
+                    let updates = loader
+                        .wait_for_updates()
+                        .context("Error waiting for updates")?;
+
+                    for (path, code) in updates {
+                        interpreter.scripts.inner.insert(path, code);
+                    }
+
                     interpreter
                         .update()
                         .context("Failed to update scripts while finished")?;
