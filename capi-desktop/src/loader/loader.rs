@@ -101,6 +101,46 @@ impl Loader {
         ))
     }
 
+    pub fn wait_for_updates(
+        &mut self,
+    ) -> anyhow::Result<impl Iterator<Item = (ScriptPath, String)>> {
+        let updates = if self.receiver.is_empty() {
+            // If there are no updates, we need to wait for the next one.
+            //
+            // There's a race condition between the checking we just did, and
+            // the waiting we're about to do. Doesn't matter though. The worst
+            // that can happen, is that an update arrived in the meantime, and
+            // our wait is very short.
+
+            vec![self.receiver.recv()?]
+        } else {
+            // If there are updates, we can return them.
+            //
+            // Again, there's a race condition between the check above and our
+            // upcoming collection of the updates. And again, it doesn't matter.
+            // The worst that can happen is that more updates are available, and
+            // then we just collect those too.
+
+            self.receiver.try_iter().collect::<Vec<_>>()
+        };
+
+        // Before we actually return the updates to the caller, let's make them
+        // more palatable. Nothing outside of `crate::loader` should need to
+        // deal with file system paths.
+        let updates = updates
+            .into_iter()
+            .map(|result| {
+                result.and_then(|(path, _, code)| {
+                    fs_path_to_script_path(&self.entry_script_dir, path)
+                        .map(|path| (path, code))
+                })
+            })
+            .collect::<anyhow::Result<Vec<(ScriptPath, String)>>>()?
+            .into_iter();
+
+        Ok(updates)
+    }
+
     pub fn wait_for_update(
         &mut self,
         scripts: &mut Scripts,
