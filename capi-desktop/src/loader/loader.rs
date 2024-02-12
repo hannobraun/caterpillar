@@ -184,7 +184,7 @@ fn walk_entry_script_dir(
 }
 
 fn convert_updates(
-    updates: Vec<Update>,
+    updates: impl IntoIterator<Item = Update>,
     entry_script_dir: &Path,
 ) -> anyhow::Result<impl Iterator<Item = (ScriptPath, String)>> {
     let updates = updates
