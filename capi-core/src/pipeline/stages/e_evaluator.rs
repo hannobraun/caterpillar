@@ -16,6 +16,20 @@ use crate::{
     },
 };
 
+// The evaluation here requires that all reachable module have already been
+// loaded. This seemed like a good idea at the time, at least as a stop-gap, but
+// I think it's the wrong approach.
+//
+// Not only has it turned out to be surprisingly tricky to implement, it's also
+// limited: If a new file is added, this either needs to be detected somehow
+// (which could end up in a race condition with the new file being needed), or
+// we need some way for the pipeline to ask for it anyway. And then the whole
+// preloading bit is pointless.
+//
+// It probably makes sense to create a `Pipeline` struct that can hold the
+// current state of evaluation, while the loader goes off to load whatever was
+// missing.
+
 pub fn evaluate(
     start: FragmentId,
     fragments: &mut Fragments,
