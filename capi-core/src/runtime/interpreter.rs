@@ -59,9 +59,6 @@ impl<P: Platform> Interpreter<P> {
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
             self.evaluator.data_stack.replace(old, new);
-            self.evaluator
-                .global_namespace
-                .replace(old, new, &self.fragments);
         }
 
         if self.state.finished() {
