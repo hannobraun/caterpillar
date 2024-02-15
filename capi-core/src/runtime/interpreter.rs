@@ -51,24 +51,10 @@ impl<P: Platform> Interpreter<P> {
             .expect("Code for entry script not found");
         let parent = None;
 
-        let PipelineOutput { start, mut module } =
+        let PipelineOutput { start, module } =
             pipeline::run(code, parent, &mut self.fragments, &self.scripts)?;
 
-        // This just blindly merges the new module into the old one, overwriting
-        // functions. What we actually want here is for this to be smarter, and
-        // to result in some kind of report on which functions got replaced or
-        // removed.
-        //
-        // If we had this, we could resolve #15. Also, we'd probably no longer
-        // need the `Namespace::replace` call below. In fact, it might even
-        // conflict with our new module merging thing.
-        //
-        // Link for #15:
-        // https://github.com/hannobraun/caterpillar/issues/15
-        self.evaluator
-            .global_namespace
-            .global_module()
-            .merge(&mut module);
+        *self.evaluator.global_namespace.global_module() = module;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
             self.evaluator.call_stack.replace(old, new);
@@ -403,7 +389,6 @@ mod tests {
     // The functionality tested here doesn't work yet. Un-ignore it, once this
     // works.
     #[test]
-    #[ignore]
     fn remove_function() -> anyhow::Result<()> {
         let mut interpreter = TestInterpreter::new()?;
 
