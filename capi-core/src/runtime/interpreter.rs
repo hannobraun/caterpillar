@@ -401,9 +401,8 @@ mod tests {
         interpreter.update(updated)?;
         let err = interpreter.wait_for_error();
 
-        // Waiting for *any* error is too unspecific. We need to inspect the
-        // error, making sure it's about `f` not being found.
-        dbg!(err);
+        let err = err.assert_resolve();
+        assert_eq!(err.name, "f");
 
         Ok(())
     }
