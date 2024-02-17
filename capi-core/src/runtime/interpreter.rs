@@ -62,7 +62,7 @@ impl<P: Platform> Interpreter<P> {
         }
 
         if self.state.finished() {
-            // Restart the program (i.e. run `main`), if available.
+            // Restart the program (i.e. run `main`, if available).
             //
             // We might not always have a `main` function. Either by design, if
             // this is a library module, and we're just running its tests, or by
