@@ -243,5 +243,5 @@ pub enum EvaluatorErrorKind<E> {
     DataStack(#[from] DataStackError),
 
     #[error(transparent)]
-    ResolveFunction(#[from] ResolveError),
+    Resolve(#[from] ResolveError),
 }
