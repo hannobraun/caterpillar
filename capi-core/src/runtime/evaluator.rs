@@ -231,6 +231,16 @@ pub struct EvaluatorError<E> {
     pub fragment: FragmentId,
 }
 
+impl<E> EvaluatorError<E> {
+    pub fn assert_resolve(self) -> ResolveError {
+        if let EvaluatorErrorKind::Resolve(err) = self.kind {
+            return err;
+        }
+
+        panic!("Expected `ResolveError`")
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind<E> {
     #[error("Error originating from core builtin function")]
