@@ -70,7 +70,7 @@ impl DesktopThread {
         let (lifeline_tx, lifeline_rx) = crossbeam_channel::bounded(0);
 
         let join_handle = thread::spawn(|| {
-            Self::run_inner(
+            Self::thread(
                 entry_script_path,
                 lifeline_rx,
                 pixel_ops_tx,
@@ -85,7 +85,7 @@ impl DesktopThread {
         })
     }
 
-    fn run_inner(
+    fn thread(
         entry_script_path: PathBuf,
         lifeline: Receiver<()>,
         pixel_ops: Sender<PixelOp>,
