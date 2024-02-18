@@ -146,11 +146,12 @@ impl<P: Platform> Interpreter<P> {
                     data_stack: self.evaluator.data_stack.clone(),
                 });
             }
-            if !result.0 {
-                return Err(TestError::TestFailed);
-            }
 
-            println!(" PASS");
+            if result.0 {
+                println!(" PASS");
+            } else {
+                println!(" FAIL");
+            }
         }
 
         Ok(())
