@@ -76,7 +76,7 @@ impl<P: Platform> Interpreter<P> {
             {
                 self.evaluator.call_stack.push(StackFrame::Fragment {
                     fragment_id: main.body.start,
-                })
+                });
             }
         }
 
