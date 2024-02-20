@@ -100,20 +100,20 @@ impl<P: Platform> Interpreter<P> {
         while !self.step(&mut platform_context)?.finished() {}
 
         let tests = self
-            .evaluator
+            .evaluator()
             .global_namespace
             .global_module()
             .tests()
             .cloned()
             .collect::<Vec<_>>();
 
-        if !self.evaluator.data_stack.is_empty() {
+        if !self.evaluator().data_stack.is_empty() {
             // This happens easily, if you do most of the work of defining a
             // test, but then forgot to actually write `test` at the end.
             // Without this error, it would result in dead code that's never
             // actually run.
             return Err(TestError::DataStackNotEmptyAfterScriptEvaluation {
-                data_stack: self.evaluator.data_stack.clone(),
+                data_stack: self.evaluator().data_stack.clone(),
             });
         }
 
@@ -128,19 +128,19 @@ impl<P: Platform> Interpreter<P> {
             //
             // (We have to clear the data stack before the next test run
             // though.)
-            self.evaluator.call_stack.push(StackFrame::Fragment {
+            self.evaluator().call_stack.push(StackFrame::Fragment {
                 fragment_id: function.body.start,
             });
-            self.evaluator.data_stack.clear();
+            self.evaluator().data_stack.clear();
 
             while !self.step(&mut platform_context)?.finished() {}
 
             let (result, _) =
-                self.evaluator.data_stack.pop_specific::<value::Bool>()?;
+                self.evaluator().data_stack.pop_specific::<value::Bool>()?;
 
-            if !self.evaluator.data_stack.is_empty() {
+            if !self.evaluator().data_stack.is_empty() {
                 return Err(TestError::DataStackNotEmptyAfterTestRun {
-                    data_stack: self.evaluator.data_stack.clone(),
+                    data_stack: self.evaluator().data_stack.clone(),
                 });
             }
 
