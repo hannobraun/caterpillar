@@ -54,11 +54,11 @@ impl<P: Platform> Interpreter<P> {
         let PipelineOutput { start, module } =
             pipeline::run(code, parent, &mut self.fragments, &self.scripts)?;
 
-        *self.evaluator.global_namespace.global_module() = module;
+        *self.evaluator().global_namespace.global_module() = module;
 
         for Replacement { old, new } in self.fragments.take_replacements() {
-            self.evaluator.call_stack.replace(old, new);
-            self.evaluator.data_stack.replace(old, new);
+            self.evaluator().call_stack.replace(old, new);
+            self.evaluator().data_stack.replace(old, new);
         }
 
         if self.state.finished() {
@@ -72,12 +72,12 @@ impl<P: Platform> Interpreter<P> {
             // do with the module, so we can detect misspellings. But for now,
             // this will do.
             if let Ok(ItemInModule::UserDefinedFunction(main)) =
-                self.evaluator.global_namespace.resolve("main")
+                self.evaluator().global_namespace.resolve("main")
             {
                 let stack_frame = StackFrame::Fragment {
                     fragment_id: main.body.start,
                 };
-                self.evaluator.call_stack.push(stack_frame);
+                self.evaluator().call_stack.push(stack_frame)
             }
         }
 
