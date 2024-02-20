@@ -1,7 +1,9 @@
 use std::{path::PathBuf, thread};
 
 use anyhow::Context;
-use capi_core::runtime::{evaluator::RuntimeState, interpreter::Interpreter};
+use capi_core::runtime::{
+    evaluator::RuntimeState, interpreter::Interpreter, test_runner::run_tests,
+};
 use crossbeam_channel::{Receiver, Sender, TryRecvError};
 
 use crate::{
@@ -47,7 +49,7 @@ impl DesktopThread {
                 interpreter: &mut Interpreter<DesktopPlatform>,
                 platform_context: PlatformContext,
             ) -> anyhow::Result<()> {
-                interpreter.run_tests(platform_context)?;
+                run_tests(interpreter, platform_context)?;
 
                 eprintln!();
                 eprintln!("> Test run finished.");
