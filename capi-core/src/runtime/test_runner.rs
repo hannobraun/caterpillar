@@ -65,10 +65,10 @@ pub fn run_tests<P: Platform>(
         test_report.inner.push((function.name.value, result.0));
     }
 
-    for (name, pass) in test_report.inner {
+    for (name, pass) in &test_report.inner {
         print!("Running test `{}`...", name);
 
-        if pass {
+        if *pass {
             println!(" PASS");
         } else {
             println!(" FAIL");
