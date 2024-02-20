@@ -11,7 +11,7 @@ use super::{
 pub fn run_tests<P: Platform>(
     interpreter: &mut Interpreter<P>,
     platform_context: P::Context<'_>,
-) -> Result<(), TestError<P::Error>> {
+) -> Result<TestReport, TestError<P::Error>> {
     let mut platform_context = platform_context;
     while !interpreter.step(&mut platform_context)?.finished() {}
 
@@ -75,7 +75,7 @@ pub fn run_tests<P: Platform>(
         }
     }
 
-    Ok(())
+    Ok(test_report)
 }
 
 pub struct TestReport {
