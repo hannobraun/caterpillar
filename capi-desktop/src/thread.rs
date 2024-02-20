@@ -49,7 +49,17 @@ impl DesktopThread {
                 interpreter: &mut Interpreter<DesktopPlatform>,
                 platform_context: PlatformContext,
             ) -> anyhow::Result<()> {
-                run_tests(interpreter, platform_context)?;
+                let test_report = run_tests(interpreter, platform_context)?;
+
+                for (name, pass) in &test_report.inner {
+                    print!("Running test `{}`...", name);
+
+                    if *pass {
+                        println!(" PASS");
+                    } else {
+                        println!(" FAIL");
+                    }
+                }
 
                 eprintln!();
                 eprintln!("> Test run finished.");
