@@ -173,9 +173,6 @@ pub enum TestError<T> {
 
     #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
     DataStackNotEmptyAfterTestRun { data_stack: DataStack },
-
-    #[error("Test returned `false`")]
-    TestFailed,
 }
 
 #[cfg(test)]
