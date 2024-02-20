@@ -133,11 +133,7 @@ impl<P: Platform> Interpreter<P> {
             });
             self.evaluator.data_stack.clear();
 
-            while !self
-                .evaluator
-                .step(&mut self.fragments, &mut platform_context)?
-                .finished()
-            {}
+            while !self.step(&mut platform_context)?.finished() {}
 
             let (result, _) =
                 self.evaluator.data_stack.pop_specific::<value::Bool>()?;
