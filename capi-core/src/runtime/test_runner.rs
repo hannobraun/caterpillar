@@ -1,4 +1,6 @@
-use crate::platform::Platform;
+use crate::{
+    platform::Platform, repr::eval::value, runtime::call_stack::StackFrame,
+};
 
 use super::{
     data_stack::{DataStack, DataStackError},
@@ -10,7 +12,64 @@ pub fn run_tests<P: Platform>(
     interpreter: &mut Interpreter<P>,
     platform_context: P::Context<'_>,
 ) -> Result<(), TestError<P::Error>> {
-    interpreter.run_tests(platform_context)
+    let mut platform_context = platform_context;
+    while !interpreter.step(&mut platform_context)?.finished() {}
+
+    let tests = interpreter
+        .evaluator()
+        .global_namespace
+        .global_module()
+        .tests()
+        .cloned()
+        .collect::<Vec<_>>();
+
+    if !interpreter.evaluator().data_stack.is_empty() {
+        // This happens easily, if you do most of the work of defining a test,
+        // but then forgot to actually write `test` at the end. Without this
+        // error, it would result in dead code that's never actually run.
+        return Err(TestError::DataStackNotEmptyAfterScriptEvaluation {
+            data_stack: interpreter.evaluator().data_stack.clone(),
+        });
+    }
+
+    for function in tests {
+        print!("Running test `{}`...", function.name.value);
+
+        // We don't need to worry about any call stack contents from the initial
+        // module evaluation, or the evaluation of the previous test,
+        // interfering with the evaluation of the next test. When evaluation is
+        // finished then, by definition, the call stack is empty.
+        //
+        // (We have to clear the data stack before the next test run though.)
+        interpreter
+            .evaluator()
+            .call_stack
+            .push(StackFrame::Fragment {
+                fragment_id: function.body.start,
+            });
+        interpreter.evaluator().data_stack.clear();
+
+        while !interpreter.step(&mut platform_context)?.finished() {}
+
+        let (result, _) = interpreter
+            .evaluator()
+            .data_stack
+            .pop_specific::<value::Bool>()?;
+
+        if !interpreter.evaluator().data_stack.is_empty() {
+            return Err(TestError::DataStackNotEmptyAfterTestRun {
+                data_stack: interpreter.evaluator().data_stack.clone(),
+            });
+        }
+
+        if result.0 {
+            println!(" PASS");
+        } else {
+            println!(" FAIL");
+        }
+    }
+
+    Ok(())
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -1,17 +1,13 @@
 use crate::{
     pipeline::{self, Module, PipelineError, PipelineOutput, Scripts},
     platform::Platform,
-    repr::eval::{
-        fragments::{FragmentId, Fragments, Replacement},
-        value,
-    },
+    repr::eval::fragments::{FragmentId, Fragments, Replacement},
     runtime::namespaces::ItemInModule,
 };
 
 use super::{
     call_stack::StackFrame,
     evaluator::{Evaluator, EvaluatorError, RuntimeState},
-    test_runner::TestError,
 };
 
 // This API is in the middle of a refactor. Here's what remains to be done:
@@ -91,67 +87,6 @@ impl<P: Platform> Interpreter<P> {
         self.state =
             self.evaluator.step(&mut self.fragments, platform_context)?;
         Ok(self.state)
-    }
-
-    pub fn run_tests(
-        &mut self,
-        mut platform_context: P::Context<'_>,
-    ) -> Result<(), TestError<P::Error>> {
-        while !self.step(&mut platform_context)?.finished() {}
-
-        let tests = self
-            .evaluator()
-            .global_namespace
-            .global_module()
-            .tests()
-            .cloned()
-            .collect::<Vec<_>>();
-
-        if !self.evaluator().data_stack.is_empty() {
-            // This happens easily, if you do most of the work of defining a
-            // test, but then forgot to actually write `test` at the end.
-            // Without this error, it would result in dead code that's never
-            // actually run.
-            return Err(TestError::DataStackNotEmptyAfterScriptEvaluation {
-                data_stack: self.evaluator().data_stack.clone(),
-            });
-        }
-
-        for function in tests {
-            print!("Running test `{}`...", function.name.value);
-
-            // We don't need to worry about any call stack contents from the
-            // initial module evaluation, or the evaluation of the previous
-            // test, interfering with the evaluation of the next test. When
-            // evaluation is finished then, by definition, the call stack is
-            // empty.
-            //
-            // (We have to clear the data stack before the next test run
-            // though.)
-            self.evaluator().call_stack.push(StackFrame::Fragment {
-                fragment_id: function.body.start,
-            });
-            self.evaluator().data_stack.clear();
-
-            while !self.step(&mut platform_context)?.finished() {}
-
-            let (result, _) =
-                self.evaluator().data_stack.pop_specific::<value::Bool>()?;
-
-            if !self.evaluator().data_stack.is_empty() {
-                return Err(TestError::DataStackNotEmptyAfterTestRun {
-                    data_stack: self.evaluator().data_stack.clone(),
-                });
-            }
-
-            if result.0 {
-                println!(" PASS");
-            } else {
-                println!(" FAIL");
-            }
-        }
-
-        Ok(())
     }
 }
 
