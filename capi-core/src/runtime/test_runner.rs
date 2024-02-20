@@ -32,9 +32,9 @@ pub fn run_tests<P: Platform>(
         });
     }
 
-    for function in tests {
-        print!("Running test `{}`...", function.name.value);
+    let mut test_report = TestReport { inner: Vec::new() };
 
+    for function in tests {
         // We don't need to worry about any call stack contents from the initial
         // module evaluation, or the evaluation of the previous test,
         // interfering with the evaluation of the next test. When evaluation is
@@ -62,7 +62,13 @@ pub fn run_tests<P: Platform>(
             });
         }
 
-        if result.0 {
+        test_report.inner.push((function.name.value, result.0));
+    }
+
+    for (name, pass) in test_report.inner {
+        print!("Running test `{}`...", name);
+
+        if pass {
             println!(" PASS");
         } else {
             println!(" FAIL");
@@ -70,6 +76,10 @@ pub fn run_tests<P: Platform>(
     }
 
     Ok(())
+}
+
+pub struct TestReport {
+    pub inner: Vec<(String, bool)>,
 }
 
 #[derive(Debug, thiserror::Error)]
