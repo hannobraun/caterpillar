@@ -39,6 +39,10 @@ impl<P: Platform> Interpreter<P> {
         &mut self.evaluator
     }
 
+    pub fn scripts(&mut self) -> &mut Scripts {
+        &mut self.scripts
+    }
+
     pub fn update(&mut self) -> Result<FragmentId, PipelineError> {
         let code = self
             .scripts

@@ -59,7 +59,7 @@ pub async fn run(
                 match code.recv().await {
                     Ok(code) => {
                         *interpreter
-                            .scripts
+                            .scripts()
                             .inner
                             .get_mut(&entry_script_path)
                             .expect("Code for entry script not found") = code;
@@ -90,7 +90,7 @@ pub async fn run(
         match code.try_recv() {
             Ok(code) => {
                 *interpreter
-                    .scripts
+                    .scripts()
                     .inner
                     .get_mut(&entry_script_path)
                     .expect("Code for entry script not found") = code;

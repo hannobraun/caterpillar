@@ -106,7 +106,7 @@ impl DesktopThread {
             }
 
             if loader
-                .apply_update_if_available(&mut interpreter.scripts)
+                .apply_update_if_available(interpreter.scripts())
                 .context("Error while checking for updated scripts")?
             {
                 interpreter
@@ -136,7 +136,7 @@ impl DesktopThread {
                         .context("Error waiting for updates")?;
 
                     for (path, code) in updates {
-                        interpreter.scripts.inner.insert(path, code);
+                        interpreter.scripts().inner.insert(path, code);
                     }
 
                     interpreter
