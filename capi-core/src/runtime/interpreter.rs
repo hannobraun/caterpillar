@@ -22,7 +22,7 @@ pub struct Interpreter<P: Platform> {
     evaluator: Evaluator<P>,
     state: RuntimeState,
 
-    pub scripts: Scripts,
+    scripts: Scripts,
 }
 
 impl<P: Platform> Interpreter<P> {
