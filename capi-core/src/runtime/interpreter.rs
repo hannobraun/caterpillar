@@ -21,7 +21,6 @@ pub struct Interpreter<P: Platform> {
     fragments: Fragments,
     evaluator: Evaluator<P>,
     state: RuntimeState,
-
     scripts: Scripts,
 }
 
