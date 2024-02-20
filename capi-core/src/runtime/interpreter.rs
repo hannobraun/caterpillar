@@ -74,9 +74,10 @@ impl<P: Platform> Interpreter<P> {
             if let Ok(ItemInModule::UserDefinedFunction(main)) =
                 self.evaluator.global_namespace.resolve("main")
             {
-                self.evaluator.call_stack.push(StackFrame::Fragment {
+                let stack_frame = StackFrame::Fragment {
                     fragment_id: main.body.start,
-                });
+                };
+                self.evaluator.call_stack.push(stack_frame);
             }
         }
 
