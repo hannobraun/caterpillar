@@ -10,8 +10,8 @@ use crate::{
 
 use super::{
     call_stack::StackFrame,
-    data_stack::{DataStack, DataStackError},
     evaluator::{Evaluator, EvaluatorError, RuntimeState},
+    test_runner::TestError,
 };
 
 // This API is in the middle of a refactor. Here's what remains to be done:
@@ -156,23 +156,6 @@ impl<P: Platform> Interpreter<P> {
 
         Ok(())
     }
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum TestError<T> {
-    #[error(transparent)]
-    Evaluator(#[from] EvaluatorError<T>),
-
-    #[error(transparent)]
-    DataStack(#[from] DataStackError),
-
-    #[error(
-        "Data stack not empty after evaluating test definitions: {data_stack}"
-    )]
-    DataStackNotEmptyAfterScriptEvaluation { data_stack: DataStack },
-
-    #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
-    DataStackNotEmptyAfterTestRun { data_stack: DataStack },
 }
 
 #[cfg(test)]
