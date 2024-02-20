@@ -15,7 +15,7 @@ use super::{
 // - Change `update` to take `ScriptPath` and `String`, increasing its
 //   granularity.
 // - Then, in `update`, update the `Scripts` instance and re-run the pipeline.
-// - Make `scripts` field private.`
+// - Remove `scripts` method.
 
 pub struct Interpreter<P: Platform> {
     fragments: Fragments,
