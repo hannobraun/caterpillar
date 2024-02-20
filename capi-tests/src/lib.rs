@@ -2,7 +2,9 @@
 mod tests {
     use std::path::PathBuf;
 
-    use capi_core::runtime::interpreter::Interpreter;
+    use capi_core::runtime::{
+        interpreter::Interpreter, test_runner::run_tests,
+    };
     use capi_desktop::{
         loader::Loader,
         platform::{DesktopPlatform, PlatformContext},
@@ -16,7 +18,7 @@ mod tests {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update()?;
-        interpreter.run_tests(PlatformContext::new(&pixel_ops))?;
+        run_tests(&mut interpreter, PlatformContext::new(&pixel_ops))?;
 
         Ok(())
     }
