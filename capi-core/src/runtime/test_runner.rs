@@ -52,10 +52,19 @@ pub fn run_tests<P: Platform>(
         while !interpreter.step(&mut platform_context)?.finished() {}
 
         let result = 'result: {
-            let (result, _) = interpreter
+            let result = interpreter
                 .evaluator()
                 .data_stack
-                .pop_specific::<value::Bool>()?;
+                .pop_specific::<value::Bool>();
+
+            let result = match result {
+                Ok((result, _)) => result,
+                Err(err) => {
+                    break 'result Err(SingleTestError::TestDidNotReturnBool(
+                        err,
+                    ))
+                }
+            };
 
             if !interpreter.evaluator().data_stack.is_empty() {
                 break 'result Err(
@@ -107,6 +116,9 @@ pub enum TestError<T> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum SingleTestError {
+    #[error("Test did not return `bool`")]
+    TestDidNotReturnBool(DataStackError),
+
     #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
     DataStackNotEmptyAfterTestRun { data_stack: DataStack },
 
