@@ -81,10 +81,12 @@ pub fn run_tests<P: Platform>(
             }
         };
 
-        test_report.inner.push(SingleTestReport {
+        let report = SingleTestReport {
             test_name: function.name.value,
             result,
-        });
+        };
+
+        test_report.inner.push(report);
     }
 
     Ok(test_report)
