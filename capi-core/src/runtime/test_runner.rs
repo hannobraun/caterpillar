@@ -51,36 +51,7 @@ pub fn run_tests<P: Platform>(
 
         while !interpreter.step(&mut platform_context)?.finished() {}
 
-        let result = 'result: {
-            let result = interpreter
-                .evaluator()
-                .data_stack
-                .pop_specific::<value::Bool>();
-
-            let result = match result {
-                Ok((result, _)) => result,
-                Err(err) => {
-                    break 'result Err(SingleTestError::TestDidNotReturnBool(
-                        err,
-                    ))
-                }
-            };
-
-            if !interpreter.evaluator().data_stack.is_empty() {
-                break 'result Err(
-                    SingleTestError::DataStackNotEmptyAfterTestRun {
-                        data_stack: interpreter.evaluator().data_stack.clone(),
-                    },
-                );
-            }
-
-            if result.0 {
-                Ok(())
-            } else {
-                Err(SingleTestError::TestReturnedFalse)
-            }
-        };
-
+        let result = run_single_test(interpreter);
         let report = SingleTestReport {
             test_name: function.name.value,
             result,
@@ -90,6 +61,40 @@ pub fn run_tests<P: Platform>(
     }
 
     Ok(test_report)
+}
+
+fn run_single_test<P: Platform>(
+    interpreter: &mut Interpreter<P>,
+) -> Result<(), SingleTestError> {
+    let result = 'result: {
+        let result = interpreter
+            .evaluator()
+            .data_stack
+            .pop_specific::<value::Bool>();
+
+        let result = match result {
+            Ok((result, _)) => result,
+            Err(err) => {
+                break 'result Err(SingleTestError::TestDidNotReturnBool(err))
+            }
+        };
+
+        if !interpreter.evaluator().data_stack.is_empty() {
+            break 'result Err(
+                SingleTestError::DataStackNotEmptyAfterTestRun {
+                    data_stack: interpreter.evaluator().data_stack.clone(),
+                },
+            );
+        }
+
+        if result.0 {
+            Ok(())
+        } else {
+            Err(SingleTestError::TestReturnedFalse)
+        }
+    };
+
+    result
 }
 
 #[must_use]
