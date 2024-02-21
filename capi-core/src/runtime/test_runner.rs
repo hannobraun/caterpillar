@@ -51,16 +51,18 @@ pub fn run_tests<P: Platform>(
 
         while !interpreter.step(&mut platform_context)?.finished() {}
 
-        let result = {
+        let result = 'result: {
             let (result, _) = interpreter
                 .evaluator()
                 .data_stack
                 .pop_specific::<value::Bool>()?;
 
             if !interpreter.evaluator().data_stack.is_empty() {
-                return Err(TestError::DataStackNotEmptyAfterTestRun {
-                    data_stack: interpreter.evaluator().data_stack.clone(),
-                });
+                break 'result Err(
+                    SingleTestError::DataStackNotEmptyAfterTestRun {
+                        data_stack: interpreter.evaluator().data_stack.clone(),
+                    },
+                );
             }
 
             if result.0 {
@@ -101,13 +103,13 @@ pub enum TestError<T> {
         "Data stack not empty after evaluating test definitions: {data_stack}"
     )]
     DataStackNotEmptyAfterScriptEvaluation { data_stack: DataStack },
-
-    #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
-    DataStackNotEmptyAfterTestRun { data_stack: DataStack },
 }
 
 #[derive(Debug, thiserror::Error)]
 pub enum SingleTestError {
+    #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
+    DataStackNotEmptyAfterTestRun { data_stack: DataStack },
+
     #[error("Test returned `false`")]
     TestReturnedFalse,
 }
