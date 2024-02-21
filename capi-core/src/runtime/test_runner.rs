@@ -68,6 +68,7 @@ pub fn run_tests<P: Platform>(
     Ok(test_report)
 }
 
+#[must_use]
 pub struct TestReport {
     pub inner: Vec<(String, bool)>,
 }
