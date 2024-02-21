@@ -21,16 +21,8 @@ mod tests {
         let report =
             run_tests(&mut interpreter, PlatformContext::new(&pixel_ops))?;
 
-        let mut failed = false;
         for report in report.inner {
-            if report.result.is_err() {
-                println!("Test failure: {}", report.test_name);
-                failed = true;
-            }
-        }
-
-        if failed {
-            panic!();
+            report.result?
         }
 
         Ok(())
