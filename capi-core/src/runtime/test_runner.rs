@@ -62,9 +62,10 @@ pub fn run_tests<P: Platform>(
             });
         }
 
+        let result = if result.0 { Ok(()) } else { Err(()) };
         test_report.inner.push(SingleTestReport {
             test_name: function.name.value,
-            result: if result.0 { Ok(()) } else { Err(()) },
+            result,
         });
     }
 
