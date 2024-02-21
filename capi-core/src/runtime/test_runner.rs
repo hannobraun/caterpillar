@@ -62,7 +62,10 @@ pub fn run_tests<P: Platform>(
             });
         }
 
-        test_report.inner.push((function.name.value, result.0));
+        test_report.inner.push(SingleTestReport {
+            test_name: function.name.value,
+            passed: result.0,
+        });
     }
 
     Ok(test_report)
@@ -70,7 +73,12 @@ pub fn run_tests<P: Platform>(
 
 #[must_use]
 pub struct TestReport {
-    pub inner: Vec<(String, bool)>,
+    pub inner: Vec<SingleTestReport>,
+}
+
+pub struct SingleTestReport {
+    pub test_name: String,
+    pub passed: bool,
 }
 
 #[derive(Debug, thiserror::Error)]

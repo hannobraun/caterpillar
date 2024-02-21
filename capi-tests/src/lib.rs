@@ -22,9 +22,9 @@ mod tests {
             run_tests(&mut interpreter, PlatformContext::new(&pixel_ops))?;
 
         let mut failed = false;
-        for (name, pass) in report.inner {
-            if !pass {
-                println!("Test failure: {}", name);
+        for report in report.inner {
+            if !report.passed {
+                println!("Test failure: {}", report.test_name);
                 failed = true;
             }
         }

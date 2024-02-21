@@ -51,10 +51,10 @@ impl DesktopThread {
             ) -> anyhow::Result<()> {
                 let test_report = run_tests(interpreter, platform_context)?;
 
-                for (name, pass) in &test_report.inner {
-                    print!("Running test `{}`...", name);
+                for report in &test_report.inner {
+                    print!("Running test `{}`...", report.test_name);
 
-                    if *pass {
+                    if report.passed {
                         println!(" PASS");
                     } else {
                         println!(" FAIL");
