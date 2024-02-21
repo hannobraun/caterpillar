@@ -66,7 +66,7 @@ pub fn run_tests<P: Platform>(
             if result.0 {
                 Ok(())
             } else {
-                Err(())
+                Err(SingleTestError::TestReturnedFalse)
             }
         };
 
@@ -86,7 +86,7 @@ pub struct TestReport {
 
 pub struct SingleTestReport {
     pub test_name: String,
-    pub result: Result<(), ()>,
+    pub result: Result<(), SingleTestError>,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -104,4 +104,8 @@ pub enum TestError<T> {
 
     #[error("Expected test to return one `bool`; left on stack: {data_stack}")]
     DataStackNotEmptyAfterTestRun { data_stack: DataStack },
+}
+
+pub enum SingleTestError {
+    TestReturnedFalse,
 }
