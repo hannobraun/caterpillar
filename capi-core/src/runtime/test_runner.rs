@@ -106,6 +106,8 @@ pub enum TestError<T> {
     DataStackNotEmptyAfterTestRun { data_stack: DataStack },
 }
 
+#[derive(Debug, thiserror::Error)]
 pub enum SingleTestError {
+    #[error("Test returned `false`")]
     TestReturnedFalse,
 }
