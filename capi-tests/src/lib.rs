@@ -24,7 +24,7 @@ mod tests {
         let mut failed = false;
         for (name, pass) in report.inner {
             if !pass {
-                println!("Test failure: {name}");
+                println!("Test failure: {}", name);
                 failed = true;
             }
         }
