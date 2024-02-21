@@ -23,7 +23,7 @@ mod tests {
 
         let mut failed = false;
         for report in report.inner {
-            if !report.passed {
+            if report.result.is_err() {
                 println!("Test failure: {}", report.test_name);
                 failed = true;
             }

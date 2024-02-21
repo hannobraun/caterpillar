@@ -64,7 +64,7 @@ pub fn run_tests<P: Platform>(
 
         test_report.inner.push(SingleTestReport {
             test_name: function.name.value,
-            passed: result.0,
+            result: if result.0 { Ok(()) } else { Err(()) },
         });
     }
 
@@ -78,7 +78,7 @@ pub struct TestReport {
 
 pub struct SingleTestReport {
     pub test_name: String,
-    pub passed: bool,
+    pub result: Result<(), ()>,
 }
 
 #[derive(Debug, thiserror::Error)]

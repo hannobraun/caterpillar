@@ -54,7 +54,7 @@ impl DesktopThread {
                 for report in &test_report.inner {
                     print!("Running test `{}`...", report.test_name);
 
-                    if report.passed {
+                    if report.result.is_ok() {
                         println!(" PASS");
                     } else {
                         println!(" FAIL");
