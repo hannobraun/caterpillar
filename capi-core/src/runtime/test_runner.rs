@@ -66,35 +66,27 @@ pub fn run_tests<P: Platform>(
 fn run_single_test<P: Platform>(
     interpreter: &mut Interpreter<P>,
 ) -> Result<(), SingleTestError> {
-    let result = 'result: {
-        let result = interpreter
-            .evaluator()
-            .data_stack
-            .pop_specific::<value::Bool>();
+    let result = interpreter
+        .evaluator()
+        .data_stack
+        .pop_specific::<value::Bool>();
 
-        let result = match result {
-            Ok((result, _)) => result,
-            Err(err) => {
-                break 'result Err(SingleTestError::TestDidNotReturnBool(err))
-            }
-        };
-
-        if !interpreter.evaluator().data_stack.is_empty() {
-            break 'result Err(
-                SingleTestError::DataStackNotEmptyAfterTestRun {
-                    data_stack: interpreter.evaluator().data_stack.clone(),
-                },
-            );
-        }
-
-        if result.0 {
-            Ok(())
-        } else {
-            Err(SingleTestError::TestReturnedFalse)
-        }
+    let result = match result {
+        Ok((result, _)) => result,
+        Err(err) => return Err(SingleTestError::TestDidNotReturnBool(err)),
     };
 
-    result
+    if !interpreter.evaluator().data_stack.is_empty() {
+        return Err(SingleTestError::DataStackNotEmptyAfterTestRun {
+            data_stack: interpreter.evaluator().data_stack.clone(),
+        });
+    }
+
+    if result.0 {
+        Ok(())
+    } else {
+        Err(SingleTestError::TestReturnedFalse)
+    }
 }
 
 #[must_use]
