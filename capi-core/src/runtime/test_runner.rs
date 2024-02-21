@@ -73,6 +73,14 @@ fn run_single_test<P: Platform>(
 
     let result = match result {
         Ok((result, _)) => result,
+        // The error handling here is not great. The top return value not being
+        // `bool` might be part of a larger problem, and we're not providing the
+        // best information by not returning the full stack in that case.
+        //
+        // Problem is, by the time `pop_specific` failed, we don't have the full
+        // stack any more. If we had an easy way to non-destructively check the
+        // top value on the stack, then we could just return a single "expected
+        // stack to return only `bool`; here's what it returned instead" error.
         Err(err) => return Err(SingleTestError::TestDidNotReturnBool(err)),
     };
 
