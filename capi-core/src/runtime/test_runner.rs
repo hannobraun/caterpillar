@@ -11,7 +11,7 @@ use super::{
 pub fn run_tests<P: Platform>(
     interpreter: &mut Interpreter<P>,
     platform_context: P::Context<'_>,
-) -> Result<TestReport, TestError<P::Error>> {
+) -> Result<TestReport<P::Error>, TestError<P::Error>> {
     let mut platform_context = platform_context;
     while !interpreter.step(&mut platform_context)?.finished() {}
 
@@ -49,9 +49,7 @@ pub fn run_tests<P: Platform>(
             });
         interpreter.evaluator().data_stack.clear();
 
-        while !interpreter.step(&mut platform_context)?.finished() {}
-
-        let result = run_single_test(interpreter);
+        let result = run_single_test(interpreter, &mut platform_context);
         let report = SingleTestReport {
             test_name: function.name.value,
             result,
@@ -65,7 +63,10 @@ pub fn run_tests<P: Platform>(
 
 fn run_single_test<P: Platform>(
     interpreter: &mut Interpreter<P>,
-) -> Result<(), SingleTestError> {
+    platform_context: &mut P::Context<'_>,
+) -> Result<(), SingleTestError<P::Error>> {
+    while !interpreter.step(platform_context)?.finished() {}
+
     let result = interpreter
         .evaluator()
         .data_stack
@@ -98,13 +99,13 @@ fn run_single_test<P: Platform>(
 }
 
 #[must_use]
-pub struct TestReport {
-    pub inner: Vec<SingleTestReport>,
+pub struct TestReport<E> {
+    pub inner: Vec<SingleTestReport<E>>,
 }
 
-pub struct SingleTestReport {
+pub struct SingleTestReport<E> {
     pub test_name: String,
-    pub result: Result<(), SingleTestError>,
+    pub result: Result<(), SingleTestError<E>>,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -122,7 +123,10 @@ pub enum TestError<T> {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum SingleTestError {
+pub enum SingleTestError<E> {
+    #[error(transparent)]
+    Evaluator(#[from] EvaluatorError<E>),
+
     #[error("Test did not return `bool`")]
     TestDidNotReturnBool(DataStackError),
 
