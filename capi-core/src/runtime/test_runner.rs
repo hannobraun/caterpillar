@@ -82,11 +82,11 @@ fn run_single_test<P: Platform>(
         });
     }
 
-    if result.0 {
-        Ok(())
-    } else {
-        Err(SingleTestError::TestReturnedFalse)
+    if !result.0 {
+        return Err(SingleTestError::TestReturnedFalse);
     }
+
+    Ok(())
 }
 
 #[must_use]
