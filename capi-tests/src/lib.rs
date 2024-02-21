@@ -18,7 +18,20 @@ mod tests {
         let (pixel_ops, _) = crossbeam_channel::unbounded();
 
         interpreter.update()?;
-        run_tests(&mut interpreter, PlatformContext::new(&pixel_ops))?;
+        let report =
+            run_tests(&mut interpreter, PlatformContext::new(&pixel_ops))?;
+
+        let mut failed = false;
+        for (name, pass) in report.inner {
+            if !pass {
+                println!("Test failure: {name}");
+                failed = true;
+            }
+        }
+
+        if failed {
+            panic!();
+        }
 
         Ok(())
     }
