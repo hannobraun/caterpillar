@@ -52,13 +52,13 @@ impl DesktopThread {
                 let test_report = run_tests(interpreter, platform_context)?;
 
                 for report in &test_report.inner {
-                    print!("Running test `{}`...", report.test_name);
-
                     if report.result.is_ok() {
-                        println!(" PASS");
+                        print!("PASS");
                     } else {
-                        println!(" FAIL");
+                        print!("FAIL");
                     }
+
+                    println!("  {}", report.test_name);
                 }
 
                 eprintln!();
