@@ -5,6 +5,7 @@ use capi_core::runtime::{
     evaluator::RuntimeState, interpreter::Interpreter, test_runner::run_tests,
 };
 use crossbeam_channel::{Receiver, Sender, TryRecvError};
+use crossterm::style::Stylize;
 
 use crate::{
     loader::Loader,
@@ -53,9 +54,9 @@ impl DesktopThread {
 
                 for report in &test_report.inner {
                     if report.result.is_ok() {
-                        print!("PASS");
+                        print!("{}", "PASS".bold().green());
                     } else {
-                        print!("FAIL");
+                        print!("{}", "FAIL".bold().red());
                     }
 
                     println!("  {}", report.test_name);
