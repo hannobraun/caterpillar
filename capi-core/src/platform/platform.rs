@@ -47,7 +47,7 @@ pub enum BuiltinFnError<T> {
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
 
-    #[error("Type error")]
+    #[error(transparent)]
     Type(#[from] TypeError),
 
     #[error("Platform-specific error from builtin function")]
