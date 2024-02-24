@@ -124,7 +124,7 @@ impl Type for Text {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Expected {expected}, found `{value}`")]
+#[error("Type error: expected {expected}, found `{value}`")]
 pub struct TypeError {
     pub value: ValuePayload,
     pub expected: &'static str,
