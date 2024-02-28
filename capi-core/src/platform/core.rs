@@ -338,7 +338,11 @@ fn get(
                 context.data_stack.pop_specific::<value::Array>()?;
 
             let index = index.0 as usize;
-            let value = array.0[index].clone();
+            let value =
+                array.0.get(index).cloned().ok_or(ArrayIndexOutOfBounds {
+                    len: array.0.len(),
+                    index,
+                })?;
 
             context.data_stack.push(Value {
                 payload: ValuePayload::Array(array.0),
@@ -584,4 +588,11 @@ fn unwrap(
         }
         _ => Ok(BuiltinFnState::Completed),
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+#[error("Error index out of bounds; len `{len}`, index `{index}")]
+pub struct ArrayIndexOutOfBounds {
+    pub len: usize,
+    pub index: usize,
 }

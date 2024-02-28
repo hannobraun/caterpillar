@@ -10,6 +10,8 @@ use crate::{
     },
 };
 
+use super::core::ArrayIndexOutOfBounds;
+
 pub trait Platform: Sized {
     type Context<'r>;
     type Error;
@@ -46,6 +48,9 @@ pub type BuiltinFnResult<E> = Result<BuiltinFnState, BuiltinFnError<E>>;
 pub enum BuiltinFnError<T> {
     #[error("Error operating data stack")]
     DataStack(#[from] DataStackError),
+
+    #[error(transparent)]
+    ArrayIndexOutOfBounds(#[from] ArrayIndexOutOfBounds),
 
     #[error(transparent)]
     Type(#[from] TypeError),
