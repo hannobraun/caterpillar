@@ -337,7 +337,8 @@ fn get(
             let (array, fragment) =
                 context.data_stack.pop_specific::<value::Array>()?;
 
-            let value = array.0[index.0 as usize].clone();
+            let index = index.0 as usize;
+            let value = array.0[index].clone();
 
             context.data_stack.push(Value {
                 payload: ValuePayload::Array(array.0),
