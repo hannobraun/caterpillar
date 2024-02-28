@@ -60,6 +60,10 @@ impl DesktopThread {
                     }
 
                     println!("  {}", report.test_name);
+
+                    if let Err(err) = report.result {
+                        println!("      {err}");
+                    }
                 }
 
                 eprintln!();
