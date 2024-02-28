@@ -52,7 +52,7 @@ impl DesktopThread {
             ) -> anyhow::Result<()> {
                 let test_report = run_tests(interpreter, platform_context)?;
 
-                for report in &test_report.inner {
+                for report in test_report.inner {
                     if report.result.is_ok() {
                         print!("{}", "PASS".bold().green());
                     } else {
