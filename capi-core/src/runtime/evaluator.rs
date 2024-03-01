@@ -223,7 +223,7 @@ impl RuntimeState {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Evaluator error at `{}`: {kind}", .fragment.display_short())]
+#[error("Evaluator error at `{}`", .fragment.display_short())]
 pub struct EvaluatorError<E> {
     #[source]
     pub kind: EvaluatorErrorKind<E>,
