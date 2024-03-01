@@ -35,12 +35,9 @@ pub fn run_tests<P: Platform>(
     let mut test_report = TestReport { inner: Vec::new() };
 
     for function in tests {
-        // We don't need to worry about any call stack contents from the initial
-        // module evaluation, or the evaluation of the previous test,
-        // interfering with the evaluation of the next test. When evaluation is
-        // finished then, by definition, the call stack is empty.
-        //
-        // (We have to clear the data stack before the next test run though.)
+        // If all is well, both the call and data stacks should be empty at this
+        // point. A failing test might have left traces on either though, and we
+        // need to address this before running the next one.
         interpreter.evaluator().call_stack.clear();
         interpreter.evaluator().data_stack.clear();
 
