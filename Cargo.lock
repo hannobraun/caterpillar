@@ -364,6 +364,7 @@ dependencies = [
  "clap",
  "crossbeam-channel",
  "crossterm",
+ "error_reporter",
  "notify",
  "notify-debouncer-mini",
  "pixels",
@@ -684,6 +685,12 @@ dependencies = [
  "libc",
  "windows-sys 0.52.0",
 ]
+
+[[package]]
+name = "error_reporter"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31ae425815400e5ed474178a7a22e275a9687086a12ca63ec793ff292d8fdae8"
 
 [[package]]
 name = "event-listener"
