@@ -268,8 +268,14 @@ impl<E> fmt::Display for EvaluatorError<E> {
                         fragment_id.display_short(),
                     )?;
                 }
-                stack_frame @ StackFrame::IntrinsicFunction { .. } => {
-                    writeln!(f, "{stack_frame:?}")?;
+                StackFrame::IntrinsicFunction { word, step, .. } => {
+                    let fragment = self.fragments.get(*word);
+                    writeln!(
+                        f,
+                        "intrinsic {:?} (`{}`) at step {step}",
+                        fragment.payload,
+                        word.display_short(),
+                    )?;
                 }
             }
         }
