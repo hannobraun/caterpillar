@@ -6,6 +6,7 @@ use capi_core::runtime::{
 };
 use crossbeam_channel::{Receiver, Sender, TryRecvError};
 use crossterm::style::Stylize;
+use error_reporter::Report;
 
 use crate::{
     loader::Loader,
@@ -62,7 +63,7 @@ impl DesktopThread {
                     println!("  {}", report.test_name);
 
                     if let Err(err) = report.result {
-                        println!("      {err}");
+                        println!("      {}", Report::new(err));
                     }
                 }
 
