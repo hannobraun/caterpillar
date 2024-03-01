@@ -1,11 +1,11 @@
 mod address;
 mod fragment;
+mod fragments;
 mod id;
 mod payload;
 mod replacements;
-mod store;
 
 pub use self::{
-    address::FragmentAddress, fragment::Fragment, id::FragmentId,
-    payload::FragmentPayload, replacements::Replacement, store::Fragments,
+    address::FragmentAddress, fragment::Fragment, fragments::Fragments,
+    id::FragmentId, payload::FragmentPayload, replacements::Replacement,
 };
