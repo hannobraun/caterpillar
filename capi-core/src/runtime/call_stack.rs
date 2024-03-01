@@ -39,6 +39,10 @@ impl CallStack {
             }
         }
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = &StackFrame> + '_ {
+        self.into_iter()
+    }
 }
 
 impl<'r> IntoIterator for &'r CallStack {
