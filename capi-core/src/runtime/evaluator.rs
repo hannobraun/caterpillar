@@ -248,7 +248,9 @@ impl<E> EvaluatorError<E> {
 
 impl<E> fmt::Display for EvaluatorError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Evaluator error at `{}`", self.fragment.display_short())
+        write!(f, "Evaluator error at `{}`", self.fragment.display_short())?;
+
+        Ok(())
     }
 }
 
