@@ -254,14 +254,16 @@ impl<E> fmt::Display for EvaluatorError<E> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "Evaluator error at `{}`", self.fragment.display_short())?;
 
-        writeln!(f, "Call stack:")?;
+        write!(f, "Call stack:")?;
         for (i, stack_frame) in self.call_stack.iter().enumerate() {
+            writeln!(f)?;
+
             write!(f, "  {:2}. ", i + 1)?;
 
             match stack_frame {
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = self.fragments.get(*fragment_id);
-                    writeln!(
+                    write!(
                         f,
                         "{:?} (`{}`)",
                         fragment.payload,
@@ -270,7 +272,7 @@ impl<E> fmt::Display for EvaluatorError<E> {
                 }
                 StackFrame::IntrinsicFunction { word, step, .. } => {
                     let fragment = self.fragments.get(*word);
-                    writeln!(
+                    write!(
                         f,
                         "intrinsic {:?} (`{}`) at step {step}",
                         fragment.payload,
