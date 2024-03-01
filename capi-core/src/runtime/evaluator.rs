@@ -244,7 +244,7 @@ impl<E> EvaluatorError<E> {
 #[derive(Debug, thiserror::Error)]
 pub enum EvaluatorErrorKind<E> {
     #[error("Error originating from core builtin function")]
-    CoreBuiltinFn(BuiltinFnError<()>),
+    CoreBuiltinFn(#[source] BuiltinFnError<()>),
 
     #[error("Error originating from builtin function")]
     BuiltinFn(#[from] BuiltinFnError<E>),
