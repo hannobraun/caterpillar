@@ -63,7 +63,8 @@ impl DesktopThread {
                     println!("  {}", report.test_name);
 
                     if let Err(err) = report.result {
-                        println!("      {}", Report::new(err).pretty(true));
+                        println!("{}", Report::new(err).pretty(true));
+                        println!();
                     }
                 }
 
