@@ -591,7 +591,7 @@ fn unwrap(
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Error index out of bounds; len `{len}`, index `{index}")]
+#[error("Error index out of bounds; len `{len}`, index `{index}`")]
 pub struct ArrayIndexOutOfBounds {
     pub len: usize,
     pub index: usize,
