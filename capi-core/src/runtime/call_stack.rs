@@ -3,7 +3,7 @@ use crate::{
     repr::eval::fragments::FragmentId,
 };
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct CallStack {
     frames: Vec<StackFrame>,
 }
