@@ -99,6 +99,7 @@ impl<P: Platform> Evaluator<P> {
                                 kind: err.into(),
                                 fragment: fragment_id,
                                 call_stack: self.call_stack.clone(),
+                                fragments: fragments.clone(),
                             })?;
 
                         match item_in_namespace {
@@ -130,6 +131,7 @@ impl<P: Platform> Evaluator<P> {
                                     kind: err.into(),
                                     fragment: fragment_id,
                                     call_stack: self.call_stack.clone(),
+                                    fragments: fragments.clone(),
                                 })?;
 
                                 match function_state {
@@ -177,6 +179,7 @@ impl<P: Platform> Evaluator<P> {
                     kind: EvaluatorErrorKind::CoreBuiltinFn(err),
                     fragment: word,
                     call_stack: self.call_stack.clone(),
+                    fragments: fragments.clone(),
                 })?;
 
                 match state {
@@ -234,6 +237,7 @@ pub struct EvaluatorError<E> {
 
     pub fragment: FragmentId,
     pub call_stack: CallStack,
+    pub fragments: Fragments,
 }
 
 impl<E> EvaluatorError<E> {
