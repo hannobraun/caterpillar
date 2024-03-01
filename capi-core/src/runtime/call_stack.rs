@@ -1,3 +1,6 @@
+use core::slice;
+use std::iter;
+
 use crate::{
     platform::{core::CorePlatform, BuiltinFn},
     repr::eval::fragments::FragmentId,
@@ -35,6 +38,15 @@ impl CallStack {
                 *frame = StackFrame::Fragment { fragment_id: new };
             }
         }
+    }
+}
+
+impl<'r> IntoIterator for &'r CallStack {
+    type Item = &'r StackFrame;
+    type IntoIter = iter::Rev<slice::Iter<'r, StackFrame>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.frames.iter().rev()
     }
 }
 
