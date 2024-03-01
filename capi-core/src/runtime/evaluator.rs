@@ -256,18 +256,20 @@ impl<E> fmt::Display for EvaluatorError<E> {
 
         writeln!(f, "Call stack:")?;
         for stack_frame in &self.call_stack {
+            write!(f, "\t")?;
+
             match stack_frame {
                 StackFrame::Fragment { fragment_id } => {
                     let fragment = self.fragments.get(*fragment_id);
                     writeln!(
                         f,
-                        "\t{:?} (`{}`)",
+                        "{:?} (`{}`)",
                         fragment.payload,
                         fragment_id.display_short(),
                     )?;
                 }
                 stack_frame @ StackFrame::IntrinsicFunction { .. } => {
-                    writeln!(f, "\t{stack_frame:?}")?;
+                    writeln!(f, "{stack_frame:?}")?;
                 }
             }
         }
