@@ -41,13 +41,14 @@ pub fn run_tests<P: Platform>(
         // finished then, by definition, the call stack is empty.
         //
         // (We have to clear the data stack before the next test run though.)
+        interpreter.evaluator().data_stack.clear();
+
         interpreter
             .evaluator()
             .call_stack
             .push(StackFrame::Fragment {
                 fragment_id: function.body.start,
             });
-        interpreter.evaluator().data_stack.clear();
 
         let result = run_single_test(interpreter, &mut platform_context);
         let report = SingleTestReport {
