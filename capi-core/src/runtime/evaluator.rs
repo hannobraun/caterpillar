@@ -96,6 +96,7 @@ impl<P: Platform> Evaluator<P> {
                             .map_err(|err| EvaluatorError {
                                 kind: err.into(),
                                 fragment: fragment_id,
+                                call_stack: self.call_stack.clone(),
                             })?;
 
                         match item_in_namespace {
@@ -126,6 +127,7 @@ impl<P: Platform> Evaluator<P> {
                                 .map_err(|err| EvaluatorError {
                                     kind: err.into(),
                                     fragment: fragment_id,
+                                    call_stack: self.call_stack.clone(),
                                 })?;
 
                                 match function_state {
@@ -172,6 +174,7 @@ impl<P: Platform> Evaluator<P> {
                 .map_err(|err| EvaluatorError {
                     kind: EvaluatorErrorKind::CoreBuiltinFn(err),
                     fragment: word,
+                    call_stack: self.call_stack.clone(),
                 })?;
 
                 match state {
@@ -229,6 +232,7 @@ pub struct EvaluatorError<E> {
     pub kind: EvaluatorErrorKind<E>,
 
     pub fragment: FragmentId,
+    pub call_stack: CallStack,
 }
 
 impl<E> EvaluatorError<E> {
