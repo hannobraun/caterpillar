@@ -41,6 +41,7 @@ pub fn run_tests<P: Platform>(
         // finished then, by definition, the call stack is empty.
         //
         // (We have to clear the data stack before the next test run though.)
+        interpreter.evaluator().call_stack.clear();
         interpreter.evaluator().data_stack.clear();
 
         interpreter
