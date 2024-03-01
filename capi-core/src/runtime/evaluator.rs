@@ -255,8 +255,8 @@ impl<E> fmt::Display for EvaluatorError<E> {
         writeln!(f, "Evaluator error at `{}`", self.fragment.display_short())?;
 
         writeln!(f, "Call stack:")?;
-        for stack_frame in &self.call_stack {
-            write!(f, "\t")?;
+        for (i, stack_frame) in self.call_stack.iter().enumerate() {
+            write!(f, "  {:2}. ", i + 1)?;
 
             match stack_frame {
                 StackFrame::Fragment { fragment_id } => {
