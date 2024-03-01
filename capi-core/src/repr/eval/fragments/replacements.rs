@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::FragmentId;
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Replacements {
     old_to_new: HashMap<FragmentId, FragmentId>,
     new_to_old: HashMap<FragmentId, FragmentId>,

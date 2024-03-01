@@ -7,7 +7,7 @@ use super::{
     Fragment, FragmentAddress, FragmentId,
 };
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Fragments {
     by_id: HashMap<FragmentId, Fragment>,
     by_address: HashMap<FragmentAddress, FragmentId>,
