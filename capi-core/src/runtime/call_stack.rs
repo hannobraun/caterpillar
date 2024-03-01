@@ -13,6 +13,10 @@ impl CallStack {
         Self::default()
     }
 
+    pub fn clear(&mut self) {
+        self.frames.clear()
+    }
+
     pub fn current(&self) -> Option<StackFrame> {
         self.frames.last().copied()
     }
