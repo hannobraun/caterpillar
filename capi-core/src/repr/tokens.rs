@@ -5,6 +5,8 @@ use super::eval::value::ValuePayload;
 #[derive(Clone, Debug, Eq, PartialEq, EnumVariantType)]
 #[evt(module = "token")]
 pub enum Token {
+    Binding,
+
     CurlyBracketOpen,
     CurlyBracketClose,
 
