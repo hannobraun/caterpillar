@@ -29,7 +29,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     }
                 }
                 ch => {
-                    state = State::WordOrNumber {
+                    state = State::Other {
                         buf: String::from(ch),
                     };
                 }
@@ -68,7 +68,7 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                     state = State::Text { buf }
                 }
             },
-            State::WordOrNumber { mut buf } => match ch {
+            State::Other { mut buf } => match ch {
                 ch if ch.is_whitespace() => {
                     state = finalize_word_or_number(buf, &mut tokens);
                 }
@@ -81,11 +81,11 @@ pub fn tokenize(code: &str) -> Vec<Token> {
                         finalize_word_or_number(buf, &mut tokens);
                         state = s
                     }
-                    None => state = State::WordOrNumber { buf },
+                    None => state = State::Other { buf },
                 },
                 ch => {
                     buf.push(ch);
-                    state = State::WordOrNumber { buf };
+                    state = State::Other { buf };
                 }
             },
         }
@@ -100,7 +100,7 @@ enum State {
     Comment,
     Symbol { buf: String },
     Text { buf: String },
-    WordOrNumber { buf: String },
+    Other { buf: String },
 }
 
 fn is_special_char(ch: char) -> bool {
