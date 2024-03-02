@@ -135,9 +135,13 @@ fn finalize_symbol(buf: String, tokens: &mut Vec<Token>) -> State {
 }
 
 fn finalize_word_or_number(buf: String, tokens: &mut Vec<Token>) -> State {
-    let token = match buf.parse::<i64>() {
-        Ok(number) => Token::Literal(ValuePayload::Number(number)),
-        Err(_) => Token::Word(buf),
+    let token = if buf == "=>" {
+        Token::Binding
+    } else {
+        match buf.parse::<i64>() {
+            Ok(number) => Token::Literal(ValuePayload::Number(number)),
+            Err(_) => Token::Word(buf),
+        }
     };
 
     tokens.push(token);
