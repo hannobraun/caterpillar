@@ -70,15 +70,15 @@ pub fn tokenize(code: &str) -> Vec<Token> {
             },
             State::Other { mut buf } => match ch {
                 ch if ch.is_whitespace() => {
-                    state = finalize_word_or_number(buf, &mut tokens);
+                    state = finalize_other(buf, &mut tokens);
                 }
                 ch if is_special_char(ch) => match process_special_char(ch) {
                     Some(SpecialCharUpdate::Token(token)) => {
-                        state = finalize_word_or_number(buf, &mut tokens);
+                        state = finalize_other(buf, &mut tokens);
                         tokens.push(token);
                     }
                     Some(SpecialCharUpdate::State(s)) => {
-                        finalize_word_or_number(buf, &mut tokens);
+                        finalize_other(buf, &mut tokens);
                         state = s
                     }
                     None => state = State::Other { buf },
@@ -134,7 +134,7 @@ fn finalize_symbol(buf: String, tokens: &mut Vec<Token>) -> State {
     State::Scanning
 }
 
-fn finalize_word_or_number(buf: String, tokens: &mut Vec<Token>) -> State {
+fn finalize_other(buf: String, tokens: &mut Vec<Token>) -> State {
     let token = if buf == "=>" {
         Token::Binding
     } else {
