@@ -1,4 +1,4 @@
-use crate::repr::eval::{fragments::FragmentId, value};
+use crate::repr::eval::value;
 
 #[derive(Clone, Debug)]
 pub struct Function {
@@ -9,5 +9,4 @@ pub struct Function {
 #[derive(Clone, Debug)]
 pub struct FunctionName {
     pub value: String,
-    pub fragment: Option<FragmentId>,
 }

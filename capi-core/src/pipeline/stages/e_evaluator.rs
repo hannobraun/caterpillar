@@ -86,13 +86,10 @@ fn fn_(
         0 => {
             let (body, _) =
                 runtime_context.data_stack.pop_specific::<value::Block>()?;
-            let (name, name_fragment) =
+            let (name, _) =
                 runtime_context.data_stack.pop_specific::<value::Symbol>()?;
 
-            let name = FunctionName {
-                value: name.0,
-                fragment: name_fragment,
-            };
+            let name = FunctionName { value: name.0 };
 
             runtime_context.global_module.define_function(name, body);
 

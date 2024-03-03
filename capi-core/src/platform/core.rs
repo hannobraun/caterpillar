@@ -540,13 +540,9 @@ fn test(
         0 => {
             let (body, _) =
                 context.data_stack.pop_specific::<value::Block>()?;
-            let (name, name_fragment) =
-                context.data_stack.pop_specific::<value::Text>()?;
+            let (name, _) = context.data_stack.pop_specific::<value::Text>()?;
 
-            let name = FunctionName {
-                value: name.0,
-                fragment: name_fragment,
-            };
+            let name = FunctionName { value: name.0 };
 
             context.global_module.define_test(name, body);
 
