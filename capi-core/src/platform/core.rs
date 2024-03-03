@@ -1,5 +1,4 @@
 use crate::{
-    pipeline::FunctionName,
     platform::{BuiltinFn, BuiltinFnState, BuiltinFns, CoreContext, Platform},
     repr::eval::value::{self, Value, ValuePayload},
     runtime::call_stack::StackFrame,
@@ -542,7 +541,7 @@ fn test(
                 context.data_stack.pop_specific::<value::Block>()?;
             let (name, _) = context.data_stack.pop_specific::<value::Text>()?;
 
-            let name = FunctionName { value: name.0 };
+            let name = name.0;
 
             context.global_module.define_test(name, body);
 

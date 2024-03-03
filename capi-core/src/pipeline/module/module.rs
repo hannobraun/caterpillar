@@ -57,12 +57,14 @@ impl Module {
         self.functions.0.insert(name, function);
     }
 
-    pub fn define_test(&mut self, name: FunctionName, body: value::Block) {
+    pub fn define_test(&mut self, name: String, body: value::Block) {
         let function = Function {
-            name: name.clone(),
+            name: FunctionName {
+                value: name.clone(),
+            },
             body,
         };
-        self.tests.0.insert(name.value, function);
+        self.tests.0.insert(name, function);
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &Function> {
