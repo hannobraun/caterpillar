@@ -49,12 +49,8 @@ impl<P: Platform> Namespace<P> {
                     ItemInModule::PlatformFunction(function)
                 }
             });
-        let user_defined_function = self
-            .global_module
-            .functions
-            .0
-            .get(name)
-            .map(|user_defined| {
+        let user_defined_function =
+            self.global_module.functions.get(name).map(|user_defined| {
                 ItemInModule::UserDefinedFunction(user_defined)
             });
         let binding = self

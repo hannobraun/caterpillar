@@ -2,12 +2,12 @@ use std::collections::BTreeMap;
 
 use crate::repr::eval::value::{self, Value};
 
-use super::{functions::Functions, Function};
+use super::Function;
 
 #[derive(Debug, Default)]
 pub struct Module {
     pub bindings: BTreeMap<String, Value>,
-    pub functions: Functions,
+    pub functions: BTreeMap<String, Function>,
 
     /// The tests defined in this module
     ///
@@ -31,7 +31,7 @@ pub struct Module {
 impl Module {
     pub fn merge(&mut self, other: &mut Self) {
         self.bindings.append(&mut other.bindings);
-        self.functions.0.append(&mut other.functions.0);
+        self.functions.append(&mut other.functions);
         self.tests.append(&mut other.tests);
     }
 
@@ -45,7 +45,7 @@ impl Module {
 
             body,
         };
-        self.functions.0.insert(name, function);
+        self.functions.insert(name, function);
     }
 
     pub fn define_test(&mut self, name: String, body: value::Block) {
@@ -54,7 +54,7 @@ impl Module {
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &Function> {
-        self.functions.0.values()
+        self.functions.values()
     }
 
     pub fn tests(&self) -> impl Iterator<Item = &Function> {
