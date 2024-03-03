@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::repr::eval::value::{self, Value};
 
-use super::{functions::Functions, Function, FunctionName};
+use super::{functions::Functions, Function};
 
 #[derive(Debug, Default)]
 pub struct Module {
@@ -49,9 +49,8 @@ impl Module {
 
     pub fn define_function(&mut self, name: String, body: value::Block) {
         let function = Function {
-            name: FunctionName {
-                value: name.clone(),
-            },
+            name: name.clone(),
+
             body,
         };
         self.functions.0.insert(name, function);
@@ -59,9 +58,7 @@ impl Module {
 
     pub fn define_test(&mut self, name: String, body: value::Block) {
         let function = Function {
-            name: FunctionName {
-                value: name.clone(),
-            },
+            name: name.clone(),
             body,
         };
         self.tests.0.insert(name, function);

@@ -50,7 +50,7 @@ pub fn run_tests<P: Platform>(
 
         let result = run_single_test(interpreter, &mut platform_context);
         let report = SingleTestReport {
-            test_name: function.name.value,
+            test_name: function.name,
             result,
         };
 
