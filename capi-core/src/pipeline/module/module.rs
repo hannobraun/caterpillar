@@ -33,14 +33,14 @@ pub struct Module {
     //
     // Once that is the case, we should probably just change this to be a
     // `Vec<Function>`, or something along those lines.
-    pub tests: Functions,
+    pub tests: Vec<Function>,
 }
 
 impl Module {
     pub fn merge(&mut self, other: &mut Self) {
         self.bindings.append(&mut other.bindings);
         self.functions.0.append(&mut other.functions.0);
-        self.tests.0.append(&mut other.tests.0);
+        self.tests.append(&mut other.tests);
     }
 
     pub fn define_binding(&mut self, name: String, value: Value) {
@@ -61,7 +61,7 @@ impl Module {
             name: name.clone(),
             body,
         };
-        self.tests.0.insert(name, function);
+        self.tests.push(function);
     }
 
     pub fn functions(&self) -> impl Iterator<Item = &Function> {
@@ -69,6 +69,6 @@ impl Module {
     }
 
     pub fn tests(&self) -> impl Iterator<Item = &Function> {
-        self.tests.0.values()
+        self.tests.iter()
     }
 }
