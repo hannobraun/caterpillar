@@ -47,12 +47,14 @@ impl Module {
         self.bindings.insert(name, value);
     }
 
-    pub fn define_function(&mut self, name: FunctionName, body: value::Block) {
+    pub fn define_function(&mut self, name: String, body: value::Block) {
         let function = Function {
-            name: name.clone(),
+            name: FunctionName {
+                value: name.clone(),
+            },
             body,
         };
-        self.functions.0.insert(name.value, function);
+        self.functions.0.insert(name, function);
     }
 
     pub fn define_test(&mut self, name: FunctionName, body: value::Block) {

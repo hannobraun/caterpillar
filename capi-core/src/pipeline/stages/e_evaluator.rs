@@ -1,7 +1,5 @@
 use crate::{
-    pipeline::{
-        self, module::Module, scripts::Scripts, FunctionName, PipelineOutput,
-    },
+    pipeline::{self, module::Module, scripts::Scripts, PipelineOutput},
     platform::{
         BuiltinFn, BuiltinFnResult, BuiltinFnState, BuiltinFns, CoreContext,
         Platform,
@@ -89,7 +87,7 @@ fn fn_(
             let (name, _) =
                 runtime_context.data_stack.pop_specific::<value::Symbol>()?;
 
-            let name = FunctionName { value: name.0 };
+            let name = name.0;
 
             runtime_context.global_module.define_function(name, body);
 
