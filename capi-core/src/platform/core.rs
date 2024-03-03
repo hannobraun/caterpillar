@@ -541,9 +541,7 @@ fn test(
                 context.data_stack.pop_specific::<value::Block>()?;
             let (name, _) = context.data_stack.pop_specific::<value::Text>()?;
 
-            let name = name.0;
-
-            context.global_module.define_test(name, body);
+            context.global_module.define_test(name.0, body);
 
             Ok(BuiltinFnState::Stepped)
         }
