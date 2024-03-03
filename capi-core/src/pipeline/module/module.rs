@@ -13,7 +13,7 @@ pub struct Module {
     // same as functions. While they *have* a name, they can't be *called by*
     // it.
     //
-    // This was a deliberate design decision:
+    // Them not being callable by name was a deliberate design decision:
     //
     // - They are meant to be called by the test harness, and calling them
     //   directly does not seem useful.
