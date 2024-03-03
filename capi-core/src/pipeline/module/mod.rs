@@ -1,5 +1,4 @@
-mod function;
 mod functions;
 mod module;
 
-pub use self::{function::Function, module::Module};
+pub use self::{functions::Function, module::Module};
