@@ -87,9 +87,7 @@ fn fn_(
             let (name, _) =
                 runtime_context.data_stack.pop_specific::<value::Symbol>()?;
 
-            let name = name.0;
-
-            runtime_context.global_module.define_function(name, body);
+            runtime_context.global_module.define_function(name.0, body);
 
             Ok(BuiltinFnState::Completed)
         }
