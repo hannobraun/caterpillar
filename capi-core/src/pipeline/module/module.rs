@@ -57,10 +57,7 @@ impl Module {
     }
 
     pub fn define_test(&mut self, name: String, body: value::Block) {
-        let function = Function {
-            name: name.clone(),
-            body,
-        };
+        let function = Function { name, body };
         self.tests.push(function);
     }
 
