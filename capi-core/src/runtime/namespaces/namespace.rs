@@ -3,10 +3,7 @@ use std::{collections::BTreeMap, fmt};
 use crate::{
     pipeline::{Function, Module},
     platform::{core::CorePlatform, BuiltinFn, Platform},
-    repr::eval::{
-        fragments::{FragmentId, Fragments},
-        value::Value,
-    },
+    repr::eval::value::Value,
 };
 
 pub struct Namespace<P: Platform> {
@@ -70,20 +67,6 @@ impl<P: Platform> Namespace<P> {
             .or(user_defined_function)
             .or(binding)
             .ok_or(ResolveError { name: name.into() })
-    }
-
-    pub fn replace(
-        &mut self,
-        old: FragmentId,
-        new: FragmentId,
-        fragments: &Fragments,
-    ) {
-        // This function only detects *renames*. It does not detect *removals*.
-        // Maybe we need to take an `Option<FragmentId>` as the `new` argument,
-        // and handle that here accordingly.
-
-        self.global_module.functions.replace(old, new, fragments);
-        self.global_module.tests.replace(old, new, fragments);
     }
 
     pub fn into_module(self) -> Module {
