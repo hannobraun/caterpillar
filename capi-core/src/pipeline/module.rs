@@ -4,7 +4,18 @@ use crate::repr::eval::value::{self, Value};
 
 #[derive(Debug, Default)]
 pub struct Module {
+    // Bindings do not actually belong here.
+    //
+    // Right now it doesn't make a difference, because there is just one global
+    // scope that the single global module is mixed up in. But eventually,
+    // bindings will be a feature of a local scope, not of any module. Hence,
+    // having them here is a mistake.
+    //
+    // In addition, bindings are the only reason that the core builtins access
+    // `context.global_module`. Once those no longer live here, that field can
+    // be moved to the platform context of the compile-time platform.
     pub bindings: BTreeMap<String, Value>,
+
     pub functions: BTreeMap<String, Function>,
 
     /// The tests defined in this module
