@@ -2,8 +2,6 @@ use std::collections::BTreeMap;
 
 use crate::repr::eval::value::{self, Value};
 
-use super::Function;
-
 #[derive(Debug, Default)]
 pub struct Module {
     pub bindings: BTreeMap<String, Value>,
@@ -60,4 +58,10 @@ impl Module {
     pub fn tests(&self) -> impl Iterator<Item = &Function> {
         self.tests.iter()
     }
+}
+
+#[derive(Clone, Debug)]
+pub struct Function {
+    pub name: String,
+    pub body: value::Block,
 }
