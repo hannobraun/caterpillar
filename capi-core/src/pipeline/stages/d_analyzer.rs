@@ -12,9 +12,8 @@ pub fn analyze(
     syntax_tree: SyntaxTree<SimpleSyntaxElement>,
     parent: Option<FragmentId>,
     fragments: &mut Fragments,
-) -> AnalyzerOutput {
-    let start = analyze_syntax_tree(syntax_tree, parent, fragments);
-    AnalyzerOutput { start }
+) -> FragmentId {
+    analyze_syntax_tree(syntax_tree, parent, fragments)
 }
 
 fn analyze_syntax_tree(
@@ -68,8 +67,4 @@ fn analyze_syntax_element(
 
     let next = Some(next);
     fragments.insert(Fragment::new(FragmentAddress { parent, next }, payload))
-}
-
-pub struct AnalyzerOutput {
-    pub start: FragmentId,
 }

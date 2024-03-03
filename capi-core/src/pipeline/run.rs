@@ -8,11 +8,8 @@ use super::{
     module::Module,
     scripts::Scripts,
     stages::{
-        a_tokenizer::tokenize,
-        b_parser::ParserError,
-        c_simplifier::simplify,
-        d_analyzer::{analyze, AnalyzerOutput},
-        e_evaluator::evaluate,
+        a_tokenizer::tokenize, b_parser::ParserError, c_simplifier::simplify,
+        d_analyzer::analyze, e_evaluator::evaluate,
     },
 };
 
@@ -25,7 +22,7 @@ pub fn run(
     let tokens = tokenize(code);
     let syntax_tree = parse(tokens)?;
     let syntax_tree = simplify(syntax_tree);
-    let AnalyzerOutput { start } = analyze(syntax_tree, parent, fragments);
+    let start = analyze(syntax_tree, parent, fragments);
     let module = evaluate(start, fragments, scripts)?;
 
     Ok(PipelineOutput { start, module })
