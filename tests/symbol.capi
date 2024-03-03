@@ -1,2 +1,2 @@
 # Make sure that special characters are processed eagerly around symbols.
-"tokenization" {:f{ true } fn f } test
+"tokenization" {:f{ true } swap drop eval } test
