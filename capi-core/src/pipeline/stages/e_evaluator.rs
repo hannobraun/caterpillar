@@ -67,7 +67,11 @@ impl Platform for CompileTimePlatform {
     type Error = ();
 
     fn builtin_fns() -> impl BuiltinFns<Self> {
-        [(fn_ as BuiltinFn<Self>, "fn"), (mod_, "mod")]
+        [
+            (fn_ as BuiltinFn<Self>, "fn"),
+            (mod_, "mod"),
+            (test, "test"),
+        ]
     }
 }
 
@@ -137,6 +141,25 @@ fn mod_(
             // module. For now, everything lives in a single global namespace,
             // so we just merge the two modules together.
             runtime_context.global_module.merge(&mut module);
+
+            Ok(BuiltinFnState::Completed)
+        }
+        _ => unreachable!(),
+    }
+}
+
+fn test(
+    step: usize,
+    context: CoreContext,
+    _platform_context: &mut PlatformContext,
+) -> BuiltinFnResult<()> {
+    match step {
+        0 => {
+            let (body, _) =
+                context.data_stack.pop_specific::<value::Block>()?;
+            let (name, _) = context.data_stack.pop_specific::<value::Text>()?;
+
+            context.global_module.define_test(name.0, body);
 
             Ok(BuiltinFnState::Completed)
         }

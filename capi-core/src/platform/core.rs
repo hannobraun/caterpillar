@@ -35,7 +35,6 @@ impl Platform for CorePlatform {
             (set, "set"),
             (sub, "-"),
             (swap, "swap"),
-            (test, "test"),
             (true_, "true"),
             (unwrap, "unwrap"),
         ]
@@ -523,25 +522,6 @@ fn swap(
 
             context.data_stack.push(b);
             context.data_stack.push(a);
-
-            Ok(BuiltinFnState::Stepped)
-        }
-        _ => Ok(BuiltinFnState::Completed),
-    }
-}
-
-fn test(
-    step: usize,
-    context: CoreContext,
-    _platform_context: &mut (),
-) -> BuiltinFnResult<()> {
-    match step {
-        0 => {
-            let (body, _) =
-                context.data_stack.pop_specific::<value::Block>()?;
-            let (name, _) = context.data_stack.pop_specific::<value::Text>()?;
-
-            context.global_module.define_test(name.0, body);
 
             Ok(BuiltinFnState::Stepped)
         }
