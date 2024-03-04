@@ -42,6 +42,33 @@ pub enum SyntaxElement {
 }
 
 pub enum SimpleSyntaxElement {
+    // I'm wondering if it's possible to lower blocks expressions. Something
+    // like this:
+    //
+    // ```
+    // { a b c }
+    // ```
+    //
+    // Into this:
+    //
+    // ```
+    // [] :a push :b push :c push
+    // ```
+    //
+    // The one problem with this example (except that there's no `push`, which
+    // is trivial to fix) is that the result would be an array of symbols, not
+    // a block. Meaning the runtime wouldn't know that this is a block.
+    //
+    // I see two ways to address that:
+    //
+    // 1. Don't. Have arrays of symbols take the place of blocks everywhere. Not
+    //    desirable long term, due to the weak typing, but I don't see why it
+    //    wouldn't work for the time being.
+    // 2. Define a "block" type which wraps the array. `push` would work on it.
+    //    More desirable as a long-term solution, but unless I'm going to
+    //    hardcode this (which would seem to defeat the point of lowering block
+    //    expressions), it's going to require the runtime to understand types
+    //    that the user can define.
     BlockExpression(SyntaxTree<Self>),
     Literal(ValuePayload),
     Word(String),
