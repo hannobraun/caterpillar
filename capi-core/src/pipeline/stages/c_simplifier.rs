@@ -1,4 +1,7 @@
-use crate::repr::syntax::{SimpleSyntaxElement, SyntaxElement, SyntaxTree};
+use crate::repr::{
+    eval::value::ValuePayload,
+    syntax::{SimpleSyntaxElement, SyntaxElement, SyntaxTree},
+};
 
 pub fn simplify(
     syntax_tree: SyntaxTree<SyntaxElement>,
@@ -18,8 +21,10 @@ fn simplify_syntax_tree(
                 simple_syntax_tree.elements.extend(syntax_elements);
                 continue;
             }
-            SyntaxElement::Binding { .. } => {
-                todo!("Binding syntax is not supported yet");
+            SyntaxElement::Binding { names } => {
+                let syntax_elements = simplify_binding(names);
+                simple_syntax_tree.elements.extend(syntax_elements);
+                continue;
             }
             SyntaxElement::BlockExpression(syntax_tree) => {
                 let syntax_tree = simplify_block(syntax_tree);
@@ -42,6 +47,19 @@ fn simplify_array(
 ) -> [SimpleSyntaxElement; 3] {
     let syntax_tree = simplify_syntax_tree(syntax_tree);
     make_simple_array_expression(syntax_tree)
+}
+
+fn simplify_binding(names: Vec<String>) -> [SimpleSyntaxElement; 4] {
+    let syntax_tree = SyntaxTree {
+        elements: names
+            .into_iter()
+            .map(|name| {
+                SimpleSyntaxElement::Literal(ValuePayload::Symbol(name))
+            })
+            .collect(),
+    };
+    let [a, b, c] = make_simple_array_expression(syntax_tree);
+    [a, b, c, SimpleSyntaxElement::Word(String::from("bind"))]
 }
 
 fn simplify_block(
