@@ -44,7 +44,7 @@ fn parse_syntax_element(
             SyntaxElement::ArrayExpression(syntax_tree)
         }
         Token::CurlyBracketOpen => {
-            let syntax_tree = parse_block(tokens)?;
+            let syntax_tree = parse_block_expression(tokens)?;
             SyntaxElement::BlockExpression(syntax_tree)
         }
         Token::Literal(_) => {
@@ -77,7 +77,9 @@ fn parse_array_expression(
     parse_syntax_tree(Some(Token::SquareBracketClose), tokens)
 }
 
-fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree<SyntaxElement>> {
+fn parse_block_expression(
+    tokens: &mut Tokens,
+) -> ParserResult<SyntaxTree<SyntaxElement>> {
     expect::<token::CurlyBracketOpen>(tokens)?;
     parse_syntax_tree(Some(Token::CurlyBracketClose), tokens)
 }
