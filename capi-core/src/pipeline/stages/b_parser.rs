@@ -90,6 +90,39 @@ fn parse_binding(tokens: &mut Tokens) -> ParserResult<Vec<String>> {
 
     let mut names = Vec::new();
 
+    // I don't love how this is using square brackets to delimit the names of a
+    // binding. We need *something* here (although a single delimiter at the end
+    // would also work; not necessary to actually bracket it), but having the
+    // square brackets, implies that this is matching against an actual array on
+    // the stack, which of course it isn't.
+    //
+    // Earlier prototypes used a `.` at the end, which looks nice, but requires
+    // an additional type of token. Also, I'm considering using `.` to terminate
+    // expressions. Both uses would conflict, as you might want to employ a
+    // binding as part of an expression, not at the end of one.
+    //
+    // Thoughts:
+    //
+    // - *Not* terminating with the binding seems needlessly obtuse in the way
+    //   it complicates the expression. Maybe it's just fine to forbid that on a
+    //   syntax level.
+    // - Maybe the answer is to not have a delimiter for either of these, and
+    //   use significant whitespace instead?
+    //
+    // More notes on that idea of using significant whitespace:
+    //
+    // - With bindings, the requirement would be to have the names be on the
+    //   same line or indented. To end the binding, you write something into the
+    //   next line, at the same or a lower indentation level.
+    // - Expressions could end in much the same way? It's even conceivable to
+    //   have multiple nested expressions (defined by levels of indentation),
+    //   with restrictions in place on which expressions can access the results
+    //   of which other expressions.
+    // - Higher expressions must be able to access the results of lower
+    //   expressions, but the other way around could be limited?
+    // - What I'm hoping for, is a way to make it super clear what's happening
+    //   with the data stack, without requiring bindings and terminated
+    //   expressions everywhere. But I have no idea if that would actually work.
     for token in tokens {
         if token == Token::SquareBracketClose {
             break;
