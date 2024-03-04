@@ -3,7 +3,10 @@ use std::{iter, vec};
 use crate::repr::{
     eval::value::ValuePayload,
     syntax::{SyntaxElement, SyntaxTree},
-    tokens::{token, Token},
+    tokens::{
+        token::{self},
+        Token,
+    },
 };
 
 pub fn parse(tokens: Vec<Token>) -> ParserResult<SyntaxTree<SyntaxElement>> {
@@ -39,6 +42,10 @@ fn parse_syntax_element(
     };
 
     let syntax_element = match next_token {
+        Token::Binding => {
+            let binding = parse_binding(tokens)?;
+            SyntaxElement::Binding(binding)
+        }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array_expression(tokens)?;
             SyntaxElement::ArrayExpression(syntax_tree)
@@ -75,6 +82,28 @@ fn parse_array_expression(
 ) -> ParserResult<SyntaxTree<SyntaxElement>> {
     expect::<token::SquareBracketOpen>(tokens)?;
     parse_syntax_tree(Some(Token::SquareBracketClose), tokens)
+}
+
+fn parse_binding(tokens: &mut Tokens) -> ParserResult<Vec<String>> {
+    expect::<token::Binding>(tokens)?;
+    expect::<token::SquareBracketOpen>(tokens)?;
+
+    let mut symbols = Vec::new();
+
+    for token in tokens {
+        if token == Token::SquareBracketClose {
+            break;
+        }
+
+        if let Token::Literal(ValuePayload::Symbol(symbol)) = token {
+            symbols.push(symbol);
+            continue;
+        }
+
+        return Err(ParserError::UnexpectedToken { actual: token });
+    }
+
+    Ok(symbols)
 }
 
 fn parse_block_expression(
