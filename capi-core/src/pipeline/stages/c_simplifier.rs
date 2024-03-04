@@ -41,16 +41,21 @@ fn simplify_array(
     syntax_tree: SyntaxTree<SyntaxElement>,
 ) -> [SimpleSyntaxElement; 3] {
     let syntax_tree = simplify_syntax_tree(syntax_tree);
-
-    [
-        SimpleSyntaxElement::Word(String::from("[]")),
-        SimpleSyntaxElement::BlockExpression(syntax_tree),
-        SimpleSyntaxElement::Word(String::from("append")),
-    ]
+    make_simple_array_expression(syntax_tree)
 }
 
 fn simplify_block(
     syntax_tree: SyntaxTree<SyntaxElement>,
 ) -> SyntaxTree<SimpleSyntaxElement> {
     simplify_syntax_tree(syntax_tree)
+}
+
+fn make_simple_array_expression(
+    syntax_tree: SyntaxTree<SimpleSyntaxElement>,
+) -> [SimpleSyntaxElement; 3] {
+    [
+        SimpleSyntaxElement::Word(String::from("[]")),
+        SimpleSyntaxElement::BlockExpression(syntax_tree),
+        SimpleSyntaxElement::Word(String::from("append")),
+    ]
 }
