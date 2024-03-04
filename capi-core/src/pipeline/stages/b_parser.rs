@@ -43,8 +43,8 @@ fn parse_syntax_element(
 
     let syntax_element = match next_token {
         Token::Binding => {
-            let binding = parse_binding(tokens)?;
-            SyntaxElement::Binding { names: binding }
+            let names = parse_binding(tokens)?;
+            SyntaxElement::Binding { names }
         }
         Token::SquareBracketOpen => {
             let syntax_tree = parse_array_expression(tokens)?;
