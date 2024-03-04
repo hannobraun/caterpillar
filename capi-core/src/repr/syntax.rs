@@ -1,4 +1,4 @@
-use super::eval::value::{self, ValuePayload};
+use super::eval::value::ValuePayload;
 
 #[derive(Clone, Debug)]
 pub struct SyntaxTree<T> {
@@ -22,7 +22,7 @@ impl<T> Default for SyntaxTree<T> {
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
     ArrayExpression(SyntaxTree<Self>),
-    Binding(Vec<value::Symbol>),
+    Binding(Vec<String>),
     BlockExpression(SyntaxTree<Self>),
 
     /// A literal value
