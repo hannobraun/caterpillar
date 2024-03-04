@@ -95,8 +95,8 @@ fn parse_binding(tokens: &mut Tokens) -> ParserResult<Vec<String>> {
             break;
         }
 
-        if let Token::Literal(ValuePayload::Symbol(symbol)) = token {
-            names.push(symbol);
+        if let Token::Literal(ValuePayload::Symbol(name)) = token {
+            names.push(name);
             continue;
         }
 
