@@ -88,7 +88,7 @@ fn parse_binding(tokens: &mut Tokens) -> ParserResult<Vec<String>> {
     expect::<token::Binding>(tokens)?;
     expect::<token::SquareBracketOpen>(tokens)?;
 
-    let mut symbols = Vec::new();
+    let mut names = Vec::new();
 
     for token in tokens {
         if token == Token::SquareBracketClose {
@@ -96,14 +96,14 @@ fn parse_binding(tokens: &mut Tokens) -> ParserResult<Vec<String>> {
         }
 
         if let Token::Literal(ValuePayload::Symbol(symbol)) = token {
-            symbols.push(symbol);
+            names.push(symbol);
             continue;
         }
 
         return Err(ParserError::UnexpectedToken { actual: token });
     }
 
-    Ok(symbols)
+    Ok(names)
 }
 
 fn parse_block_expression(
