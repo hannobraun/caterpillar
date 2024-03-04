@@ -103,6 +103,13 @@ enum State {
     Other { buf: String },
 }
 
+// That whole deal with special characters here is not great:
+//
+// - There's too much duplication. It would be nicer, if the following code
+//   would only need to specify a special character once.
+// - I'd like to give the `=>` token the same treatment, but those are two
+//   characters, which won't work with the current approach.
+
 fn is_special_char(ch: char) -> bool {
     matches!(ch, '{' | '}' | '[' | ']' | '#' | ':' | '"')
 }
