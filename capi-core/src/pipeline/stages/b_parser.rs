@@ -82,13 +82,13 @@ fn parse_block(tokens: &mut Tokens) -> ParserResult<SyntaxTree<SyntaxElement>> {
     parse_syntax_tree(Some(Token::CurlyBracketClose), tokens)
 }
 
-fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
-    let token = expect::<token::Word>(tokens)?;
+fn parse_literal(tokens: &mut Tokens) -> ParserResult<ValuePayload> {
+    let token = expect::<token::Literal>(tokens)?;
     Ok(token.0)
 }
 
-fn parse_literal(tokens: &mut Tokens) -> ParserResult<ValuePayload> {
-    let token = expect::<token::Literal>(tokens)?;
+fn parse_word(tokens: &mut Tokens) -> ParserResult<String> {
+    let token = expect::<token::Word>(tokens)?;
     Ok(token.0)
 }
 
