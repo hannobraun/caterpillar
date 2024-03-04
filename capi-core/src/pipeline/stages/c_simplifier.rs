@@ -18,6 +18,9 @@ fn simplify_syntax_tree(
                 simple_syntax_tree.elements.extend(syntax_elements);
                 continue;
             }
+            SyntaxElement::Binding(_) => {
+                todo!("Binding syntax is not supported yet");
+            }
             SyntaxElement::BlockExpression(syntax_tree) => {
                 let syntax_tree = simplify_block(syntax_tree);
                 SimpleSyntaxElement::BlockExpression(syntax_tree)
