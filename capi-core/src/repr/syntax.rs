@@ -22,7 +22,9 @@ impl<T> Default for SyntaxTree<T> {
 #[derive(Clone, Debug)]
 pub enum SyntaxElement {
     ArrayExpression(SyntaxTree<Self>),
-    Binding(Vec<String>),
+    Binding {
+        names: Vec<String>,
+    },
     BlockExpression(SyntaxTree<Self>),
 
     /// A literal value
