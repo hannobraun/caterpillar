@@ -288,20 +288,9 @@ fn eval(
             });
 
             // `eval` doesn't need to consume the block, so it would be nice, if
-            // we could put it back on the stack. However, if we were to do that
-            // here, that would happen *before* the block is evaluated, and
-            // hence the block would have itself on the stack when it starts.
-            // This sounds like it could possibly be useful, rarely and in
-            // devious ways, but it certainly will just be annoying in the
-            // common case.
-            //
-            // What we *could* do is add another frame to the call stack, which
-            // puts the block back on the stack after the block itself returns.
-            // That would require stack frames to be an enum that could either
-            // reference a fragment or builtin code that does what we need.
-            //
-            // Not sure if it's worth it. Maybe if the need for this comes up in
-            // more cases.
+            // we could put it back on the stack. All infrastructure we need for
+            // that exists now: Just put it on the side stack, put it back on
+            // the main stack in the next step.
 
             Ok(BuiltinFnState::Stepped)
         }
