@@ -1,6 +1,6 @@
 :times
 {
-    [ :block :num_times ] bind
+    => [ :block :num_times ]
 
     num_times 0 >
     {
