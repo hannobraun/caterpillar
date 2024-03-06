@@ -24,7 +24,7 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        let gameState = 0;
+        let gameState = initGameState();
 
         requestAnimationFrame(mainLoop);
 
@@ -61,6 +61,10 @@
             context.putImageData(imageData, 0, 0);
 
             requestAnimationFrame(mainLoop);
+        }
+
+        function initGameState() {
+            return 0;
         }
 
         function update() {
