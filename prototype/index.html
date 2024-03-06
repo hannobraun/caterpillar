@@ -113,6 +113,10 @@
                 gameState.timeSinceLastUpdateMs -= delayMs;
 
                 gameState.position[0] += 1;
+
+                if (gameState.position[0] >= gameState.width) {
+                    gameState.position[0] = 0;
+                }
             }
 
             return gameState;
