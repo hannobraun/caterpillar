@@ -35,7 +35,7 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            const evenOrNot = 0;
+            const evenOrNot = update();
 
             const drawBufferSize = canvas.width * canvas.height;
             const target = {
@@ -59,6 +59,10 @@
             context.putImageData(imageData, 0, 0);
 
             requestAnimationFrame(mainLoop);
+        }
+
+        function update() {
+            return 0;
         }
 
         function draw(target, evenOrNot) {
