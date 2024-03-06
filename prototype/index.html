@@ -100,6 +100,9 @@
             const x = Math.floor(width / 2);
             const y = Math.floor(height / 2);
 
+            const foodX = Math.floor(Math.random() * width);
+            const foodY = Math.floor(Math.random() * height);
+
             return {
                 cellSize: cellSize,
 
@@ -112,6 +115,8 @@
                 velocity: [1, 0],
 
                 growthLeft: 2,
+
+                foodPos: [foodX, foodY],
 
                 timeSinceLastUpdateMs: 0,
             };
@@ -129,6 +134,12 @@
             for (let x = 0; x < gameState.width; x += 1) {
                 for (let y = 0; y < gameState.height; y += 1) {
                     const index = x + y * gameState.width;
+
+                    const foodX = gameState.foodPos[0];
+                    const foodY = gameState.foodPos[1];
+                    if (x == foodX && y == foodY) {
+                        gameState.cells[index] = 127;
+                    }
 
                     for (let i = 0; i < gameState.positions.length; i += 1) {
                         const [posX, posY] = gameState.positions[i];
