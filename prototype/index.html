@@ -37,7 +37,7 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            gameState = updateGameState();
+            gameState = updateGameState(gameState);
 
             const drawBufferSize = canvas.width * canvas.height;
             const target = {
@@ -67,7 +67,7 @@
             return 0;
         }
 
-        function updateGameState() {
+        function updateGameState(gameState) {
             return 0;
         }
 
