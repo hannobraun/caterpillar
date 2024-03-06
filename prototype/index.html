@@ -105,10 +105,13 @@
                     const baseI = x * cellSize;
                     const baseJ = y * cellSize;
 
+                    let color = 0;
+
                     if ((x + y) % 2 == gameState.evenOrOdd) {
-                        const color = 255;
-                        drawCell(cellSize, baseI, baseJ, color, target);
+                        color = 255;
                     }
+
+                    drawCell(cellSize, baseI, baseJ, color, target);
                 }
             }
 
