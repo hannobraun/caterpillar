@@ -125,30 +125,6 @@
         function updateGameState(input, gameState, deltaTimeMs) {
             const delayMs = 100;
 
-            for (let i = 0; i < gameState.cells.length; i += 1) {
-                gameState.cells[i] = 0;
-            }
-
-            for (let x = 0; x < gameState.width; x += 1) {
-                for (let y = 0; y < gameState.height; y += 1) {
-                    const index = x + y * gameState.width;
-
-                    const foodX = gameState.foodPos[0];
-                    const foodY = gameState.foodPos[1];
-                    if (x == foodX && y == foodY) {
-                        gameState.cells[index] = 127;
-                    }
-
-                    for (let i = 0; i < gameState.positions.length; i += 1) {
-                        const [posX, posY] = gameState.positions[i];
-
-                        if (x == posX && y == posY) {
-                            gameState.cells[index] = 255;
-                        }
-                    }
-                }
-            }
-
             gameState.timeSinceLastUpdateMs += deltaTimeMs;
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
                 gameState.timeSinceLastUpdateMs -= delayMs;
@@ -208,6 +184,30 @@
                     }
                     if (gameState.positions[i][1] >= gameState.height) {
                         gameState.positions[i][1] = 0;
+                    }
+                }
+            }
+
+            for (let i = 0; i < gameState.cells.length; i += 1) {
+                gameState.cells[i] = 0;
+            }
+
+            for (let x = 0; x < gameState.width; x += 1) {
+                for (let y = 0; y < gameState.height; y += 1) {
+                    const index = x + y * gameState.width;
+
+                    const foodX = gameState.foodPos[0];
+                    const foodY = gameState.foodPos[1];
+                    if (x == foodX && y == foodY) {
+                        gameState.cells[index] = 127;
+                    }
+
+                    for (let i = 0; i < gameState.positions.length; i += 1) {
+                        const [posX, posY] = gameState.positions[i];
+
+                        if (x == posX && y == posY) {
+                            gameState.cells[index] = 255;
+                        }
                     }
                 }
             }
