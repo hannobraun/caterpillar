@@ -92,21 +92,21 @@
             const cellSize = 32;
 
             const cellsWidth = Math.floor(target.width / cellSize);
-            const height = Math.floor(target.height / cellSize);
+            const cellsHeight = Math.floor(target.height / cellSize);
 
             const x = Math.floor(cellsWidth / 2);
-            const y = Math.floor(height / 2);
+            const y = Math.floor(cellsHeight / 2);
 
             const foodX = Math.floor(Math.random() * cellsWidth);
-            const foodY = Math.floor(Math.random() * height);
+            const foodY = Math.floor(Math.random() * cellsHeight);
 
             return {
                 cellSize: cellSize,
 
                 width: cellsWidth,
-                height: height,
+                height: cellsHeight,
 
-                cells: new Uint8ClampedArray(cellsWidth * height),
+                cells: new Uint8ClampedArray(cellsWidth * cellsHeight),
 
                 positions: [[x, y]],
                 velocity: [1, 0],
