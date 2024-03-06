@@ -86,13 +86,17 @@
         }
 
 
-        let gameState = initGameState(target);
+        let gameState = initGameState(
+            target.buffer,
+            target.width,
+            target.height,
+        );
 
-        function initGameState(target) {
+        function initGameState(buffer, width, height) {
             const cellSize = 32;
 
-            const cellsWidth = Math.floor(target.width / cellSize);
-            const cellsHeight = Math.floor(target.height / cellSize);
+            const cellsWidth = Math.floor(width / cellSize);
+            const cellsHeight = Math.floor(height / cellSize);
 
             const x = Math.floor(cellsWidth / 2);
             const y = Math.floor(cellsHeight / 2);
