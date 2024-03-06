@@ -40,7 +40,7 @@
                 buffer: new Uint8ClampedArray(drawBufferSize),
                 width: canvas.width,
                 height: canvas.height,
-            });
+            }, 0);
 
             for (let i = 0; i < drawBuffer.length; i += 1) {
                 const value = drawBuffer[i];
@@ -57,7 +57,7 @@
             requestAnimationFrame(mainLoop);
         }
 
-        function draw(target) {
+        function draw(target, evenOrNot) {
             const cellSize = 32;
 
             const width = Math.floor(target.width / cellSize);
@@ -65,7 +65,7 @@
 
             for (let x = 0; x < width; x += 1) {
                 for (let y = 0; y < height; y += 1) {
-                    if ((x + y) % 2 == 0) {
+                    if ((x + y) % 2 == evenOrNot) {
                         const baseI = x * cellSize;
                         const baseJ = y * cellSize;
 
