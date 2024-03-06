@@ -109,6 +109,8 @@
                 cells: new Uint8ClampedArray(width * height),
 
                 position: [x, y],
+                velocity: [1, 0],
+
                 timeSinceLastUpdateMs: 0,
             };
         }
@@ -134,7 +136,25 @@
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
                 gameState.timeSinceLastUpdateMs -= delayMs;
 
-                gameState.position[0] += 1;
+                if (input.left) {
+                    gameState.velocity = [-1, 0];
+                    input.left = false;
+                }
+                if (input.right) {
+                    gameState.velocity = [1, 0];
+                    input.right = false;
+                }
+                if (input.up) {
+                    gameState.velocity = [0, -1];
+                    input.up = false;
+                }
+                if (input.down) {
+                    gameState.velocity = [0, 1];
+                    input.down = false;
+                }
+
+                gameState.position[0] += gameState.velocity[0];
+                gameState.position[1] += gameState.velocity[1];
 
                 if (gameState.position[0] >= gameState.width) {
                     gameState.position[0] = 0;
