@@ -91,13 +91,13 @@
 
             gameState.timeSinceLastUpdateMs += deltaTimeMs;
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
+                gameState.timeSinceLastUpdateMs -= delayMs;
+
                 if (gameState.evenOrOdd == 0) {
                     gameState.evenOrOdd = 1;
                 } else if (gameState.evenOrOdd == 1) {
                     gameState.evenOrOdd = 0;
                 }
-
-                gameState.timeSinceLastUpdateMs -= delayMs;
             }
 
             return gameState;
