@@ -35,6 +35,11 @@
         const deltaTimeMs = 1000 / 60;
 
         const drawBufferSize = canvas.width * canvas.height;
+        const target = {
+            buffer: new Uint8ClampedArray(drawBufferSize),
+            width: canvas.width,
+            height: canvas.height,
+        };
 
         let gameState = initGameState();
         let lastUpdate = 0;
@@ -46,12 +51,6 @@
                 gameState = updateGameState(gameState, deltaTimeMs);
                 lastUpdate += deltaTimeMs;
             }
-
-            const target = {
-                buffer: new Uint8ClampedArray(drawBufferSize),
-                width: canvas.width,
-                height: canvas.height,
-            };
 
             const drawBuffer = draw(target, gameState);
 
