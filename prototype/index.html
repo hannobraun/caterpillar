@@ -35,16 +35,26 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                imageData.data[i + 0] = 0;
-                imageData.data[i + 1] = 0;
-                imageData.data[i + 2] = 0;
-                imageData.data[i + 3] = 255;
+            const drawBufferSize = canvas.width * canvas.height;
+            const drawBuffer = draw(new Uint8ClampedArray(drawBufferSize));
+
+            for (let i = 0; i < drawBuffer.length; i += 1) {
+                const value = drawBuffer[i];
+
+                const j = i * 4;
+                imageData.data[j + 0] = value;
+                imageData.data[j + 1] = value;
+                imageData.data[j + 2] = value;
+                imageData.data[j + 3] = 255;
             }
 
             context.putImageData(imageData, 0, 0);
 
             requestAnimationFrame(mainLoop);
+        }
+
+        function draw(buffer) {
+            return buffer;
         }
     </script>
 </body>
