@@ -24,25 +24,20 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        const input = {
-            left: false,
-            right: false,
-            up: false,
-            down: false,
-        };
+        const input = [];
 
         document.addEventListener("keydown", (event) => {
             if (event.key == "ArrowLeft") {
-                input.left = true;
+                input.push("left");
             }
             if (event.key == "ArrowRight") {
-                input.right = true;
+                input.push("right");
             }
             if (event.key == "ArrowUp") {
-                input.up = true;
+                input.push("up");
             }
             if (event.key == "ArrowDown") {
-                input.down = true;
+                input.push("down");
             }
         });
 
@@ -134,33 +129,26 @@
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
                 gameState.timeSinceLastUpdateMs -= delayMs;
 
-                if (input.left) {
+                const inputEvent = input.shift();
+                if (inputEvent == "left") {
                     if (gameState.velocity[0] != 1) {
                         gameState.velocity = [-1, 0];
                     }
-
-                    input.left = false;
                 }
-                if (input.right) {
+                if (inputEvent == "right") {
                     if (gameState.velocity[0] != -1) {
                         gameState.velocity = [1, 0];
                     }
-
-                    input.right = false;
                 }
-                if (input.up) {
+                if (inputEvent == "up") {
                     if (gameState.velocity[1] != 1) {
                         gameState.velocity = [0, -1];
                     }
-
-                    input.up = false;
                 }
-                if (input.down) {
+                if (inputEvent == "down") {
                     if (gameState.velocity[1] != -1) {
                         gameState.velocity = [0, 1];
                     }
-
-                    input.down = false;
                 }
 
                 const headPos = Array.from(gameState.positions[0]);
