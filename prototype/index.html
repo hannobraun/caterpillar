@@ -156,8 +156,17 @@
                 gameState.position[0] += gameState.velocity[0];
                 gameState.position[1] += gameState.velocity[1];
 
+                if (gameState.position[0] < 0) {
+                    gameState.position[0] = gameState.width - 1;
+                }
                 if (gameState.position[0] >= gameState.width) {
                     gameState.position[0] = 0;
+                }
+                if (gameState.position[1] < 0) {
+                    gameState.position[1] = gameState.height - 1;
+                }
+                if (gameState.position[1] >= gameState.height) {
+                    gameState.position[1] = 0;
                 }
             }
 
