@@ -82,12 +82,25 @@
                 height: height,
 
                 evenOrOdd: 0,
+                cells: new Uint8ClampedArray(width * height),
                 timeSinceLastUpdateMs: 0,
             };
         }
 
         function updateGameState(gameState, deltaTimeMs) {
             const delayMs = 500;
+
+            for (let x = 0; x < gameState.width; x += 1) {
+                for (let y = 0; y < gameState.height; y += 1) {
+                    let color = 0;
+                    if ((x + y) % 2 == gameState.evenOrOdd) {
+                        color = 255;
+                    }
+
+                    const index = x + y * gameState.width;
+                    gameState.cells[index] = color;
+                }
+            }
 
             gameState.timeSinceLastUpdateMs += deltaTimeMs;
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
@@ -109,11 +122,7 @@
                     const baseI = x * gameState.cellSize;
                     const baseJ = y * gameState.cellSize;
 
-                    let color = 0;
-
-                    if ((x + y) % 2 == gameState.evenOrOdd) {
-                        color = 255;
-                    }
+                    let color = gameState.cells[x + y * gameState.width];
 
                     drawCell(gameState.cellSize, baseI, baseJ, color, target);
                 }
