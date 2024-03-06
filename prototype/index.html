@@ -118,18 +118,21 @@
         function updateGameState(input, gameState, deltaTimeMs) {
             const delayMs = 100;
 
+            for (let i = 0; i < gameState.cells.length; i += 1) {
+                gameState.cells[i] = 0;
+            }
+
             for (let i = 0; i < gameState.positions.length; i += 1) {
                 const [posX, posY] = gameState.positions[i];
 
                 for (let x = 0; x < gameState.width; x += 1) {
                     for (let y = 0; y < gameState.height; y += 1) {
-                        let color = 0;
                         if (x == posX && y == posY) {
-                            color = 255;
+                            const index = x + y * gameState.width;
+                            gameState.cells[index] = 255;
                         }
 
-                        const index = x + y * gameState.width;
-                        gameState.cells[index] = color;
+
                     }
                 }
             }
