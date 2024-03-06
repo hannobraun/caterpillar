@@ -24,6 +24,14 @@
 <body>
     <canvas></canvas>
     <script type="module">
+        const canvas = document.querySelector("canvas");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const context = canvas.getContext("2d");
+        const imageData = new ImageData(canvas.width, canvas.height);
+
         const deltaTimeMs = 1000 / 60;
 
         let gameState = initGameState();
@@ -32,14 +40,6 @@
         requestAnimationFrame(mainLoop);
 
         function mainLoop(timeStamp) {
-            const canvas = document.querySelector("canvas");
-
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const context = canvas.getContext("2d");
-            const imageData = new ImageData(canvas.width, canvas.height);
-
             if (timeStamp - lastUpdate >= deltaTimeMs) {
                 gameState = updateGameState(gameState, deltaTimeMs);
                 lastUpdate += deltaTimeMs;
