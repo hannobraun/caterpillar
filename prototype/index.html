@@ -84,7 +84,7 @@
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
-                gameState = updateGameState(gameState, deltaTimeMs);
+                gameState = updateGameState(input, gameState, deltaTimeMs);
                 lastUpdate += deltaTimeMs;
             }
 
@@ -127,7 +127,7 @@
             };
         }
 
-        function updateGameState(gameState, deltaTimeMs) {
+        function updateGameState(input, gameState, deltaTimeMs) {
             const delayMs = 200;
 
             for (let x = 0; x < gameState.width; x += 1) {
