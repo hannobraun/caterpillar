@@ -41,7 +41,7 @@
             height: canvas.height,
         };
 
-        let gameState = initGameState();
+        let gameState = initGameState(target);
         let lastUpdate = 0;
 
         requestAnimationFrame(mainLoop);
@@ -69,7 +69,7 @@
             requestAnimationFrame(mainLoop);
         }
 
-        function initGameState() {
+        function initGameState(target) {
             const cellSize = 32;
 
             return {
