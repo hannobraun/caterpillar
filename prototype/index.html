@@ -108,7 +108,7 @@
 
                 cells: new Uint8ClampedArray(width * height),
 
-                position: [x, y],
+                positions: [[x, y]],
                 velocity: [1, 0],
 
                 timeSinceLastUpdateMs: 0,
@@ -118,17 +118,19 @@
         function updateGameState(input, gameState, deltaTimeMs) {
             const delayMs = 100;
 
-            for (let x = 0; x < gameState.width; x += 1) {
-                for (let y = 0; y < gameState.height; y += 1) {
-                    const [posX, posY] = gameState.position;
+            for (let i = 0; i < gameState.positions.length; i += 1) {
+                const [posX, posY] = gameState.positions[i];
 
-                    let color = 0;
-                    if (x == posX && y == posY) {
-                        color = 255;
+                for (let x = 0; x < gameState.width; x += 1) {
+                    for (let y = 0; y < gameState.height; y += 1) {
+                        let color = 0;
+                        if (x == posX && y == posY) {
+                            color = 255;
+                        }
+
+                        const index = x + y * gameState.width;
+                        gameState.cells[index] = color;
                     }
-
-                    const index = x + y * gameState.width;
-                    gameState.cells[index] = color;
                 }
             }
 
@@ -165,20 +167,27 @@
                     input.down = false;
                 }
 
-                gameState.position[0] += gameState.velocity[0];
-                gameState.position[1] += gameState.velocity[1];
+                const firstPosition = Array.from(gameState.positions[0]);
 
-                if (gameState.position[0] < 0) {
-                    gameState.position[0] = gameState.width - 1;
-                }
-                if (gameState.position[0] >= gameState.width) {
-                    gameState.position[0] = 0;
-                }
-                if (gameState.position[1] < 0) {
-                    gameState.position[1] = gameState.height - 1;
-                }
-                if (gameState.position[1] >= gameState.height) {
-                    gameState.position[1] = 0;
+                firstPosition[0] += gameState.velocity[0];
+                firstPosition[1] += gameState.velocity[1];
+
+                gameState.positions.unshift(firstPosition);
+                gameState.positions.pop();
+
+                for (let i = 0; i < gameState.positions.length; i += 1) {
+                    if (gameState.positions[i][0] < 0) {
+                        gameState.positions[i][0] = gameState.width - 1;
+                    }
+                    if (gameState.positions[i][0] >= gameState.width) {
+                        gameState.positions[i][0] = 0;
+                    }
+                    if (gameState.positions[i][1] < 0) {
+                        gameState.positions[i][1] = gameState.height - 1;
+                    }
+                    if (gameState.positions[i][1] >= gameState.height) {
+                        gameState.positions[i][1] = 0;
+                    }
                 }
             }
 
