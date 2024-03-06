@@ -111,6 +111,8 @@
                 positions: [[x, y]],
                 velocity: [1, 0],
 
+                growthLeft: 2,
+
                 timeSinceLastUpdateMs: 0,
             };
         }
@@ -176,7 +178,13 @@
                 firstPosition[1] += gameState.velocity[1];
 
                 gameState.positions.unshift(firstPosition);
-                gameState.positions.pop();
+
+
+                if (gameState.growthLeft > 0) {
+                    gameState.growthLeft -= 1;
+                } else {
+                    gameState.positions.pop();
+                }
 
                 for (let i = 0; i < gameState.positions.length; i += 1) {
                     if (gameState.positions[i][0] < 0) {
