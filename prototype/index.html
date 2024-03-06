@@ -186,6 +186,22 @@
                         gameState.positions[i][1] = 0;
                     }
                 }
+
+                for (let i = 0; i < gameState.positions.length; i += 1) {
+                    const [posX, posY] = gameState.positions[0];
+                    const [foodX, foodY] = gameState.foodPos;
+
+                    if (posX == foodX && posY == foodY) {
+                        const extraGrowth = Math.ceil(
+                            gameState.positions.length / 2
+                        );
+                        gameState.growthLeft += extraGrowth;
+
+                        const foodX = Math.floor(Math.random() * gameState.width);
+                        const foodY = Math.floor(Math.random() * gameState.height);
+                        gameState.foodPos = [foodX, foodY];
+                    }
+                }
             }
 
             for (let i = 0; i < gameState.cells.length; i += 1) {
