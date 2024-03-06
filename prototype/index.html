@@ -71,6 +71,7 @@
 
         function initGameState() {
             return {
+                cellSize: 32,
                 evenOrOdd: 0,
                 timeSinceLastUpdateMs: 0,
             };
@@ -94,15 +95,13 @@
         }
 
         function draw(target, gameState) {
-            const cellSize = 32;
-
-            const width = Math.floor(target.width / cellSize);
-            const height = Math.floor(target.height / cellSize);
+            const width = Math.floor(target.width / gameState.cellSize);
+            const height = Math.floor(target.height / gameState.cellSize);
 
             for (let x = 0; x < width; x += 1) {
                 for (let y = 0; y < height; y += 1) {
-                    const baseI = x * cellSize;
-                    const baseJ = y * cellSize;
+                    const baseI = x * gameState.cellSize;
+                    const baseJ = y * gameState.cellSize;
 
                     let color = 0;
 
@@ -110,7 +109,7 @@
                         color = 255;
                     }
 
-                    drawCell(cellSize, baseI, baseJ, color, target);
+                    drawCell(gameState.cellSize, baseI, baseJ, color, target);
                 }
             }
 
