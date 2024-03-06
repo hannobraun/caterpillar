@@ -76,10 +76,10 @@
             };
         }
 
-        function updateGameState(gameState, deltaT) {
+        function updateGameState(gameState, deltaTimeMs) {
             const delayMs = 500;
 
-            gameState.timeSinceLastUpdateMs += deltaT;
+            gameState.timeSinceLastUpdateMs += deltaTimeMs;
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
                 if (gameState.evenOrOdd == 0) {
                     gameState.evenOrOdd = 1;
