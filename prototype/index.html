@@ -70,8 +70,10 @@
         }
 
         function initGameState() {
+            const cellSize = 32;
+
             return {
-                cellSize: 32,
+                cellSize: cellSize,
                 evenOrOdd: 0,
                 timeSinceLastUpdateMs: 0,
             };
