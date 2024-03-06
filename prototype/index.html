@@ -106,20 +106,24 @@
                         const baseI = x * cellSize;
                         const baseJ = y * cellSize;
 
-                        for (let i = 0; i < cellSize; i += 1) {
-                            for (let j = 0; j < cellSize; j += 1) {
-                                const absI = baseI + i;
-                                const absJ = baseJ + j;
-
-                                const index = absI + absJ * target.width;
-                                target.buffer[index] = 255;
-                            }
-                        }
+                        drawCell(cellSize, baseI, baseJ, target);
                     }
                 }
             }
 
             return target.buffer;
+        }
+
+        function drawCell(cellSize, baseI, baseJ, target) {
+            for (let i = 0; i < cellSize; i += 1) {
+                for (let j = 0; j < cellSize; j += 1) {
+                    const absI = baseI + i;
+                    const absJ = baseJ + j;
+
+                    const index = absI + absJ * target.width;
+                    target.buffer[index] = 255;
+                }
+            }
         }
     </script>
 </body>
