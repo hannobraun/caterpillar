@@ -24,6 +24,8 @@
 <body>
     <canvas></canvas>
     <script type="module">
+        let gameState = 0;
+
         requestAnimationFrame(mainLoop);
 
         function mainLoop() {
@@ -35,7 +37,7 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            const gameState = update();
+            gameState = update();
 
             const drawBufferSize = canvas.width * canvas.height;
             const target = {
