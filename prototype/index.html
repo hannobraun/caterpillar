@@ -58,18 +58,17 @@
             height: canvas.height,
         };
 
-        let gameState = initGameState(target);
         let lastUpdate = 0;
 
         requestAnimationFrame(mainLoop);
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
-                gameState = updateGameState(input, gameState, deltaTimeMs);
+                updateGameState(input, deltaTimeMs);
                 lastUpdate += deltaTimeMs;
             }
 
-            const drawBuffer = draw(target, gameState);
+            const drawBuffer = draw(target);
 
             for (let i = 0; i < drawBuffer.length; i += 1) {
                 const value = drawBuffer[i];
@@ -85,6 +84,9 @@
 
             requestAnimationFrame(mainLoop);
         }
+
+
+        let gameState = initGameState(target);
 
         function initGameState(target) {
             const cellSize = 32;
@@ -118,7 +120,7 @@
             };
         }
 
-        function updateGameState(input, gameState, deltaTimeMs) {
+        function updateGameState(input, deltaTimeMs) {
             if (gameState.lost) {
                 return gameState;
             }
@@ -228,11 +230,9 @@
                     }
                 }
             }
-
-            return gameState;
         }
 
-        function draw(target, gameState) {
+        function draw(target) {
             for (let x = 0; x < gameState.width; x += 1) {
                 for (let y = 0; y < gameState.height; y += 1) {
                     const baseI = x * gameState.cellSize;
