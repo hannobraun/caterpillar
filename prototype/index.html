@@ -36,7 +36,11 @@
             const imageData = new ImageData(canvas.width, canvas.height);
 
             const drawBufferSize = canvas.width * canvas.height;
-            const drawBuffer = draw(new Uint8ClampedArray(drawBufferSize));
+            const drawBuffer = draw({
+                buffer: new Uint8ClampedArray(drawBufferSize),
+                width: canvas.width,
+                height: canvas.height,
+            });
 
             for (let i = 0; i < drawBuffer.length; i += 1) {
                 const value = drawBuffer[i];
@@ -54,7 +58,7 @@
         }
 
         function draw(buffer) {
-            return buffer;
+            return buffer.buffer;
         }
     </script>
 </body>
