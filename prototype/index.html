@@ -91,22 +91,22 @@
         function initGameState(target) {
             const cellSize = 32;
 
-            const width = Math.floor(target.width / cellSize);
+            const cellsWidth = Math.floor(target.width / cellSize);
             const height = Math.floor(target.height / cellSize);
 
-            const x = Math.floor(width / 2);
+            const x = Math.floor(cellsWidth / 2);
             const y = Math.floor(height / 2);
 
-            const foodX = Math.floor(Math.random() * width);
+            const foodX = Math.floor(Math.random() * cellsWidth);
             const foodY = Math.floor(Math.random() * height);
 
             return {
                 cellSize: cellSize,
 
-                width: width,
+                width: cellsWidth,
                 height: height,
 
-                cells: new Uint8ClampedArray(width * height),
+                cells: new Uint8ClampedArray(cellsWidth * height),
 
                 positions: [[x, y]],
                 velocity: [1, 0],
