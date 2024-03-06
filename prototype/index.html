@@ -24,7 +24,7 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        const deltaT = 1000 / 60;
+        const deltaTimeMs = 1000 / 60;
 
         let gameState = initGameState();
         let lastUpdate = 0;
@@ -40,9 +40,9 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            if (timeStamp - lastUpdate >= deltaT) {
-                gameState = updateGameState(gameState, deltaT);
-                lastUpdate += deltaT;
+            if (timeStamp - lastUpdate >= deltaTimeMs) {
+                gameState = updateGameState(gameState, deltaTimeMs);
+                lastUpdate += deltaTimeMs;
             }
 
             const drawBufferSize = canvas.width * canvas.height;
