@@ -119,10 +119,15 @@
                 foodPos: [foodX, foodY],
 
                 timeSinceLastUpdateMs: 0,
+                lost: false,
             };
         }
 
         function updateGameState(input, gameState, deltaTimeMs) {
+            if (gameState.lost) {
+                return gameState;
+            }
+
             const delayMs = 100;
 
             gameState.timeSinceLastUpdateMs += deltaTimeMs;
@@ -183,6 +188,15 @@
                     }
                     if (gameState.positions[i][1] >= gameState.height) {
                         gameState.positions[i][1] = 0;
+                    }
+                }
+
+                const [headPosX, headPosY] = gameState.positions[0];
+                for (let i = 1; i < gameState.positions.length; i += 1) {
+                    const [posX, posY] = gameState.positions[i];
+
+                    if (headPosX == posX && headPosY == posY) {
+                        gameState.lost = true;
                     }
                 }
 
