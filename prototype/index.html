@@ -137,19 +137,31 @@
                 gameState.timeSinceLastUpdateMs -= delayMs;
 
                 if (input.left) {
-                    gameState.velocity = [-1, 0];
+                    if (gameState.velocity[0] != 1) {
+                        gameState.velocity = [-1, 0];
+                    }
+
                     input.left = false;
                 }
                 if (input.right) {
-                    gameState.velocity = [1, 0];
+                    if (gameState.velocity[0] != -1) {
+                        gameState.velocity = [1, 0];
+                    }
+
                     input.right = false;
                 }
                 if (input.up) {
-                    gameState.velocity = [0, -1];
+                    if (gameState.velocity[1] != 1) {
+                        gameState.velocity = [0, -1];
+                    }
+
                     input.up = false;
                 }
                 if (input.down) {
-                    gameState.velocity = [0, 1];
+                    if (gameState.velocity[1] != -1) {
+                        gameState.velocity = [0, 1];
+                    }
+
                     input.down = false;
                 }
 
