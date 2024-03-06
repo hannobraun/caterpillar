@@ -11,6 +11,8 @@
 <body>
     <canvas></canvas>
     <script type="module">
+        requestAnimationFrame(mainLoop);
+
         function mainLoop() {
             const canvas = document.querySelector("canvas");
             const context = canvas.getContext("2d");
@@ -27,8 +29,6 @@
 
             requestAnimationFrame(mainLoop);
         }
-
-        requestAnimationFrame(mainLoop);
     </script>
 </body>
 
