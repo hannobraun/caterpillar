@@ -41,7 +41,7 @@
             const imageData = new ImageData(canvas.width, canvas.height);
 
             if (timeStamp - lastUpdate >= deltaT) {
-                gameState = updateGameState(gameState);
+                gameState = updateGameState(gameState, deltaT);
                 lastUpdate += deltaT;
             }
 
@@ -76,7 +76,7 @@
             };
         }
 
-        function updateGameState(gameState) {
+        function updateGameState(gameState, deltaT) {
             return gameState;
         }
 
