@@ -102,10 +102,10 @@
 
             for (let x = 0; x < width; x += 1) {
                 for (let y = 0; y < height; y += 1) {
-                    if ((x + y) % 2 == gameState.evenOrOdd) {
-                        const baseI = x * cellSize;
-                        const baseJ = y * cellSize;
+                    const baseI = x * cellSize;
+                    const baseJ = y * cellSize;
 
+                    if ((x + y) % 2 == gameState.evenOrOdd) {
                         const color = 255;
                         drawCell(cellSize, baseI, baseJ, color, target);
                     }
