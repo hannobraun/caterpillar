@@ -70,7 +70,9 @@
         }
 
         function initGameState() {
-            return 0;
+            return {
+                evenOrOdd: 0,
+            };
         }
 
         function updateGameState(gameState) {
@@ -85,7 +87,7 @@
 
             for (let x = 0; x < width; x += 1) {
                 for (let y = 0; y < height; y += 1) {
-                    if ((x + y) % 2 == gameState) {
+                    if ((x + y) % 2 == gameState.evenOrOdd) {
                         const baseI = x * cellSize;
                         const baseJ = y * cellSize;
 
