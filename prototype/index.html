@@ -35,6 +35,8 @@
             const context = canvas.getContext("2d");
             const imageData = new ImageData(canvas.width, canvas.height);
 
+            const evenOrNot = 0;
+
             const drawBufferSize = canvas.width * canvas.height;
             const target = {
                 buffer: new Uint8ClampedArray(drawBufferSize),
@@ -42,7 +44,7 @@
                 height: canvas.height,
             };
 
-            const drawBuffer = draw(target, 0);
+            const drawBuffer = draw(target, evenOrNot);
 
             for (let i = 0; i < drawBuffer.length; i += 1) {
                 const value = drawBuffer[i];
