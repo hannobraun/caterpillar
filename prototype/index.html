@@ -122,7 +122,7 @@
                     const baseI = x * gameState.cellSize;
                     const baseJ = y * gameState.cellSize;
 
-                    let color = gameState.cells[x + y * gameState.width];
+                    const color = gameState.cells[x + y * gameState.width];
 
                     drawCell(gameState.cellSize, baseI, baseJ, color, target);
                 }
