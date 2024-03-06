@@ -77,7 +77,7 @@
             return gameState;
         }
 
-        function draw(target, evenOrNot) {
+        function draw(target, gameState) {
             const cellSize = 32;
 
             const width = Math.floor(target.width / cellSize);
@@ -85,7 +85,7 @@
 
             for (let x = 0; x < width; x += 1) {
                 for (let y = 0; y < height; y += 1) {
-                    if ((x + y) % 2 == evenOrNot) {
+                    if ((x + y) % 2 == gameState) {
                         const baseI = x * cellSize;
                         const baseJ = y * cellSize;
 
