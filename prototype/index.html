@@ -11,18 +11,22 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        const canvas = document.querySelector("canvas");
-        const context = canvas.getContext("2d");
-        const imageData = new ImageData(canvas.width, canvas.height);
+        function mainLoop() {
+            const canvas = document.querySelector("canvas");
+            const context = canvas.getContext("2d");
+            const imageData = new ImageData(canvas.width, canvas.height);
 
-        for (let i = 0; i < imageData.data.length; i += 4) {
-            imageData.data[i + 0] = 0;
-            imageData.data[i + 1] = 0;
-            imageData.data[i + 2] = 255;
-            imageData.data[i + 3] = 255;
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                imageData.data[i + 0] = 0;
+                imageData.data[i + 1] = 0;
+                imageData.data[i + 2] = 255;
+                imageData.data[i + 3] = 255;
+            }
+
+            context.putImageData(imageData, 0, 0);
         }
 
-        context.putImageData(imageData, 0, 0);
+        mainLoop();
     </script>
 </body>
 
