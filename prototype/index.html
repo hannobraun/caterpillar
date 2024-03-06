@@ -158,12 +158,12 @@
                     input.down = false;
                 }
 
-                const firstPosition = Array.from(gameState.positions[0]);
+                const headPos = Array.from(gameState.positions[0]);
 
-                firstPosition[0] += gameState.velocity[0];
-                firstPosition[1] += gameState.velocity[1];
+                headPos[0] += gameState.velocity[0];
+                headPos[1] += gameState.velocity[1];
 
-                gameState.positions.unshift(firstPosition);
+                gameState.positions.unshift(headPos);
 
 
                 if (gameState.growthLeft > 0) {
