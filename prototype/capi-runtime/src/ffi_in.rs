@@ -1,8 +1,8 @@
 use std::{panic, sync::Mutex};
 
 use crate::{
-    cells::Cells, ffi_out::print, input::Input, render_target::RenderTarget,
-    state::State, world::World,
+    cells::Cells, ffi_out::print, input::InputEvent,
+    render_target::RenderTarget, state::State, world::World,
 };
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
@@ -50,26 +50,26 @@ pub extern "C" fn get_render_target_buffer_len() -> usize {
 #[no_mangle]
 pub extern "C" fn on_input(key: i32) {
     let input = match key {
-        0 => Input::Up,
-        1 => Input::Left,
-        2 => Input::Down,
-        3 => Input::Right,
+        0 => InputEvent::Up,
+        1 => InputEvent::Left,
+        2 => InputEvent::Down,
+        3 => InputEvent::Right,
         _ => return,
     };
 
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    if input == Input::Up && state.world.velocity != [0, 1] {
+    if input == InputEvent::Up && state.world.velocity != [0, 1] {
         state.world.velocity = [0, -1];
     }
-    if input == Input::Left && state.world.velocity != [1, 0] {
+    if input == InputEvent::Left && state.world.velocity != [1, 0] {
         state.world.velocity = [-1, 0];
     }
-    if input == Input::Down && state.world.velocity != [0, -1] {
+    if input == InputEvent::Down && state.world.velocity != [0, -1] {
         state.world.velocity = [0, 1];
     }
-    if input == Input::Right && state.world.velocity != [-1, 0] {
+    if input == InputEvent::Right && state.world.velocity != [-1, 0] {
         state.world.velocity = [1, 0];
     }
 }
