@@ -57,8 +57,8 @@ pub extern "C" fn extern_draw_cell(
     base_j: usize,
     color: u8,
 ) {
-    let mut guard = DRAW_TARGET.lock().unwrap();
-    let target = guard.as_mut().unwrap();
+    let mut target = DRAW_TARGET.lock().unwrap();
+    let target = target.as_mut().unwrap();
 
     draw_cell(cell_size, base_i, base_j, color, target)
 }
