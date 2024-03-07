@@ -67,15 +67,15 @@ fn draw_cell(
     base_i: usize,
     base_j: usize,
     color: u8,
-    buffer: &mut DrawTarget,
+    target: &mut DrawTarget,
 ) {
     for i in 0..cell_size {
         for j in 0..cell_size {
             let abs_i = base_i + i;
             let abs_j = base_j + j;
 
-            let index = abs_i + abs_j * buffer.width;
-            buffer.buffer[index] = color;
+            let index = abs_i + abs_j * target.width;
+            target.buffer[index] = color;
         }
     }
 }
