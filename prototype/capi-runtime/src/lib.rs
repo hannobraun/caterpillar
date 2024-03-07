@@ -9,7 +9,7 @@ static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
 static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 extern "C" {
-    fn print(ptr: *const u8, len: usize);
+    fn print_ffi(ptr: *const u8, len: usize);
 }
 
 #[no_mangle]
@@ -17,7 +17,7 @@ pub extern "C" fn init() {
     panic::set_hook(Box::new(|panic_info| {
         let msg = format!("{panic_info}");
         unsafe {
-            print(msg.as_ptr(), msg.len());
+            print_ffi(msg.as_ptr(), msg.len());
         }
     }));
 }

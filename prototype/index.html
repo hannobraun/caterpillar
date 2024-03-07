@@ -28,7 +28,7 @@
         const { module, instance } =
             await WebAssembly.instantiateStreaming(fetch(path), {
                 env: {
-                    print: (ptr, len) => {
+                    print_ffi: (ptr, len) => {
                         const memory = instance.exports.memory;
                         const array = new Uint8Array(memory.buffer, ptr, len);
                         const string = new TextDecoder().decode(array);
