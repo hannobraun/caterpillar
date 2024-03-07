@@ -46,7 +46,7 @@
 
         document.addEventListener("keydown", (event) => {
             if (event.key == "ArrowUp") {
-                input.push(INPUT_UP);
+                instance.exports.on_input(INPUT_UP);
             }
             if (event.key == "ArrowLeft") {
                 input.push("left");
@@ -162,11 +162,6 @@
                 if (inputEvent == "right") {
                     if (instance.exports.get_velocity_x() != -1) {
                         instance.exports.set_velocity(1, 0);
-                    }
-                }
-                if (inputEvent == INPUT_UP) {
-                    if (instance.exports.get_velocity_y() != 1) {
-                        instance.exports.set_velocity(0, -1);
                     }
                 }
                 if (inputEvent == "down") {

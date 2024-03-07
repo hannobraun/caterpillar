@@ -29,6 +29,18 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
 }
 
 #[no_mangle]
+pub extern "C" fn on_input(key: i32) {
+    const UP: i32 = 0;
+
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    if key == UP && state.velocity != [0, 1] {
+        state.velocity = [0, -1];
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
     let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
     let target = target.as_mut().expect("Expected target to be initialized");
