@@ -254,7 +254,8 @@
                         gameState.cellSize,
                         baseI, baseJ,
                         color,
-                        target.buffer, target.width,
+                        target.buffer.buffer, target.buffer.length,
+                        target.width,
                     );
                 }
             }
@@ -262,7 +263,15 @@
             return target.buffer;
         }
 
-        function drawCell(cellSize, baseI, baseJ, color, array, width) {
+        function drawCell(
+            cellSize,
+            baseI, baseJ,
+            color,
+            buffer, bufferLength,
+            width,
+        ) {
+            const array = new Uint8Array(buffer, 0, bufferLength);
+
             for (let i = 0; i < cellSize; i += 1) {
                 for (let j = 0; j < cellSize; j += 1) {
                     const absI = baseI + i;
