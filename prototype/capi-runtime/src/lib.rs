@@ -55,7 +55,7 @@ pub extern "C" fn positions_len() -> usize {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions.len()
 }
@@ -65,7 +65,7 @@ pub extern "C" fn positions_get_x(i: usize) -> i32 {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions[i][0]
 }
@@ -75,7 +75,7 @@ pub extern "C" fn positions_get_y(i: usize) -> i32 {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions[i][1]
 }
@@ -85,7 +85,7 @@ pub extern "C" fn positions_set_x(i: usize, x: i32) {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions[i][0] = x;
 }
@@ -95,7 +95,7 @@ pub extern "C" fn positions_set_y(i: usize, y: i32) {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions[i][1] = y;
 }
@@ -105,7 +105,7 @@ pub extern "C" fn positions_push_front(x: i32, y: i32) {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions.push_front([x, y]);
 }
@@ -115,7 +115,7 @@ pub extern "C" fn positions_pop_back() {
     let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
-        .expect("Expected positions to be initialized");
+        .expect("Expected state to be initialized");
 
     positions.positions.pop_back();
 }
@@ -123,9 +123,7 @@ pub extern "C" fn positions_pop_back() {
 #[no_mangle]
 pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
     let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state
-        .as_mut()
-        .expect("Expected positions to be initialized");
+    let state = state.as_mut().expect("Expected state to be initialized");
 
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
@@ -151,9 +149,7 @@ pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
 #[no_mangle]
 pub extern "C" fn update_cells() {
     let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state
-        .as_mut()
-        .expect("Expected positions to be initialized");
+    let state = state.as_mut().expect("Expected state to be initialized");
 
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
