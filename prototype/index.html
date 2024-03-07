@@ -24,7 +24,7 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        const { module, instance } = await loadWasm();
+        const { instance } = await loadWasm();
         const { canvas, context } = initCanvas();
         const { imageData } = initDrawBuffer(instance, canvas);
         initInputHandling(instance);
