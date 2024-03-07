@@ -1,4 +1,4 @@
-use std::process::Command;
+use tokio::process::Command;
 
 #[rocket::main]
 async fn main() -> anyhow::Result<()> {
@@ -7,7 +7,8 @@ async fn main() -> anyhow::Result<()> {
         .arg("--release")
         .args(["--package", "capi-runtime"])
         .args(["--target", "wasm32-unknown-unknown"])
-        .status()?;
+        .status()
+        .await?;
 
     rocket::build()
         .mount("/", rocket::fs::FileServer::from("."))
