@@ -50,6 +50,23 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 }
 
 #[no_mangle]
+pub extern "C" fn draw() {
+    let mut cells = CELLS.lock().expect("Expected exclusive access");
+    let cells = cells.as_mut().expect("Expected cells to be initialized");
+
+    for x in 0..cells.width {
+        for y in 0..cells.height {
+            let base_i = x * cells.cell_size;
+            let base_j = y * cells.cell_size;
+
+            let color = cells.buffer[x + y * cells.width];
+
+            draw_cell(cells.cell_size, base_i, base_j, color);
+        }
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn extern_draw_cell(
     cell_size: usize,
     base_i: usize,

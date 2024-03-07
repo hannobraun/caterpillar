@@ -92,7 +92,7 @@
                 lastUpdate += deltaTimeMs;
             }
 
-            draw();
+            instance.exports.draw();
 
             for (let i = 0; i < target.buffer.length; i += 1) {
                 const value = target.buffer[i];
@@ -267,22 +267,7 @@
             }
         }
 
-        function draw() {
-            for (let x = 0; x < gameState.width; x += 1) {
-                for (let y = 0; y < gameState.height; y += 1) {
-                    const baseI = x * gameState.cellSize;
-                    const baseJ = y * gameState.cellSize;
 
-                    const color = gameState.cells[x + y * gameState.width];
-
-                    instance.exports.extern_draw_cell(
-                        gameState.cellSize,
-                        baseI, baseJ,
-                        color,
-                    );
-                }
-            }
-        }
     </script>
 </body>
 
