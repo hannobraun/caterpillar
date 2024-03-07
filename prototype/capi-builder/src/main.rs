@@ -1,16 +1,15 @@
-use std::path::Path;
-
-use tokio::process::Command;
+use tempfile::{tempdir, TempDir};
+use tokio::{fs, process::Command};
 
 #[rocket::main]
 async fn main() -> anyhow::Result<()> {
-    build().await?;
-    serve(".").await?;
+    let path = build().await?;
+    serve(path).await?;
 
     Ok(())
 }
 
-async fn build() -> anyhow::Result<()> {
+async fn build() -> anyhow::Result<TempDir> {
     Command::new("cargo")
         .arg("build")
         .arg("--release")
@@ -19,12 +18,20 @@ async fn build() -> anyhow::Result<()> {
         .status()
         .await?;
 
-    Ok(())
+    let dir = tempdir()?;
+    fs::copy("index.html", dir.path().join("index.html")).await?;
+    fs::copy(
+        "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+        dir.path().join("capi_runtime.wasm"),
+    )
+    .await?;
+
+    Ok(dir)
 }
 
-async fn serve(path: impl AsRef<Path>) -> anyhow::Result<()> {
+async fn serve(path: TempDir) -> anyhow::Result<()> {
     rocket::build()
-        .mount("/", rocket::fs::FileServer::from(path))
+        .mount("/", rocket::fs::FileServer::from(&path))
         .launch()
         .await?;
 
