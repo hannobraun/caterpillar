@@ -3,7 +3,7 @@ mod draw_target;
 mod ffi_out;
 mod state;
 
-use std::{iter, panic, sync::Mutex};
+use std::{panic, sync::Mutex};
 
 use state::State;
 
@@ -44,12 +44,7 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
 
-    let x = cells.width as i32 / 2;
-    let y = cells.height as i32 / 2;
-
-    let state = State {
-        positions: iter::once([x, y]).collect(),
-    };
+    let state = State::new(&cells);
     *STATE.lock().expect("Expected exclusive access") = Some(state);
 
     cells_ptr
