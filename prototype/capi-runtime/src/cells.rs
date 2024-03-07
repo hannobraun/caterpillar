@@ -6,9 +6,7 @@ pub struct Cells {
     pub buffer: Vec<u8>,
 
     pub cell_size: usize,
-
-    pub width: usize,
-    pub height: usize,
+    pub size: [usize; 2],
 }
 
 impl Cells {
@@ -23,8 +21,7 @@ impl Cells {
 
             cell_size,
 
-            width,
-            height,
+            size: [width, height],
         }
     }
 }

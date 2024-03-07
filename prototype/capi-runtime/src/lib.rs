@@ -134,9 +134,9 @@ pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
         cells.buffer[i] = 0;
     }
 
-    for x in 0..cells.width {
-        for y in 0..cells.height {
-            let index = x + y * cells.width;
+    for x in 0..cells.size[0] {
+        for y in 0..cells.size[1] {
+            let index = x + y * cells.size[0];
 
             if x as i32 == food_x && y as i32 == food_y {
                 cells.buffer[index] = 127;
@@ -156,12 +156,12 @@ pub extern "C" fn draw() {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
 
-    for x in 0..cells.width {
-        for y in 0..cells.height {
+    for x in 0..cells.size[0] {
+        for y in 0..cells.size[1] {
             let base_i = x * cells.cell_size;
             let base_j = y * cells.cell_size;
 
-            let color = cells.buffer[x + y * cells.width];
+            let color = cells.buffer[x + y * cells.size[0]];
 
             draw_cell(cells.cell_size, base_i, base_j, color);
         }

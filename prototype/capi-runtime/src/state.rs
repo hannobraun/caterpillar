@@ -8,8 +8,8 @@ pub struct State {
 
 impl State {
     pub fn new(cells: &Cells) -> Self {
-        let x = cells.width as i32 / 2;
-        let y = cells.height as i32 / 2;
+        let x = cells.size[0] as i32 / 2;
+        let y = cells.size[1] as i32 / 2;
 
         Self {
             positions: iter::once([x, y]).collect(),
