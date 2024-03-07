@@ -9,7 +9,9 @@ pub struct Cells {
 }
 
 impl Cells {
-    pub fn new(cell_size: usize, draw_target: &DrawTarget) -> Self {
+    pub fn new(draw_target: &DrawTarget) -> Self {
+        let cell_size = 32;
+
         let width = draw_target.width / cell_size;
         let height = draw_target.height / cell_size;
 

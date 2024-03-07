@@ -21,9 +21,7 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
 
     let draw_target = DrawTarget::new(width, height);
 
-    let cell_size = 32;
-
-    let cells = Cells::new(cell_size, &draw_target);
+    let cells = Cells::new(&draw_target);
     *CELLS.lock().expect("Expected exclusive access") = Some(cells);
 
     let mut cells = CELLS.lock().expect("Expected exclusive access");
