@@ -22,16 +22,22 @@ pub struct DrawTarget {
     pub height: usize,
 }
 
+impl DrawTarget {
+    pub fn new(width: usize, height: usize) -> Self {
+        const NUM_COLOR_CHANNELS: usize = 4;
+        let len = width * height * NUM_COLOR_CHANNELS;
+
+        Self {
+            buffer: iter::repeat(0).take(len).collect(),
+            width,
+            height,
+        }
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
-    const NUM_COLOR_CHANNELS: usize = 4;
-    let len = width * height * NUM_COLOR_CHANNELS;
-
-    let buffer = DrawTarget {
-        buffer: iter::repeat(0).take(len).collect(),
-        width,
-        height,
-    };
+    let buffer = DrawTarget::new(width, height);
     DRAW_BUFFER
         .lock()
         .expect(
