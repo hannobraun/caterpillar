@@ -1,12 +1,12 @@
 mod cells;
 mod draw_target;
 mod ffi_out;
-mod state;
+mod world;
 
 use std::{panic, sync::Mutex};
 
 use self::{
-    cells::Cells, draw_target::DrawTarget, ffi_out::print, state::World,
+    cells::Cells, draw_target::DrawTarget, ffi_out::print, world::World,
 };
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
