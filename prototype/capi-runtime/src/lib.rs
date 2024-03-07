@@ -20,13 +20,13 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
         print(&format!("{panic_info}"));
     }));
 
-    let draw_target = RenderTarget::new(width, height);
+    let render_target = RenderTarget::new(width, height);
 
-    let cells = Cells::new(&draw_target);
+    let cells = Cells::new(&render_target);
     let state = World::new(cells);
     let state = State {
         world: state,
-        render_target: draw_target,
+        render_target,
     };
 
     STATE
