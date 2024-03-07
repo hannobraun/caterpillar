@@ -110,14 +110,14 @@ fn draw(state: &mut State) {
 fn draw_cell(
     cell_size: usize,
     cell_x: usize,
-    base_y: usize,
+    cell_y: usize,
     color: u8,
     target: &mut RenderTarget,
 ) {
     for x in 0..cell_size {
         for y in 0..cell_size {
             let pixel_x = cell_x + x;
-            let pixel_y = base_y + y;
+            let pixel_y = cell_y + y;
 
             let index = (pixel_x + pixel_y * target.width)
                 * RenderTarget::NUM_COLOR_CHANNELS;
