@@ -81,8 +81,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64, mut lost: bool) -> bool {
     lost
 }
 
-#[no_mangle]
-pub extern "C" fn move_snake(state: &mut State) {
+fn move_snake(state: &mut State) {
     let [mut head_x, mut head_y] = state.head_position();
 
     head_x += state.velocity[0];
@@ -97,8 +96,7 @@ pub extern "C" fn move_snake(state: &mut State) {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn constrain_positions(state: &mut State) {
+fn constrain_positions(state: &mut State) {
     for [x, y] in &mut state.positions {
         if *x < 0 {
             *x = state.cells.size[0] as i32 - 1;
@@ -115,8 +113,7 @@ pub extern "C" fn constrain_positions(state: &mut State) {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn check_collision(state: &State) -> bool {
+fn check_collision(state: &State) -> bool {
     let [head_x, head_y] = state.head_position();
 
     for [body_x, body_y] in state.body_positions() {
@@ -128,8 +125,7 @@ pub extern "C" fn check_collision(state: &State) -> bool {
     false
 }
 
-#[no_mangle]
-pub extern "C" fn eat_food(state: &mut State) {
+fn eat_food(state: &mut State) {
     let mut ate_food = false;
 
     for &[pos_x, pos_y] in &state.positions {
@@ -146,8 +142,7 @@ pub extern "C" fn eat_food(state: &mut State) {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn update_cells(state: &mut State) {
+fn update_cells(state: &mut State) {
     for i in 0..state.cells.buffer.len() {
         state.cells.buffer[i] = 0;
     }
