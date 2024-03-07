@@ -9,5 +9,10 @@ async fn main() -> anyhow::Result<()> {
         .args(["--target", "wasm32-unknown-unknown"])
         .status()?;
 
+    rocket::build()
+        .mount("/", rocket::fs::FileServer::from("."))
+        .launch()
+        .await?;
+
     Ok(())
 }
