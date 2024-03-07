@@ -83,10 +83,10 @@
                 lastUpdate += deltaTimeMs;
             }
 
-            const drawBuffer = draw(target);
+            draw(target);
 
-            for (let i = 0; i < drawBuffer.length; i += 1) {
-                const value = drawBuffer[i];
+            for (let i = 0; i < target.buffer.length; i += 1) {
+                const value = target.buffer[i];
 
                 const j = i * 4;
                 imageData.data[j + 0] = value;
@@ -269,8 +269,6 @@
                     );
                 }
             }
-
-            return target.buffer;
         }
     </script>
 </body>
