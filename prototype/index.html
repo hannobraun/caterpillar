@@ -70,7 +70,7 @@
             canvas.width,
             canvas.height,
         );
-        const drawBufferSize = canvas.width * canvas.height * 4;
+        const drawBufferSize = canvas.width * canvas.height;
         const drawBuffer = new Uint8Array(
             instance.exports.memory.buffer,
             drawBufferPtr,
