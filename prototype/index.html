@@ -25,27 +25,7 @@
     <canvas></canvas>
     <script type="module">
         const { module, instance } = await loadWasm();
-
-
-        document.addEventListener("keydown", (event) => {
-            const INPUT_UP = 0;
-            const INPUT_LEFT = 1;
-            const INPUT_DOWN = 2;
-            const INPUT_RIGHT = 3;
-
-            if (event.key == "ArrowUp") {
-                instance.exports.on_input(INPUT_UP);
-            }
-            if (event.key == "ArrowLeft") {
-                instance.exports.on_input(INPUT_LEFT);
-            }
-            if (event.key == "ArrowDown") {
-                instance.exports.on_input(INPUT_DOWN);
-            }
-            if (event.key == "ArrowRight") {
-                instance.exports.on_input(INPUT_RIGHT);
-            }
-        });
+        initInputHandling(instance);
 
         const canvas = document.querySelector("canvas");
 
@@ -85,6 +65,28 @@
                     random_ffi: () => {
                         return Math.random();
                     }
+                }
+            });
+        }
+
+        function initInputHandling(instance) {
+            document.addEventListener("keydown", (event) => {
+                const INPUT_UP = 0;
+                const INPUT_LEFT = 1;
+                const INPUT_DOWN = 2;
+                const INPUT_RIGHT = 3;
+
+                if (event.key == "ArrowUp") {
+                    instance.exports.on_input(INPUT_UP);
+                }
+                if (event.key == "ArrowLeft") {
+                    instance.exports.on_input(INPUT_LEFT);
+                }
+                if (event.key == "ArrowDown") {
+                    instance.exports.on_input(INPUT_DOWN);
+                }
+                if (event.key == "ArrowRight") {
+                    instance.exports.on_input(INPUT_RIGHT);
                 }
             });
         }
