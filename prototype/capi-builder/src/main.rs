@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use tempfile::{tempdir, TempDir};
+use tempfile::tempdir;
 use tokio::{fs, process::Command};
 
 #[rocket::main]
@@ -8,7 +8,7 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempdir()?;
 
     build(&serve_dir).await?;
-    serve(serve_dir).await?;
+    serve(&serve_dir).await?;
 
     Ok(())
 }
@@ -34,7 +34,7 @@ async fn build(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve(path: TempDir) -> anyhow::Result<()> {
+async fn serve(path: impl AsRef<Path>) -> anyhow::Result<()> {
     rocket::build()
         .mount("/", rocket::fs::FileServer::from(&path))
         .launch()
