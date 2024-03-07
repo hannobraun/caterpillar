@@ -11,7 +11,6 @@ use self::{cells::Cells, draw_target::DrawTarget, ffi_out::print};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
 static STATE: Mutex<Option<State>> = Mutex::new(None);
-static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
@@ -22,12 +21,7 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     let draw_target = DrawTarget::new(width, height);
 
     let cells = Cells::new(&draw_target);
-    *CELLS.lock().expect("Expected exclusive access") = Some(cells);
-
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
-
-    let state = State::new(&cells);
+    let state = State::new(cells);
     *STATE.lock().expect("Expected exclusive access") = Some(state);
 
     DRAW_TARGET
@@ -105,20 +99,17 @@ pub extern "C" fn move_snake(state: &mut State) {
 
 #[no_mangle]
 pub extern "C" fn constrain_positions(state: &mut State) {
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
-
     for [x, y] in &mut state.positions {
         if *x < 0 {
-            *x = cells.size[0] as i32 - 1;
+            *x = state.cells.size[0] as i32 - 1;
         }
-        if *x >= cells.size[0] as i32 {
+        if *x >= state.cells.size[0] as i32 {
             *x = 0;
         }
         if *y < 0 {
-            *y = cells.size[1] as i32 - 1;
+            *y = state.cells.size[1] as i32 - 1;
         }
-        if *y >= cells.size[1] as i32 {
+        if *y >= state.cells.size[1] as i32 {
             *y = 0;
         }
     }
@@ -139,9 +130,6 @@ pub extern "C" fn check_collision(state: &State) -> bool {
 
 #[no_mangle]
 pub extern "C" fn eat_food(state: &mut State) {
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
-
     let mut ate_food = false;
 
     for &[pos_x, pos_y] in &state.positions {
@@ -154,30 +142,27 @@ pub extern "C" fn eat_food(state: &mut State) {
     }
 
     if ate_food {
-        state.randomize_food_pos(cells);
+        state.randomize_food_pos();
     }
 }
 
 #[no_mangle]
-pub extern "C" fn update_cells(state: &State) {
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
-
-    for i in 0..cells.buffer.len() {
-        cells.buffer[i] = 0;
+pub extern "C" fn update_cells(state: &mut State) {
+    for i in 0..state.cells.buffer.len() {
+        state.cells.buffer[i] = 0;
     }
 
-    for x in 0..cells.size[0] {
-        for y in 0..cells.size[1] {
-            let index = x + y * cells.size[0];
+    for x in 0..state.cells.size[0] {
+        for y in 0..state.cells.size[1] {
+            let index = x + y * state.cells.size[0];
 
             if x as i32 == state.food_pos[0] && y as i32 == state.food_pos[1] {
-                cells.buffer[index] = 127;
+                state.cells.buffer[index] = 127;
             }
 
             for &[pos_x, pos_y] in &state.positions {
                 if x as i32 == pos_x && y as i32 == pos_y {
-                    cells.buffer[index] = 255;
+                    state.cells.buffer[index] = 255;
                 }
             }
         }
@@ -186,17 +171,17 @@ pub extern "C" fn update_cells(state: &State) {
 
 #[no_mangle]
 pub extern "C" fn draw() {
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
 
-    for x in 0..cells.size[0] {
-        for y in 0..cells.size[1] {
-            let base_i = x * cells.cell_size;
-            let base_j = y * cells.cell_size;
+    for x in 0..state.cells.size[0] {
+        for y in 0..state.cells.size[1] {
+            let base_i = x * state.cells.cell_size;
+            let base_j = y * state.cells.cell_size;
 
-            let color = cells.buffer[x + y * cells.size[0]];
+            let color = state.cells.buffer[x + y * state.cells.size[0]];
 
-            draw_cell(cells.cell_size, base_i, base_j, color);
+            draw_cell(state.cells.cell_size, base_i, base_j, color);
         }
     }
 }

@@ -8,10 +8,11 @@ pub struct State {
     pub food_pos: [i32; 2],
     pub growth_left: i32,
     pub time_since_last_update_ms: f64,
+    pub cells: Cells,
 }
 
 impl State {
-    pub fn new(cells: &Cells) -> Self {
+    pub fn new(cells: Cells) -> Self {
         let x = cells.size[0] as i32 / 2;
         let y = cells.size[1] as i32 / 2;
 
@@ -21,16 +22,19 @@ impl State {
             food_pos: [0, 0],
             growth_left: 2,
             time_since_last_update_ms: 0.,
+            cells,
         };
 
-        self_.randomize_food_pos(cells);
+        self_.randomize_food_pos();
 
         self_
     }
 
-    pub fn randomize_food_pos(&mut self, cells: &Cells) {
-        self.food_pos =
-            cells.size.map(|dim| (random() * dim as f32).floor() as i32);
+    pub fn randomize_food_pos(&mut self) {
+        self.food_pos = self
+            .cells
+            .size
+            .map(|dim| (random() * dim as f32).floor() as i32);
     }
 
     pub fn head_position(&self) -> [i32; 2] {
