@@ -20,6 +20,18 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     }));
 
     let draw_target = DrawTarget::new(width, height);
+
+    let cell_size = 32;
+
+    let cells = Cells::new(cell_size, &draw_target);
+    *CELLS.lock().expect("Expected exclusive access") = Some(cells);
+
+    let mut cells = CELLS.lock().expect("Expected exclusive access");
+    let cells = cells.as_mut().expect("Expected cells to be initialized");
+
+    let state = State::new(&cells);
+    *STATE.lock().expect("Expected exclusive access") = Some(state);
+
     DRAW_TARGET
         .lock()
         .expect("Expected exclusive access")
@@ -50,23 +62,6 @@ pub extern "C" fn on_input(key: i32) {
     if key == RIGHT && state.velocity != [-1, 0] {
         state.velocity = [1, 0];
     }
-}
-
-#[no_mangle]
-pub extern "C" fn init_cells() {
-    let cell_size = 32;
-
-    let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
-    let target = target.as_mut().expect("Expected target to be initialized");
-
-    let cells = Cells::new(cell_size, &target);
-    *CELLS.lock().expect("Expected exclusive access") = Some(cells);
-
-    let mut cells = CELLS.lock().expect("Expected exclusive access");
-    let cells = cells.as_mut().expect("Expected cells to be initialized");
-
-    let state = State::new(&cells);
-    *STATE.lock().expect("Expected exclusive access") = Some(state);
 }
 
 #[no_mangle]
