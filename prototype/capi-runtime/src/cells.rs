@@ -4,6 +4,7 @@ use crate::draw_target::DrawTarget;
 
 pub struct Cells {
     pub buffer: Vec<u8>,
+    pub cell_size: usize,
 }
 
 impl Cells {
@@ -13,6 +14,6 @@ impl Cells {
 
         let buffer = iter::repeat(0).take(width * height).collect();
 
-        Self { buffer }
+        Self { buffer, cell_size }
     }
 }
