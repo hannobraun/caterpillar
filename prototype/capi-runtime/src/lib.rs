@@ -21,7 +21,7 @@ pub extern "C" fn init() {
 }
 
 #[no_mangle]
-pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
+pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     let buffer = DrawTarget::new(width, height);
     DRAW_TARGET
         .lock()
