@@ -4,7 +4,6 @@ use crate::draw_target::DrawTarget;
 
 pub struct Cells {
     pub buffer: Vec<u8>,
-
     pub cell_size: usize,
     pub size: [usize; 2],
 }
@@ -18,9 +17,7 @@ impl Cells {
 
         Self {
             buffer,
-
             cell_size,
-
             size: [width, height],
         }
     }
