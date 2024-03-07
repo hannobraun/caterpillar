@@ -40,6 +40,8 @@
                 }
             });
 
+        const INPUT_UP = 0;
+
         const input = [];
 
         document.addEventListener("keydown", (event) => {
@@ -50,7 +52,7 @@
                 input.push("right");
             }
             if (event.key == "ArrowUp") {
-                input.push("up");
+                input.push(INPUT_UP);
             }
             if (event.key == "ArrowDown") {
                 input.push("down");
@@ -162,7 +164,7 @@
                         instance.exports.set_velocity(1, 0);
                     }
                 }
-                if (inputEvent == "up") {
+                if (inputEvent == INPUT_UP) {
                     if (instance.exports.get_velocity_y() != 1) {
                         instance.exports.set_velocity(0, -1);
                     }
