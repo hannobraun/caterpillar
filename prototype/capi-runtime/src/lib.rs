@@ -1,11 +1,12 @@
+mod cells;
 mod draw_target;
 
 use std::{iter, panic, sync::Mutex};
 
-use self::draw_target::DrawTarget;
+use self::{cells::Cells, draw_target::DrawTarget};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
-static CELLS: Mutex<Option<Vec<u8>>> = Mutex::new(None);
+static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 extern "C" {
     fn print(ptr: *const u8, len: usize);
@@ -42,11 +43,14 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
     let width = target.width / cell_size;
     let height = target.height / cell_size;
 
-    let cells = iter::repeat(0).take(width * height).collect();
+    let cells = Cells {
+        buffer: iter::repeat(0).take(width * height).collect(),
+    };
     CELLS
         .lock()
         .expect("Expected exclusive access")
         .insert(cells)
+        .buffer
         .as_mut_ptr()
 }
 
