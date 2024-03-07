@@ -121,7 +121,35 @@ pub extern "C" fn positions_pop_back() {
 }
 
 #[no_mangle]
-pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
+pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state
+        .as_mut()
+        .expect("Expected positions to be initialized");
+
+    let mut cells = CELLS.lock().expect("Expected exclusive access");
+    let cells = cells.as_mut().expect("Expected cells to be initialized");
+
+    let mut ate_food = false;
+
+    for &[pos_x, pos_y] in &state.positions {
+        if pos_x == state.food_pos[0] && pos_y == state.food_pos[1] {
+            let extra_growth = state.positions.len() / 2;
+            growth_left += extra_growth as i32;
+
+            ate_food = true;
+        }
+    }
+
+    if ate_food {
+        state.randomize_food_pos(cells);
+    }
+
+    growth_left
+}
+
+#[no_mangle]
+pub extern "C" fn update_cells() {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state
         .as_mut()
@@ -138,7 +166,7 @@ pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
         for y in 0..cells.size[1] {
             let index = x + y * cells.size[0];
 
-            if x as i32 == food_x && y as i32 == food_y {
+            if x as i32 == state.food_pos[0] && y as i32 == state.food_pos[1] {
                 cells.buffer[index] = 127;
             }
 

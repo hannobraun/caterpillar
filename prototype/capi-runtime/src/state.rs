@@ -1,9 +1,10 @@
 use std::{collections::VecDeque, iter};
 
-use crate::cells::Cells;
+use crate::{cells::Cells, ffi_out::random};
 
 pub struct State {
     pub positions: VecDeque<[i32; 2]>,
+    pub food_pos: [i32; 2],
 }
 
 impl State {
@@ -11,8 +12,18 @@ impl State {
         let x = cells.size[0] as i32 / 2;
         let y = cells.size[1] as i32 / 2;
 
-        Self {
+        let mut self_ = Self {
             positions: iter::once([x, y]).collect(),
-        }
+            food_pos: [0, 0],
+        };
+
+        self_.randomize_food_pos(cells);
+
+        self_
+    }
+
+    pub fn randomize_food_pos(&mut self, cells: &Cells) {
+        self.food_pos =
+            cells.size.map(|dim| (random() * dim as f32).floor() as i32);
     }
 }

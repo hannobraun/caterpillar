@@ -34,6 +34,9 @@
                         const string = new TextDecoder().decode(array);
                         console.log(string);
                     },
+                    random_ffi: () => {
+                        return Math.random();
+                    }
                 }
             });
 
@@ -126,9 +129,6 @@
                 cellsWidth * cellsHeight,
             );
 
-            const foodX = Math.floor(Math.random() * cellsWidth);
-            const foodY = Math.floor(Math.random() * cellsHeight);
-
             return {
                 width: cellsWidth,
                 height: cellsHeight,
@@ -138,8 +138,6 @@
                 velocity: [1, 0],
 
                 growthLeft: 2,
-
-                foodPos: [foodX, foodY],
 
                 timeSinceLastUpdateMs: 0,
                 lost: false,
@@ -225,25 +223,10 @@
                     }
                 }
 
-                for (let i = 0; i < instance.exports.positions_len(); i += 1) {
-                    const posX = instance.exports.positions_get_x(i);
-                    const posY = instance.exports.positions_get_y(i);
-                    const [foodX, foodY] = gameState.foodPos;
-
-                    if (posX == foodX && posY == foodY) {
-                        const extraGrowth =
-                            instance.exports.positions_len() / 2;
-                        gameState.growthLeft += extraGrowth;
-
-                        const foodX = Math.floor(Math.random() * gameState.width);
-                        const foodY = Math.floor(Math.random() * gameState.height);
-                        gameState.foodPos = [foodX, foodY];
-                    }
-                }
-
-                const foodX = gameState.foodPos[0];
-                const foodY = gameState.foodPos[1];
-                instance.exports.update_cells(foodX, foodY);
+                gameState.growthLeft = instance.exports.eat_food(
+                    gameState.growthLeft,
+                );
+                instance.exports.update_cells();
             }
         }
     </script>
