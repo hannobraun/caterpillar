@@ -1,4 +1,4 @@
-use std::{panic, slice, sync::Mutex};
+use std::{iter, panic, slice, sync::Mutex};
 
 static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
@@ -24,7 +24,7 @@ pub extern "C" fn init_draw_buffer(
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 
-    let buffer = Vec::with_capacity(len);
+    let buffer = iter::repeat(0).take(len).collect();
     DRAW_BUFFER
         .lock()
         .expect(
