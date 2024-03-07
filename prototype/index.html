@@ -259,11 +259,10 @@
 
                     const color = gameState.cells[x + y * gameState.width];
 
-                    drawCell(
+                    instance.exports.draw_cell(
                         gameState.cellSize,
                         baseI, baseJ,
                         color,
-                        target.buffer.buffer,
                         target.buffer.byteOffset,
                         target.buffer.length,
                         target.width,
@@ -272,28 +271,6 @@
             }
 
             return target.buffer;
-        }
-
-        function drawCell(
-            cellSize,
-            baseI, baseJ,
-            color,
-            buffer,
-            bufferOffset,
-            bufferLength,
-            width,
-        ) {
-            const array = new Uint8Array(buffer, bufferOffset, bufferLength);
-
-            for (let i = 0; i < cellSize; i += 1) {
-                for (let j = 0; j < cellSize; j += 1) {
-                    const absI = baseI + i;
-                    const absJ = baseJ + j;
-
-                    const index = absI + absJ * width;
-                    array[index] = color;
-                }
-            }
         }
     </script>
 </body>
