@@ -1,4 +1,7 @@
-use std::{path::Path, time::Duration};
+use std::{
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use notify_debouncer_mini::{
     new_debouncer,
@@ -17,15 +20,13 @@ use tokio::{
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempdir()?;
 
-    let _watcher = watch(&serve_dir)?;
+    let _watcher = watch(serve_dir.path().to_path_buf())?;
     serve(&serve_dir).await?;
 
     Ok(())
 }
 
-fn watch(
-    serve_dir: impl AsRef<Path>,
-) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+fn watch(serve_dir: PathBuf) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
     let (tx, rx) = watch::channel(());
 
     let mut debouncer = new_debouncer(
@@ -43,7 +44,6 @@ fn watch(
         .watcher()
         .watch(Path::new("capi-runtime"), RecursiveMode::Recursive)?;
 
-    let serve_dir = serve_dir.as_ref().to_path_buf();
     task::spawn(build(serve_dir, rx));
 
     Ok(debouncer)
