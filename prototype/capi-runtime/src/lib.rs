@@ -12,9 +12,9 @@ extern "C" {
     fn print_ffi(ptr: *const u8, len: usize);
 }
 
-pub fn print(msg: &str) {
+pub fn print(s: &str) {
     unsafe {
-        print_ffi(msg.as_ptr(), msg.len());
+        print_ffi(s.as_ptr(), s.len());
     }
 }
 
