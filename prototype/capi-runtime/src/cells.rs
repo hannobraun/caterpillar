@@ -11,8 +11,8 @@ impl Cells {
         let width = draw_target.width / cell_size;
         let height = draw_target.height / cell_size;
 
-        Self {
-            buffer: iter::repeat(0).take(width * height).collect(),
-        }
+        let buffer = iter::repeat(0).take(width * height).collect();
+
+        Self { buffer }
     }
 }
