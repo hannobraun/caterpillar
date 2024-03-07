@@ -1,6 +1,6 @@
 mod cells;
-mod draw_target;
 mod ffi_out;
+mod render_target;
 mod state;
 mod world;
 
@@ -9,7 +9,7 @@ use std::{panic, sync::Mutex};
 use state::State;
 
 use self::{
-    cells::Cells, draw_target::RenderTarget, ffi_out::print, world::World,
+    cells::Cells, ffi_out::print, render_target::RenderTarget, world::World,
 };
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);

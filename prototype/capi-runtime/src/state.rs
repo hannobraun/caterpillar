@@ -1,4 +1,4 @@
-use crate::{draw_target::RenderTarget, world::World};
+use crate::{render_target::RenderTarget, world::World};
 
 pub struct State {
     pub world: World,

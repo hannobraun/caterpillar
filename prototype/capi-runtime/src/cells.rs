@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::draw_target::RenderTarget;
+use crate::render_target::RenderTarget;
 
 pub struct Cells {
     pub buffer: Vec<u8>,
