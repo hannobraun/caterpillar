@@ -41,7 +41,7 @@ impl World {
 
         self.time_since_last_update_ms += delta_time_ms;
         if self.time_since_last_update_ms >= delay_ms {
-            self.time_since_last_update_ms -= delay_ms;
+            self.time_since_last_update_ms = 0.;
 
             move_snake(self);
             constrain_positions(self);
