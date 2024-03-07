@@ -1,6 +1,6 @@
 use std::{iter, panic, sync::Mutex};
 
-static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
+static DRAW_BUFFER: Mutex<Option<DrawBuffer>> = Mutex::new(None);
 
 extern "C" {
     fn print(ptr: *const u8, len: usize);
@@ -16,6 +16,12 @@ pub extern "C" fn init() {
     }));
 }
 
+pub struct DrawBuffer {
+    pub buffer: Vec<u8>,
+    pub width: usize,
+    pub height: usize,
+}
+
 #[no_mangle]
 pub extern "C" fn init_draw_buffer(
     canvas_width: usize,
@@ -24,13 +30,18 @@ pub extern "C" fn init_draw_buffer(
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 
-    let buffer = iter::repeat(0).take(len).collect();
+    let buffer = DrawBuffer {
+        buffer: iter::repeat(0).take(len).collect(),
+        width: canvas_width,
+        height: canvas_height,
+    };
     DRAW_BUFFER
         .lock()
         .expect(
             "Expected exclusive access in single-threaded WebAssembly context",
         )
         .insert(buffer)
+        .buffer
         .as_mut_ptr()
 }
 
@@ -51,7 +62,7 @@ pub extern "C" fn draw_cell(
             let abs_j = base_j + j;
 
             let index = abs_i + abs_j * width;
-            buffer[index] = color;
+            buffer.buffer[index] = color;
         }
     }
 }
