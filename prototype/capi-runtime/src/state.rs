@@ -32,6 +32,25 @@ impl State {
         self_
     }
 
+    pub fn update(&mut self, delta_time_ms: f64) {
+        if self.lost {
+            return;
+        }
+
+        let delay_ms = 100.;
+
+        self.time_since_last_update_ms += delta_time_ms;
+        if self.time_since_last_update_ms >= delay_ms {
+            self.time_since_last_update_ms -= delay_ms;
+
+            move_snake(self);
+            constrain_positions(self);
+            check_collision(self);
+            eat_food(self);
+            update_cells(self);
+        }
+    }
+
     pub fn randomize_food_pos(&mut self) {
         self.food_pos = self
             .cells
@@ -45,5 +64,89 @@ impl State {
 
     pub fn body_positions(&self) -> impl Iterator<Item = [i32; 2]> + '_ {
         self.positions.iter().copied().skip(1)
+    }
+}
+
+fn move_snake(state: &mut State) {
+    let [mut head_x, mut head_y] = state.head_position();
+
+    head_x += state.velocity[0];
+    head_y += state.velocity[1];
+
+    state.positions.push_front([head_x, head_y]);
+
+    if state.growth_left > 0 {
+        state.growth_left -= 1;
+    } else {
+        state.positions.pop_back();
+    }
+}
+
+fn constrain_positions(state: &mut State) {
+    for [x, y] in &mut state.positions {
+        if *x < 0 {
+            *x = state.cells.size[0] as i32 - 1;
+        }
+        if *x >= state.cells.size[0] as i32 {
+            *x = 0;
+        }
+        if *y < 0 {
+            *y = state.cells.size[1] as i32 - 1;
+        }
+        if *y >= state.cells.size[1] as i32 {
+            *y = 0;
+        }
+    }
+}
+
+fn check_collision(state: &mut State) {
+    let [head_x, head_y] = state.head_position();
+
+    let mut lost = false;
+    for [body_x, body_y] in state.body_positions() {
+        if head_x == body_x && head_y == body_y {
+            lost = true;
+        }
+    }
+
+    state.lost = lost;
+}
+
+fn eat_food(state: &mut State) {
+    let mut ate_food = false;
+
+    for &[pos_x, pos_y] in &state.positions {
+        if pos_x == state.food_pos[0] && pos_y == state.food_pos[1] {
+            let extra_growth = state.positions.len() / 2;
+            state.growth_left += extra_growth as i32;
+
+            ate_food = true;
+        }
+    }
+
+    if ate_food {
+        state.randomize_food_pos();
+    }
+}
+
+fn update_cells(state: &mut State) {
+    for i in 0..state.cells.buffer.len() {
+        state.cells.buffer[i] = 0;
+    }
+
+    for x in 0..state.cells.size[0] {
+        for y in 0..state.cells.size[1] {
+            let index = x + y * state.cells.size[0];
+
+            if x as i32 == state.food_pos[0] && y as i32 == state.food_pos[1] {
+                state.cells.buffer[index] = 127;
+            }
+
+            for &[pos_x, pos_y] in &state.positions {
+                if x as i32 == pos_x && y as i32 == pos_y {
+                    state.cells.buffer[index] = 255;
+                }
+            }
+        }
     }
 }
