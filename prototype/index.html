@@ -40,12 +40,12 @@
                 }
             });
 
-        const INPUT_UP = 0;
-        const INPUT_LEFT = 1;
-        const INPUT_DOWN = 2;
-        const INPUT_RIGHT = 3;
-
         document.addEventListener("keydown", (event) => {
+            const INPUT_UP = 0;
+            const INPUT_LEFT = 1;
+            const INPUT_DOWN = 2;
+            const INPUT_RIGHT = 3;
+
             if (event.key == "ArrowUp") {
                 instance.exports.on_input(INPUT_UP);
             }
