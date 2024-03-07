@@ -151,10 +151,10 @@ pub extern "C" fn check_collision() -> bool {
 
     let mut positions = state.positions.iter();
 
-    let [head_x, head_y] =
+    let &[head_x, head_y] =
         positions.next().expect("Expected snake to have head");
 
-    for [body_x, body_y] in positions {
+    for [body_x, body_y] in state.body_positions() {
         if head_x == body_x && head_y == body_y {
             return true;
         }
