@@ -121,6 +121,33 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 }
 
 #[no_mangle]
+pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
+    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let positions = positions
+        .as_mut()
+        .expect("Expected positions to be initialized");
+
+    let mut cells = CELLS.lock().expect("Expected exclusive access");
+    let cells = cells.as_mut().expect("Expected cells to be initialized");
+
+    for x in 0..cells.width {
+        for y in 0..cells.height {
+            let index = x + y * cells.width;
+
+            if x as i32 == food_x && y as i32 == food_y {
+                cells.buffer[index] = 127;
+            }
+
+            for &[pos_x, pos_y] in &*positions {
+                if x as i32 == pos_x && y as i32 == pos_y {
+                    cells.buffer[index] = 255;
+                }
+            }
+        }
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn draw() {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");

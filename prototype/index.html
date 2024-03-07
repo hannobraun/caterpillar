@@ -254,26 +254,9 @@
                 gameState.cells[i] = 0;
             }
 
-            for (let x = 0; x < gameState.width; x += 1) {
-                for (let y = 0; y < gameState.height; y += 1) {
-                    const index = x + y * gameState.width;
-
-                    const foodX = gameState.foodPos[0];
-                    const foodY = gameState.foodPos[1];
-                    if (x == foodX && y == foodY) {
-                        gameState.cells[index] = 127;
-                    }
-
-                    for (let i = 0; i < instance.exports.positions_len(); i += 1) {
-                        const posX = instance.exports.positions_get_x(i);
-                        const posY = instance.exports.positions_get_y(i);
-
-                        if (x == posX && y == posY) {
-                            gameState.cells[index] = 255;
-                        }
-                    }
-                }
-            }
+            const foodX = gameState.foodPos[0];
+            const foodY = gameState.foodPos[1];
+            instance.exports.update_cells(foodX, foodY);
         }
     </script>
 </body>
