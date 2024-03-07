@@ -32,7 +32,7 @@ pub extern "C" fn draw_cell(
 ) {
     assert!(!buffer.is_null());
 
-    let array = unsafe { slice::from_raw_parts_mut(buffer, buffer_length) };
+    let buffer = unsafe { slice::from_raw_parts_mut(buffer, buffer_length) };
 
     for i in 0..cell_size {
         for j in 0..cell_size {
@@ -40,7 +40,7 @@ pub extern "C" fn draw_cell(
             let abs_j = base_j + j;
 
             let index = abs_i + abs_j * width;
-            array[index] = color;
+            buffer[index] = color;
         }
     }
 }
