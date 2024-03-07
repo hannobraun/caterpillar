@@ -53,7 +53,9 @@ pub extern "C" fn on_input(key: i32) {
 }
 
 #[no_mangle]
-pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
+pub extern "C" fn init_cells() -> *mut u8 {
+    let cell_size = 32;
+
     let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
     let target = target.as_mut().expect("Expected target to be initialized");
 

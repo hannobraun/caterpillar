@@ -118,8 +118,7 @@
         let gameState = initGameState();
 
         function initGameState() {
-            const cellSize = 32;
-            instance.exports.init_cells(cellSize);
+            instance.exports.init_cells();
 
             return {
                 lost: false,
