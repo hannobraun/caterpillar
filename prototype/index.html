@@ -238,9 +238,8 @@
                     const [foodX, foodY] = gameState.foodPos;
 
                     if (posX == foodX && posY == foodY) {
-                        const extraGrowth = Math.ceil(
-                            instance.exports.positions_len() / 2
-                        );
+                        const extraGrowth =
+                            instance.exports.positions_len() / 2;
                         gameState.growthLeft += extraGrowth;
 
                         const foodX = Math.floor(Math.random() * gameState.width);
