@@ -137,8 +137,6 @@
 
                 velocity: [1, 0],
 
-                growthLeft: 2,
-
                 timeSinceLastUpdateMs: 0,
                 lost: false,
             };
@@ -179,16 +177,10 @@
 
                 const [velX, velY] = gameState.velocity;
 
-                gameState.growthLeft = instance.exports.move_snake(
-                    velX,
-                    velY,
-                    gameState.growthLeft,
-                );
+                instance.exports.move_snake(velX, velY);
                 instance.exports.constrain_positions();
                 gameState.lost = instance.exports.check_collision();
-                gameState.growthLeft = instance.exports.eat_food(
-                    gameState.growthLeft,
-                );
+                instance.exports.eat_food();
                 instance.exports.update_cells();
             }
         }

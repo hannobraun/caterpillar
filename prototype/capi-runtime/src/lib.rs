@@ -121,11 +121,7 @@ pub extern "C" fn positions_pop_back() {
 }
 
 #[no_mangle]
-pub extern "C" fn move_snake(
-    vel_x: i32,
-    vel_y: i32,
-    mut growth_left: i32,
-) -> i32 {
+pub extern "C" fn move_snake(vel_x: i32, vel_y: i32) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
@@ -136,13 +132,11 @@ pub extern "C" fn move_snake(
 
     state.positions.push_front([head_x, head_y]);
 
-    if growth_left > 0 {
-        growth_left -= 1;
+    if state.growth_left > 0 {
+        state.growth_left -= 1;
     } else {
         state.positions.pop_back();
     }
-
-    growth_left
 }
 
 #[no_mangle]
@@ -186,7 +180,7 @@ pub extern "C" fn check_collision() -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
+pub extern "C" fn eat_food() {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
@@ -198,7 +192,7 @@ pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
     for &[pos_x, pos_y] in &state.positions {
         if pos_x == state.food_pos[0] && pos_y == state.food_pos[1] {
             let extra_growth = state.positions.len() / 2;
-            growth_left += extra_growth as i32;
+            state.growth_left += extra_growth as i32;
 
             ate_food = true;
         }
@@ -207,8 +201,6 @@ pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
     if ate_food {
         state.randomize_food_pos(cells);
     }
-
-    growth_left
 }
 
 #[no_mangle]
