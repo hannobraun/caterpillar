@@ -121,6 +121,31 @@ pub extern "C" fn positions_pop_back() {
 }
 
 #[no_mangle]
+pub extern "C" fn move_snake(
+    vel_x: i32,
+    vel_y: i32,
+    mut growth_left: i32,
+) -> i32 {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    let [mut head_x, mut head_y] = state.head_position();
+
+    head_x += vel_x;
+    head_y += vel_y;
+
+    state.positions.push_front([head_x, head_y]);
+
+    if growth_left > 0 {
+        growth_left -= 1;
+    } else {
+        state.positions.pop_back();
+    }
+
+    growth_left
+}
+
+#[no_mangle]
 pub extern "C" fn constrain_positions() {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");

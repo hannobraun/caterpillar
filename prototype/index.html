@@ -177,20 +177,13 @@
                     }
                 }
 
-                let headX = instance.exports.positions_get_x(0);
-                let headY = instance.exports.positions_get_y(0);
+                const [velX, velY] = gameState.velocity;
 
-                headX += gameState.velocity[0];
-                headY += gameState.velocity[1];
-
-                instance.exports.positions_push_front(headX, headY);
-
-                if (gameState.growthLeft > 0) {
-                    gameState.growthLeft -= 1;
-                } else {
-                    instance.exports.positions_pop_back();
-                }
-
+                gameState.growthLeft = instance.exports.move_snake(
+                    velX,
+                    velY,
+                    gameState.growthLeft,
+                );
                 instance.exports.constrain_positions();
                 gameState.lost = instance.exports.check_collision();
                 gameState.growthLeft = instance.exports.eat_food(
