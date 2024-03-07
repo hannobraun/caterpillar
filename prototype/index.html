@@ -26,19 +26,8 @@
     <script type="module">
         const { module, instance } = await loadWasm();
         const { canvas, context } = initCanvas();
+        const { imageData, drawBuffer } = initDrawBuffer();
         initInputHandling(instance);
-
-        const imageData = new ImageData(canvas.width, canvas.height);
-
-        const drawBufferPtr = instance.exports.on_init(
-            canvas.width,
-            canvas.height,
-        );
-        const drawBuffer = new Uint8Array(
-            instance.exports.memory.buffer,
-            drawBufferPtr,
-            canvas.width * canvas.height * 4,
-        );
 
         const deltaTimeMs = 1000 / 60;
         let lastUpdate = 0;
@@ -73,6 +62,22 @@
             const context = canvas.getContext("2d");
 
             return { canvas: canvas, context: context };
+        }
+
+        function initDrawBuffer() {
+            const imageData = new ImageData(canvas.width, canvas.height);
+
+            const drawBufferPtr = instance.exports.on_init(
+                canvas.width,
+                canvas.height,
+            );
+            const drawBuffer = new Uint8Array(
+                instance.exports.memory.buffer,
+                drawBufferPtr,
+                canvas.width * canvas.height * 4,
+            );
+
+            return { imageData: imageData, drawBuffer: drawBuffer };
         }
 
         function initInputHandling(instance) {
