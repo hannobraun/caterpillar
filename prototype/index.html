@@ -90,10 +90,7 @@
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
-                gameState.lost = instance.exports.on_frame(
-                    deltaTimeMs,
-                    gameState.lost,
-                );
+                instance.exports.on_frame(deltaTimeMs);
                 lastUpdate += deltaTimeMs;
             }
 
@@ -112,15 +109,6 @@
             context.putImageData(imageData, 0, 0);
 
             requestAnimationFrame(mainLoop);
-        }
-
-
-        let gameState = initGameState();
-
-        function initGameState() {
-            return {
-                lost: false,
-            };
         }
     </script>
 </body>

@@ -8,6 +8,7 @@ pub struct State {
     pub food_pos: [i32; 2],
     pub growth_left: i32,
     pub time_since_last_update_ms: f64,
+    pub lost: bool,
     pub cells: Cells,
 }
 
@@ -22,6 +23,7 @@ impl State {
             food_pos: [0, 0],
             growth_left: 2,
             time_since_last_update_ms: 0.,
+            lost: false,
             cells,
         };
 

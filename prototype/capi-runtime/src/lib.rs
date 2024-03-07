@@ -57,12 +57,12 @@ pub extern "C" fn on_input(key: i32) {
 }
 
 #[no_mangle]
-pub extern "C" fn on_frame(delta_time_ms: f64, mut lost: bool) -> bool {
+pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    if lost {
-        return lost;
+    if state.lost {
+        return;
     }
 
     let delay_ms = 100.;
@@ -73,12 +73,10 @@ pub extern "C" fn on_frame(delta_time_ms: f64, mut lost: bool) -> bool {
 
         move_snake(state);
         constrain_positions(state);
-        lost = check_collision(state);
+        state.lost = check_collision(state);
         eat_food(state);
         update_cells(state);
     }
-
-    lost
 }
 
 fn move_snake(state: &mut State) {
