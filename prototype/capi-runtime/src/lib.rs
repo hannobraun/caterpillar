@@ -1,6 +1,6 @@
 use std::{iter, panic, sync::Mutex};
 
-static DRAW_BUFFER: Mutex<Option<DrawBuffer>> = Mutex::new(None);
+static DRAW_BUFFER: Mutex<Option<DrawTarget>> = Mutex::new(None);
 
 extern "C" {
     fn print(ptr: *const u8, len: usize);
@@ -16,7 +16,7 @@ pub extern "C" fn init() {
     }));
 }
 
-pub struct DrawBuffer {
+pub struct DrawTarget {
     pub buffer: Vec<u8>,
     pub width: usize,
     pub height: usize,
@@ -30,7 +30,7 @@ pub extern "C" fn init_draw_buffer(
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 
-    let buffer = DrawBuffer {
+    let buffer = DrawTarget {
         buffer: iter::repeat(0).take(len).collect(),
         width: canvas_width,
         height: canvas_height,
@@ -63,7 +63,7 @@ fn draw_cell(
     base_i: usize,
     base_j: usize,
     color: u8,
-    buffer: &mut DrawBuffer,
+    buffer: &mut DrawTarget,
 ) {
     for i in 0..cell_size {
         for j in 0..cell_size {
