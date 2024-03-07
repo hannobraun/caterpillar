@@ -14,14 +14,11 @@ static STATE: Mutex<Option<State>> = Mutex::new(None);
 static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 #[no_mangle]
-pub extern "C" fn init() {
+pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     panic::set_hook(Box::new(|panic_info| {
         print(&format!("{panic_info}"));
     }));
-}
 
-#[no_mangle]
-pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     let buffer = DrawTarget::new(width, height);
     DRAW_TARGET
         .lock()
