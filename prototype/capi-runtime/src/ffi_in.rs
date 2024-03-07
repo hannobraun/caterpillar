@@ -60,18 +60,7 @@ pub extern "C" fn on_input(key: i32) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    if input == InputEvent::Up && state.world.velocity != [0, 1] {
-        state.world.velocity = [0, -1];
-    }
-    if input == InputEvent::Left && state.world.velocity != [1, 0] {
-        state.world.velocity = [-1, 0];
-    }
-    if input == InputEvent::Down && state.world.velocity != [0, -1] {
-        state.world.velocity = [0, 1];
-    }
-    if input == InputEvent::Right && state.world.velocity != [-1, 0] {
-        state.world.velocity = [1, 0];
-    }
+    state.world.input.events.push_back(input);
 }
 
 #[no_mangle]

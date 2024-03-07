@@ -1,3 +1,9 @@
+use std::collections::VecDeque;
+
+pub struct Input {
+    pub events: VecDeque<InputEvent>,
+}
+
 #[derive(Eq, PartialEq)]
 #[repr(i32)]
 pub enum InputEvent {

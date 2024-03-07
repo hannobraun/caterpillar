@@ -1,8 +1,13 @@
 use std::{collections::VecDeque, iter};
 
-use crate::{cells::Cells, ffi_out::random};
+use crate::{
+    cells::Cells,
+    ffi_out::random,
+    input::{Input, InputEvent},
+};
 
 pub struct World {
+    pub input: Input,
     pub positions: VecDeque<[i32; 2]>,
     pub velocity: [i32; 2],
     pub food_pos: [i32; 2],
@@ -18,6 +23,9 @@ impl World {
         let y = cells.size[1] as i32 / 2;
 
         let mut self_ = Self {
+            input: Input {
+                events: VecDeque::new(),
+            },
             positions: iter::once([x, y]).collect(),
             velocity: [1, 0],
             food_pos: [0, 0],
@@ -43,6 +51,7 @@ impl World {
         if self.time_since_last_update_ms >= delay_ms {
             self.time_since_last_update_ms = 0.;
 
+            handle_input(self);
             move_snake(self);
             constrain_positions(self);
             check_collision(self);
@@ -64,6 +73,23 @@ impl World {
 
     pub fn body_positions(&self) -> impl Iterator<Item = [i32; 2]> + '_ {
         self.positions.iter().copied().skip(1)
+    }
+}
+
+fn handle_input(world: &mut World) {
+    for input in world.input.events.drain(..) {
+        if input == InputEvent::Up && world.velocity != [0, 1] {
+            world.velocity = [0, -1];
+        }
+        if input == InputEvent::Left && world.velocity != [1, 0] {
+            world.velocity = [-1, 0];
+        }
+        if input == InputEvent::Down && world.velocity != [0, -1] {
+            world.velocity = [0, 1];
+        }
+        if input == InputEvent::Right && world.velocity != [-1, 0] {
+            world.velocity = [1, 0];
+        }
     }
 }
 
