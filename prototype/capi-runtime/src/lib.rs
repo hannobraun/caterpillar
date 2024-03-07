@@ -51,14 +51,38 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 }
 
 #[no_mangle]
-pub extern "C" fn move_snake(vel_x: i32, vel_y: i32) {
+pub extern "C" fn get_velocity_x() -> i32 {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    state.velocity[0]
+}
+
+#[no_mangle]
+pub extern "C" fn get_velocity_y() -> i32 {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    state.velocity[1]
+}
+
+#[no_mangle]
+pub extern "C" fn set_velocity(vel_x: i32, vel_y: i32) {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    state.velocity = [vel_x, vel_y];
+}
+
+#[no_mangle]
+pub extern "C" fn move_snake() {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
     let [mut head_x, mut head_y] = state.head_position();
 
-    head_x += vel_x;
-    head_y += vel_y;
+    head_x += state.velocity[0];
+    head_y += state.velocity[1];
 
     state.positions.push_front([head_x, head_y]);
 

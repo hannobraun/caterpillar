@@ -135,8 +135,6 @@
 
                 cells: cells,
 
-                velocity: [1, 0],
-
                 timeSinceLastUpdateMs: 0,
                 lost: false,
             };
@@ -155,29 +153,27 @@
 
                 const inputEvent = input.shift();
                 if (inputEvent == "left") {
-                    if (gameState.velocity[0] != 1) {
-                        gameState.velocity = [-1, 0];
+                    if (instance.exports.get_velocity_x() != 1) {
+                        instance.exports.set_velocity(-1, 0);
                     }
                 }
                 if (inputEvent == "right") {
-                    if (gameState.velocity[0] != -1) {
-                        gameState.velocity = [1, 0];
+                    if (instance.exports.get_velocity_x() != -1) {
+                        instance.exports.set_velocity(1, 0);
                     }
                 }
                 if (inputEvent == "up") {
-                    if (gameState.velocity[1] != 1) {
-                        gameState.velocity = [0, -1];
+                    if (instance.exports.get_velocity_y() != 1) {
+                        instance.exports.set_velocity(0, -1);
                     }
                 }
                 if (inputEvent == "down") {
-                    if (gameState.velocity[1] != -1) {
-                        gameState.velocity = [0, 1];
+                    if (instance.exports.get_velocity_y() != -1) {
+                        instance.exports.set_velocity(0, 1);
                     }
                 }
 
-                const [velX, velY] = gameState.velocity;
-
-                instance.exports.move_snake(velX, velY);
+                instance.exports.move_snake();
                 instance.exports.constrain_positions();
                 gameState.lost = instance.exports.check_collision();
                 instance.exports.eat_food();

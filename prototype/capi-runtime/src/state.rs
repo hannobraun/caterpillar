@@ -4,6 +4,7 @@ use crate::{cells::Cells, ffi_out::random};
 
 pub struct State {
     pub positions: VecDeque<[i32; 2]>,
+    pub velocity: [i32; 2],
     pub food_pos: [i32; 2],
     pub growth_left: i32,
 }
@@ -15,6 +16,7 @@ impl State {
 
         let mut self_ = Self {
             positions: iter::once([x, y]).collect(),
+            velocity: [1, 0],
             food_pos: [0, 0],
             growth_left: 2,
         };
