@@ -254,7 +254,9 @@
                         gameState.cellSize,
                         baseI, baseJ,
                         color,
-                        target.buffer.buffer, target.buffer.length,
+                        target.buffer.buffer,
+                        target.buffer.byteOffset,
+                        target.buffer.length,
                         target.width,
                     );
                 }
@@ -267,10 +269,12 @@
             cellSize,
             baseI, baseJ,
             color,
-            buffer, bufferLength,
+            buffer,
+            bufferOffset,
+            bufferLength,
             width,
         ) {
-            const array = new Uint8Array(buffer, 0, bufferLength);
+            const array = new Uint8Array(buffer, bufferOffset, bufferLength);
 
             for (let i = 0; i < cellSize; i += 1) {
                 for (let j = 0; j < cellSize; j += 1) {
