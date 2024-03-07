@@ -262,14 +262,14 @@
             return target.buffer;
         }
 
-        function drawCell(cellSize, baseI, baseJ, color, buffer, width) {
+        function drawCell(cellSize, baseI, baseJ, color, array, width) {
             for (let i = 0; i < cellSize; i += 1) {
                 for (let j = 0; j < cellSize; j += 1) {
                     const absI = baseI + i;
                     const absJ = baseJ + j;
 
                     const index = absI + absJ * width;
-                    buffer[index] = color;
+                    array[index] = color;
                 }
             }
         }
