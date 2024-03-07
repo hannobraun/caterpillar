@@ -115,8 +115,6 @@
             lastUpdate = timeStamp;
 
             instance.exports.on_frame(deltaTimeMs);
-            instance.exports.draw();
-
             context.putImageData(imageData, 0, 0);
 
             requestAnimationFrame(mainLoop);

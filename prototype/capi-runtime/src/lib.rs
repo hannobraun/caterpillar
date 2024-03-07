@@ -84,13 +84,10 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let state = state.as_mut().expect("Expected state to be initialized");
 
     state.world.update(delta_time_ms);
+    draw(state);
 }
 
-#[no_mangle]
-pub extern "C" fn draw() {
-    let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state.as_mut().expect("Expected state to be initialized");
-
+fn draw(state: &mut State) {
     for x in 0..state.world.cells.size[0] {
         for y in 0..state.world.cells.size[1] {
             let base_i = x * state.world.cells.cell_size;
