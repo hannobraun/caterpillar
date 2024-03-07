@@ -34,9 +34,9 @@ async fn build(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve(path: impl AsRef<Path>) -> anyhow::Result<()> {
+async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
     rocket::build()
-        .mount("/", rocket::fs::FileServer::from(&path))
+        .mount("/", rocket::fs::FileServer::from(&serve_dir))
         .launch()
         .await?;
 
