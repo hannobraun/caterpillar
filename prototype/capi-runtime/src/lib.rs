@@ -149,10 +149,7 @@ pub extern "C" fn check_collision() -> bool {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    let mut positions = state.positions.iter();
-
-    let &[head_x, head_y] =
-        positions.next().expect("Expected snake to have head");
+    let [head_x, head_y] = state.head_position();
 
     for [body_x, body_y] in state.body_positions() {
         if head_x == body_x && head_y == body_y {

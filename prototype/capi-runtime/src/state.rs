@@ -27,6 +27,10 @@ impl State {
             cells.size.map(|dim| (random() * dim as f32).floor() as i32);
     }
 
+    pub fn head_position(&self) -> [i32; 2] {
+        self.positions[0]
+    }
+
     pub fn body_positions(&self) -> impl Iterator<Item = [i32; 2]> + '_ {
         self.positions.iter().copied().skip(1)
     }
