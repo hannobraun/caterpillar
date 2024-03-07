@@ -1,6 +1,6 @@
-use crate::{draw_target::DrawTarget, world::World};
+use crate::{draw_target::RenderTarget, world::World};
 
 pub struct State {
     pub world: World,
-    pub draw_target: DrawTarget,
+    pub draw_target: RenderTarget,
 }

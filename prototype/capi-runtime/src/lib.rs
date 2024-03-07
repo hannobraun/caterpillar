@@ -9,7 +9,7 @@ use std::{panic, sync::Mutex};
 use state::State;
 
 use self::{
-    cells::Cells, draw_target::DrawTarget, ffi_out::print, world::World,
+    cells::Cells, draw_target::RenderTarget, ffi_out::print, world::World,
 };
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
@@ -20,7 +20,7 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
         print(&format!("{panic_info}"));
     }));
 
-    let draw_target = DrawTarget::new(width, height);
+    let draw_target = RenderTarget::new(width, height);
 
     let cells = Cells::new(&draw_target);
     let state = World::new(cells);
@@ -99,7 +99,7 @@ fn draw_cell(
     base_i: usize,
     base_j: usize,
     color: u8,
-    target: &mut DrawTarget,
+    target: &mut RenderTarget,
 ) {
     for i in 0..cell_size {
         for j in 0..cell_size {

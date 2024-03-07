@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::draw_target::DrawTarget;
+use crate::draw_target::RenderTarget;
 
 pub struct Cells {
     pub buffer: Vec<u8>,
@@ -9,7 +9,7 @@ pub struct Cells {
 }
 
 impl Cells {
-    pub fn new(draw_target: &DrawTarget) -> Self {
+    pub fn new(draw_target: &RenderTarget) -> Self {
         let cell_size = 32;
 
         let width = draw_target.width / cell_size;
