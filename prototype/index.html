@@ -111,12 +111,11 @@
 
 
         let gameState = initGameState(
-            target.buffer,
             target.width,
             target.height,
         );
 
-        function initGameState(buffer, width, height) {
+        function initGameState(width, height) {
             const cellSize = 32;
 
             const cellsWidth = Math.floor(width / cellSize);
