@@ -126,7 +126,7 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 #[no_mangle]
 pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
     let mut state = STATE.lock().expect("Expected exclusive access");
-    let positions = state
+    let state = state
         .as_mut()
         .expect("Expected positions to be initialized");
 
@@ -145,7 +145,7 @@ pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
                 cells.buffer[index] = 127;
             }
 
-            for &[pos_x, pos_y] in &positions.positions {
+            for &[pos_x, pos_y] in &state.positions {
                 if x as i32 == pos_x && y as i32 == pos_y {
                     cells.buffer[index] = 255;
                 }
