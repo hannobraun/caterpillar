@@ -6,7 +6,6 @@ mod world;
 
 use std::{panic, sync::Mutex};
 
-use render_target::draw;
 use state::State;
 
 use self::{
@@ -85,5 +84,5 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let state = state.as_mut().expect("Expected state to be initialized");
 
     state.world.update(delta_time_ms);
-    draw(&state.world, &mut state.render_target);
+    state.render_target.draw(&state.world);
 }

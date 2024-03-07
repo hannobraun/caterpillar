@@ -21,23 +21,17 @@ impl RenderTarget {
             height,
         }
     }
-}
 
-pub fn draw(world: &World, render_target: &mut RenderTarget) {
-    for x in 0..world.cells.size[0] {
-        for y in 0..world.cells.size[1] {
-            let cell_x = x * world.cells.cell_size;
-            let cell_y = y * world.cells.cell_size;
+    pub fn draw(&mut self, world: &World) {
+        for x in 0..world.cells.size[0] {
+            for y in 0..world.cells.size[1] {
+                let cell_x = x * world.cells.cell_size;
+                let cell_y = y * world.cells.cell_size;
 
-            let color = world.cells.buffer[x + y * world.cells.size[0]];
+                let color = world.cells.buffer[x + y * world.cells.size[0]];
 
-            draw_cell(
-                world.cells.cell_size,
-                cell_x,
-                cell_y,
-                color,
-                render_target,
-            );
+                draw_cell(world.cells.cell_size, cell_x, cell_y, color, self);
+            }
         }
     }
 }
