@@ -90,7 +90,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 fn draw(state: &mut State) {
     for x in 0..state.world.cells.size[0] {
         for y in 0..state.world.cells.size[1] {
-            let base_i = x * state.world.cells.cell_size;
+            let cell_x = x * state.world.cells.cell_size;
             let base_j = y * state.world.cells.cell_size;
 
             let color =
@@ -98,7 +98,7 @@ fn draw(state: &mut State) {
 
             draw_cell(
                 state.world.cells.cell_size,
-                base_i,
+                cell_x,
                 base_j,
                 color,
                 &mut state.render_target,
