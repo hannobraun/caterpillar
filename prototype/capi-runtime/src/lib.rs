@@ -7,15 +7,18 @@ extern "C" {
 }
 
 #[no_mangle]
-pub extern "C" fn allocate_draw_buffer(
-    canvas_width: usize,
-    canvas_height: usize,
-) -> *mut u8 {
+pub extern "C" fn init() {
     let msg = "Hello, world!";
     unsafe {
         print(msg.as_ptr(), msg.len());
     }
+}
 
+#[no_mangle]
+pub extern "C" fn allocate_draw_buffer(
+    canvas_width: usize,
+    canvas_height: usize,
+) -> *mut u8 {
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 
