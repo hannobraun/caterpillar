@@ -82,8 +82,6 @@
         );
         const target = {
             buffer: drawBuffer,
-            width: canvas.width,
-            height: canvas.height,
         };
 
         let lastUpdate = 0;
@@ -117,31 +115,13 @@
         }
 
 
-        let gameState = initGameState(
-            target.width,
-            target.height,
-        );
+        let gameState = initGameState();
 
-        function initGameState(width, height) {
+        function initGameState() {
             const cellSize = 32;
-
-            const cellsWidth = Math.floor(width / cellSize);
-            const cellsHeight = Math.floor(height / cellSize);
-
-            const cellsPtr = instance.exports.init_cells(cellSize);
-            const cells = new Uint8Array(
-                instance.exports.memory.buffer,
-                cellsPtr,
-                cellsWidth * cellsHeight,
-            );
+            instance.exports.init_cells(cellSize);
 
             return {
-                width: cellsWidth,
-                height: cellsHeight,
-
-                cells: cells,
-
-                timeSinceLastUpdateMs: 0,
                 lost: false,
             };
         }
