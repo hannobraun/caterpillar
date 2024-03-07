@@ -75,10 +75,32 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 }
 
 #[no_mangle]
-pub extern "C" fn move_snake() {
+pub extern "C" fn on_frame(delta_time_ms: f64, mut lost: bool) -> bool {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
+    if lost {
+        return lost;
+    }
+
+    let delay_ms = 100.;
+
+    state.time_since_last_update_ms += delta_time_ms;
+    if state.time_since_last_update_ms >= delay_ms {
+        state.time_since_last_update_ms -= delay_ms;
+
+        move_snake(state);
+        constrain_positions(state);
+        lost = check_collision(state);
+        eat_food(state);
+        update_cells(state);
+    }
+
+    lost
+}
+
+#[no_mangle]
+pub extern "C" fn move_snake(state: &mut State) {
     let [mut head_x, mut head_y] = state.head_position();
 
     head_x += state.velocity[0];
@@ -94,12 +116,9 @@ pub extern "C" fn move_snake() {
 }
 
 #[no_mangle]
-pub extern "C" fn constrain_positions() {
+pub extern "C" fn constrain_positions(state: &mut State) {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
-
-    let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state.as_mut().expect("Expected state to be initialized");
 
     for [x, y] in &mut state.positions {
         if *x < 0 {
@@ -118,10 +137,7 @@ pub extern "C" fn constrain_positions() {
 }
 
 #[no_mangle]
-pub extern "C" fn check_collision() -> bool {
-    let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state.as_mut().expect("Expected state to be initialized");
-
+pub extern "C" fn check_collision(state: &State) -> bool {
     let [head_x, head_y] = state.head_position();
 
     for [body_x, body_y] in state.body_positions() {
@@ -134,10 +150,7 @@ pub extern "C" fn check_collision() -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn eat_food() {
-    let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state.as_mut().expect("Expected state to be initialized");
-
+pub extern "C" fn eat_food(state: &mut State) {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
 
@@ -158,10 +171,7 @@ pub extern "C" fn eat_food() {
 }
 
 #[no_mangle]
-pub extern "C" fn update_cells() {
-    let mut state = STATE.lock().expect("Expected exclusive access");
-    let state = state.as_mut().expect("Expected state to be initialized");
-
+pub extern "C" fn update_cells(state: &State) {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
 

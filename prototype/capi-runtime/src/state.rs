@@ -7,6 +7,7 @@ pub struct State {
     pub velocity: [i32; 2],
     pub food_pos: [i32; 2],
     pub growth_left: i32,
+    pub time_since_last_update_ms: f64,
 }
 
 impl State {
@@ -19,6 +20,7 @@ impl State {
             velocity: [1, 0],
             food_pos: [0, 0],
             growth_left: 2,
+            time_since_last_update_ms: 0.,
         };
 
         self_.randomize_food_pos(cells);

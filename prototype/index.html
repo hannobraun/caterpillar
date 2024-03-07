@@ -92,7 +92,10 @@
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
-                updateGameState(deltaTimeMs);
+                gameState.lost = instance.exports.on_frame(
+                    deltaTimeMs,
+                    gameState.lost,
+                );
                 lastUpdate += deltaTimeMs;
             }
 
@@ -141,25 +144,6 @@
                 timeSinceLastUpdateMs: 0,
                 lost: false,
             };
-        }
-
-        function updateGameState(deltaTimeMs) {
-            if (gameState.lost) {
-                return gameState;
-            }
-
-            const delayMs = 100;
-
-            gameState.timeSinceLastUpdateMs += deltaTimeMs;
-            if (gameState.timeSinceLastUpdateMs >= delayMs) {
-                gameState.timeSinceLastUpdateMs -= delayMs;
-
-                instance.exports.move_snake();
-                instance.exports.constrain_positions();
-                gameState.lost = instance.exports.check_collision();
-                instance.exports.eat_food();
-                instance.exports.update_cells();
-            }
         }
     </script>
 </body>
