@@ -66,16 +66,6 @@ pub extern "C" fn draw() {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn extern_draw_cell(
-    cell_size: usize,
-    base_i: usize,
-    base_j: usize,
-    color: u8,
-) {
-    draw_cell(cell_size, base_i, base_j, color)
-}
-
 fn draw_cell(cell_size: usize, base_i: usize, base_j: usize, color: u8) {
     let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
     let target = target.as_mut().expect("Expected target to be initialized");
