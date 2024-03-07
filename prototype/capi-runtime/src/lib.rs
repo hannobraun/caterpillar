@@ -104,9 +104,9 @@ fn draw_cell(
     for x in 0..cell_size {
         for y in 0..cell_size {
             let pixel_x = cell_x + x;
-            let abs_j = base_y + y;
+            let pixel_y = base_y + y;
 
-            let index = pixel_x + abs_j * target.width;
+            let index = pixel_x + pixel_y * target.width;
             target.buffer[index] = color;
         }
     }
