@@ -3,6 +3,11 @@ name = "capi-builder"
 version = "0.1.0"
 edition = "2021"
 
+
 [dependencies]
 anyhow = "*"
 rocket = "*"
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
