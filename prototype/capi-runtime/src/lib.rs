@@ -1,4 +1,4 @@
-use std::{slice, sync::Mutex};
+use std::{panic, slice, sync::Mutex};
 
 static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
@@ -8,10 +8,12 @@ extern "C" {
 
 #[no_mangle]
 pub extern "C" fn init() {
-    let msg = "Hello, world!";
-    unsafe {
-        print(msg.as_ptr(), msg.len());
-    }
+    panic::set_hook(Box::new(|panic_info| {
+        let msg = format!("{panic_info}");
+        unsafe {
+            print(msg.as_ptr(), msg.len());
+        }
+    }));
 }
 
 #[no_mangle]
