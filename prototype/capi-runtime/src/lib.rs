@@ -24,15 +24,15 @@ pub struct DrawTarget {
 
 #[no_mangle]
 pub extern "C" fn init_draw_target(
-    canvas_width: usize,
+    width: usize,
     canvas_height: usize,
 ) -> *mut u8 {
     const NUM_COLOR_CHANNELS: usize = 4;
-    let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
+    let len = width * canvas_height * NUM_COLOR_CHANNELS;
 
     let buffer = DrawTarget {
         buffer: iter::repeat(0).take(len).collect(),
-        width: canvas_width,
+        width,
         height: canvas_height,
     };
     DRAW_BUFFER
