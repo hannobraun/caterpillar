@@ -126,10 +126,7 @@
                 cellsWidth * cellsHeight,
             );
 
-            const x = Math.floor(cellsWidth / 2);
-            const y = Math.floor(cellsHeight / 2);
-
-            instance.exports.init_game_state(x, y);
+            instance.exports.init_game_state();
 
             const foodX = Math.floor(Math.random() * cellsWidth);
             const foodY = Math.floor(Math.random() * cellsHeight);
