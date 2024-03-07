@@ -68,8 +68,6 @@
         const context = canvas.getContext("2d");
         const imageData = new ImageData(canvas.width, canvas.height);
 
-        const deltaTimeMs = 1000 / 60;
-
         const drawBufferPtr = instance.exports.on_init(
             canvas.width,
             canvas.height,
@@ -80,6 +78,7 @@
             canvas.width * canvas.height,
         );
 
+        const deltaTimeMs = 1000 / 60;
         let lastUpdate = 0;
 
         requestAnimationFrame(mainLoop);
