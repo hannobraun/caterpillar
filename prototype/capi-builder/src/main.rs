@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
 }
 
 async fn build(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
-    let dir = serve_dir.as_ref();
+    let serve_dir = serve_dir.as_ref();
 
     Command::new("cargo")
         .arg("build")
@@ -24,10 +24,10 @@ async fn build(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
         .status()
         .await?;
 
-    fs::copy("index.html", dir.join("index.html")).await?;
+    fs::copy("index.html", serve_dir.join("index.html")).await?;
     fs::copy(
         "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
-        dir.join("capi_runtime.wasm"),
+        serve_dir.join("capi_runtime.wasm"),
     )
     .await?;
 
