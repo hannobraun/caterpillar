@@ -121,6 +121,30 @@ pub extern "C" fn positions_pop_back() {
 }
 
 #[no_mangle]
+pub extern "C" fn constrain_positions() {
+    let mut cells = CELLS.lock().expect("Expected exclusive access");
+    let cells = cells.as_mut().expect("Expected cells to be initialized");
+
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    for [x, y] in &mut state.positions {
+        if *x < 0 {
+            *x = cells.size[0] as i32 - 1;
+        }
+        if *x >= cells.size[0] as i32 {
+            *x = 0;
+        }
+        if *y < 0 {
+            *y = cells.size[1] as i32 - 1;
+        }
+        if *y >= cells.size[1] as i32 {
+            *y = 0;
+        }
+    }
+}
+
+#[no_mangle]
 pub extern "C" fn check_collision() -> bool {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");

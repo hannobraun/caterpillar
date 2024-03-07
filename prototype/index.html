@@ -191,27 +191,7 @@
                     instance.exports.positions_pop_back();
                 }
 
-                for (let i = 0; i < instance.exports.positions_len(); i += 1) {
-                    if (instance.exports.positions_get_x(i) < 0) {
-                        instance.exports.positions_set_x(
-                            i,
-                            gameState.width - 1,
-                        );
-                    }
-                    if (instance.exports.positions_get_x(i) >= gameState.width) {
-                        instance.exports.positions_set_x(i, 0);
-                    }
-                    if (instance.exports.positions_get_y(i) < 0) {
-                        instance.exports.positions_set_y(
-                            i,
-                            gameState.height - 1,
-                        );
-                    }
-                    if (instance.exports.positions_get_y(i) >= gameState.height) {
-                        instance.exports.positions_set_y(i, 0);
-                    }
-                }
-
+                instance.exports.constrain_positions();
                 gameState.lost = instance.exports.check_collision();
                 gameState.growthLeft = instance.exports.eat_food(
                     gameState.growthLeft,
