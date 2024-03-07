@@ -33,10 +33,10 @@ pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
 
 #[no_mangle]
 pub extern "C" fn positions_init(x: i32, y: i32) {
-    let positions = State {
+    let state = State {
         positions: iter::once([x, y]).collect(),
     };
-    *STATE.lock().expect("Expected exclusive access") = Some(positions);
+    *STATE.lock().expect("Expected exclusive access") = Some(state);
 }
 
 #[no_mangle]
