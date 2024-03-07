@@ -1,22 +1,13 @@
 mod cells;
 mod draw_target;
+mod ffi_out;
 
 use std::{panic, sync::Mutex};
 
-use self::{cells::Cells, draw_target::DrawTarget};
+use self::{cells::Cells, draw_target::DrawTarget, ffi_out::print};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
 static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
-
-extern "C" {
-    fn print_ffi(ptr: *const u8, len: usize);
-}
-
-pub fn print(s: &str) {
-    unsafe {
-        print_ffi(s.as_ptr(), s.len());
-    }
-}
 
 #[no_mangle]
 pub extern "C" fn init() {
