@@ -23,7 +23,7 @@ pub struct DrawTarget {
 }
 
 #[no_mangle]
-pub extern "C" fn init_draw_buffer(
+pub extern "C" fn init_draw_target(
     canvas_width: usize,
     canvas_height: usize,
 ) -> *mut u8 {
