@@ -12,13 +12,16 @@ extern "C" {
     fn print_ffi(ptr: *const u8, len: usize);
 }
 
+pub fn print(msg: &str) {
+    unsafe {
+        print_ffi(msg.as_ptr(), msg.len());
+    }
+}
+
 #[no_mangle]
 pub extern "C" fn init() {
     panic::set_hook(Box::new(|panic_info| {
-        let msg = format!("{panic_info}");
-        unsafe {
-            print_ffi(msg.as_ptr(), msg.len());
-        }
+        print(&format!("{panic_info}"));
     }));
 }
 
