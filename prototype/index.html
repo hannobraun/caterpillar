@@ -29,7 +29,6 @@
         const { imageData } = initDrawBuffer(instance, canvas);
         initInputHandling(instance);
 
-        const deltaTimeMs = 1000 / 60;
         let lastUpdate = 0;
 
         requestAnimationFrame(mainLoop);
@@ -113,11 +112,10 @@
         }
 
         function mainLoop(timeStamp) {
-            if (timeStamp - lastUpdate >= deltaTimeMs) {
-                instance.exports.on_frame(deltaTimeMs);
-                lastUpdate += deltaTimeMs;
-            }
+            const deltaTimeMs = timeStamp - lastUpdate;
+            lastUpdate = timeStamp;
 
+            instance.exports.on_frame(deltaTimeMs);
             instance.exports.draw();
 
             context.putImageData(imageData, 0, 0);
