@@ -1,16 +1,18 @@
 mod cells;
 mod draw_target;
 mod ffi_out;
+mod state;
 mod world;
 
 use std::{panic, sync::Mutex};
+
+use state::State;
 
 use self::{
     cells::Cells, draw_target::DrawTarget, ffi_out::print, world::World,
 };
 
-static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
-static STATE: Mutex<Option<World>> = Mutex::new(None);
+static STATE: Mutex<Option<State>> = Mutex::new(None);
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
@@ -22,12 +24,16 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
 
     let cells = Cells::new(&draw_target);
     let state = World::new(cells);
-    *STATE.lock().expect("Expected exclusive access") = Some(state);
+    let state = State {
+        world: state,
+        draw_target,
+    };
 
-    DRAW_TARGET
+    STATE
         .lock()
         .expect("Expected exclusive access")
-        .insert(draw_target)
+        .insert(state)
+        .draw_target
         .buffer
         .as_mut_ptr()
 }
@@ -42,17 +48,17 @@ pub extern "C" fn on_input(key: i32) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    if key == UP && state.velocity != [0, 1] {
-        state.velocity = [0, -1];
+    if key == UP && state.world.velocity != [0, 1] {
+        state.world.velocity = [0, -1];
     }
-    if key == LEFT && state.velocity != [1, 0] {
-        state.velocity = [-1, 0];
+    if key == LEFT && state.world.velocity != [1, 0] {
+        state.world.velocity = [-1, 0];
     }
-    if key == DOWN && state.velocity != [0, -1] {
-        state.velocity = [0, 1];
+    if key == DOWN && state.world.velocity != [0, -1] {
+        state.world.velocity = [0, 1];
     }
-    if key == RIGHT && state.velocity != [-1, 0] {
-        state.velocity = [1, 0];
+    if key == RIGHT && state.world.velocity != [-1, 0] {
+        state.world.velocity = [1, 0];
     }
 }
 
@@ -61,7 +67,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    state.update(delta_time_ms);
+    state.world.update(delta_time_ms);
 }
 
 #[no_mangle]
@@ -69,22 +75,32 @@ pub extern "C" fn draw() {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    for x in 0..state.cells.size[0] {
-        for y in 0..state.cells.size[1] {
-            let base_i = x * state.cells.cell_size;
-            let base_j = y * state.cells.cell_size;
+    for x in 0..state.world.cells.size[0] {
+        for y in 0..state.world.cells.size[1] {
+            let base_i = x * state.world.cells.cell_size;
+            let base_j = y * state.world.cells.cell_size;
 
-            let color = state.cells.buffer[x + y * state.cells.size[0]];
+            let color =
+                state.world.cells.buffer[x + y * state.world.cells.size[0]];
 
-            draw_cell(state.cells.cell_size, base_i, base_j, color);
+            draw_cell(
+                state.world.cells.cell_size,
+                base_i,
+                base_j,
+                color,
+                &mut state.draw_target,
+            );
         }
     }
 }
 
-fn draw_cell(cell_size: usize, base_i: usize, base_j: usize, color: u8) {
-    let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
-    let target = target.as_mut().expect("Expected target to be initialized");
-
+fn draw_cell(
+    cell_size: usize,
+    base_i: usize,
+    base_j: usize,
+    color: u8,
+    target: &mut DrawTarget,
+) {
     for i in 0..cell_size {
         for j in 0..cell_size {
             let abs_i = base_i + i;
