@@ -58,7 +58,7 @@ pub extern "C" fn extern_draw_cell(
     color: u8,
 ) {
     let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
-    let target = target.as_mut().unwrap();
+    let target = target.as_mut().expect("Expected target to be initialized");
 
     draw_cell(cell_size, base_i, base_j, color, target)
 }
