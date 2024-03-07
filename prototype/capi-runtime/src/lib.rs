@@ -47,6 +47,14 @@ pub extern "C" fn get_render_target_buffer() -> *mut u8 {
 }
 
 #[no_mangle]
+pub extern "C" fn get_render_target_buffer_len() -> usize {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    state.render_target.buffer.len()
+}
+
+#[no_mangle]
 pub extern "C" fn on_input(key: i32) {
     const UP: i32 = 0;
     const LEFT: i32 = 1;

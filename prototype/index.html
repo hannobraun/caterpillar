@@ -74,11 +74,13 @@
 
             const renderTargetBuffer =
                 instance.exports.get_render_target_buffer();
+            const renderTargetBufferLen =
+                instance.exports.get_render_target_buffer_len();
 
             const drawBuffer = new Uint8Array(
                 instance.exports.memory.buffer,
                 renderTargetBuffer,
-                canvas.width * canvas.height * 4,
+                renderTargetBufferLen,
             );
 
             return { imageData: imageData, drawBuffer: drawBuffer };
