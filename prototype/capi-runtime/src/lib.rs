@@ -56,13 +56,24 @@ pub extern "C" fn extern_draw_cell(
     let mut guard = DRAW_BUFFER.lock().unwrap();
     let buffer = guard.as_mut().unwrap();
 
+    draw_cell(cell_size, base_i, base_j, color, width, &mut buffer.buffer)
+}
+
+fn draw_cell(
+    cell_size: usize,
+    base_i: usize,
+    base_j: usize,
+    color: u8,
+    width: usize,
+    buffer: &mut [u8],
+) {
     for i in 0..cell_size {
         for j in 0..cell_size {
             let abs_i = base_i + i;
             let abs_j = base_j + j;
 
             let index = abs_i + abs_j * width;
-            buffer.buffer[index] = color;
+            buffer[index] = color;
         }
     }
 }
