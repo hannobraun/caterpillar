@@ -26,14 +26,14 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     let state = World::new(cells);
     let state = State {
         world: state,
-        draw_target,
+        render_target: draw_target,
     };
 
     STATE
         .lock()
         .expect("Expected exclusive access")
         .insert(state)
-        .draw_target
+        .render_target
         .buffer
         .as_mut_ptr()
 }
@@ -88,7 +88,7 @@ pub extern "C" fn draw() {
                 base_i,
                 base_j,
                 color,
-                &mut state.draw_target,
+                &mut state.render_target,
             );
         }
     }
