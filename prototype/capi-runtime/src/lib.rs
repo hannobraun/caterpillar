@@ -1,10 +1,11 @@
 mod draw_target;
 
-use std::{panic, sync::Mutex};
+use std::{iter, panic, sync::Mutex};
 
 use self::draw_target::DrawTarget;
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
+static CELLS: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
 extern "C" {
     fn print(ptr: *const u8, len: usize);
@@ -30,6 +31,22 @@ pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
         )
         .insert(buffer)
         .buffer
+        .as_mut_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
+    let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
+    let target = target.as_mut().expect("Expected target to be initialized");
+
+    let width = target.width / cell_size;
+    let height = target.height / cell_size;
+
+    let cells = iter::repeat(0).take(width * height).collect();
+    CELLS
+        .lock()
+        .expect("Expected exclusive access")
+        .insert(cells)
         .as_mut_ptr()
 }
 
