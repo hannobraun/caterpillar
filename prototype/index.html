@@ -57,7 +57,7 @@
 
         const deltaTimeMs = 1000 / 60;
 
-        const drawBufferSize = canvas.width * canvas.height;
+        const drawBufferSize = canvas.width * canvas.height * 4;
         const target = {
             buffer: new Uint8Array(drawBufferSize),
             width: canvas.width,
