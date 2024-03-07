@@ -24,6 +24,12 @@
 <body>
     <canvas></canvas>
     <script type="module">
+        const path = "target/wasm32-unknown-unknown/release/capi_runtime.wasm";
+        const { module, instance } =
+            await WebAssembly.instantiateStreaming(fetch(path));
+        const add = instance.exports.add;
+        console.log(add(1, 2));
+
         const input = [];
 
         document.addEventListener("keydown", (event) => {
