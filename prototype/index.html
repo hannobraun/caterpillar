@@ -41,6 +41,7 @@
             });
 
         const INPUT_UP = 0;
+        const INPUT_LEFT = 1;
 
         const input = [];
 
@@ -49,7 +50,7 @@
                 instance.exports.on_input(INPUT_UP);
             }
             if (event.key == "ArrowLeft") {
-                input.push("left");
+                instance.exports.on_input(INPUT_LEFT);
             }
             if (event.key == "ArrowRight") {
                 input.push("right");
@@ -154,11 +155,6 @@
                 gameState.timeSinceLastUpdateMs -= delayMs;
 
                 const inputEvent = input.shift();
-                if (inputEvent == "left") {
-                    if (instance.exports.get_velocity_x() != 1) {
-                        instance.exports.set_velocity(-1, 0);
-                    }
-                }
                 if (inputEvent == "right") {
                     if (instance.exports.get_velocity_x() != -1) {
                         instance.exports.set_velocity(1, 0);
