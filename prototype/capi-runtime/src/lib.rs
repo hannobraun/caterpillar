@@ -29,6 +29,20 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
 }
 
 #[no_mangle]
+pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
+    let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
+    let target = target.as_mut().expect("Expected target to be initialized");
+
+    let cells = Cells::new(cell_size, &target);
+    CELLS
+        .lock()
+        .expect("Expected exclusive access")
+        .insert(cells)
+        .buffer
+        .as_mut_ptr()
+}
+
+#[no_mangle]
 pub extern "C" fn init_game_state() {
     let mut cells = CELLS.lock().expect("Expected exclusive access");
     let cells = cells.as_mut().expect("Expected cells to be initialized");
@@ -110,20 +124,6 @@ pub extern "C" fn positions_pop_back() {
         .expect("Expected positions to be initialized");
 
     positions.positions.pop_back();
-}
-
-#[no_mangle]
-pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
-    let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
-    let target = target.as_mut().expect("Expected target to be initialized");
-
-    let cells = Cells::new(cell_size, &target);
-    CELLS
-        .lock()
-        .expect("Expected exclusive access")
-        .insert(cells)
-        .buffer
-        .as_mut_ptr()
 }
 
 #[no_mangle]
