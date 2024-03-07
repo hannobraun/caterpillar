@@ -250,10 +250,6 @@
                 }
             }
 
-            for (let i = 0; i < gameState.cells.length; i += 1) {
-                gameState.cells[i] = 0;
-            }
-
             const foodX = gameState.foodPos[0];
             const foodY = gameState.foodPos[1];
             instance.exports.update_cells(foodX, foodY);
