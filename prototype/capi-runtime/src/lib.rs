@@ -96,14 +96,14 @@ pub extern "C" fn draw() {
 
 fn draw_cell(
     cell_size: usize,
-    base_i: usize,
+    base_x: usize,
     base_j: usize,
     color: u8,
     target: &mut RenderTarget,
 ) {
     for x in 0..cell_size {
         for y in 0..cell_size {
-            let abs_i = base_i + x;
+            let abs_i = base_x + x;
             let abs_j = base_j + y;
 
             let index = abs_i + abs_j * target.width;
