@@ -24,21 +24,8 @@
 <body>
     <canvas></canvas>
     <script type="module">
-        const path = "target/wasm32-unknown-unknown/release/capi_runtime.wasm";
-        const { module, instance } =
-            await WebAssembly.instantiateStreaming(fetch(path), {
-                env: {
-                    print_ffi: (ptr, len) => {
-                        const memory = instance.exports.memory;
-                        const array = new Uint8Array(memory.buffer, ptr, len);
-                        const string = new TextDecoder().decode(array);
-                        console.log(string);
-                    },
-                    random_ffi: () => {
-                        return Math.random();
-                    }
-                }
-            });
+        const { module, instance } = await loadWasm();
+
 
         document.addEventListener("keydown", (event) => {
             const INPUT_UP = 0;
@@ -82,6 +69,25 @@
         let lastUpdate = 0;
 
         requestAnimationFrame(mainLoop);
+
+        async function loadWasm() {
+            const path =
+                "target/wasm32-unknown-unknown/release/capi_runtime.wasm";
+
+            return await WebAssembly.instantiateStreaming(fetch(path), {
+                env: {
+                    print_ffi: (ptr, len) => {
+                        const memory = instance.exports.memory;
+                        const array = new Uint8Array(memory.buffer, ptr, len);
+                        const string = new TextDecoder().decode(array);
+                        console.log(string);
+                    },
+                    random_ffi: () => {
+                        return Math.random();
+                    }
+                }
+            });
+        }
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
