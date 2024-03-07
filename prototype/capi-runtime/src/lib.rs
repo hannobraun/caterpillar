@@ -15,7 +15,7 @@ pub extern "C" fn init() {
 }
 
 #[no_mangle]
-pub extern "C" fn allocate_draw_buffer(
+pub extern "C" fn init_draw_buffer(
     canvas_width: usize,
     canvas_height: usize,
 ) -> *mut u8 {
