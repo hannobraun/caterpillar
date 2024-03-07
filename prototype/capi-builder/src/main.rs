@@ -3,11 +3,7 @@ use tokio::process::Command;
 #[rocket::main]
 async fn main() -> anyhow::Result<()> {
     build().await?;
-
-    rocket::build()
-        .mount("/", rocket::fs::FileServer::from("."))
-        .launch()
-        .await?;
+    serve().await?;
 
     Ok(())
 }
@@ -19,6 +15,15 @@ async fn build() -> anyhow::Result<()> {
         .args(["--package", "capi-runtime"])
         .args(["--target", "wasm32-unknown-unknown"])
         .status()
+        .await?;
+
+    Ok(())
+}
+
+async fn serve() -> anyhow::Result<()> {
+    rocket::build()
+        .mount("/", rocket::fs::FileServer::from("."))
+        .launch()
         .await?;
 
     Ok(())
