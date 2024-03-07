@@ -19,11 +19,11 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
         print(&format!("{panic_info}"));
     }));
 
-    let buffer = DrawTarget::new(width, height);
+    let draw_target = DrawTarget::new(width, height);
     DRAW_TARGET
         .lock()
         .expect("Expected exclusive access")
-        .insert(buffer)
+        .insert(draw_target)
         .buffer
         .as_mut_ptr()
 }
