@@ -121,6 +121,25 @@ pub extern "C" fn positions_pop_back() {
 }
 
 #[no_mangle]
+pub extern "C" fn check_collision() -> bool {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    let mut positions = state.positions.iter();
+
+    let [head_x, head_y] =
+        positions.next().expect("Expected snake to have head");
+
+    for [pos_x, pos_y] in positions {
+        if head_x == pos_x && head_y == pos_y {
+            return true;
+        }
+    }
+
+    false
+}
+
+#[no_mangle]
 pub extern "C" fn eat_food(mut growth_left: i32) -> i32 {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");

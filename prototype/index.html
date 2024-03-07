@@ -212,17 +212,7 @@
                     }
                 }
 
-                const headPosX = instance.exports.positions_get_x(0);
-                const headPosY = instance.exports.positions_get_y(0);
-                for (let i = 1; i < instance.exports.positions_len(); i += 1) {
-                    const posX = instance.exports.positions_get_x(i);
-                    const posY = instance.exports.positions_get_y(i);
-
-                    if (headPosX == posX && headPosY == posY) {
-                        gameState.lost = true;
-                    }
-                }
-
+                gameState.lost = instance.exports.check_collision();
                 gameState.growthLeft = instance.exports.eat_food(
                     gameState.growthLeft,
                 );
