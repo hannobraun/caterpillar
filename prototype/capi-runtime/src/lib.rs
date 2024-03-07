@@ -101,9 +101,9 @@ fn draw_cell(
     color: u8,
     target: &mut RenderTarget,
 ) {
-    for i in 0..cell_size {
+    for x in 0..cell_size {
         for j in 0..cell_size {
-            let abs_i = base_i + i;
+            let abs_i = base_i + x;
             let abs_j = base_j + j;
 
             let index = abs_i + abs_j * target.width;
