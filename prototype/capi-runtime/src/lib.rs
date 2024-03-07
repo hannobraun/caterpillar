@@ -91,7 +91,7 @@ fn draw(state: &mut State) {
     for x in 0..state.world.cells.size[0] {
         for y in 0..state.world.cells.size[1] {
             let cell_x = x * state.world.cells.cell_size;
-            let base_j = y * state.world.cells.cell_size;
+            let cell_y = y * state.world.cells.cell_size;
 
             let color =
                 state.world.cells.buffer[x + y * state.world.cells.size[0]];
@@ -99,7 +99,7 @@ fn draw(state: &mut State) {
             draw_cell(
                 state.world.cells.cell_size,
                 cell_x,
-                base_j,
+                cell_y,
                 color,
                 &mut state.render_target,
             );
