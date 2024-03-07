@@ -84,24 +84,23 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let state = state.as_mut().expect("Expected state to be initialized");
 
     state.world.update(delta_time_ms);
-    draw(state);
+    draw(&state.world, &mut state.render_target);
 }
 
-fn draw(state: &mut State) {
-    for x in 0..state.world.cells.size[0] {
-        for y in 0..state.world.cells.size[1] {
-            let cell_x = x * state.world.cells.cell_size;
-            let cell_y = y * state.world.cells.cell_size;
+fn draw(world: &World, render_target: &mut RenderTarget) {
+    for x in 0..world.cells.size[0] {
+        for y in 0..world.cells.size[1] {
+            let cell_x = x * world.cells.cell_size;
+            let cell_y = y * world.cells.cell_size;
 
-            let color =
-                state.world.cells.buffer[x + y * state.world.cells.size[0]];
+            let color = world.cells.buffer[x + y * world.cells.size[0]];
 
             draw_cell(
-                state.world.cells.cell_size,
+                world.cells.cell_size,
                 cell_x,
                 cell_y,
                 color,
-                &mut state.render_target,
+                render_target,
             );
         }
     }
