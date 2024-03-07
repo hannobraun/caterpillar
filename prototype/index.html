@@ -250,21 +250,26 @@
 
                     const color = gameState.cells[x + y * gameState.width];
 
-                    drawCell(gameState.cellSize, baseI, baseJ, color, target);
+                    drawCell(
+                        gameState.cellSize,
+                        baseI, baseJ,
+                        color,
+                        target.buffer, target.width,
+                    );
                 }
             }
 
             return target.buffer;
         }
 
-        function drawCell(cellSize, baseI, baseJ, color, target) {
+        function drawCell(cellSize, baseI, baseJ, color, buffer, width) {
             for (let i = 0; i < cellSize; i += 1) {
                 for (let j = 0; j < cellSize; j += 1) {
                     const absI = baseI + i;
                     const absJ = baseJ + j;
 
-                    const index = absI + absJ * target.width;
-                    target.buffer[index] = color;
+                    const index = absI + absJ * width;
+                    buffer[index] = color;
                 }
             }
         }
