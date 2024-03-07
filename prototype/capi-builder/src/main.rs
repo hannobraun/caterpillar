@@ -1,6 +1,7 @@
 use std::process::Command;
 
-fn main() -> anyhow::Result<()> {
+#[rocket::main]
+async fn main() -> anyhow::Result<()> {
     Command::new("cargo")
         .arg("build")
         .arg("--release")
