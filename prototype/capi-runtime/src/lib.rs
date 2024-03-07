@@ -1,4 +1,4 @@
-use std::{iter, panic, slice, sync::Mutex};
+use std::{iter, panic, sync::Mutex};
 
 static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
@@ -40,13 +40,10 @@ pub extern "C" fn draw_cell(
     base_i: usize,
     base_j: usize,
     color: u8,
-    buffer: *mut u8,
-    buffer_length: usize,
     width: usize,
 ) {
-    assert!(!buffer.is_null());
-
-    let buffer = unsafe { slice::from_raw_parts_mut(buffer, buffer_length) };
+    let mut guard = DRAW_BUFFER.lock().unwrap();
+    let buffer = guard.as_mut().unwrap();
 
     for i in 0..cell_size {
         for j in 0..cell_size {
