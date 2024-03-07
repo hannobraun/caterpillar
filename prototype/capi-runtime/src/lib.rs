@@ -1,7 +1,7 @@
 mod cells;
 mod draw_target;
 
-use std::{iter, panic, sync::Mutex};
+use std::{panic, sync::Mutex};
 
 use self::{cells::Cells, draw_target::DrawTarget};
 
@@ -40,12 +40,7 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
     let mut target = DRAW_TARGET.lock().expect("Expected exclusive access");
     let target = target.as_mut().expect("Expected target to be initialized");
 
-    let width = target.width / cell_size;
-    let height = target.height / cell_size;
-
-    let cells = Cells {
-        buffer: iter::repeat(0).take(width * height).collect(),
-    };
+    let cells = Cells::new(cell_size, &target);
     CELLS
         .lock()
         .expect("Expected exclusive access")
