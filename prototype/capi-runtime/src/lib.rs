@@ -15,7 +15,7 @@ use self::{
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
 #[no_mangle]
-pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
+pub extern "C" fn on_init(width: usize, height: usize) {
     panic::set_hook(Box::new(|panic_info| {
         print(&format!("{panic_info}"));
     }));
@@ -35,7 +35,15 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
         .insert(state)
         .render_target
         .buffer
-        .as_mut_ptr()
+        .as_mut_ptr();
+}
+
+#[no_mangle]
+pub extern "C" fn get_render_target_buffer() -> *mut u8 {
+    let mut state = STATE.lock().expect("Expected exclusive access");
+    let state = state.as_mut().expect("Expected state to be initialized");
+
+    state.render_target.buffer.as_mut_ptr()
 }
 
 #[no_mangle]

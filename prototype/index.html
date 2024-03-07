@@ -67,13 +67,17 @@
         function initDrawBuffer() {
             const imageData = new ImageData(canvas.width, canvas.height);
 
-            const drawBufferPtr = instance.exports.on_init(
+            instance.exports.on_init(
                 canvas.width,
                 canvas.height,
             );
+
+            const renderTargetBuffer =
+                instance.exports.get_render_target_buffer();
+
             const drawBuffer = new Uint8Array(
                 instance.exports.memory.buffer,
-                drawBufferPtr,
+                renderTargetBuffer,
                 canvas.width * canvas.height * 4,
             );
 
