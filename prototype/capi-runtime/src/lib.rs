@@ -46,7 +46,7 @@ pub extern "C" fn init_draw_buffer(
 }
 
 #[no_mangle]
-pub extern "C" fn draw_cell(
+pub extern "C" fn extern_draw_cell(
     cell_size: usize,
     base_i: usize,
     base_j: usize,
