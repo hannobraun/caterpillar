@@ -7,9 +7,9 @@ pub struct Cells {
 }
 
 impl Cells {
-    pub fn new(cell_size: usize, target: &DrawTarget) -> Self {
-        let width = target.width / cell_size;
-        let height = target.height / cell_size;
+    pub fn new(cell_size: usize, draw_target: &DrawTarget) -> Self {
+        let width = draw_target.width / cell_size;
+        let height = draw_target.height / cell_size;
 
         Self {
             buffer: iter::repeat(0).take(width * height).collect(),
