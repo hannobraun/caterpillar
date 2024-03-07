@@ -77,7 +77,7 @@
             const renderTargetBufferLen =
                 instance.exports.get_render_target_buffer_len();
 
-            const drawBuffer = new Uint8Array(
+            const drawBuffer = new Uint8ClampedArray(
                 instance.exports.memory.buffer,
                 renderTargetBuffer,
                 renderTargetBufferLen,
