@@ -32,6 +32,7 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
 pub extern "C" fn on_input(key: i32) {
     const UP: i32 = 0;
     const LEFT: i32 = 1;
+    const DOWN: i32 = 2;
 
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
@@ -41,6 +42,9 @@ pub extern "C" fn on_input(key: i32) {
     }
     if key == LEFT && state.velocity != [1, 0] {
         state.velocity = [-1, 0];
+    }
+    if key == DOWN && state.velocity != [0, -1] {
+        state.velocity = [0, 1];
     }
 }
 

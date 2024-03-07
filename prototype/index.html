@@ -42,6 +42,7 @@
 
         const INPUT_UP = 0;
         const INPUT_LEFT = 1;
+        const INPUT_DOWN = 2;
 
         const input = [];
 
@@ -52,11 +53,11 @@
             if (event.key == "ArrowLeft") {
                 instance.exports.on_input(INPUT_LEFT);
             }
+            if (event.key == "ArrowDown") {
+                instance.exports.on_input(INPUT_DOWN);
+            }
             if (event.key == "ArrowRight") {
                 input.push("right");
-            }
-            if (event.key == "ArrowDown") {
-                input.push("down");
             }
         });
 
@@ -158,11 +159,6 @@
                 if (inputEvent == "right") {
                     if (instance.exports.get_velocity_x() != -1) {
                         instance.exports.set_velocity(1, 0);
-                    }
-                }
-                if (inputEvent == "down") {
-                    if (instance.exports.get_velocity_y() != -1) {
-                        instance.exports.set_velocity(0, 1);
                     }
                 }
 
