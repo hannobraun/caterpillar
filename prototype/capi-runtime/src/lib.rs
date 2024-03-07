@@ -32,7 +32,7 @@ pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
 }
 
 #[no_mangle]
-pub extern "C" fn positions_init(x: i32, y: i32) {
+pub extern "C" fn init_game_state(x: i32, y: i32) {
     let state = State {
         positions: iter::once([x, y]).collect(),
     };
