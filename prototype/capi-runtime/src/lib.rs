@@ -1,4 +1,6 @@
-use std::{mem, slice};
+use std::{slice, sync::Mutex};
+
+static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
 #[no_mangle]
 pub extern "C" fn allocate_draw_buffer(
@@ -8,11 +10,14 @@ pub extern "C" fn allocate_draw_buffer(
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 
-    let mut buffer = Vec::with_capacity(len);
-    let ptr = buffer.as_mut_ptr();
-    mem::forget(buffer);
-
-    ptr
+    let buffer = Vec::with_capacity(len);
+    DRAW_BUFFER
+        .lock()
+        .expect(
+            "Expected exclusive access in single-threaded WebAssembly context",
+        )
+        .insert(buffer)
+        .as_mut_ptr()
 }
 
 #[no_mangle]
