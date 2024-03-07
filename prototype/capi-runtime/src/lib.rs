@@ -2,11 +2,20 @@ use std::{slice, sync::Mutex};
 
 static DRAW_BUFFER: Mutex<Option<Vec<u8>>> = Mutex::new(None);
 
+extern "C" {
+    fn print(ptr: *const u8, len: usize);
+}
+
 #[no_mangle]
 pub extern "C" fn allocate_draw_buffer(
     canvas_width: usize,
     canvas_height: usize,
 ) -> *mut u8 {
+    let msg = "Hello, world!";
+    unsafe {
+        print(msg.as_ptr(), msg.len());
+    }
+
     const NUM_COLOR_CHANNELS: usize = 4;
     let len = canvas_width * canvas_height * NUM_COLOR_CHANNELS;
 

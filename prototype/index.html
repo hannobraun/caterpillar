@@ -26,7 +26,16 @@
     <script type="module">
         const path = "target/wasm32-unknown-unknown/release/capi_runtime.wasm";
         const { module, instance } =
-            await WebAssembly.instantiateStreaming(fetch(path));
+            await WebAssembly.instantiateStreaming(fetch(path), {
+                env: {
+                    print: (ptr, len) => {
+                        const memory = instance.exports.memory;
+                        const array = new Uint8Array(memory.buffer, ptr, len);
+                        const string = new TextDecoder().decode(array);
+                        console.log(string);
+                    },
+                }
+            });
 
         const input = [];
 
