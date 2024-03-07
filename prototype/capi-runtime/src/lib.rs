@@ -10,7 +10,7 @@ use state::State;
 use self::{cells::Cells, draw_target::DrawTarget, ffi_out::print};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
-static POSITIONS: Mutex<Option<State>> = Mutex::new(None);
+static STATE: Mutex<Option<State>> = Mutex::new(None);
 static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 #[no_mangle]
@@ -38,12 +38,12 @@ pub extern "C" fn positions_init(x: i32, y: i32) {
     let positions = State {
         positions: iter::once([x, y]).collect(),
     };
-    *POSITIONS.lock().expect("Expected exclusive access") = Some(positions);
+    *STATE.lock().expect("Expected exclusive access") = Some(positions);
 }
 
 #[no_mangle]
 pub extern "C" fn positions_len() -> usize {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -53,7 +53,7 @@ pub extern "C" fn positions_len() -> usize {
 
 #[no_mangle]
 pub extern "C" fn positions_get_x(i: usize) -> i32 {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -63,7 +63,7 @@ pub extern "C" fn positions_get_x(i: usize) -> i32 {
 
 #[no_mangle]
 pub extern "C" fn positions_get_y(i: usize) -> i32 {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -73,7 +73,7 @@ pub extern "C" fn positions_get_y(i: usize) -> i32 {
 
 #[no_mangle]
 pub extern "C" fn positions_set_x(i: usize, x: i32) {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -83,7 +83,7 @@ pub extern "C" fn positions_set_x(i: usize, x: i32) {
 
 #[no_mangle]
 pub extern "C" fn positions_set_y(i: usize, y: i32) {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -93,7 +93,7 @@ pub extern "C" fn positions_set_y(i: usize, y: i32) {
 
 #[no_mangle]
 pub extern "C" fn positions_push_front(x: i32, y: i32) {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -103,7 +103,7 @@ pub extern "C" fn positions_push_front(x: i32, y: i32) {
 
 #[no_mangle]
 pub extern "C" fn positions_pop_back() {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
@@ -127,7 +127,7 @@ pub extern "C" fn init_cells(cell_size: usize) -> *mut u8 {
 
 #[no_mangle]
 pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
-    let mut positions = POSITIONS.lock().expect("Expected exclusive access");
+    let mut positions = STATE.lock().expect("Expected exclusive access");
     let positions = positions
         .as_mut()
         .expect("Expected positions to be initialized");
