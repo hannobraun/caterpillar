@@ -1,9 +1,11 @@
+use std::path::Path;
+
 use tokio::process::Command;
 
 #[rocket::main]
 async fn main() -> anyhow::Result<()> {
     build().await?;
-    serve().await?;
+    serve(".").await?;
 
     Ok(())
 }
@@ -20,9 +22,9 @@ async fn build() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve() -> anyhow::Result<()> {
+async fn serve(path: impl AsRef<Path>) -> anyhow::Result<()> {
     rocket::build()
-        .mount("/", rocket::fs::FileServer::from("."))
+        .mount("/", rocket::fs::FileServer::from(path))
         .launch()
         .await?;
 
