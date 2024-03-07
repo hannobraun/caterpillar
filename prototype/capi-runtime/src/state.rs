@@ -2,7 +2,7 @@ use std::{collections::VecDeque, iter};
 
 use crate::{cells::Cells, ffi_out::random};
 
-pub struct State {
+pub struct World {
     pub positions: VecDeque<[i32; 2]>,
     pub velocity: [i32; 2],
     pub food_pos: [i32; 2],
@@ -12,7 +12,7 @@ pub struct State {
     pub cells: Cells,
 }
 
-impl State {
+impl World {
     pub fn new(cells: Cells) -> Self {
         let x = cells.size[0] as i32 / 2;
         let y = cells.size[1] as i32 / 2;
@@ -67,7 +67,7 @@ impl State {
     }
 }
 
-fn move_snake(state: &mut State) {
+fn move_snake(state: &mut World) {
     let [mut head_x, mut head_y] = state.head_position();
 
     head_x += state.velocity[0];
@@ -82,7 +82,7 @@ fn move_snake(state: &mut State) {
     }
 }
 
-fn constrain_positions(state: &mut State) {
+fn constrain_positions(state: &mut World) {
     for [x, y] in &mut state.positions {
         if *x < 0 {
             *x = state.cells.size[0] as i32 - 1;
@@ -99,7 +99,7 @@ fn constrain_positions(state: &mut State) {
     }
 }
 
-fn check_collision(state: &mut State) {
+fn check_collision(state: &mut World) {
     let [head_x, head_y] = state.head_position();
 
     let mut lost = false;
@@ -112,7 +112,7 @@ fn check_collision(state: &mut State) {
     state.lost = lost;
 }
 
-fn eat_food(state: &mut State) {
+fn eat_food(state: &mut World) {
     let mut ate_food = false;
 
     for &[pos_x, pos_y] in &state.positions {
@@ -129,7 +129,7 @@ fn eat_food(state: &mut State) {
     }
 }
 
-fn update_cells(state: &mut State) {
+fn update_cells(state: &mut World) {
     for i in 0..state.cells.buffer.len() {
         state.cells.buffer[i] = 0;
     }

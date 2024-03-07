@@ -5,12 +5,12 @@ mod state;
 
 use std::{panic, sync::Mutex};
 
-use state::State;
+use state::World;
 
 use self::{cells::Cells, draw_target::DrawTarget, ffi_out::print};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
-static STATE: Mutex<Option<State>> = Mutex::new(None);
+static STATE: Mutex<Option<World>> = Mutex::new(None);
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
@@ -21,7 +21,7 @@ pub extern "C" fn on_init(width: usize, height: usize) -> *mut u8 {
     let draw_target = DrawTarget::new(width, height);
 
     let cells = Cells::new(&draw_target);
-    let state = State::new(cells);
+    let state = World::new(cells);
     *STATE.lock().expect("Expected exclusive access") = Some(state);
 
     DRAW_TARGET
