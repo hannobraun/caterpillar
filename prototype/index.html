@@ -43,8 +43,7 @@
         const INPUT_UP = 0;
         const INPUT_LEFT = 1;
         const INPUT_DOWN = 2;
-
-        const input = [];
+        const INPUT_RIGHT = 3;
 
         document.addEventListener("keydown", (event) => {
             if (event.key == "ArrowUp") {
@@ -57,7 +56,7 @@
                 instance.exports.on_input(INPUT_DOWN);
             }
             if (event.key == "ArrowRight") {
-                input.push("right");
+                instance.exports.on_input(INPUT_RIGHT);
             }
         });
 
@@ -93,7 +92,7 @@
 
         function mainLoop(timeStamp) {
             if (timeStamp - lastUpdate >= deltaTimeMs) {
-                updateGameState(input, deltaTimeMs);
+                updateGameState(deltaTimeMs);
                 lastUpdate += deltaTimeMs;
             }
 
@@ -144,7 +143,7 @@
             };
         }
 
-        function updateGameState(input, deltaTimeMs) {
+        function updateGameState(deltaTimeMs) {
             if (gameState.lost) {
                 return gameState;
             }
@@ -154,13 +153,6 @@
             gameState.timeSinceLastUpdateMs += deltaTimeMs;
             if (gameState.timeSinceLastUpdateMs >= delayMs) {
                 gameState.timeSinceLastUpdateMs -= delayMs;
-
-                const inputEvent = input.shift();
-                if (inputEvent == "right") {
-                    if (instance.exports.get_velocity_x() != -1) {
-                        instance.exports.set_velocity(1, 0);
-                    }
-                }
 
                 instance.exports.move_snake();
                 instance.exports.constrain_positions();
