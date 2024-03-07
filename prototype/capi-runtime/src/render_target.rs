@@ -30,31 +30,31 @@ impl RenderTarget {
 
                 let color = world.cells.buffer[x + y * world.cells.size[0]];
 
-                draw_cell(world.cells.cell_size, cell_x, cell_y, color, self);
+                self.draw_cell(world.cells.cell_size, cell_x, cell_y, color);
             }
         }
     }
-}
 
-fn draw_cell(
-    cell_size: usize,
-    cell_x: usize,
-    cell_y: usize,
-    color: u8,
-    target: &mut RenderTarget,
-) {
-    for x in 0..cell_size {
-        for y in 0..cell_size {
-            let pixel_x = cell_x + x;
-            let pixel_y = cell_y + y;
+    fn draw_cell(
+        &mut self,
+        cell_size: usize,
+        cell_x: usize,
+        cell_y: usize,
+        color: u8,
+    ) {
+        for x in 0..cell_size {
+            for y in 0..cell_size {
+                let pixel_x = cell_x + x;
+                let pixel_y = cell_y + y;
 
-            let index = (pixel_x + pixel_y * target.width)
-                * RenderTarget::NUM_COLOR_CHANNELS;
+                let index = (pixel_x + pixel_y * self.width)
+                    * RenderTarget::NUM_COLOR_CHANNELS;
 
-            target.buffer[index + 0] = color;
-            target.buffer[index + 1] = color;
-            target.buffer[index + 2] = color;
-            target.buffer[index + 3] = 255;
+                self.buffer[index + 0] = color;
+                self.buffer[index + 1] = color;
+                self.buffer[index + 2] = color;
+                self.buffer[index + 3] = 255;
+            }
         }
     }
 }
