@@ -1,13 +1,16 @@
 mod cells;
 mod draw_target;
 mod ffi_out;
+mod state;
 
-use std::{collections::VecDeque, iter, panic, sync::Mutex};
+use std::{iter, panic, sync::Mutex};
+
+use state::State;
 
 use self::{cells::Cells, draw_target::DrawTarget, ffi_out::print};
 
 static DRAW_TARGET: Mutex<Option<DrawTarget>> = Mutex::new(None);
-static POSITIONS: Mutex<Option<VecDeque<[i32; 2]>>> = Mutex::new(None);
+static POSITIONS: Mutex<Option<State>> = Mutex::new(None);
 static CELLS: Mutex<Option<Cells>> = Mutex::new(None);
 
 #[no_mangle]
@@ -32,7 +35,9 @@ pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
 
 #[no_mangle]
 pub extern "C" fn positions_init(x: i32, y: i32) {
-    let positions = iter::once([x, y]).collect();
+    let positions = State {
+        positions: iter::once([x, y]).collect(),
+    };
     *POSITIONS.lock().expect("Expected exclusive access") = Some(positions);
 }
 
@@ -43,7 +48,7 @@ pub extern "C" fn positions_len() -> usize {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions.len()
+    positions.positions.len()
 }
 
 #[no_mangle]
@@ -53,7 +58,7 @@ pub extern "C" fn positions_get_x(i: usize) -> i32 {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions[i][0]
+    positions.positions[i][0]
 }
 
 #[no_mangle]
@@ -63,7 +68,7 @@ pub extern "C" fn positions_get_y(i: usize) -> i32 {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions[i][1]
+    positions.positions[i][1]
 }
 
 #[no_mangle]
@@ -73,7 +78,7 @@ pub extern "C" fn positions_set_x(i: usize, x: i32) {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions[i][0] = x;
+    positions.positions[i][0] = x;
 }
 
 #[no_mangle]
@@ -83,7 +88,7 @@ pub extern "C" fn positions_set_y(i: usize, y: i32) {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions[i][1] = y;
+    positions.positions[i][1] = y;
 }
 
 #[no_mangle]
@@ -93,7 +98,7 @@ pub extern "C" fn positions_push_front(x: i32, y: i32) {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions.push_front([x, y]);
+    positions.positions.push_front([x, y]);
 }
 
 #[no_mangle]
@@ -103,7 +108,7 @@ pub extern "C" fn positions_pop_back() {
         .as_mut()
         .expect("Expected positions to be initialized");
 
-    positions.pop_back();
+    positions.positions.pop_back();
 }
 
 #[no_mangle]
@@ -142,7 +147,7 @@ pub extern "C" fn update_cells(food_x: i32, food_y: i32) {
                 cells.buffer[index] = 127;
             }
 
-            for &[pos_x, pos_y] in &*positions {
+            for &[pos_x, pos_y] in &positions.positions {
                 if x as i32 == pos_x && y as i32 == pos_y {
                     cells.buffer[index] = 255;
                 }
