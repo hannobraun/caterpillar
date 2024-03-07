@@ -65,8 +65,6 @@
         }
 
         function initDrawBuffer(canvas) {
-            const imageData = new ImageData(canvas.width, canvas.height);
-
             instance.exports.on_init(
                 canvas.width,
                 canvas.height,
@@ -81,6 +79,12 @@
                 instance.exports.memory.buffer,
                 renderTargetBuffer,
                 renderTargetBufferLen,
+            );
+
+            const imageData = new ImageData(
+                drawBuffer,
+                canvas.width,
+                canvas.height
             );
 
             return { imageData: imageData, drawBuffer: drawBuffer };
@@ -115,11 +119,6 @@
             }
 
             instance.exports.draw();
-
-            for (let i = 0; i < drawBuffer.length; i += 1) {
-                const value = drawBuffer[i];
-                imageData.data[i] = value;
-            }
 
             context.putImageData(imageData, 0, 0);
 
