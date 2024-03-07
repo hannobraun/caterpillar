@@ -7,8 +7,10 @@ pub struct RenderTarget {
 }
 
 impl RenderTarget {
+    pub const NUM_COLOR_CHANNELS: usize = 4;
+
     pub fn new(width: usize, height: usize) -> Self {
-        let len = width * height;
+        let len = width * height * Self::NUM_COLOR_CHANNELS;
         let buffer = iter::repeat(0).take(len).collect();
 
         Self {

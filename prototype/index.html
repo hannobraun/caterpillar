@@ -75,7 +75,7 @@
         const drawBuffer = new Uint8Array(
             instance.exports.memory.buffer,
             drawBufferPtr,
-            canvas.width * canvas.height,
+            canvas.width * canvas.height * 4,
         );
 
         const deltaTimeMs = 1000 / 60;
@@ -93,12 +93,7 @@
 
             for (let i = 0; i < drawBuffer.length; i += 1) {
                 const value = drawBuffer[i];
-
-                const j = i * 4;
-                imageData.data[j + 0] = value;
-                imageData.data[j + 1] = value;
-                imageData.data[j + 2] = value;
-                imageData.data[j + 3] = 255;
+                imageData.data[i] = value;
             }
 
             context.putImageData(imageData, 0, 0);

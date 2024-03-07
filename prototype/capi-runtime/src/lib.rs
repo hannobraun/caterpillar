@@ -106,8 +106,13 @@ fn draw_cell(
             let pixel_x = cell_x + x;
             let pixel_y = base_y + y;
 
-            let index = pixel_x + pixel_y * target.width;
-            target.buffer[index] = color;
+            let index = (pixel_x + pixel_y * target.width)
+                * RenderTarget::NUM_COLOR_CHANNELS;
+
+            target.buffer[index + 0] = color;
+            target.buffer[index + 1] = color;
+            target.buffer[index + 2] = color;
+            target.buffer[index + 3] = 255;
         }
     }
 }
