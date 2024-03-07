@@ -28,6 +28,7 @@ async fn main() -> anyhow::Result<()> {
 
 fn watch(serve_dir: PathBuf) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
     let (tx, rx) = watch::channel(());
+    tx.send_replace(());
 
     let mut debouncer = new_debouncer(
         Duration::from_millis(50),
