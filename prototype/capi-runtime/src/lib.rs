@@ -25,9 +25,7 @@ pub extern "C" fn init_draw_target(width: usize, height: usize) -> *mut u8 {
     let buffer = DrawTarget::new(width, height);
     DRAW_TARGET
         .lock()
-        .expect(
-            "Expected exclusive access in single-threaded WebAssembly context",
-        )
+        .expect("Expected exclusive access")
         .insert(buffer)
         .buffer
         .as_mut_ptr()
