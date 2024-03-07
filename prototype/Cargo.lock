@@ -144,13 +144,6 @@ name = "capi-runtime"
 version = "0.1.0"
 
 [[package]]
-name = "capi-server"
-version = "0.1.0"
-dependencies = [
- "rocket",
-]
-
-[[package]]
 name = "cc"
 version = "1.0.90"
 source = "registry+https://github.com/rust-lang/crates.io-index"
