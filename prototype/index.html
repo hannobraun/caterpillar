@@ -142,7 +142,7 @@
 
                 cells: cells,
 
-                positions: [[x, y]],
+                positions: [x, y],
                 velocity: [1, 0],
 
                 growthLeft: 2,
@@ -187,50 +187,55 @@
                     }
                 }
 
-                let [headX, headY] = gameState.positions[0];
+                let headX = gameState.positions[0];
+                let headY = gameState.positions[1];
 
                 headX += gameState.velocity[0];
                 headY += gameState.velocity[1];
 
-                gameState.positions.unshift([headX, headY]);
+                gameState.positions.unshift(headX, headY);
 
                 if (gameState.growthLeft > 0) {
                     gameState.growthLeft -= 1;
                 } else {
                     gameState.positions.pop();
+                    gameState.positions.pop();
                 }
 
-                for (let i = 0; i < gameState.positions.length; i += 1) {
-                    if (gameState.positions[i][0] < 0) {
-                        gameState.positions[i][0] = gameState.width - 1;
+                for (let i = 0; i < gameState.positions.length; i += 2) {
+                    if (gameState.positions[i + 0] < 0) {
+                        gameState.positions[i + 0] = gameState.width - 1;
                     }
-                    if (gameState.positions[i][0] >= gameState.width) {
-                        gameState.positions[i][0] = 0;
+                    if (gameState.positions[i + 0] >= gameState.width) {
+                        gameState.positions[i + 0] = 0;
                     }
-                    if (gameState.positions[i][1] < 0) {
-                        gameState.positions[i][1] = gameState.height - 1;
+                    if (gameState.positions[i + 1] < 0) {
+                        gameState.positions[i + 1] = gameState.height - 1;
                     }
-                    if (gameState.positions[i][1] >= gameState.height) {
-                        gameState.positions[i][1] = 0;
+                    if (gameState.positions[i + 1] >= gameState.height) {
+                        gameState.positions[i + 1] = 0;
                     }
                 }
 
-                const [headPosX, headPosY] = gameState.positions[0];
-                for (let i = 1; i < gameState.positions.length; i += 1) {
-                    const [posX, posY] = gameState.positions[i];
+                const headPosX = gameState.positions[0];
+                const headPosY = gameState.positions[1];
+                for (let i = 2; i < gameState.positions.length; i += 2) {
+                    const posX = gameState.positions[i + 0];
+                    const posY = gameState.positions[i + 1];
 
                     if (headPosX == posX && headPosY == posY) {
                         gameState.lost = true;
                     }
                 }
 
-                for (let i = 0; i < gameState.positions.length; i += 1) {
-                    const [posX, posY] = gameState.positions[0];
+                for (let i = 0; i < gameState.positions.length; i += 2) {
+                    const posX = gameState.positions[i + 0];
+                    const posY = gameState.positions[i + 1];
                     const [foodX, foodY] = gameState.foodPos;
 
                     if (posX == foodX && posY == foodY) {
                         const extraGrowth = Math.ceil(
-                            gameState.positions.length / 2
+                            gameState.positions.length / 2 / 2
                         );
                         gameState.growthLeft += extraGrowth;
 
@@ -255,8 +260,9 @@
                         gameState.cells[index] = 127;
                     }
 
-                    for (let i = 0; i < gameState.positions.length; i += 1) {
-                        const [posX, posY] = gameState.positions[i];
+                    for (let i = 0; i < gameState.positions.length; i += 2) {
+                        const posX = gameState.positions[i + 0];
+                        const posY = gameState.positions[i + 1];
 
                         if (x == posX && y == posY) {
                             gameState.cells[index] = 255;
