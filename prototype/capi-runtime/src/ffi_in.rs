@@ -10,7 +10,14 @@ pub extern "C" fn on_init(width: usize, height: usize) {
         print(&format!("{panic_info}"));
     }));
 
-    let state = State::new(width, height);
+    let state = State::new(
+        width,
+        height,
+        &[
+            b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S', b'p', 255,
+            b'p', 3, b'S', b't',
+        ],
+    );
 
     STATE
         .lock()
