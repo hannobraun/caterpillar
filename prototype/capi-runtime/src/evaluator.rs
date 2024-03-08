@@ -27,7 +27,7 @@ impl Evaluator {
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
         let mut code_ptr = 0;
-        let mut stack = Stack {
+        let mut stack = Data {
             ptr: self.data.len() - 1,
             data: &mut self.data,
         };
@@ -76,13 +76,13 @@ impl Evaluator {
 }
 
 /// A downward-growing stack
-struct Stack<'r> {
+struct Data<'r> {
     // Points to the address where the *next* item will be pushed
     ptr: usize,
     data: &'r mut [u8],
 }
 
-impl Stack<'_> {
+impl Data<'_> {
     pub fn push(&mut self, value: u8) {
         self.data[self.ptr] = value;
         self.ptr -= 1;
