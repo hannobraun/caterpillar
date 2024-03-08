@@ -18,7 +18,7 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     let state = World::new(cells);
 
     let state = State {
-        evaluator: Evaluator::new(),
+        evaluator: Evaluator::new(&[b'p', 0, b'S', b't']),
         world: state,
         render_target,
     };
