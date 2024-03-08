@@ -26,7 +26,7 @@ impl Evaluator {
         &mut self,
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
-        let code_ptr = 0;
+        let mut code_ptr = 0;
         let mut stack = Stack {
             ptr: self.data.len() - 1,
         };
@@ -39,6 +39,13 @@ impl Evaluator {
             let instruction = self.code[code_ptr];
 
             match instruction {
+                // Push a value to the stack
+                b'p' => {
+                    code_ptr += 1;
+                    let value = self.code[code_ptr];
+                    stack.push(value, &mut self.data);
+                }
+
                 // Terminate the program
                 b't' => {
                     break;
@@ -49,6 +56,8 @@ impl Evaluator {
                     panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
                 }
             }
+
+            code_ptr += 1;
         }
 
         &self.data
