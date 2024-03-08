@@ -74,7 +74,7 @@ impl Evaluator {
             code_ptr += 1;
         }
 
-        &self.data.data
+        self.data.read()
     }
 }
 

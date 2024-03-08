@@ -23,6 +23,10 @@ impl Data {
         Self { ptr, data }
     }
 
+    pub fn read(&self) -> &[u8] {
+        &self.data
+    }
+
     pub fn push(&mut self, value: u8) {
         self.data[self.ptr.0] = value;
         self.ptr -= 1;
