@@ -2,10 +2,10 @@ use std::num::Wrapping;
 
 /// A downward-growing stack
 pub struct Data<'r> {
-    // Points to the address where the *next* item will be pushed
-    //
-    // Need to be `Wrapping`, as that's what's going to happen, if the stack
-    // fully fills the available memory.
+    /// Points to the address where the *next* item will be pushed
+    ///
+    /// Need to be `Wrapping`, as that's what's going to happen, if the stack
+    /// fully fills the available memory.
     ptr: Wrapping<usize>,
 
     pub data: &'r mut [u8],
