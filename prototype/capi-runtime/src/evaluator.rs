@@ -43,6 +43,7 @@ impl Evaluator {
                 b'p' => {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
+
                     stack.push(value, &mut self.data);
                 }
 
