@@ -1,22 +1,24 @@
-use std::num::Wrapping;
+use std::{iter, num::Wrapping};
 
 /// A downward-growing stack
-pub struct Data<'r> {
+pub struct Data {
     /// Points to the address where the *next* item will be pushed
     ///
     /// Need to be `Wrapping`, as that's what's going to happen, if the stack
     /// fully fills the available memory.
     ptr: Wrapping<usize>,
 
-    pub data: &'r mut [u8],
+    pub data: Vec<u8>,
 }
 
-impl<'r> Data<'r> {
-    pub fn new(data: &'r mut [u8]) -> Self {
+impl Data {
+    pub fn new(size: usize) -> Self {
         // Let's make `ptr` wrapping before doing any arithmetic. Otherwise, we
         // subtract with overflow, if `data` has zero length.
-        let mut ptr = Wrapping(data.len());
+        let mut ptr = Wrapping(size);
         ptr -= 1;
+
+        let data = iter::repeat(0).take(size).collect();
 
         Self { ptr, data }
     }
@@ -43,8 +45,7 @@ mod tests {
 
     #[test]
     fn fill_memory_completely() {
-        let mut data = [0; 1];
-        let mut data = Data::new(&mut data);
+        let mut data = Data::new(1);
 
         data.push(0);
         // Should not panic. It will, in debug mode, unless wrapping is handled
@@ -53,8 +54,7 @@ mod tests {
 
     #[test]
     fn handle_zero_memory() {
-        let mut data = [];
-        Data::new(&mut data);
+        Data::new(0);
         // Should not panic. It will, unless wrapping behavior is handled
         // correctly when initializing the stack pointer.
     }

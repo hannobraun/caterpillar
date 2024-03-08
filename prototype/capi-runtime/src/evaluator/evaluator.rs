@@ -4,7 +4,7 @@ use super::data::Data;
 
 pub struct Evaluator {
     code: Vec<u8>,
-    data: Vec<u8>,
+    data: Data,
 }
 
 impl Evaluator {
@@ -18,7 +18,7 @@ impl Evaluator {
         let mut code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
         code[..program.len()].copy_from_slice(&program);
 
-        let data = iter::repeat(0).take(DATA_SIZE).collect();
+        let data = Data::new(DATA_SIZE);
 
         Self { code, data }
     }
@@ -28,10 +28,9 @@ impl Evaluator {
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
         let mut code_ptr = 0;
-        let mut data = Data::new(&mut self.data);
 
         for b in arguments {
-            data.push(b);
+            self.data.push(b);
         }
 
         loop {
@@ -48,22 +47,22 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    data.push(value);
+                    self.data.push(value);
                 }
 
                 // `clone` - Clone the top item on the stack
                 b'c' => {
-                    let value = data.pop();
-                    data.push(value);
-                    data.push(value);
+                    let value = self.data.pop();
+                    self.data.push(value);
+                    self.data.push(value);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = data.pop();
-                    let value = data.pop();
+                    let address = self.data.pop();
+                    let value = self.data.pop();
 
-                    data.store(address, value);
+                    self.data.store(address, value);
                 }
 
                 opcode => {
@@ -75,7 +74,7 @@ impl Evaluator {
             code_ptr += 1;
         }
 
-        &self.data
+        &self.data.data
     }
 }
 
