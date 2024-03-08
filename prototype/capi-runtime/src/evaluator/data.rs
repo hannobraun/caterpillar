@@ -33,8 +33,7 @@ impl<'r> Data<'r> {
     }
 
     pub fn store(&mut self, address: impl Into<usize>, value: u8) {
-        let address: usize = address.into();
-        self.data[address] = value;
+        self.data[address.into()] = value;
     }
 }
 
