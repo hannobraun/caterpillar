@@ -17,7 +17,7 @@ impl Evaluator {
         let data = iter::repeat(0).take(DATA_SIZE).collect();
 
         let program = [b't'];
-        code.copy_from_slice(&program);
+        code[..program.len()].copy_from_slice(&program);
 
         Self { code, data }
     }
