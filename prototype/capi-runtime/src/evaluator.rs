@@ -43,7 +43,9 @@ impl Evaluator {
                     break;
                 }
 
-                opcode => panic!("Unknown opcode: `{opcode}`"),
+                opcode => {
+                    panic!("Unknown opcode: `{opcode}`");
+                }
             }
         }
 
