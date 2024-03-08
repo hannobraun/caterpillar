@@ -1,7 +1,7 @@
 use std::{panic, sync::Mutex};
 
 use crate::{
-    cells::Cells, ffi_out::print, input::InputEvent,
+    cells::Cells, evaluator::Evaluator, ffi_out::print, input::InputEvent,
     render_target::RenderTarget, state::State, world::World,
 };
 
@@ -18,6 +18,7 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     let state = World::new(cells);
 
     let state = State {
+        evaluator: Evaluator {},
         world: state,
         render_target,
     };
