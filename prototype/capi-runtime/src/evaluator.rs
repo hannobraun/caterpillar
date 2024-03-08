@@ -27,11 +27,13 @@ impl Evaluator {
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
         let code_ptr = 0;
-        let mut stack_ptr = self.data.len() - 1;
+        let mut stack = Stack {
+            ptr: self.data.len() - 1,
+        };
 
         for b in arguments {
-            self.data[stack_ptr] = b;
-            stack_ptr -= 1;
+            self.data[stack.ptr] = b;
+            stack.ptr -= 1;
         }
 
         loop {
@@ -52,4 +54,10 @@ impl Evaluator {
 
         &self.data
     }
+}
+
+/// A downward-growing stack
+struct Stack {
+    // Points to the address where the *next* item will be pushed
+    ptr: usize,
 }
