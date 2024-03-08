@@ -51,6 +51,13 @@ impl Evaluator {
                     stack.push(value);
                 }
 
+                // `clone` - Clone the top item on the stack
+                b'c' => {
+                    let value = stack.pop();
+                    stack.push(value);
+                    stack.push(value);
+                }
+
                 // `store` - Store data in memory
                 b'S' => {
                     let address = stack.pop();
@@ -89,6 +96,13 @@ mod tests {
         let mut evaluator = Evaluator::new(&[b'p', 255, b't']);
         let data = evaluator.evaluate([]);
         assert_eq!(data[data.len() - 1..], [255]);
+    }
+
+    #[test]
+    fn clone() {
+        let mut evaluator = Evaluator::new(&[b'p', 255, b'c', b't']);
+        let data = evaluator.evaluate([]);
+        assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
     #[test]
