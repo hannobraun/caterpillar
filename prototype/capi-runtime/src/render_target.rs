@@ -58,7 +58,7 @@ impl RenderTarget {
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
                 let data = evaluator.evaluate([color]);
-                assert_eq!(data[0..1], [color]);
+                assert_eq!(data[..1], [color]);
 
                 self.buffer[index + 0] = color;
                 self.buffer[index + 1] = color;
