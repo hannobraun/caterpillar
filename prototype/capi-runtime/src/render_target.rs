@@ -58,12 +58,7 @@ impl RenderTarget {
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
                 let data = evaluator.evaluate([color]);
-                assert_eq!(data[..4], [color, color, color, 255]);
-
-                self.buffer[index + 0] = color;
-                self.buffer[index + 1] = color;
-                self.buffer[index + 2] = color;
-                self.buffer[index + 3] = 255;
+                self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
     }
