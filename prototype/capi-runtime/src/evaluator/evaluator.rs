@@ -71,3 +71,30 @@ impl Evaluator {
         &self.data
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Evaluator;
+
+    #[test]
+    fn terminate() {
+        let mut evaluator = Evaluator::new(&[b't']);
+
+        evaluator.evaluate([]);
+        // This should not run forever, or cause any kind of panic.
+    }
+
+    #[test]
+    fn push() {
+        let mut evaluator = Evaluator::new(&[b'p', 255, b't']);
+        let data = evaluator.evaluate([]);
+        assert_eq!(data[data.len() - 1..], [255]);
+    }
+
+    #[test]
+    fn store() {
+        let mut evaluator = Evaluator::new(&[b'p', 255, b'p', 0, b'S', b't']);
+        let data = evaluator.evaluate([]);
+        assert_eq!(data[0..1], [255]);
+    }
+}
