@@ -16,9 +16,9 @@ impl Evaluator {
         const DATA_SIZE: usize = 2;
 
         let mut code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
-        let data = iter::repeat(0).take(DATA_SIZE).collect();
-
         code[..program.len()].copy_from_slice(&program);
+
+        let data = iter::repeat(0).take(DATA_SIZE).collect();
 
         Self { code, data }
     }
