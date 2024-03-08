@@ -27,10 +27,7 @@ impl Evaluator {
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
         let mut code_ptr = 0;
-        let mut stack = Data {
-            ptr: self.data.len() - 1,
-            data: &mut self.data,
-        };
+        let mut stack = Data::new(&mut self.data);
 
         for b in arguments {
             stack.push(b);
@@ -82,7 +79,14 @@ struct Data<'r> {
     data: &'r mut [u8],
 }
 
-impl Data<'_> {
+impl<'r> Data<'r> {
+    pub fn new(data: &'r mut [u8]) -> Self {
+        Self {
+            ptr: data.len() - 1,
+            data,
+        }
+    }
+
     pub fn push(&mut self, value: u8) {
         self.data[self.ptr] = value;
         self.ptr -= 1;
