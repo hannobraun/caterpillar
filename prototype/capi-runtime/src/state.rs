@@ -16,7 +16,10 @@ impl State {
         let state = World::new(cells);
 
         Self {
-            evaluator: Evaluator::new(&[b'p', 0, b'S', b't']),
+            evaluator: Evaluator::new(&[
+                b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S', b'p',
+                255, b'p', 3, b'S', b't',
+            ]),
             world: state,
             render_target,
         }
