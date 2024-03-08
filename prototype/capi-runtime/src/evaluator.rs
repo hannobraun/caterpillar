@@ -32,8 +32,7 @@ impl Evaluator {
         };
 
         for b in arguments {
-            self.data[stack.ptr] = b;
-            stack.ptr -= 1;
+            stack.push(b, &mut self.data);
         }
 
         loop {
@@ -60,4 +59,11 @@ impl Evaluator {
 struct Stack {
     // Points to the address where the *next* item will be pushed
     ptr: usize,
+}
+
+impl Stack {
+    pub fn push(&mut self, value: u8, data: &mut [u8]) {
+        data[self.ptr] = value;
+        self.ptr -= 1;
+    }
 }
