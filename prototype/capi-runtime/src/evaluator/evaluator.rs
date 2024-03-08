@@ -13,7 +13,7 @@ impl Evaluator {
         // interest. Keeping the limits as low as possible here, to make sure I
         // notice.
         const CODE_SIZE: usize = 32;
-        const DATA_SIZE: usize = 2;
+        const DATA_SIZE: usize = 8;
 
         let mut code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
         code[..program.len()].copy_from_slice(&program);
