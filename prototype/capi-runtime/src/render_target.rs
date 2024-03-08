@@ -47,7 +47,7 @@ impl RenderTarget {
         cell_x: usize,
         cell_y: usize,
         color: u8,
-        _: &mut Evaluator,
+        evaluator: &mut Evaluator,
     ) {
         for x in 0..cell_size {
             for y in 0..cell_size {
@@ -56,6 +56,8 @@ impl RenderTarget {
 
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
+
+                evaluator.evaluate();
 
                 self.buffer[index + 0] = color;
                 self.buffer[index + 1] = color;
