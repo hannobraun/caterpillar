@@ -70,5 +70,5 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let state = state.as_mut().expect("Expected state to be initialized");
 
     state.world.update(delta_time_ms);
-    state.render_target.draw(&state.world);
+    state.render_target.draw(&state.world, &mut state.evaluator);
 }
