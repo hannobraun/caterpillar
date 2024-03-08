@@ -1,9 +1,6 @@
 use std::{panic, sync::Mutex};
 
-use crate::{
-    cells::Cells, evaluator::Evaluator, ffi_out::print, input::InputEvent,
-    render_target::RenderTarget, state::State, world::World,
-};
+use crate::{ffi_out::print, input::InputEvent, state::State};
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
@@ -13,15 +10,7 @@ pub extern "C" fn on_init(width: usize, height: usize) {
         print(&format!("{panic_info}"));
     }));
 
-    let render_target = RenderTarget::new(width, height);
-    let cells = Cells::new(&render_target);
-    let state = World::new(cells);
-
-    let state = State {
-        evaluator: Evaluator::new(&[b'p', 0, b'S', b't']),
-        world: state,
-        render_target,
-    };
+    let state = State::new(width, height);
 
     STATE
         .lock()
