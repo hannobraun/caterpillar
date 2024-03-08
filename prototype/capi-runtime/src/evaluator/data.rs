@@ -8,7 +8,7 @@ pub struct Data {
     /// fully fills the available memory.
     ptr: Wrapping<usize>,
 
-    pub data: Vec<u8>,
+    data: Vec<u8>,
 }
 
 impl Data {
