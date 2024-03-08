@@ -38,6 +38,11 @@ impl Evaluator {
             let instruction = self.code[code_ptr];
 
             match instruction {
+                // `terminate` - Terminate the program
+                b't' => {
+                    break;
+                }
+
                 // `push` - Push a value to the stack
                 b'p' => {
                     code_ptr += 1;
@@ -52,11 +57,6 @@ impl Evaluator {
                     let value = stack.pop();
 
                     stack.store(address, value);
-                }
-
-                // `terminate` - Terminate the program
-                b't' => {
-                    break;
                 }
 
                 opcode => {
