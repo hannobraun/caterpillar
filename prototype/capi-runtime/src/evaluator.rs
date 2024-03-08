@@ -22,7 +22,10 @@ impl Evaluator {
         Self { code, data }
     }
 
-    pub fn evaluate(&mut self, arguments: impl IntoIterator<Item = u8>) {
+    pub fn evaluate(
+        &mut self,
+        arguments: impl IntoIterator<Item = u8>,
+    ) -> &[u8] {
         let code_ptr = 0;
         let mut stack_ptr = self.data.len() - 1;
 
@@ -43,5 +46,7 @@ impl Evaluator {
                 opcode => panic!("Unknown opcode: `{opcode}`"),
             }
         }
+
+        &self.data
     }
 }
