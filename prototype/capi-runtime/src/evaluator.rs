@@ -44,7 +44,8 @@ impl Evaluator {
                 }
 
                 opcode => {
-                    panic!("Unknown opcode: `{opcode}`");
+                    let opcode_as_char: char = opcode.into();
+                    panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
                 }
             }
         }
