@@ -29,10 +29,11 @@ impl Evaluator {
         let mut code_ptr = 0;
         let mut stack = Stack {
             ptr: self.data.len() - 1,
+            data: &mut self.data,
         };
 
         for b in arguments {
-            stack.push(b, &mut self.data);
+            stack.push(b);
         }
 
         loop {
@@ -44,16 +45,16 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    stack.push(value, &mut self.data);
+                    stack.push(value);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = stack.pop(&mut self.data);
-                    let value = stack.pop(&mut self.data);
+                    let address = stack.pop();
+                    let value = stack.pop();
 
                     let address: usize = address.into();
-                    self.data[address] = value;
+                    stack.data[address] = value;
                 }
 
                 // `terminate` - Terminate the program
@@ -75,20 +76,21 @@ impl Evaluator {
 }
 
 /// A downward-growing stack
-struct Stack {
+struct Stack<'r> {
     // Points to the address where the *next* item will be pushed
     ptr: usize,
+    data: &'r mut [u8],
 }
 
-impl Stack {
-    pub fn push(&mut self, value: u8, data: &mut [u8]) {
-        data[self.ptr] = value;
+impl Stack<'_> {
+    pub fn push(&mut self, value: u8) {
+        self.data[self.ptr] = value;
         self.ptr -= 1;
     }
 
-    pub fn pop(&mut self, data: &mut [u8]) -> u8 {
+    pub fn pop(&mut self) -> u8 {
         self.ptr += 1;
-        let value = data[self.ptr];
+        let value = self.data[self.ptr];
         value
     }
 }
