@@ -31,6 +31,11 @@ impl<'r> Data<'r> {
         let value = self.data[self.ptr.0];
         value
     }
+
+    pub fn store(&mut self, address: impl Into<usize>, value: u8) {
+        let address: usize = address.into();
+        self.data[address] = value;
+    }
 }
 
 #[cfg(test)]

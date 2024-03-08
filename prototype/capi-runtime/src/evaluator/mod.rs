@@ -54,8 +54,7 @@ impl Evaluator {
                     let address = stack.pop();
                     let value = stack.pop();
 
-                    let address: usize = address.into();
-                    stack.data[address] = value;
+                    stack.store(address, value);
                 }
 
                 // `terminate` - Terminate the program
