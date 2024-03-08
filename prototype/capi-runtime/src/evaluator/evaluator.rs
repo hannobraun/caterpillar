@@ -28,10 +28,10 @@ impl Evaluator {
         arguments: impl IntoIterator<Item = u8>,
     ) -> &[u8] {
         let mut code_ptr = 0;
-        let mut stack = Data::new(&mut self.data);
+        let mut data = Data::new(&mut self.data);
 
         for b in arguments {
-            stack.push(b);
+            data.push(b);
         }
 
         loop {
@@ -48,22 +48,22 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    stack.push(value);
+                    data.push(value);
                 }
 
                 // `clone` - Clone the top item on the stack
                 b'c' => {
-                    let value = stack.pop();
-                    stack.push(value);
-                    stack.push(value);
+                    let value = data.pop();
+                    data.push(value);
+                    data.push(value);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = stack.pop();
-                    let value = stack.pop();
+                    let address = data.pop();
+                    let value = data.pop();
 
-                    stack.store(address, value);
+                    data.store(address, value);
                 }
 
                 opcode => {
