@@ -95,6 +95,6 @@ mod tests {
     fn store() {
         let mut evaluator = Evaluator::new(&[b'p', 255, b'p', 0, b'S', b't']);
         let data = evaluator.evaluate([]);
-        assert_eq!(data[0..1], [255]);
+        assert_eq!(data[..1], [255]);
     }
 }
