@@ -47,6 +47,15 @@ impl Evaluator {
                     stack.push(value, &mut self.data);
                 }
 
+                // Store data in memory
+                b'S' => {
+                    let address = stack.pop(&mut self.data);
+                    let value = stack.pop(&mut self.data);
+
+                    let address: usize = address.into();
+                    self.data[address] = value;
+                }
+
                 // Terminate the program
                 b't' => {
                     break;
@@ -75,5 +84,11 @@ impl Stack {
     pub fn push(&mut self, value: u8, data: &mut [u8]) {
         data[self.ptr] = value;
         self.ptr -= 1;
+    }
+
+    pub fn pop(&mut self, data: &mut [u8]) -> u8 {
+        self.ptr += 1;
+        let value = data[self.ptr];
+        value
     }
 }
