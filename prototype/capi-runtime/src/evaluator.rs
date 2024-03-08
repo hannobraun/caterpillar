@@ -39,7 +39,7 @@ impl Evaluator {
             let instruction = self.code[code_ptr];
 
             match instruction {
-                // Push a value to the stack
+                // `push` - Push a value to the stack
                 b'p' => {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
@@ -47,7 +47,7 @@ impl Evaluator {
                     stack.push(value, &mut self.data);
                 }
 
-                // Store data in memory
+                // `store` - Store data in memory
                 b'S' => {
                     let address = stack.pop(&mut self.data);
                     let value = stack.pop(&mut self.data);
@@ -56,7 +56,7 @@ impl Evaluator {
                     self.data[address] = value;
                 }
 
-                // Terminate the program
+                // `terminate` - Terminate the program
                 b't' => {
                     break;
                 }
