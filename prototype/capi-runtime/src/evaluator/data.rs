@@ -8,7 +8,7 @@ pub struct Data<'r> {
     /// fully fills the available memory.
     ptr: Wrapping<usize>,
 
-    pub data: &'r mut [u8],
+    data: &'r mut [u8],
 }
 
 impl<'r> Data<'r> {
