@@ -21,6 +21,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 bytecode.push(opcode::PUSH);
                 bytecode.push(value);
             }
+            "store" => {
+                bytecode.push(opcode::STORE);
+            }
             "terminate" => bytecode.push(opcode::TERMINATE),
             instruction => {
                 return Err(AssemblerError::UnknownInstruction {
@@ -59,6 +62,12 @@ mod tests {
     fn push() {
         let data = assemble("push 255", [0]);
         assert_eq!(data, [255]);
+    }
+
+    #[test]
+    fn store() {
+        let data = assemble("push 255 push 0 store", [0, 0, 0]);
+        assert_eq!(data, [255, 0, 255]);
     }
 
     #[test]
