@@ -31,7 +31,7 @@ impl Evaluator {
         }
     }
 
-    pub fn evaluate(&mut self, data_memory: &mut [u8]) {
+    pub fn evaluate(&mut self, data: &mut [u8]) {
         let mut code_ptr = 0;
 
         loop {
@@ -40,9 +40,9 @@ impl Evaluator {
             match instruction {
                 // `clone` - Clone the top item on the stack
                 b'c' => {
-                    let value = self.data.pop(data_memory);
-                    self.data.push(value, data_memory);
-                    self.data.push(value, data_memory);
+                    let value = self.data.pop(data);
+                    self.data.push(value, data);
+                    self.data.push(value, data);
                 }
 
                 // `push` - Push a value to the stack
@@ -50,15 +50,15 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    self.data.push(value, data_memory);
+                    self.data.push(value, data);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = self.data.pop(data_memory);
-                    let value = self.data.pop(data_memory);
+                    let address = self.data.pop(data);
+                    let value = self.data.pop(data);
 
-                    self.data.store(address, value, data_memory);
+                    self.data.store(address, value, data);
                 }
 
                 // `terminate` - Terminate the program
