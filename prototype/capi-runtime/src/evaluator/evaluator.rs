@@ -1,24 +1,18 @@
-use std::iter;
-
-use crate::ffi_in::CODE_SIZE;
-
 use super::data::Data;
 
 pub struct Evaluator {
-    code: Vec<u8>,
     data: Data,
 }
 
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
-        let code = iter::repeat(0).take(CODE_SIZE).collect();
         let data = Data::new(&data);
 
-        Self { code, data }
+        Self { data }
     }
 
-    pub fn load_program(&mut self, program: &[u8]) {
-        self.code[..program.len()].copy_from_slice(&program);
+    pub fn load_program(&mut self, program: &[u8], code: &mut [u8]) {
+        code[..program.len()].copy_from_slice(&program);
     }
 
     pub fn push_args(
@@ -31,11 +25,11 @@ impl Evaluator {
         }
     }
 
-    pub fn evaluate(&mut self, data: &mut [u8]) {
+    pub fn evaluate(&mut self, code: &[u8], data: &mut [u8]) {
         let mut code_ptr = 0;
 
         loop {
-            let instruction = self.code[code_ptr];
+            let instruction = code[code_ptr];
 
             match instruction {
                 // `clone` - Clone the top item on the stack
@@ -48,7 +42,7 @@ impl Evaluator {
                 // `push` - Push a value to the stack
                 b'p' => {
                     code_ptr += 1;
-                    let value = self.code[code_ptr];
+                    let value = code[code_ptr];
 
                     self.data.push(value, data);
                 }
@@ -79,7 +73,7 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::ffi_in::DATA_SIZE;
+    use crate::ffi_in::{CODE_SIZE, DATA_SIZE};
 
     use super::Evaluator;
 
@@ -108,12 +102,13 @@ mod tests {
     }
 
     fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
+        let mut code = [0; CODE_SIZE];
         let mut data = [0; DATA_SIZE];
 
         let mut evaluator = Evaluator::new(&data);
-        evaluator.load_program(program);
+        evaluator.load_program(program, &mut code);
 
-        evaluator.evaluate(&mut data);
+        evaluator.evaluate(&mut code, &mut data);
         data
     }
 }

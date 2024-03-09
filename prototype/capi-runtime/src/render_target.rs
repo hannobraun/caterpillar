@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::{evaluator::Evaluator, world::World};
+use crate::{evaluator::Evaluator, ffi_in::CODE_SIZE, world::World};
 
 pub struct RenderTarget {
     pub buffer: Vec<u8>,
@@ -64,12 +64,16 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
-                evaluator.load_program(&[
-                    b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S',
-                    b'p', 255, b'p', 3, b'S', b't',
-                ]);
+                let mut code = [0; CODE_SIZE];
+                evaluator.load_program(
+                    &[
+                        b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2,
+                        b'S', b'p', 255, b'p', 3, b'S', b't',
+                    ],
+                    &mut code,
+                );
                 evaluator.push_args([color], data);
-                evaluator.evaluate(data);
+                evaluator.evaluate(&code, data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
