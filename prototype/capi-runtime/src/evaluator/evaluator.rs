@@ -8,19 +8,21 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(program: &[u8]) -> Self {
+    pub fn new() -> Self {
         // I want to know when I go beyond certain thresholds, just out of
         // interest. Keeping the limits as low as possible here, to make sure I
         // notice.
         const CODE_SIZE: usize = 32;
         const DATA_SIZE: usize = 8;
 
-        let mut code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
-        code[..program.len()].copy_from_slice(&program);
-
+        let code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
         let data = Data::new(DATA_SIZE);
 
         Self { code, data }
+    }
+
+    pub fn load_program(&mut self, program: &[u8]) {
+        self.code[..program.len()].copy_from_slice(&program);
     }
 
     pub fn evaluate(
@@ -107,7 +109,9 @@ mod tests {
     }
 
     fn evaluate(program: &[u8]) -> Vec<u8> {
-        let mut evaluator = Evaluator::new(program);
+        let mut evaluator = Evaluator::new();
+        evaluator.load_program(program);
+
         let data = evaluator.evaluate([]);
         data.to_vec()
     }
