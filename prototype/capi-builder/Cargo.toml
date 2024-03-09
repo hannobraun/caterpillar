@@ -10,6 +10,9 @@ notify-debouncer-mini = "*"
 rocket = "*"
 tempfile = "*"
 
+[dependencies.capi-assembler]
+path = "../capi-assembler"
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
