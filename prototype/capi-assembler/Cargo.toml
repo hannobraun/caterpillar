@@ -5,7 +5,6 @@ edition = "2021"
 
 
 [dependencies]
-anyhow = "*"
 thiserror = "*"
 
 [dependencies.capi-vm]
