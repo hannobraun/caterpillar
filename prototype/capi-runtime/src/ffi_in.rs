@@ -9,6 +9,19 @@ pub const DATA_SIZE: usize = 8;
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
+/// # The virtual machine's data memory
+///
+/// ## Safety
+///
+/// We are in a single-threaded context. This static is only accessed by top-
+/// level FFI functions in this module and the JavaScript host. Since neither of
+/// those can run concurrently, this doesn't constitute concurrent access to
+/// this static.
+///
+/// As a consequence, access is sound, as long as no reference to this static is
+/// lives longer than the local scope of the FFI function that creates it.
+pub static mut DATA: [u8; DATA_SIZE] = [0; DATA_SIZE];
+
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
     panic::set_hook(Box::new(|panic_info| {
@@ -67,6 +80,8 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
+    // This is sound, as the reference is dropped at the end of this function.
+    // See comment on `DATA`.
     let data = unsafe { &mut DATA };
 
     state.world.update(delta_time_ms);
