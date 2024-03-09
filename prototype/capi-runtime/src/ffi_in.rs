@@ -100,4 +100,5 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     );
 }
 
+#[repr(transparent)]
 struct SharedMemory<const SIZE: usize>([u8; SIZE]);
