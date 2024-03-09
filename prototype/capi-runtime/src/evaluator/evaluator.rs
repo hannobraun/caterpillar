@@ -83,9 +83,9 @@ mod tests {
     use super::Evaluator;
 
     #[test]
-    fn terminate() {
-        evaluate(&[b't']);
-        // This should not run forever, or cause any kind of panic.
+    fn clone() {
+        let data = evaluate(&[b'p', 255, b'c', b't']);
+        assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
     #[test]
@@ -95,15 +95,15 @@ mod tests {
     }
 
     #[test]
-    fn clone() {
-        let data = evaluate(&[b'p', 255, b'c', b't']);
-        assert_eq!(data[data.len() - 2..], [255, 255]);
-    }
-
-    #[test]
     fn store() {
         let data = evaluate(&[b'p', 255, b'p', 0, b'S', b't']);
         assert_eq!(data[..1], [255]);
+    }
+
+    #[test]
+    fn terminate() {
+        evaluate(&[b't']);
+        // This should not run forever, or cause any kind of panic.
     }
 
     fn evaluate(program: &[u8]) -> Vec<u8> {
