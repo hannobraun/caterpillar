@@ -79,8 +79,23 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let data = unsafe { DATA.access_write() };
 
     let program = [
-        b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S', b'p', 255,
-        b'p', 3, b'S', b't',
+        b'c', // clone
+        b'p', // push
+        0,    // address
+        b'S', // store
+        b'c', // clone
+        b'p', // push
+        1,    // address
+        b'S', // store
+        b'p', // push
+        2,    // address
+        b'S', // store
+        b'p', // push
+        255,  // alpha channel
+        b'p', // push
+        3,    // address
+        b'S', // store
+        b't', // terminate
     ];
     code[..program.len()].copy_from_slice(&program);
 
