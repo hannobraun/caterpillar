@@ -51,7 +51,7 @@ impl Evaluator {
                 }
 
                 // `clone` - Clone the top item of the stack
-                b'c' => {
+                0x04 => {
                     let value = self.data.pop(data);
                     self.data.push(value, data);
                     self.data.push(value, data);
@@ -79,7 +79,7 @@ mod tests {
         let data = evaluate(&[
             0x01, // push
             255,  // value
-            b'c', // clone
+            0x04, // clone
             0x00, // terminate
         ]);
         assert_eq!(data[data.len() - 2..], [255, 255]);

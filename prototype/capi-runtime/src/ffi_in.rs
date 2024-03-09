@@ -79,11 +79,11 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let data = unsafe { DATA.access_write() };
 
     let program = [
-        b'c', // clone
+        0x04, // clone
         0x01, // push
         0,    // address
         0x03, // store
-        b'c', // clone
+        0x04, // clone
         0x01, // push
         1,    // address
         0x03, // store
