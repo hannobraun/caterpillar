@@ -93,19 +93,8 @@ mod tests {
 
     #[test]
     fn store() {
-        let data = evaluate(
-            [
-                0x01, // push
-                255,  // value
-                0x01, // push
-                0,    // address
-                0x03, // store
-                0x00, // terminate
-            ],
-            [0; 2],
-            [],
-        );
-        assert_eq!(data[..1], [255],);
+        let data = evaluate([opcode::STORE], [0, 0, 0], [255, 0]);
+        assert_eq!(data, [255, 0, 255]);
     }
 
     #[test]
