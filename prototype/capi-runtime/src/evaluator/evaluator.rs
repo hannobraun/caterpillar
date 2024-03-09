@@ -40,6 +40,8 @@ impl Evaluator {
                     self.data.push(value, data);
                 }
 
+                // 0x02 reserved for `load`
+
                 // `clone` - Clone the top item of the stack
                 b'c' => {
                     let value = self.data.pop(data);
