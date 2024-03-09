@@ -20,10 +20,49 @@ use tokio::{
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempdir()?;
 
+    let _host_watcher = watch_host(serve_dir.path().to_path_buf())?;
     let _runtime_watcher = watch_runtime(serve_dir.path().to_path_buf())?;
     serve(&serve_dir).await?;
 
     Ok(())
+}
+
+fn watch_host(
+    serve_dir: PathBuf,
+) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+    let (tx, rx) = watch::channel(());
+    tx.send_replace(());
+
+    let mut debouncer = new_debouncer(
+        Duration::from_millis(50),
+        move |result: DebounceEventResult| {
+            let events = result.unwrap();
+            for event in events {
+                if event.kind == DebouncedEventKind::Any {
+                    tx.send(()).unwrap();
+                }
+            }
+        },
+    )?;
+    debouncer
+        .watcher()
+        .watch(Path::new("index.html"), RecursiveMode::Recursive)?;
+
+    task::spawn(copy_host(serve_dir, rx));
+
+    Ok(debouncer)
+}
+
+async fn copy_host(
+    serve_dir: PathBuf,
+    mut changes: watch::Receiver<()>,
+) -> anyhow::Result<()> {
+    loop {
+        let () = changes.changed().await.unwrap();
+
+        println!("Copying host...");
+        copy_artifacts(&serve_dir).await?;
+    }
 }
 
 fn watch_runtime(
