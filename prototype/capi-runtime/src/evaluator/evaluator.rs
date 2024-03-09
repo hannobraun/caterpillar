@@ -1,5 +1,7 @@
 use std::iter;
 
+use crate::ffi_in::{CODE_SIZE, DATA_SIZE};
+
 use super::data::Data;
 
 pub struct Evaluator {
@@ -9,12 +11,6 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new() -> Self {
-        // I want to know when I go beyond certain thresholds, just out of
-        // interest. Keeping the limits as low as possible here, to make sure I
-        // notice.
-        const CODE_SIZE: usize = 32;
-        const DATA_SIZE: usize = 8;
-
         let code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
         let data = Data::new(DATA_SIZE);
 
