@@ -9,8 +9,8 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
     while let Some(instruction) = instructions.next() {
         if instruction.ends_with(':') {
-            // This is a label. Currently they serve a function more
-            // like comments, and are ignored.
+            // This is a label. Currently they serve a function more like
+            // comments, and are ignored.
             continue;
         }
 
