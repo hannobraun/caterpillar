@@ -72,6 +72,13 @@ mod opcode {
 mod tests {
     use super::{opcode, Evaluator};
 
+    // I've started simplifying these tests, so each only depends on the
+    // instruction it actually tests, not a whole lot of others for test setup.
+    // This went well for the first tests, but failed for the others. The
+    // problem is, there's currently no way to set up the stack pointer.
+    //
+    // Maybe `Evaluator` just needs a way to override the stack pointer then.
+
     #[test]
     fn terminate() {
         evaluate([opcode::TERMINATE], []);
