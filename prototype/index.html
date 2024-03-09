@@ -25,7 +25,7 @@
     <canvas></canvas>
     <script type="module">
         const { instance } = await loadWasm();
-        initProgram(instance);
+        await initProgram(instance);
         const { canvas, context } = initCanvas();
         const { imageData } = initDrawBuffer(instance, canvas);
         initInputHandling(instance);
@@ -51,30 +51,29 @@
             });
         }
 
-        function initProgram(instance) {
+        async function initProgram(instance) {
             const code = new Uint8Array(
                 instance.exports.memory.buffer,
                 instance.exports.code_ptr(),
                 instance.exports.code_len(),
             );
 
-            code[0] = 0x04;  // clone
-            code[1] = 0x01;  // push
-            code[2] = 0;     // address
-            code[3] = 0x03;  // store
-            code[4] = 0x04;  // clone
-            code[5] = 0x01;  // push
-            code[6] = 1;     // address
-            code[7] = 0x03;  // store
-            code[8] = 0x01;  // push
-            code[9] = 2;     // address
-            code[10] = 0x03; // store
-            code[11] = 0x01; // push
-            code[12] = 255;  // alpha channel
-            code[13] = 0x01; // push
-            code[14] = 3;    // address
-            code[15] = 0x03; // store
-            code[16] = 0x00; // terminate
+            const program = await fetch("/code");
+            const reader = program.body.getReader();
+
+            let code_index = 0;
+            while (true) {
+                const { done, value } = await reader.read()
+
+                if (done) {
+                    break;
+                }
+
+                for (let i = 0; i < value.length; i += 1) {
+                    code[code_index] = value[i];
+                    code_index += 1;
+                }
+            }
         }
 
         function initCanvas() {

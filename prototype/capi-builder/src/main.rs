@@ -135,8 +135,32 @@ async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
 async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
     rocket::build()
         .mount("/", rocket::fs::FileServer::from(&serve_dir))
+        .mount("/", rocket::routes![code])
         .launch()
         .await?;
 
     Ok(())
+}
+
+#[rocket::get("/code")]
+fn code() -> &'static [u8] {
+    &[
+        0x04, // clone
+        0x01, // push
+        0,    // address
+        0x03, // store
+        0x04, // clone
+        0x01, // push
+        1,    // address
+        0x03, // store
+        0x01, // push
+        2,    // address
+        0x03, // store
+        0x01, // push
+        255,  // alpha channel
+        0x01, // push
+        3,    // address
+        0x03, // store
+        0x00, // terminate
+    ]
 }
