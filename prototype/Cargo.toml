@@ -1,3 +1,4 @@
 [workspace]
 resolver = "2"
 members = ["capi-builder", "capi-runtime", "capi-vm"]
+default-members = ["capi-builder", "capi-vm"]
