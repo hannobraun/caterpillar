@@ -1,8 +1,8 @@
 use std::{iter, num::Wrapping};
 
-/// A downward-growing stack
+/// Access to the evaluator's data memory
 pub struct Data {
-    /// Points to the address where the *next* item will be pushed
+    /// Points to the address where the *next* stack item will be pushed
     ///
     /// Need to be `Wrapping`, as that's what's going to happen, if the stack
     /// fully fills the available memory.
