@@ -9,6 +9,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
     while let Some(instruction) = instructions.next() {
         match instruction {
+            "clone" => {
+                bytecode.push(opcode::CLONE);
+            }
             "push" => {
                 let Some(value) = instructions.next() else {
                     return Err(AssemblerError::PushCameLast);
@@ -45,6 +48,12 @@ pub enum AssemblerError {
 #[cfg(test)]
 mod tests {
     use capi_vm::Evaluator;
+
+    #[test]
+    fn clone() {
+        let data = assemble("push 255 clone", [0, 0]);
+        assert_eq!(data, [255, 255]);
+    }
 
     #[test]
     fn push() {
