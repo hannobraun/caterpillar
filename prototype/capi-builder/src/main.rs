@@ -82,9 +82,15 @@ fn watch_runtime(
             }
         },
     )?;
+
+    // Here we're watching `capi-runtime` and its dependencies. It would be more
+    // robust to figure out those dependencies automatically.
     debouncer
         .watcher()
         .watch(Path::new("capi-runtime"), RecursiveMode::Recursive)?;
+    debouncer
+        .watcher()
+        .watch(Path::new("capi-vm"), RecursiveMode::Recursive)?;
 
     task::spawn(build_runtime(serve_dir, rx));
 
