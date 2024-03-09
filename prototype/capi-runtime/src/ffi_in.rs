@@ -82,19 +82,19 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
         b'c', // clone
         0x01, // push
         0,    // address
-        b'S', // store
+        0x03, // store
         b'c', // clone
         0x01, // push
         1,    // address
-        b'S', // store
+        0x03, // store
         0x01, // push
         2,    // address
-        b'S', // store
+        0x03, // store
         0x01, // push
         255,  // alpha channel
         0x01, // push
         3,    // address
-        b'S', // store
+        0x03, // store
         0x00, // terminate
     ];
     code[..program.len()].copy_from_slice(&program);

@@ -50,7 +50,7 @@ impl Evaluator {
                 }
 
                 // `store` - Store data in memory
-                b'S' => {
+                0x03 => {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
 
@@ -102,7 +102,7 @@ mod tests {
             255,  // value
             0x01, // push
             0,    // address
-            b'S', // store
+            0x03, // store
             0x00, // terminate
         ]);
         assert_eq!(data[..1], [255]);
