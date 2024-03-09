@@ -68,16 +68,11 @@ mod opcode {
 
 #[cfg(test)]
 mod tests {
-    use super::Evaluator;
+    use super::{opcode, Evaluator};
 
     #[test]
     fn terminate() {
-        evaluate(
-            [
-                0x00, // terminate
-            ],
-            [],
-        );
+        evaluate([opcode::TERMINATE], []);
         // This should not run forever, or cause any kind of panic.
     }
 
