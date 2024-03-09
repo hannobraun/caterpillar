@@ -12,7 +12,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
         let code = iter::repeat(0).take(CODE_SIZE).collect();
-        let data = Data::new(data.len());
+        let data = Data::new(&data);
 
         Self { code, data }
     }

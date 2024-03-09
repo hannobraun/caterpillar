@@ -10,10 +10,10 @@ pub struct Data {
 }
 
 impl Data {
-    pub fn new(size: usize) -> Self {
+    pub fn new(memory: &[u8]) -> Self {
         // Let's make `ptr` wrapping before doing any arithmetic. Otherwise, we
         // subtract with overflow, if `data` has zero length.
-        let mut ptr = Wrapping(size);
+        let mut ptr = Wrapping(memory.len());
         ptr -= 1;
 
         Self { stack_ptr: ptr }
@@ -47,7 +47,7 @@ mod tests {
     #[test]
     fn fill_memory_completely() {
         let mut memory = [0; 1];
-        let mut data = Data::new(memory.len());
+        let mut data = Data::new(&memory);
 
         data.push(0, &mut memory);
         // Should not panic. It will, in debug mode, unless wrapping is handled
@@ -56,7 +56,7 @@ mod tests {
 
     #[test]
     fn handle_zero_memory() {
-        Data::new(0);
+        Data::new(&[]);
         // Should not panic. It will, unless wrapping behavior is handled
         // correctly when initializing the stack pointer.
     }
