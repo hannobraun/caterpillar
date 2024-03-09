@@ -70,55 +70,63 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::ffi_in::DATA_SIZE;
-
     use super::Evaluator;
 
     #[test]
     fn clone() {
-        let data = evaluate(&[
-            0x01, // push
-            255,  // value
-            0x04, // clone
-            0x00, // terminate
-        ]);
+        let data = evaluate(
+            &[
+                0x01, // push
+                255,  // value
+                0x04, // clone
+                0x00, // terminate
+            ],
+            [0; 2],
+        );
         assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
     #[test]
     fn push() {
-        let data = evaluate(&[
-            0x01, // push
-            255,  // value
-            0x00, // terminate
-        ]);
+        let data = evaluate(
+            &[
+                0x01, // push
+                255,  // value
+                0x00, // terminate
+            ],
+            [0; 1],
+        );
         assert_eq!(data[data.len() - 1..], [255]);
     }
 
     #[test]
     fn store() {
-        let data = evaluate(&[
-            0x01, // push
-            255,  // value
-            0x01, // push
-            0,    // address
-            0x03, // store
-            0x00, // terminate
-        ]);
+        let data = evaluate(
+            &[
+                0x01, // push
+                255,  // value
+                0x01, // push
+                0,    // address
+                0x03, // store
+                0x00, // terminate
+            ],
+            [0; 2],
+        );
         assert_eq!(data[..1], [255]);
     }
 
     #[test]
     fn terminate() {
-        evaluate(&[
-            0x00, // terminate
-        ]);
+        evaluate(
+            &[
+                0x00, // terminate
+            ],
+            [],
+        );
         // This should not run forever, or cause any kind of panic.
     }
 
-    fn evaluate(code: &[u8]) -> [u8; DATA_SIZE] {
-        let mut data = [0; DATA_SIZE];
-
+    fn evaluate<const D: usize>(code: &[u8], mut data: [u8; D]) -> [u8; D] {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator.evaluate(code, &mut data);
