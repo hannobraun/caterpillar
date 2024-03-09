@@ -136,7 +136,7 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     ///
     /// The caller must not call [`SharedMemory::access_write`] again, while the
     /// returned reference still exists.
-    unsafe fn access_write(&mut self) -> &mut [u8] {
+    unsafe fn access_write(&self) -> &mut [u8] {
         &mut *self.inner.get()
     }
 }
