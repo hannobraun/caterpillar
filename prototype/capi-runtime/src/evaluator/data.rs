@@ -19,8 +19,8 @@ impl Data {
         Self { stack_ptr: ptr }
     }
 
-    pub fn push(&mut self, value: u8, data: &mut [u8]) {
-        data[self.stack_ptr.0] = value;
+    pub fn push(&mut self, value: u8, memory: &mut [u8]) {
+        memory[self.stack_ptr.0] = value;
         self.stack_ptr -= 1;
     }
 
