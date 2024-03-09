@@ -21,7 +21,7 @@ fn main() -> anyhow::Result<()> {
         0x00, // terminate
     ];
 
-    File::create("program.bc.capi")?.write_all(&program)?;
+    File::create("snake.bc.capi")?.write_all(&program)?;
 
     Ok(())
 }

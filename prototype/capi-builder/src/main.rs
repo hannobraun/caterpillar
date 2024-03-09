@@ -151,6 +151,6 @@ async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
 
 #[rocket::get("/code")]
 async fn code() -> io::Result<File> {
-    let file = File::open("program.bc.capi").await?;
+    let file = File::open("snake.bc.capi").await?;
     Ok(file)
 }
