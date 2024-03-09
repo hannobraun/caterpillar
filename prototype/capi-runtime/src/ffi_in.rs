@@ -140,3 +140,7 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
         &mut *self.inner.get()
     }
 }
+
+// Safe to implement, since with WebAssembly, this lives in a single-threaded
+// context.
+unsafe impl<const SIZE: usize> Sync for SharedMemory<SIZE> {}
