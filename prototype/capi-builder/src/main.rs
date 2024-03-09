@@ -77,14 +77,20 @@ async fn build_runtime(
             .await?;
 
         if exit_status.success() {
-            fs::copy("index.html", serve_dir.join("index.html")).await?;
-            fs::copy(
-                "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
-                serve_dir.join("capi_runtime.wasm"),
-            )
-            .await?;
+            copy_artifacts(serve_dir).await?;
         }
     }
+}
+
+async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
+    fs::copy("index.html", serve_dir.join("index.html")).await?;
+    fs::copy(
+        "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+        serve_dir.join("capi_runtime.wasm"),
+    )
+    .await?;
+
+    Ok(())
 }
 
 async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
