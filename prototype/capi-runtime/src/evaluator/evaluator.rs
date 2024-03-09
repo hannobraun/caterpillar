@@ -74,25 +74,43 @@ mod tests {
 
     #[test]
     fn clone() {
-        let data = evaluate(&[b'p', 255, b'c', b't']);
+        let data = evaluate(&[
+            b'p', // push
+            255,  // value
+            b'c', // clone
+            b't', // terminate
+        ]);
         assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
     #[test]
     fn push() {
-        let data = evaluate(&[b'p', 255, b't']);
+        let data = evaluate(&[
+            b'p', // push
+            255,  // value
+            b't', // terminate
+        ]);
         assert_eq!(data[data.len() - 1..], [255]);
     }
 
     #[test]
     fn store() {
-        let data = evaluate(&[b'p', 255, b'p', 0, b'S', b't']);
+        let data = evaluate(&[
+            b'p', // push
+            255,  // value
+            b'p', // push
+            0,    // address
+            b'S', // store
+            b't', // terminate
+        ]);
         assert_eq!(data[..1], [255]);
     }
 
     #[test]
     fn terminate() {
-        evaluate(&[b't']);
+        evaluate(&[
+            b't', // terminate
+        ]);
         // This should not run forever, or cause any kind of panic.
     }
 
