@@ -77,6 +77,19 @@ mod tests {
     }
 
     #[test]
+    fn push() {
+        let data = evaluate(
+            [
+                0x01, // push
+                255,  // value
+                0x00, // terminate
+            ],
+            [0; 1],
+        );
+        assert_eq!(data[data.len() - 1..], [255]);
+    }
+
+    #[test]
     fn clone() {
         let data = evaluate(
             [
@@ -88,19 +101,6 @@ mod tests {
             [0; 2],
         );
         assert_eq!(data[data.len() - 2..], [255, 255]);
-    }
-
-    #[test]
-    fn push() {
-        let data = evaluate(
-            [
-                0x01, // push
-                255,  // value
-                0x00, // terminate
-            ],
-            [0; 1],
-        );
-        assert_eq!(data[data.len() - 1..], [255]);
     }
 
     #[test]
