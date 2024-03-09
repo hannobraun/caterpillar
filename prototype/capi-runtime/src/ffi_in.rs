@@ -67,10 +67,10 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    let mut data = [0; DATA_SIZE];
+    let data = unsafe { &mut DATA };
 
     state.world.update(delta_time_ms);
     state
         .render_target
-        .draw(&state.world, &mut state.evaluator, &mut data);
+        .draw(&state.world, &mut state.evaluator, data);
 }
