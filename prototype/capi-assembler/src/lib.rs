@@ -29,15 +29,11 @@ mod tests {
 
     #[test]
     fn terminate() {
-        assemble("terminate");
+        assemble("terminate", []);
         // This should not run forever, nor cause any kind of panic.
     }
 
-    const DATA_SIZE: usize = 64;
-
-    fn assemble(assembly: &str) -> [u8; DATA_SIZE] {
-        let mut data = [0; DATA_SIZE];
-
+    fn assemble<const D: usize>(assembly: &str, mut data: [u8; D]) -> [u8; D] {
         let bytecode = super::assemble(assembly).unwrap();
 
         let mut evaluator = Evaluator::new(&data);
