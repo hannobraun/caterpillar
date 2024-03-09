@@ -23,10 +23,10 @@ impl Evaluator {
 
     pub fn push_arguments(
         &mut self,
-        arguments: impl IntoIterator<Item = u8>,
+        args: impl IntoIterator<Item = u8>,
         data: &mut [u8],
     ) {
-        for b in arguments {
+        for b in args {
             self.data.push(b, data);
         }
     }
