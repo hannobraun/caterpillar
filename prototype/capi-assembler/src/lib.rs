@@ -8,6 +8,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut instructions = assembly.split_whitespace();
 
     while let Some(instruction) = instructions.next() {
+        if instruction.ends_with(':') {
+            // This is a label. Currently they serve a function more
+            // like comments, and are ignored.
+            continue;
+        }
+
         if instruction == "push" {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
@@ -29,12 +35,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         if let Some(opcode) = opcode {
             bytecode.push(opcode);
-            continue;
-        }
-
-        if instruction.ends_with(':') {
-            // This is a label. Currently they serve a function more
-            // like comments, and are ignored.
             continue;
         }
 
