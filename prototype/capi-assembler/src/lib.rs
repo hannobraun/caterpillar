@@ -1,6 +1,6 @@
 use capi_vm::opcode;
 
-pub fn assemble(assembly: &str) -> Result<Vec<u8>, UnknownInstruction> {
+pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut bytecode = Vec::new();
 
     let mut instructions = assembly.split_whitespace();
@@ -9,7 +9,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, UnknownInstruction> {
         match instruction {
             "terminate" => bytecode.push(opcode::TERMINATE),
             instruction => {
-                return Err(UnknownInstruction {
+                return Err(AssemblerError::UnknownInstruction {
                     name: instruction.into(),
                 })
             }
@@ -20,9 +20,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, UnknownInstruction> {
 }
 
 #[derive(Debug, thiserror::Error)]
-#[error("Unknown instruction: `{name}`")]
-pub struct UnknownInstruction {
-    pub name: String,
+pub enum AssemblerError {
+    #[error("Unknown instruction: `{name}`")]
+    UnknownInstruction { name: String },
 }
 
 #[cfg(test)]
