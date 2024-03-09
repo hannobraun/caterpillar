@@ -32,18 +32,18 @@ impl Evaluator {
                     break;
                 }
 
-                // `clone` - Clone the top item on the stack
-                b'c' => {
-                    let value = self.data.pop(data);
-                    self.data.push(value, data);
-                    self.data.push(value, data);
-                }
-
                 // `push` - Push a value to the stack
                 0x01 => {
                     code_ptr += 1;
                     let value = code[code_ptr];
 
+                    self.data.push(value, data);
+                }
+
+                // `clone` - Clone the top item on the stack
+                b'c' => {
+                    let value = self.data.pop(data);
+                    self.data.push(value, data);
                     self.data.push(value, data);
                 }
 
