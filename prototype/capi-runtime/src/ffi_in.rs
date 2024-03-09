@@ -10,16 +10,6 @@ pub const DATA_SIZE: usize = 8;
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
 /// # The virtual machine's data memory
-///
-/// ## Safety
-///
-/// We are in a single-threaded context. This static is only accessed by top-
-/// level FFI functions in this module and the JavaScript host. Since neither of
-/// those can run concurrently, this doesn't constitute concurrent access to
-/// this static.
-///
-/// As a consequence, access is sound, as long as no reference to this static is
-/// lives longer than the local scope of the FFI function that creates it.
 static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory([0; DATA_SIZE]);
 
 #[no_mangle]
@@ -100,5 +90,15 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     );
 }
 
+/// Virtual machine memory that is shared with the JavaScript host
+///
+/// ## Safety
+///
+/// We are in a single-threaded context. Shared memory is only accessed by top-
+/// level FFI functions in this module and the JavaScript host. Since neither of
+/// those can run concurrently, this doesn't constitute concurrent access.
+///
+/// As a consequence, access is sound, as long as no reference to this static is
+/// lives longer than the local scope of the FFI function that creates it.
 #[repr(transparent)]
 struct SharedMemory<const SIZE: usize>([u8; SIZE]);
