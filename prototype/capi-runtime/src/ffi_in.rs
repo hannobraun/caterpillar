@@ -80,6 +80,13 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
+    let program = [
+        b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S', b'p', 255,
+        b'p', 3, b'S', b't',
+    ];
+    let mut code = [0; CODE_SIZE];
+    code[..program.len()].copy_from_slice(&program);
+
     // This is sound, as the reference is dropped at the end of this function.
     // See comment on `DATA`.
     let data = unsafe { &mut DATA };
@@ -87,5 +94,5 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     state.world.update(delta_time_ms);
     state
         .render_target
-        .draw(&state.world, &mut state.evaluator, data);
+        .draw(&state.world, &mut state.evaluator, &code, data);
 }
