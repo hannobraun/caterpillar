@@ -91,7 +91,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     state.world.update(delta_time_ms);
     state
         .render_target
-        .draw(&state.world, &mut state.evaluator, &code, data);
+        .draw(&state.world, &mut state.evaluator, code, data);
 }
 
 /// # Virtual machine memory that is shared with the JavaScript host

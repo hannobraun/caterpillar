@@ -8,7 +8,7 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
-        let data = Data::new(&data);
+        let data = Data::new(data);
         Self { data }
     }
 

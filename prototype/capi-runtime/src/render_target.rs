@@ -42,7 +42,7 @@ impl RenderTarget {
                     cell_y,
                     color,
                     evaluator,
-                    &code,
+                    code,
                     data,
                 );
             }
@@ -68,7 +68,7 @@ impl RenderTarget {
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
                 evaluator.push_args([color], data);
-                evaluator.evaluate(&code, data);
+                evaluator.evaluate(code, data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
