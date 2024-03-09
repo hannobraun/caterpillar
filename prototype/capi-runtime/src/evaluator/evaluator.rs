@@ -108,12 +108,12 @@ mod tests {
     }
 
     fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
-        let mut data_memory = [0; DATA_SIZE];
+        let mut data = [0; DATA_SIZE];
 
-        let mut evaluator = Evaluator::new(&data_memory);
+        let mut evaluator = Evaluator::new(&data);
         evaluator.load_program(program);
 
-        evaluator.evaluate(&mut data_memory);
-        data_memory
+        evaluator.evaluate(&mut data);
+        data
     }
 }
