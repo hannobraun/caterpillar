@@ -48,7 +48,7 @@ impl RenderTarget {
                     cell_y,
                     color,
                     evaluator,
-                    &mut code,
+                    &code,
                     data,
                 );
             }
@@ -62,7 +62,7 @@ impl RenderTarget {
         cell_y: usize,
         color: u8,
         evaluator: &mut Evaluator,
-        code: &mut [u8],
+        code: &[u8],
         data: &mut [u8],
     ) {
         for x in 0..cell_size {
