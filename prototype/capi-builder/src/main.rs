@@ -1,4 +1,5 @@
 use std::{
+    io,
     path::{Path, PathBuf},
     time::Duration,
 };
@@ -10,7 +11,7 @@ use notify_debouncer_mini::{
 };
 use tempfile::tempdir;
 use tokio::{
-    fs,
+    fs::{self, File},
     process::Command,
     sync::watch,
     task::{self},
@@ -149,24 +150,7 @@ async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
 }
 
 #[rocket::get("/code")]
-fn code() -> &'static [u8] {
-    &[
-        0x04, // clone
-        0x01, // push
-        0,    // address
-        0x03, // store
-        0x04, // clone
-        0x01, // push
-        1,    // address
-        0x03, // store
-        0x01, // push
-        2,    // address
-        0x03, // store
-        0x01, // push
-        255,  // alpha channel
-        0x01, // push
-        3,    // address
-        0x03, // store
-        0x00, // terminate
-    ]
+async fn code() -> io::Result<File> {
+    let file = File::open("program.bc.capi").await?;
+    Ok(file)
 }
