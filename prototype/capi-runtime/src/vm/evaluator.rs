@@ -28,12 +28,12 @@ impl Evaluator {
 
             match instruction {
                 // `terminate` - Terminate the program
-                0x00 => {
+                opcode::TERMINATE => {
                     break;
                 }
 
                 // `push` - Push a value to the stack
-                0x01 => {
+                opcode::PUSH => {
                     code_ptr += 1;
                     let value = code[code_ptr];
 
@@ -43,7 +43,7 @@ impl Evaluator {
                 // 0x02 reserved for `load`
 
                 // `store` - Store data in memory
-                0x03 => {
+                opcode::STORE => {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
 
@@ -51,7 +51,7 @@ impl Evaluator {
                 }
 
                 // `clone` - Clone the top item of the stack
-                0x04 => {
+                opcode::CLONE => {
                     let value = self.data.pop(data);
                     self.data.push(value, data);
                     self.data.push(value, data);
@@ -66,6 +66,14 @@ impl Evaluator {
             code_ptr += 1;
         }
     }
+}
+
+mod opcode {
+    pub const TERMINATE: u8 = 0x00;
+    pub const PUSH: u8 = 0x01;
+    // 0x02 reserved for `load`
+    pub const STORE: u8 = 0x03;
+    pub const CLONE: u8 = 0x04;
 }
 
 #[cfg(test)]
