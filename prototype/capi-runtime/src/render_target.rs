@@ -49,6 +49,7 @@ impl RenderTarget {
         }
     }
 
+    #[allow(clippy::too_many_arguments)] // it's due for a rewrite anyway
     fn draw_cell(
         &mut self,
         cell_size: usize,
