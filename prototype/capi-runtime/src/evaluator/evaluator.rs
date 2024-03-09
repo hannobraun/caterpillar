@@ -14,7 +14,7 @@ impl Evaluator {
     pub fn new() -> Self {
         let code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
         let data_memory: Vec<_> = iter::repeat(0).take(DATA_SIZE).collect();
-        let data = Data::new(data_memory.len());
+        let data = Data::new(&data_memory);
 
         Self {
             code,
