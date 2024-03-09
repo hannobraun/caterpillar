@@ -21,16 +21,18 @@ impl Evaluator {
         self.code[..program.len()].copy_from_slice(&program);
     }
 
-    pub fn evaluate(
+    pub fn push_arguments(
         &mut self,
         arguments: impl IntoIterator<Item = u8>,
         data_memory: &mut [u8],
     ) {
-        let mut code_ptr = 0;
-
         for b in arguments {
             self.data.push(b, data_memory);
         }
+    }
+
+    pub fn evaluate(&mut self, data_memory: &mut [u8]) {
+        let mut code_ptr = 0;
 
         loop {
             let instruction = self.code[code_ptr];
@@ -111,7 +113,7 @@ mod tests {
         let mut evaluator = Evaluator::new();
         evaluator.load_program(program);
 
-        evaluator.evaluate([], &mut data_memory);
+        evaluator.evaluate(&mut data_memory);
         data_memory
     }
 }

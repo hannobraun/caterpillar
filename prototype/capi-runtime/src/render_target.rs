@@ -58,7 +58,8 @@ impl RenderTarget {
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
                 let mut data = [0; DATA_SIZE];
-                evaluator.evaluate([color], &mut data);
+                evaluator.push_arguments([color], &mut data);
+                evaluator.evaluate(&mut data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
