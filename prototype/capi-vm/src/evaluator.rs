@@ -1,3 +1,5 @@
+use crate::opcode;
+
 use super::data::Data;
 
 pub struct Evaluator {
@@ -60,22 +62,16 @@ impl Evaluator {
     }
 }
 
-mod opcode {
-    pub const TERMINATE: u8 = 0x00;
-    pub const PUSH: u8 = 0x01;
-    // 0x02 reserved for `load`
-    pub const STORE: u8 = 0x03;
-    pub const CLONE: u8 = 0x04;
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{opcode, Evaluator};
+    use crate::opcode;
+
+    use super::Evaluator;
 
     #[test]
     fn terminate() {
         evaluate([opcode::TERMINATE], [], []);
-        // This should not run forever, or cause any kind of panic.
+        // This should not run forever, nor cause any kind of panic.
     }
 
     #[test]
