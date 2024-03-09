@@ -24,7 +24,9 @@ impl Evaluator {
         let mut code_ptr = 0;
 
         loop {
-            let instruction = code[code_ptr];
+            let Some(&instruction) = code.get(code_ptr) else {
+                break;
+            };
 
             match instruction {
                 opcode::TERMINATE => {
