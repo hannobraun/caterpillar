@@ -9,7 +9,7 @@ pub const DATA_SIZE: usize = 8;
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
-/// # The virtual machine's data memory
+/// The virtual machine's data memory
 pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
 #[no_mangle]
