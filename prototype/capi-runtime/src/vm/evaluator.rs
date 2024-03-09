@@ -75,7 +75,7 @@ mod tests {
     #[test]
     fn clone() {
         let data = evaluate(
-            &[
+            [
                 0x01, // push
                 255,  // value
                 0x04, // clone
@@ -89,7 +89,7 @@ mod tests {
     #[test]
     fn push() {
         let data = evaluate(
-            &[
+            [
                 0x01, // push
                 255,  // value
                 0x00, // terminate
@@ -102,7 +102,7 @@ mod tests {
     #[test]
     fn store() {
         let data = evaluate(
-            &[
+            [
                 0x01, // push
                 255,  // value
                 0x01, // push
@@ -118,7 +118,7 @@ mod tests {
     #[test]
     fn terminate() {
         evaluate(
-            &[
+            [
                 0x00, // terminate
             ],
             [],
@@ -126,10 +126,13 @@ mod tests {
         // This should not run forever, or cause any kind of panic.
     }
 
-    fn evaluate<const D: usize>(code: &[u8], mut data: [u8; D]) -> [u8; D] {
+    fn evaluate<const C: usize, const D: usize>(
+        code: [u8; C],
+        mut data: [u8; D],
+    ) -> [u8; D] {
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(code, &mut data);
+        evaluator.evaluate(&code, &mut data);
         data
     }
 }
