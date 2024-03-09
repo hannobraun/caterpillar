@@ -8,40 +8,39 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut instructions = assembly.split_whitespace();
 
     while let Some(instruction) = instructions.next() {
-        match instruction {
-            "push" => {
-                let Some(value) = instructions.next() else {
-                    return Err(AssemblerError::PushCameLast);
-                };
-                let value: u8 = value.parse()?;
+        if instruction == "push" {
+            let Some(value) = instructions.next() else {
+                return Err(AssemblerError::PushCameLast);
+            };
+            let value: u8 = value.parse()?;
 
-                bytecode.push(opcode::PUSH);
-                bytecode.push(value);
-            }
-            instruction => {
-                let opcode = match instruction {
-                    "clone" => Some(opcode::CLONE),
-                    "store" => Some(opcode::STORE),
-                    "terminate" => Some(opcode::TERMINATE),
-                    _ => None,
-                };
+            bytecode.push(opcode::PUSH);
+            bytecode.push(value);
 
-                if let Some(opcode) = opcode {
-                    bytecode.push(opcode);
-                    continue;
-                }
-
-                if instruction.ends_with(':') {
-                    // This is a label. Currently they serve a function more
-                    // like comments, and are ignored.
-                    continue;
-                }
-
-                return Err(AssemblerError::UnknownInstruction {
-                    name: instruction.into(),
-                });
-            }
+            continue;
         }
+
+        let opcode = match instruction {
+            "clone" => Some(opcode::CLONE),
+            "store" => Some(opcode::STORE),
+            "terminate" => Some(opcode::TERMINATE),
+            _ => None,
+        };
+
+        if let Some(opcode) = opcode {
+            bytecode.push(opcode);
+            continue;
+        }
+
+        if instruction.ends_with(':') {
+            // This is a label. Currently they serve a function more
+            // like comments, and are ignored.
+            continue;
+        }
+
+        return Err(AssemblerError::UnknownInstruction {
+            name: instruction.into(),
+        });
     }
 
     Ok(bytecode)
