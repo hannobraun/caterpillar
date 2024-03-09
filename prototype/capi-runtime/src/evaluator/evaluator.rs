@@ -40,7 +40,7 @@ impl Evaluator {
                     self.data.push(value, data);
                 }
 
-                // `clone` - Clone the top item on the stack
+                // `clone` - Clone the top item of the stack
                 b'c' => {
                     let value = self.data.pop(data);
                     self.data.push(value, data);
