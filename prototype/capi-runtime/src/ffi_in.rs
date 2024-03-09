@@ -28,6 +28,8 @@ pub extern "C" fn on_init(width: usize, height: usize) {
         print(&format!("{panic_info}"));
     }));
 
+    // This is sound, as the reference is dropped at the end of this function.
+    // See comment on `DATA`.
     let data = unsafe { &DATA };
 
     let mut state = State::new(width, height, data);
