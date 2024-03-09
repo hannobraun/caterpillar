@@ -83,7 +83,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let state = state.as_mut().expect("Expected state to be initialized");
 
     // This is sound, as the reference is dropped at the end of this function.
-    let code = unsafe { CODE.access_write() };
+    let code = unsafe { CODE.access_read() };
 
     // This is sound, as the reference is dropped at the end of this function.
     let data = unsafe { DATA.access_write() };
