@@ -10,10 +10,6 @@ impl Evaluator {
         Self { data }
     }
 
-    pub fn load_program(&mut self, program: &[u8], code: &mut [u8]) {
-        code[..program.len()].copy_from_slice(&program);
-    }
-
     pub fn push_args(
         &mut self,
         args: impl IntoIterator<Item = u8>,
@@ -105,7 +101,7 @@ mod tests {
         let mut data = [0; DATA_SIZE];
 
         let mut evaluator = Evaluator::new(&data);
-        evaluator.load_program(program, &mut code);
+        code[..program.len()].copy_from_slice(&program);
 
         evaluator.evaluate(&mut code, &mut data);
         data

@@ -65,13 +65,11 @@ impl RenderTarget {
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
                 let mut code = [0; CODE_SIZE];
-                evaluator.load_program(
-                    &[
-                        b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2,
-                        b'S', b'p', 255, b'p', 3, b'S', b't',
-                    ],
-                    &mut code,
-                );
+                let program = [
+                    b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S',
+                    b'p', 255, b'p', 3, b'S', b't',
+                ];
+                code[..program.len()].copy_from_slice(&program);
                 evaluator.push_args([color], data);
                 evaluator.evaluate(&code, data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
