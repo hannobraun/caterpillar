@@ -1,3 +1,5 @@
+use std::num::ParseIntError;
+
 use capi_vm::opcode;
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
@@ -7,6 +9,15 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
     while let Some(instruction) = instructions.next() {
         match instruction {
+            "push" => {
+                let Some(value) = instructions.next() else {
+                    return Err(AssemblerError::PushCameLast);
+                };
+                let value: u8 = value.parse()?;
+
+                bytecode.push(opcode::PUSH);
+                bytecode.push(value);
+            }
             "terminate" => bytecode.push(opcode::TERMINATE),
             instruction => {
                 return Err(AssemblerError::UnknownInstruction {
@@ -21,6 +32,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AssemblerError {
+    #[error("Could not parse value")]
+    ParseValue(#[from] ParseIntError),
+
+    #[error("Expected value after `push`, but came last")]
+    PushCameLast,
+
     #[error("Unknown instruction: `{name}`")]
     UnknownInstruction { name: String },
 }
@@ -28,6 +45,12 @@ pub enum AssemblerError {
 #[cfg(test)]
 mod tests {
     use capi_vm::Evaluator;
+
+    #[test]
+    fn push() {
+        let data = assemble("push 255", [0]);
+        assert_eq!(data, [255]);
+    }
 
     #[test]
     fn terminate() {
