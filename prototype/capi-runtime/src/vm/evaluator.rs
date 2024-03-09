@@ -80,15 +80,8 @@ mod tests {
 
     #[test]
     fn push() {
-        let data = evaluate(
-            [
-                0x01, // push
-                255,  // value
-                0x00, // terminate
-            ],
-            [0; 1],
-        );
-        assert_eq!(data[data.len() - 1..], [255]);
+        let data = evaluate([opcode::PUSH, 255], [0]);
+        assert_eq!(data, [255]);
     }
 
     #[test]
