@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::{evaluator::Evaluator, ffi_in::DATA_SIZE, world::World};
+use crate::{evaluator::Evaluator, world::World};
 
 pub struct RenderTarget {
     pub buffer: Vec<u8>,
@@ -22,7 +22,12 @@ impl RenderTarget {
         }
     }
 
-    pub fn draw(&mut self, world: &World, evaluator: &mut Evaluator) {
+    pub fn draw(
+        &mut self,
+        world: &World,
+        evaluator: &mut Evaluator,
+        data: &mut [u8],
+    ) {
         for x in 0..world.cells.size[0] {
             for y in 0..world.cells.size[1] {
                 let cell_x = x * world.cells.cell_size;
@@ -30,14 +35,13 @@ impl RenderTarget {
 
                 let color = world.cells.buffer[x + y * world.cells.size[0]];
 
-                let mut data = [0; DATA_SIZE];
                 self.draw_cell(
                     world.cells.cell_size,
                     cell_x,
                     cell_y,
                     color,
                     evaluator,
-                    &mut data,
+                    data,
                 );
             }
         }
