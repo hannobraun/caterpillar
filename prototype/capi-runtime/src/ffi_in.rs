@@ -9,6 +9,9 @@ pub const DATA_SIZE: usize = 8;
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
+/// The virtual machine's code memory
+pub static CODE: SharedMemory<CODE_SIZE> = SharedMemory::new();
+
 /// The virtual machine's data memory
 pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
@@ -69,7 +72,8 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut state = STATE.lock().expect("Expected exclusive access");
     let state = state.as_mut().expect("Expected state to be initialized");
 
-    let mut code = [0; CODE_SIZE];
+    // This is sound, as the reference is dropped at the end of this function.
+    let code = unsafe { CODE.access_write() };
 
     // This is sound, as the reference is dropped at the end of this function.
     let data = unsafe { DATA.access_write() };
