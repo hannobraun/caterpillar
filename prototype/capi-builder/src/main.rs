@@ -23,7 +23,7 @@ async fn main() -> anyhow::Result<()> {
 
     let _host_watcher = watch_host(serve_dir.path().to_path_buf())?;
     let _runtime_watcher = watch_runtime(serve_dir.path().to_path_buf())?;
-    serve(&serve_dir).await?;
+    serve(serve_dir.path().to_path_buf()).await?;
 
     Ok(())
 }
@@ -139,7 +139,7 @@ async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve(serve_dir: impl AsRef<Path>) -> anyhow::Result<()> {
+async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     rocket::build()
         .mount("/", rocket::fs::FileServer::from(&serve_dir))
         .mount("/", rocket::routes![code])
