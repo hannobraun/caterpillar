@@ -9,6 +9,7 @@ use notify_debouncer_mini::{
     notify::{RecommendedWatcher, RecursiveMode},
     DebounceEventResult, DebouncedEventKind, Debouncer,
 };
+use rocket::State;
 use tempfile::tempdir;
 use tokio::{
     fs::{self, File},
@@ -142,6 +143,7 @@ async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
 
 async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     rocket::build()
+        .manage(serve_dir.clone())
         .mount("/", rocket::fs::FileServer::from(&serve_dir))
         .mount("/", rocket::routes![code])
         .launch()
@@ -151,7 +153,7 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
 }
 
 #[rocket::get("/code")]
-async fn code() -> io::Result<File> {
-    let file = File::open("snake.bc.capi").await?;
+async fn code(serve_dir: &State<PathBuf>) -> io::Result<File> {
+    let file = File::open(serve_dir.join("snake.bc.capi")).await?;
     Ok(file)
 }
