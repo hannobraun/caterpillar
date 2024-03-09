@@ -10,13 +10,13 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(width: usize, height: usize) -> Self {
+    pub fn new(width: usize, height: usize, data: &[u8]) -> Self {
         let render_target = RenderTarget::new(width, height);
         let cells = Cells::new(&render_target);
         let state = World::new(cells);
 
         Self {
-            evaluator: Evaluator::new(),
+            evaluator: Evaluator::new(data),
             world: state,
             render_target,
         }

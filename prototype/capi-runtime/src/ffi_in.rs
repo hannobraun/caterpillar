@@ -28,7 +28,9 @@ pub extern "C" fn on_init(width: usize, height: usize) {
         print(&format!("{panic_info}"));
     }));
 
-    let mut state = State::new(width, height);
+    let data = unsafe { &DATA };
+
+    let mut state = State::new(width, height, data);
     state.evaluator.load_program(&[
         b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S', b'p', 255,
         b'p', 3, b'S', b't',

@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::ffi_in::{CODE_SIZE, DATA_SIZE};
+use crate::ffi_in::CODE_SIZE;
 
 use super::data::Data;
 
@@ -10,9 +10,9 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
+    pub fn new(data: &[u8]) -> Self {
         let code = iter::repeat(0).take(CODE_SIZE).collect();
-        let data = Data::new(DATA_SIZE);
+        let data = Data::new(data.len());
 
         Self { code, data }
     }
@@ -110,7 +110,7 @@ mod tests {
     fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
         let mut data_memory = [0; DATA_SIZE];
 
-        let mut evaluator = Evaluator::new();
+        let mut evaluator = Evaluator::new(&data_memory);
         evaluator.load_program(program);
 
         evaluator.evaluate(&mut data_memory);
