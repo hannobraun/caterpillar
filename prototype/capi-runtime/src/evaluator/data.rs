@@ -6,7 +6,7 @@ pub struct Data {
     ///
     /// Need to be `Wrapping`, as that's what's going to happen, if the stack
     /// fully fills the available memory.
-    ptr: Wrapping<usize>,
+    stack_ptr: Wrapping<usize>,
 
     data: Vec<u8>,
 }
@@ -20,7 +20,10 @@ impl Data {
 
         let data = iter::repeat(0).take(size).collect();
 
-        Self { ptr, data }
+        Self {
+            stack_ptr: ptr,
+            data,
+        }
     }
 
     pub fn read(&self) -> &[u8] {
@@ -28,13 +31,13 @@ impl Data {
     }
 
     pub fn push(&mut self, value: u8) {
-        self.data[self.ptr.0] = value;
-        self.ptr -= 1;
+        self.data[self.stack_ptr.0] = value;
+        self.stack_ptr -= 1;
     }
 
     pub fn pop(&mut self) -> u8 {
-        self.ptr += 1;
-        let value = self.data[self.ptr.0];
+        self.stack_ptr += 1;
+        let value = self.data[self.stack_ptr.0];
         value
     }
 
