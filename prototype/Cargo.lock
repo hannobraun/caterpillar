@@ -136,6 +136,7 @@ name = "capi-assembler"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "capi-vm",
 ]
 
 [[package]]
