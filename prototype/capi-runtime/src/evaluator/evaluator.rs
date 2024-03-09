@@ -84,30 +84,31 @@ mod tests {
 
     #[test]
     fn terminate() {
-        let mut evaluator = Evaluator::new(&[b't']);
-
-        evaluator.evaluate([]);
+        evaluate(&[b't']);
         // This should not run forever, or cause any kind of panic.
     }
 
     #[test]
     fn push() {
-        let mut evaluator = Evaluator::new(&[b'p', 255, b't']);
-        let data = evaluator.evaluate([]);
+        let data = evaluate(&[b'p', 255, b't']);
         assert_eq!(data[data.len() - 1..], [255]);
     }
 
     #[test]
     fn clone() {
-        let mut evaluator = Evaluator::new(&[b'p', 255, b'c', b't']);
-        let data = evaluator.evaluate([]);
+        let data = evaluate(&[b'p', 255, b'c', b't']);
         assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
     #[test]
     fn store() {
-        let mut evaluator = Evaluator::new(&[b'p', 255, b'p', 0, b'S', b't']);
-        let data = evaluator.evaluate([]);
+        let data = evaluate(&[b'p', 255, b'p', 0, b'S', b't']);
         assert_eq!(data[..1], [255]);
+    }
+
+    fn evaluate(program: &[u8]) -> Vec<u8> {
+        let mut evaluator = Evaluator::new(program);
+        let data = evaluator.evaluate([]);
+        data.to_vec()
     }
 }
