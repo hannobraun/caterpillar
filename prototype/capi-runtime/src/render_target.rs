@@ -30,12 +30,14 @@ impl RenderTarget {
 
                 let color = world.cells.buffer[x + y * world.cells.size[0]];
 
+                let mut data = [0; DATA_SIZE];
                 self.draw_cell(
                     world.cells.cell_size,
                     cell_x,
                     cell_y,
                     color,
                     evaluator,
+                    &mut data,
                 );
             }
         }
@@ -48,6 +50,7 @@ impl RenderTarget {
         cell_y: usize,
         color: u8,
         evaluator: &mut Evaluator,
+        data: &mut [u8],
     ) {
         for x in 0..cell_size {
             for y in 0..cell_size {
@@ -57,9 +60,8 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
-                let mut data = [0; DATA_SIZE];
-                evaluator.push_args([color], &mut data);
-                evaluator.evaluate(&mut data);
+                evaluator.push_args([color], data);
+                evaluator.evaluate(data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
