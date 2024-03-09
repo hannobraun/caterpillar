@@ -51,7 +51,7 @@ impl Evaluator {
                 }
 
                 // `terminate` - Terminate the program
-                b't' => {
+                0x00 => {
                     break;
                 }
 
@@ -78,7 +78,7 @@ mod tests {
             b'p', // push
             255,  // value
             b'c', // clone
-            b't', // terminate
+            0x00, // terminate
         ]);
         assert_eq!(data[data.len() - 2..], [255, 255]);
     }
@@ -88,7 +88,7 @@ mod tests {
         let data = evaluate(&[
             b'p', // push
             255,  // value
-            b't', // terminate
+            0x00, // terminate
         ]);
         assert_eq!(data[data.len() - 1..], [255]);
     }
@@ -101,7 +101,7 @@ mod tests {
             b'p', // push
             0,    // address
             b'S', // store
-            b't', // terminate
+            0x00, // terminate
         ]);
         assert_eq!(data[..1], [255]);
     }
@@ -109,7 +109,7 @@ mod tests {
     #[test]
     fn terminate() {
         evaluate(&[
-            b't', // terminate
+            0x00, // terminate
         ]);
         // This should not run forever, or cause any kind of panic.
     }

@@ -95,7 +95,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
         b'p', // push
         3,    // address
         b'S', // store
-        b't', // terminate
+        0x00, // terminate
     ];
     code[..program.len()].copy_from_slice(&program);
 
