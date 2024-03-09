@@ -26,8 +26,7 @@ impl Data {
 
     pub fn pop(&mut self, memory: &mut [u8]) -> u8 {
         self.stack_ptr += 1;
-        let value = memory[self.stack_ptr.0];
-        value
+        memory[self.stack_ptr.0]
     }
 
     pub fn store(
