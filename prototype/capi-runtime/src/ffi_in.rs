@@ -78,15 +78,12 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 
     // This is sound, as the reference is dropped at the end of this function.
     // See comment on `DATA`.
-    let data = unsafe { &mut DATA };
+    let data = unsafe { DATA.access_write() };
 
     state.world.update(delta_time_ms);
-    state.render_target.draw(
-        &state.world,
-        &mut state.evaluator,
-        &code,
-        &mut data.0,
-    );
+    state
+        .render_target
+        .draw(&state.world, &mut state.evaluator, &code, data);
 }
 
 /// Virtual machine memory that is shared with the JavaScript host
@@ -118,5 +115,18 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// the JavaScript host.
     unsafe fn access_read(&self) -> &[u8] {
         &self.0
+    }
+
+    /// Gain write access to the shared memory
+    ///
+    /// This method is private, to prevent any access within Rust code that
+    /// doesn't come from the top-level FFI functions.
+    ///
+    /// # Safety
+    ///
+    /// The caller must drop the returned reference before returning control to
+    /// the JavaScript host.
+    unsafe fn access_write(&mut self) -> &mut [u8] {
+        &mut self.0
     }
 }
