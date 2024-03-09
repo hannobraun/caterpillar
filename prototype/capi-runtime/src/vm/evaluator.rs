@@ -70,7 +70,7 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::ffi_in::{CODE_SIZE, DATA_SIZE};
+    use crate::ffi_in::DATA_SIZE;
 
     use super::Evaluator;
 
@@ -117,13 +117,11 @@ mod tests {
     }
 
     fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
-        let mut code = [0; CODE_SIZE];
         let mut data = [0; DATA_SIZE];
 
         let mut evaluator = Evaluator::new(&data);
-        code[..program.len()].copy_from_slice(&program);
 
-        evaluator.evaluate(&code, &mut data);
+        evaluator.evaluate(program, &mut data);
         data
     }
 }
