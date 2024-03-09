@@ -1,4 +1,4 @@
-use std::{panic, sync::Mutex};
+use std::{cell::UnsafeCell, panic, sync::Mutex};
 
 use crate::{ffi_out::print, input::InputEvent, state::State};
 
@@ -98,12 +98,14 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 /// lives longer than the local scope of the FFI function that creates it.
 #[repr(transparent)]
 pub struct SharedMemory<const SIZE: usize> {
-    inner: [u8; SIZE],
+    inner: UnsafeCell<[u8; SIZE]>,
 }
 
 impl<const SIZE: usize> SharedMemory<SIZE> {
     const fn new() -> Self {
-        Self { inner: [0; SIZE] }
+        Self {
+            inner: UnsafeCell::new([0; SIZE]),
+        }
     }
 
     /// Gain read access to the shared memory
@@ -116,7 +118,7 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
     unsafe fn access_read(&self) -> &[u8] {
-        &self.inner
+        &*self.inner.get()
     }
 
     /// Gain write access to the shared memory
@@ -129,6 +131,6 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
     unsafe fn access_write(&mut self) -> &mut [u8] {
-        &mut self.inner
+        &mut *self.inner.get()
     }
 }
