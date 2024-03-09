@@ -88,27 +88,6 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     // This is sound, as the reference is dropped at the end of this function.
     let data = unsafe { DATA.access_write() };
 
-    let program = [
-        0x04, // clone
-        0x01, // push
-        0,    // address
-        0x03, // store
-        0x04, // clone
-        0x01, // push
-        1,    // address
-        0x03, // store
-        0x01, // push
-        2,    // address
-        0x03, // store
-        0x01, // push
-        255,  // alpha channel
-        0x01, // push
-        3,    // address
-        0x03, // store
-        0x00, // terminate
-    ];
-    code[..program.len()].copy_from_slice(&program);
-
     state.world.update(delta_time_ms);
     state
         .render_target
