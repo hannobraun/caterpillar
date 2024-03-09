@@ -34,9 +34,9 @@ impl Data {
         &mut self,
         address: impl Into<usize>,
         value: u8,
-        data: &mut [u8],
+        memory: &mut [u8],
     ) {
-        data[address.into()] = value;
+        memory[address.into()] = value;
     }
 }
 
