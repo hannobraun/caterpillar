@@ -81,13 +81,13 @@ mod tests {
 
     #[test]
     fn terminate() {
-        evaluate([opcode::TERMINATE], []);
+        evaluate([opcode::TERMINATE], [], []);
         // This should not run forever, or cause any kind of panic.
     }
 
     #[test]
     fn push() {
-        let data = evaluate([opcode::PUSH, 255], [0]);
+        let data = evaluate([opcode::PUSH, 255], [0], []);
         assert_eq!(data, [255]);
     }
 
@@ -103,8 +103,9 @@ mod tests {
                 0x00, // terminate
             ],
             [0; 2],
+            [],
         );
-        assert_eq!(data[..1], [255]);
+        assert_eq!(data[..1], [255],);
     }
 
     #[test]
@@ -117,15 +118,18 @@ mod tests {
                 0x00, // terminate
             ],
             [0; 2],
+            [],
         );
         assert_eq!(data[data.len() - 2..], [255, 255]);
     }
 
-    fn evaluate<const C: usize, const D: usize>(
+    fn evaluate<const C: usize, const D: usize, const A: usize>(
         code: [u8; C],
         mut data: [u8; D],
+        args: [u8; A],
     ) -> [u8; D] {
         let mut evaluator = Evaluator::new(&data);
+        evaluator.push_args(args, &mut data);
 
         evaluator.evaluate(&code, &mut data);
         data
