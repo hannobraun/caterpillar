@@ -77,7 +77,14 @@ impl World {
 }
 
 fn handle_input(world: &mut World) {
-    for input in world.input.events.drain(..) {
+    // Only process one input event per frame. That means, if the player presses
+    // two keys in quick succession, they both have an effect, regardless of the
+    // precise timing.
+    //
+    // It also prevents the case where two quick key presses could cause the
+    // snake to reverse course, despite the explicit conditions here to prevent
+    // just that.
+    if let Some(input) = world.input.events.pop_front() {
         if input == InputEvent::Up && world.velocity != [0, 1] {
             world.velocity = [0, -1];
         }
