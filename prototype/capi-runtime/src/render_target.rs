@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::{evaluator::Evaluator, world::World};
+use crate::{vm::Evaluator, world::World};
 
 pub struct RenderTarget {
     pub buffer: Vec<u8>,

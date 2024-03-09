@@ -1,5 +1,5 @@
 use crate::{
-    cells::Cells, evaluator::Evaluator, render_target::RenderTarget,
+    cells::Cells, vm::Evaluator, render_target::RenderTarget,
     world::World,
 };
 
