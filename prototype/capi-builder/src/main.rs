@@ -59,6 +59,13 @@ async fn build(
     loop {
         let () = changes.changed().await.unwrap();
 
+        // Remove all files before the build, to prevent anybody from loading a
+        // stale version after a change.
+        let mut read_dir = fs::read_dir(serve_dir).await?;
+        while let Some(entry) = read_dir.next_entry().await? {
+            fs::remove_file(entry.path()).await?;
+        }
+
         let exit_status = Command::new("cargo")
             .arg("build")
             .arg("--release")
@@ -74,14 +81,6 @@ async fn build(
                 serve_dir.join("capi_runtime.wasm"),
             )
             .await?;
-        } else {
-            // Remove all files from the serve directory, to prevent any loading
-            // of stale versions.
-
-            let mut read_dir = fs::read_dir(serve_dir).await?;
-            while let Some(entry) = read_dir.next_entry().await? {
-                fs::remove_file(entry.path()).await?;
-            }
         }
     }
 }
