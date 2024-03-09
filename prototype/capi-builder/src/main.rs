@@ -20,13 +20,15 @@ use tokio::{
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempdir()?;
 
-    let _watcher = watch(serve_dir.path().to_path_buf())?;
+    let _watcher = watch_runtime(serve_dir.path().to_path_buf())?;
     serve(&serve_dir).await?;
 
     Ok(())
 }
 
-fn watch(serve_dir: PathBuf) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+fn watch_runtime(
+    serve_dir: PathBuf,
+) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
     let (tx, rx) = watch::channel(());
     tx.send_replace(());
 
