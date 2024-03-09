@@ -19,10 +19,9 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     }));
 
     // This is sound, as the reference is dropped at the end of this function.
-    // See comment on `DATA`.
-    let data = unsafe { &DATA };
+    let data = unsafe { DATA.access_read() };
 
-    let state = State::new(width, height, &data.0);
+    let state = State::new(width, height, data);
 
     STATE
         .lock()
@@ -102,3 +101,18 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 /// lives longer than the local scope of the FFI function that creates it.
 #[repr(transparent)]
 pub struct SharedMemory<const SIZE: usize>([u8; SIZE]);
+
+impl<const SIZE: usize> SharedMemory<SIZE> {
+    /// Gain read access to the shared memory
+    ///
+    /// This method is private, to prevent any access within Rust code that
+    /// doesn't come from the top-level FFI functions.
+    ///
+    /// # Safety
+    ///
+    /// The caller must drop the returned reference before returning control to
+    /// the JavaScript host.
+    unsafe fn access_read(&self) -> &[u8] {
+        &self.0
+    }
+}
