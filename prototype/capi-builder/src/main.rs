@@ -4,6 +4,8 @@ use std::{
     time::Duration,
 };
 
+use anyhow::Context;
+use capi_assembler::assemble;
 use notify_debouncer_mini::{
     new_debouncer,
     notify::{RecommendedWatcher, RecursiveMode},
@@ -13,6 +15,7 @@ use rocket::State;
 use tempfile::tempdir;
 use tokio::{
     fs::{self, File},
+    io::{AsyncReadExt, AsyncWriteExt},
     process::Command,
     sync::watch,
     task,
@@ -24,6 +27,8 @@ async fn main() -> anyhow::Result<()> {
 
     let _host_watcher = watch_host(serve_dir.path().to_path_buf())?;
     let _runtime_watcher = watch_runtime(serve_dir.path().to_path_buf())?;
+    let _snake_watcher =
+        watch_assembler(serve_dir.path().to_path_buf()).await?;
     serve(serve_dir.path().to_path_buf()).await?;
 
     Ok(())
@@ -126,6 +131,82 @@ async fn build_runtime(
         if exit_status.success() {
             copy_artifacts(serve_dir).await?;
         }
+    }
+}
+
+async fn watch_assembler(
+    serve_dir: PathBuf,
+) -> anyhow::Result<Debouncer<RecommendedWatcher>> {
+    let (tx, rx) = watch::channel(());
+    tx.send_replace(());
+
+    let mut debouncer = new_debouncer(
+        Duration::from_millis(50),
+        move |result: DebounceEventResult| {
+            let events = result.unwrap();
+            for event in events {
+                if event.kind == DebouncedEventKind::Any {
+                    tx.send(()).unwrap();
+                }
+            }
+        },
+    )?;
+
+    debouncer
+        .watcher()
+        .watch(Path::new("snake.asm.capi"), RecursiveMode::Recursive)?;
+
+    task::spawn(build_snake(serve_dir, rx));
+
+    Ok(debouncer)
+}
+
+async fn build_snake(
+    serve_dir: impl AsRef<Path>,
+    mut changes: watch::Receiver<()>,
+) -> anyhow::Result<()> {
+    let serve_dir = serve_dir.as_ref();
+
+    loop {
+        let () = changes.changed().await.unwrap();
+
+        // Remove all files before the build, to prevent anybody from loading a
+        // stale version after a change.
+        let mut read_dir = fs::read_dir(serve_dir).await?;
+        while let Some(entry) = read_dir.next_entry().await? {
+            let result = fs::remove_file(entry.path()).await;
+            if let Err(err) = result {
+                if let io::ErrorKind::NotFound = err.kind() {
+                    // This is fine. We wanted to remove it anyways.
+                    continue;
+                }
+
+                Err(err)?
+            }
+        }
+
+        let mut assembly = String::new();
+        File::open("snake.asm.capi")
+            .await
+            .context("Opening assembly")?
+            .read_to_string(&mut assembly)
+            .await
+            .context("Reading assembly")?;
+
+        let bytecode = match assemble(&assembly) {
+            Ok(bytecode) => bytecode,
+            Err(err) => {
+                println!("Assembly error: {err}");
+                continue;
+            }
+        };
+
+        File::create("snake.bc.capi")
+            .await?
+            .write_all(&bytecode)
+            .await?;
+
+        copy_artifacts(serve_dir).await?;
     }
 }
 
