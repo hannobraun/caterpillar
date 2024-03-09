@@ -135,6 +135,7 @@ async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
         serve_dir.join("capi_runtime.wasm"),
     )
     .await?;
+    fs::copy("snake.bc.capi", serve_dir.join("snake.bc.capi")).await?;
 
     Ok(())
 }
