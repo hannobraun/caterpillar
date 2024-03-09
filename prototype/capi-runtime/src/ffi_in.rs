@@ -144,6 +144,7 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     ///
     /// The caller must not call [`SharedMemory::access_write`] again, while the
     /// returned reference still exists.
+    #[allow(clippy::mut_from_ref)] // it's `unsafe` and well-documented
     unsafe fn access_write(&self) -> &mut [u8] {
         &mut *self.inner.get()
     }
