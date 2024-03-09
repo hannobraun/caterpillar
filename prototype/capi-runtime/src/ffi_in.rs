@@ -80,19 +80,19 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 
     let program = [
         b'c', // clone
-        b'p', // push
+        0x01, // push
         0,    // address
         b'S', // store
         b'c', // clone
-        b'p', // push
+        0x01, // push
         1,    // address
         b'S', // store
-        b'p', // push
+        0x01, // push
         2,    // address
         b'S', // store
-        b'p', // push
+        0x01, // push
         255,  // alpha channel
-        b'p', // push
+        0x01, // push
         3,    // address
         b'S', // store
         0x00, // terminate

@@ -40,7 +40,7 @@ impl Evaluator {
                 }
 
                 // `push` - Push a value to the stack
-                b'p' => {
+                0x01 => {
                     code_ptr += 1;
                     let value = code[code_ptr];
 
@@ -75,7 +75,7 @@ mod tests {
     #[test]
     fn clone() {
         let data = evaluate(&[
-            b'p', // push
+            0x01, // push
             255,  // value
             b'c', // clone
             0x00, // terminate
@@ -86,7 +86,7 @@ mod tests {
     #[test]
     fn push() {
         let data = evaluate(&[
-            b'p', // push
+            0x01, // push
             255,  // value
             0x00, // terminate
         ]);
@@ -96,9 +96,9 @@ mod tests {
     #[test]
     fn store() {
         let data = evaluate(&[
-            b'p', // push
+            0x01, // push
             255,  // value
-            b'p', // push
+            0x01, // push
             0,    // address
             b'S', // store
             0x00, // terminate
