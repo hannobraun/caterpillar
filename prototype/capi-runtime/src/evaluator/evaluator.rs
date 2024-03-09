@@ -25,7 +25,7 @@ impl Evaluator {
         &mut self,
         arguments: impl IntoIterator<Item = u8>,
         data_memory: &'m mut [u8],
-    ) -> &'m [u8] {
+    ) {
         let mut code_ptr = 0;
 
         for b in arguments {
@@ -72,8 +72,6 @@ impl Evaluator {
 
             code_ptr += 1;
         }
-
-        data_memory
     }
 }
 
