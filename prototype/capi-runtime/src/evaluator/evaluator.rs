@@ -113,7 +113,7 @@ mod tests {
         let mut evaluator = Evaluator::new();
         evaluator.load_program(program);
 
-        let data = evaluator.evaluate([], &mut data_memory);
-        data.to_vec()
+        evaluator.evaluate([], &mut data_memory);
+        data_memory.to_vec()
     }
 }
