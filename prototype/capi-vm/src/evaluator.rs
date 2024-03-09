@@ -99,17 +99,8 @@ mod tests {
 
     #[test]
     fn clone() {
-        let data = evaluate(
-            [
-                0x01, // push
-                255,  // value
-                0x04, // clone
-                0x00, // terminate
-            ],
-            [0; 2],
-            [],
-        );
-        assert_eq!(data[data.len() - 2..], [255, 255]);
+        let data = evaluate([opcode::CLONE], [0, 0], [255]);
+        assert_eq!(data, [255, 255]);
     }
 
     fn evaluate<const C: usize, const D: usize, const A: usize>(
