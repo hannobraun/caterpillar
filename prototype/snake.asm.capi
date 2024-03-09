@@ -1,0 +1,12 @@
+clone
+push 0
+store
+clone
+push 1
+store
+push 2
+store
+push 255
+push 3
+store
+terminate
