@@ -3,7 +3,9 @@ use capi_vm::opcode;
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, UnknownInstruction> {
     let mut bytecode = Vec::new();
 
-    for instruction in assembly.split_whitespace() {
+    let mut instructions = assembly.split_whitespace();
+
+    while let Some(instruction) = instructions.next() {
         match instruction {
             "terminate" => bytecode.push(opcode::TERMINATE),
             instruction => {
