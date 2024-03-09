@@ -4,5 +4,6 @@ mod ffi_out;
 mod input;
 mod render_target;
 mod state;
-mod vm;
 mod world;
+
+pub use capi_vm as vm;
