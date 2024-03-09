@@ -20,7 +20,7 @@ static STATE: Mutex<Option<State>> = Mutex::new(None);
 ///
 /// As a consequence, access is sound, as long as no reference to this static is
 /// lives longer than the local scope of the FFI function that creates it.
-pub static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory([0; DATA_SIZE]);
+static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory([0; DATA_SIZE]);
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
@@ -100,4 +100,4 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     );
 }
 
-pub struct SharedMemory<const SIZE: usize>([u8; SIZE]);
+struct SharedMemory<const SIZE: usize>([u8; SIZE]);
