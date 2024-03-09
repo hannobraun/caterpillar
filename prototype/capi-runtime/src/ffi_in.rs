@@ -137,6 +137,16 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// This method is private, to prevent any access within Rust code that
     /// doesn't come from the top-level FFI functions.
     ///
+    /// ## `&self` argument
+    ///
+    /// This method returns a mutable reference, despite only requiring `&self`.
+    /// This is fine, as method is `unsafe` and the requirements that come from
+    /// this are documented.
+    ///
+    /// If this took `&mut self`, the `SharedMemory` would need to live in a
+    /// `static mut`, which would have the same pitfalls, and more. With the
+    /// current design, `SharedMemory` can live in a non-`mut` `static`.
+    ///
     /// ## Safety
     ///
     /// The caller must drop the returned reference before returning control to
