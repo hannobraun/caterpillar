@@ -97,11 +97,13 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 /// As a consequence, access is sound, as long as no reference to this static is
 /// lives longer than the local scope of the FFI function that creates it.
 #[repr(transparent)]
-pub struct SharedMemory<const SIZE: usize>([u8; SIZE]);
+pub struct SharedMemory<const SIZE: usize> {
+    inner: [u8; SIZE],
+}
 
 impl<const SIZE: usize> SharedMemory<SIZE> {
     const fn new() -> Self {
-        Self([0; SIZE])
+        Self { inner: [0; SIZE] }
     }
 
     /// Gain read access to the shared memory
@@ -114,7 +116,7 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
     unsafe fn access_read(&self) -> &[u8] {
-        &self.0
+        &self.inner
     }
 
     /// Gain write access to the shared memory
@@ -127,6 +129,6 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
     unsafe fn access_write(&mut self) -> &mut [u8] {
-        &mut self.0
+        &mut self.inner
     }
 }
