@@ -9,9 +9,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
     while let Some(instruction) = instructions.next() {
         match instruction {
-            "clone" => {
-                bytecode.push(opcode::CLONE);
-            }
             "push" => {
                 let Some(value) = instructions.next() else {
                     return Err(AssemblerError::PushCameLast);
@@ -21,14 +18,22 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 bytecode.push(opcode::PUSH);
                 bytecode.push(value);
             }
-            "store" => {
-                bytecode.push(opcode::STORE);
-            }
-            "terminate" => bytecode.push(opcode::TERMINATE),
             instruction => {
+                let opcode = match instruction {
+                    "clone" => Some(opcode::CLONE),
+                    "store" => Some(opcode::STORE),
+                    "terminate" => Some(opcode::TERMINATE),
+                    _ => None,
+                };
+
+                if let Some(opcode) = opcode {
+                    bytecode.push(opcode);
+                    continue;
+                }
+
                 return Err(AssemblerError::UnknownInstruction {
                     name: instruction.into(),
-                })
+                });
             }
         }
     }
