@@ -132,6 +132,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
 
 [[package]]
+name = "capi-assembler"
+version = "0.1.0"
+
+[[package]]
 name = "capi-builder"
 version = "0.1.0"
 dependencies = [
