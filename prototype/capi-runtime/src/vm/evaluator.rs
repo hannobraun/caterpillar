@@ -123,7 +123,7 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
         code[..program.len()].copy_from_slice(&program);
 
-        evaluator.evaluate(&mut code, &mut data);
+        evaluator.evaluate(&code, &mut data);
         data
     }
 }
