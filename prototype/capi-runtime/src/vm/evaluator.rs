@@ -116,12 +116,12 @@ mod tests {
         // This should not run forever, or cause any kind of panic.
     }
 
-    fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
+    fn evaluate(code: &[u8]) -> [u8; DATA_SIZE] {
         let mut data = [0; DATA_SIZE];
 
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(program, &mut data);
+        evaluator.evaluate(code, &mut data);
         data
     }
 }
