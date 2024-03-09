@@ -71,6 +71,17 @@ mod tests {
     use super::Evaluator;
 
     #[test]
+    fn terminate() {
+        evaluate(
+            [
+                0x00, // terminate
+            ],
+            [],
+        );
+        // This should not run forever, or cause any kind of panic.
+    }
+
+    #[test]
     fn clone() {
         let data = evaluate(
             [
@@ -111,17 +122,6 @@ mod tests {
             [0; 2],
         );
         assert_eq!(data[..1], [255]);
-    }
-
-    #[test]
-    fn terminate() {
-        evaluate(
-            [
-                0x00, // terminate
-            ],
-            [],
-        );
-        // This should not run forever, or cause any kind of panic.
     }
 
     fn evaluate<const C: usize, const D: usize>(
