@@ -20,7 +20,7 @@ static STATE: Mutex<Option<State>> = Mutex::new(None);
 ///
 /// As a consequence, access is sound, as long as no reference to this static is
 /// lives longer than the local scope of the FFI function that creates it.
-pub static mut DATA: [u8; DATA_SIZE] = [0; DATA_SIZE];
+pub static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory([0; DATA_SIZE]);
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
@@ -32,7 +32,7 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     // See comment on `DATA`.
     let data = unsafe { &DATA };
 
-    let state = State::new(width, height, data);
+    let state = State::new(width, height, &data.0);
 
     STATE
         .lock()
@@ -92,7 +92,12 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let data = unsafe { &mut DATA };
 
     state.world.update(delta_time_ms);
-    state
-        .render_target
-        .draw(&state.world, &mut state.evaluator, &code, data);
+    state.render_target.draw(
+        &state.world,
+        &mut state.evaluator,
+        &code,
+        &mut data.0,
+    );
 }
+
+pub struct SharedMemory<const SIZE: usize>([u8; SIZE]);
