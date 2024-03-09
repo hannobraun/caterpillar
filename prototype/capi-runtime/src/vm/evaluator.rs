@@ -27,36 +27,26 @@ impl Evaluator {
             let instruction = code[code_ptr];
 
             match instruction {
-                // `terminate` - Terminate the program
                 opcode::TERMINATE => {
                     break;
                 }
-
-                // `push` - Push a value to the stack
                 opcode::PUSH => {
                     code_ptr += 1;
                     let value = code[code_ptr];
 
                     self.data.push(value, data);
                 }
-
-                // 0x02 reserved for `load`
-
-                // `store` - Store data in memory
                 opcode::STORE => {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
 
                     self.data.store(address, value, data);
                 }
-
-                // `clone` - Clone the top item of the stack
                 opcode::CLONE => {
                     let value = self.data.pop(data);
                     self.data.push(value, data);
                     self.data.push(value, data);
                 }
-
                 opcode => {
                     let opcode_as_char: char = opcode.into();
                     panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
