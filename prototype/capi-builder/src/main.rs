@@ -15,7 +15,7 @@ use tokio::{
     fs::{self, File},
     process::Command,
     sync::watch,
-    task::{self},
+    task,
 };
 
 #[rocket::main]
