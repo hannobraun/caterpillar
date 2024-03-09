@@ -31,6 +31,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     continue;
                 }
 
+                if instruction.ends_with(':') {
+                    // This is a label. Currently they serve a function more
+                    // like comments, and are ignored.
+                    continue;
+                }
+
                 return Err(AssemblerError::UnknownInstruction {
                     name: instruction.into(),
                 });
