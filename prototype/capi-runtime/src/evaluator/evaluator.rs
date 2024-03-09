@@ -21,7 +21,7 @@ impl Evaluator {
         self.code[..program.len()].copy_from_slice(&program);
     }
 
-    pub fn push_arguments(
+    pub fn push_args(
         &mut self,
         args: impl IntoIterator<Item = u8>,
         data: &mut [u8],
