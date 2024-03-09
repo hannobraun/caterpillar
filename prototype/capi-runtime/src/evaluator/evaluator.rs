@@ -37,9 +37,11 @@ impl Evaluator {
             let instruction = self.code[code_ptr];
 
             match instruction {
-                // `terminate` - Terminate the program
-                b't' => {
-                    break;
+                // `clone` - Clone the top item on the stack
+                b'c' => {
+                    let value = self.data.pop();
+                    self.data.push(value);
+                    self.data.push(value);
                 }
 
                 // `push` - Push a value to the stack
@@ -50,19 +52,17 @@ impl Evaluator {
                     self.data.push(value);
                 }
 
-                // `clone` - Clone the top item on the stack
-                b'c' => {
-                    let value = self.data.pop();
-                    self.data.push(value);
-                    self.data.push(value);
-                }
-
                 // `store` - Store data in memory
                 b'S' => {
                     let address = self.data.pop();
                     let value = self.data.pop();
 
                     self.data.store(address, value);
+                }
+
+                // `terminate` - Terminate the program
+                b't' => {
+                    break;
                 }
 
                 opcode => {
