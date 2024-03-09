@@ -59,7 +59,7 @@ async fn build(
     loop {
         let () = changes.changed().await.unwrap();
 
-        Command::new("cargo")
+        let exit_status = Command::new("cargo")
             .arg("build")
             .arg("--release")
             .args(["--package", "capi-runtime"])
@@ -67,12 +67,22 @@ async fn build(
             .status()
             .await?;
 
-        fs::copy("index.html", serve_dir.join("index.html")).await?;
-        fs::copy(
-            "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
-            serve_dir.join("capi_runtime.wasm"),
-        )
-        .await?;
+        if exit_status.success() {
+            fs::copy("index.html", serve_dir.join("index.html")).await?;
+            fs::copy(
+                "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+                serve_dir.join("capi_runtime.wasm"),
+            )
+            .await?;
+        } else {
+            // Remove all files from the serve directory, to prevent any loading
+            // of stale versions.
+
+            let mut read_dir = fs::read_dir(serve_dir).await?;
+            while let Some(entry) = read_dir.next_entry().await? {
+                fs::remove_file(entry.path()).await?;
+            }
+        }
     }
 }
 
