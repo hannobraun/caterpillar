@@ -1,4 +1,4 @@
-use std::num::Wrapping;
+use core::num::Wrapping;
 
 /// Access to the evaluator's data memory
 pub struct Data {
