@@ -42,19 +42,19 @@ impl Evaluator {
 
                 // 0x02 reserved for `load`
 
-                // `clone` - Clone the top item of the stack
-                b'c' => {
-                    let value = self.data.pop(data);
-                    self.data.push(value, data);
-                    self.data.push(value, data);
-                }
-
                 // `store` - Store data in memory
                 0x03 => {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
 
                     self.data.store(address, value, data);
+                }
+
+                // `clone` - Clone the top item of the stack
+                b'c' => {
+                    let value = self.data.pop(data);
+                    self.data.push(value, data);
+                    self.data.push(value, data);
                 }
 
                 opcode => {
