@@ -47,12 +47,12 @@ fn watch_runtime(
         .watcher()
         .watch(Path::new("capi-runtime"), RecursiveMode::Recursive)?;
 
-    task::spawn(build(serve_dir, rx));
+    task::spawn(build_runtime(serve_dir, rx));
 
     Ok(debouncer)
 }
 
-async fn build(
+async fn build_runtime(
     serve_dir: impl AsRef<Path>,
     mut changes: watch::Receiver<()>,
 ) -> anyhow::Result<()> {
