@@ -57,10 +57,9 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
-                let mut data_memory = [0; DATA_SIZE];
-                evaluator.evaluate([color], &mut data_memory);
-                self.buffer[index..index + 4]
-                    .copy_from_slice(&data_memory[..4]);
+                let mut data = [0; DATA_SIZE];
+                evaluator.evaluate([color], &mut data);
+                self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
     }
