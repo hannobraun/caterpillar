@@ -64,6 +64,10 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
+                evaluator.load_program(&[
+                    b'c', b'p', 0, b'S', b'c', b'p', 1, b'S', b'p', 2, b'S',
+                    b'p', 255, b'p', 3, b'S', b't',
+                ]);
                 evaluator.push_args([color], data);
                 evaluator.evaluate(data);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
