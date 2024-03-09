@@ -7,34 +7,29 @@ use super::data::Data;
 pub struct Evaluator {
     code: Vec<u8>,
     data: Data,
-    data_memory: Vec<u8>,
 }
 
 impl Evaluator {
     pub fn new() -> Self {
         let code = iter::repeat(0).take(CODE_SIZE).collect();
-        let data_memory: Vec<_> = iter::repeat(0).take(DATA_SIZE).collect();
         let data = Data::new(DATA_SIZE);
 
-        Self {
-            code,
-            data,
-            data_memory,
-        }
+        Self { code, data }
     }
 
     pub fn load_program(&mut self, program: &[u8]) {
         self.code[..program.len()].copy_from_slice(&program);
     }
 
-    pub fn evaluate(
+    pub fn evaluate<'m>(
         &mut self,
         arguments: impl IntoIterator<Item = u8>,
-    ) -> &[u8] {
+        data_memory: &'m mut [u8],
+    ) -> &'m [u8] {
         let mut code_ptr = 0;
 
         for b in arguments {
-            self.data.push(b, &mut self.data_memory);
+            self.data.push(b, data_memory);
         }
 
         loop {
@@ -43,9 +38,9 @@ impl Evaluator {
             match instruction {
                 // `clone` - Clone the top item on the stack
                 b'c' => {
-                    let value = self.data.pop(&mut self.data_memory);
-                    self.data.push(value, &mut self.data_memory);
-                    self.data.push(value, &mut self.data_memory);
+                    let value = self.data.pop(data_memory);
+                    self.data.push(value, data_memory);
+                    self.data.push(value, data_memory);
                 }
 
                 // `push` - Push a value to the stack
@@ -53,15 +48,15 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    self.data.push(value, &mut self.data_memory);
+                    self.data.push(value, data_memory);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = self.data.pop(&mut self.data_memory);
-                    let value = self.data.pop(&mut self.data_memory);
+                    let address = self.data.pop(data_memory);
+                    let value = self.data.pop(data_memory);
 
-                    self.data.store(address, value, &mut self.data_memory);
+                    self.data.store(address, value, data_memory);
                 }
 
                 // `terminate` - Terminate the program
@@ -78,12 +73,14 @@ impl Evaluator {
             code_ptr += 1;
         }
 
-        &self.data_memory
+        data_memory
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::ffi_in::DATA_SIZE;
+
     use super::Evaluator;
 
     #[test]
@@ -111,10 +108,12 @@ mod tests {
     }
 
     fn evaluate(program: &[u8]) -> Vec<u8> {
+        let mut data_memory = [0; DATA_SIZE];
+
         let mut evaluator = Evaluator::new();
         evaluator.load_program(program);
 
-        let data = evaluator.evaluate([]);
+        let data = evaluator.evaluate([], &mut data_memory);
         data.to_vec()
     }
 }

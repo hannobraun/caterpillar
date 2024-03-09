@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::{evaluator::Evaluator, world::World};
+use crate::{evaluator::Evaluator, ffi_in::DATA_SIZE, world::World};
 
 pub struct RenderTarget {
     pub buffer: Vec<u8>,
@@ -57,7 +57,8 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
-                let data = evaluator.evaluate([color]);
+                let mut data_memory = [0; DATA_SIZE];
+                let data = evaluator.evaluate([color], &mut data_memory);
                 self.buffer[index..index + 4].copy_from_slice(&data[..4]);
             }
         }
