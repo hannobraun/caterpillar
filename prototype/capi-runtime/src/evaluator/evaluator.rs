@@ -107,13 +107,13 @@ mod tests {
         // This should not run forever, or cause any kind of panic.
     }
 
-    fn evaluate(program: &[u8]) -> Vec<u8> {
+    fn evaluate(program: &[u8]) -> [u8; DATA_SIZE] {
         let mut data_memory = [0; DATA_SIZE];
 
         let mut evaluator = Evaluator::new();
         evaluator.load_program(program);
 
         evaluator.evaluate([], &mut data_memory);
-        data_memory.to_vec()
+        data_memory
     }
 }
