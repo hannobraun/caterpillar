@@ -7,14 +7,20 @@ use super::data::Data;
 pub struct Evaluator {
     code: Vec<u8>,
     data: Data,
+    data_memory: Vec<u8>,
 }
 
 impl Evaluator {
     pub fn new() -> Self {
         let code: Vec<_> = iter::repeat(0).take(CODE_SIZE).collect();
-        let data = Data::new(DATA_SIZE);
+        let data_memory: Vec<_> = iter::repeat(0).take(DATA_SIZE).collect();
+        let data = Data::new(data_memory.len());
 
-        Self { code, data }
+        Self {
+            code,
+            data,
+            data_memory,
+        }
     }
 
     pub fn load_program(&mut self, program: &[u8]) {
@@ -28,7 +34,7 @@ impl Evaluator {
         let mut code_ptr = 0;
 
         for b in arguments {
-            self.data.push(b);
+            self.data.push(b, &mut self.data_memory);
         }
 
         loop {
@@ -37,9 +43,9 @@ impl Evaluator {
             match instruction {
                 // `clone` - Clone the top item on the stack
                 b'c' => {
-                    let value = self.data.pop();
-                    self.data.push(value);
-                    self.data.push(value);
+                    let value = self.data.pop(&mut self.data_memory);
+                    self.data.push(value, &mut self.data_memory);
+                    self.data.push(value, &mut self.data_memory);
                 }
 
                 // `push` - Push a value to the stack
@@ -47,15 +53,15 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = self.code[code_ptr];
 
-                    self.data.push(value);
+                    self.data.push(value, &mut self.data_memory);
                 }
 
                 // `store` - Store data in memory
                 b'S' => {
-                    let address = self.data.pop();
-                    let value = self.data.pop();
+                    let address = self.data.pop(&mut self.data_memory);
+                    let value = self.data.pop(&mut self.data_memory);
 
-                    self.data.store(address, value);
+                    self.data.store(address, value, &mut self.data_memory);
                 }
 
                 // `terminate` - Terminate the program
@@ -72,7 +78,7 @@ impl Evaluator {
             code_ptr += 1;
         }
 
-        self.data.read()
+        &self.data_memory
     }
 }
 

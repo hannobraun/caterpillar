@@ -1,4 +1,4 @@
-use std::{iter, num::Wrapping};
+use std::num::Wrapping;
 
 /// Access to the evaluator's data memory
 pub struct Data {
@@ -7,8 +7,6 @@ pub struct Data {
     /// Need to be `Wrapping`, as that's what's going to happen, if the stack
     /// fully fills the available memory.
     stack_ptr: Wrapping<usize>,
-
-    data: Vec<u8>,
 }
 
 impl Data {
@@ -18,31 +16,27 @@ impl Data {
         let mut ptr = Wrapping(size);
         ptr -= 1;
 
-        let data = iter::repeat(0).take(size).collect();
-
-        Self {
-            stack_ptr: ptr,
-            data,
-        }
+        Self { stack_ptr: ptr }
     }
 
-    pub fn read(&self) -> &[u8] {
-        &self.data
-    }
-
-    pub fn push(&mut self, value: u8) {
-        self.data[self.stack_ptr.0] = value;
+    pub fn push(&mut self, value: u8, data: &mut [u8]) {
+        data[self.stack_ptr.0] = value;
         self.stack_ptr -= 1;
     }
 
-    pub fn pop(&mut self) -> u8 {
+    pub fn pop(&mut self, data: &mut [u8]) -> u8 {
         self.stack_ptr += 1;
-        let value = self.data[self.stack_ptr.0];
+        let value = data[self.stack_ptr.0];
         value
     }
 
-    pub fn store(&mut self, address: impl Into<usize>, value: u8) {
-        self.data[address.into()] = value;
+    pub fn store(
+        &mut self,
+        address: impl Into<usize>,
+        value: u8,
+        data: &mut [u8],
+    ) {
+        data[address.into()] = value;
     }
 }
 
@@ -52,9 +46,10 @@ mod tests {
 
     #[test]
     fn fill_memory_completely() {
-        let mut data = Data::new(1);
+        let mut memory = [0; 1];
+        let mut data = Data::new(memory.len());
 
-        data.push(0);
+        data.push(0, &mut memory);
         // Should not panic. It will, in debug mode, unless wrapping is handled
         // correctly.
     }
