@@ -72,7 +72,6 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
     let mut code = [0; CODE_SIZE];
 
     // This is sound, as the reference is dropped at the end of this function.
-    // See comment on `DATA`.
     let data = unsafe { DATA.access_write() };
 
     let program = [
