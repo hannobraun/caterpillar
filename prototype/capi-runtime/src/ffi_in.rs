@@ -10,7 +10,7 @@ pub const DATA_SIZE: usize = 8;
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
 /// # The virtual machine's data memory
-pub static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory([0; DATA_SIZE]);
+pub static mut DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
@@ -103,6 +103,10 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
 pub struct SharedMemory<const SIZE: usize>([u8; SIZE]);
 
 impl<const SIZE: usize> SharedMemory<SIZE> {
+    const fn new() -> Self {
+        Self([0; SIZE])
+    }
+
     /// Gain read access to the shared memory
     ///
     /// This method is private, to prevent any access within Rust code that
