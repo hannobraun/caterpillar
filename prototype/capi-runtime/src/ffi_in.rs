@@ -94,7 +94,7 @@ pub extern "C" fn on_frame(delta_time_ms: f64) {
         .draw(&state.world, &mut state.evaluator, &code, data);
 }
 
-/// Virtual machine memory that is shared with the JavaScript host
+/// # Virtual machine memory that is shared with the JavaScript host
 ///
 /// ## Safety
 ///
@@ -116,12 +116,12 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
         }
     }
 
-    /// Gain read access to the shared memory
+    /// # Gain read access to the shared memory
     ///
     /// This method is private, to prevent any access within Rust code that
     /// doesn't come from the top-level FFI functions.
     ///
-    /// # Safety
+    /// ## Safety
     ///
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
@@ -132,12 +132,12 @@ impl<const SIZE: usize> SharedMemory<SIZE> {
         &*self.inner.get()
     }
 
-    /// Gain write access to the shared memory
+    /// # Gain write access to the shared memory
     ///
     /// This method is private, to prevent any access within Rust code that
     /// doesn't come from the top-level FFI functions.
     ///
-    /// # Safety
+    /// ## Safety
     ///
     /// The caller must drop the returned reference before returning control to
     /// the JavaScript host.
