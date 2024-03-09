@@ -1,3 +1,5 @@
+#![no_std]
+
 mod data;
 mod evaluator;
 
