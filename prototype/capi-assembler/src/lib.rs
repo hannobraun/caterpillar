@@ -58,7 +58,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let mut buffer = [0; 8];
 
             let mut parse = || -> Result<Option<WidthInfo>, ParseIntError> {
-                let size = match width.as_str() {
+                let width = match width.as_str() {
                     "8" => {
                         let width = W8::INFO;
 
@@ -98,7 +98,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     _ => None,
                 };
 
-                Ok(size)
+                Ok(width)
             };
 
             let width = parse().map_err(|err| AssemblerError::ParseValue {
