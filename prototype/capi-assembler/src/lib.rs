@@ -94,7 +94,7 @@ mod tests {
     }
 
     #[test]
-    fn push() {
+    fn push8_decimal() {
         let data = assemble("push8 255", [0]);
         assert_eq!(data, [255]);
     }
