@@ -101,44 +101,35 @@ mod tests {
 
     #[test]
     fn push8() {
-        let data = evaluate([opcode::PUSH | W8::FLAG, 255], [0], []);
-        assert_eq!(data, [255]);
+        let [a] = 0x11u8.to_le_bytes();
+        let data = evaluate([opcode::PUSH | W8::FLAG, a], [0], []);
+        assert_eq!(data, [0x11]);
     }
 
     #[test]
     fn push16() {
-        let data = evaluate([opcode::PUSH | W16::FLAG, 255, 255], [0, 0], []);
-        assert_eq!(data, [255, 255]);
+        let [a, b] = 0x2211u16.to_le_bytes();
+        let data = evaluate([opcode::PUSH | W16::FLAG, a, b], [0, 0], []);
+        assert_eq!(data, [0x11, 0x22]);
     }
 
     #[test]
     fn push32() {
-        let data = evaluate(
-            [opcode::PUSH | W32::FLAG, 255, 255, 255, 255],
-            [0, 0, 0, 0],
-            [],
-        );
-        assert_eq!(data, [255, 255, 255, 255]);
+        let [a, b, c, d] = 0x44332211u32.to_le_bytes();
+        let data =
+            evaluate([opcode::PUSH | W32::FLAG, a, b, c, d], [0, 0, 0, 0], []);
+        assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
     }
 
     #[test]
     fn push64() {
+        let [a, b, c, d, e, f, g, h] = 0x8877665544332211u64.to_le_bytes();
         let data = evaluate(
-            [
-                opcode::PUSH | W64::FLAG,
-                255,
-                255,
-                255,
-                255,
-                255,
-                255,
-                255,
-                255,
-            ],
+            [opcode::PUSH | W64::FLAG, a, b, c, d, e, f, g, h],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [],
         );
-        assert_eq!(data, [255, 255, 255, 255, 255, 255, 255, 255]);
+        assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
     }
 
     #[test]
