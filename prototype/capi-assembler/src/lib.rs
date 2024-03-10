@@ -36,6 +36,15 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             }
         }
 
+        let width = match width.as_str() {
+            "8" => Some(W8::INFO),
+            "16" => Some(W16::INFO),
+            "32" => Some(W32::INFO),
+            "64" => Some(W64::INFO),
+
+            _ => None,
+        };
+
         if opcode == "push" {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
@@ -58,37 +67,29 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let mut buffer = [0; 8];
 
             let mut parse = || -> Result<Option<WidthInfo>, ParseIntError> {
-                let width = match width.as_str() {
-                    "8" => {
-                        let width = W8::INFO;
-
+                let width = match width {
+                    Some(width @ W8::INFO) => {
                         buffer[..width.size].copy_from_slice(&[
                             u8::from_str_radix(value, radix)?,
                         ]);
 
                         Some(width)
                     }
-                    "16" => {
-                        let width = W16::INFO;
-
+                    Some(width @ W16::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u16::from_str_radix(value, radix)?.to_le_bytes(),
                         );
 
                         Some(width)
                     }
-                    "32" => {
-                        let width = W32::INFO;
-
+                    Some(width @ W32::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u32::from_str_radix(value, radix)?.to_le_bytes(),
                         );
 
                         Some(width)
                     }
-                    "64" => {
-                        let width = W64::INFO;
-
+                    Some(width @ W64::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
