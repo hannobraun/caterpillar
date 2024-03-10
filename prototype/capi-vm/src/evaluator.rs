@@ -1,4 +1,4 @@
-use crate::opcode;
+use crate::{argument::Argument, opcode};
 
 use super::data::Data;
 
@@ -12,12 +12,12 @@ impl Evaluator {
         Self { data }
     }
 
-    pub fn push_argument(
+    pub fn push_argument<const N: usize>(
         &mut self,
-        argument: impl IntoIterator<Item = u8>,
+        argument: impl Argument<N>,
         data: &mut [u8],
     ) {
-        for b in argument {
+        for b in argument.to_bytes() {
             self.data.push(b, data);
         }
     }
@@ -98,7 +98,10 @@ mod tests {
         args: [u8; A],
     ) -> [u8; D] {
         let mut evaluator = Evaluator::new(&data);
-        evaluator.push_argument(args, &mut data);
+
+        for arg in args {
+            evaluator.push_argument(arg, &mut data);
+        }
 
         evaluator.evaluate(&code, &mut data);
         data
