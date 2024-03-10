@@ -1,22 +1,22 @@
-pub const W8: Width = Width {
+pub const W8: WidthInfo = WidthInfo {
     size: 1,
     flag: encoding::W8 << 6,
 };
-pub const W16: Width = Width {
+pub const W16: WidthInfo = WidthInfo {
     size: 2,
     flag: encoding::W16 << 6,
 };
-pub const W32: Width = Width {
+pub const W32: WidthInfo = WidthInfo {
     size: 4,
     flag: encoding::W32 << 6,
 };
-pub const W64: Width = Width {
+pub const W64: WidthInfo = WidthInfo {
     size: 8,
     flag: encoding::W64 << 6,
 };
 
 #[derive(Eq, PartialEq)]
-pub struct Width {
+pub struct WidthInfo {
     pub size: usize,
     pub flag: u8,
 }
