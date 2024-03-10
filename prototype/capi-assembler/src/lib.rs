@@ -50,7 +50,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     // anything with a prefix before "0x" is definitely not an
                     // instruction we know.
                     return Err(AssemblerError::UnknownInstruction {
-                        name: value.to_string(),
+                        name: instruction.to_string(),
                     });
                 }
             };
@@ -110,7 +110,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 // The size suffix was not recognized. We don't know this
                 // instruction.
                 return Err(AssemblerError::UnknownInstruction {
-                    name: value.to_string(),
+                    name: instruction.to_string(),
                 });
             };
             let value = &buffer[..width.size];
