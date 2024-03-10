@@ -108,7 +108,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 value: value.to_owned(),
                 source: err,
             })?;
-
             let value = &buffer[..width.size];
 
             bytecode.push(opcode::PUSH | width.flag);
