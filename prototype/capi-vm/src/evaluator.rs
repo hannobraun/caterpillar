@@ -1,6 +1,6 @@
 use crate::{
     opcode,
-    width::{W16, W32, W64, W8},
+    width::{self, W16, W32, W64, W8},
 };
 
 use super::data::Data;
@@ -32,7 +32,13 @@ impl Evaluator {
             };
 
             let opcode = instruction & 0x3f;
-            let width = instruction & 0xc0;
+            let width = match instruction >> 6 {
+                width::encoding::W8 => W8,
+                width::encoding::W16 => W16,
+                width::encoding::W32 => W32,
+                width::encoding::W64 => W64,
+                _ => unreachable!("2 bits can only encode 4 values"),
+            };
 
             match opcode {
                 opcode::TERMINATE => {
@@ -45,16 +51,16 @@ impl Evaluator {
                     self.data.push([value], data);
                 }
                 opcode::DROP => {
-                    if width == W8.flag {
+                    if width == W8 {
                         self.data.pop::<1>(data);
                     }
-                    if width == W16.flag {
+                    if width == W16 {
                         self.data.pop::<2>(data);
                     }
-                    if width == W32.flag {
+                    if width == W32 {
                         self.data.pop::<4>(data);
                     }
-                    if width == W64.flag {
+                    if width == W64 {
                         self.data.pop::<8>(data);
                     }
                 }
