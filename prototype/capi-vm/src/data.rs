@@ -19,9 +19,13 @@ impl Data {
         Self { stack_ptr: ptr }
     }
 
-    pub fn push<const N: usize>(&mut self, value: [u8; N], memory: &mut [u8]) {
-        for i in 0..N {
-            memory[self.stack_ptr.0] = value[N - 1 - i];
+    pub fn push<V>(&mut self, value: V, memory: &mut [u8])
+    where
+        V: IntoIterator<Item = u8>,
+        V::IntoIter: DoubleEndedIterator,
+    {
+        for b in value.into_iter().rev() {
+            memory[self.stack_ptr.0] = b;
             self.stack_ptr -= 1;
         }
     }
