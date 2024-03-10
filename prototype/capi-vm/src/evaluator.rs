@@ -34,7 +34,7 @@ impl Evaluator {
             let opcode = instruction & 0x3f;
             let width = instruction & 0xc0;
 
-            let width_info = match width {
+            let width = match width {
                 W8::FLAG => W8::INFO,
                 W16::FLAG => W16::INFO,
                 W32::FLAG => W32::INFO,
@@ -48,18 +48,17 @@ impl Evaluator {
                 }
                 opcode::PUSH => {
                     let mut buffer = [0; W64::SIZE];
-                    let value = &mut buffer[0..width_info.size];
+                    let value = &mut buffer[0..width.size];
 
                     for b in value {
                         code_ptr += 1;
                         *b = code[code_ptr];
                     }
 
-                    self.data
-                        .push(buffer.into_iter().take(width_info.size), data);
+                    self.data.push(buffer.into_iter().take(width.size), data);
                 }
                 opcode::DROP => {
-                    for _ in 0..width_info.size {
+                    for _ in 0..width.size {
                         let [_] = self.data.pop(data);
                     }
                 }
