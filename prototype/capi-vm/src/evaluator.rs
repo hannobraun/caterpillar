@@ -1,4 +1,4 @@
-use crate::{argument::Word, opcode, width};
+use crate::{word::Word, opcode, width};
 
 use super::data::Data;
 

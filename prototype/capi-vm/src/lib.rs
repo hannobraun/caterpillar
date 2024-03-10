@@ -1,8 +1,8 @@
 #![no_std]
 
-mod argument;
 mod data;
 mod evaluator;
+mod word;
 
 pub mod opcode;
 pub mod width;
