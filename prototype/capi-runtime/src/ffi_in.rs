@@ -26,6 +26,16 @@ pub extern "C" fn code_len() -> usize {
 pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
 #[no_mangle]
+pub extern "C" fn data_ptr() -> usize {
+    &DATA as *const _ as usize
+}
+
+#[no_mangle]
+pub extern "C" fn data_len() -> usize {
+    DATA_SIZE
+}
+
+#[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
     panic::set_hook(Box::new(|panic_info| {
         print(&format!("{panic_info}"));
