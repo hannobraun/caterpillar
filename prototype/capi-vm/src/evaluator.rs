@@ -32,11 +32,11 @@ impl Evaluator {
             };
 
             let opcode = instruction & 0x3f;
-            let width = match instruction >> 6 {
-                W8::ENCODING => W8::INFO,
-                W16::ENCODING => W16::INFO,
-                W32::ENCODING => W32::INFO,
-                W64::ENCODING => W64::INFO,
+            let width = match instruction & 0xc0 {
+                W8::FLAG => W8::INFO,
+                W16::FLAG => W16::INFO,
+                W32::FLAG => W32::INFO,
+                W64::FLAG => W64::INFO,
                 _ => unreachable!("2 bits can only encode 4 values"),
             };
 
