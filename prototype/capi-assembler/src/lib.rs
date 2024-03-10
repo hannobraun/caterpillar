@@ -67,37 +67,29 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let mut buffer = [0; 8];
 
             let mut parse = || -> Result<Option<WidthInfo>, ParseIntError> {
-                let width = match width {
+                match width {
                     Some(width @ W8::INFO) => {
                         buffer[..width.size].copy_from_slice(&[
                             u8::from_str_radix(value, radix)?,
                         ]);
-
-                        Some(width)
                     }
                     Some(width @ W16::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u16::from_str_radix(value, radix)?.to_le_bytes(),
                         );
-
-                        Some(width)
                     }
                     Some(width @ W32::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u32::from_str_radix(value, radix)?.to_le_bytes(),
                         );
-
-                        Some(width)
                     }
                     Some(width @ W64::INFO) => {
                         buffer[..width.size].copy_from_slice(
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
-
-                        Some(width)
                     }
-                    _ => None,
-                };
+                    _ => {}
+                }
 
                 Ok(width)
             };
