@@ -14,7 +14,15 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
-        if instruction == "push8" {
+        let mut opcode = String::new();
+
+        for ch in instruction.chars() {
+            if ch.is_alphabetic() {
+                opcode.push(ch);
+            }
+        }
+
+        if opcode == "push" {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
@@ -26,7 +34,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
-        let opcode = match instruction {
+        let opcode = match opcode.as_str() {
             "clone" => Some(opcode::CLONE),
             "drop" => Some(opcode::DROP),
             "store" => Some(opcode::STORE),
