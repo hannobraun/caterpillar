@@ -45,14 +45,7 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     let data = unsafe { DATA.access_read() };
 
     let state = State::new(width, height, data);
-
-    STATE
-        .lock()
-        .expect("Expected exclusive access")
-        .insert(state)
-        .render_target
-        .buffer
-        .as_mut_ptr();
+    *STATE.lock().expect("Expected exclusive access") = Some(state);
 }
 
 #[no_mangle]
