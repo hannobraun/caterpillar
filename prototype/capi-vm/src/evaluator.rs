@@ -48,24 +48,13 @@ impl Evaluator {
                         self.data.pop::<1>(data);
                     }
                     if width == width::W16 {
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
+                        self.data.pop::<2>(data);
                     }
                     if width == width::W32 {
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
+                        self.data.pop::<4>(data);
                     }
                     if width == width::W64 {
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
-                        self.data.pop::<1>(data);
+                        self.data.pop::<8>(data);
                     }
                 }
                 opcode::STORE => {
