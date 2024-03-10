@@ -93,15 +93,10 @@
                 canvas.height,
             );
 
-            const renderTargetBuffer =
-                instance.exports.get_render_target_buffer();
-            const renderTargetBufferLen =
-                instance.exports.get_render_target_buffer_len();
-
             const drawBuffer = new Uint8ClampedArray(
                 instance.exports.memory.buffer,
-                renderTargetBuffer,
-                renderTargetBufferLen,
+                instance.exports.data_ptr() + 1024,
+                canvas.width * canvas.height * 4,
             );
 
             const imageData = new ImageData(

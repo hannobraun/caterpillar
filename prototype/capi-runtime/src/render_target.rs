@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::{vm::Evaluator, world::World};
+use crate::{ffi_in::RENDER_BUFFER_OFFSET, vm::Evaluator, world::World};
 
 pub struct RenderTarget {
     pub buffer: Vec<u8>,
@@ -74,7 +74,7 @@ impl RenderTarget {
 
                 evaluator.push_args([color], data);
                 evaluator.evaluate(code, data);
-                self.buffer[index..index + 4].copy_from_slice(&data[..4]);
+                data.copy_within(..4, RENDER_BUFFER_OFFSET + index);
             }
         }
     }
