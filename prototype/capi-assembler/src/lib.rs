@@ -26,7 +26,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
-            let value: u8 = value.parse()?;
+
+            let radix = 10;
+            let value = u8::from_str_radix(value, radix)?;
 
             bytecode.push(opcode::PUSH);
             bytecode.push(value);
