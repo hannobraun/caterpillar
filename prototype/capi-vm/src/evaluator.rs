@@ -32,13 +32,7 @@ impl Evaluator {
             };
 
             let opcode = instruction & 0x3f;
-            let width = match instruction & 0xc0 {
-                W8::FLAG => W8::INFO,
-                W16::FLAG => W16::INFO,
-                W32::FLAG => W32::INFO,
-                W64::FLAG => W64::INFO,
-                _ => unreachable!("2 bits can only encode 4 values"),
-            };
+            let width = instruction & 0xc0;
 
             match opcode {
                 opcode::TERMINATE => {
@@ -51,16 +45,16 @@ impl Evaluator {
                     self.data.push([value], data);
                 }
                 opcode::DROP => {
-                    if width == W8::INFO {
+                    if width == W8::FLAG {
                         self.data.pop::<{ W8::SIZE }>(data);
                     }
-                    if width == W16::INFO {
+                    if width == W16::FLAG {
                         self.data.pop::<{ W16::SIZE }>(data);
                     }
-                    if width == W32::INFO {
+                    if width == W32::FLAG {
                         self.data.pop::<{ W32::SIZE }>(data);
                     }
-                    if width == W64::INFO {
+                    if width == W64::FLAG {
                         self.data.pop::<{ W64::SIZE }>(data);
                     }
                 }
