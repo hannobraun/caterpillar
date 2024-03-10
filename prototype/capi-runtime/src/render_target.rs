@@ -22,6 +22,10 @@ impl RenderTarget {
         }
     }
 
+    pub fn buffer_size(&self) -> usize {
+        self.buffer.len()
+    }
+
     pub fn draw(
         &mut self,
         world: &World,

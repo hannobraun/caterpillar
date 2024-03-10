@@ -45,6 +45,13 @@ pub extern "C" fn on_init(width: usize, height: usize) {
     let data = unsafe { DATA.access_read() };
 
     let state = State::new(width, height, data);
+    let render_buffer_size = state.render_target.buffer_size();
+
+    assert!(
+        DATA_SIZE >= render_buffer_size,
+        "DATA_SIZE ({DATA_SIZE}) < `render_buffer_size ({render_buffer_size})"
+    );
+
     *STATE.lock().expect("Expected exclusive access") = Some(state);
 }
 
