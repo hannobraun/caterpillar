@@ -73,7 +73,7 @@ async fn copy_host(
             fs::remove_file(serve_dir.join(serve_dir.join("index.html"))).await;
 
         println!("Copying host...");
-        copy_artifacts(&serve_dir).await?;
+        fs::copy("index.html", serve_dir.join("index.html")).await?;
     }
 }
 
@@ -134,7 +134,11 @@ async fn build_runtime(
             .await?;
 
         if exit_status.success() {
-            copy_artifacts(serve_dir).await?;
+            fs::copy(
+                "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+                serve_dir.join("capi_runtime.wasm"),
+            )
+            .await?;
         }
     }
 }
@@ -202,20 +206,8 @@ async fn build_snake(
             .write_all(&bytecode)
             .await?;
 
-        copy_artifacts(serve_dir).await?;
+        fs::copy("snake.bc.capi", serve_dir.join("snake.bc.capi")).await?;
     }
-}
-
-async fn copy_artifacts(serve_dir: &Path) -> anyhow::Result<()> {
-    fs::copy("index.html", serve_dir.join("index.html")).await?;
-    fs::copy(
-        "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
-        serve_dir.join("capi_runtime.wasm"),
-    )
-    .await?;
-    fs::copy("snake.bc.capi", serve_dir.join("snake.bc.capi")).await?;
-
-    Ok(())
 }
 
 async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
