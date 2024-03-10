@@ -12,6 +12,10 @@ impl Evaluator {
         Self { data }
     }
 
+    pub fn push_u8(&mut self, value: u8, data: &mut [u8]) {
+        self.data.push([value], data);
+    }
+
     pub fn push_argument<const N: usize>(
         &mut self,
         argument: impl Word<N>,

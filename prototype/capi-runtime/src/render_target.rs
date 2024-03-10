@@ -66,7 +66,7 @@ impl RenderTarget {
                     .expect("Expected to run on 32-bit platform (WebAssembly)");
 
                 evaluator.push_argument(index_u32, data);
-                evaluator.push_argument(color, data);
+                evaluator.push_u8(color, data);
 
                 evaluator.evaluate(code, data);
                 data.copy_within(..4, RENDER_BUFFER_OFFSET + index);
