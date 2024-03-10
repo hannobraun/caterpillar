@@ -7,3 +7,9 @@ impl Argument<1> for u8 {
         [self]
     }
 }
+
+impl Argument<4> for u32 {
+    fn to_bytes(self) -> [u8; 4] {
+        self.to_le_bytes()
+    }
+}
