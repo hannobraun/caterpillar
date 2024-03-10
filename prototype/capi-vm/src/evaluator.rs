@@ -45,16 +45,16 @@ impl Evaluator {
                     self.data.push([value], data);
                 }
                 opcode::DROP => {
-                    if width == W8 {
+                    if width == W8.flag {
                         self.data.pop::<1>(data);
                     }
-                    if width == W16 {
+                    if width == W16.flag {
                         self.data.pop::<2>(data);
                     }
-                    if width == W32 {
+                    if width == W32.flag {
                         self.data.pop::<4>(data);
                     }
-                    if width == W64 {
+                    if width == W64.flag {
                         self.data.pop::<8>(data);
                     }
                 }
@@ -103,13 +103,14 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let data = evaluate([opcode::DROP | W8, opcode::PUSH, 255], [0], [127]);
+        let data =
+            evaluate([opcode::DROP | W8.flag, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
     }
     #[test]
     fn drop16() {
         let data = evaluate(
-            [opcode::DROP | W16, opcode::PUSH, 255],
+            [opcode::DROP | W16.flag, opcode::PUSH, 255],
             [0, 0],
             [127, 127],
         );
@@ -119,7 +120,7 @@ mod tests {
     #[test]
     fn drop32() {
         let data = evaluate(
-            [opcode::DROP | W32, opcode::PUSH, 255],
+            [opcode::DROP | W32.flag, opcode::PUSH, 255],
             [0, 0, 0, 0],
             [127, 127, 127, 127],
         );
@@ -129,7 +130,7 @@ mod tests {
     #[test]
     fn drop64() {
         let data = evaluate(
-            [opcode::DROP | W64, opcode::PUSH, 255],
+            [opcode::DROP | W64.flag, opcode::PUSH, 255],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [127, 127, 127, 127, 127, 127, 127, 127],
         );
