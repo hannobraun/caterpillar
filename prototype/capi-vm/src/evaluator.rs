@@ -161,7 +161,7 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         for arg in args {
-            evaluator.push_argument(arg, &mut data);
+            evaluator.push_u8(arg, &mut data);
         }
 
         evaluator.evaluate(&code, &mut data);
