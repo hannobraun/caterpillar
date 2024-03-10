@@ -157,42 +157,42 @@ mod tests {
 
     #[test]
     fn clone() -> anyhow::Result<()> {
-        let data = assemble("push8 255 clone", [0, 0]);
+        let data = assemble("push8 255 clone", [0, 0])?;
         assert_eq!(data, [255, 255]);
         Ok(())
     }
 
     #[test]
     fn drop() -> anyhow::Result<()> {
-        let data = assemble("push8 255 drop push8 127", [0]);
+        let data = assemble("push8 255 drop push8 127", [0])?;
         assert_eq!(data, [127]);
         Ok(())
     }
 
     #[test]
     fn push8_decimal() -> anyhow::Result<()> {
-        let data = assemble("push8 255", [0]);
+        let data = assemble("push8 255", [0])?;
         assert_eq!(data, [255]);
         Ok(())
     }
 
     #[test]
     fn push8() -> anyhow::Result<()> {
-        let data = assemble("push8 0x11", [0]);
+        let data = assemble("push8 0x11", [0])?;
         assert_eq!(data, [0x11]);
         Ok(())
     }
 
     #[test]
     fn push16() -> anyhow::Result<()> {
-        let data = assemble("push16 0x2211", [0, 0]);
+        let data = assemble("push16 0x2211", [0, 0])?;
         assert_eq!(data, [0x11, 0x22]);
         Ok(())
     }
 
     #[test]
     fn push32() -> anyhow::Result<()> {
-        let data = assemble("push32 0x44332211", [0, 0, 0, 0]);
+        let data = assemble("push32 0x44332211", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
         Ok(())
     }
@@ -200,31 +200,34 @@ mod tests {
     #[test]
     fn push64() -> anyhow::Result<()> {
         let data =
-            assemble("push64 0x8877665544332211", [0, 0, 0, 0, 0, 0, 0, 0]);
+            assemble("push64 0x8877665544332211", [0, 0, 0, 0, 0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
         Ok(())
     }
 
     #[test]
     fn store() -> anyhow::Result<()> {
-        let data = assemble("push8 255 push8 0 store", [0, 0, 0]);
+        let data = assemble("push8 255 push8 0 store", [0, 0, 0])?;
         assert_eq!(data, [255, 0, 255]);
         Ok(())
     }
 
     #[test]
     fn terminate() -> anyhow::Result<()> {
-        assemble("terminate", []);
+        assemble("terminate", [])?;
         // This should not run forever, nor cause any kind of panic.
         Ok(())
     }
 
-    fn assemble<const D: usize>(assembly: &str, mut data: [u8; D]) -> [u8; D] {
-        let bytecode = super::assemble(assembly).unwrap();
+    fn assemble<const D: usize>(
+        assembly: &str,
+        mut data: [u8; D],
+    ) -> anyhow::Result<[u8; D]> {
+        let bytecode = super::assemble(assembly)?;
 
         let mut evaluator = Evaluator::new(&data);
         evaluator.evaluate(&bytecode, &mut data);
 
-        data
+        Ok(data)
     }
 }
