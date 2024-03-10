@@ -1,6 +1,9 @@
 use std::num::ParseIntError;
 
-use capi_vm::opcode;
+use capi_vm::{
+    opcode,
+    width::{Width, WidthInfo, W16, W32, W64, W8},
+};
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut bytecode = Vec::new();
@@ -15,10 +18,13 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         let mut opcode = String::new();
+        let mut width = String::new();
 
         for ch in instruction.chars() {
             if ch.is_alphabetic() {
                 opcode.push(ch);
+            } else if ch.is_ascii_digit() {
+                width.push(ch);
             }
         }
 
@@ -41,15 +47,70 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 }
             };
 
-            let value = u8::from_str_radix(value, radix).map_err(|err| {
-                AssemblerError::ParseValue {
-                    value: value.to_owned(),
-                    source: err,
-                }
+            let mut buffer = [0; 8];
+
+            let mut parse = || -> Result<Option<WidthInfo>, ParseIntError> {
+                let size = match width.as_str() {
+                    "8" => {
+                        let width = W8::INFO;
+
+                        buffer[..width.size].copy_from_slice(&[
+                            u8::from_str_radix(value, radix)?,
+                        ]);
+
+                        Some(width)
+                    }
+                    "16" => {
+                        let width = W16::INFO;
+
+                        buffer[..2].copy_from_slice(
+                            &u16::from_str_radix(value, radix)?.to_le_bytes(),
+                        );
+
+                        Some(width)
+                    }
+                    "32" => {
+                        let width = W32::INFO;
+
+                        buffer[..4].copy_from_slice(
+                            &u32::from_str_radix(value, radix)?.to_le_bytes(),
+                        );
+
+                        Some(width)
+                    }
+                    "64" => {
+                        let width = W64::INFO;
+
+                        buffer[..8].copy_from_slice(
+                            &u64::from_str_radix(value, radix)?.to_le_bytes(),
+                        );
+
+                        Some(width)
+                    }
+                    _ => None,
+                };
+
+                Ok(size)
+            };
+
+            let width = parse().map_err(|err| AssemblerError::ParseValue {
+                value: value.to_owned(),
+                source: err,
             })?;
 
-            bytecode.push(opcode::PUSH);
-            bytecode.push(value);
+            let Some(width) = width else {
+                // The size suffix was not recognized. We don't know this
+                // instruction.
+                return Err(AssemblerError::UnknownInstruction {
+                    name: value.to_string(),
+                });
+            };
+            let value = &buffer[..width.size];
+
+            bytecode.push(opcode::PUSH | width.flag);
+            for &b in value {
+                bytecode.push(b);
+            }
 
             continue;
         }
@@ -113,9 +174,28 @@ mod tests {
     }
 
     #[test]
-    fn push() {
-        let data = assemble("push8 0xff", [0]);
-        assert_eq!(data, [0xff]);
+    fn push8() {
+        let data = assemble("push8 0x11", [0]);
+        assert_eq!(data, [0x11]);
+    }
+
+    #[test]
+    fn push16() {
+        let data = assemble("push16 0x2211", [0, 0]);
+        assert_eq!(data, [0x11, 0x22]);
+    }
+
+    #[test]
+    fn push32() {
+        let data = assemble("push32 0x44332211", [0, 0, 0, 0]);
+        assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
+    }
+
+    #[test]
+    fn push64() {
+        let data =
+            assemble("push64 0x8877665544332211", [0, 0, 0, 0, 0, 0, 0, 0]);
+        assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
     }
 
     #[test]
