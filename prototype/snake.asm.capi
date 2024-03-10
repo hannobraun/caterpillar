@@ -15,8 +15,5 @@ set_alpha_channel:
     push8 3
     store
 terminate:
-    drop
-    drop
-    drop
-    drop
+    drop32
     terminate

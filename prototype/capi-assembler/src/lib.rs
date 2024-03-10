@@ -118,9 +118,23 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
+        if opcode == "drop" {
+            let opcode = opcode::DROP;
+
+            let Some(width) = width else {
+                // The size suffix was not recognized. We don't know this
+                // instruction.
+                return Err(AssemblerError::UnknownInstruction {
+                    name: instruction.to_string(),
+                });
+            };
+
+            bytecode.push(opcode | width.flag);
+            continue;
+        }
+
         let opcode = match opcode.as_str() {
             "clone" => Some(opcode::CLONE),
-            "drop" => Some(opcode::DROP),
             "store" => Some(opcode::STORE),
             "terminate" => Some(opcode::TERMINATE),
             _ => None,
@@ -168,9 +182,36 @@ mod tests {
     }
 
     #[test]
-    fn drop() -> anyhow::Result<()> {
-        let data = assemble("push8 255 drop push8 127", [0])?;
-        assert_eq!(data, [127]);
+    fn drop8() -> anyhow::Result<()> {
+        let data = assemble("push8 0x11 drop8 push8 0x22", [0])?;
+        assert_eq!(data, [0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn drop16() -> anyhow::Result<()> {
+        let data = assemble("push16 0x1111 drop16 push16 0x2222", [0, 0])?;
+        assert_eq!(data, [0x22, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn drop32() -> anyhow::Result<()> {
+        let data = assemble(
+            "push32 0x11111111 drop32 push32 0x22222222",
+            [0, 0, 0, 0],
+        )?;
+        assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn drop64() -> anyhow::Result<()> {
+        let data = assemble(
+            "push64 0x111111111111111 drop64 push64 0x2222222222222222",
+            [0, 0, 0, 0, 0, 0, 0, 0],
+        )?;
+        assert_eq!(data, [0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }
 
