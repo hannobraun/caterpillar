@@ -28,6 +28,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         let opcode = match instruction {
             "clone" => Some(opcode::CLONE),
+            "drop" => Some(opcode::DROP),
             "store" => Some(opcode::STORE),
             "terminate" => Some(opcode::TERMINATE),
             _ => None,
@@ -66,6 +67,12 @@ mod tests {
     fn clone() {
         let data = assemble("push 255 clone", [0, 0]);
         assert_eq!(data, [255, 255]);
+    }
+
+    #[test]
+    fn drop() {
+        let data = assemble("push 255 drop push 127", [0]);
+        assert_eq!(data, [127]);
     }
 
     #[test]
