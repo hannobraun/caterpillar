@@ -52,16 +52,16 @@ impl Evaluator {
                 }
                 opcode::DROP => {
                     if width == W8::INFO {
-                        self.data.pop::<1>(data);
+                        self.data.pop::<{ W8::SIZE }>(data);
                     }
                     if width == W16::INFO {
-                        self.data.pop::<2>(data);
+                        self.data.pop::<{ W16::SIZE }>(data);
                     }
                     if width == W32::INFO {
-                        self.data.pop::<4>(data);
+                        self.data.pop::<{ W32::SIZE }>(data);
                     }
                     if width == W64::INFO {
-                        self.data.pop::<8>(data);
+                        self.data.pop::<{ W64::SIZE }>(data);
                     }
                 }
                 opcode::STORE => {
