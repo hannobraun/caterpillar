@@ -1,4 +1,4 @@
-use crate::{argument::Argument, opcode};
+use crate::{argument::Argument, opcode, width};
 
 use super::data::Data;
 
@@ -30,7 +30,10 @@ impl Evaluator {
                 break;
             };
 
-            match instruction {
+            let opcode = instruction & 0x3f;
+            let width = instruction & 0xc0;
+
+            match opcode {
                 opcode::TERMINATE => {
                     break;
                 }
@@ -41,7 +44,29 @@ impl Evaluator {
                     self.data.push(value, data);
                 }
                 opcode::DROP => {
-                    self.data.pop(data);
+                    if width == width::W8 {
+                        self.data.pop(data);
+                    }
+                    if width == width::W16 {
+                        self.data.pop(data);
+                        self.data.pop(data);
+                    }
+                    if width == width::W32 {
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                    }
+                    if width == width::W64 {
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                        self.data.pop(data);
+                    }
                 }
                 opcode::STORE => {
                     let address = self.data.pop(data);
@@ -67,7 +92,7 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::opcode;
+    use crate::{opcode, width};
 
     use super::Evaluator;
 
@@ -84,9 +109,39 @@ mod tests {
     }
 
     #[test]
-    fn drop() {
-        let data = evaluate([opcode::DROP, opcode::PUSH, 255], [0], [127]);
+    fn drop8() {
+        let data =
+            evaluate([opcode::DROP | width::W8, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
+    }
+    #[test]
+    fn drop16() {
+        let data = evaluate(
+            [opcode::DROP | width::W16, opcode::PUSH, 255],
+            [0, 0],
+            [127, 127],
+        );
+        assert_eq!(data, [127, 255]);
+    }
+
+    #[test]
+    fn drop32() {
+        let data = evaluate(
+            [opcode::DROP | width::W32, opcode::PUSH, 255],
+            [0, 0, 0, 0],
+            [127, 127, 127, 127],
+        );
+        assert_eq!(data, [127, 127, 127, 255]);
+    }
+
+    #[test]
+    fn drop64() {
+        let data = evaluate(
+            [opcode::DROP | width::W64, opcode::PUSH, 255],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [127, 127, 127, 127, 127, 127, 127, 127],
+        );
+        assert_eq!(data, [127, 127, 127, 127, 127, 127, 127, 255]);
     }
 
     #[test]
