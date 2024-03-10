@@ -214,8 +214,8 @@ mod tests {
 
     #[test]
     fn terminate() -> anyhow::Result<()> {
+        // This should not run forever, nor cause any kind of error.
         assemble("terminate", [])?;
-        // This should not run forever, nor cause any kind of panic.
         Ok(())
     }
 
