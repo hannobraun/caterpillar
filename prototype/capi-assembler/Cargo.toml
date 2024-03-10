@@ -9,3 +9,7 @@ thiserror = "*"
 
 [dependencies.capi-vm]
 path = "../capi-vm"
+
+
+[dev-dependencies]
+anyhow = "*"
