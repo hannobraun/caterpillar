@@ -96,7 +96,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
-                    _ => {}
+                    _ => {
+                        unreachable!("Unsupported width");
+                    }
                 }
 
                 Ok(())
