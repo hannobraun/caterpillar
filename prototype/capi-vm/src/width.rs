@@ -37,7 +37,7 @@ impl Width for W64 {
     const SIZE: usize = 8;
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct WidthInfo {
     pub size: usize,
     pub flag: u8,
