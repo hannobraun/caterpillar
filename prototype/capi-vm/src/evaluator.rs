@@ -39,10 +39,33 @@ impl Evaluator {
                     break;
                 }
                 opcode::PUSH => {
-                    code_ptr += 1;
-                    let value = code[code_ptr];
+                    let mut copy_value = |value: &mut [u8]| {
+                        for b in value {
+                            code_ptr += 1;
+                            *b = code[code_ptr];
+                        }
+                    };
 
-                    self.data.push([value], data);
+                    if width == W8::FLAG {
+                        let mut value = [0; W8::SIZE];
+                        copy_value(&mut value);
+                        self.data.push(value, data);
+                    }
+                    if width == W16::FLAG {
+                        let mut value = [0; W16::SIZE];
+                        copy_value(&mut value);
+                        self.data.push(value, data);
+                    }
+                    if width == W32::FLAG {
+                        let mut value = [0; W32::SIZE];
+                        copy_value(&mut value);
+                        self.data.push(value, data);
+                    }
+                    if width == W64::FLAG {
+                        let mut value = [0; W64::SIZE];
+                        copy_value(&mut value);
+                        self.data.push(value, data);
+                    }
                 }
                 opcode::DROP => {
                     if width == W8::FLAG {
@@ -96,9 +119,45 @@ mod tests {
     }
 
     #[test]
-    fn push() {
-        let data = evaluate([opcode::PUSH, 255], [0], []);
+    fn push8() {
+        let data = evaluate([opcode::PUSH | W8::FLAG, 255], [0], []);
         assert_eq!(data, [255]);
+    }
+
+    #[test]
+    fn push16() {
+        let data = evaluate([opcode::PUSH | W16::FLAG, 255, 255], [0, 0], []);
+        assert_eq!(data, [255, 255]);
+    }
+
+    #[test]
+    fn push32() {
+        let data = evaluate(
+            [opcode::PUSH | W32::FLAG, 255, 255, 255, 255],
+            [0, 0, 0, 0],
+            [],
+        );
+        assert_eq!(data, [255, 255, 255, 255]);
+    }
+
+    #[test]
+    fn push64() {
+        let data = evaluate(
+            [
+                opcode::PUSH | W64::FLAG,
+                255,
+                255,
+                255,
+                255,
+                255,
+                255,
+                255,
+                255,
+            ],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [],
+        );
+        assert_eq!(data, [255, 255, 255, 255, 255, 255, 255, 255]);
     }
 
     #[test]
