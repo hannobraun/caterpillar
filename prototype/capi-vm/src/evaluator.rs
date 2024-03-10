@@ -1,4 +1,4 @@
-use crate::{argument::Argument, opcode, width};
+use crate::{argument::Word, opcode, width};
 
 use super::data::Data;
 
@@ -14,7 +14,7 @@ impl Evaluator {
 
     pub fn push_argument<const N: usize>(
         &mut self,
-        argument: impl Argument<N>,
+        argument: impl Word<N>,
         data: &mut [u8],
     ) {
         for b in argument.to_bytes() {
