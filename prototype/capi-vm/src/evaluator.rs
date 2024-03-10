@@ -1,6 +1,6 @@
 use crate::{
     opcode,
-    width::{self, W16, W32, W64, W8},
+    width::{self, Width, W16, W32, W64, W8},
 };
 
 use super::data::Data;
@@ -33,10 +33,10 @@ impl Evaluator {
 
             let opcode = instruction & 0x3f;
             let width = match instruction >> 6 {
-                width::encoding::W8 => W8,
-                width::encoding::W16 => W16,
-                width::encoding::W32 => W32,
-                width::encoding::W64 => W64,
+                width::encoding::W8 => W8::INFO,
+                width::encoding::W16 => W16::INFO,
+                width::encoding::W32 => W32::INFO,
+                width::encoding::W64 => W64::INFO,
                 _ => unreachable!("2 bits can only encode 4 values"),
             };
 
@@ -51,16 +51,16 @@ impl Evaluator {
                     self.data.push([value], data);
                 }
                 opcode::DROP => {
-                    if width == W8 {
+                    if width == W8::INFO {
                         self.data.pop::<1>(data);
                     }
-                    if width == W16 {
+                    if width == W16::INFO {
                         self.data.pop::<2>(data);
                     }
-                    if width == W32 {
+                    if width == W32::INFO {
                         self.data.pop::<4>(data);
                     }
-                    if width == W64 {
+                    if width == W64::INFO {
                         self.data.pop::<8>(data);
                     }
                 }
@@ -90,7 +90,7 @@ impl Evaluator {
 mod tests {
     use crate::{
         opcode,
-        width::{W16, W32, W64, W8},
+        width::{Width, W16, W32, W64, W8},
     };
 
     use super::Evaluator;
@@ -109,14 +109,17 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let data =
-            evaluate([opcode::DROP | W8.flag, opcode::PUSH, 255], [0], [127]);
+        let data = evaluate(
+            [opcode::DROP | W8::INFO.flag, opcode::PUSH, 255],
+            [0],
+            [127],
+        );
         assert_eq!(data, [255]);
     }
     #[test]
     fn drop16() {
         let data = evaluate(
-            [opcode::DROP | W16.flag, opcode::PUSH, 255],
+            [opcode::DROP | W16::INFO.flag, opcode::PUSH, 255],
             [0, 0],
             [127, 127],
         );
@@ -126,7 +129,7 @@ mod tests {
     #[test]
     fn drop32() {
         let data = evaluate(
-            [opcode::DROP | W32.flag, opcode::PUSH, 255],
+            [opcode::DROP | W32::INFO.flag, opcode::PUSH, 255],
             [0, 0, 0, 0],
             [127, 127, 127, 127],
         );
@@ -136,7 +139,7 @@ mod tests {
     #[test]
     fn drop64() {
         let data = evaluate(
-            [opcode::DROP | W64.flag, opcode::PUSH, 255],
+            [opcode::DROP | W64::INFO.flag, opcode::PUSH, 255],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [127, 127, 127, 127, 127, 127, 127, 127],
         );
