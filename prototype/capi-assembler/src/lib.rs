@@ -22,6 +22,14 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         for ch in instruction.chars() {
             if ch.is_alphabetic() {
+                if !width.is_empty() {
+                    // We only have instructions that *end* with numbers, so
+                    // this is definitely nothing we know about.
+                    return Err(AssemblerError::UnknownInstruction {
+                        name: instruction.to_owned(),
+                    });
+                }
+
                 opcode.push(ch);
             } else if ch.is_ascii_digit() {
                 width.push(ch);
@@ -219,6 +227,15 @@ mod tests {
         // This should not run forever, nor cause any kind of error.
         assemble("terminate", [])?;
         Ok(())
+    }
+
+    #[test]
+    fn unknown_mixed_alphanumerics() {
+        let result = assemble("pu32sh", []);
+        assert!(matches!(
+            result,
+            Err(AssemblerError::UnknownInstruction { .. })
+        ));
     }
 
     fn assemble<const D: usize>(
