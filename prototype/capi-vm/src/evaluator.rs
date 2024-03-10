@@ -82,7 +82,10 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::{opcode, width};
+    use crate::{
+        opcode,
+        width::{W16, W32, W64, W8},
+    };
 
     use super::Evaluator;
 
@@ -100,14 +103,13 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let data =
-            evaluate([opcode::DROP | width::W8, opcode::PUSH, 255], [0], [127]);
+        let data = evaluate([opcode::DROP | W8, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
     }
     #[test]
     fn drop16() {
         let data = evaluate(
-            [opcode::DROP | width::W16, opcode::PUSH, 255],
+            [opcode::DROP | W16, opcode::PUSH, 255],
             [0, 0],
             [127, 127],
         );
@@ -117,7 +119,7 @@ mod tests {
     #[test]
     fn drop32() {
         let data = evaluate(
-            [opcode::DROP | width::W32, opcode::PUSH, 255],
+            [opcode::DROP | W32, opcode::PUSH, 255],
             [0, 0, 0, 0],
             [127, 127, 127, 127],
         );
@@ -127,7 +129,7 @@ mod tests {
     #[test]
     fn drop64() {
         let data = evaluate(
-            [opcode::DROP | width::W64, opcode::PUSH, 255],
+            [opcode::DROP | W64, opcode::PUSH, 255],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [127, 127, 127, 127, 127, 127, 127, 127],
         );
