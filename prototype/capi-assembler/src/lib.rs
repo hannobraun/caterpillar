@@ -155,6 +155,8 @@ pub enum AssemblerError {
 mod tests {
     use capi_vm::Evaluator;
 
+    use crate::AssemblerError;
+
     #[test]
     fn clone() -> anyhow::Result<()> {
         let data = assemble("push8 255 clone", [0, 0])?;
@@ -222,7 +224,7 @@ mod tests {
     fn assemble<const D: usize>(
         assembly: &str,
         mut data: [u8; D],
-    ) -> anyhow::Result<[u8; D]> {
+    ) -> Result<[u8; D], AssemblerError> {
         let bytecode = super::assemble(assembly)?;
 
         let mut evaluator = Evaluator::new(&data);
