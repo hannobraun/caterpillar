@@ -46,6 +46,14 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         };
 
         if opcode == "push" {
+            let Some(width) = width else {
+                // The size suffix was not recognized. We don't know this
+                // instruction.
+                return Err(AssemblerError::UnknownInstruction {
+                    name: instruction.to_string(),
+                });
+            };
+
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
@@ -68,22 +76,22 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
             let mut parse = || -> Result<(), ParseIntError> {
                 match width {
-                    Some(width @ W8::INFO) => {
+                    width @ W8::INFO => {
                         buffer[..width.size].copy_from_slice(&[
                             u8::from_str_radix(value, radix)?,
                         ]);
                     }
-                    Some(width @ W16::INFO) => {
+                    width @ W16::INFO => {
                         buffer[..width.size].copy_from_slice(
                             &u16::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
-                    Some(width @ W32::INFO) => {
+                    width @ W32::INFO => {
                         buffer[..width.size].copy_from_slice(
                             &u32::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
-                    Some(width @ W64::INFO) => {
+                    width @ W64::INFO => {
                         buffer[..width.size].copy_from_slice(
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
@@ -99,13 +107,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 source: err,
             })?;
 
-            let Some(width) = width else {
-                // The size suffix was not recognized. We don't know this
-                // instruction.
-                return Err(AssemblerError::UnknownInstruction {
-                    name: instruction.to_string(),
-                });
-            };
             let value = &buffer[..width.size];
 
             bytecode.push(opcode::PUSH | width.flag);
