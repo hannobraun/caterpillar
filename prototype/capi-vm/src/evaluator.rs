@@ -40,6 +40,9 @@ impl Evaluator {
 
                     self.data.push(value, data);
                 }
+                opcode::DROP => {
+                    self.data.pop(data);
+                }
                 opcode::STORE => {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
@@ -77,6 +80,12 @@ mod tests {
     #[test]
     fn push() {
         let data = evaluate([opcode::PUSH, 255], [0], []);
+        assert_eq!(data, [255]);
+    }
+
+    #[test]
+    fn drop() {
+        let data = evaluate([opcode::DROP, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
     }
 
