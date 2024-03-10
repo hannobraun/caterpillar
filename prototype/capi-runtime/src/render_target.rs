@@ -1,9 +1,6 @@
-use std::iter;
-
 use crate::{ffi_in::RENDER_BUFFER_OFFSET, vm::Evaluator, world::World};
 
 pub struct RenderTarget {
-    pub buffer: Vec<u8>,
     pub width: usize,
     pub height: usize,
 }
@@ -12,18 +9,11 @@ impl RenderTarget {
     pub const NUM_COLOR_CHANNELS: usize = 4;
 
     pub fn new(width: usize, height: usize) -> Self {
-        let len = width * height * Self::NUM_COLOR_CHANNELS;
-        let buffer = iter::repeat(0).take(len).collect();
-
-        Self {
-            buffer,
-            width,
-            height,
-        }
+        Self { width, height }
     }
 
     pub fn buffer_size(&self) -> usize {
-        self.buffer.len()
+        self.width * self.height * Self::NUM_COLOR_CHANNELS
     }
 
     pub fn draw(
