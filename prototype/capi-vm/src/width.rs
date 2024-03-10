@@ -2,9 +2,10 @@ pub trait Width {
     const ENCODING: u8;
     const SIZE: usize;
 
+    const FLAG: u8 = Self::ENCODING << 6;
     const INFO: WidthInfo = WidthInfo {
         size: Self::SIZE,
-        flag: Self::ENCODING << 6,
+        flag: Self::FLAG,
     };
 }
 
