@@ -28,7 +28,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             };
 
             let radix = 10;
-            let value = u8::from_str_radix(value, radix)?;
+            let value = u8::from_str_radix(value, radix).map_err(|err| {
+                AssemblerError::ParseValue {
+                    value: value.to_owned(),
+                    source: err,
+                }
+            })?;
 
             bytecode.push(opcode::PUSH);
             bytecode.push(value);
@@ -59,8 +64,11 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AssemblerError {
-    #[error("Could not parse value")]
-    ParseValue(#[from] ParseIntError),
+    #[error("Could not parse value `{value}")]
+    ParseValue {
+        value: String,
+        source: ParseIntError,
+    },
 
     #[error("Expected value after `push`, but came last")]
     PushCameLast,
