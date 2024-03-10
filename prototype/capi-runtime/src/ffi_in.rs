@@ -5,7 +5,7 @@ use crate::{ffi_out::print, input::InputEvent, state::State};
 // I want to know when I go beyond certain thresholds, just out of interest.
 // Keeping the limits as low as possible here, to make sure I notice.
 pub const CODE_SIZE: usize = 32;
-pub const DATA_SIZE: usize = 8;
+pub const DATA_SIZE: usize = 2usize.pow(24);
 
 static STATE: Mutex<Option<State>> = Mutex::new(None);
 
