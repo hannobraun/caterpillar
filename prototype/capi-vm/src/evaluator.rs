@@ -1,4 +1,7 @@
-use crate::{opcode, width};
+use crate::{
+    opcode,
+    width::{W16, W32, W64, W8},
+};
 
 use super::data::Data;
 
@@ -42,16 +45,16 @@ impl Evaluator {
                     self.data.push([value], data);
                 }
                 opcode::DROP => {
-                    if width == width::W8 {
+                    if width == W8 {
                         self.data.pop::<1>(data);
                     }
-                    if width == width::W16 {
+                    if width == W16 {
                         self.data.pop::<2>(data);
                     }
-                    if width == width::W32 {
+                    if width == W32 {
                         self.data.pop::<4>(data);
                     }
-                    if width == width::W64 {
+                    if width == W64 {
                         self.data.pop::<8>(data);
                     }
                 }
