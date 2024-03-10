@@ -15,4 +15,8 @@ set_alpha_channel:
     push 3
     store
 terminate:
+    drop
+    drop
+    drop
+    drop
     terminate
