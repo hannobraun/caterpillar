@@ -1,4 +1,4 @@
-use crate::{opcode, width, word::Word};
+use crate::{opcode, width};
 
 use super::data::Data;
 
@@ -18,16 +18,6 @@ impl Evaluator {
 
     pub fn push_u32(&mut self, value: u32, data: &mut [u8]) {
         self.data.push(value.to_le_bytes(), data);
-    }
-
-    pub fn push_argument<const N: usize>(
-        &mut self,
-        argument: impl Word<N>,
-        data: &mut [u8],
-    ) {
-        for b in argument.to_bytes() {
-            self.data.push([b], data);
-        }
     }
 
     pub fn evaluate(&mut self, code: &[u8], data: &mut [u8]) {

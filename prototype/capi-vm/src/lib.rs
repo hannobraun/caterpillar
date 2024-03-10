@@ -2,7 +2,6 @@
 
 mod data;
 mod evaluator;
-mod word;
 
 pub mod opcode;
 pub mod width;
