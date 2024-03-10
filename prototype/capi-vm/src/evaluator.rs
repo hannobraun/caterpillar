@@ -16,6 +16,10 @@ impl Evaluator {
         self.data.push([value], data);
     }
 
+    pub fn push_u32(&mut self, value: u32, data: &mut [u8]) {
+        self.data.push(value.to_le_bytes(), data);
+    }
+
     pub fn push_argument<const N: usize>(
         &mut self,
         argument: impl Word<N>,
