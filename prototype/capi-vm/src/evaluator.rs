@@ -47,33 +47,16 @@ impl Evaluator {
                     break;
                 }
                 opcode::PUSH => {
-                    let mut copy_value = |value: &mut [u8]| {
-                        for b in value {
-                            code_ptr += 1;
-                            *b = code[code_ptr];
-                        }
-                    };
+                    let mut buffer = [0; W64::SIZE];
+                    let value = &mut buffer[0..width_info.size];
 
-                    if width == W8::FLAG {
-                        let mut value = [0; W8::SIZE];
-                        copy_value(&mut value);
-                        self.data.push(value, data);
+                    for b in value {
+                        code_ptr += 1;
+                        *b = code[code_ptr];
                     }
-                    if width == W16::FLAG {
-                        let mut value = [0; W16::SIZE];
-                        copy_value(&mut value);
-                        self.data.push(value, data);
-                    }
-                    if width == W32::FLAG {
-                        let mut value = [0; W32::SIZE];
-                        copy_value(&mut value);
-                        self.data.push(value, data);
-                    }
-                    if width == W64::FLAG {
-                        let mut value = [0; W64::SIZE];
-                        copy_value(&mut value);
-                        self.data.push(value, data);
-                    }
+
+                    self.data
+                        .push(buffer.into_iter().take(width_info.size), data);
                 }
                 opcode::DROP => {
                     for _ in 0..width_info.size {
