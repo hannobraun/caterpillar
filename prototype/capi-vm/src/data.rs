@@ -19,9 +19,11 @@ impl Data {
         Self { stack_ptr: ptr }
     }
 
-    pub fn push(&mut self, value: u8, memory: &mut [u8]) {
-        memory[self.stack_ptr.0] = value;
-        self.stack_ptr -= 1;
+    pub fn push<const N: usize>(&mut self, value: [u8; N], memory: &mut [u8]) {
+        for i in 0..N {
+            memory[self.stack_ptr.0] = value[N - 1 - i];
+            self.stack_ptr -= 1;
+        }
     }
 
     pub fn pop(&mut self, memory: &mut [u8]) -> u8 {
@@ -48,7 +50,7 @@ mod tests {
         let mut memory = [0; 1];
         let mut data = Data::new(&memory);
 
-        data.push(0, &mut memory);
+        data.push([0], &mut memory);
         // Should not panic. It will, in debug mode, unless wrapping is handled
         // correctly.
     }

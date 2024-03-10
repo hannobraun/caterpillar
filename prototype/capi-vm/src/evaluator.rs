@@ -18,7 +18,7 @@ impl Evaluator {
         data: &mut [u8],
     ) {
         for b in argument.to_bytes() {
-            self.data.push(b, data);
+            self.data.push([b], data);
         }
     }
 
@@ -41,7 +41,7 @@ impl Evaluator {
                     code_ptr += 1;
                     let value = code[code_ptr];
 
-                    self.data.push(value, data);
+                    self.data.push([value], data);
                 }
                 opcode::DROP => {
                     if width == width::W8 {
@@ -76,8 +76,8 @@ impl Evaluator {
                 }
                 opcode::CLONE => {
                     let value = self.data.pop(data);
-                    self.data.push(value, data);
-                    self.data.push(value, data);
+                    self.data.push([value], data);
+                    self.data.push([value], data);
                 }
                 opcode => {
                     let opcode_as_char: char = opcode.into();
