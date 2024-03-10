@@ -12,9 +12,6 @@ static STATE: Mutex<Option<State>> = Mutex::new(None);
 /// The virtual machine's code memory
 pub static CODE: SharedMemory<CODE_SIZE> = SharedMemory::new();
 
-/// The virtual machine's data memory
-pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
-
 #[no_mangle]
 pub extern "C" fn code_ptr() -> usize {
     &CODE as *const _ as usize
@@ -24,6 +21,9 @@ pub extern "C" fn code_ptr() -> usize {
 pub extern "C" fn code_len() -> usize {
     CODE_SIZE
 }
+
+/// The virtual machine's data memory
+pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
 #[no_mangle]
 pub extern "C" fn on_init(width: usize, height: usize) {
