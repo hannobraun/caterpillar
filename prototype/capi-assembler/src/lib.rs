@@ -71,7 +71,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     "16" => {
                         let width = W16::INFO;
 
-                        buffer[..2].copy_from_slice(
+                        buffer[..width.size].copy_from_slice(
                             &u16::from_str_radix(value, radix)?.to_le_bytes(),
                         );
 
@@ -80,7 +80,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     "32" => {
                         let width = W32::INFO;
 
-                        buffer[..4].copy_from_slice(
+                        buffer[..width.size].copy_from_slice(
                             &u32::from_str_radix(value, radix)?.to_le_bytes(),
                         );
 
@@ -89,7 +89,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     "64" => {
                         let width = W64::INFO;
 
-                        buffer[..8].copy_from_slice(
+                        buffer[..width.size].copy_from_slice(
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
 
