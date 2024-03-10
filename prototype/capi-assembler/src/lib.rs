@@ -2,7 +2,7 @@ use std::num::ParseIntError;
 
 use capi_vm::{
     opcode,
-    width::{Width, WidthInfo, W16, W32, W64, W8},
+    width::{Width, W16, W32, W64, W8},
 };
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
@@ -66,7 +66,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
             let mut buffer = [0; 8];
 
-            let mut parse = || -> Result<Option<WidthInfo>, ParseIntError> {
+            let mut parse = || -> Result<(), ParseIntError> {
                 match width {
                     Some(width @ W8::INFO) => {
                         buffer[..width.size].copy_from_slice(&[
@@ -91,10 +91,10 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     _ => {}
                 }
 
-                Ok(width)
+                Ok(())
             };
 
-            let width = parse().map_err(|err| AssemblerError::ParseValue {
+            parse().map_err(|err| AssemblerError::ParseValue {
                 value: value.to_owned(),
                 source: err,
             })?;
