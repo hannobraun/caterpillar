@@ -67,6 +67,11 @@ async fn copy_host(
     loop {
         let () = changes.changed().await.unwrap();
 
+        // Remove file before the build, to prevent anybody from loading a stale
+        // stale version after a change.
+        let _ =
+            fs::remove_file(serve_dir.join(serve_dir.join("index.html"))).await;
+
         println!("Copying host...");
         copy_artifacts(&serve_dir).await?;
     }
@@ -113,12 +118,12 @@ async fn build_runtime(
     loop {
         let () = changes.changed().await.unwrap();
 
-        // Remove all files before the build, to prevent anybody from loading a
+        // Remove file before the build, to prevent anybody from loading a stale
         // stale version after a change.
-        let mut read_dir = fs::read_dir(serve_dir).await?;
-        while let Some(entry) = read_dir.next_entry().await? {
-            fs::remove_file(entry.path()).await?;
-        }
+        let _ = fs::remove_file(
+            serve_dir.join(serve_dir.join("capi_runtime.wasm")),
+        )
+        .await;
 
         let exit_status = Command::new("cargo")
             .arg("build")
@@ -170,20 +175,11 @@ async fn build_snake(
     loop {
         let () = changes.changed().await.unwrap();
 
-        // Remove all files before the build, to prevent anybody from loading a
+        // Remove file before the build, to prevent anybody from loading a stale
         // stale version after a change.
-        let mut read_dir = fs::read_dir(serve_dir).await?;
-        while let Some(entry) = read_dir.next_entry().await? {
-            let result = fs::remove_file(entry.path()).await;
-            if let Err(err) = result {
-                if let io::ErrorKind::NotFound = err.kind() {
-                    // This is fine. We wanted to remove it anyways.
-                    continue;
-                }
-
-                Err(err)?
-            }
-        }
+        let _ =
+            fs::remove_file(serve_dir.join(serve_dir.join("snake.bc.capi")))
+                .await;
 
         let mut assembly = String::new();
         File::open("snake.asm.capi")
