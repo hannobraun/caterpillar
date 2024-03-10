@@ -1,18 +1,18 @@
 set_pixel:
 set_red_channel:
     clone
-    push 0
+    push8 0
     store
 set_green_channel:
     clone
-    push 1
+    push8 1
     store
 set_blue_channel:
-    push 2
+    push8 2
     store
 set_alpha_channel:
-    push 255
-    push 3
+    push8 255
+    push8 3
     store
 terminate:
     drop

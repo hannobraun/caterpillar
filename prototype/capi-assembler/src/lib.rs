@@ -14,7 +14,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
-        if instruction == "push" {
+        if instruction == "push8" {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
@@ -65,25 +65,25 @@ mod tests {
 
     #[test]
     fn clone() {
-        let data = assemble("push 255 clone", [0, 0]);
+        let data = assemble("push8 255 clone", [0, 0]);
         assert_eq!(data, [255, 255]);
     }
 
     #[test]
     fn drop() {
-        let data = assemble("push 255 drop push 127", [0]);
+        let data = assemble("push8 255 drop push8 127", [0]);
         assert_eq!(data, [127]);
     }
 
     #[test]
     fn push() {
-        let data = assemble("push 255", [0]);
+        let data = assemble("push8 255", [0]);
         assert_eq!(data, [255]);
     }
 
     #[test]
     fn store() {
-        let data = assemble("push 255 push 0 store", [0, 0, 0]);
+        let data = assemble("push8 255 push8 0 store", [0, 0, 0]);
         assert_eq!(data, [255, 0, 255]);
     }
 
