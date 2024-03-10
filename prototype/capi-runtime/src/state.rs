@@ -1,6 +1,5 @@
 use crate::{
-    cells::Cells, vm::Evaluator, render_target::RenderTarget,
-    world::World,
+    cells::Cells, render_target::RenderTarget, vm::Evaluator, world::World,
 };
 
 pub struct State {
