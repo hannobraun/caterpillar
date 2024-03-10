@@ -27,7 +27,20 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 return Err(AssemblerError::PushCameLast);
             };
 
-            let radix = 10;
+            let (value, radix) = match value.split_once("0x") {
+                Some(("", value)) => (value, 16),
+                None => (value, 10),
+
+                Some((_, _)) => {
+                    // We only have instructions with numbers at the end, so
+                    // anything with a prefix before "0x" is definitely not an
+                    // instruction we know.
+                    return Err(AssemblerError::UnknownInstruction {
+                        name: value.to_string(),
+                    });
+                }
+            };
+
             let value = u8::from_str_radix(value, radix).map_err(|err| {
                 AssemblerError::ParseValue {
                     value: value.to_owned(),
@@ -97,6 +110,12 @@ mod tests {
     fn push8_decimal() {
         let data = assemble("push8 255", [0]);
         assert_eq!(data, [255]);
+    }
+
+    #[test]
+    fn push() {
+        let data = assemble("push8 0xff", [0]);
+        assert_eq!(data, [0xff]);
     }
 
     #[test]
