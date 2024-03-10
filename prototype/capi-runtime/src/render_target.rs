@@ -62,7 +62,7 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS;
 
-                evaluator.push_args([color], data);
+                evaluator.push_argument([color], data);
                 evaluator.evaluate(code, data);
                 data.copy_within(..4, RENDER_BUFFER_OFFSET + index);
             }

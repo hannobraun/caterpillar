@@ -12,7 +12,7 @@ impl Evaluator {
         Self { data }
     }
 
-    pub fn push_args(
+    pub fn push_argument(
         &mut self,
         args: impl IntoIterator<Item = u8>,
         data: &mut [u8],
@@ -98,7 +98,7 @@ mod tests {
         args: [u8; A],
     ) -> [u8; D] {
         let mut evaluator = Evaluator::new(&data);
-        evaluator.push_args(args, &mut data);
+        evaluator.push_argument(args, &mut data);
 
         evaluator.evaluate(&code, &mut data);
         data
