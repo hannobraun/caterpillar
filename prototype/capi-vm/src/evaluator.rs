@@ -113,6 +113,7 @@ mod tests {
             evaluate([opcode::DROP | W8::FLAG, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
     }
+
     #[test]
     fn drop16() {
         let data = evaluate(
