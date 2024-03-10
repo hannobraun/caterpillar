@@ -45,37 +45,37 @@ impl Evaluator {
                 }
                 opcode::DROP => {
                     if width == width::W8 {
-                        self.data.pop(data);
+                        self.data.pop::<1>(data);
                     }
                     if width == width::W16 {
-                        self.data.pop(data);
-                        self.data.pop(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
                     }
                     if width == width::W32 {
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
                     }
                     if width == width::W64 {
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
-                        self.data.pop(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
+                        self.data.pop::<1>(data);
                     }
                 }
                 opcode::STORE => {
-                    let address = self.data.pop(data);
-                    let value = self.data.pop(data);
+                    let [address] = self.data.pop(data);
+                    let [value] = self.data.pop(data);
 
                     self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
-                    let value = self.data.pop(data);
+                    let [value] = self.data.pop(data);
                     self.data.push([value], data);
                     self.data.push([value], data);
                 }

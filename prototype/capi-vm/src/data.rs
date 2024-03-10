@@ -26,9 +26,15 @@ impl Data {
         }
     }
 
-    pub fn pop(&mut self, memory: &mut [u8]) -> u8 {
-        self.stack_ptr += 1;
-        memory[self.stack_ptr.0]
+    pub fn pop<const N: usize>(&mut self, memory: &mut [u8]) -> [u8; N] {
+        let mut value = [0; N];
+
+        for _ in 0..N {
+            self.stack_ptr += 1;
+            value[N - 1] = memory[self.stack_ptr.0];
+        }
+
+        value
     }
 
     pub fn store(
