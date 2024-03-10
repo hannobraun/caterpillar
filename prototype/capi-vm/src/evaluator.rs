@@ -109,17 +109,14 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let data = evaluate(
-            [opcode::DROP | W8::INFO.flag, opcode::PUSH, 255],
-            [0],
-            [127],
-        );
+        let data =
+            evaluate([opcode::DROP | W8::FLAG, opcode::PUSH, 255], [0], [127]);
         assert_eq!(data, [255]);
     }
     #[test]
     fn drop16() {
         let data = evaluate(
-            [opcode::DROP | W16::INFO.flag, opcode::PUSH, 255],
+            [opcode::DROP | W16::FLAG, opcode::PUSH, 255],
             [0, 0],
             [127, 127],
         );
@@ -129,7 +126,7 @@ mod tests {
     #[test]
     fn drop32() {
         let data = evaluate(
-            [opcode::DROP | W32::INFO.flag, opcode::PUSH, 255],
+            [opcode::DROP | W32::FLAG, opcode::PUSH, 255],
             [0, 0, 0, 0],
             [127, 127, 127, 127],
         );
@@ -139,7 +136,7 @@ mod tests {
     #[test]
     fn drop64() {
         let data = evaluate(
-            [opcode::DROP | W64::INFO.flag, opcode::PUSH, 255],
+            [opcode::DROP | W64::FLAG, opcode::PUSH, 255],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [127, 127, 127, 127, 127, 127, 127, 127],
         );
