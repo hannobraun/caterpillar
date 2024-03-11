@@ -15,12 +15,14 @@ impl Evaluator {
         Self { data }
     }
 
-    pub fn push_u8(&mut self, value: u8, data: &mut [u8]) {
+    pub fn push_u8(&mut self, value: u8, data: &mut [u8]) -> &mut Self {
         self.data.push([value], data);
+        self
     }
 
-    pub fn push_u32(&mut self, value: u32, data: &mut [u8]) {
+    pub fn push_u32(&mut self, value: u32, data: &mut [u8]) -> &mut Self {
         self.data.push(value.to_le_bytes(), data);
+        self
     }
 
     pub fn evaluate(&mut self, code: &[u8], data: &mut [u8]) {
