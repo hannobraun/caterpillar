@@ -121,35 +121,49 @@ mod tests {
 
     #[test]
     fn push8() {
+        let mut data = [0; 1];
+        let mut evaluator = Evaluator::new(&data);
+
         let [a] = 0x11u8.to_le_bytes();
-        let data = evaluate([opcode::PUSH | W8::FLAG, a], [0], []);
-        assert_eq!(data, [0x11]);
+        evaluator.evaluate(&[opcode::PUSH | W8::FLAG, a], &mut data);
+
+        assert_eq!(data, [a]);
     }
 
     #[test]
     fn push16() {
+        let mut data = [0; 2];
+        let mut evaluator = Evaluator::new(&data);
+
         let [a, b] = 0x2211u16.to_le_bytes();
-        let data = evaluate([opcode::PUSH | W16::FLAG, a, b], [0, 0], []);
-        assert_eq!(data, [0x11, 0x22]);
+        evaluator.evaluate(&[opcode::PUSH | W16::FLAG, a, b], &mut data);
+
+        assert_eq!(data, [a, b]);
     }
 
     #[test]
     fn push32() {
+        let mut data = [0; 4];
+        let mut evaluator = Evaluator::new(&data);
+
         let [a, b, c, d] = 0x44332211u32.to_le_bytes();
-        let data =
-            evaluate([opcode::PUSH | W32::FLAG, a, b, c, d], [0, 0, 0, 0], []);
-        assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
+        evaluator.evaluate(&[opcode::PUSH | W32::FLAG, a, b, c, d], &mut data);
+
+        assert_eq!(data, [a, b, c, d]);
     }
 
     #[test]
     fn push64() {
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
         let [a, b, c, d, e, f, g, h] = 0x8877665544332211u64.to_le_bytes();
-        let data = evaluate(
-            [opcode::PUSH | W64::FLAG, a, b, c, d, e, f, g, h],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [],
+        evaluator.evaluate(
+            &[opcode::PUSH | W64::FLAG, a, b, c, d, e, f, g, h],
+            &mut data,
         );
-        assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
+
+        assert_eq!(data, [a, b, c, d, e, f, g, h]);
     }
 
     #[test]
