@@ -159,7 +159,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AssemblerError {
-    #[error("Could not parse value `{value}")]
+    #[error("Could not parse value `{value}`")]
     ParseValue {
         value: String,
         source: ParseIntError,
