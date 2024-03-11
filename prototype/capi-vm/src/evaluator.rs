@@ -102,6 +102,16 @@ impl Evaluator {
                     self.data.push([value], data);
                     self.data.push([value], data);
                 }
+                opcode::SWAP => {
+                    let mut a = [0; MAX_WIDTH_BYTES];
+                    let mut b = [0; MAX_WIDTH_BYTES];
+
+                    self.data.pop(&mut a[..width.num_bytes], data);
+                    self.data.pop(&mut b[..width.num_bytes], data);
+
+                    self.data.push(a.into_iter().take(width.num_bytes), data);
+                    self.data.push(b.into_iter().take(width.num_bytes), data);
+                }
                 opcode => {
                     let opcode_as_char: char = opcode.into();
                     panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
@@ -116,7 +126,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{CLONE, DROP, PUSH, STORE, TERMINATE},
+        opcode::{CLONE, DROP, PUSH, STORE, SWAP, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -305,6 +315,64 @@ mod tests {
             .evaluate(bc().op(CLONE), &mut data);
 
         assert_eq!(data, [0x11, 0x11]);
+    }
+
+    #[test]
+    fn swap8() {
+        let mut data = [0; 2];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u8(0x11, &mut data)
+            .push_u8(0x22, &mut data)
+            .evaluate(bc().op(SWAP).w(W8), &mut data);
+
+        assert_eq!(data, [0x11, 0x22]);
+    }
+
+    #[test]
+    fn swap16() {
+        let mut data = [0; 4];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u16(0x1111, &mut data)
+            .push_u16(0x2222, &mut data)
+            .evaluate(bc().op(SWAP).w(W16), &mut data);
+
+        assert_eq!(data, [0x11, 0x11, 0x22, 0x22]);
+    }
+
+    #[test]
+    fn swap32() {
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u32(0x11111111, &mut data)
+            .push_u32(0x22222222, &mut data)
+            .evaluate(bc().op(SWAP).w(W32), &mut data);
+
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
+    }
+
+    #[test]
+    fn swap64() {
+        let mut data = [0; 16];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u64(0x1111111111111111, &mut data)
+            .push_u64(0x2222222222222222, &mut data)
+            .evaluate(bc().op(SWAP).w(W64), &mut data);
+
+        assert_eq!(
+            data,
+            [
+                0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22, 0x22,
+                0x22, 0x22, 0x22, 0x22, 0x22, 0x22
+            ]
+        );
     }
 
     pub fn bc() -> Bytecode {
