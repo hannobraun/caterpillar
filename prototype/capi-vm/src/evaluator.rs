@@ -112,7 +112,10 @@ mod tests {
 
     #[test]
     fn terminate() {
-        evaluate([opcode::TERMINATE], [], []);
+        let mut data = [];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.evaluate(&[opcode::TERMINATE], &mut data);
         // This should not run forever, nor cause any kind of panic.
     }
 
