@@ -41,14 +41,14 @@ impl Data {
         &mut self,
         address: u32,
         value: impl IntoIterator<Item = u8>,
-        memory: &mut [u8],
+        data: &mut [u8],
     ) {
         let mut address: usize = address
             .try_into()
             .expect("Couldn't convert address to usize");
 
         for b in value {
-            memory[address] = b;
+            data[address] = b;
             address += 1;
         }
     }
