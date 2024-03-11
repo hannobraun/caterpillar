@@ -59,20 +59,33 @@ impl Evaluator {
                 }
                 opcode::DROP => {
                     for _ in 0..width.size {
-                        let [_] = self.data.pop(data);
+                        self.data.pop(&mut [0], data);
                     }
                 }
                 opcode::STORE => {
                     let address = {
-                        let bytes = self.data.pop::<4>(data);
+                        let mut bytes = [0; 4];
+                        self.data.pop(&mut bytes, data);
+
                         u32::from_le_bytes(bytes)
                     };
-                    let value = self.data.pop::<1>(data);
+                    let value = {
+                        let mut bytes = [0; 1];
+                        self.data.pop(&mut bytes, data);
+                        bytes
+                    };
 
                     self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
-                    let [value] = self.data.pop(data);
+                    let value = {
+                        let mut bytes = [0; 1];
+                        self.data.pop(&mut bytes, data);
+
+                        let [value] = bytes;
+                        value
+                    };
+
                     self.data.push([value], data);
                     self.data.push([value], data);
                 }
