@@ -66,7 +66,7 @@ impl Evaluator {
                     let [address] = self.data.pop(data);
                     let [value] = self.data.pop(data);
 
-                    self.data.store(address, value, data);
+                    self.data.store(address.into(), value, data);
                 }
                 opcode::CLONE => {
                     let [value] = self.data.pop(data);

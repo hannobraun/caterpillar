@@ -41,13 +41,11 @@ impl Data {
         value
     }
 
-    pub fn store(
-        &mut self,
-        address: impl Into<usize>,
-        value: u8,
-        memory: &mut [u8],
-    ) {
-        memory[address.into()] = value;
+    pub fn store(&mut self, address: u32, value: u8, memory: &mut [u8]) {
+        let address: usize = address
+            .try_into()
+            .expect("Couldn't convert address to usize");
+        memory[address] = value;
     }
 }
 
