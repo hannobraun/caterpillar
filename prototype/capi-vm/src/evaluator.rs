@@ -30,6 +30,11 @@ impl Evaluator {
         self
     }
 
+    pub fn push_u64(&mut self, value: u64, data: &mut [u8]) -> &mut Self {
+        self.data.push(value.to_le_bytes(), data);
+        self
+    }
+
     pub fn evaluate(&mut self, code: &[u8], data: &mut [u8]) {
         let mut code_ptr = 0;
 
