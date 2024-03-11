@@ -35,7 +35,8 @@ impl Evaluator {
         self
     }
 
-    pub fn evaluate(&mut self, code: &[u8], data: &mut [u8]) {
+    pub fn evaluate(&mut self, code: impl AsRef<[u8]>, data: &mut [u8]) {
+        let code = code.as_ref();
         let mut code_ptr = 0;
 
         loop {
