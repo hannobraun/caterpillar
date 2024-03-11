@@ -115,7 +115,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{self, DROP, PUSH, STORE, TERMINATE},
+        opcode::{CLONE, DROP, PUSH, STORE, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -296,23 +296,14 @@ mod tests {
 
     #[test]
     fn clone() {
-        let data = evaluate([opcode::CLONE], [0, 0], [255]);
-        assert_eq!(data, [255, 255]);
-    }
-
-    fn evaluate<const C: usize, const D: usize, const A: usize>(
-        code: [u8; C],
-        mut data: [u8; D],
-        args: [u8; A],
-    ) -> [u8; D] {
+        let mut data = [0; 2];
         let mut evaluator = Evaluator::new(&data);
 
-        for arg in args {
-            evaluator.push_u8(arg, &mut data);
-        }
+        evaluator
+            .push_u8(0x11, &mut data)
+            .evaluate(bc().op(CLONE), &mut data);
 
-        evaluator.evaluate(&code, &mut data);
-        data
+        assert_eq!(data, [0x11, 0x11]);
     }
 
     pub fn bc() -> Bytecode {
