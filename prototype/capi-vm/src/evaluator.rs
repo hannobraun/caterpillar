@@ -91,16 +91,12 @@ impl Evaluator {
                     self.data.store(address, value.iter().copied(), data);
                 }
                 opcode::CLONE => {
-                    let value = {
-                        let mut bytes = [0; 1];
-                        self.data.pop(&mut bytes, data);
+                    let mut value = [0; 1];
 
-                        let [value] = bytes;
-                        value
-                    };
+                    self.data.pop(&mut value, data);
 
-                    self.data.push([value], data);
-                    self.data.push([value], data);
+                    self.data.push(value, data);
+                    self.data.push(value, data);
                 }
                 opcode::SWAP => {
                     let mut a = [0; MAX_WIDTH_BYTES];
