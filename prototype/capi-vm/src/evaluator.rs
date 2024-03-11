@@ -91,12 +91,14 @@ impl Evaluator {
                     self.data.store(address, value.iter().copied(), data);
                 }
                 opcode::CLONE => {
-                    let mut value = [0; 1];
+                    let mut value = [0; MAX_WIDTH_BYTES];
 
-                    self.data.pop(&mut value, data);
+                    self.data.pop(&mut value[..width.num_bytes], data);
 
-                    self.data.push(value, data);
-                    self.data.push(value, data);
+                    self.data
+                        .push(value.into_iter().take(width.num_bytes), data);
+                    self.data
+                        .push(value.into_iter().take(width.num_bytes), data);
                 }
                 opcode::SWAP => {
                     let mut a = [0; MAX_WIDTH_BYTES];
@@ -302,15 +304,57 @@ mod tests {
     }
 
     #[test]
-    fn clone() {
+    fn clone8() {
         let mut data = [0; 2];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
             .push_u8(0x11, &mut data)
-            .evaluate(bc().op(CLONE), &mut data);
+            .evaluate(bc().op(CLONE).w(W8), &mut data);
 
         assert_eq!(data, [0x11, 0x11]);
+    }
+
+    #[test]
+    fn clone16() {
+        let mut data = [0; 4];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u16(0x1111, &mut data)
+            .evaluate(bc().op(CLONE).w(W16), &mut data);
+
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11]);
+    }
+
+    #[test]
+    fn clone32() {
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u32(0x11111111, &mut data)
+            .evaluate(bc().op(CLONE).w(W32), &mut data);
+
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11]);
+    }
+
+    #[test]
+    fn clone64() {
+        let mut data = [0; 16];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u64(0x1111111111111111, &mut data)
+            .evaluate(bc().op(CLONE).w(W64), &mut data);
+
+        assert_eq!(
+            data,
+            [
+                0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11,
+                0x11, 0x11, 0x11, 0x11, 0x11, 0x11
+            ]
+        );
     }
 
     #[test]
