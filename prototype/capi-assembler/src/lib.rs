@@ -253,8 +253,8 @@ mod tests {
 
     #[test]
     fn store() -> anyhow::Result<()> {
-        let data = assemble("push8 255 push8 0 store", [0, 0, 0])?;
-        assert_eq!(data, [255, 0, 255]);
+        let data = assemble("push8 255 push32 0 store", [0, 0, 0, 0, 0, 0])?;
+        assert_eq!(data, [255, 0, 0, 0, 0, 255]);
         Ok(())
     }
 

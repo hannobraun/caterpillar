@@ -63,10 +63,13 @@ impl Evaluator {
                     }
                 }
                 opcode::STORE => {
-                    let [address] = self.data.pop(data);
+                    let address = {
+                        let bytes = self.data.pop::<4>(data);
+                        u32::from_le_bytes(bytes)
+                    };
                     let [value] = self.data.pop(data);
 
-                    self.data.store(address.into(), value, data);
+                    self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
                     let [value] = self.data.pop(data);
@@ -171,8 +174,9 @@ mod tests {
 
     #[test]
     fn store() {
-        let data = evaluate([opcode::STORE], [0, 0, 0], [255, 0]);
-        assert_eq!(data, [255, 0, 255]);
+        let data =
+            evaluate([opcode::STORE], [0, 0, 0, 0, 0, 0], [255, 0, 0, 0, 0]);
+        assert_eq!(data, [255, 0, 0, 0, 0, 255]);
     }
 
     #[test]
