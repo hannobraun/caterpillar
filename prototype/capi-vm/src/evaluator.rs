@@ -115,7 +115,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{self, PUSH, TERMINATE},
+        opcode::{self, DROP, PUSH, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -176,10 +176,9 @@ mod tests {
         let mut data = [0; 1];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.push_u8(0x11, &mut data).evaluate(
-            &[opcode::DROP | W8::FLAG, opcode::PUSH, 0x22],
-            &mut data,
-        );
+        evaluator
+            .push_u8(0x11, &mut data)
+            .evaluate(bc().op(DROP).w(W8).op(PUSH).u8(0x22), &mut data);
 
         assert_eq!(data, [0x22]);
     }
@@ -189,10 +188,9 @@ mod tests {
         let mut data = [0; 2];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.push_u16(0x1111, &mut data).evaluate(
-            &[opcode::DROP | W16::FLAG, opcode::PUSH, 0x22],
-            &mut data,
-        );
+        evaluator
+            .push_u16(0x1111, &mut data)
+            .evaluate(bc().op(DROP).w(W16).op(PUSH).u8(0x22), &mut data);
 
         assert_eq!(data, [0x11, 0x22]);
     }
@@ -202,10 +200,9 @@ mod tests {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.push_u32(0x11111111, &mut data).evaluate(
-            &[opcode::DROP | W32::FLAG, opcode::PUSH, 0x22],
-            &mut data,
-        );
+        evaluator
+            .push_u32(0x11111111, &mut data)
+            .evaluate(bc().op(DROP).w(W32).op(PUSH).u8(0x22), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x22]);
     }
@@ -215,10 +212,9 @@ mod tests {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.push_u64(0x1111111111111111, &mut data).evaluate(
-            &[opcode::DROP | W64::FLAG, opcode::PUSH, 0x22],
-            &mut data,
-        );
+        evaluator
+            .push_u64(0x1111111111111111, &mut data)
+            .evaluate(bc().op(DROP).w(W64).op(PUSH).u8(0x22), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22]);
     }
