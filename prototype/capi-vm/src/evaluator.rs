@@ -1,6 +1,6 @@
 use crate::{
     opcode,
-    width::{Width, W16, W32, W64, W8},
+    width::{Width, MAX_WIDTH_BYTES, W16, W32, W64, W8},
 };
 
 use super::data::Data;
@@ -60,7 +60,7 @@ impl Evaluator {
                     break;
                 }
                 opcode::PUSH => {
-                    let mut buffer = [0; W64::NUM_BYTES];
+                    let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = &mut buffer[0..width.size];
 
                     for b in value {
@@ -71,7 +71,7 @@ impl Evaluator {
                     self.data.push(buffer.into_iter().take(width.size), data);
                 }
                 opcode::DROP => {
-                    let mut buffer = [0; 8];
+                    let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = &mut buffer[..width.size];
                     self.data.pop(value, data);
                 }
@@ -83,7 +83,7 @@ impl Evaluator {
                         u32::from_le_bytes(bytes)
                     };
 
-                    let mut buffer = [0; 8];
+                    let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = &mut buffer[..width.size];
                     self.data.pop(value, data);
 

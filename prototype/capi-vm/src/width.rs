@@ -1,3 +1,5 @@
+pub const MAX_WIDTH_BYTES: usize = W64::NUM_BYTES;
+
 pub trait Width {
     const ENCODING: u8;
     const NUM_BYTES: usize;
