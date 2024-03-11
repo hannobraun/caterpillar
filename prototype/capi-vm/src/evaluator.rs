@@ -60,7 +60,7 @@ impl Evaluator {
                     break;
                 }
                 opcode::PUSH => {
-                    let mut buffer = [0; W64::SIZE];
+                    let mut buffer = [0; W64::NUM_BYTES];
                     let value = &mut buffer[0..width.size];
 
                     for b in value {
