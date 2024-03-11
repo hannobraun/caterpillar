@@ -69,13 +69,12 @@ impl Evaluator {
 
                         u32::from_le_bytes(bytes)
                     };
-                    let value = {
-                        let mut bytes = [0; 1];
-                        self.data.pop(&mut bytes, data);
-                        bytes
-                    };
 
-                    self.data.store(address, value, data);
+                    let mut buffer = [0; 8];
+                    let value = &mut buffer[..width.size];
+                    self.data.pop(value, data);
+
+                    self.data.store(address, value.iter().copied(), data);
                 }
                 opcode::CLONE => {
                     let value = {
@@ -186,10 +185,52 @@ mod tests {
     }
 
     #[test]
-    fn store() {
-        let data =
-            evaluate([opcode::STORE], [0, 0, 0, 0, 0, 0], [255, 0, 0, 0, 0]);
-        assert_eq!(data, [255, 0, 0, 0, 0, 255]);
+    fn store8() {
+        let data = evaluate(
+            [opcode::STORE | W8::FLAG],
+            [0, 0, 0, 0, 0, 0],
+            [0x11, 0, 0, 0, 0],
+        );
+        assert_eq!(data, [0x11, 0, 0, 0, 0, 0x11]);
+    }
+
+    #[test]
+    fn store16() {
+        let data = evaluate(
+            [opcode::STORE | W16::FLAG],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0x22, 0x11, 0, 0, 0, 0],
+        );
+        assert_eq!(data, [0x11, 0x22, 0, 0, 0, 0, 0x11, 0x22]);
+    }
+
+    #[test]
+    fn store32() {
+        let data = evaluate(
+            [opcode::STORE | W32::FLAG],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0x44, 0x33, 0x22, 0x11, 0, 0, 0, 0],
+        );
+        assert_eq!(
+            data,
+            [0x11, 0x22, 0x33, 0x44, 0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]
+        );
+    }
+
+    #[test]
+    fn store64() {
+        let data = evaluate(
+            [opcode::STORE | W64::FLAG],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0, 0, 0, 0],
+        );
+        assert_eq!(
+            data,
+            [
+                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0, 0, 0, 0,
+                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+            ]
+        );
     }
 
     #[test]
