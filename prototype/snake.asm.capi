@@ -2,18 +2,18 @@ set_pixel:
 set_red_channel:
     clone
     push8 0
-    store
+    store8
 set_green_channel:
     clone
     push8 1
-    store
+    store8
 set_blue_channel:
     push8 2
-    store
+    store8
 set_alpha_channel:
     push8 255
     push8 3
-    store
+    store8
 terminate:
     drop32
     terminate

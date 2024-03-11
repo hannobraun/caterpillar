@@ -117,25 +117,29 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
             continue;
         }
-
-        if opcode == "drop" {
-            let opcode = opcode::DROP;
-
-            let Some(width) = width else {
-                // The size suffix was not recognized. We don't know this
-                // instruction.
-                return Err(AssemblerError::UnknownInstruction {
-                    name: instruction.to_string(),
-                });
+        {
+            let opcode = match opcode.as_str() {
+                "drop" => Some(opcode::DROP),
+                "store" => Some(opcode::STORE),
+                _ => None,
             };
 
-            bytecode.push(opcode | width.flag);
-            continue;
+            if let Some(opcode) = opcode {
+                let Some(width) = width else {
+                    // The size suffix was not recognized. We don't know this
+                    // instruction.
+                    return Err(AssemblerError::UnknownInstruction {
+                        name: instruction.to_string(),
+                    });
+                };
+
+                bytecode.push(opcode | width.flag);
+                continue;
+            }
         }
 
         let opcode = match opcode.as_str() {
             "clone" => Some(opcode::CLONE),
-            "store" => Some(opcode::STORE),
             "terminate" => Some(opcode::TERMINATE),
             _ => None,
         };
@@ -252,9 +256,48 @@ mod tests {
     }
 
     #[test]
-    fn store() -> anyhow::Result<()> {
-        let data = assemble("push8 255 push32 0 store", [0, 0, 0, 0, 0, 0])?;
-        assert_eq!(data, [255, 0, 0, 0, 0, 255]);
+    fn store8() -> anyhow::Result<()> {
+        let data = assemble("push8 0x11 push32 0 store8", [0, 0, 0, 0, 0, 0])?;
+        assert_eq!(data, [0x11, 0, 0, 0, 0, 0x11]);
+        Ok(())
+    }
+
+    #[test]
+    fn store16() -> anyhow::Result<()> {
+        let data = assemble(
+            "push16 0x2211 push32 0 store16",
+            [0, 0, 0, 0, 0, 0, 0, 0],
+        )?;
+        assert_eq!(data, [0x11, 0x22, 0, 0, 0, 0, 0x11, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn store32() -> anyhow::Result<()> {
+        let data = assemble(
+            "push32 0x44332211 push32 0 store32",
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        )?;
+        assert_eq!(
+            data,
+            [0x11, 0x22, 0x33, 0x44, 0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn store64() -> anyhow::Result<()> {
+        let data = assemble(
+            "push64 0x8877665544332211 push32 0 store64",
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        )?;
+        assert_eq!(
+            data,
+            [
+                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0, 0, 0, 0,
+                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+            ]
+        );
         Ok(())
     }
 
