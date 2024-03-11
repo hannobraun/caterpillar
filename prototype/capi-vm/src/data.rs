@@ -19,13 +19,13 @@ impl Data {
         Self { stack_ptr: ptr }
     }
 
-    pub fn push<V>(&mut self, value: V, memory: &mut [u8])
+    pub fn push<V>(&mut self, value: V, data: &mut [u8])
     where
         V: IntoIterator<Item = u8>,
         V::IntoIter: DoubleEndedIterator,
     {
         for b in value.into_iter().rev() {
-            memory[self.stack_ptr.0] = b;
+            data[self.stack_ptr.0] = b;
             self.stack_ptr -= 1;
         }
     }
