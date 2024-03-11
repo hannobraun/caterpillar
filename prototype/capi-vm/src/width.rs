@@ -6,7 +6,7 @@ pub trait Width {
 
     const FLAG: u8 = Self::ENCODING << 6;
     const INFO: WidthInfo = WidthInfo {
-        size: Self::NUM_BYTES,
+        num_bytes: Self::NUM_BYTES,
         flag: Self::FLAG,
     };
 }
@@ -41,6 +41,6 @@ impl Width for W64 {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct WidthInfo {
-    pub size: usize,
+    pub num_bytes: usize,
     pub flag: u8,
 }

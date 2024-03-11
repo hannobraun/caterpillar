@@ -77,22 +77,22 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let mut parse = || -> Result<(), ParseIntError> {
                 match width.flag {
                     W8::FLAG => {
-                        buffer[..width.size].copy_from_slice(&[
+                        buffer[..width.num_bytes].copy_from_slice(&[
                             u8::from_str_radix(value, radix)?,
                         ]);
                     }
                     W16::FLAG => {
-                        buffer[..width.size].copy_from_slice(
+                        buffer[..width.num_bytes].copy_from_slice(
                             &u16::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
                     W32::FLAG => {
-                        buffer[..width.size].copy_from_slice(
+                        buffer[..width.num_bytes].copy_from_slice(
                             &u32::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
                     W64::FLAG => {
-                        buffer[..width.size].copy_from_slice(
+                        buffer[..width.num_bytes].copy_from_slice(
                             &u64::from_str_radix(value, radix)?.to_le_bytes(),
                         );
                     }
@@ -108,7 +108,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 value: value.to_owned(),
                 source: err,
             })?;
-            let value = &buffer[..width.size];
+            let value = &buffer[..width.num_bytes];
 
             bytecode.push(opcode::PUSH | width.flag);
             for &b in value {

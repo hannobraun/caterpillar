@@ -61,18 +61,19 @@ impl Evaluator {
                 }
                 opcode::PUSH => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[0..width.size];
+                    let value = &mut buffer[0..width.num_bytes];
 
                     for b in value {
                         code_ptr += 1;
                         *b = code[code_ptr];
                     }
 
-                    self.data.push(buffer.into_iter().take(width.size), data);
+                    self.data
+                        .push(buffer.into_iter().take(width.num_bytes), data);
                 }
                 opcode::DROP => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[..width.size];
+                    let value = &mut buffer[..width.num_bytes];
                     self.data.pop(value, data);
                 }
                 opcode::STORE => {
@@ -84,7 +85,7 @@ impl Evaluator {
                     };
 
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[..width.size];
+                    let value = &mut buffer[..width.num_bytes];
                     self.data.pop(value, data);
 
                     self.data.store(address, value.iter().copied(), data);
