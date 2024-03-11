@@ -10,10 +10,10 @@ pub struct Data {
 }
 
 impl Data {
-    pub fn new(memory: &[u8]) -> Self {
+    pub fn new(data: &[u8]) -> Self {
         // Let's make `ptr` wrapping before doing any arithmetic. Otherwise, we
         // subtract with overflow, if `data` has zero length.
-        let mut ptr = Wrapping(memory.len());
+        let mut ptr = Wrapping(data.len());
         ptr -= 1;
 
         Self { stack_ptr: ptr }
