@@ -58,9 +58,9 @@ impl Evaluator {
                     self.data.push(buffer.into_iter().take(width.size), data);
                 }
                 opcode::DROP => {
-                    for _ in 0..width.size {
-                        self.data.pop(&mut [0], data);
-                    }
+                    let mut buffer = [0; 8];
+                    let value = &mut buffer[..width.size];
+                    self.data.pop(value, data);
                 }
                 opcode::STORE => {
                     let address = {
