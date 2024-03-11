@@ -30,10 +30,10 @@ impl Data {
         }
     }
 
-    pub fn pop(&mut self, value: &mut [u8], memory: &mut [u8]) {
+    pub fn pop(&mut self, value: &mut [u8], data: &mut [u8]) {
         for b in value.iter_mut() {
             self.stack_ptr += 1;
-            *b = memory[self.stack_ptr.0];
+            *b = data[self.stack_ptr.0];
         }
     }
 
