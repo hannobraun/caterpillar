@@ -115,7 +115,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{self, DROP, PUSH, TERMINATE},
+        opcode::{self, DROP, PUSH, STORE, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -231,31 +231,40 @@ mod tests {
 
     #[test]
     fn store8() {
-        let data = evaluate(
-            [opcode::STORE | W8::FLAG],
-            [0, 0, 0, 0, 0, 0, 0],
-            [0x11, 0, 0, 0, 1],
-        );
+        let mut data = [0; 7];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u8(0x11, &mut data)
+            .push_u32(1, &mut data)
+            .evaluate(bc().op(STORE).w(W8), &mut data);
+
         assert_eq!(data, [0, 0x11, 1, 0, 0, 0, 0x11]);
     }
 
     #[test]
     fn store16() {
-        let data = evaluate(
-            [opcode::STORE | W16::FLAG],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0x22, 0x11, 0, 0, 0, 2],
-        );
+        let mut data = [0; 10];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u16(0x2211, &mut data)
+            .push_u32(2, &mut data)
+            .evaluate(bc().op(STORE).w(W16), &mut data);
+
         assert_eq!(data, [0, 0, 0x11, 0x22, 2, 0, 0, 0, 0x11, 0x22]);
     }
 
     #[test]
     fn store32() {
-        let data = evaluate(
-            [opcode::STORE | W32::FLAG],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0x44, 0x33, 0x22, 0x11, 0, 0, 0, 4],
-        );
+        let mut data = [0; 16];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u32(0x44332211, &mut data)
+            .push_u32(4, &mut data)
+            .evaluate(bc().op(STORE).w(W32), &mut data);
+
         assert_eq!(
             data,
             [
@@ -267,14 +276,14 @@ mod tests {
 
     #[test]
     fn store64() {
-        let data = evaluate(
-            [opcode::STORE | W64::FLAG],
-            [
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0,
-            ],
-            [0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0, 0, 0, 8],
-        );
+        let mut data = [0; 28];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u64(0x8877665544332211, &mut data)
+            .push_u32(8, &mut data)
+            .evaluate(bc().op(STORE).w(W64), &mut data);
+
         assert_eq!(
             data,
             [
