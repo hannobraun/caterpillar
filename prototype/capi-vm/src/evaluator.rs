@@ -173,50 +173,60 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let mut data = [0; 1];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u8(0x11, &mut data)
-            .evaluate(bc().op(DROP).w(W8).op(PUSH).u8(0x22), &mut data);
-
-        assert_eq!(data, [0x22]);
-    }
-
-    #[test]
-    fn drop16() {
         let mut data = [0; 2];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u16(0x1111, &mut data)
-            .evaluate(bc().op(DROP).w(W16).op(PUSH).u8(0x22), &mut data);
+            .push_u8(0x11, &mut data)
+            .push_u8(0x22, &mut data)
+            .evaluate(bc().op(DROP).w(W8).op(PUSH).u8(0x33), &mut data);
 
-        assert_eq!(data, [0x11, 0x22]);
+        assert_eq!(data, [0x33, 0x11]);
     }
 
     #[test]
-    fn drop32() {
+    fn drop16() {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x11111111, &mut data)
-            .evaluate(bc().op(DROP).w(W32).op(PUSH).u8(0x22), &mut data);
+            .push_u16(0x1111, &mut data)
+            .push_u16(0x2222, &mut data)
+            .evaluate(bc().op(DROP).w(W16).op(PUSH).u8(0x33), &mut data);
 
-        assert_eq!(data, [0x11, 0x11, 0x11, 0x22]);
+        assert_eq!(data, [0x22, 0x33, 0x11, 0x11]);
     }
 
     #[test]
-    fn drop64() {
+    fn drop32() {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u64(0x1111111111111111, &mut data)
-            .evaluate(bc().op(DROP).w(W64).op(PUSH).u8(0x22), &mut data);
+            .push_u32(0x11111111, &mut data)
+            .push_u32(0x22222222, &mut data)
+            .evaluate(bc().op(DROP).w(W32).op(PUSH).u8(0x33), &mut data);
 
-        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22]);
+        assert_eq!(data, [0x22, 0x22, 0x22, 0x33, 0x11, 0x11, 0x11, 0x11]);
+    }
+
+    #[test]
+    fn drop64() {
+        let mut data = [0; 16];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u64(0x1111111111111111, &mut data)
+            .push_u64(0x2222222222222222, &mut data)
+            .evaluate(bc().op(DROP).w(W64).op(PUSH).u8(0x33), &mut data);
+
+        assert_eq!(
+            data,
+            [
+                0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x33, 0x11, 0x11,
+                0x11, 0x11, 0x11, 0x11, 0x11, 0x11
+            ]
+        );
     }
 
     #[test]
