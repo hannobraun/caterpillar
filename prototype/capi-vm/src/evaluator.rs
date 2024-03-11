@@ -115,7 +115,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode,
+        opcode::{self, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -126,7 +126,7 @@ mod tests {
         let mut data = [];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(&[opcode::TERMINATE], &mut data);
+        evaluator.evaluate(bc().op(TERMINATE), &mut data);
         // This should not run forever, nor cause any kind of panic.
     }
 
@@ -313,5 +313,26 @@ mod tests {
 
         evaluator.evaluate(&code, &mut data);
         data
+    }
+
+    pub fn bc() -> Bytecode {
+        Bytecode { inner: Vec::new() }
+    }
+
+    pub struct Bytecode {
+        inner: Vec<u8>,
+    }
+
+    impl Bytecode {
+        pub fn op(mut self, opcode: u8) -> Self {
+            self.inner.push(opcode);
+            self
+        }
+    }
+
+    impl AsRef<[u8]> for Bytecode {
+        fn as_ref(&self) -> &[u8] {
+            self.inner.as_ref()
+        }
     }
 }
