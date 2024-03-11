@@ -178,39 +178,54 @@ mod tests {
 
     #[test]
     fn drop8() {
-        let data =
-            evaluate([opcode::DROP | W8::FLAG, opcode::PUSH, 255], [0], [127]);
-        assert_eq!(data, [255]);
+        let mut data = [0; 1];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push_u8(0x11, &mut data).evaluate(
+            &[opcode::DROP | W8::FLAG, opcode::PUSH, 0x22],
+            &mut data,
+        );
+
+        assert_eq!(data, [0x22]);
     }
 
     #[test]
     fn drop16() {
-        let data = evaluate(
-            [opcode::DROP | W16::FLAG, opcode::PUSH, 255],
-            [0, 0],
-            [127, 127],
+        let mut data = [0; 2];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push_u16(0x1111, &mut data).evaluate(
+            &[opcode::DROP | W16::FLAG, opcode::PUSH, 0x22],
+            &mut data,
         );
-        assert_eq!(data, [127, 255]);
+
+        assert_eq!(data, [0x11, 0x22]);
     }
 
     #[test]
     fn drop32() {
-        let data = evaluate(
-            [opcode::DROP | W32::FLAG, opcode::PUSH, 255],
-            [0, 0, 0, 0],
-            [127, 127, 127, 127],
+        let mut data = [0; 4];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push_u32(0x11111111, &mut data).evaluate(
+            &[opcode::DROP | W32::FLAG, opcode::PUSH, 0x22],
+            &mut data,
         );
-        assert_eq!(data, [127, 127, 127, 255]);
+
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x22]);
     }
 
     #[test]
     fn drop64() {
-        let data = evaluate(
-            [opcode::DROP | W64::FLAG, opcode::PUSH, 255],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [127, 127, 127, 127, 127, 127, 127, 127],
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push_u64(0x1111111111111111, &mut data).evaluate(
+            &[opcode::DROP | W64::FLAG, opcode::PUSH, 0x22],
+            &mut data,
         );
-        assert_eq!(data, [127, 127, 127, 127, 127, 127, 127, 255]);
+
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22]);
     }
 
     #[test]
