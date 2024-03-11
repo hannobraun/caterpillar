@@ -67,7 +67,7 @@ impl Evaluator {
                         let bytes = self.data.pop::<4>(data);
                         u32::from_le_bytes(bytes)
                     };
-                    let [value] = self.data.pop(data);
+                    let value = self.data.pop::<1>(data);
 
                     self.data.store(address, value, data);
                 }

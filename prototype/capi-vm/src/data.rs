@@ -41,11 +41,20 @@ impl Data {
         value
     }
 
-    pub fn store(&mut self, address: u32, value: u8, memory: &mut [u8]) {
-        let address: usize = address
+    pub fn store(
+        &mut self,
+        address: u32,
+        value: impl IntoIterator<Item = u8>,
+        memory: &mut [u8],
+    ) {
+        let mut address: usize = address
             .try_into()
             .expect("Couldn't convert address to usize");
-        memory[address] = value;
+
+        for b in value {
+            memory[address] = b;
+            address += 1;
+        }
     }
 }
 
