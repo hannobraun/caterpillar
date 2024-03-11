@@ -180,8 +180,8 @@ mod tests {
 
     #[test]
     fn clone() -> anyhow::Result<()> {
-        let data = assemble("push8 255 clone", [0, 0])?;
-        assert_eq!(data, [255, 255]);
+        let data = assemble("push8 0x11 clone", [0, 0])?;
+        assert_eq!(data, [0x11, 0x11]);
         Ok(())
     }
 
