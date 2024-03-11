@@ -115,7 +115,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{self, TERMINATE},
+        opcode::{self, PUSH, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -135,7 +135,7 @@ mod tests {
         let mut data = [0; 1];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(&[opcode::PUSH | W8::FLAG, 0x11], &mut data);
+        evaluator.evaluate(bc().op(PUSH).w(W8).u8(0x11), &mut data);
 
         assert_eq!(data, [0x11]);
     }
@@ -145,7 +145,7 @@ mod tests {
         let mut data = [0; 2];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(&[opcode::PUSH | W16::FLAG, 0x11, 0x22], &mut data);
+        evaluator.evaluate(bc().op(PUSH).w(W16).u16(0x2211), &mut data);
 
         assert_eq!(data, [0x11, 0x22]);
     }
@@ -155,10 +155,7 @@ mod tests {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(
-            &[opcode::PUSH | W32::FLAG, 0x11, 0x22, 0x33, 0x44],
-            &mut data,
-        );
+        evaluator.evaluate(bc().op(PUSH).w(W32).u32(0x44332211), &mut data);
 
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
     }
@@ -168,20 +165,8 @@ mod tests {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(
-            &[
-                opcode::PUSH | W64::FLAG,
-                0x11,
-                0x22,
-                0x33,
-                0x44,
-                0x55,
-                0x66,
-                0x77,
-                0x88,
-            ],
-            &mut data,
-        );
+        evaluator
+            .evaluate(bc().op(PUSH).w(W64).u64(0x8877665544332211), &mut data);
 
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
     }
@@ -326,6 +311,37 @@ mod tests {
     impl Bytecode {
         pub fn op(mut self, opcode: u8) -> Self {
             self.inner.push(opcode);
+            self
+        }
+
+        pub fn w<W>(mut self, _: W) -> Self
+        where
+            W: Width,
+        {
+            *self
+                .inner
+                .last_mut()
+                .expect("Expected previous call to `op`") |= W::FLAG;
+            self
+        }
+
+        pub fn u8(mut self, value: u8) -> Self {
+            self.inner.extend(value.to_le_bytes());
+            self
+        }
+
+        pub fn u16(mut self, value: u16) -> Self {
+            self.inner.extend(value.to_le_bytes());
+            self
+        }
+
+        pub fn u32(mut self, value: u32) -> Self {
+            self.inner.extend(value.to_le_bytes());
+            self
+        }
+
+        pub fn u64(mut self, value: u64) -> Self {
+            self.inner.extend(value.to_le_bytes());
             self
         }
     }
