@@ -147,7 +147,7 @@ mod tests {
     #[test]
     fn clone() -> anyhow::Result<()> {
         let data = assemble("push8 0x11 clone", [0; 2])?;
-        assert_eq!(data, [0x11, 0x11]);
+        assert_eq!(data, [0x11; 2]);
         Ok(())
     }
 
