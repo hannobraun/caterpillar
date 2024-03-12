@@ -62,12 +62,12 @@ impl RenderTarget {
                 let index = (pixel_x + pixel_y * self.width)
                     * RenderTarget::NUM_COLOR_CHANNELS
                     + RENDER_BUFFER_OFFSET;
-                let index_u32: u32 = index
+                let index: u32 = index
                     .try_into()
                     .expect("Expected to run on 32-bit platform (WebAssembly)");
 
                 evaluator
-                    .push_u32(index_u32, data)
+                    .push_u32(index, data)
                     .push_u8(color, data)
                     .evaluate(code, data);
             }
