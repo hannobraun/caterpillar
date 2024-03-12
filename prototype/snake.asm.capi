@@ -1,10 +1,10 @@
 set_pixel:
 set_red_channel:
-    clone
+    clone8
     push32 0
     store8
 set_green_channel:
-    clone
+    clone8
     push32 1
     store8
 set_blue_channel:

@@ -100,7 +100,10 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "drop16" => Some((opcode::DROP, W16::INFO)),
             "drop32" => Some((opcode::DROP, W32::INFO)),
             "drop64" => Some((opcode::DROP, W64::INFO)),
-            "clone" => Some((opcode::CLONE, W8::INFO)),
+            "clone8" => Some((opcode::CLONE, W8::INFO)),
+            "clone16" => Some((opcode::CLONE, W16::INFO)),
+            "clone32" => Some((opcode::CLONE, W32::INFO)),
+            "clone64" => Some((opcode::CLONE, W64::INFO)),
             "store8" => Some((opcode::STORE, W8::INFO)),
             "store16" => Some((opcode::STORE, W16::INFO)),
             "store32" => Some((opcode::STORE, W32::INFO)),
@@ -145,9 +148,30 @@ mod tests {
     use crate::AssemblerError;
 
     #[test]
-    fn clone() -> anyhow::Result<()> {
-        let data = assemble("push8 0x11 clone", [0; 2])?;
+    fn clone8() -> anyhow::Result<()> {
+        let data = assemble("push8 0x11 clone8", [0; 2])?;
         assert_eq!(data, [0x11; 2]);
+        Ok(())
+    }
+
+    #[test]
+    fn clone16() -> anyhow::Result<()> {
+        let data = assemble("push16 0x1111 clone16", [0; 4])?;
+        assert_eq!(data, [0x11; 4]);
+        Ok(())
+    }
+
+    #[test]
+    fn clone32() -> anyhow::Result<()> {
+        let data = assemble("push32 0x11111111 clone32", [0; 8])?;
+        assert_eq!(data, [0x11; 8]);
+        Ok(())
+    }
+
+    #[test]
+    fn clone64() -> anyhow::Result<()> {
+        let data = assemble("push64 0x1111111111111111 clone64", [0; 16])?;
+        assert_eq!(data, [0x11; 16]);
         Ok(())
     }
 
