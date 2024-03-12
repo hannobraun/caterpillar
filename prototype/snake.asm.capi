@@ -5,5 +5,4 @@ set_pixel:
     clone8
     swap32
     store32
-terminate:
     terminate
