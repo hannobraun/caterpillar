@@ -36,22 +36,18 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             }
         }
 
-        let width = match width.as_str() {
-            "8" => Some(W8::INFO),
-            "16" => Some(W16::INFO),
-            "32" => Some(W32::INFO),
-            "64" => Some(W64::INFO),
-
-            _ => None,
-        };
-
         if opcode == "push" {
-            let Some(width) = width else {
-                // The size suffix was not recognized. We don't know this
-                // instruction.
-                return Err(AssemblerError::UnknownInstruction {
-                    name: instruction.to_string(),
-                });
+            let width = match instruction {
+                "push8" => W8::INFO,
+                "push16" => W16::INFO,
+                "push32" => W32::INFO,
+                "push64" => W64::INFO,
+
+                _ => {
+                    return Err(AssemblerError::UnknownInstruction {
+                        name: instruction.to_string(),
+                    });
+                }
             };
 
             let Some(value) = instructions.next() else {
