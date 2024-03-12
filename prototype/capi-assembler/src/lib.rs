@@ -108,6 +108,10 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "store16" => Some((opcode::STORE, W16::INFO)),
             "store32" => Some((opcode::STORE, W32::INFO)),
             "store64" => Some((opcode::STORE, W64::INFO)),
+            "swap8" => Some((opcode::SWAP, W8::INFO)),
+            "swap16" => Some((opcode::SWAP, W16::INFO)),
+            "swap32" => Some((opcode::SWAP, W32::INFO)),
+            "swap64" => Some((opcode::SWAP, W64::INFO)),
             "terminate" => Some((opcode::TERMINATE, W8::INFO)),
 
             _ => None,
@@ -286,6 +290,44 @@ mod tests {
             [
                 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0, 0, 0, 0,
                 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
+            ]
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn swap8() -> anyhow::Result<()> {
+        let data = assemble("push8 0x11 push8 0x22 swap8", [0; 2])?;
+        assert_eq!(data, [0x11, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn swap16() -> anyhow::Result<()> {
+        let data = assemble("push16 0x1111 push16 0x2222 swap16", [0; 4])?;
+        assert_eq!(data, [0x11, 0x11, 0x22, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn swap32() -> anyhow::Result<()> {
+        let data =
+            assemble("push32 0x11111111 push32 0x22222222 swap32", [0; 8])?;
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn swap64() -> anyhow::Result<()> {
+        let data = assemble(
+            "push64 0x1111111111111111 push64 0x2222222222222222 swap64",
+            [0; 16],
+        )?;
+        assert_eq!(
+            data,
+            [
+                0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22, 0x22,
+                0x22, 0x22, 0x22, 0x22, 0x22, 0x22
             ]
         );
         Ok(())
