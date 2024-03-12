@@ -123,27 +123,18 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "drop16" => Some((opcode::DROP, W16::INFO)),
             "drop32" => Some((opcode::DROP, W32::INFO)),
             "drop64" => Some((opcode::DROP, W64::INFO)),
+            "clone" => Some((opcode::CLONE, W8::INFO)),
             "store8" => Some((opcode::STORE, W8::INFO)),
             "store16" => Some((opcode::STORE, W16::INFO)),
             "store32" => Some((opcode::STORE, W32::INFO)),
             "store64" => Some((opcode::STORE, W64::INFO)),
+            "terminate" => Some((opcode::TERMINATE, W8::INFO)),
 
             _ => None,
         };
 
         if let Some((opcode, width)) = opcode_and_width {
             bytecode.push(opcode | width.flag);
-            continue;
-        }
-
-        let opcode = match opcode.as_str() {
-            "clone" => Some(opcode::CLONE),
-            "terminate" => Some(opcode::TERMINATE),
-            _ => None,
-        };
-
-        if let Some(opcode) = opcode {
-            bytecode.push(opcode);
             continue;
         }
 
