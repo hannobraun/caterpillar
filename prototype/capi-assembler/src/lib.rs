@@ -36,7 +36,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             }
         }
 
-        if opcode == "push" {
+        if instruction.starts_with("push") {
             let width = match instruction {
                 "push8" => W8::INFO,
                 "push16" => W16::INFO,
