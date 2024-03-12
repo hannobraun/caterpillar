@@ -1,4 +1,4 @@
-use crate::{ffi_in::RENDER_BUFFER_OFFSET, vm::Evaluator, world::World};
+use crate::{vm::Evaluator, world::World};
 
 pub struct RenderTarget {
     pub width: usize,
@@ -60,8 +60,7 @@ impl RenderTarget {
                 let pixel_y = cell_y + y;
 
                 let index = (pixel_x + pixel_y * self.width)
-                    * RenderTarget::NUM_COLOR_CHANNELS
-                    + RENDER_BUFFER_OFFSET;
+                    * RenderTarget::NUM_COLOR_CHANNELS;
                 let index: u32 = index
                     .try_into()
                     .expect("Expected to run on 32-bit platform (WebAssembly)");

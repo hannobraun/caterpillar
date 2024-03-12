@@ -95,7 +95,7 @@
 
             const drawBuffer = new Uint8ClampedArray(
                 instance.exports.memory.buffer,
-                instance.exports.data_ptr() + 1024,
+                instance.exports.data_ptr(),
                 canvas.width * canvas.height * 4,
             );
 

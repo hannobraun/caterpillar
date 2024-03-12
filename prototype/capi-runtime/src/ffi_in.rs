@@ -25,8 +25,6 @@ pub extern "C" fn code_len() -> usize {
 /// The virtual machine's data memory
 pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
-pub const RENDER_BUFFER_OFFSET: usize = 1024;
-
 #[no_mangle]
 pub extern "C" fn data_ptr() -> usize {
     &DATA as *const _ as usize
