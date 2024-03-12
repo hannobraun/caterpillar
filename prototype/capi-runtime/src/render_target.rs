@@ -60,7 +60,8 @@ impl RenderTarget {
                 let pixel_y = cell_y + y;
 
                 let index = (pixel_x + pixel_y * self.width)
-                    * RenderTarget::NUM_COLOR_CHANNELS;
+                    * RenderTarget::NUM_COLOR_CHANNELS
+                    + RENDER_BUFFER_OFFSET;
                 let index_u32: u32 = index
                     .try_into()
                     .expect("Expected to run on 32-bit platform (WebAssembly)");
@@ -69,7 +70,7 @@ impl RenderTarget {
                     .push_u32(index_u32, data)
                     .push_u8(color, data)
                     .evaluate(code, data);
-                data.copy_within(..4, RENDER_BUFFER_OFFSET + index);
+                data.copy_within(..4, index);
             }
         }
     }
