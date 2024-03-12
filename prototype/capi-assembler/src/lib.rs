@@ -117,25 +117,23 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
             continue;
         }
-        {
-            let opcode = match opcode.as_str() {
-                "drop" => Some(opcode::DROP),
-                "store" => Some(opcode::STORE),
-                _ => None,
-            };
 
-            if let Some(opcode) = opcode {
-                let Some(width) = width else {
-                    // The size suffix was not recognized. We don't know this
-                    // instruction.
-                    return Err(AssemblerError::UnknownInstruction {
-                        name: instruction.to_string(),
-                    });
-                };
+        let opcode_and_width = match instruction {
+            "drop8" => Some((opcode::DROP, W8::INFO)),
+            "drop16" => Some((opcode::DROP, W16::INFO)),
+            "drop32" => Some((opcode::DROP, W32::INFO)),
+            "drop64" => Some((opcode::DROP, W64::INFO)),
+            "store8" => Some((opcode::STORE, W8::INFO)),
+            "store16" => Some((opcode::STORE, W16::INFO)),
+            "store32" => Some((opcode::STORE, W32::INFO)),
+            "store64" => Some((opcode::STORE, W64::INFO)),
 
-                bytecode.push(opcode | width.flag);
-                continue;
-            }
+            _ => None,
+        };
+
+        if let Some((opcode, width)) = opcode_and_width {
+            bytecode.push(opcode | width.flag);
+            continue;
         }
 
         let opcode = match opcode.as_str() {
