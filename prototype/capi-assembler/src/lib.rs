@@ -17,25 +17,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
-        let mut opcode = String::new();
-        let mut width = String::new();
-
-        for ch in instruction.chars() {
-            if ch.is_alphabetic() {
-                if !width.is_empty() {
-                    // We only have instructions that *end* with numbers, so
-                    // this is definitely nothing we know about.
-                    return Err(AssemblerError::UnknownInstruction {
-                        name: instruction.to_owned(),
-                    });
-                }
-
-                opcode.push(ch);
-            } else if ch.is_ascii_digit() {
-                width.push(ch);
-            }
-        }
-
         if instruction.starts_with("push") {
             let width = match instruction {
                 "push8" => W8::INFO,
