@@ -16,7 +16,7 @@ impl Evaluator {
     }
 
     pub fn push_u8(&mut self, value: u8, data: &mut [u8]) -> &mut Self {
-        self.data.push([value], data);
+        self.data.push(value.to_le_bytes(), data);
         self
     }
 
