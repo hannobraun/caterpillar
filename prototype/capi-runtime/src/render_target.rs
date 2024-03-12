@@ -70,7 +70,6 @@ impl RenderTarget {
                     .push_u32(index_u32, data)
                     .push_u8(color, data)
                     .evaluate(code, data);
-                data.copy_within(..4, index);
             }
         }
     }

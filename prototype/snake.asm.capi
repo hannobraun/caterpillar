@@ -3,8 +3,7 @@ set_pixel:
     swap8
     clone8
     clone8
-    push32 0
+    swap32
     store32
 terminate:
-    drop32
     terminate
