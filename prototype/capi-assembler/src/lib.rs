@@ -104,10 +104,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "clone16" => Some((opcode::CLONE, W16::INFO)),
             "clone32" => Some((opcode::CLONE, W32::INFO)),
             "clone64" => Some((opcode::CLONE, W64::INFO)),
-            "store8" => Some((opcode::STORE, W8::INFO)),
-            "store16" => Some((opcode::STORE, W16::INFO)),
             "store32" => Some((opcode::STORE, W32::INFO)),
-            "store64" => Some((opcode::STORE, W64::INFO)),
             "swap8" => Some((opcode::SWAP, W8::INFO)),
             "swap16" => Some((opcode::SWAP, W16::INFO)),
             "swap32" => Some((opcode::SWAP, W32::INFO)),
@@ -250,23 +247,6 @@ mod tests {
     }
 
     #[test]
-    fn store8() -> anyhow::Result<()> {
-        let data = assemble("push8 0x11 push32 0 store8", [0, 0, 0, 0, 0, 0])?;
-        assert_eq!(data, [0x11, 0, 0, 0, 0, 0x11]);
-        Ok(())
-    }
-
-    #[test]
-    fn store16() -> anyhow::Result<()> {
-        let data = assemble(
-            "push16 0x2211 push32 0 store16",
-            [0, 0, 0, 0, 0, 0, 0, 0],
-        )?;
-        assert_eq!(data, [0x11, 0x22, 0, 0, 0, 0, 0x11, 0x22]);
-        Ok(())
-    }
-
-    #[test]
     fn store32() -> anyhow::Result<()> {
         let data = assemble(
             "push32 0x44332211 push32 0 store32",
@@ -275,22 +255,6 @@ mod tests {
         assert_eq!(
             data,
             [0x11, 0x22, 0x33, 0x44, 0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]
-        );
-        Ok(())
-    }
-
-    #[test]
-    fn store64() -> anyhow::Result<()> {
-        let data = assemble(
-            "push64 0x8877665544332211 push32 0 store64",
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        )?;
-        assert_eq!(
-            data,
-            [
-                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0, 0, 0, 0,
-                0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88
-            ]
         );
         Ok(())
     }
