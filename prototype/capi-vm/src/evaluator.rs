@@ -220,7 +220,7 @@ mod tests {
             .push(8, &mut data)
             .evaluate(bc().op(ROL), &mut data);
 
-        assert_eq!(data, [0x08, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff]);
+        assert_eq!(evaluator.pop(&mut data), 0xff00ff00);
     }
 
     pub fn bc() -> Bytecode {
