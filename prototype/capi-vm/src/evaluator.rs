@@ -166,7 +166,8 @@ mod tests {
             .push(0x11111111, &mut data)
             .evaluate(bc().op(CLONE), &mut data);
 
-        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11]);
+        assert_eq!(evaluator.pop(&mut data), 0x11111111);
+        assert_eq!(evaluator.pop(&mut data), 0x11111111);
     }
 
     #[test]
