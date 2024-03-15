@@ -18,8 +18,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         if instruction == "push" {
-            let width = W32::INFO;
-
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
@@ -45,7 +43,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 })?
                 .to_le_bytes();
 
-            bytecode.push(opcode::PUSH | width.flag);
+            bytecode.push(opcode::PUSH | W32::FLAG);
             for &b in value {
                 bytecode.push(b);
             }
