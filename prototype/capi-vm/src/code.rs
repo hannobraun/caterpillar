@@ -1,5 +1,5 @@
 pub struct Code {
-    pub ptr: usize,
+    ptr: usize,
 }
 
 impl Code {
