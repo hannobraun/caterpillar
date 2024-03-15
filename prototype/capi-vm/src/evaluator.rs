@@ -68,13 +68,6 @@ impl Evaluator {
                 opcode::TERMINATE => {
                     break;
                 }
-                opcode::JUMP => {
-                    let mut offset = [0; 1];
-                    let _ = self.data.pop(&mut offset, data);
-
-                    let offset = i8::from_le_bytes(offset).into();
-                    self.code.jump_relative(offset);
-                }
                 opcode::PUSH => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = self
@@ -172,9 +165,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{
-            AND, CLONE, DROP, JUMP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
-        },
+        opcode::{AND, CLONE, DROP, OR, PUSH, ROL, STORE, SWAP, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -187,40 +178,6 @@ mod tests {
 
         evaluator.evaluate(bc().op(TERMINATE), &mut data);
         // This should not run forever, nor cause any kind of panic.
-    }
-
-    #[test]
-    fn jump8r_simple() {
-        let mut data = [0; 1];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator.push_i8(1, &mut data).evaluate(
-            bc().op(JUMP).op(TERMINATE).op(PUSH).w(W8).u8(0x11),
-            &mut data,
-        );
-        assert_eq!(data, [0x11]);
-    }
-
-    #[test]
-    fn jump8r_negative() {
-        let mut data = [0; 3];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_i8(2, &mut data)
-            .push_i8(-2, &mut data)
-            .push_i8(1, &mut data)
-            .evaluate(
-                bc().op(JUMP)
-                    .op(JUMP)
-                    .op(JUMP)
-                    .op(TERMINATE)
-                    .op(PUSH)
-                    .w(W8)
-                    .u8(0x11),
-                &mut data,
-            );
-        assert_eq!(data, [1, -2i8 as u8, 0x11]);
     }
 
     #[test]
