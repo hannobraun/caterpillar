@@ -2,7 +2,7 @@ use std::num::ParseIntError;
 
 use capi_vm::{
     opcode,
-    width::{Width, W16, W32, W64, W8},
+    width::{Width, W32, W8},
 };
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
@@ -41,31 +41,9 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let mut buffer = [0; 8];
 
             let mut parse = || -> Result<(), ParseIntError> {
-                match width.flag {
-                    W8::FLAG => {
-                        buffer[..width.num_bytes].copy_from_slice(&[
-                            u8::from_str_radix(value, radix)?,
-                        ]);
-                    }
-                    W16::FLAG => {
-                        buffer[..width.num_bytes].copy_from_slice(
-                            &u16::from_str_radix(value, radix)?.to_le_bytes(),
-                        );
-                    }
-                    W32::FLAG => {
-                        buffer[..width.num_bytes].copy_from_slice(
-                            &u32::from_str_radix(value, radix)?.to_le_bytes(),
-                        );
-                    }
-                    W64::FLAG => {
-                        buffer[..width.num_bytes].copy_from_slice(
-                            &u64::from_str_radix(value, radix)?.to_le_bytes(),
-                        );
-                    }
-                    _ => {
-                        unreachable!("Unsupported width");
-                    }
-                }
+                buffer[..W32::INFO.num_bytes].copy_from_slice(
+                    &u32::from_str_radix(value, radix)?.to_le_bytes(),
+                );
 
                 Ok(())
             };
