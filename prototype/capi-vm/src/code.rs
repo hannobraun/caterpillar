@@ -18,10 +18,7 @@ impl Code {
         instruction
     }
 
-    pub fn read_value<'b>(
-        &mut self,
-        code: &[u8],
-    ) -> impl Iterator<Item = u8> + DoubleEndedIterator + 'b {
+    pub fn read_value(&mut self, code: &[u8]) -> u32 {
         let mut buffer = [0; 4];
 
         for b in &mut buffer {
@@ -29,6 +26,6 @@ impl Code {
             self.ptr += 1;
         }
 
-        buffer.into_iter()
+        u32::from_le_bytes(buffer)
     }
 }
