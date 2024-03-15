@@ -444,7 +444,7 @@ mod tests {
     }
 
     #[test]
-    fn swap32() {
+    fn swap() {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
