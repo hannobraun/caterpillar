@@ -29,14 +29,14 @@ impl Data {
     }
 
     pub fn pop(&mut self, data: &mut [u8]) -> u32 {
-        let mut buffer = [0; 4];
+        let mut bytes = [0; 4];
 
-        for b in buffer.iter_mut() {
+        for b in bytes.iter_mut() {
             self.stack_ptr += 1;
             *b = data[self.stack_ptr.0];
         }
 
-        u32::from_le_bytes(buffer)
+        u32::from_le_bytes(bytes)
     }
 
     pub fn store(&mut self, address: u32, value: u32, data: &mut [u8]) {
