@@ -68,6 +68,11 @@ impl Data {
 }
 
 #[derive(Debug)]
+#[cfg_attr(feature = "std", derive(thiserror::Error))]
+#[cfg_attr(feature = "std", error(
+    "Error storing value `{value}`: address `{address}` out of bounds (memory \
+    size: `{data_len}`)"
+))]
 pub struct StoreError {
     pub value: u32,
     pub address: usize,
