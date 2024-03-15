@@ -265,7 +265,7 @@ mod tests {
     }
 
     #[test]
-    fn drop32() {
+    fn drop() {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
