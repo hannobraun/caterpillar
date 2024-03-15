@@ -149,9 +149,8 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        opcode::{AND, CLONE, DROP, OR, PUSH, ROL, STORE, SWAP, TERMINATE},
-        width::{Width, W32},
+    use crate::opcode::{
+        AND, CLONE, DROP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
     };
 
     use super::Evaluator;
@@ -170,7 +169,7 @@ mod tests {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(bc().op(PUSH).w(W32).u32(0x44332211), &mut data);
+        evaluator.evaluate(bc().op(PUSH).u32(0x44332211), &mut data);
 
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
     }
@@ -183,10 +182,7 @@ mod tests {
         evaluator
             .push_u32(0x11111111, &mut data)
             .push_u32(0x22222222, &mut data)
-            .evaluate(
-                bc().op(DROP).w(W32).op(PUSH).w(W32).u32(0x33333333),
-                &mut data,
-            );
+            .evaluate(bc().op(DROP).op(PUSH).u32(0x33333333), &mut data);
 
         assert_eq!(data, [0x33, 0x33, 0x33, 0x33, 0x11, 0x11, 0x11, 0x11]);
     }
@@ -199,7 +195,7 @@ mod tests {
         evaluator
             .push_u32(0x44332211, &mut data)
             .push_u32(4, &mut data)
-            .evaluate(bc().op(STORE).w(W32), &mut data);
+            .evaluate(bc().op(STORE), &mut data);
 
         assert_eq!(
             data,
@@ -217,7 +213,7 @@ mod tests {
 
         evaluator
             .push_u32(0x11111111, &mut data)
-            .evaluate(bc().op(CLONE).w(W32), &mut data);
+            .evaluate(bc().op(CLONE), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11]);
     }
@@ -230,7 +226,7 @@ mod tests {
         evaluator
             .push_u32(0x11111111, &mut data)
             .push_u32(0x22222222, &mut data)
-            .evaluate(bc().op(SWAP).w(W32), &mut data);
+            .evaluate(bc().op(SWAP), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
     }
@@ -285,17 +281,6 @@ mod tests {
     impl Bytecode {
         pub fn op(mut self, opcode: u8) -> Self {
             self.inner.push(opcode);
-            self
-        }
-
-        pub fn w<W>(mut self, _: W) -> Self
-        where
-            W: Width,
-        {
-            *self
-                .inner
-                .last_mut()
-                .expect("Expected previous call to `op`") |= W::FLAG;
             self
         }
 
