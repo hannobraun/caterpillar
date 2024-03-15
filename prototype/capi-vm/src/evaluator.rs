@@ -111,14 +111,14 @@ impl Evaluator {
                     self.data.push(value, data);
                 }
                 opcode::SWAP => {
-                    let mut a = [0; MAX_WIDTH_BYTES];
                     let mut b = [0; MAX_WIDTH_BYTES];
+                    let mut a = [0; MAX_WIDTH_BYTES];
 
-                    let a = self.data.pop(&mut a[..width.num_bytes], data);
                     let b = self.data.pop(&mut b[..width.num_bytes], data);
+                    let a = self.data.pop(&mut a[..width.num_bytes], data);
 
-                    self.data.push(a, data);
                     self.data.push(b, data);
+                    self.data.push(a, data);
                 }
                 opcode::AND => {
                     let mut b = [0; 4];
