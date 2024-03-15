@@ -50,6 +50,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         let opcode_and_width = match instruction {
             "and" => Some(opcode::AND),
+            "call" => Some(opcode::CALL),
             "drop" => Some(opcode::DROP),
             "clone" => Some(opcode::CLONE),
             "jump" => Some(opcode::JUMP),
@@ -100,6 +101,13 @@ mod tests {
     fn and() -> anyhow::Result<()> {
         let data = assemble("push 0x11111111 push 0x000000ff and", [0; 8])?;
         assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
+        Ok(())
+    }
+
+    #[test]
+    fn call() -> anyhow::Result<()> {
+        let data = assemble("push 7 call terminate push 0x11111111", [0; 8])?;
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x06, 0x00, 0x00, 0x00]);
         Ok(())
     }
 
