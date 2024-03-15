@@ -19,10 +19,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         if instruction.starts_with("push") {
             let width = match instruction {
-                "push8" => W8::INFO,
-                "push16" => W16::INFO,
                 "push32" => W32::INFO,
-                "push64" => W64::INFO,
 
                 _ => {
                     return Err(AssemblerError::UnknownInstruction {
@@ -172,20 +169,6 @@ mod tests {
     }
 
     #[test]
-    fn push8() -> anyhow::Result<()> {
-        let data = assemble("push8 0x11", [0])?;
-        assert_eq!(data, [0x11]);
-        Ok(())
-    }
-
-    #[test]
-    fn push16() -> anyhow::Result<()> {
-        let data = assemble("push16 0x2211", [0, 0])?;
-        assert_eq!(data, [0x11, 0x22]);
-        Ok(())
-    }
-
-    #[test]
     fn push32() -> anyhow::Result<()> {
         let data = assemble("push32 0x44332211", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
@@ -196,14 +179,6 @@ mod tests {
     fn push_decimal() -> anyhow::Result<()> {
         let data = assemble("push32 1144201745", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
-        Ok(())
-    }
-
-    #[test]
-    fn push64() -> anyhow::Result<()> {
-        let data =
-            assemble("push64 0x8877665544332211", [0, 0, 0, 0, 0, 0, 0, 0])?;
-        assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
         Ok(())
     }
 
