@@ -104,7 +104,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "clone16" => Some((opcode::CLONE, W16::INFO)),
             "clone32" => Some((opcode::CLONE, W32::INFO)),
             "clone64" => Some((opcode::CLONE, W64::INFO)),
-            "store32" => Some((opcode::STORE, W32::INFO)),
+            "store" => Some((opcode::STORE, W32::INFO)),
             "swap8" => Some((opcode::SWAP, W8::INFO)),
             "swap16" => Some((opcode::SWAP, W16::INFO)),
             "swap32" => Some((opcode::SWAP, W32::INFO)),
@@ -249,7 +249,7 @@ mod tests {
     #[test]
     fn store32() -> anyhow::Result<()> {
         let data = assemble(
-            "push32 0x44332211 push32 0 store32",
+            "push32 0x44332211 push32 0 store",
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         )?;
         assert_eq!(
