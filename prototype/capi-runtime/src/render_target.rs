@@ -67,7 +67,7 @@ impl RenderTarget {
 
                 evaluator
                     .push_u32(index, data)
-                    .push_u8(color, data)
+                    .push_u32(color.into(), data)
                     .evaluate(code, data);
             }
         }
