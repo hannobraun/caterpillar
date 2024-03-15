@@ -19,7 +19,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
         if instruction.starts_with("push") {
             let width = match instruction {
-                "push32" => W32::INFO,
+                "push" => W32::INFO,
 
                 _ => {
                     return Err(AssemblerError::UnknownInstruction {
@@ -141,14 +141,14 @@ mod tests {
 
     #[test]
     fn and() -> anyhow::Result<()> {
-        let data = assemble("push32 0x11111111 push32 0x000000ff and", [0; 8])?;
+        let data = assemble("push 0x11111111 push 0x000000ff and", [0; 8])?;
         assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
         Ok(())
     }
 
     #[test]
     fn clone() -> anyhow::Result<()> {
-        let data = assemble("push32 0x11111111 clone", [0; 8])?;
+        let data = assemble("push 0x11111111 clone", [0; 8])?;
         assert_eq!(data, [0x11; 8]);
         Ok(())
     }
@@ -156,35 +156,35 @@ mod tests {
     #[test]
     fn drop() -> anyhow::Result<()> {
         let data =
-            assemble("push32 0x11111111 drop push32 0x22222222", [0, 0, 0, 0])?;
+            assemble("push 0x11111111 drop push 0x22222222", [0, 0, 0, 0])?;
         assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }
 
     #[test]
     fn or() -> anyhow::Result<()> {
-        let data = assemble("push32 0x05030100 push32 0x60402000 or", [0; 8])?;
+        let data = assemble("push 0x05030100 push 0x60402000 or", [0; 8])?;
         assert_eq!(data, [0x00, 0x20, 0x40, 0x60, 0x00, 0x21, 0x43, 0x65]);
         Ok(())
     }
 
     #[test]
     fn push32() -> anyhow::Result<()> {
-        let data = assemble("push32 0x44332211", [0, 0, 0, 0])?;
+        let data = assemble("push 0x44332211", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
         Ok(())
     }
 
     #[test]
     fn push_decimal() -> anyhow::Result<()> {
-        let data = assemble("push32 1144201745", [0, 0, 0, 0])?;
+        let data = assemble("push 1144201745", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
         Ok(())
     }
 
     #[test]
     fn rol() -> anyhow::Result<()> {
-        let data = assemble("push32 0x00ff00ff push32 8 rol", [0; 8])?;
+        let data = assemble("push 0x00ff00ff push 8 rol", [0; 8])?;
         assert_eq!(data, [0x08, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff]);
         Ok(())
     }
@@ -192,7 +192,7 @@ mod tests {
     #[test]
     fn store() -> anyhow::Result<()> {
         let data = assemble(
-            "push32 0x44332211 push32 0 store",
+            "push 0x44332211 push 0 store",
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         )?;
         assert_eq!(
@@ -204,8 +204,7 @@ mod tests {
 
     #[test]
     fn swap() -> anyhow::Result<()> {
-        let data =
-            assemble("push32 0x11111111 push32 0x22222222 swap", [0; 8])?;
+        let data = assemble("push 0x11111111 push 0x22222222 swap", [0; 8])?;
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }
