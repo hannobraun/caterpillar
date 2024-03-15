@@ -44,7 +44,6 @@ impl Evaluator {
                 }
                 opcode::STORE => {
                     let address = self.data.pop(data);
-
                     let value = self.data.pop(data);
 
                     self.data.store(address, value, data);
