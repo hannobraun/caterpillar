@@ -15,7 +15,7 @@ impl Evaluator {
         }
     }
 
-    pub fn push_u32(&mut self, value: u32, data: &mut [u8]) -> &mut Self {
+    pub fn push(&mut self, value: u32, data: &mut [u8]) -> &mut Self {
         self.data.push(value, data);
         self
     }
@@ -127,8 +127,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x11111111, &mut data)
-            .push_u32(0x22222222, &mut data)
+            .push(0x11111111, &mut data)
+            .push(0x22222222, &mut data)
             .evaluate(bc().op(DROP).op(PUSH).u32(0x33333333), &mut data);
 
         assert_eq!(data, [0x33, 0x33, 0x33, 0x33, 0x11, 0x11, 0x11, 0x11]);
@@ -140,8 +140,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x44332211, &mut data)
-            .push_u32(4, &mut data)
+            .push(0x44332211, &mut data)
+            .push(4, &mut data)
             .evaluate(bc().op(STORE), &mut data);
 
         assert_eq!(
@@ -159,7 +159,7 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x11111111, &mut data)
+            .push(0x11111111, &mut data)
             .evaluate(bc().op(CLONE), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11]);
@@ -171,8 +171,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x11111111, &mut data)
-            .push_u32(0x22222222, &mut data)
+            .push(0x11111111, &mut data)
+            .push(0x22222222, &mut data)
             .evaluate(bc().op(SWAP), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
@@ -184,8 +184,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x11111111, &mut data)
-            .push_u32(0x000000ff, &mut data)
+            .push(0x11111111, &mut data)
+            .push(0x000000ff, &mut data)
             .evaluate(bc().op(AND), &mut data);
 
         assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
@@ -197,8 +197,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x05030100, &mut data)
-            .push_u32(0x60402000, &mut data)
+            .push(0x05030100, &mut data)
+            .push(0x60402000, &mut data)
             .evaluate(bc().op(OR), &mut data);
 
         assert_eq!(data, [0x00, 0x20, 0x40, 0x60, 0x00, 0x21, 0x43, 0x65]);
@@ -210,8 +210,8 @@ mod tests {
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
-            .push_u32(0x00ff00ff, &mut data)
-            .push_u32(8, &mut data)
+            .push(0x00ff00ff, &mut data)
+            .push(8, &mut data)
             .evaluate(bc().op(ROL), &mut data);
 
         assert_eq!(data, [0x08, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff]);
