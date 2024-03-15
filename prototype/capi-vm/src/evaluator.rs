@@ -1,4 +1,4 @@
-use crate::{code::Code, opcode};
+use crate::{code::Code, data::StoreError, opcode};
 
 use super::data::Data;
 
@@ -28,7 +28,7 @@ impl Evaluator {
         &mut self,
         code: impl AsRef<[u8]>,
         data: &mut [u8],
-    ) -> &mut Self {
+    ) -> Result<&mut Self, StoreError> {
         let code = code.as_ref();
         self.code.reset();
 
@@ -63,7 +63,7 @@ impl Evaluator {
                     let address = self.data.pop(data);
                     let value = self.data.pop(data);
 
-                    self.data.store(address, value, data).unwrap();
+                    self.data.store(address, value, data)?;
                 }
                 opcode::CLONE => {
                     let value = self.data.pop(data);
@@ -109,7 +109,7 @@ impl Evaluator {
             }
         }
 
-        self
+        Ok(self)
     }
 }
 
@@ -126,7 +126,7 @@ mod tests {
         let mut data = [];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(bc().op(TERMINATE), &mut data);
+        evaluator.evaluate(bc().op(TERMINATE), &mut data)?;
         // This should not run forever, nor cause any kind of panic.
 
         Ok(())
@@ -140,7 +140,7 @@ mod tests {
         evaluator.push(0x00000002, &mut data).evaluate(
             bc().op(JUMP).op(TERMINATE).op(PUSH).u32(0x44332211),
             &mut data,
-        );
+        )?;
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
         Ok(())
@@ -154,7 +154,7 @@ mod tests {
         evaluator.push(0x00000002, &mut data).evaluate(
             bc().op(CALL).op(TERMINATE).op(PUSH).u32(0x44332211),
             &mut data,
-        );
+        )?;
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
         assert_eq!(evaluator.pop(&mut data), 0x00000001);
@@ -166,7 +166,7 @@ mod tests {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
-        evaluator.evaluate(bc().op(PUSH).u32(0x44332211), &mut data);
+        evaluator.evaluate(bc().op(PUSH).u32(0x44332211), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
         Ok(())
@@ -179,7 +179,7 @@ mod tests {
 
         evaluator
             .push(0x11111111, &mut data)
-            .evaluate(bc().op(DROP), &mut data)
+            .evaluate(bc().op(DROP), &mut data)?
             .push(0x22222222, &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0x22222222);
@@ -194,7 +194,7 @@ mod tests {
         evaluator
             .push(0x44332211, &mut data)
             .push(4, &mut data)
-            .evaluate(bc().op(STORE), &mut data);
+            .evaluate(bc().op(STORE), &mut data)?;
 
         assert_eq!(data[..8], [0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]);
         Ok(())
@@ -207,7 +207,7 @@ mod tests {
 
         evaluator
             .push(0x11111111, &mut data)
-            .evaluate(bc().op(CLONE), &mut data);
+            .evaluate(bc().op(CLONE), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
@@ -222,7 +222,7 @@ mod tests {
         evaluator
             .push(0x11111111, &mut data)
             .push(0x22222222, &mut data)
-            .evaluate(bc().op(SWAP), &mut data);
+            .evaluate(bc().op(SWAP), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
         assert_eq!(evaluator.pop(&mut data), 0x22222222);
@@ -237,7 +237,7 @@ mod tests {
         evaluator
             .push(0x11111111, &mut data)
             .push(0x000000ff, &mut data)
-            .evaluate(bc().op(AND), &mut data);
+            .evaluate(bc().op(AND), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0x00000011);
         Ok(())
@@ -251,7 +251,7 @@ mod tests {
         evaluator
             .push(0x05030100, &mut data)
             .push(0x60402000, &mut data)
-            .evaluate(bc().op(OR), &mut data);
+            .evaluate(bc().op(OR), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0x65432100);
         Ok(())
@@ -265,7 +265,7 @@ mod tests {
         evaluator
             .push(0x00ff00ff, &mut data)
             .push(8, &mut data)
-            .evaluate(bc().op(ROL), &mut data);
+            .evaluate(bc().op(ROL), &mut data)?;
 
         assert_eq!(evaluator.pop(&mut data), 0xff00ff00);
         Ok(())

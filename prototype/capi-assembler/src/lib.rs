@@ -237,7 +237,7 @@ mod tests {
         let bytecode = super::assemble(assembly)?;
 
         let mut evaluator = Evaluator::new(&data);
-        evaluator.evaluate(&bytecode, &mut data);
+        evaluator.evaluate(&bytecode, &mut data)?;
 
         Ok(data)
     }

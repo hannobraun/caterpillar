@@ -68,7 +68,8 @@ impl RenderTarget {
                 evaluator
                     .push(index, data)
                     .push(color.into(), data)
-                    .evaluate(code, data);
+                    .evaluate(code, data)
+                    .unwrap();
             }
         }
     }
