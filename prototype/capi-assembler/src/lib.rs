@@ -1,9 +1,6 @@
 use std::num::ParseIntError;
 
-use capi_vm::{
-    opcode,
-    width::{Width, W32},
-};
+use capi_vm::opcode;
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut bytecode = Vec::new();
@@ -43,7 +40,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 }
             })?;
 
-            bytecode.push(opcode::PUSH | W32::FLAG);
+            bytecode.push(opcode::PUSH);
             for b in value.to_le_bytes() {
                 bytecode.push(b);
             }
@@ -65,7 +62,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         };
 
         if let Some(opcode) = opcode_and_width {
-            bytecode.push(opcode | W32::FLAG);
+            bytecode.push(opcode);
             continue;
         }
 
