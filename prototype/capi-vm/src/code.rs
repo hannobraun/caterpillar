@@ -29,10 +29,16 @@ impl Code {
         u32::from_le_bytes(buffer)
     }
 
-    pub fn jump(&mut self, address: u32) {
+    pub fn jump(&mut self, address: u32) -> u32 {
         let address: usize = address
             .try_into()
             .expect("Expected to run on 32-bit platform");
+
+        let old_address = self.ptr;
         self.ptr = address;
+
+        old_address
+            .try_into()
+            .expect("Failed to convert `usize` to `u32`")
     }
 }
