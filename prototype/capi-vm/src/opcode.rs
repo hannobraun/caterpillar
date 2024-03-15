@@ -1,5 +1,6 @@
 pub const TERMINATE: u8 = 0x00;
 pub const JUMP: u8 = 0x01;
+pub const CALL: u8 = 0x02;
 pub const PUSH: u8 = 0x03;
 pub const DROP: u8 = 0x04;
 // 0x05 reserved for `load`

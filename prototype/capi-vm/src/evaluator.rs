@@ -47,6 +47,11 @@ impl Evaluator {
                     let address = self.data.pop(data);
                     self.code.jump(address);
                 }
+                opcode::CALL => {
+                    let address = self.data.pop(data);
+                    let address = self.code.jump(address);
+                    self.data.push(address, data);
+                }
                 opcode::PUSH => {
                     let value = self.code.read_value(code);
                     self.data.push(value, data);
@@ -111,7 +116,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::opcode::{
-        AND, CLONE, DROP, JUMP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
+        AND, CALL, CLONE, DROP, JUMP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
     };
 
     use super::Evaluator;
@@ -136,6 +141,20 @@ mod tests {
         );
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
+    }
+
+    #[test]
+    fn call() {
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push(0x00000002, &mut data).evaluate(
+            bc().op(CALL).op(TERMINATE).op(PUSH).u32(0x44332211),
+            &mut data,
+        );
+
+        assert_eq!(evaluator.pop(&mut data), 0x44332211);
+        assert_eq!(evaluator.pop(&mut data), 0x00000001);
     }
 
     #[test]
