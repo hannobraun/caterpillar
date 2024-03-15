@@ -4,13 +4,19 @@ use capi_vm::opcode;
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut bytecode = Vec::new();
+
     let mut labels = BTreeMap::new();
+    let mut references = BTreeMap::new();
 
     let mut instructions = assembly.split_whitespace();
 
     while let Some(instruction) = instructions.next() {
         if let Some((label, "")) = instruction.split_once(':') {
-            labels.insert(label, bytecode.len());
+            let address: u32 = bytecode
+                .len()
+                .try_into()
+                .expect("Failed to convert `usize` to `u32`");
+            labels.insert(label, address);
             continue;
         }
 
@@ -20,6 +26,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
+
+            if let Some(("", reference)) = value.split_once(':') {
+                references.insert(reference, bytecode.len());
+                bytecode.extend([0; 4]);
+                continue;
+            }
 
             let (value, radix) = match value.split_once("0x") {
                 Some(("", value)) => (value, 16),
@@ -74,7 +86,16 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         });
     }
 
-    dbg!(labels);
+    for (reference, position) in references {
+        let Some(address) = labels.get(reference) else {
+            return Err(AssemblerError::UnknownLabel {
+                name: reference.into(),
+            });
+        };
+
+        bytecode[position..position + 4]
+            .copy_from_slice(&address.to_le_bytes());
+    }
 
     Ok(bytecode)
 }
@@ -92,6 +113,9 @@ pub enum AssemblerError {
 
     #[error("Unknown instruction: `{name}`")]
     UnknownInstruction { name: String },
+
+    #[error("Unknown label: `{name}`")]
+    UnknownLabel { name: String },
 }
 
 #[cfg(test)]
@@ -110,6 +134,23 @@ mod tests {
     #[test]
     fn call() -> anyhow::Result<()> {
         let data = assemble("push 7 call terminate push 0x11111111", [0; 8])?;
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x06, 0x00, 0x00, 0x00]);
+        Ok(())
+    }
+
+    #[test]
+    fn call_label() -> anyhow::Result<()> {
+        let data = assemble(
+            "
+            start:
+                push :push
+                call
+                terminate
+            push:
+                push 0x11111111
+            ",
+            [0; 8],
+        )?;
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x06, 0x00, 0x00, 0x00]);
         Ok(())
     }
