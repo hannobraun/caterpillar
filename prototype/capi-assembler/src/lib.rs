@@ -52,6 +52,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "and" => Some(opcode::AND),
             "drop" => Some(opcode::DROP),
             "clone" => Some(opcode::CLONE),
+            "jump" => Some(opcode::JUMP),
             "or" => Some(opcode::OR),
             "rol" => Some(opcode::ROL),
             "store" => Some(opcode::STORE),
@@ -114,6 +115,13 @@ mod tests {
         let data =
             assemble("push 0x11111111 drop push 0x22222222", [0, 0, 0, 0])?;
         assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
+        Ok(())
+    }
+
+    #[test]
+    fn jump() -> anyhow::Result<()> {
+        let data = assemble("push 7 jump terminate push 0x11111111", [0; 4])?;
+        assert_eq!(data, [0x11, 0x11, 0x11, 0x11]);
         Ok(())
     }
 
