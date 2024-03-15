@@ -272,9 +272,12 @@ mod tests {
         evaluator
             .push_u32(0x11111111, &mut data)
             .push_u32(0x22222222, &mut data)
-            .evaluate(bc().op(DROP).w(W32).op(PUSH).u8(0x33), &mut data);
+            .evaluate(
+                bc().op(DROP).w(W32).op(PUSH).w(W32).u32(0x33333333),
+                &mut data,
+            );
 
-        assert_eq!(data, [0x22, 0x22, 0x22, 0x33, 0x11, 0x11, 0x11, 0x11]);
+        assert_eq!(data, [0x33, 0x33, 0x33, 0x33, 0x11, 0x11, 0x11, 0x11]);
     }
 
     #[test]
