@@ -51,7 +51,7 @@ impl Evaluator {
                 opcode::CLONE => {
                     let value = self.data.pop(data);
 
-                    self.data.push(value.clone(), data);
+                    self.data.push(value, data);
                     self.data.push(value, data);
                 }
                 opcode::SWAP => {
