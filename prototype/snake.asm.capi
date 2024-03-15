@@ -1,8 +1,20 @@
 set_pixel:
-    push8 0xff
-    swap8
-    clone8
-    clone8
+set_green:
+    clone32
+    push32 8
+    rol
+    or
+set_blue:
+    clone32
+    push32 0x000000ff
+    and
+    push32 16
+    rol
+    or
+set_alpha:
+    push32 0xff000000
+    or
+store:
     swap32
     store
     terminate
