@@ -30,4 +30,22 @@ impl Code {
 
         buffer.iter().copied()
     }
+
+    pub fn jump_relative(&mut self, offset: i8) {
+        let ptr: isize = self
+            .ptr
+            .try_into()
+            .expect("Couldn't convert code pointer to `isize`");
+        let offset: isize = offset.into();
+
+        let ptr = ptr
+            .checked_add(offset)
+            .expect("Relative jump caused overflow");
+
+        let ptr: usize = ptr
+            .try_into()
+            .expect("Relative jump caused negative overflow");
+
+        self.ptr = ptr;
+    }
 }
