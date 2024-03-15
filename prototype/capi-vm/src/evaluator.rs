@@ -60,46 +60,46 @@ impl Evaluator {
                     self.data.push(value.to_le_bytes(), data);
                 }
                 opcode::DROP => {
-                    let mut buffer = [0; 4];
-                    let _ = self.data.pop(&mut buffer, data);
+                    let buffer = [0; 4];
+                    let _ = self.data.pop(buffer, data);
                 }
                 opcode::STORE => {
                     let address = {
-                        let mut bytes = [0; 4];
-                        let _ = self.data.pop(&mut bytes, data);
+                        let bytes = [0; 4];
+                        let bytes = self.data.pop(bytes, data);
 
                         u32::from_le_bytes(bytes)
                     };
 
-                    let mut buffer = [0; 4];
-                    let value = self.data.pop(&mut buffer, data);
+                    let buffer = [0; 4];
+                    let value = self.data.pop(buffer, data);
 
                     self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
-                    let mut value = [0; 4];
+                    let value = [0; 4];
 
-                    let value = self.data.pop(&mut value, data);
+                    let value = self.data.pop(value, data);
 
                     self.data.push(value.clone(), data);
                     self.data.push(value, data);
                 }
                 opcode::SWAP => {
-                    let mut b = [0; 4];
-                    let mut a = [0; 4];
+                    let b = [0; 4];
+                    let a = [0; 4];
 
-                    let b = self.data.pop(&mut b, data);
-                    let a = self.data.pop(&mut a, data);
+                    let b = self.data.pop(b, data);
+                    let a = self.data.pop(a, data);
 
                     self.data.push(b, data);
                     self.data.push(a, data);
                 }
                 opcode::AND => {
-                    let mut b = [0; 4];
-                    let mut a = [0; 4];
+                    let b = [0; 4];
+                    let a = [0; 4];
 
-                    let _ = self.data.pop(&mut b, data);
-                    let _ = self.data.pop(&mut a, data);
+                    let b = self.data.pop(b, data);
+                    let a = self.data.pop(a, data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);
@@ -109,11 +109,11 @@ impl Evaluator {
                     self.data.push(r.to_le_bytes(), data);
                 }
                 opcode::OR => {
-                    let mut b = [0; 4];
-                    let mut a = [0; 4];
+                    let b = [0; 4];
+                    let a = [0; 4];
 
-                    let _ = self.data.pop(&mut b, data);
-                    let _ = self.data.pop(&mut a, data);
+                    let b = self.data.pop(b, data);
+                    let a = self.data.pop(a, data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);
@@ -123,11 +123,11 @@ impl Evaluator {
                     self.data.push(r.to_le_bytes(), data);
                 }
                 opcode::ROL => {
-                    let mut b = [0; 4];
-                    let mut a = [0; 4];
+                    let b = [0; 4];
+                    let a = [0; 4];
 
-                    let _ = self.data.pop(&mut b, data);
-                    let _ = self.data.pop(&mut a, data);
+                    let b = self.data.pop(b, data);
+                    let a = self.data.pop(a, data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);
