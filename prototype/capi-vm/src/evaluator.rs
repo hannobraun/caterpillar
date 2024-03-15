@@ -1,4 +1,5 @@
 use crate::{
+    code::Code,
     opcode,
     width::{Width, MAX_WIDTH_BYTES, W16, W32, W64, W8},
 };
@@ -6,14 +7,14 @@ use crate::{
 use super::data::Data;
 
 pub struct Evaluator {
-    code_ptr: usize,
+    code: Code,
     data: Data,
 }
 
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
         Self {
-            code_ptr: 0,
+            code: Code::new(),
             data: Data::new(data),
         }
     }
@@ -40,10 +41,10 @@ impl Evaluator {
 
     pub fn evaluate(&mut self, code: impl AsRef<[u8]>, data: &mut [u8]) {
         let code = code.as_ref();
-        self.code_ptr = 0;
+        self.code.ptr = 0;
 
         loop {
-            let Some(&instruction) = code.get(self.code_ptr) else {
+            let Some(&instruction) = code.get(self.code.ptr) else {
                 break;
             };
 
@@ -67,8 +68,8 @@ impl Evaluator {
                     let value = &mut buffer[0..width.num_bytes];
 
                     for b in value {
-                        self.code_ptr += 1;
-                        *b = code[self.code_ptr];
+                        self.code.ptr += 1;
+                        *b = code[self.code.ptr];
                     }
 
                     self.data
@@ -119,7 +120,7 @@ impl Evaluator {
                 }
             }
 
-            self.code_ptr += 1;
+            self.code.ptr += 1;
         }
     }
 }
