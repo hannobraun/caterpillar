@@ -122,16 +122,18 @@ mod tests {
     use super::Evaluator;
 
     #[test]
-    fn terminate() {
+    fn terminate() -> anyhow::Result<()> {
         let mut data = [];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator.evaluate(bc().op(TERMINATE), &mut data);
         // This should not run forever, nor cause any kind of panic.
+
+        Ok(())
     }
 
     #[test]
-    fn jump() {
+    fn jump() -> anyhow::Result<()> {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
@@ -141,10 +143,11 @@ mod tests {
         );
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
+        Ok(())
     }
 
     #[test]
-    fn call() {
+    fn call() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -155,20 +158,22 @@ mod tests {
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
         assert_eq!(evaluator.pop(&mut data), 0x00000001);
+        Ok(())
     }
 
     #[test]
-    fn push() {
+    fn push() -> anyhow::Result<()> {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator.evaluate(bc().op(PUSH).u32(0x44332211), &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0x44332211);
+        Ok(())
     }
 
     #[test]
-    fn drop() {
+    fn drop() -> anyhow::Result<()> {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
@@ -178,10 +183,11 @@ mod tests {
             .push(0x22222222, &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0x22222222);
+        Ok(())
     }
 
     #[test]
-    fn store() {
+    fn store() -> anyhow::Result<()> {
         let mut data = [0; 16];
         let mut evaluator = Evaluator::new(&data);
 
@@ -191,10 +197,11 @@ mod tests {
             .evaluate(bc().op(STORE), &mut data);
 
         assert_eq!(data[..8], [0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]);
+        Ok(())
     }
 
     #[test]
-    fn clone() {
+    fn clone() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -204,10 +211,11 @@ mod tests {
 
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
+        Ok(())
     }
 
     #[test]
-    fn swap() {
+    fn swap() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -218,10 +226,11 @@ mod tests {
 
         assert_eq!(evaluator.pop(&mut data), 0x11111111);
         assert_eq!(evaluator.pop(&mut data), 0x22222222);
+        Ok(())
     }
 
     #[test]
-    fn and() {
+    fn and() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -231,10 +240,11 @@ mod tests {
             .evaluate(bc().op(AND), &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0x00000011);
+        Ok(())
     }
 
     #[test]
-    fn or() {
+    fn or() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -244,10 +254,11 @@ mod tests {
             .evaluate(bc().op(OR), &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0x65432100);
+        Ok(())
     }
 
     #[test]
-    fn rol() {
+    fn rol() -> anyhow::Result<()> {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
@@ -257,6 +268,7 @@ mod tests {
             .evaluate(bc().op(ROL), &mut data);
 
         assert_eq!(evaluator.pop(&mut data), 0xff00ff00);
+        Ok(())
     }
 
     pub fn bc() -> Bytecode {
