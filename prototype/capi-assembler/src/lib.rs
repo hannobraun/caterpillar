@@ -96,7 +96,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         let opcode_and_width = match instruction {
-            "drop32" => Some((opcode::DROP, W32::INFO)),
+            "drop" => Some((opcode::DROP, W32::INFO)),
             "clone8" => Some((opcode::CLONE, W8::INFO)),
             "clone16" => Some((opcode::CLONE, W16::INFO)),
             "clone32" => Some((opcode::CLONE, W32::INFO)),
@@ -175,10 +175,8 @@ mod tests {
 
     #[test]
     fn drop32() -> anyhow::Result<()> {
-        let data = assemble(
-            "push32 0x11111111 drop32 push32 0x22222222",
-            [0, 0, 0, 0],
-        )?;
+        let data =
+            assemble("push32 0x11111111 drop push32 0x22222222", [0, 0, 0, 0])?;
         assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }
