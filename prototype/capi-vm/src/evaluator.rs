@@ -388,7 +388,7 @@ mod tests {
         );
     }
     #[test]
-    fn clone32() {
+    fn clone() {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
 
