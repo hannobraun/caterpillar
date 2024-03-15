@@ -38,13 +38,12 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 }
             };
 
-            let buffer = u32::from_str_radix(value, radix)
+            let value = &u32::from_str_radix(value, radix)
                 .map_err(|err| AssemblerError::ParseValue {
                     value: value.to_owned(),
                     source: err,
                 })?
-                .to_le_bytes();
-            let value = &buffer[..width.num_bytes];
+                .to_le_bytes()[..width.num_bytes];
 
             bytecode.push(opcode::PUSH | width.flag);
             for &b in value {
