@@ -43,6 +43,10 @@ impl Evaluator {
                 opcode::TERMINATE => {
                     break;
                 }
+                opcode::JUMP => {
+                    let address = self.data.pop(data);
+                    self.code.jump(address);
+                }
                 opcode::PUSH => {
                     let value = self.code.read_value(code);
                     self.data.push(value, data);
@@ -107,7 +111,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::opcode::{
-        AND, CLONE, DROP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
+        AND, CLONE, DROP, JUMP, OR, PUSH, ROL, STORE, SWAP, TERMINATE,
     };
 
     use super::Evaluator;
@@ -119,6 +123,19 @@ mod tests {
 
         evaluator.evaluate(bc().op(TERMINATE), &mut data);
         // This should not run forever, nor cause any kind of panic.
+    }
+
+    #[test]
+    fn jump() {
+        let mut data = [0; 4];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator.push(0x00000002, &mut data).evaluate(
+            bc().op(JUMP).op(TERMINATE).op(PUSH).u32(0x44332211),
+            &mut data,
+        );
+
+        assert_eq!(evaluator.pop(&mut data), 0x44332211);
     }
 
     #[test]

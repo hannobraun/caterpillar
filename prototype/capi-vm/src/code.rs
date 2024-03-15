@@ -28,4 +28,11 @@ impl Code {
 
         u32::from_le_bytes(buffer)
     }
+
+    pub fn jump(&mut self, address: u32) {
+        let ptr: usize = address
+            .try_into()
+            .expect("Expected to run on 32-bit platform");
+        self.ptr = ptr;
+    }
 }
