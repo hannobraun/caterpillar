@@ -17,16 +17,8 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             continue;
         }
 
-        if instruction.starts_with("push") {
-            let width = match instruction {
-                "push" => W32::INFO,
-
-                _ => {
-                    return Err(AssemblerError::UnknownInstruction {
-                        name: instruction.to_string(),
-                    });
-                }
-            };
+        if instruction == "push" {
+            let width = W32::INFO;
 
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
