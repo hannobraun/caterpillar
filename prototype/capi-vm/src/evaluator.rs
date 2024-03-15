@@ -60,46 +60,35 @@ impl Evaluator {
                     self.data.push(value.to_le_bytes(), data);
                 }
                 opcode::DROP => {
-                    let buffer = [0; 4];
-                    let _ = self.data.pop(buffer, data);
+                    let _ = self.data.pop(data);
                 }
                 opcode::STORE => {
                     let address = {
-                        let bytes = [0; 4];
-                        let bytes = self.data.pop(bytes, data);
+                        let bytes = self.data.pop(data);
 
                         u32::from_le_bytes(bytes)
                     };
 
-                    let buffer = [0; 4];
-                    let value = self.data.pop(buffer, data);
+                    let value = self.data.pop(data);
 
                     self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
-                    let value = [0; 4];
-
-                    let value = self.data.pop(value, data);
+                    let value = self.data.pop(data);
 
                     self.data.push(value.clone(), data);
                     self.data.push(value, data);
                 }
                 opcode::SWAP => {
-                    let b = [0; 4];
-                    let a = [0; 4];
-
-                    let b = self.data.pop(b, data);
-                    let a = self.data.pop(a, data);
+                    let b = self.data.pop(data);
+                    let a = self.data.pop(data);
 
                     self.data.push(b, data);
                     self.data.push(a, data);
                 }
                 opcode::AND => {
-                    let b = [0; 4];
-                    let a = [0; 4];
-
-                    let b = self.data.pop(b, data);
-                    let a = self.data.pop(a, data);
+                    let b = self.data.pop(data);
+                    let a = self.data.pop(data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);
@@ -109,11 +98,8 @@ impl Evaluator {
                     self.data.push(r.to_le_bytes(), data);
                 }
                 opcode::OR => {
-                    let b = [0; 4];
-                    let a = [0; 4];
-
-                    let b = self.data.pop(b, data);
-                    let a = self.data.pop(a, data);
+                    let b = self.data.pop(data);
+                    let a = self.data.pop(data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);
@@ -123,11 +109,8 @@ impl Evaluator {
                     self.data.push(r.to_le_bytes(), data);
                 }
                 opcode::ROL => {
-                    let b = [0; 4];
-                    let a = [0; 4];
-
-                    let b = self.data.pop(b, data);
-                    let a = self.data.pop(a, data);
+                    let b = self.data.pop(data);
+                    let a = self.data.pop(data);
 
                     let b = u32::from_le_bytes(b);
                     let a = u32::from_le_bytes(a);

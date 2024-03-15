@@ -30,7 +30,9 @@ impl Data {
         }
     }
 
-    pub fn pop(&mut self, mut buffer: [u8; 4], data: &mut [u8]) -> [u8; 4] {
+    pub fn pop(&mut self, data: &mut [u8]) -> [u8; 4] {
+        let mut buffer = [0; 4];
+
         for b in buffer.iter_mut() {
             self.stack_ptr += 1;
             *b = data[self.stack_ptr.0];
