@@ -40,20 +40,14 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
 
             let mut buffer = [0; 8];
 
-            let mut parse = || -> Result<(), AssemblerError> {
-                buffer[..W32::INFO.num_bytes].copy_from_slice(
-                    &u32::from_str_radix(value, radix)
-                        .map_err(|err| AssemblerError::ParseValue {
-                            value: value.to_owned(),
-                            source: err,
-                        })?
-                        .to_le_bytes(),
-                );
-
-                Ok(())
-            };
-
-            parse()?;
+            buffer[..W32::INFO.num_bytes].copy_from_slice(
+                &u32::from_str_radix(value, radix)
+                    .map_err(|err| AssemblerError::ParseValue {
+                        value: value.to_owned(),
+                        source: err,
+                    })?
+                    .to_le_bytes(),
+            );
             let value = &buffer[..width.num_bytes];
 
             bytecode.push(opcode::PUSH | width.flag);
