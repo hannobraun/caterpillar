@@ -1,16 +1,16 @@
-use std::num::ParseIntError;
+use std::{collections::BTreeMap, num::ParseIntError};
 
 use capi_vm::opcode;
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
     let mut bytecode = Vec::new();
+    let mut labels = BTreeMap::new();
 
     let mut instructions = assembly.split_whitespace();
 
     while let Some(instruction) = instructions.next() {
-        if instruction.ends_with(':') {
-            // This is a label. Currently they serve a function more like
-            // comments, and are ignored.
+        if let Some((label, "")) = instruction.split_once(':') {
+            labels.insert(label, bytecode.len());
             continue;
         }
 
@@ -72,6 +72,8 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             name: instruction.into(),
         });
     }
+
+    dbg!(labels);
 
     Ok(bytecode)
 }
