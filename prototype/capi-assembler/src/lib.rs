@@ -172,13 +172,6 @@ mod tests {
     }
 
     #[test]
-    fn push8_decimal() -> anyhow::Result<()> {
-        let data = assemble("push8 255", [0])?;
-        assert_eq!(data, [255]);
-        Ok(())
-    }
-
-    #[test]
     fn push8() -> anyhow::Result<()> {
         let data = assemble("push8 0x11", [0])?;
         assert_eq!(data, [0x11]);
@@ -195,6 +188,13 @@ mod tests {
     #[test]
     fn push32() -> anyhow::Result<()> {
         let data = assemble("push32 0x44332211", [0, 0, 0, 0])?;
+        assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
+        Ok(())
+    }
+
+    #[test]
+    fn push_decimal() -> anyhow::Result<()> {
+        let data = assemble("push32 1144201745", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
         Ok(())
     }
