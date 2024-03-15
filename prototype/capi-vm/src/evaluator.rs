@@ -323,7 +323,7 @@ mod tests {
     }
 
     #[test]
-    fn store32() {
+    fn store() {
         let mut data = [0; 16];
         let mut evaluator = Evaluator::new(&data);
 
