@@ -17,4 +17,5 @@ set_alpha:
 store:
     swap
     store
+terminate:
     terminate
