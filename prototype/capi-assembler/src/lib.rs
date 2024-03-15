@@ -15,6 +15,8 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         if instruction == "push" {
+            bytecode.push(opcode::PUSH);
+
             let Some(value) = instructions.next() else {
                 return Err(AssemblerError::PushCameLast);
             };
@@ -40,7 +42,6 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 }
             })?;
 
-            bytecode.push(opcode::PUSH);
             for b in value.to_le_bytes() {
                 bytecode.push(b);
             }
