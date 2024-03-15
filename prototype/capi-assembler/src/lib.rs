@@ -102,7 +102,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "or" => Some((opcode::OR, W32::INFO)),
             "rol" => Some((opcode::ROL, W32::INFO)),
             "store" => Some((opcode::STORE, W32::INFO)),
-            "swap32" => Some((opcode::SWAP, W32::INFO)),
+            "swap" => Some((opcode::SWAP, W32::INFO)),
             "terminate" => Some((opcode::TERMINATE, W8::INFO)),
 
             _ => None,
@@ -230,7 +230,7 @@ mod tests {
     #[test]
     fn swap32() -> anyhow::Result<()> {
         let data =
-            assemble("push32 0x11111111 push32 0x22222222 swap32", [0; 8])?;
+            assemble("push32 0x11111111 push32 0x22222222 swap", [0; 8])?;
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }

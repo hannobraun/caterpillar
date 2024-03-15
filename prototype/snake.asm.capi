@@ -15,6 +15,6 @@ set_alpha:
     push32 0xff000000
     or
 store:
-    swap32
+    swap
     store
     terminate
