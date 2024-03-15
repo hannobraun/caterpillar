@@ -20,6 +20,10 @@ impl Evaluator {
         self
     }
 
+    pub fn pop(&mut self, data: &mut [u8]) -> u32 {
+        self.data.pop(data)
+    }
+
     pub fn evaluate(&mut self, code: impl AsRef<[u8]>, data: &mut [u8]) {
         let code = code.as_ref();
         self.code.reset();
@@ -118,7 +122,7 @@ mod tests {
 
         evaluator.evaluate(bc().op(PUSH).u32(0x44332211), &mut data);
 
-        assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
+        assert_eq!(evaluator.pop(&mut data), 0x44332211);
     }
 
     #[test]
