@@ -64,10 +64,10 @@ mod tests {
 
     #[test]
     fn fill_memory_completely() {
-        let mut memory = [0; 1];
+        let mut memory = [0; 4];
         let mut data = Data::new(&memory);
 
-        data.push([0], &mut memory);
+        data.push([0; 4], &mut memory);
         // Should not panic. It will, in debug mode, unless wrapping is handled
         // correctly.
     }
