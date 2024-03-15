@@ -174,7 +174,7 @@ mod tests {
     }
 
     #[test]
-    fn drop32() -> anyhow::Result<()> {
+    fn drop() -> anyhow::Result<()> {
         let data =
             assemble("push32 0x11111111 drop push32 0x22222222", [0, 0, 0, 0])?;
         assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
