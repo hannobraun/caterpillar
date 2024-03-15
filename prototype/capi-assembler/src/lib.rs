@@ -36,7 +36,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 }
             };
 
-            let value = &u32::from_str_radix(value, radix)
+            let value = u32::from_str_radix(value, radix)
                 .map_err(|err| AssemblerError::ParseValue {
                     value: value.to_owned(),
                     source: err,
@@ -44,7 +44,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                 .to_le_bytes();
 
             bytecode.push(opcode::PUSH | W32::FLAG);
-            for &b in value {
+            for b in value {
                 bytecode.push(b);
             }
 
