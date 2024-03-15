@@ -44,10 +44,9 @@ impl Evaluator {
         self.code.ptr = 0;
 
         loop {
-            let Some(&instruction) = code.get(self.code.ptr) else {
+            let Some(instruction) = self.code.read_instruction(code) else {
                 break;
             };
-            self.code.ptr += 1;
 
             let opcode = instruction & 0x3f;
             let width = instruction & 0xc0;
