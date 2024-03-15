@@ -121,14 +121,14 @@ impl Evaluator {
                     self.data.push(b, data);
                 }
                 opcode::AND => {
-                    let mut a = [0; 4];
                     let mut b = [0; 4];
+                    let mut a = [0; 4];
 
-                    let _ = self.data.pop(&mut a, data);
                     let _ = self.data.pop(&mut b, data);
+                    let _ = self.data.pop(&mut a, data);
 
-                    let a = u32::from_le_bytes(a);
                     let b = u32::from_le_bytes(b);
+                    let a = u32::from_le_bytes(a);
 
                     let r = a & b;
 
