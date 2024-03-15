@@ -20,9 +20,9 @@ impl Data {
     }
 
     pub fn push(&mut self, value: u32, data: &mut [u8]) {
-        let value = value.to_le_bytes();
+        let bytes = value.to_le_bytes();
 
-        for b in value.into_iter().rev() {
+        for b in bytes.into_iter().rev() {
             data[self.stack_ptr.0] = b;
             self.stack_ptr -= 1;
         }
