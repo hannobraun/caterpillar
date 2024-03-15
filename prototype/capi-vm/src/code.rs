@@ -7,6 +7,10 @@ impl Code {
         Self { ptr: 0 }
     }
 
+    pub fn reset(&mut self) {
+        self.ptr = 0;
+    }
+
     pub fn read_instruction(&mut self, code: &[u8]) -> Option<u8> {
         let instruction = code.get(self.ptr).copied();
         self.ptr += 1;

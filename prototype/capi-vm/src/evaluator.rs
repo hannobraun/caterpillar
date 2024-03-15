@@ -41,7 +41,7 @@ impl Evaluator {
 
     pub fn evaluate(&mut self, code: impl AsRef<[u8]>, data: &mut [u8]) {
         let code = code.as_ref();
-        self.code.ptr = 0;
+        self.code.reset();
 
         loop {
             let Some(instruction) = self.code.read_instruction(code) else {
