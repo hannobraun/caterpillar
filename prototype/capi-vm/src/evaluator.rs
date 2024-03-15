@@ -63,35 +63,28 @@ impl Evaluator {
                     let _ = self.data.pop(data);
                 }
                 opcode::STORE => {
-                    let address = {
-                        let bytes = self.data.pop(data);
-
-                        u32::from_le_bytes(bytes)
-                    };
+                    let address = self.data.pop(data);
 
                     let value = self.data.pop(data);
 
-                    self.data.store(address, value, data);
+                    self.data.store(address, value.to_le_bytes(), data);
                 }
                 opcode::CLONE => {
                     let value = self.data.pop(data);
 
-                    self.data.push(value.clone(), data);
-                    self.data.push(value, data);
+                    self.data.push(value.to_le_bytes().clone(), data);
+                    self.data.push(value.to_le_bytes(), data);
                 }
                 opcode::SWAP => {
                     let b = self.data.pop(data);
                     let a = self.data.pop(data);
 
-                    self.data.push(b, data);
-                    self.data.push(a, data);
+                    self.data.push(b.to_le_bytes(), data);
+                    self.data.push(a.to_le_bytes(), data);
                 }
                 opcode::AND => {
                     let b = self.data.pop(data);
                     let a = self.data.pop(data);
-
-                    let b = u32::from_le_bytes(b);
-                    let a = u32::from_le_bytes(a);
 
                     let r = a & b;
 
@@ -101,9 +94,6 @@ impl Evaluator {
                     let b = self.data.pop(data);
                     let a = self.data.pop(data);
 
-                    let b = u32::from_le_bytes(b);
-                    let a = u32::from_le_bytes(a);
-
                     let r = a | b;
 
                     self.data.push(r.to_le_bytes(), data);
@@ -111,9 +101,6 @@ impl Evaluator {
                 opcode::ROL => {
                     let b = self.data.pop(data);
                     let a = self.data.pop(data);
-
-                    let b = u32::from_le_bytes(b);
-                    let a = u32::from_le_bytes(a);
 
                     let r = a.rotate_left(b);
 

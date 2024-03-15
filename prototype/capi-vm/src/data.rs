@@ -30,7 +30,7 @@ impl Data {
         }
     }
 
-    pub fn pop(&mut self, data: &mut [u8]) -> [u8; 4] {
+    pub fn pop(&mut self, data: &mut [u8]) -> u32 {
         let mut buffer = [0; 4];
 
         for b in buffer.iter_mut() {
@@ -38,7 +38,7 @@ impl Data {
             *b = data[self.stack_ptr.0];
         }
 
-        buffer
+        u32::from_le_bytes(buffer)
     }
 
     pub fn store(
