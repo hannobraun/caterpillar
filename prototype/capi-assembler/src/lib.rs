@@ -102,6 +102,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
             "clone16" => Some((opcode::CLONE, W16::INFO)),
             "clone32" => Some((opcode::CLONE, W32::INFO)),
             "clone64" => Some((opcode::CLONE, W64::INFO)),
+            "rol" => Some((opcode::ROL, W32::INFO)),
             "store" => Some((opcode::STORE, W32::INFO)),
             "swap8" => Some((opcode::SWAP, W8::INFO)),
             "swap16" => Some((opcode::SWAP, W16::INFO)),
@@ -222,6 +223,13 @@ mod tests {
         let data =
             assemble("push64 0x8877665544332211", [0, 0, 0, 0, 0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
+        Ok(())
+    }
+
+    #[test]
+    fn rol() -> anyhow::Result<()> {
+        let data = assemble("push32 0x00ff00ff push32 8 rol", [0; 8])?;
+        assert_eq!(data, [0x08, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff]);
         Ok(())
     }
 
