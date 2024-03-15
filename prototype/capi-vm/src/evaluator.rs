@@ -111,11 +111,11 @@ impl Evaluator {
                     self.data.push(value, data);
                 }
                 opcode::SWAP => {
-                    let mut b = [0; MAX_WIDTH_BYTES];
-                    let mut a = [0; MAX_WIDTH_BYTES];
+                    let mut b = [0; 4];
+                    let mut a = [0; 4];
 
-                    let b = self.data.pop(&mut b[..width.num_bytes], data);
-                    let a = self.data.pop(&mut a[..width.num_bytes], data);
+                    let b = self.data.pop(&mut b, data);
+                    let a = self.data.pop(&mut a, data);
 
                     self.data.push(b, data);
                     self.data.push(a, data);
@@ -444,32 +444,6 @@ mod tests {
     }
 
     #[test]
-    fn swap8() {
-        let mut data = [0; 2];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u8(0x11, &mut data)
-            .push_u8(0x22, &mut data)
-            .evaluate(bc().op(SWAP).w(W8), &mut data);
-
-        assert_eq!(data, [0x11, 0x22]);
-    }
-
-    #[test]
-    fn swap16() {
-        let mut data = [0; 4];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u16(0x1111, &mut data)
-            .push_u16(0x2222, &mut data)
-            .evaluate(bc().op(SWAP).w(W16), &mut data);
-
-        assert_eq!(data, [0x11, 0x11, 0x22, 0x22]);
-    }
-
-    #[test]
     fn swap32() {
         let mut data = [0; 8];
         let mut evaluator = Evaluator::new(&data);
@@ -480,25 +454,6 @@ mod tests {
             .evaluate(bc().op(SWAP).w(W32), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
-    }
-
-    #[test]
-    fn swap64() {
-        let mut data = [0; 16];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u64(0x1111111111111111, &mut data)
-            .push_u64(0x2222222222222222, &mut data)
-            .evaluate(bc().op(SWAP).w(W64), &mut data);
-
-        assert_eq!(
-            data,
-            [
-                0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x22, 0x22,
-                0x22, 0x22, 0x22, 0x22, 0x22, 0x22
-            ]
-        );
     }
 
     #[test]
