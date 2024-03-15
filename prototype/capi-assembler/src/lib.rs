@@ -247,7 +247,7 @@ mod tests {
     }
 
     #[test]
-    fn store32() -> anyhow::Result<()> {
+    fn store() -> anyhow::Result<()> {
         let data = assemble(
             "push32 0x44332211 push32 0 store",
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
