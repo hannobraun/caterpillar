@@ -96,6 +96,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         let opcode_and_width = match instruction {
+            "and" => Some((opcode::AND, W32::INFO)),
             "drop" => Some((opcode::DROP, W32::INFO)),
             "clone8" => Some((opcode::CLONE, W8::INFO)),
             "clone16" => Some((opcode::CLONE, W16::INFO)),
@@ -144,6 +145,13 @@ mod tests {
     use capi_vm::Evaluator;
 
     use crate::AssemblerError;
+
+    #[test]
+    fn and() -> anyhow::Result<()> {
+        let data = assemble("push32 0x11111111 push32 0x000000ff and", [0; 8])?;
+        assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
+        Ok(())
+    }
 
     #[test]
     fn clone8() -> anyhow::Result<()> {
