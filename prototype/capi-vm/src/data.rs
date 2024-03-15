@@ -43,9 +43,9 @@ impl Data {
         let mut address: usize = address
             .try_into()
             .expect("Couldn't convert address to usize");
-        let value = value.to_le_bytes();
+        let bytes = value.to_le_bytes();
 
-        for b in value {
+        for b in bytes {
             data[address] = b;
             address += 1;
         }
