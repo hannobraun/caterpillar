@@ -122,7 +122,7 @@ mod tests {
     }
 
     #[test]
-    fn push32() {
+    fn push() {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
