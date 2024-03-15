@@ -194,7 +194,7 @@ mod tests {
             .push(0x000000ff, &mut data)
             .evaluate(bc().op(AND), &mut data);
 
-        assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
+        assert_eq!(evaluator.pop(&mut data), 0x00000011);
     }
 
     #[test]
