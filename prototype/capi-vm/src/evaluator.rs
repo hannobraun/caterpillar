@@ -11,8 +11,9 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
-        let data = Data::new(data);
-        Self { data }
+        Self {
+            data: Data::new(data),
+        }
     }
 
     pub fn push_u8(&mut self, value: u8, data: &mut [u8]) -> &mut Self {
