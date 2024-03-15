@@ -57,7 +57,6 @@ impl Evaluator {
                 }
                 opcode::PUSH => {
                     let value = self.code.read_value(code);
-
                     self.data.push(value.to_le_bytes(), data);
                 }
                 opcode::DROP => {
