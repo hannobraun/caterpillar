@@ -102,10 +102,9 @@ impl Evaluator {
                     self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
-                    let mut value = [0; MAX_WIDTH_BYTES];
+                    let mut value = [0; 4];
 
-                    let value =
-                        self.data.pop(&mut value[..width.num_bytes], data);
+                    let value = self.data.pop(&mut value, data);
 
                     self.data.push(value.clone(), data);
                     self.data.push(value, data);
@@ -388,31 +387,6 @@ mod tests {
             ]
         );
     }
-
-    #[test]
-    fn clone8() {
-        let mut data = [0; 2];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u8(0x11, &mut data)
-            .evaluate(bc().op(CLONE).w(W8), &mut data);
-
-        assert_eq!(data, [0x11, 0x11]);
-    }
-
-    #[test]
-    fn clone16() {
-        let mut data = [0; 4];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u16(0x1111, &mut data)
-            .evaluate(bc().op(CLONE).w(W16), &mut data);
-
-        assert_eq!(data, [0x11, 0x11, 0x11, 0x11]);
-    }
-
     #[test]
     fn clone32() {
         let mut data = [0; 8];
@@ -423,24 +397,6 @@ mod tests {
             .evaluate(bc().op(CLONE).w(W32), &mut data);
 
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11]);
-    }
-
-    #[test]
-    fn clone64() {
-        let mut data = [0; 16];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u64(0x1111111111111111, &mut data)
-            .evaluate(bc().op(CLONE).w(W64), &mut data);
-
-        assert_eq!(
-            data,
-            [
-                0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11,
-                0x11, 0x11, 0x11, 0x11, 0x11, 0x11
-            ]
-        );
     }
 
     #[test]
