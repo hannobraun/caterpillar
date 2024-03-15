@@ -1,11 +1,11 @@
 set_pixel:
 set_green:
-    clone32
+    clone
     push32 8
     rol
     or
 set_blue:
-    clone32
+    clone
     push32 0x000000ff
     and
     push32 16
