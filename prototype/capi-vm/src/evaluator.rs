@@ -74,41 +74,40 @@ impl Evaluator {
                 opcode::DROP => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = &mut buffer[..width.num_bytes];
-                    self.data.pop(value, data);
+                    let _ = self.data.pop(value, data);
                 }
                 opcode::STORE => {
                     let address = {
                         let mut bytes = [0; 4];
-                        self.data.pop(&mut bytes, data);
+                        let _ = self.data.pop(&mut bytes, data);
 
                         u32::from_le_bytes(bytes)
                     };
 
                     let mut buffer = [0; MAX_WIDTH_BYTES];
                     let value = &mut buffer[..width.num_bytes];
-                    self.data.pop(value, data);
+                    let value = self.data.pop(value, data);
 
-                    self.data.store(address, value.iter().copied(), data);
+                    self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
                     let mut value = [0; MAX_WIDTH_BYTES];
 
-                    self.data.pop(&mut value[..width.num_bytes], data);
+                    let value =
+                        self.data.pop(&mut value[..width.num_bytes], data);
 
-                    self.data
-                        .push(value.into_iter().take(width.num_bytes), data);
-                    self.data
-                        .push(value.into_iter().take(width.num_bytes), data);
+                    self.data.push(value.clone(), data);
+                    self.data.push(value, data);
                 }
                 opcode::SWAP => {
                     let mut a = [0; MAX_WIDTH_BYTES];
                     let mut b = [0; MAX_WIDTH_BYTES];
 
-                    self.data.pop(&mut a[..width.num_bytes], data);
-                    self.data.pop(&mut b[..width.num_bytes], data);
+                    let a = self.data.pop(&mut a[..width.num_bytes], data);
+                    let b = self.data.pop(&mut b[..width.num_bytes], data);
 
-                    self.data.push(a.into_iter().take(width.num_bytes), data);
-                    self.data.push(b.into_iter().take(width.num_bytes), data);
+                    self.data.push(a, data);
+                    self.data.push(b, data);
                 }
                 opcode => {
                     let opcode_as_char: char = opcode.into();

@@ -30,11 +30,17 @@ impl Data {
         }
     }
 
-    pub fn pop(&mut self, value: &mut [u8], data: &mut [u8]) {
+    pub fn pop<'b>(
+        &mut self,
+        value: &'b mut [u8],
+        data: &mut [u8],
+    ) -> impl Iterator<Item = u8> + DoubleEndedIterator + Clone + 'b {
         for b in value.iter_mut() {
             self.stack_ptr += 1;
             *b = data[self.stack_ptr.0];
         }
+
+        value.iter().copied()
     }
 
     pub fn store(
