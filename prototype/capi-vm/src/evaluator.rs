@@ -1,8 +1,4 @@
-use crate::{
-    code::Code,
-    opcode,
-    width::{Width, MAX_WIDTH_BYTES, W16, W32, W64, W8},
-};
+use crate::{code::Code, opcode};
 
 use super::data::Data;
 
@@ -54,25 +50,14 @@ impl Evaluator {
             };
 
             let opcode = instruction & 0x3f;
-            let width = instruction & 0xc0;
-
-            let width = match width {
-                W8::FLAG => W8::INFO,
-                W16::FLAG => W16::INFO,
-                W32::FLAG => W32::INFO,
-                W64::FLAG => W64::INFO,
-                _ => unreachable!("2 bits can encode 4 values"),
-            };
 
             match opcode {
                 opcode::TERMINATE => {
                     break;
                 }
                 opcode::PUSH => {
-                    let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = self
-                        .code
-                        .read_value(&mut buffer[0..width.num_bytes], code);
+                    let mut buffer = [0; 4];
+                    let value = self.code.read_value(&mut buffer, code);
 
                     self.data.push(value, data);
                 }
@@ -166,7 +151,7 @@ impl Evaluator {
 mod tests {
     use crate::{
         opcode::{AND, CLONE, DROP, OR, PUSH, ROL, STORE, SWAP, TERMINATE},
-        width::{Width, W16, W32, W64, W8},
+        width::{Width, W32},
     };
 
     use super::Evaluator;
@@ -181,26 +166,6 @@ mod tests {
     }
 
     #[test]
-    fn push8() {
-        let mut data = [0; 1];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator.evaluate(bc().op(PUSH).w(W8).u8(0x11), &mut data);
-
-        assert_eq!(data, [0x11]);
-    }
-
-    #[test]
-    fn push16() {
-        let mut data = [0; 2];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator.evaluate(bc().op(PUSH).w(W16).u16(0x2211), &mut data);
-
-        assert_eq!(data, [0x11, 0x22]);
-    }
-
-    #[test]
     fn push32() {
         let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
@@ -208,17 +173,6 @@ mod tests {
         evaluator.evaluate(bc().op(PUSH).w(W32).u32(0x44332211), &mut data);
 
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
-    }
-
-    #[test]
-    fn push64() {
-        let mut data = [0; 8];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .evaluate(bc().op(PUSH).w(W64).u64(0x8877665544332211), &mut data);
-
-        assert_eq!(data, [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]);
     }
 
     #[test]
@@ -345,22 +299,7 @@ mod tests {
             self
         }
 
-        pub fn u8(mut self, value: u8) -> Self {
-            self.inner.extend(value.to_le_bytes());
-            self
-        }
-
-        pub fn u16(mut self, value: u16) -> Self {
-            self.inner.extend(value.to_le_bytes());
-            self
-        }
-
         pub fn u32(mut self, value: u32) -> Self {
-            self.inner.extend(value.to_le_bytes());
-            self
-        }
-
-        pub fn u64(mut self, value: u64) -> Self {
             self.inner.extend(value.to_le_bytes());
             self
         }
