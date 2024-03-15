@@ -19,11 +19,9 @@ impl Data {
         Self { stack_ptr: ptr }
     }
 
-    pub fn push<V>(&mut self, value: V, data: &mut [u8])
-    where
-        V: IntoIterator<Item = u8>,
-        V::IntoIter: DoubleEndedIterator,
-    {
+    pub fn push(&mut self, value: u32, data: &mut [u8]) {
+        let value = value.to_le_bytes();
+
         for b in value.into_iter().rev() {
             data[self.stack_ptr.0] = b;
             self.stack_ptr -= 1;
@@ -67,7 +65,7 @@ mod tests {
         let mut memory = [0; 4];
         let mut data = Data::new(&memory);
 
-        data.push([0; 4], &mut memory);
+        data.push(0, &mut memory);
         // Should not panic. It will, in debug mode, unless wrapping is handled
         // correctly.
     }
