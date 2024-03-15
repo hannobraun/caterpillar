@@ -24,7 +24,7 @@ impl Code {
     ) -> impl Iterator<Item = u8> + DoubleEndedIterator + 'b {
         let mut buffer = [0; 4];
 
-        for b in buffer.iter_mut() {
+        for b in &mut buffer {
             *b = code[self.ptr];
             self.ptr += 1;
         }
