@@ -2,7 +2,7 @@ use std::num::ParseIntError;
 
 use capi_vm::{
     opcode,
-    width::{Width, W32, W8},
+    width::{Width, W32},
 };
 
 pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
@@ -63,20 +63,20 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         let opcode_and_width = match instruction {
-            "and" => Some((opcode::AND, W32::INFO)),
-            "drop" => Some((opcode::DROP, W32::INFO)),
-            "clone" => Some((opcode::CLONE, W32::INFO)),
-            "or" => Some((opcode::OR, W32::INFO)),
-            "rol" => Some((opcode::ROL, W32::INFO)),
-            "store" => Some((opcode::STORE, W32::INFO)),
-            "swap" => Some((opcode::SWAP, W32::INFO)),
-            "terminate" => Some((opcode::TERMINATE, W8::INFO)),
+            "and" => Some(opcode::AND),
+            "drop" => Some(opcode::DROP),
+            "clone" => Some(opcode::CLONE),
+            "or" => Some(opcode::OR),
+            "rol" => Some(opcode::ROL),
+            "store" => Some(opcode::STORE),
+            "swap" => Some(opcode::SWAP),
+            "terminate" => Some(opcode::TERMINATE),
 
             _ => None,
         };
 
-        if let Some((opcode, width)) = opcode_and_width {
-            bytecode.push(opcode | width.flag);
+        if let Some(opcode) = opcode_and_width {
+            bytecode.push(opcode | W32::FLAG);
             continue;
         }
 
