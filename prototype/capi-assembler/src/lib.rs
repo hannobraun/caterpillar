@@ -153,7 +153,7 @@ mod tests {
     }
 
     #[test]
-    fn clone32() -> anyhow::Result<()> {
+    fn clone() -> anyhow::Result<()> {
         let data = assemble("push32 0x11111111 clone", [0; 8])?;
         assert_eq!(data, [0x11; 8]);
         Ok(())
