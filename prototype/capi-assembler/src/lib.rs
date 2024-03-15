@@ -169,7 +169,7 @@ mod tests {
     }
 
     #[test]
-    fn push32() -> anyhow::Result<()> {
+    fn push() -> anyhow::Result<()> {
         let data = assemble("push 0x44332211", [0, 0, 0, 0])?;
         assert_eq!(data, [0x11, 0x22, 0x33, 0x44]);
         Ok(())
