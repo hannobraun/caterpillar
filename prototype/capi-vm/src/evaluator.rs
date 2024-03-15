@@ -15,27 +15,7 @@ impl Evaluator {
         }
     }
 
-    pub fn push_i8(&mut self, value: i8, data: &mut [u8]) -> &mut Self {
-        self.data.push(value.to_le_bytes(), data);
-        self
-    }
-
-    pub fn push_u8(&mut self, value: u8, data: &mut [u8]) -> &mut Self {
-        self.data.push(value.to_le_bytes(), data);
-        self
-    }
-
-    pub fn push_u16(&mut self, value: u16, data: &mut [u8]) -> &mut Self {
-        self.data.push(value.to_le_bytes(), data);
-        self
-    }
-
     pub fn push_u32(&mut self, value: u32, data: &mut [u8]) -> &mut Self {
-        self.data.push(value.to_le_bytes(), data);
-        self
-    }
-
-    pub fn push_u64(&mut self, value: u64, data: &mut [u8]) -> &mut Self {
         self.data.push(value.to_le_bytes(), data);
         self
     }
