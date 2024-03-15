@@ -30,9 +30,9 @@ impl Code {
     }
 
     pub fn jump(&mut self, address: u32) {
-        let ptr: usize = address
+        let address: usize = address
             .try_into()
             .expect("Expected to run on 32-bit platform");
-        self.ptr = ptr;
+        self.ptr = address;
     }
 }
