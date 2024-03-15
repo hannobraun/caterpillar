@@ -4,12 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-std = []
+std = ["thiserror"]
+
+
+[dependencies.thiserror]
+version = "*"
+optional = true
 
 
 [dev-dependencies]
 anyhow = "*"
-thiserror = "*"
 
 [dev-dependencies.capi-vm]
 path = "."
