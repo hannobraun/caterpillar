@@ -9,6 +9,7 @@ thiserror = "*"
 
 [dependencies.capi-vm]
 path = "../capi-vm"
+features = ["std"]
 
 
 [dev-dependencies]
