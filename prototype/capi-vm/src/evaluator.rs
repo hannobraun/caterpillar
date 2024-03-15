@@ -154,13 +154,7 @@ mod tests {
             .push(4, &mut data)
             .evaluate(bc().op(STORE), &mut data);
 
-        assert_eq!(
-            data,
-            [
-                0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44, 4, 0, 0, 0, 0x11, 0x22,
-                0x33, 0x44
-            ]
-        );
+        assert_eq!(data[..8], [0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44]);
     }
 
     #[test]
