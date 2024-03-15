@@ -47,6 +47,7 @@ impl Evaluator {
             let Some(&instruction) = code.get(self.code.ptr) else {
                 break;
             };
+            self.code.ptr += 1;
 
             let opcode = instruction & 0x3f;
             let width = instruction & 0xc0;
@@ -68,8 +69,8 @@ impl Evaluator {
                     let value = &mut buffer[0..width.num_bytes];
 
                     for b in value {
-                        self.code.ptr += 1;
                         *b = code[self.code.ptr];
+                        self.code.ptr += 1;
                     }
 
                     self.data
@@ -119,8 +120,6 @@ impl Evaluator {
                     panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
                 }
             }
-
-            self.code.ptr += 1;
         }
     }
 }
