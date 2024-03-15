@@ -228,7 +228,7 @@ mod tests {
     }
 
     #[test]
-    fn swap32() -> anyhow::Result<()> {
+    fn swap() -> anyhow::Result<()> {
         let data =
             assemble("push32 0x11111111 push32 0x22222222 swap", [0; 8])?;
         assert_eq!(data, [0x11, 0x11, 0x11, 0x11, 0x22, 0x22, 0x22, 0x22]);
