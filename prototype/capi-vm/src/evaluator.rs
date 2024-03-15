@@ -73,8 +73,7 @@ impl Evaluator {
                 }
                 opcode::DROP => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[..width.num_bytes];
-                    let _ = self.data.pop(value, data);
+                    let _ = self.data.pop(&mut buffer[..width.num_bytes], data);
                 }
                 opcode::STORE => {
                     let address = {
@@ -85,8 +84,8 @@ impl Evaluator {
                     };
 
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[..width.num_bytes];
-                    let value = self.data.pop(value, data);
+                    let value =
+                        self.data.pop(&mut buffer[..width.num_bytes], data);
 
                     self.data.store(address, value, data);
                 }
