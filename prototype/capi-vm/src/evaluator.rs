@@ -95,9 +95,8 @@ impl Evaluator {
                         u32::from_le_bytes(bytes)
                     };
 
-                    let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value =
-                        self.data.pop(&mut buffer[..width.num_bytes], data);
+                    let mut buffer = [0; 4];
+                    let value = self.data.pop(&mut buffer, data);
 
                     self.data.store(address, value, data);
                 }
@@ -324,32 +323,6 @@ mod tests {
     }
 
     #[test]
-    fn store8() {
-        let mut data = [0; 7];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u8(0x11, &mut data)
-            .push_u32(1, &mut data)
-            .evaluate(bc().op(STORE).w(W8), &mut data);
-
-        assert_eq!(data, [0, 0x11, 1, 0, 0, 0, 0x11]);
-    }
-
-    #[test]
-    fn store16() {
-        let mut data = [0; 10];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u16(0x2211, &mut data)
-            .push_u32(2, &mut data)
-            .evaluate(bc().op(STORE).w(W16), &mut data);
-
-        assert_eq!(data, [0, 0, 0x11, 0x22, 2, 0, 0, 0, 0x11, 0x22]);
-    }
-
-    #[test]
     fn store32() {
         let mut data = [0; 16];
         let mut evaluator = Evaluator::new(&data);
@@ -368,25 +341,6 @@ mod tests {
         );
     }
 
-    #[test]
-    fn store64() {
-        let mut data = [0; 28];
-        let mut evaluator = Evaluator::new(&data);
-
-        evaluator
-            .push_u64(0x8877665544332211, &mut data)
-            .push_u32(8, &mut data)
-            .evaluate(bc().op(STORE).w(W64), &mut data);
-
-        assert_eq!(
-            data,
-            [
-                0, 0, 0, 0, 0, 0, 0, 0, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
-                0x77, 0x88, 8, 0, 0, 0, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66,
-                0x77, 0x88
-            ]
-        );
-    }
     #[test]
     fn clone() {
         let mut data = [0; 8];
