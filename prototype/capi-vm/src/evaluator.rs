@@ -133,15 +133,15 @@ mod tests {
 
     #[test]
     fn drop() {
-        let mut data = [0; 8];
+        let mut data = [0; 4];
         let mut evaluator = Evaluator::new(&data);
 
         evaluator
             .push(0x11111111, &mut data)
-            .push(0x22222222, &mut data)
-            .evaluate(bc().op(DROP).op(PUSH).u32(0x33333333), &mut data);
+            .evaluate(bc().op(DROP), &mut data)
+            .push(0x22222222, &mut data);
 
-        assert_eq!(data, [0x33, 0x33, 0x33, 0x33, 0x11, 0x11, 0x11, 0x11]);
+        assert_eq!(evaluator.pop(&mut data), 0x22222222);
     }
 
     #[test]
