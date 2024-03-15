@@ -20,7 +20,7 @@ impl Code {
 
     pub fn read_value<'b>(
         &mut self,
-        buffer: &'b mut [u8],
+        mut buffer: [u8; 4],
         code: &[u8],
     ) -> impl Iterator<Item = u8> + DoubleEndedIterator + 'b {
         for b in buffer.iter_mut() {
@@ -28,6 +28,6 @@ impl Code {
             self.ptr += 1;
         }
 
-        buffer.iter().copied()
+        buffer.into_iter()
     }
 }
