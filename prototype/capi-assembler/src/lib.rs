@@ -43,7 +43,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
                     value: value.to_owned(),
                     source: err,
                 })?
-                .to_le_bytes()[..width.num_bytes];
+                .to_le_bytes();
 
             bytecode.push(opcode::PUSH | width.flag);
             for &b in value {
