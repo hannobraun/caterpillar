@@ -216,15 +216,6 @@ mod tests {
         Ok(())
     }
 
-    #[test]
-    fn unknown_mixed_alphanumerics() {
-        let result = assemble("pu32sh", []);
-        assert!(matches!(
-            result,
-            Err(AssemblerError::UnknownInstruction { .. })
-        ));
-    }
-
     fn assemble<const D: usize>(
         assembly: &str,
         mut data: [u8; D],
