@@ -12,4 +12,17 @@ impl Code {
         self.ptr += 1;
         instruction
     }
+
+    pub fn read_value<'b>(
+        &mut self,
+        buffer: &'b mut [u8],
+        code: &[u8],
+    ) -> impl Iterator<Item = u8> + DoubleEndedIterator + 'b {
+        for b in buffer.iter_mut() {
+            *b = code[self.ptr];
+            self.ptr += 1;
+        }
+
+        buffer.iter().copied()
+    }
 }

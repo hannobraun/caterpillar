@@ -65,15 +65,11 @@ impl Evaluator {
                 }
                 opcode::PUSH => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
-                    let value = &mut buffer[0..width.num_bytes];
+                    let value = self
+                        .code
+                        .read_value(&mut buffer[0..width.num_bytes], code);
 
-                    for b in value {
-                        *b = code[self.code.ptr];
-                        self.code.ptr += 1;
-                    }
-
-                    self.data
-                        .push(buffer.into_iter().take(width.num_bytes), data);
+                    self.data.push(value, data);
                 }
                 opcode::DROP => {
                     let mut buffer = [0; MAX_WIDTH_BYTES];
