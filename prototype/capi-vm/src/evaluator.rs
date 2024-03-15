@@ -134,6 +134,20 @@ impl Evaluator {
 
                     self.data.push(r.to_le_bytes(), data);
                 }
+                opcode::ROL => {
+                    let mut b = [0; 4];
+                    let mut a = [0; 4];
+
+                    let _ = self.data.pop(&mut b, data);
+                    let _ = self.data.pop(&mut a, data);
+
+                    let b = u32::from_le_bytes(b);
+                    let a = u32::from_le_bytes(a);
+
+                    let r = a.rotate_left(b);
+
+                    self.data.push(r.to_le_bytes(), data);
+                }
                 opcode => {
                     let opcode_as_char: char = opcode.into();
                     panic!("Unknown opcode: `{opcode_as_char}` ({opcode:#x})");
@@ -146,7 +160,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        opcode::{AND, CLONE, DROP, JUMP, PUSH, STORE, SWAP, TERMINATE},
+        opcode::{AND, CLONE, DROP, JUMP, PUSH, ROL, STORE, SWAP, TERMINATE},
         width::{Width, W16, W32, W64, W8},
     };
 
@@ -482,6 +496,19 @@ mod tests {
             .evaluate(bc().op(AND), &mut data);
 
         assert_eq!(data, [0xff, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00]);
+    }
+
+    #[test]
+    fn rol() {
+        let mut data = [0; 8];
+        let mut evaluator = Evaluator::new(&data);
+
+        evaluator
+            .push_u32(0x00ff00ff, &mut data)
+            .push_u32(8, &mut data)
+            .evaluate(bc().op(ROL), &mut data);
+
+        assert_eq!(data, [0x08, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff]);
     }
 
     pub fn bc() -> Bytecode {

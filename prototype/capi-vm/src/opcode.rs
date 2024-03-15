@@ -7,3 +7,5 @@ pub const STORE: u8 = 0x05;
 pub const CLONE: u8 = 0x06;
 pub const SWAP: u8 = 0x07;
 pub const AND: u8 = 0x08;
+// 0x09 reserved for `or`
+pub const ROL: u8 = 0x0a;
