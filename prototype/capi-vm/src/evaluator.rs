@@ -6,12 +6,14 @@ use crate::{
 use super::data::Data;
 
 pub struct Evaluator {
+    code_ptr: usize,
     data: Data,
 }
 
 impl Evaluator {
     pub fn new(data: &[u8]) -> Self {
         Self {
+            code_ptr: 0,
             data: Data::new(data),
         }
     }
@@ -38,10 +40,10 @@ impl Evaluator {
 
     pub fn evaluate(&mut self, code: impl AsRef<[u8]>, data: &mut [u8]) {
         let code = code.as_ref();
-        let mut code_ptr = 0;
+        self.code_ptr = 0;
 
         loop {
-            let Some(&instruction) = code.get(code_ptr) else {
+            let Some(&instruction) = code.get(self.code_ptr) else {
                 break;
             };
 
@@ -65,8 +67,8 @@ impl Evaluator {
                     let value = &mut buffer[0..width.num_bytes];
 
                     for b in value {
-                        code_ptr += 1;
-                        *b = code[code_ptr];
+                        self.code_ptr += 1;
+                        *b = code[self.code_ptr];
                     }
 
                     self.data
@@ -117,7 +119,7 @@ impl Evaluator {
                 }
             }
 
-            code_ptr += 1;
+            self.code_ptr += 1;
         }
     }
 }
