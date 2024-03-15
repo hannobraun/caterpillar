@@ -96,10 +96,7 @@ pub fn assemble(assembly: &str) -> Result<Vec<u8>, AssemblerError> {
         }
 
         let opcode_and_width = match instruction {
-            "drop8" => Some((opcode::DROP, W8::INFO)),
-            "drop16" => Some((opcode::DROP, W16::INFO)),
             "drop32" => Some((opcode::DROP, W32::INFO)),
-            "drop64" => Some((opcode::DROP, W64::INFO)),
             "clone8" => Some((opcode::CLONE, W8::INFO)),
             "clone16" => Some((opcode::CLONE, W16::INFO)),
             "clone32" => Some((opcode::CLONE, W32::INFO)),
@@ -177,36 +174,12 @@ mod tests {
     }
 
     #[test]
-    fn drop8() -> anyhow::Result<()> {
-        let data = assemble("push8 0x11 drop8 push8 0x22", [0])?;
-        assert_eq!(data, [0x22]);
-        Ok(())
-    }
-
-    #[test]
-    fn drop16() -> anyhow::Result<()> {
-        let data = assemble("push16 0x1111 drop16 push16 0x2222", [0, 0])?;
-        assert_eq!(data, [0x22, 0x22]);
-        Ok(())
-    }
-
-    #[test]
     fn drop32() -> anyhow::Result<()> {
         let data = assemble(
             "push32 0x11111111 drop32 push32 0x22222222",
             [0, 0, 0, 0],
         )?;
         assert_eq!(data, [0x22, 0x22, 0x22, 0x22]);
-        Ok(())
-    }
-
-    #[test]
-    fn drop64() -> anyhow::Result<()> {
-        let data = assemble(
-            "push64 0x111111111111111 drop64 push64 0x2222222222222222",
-            [0, 0, 0, 0, 0, 0, 0, 0],
-        )?;
-        assert_eq!(data, [0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22]);
         Ok(())
     }
 
