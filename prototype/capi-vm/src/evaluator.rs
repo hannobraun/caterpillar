@@ -56,8 +56,7 @@ impl Evaluator {
                     break;
                 }
                 opcode::PUSH => {
-                    let buffer = [0; 4];
-                    let value = self.code.read_value(buffer, code);
+                    let value = self.code.read_value(code);
 
                     self.data.push(value, data);
                 }
