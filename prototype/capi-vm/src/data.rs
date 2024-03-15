@@ -39,17 +39,39 @@ impl Data {
         u32::from_le_bytes(bytes)
     }
 
-    pub fn store(&mut self, address: u32, value: u32, data: &mut [u8]) {
+    pub fn store(
+        &mut self,
+        address: u32,
+        value: u32,
+        data: &mut [u8],
+    ) -> Result<(), StoreError> {
         let mut address: usize = address
             .try_into()
             .expect("Couldn't convert address to usize");
         let bytes = value.to_le_bytes();
 
+        if address + bytes.len() >= data.len() {
+            return Err(StoreError {
+                value,
+                address,
+                data_len: data.len(),
+            });
+        }
+
         for b in bytes {
             data[address] = b;
             address += 1;
         }
+
+        Ok(())
     }
+}
+
+#[derive(Debug)]
+pub struct StoreError {
+    pub value: u32,
+    pub address: usize,
+    pub data_len: usize,
 }
 
 #[cfg(test)]
