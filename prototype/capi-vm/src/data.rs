@@ -39,15 +39,11 @@ impl Data {
         u32::from_le_bytes(buffer)
     }
 
-    pub fn store(
-        &mut self,
-        address: u32,
-        value: impl IntoIterator<Item = u8>,
-        data: &mut [u8],
-    ) {
+    pub fn store(&mut self, address: u32, value: u32, data: &mut [u8]) {
         let mut address: usize = address
             .try_into()
             .expect("Couldn't convert address to usize");
+        let value = value.to_le_bytes();
 
         for b in value {
             data[address] = b;

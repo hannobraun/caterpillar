@@ -47,7 +47,7 @@ impl Evaluator {
 
                     let value = self.data.pop(data);
 
-                    self.data.store(address, value.to_le_bytes(), data);
+                    self.data.store(address, value, data);
                 }
                 opcode::CLONE => {
                     let value = self.data.pop(data);
