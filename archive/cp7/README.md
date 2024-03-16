@@ -1,4 +1,18 @@
-# Caterpillar
+# Caterpillar - Prototype 7
+
+## Context
+
+This is a prototype (of many) for the Caterpillar programming language. Check
+out the top-level README for more information.
+
+At the time of writing, this was the longest-running prototype, by far. While it
+showed a lot of promise, it unfortunately ended up in a situation where a lot of
+infrastructure had been created, but the language it supported was still of
+limited use, and much more work would have been required to change that.
+
+Because of that, I decided to explore other possibilities, with the goal of
+finding an approach that would allow me to attack the problem in a more
+incremental manner.
 
 ## About
 
@@ -25,7 +39,7 @@ it work.
 
 ## Status
 
-After [quite a few experiments](archive/), I've decided to create a practical
+After [quite a few experiments](../), I've decided to create a practical
 language that keeps things as simple as they can be, to enable exploration of
 the core premise: interactivity.
 
@@ -57,20 +71,3 @@ Caterpillar is still in a state of early exploration, and barely usable.
 Caterpillar currently runs on [desktop operating systems](capi-desktop/) and in
 [browsers](capi-web/). Please check out the respective README (see links in the
 preceding sentence) for more information.
-
-## Acknowledgements
-
-Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting
-the name!
-
-## License
-
-This project is open source, licensed under the terms of the
-[Zero Clause BSD License] (0BSD, for short). This basically means you can do
-anything with it, without any restrictions, but you can't hold the authors
-liable for problems.
-
-See [LICENSE.md] for full details.
-
-[Zero Clause BSD License]: https://opensource.org/licenses/0BSD
-[LICENSE.md]: LICENSE.md
