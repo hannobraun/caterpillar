@@ -78,9 +78,13 @@ Here are some alternatives I've considered:
 
 ### Define the language within a host language
 
-- no files, no watching files
-- not even parsing; define it as data structures that are then interpreted
-- syntax can come later
+Programming languages typically have syntax, and infrastructure to deal with that syntax. Code to load from files, code to watch those files for changes, a tokenizer, a parser, ... all of this is tedious and can get in the way while iterating on other things.
+
+Syntax is also a solved problem. After eight prototypes, I have no doubt that I can handle this, and it won't be a problem. So let's ignore it and go right for the semantics.
+
+This is my idea: Instead of writing an interpreter in Rust, I will define the language in Rust itself. The data structures that would otherwise be produced by a pipeline reading code from text files, I will instead produce using a Rust API.
+
+This will allow me to focus on the other aspects of the language that are not a solved problem yet. Syntax can be added later, once I feel that the other aspects of the language are under control.
 
 ### Radically reduced scope
 
