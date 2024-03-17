@@ -47,32 +47,56 @@ further improving it.
 After more than a year of working on this without getting to a something that I
 actually like, that seems like a very attractive outlook.
 
-- focus on a single purpose
-  - web-based games?
-  - embedded?
-  - maybe text-based games?
-- language is defined within a host language
-  - no files, no watching files
-  - not even parsing; define it as data structures that are then interpreted
-  - syntax can come later
-- super-deformed scope (going beyond "reduced"): just the inside of functions
-  - functions themselves can be defined in the host language
-  - just make a language that can do the actual stuff; would be a win already
-- super-simple language
-  - still stack-based
-    - it _is_ the simplest way to create a language
-    - and postfix _has_ advantages vs the other fixes
-    - slightly offset by lack of understanding
-  - untyped
-    - all values are 32-bit words
-    - all functions are interpretations of those
-- immediate debugger
-  - providing full insight into what's going on is an immediate concern
-  - manipulating it, like stepping through code, comes right after
-  - "writing a debugger" should never be a concern; it should just be there
-- interactive-last
-  - interactivity is still part of the core premise
-  - but I feel like I have a pretty good handle on the technical side now
-  - I feel confident that I can retrofit it easily
-  - so first, let's create a productive language, which is the hard part now
-  - make it interactive as soon as it's productive
+And since making the language productive has turned out to be the hard part, getting there early means that there won't be lots of code already built for other aspects, that slow down any work on that.
+
+I will now present my ideas for getting there.
+
+### Focus on a single purpose
+
+The previous prototype focused on a single use case, and I think that was a good idea. The question is, which use case should that be, and will it bring its own complications.
+
+Here are some candidates.
+
+#### Browser games
+
+#### Desktop games
+
+#### Text-based games
+
+#### Microcontrollers
+
+### Define the language within a host language
+
+- no files, no watching files
+- not even parsing; define it as data structures that are then interpreted
+- syntax can come later
+
+### Radically reduced scope
+
+- just the inside of functions
+- functions themselves can be defined in the host language
+- just make a language that can do the actual stuff; would be a win already
+
+### Extremely simple language
+
+- still stack-based
+  - it _is_ the simplest way to create a language
+  - and postfix _has_ advantages vs the other fixes
+  - slightly offset by lack of understanding
+- untyped
+  - all values are 32-bit words
+  - all functions are interpretations of those
+
+### Building the debugger immediately
+
+- providing full insight into what's going on is an immediate concern
+- manipulating it, like stepping through code, comes right after
+- "writing a debugger" should never be a concern; it should just be there
+
+### Postponing interactivity
+
+- interactivity is still part of the core premise
+- but I feel like I have a pretty good handle on the technical side now
+- I feel confident that I can retrofit it easily
+- so first, let's create a productive language, which is the hard part now
+- make it interactive as soon as it's productive
