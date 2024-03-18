@@ -1,10 +1,16 @@
 use std::{path::Path, time::Duration};
 
 use notify_debouncer_mini::{DebounceEventResult, DebouncedEventKind};
-use tokio::fs;
+use tokio::{
+    fs,
+    sync::watch::{self, Receiver},
+    task,
+};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    let (tx, rx) = watch::channel(());
+
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
         move |result: DebounceEventResult| {
@@ -12,7 +18,9 @@ async fn main() -> anyhow::Result<()> {
 
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
-                    dbg!(event);
+                    // Should only panic, if the other end panicked, causing the
+                    // receiver to drop. Nothing we can do about it.
+                    let _ = tx.send(());
                 }
             }
         },
@@ -20,6 +28,8 @@ async fn main() -> anyhow::Result<()> {
     debouncer
         .watcher()
         .watch(Path::new("index.html"), notify::RecursiveMode::NonRecursive)?;
+
+    task::spawn(print_events(rx));
 
     let serve_dir = tempfile::tempdir()?;
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
@@ -29,4 +39,10 @@ async fn main() -> anyhow::Result<()> {
         .await;
 
     Ok(())
+}
+
+async fn print_events(mut events: Receiver<()>) {
+    while let Ok(()) = events.changed().await {
+        println!("Change detected.");
+    }
 }
