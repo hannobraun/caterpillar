@@ -1,13 +1,15 @@
 use std::{path::Path, time::Duration};
 
+use notify_debouncer_mini::DebounceEventResult;
 use tokio::fs;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
-        |result| {
-            let _ = dbg!(result);
+        |result: DebounceEventResult| {
+            let events = result.expect("Error watching for changes");
+            dbg!(events);
         },
     )?;
     debouncer
