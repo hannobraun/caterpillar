@@ -16,12 +16,13 @@ use tokio::{
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
+    let path = serve_dir.path().to_owned();
 
     tokio::select! {
-        result = task::spawn(build(serve_dir.path().to_owned())) => {
+        result = task::spawn(build(path.clone())) => {
             result??;
         }
-        () = serve(serve_dir.path().to_owned()) => {
+        () = serve(path) => {
         }
     }
 
