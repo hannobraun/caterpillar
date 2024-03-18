@@ -5,10 +5,14 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-notify = "*"
-notify-debouncer-mini = "*"
 tempfile = "*"
 warp = "*"
+
+[dependencies.notify]
+version = "*"
+
+[dependencies.notify-debouncer-mini]
+version = "*"
 
 [dependencies.tokio]
 version = "*"
