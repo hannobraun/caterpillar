@@ -21,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
         result = task::spawn(build(serve_dir.path().to_owned())) => {
             result??;
         }
-        () = serve_build(serve_dir.path().to_owned()) => {
+        () = serve(serve_dir.path().to_owned()) => {
         }
     }
 
@@ -64,7 +64,7 @@ async fn build(serve_dir: PathBuf) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve_build(serve_dir: PathBuf) {
+async fn serve(serve_dir: PathBuf) {
     warp::serve(warp::fs::dir(serve_dir))
         .run(([127, 0, 0, 1], 8080))
         .await;
