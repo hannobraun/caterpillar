@@ -9,10 +9,11 @@ use tokio::{
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    let serve_dir = tempfile::tempdir()?;
+
     let events = watch_files()?;
     task::spawn(build_on_changes(events));
 
-    let serve_dir = tempfile::tempdir()?;
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
 
     warp::serve(warp::fs::dir(serve_dir.path().to_owned()))
