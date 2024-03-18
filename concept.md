@@ -168,8 +168,12 @@ yields any real results. But I'll risk it. I want to learn.
 
 ### Postponing interactivity
 
-- interactivity is still part of the core premise
-- but I feel like I have a pretty good handle on the technical side now
-- I feel confident that I can retrofit it easily
-- so first, let's create a productive language, which is the hard part now
-- make it interactive as soon as it's productive
+Interactivity is still part of the core premise of what Caterpillar will be
+about, but I feel like I've got a good handle on the technical side of it by
+now. I'm confident that I can retrofit it, once the prototype reaches the
+functionality outlined here.
+
+Creating a productive language has turned out to be the hard part. I'm sure
+there are still many challenges to make the language interactive, but as far as
+the previous prototypes are concerned, it's actually one of the
+better-understood aspects. Let's worry about other things for now.
