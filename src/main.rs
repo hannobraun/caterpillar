@@ -1,6 +1,6 @@
 use std::{path::Path, time::Duration};
 
-use notify_debouncer_mini::DebounceEventResult;
+use notify_debouncer_mini::{DebounceEventResult, DebouncedEventKind};
 use tokio::fs;
 
 #[tokio::main]
@@ -9,7 +9,12 @@ async fn main() -> anyhow::Result<()> {
         Duration::from_millis(50),
         |result: DebounceEventResult| {
             let events = result.expect("Error watching for changes");
-            dbg!(events);
+
+            for event in events {
+                if let DebouncedEventKind::Any = event.kind {
+                    dbg!(event);
+                }
+            }
         },
     )?;
     debouncer
