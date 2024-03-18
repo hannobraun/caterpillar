@@ -9,8 +9,8 @@ use tokio::{
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let rx = watch_files()?;
-    task::spawn(print_events(rx));
+    let events = watch_files()?;
+    task::spawn(print_events(events));
 
     let serve_dir = tempfile::tempdir()?;
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
