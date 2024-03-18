@@ -48,10 +48,12 @@ fn watch_source() -> anyhow::Result<Receiver<()>> {
     Ok(rx)
 }
 
-async fn build_on_changes(mut events: Receiver<()>) {
+async fn build_on_changes(mut events: Receiver<()>) -> anyhow::Result<()> {
     while let Ok(()) = events.changed().await {
         println!("Change detected.");
     }
+
+    Ok(())
 }
 
 async fn serve_build(serve_dir: PathBuf) {
