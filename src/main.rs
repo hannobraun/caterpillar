@@ -3,7 +3,10 @@ use std::{
     time::Duration,
 };
 
-use notify_debouncer_mini::{DebounceEventResult, DebouncedEventKind};
+use notify::RecommendedWatcher;
+use notify_debouncer_mini::{
+    DebounceEventResult, DebouncedEventKind, Debouncer,
+};
 use tokio::{
     fs,
     sync::watch::{self, Receiver},
@@ -23,7 +26,8 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn watch_source() -> anyhow::Result<Receiver<()>> {
+fn watch_source(
+) -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     let (tx, rx) = watch::channel(());
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
@@ -44,11 +48,11 @@ fn watch_source() -> anyhow::Result<Receiver<()>> {
         .watcher()
         .watch(Path::new("index.html"), notify::RecursiveMode::NonRecursive)?;
 
-    Ok(rx)
+    Ok((debouncer, rx))
 }
 
 async fn build_on_changes() -> anyhow::Result<()> {
-    let mut events = watch_source()?;
+    let (_watcher, mut events) = watch_source()?;
 
     while let Ok(()) = events.changed().await {
         println!("Change detected.");
