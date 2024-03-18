@@ -138,11 +138,33 @@ Whereas previous prototypes were dynamically typed, I want to go completely
 untyped this time. Every value is a 32-bit integer, so the abstraction level is
 more like what you'd expect from an Assembler or a Forth.
 
-### Building the debugger immediately
+### Building a debugger immediately
 
-- providing full insight into what's going on is an immediate concern
-- manipulating it, like stepping through code, comes right after
-- "writing a debugger" should never be a concern; it should just be there
+Since the lack of understanding has been such a massive problem in every
+prototype so far, I want to lean heavily on tools to fix that, this time around.
+
+Formatting infrastructure for printing debug messages will certainly help, and
+might become an area of focus for this prototype, but I want to go one step
+further: a full debugger, from the get go.
+
+Providing full insight into everything that's going on with the language runtime
+will be an immediate concern. Since I want to go for browser games as a use
+case, I intend to display this information in the browser, right next to the
+game graphics.
+
+Manipulating this information by stepping through the code, and with other
+typical debugger functionality, will come right next after displaying it. I want
+"writing a debugger" to just never be a concern I have with this prototype. It
+will be there from the start.
+
+Later on, this can be moved to another browser window (even running on another
+computer), as the infrastructure around the language becomes more sophisticated.
+But initially, having a non-optional debugger, right where the game is being
+played, will be enough.
+
+It's not unlikely that this experiment will the thing that derails the prototype
+this time, as I can foresee this being a huge amount of work, long before it
+yields any real results. But I'll risk it. I want to learn.
 
 ### Postponing interactivity
 
