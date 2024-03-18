@@ -18,7 +18,7 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
 
     tokio::select! {
-        result = task::spawn(build_on_changes(serve_dir.path().to_owned())) => {
+        result = task::spawn(build(serve_dir.path().to_owned())) => {
             result??;
         }
         () = serve_build(serve_dir.path().to_owned()) => {
@@ -54,7 +54,7 @@ fn watch_source(
     Ok((debouncer, rx))
 }
 
-async fn build_on_changes(serve_dir: PathBuf) -> anyhow::Result<()> {
+async fn build(serve_dir: PathBuf) -> anyhow::Result<()> {
     let (_watcher, mut events) = watch_source()?;
 
     while let Ok(()) = events.changed().await {
