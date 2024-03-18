@@ -9,6 +9,20 @@ use tokio::{
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    let rx = watch_files()?;
+    task::spawn(print_events(rx));
+
+    let serve_dir = tempfile::tempdir()?;
+    fs::copy("index.html", serve_dir.path().join("index.html")).await?;
+
+    warp::serve(warp::fs::dir(serve_dir.path().to_owned()))
+        .run(([127, 0, 0, 1], 8080))
+        .await;
+
+    Ok(())
+}
+
+fn watch_files() -> anyhow::Result<Receiver<()>> {
     let (tx, rx) = watch::channel(());
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
@@ -29,16 +43,7 @@ async fn main() -> anyhow::Result<()> {
         .watcher()
         .watch(Path::new("index.html"), notify::RecursiveMode::NonRecursive)?;
 
-    task::spawn(print_events(rx));
-
-    let serve_dir = tempfile::tempdir()?;
-    fs::copy("index.html", serve_dir.path().join("index.html")).await?;
-
-    warp::serve(warp::fs::dir(serve_dir.path().to_owned()))
-        .run(([127, 0, 0, 1], 8080))
-        .await;
-
-    Ok(())
+    Ok(rx)
 }
 
 async fn print_events(mut events: Receiver<()>) {
