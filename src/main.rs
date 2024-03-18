@@ -14,8 +14,7 @@ use tokio::{
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
 
-    let events = watch_source()?;
-    task::spawn(build_on_changes(events));
+    task::spawn(build_on_changes());
 
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
 
@@ -48,7 +47,9 @@ fn watch_source() -> anyhow::Result<Receiver<()>> {
     Ok(rx)
 }
 
-async fn build_on_changes(mut events: Receiver<()>) -> anyhow::Result<()> {
+async fn build_on_changes() -> anyhow::Result<()> {
+    let mut events = watch_source()?;
+
     while let Ok(()) = events.changed().await {
         println!("Change detected.");
     }
