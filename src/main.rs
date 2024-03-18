@@ -28,7 +28,8 @@ async fn main() -> anyhow::Result<()> {
 
 fn watch_source(
 ) -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
-    let (tx, rx) = watch::channel(());
+    let (tx, mut rx) = watch::channel(());
+    rx.mark_changed();
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
