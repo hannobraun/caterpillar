@@ -13,8 +13,6 @@ It might be successful or not. If it is, it can be the basis for further
 development. If it's not, it will yield more insights, and show more avenues for
 further exploration in future prototypes.
 
-This is currently a work in progress.
-
 ## Problems
 
 The previous prototypes have shown that creating a programming language is not
