@@ -128,13 +128,15 @@ aspects of the language are under control.
 
 ### Extremely simple language
 
-- still stack-based
-  - it _is_ the simplest way to create a language
-  - and postfix _has_ advantages vs the other fixes
-  - slightly offset by lack of understanding
-- untyped
-  - all values are 32-bit words
-  - all functions are interpretations of those
+Creating a simple language has always been the goal, but I've not always done it
+as minimally as I could have. I still want to make it stack-based, but I will
+try again without local variables. This hurts the "lack of understanding"
+problem, but I've decided to lean heavily on tooling this time (see below), so
+I'm hoping that will be enough.
+
+Whereas previous prototypes were dynamically typed, I want to go completely
+untyped this time. Every value is a 32-bit integer, so the abstraction level is
+more like what you'd expect from an Assembler or a Forth.
 
 ### Building the debugger immediately
 
