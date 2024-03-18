@@ -29,8 +29,7 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn watch_source(
-) -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
+fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     let (tx, mut rx) = watch::channel(());
     rx.mark_changed();
 
@@ -56,7 +55,7 @@ fn watch_source(
 }
 
 async fn build(serve_dir: PathBuf) -> anyhow::Result<()> {
-    let (_watcher, mut events) = watch_source()?;
+    let (_watcher, mut events) = watch()?;
 
     while let Ok(()) = events.changed().await {
         fs::copy("index.html", serve_dir.join("index.html")).await?;
