@@ -6,6 +6,13 @@ This is the planning document for the next prototype. I want to use this to
 clarify my own thinking, by way of writing. If it has the side effect of
 communicating my ideas to someone else, all the better.
 
+The goal of this next prototype is to figure out a better approach to building
+Caterpillar, based on what I've learned so far with previous prototypes.
+
+It might be successful or not. If it is, it can be the basis for further
+development. If it's not, it will yield more insights, and show more avenues for
+further exploration in future prototypes.
+
 This is currently a work in progress.
 
 ## Problems
