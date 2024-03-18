@@ -7,7 +7,7 @@ use tokio::fs;
 async fn main() -> anyhow::Result<()> {
     let mut debouncer = notify_debouncer_mini::new_debouncer(
         Duration::from_millis(50),
-        |result: DebounceEventResult| {
+        move |result: DebounceEventResult| {
             let events = result.expect("Error watching for changes");
 
             for event in events {
