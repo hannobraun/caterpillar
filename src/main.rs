@@ -14,7 +14,7 @@ use tokio::{
 async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
 
-    let events = watch_files()?;
+    let events = watch_source()?;
     task::spawn(build_on_changes(events));
 
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
@@ -24,7 +24,7 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn watch_files() -> anyhow::Result<Receiver<()>> {
+fn watch_source() -> anyhow::Result<Receiver<()>> {
     let (tx, rx) = watch::channel(());
 
     let mut debouncer = notify_debouncer_mini::new_debouncer(
