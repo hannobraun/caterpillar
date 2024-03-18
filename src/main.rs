@@ -18,7 +18,6 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
 
     task::spawn(build_on_changes(serve_dir.path().to_owned()));
-
     serve_build(serve_dir.path().to_owned()).await;
 
     Ok(())
