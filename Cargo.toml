@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
+notify = "*"
+notify-debouncer-mini = "*"
 tempfile = "*"
 warp = "*"
 
