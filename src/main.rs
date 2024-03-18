@@ -1,4 +1,7 @@
-use std::{path::Path, time::Duration};
+use std::{
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use notify_debouncer_mini::{DebounceEventResult, DebouncedEventKind};
 use tokio::{
@@ -16,9 +19,7 @@ async fn main() -> anyhow::Result<()> {
 
     fs::copy("index.html", serve_dir.path().join("index.html")).await?;
 
-    warp::serve(warp::fs::dir(serve_dir.path().to_owned()))
-        .run(([127, 0, 0, 1], 8080))
-        .await;
+    serve_build(serve_dir.path().to_owned()).await;
 
     Ok(())
 }
@@ -51,4 +52,10 @@ async fn build_on_changes(mut events: Receiver<()>) {
     while let Ok(()) = events.changed().await {
         println!("Change detected.");
     }
+}
+
+async fn serve_build(serve_dir: PathBuf) {
+    warp::serve(warp::fs::dir(serve_dir))
+        .run(([127, 0, 0, 1], 8080))
+        .await;
 }
