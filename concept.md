@@ -126,12 +126,6 @@ This will allow me to focus on the other aspects of the language that are not a
 solved problem yet. Syntax can be added later, once I feel that the other
 aspects of the language are under control.
 
-### Radically reduced scope
-
-- just the inside of functions
-- functions themselves can be defined in the host language
-- just make a language that can do the actual stuff; would be a win already
-
 ### Extremely simple language
 
 - still stack-based
