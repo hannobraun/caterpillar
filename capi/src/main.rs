@@ -60,11 +60,11 @@ fn builder(
     events: Receiver<()>,
     serve_dir: PathBuf,
 ) -> anyhow::Result<JoinHandle<anyhow::Result<()>>> {
-    let builder = task::spawn(build_inner(events, serve_dir));
+    let builder = task::spawn(build(events, serve_dir));
     Ok(builder)
 }
 
-async fn build_inner(
+async fn build(
     mut events: Receiver<()>,
     serve_dir: PathBuf,
 ) -> anyhow::Result<()> {
