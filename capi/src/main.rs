@@ -58,10 +58,10 @@ fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
 }
 
 fn builder(
-    events: Receiver<()>,
+    watch_events: Receiver<()>,
     serve_dir: PathBuf,
 ) -> JoinHandle<anyhow::Result<()>> {
-    task::spawn(build(events, serve_dir))
+    task::spawn(build(watch_events, serve_dir))
 }
 
 async fn build(
