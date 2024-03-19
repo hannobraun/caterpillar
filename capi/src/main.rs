@@ -21,13 +21,14 @@ async fn main() -> anyhow::Result<()> {
 
     let (_watcher, watch_events) = watch()?;
     let builder = build(watch_events, path.clone())?;
+    let server = task::spawn(serve(path));
 
     tokio::select! {
         result = builder => {
             result??;
         }
-        result = serve(path) => {
-            result?;
+        result = server => {
+            result??;
         }
     }
 
