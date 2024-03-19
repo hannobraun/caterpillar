@@ -10,6 +10,16 @@
 
 <body>
     <p>Hello, world!</p>
+
+    <script type="module">
+        const response = await fetch("/update");
+        if (response.status == 200) {
+            location.reload();
+        }
+        else {
+            throw response;
+        }
+    </script>
 </body>
 
 </html>
