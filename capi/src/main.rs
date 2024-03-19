@@ -11,7 +11,7 @@ use notify_debouncer_mini::{
 };
 use tokio::{
     fs,
-    sync::watch::{self, Receiver},
+    sync::watch::{self, Receiver, Sender},
     task::{self, JoinHandle},
 };
 
@@ -21,8 +21,8 @@ async fn main() -> anyhow::Result<()> {
     let path = serve_dir.path().to_owned();
 
     let (_watcher, watch_events) = watcher()?;
-    let builder = builder(watch_events, path.clone());
-    let server = server(path);
+    let (builder, build_events) = builder(watch_events, path.clone());
+    let server = server(path, build_events);
 
     tokio::select! {
         result = builder => { result??; }
@@ -60,28 +60,36 @@ fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
 fn builder(
     watch_events: Receiver<()>,
     serve_dir: PathBuf,
-) -> JoinHandle<anyhow::Result<()>> {
-    task::spawn(build(watch_events, serve_dir))
+) -> (JoinHandle<anyhow::Result<()>>, Receiver<()>) {
+    let (tx, rx) = watch::channel(());
+    let builder = task::spawn(build(watch_events, tx, serve_dir));
+    (builder, rx)
 }
 
 async fn build(
     mut watch_events: Receiver<()>,
+    build_events: Sender<()>,
     serve_dir: PathBuf,
 ) -> anyhow::Result<()> {
     while let Ok(()) = watch_events.changed().await {
         println!("Change detected. Building...");
 
         fs::copy("index.html", serve_dir.join("index.html")).await?;
+
+        build_events.send(())?;
     }
 
     Ok(())
 }
 
-fn server(serve_dir: PathBuf) -> JoinHandle<anyhow::Result<()>> {
-    task::spawn(serve(serve_dir))
+fn server(
+    serve_dir: PathBuf,
+    events: Receiver<()>,
+) -> JoinHandle<anyhow::Result<()>> {
+    task::spawn(serve(serve_dir, events))
 }
 
-async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
+async fn serve(serve_dir: PathBuf, events: Receiver<()>) -> anyhow::Result<()> {
     use warp::Filter;
 
     let address: SocketAddr = ([127, 0, 0, 1], 8080).into();
@@ -91,6 +99,11 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
         warp::get().and(
             warp::path("update")
                 .and(warp::body::stream())
+                .map(move |stream| {
+                    let mut events = events.clone();
+                    events.mark_unchanged();
+                    (stream, events)
+                })
                 .then(update)
                 .or(warp::fs::dir(serve_dir)),
         ),
@@ -101,6 +114,7 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn update(_: impl Stream) -> &'static str {
+async fn update((_, mut events): (impl Stream, Receiver<()>)) -> &'static str {
+    events.changed().await.unwrap();
     "Hello, world!"
 }
