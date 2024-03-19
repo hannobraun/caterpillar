@@ -4,6 +4,7 @@ use std::{
     time::Duration,
 };
 
+use futures::Stream;
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
@@ -89,7 +90,8 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     warp::serve(
         warp::get().and(
             warp::path("update")
-                .map(update)
+                .and(warp::body::stream())
+                .then(update)
                 .or(warp::fs::dir(serve_dir)),
         ),
     )
@@ -99,6 +101,6 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn update() -> &'static str {
+async fn update(_: impl Stream) -> &'static str {
     "Hello, world!"
 }
