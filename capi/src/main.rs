@@ -5,6 +5,7 @@ use std::{
 };
 
 use futures::Stream;
+use http::StatusCode;
 use notify::RecommendedWatcher;
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
@@ -114,7 +115,7 @@ async fn serve(serve_dir: PathBuf, events: Receiver<()>) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn update((_, mut events): (impl Stream, Receiver<()>)) -> &'static str {
+async fn update((_, mut events): (impl Stream, Receiver<()>)) -> StatusCode {
     events.changed().await.unwrap();
-    "Hello, world!"
+    StatusCode::OK
 }
