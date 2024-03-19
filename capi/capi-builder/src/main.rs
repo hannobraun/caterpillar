@@ -51,6 +51,10 @@ fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
             }
         },
     )?;
+
+    debouncer
+        .watcher()
+        .watch(Path::new("capi-runtime/src"), RecursiveMode::Recursive)?;
     debouncer
         .watcher()
         .watch(Path::new("index.html"), RecursiveMode::NonRecursive)?;
