@@ -75,6 +75,7 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     use warp::Filter;
 
     let address: SocketAddr = ([127, 0, 0, 1], 8080).into();
+    println!("Starting server at http://{address}");
 
     warp::serve(
         warp::get().and(
