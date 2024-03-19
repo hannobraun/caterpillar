@@ -59,7 +59,12 @@ fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     Ok((debouncer, rx))
 }
 
-async fn build(
+async fn build(events: Receiver<()>, serve_dir: PathBuf) -> anyhow::Result<()> {
+    build_inner(events, serve_dir).await?;
+    Ok(())
+}
+
+async fn build_inner(
     mut events: Receiver<()>,
     serve_dir: PathBuf,
 ) -> anyhow::Result<()> {
