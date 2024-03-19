@@ -20,9 +20,10 @@ async fn main() -> anyhow::Result<()> {
     let path = serve_dir.path().to_owned();
 
     let (_watcher, events) = watch()?;
+    let builder = task::spawn(build(events, path.clone()));
 
     tokio::select! {
-        result = task::spawn(build(events, path.clone())) => {
+        result = builder => {
             result??;
         }
         result = serve(path) => {
