@@ -120,5 +120,6 @@ async fn update((_, mut events): (impl Stream, Receiver<()>)) -> StatusCode {
         return StatusCode::INTERNAL_SERVER_ERROR;
     }
 
+    println!("Notifying client of update");
     StatusCode::OK
 }
