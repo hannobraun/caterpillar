@@ -20,7 +20,7 @@ async fn main() -> anyhow::Result<()> {
     let path = serve_dir.path().to_owned();
 
     let (_watcher, watch_events) = watch()?;
-    let builder = builder(watch_events, path.clone())?;
+    let builder = builder(watch_events, path.clone());
     let server = server(path);
 
     tokio::select! {
@@ -59,9 +59,8 @@ fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
 fn builder(
     events: Receiver<()>,
     serve_dir: PathBuf,
-) -> anyhow::Result<JoinHandle<anyhow::Result<()>>> {
-    let builder = task::spawn(build(events, serve_dir));
-    Ok(builder)
+) -> JoinHandle<anyhow::Result<()>> {
+    task::spawn(build(events, serve_dir))
 }
 
 async fn build(
