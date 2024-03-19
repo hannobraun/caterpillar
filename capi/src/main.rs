@@ -19,8 +19,8 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
     let path = serve_dir.path().to_owned();
 
-    let (_watcher, events) = watch()?;
-    let builder = build(events, path.clone())?;
+    let (_watcher, watch_events) = watch()?;
+    let builder = build(watch_events, path.clone())?;
 
     tokio::select! {
         result = builder => {
