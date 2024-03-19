@@ -24,12 +24,8 @@ async fn main() -> anyhow::Result<()> {
     let server = task::spawn(serve(path));
 
     tokio::select! {
-        result = builder => {
-            result??;
-        }
-        result = server => {
-            result??;
-        }
+        result = builder => { result??; }
+        result = server => { result??; }
     }
 
     Ok(())
