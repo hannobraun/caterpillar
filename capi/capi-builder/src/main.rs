@@ -6,7 +6,7 @@ use std::{
 
 use futures::Stream;
 use http::StatusCode;
-use notify::RecommendedWatcher;
+use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     DebounceEventResult, DebouncedEventKind, Debouncer,
 };
@@ -53,7 +53,7 @@ fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     )?;
     debouncer
         .watcher()
-        .watch(Path::new("index.html"), notify::RecursiveMode::NonRecursive)?;
+        .watch(Path::new("index.html"), RecursiveMode::NonRecursive)?;
 
     Ok((debouncer, rx))
 }
