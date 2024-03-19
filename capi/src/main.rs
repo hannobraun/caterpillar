@@ -116,6 +116,9 @@ async fn serve(serve_dir: PathBuf, events: Receiver<()>) -> anyhow::Result<()> {
 }
 
 async fn update((_, mut events): (impl Stream, Receiver<()>)) -> StatusCode {
-    events.changed().await.unwrap();
+    if events.changed().await.is_err() {
+        return StatusCode::INTERNAL_SERVER_ERROR;
+    }
+
     StatusCode::OK
 }
