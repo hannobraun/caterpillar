@@ -62,6 +62,8 @@ async fn build(
     serve_dir: PathBuf,
 ) -> anyhow::Result<()> {
     while let Ok(()) = events.changed().await {
+        println!("Change detected. Building...");
+
         fs::copy("index.html", serve_dir.join("index.html")).await?;
     }
 
