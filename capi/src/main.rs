@@ -1,4 +1,5 @@
 use std::{
+    net::SocketAddr,
     path::{Path, PathBuf},
     time::Duration,
 };
@@ -73,6 +74,8 @@ async fn build(
 async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     use warp::Filter;
 
+    let address: SocketAddr = ([127, 0, 0, 1], 8080).into();
+
     warp::serve(
         warp::get().and(
             warp::path("update")
@@ -80,7 +83,7 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
                 .or(warp::fs::dir(serve_dir)),
         ),
     )
-    .run(([127, 0, 0, 1], 8080))
+    .run(address)
     .await;
 
     Ok(())
