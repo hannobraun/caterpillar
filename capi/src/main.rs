@@ -21,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
 
     let (_watcher, watch_events) = watch()?;
     let builder = builder(watch_events, path.clone())?;
-    let server = task::spawn(serve(path));
+    let server = server(path);
 
     tokio::select! {
         result = builder => { result??; }
@@ -75,6 +75,10 @@ async fn build(
     }
 
     Ok(())
+}
+
+fn server(serve_dir: PathBuf) -> JoinHandle<anyhow::Result<()>> {
+    task::spawn(serve(serve_dir))
 }
 
 async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
