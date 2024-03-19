@@ -12,6 +12,7 @@ use notify_debouncer_mini::{
 };
 use tokio::{
     fs,
+    process::Command,
     sync::watch::{self, Receiver, Sender},
     task::{self, JoinHandle},
 };
@@ -79,6 +80,23 @@ async fn build(
     while let Ok(()) = watch_events.changed().await {
         println!("Change detected. Building...");
 
+        let exit_status = Command::new("cargo")
+            .arg("build")
+            .arg("--release")
+            .args(["--package", "capi-runtime"])
+            .args(["--target", "wasm32-unknown-unknown"])
+            .status()
+            .await?;
+
+        if !exit_status.success() {
+            continue;
+        }
+
+        fs::copy(
+            "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+            serve_dir.join("capi-runtime.wasm"),
+        )
+        .await?;
         fs::copy("index.html", serve_dir.join("index.html")).await?;
 
         build_events.send(())?;
