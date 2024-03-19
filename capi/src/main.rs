@@ -89,7 +89,7 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     warp::serve(
         warp::get().and(
             warp::path("update")
-                .map(|| "Hello, world!")
+                .map(update)
                 .or(warp::fs::dir(serve_dir)),
         ),
     )
@@ -97,4 +97,8 @@ async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
     .await;
 
     Ok(())
+}
+
+fn update() -> &'static str {
+    "Hello, world!"
 }
