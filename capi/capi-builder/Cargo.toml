@@ -1,0 +1,23 @@
+[package]
+name = "capi"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+futures = "*"
+http = "*"
+tempfile = "*"
+warp = "*"
+
+[dependencies.notify]
+version = "*"
+default-features = false # `crossbeam` feature can conflict with Tokio
+
+[dependencies.notify-debouncer-mini]
+version = "*"
+default-features = false # `crossbeam` feature can conflict with Tokio
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
