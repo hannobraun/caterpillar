@@ -11,7 +11,7 @@ use notify_debouncer_mini::{
 use tokio::{
     fs,
     sync::watch::{self, Receiver},
-    task,
+    task::{self, JoinHandle},
 };
 
 #[tokio::main]
@@ -20,7 +20,7 @@ async fn main() -> anyhow::Result<()> {
     let path = serve_dir.path().to_owned();
 
     let (_watcher, events) = watch()?;
-    let builder = task::spawn(build(events, path.clone()));
+    let builder = build(events, path.clone())?;
 
     tokio::select! {
         result = builder => {
@@ -59,9 +59,12 @@ fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     Ok((debouncer, rx))
 }
 
-async fn build(events: Receiver<()>, serve_dir: PathBuf) -> anyhow::Result<()> {
-    build_inner(events, serve_dir).await?;
-    Ok(())
+fn build(
+    events: Receiver<()>,
+    serve_dir: PathBuf,
+) -> anyhow::Result<JoinHandle<anyhow::Result<()>>> {
+    let builder = task::spawn(build_inner(events, serve_dir));
+    Ok(builder)
 }
 
 async fn build_inner(
