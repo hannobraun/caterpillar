@@ -18,8 +18,10 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
     let path = serve_dir.path().to_owned();
 
+    let (_watcher, events) = watch()?;
+
     tokio::select! {
-        result = task::spawn(build(path.clone())) => {
+        result = task::spawn(build(events, path.clone())) => {
             result??;
         }
         result = serve(path) => {
@@ -55,9 +57,10 @@ fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     Ok((debouncer, rx))
 }
 
-async fn build(serve_dir: PathBuf) -> anyhow::Result<()> {
-    let (_watcher, mut events) = watch()?;
-
+async fn build(
+    mut events: Receiver<()>,
+    serve_dir: PathBuf,
+) -> anyhow::Result<()> {
     while let Ok(()) = events.changed().await {
         fs::copy("index.html", serve_dir.join("index.html")).await?;
     }
