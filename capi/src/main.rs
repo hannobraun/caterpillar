@@ -19,7 +19,7 @@ async fn main() -> anyhow::Result<()> {
     let serve_dir = tempfile::tempdir()?;
     let path = serve_dir.path().to_owned();
 
-    let (_watcher, watch_events) = watch()?;
+    let (_watcher, watch_events) = watcher()?;
     let builder = builder(watch_events, path.clone());
     let server = server(path);
 
@@ -31,7 +31,7 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn watch() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
+fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
     let (tx, mut rx) = watch::channel(());
     rx.mark_changed();
 
