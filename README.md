@@ -5,10 +5,9 @@
 The goal of the Caterpillar project is to explore the practical use of
 [interactive programming](https://en.wikipedia.org/wiki/Interactive_programming).
 
-You can find the currently active prototype at the top level of this repository
-(or, at the time of writing, you actually can't, because I'm back at the drawing
-board). The [`archive/` directory](archive/) contains a number of previous
-prototypes at various levels of completion.
+You can find the currently active prototype in the [`capi/` directory](capi/).
+The [`archive/` directory](archive/) contains a number of previous prototypes at
+various levels of completion.
 
 ## Acknowledgements
 
