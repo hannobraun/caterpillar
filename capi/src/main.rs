@@ -66,7 +66,8 @@ async fn build(serve_dir: PathBuf) -> anyhow::Result<()> {
 }
 
 async fn serve(serve_dir: PathBuf) -> anyhow::Result<()> {
-    warp::serve(warp::fs::dir(serve_dir))
+    use warp::Filter;
+    warp::serve(warp::get().and(warp::fs::dir(serve_dir)))
         .run(([127, 0, 0, 1], 8080))
         .await;
 
