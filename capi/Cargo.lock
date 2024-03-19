@@ -89,6 +89,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "futures",
+ "http",
  "notify",
  "notify-debouncer-mini",
  "tempfile",
