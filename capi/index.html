@@ -22,8 +22,9 @@
         });
 
         const module = fetch("/capi-runtime.wasm");
-        const instance = await WebAssembly.instantiateStreaming(module);
-        console.log(instance);
+        const { instance } = await WebAssembly.instantiateStreaming(module);
+
+        instance.exports.on_init();
     </script>
 </body>
 
