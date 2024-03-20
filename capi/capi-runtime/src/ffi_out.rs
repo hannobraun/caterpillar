@@ -1,7 +1,9 @@
 pub fn print(s: &str) {
-    unsafe { ffi_print(s.as_ptr(), s.len()) };
+    unsafe { ffi::ffi_print(s.as_ptr(), s.len()) };
 }
 
-extern "C" {
-    fn ffi_print(ptr: *const u8, len: usize);
+mod ffi {
+    extern "C" {
+        pub fn ffi_print(ptr: *const u8, len: usize);
+    }
 }
