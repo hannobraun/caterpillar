@@ -24,6 +24,9 @@
         const module = fetch("/capi-runtime.wasm");
         const { instance } = await WebAssembly.instantiateStreaming(module, {
             env: {
+                console_error: (ptr, len) => {
+                    print(ptr, len, console.error)
+                },
                 console_log: (ptr, len) => {
                     print(ptr, len, console.log)
                 },
