@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 futures = "*"
-http = "*"
+http = "0.2"   # needs to be in sync with warp
 tempfile = "*"
 warp = "*"
 
