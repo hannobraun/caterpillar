@@ -1,4 +1,4 @@
-pub fn print(s: &str) {
+pub fn console_log(s: &str) {
     unsafe { ffi::console_log(s.as_ptr(), s.len()) };
 }
 

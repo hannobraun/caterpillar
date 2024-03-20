@@ -15,7 +15,7 @@ static ALLOCATOR: lol_alloc::LockedAllocator<lol_alloc::FreeListAllocator> =
 fn panic(info: &core::panic::PanicInfo) -> ! {
     use alloc::string::ToString;
     let msg = info.to_string();
-    crate::ffi_out::print(&msg);
+    crate::ffi_out::console_log(&msg);
 
     core::arch::wasm32::unreachable()
 }

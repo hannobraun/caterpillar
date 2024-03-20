@@ -1,6 +1,6 @@
-use crate::ffi_out::print;
+use crate::ffi_out::console_log;
 
 #[no_mangle]
 pub extern "C" fn on_init() {
-    print("Hello, world!");
+    console_log("Hello, world!");
 }
