@@ -102,6 +102,8 @@ async fn build(
         build_events.send(())?;
     }
 
+    println!("Shut down builder");
+
     Ok(())
 }
 
