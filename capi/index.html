@@ -25,15 +25,19 @@
         const { instance } = await WebAssembly.instantiateStreaming(module, {
             env: {
                 ffi_print: (ptr, len) => {
-                    const memory = instance.exports.memory;
-                    const array = new Uint8Array(memory.buffer, ptr, len);
-                    const string = new TextDecoder().decode(array);
-                    console.log(string);
+                    print(ptr, len, console.log)
                 },
             }
         });
 
         instance.exports.on_init();
+
+        function print(ptr, len, f) {
+            const memory = instance.exports.memory;
+            const array = new Uint8Array(memory.buffer, ptr, len);
+            const string = new TextDecoder().decode(array);
+            f(string);
+        }
     </script>
 </body>
 
