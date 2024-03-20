@@ -20,6 +20,10 @@
                 throw response;
             }
         });
+
+        const module = fetch("/capi-runtime.wasm");
+        const instance = await WebAssembly.instantiateStreaming(module);
+        console.log(instance);
     </script>
 </body>
 
