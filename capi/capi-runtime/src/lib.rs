@@ -17,6 +17,7 @@ static ALLOCATOR: lol_alloc::LockedAllocator<lol_alloc::FreeListAllocator> =
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
     use alloc::string::ToString;
+
     let msg = info.to_string();
     crate::ffi_out::console_error(&msg);
 
