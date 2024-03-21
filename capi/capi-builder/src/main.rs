@@ -93,7 +93,7 @@ async fn build(
         }
 
         fs::copy(
-            "target/wasm32-unknown-unknown/release/capi_runtime.wasm",
+            "capi-runtime/target/wasm32-unknown-unknown/release/capi_runtime.wasm",
             serve_dir.join("capi-runtime.wasm"),
         )
         .await?;
