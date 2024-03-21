@@ -13,7 +13,7 @@ mod ffi_out;
 static ALLOCATOR: lol_alloc::LockedAllocator<lol_alloc::FreeListAllocator> =
     lol_alloc::LockedAllocator::new(lol_alloc::FreeListAllocator::new());
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", not(test)))]
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
     use alloc::string::ToString;
