@@ -22,6 +22,9 @@
             }
         });
 
+        const canvas = document.querySelector("canvas");
+        const context = canvas.getContext("2d");
+
         const module = fetch("/capi-runtime.wasm");
         const { instance } = await WebAssembly.instantiateStreaming(module, {
             env: {
@@ -35,6 +38,19 @@
         });
 
         instance.exports.on_init();
+
+        const data = new Uint8ClampedArray(
+            instance.exports.memory.buffer,
+            instance.exports.data_ptr(),
+            canvas.width * canvas.height * 4,
+        );
+
+        const imageData = new ImageData(
+            data,
+            canvas.width,
+            canvas.height
+        );
+        context.putImageData(imageData, 0, 0);
 
         function print(ptr, len, f) {
             const memory = instance.exports.memory;
