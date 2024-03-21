@@ -220,5 +220,10 @@ omissions, I'm actively thinking about the following topics:
   to study them more. This is also inspired by HVM.
 - Homoiconicity: Seems like a desirable property, but it's not something I have
   thought about much, so far.
+- Effects: Tracking effects is desirable, and I think the sandboxing I described
+  meshes well with that. I'm not sure what, if anything, is required beyond
+  that, and haven't looked into that too much. [Koka] seems like an interesting
+  role model.
 
 [Interaction nets]: https://en.wikipedia.org/wiki/Interaction_nets
+[Koka]: https://koka-lang.github.io/
