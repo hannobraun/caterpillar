@@ -161,6 +161,56 @@ Besides Rust, all of this is heavily inspired by [HVM].
 [linear types]: https://en.wikipedia.org/wiki/Substructural_type_system#Linear_type_systems
 [HVM]: https://github.com/HigherOrderCO/HVM
 
+### Content-addressed definitions
+
+Definitions in Caterpillar, functions, types, etc, will be content-addressed,
+meaning they are identified by a hash of their contents.
+
+This means that multiple versions of the same definition can exist and be
+referred to at the same time. It also implies that the canonical form of code is
+stored in a form that is not the same as the textual representation that a
+programmer would write.
+
+This idea is lifted from [Unison]. I won't go into justification here, as
+Unison's documentation already does a great job of explaining the benefits. I
+would like to expand on some points though, that I haven't seen addressed on
+their side.
+
+The straight-forward way to implement this, is to store code in some kind of
+structured database. I think, but I'm not sure, that that's how Unison does
+that. This has the disadvantage of either being tedious to use, or requiring
+specialized tooling, or likely both.
+
+I have come up with an alternative way: The written form of Caterpillar form
+lives in regular text files, meaning no special tooling is required to edit it.
+Since Caterpillar is interactive, it needs to constantly monitor those files for
+changes anyway, to apply changes to the running program. When it processes these
+files, it can create, update, and take into account a second set of files, which
+contains the canonical representation.
+
+Here's an example, to hopefully make that understandable:
+
+1. The programmer writes code that calls a function: `x`
+2. Caterpillar sees that no canonical representation of that code exists yet,
+   and will now create it.
+3. Caterpillar resolves this function call to the function `x` with hash `1`.
+4. Caterpillar writes the canonical representation of the new code `x@1`.
+5. A new version of function `x` with the hash `2` is defined.
+6. The programmer makes changes to the original code; since the canonical
+   representation exists, Caterpillar knows that the original mention of `x`
+   still refers to `x@1`.
+7. New mentions of `x` will resolve to `x@2`. This distinction will be displayed
+   by tooling in a way that preserves clarity.
+8. The programmer can upgrade the original mentions of `x` to refer to `x@2`,
+   through some kind of interface (could be CLI; GUI, integrated into the IDE,
+   ...). This upgrade could possibly be automatic, if `x@1` and `x@2` have
+   compatible signatures.
+
+Both the written and the canonical representation would live side-by-side in
+version control.
+
+[Unison]: https://www.unison-lang.org/
+
 ## Future Extensions
 
 This design is, as stated in the introduction, not complete. Besides accidental
