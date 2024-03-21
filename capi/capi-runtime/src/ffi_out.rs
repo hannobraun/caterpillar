@@ -1,4 +1,4 @@
-#[cfg_attr(not(target_arch = "wasm32"), allow(unused))]
+#[cfg_attr(test, allow(unused))]
 pub fn console_error(s: &str) {
     unsafe { ffi::console_error(s.as_ptr(), s.len()) }
 }
