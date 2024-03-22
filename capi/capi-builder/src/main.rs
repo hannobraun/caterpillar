@@ -83,7 +83,7 @@ async fn build(
         let exit_status = Command::new("cargo")
             .arg("build")
             .arg("--release")
-            .args(["--manifest-path", "capi-runtime/Cargo.toml"])
+            .args(["--package", "capi-runtime"])
             .args(["--target", "wasm32-unknown-unknown"])
             .status()
             .await?;
