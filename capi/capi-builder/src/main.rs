@@ -46,7 +46,7 @@ fn watcher() -> anyhow::Result<(Debouncer<RecommendedWatcher>, Receiver<()>)> {
             for event in events {
                 if let DebouncedEventKind::Any = event.kind {
                     // Should only panic, if the other end panicked, causing the
-                    // receiver to drop. Nothing we can do about it.
+                    // receiver to drop. Nothing we can do about that.
                     let _ = tx.send(());
                 }
             }
