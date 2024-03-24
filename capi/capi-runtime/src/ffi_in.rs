@@ -17,7 +17,9 @@ pub extern "C" fn data_len() -> usize {
 
 #[no_mangle]
 pub extern "C" fn on_init() {
-    // Sound, as we only call this once and only use it here locally.
+    // This is sound, as we only access `DATA` once in this function, don't call
+    // any other functions in this module (which would have access to `DATA`),
+    // and drop the reference before we return.
     let data = unsafe { DATA.access_write() };
 
     lang(data);
