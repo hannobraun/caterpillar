@@ -1,5 +1,7 @@
 use core::cell::UnsafeCell;
 
+use crate::lang::lang;
+
 pub const DATA_SIZE: usize = 2usize.pow(24); // 16 MiB
 pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
 
@@ -18,12 +20,7 @@ pub extern "C" fn on_init() {
     // Sound, as we only call this once and only use it here locally.
     let data = unsafe { DATA.access_write() };
 
-    for chunk in data.chunks_mut(4) {
-        chunk[0] = 0;
-        chunk[1] = 255;
-        chunk[2] = 0;
-        chunk[3] = 255;
-    }
+    lang(data);
 
     println!("Caterpillar initialized.");
 }
