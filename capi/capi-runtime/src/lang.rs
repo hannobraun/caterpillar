@@ -33,22 +33,26 @@ fn set_pixel(i: usize, data: &mut [u8]) {
 
 fn set_red(i: usize, data: &mut [u8]) {
     let offset = i;
-    data[offset] = 0;
+    let value = 0;
+    data[offset] = value;
 }
 
 fn set_green(i: usize, data: &mut [u8]) {
     let offset = i + 1;
-    data[offset] = 255;
+    let value = 255;
+    data[offset] = value;
 }
 
 fn set_blue(i: usize, data: &mut [u8]) {
     let offset = i + 2;
-    data[offset] = 0;
+    let value = 0;
+    data[offset] = value;
 }
 
 fn set_alpha(i: usize, data: &mut [u8]) {
     let offset = i + 3;
-    data[offset] = 255;
+    let value = 255;
+    data[offset] = value;
 }
 
 fn inc_pixel(i: usize) -> usize {
