@@ -6,11 +6,15 @@ pub fn lang(data: &mut [u8]) {
             break;
         }
 
-        data[i] = 0;
-        data[i + 1] = 255;
-        data[i + 2] = 0;
-        data[i + 3] = 255;
+        set_pixel(i, data);
 
         i += 4;
     }
+}
+
+fn set_pixel(i: usize, data: &mut [u8]) {
+    data[i] = 0;
+    data[i + 1] = 255;
+    data[i + 2] = 0;
+    data[i + 3] = 255;
 }
