@@ -38,10 +38,11 @@
 
         instance.exports.on_init(canvas.width, canvas.height);
 
+        const drawBufferLen = canvas.width * canvas.height * 4;
         const data = new Uint8ClampedArray(
             instance.exports.memory.buffer,
             instance.exports.mem_ptr(),
-            canvas.width * canvas.height * 4,
+            drawBufferLen,
         );
 
         const imageData = new ImageData(
