@@ -36,7 +36,7 @@
             }
         });
 
-        instance.exports.on_init();
+        instance.exports.on_init(canvas.width, canvas.height);
 
         const data = new Uint8ClampedArray(
             instance.exports.memory.buffer,
