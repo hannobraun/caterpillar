@@ -1,7 +1,10 @@
 mod builtins;
 mod data_stack;
 
-use self::{builtins::add, data_stack::DataStack};
+use self::{
+    builtins::{add, store},
+    data_stack::DataStack,
+};
 
 pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     set_all_pixels(canvas_width, canvas_height, mem);
@@ -72,9 +75,9 @@ fn set_channel(base_addr: usize, offset: usize, value: u8, mem: &mut [u8]) {
 
     add(&mut data_stack);
 
-    let addr = data_stack.pop();
+    data_stack.push(value as usize);
 
-    mem[addr] = value;
+    store(&mut data_stack, mem);
 }
 
 fn inc_pixel(data_stack: &mut DataStack) {

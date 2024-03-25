@@ -8,3 +8,11 @@ pub fn add(data_stack: &mut DataStack) {
 
     data_stack.push(c);
 }
+
+pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
+    let value = data_stack.pop();
+    let addr = data_stack.pop();
+
+    let value: u8 = value.try_into().unwrap();
+    mem[addr] = value;
+}
