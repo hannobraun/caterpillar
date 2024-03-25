@@ -3,11 +3,11 @@ use core::cell::UnsafeCell;
 use crate::lang::lang;
 
 pub const MEM_SIZE: usize = 2usize.pow(24); // 16 MiB
-pub static DATA: SharedMemory<MEM_SIZE> = SharedMemory::new();
+pub static MEM: SharedMemory<MEM_SIZE> = SharedMemory::new();
 
 #[no_mangle]
 pub extern "C" fn data_ptr() -> usize {
-    &DATA as *const _ as usize
+    &MEM as *const _ as usize
 }
 
 #[no_mangle]
@@ -20,7 +20,7 @@ pub extern "C" fn on_init(canvas_width: usize, canvas_height: usize) {
     // This is sound, as we only access `DATA` once in this function, don't call
     // any other functions in this module (which would have access to `DATA`),
     // and drop the reference before we return.
-    let data = unsafe { DATA.access_write() };
+    let data = unsafe { MEM.access_write() };
 
     lang(canvas_width, canvas_height, data);
 
