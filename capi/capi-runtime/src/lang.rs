@@ -1,4 +1,8 @@
 pub fn lang(data: &mut [u8]) {
+    set_all_pixels(data);
+}
+
+fn set_all_pixels(data: &mut [u8]) {
     let mut i = 0;
 
     loop {
