@@ -11,8 +11,7 @@ fn set_all_pixels(data: &mut [u8]) {
         }
 
         set_pixel(i, data);
-
-        i += 4;
+        i = inc_pixel(i);
     }
 }
 
@@ -37,4 +36,8 @@ fn set_blue(i: usize, data: &mut [u8]) {
 
 fn set_alpha(i: usize, data: &mut [u8]) {
     data[i + 3] = 255;
+}
+
+fn inc_pixel(i: usize) -> usize {
+    i + 4
 }
