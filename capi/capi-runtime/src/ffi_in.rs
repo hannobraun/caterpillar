@@ -2,8 +2,8 @@ use core::cell::UnsafeCell;
 
 use crate::lang::lang;
 
-pub const DATA_SIZE: usize = 2usize.pow(24); // 16 MiB
-pub static DATA: SharedMemory<DATA_SIZE> = SharedMemory::new();
+pub const MEM_SIZE: usize = 2usize.pow(24); // 16 MiB
+pub static DATA: SharedMemory<MEM_SIZE> = SharedMemory::new();
 
 #[no_mangle]
 pub extern "C" fn data_ptr() -> usize {
@@ -12,7 +12,7 @@ pub extern "C" fn data_ptr() -> usize {
 
 #[no_mangle]
 pub extern "C" fn data_len() -> usize {
-    DATA_SIZE
+    MEM_SIZE
 }
 
 #[no_mangle]
