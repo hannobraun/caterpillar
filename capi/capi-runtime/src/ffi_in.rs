@@ -11,7 +11,7 @@ pub extern "C" fn mem_ptr() -> usize {
 }
 
 #[no_mangle]
-pub extern "C" fn data_len() -> usize {
+pub extern "C" fn mem_len() -> usize {
     MEM_SIZE
 }
 
