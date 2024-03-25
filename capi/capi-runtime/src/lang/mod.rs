@@ -65,7 +65,15 @@ fn set_alpha(i: usize, mem: &mut [u8]) {
 }
 
 fn set_channel(base_addr: usize, offset: usize, value: u8, mem: &mut [u8]) {
-    let addr = base_addr + offset;
+    let mut data_stack = DataStack::new();
+
+    data_stack.push(base_addr);
+    data_stack.push(offset);
+
+    add(&mut data_stack);
+
+    let addr = data_stack.pop();
+
     mem[addr] = value;
 }
 
