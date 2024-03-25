@@ -65,7 +65,8 @@ fn set_alpha(i: usize, mem: &mut [u8]) {
 }
 
 fn set_channel(i: usize, offset: usize, value: u8, mem: &mut [u8]) {
-    mem[i + offset] = value;
+    let addr = i + offset;
+    mem[addr] = value;
 }
 
 fn inc_pixel(data_stack: &mut DataStack) {
