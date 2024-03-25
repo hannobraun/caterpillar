@@ -40,7 +40,7 @@
 
         const data = new Uint8ClampedArray(
             instance.exports.memory.buffer,
-            instance.exports.data_ptr(),
+            instance.exports.mem_ptr(),
             canvas.width * canvas.height * 4,
         );
 

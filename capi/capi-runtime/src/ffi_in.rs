@@ -6,7 +6,7 @@ pub const MEM_SIZE: usize = 2usize.pow(24); // 16 MiB
 pub static MEM: SharedMemory<MEM_SIZE> = SharedMemory::new();
 
 #[no_mangle]
-pub extern "C" fn data_ptr() -> usize {
+pub extern "C" fn mem_ptr() -> usize {
     &MEM as *const _ as usize
 }
 
