@@ -15,7 +15,7 @@ pub fn lang(data: &mut [u8]) {
 fn set_pixel(i: usize, data: &mut [u8]) {
     set_red(i, data);
     set_green(i, data);
-    data[i + 2] = 0;
+    set_blue(i, data);
     data[i + 3] = 255;
 }
 
@@ -25,4 +25,8 @@ fn set_red(i: usize, data: &mut [u8]) {
 
 fn set_green(i: usize, data: &mut [u8]) {
     data[i + 1] = 255;
+}
+
+fn set_blue(i: usize, data: &mut [u8]) {
+    data[i + 2] = 0;
 }
