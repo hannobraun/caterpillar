@@ -1,4 +1,6 @@
-pub fn lang(data: &mut [u8]) {
+pub fn lang(canvas_width: usize, canvas_height: usize, data: &mut [u8]) {
+    println!("width: {canvas_width} x height: {canvas_height}");
+
     set_all_pixels(data);
 }
 

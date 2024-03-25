@@ -17,14 +17,12 @@ pub extern "C" fn data_len() -> usize {
 
 #[no_mangle]
 pub extern "C" fn on_init(canvas_width: usize, canvas_height: usize) {
-    println!("width: {canvas_width} x height: {canvas_height}");
-
     // This is sound, as we only access `DATA` once in this function, don't call
     // any other functions in this module (which would have access to `DATA`),
     // and drop the reference before we return.
     let data = unsafe { DATA.access_write() };
 
-    lang(data);
+    lang(canvas_width, canvas_height, data);
 
     println!("Caterpillar initialized.");
 }
