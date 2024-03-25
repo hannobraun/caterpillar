@@ -64,8 +64,8 @@ fn set_alpha(i: usize, mem: &mut [u8]) {
     set_channel(i, offset, value, mem);
 }
 
-fn set_channel(i: usize, offset: usize, value: u8, mem: &mut [u8]) {
-    let addr = i + offset;
+fn set_channel(base_addr: usize, offset: usize, value: u8, mem: &mut [u8]) {
+    let addr = base_addr + offset;
     mem[addr] = value;
 }
 
