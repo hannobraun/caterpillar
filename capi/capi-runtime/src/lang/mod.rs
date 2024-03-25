@@ -64,9 +64,17 @@ fn set_channel(i: usize, offset: usize, value: u8, mem: &mut [u8]) {
 }
 
 fn inc_pixel(data_stack: &mut DataStack) {
-    let i = data_stack.pop();
-    let i = i + 4;
-    data_stack.push(i);
+    data_stack.push(4);
+    add(data_stack);
+}
+
+fn add(data_stack: &mut DataStack) {
+    let a = data_stack.pop();
+    let b = data_stack.pop();
+
+    let c = a + b;
+
+    data_stack.push(c);
 }
 
 pub struct DataStack {
