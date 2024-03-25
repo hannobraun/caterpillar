@@ -5,10 +5,11 @@ pub fn lang(canvas_width: usize, canvas_height: usize, data: &mut [u8]) {
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, data: &mut [u8]) {
     println!("width: {canvas_width} x height: {canvas_height}");
 
+    let buffer_len = canvas_width * canvas_height * 4;
     let mut i = 0;
 
     loop {
-        if i >= data.len() {
+        if i >= buffer_len {
             break;
         }
 
