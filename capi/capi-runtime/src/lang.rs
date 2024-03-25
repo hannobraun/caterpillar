@@ -12,7 +12,10 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
         }
 
         set_pixel(i, mem);
-        i = inc_pixel(i);
+
+        let mut data_stack = Vec::new();
+        data_stack.push(i);
+        i = inc_pixel(&mut data_stack);
     }
 }
 
@@ -59,6 +62,7 @@ fn set_channel(i: usize, offset: usize, value: u8, mem: &mut [u8]) {
     mem[i + offset] = value;
 }
 
-fn inc_pixel(i: usize) -> usize {
+fn inc_pixel(data_stack: &mut Vec<usize>) -> usize {
+    let i = data_stack.pop().unwrap();
     i + 4
 }
