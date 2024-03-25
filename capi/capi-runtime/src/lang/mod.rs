@@ -1,3 +1,7 @@
+mod data_stack;
+
+use self::data_stack::DataStack;
+
 pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     set_all_pixels(canvas_width, canvas_height, mem);
 }
@@ -75,22 +79,4 @@ fn add(data_stack: &mut DataStack) {
     let c = a + b;
 
     data_stack.push(c);
-}
-
-pub struct DataStack {
-    values: Vec<usize>,
-}
-
-impl DataStack {
-    pub fn new() -> Self {
-        Self { values: Vec::new() }
-    }
-
-    pub fn push(&mut self, value: usize) {
-        self.values.push(value);
-    }
-
-    pub fn pop(&mut self) -> usize {
-        self.values.pop().unwrap()
-    }
 }
