@@ -16,7 +16,7 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
         let mut data_stack = DataStack { values: Vec::new() };
         data_stack.push(i);
         inc_pixel(&mut data_stack.values);
-        i = data_stack.values.pop().unwrap();
+        i = data_stack.pop();
     }
 }
 
@@ -76,5 +76,9 @@ pub struct DataStack {
 impl DataStack {
     pub fn push(&mut self, value: usize) {
         self.values.push(value);
+    }
+
+    pub fn pop(&mut self) -> usize {
+        self.values.pop().unwrap()
     }
 }
