@@ -1,8 +1,16 @@
 pub fn lang(data: &mut [u8]) {
-    for chunk in data.chunks_mut(4) {
-        chunk[0] = 0;
-        chunk[1] = 255;
-        chunk[2] = 0;
-        chunk[3] = 255;
+    let mut i = 0;
+
+    loop {
+        if i >= data.len() {
+            break;
+        }
+
+        data[i] = 0;
+        data[i + 1] = 255;
+        data[i + 2] = 0;
+        data[i + 3] = 255;
+
+        i += 4;
     }
 }
