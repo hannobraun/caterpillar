@@ -14,11 +14,15 @@ pub fn lang(data: &mut [u8]) {
 
 fn set_pixel(i: usize, data: &mut [u8]) {
     set_red(i, data);
-    data[i + 1] = 255;
+    set_green(i, data);
     data[i + 2] = 0;
     data[i + 3] = 255;
 }
 
 fn set_red(i: usize, data: &mut [u8]) {
     data[i] = 0;
+}
+
+fn set_green(i: usize, data: &mut [u8]) {
+    data[i + 1] = 255;
 }
