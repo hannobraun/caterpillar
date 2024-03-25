@@ -36,9 +36,13 @@
             }
         });
 
+        const drawBufferLen = canvas.width * canvas.height * 4;
+        if (drawBufferLen >= instance.exports.mem_len()) {
+            throw "Not enough memory for draw buffer";
+        }
+
         instance.exports.on_init(canvas.width, canvas.height);
 
-        const drawBufferLen = canvas.width * canvas.height * 4;
         const drawBuffer = new Uint8ClampedArray(
             instance.exports.memory.buffer,
             instance.exports.mem_ptr(),
