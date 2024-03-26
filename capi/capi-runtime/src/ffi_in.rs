@@ -1,4 +1,4 @@
-use std::cell::UnsafeCell;
+use std::{cell::UnsafeCell, panic};
 
 use crate::lang::lang;
 
@@ -17,6 +17,10 @@ pub extern "C" fn mem_len() -> usize {
 
 #[no_mangle]
 pub extern "C" fn on_init(canvas_width: usize, canvas_height: usize) {
+    panic::set_hook(Box::new(|panic_info| {
+        println!("{panic_info}");
+    }));
+
     // This is sound, as we only access `DATA` once in this function, don't call
     // any other functions in this module (which would have access to `DATA`),
     // and drop the reference before we return.
