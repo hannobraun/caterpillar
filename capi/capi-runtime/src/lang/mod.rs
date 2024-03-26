@@ -44,39 +44,61 @@ fn set_pixel(i: usize, mem: &mut [u8]) {
 }
 
 fn set_red(base_addr: usize, mem: &mut [u8]) {
+    let mut data_stack = DataStack::new();
+
     let offset = 0;
     let value = 0;
-    set_channel(value, base_addr, offset, mem);
-}
-
-fn set_green(base_addr: usize, mem: &mut [u8]) {
-    let offset = 1;
-    let value = 255;
-    set_channel(value, base_addr, offset, mem);
-}
-
-fn set_blue(base_addr: usize, mem: &mut [u8]) {
-    let offset = 2;
-    let value = 0;
-    set_channel(value, base_addr, offset, mem);
-}
-
-fn set_alpha(base_addr: usize, mem: &mut [u8]) {
-    let offset = 3;
-    let value = 255;
-    set_channel(value, base_addr, offset, mem);
-}
-
-fn set_channel(value: usize, base_addr: usize, offset: usize, mem: &mut [u8]) {
-    let mut data_stack = DataStack::new();
 
     data_stack.push(value);
     data_stack.push(base_addr);
     data_stack.push(offset);
 
-    add(&mut data_stack);
-    swap(&mut data_stack);
-    store(&mut data_stack, mem);
+    set_channel(&mut data_stack, mem);
+}
+
+fn set_green(base_addr: usize, mem: &mut [u8]) {
+    let mut data_stack = DataStack::new();
+
+    let offset = 1;
+    let value = 255;
+
+    data_stack.push(value);
+    data_stack.push(base_addr);
+    data_stack.push(offset);
+
+    set_channel(&mut data_stack, mem);
+}
+
+fn set_blue(base_addr: usize, mem: &mut [u8]) {
+    let mut data_stack = DataStack::new();
+
+    let offset = 2;
+    let value = 0;
+
+    data_stack.push(value);
+    data_stack.push(base_addr);
+    data_stack.push(offset);
+
+    set_channel(&mut data_stack, mem);
+}
+
+fn set_alpha(base_addr: usize, mem: &mut [u8]) {
+    let mut data_stack = DataStack::new();
+
+    let offset = 3;
+    let value = 255;
+
+    data_stack.push(value);
+    data_stack.push(base_addr);
+    data_stack.push(offset);
+
+    set_channel(&mut data_stack, mem);
+}
+
+fn set_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
+    add(data_stack);
+    swap(data_stack);
+    store(data_stack, mem);
 }
 
 fn inc_pixel(data_stack: &mut DataStack) {
