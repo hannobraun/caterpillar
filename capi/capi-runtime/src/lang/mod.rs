@@ -36,11 +36,11 @@ fn draw_buffer_offset() -> usize {
     0
 }
 
-fn set_pixel(i: usize, mem: &mut [u8]) {
-    set_red(i, mem);
-    set_green(i, mem);
-    set_blue(i, mem);
-    set_alpha(i, mem);
+fn set_pixel(addr: usize, mem: &mut [u8]) {
+    set_red(addr, mem);
+    set_green(addr, mem);
+    set_blue(addr, mem);
+    set_alpha(addr, mem);
 }
 
 fn set_red(base_addr: usize, mem: &mut [u8]) {
