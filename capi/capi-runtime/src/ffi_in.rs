@@ -1,4 +1,4 @@
-use core::cell::UnsafeCell;
+use std::cell::UnsafeCell;
 
 use crate::lang::lang;
 
