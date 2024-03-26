@@ -12,19 +12,19 @@ pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
-    let mut i = draw_buffer_offset();
+    let mut addr = draw_buffer_offset();
 
     loop {
-        if i >= buffer_len {
+        if addr >= buffer_len {
             break;
         }
 
-        set_pixel(i, mem);
+        set_pixel(addr, mem);
 
         let mut data_stack = DataStack::new();
-        data_stack.push(i);
+        data_stack.push(addr);
         inc_pixel(&mut data_stack);
-        i = data_stack.pop();
+        addr = data_stack.pop();
     }
 }
 
