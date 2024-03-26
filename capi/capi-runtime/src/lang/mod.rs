@@ -43,28 +43,28 @@ fn set_pixel(i: usize, mem: &mut [u8]) {
     set_alpha(i, mem);
 }
 
-fn set_red(i: usize, mem: &mut [u8]) {
+fn set_red(base_addr: usize, mem: &mut [u8]) {
     let offset = 0;
     let value = 0;
-    set_channel(value, i, offset, mem);
+    set_channel(value, base_addr, offset, mem);
 }
 
-fn set_green(i: usize, mem: &mut [u8]) {
+fn set_green(base_addr: usize, mem: &mut [u8]) {
     let offset = 1;
     let value = 255;
-    set_channel(value, i, offset, mem);
+    set_channel(value, base_addr, offset, mem);
 }
 
-fn set_blue(i: usize, mem: &mut [u8]) {
+fn set_blue(base_addr: usize, mem: &mut [u8]) {
     let offset = 2;
     let value = 0;
-    set_channel(value, i, offset, mem);
+    set_channel(value, base_addr, offset, mem);
 }
 
-fn set_alpha(i: usize, mem: &mut [u8]) {
+fn set_alpha(base_addr: usize, mem: &mut [u8]) {
     let offset = 3;
     let value = 255;
-    set_channel(value, i, offset, mem);
+    set_channel(value, base_addr, offset, mem);
 }
 
 fn set_channel(value: usize, base_addr: usize, offset: usize, mem: &mut [u8]) {
