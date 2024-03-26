@@ -117,6 +117,7 @@ fn set_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
     add(data_stack);
     swap(data_stack);
     store(data_stack, mem);
+    data_stack.pop();
 }
 
 fn inc_pixel(data_stack: &mut DataStack) {

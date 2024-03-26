@@ -15,6 +15,8 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
 
     let value: u8 = value.try_into().unwrap();
     mem[addr] = value;
+
+    data_stack.push(addr);
 }
 
 pub fn swap(data_stack: &mut DataStack) {
