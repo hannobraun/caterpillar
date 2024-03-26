@@ -45,12 +45,13 @@ fn set_pixel(addr: usize, mem: &mut [u8]) {
 
 fn set_red(pixel_addr: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
+    data_stack.push(pixel_addr);
 
     let offset = 0;
     let value = 0;
 
     data_stack.push(value);
-    data_stack.push(pixel_addr);
+    swap(&mut data_stack);
     data_stack.push(offset);
 
     set_channel(&mut data_stack, mem);
@@ -58,12 +59,13 @@ fn set_red(pixel_addr: usize, mem: &mut [u8]) {
 
 fn set_green(pixel_addr: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
+    data_stack.push(pixel_addr);
 
     let offset = 1;
     let value = 255;
 
     data_stack.push(value);
-    data_stack.push(pixel_addr);
+    swap(&mut data_stack);
     data_stack.push(offset);
 
     set_channel(&mut data_stack, mem);
@@ -71,12 +73,13 @@ fn set_green(pixel_addr: usize, mem: &mut [u8]) {
 
 fn set_blue(pixel_addr: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
+    data_stack.push(pixel_addr);
 
     let offset = 2;
     let value = 0;
 
     data_stack.push(value);
-    data_stack.push(pixel_addr);
+    swap(&mut data_stack);
     data_stack.push(offset);
 
     set_channel(&mut data_stack, mem);
@@ -84,12 +87,13 @@ fn set_blue(pixel_addr: usize, mem: &mut [u8]) {
 
 fn set_alpha(pixel_addr: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
+    data_stack.push(pixel_addr);
 
     let offset = 3;
     let value = 255;
 
     data_stack.push(value);
-    data_stack.push(pixel_addr);
+    swap(&mut data_stack);
     data_stack.push(offset);
 
     set_channel(&mut data_stack, mem);
