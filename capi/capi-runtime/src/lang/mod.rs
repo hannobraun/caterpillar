@@ -46,28 +46,28 @@ fn set_pixel(i: usize, mem: &mut [u8]) {
 fn set_red(i: usize, mem: &mut [u8]) {
     let offset = 0;
     let value = 0;
-    set_channel(i, offset, value, mem);
+    set_channel(value, i, offset, mem);
 }
 
 fn set_green(i: usize, mem: &mut [u8]) {
     let offset = 1;
     let value = 255;
-    set_channel(i, offset, value, mem);
+    set_channel(value, i, offset, mem);
 }
 
 fn set_blue(i: usize, mem: &mut [u8]) {
     let offset = 2;
     let value = 0;
-    set_channel(i, offset, value, mem);
+    set_channel(value, i, offset, mem);
 }
 
 fn set_alpha(i: usize, mem: &mut [u8]) {
     let offset = 3;
     let value = 255;
-    set_channel(i, offset, value, mem);
+    set_channel(value, i, offset, mem);
 }
 
-fn set_channel(base_addr: usize, offset: usize, value: usize, mem: &mut [u8]) {
+fn set_channel(value: usize, base_addr: usize, offset: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
 
     data_stack.push(base_addr);
