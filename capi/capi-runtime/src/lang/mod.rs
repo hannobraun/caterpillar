@@ -12,7 +12,7 @@ pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
-    let mut addr = draw_buffer_offset();
+    let mut addr = draw_buffer_addr();
 
     loop {
         if addr >= buffer_len {
@@ -32,7 +32,7 @@ fn compute_draw_buffer_len(canvas_width: usize, canvas_height: usize) -> usize {
     canvas_width * canvas_height * 4
 }
 
-fn draw_buffer_offset() -> usize {
+fn draw_buffer_addr() -> usize {
     0
 }
 
