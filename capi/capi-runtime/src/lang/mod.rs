@@ -12,21 +12,22 @@ pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
-    let mut addr = draw_buffer_addr();
+    let addr = draw_buffer_addr();
+
+    let mut data_stack = DataStack::new();
+    data_stack.push(addr);
 
     loop {
+        let addr = data_stack.pop();
         if addr >= buffer_len {
             break;
         }
-
-        let mut data_stack = DataStack::new();
-
         data_stack.push(addr);
-        set_pixel(&mut data_stack, mem);
-        addr = data_stack.pop();
 
-        assert_eq!(data_stack.num_values(), 0);
+        set_pixel(&mut data_stack, mem);
     }
+
+    assert_eq!(data_stack.num_values(), 0);
 }
 
 fn compute_draw_buffer_len(canvas_width: usize, canvas_height: usize) -> usize {
