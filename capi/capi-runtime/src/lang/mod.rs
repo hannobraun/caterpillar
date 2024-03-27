@@ -19,9 +19,9 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
             break;
         }
 
-        set_pixel(addr, mem);
-
         let mut data_stack = DataStack::new();
+
+        set_pixel(addr, mem);
         data_stack.push(addr);
         inc_pixel(&mut data_stack);
         addr = data_stack.pop();
