@@ -54,25 +54,25 @@ fn set_pixel(addr: usize, mem: &mut [u8]) {
 
 fn set_red(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(0);
-    set_channel(data_stack, mem);
+    store_channel(data_stack, mem);
 }
 
 fn set_green(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(255);
-    set_channel(data_stack, mem);
+    store_channel(data_stack, mem);
 }
 
 fn set_blue(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(0);
-    set_channel(data_stack, mem);
+    store_channel(data_stack, mem);
 }
 
 fn set_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(255);
-    set_channel(data_stack, mem);
+    store_channel(data_stack, mem);
 }
 
-fn set_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
     store(data_stack, mem);
     inc_channel(data_stack);
 }
