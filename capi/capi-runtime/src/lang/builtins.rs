@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use super::data_stack::DataStack;
 
 pub fn add(data_stack: &mut DataStack) {
