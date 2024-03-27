@@ -42,32 +42,32 @@ fn set_pixel(addr: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
     data_stack.push(addr);
 
-    set_red(&mut data_stack, mem);
-    set_green(&mut data_stack, mem);
-    set_blue(&mut data_stack, mem);
-    set_alpha(&mut data_stack, mem);
+    store_red(&mut data_stack, mem);
+    store_green(&mut data_stack, mem);
+    store_blue(&mut data_stack, mem);
+    store_alpha(&mut data_stack, mem);
 
     let _addr = data_stack.pop();
 
     assert_eq!(data_stack.num_values(), 0);
 }
 
-fn set_red(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_red(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(0);
     store_channel(data_stack, mem);
 }
 
-fn set_green(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_green(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(255);
     store_channel(data_stack, mem);
 }
 
-fn set_blue(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_blue(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(0);
     store_channel(data_stack, mem);
 }
 
-fn set_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(255);
     store_channel(data_stack, mem);
 }
