@@ -12,10 +12,9 @@ pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
-    let addr = draw_buffer_addr();
 
     let mut data_stack = DataStack::new();
-    data_stack.push(addr);
+    draw_buffer_addr(&mut data_stack);
 
     loop {
         let addr = data_stack.pop();
@@ -34,8 +33,8 @@ fn compute_draw_buffer_len(canvas_width: usize, canvas_height: usize) -> usize {
     canvas_width * canvas_height * 4
 }
 
-fn draw_buffer_addr() -> usize {
-    0
+fn draw_buffer_addr(data_stack: &mut DataStack) {
+    data_stack.push(0);
 }
 
 fn set_pixel(data_stack: &mut DataStack, mem: &mut [u8]) {
