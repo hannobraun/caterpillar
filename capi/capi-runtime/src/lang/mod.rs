@@ -11,9 +11,9 @@ pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 }
 
 fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
-    let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
-
     let mut data_stack = DataStack::new();
+
+    let buffer_len = compute_draw_buffer_len(canvas_width, canvas_height);
     draw_buffer_addr(&mut data_stack);
 
     loop {
