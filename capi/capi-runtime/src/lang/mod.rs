@@ -23,8 +23,6 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
         data_stack.push(addr);
         set_pixel(&mut data_stack, mem);
-        data_stack.push(addr);
-        inc_pixel(&mut data_stack);
         addr = data_stack.pop();
 
         assert_eq!(data_stack.num_values(), 0);
@@ -44,10 +42,6 @@ fn set_pixel(data_stack: &mut DataStack, mem: &mut [u8]) {
     store_green(data_stack, mem);
     store_blue(data_stack, mem);
     store_alpha(data_stack, mem);
-
-    let _addr = data_stack.pop();
-
-    assert_eq!(data_stack.num_values(), 0);
 }
 
 fn store_red(data_stack: &mut DataStack, mem: &mut [u8]) {
@@ -77,10 +71,5 @@ fn store_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
 
 fn inc_channel(data_stack: &mut DataStack) {
     data_stack.push(1);
-    add(data_stack);
-}
-
-fn inc_pixel(data_stack: &mut DataStack) {
-    data_stack.push(4);
     add(data_stack);
 }
