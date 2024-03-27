@@ -9,19 +9,15 @@ use self::{
 pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
 
-    set_all_pixels(canvas_width, canvas_height, &mut data_stack, mem);
+    data_stack.push(canvas_width);
+    data_stack.push(canvas_height);
+
+    set_all_pixels(&mut data_stack, mem);
 
     assert_eq!(data_stack.num_values(), 0);
 }
 
-fn set_all_pixels(
-    canvas_width: usize,
-    canvas_height: usize,
-    data_stack: &mut DataStack,
-    mem: &mut [u8],
-) {
-    data_stack.push(canvas_width);
-    data_stack.push(canvas_height);
+fn set_all_pixels(data_stack: &mut DataStack, mem: &mut [u8]) {
     compute_draw_buffer_len(data_stack);
     let buffer_len = data_stack.pop();
 
