@@ -14,4 +14,8 @@ impl DataStack {
     pub fn pop(&mut self) -> usize {
         self.values.pop().unwrap()
     }
+
+    pub fn num_values(&self) -> usize {
+        self.values.len()
+    }
 }

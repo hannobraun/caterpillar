@@ -25,6 +25,8 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
         data_stack.push(addr);
         inc_pixel(&mut data_stack);
         addr = data_stack.pop();
+
+        assert_eq!(data_stack.num_values(), 0);
     }
 }
 
@@ -47,6 +49,8 @@ fn set_pixel(addr: usize, mem: &mut [u8]) {
     set_blue(&mut data_stack, mem);
     data_stack.push(addr);
     set_alpha(&mut data_stack, mem);
+
+    assert_eq!(data_stack.num_values(), 0);
 }
 
 fn set_red(data_stack: &mut DataStack, mem: &mut [u8]) {
