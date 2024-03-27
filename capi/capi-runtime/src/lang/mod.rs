@@ -2,7 +2,7 @@ mod builtins;
 mod data_stack;
 
 use self::{
-    builtins::{add, store, swap},
+    builtins::{add, store},
     data_stack::DataStack,
 };
 
@@ -54,8 +54,6 @@ fn set_pixel(addr: usize, mem: &mut [u8]) {
 
 fn set_red(data_stack: &mut DataStack, mem: &mut [u8]) {
     red_value(data_stack);
-    swap(data_stack);
-
     set_channel(data_stack, mem);
 }
 
@@ -65,8 +63,6 @@ fn red_value(data_stack: &mut DataStack) {
 
 fn set_green(data_stack: &mut DataStack, mem: &mut [u8]) {
     green_value(data_stack);
-    swap(data_stack);
-
     set_channel(data_stack, mem);
 }
 
@@ -76,8 +72,6 @@ fn green_value(data_stack: &mut DataStack) {
 
 fn set_blue(data_stack: &mut DataStack, mem: &mut [u8]) {
     blue_value(data_stack);
-    swap(data_stack);
-
     set_channel(data_stack, mem);
 }
 
@@ -87,8 +81,6 @@ fn blue_value(data_stack: &mut DataStack) {
 
 fn set_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
     alpha_value(data_stack);
-    swap(data_stack);
-
     set_channel(data_stack, mem);
 }
 
@@ -97,7 +89,6 @@ fn alpha_value(data_stack: &mut DataStack) {
 }
 
 fn set_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
-    swap(data_stack);
     store(data_stack, mem);
     inc_channel(data_stack);
 }
