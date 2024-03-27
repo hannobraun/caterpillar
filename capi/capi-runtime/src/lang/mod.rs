@@ -21,7 +21,8 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 
         let mut data_stack = DataStack::new();
 
-        set_pixel(addr, mem);
+        data_stack.push(addr);
+        set_pixel(&mut data_stack, mem);
         data_stack.push(addr);
         inc_pixel(&mut data_stack);
         addr = data_stack.pop();
@@ -38,14 +39,11 @@ fn draw_buffer_addr() -> usize {
     0
 }
 
-fn set_pixel(addr: usize, mem: &mut [u8]) {
-    let mut data_stack = DataStack::new();
-    data_stack.push(addr);
-
-    store_red(&mut data_stack, mem);
-    store_green(&mut data_stack, mem);
-    store_blue(&mut data_stack, mem);
-    store_alpha(&mut data_stack, mem);
+fn set_pixel(data_stack: &mut DataStack, mem: &mut [u8]) {
+    store_red(data_stack, mem);
+    store_green(data_stack, mem);
+    store_blue(data_stack, mem);
+    store_alpha(data_stack, mem);
 
     let _addr = data_stack.pop();
 
