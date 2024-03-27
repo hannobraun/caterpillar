@@ -11,6 +11,15 @@ pub fn add(data_stack: &mut DataStack) {
     data_stack.push(c);
 }
 
+pub fn mul(data_stack: &mut DataStack) {
+    let b = data_stack.pop();
+    let a = data_stack.pop();
+
+    let c = a * b;
+
+    data_stack.push(c);
+}
+
 pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
     let value = data_stack.pop();
     let addr = data_stack.pop();

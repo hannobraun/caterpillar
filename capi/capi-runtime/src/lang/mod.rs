@@ -2,7 +2,7 @@ mod builtins;
 mod data_stack;
 
 use self::{
-    builtins::{add, store},
+    builtins::{add, mul, store},
     data_stack::DataStack,
 };
 
@@ -30,7 +30,15 @@ fn set_all_pixels(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
 }
 
 fn compute_draw_buffer_len(canvas_width: usize, canvas_height: usize) -> usize {
-    canvas_width * canvas_height * 4
+    let mut data_stack = DataStack::new();
+
+    data_stack.push(canvas_width);
+    data_stack.push(canvas_height);
+    mul(&mut data_stack);
+    data_stack.push(4);
+    mul(&mut data_stack);
+
+    data_stack.pop()
 }
 
 fn draw_buffer_addr(data_stack: &mut DataStack) {
