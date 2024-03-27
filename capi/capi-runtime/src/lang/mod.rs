@@ -72,10 +72,10 @@ fn store_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
 
 fn store_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
     store(data_stack, mem);
-    inc_channel(data_stack);
+    inc_addr(data_stack);
 }
 
-fn inc_channel(data_stack: &mut DataStack) {
+fn inc_addr(data_stack: &mut DataStack) {
     data_stack.push(1);
     add(data_stack);
 }
