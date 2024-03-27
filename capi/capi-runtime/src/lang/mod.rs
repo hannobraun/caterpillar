@@ -99,7 +99,10 @@ fn alpha_value(data_stack: &mut DataStack) {
 fn set_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
     swap(data_stack);
     store(data_stack, mem);
+    inc_channel(data_stack);
+}
 
+fn inc_channel(data_stack: &mut DataStack) {
     data_stack.push(1);
     add(data_stack);
 }
