@@ -12,12 +12,12 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     data_stack.push(frame_width);
     data_stack.push(frame_height);
 
-    set_all_pixels(&mut data_stack, frame);
+    store_all_pixels(&mut data_stack, frame);
 
     assert_eq!(data_stack.num_values(), 0);
 }
 
-fn set_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
+fn store_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
     compute_draw_buffer_len(data_stack);
     let buffer_len = data_stack.pop();
 
