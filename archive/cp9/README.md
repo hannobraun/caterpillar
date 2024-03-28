@@ -24,7 +24,52 @@ list, which the next prototype can incorporate.
 
 ## Status
 
-Development has just started. Not much is there yet.
+This prototype has been archived, in favor of a new prototype with a very
+similar approach, but reduced scope. Here's what led to this decision:
+
+- I had initially hoped to use [Trunk] to build and package the Caterpillar
+  runtime, but then decided not to do that. It would have required buying into
+  `wasm-bindgen`, which I didn't want to do. I wanted a simpler interface
+  between the runtime and the JavaScript host, figuring this would lead to less
+  complication. (The description below already reflects this, even though I
+  didn't go into any detail.)
+- Developing my own build tool was indeed a limited effort, and once I had that
+  figured out, I was very happy with how it worked. But when I started to
+  closely consider the debugger, I found problems with my approach. I would have
+  preferred to build the debugger with [Leptos], as I figured that a Rust-based
+  solution would present the fewest hurdles in displaying my Rust-based data
+  from the Caterpillar runtime.
+- I saw the following options for realizing that:
+  - Putting everything into a single WebAssembly module. Leptos requires Trunk,
+    `wasm-bindgen`, and all the stuff I was trying to avoid, so I wasn't sure
+    about that option. It also would have meant a lot of fiddling with tasks,
+    channels, etc, to integrate the Catterpillar runtime with Leptops. (I've had
+    this experience with Sycamore, in an earlier prototype, and believe working
+    with Leptos would be similar in that regard.).
+  - Loading a second WebAssembly module, this one Leptos-based, into the same
+    website. But then I would have had to figure out how to build and deploy
+    that during development, which would have likely required a significant
+    investment into my builder, reinventing parts of Trunk. Or possibly dealing
+    with advanced and unfamiliar tooling from the JavaScript world. Also, as I'm
+    writing this, I realize the communication between the two WebAssembly
+    modules would have been an additional pain.
+  - Putting the debugger in a separate site, building that with Trunk and
+    Leptos. But then the communication would have been an even bigger pain, with
+    my builder having to become a full-blown development server that can serve
+    both sites and intermediate between them. I think this is the direction that
+    the project needs to go eventually, but that would have front-loaded a lot
+    of effort that I wanted to avoid with this prototype.
+- As the web-based nature of this prototype turned into a substantial problem, I
+  realized that I was still far away from anything that I would like to deploy
+  to users. Which ironically meant that the only reason I wanted to make this
+  prototype web-based in the first place was irrelevant, for the time being.
+
+So I decided to correct course and start a new prototype that is even more
+streamlined, with a similar scope as this one, but with the runtime running on
+the desktop-based development system.
+
+[Trunk]: https://trunkrs.dev/
+[Leptos]: https://leptos.dev/
 
 ## Approach
 
