@@ -11,7 +11,9 @@ fn main() -> anyhow::Result<()> {
     const HEIGHT: u32 = 320;
 
     let event_loop = EventLoop::new()?;
-    let window = WindowBuilder::new().build(&event_loop)?;
+    let window = WindowBuilder::new()
+        .with_title("Caterpillar")
+        .build(&event_loop)?;
 
     let surface_texture = SurfaceTexture::new(WIDTH, HEIGHT, &window);
     let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
