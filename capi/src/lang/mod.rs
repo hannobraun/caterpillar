@@ -61,27 +61,27 @@ fn store_pixel(lang: &mut Lang) {
 
 fn store_red(lang: &mut Lang) {
     lang.data_stack.push(0);
-    store_channel(&mut lang.data_stack, lang.frame);
+    store_channel(lang);
 }
 
 fn store_green(lang: &mut Lang) {
     lang.data_stack.push(255);
-    store_channel(&mut lang.data_stack, lang.frame);
+    store_channel(lang);
 }
 
 fn store_blue(lang: &mut Lang) {
     lang.data_stack.push(0);
-    store_channel(&mut lang.data_stack, lang.frame);
+    store_channel(lang);
 }
 
 fn store_alpha(lang: &mut Lang) {
     lang.data_stack.push(255);
-    store_channel(&mut lang.data_stack, lang.frame);
+    store_channel(lang);
 }
 
-fn store_channel(data_stack: &mut DataStack, frame: &mut [u8]) {
-    store(data_stack, frame);
-    inc_addr(data_stack);
+fn store_channel(lang: &mut Lang) {
+    store(&mut lang.data_stack, lang.frame);
+    inc_addr(&mut lang.data_stack);
 }
 
 fn inc_addr(data_stack: &mut DataStack) {
