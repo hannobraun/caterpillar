@@ -6,10 +6,10 @@ use self::{
     data_stack::DataStack,
 };
 
-pub fn lang(canvas_width: usize, canvas_height: usize, mem: &mut [u8]) {
+pub fn lang(frame_width: usize, canvas_height: usize, mem: &mut [u8]) {
     let mut data_stack = DataStack::new();
 
-    data_stack.push(canvas_width);
+    data_stack.push(frame_width);
     data_stack.push(canvas_height);
 
     set_all_pixels(&mut data_stack, mem);
