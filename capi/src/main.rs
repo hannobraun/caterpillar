@@ -6,8 +6,6 @@ use winit::{
 };
 
 fn main() -> anyhow::Result<()> {
-    println!("Hello, world!");
-
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 320;
 
