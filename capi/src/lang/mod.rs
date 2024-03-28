@@ -6,15 +6,23 @@ use self::{
     data_stack::DataStack,
 };
 
+pub struct Lang<'r> {
+    data_stack: DataStack,
+    frame: &'r mut [u8],
+}
+
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut data_stack = DataStack::new();
+    let mut lang = Lang {
+        data_stack: DataStack::new(),
+        frame,
+    };
 
-    data_stack.push(frame_width);
-    data_stack.push(frame_height);
+    lang.data_stack.push(frame_width);
+    lang.data_stack.push(frame_height);
 
-    store_all_pixels(&mut data_stack, frame);
+    store_all_pixels(&mut lang.data_stack, lang.frame);
 
-    assert_eq!(data_stack.num_values(), 0);
+    assert_eq!(lang.data_stack.num_values(), 0);
 }
 
 fn store_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
