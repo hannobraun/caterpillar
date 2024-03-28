@@ -53,30 +53,30 @@ fn frame_addr(lang: &mut Lang) {
 }
 
 fn store_pixel(lang: &mut Lang) {
-    store_red(&mut lang.data_stack, lang.frame);
-    store_green(&mut lang.data_stack, lang.frame);
-    store_blue(&mut lang.data_stack, lang.frame);
-    store_alpha(&mut lang.data_stack, lang.frame);
+    store_red(lang);
+    store_green(lang);
+    store_blue(lang);
+    store_alpha(lang);
 }
 
-fn store_red(data_stack: &mut DataStack, frame: &mut [u8]) {
-    data_stack.push(0);
-    store_channel(data_stack, frame);
+fn store_red(lang: &mut Lang) {
+    lang.data_stack.push(0);
+    store_channel(&mut lang.data_stack, lang.frame);
 }
 
-fn store_green(data_stack: &mut DataStack, frame: &mut [u8]) {
-    data_stack.push(255);
-    store_channel(data_stack, frame);
+fn store_green(lang: &mut Lang) {
+    lang.data_stack.push(255);
+    store_channel(&mut lang.data_stack, lang.frame);
 }
 
-fn store_blue(data_stack: &mut DataStack, frame: &mut [u8]) {
-    data_stack.push(0);
-    store_channel(data_stack, frame);
+fn store_blue(lang: &mut Lang) {
+    lang.data_stack.push(0);
+    store_channel(&mut lang.data_stack, lang.frame);
 }
 
-fn store_alpha(data_stack: &mut DataStack, frame: &mut [u8]) {
-    data_stack.push(255);
-    store_channel(data_stack, frame);
+fn store_alpha(lang: &mut Lang) {
+    lang.data_stack.push(255);
+    store_channel(&mut lang.data_stack, lang.frame);
 }
 
 fn store_channel(data_stack: &mut DataStack, frame: &mut [u8]) {
