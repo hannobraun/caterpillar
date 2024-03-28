@@ -26,6 +26,11 @@ impl<'r> Lang<'r> {
 
     // Built-ins
 
+    pub fn add(&mut self) -> &mut Self {
+        add(&mut self.data_stack);
+        self
+    }
+
     pub fn mul(&mut self) -> &mut Self {
         mul(&mut self.data_stack);
         self
@@ -101,5 +106,5 @@ fn store_channel(lang: &mut Lang) {
 
 fn inc_addr(lang: &mut Lang) {
     lang.v(1);
-    add(&mut lang.data_stack);
+    lang.add();
 }
