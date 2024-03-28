@@ -3,7 +3,7 @@ use winit::{
     event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
     keyboard::{KeyCode, PhysicalKey},
-    window::Window,
+    window::WindowBuilder,
 };
 
 fn main() -> anyhow::Result<()> {
@@ -11,7 +11,7 @@ fn main() -> anyhow::Result<()> {
     const HEIGHT: u32 = 320;
 
     let event_loop = EventLoop::new()?;
-    let window = Window::new(&event_loop)?;
+    let window = WindowBuilder::new().build(&event_loop)?;
 
     let surface_texture = SurfaceTexture::new(WIDTH, HEIGHT, &window);
     let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
