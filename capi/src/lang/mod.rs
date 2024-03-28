@@ -11,11 +11,17 @@ pub struct Lang<'r> {
     frame: &'r mut [u8],
 }
 
+impl<'r> Lang<'r> {
+    pub fn new(frame: &'r mut [u8]) -> Self {
+        Self {
+            data_stack: DataStack::new(),
+            frame,
+        }
+    }
+}
+
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut lang = Lang {
-        data_stack: DataStack::new(),
-        frame,
-    };
+    let mut lang = Lang::new(frame);
 
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
