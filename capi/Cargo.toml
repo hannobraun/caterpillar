@@ -9,3 +9,4 @@ pixels = "*"
 
 [dependencies.winit]
 version = "*"
+features = ["rwh_05"]
