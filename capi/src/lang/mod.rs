@@ -30,7 +30,7 @@ fn set_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
         }
         data_stack.push(addr);
 
-        set_pixel(data_stack, frame);
+        store_pixel(data_stack, frame);
     }
 }
 
@@ -44,7 +44,7 @@ fn draw_buffer_addr(data_stack: &mut DataStack) {
     data_stack.push(0);
 }
 
-fn set_pixel(data_stack: &mut DataStack, frame: &mut [u8]) {
+fn store_pixel(data_stack: &mut DataStack, frame: &mut [u8]) {
     store_red(data_stack, frame);
     store_green(data_stack, frame);
     store_blue(data_stack, frame);
