@@ -81,10 +81,10 @@ fn store_alpha(lang: &mut Lang) {
 
 fn store_channel(lang: &mut Lang) {
     store(&mut lang.data_stack, lang.frame);
-    inc_addr(&mut lang.data_stack);
+    inc_addr(lang);
 }
 
-fn inc_addr(data_stack: &mut DataStack) {
-    data_stack.push(1);
-    add(data_stack);
+fn inc_addr(lang: &mut Lang) {
+    lang.data_stack.push(1);
+    add(&mut lang.data_stack);
 }
