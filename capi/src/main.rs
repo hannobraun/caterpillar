@@ -15,9 +15,15 @@ fn main() -> anyhow::Result<()> {
     let surface_texture = SurfaceTexture::new(WIDTH, HEIGHT, &window);
     let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
-    event_loop.run(|event, _| match event {
+    event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             window.request_redraw();
+        }
+        Event::WindowEvent {
+            event: WindowEvent::CloseRequested,
+            ..
+        } => {
+            event_loop_window_target.exit();
         }
         Event::WindowEvent {
             event: WindowEvent::RedrawRequested,
