@@ -35,6 +35,11 @@ impl<'r> Lang<'r> {
         mul(&mut self.data_stack);
         self
     }
+
+    pub fn store(&mut self) -> &mut Self {
+        store(&mut self.data_stack, self.frame);
+        self
+    }
 }
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
@@ -100,7 +105,7 @@ fn store_alpha(lang: &mut Lang) {
 }
 
 fn store_channel(lang: &mut Lang) {
-    store(&mut lang.data_stack, lang.frame);
+    lang.store();
     inc_addr(lang);
 }
 
