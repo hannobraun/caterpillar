@@ -8,7 +8,7 @@ use winit::{
 
 fn main() -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
-    const HEIGHT: u32 = 320;
+    const HEIGHT: u32 = 480;
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
