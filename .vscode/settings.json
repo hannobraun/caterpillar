@@ -6,8 +6,5 @@
     "search.exclude": {
         "archive/**": true
     },
-    "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
-    "rust-analyzer.linkedProjects": [
-        "capi/capi-runtime/Cargo.toml"
-    ]
+    "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix"
 }
