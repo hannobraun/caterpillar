@@ -18,6 +18,13 @@ impl<'r> Lang<'r> {
             frame,
         }
     }
+
+    // Built-ins
+
+    pub fn mul(&mut self) -> &mut Self {
+        mul(&mut self.data_stack);
+        self
+    }
 }
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
@@ -49,9 +56,9 @@ fn store_all_pixels(lang: &mut Lang) {
 }
 
 fn compute_draw_buffer_len(lang: &mut Lang) {
-    mul(&mut lang.data_stack);
+    lang.mul();
     lang.data_stack.push(4);
-    mul(&mut lang.data_stack);
+    lang.mul();
 }
 
 fn frame_addr(lang: &mut Lang) {
