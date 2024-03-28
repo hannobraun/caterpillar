@@ -20,25 +20,25 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
 
-    store_all_pixels(&mut lang.data_stack, lang.frame);
+    store_all_pixels(&mut lang);
 
     assert_eq!(lang.data_stack.num_values(), 0);
 }
 
-fn store_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
-    compute_draw_buffer_len(data_stack);
-    let buffer_len = data_stack.pop();
+fn store_all_pixels(lang: &mut Lang) {
+    compute_draw_buffer_len(&mut lang.data_stack);
+    let buffer_len = lang.data_stack.pop();
 
-    frame_addr(data_stack);
+    frame_addr(&mut lang.data_stack);
 
     loop {
-        let addr = data_stack.pop();
+        let addr = lang.data_stack.pop();
         if addr >= buffer_len {
             break;
         }
-        data_stack.push(addr);
+        lang.data_stack.push(addr);
 
-        store_pixel(data_stack, frame);
+        store_pixel(&mut lang.data_stack, lang.frame);
     }
 }
 
