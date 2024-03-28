@@ -6,4 +6,6 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 pixels = "*"
-winit = "*"
+
+[dependencies.winit]
+version = "*"
