@@ -35,8 +35,7 @@ impl<'r> Lang<'r> {
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
 
-    lang.v(frame_width);
-    lang.v(frame_height);
+    lang.v(frame_width).v(frame_height);
 
     store_all_pixels(&mut lang);
 
