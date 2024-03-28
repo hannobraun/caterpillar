@@ -44,7 +44,9 @@ fn main() -> anyhow::Result<()> {
             event: WindowEvent::RedrawRequested,
             ..
         } => {
-            pixels.render().unwrap();
+            if let Err(err) = pixels.render() {
+                eprintln!("Render error: {err}");
+            }
         }
         _ => {}
     })?;
