@@ -6,18 +6,18 @@ use self::{
     data_stack::DataStack,
 };
 
-pub fn lang(frame_width: usize, frame_height: usize, mem: &mut [u8]) {
+pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut data_stack = DataStack::new();
 
     data_stack.push(frame_width);
     data_stack.push(frame_height);
 
-    set_all_pixels(&mut data_stack, mem);
+    set_all_pixels(&mut data_stack, frame);
 
     assert_eq!(data_stack.num_values(), 0);
 }
 
-fn set_all_pixels(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn set_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
     compute_draw_buffer_len(data_stack);
     let buffer_len = data_stack.pop();
 
@@ -30,7 +30,7 @@ fn set_all_pixels(data_stack: &mut DataStack, mem: &mut [u8]) {
         }
         data_stack.push(addr);
 
-        set_pixel(data_stack, mem);
+        set_pixel(data_stack, frame);
     }
 }
 
@@ -44,35 +44,35 @@ fn draw_buffer_addr(data_stack: &mut DataStack) {
     data_stack.push(0);
 }
 
-fn set_pixel(data_stack: &mut DataStack, mem: &mut [u8]) {
-    store_red(data_stack, mem);
-    store_green(data_stack, mem);
-    store_blue(data_stack, mem);
-    store_alpha(data_stack, mem);
+fn set_pixel(data_stack: &mut DataStack, frame: &mut [u8]) {
+    store_red(data_stack, frame);
+    store_green(data_stack, frame);
+    store_blue(data_stack, frame);
+    store_alpha(data_stack, frame);
 }
 
-fn store_red(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_red(data_stack: &mut DataStack, frame: &mut [u8]) {
     data_stack.push(0);
-    store_channel(data_stack, mem);
+    store_channel(data_stack, frame);
 }
 
-fn store_green(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_green(data_stack: &mut DataStack, frame: &mut [u8]) {
     data_stack.push(255);
-    store_channel(data_stack, mem);
+    store_channel(data_stack, frame);
 }
 
-fn store_blue(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_blue(data_stack: &mut DataStack, frame: &mut [u8]) {
     data_stack.push(0);
-    store_channel(data_stack, mem);
+    store_channel(data_stack, frame);
 }
 
-fn store_alpha(data_stack: &mut DataStack, mem: &mut [u8]) {
+fn store_alpha(data_stack: &mut DataStack, frame: &mut [u8]) {
     data_stack.push(255);
-    store_channel(data_stack, mem);
+    store_channel(data_stack, frame);
 }
 
-fn store_channel(data_stack: &mut DataStack, mem: &mut [u8]) {
-    store(data_stack, mem);
+fn store_channel(data_stack: &mut DataStack, frame: &mut [u8]) {
+    store(data_stack, frame);
     inc_addr(data_stack);
 }
 
