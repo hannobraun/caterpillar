@@ -21,7 +21,7 @@ fn store_all_pixels(data_stack: &mut DataStack, frame: &mut [u8]) {
     compute_draw_buffer_len(data_stack);
     let buffer_len = data_stack.pop();
 
-    draw_buffer_addr(data_stack);
+    frame_addr(data_stack);
 
     loop {
         let addr = data_stack.pop();
@@ -40,7 +40,7 @@ fn compute_draw_buffer_len(data_stack: &mut DataStack) {
     mul(data_stack);
 }
 
-fn draw_buffer_addr(data_stack: &mut DataStack) {
+fn frame_addr(data_stack: &mut DataStack) {
     data_stack.push(0);
 }
 
