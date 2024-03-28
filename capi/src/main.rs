@@ -1,7 +1,8 @@
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
-    event::{Event, WindowEvent},
+    event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
+    keyboard::{KeyCode, PhysicalKey},
     window::Window,
 };
 
@@ -21,6 +22,20 @@ fn main() -> anyhow::Result<()> {
         }
         Event::WindowEvent {
             event: WindowEvent::CloseRequested,
+            ..
+        } => {
+            event_loop_window_target.exit();
+        }
+        Event::WindowEvent {
+            event:
+                WindowEvent::KeyboardInput {
+                    event:
+                        KeyEvent {
+                            physical_key: PhysicalKey::Code(KeyCode::Escape),
+                            ..
+                        },
+                    ..
+                },
             ..
         } => {
             event_loop_window_target.exit();
