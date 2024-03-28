@@ -26,7 +26,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 }
 
 fn store_all_pixels(lang: &mut Lang) {
-    compute_draw_buffer_len(&mut lang.data_stack);
+    compute_draw_buffer_len(lang);
     let buffer_len = lang.data_stack.pop();
 
     frame_addr(&mut lang.data_stack);
@@ -42,10 +42,10 @@ fn store_all_pixels(lang: &mut Lang) {
     }
 }
 
-fn compute_draw_buffer_len(data_stack: &mut DataStack) {
-    mul(data_stack);
-    data_stack.push(4);
-    mul(data_stack);
+fn compute_draw_buffer_len(lang: &mut Lang) {
+    mul(&mut lang.data_stack);
+    lang.data_stack.push(4);
+    mul(&mut lang.data_stack);
 }
 
 fn frame_addr(data_stack: &mut DataStack) {
