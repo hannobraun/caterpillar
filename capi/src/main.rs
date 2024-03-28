@@ -1,3 +1,5 @@
+mod lang;
+
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
@@ -5,6 +7,8 @@ use winit::{
     keyboard::{KeyCode, PhysicalKey},
     window::WindowBuilder,
 };
+
+use crate::lang::lang;
 
 fn main() -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
@@ -16,10 +20,15 @@ fn main() -> anyhow::Result<()> {
         .build(&event_loop)?;
 
     let surface_texture = SurfaceTexture::new(WIDTH, HEIGHT, &window);
-    let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
+    let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
+            lang(
+                WIDTH.try_into().unwrap(),
+                HEIGHT.try_into().unwrap(),
+                pixels.frame_mut(),
+            );
             window.request_redraw();
         }
         Event::WindowEvent {
