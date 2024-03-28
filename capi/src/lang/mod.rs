@@ -29,7 +29,7 @@ fn store_all_pixels(lang: &mut Lang) {
     compute_draw_buffer_len(lang);
     let buffer_len = lang.data_stack.pop();
 
-    frame_addr(&mut lang.data_stack);
+    frame_addr(lang);
 
     loop {
         let addr = lang.data_stack.pop();
@@ -48,8 +48,8 @@ fn compute_draw_buffer_len(lang: &mut Lang) {
     mul(&mut lang.data_stack);
 }
 
-fn frame_addr(data_stack: &mut DataStack) {
-    data_stack.push(0);
+fn frame_addr(lang: &mut Lang) {
+    lang.data_stack.push(0);
 }
 
 fn store_pixel(data_stack: &mut DataStack, frame: &mut [u8]) {
