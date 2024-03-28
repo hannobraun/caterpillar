@@ -19,6 +19,11 @@ impl<'r> Lang<'r> {
         }
     }
 
+    pub fn v(&mut self, value: usize) -> &mut Self {
+        self.data_stack.push(value);
+        self
+    }
+
     // Built-ins
 
     pub fn mul(&mut self) -> &mut Self {
@@ -30,8 +35,8 @@ impl<'r> Lang<'r> {
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
 
-    lang.data_stack.push(frame_width);
-    lang.data_stack.push(frame_height);
+    lang.v(frame_width);
+    lang.v(frame_height);
 
     store_all_pixels(&mut lang);
 
@@ -57,12 +62,12 @@ fn store_all_pixels(lang: &mut Lang) {
 
 fn compute_draw_buffer_len(lang: &mut Lang) {
     lang.mul();
-    lang.data_stack.push(4);
+    lang.v(4);
     lang.mul();
 }
 
 fn frame_addr(lang: &mut Lang) {
-    lang.data_stack.push(0);
+    lang.v(0);
 }
 
 fn store_pixel(lang: &mut Lang) {
@@ -73,22 +78,22 @@ fn store_pixel(lang: &mut Lang) {
 }
 
 fn store_red(lang: &mut Lang) {
-    lang.data_stack.push(0);
+    lang.v(0);
     store_channel(lang);
 }
 
 fn store_green(lang: &mut Lang) {
-    lang.data_stack.push(255);
+    lang.v(255);
     store_channel(lang);
 }
 
 fn store_blue(lang: &mut Lang) {
-    lang.data_stack.push(0);
+    lang.v(0);
     store_channel(lang);
 }
 
 fn store_alpha(lang: &mut Lang) {
-    lang.data_stack.push(255);
+    lang.v(255);
     store_channel(lang);
 }
 
@@ -98,6 +103,6 @@ fn store_channel(lang: &mut Lang) {
 }
 
 fn inc_addr(lang: &mut Lang) {
-    lang.data_stack.push(1);
+    lang.v(1);
     add(&mut lang.data_stack);
 }
