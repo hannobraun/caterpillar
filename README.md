@@ -9,6 +9,19 @@ You can find the currently active prototype in the [`capi/` directory](capi/).
 The [`archive/` directory](archive/) contains a number of previous prototypes at
 various levels of completion.
 
+## Design
+
+I'm currently working on collecting the ideas that have been guiding me into a
+rough design document: [DESIGN.md](DESIGN.md)
+
+But please don't read too much into that. This project has already gone through
+a large number of prototypes, and I'm sure it will go through more. My ideas
+have changed significantly during that time, and they will keep evolving.
+
+At some point, I hope to develop one of these prototypes into a productive
+language. The only design that is really relevant is the one implemented in
+that.
+
 ## Acknowledgements
 
 Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting
