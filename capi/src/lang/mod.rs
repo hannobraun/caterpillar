@@ -60,9 +60,7 @@ fn store_all_pixels(lang: &mut Lang) {
 }
 
 fn compute_draw_buffer_len(lang: &mut Lang) {
-    lang.mul();
-    lang.v(4);
-    lang.mul();
+    lang.mul().v(4).mul();
 }
 
 fn frame_addr(lang: &mut Lang) {
