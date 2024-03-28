@@ -105,6 +105,5 @@ fn store_channel(lang: &mut Lang) {
 }
 
 fn inc_addr(lang: &mut Lang) {
-    lang.v(1);
-    lang.add();
+    lang.v(1).add();
 }
