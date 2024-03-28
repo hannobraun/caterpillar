@@ -38,7 +38,7 @@ fn store_all_pixels(lang: &mut Lang) {
         }
         lang.data_stack.push(addr);
 
-        store_pixel(&mut lang.data_stack, lang.frame);
+        store_pixel(lang);
     }
 }
 
@@ -52,11 +52,11 @@ fn frame_addr(lang: &mut Lang) {
     lang.data_stack.push(0);
 }
 
-fn store_pixel(data_stack: &mut DataStack, frame: &mut [u8]) {
-    store_red(data_stack, frame);
-    store_green(data_stack, frame);
-    store_blue(data_stack, frame);
-    store_alpha(data_stack, frame);
+fn store_pixel(lang: &mut Lang) {
+    store_red(&mut lang.data_stack, lang.frame);
+    store_green(&mut lang.data_stack, lang.frame);
+    store_blue(&mut lang.data_stack, lang.frame);
+    store_alpha(&mut lang.data_stack, lang.frame);
 }
 
 fn store_red(data_stack: &mut DataStack, frame: &mut [u8]) {
