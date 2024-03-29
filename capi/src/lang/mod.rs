@@ -6,7 +6,8 @@ use self::data_stack::DataStack;
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
 
-    lang.v(frame_width).v(frame_height);
+    lang.data_stack.push(frame_width);
+    lang.data_stack.push(frame_height);
 
     store_all_pixels(&mut lang);
 
