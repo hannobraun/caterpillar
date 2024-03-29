@@ -1,10 +1,7 @@
 mod builtins;
 mod data_stack;
 
-use self::{
-    builtins::{add, mul, store},
-    data_stack::DataStack,
-};
+use self::data_stack::DataStack;
 
 pub struct Lang<'r> {
     data_stack: DataStack,
@@ -21,9 +18,9 @@ impl<'r> Lang<'r> {
 
     pub fn b(&mut self, name: &'static str) -> &mut Self {
         match name {
-            "add" => add(&mut self.data_stack),
-            "mul" => mul(&mut self.data_stack),
-            "store" => store(&mut self.data_stack, self.frame),
+            "add" => builtins::add(&mut self.data_stack),
+            "mul" => builtins::mul(&mut self.data_stack),
+            "store" => builtins::store(&mut self.data_stack, self.frame),
             _ => panic!("Unknown builtin: `{name}`"),
         }
 
