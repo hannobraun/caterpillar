@@ -71,7 +71,7 @@ fn compute_draw_buffer_len(lang: &mut Lang) {
 }
 
 fn frame_addr(lang: &mut Lang) {
-    lang.v(0);
+    lang.data_stack.push(0);
 }
 
 fn store_pixel(lang: &mut Lang) {
