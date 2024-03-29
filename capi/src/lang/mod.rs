@@ -19,17 +19,21 @@ impl<'r> Lang<'r> {
         }
     }
 
+    pub fn b(&mut self, name: &'static str) -> &mut Self {
+        match name {
+            "add" => add(&mut self.data_stack),
+            _ => panic!("Unknown builtin: `{name}`"),
+        }
+
+        self
+    }
+
     pub fn v(&mut self, value: usize) -> &mut Self {
         self.data_stack.push(value);
         self
     }
 
     // Built-ins
-
-    pub fn add(&mut self) -> &mut Self {
-        add(&mut self.data_stack);
-        self
-    }
 
     pub fn mul(&mut self) -> &mut Self {
         mul(&mut self.data_stack);
@@ -110,5 +114,5 @@ fn store_channel(lang: &mut Lang) {
 }
 
 fn inc_addr(lang: &mut Lang) {
-    lang.v(1).add();
+    lang.v(1).b("add");
 }
