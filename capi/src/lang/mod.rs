@@ -22,6 +22,7 @@ impl<'r> Lang<'r> {
     pub fn b(&mut self, name: &'static str) -> &mut Self {
         match name {
             "add" => add(&mut self.data_stack),
+            "mul" => mul(&mut self.data_stack),
             _ => panic!("Unknown builtin: `{name}`"),
         }
 
@@ -34,11 +35,6 @@ impl<'r> Lang<'r> {
     }
 
     // Built-ins
-
-    pub fn mul(&mut self) -> &mut Self {
-        mul(&mut self.data_stack);
-        self
-    }
 
     pub fn store(&mut self) -> &mut Self {
         store(&mut self.data_stack, self.frame);
@@ -74,7 +70,7 @@ fn store_all_pixels(lang: &mut Lang) {
 }
 
 fn compute_draw_buffer_len(lang: &mut Lang) {
-    lang.mul().v(4).mul();
+    lang.b("mul").v(4).b("mul");
 }
 
 fn frame_addr(lang: &mut Lang) {
