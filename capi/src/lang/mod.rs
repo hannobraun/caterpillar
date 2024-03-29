@@ -3,6 +3,16 @@ mod data_stack;
 
 use self::data_stack::DataStack;
 
+pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
+    let mut lang = Lang::new(frame);
+
+    lang.v(frame_width).v(frame_height);
+
+    store_all_pixels(&mut lang);
+
+    assert_eq!(lang.data_stack.num_values(), 0);
+}
+
 pub struct Lang<'r> {
     data_stack: DataStack,
     frame: &'r mut [u8],
@@ -31,16 +41,6 @@ impl<'r> Lang<'r> {
         self.data_stack.push(value);
         self
     }
-}
-
-pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut lang = Lang::new(frame);
-
-    lang.v(frame_width).v(frame_height);
-
-    store_all_pixels(&mut lang);
-
-    assert_eq!(lang.data_stack.num_values(), 0);
 }
 
 fn store_all_pixels(lang: &mut Lang) {
