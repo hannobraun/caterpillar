@@ -23,6 +23,7 @@ impl<'r> Lang<'r> {
         match name {
             "add" => add(&mut self.data_stack),
             "mul" => mul(&mut self.data_stack),
+            "store" => store(&mut self.data_stack, self.frame),
             _ => panic!("Unknown builtin: `{name}`"),
         }
 
@@ -31,13 +32,6 @@ impl<'r> Lang<'r> {
 
     pub fn v(&mut self, value: usize) -> &mut Self {
         self.data_stack.push(value);
-        self
-    }
-
-    // Built-ins
-
-    pub fn store(&mut self) -> &mut Self {
-        store(&mut self.data_stack, self.frame);
         self
     }
 }
@@ -105,7 +99,7 @@ fn store_alpha(lang: &mut Lang) {
 }
 
 fn store_channel(lang: &mut Lang) {
-    lang.store();
+    lang.b("store");
     inc_addr(lang);
 }
 
