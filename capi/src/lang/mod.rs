@@ -10,7 +10,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
     store_all_pixels(&mut lang);
 
-    assert_eq!(lang.data_stack.num_values(), 0);
+    lang.execute();
 }
 
 pub struct Lang<'r> {
@@ -40,6 +40,10 @@ impl<'r> Lang<'r> {
     pub fn v(&mut self, value: usize) -> &mut Self {
         self.data_stack.push(value);
         self
+    }
+
+    pub fn execute(self) {
+        assert_eq!(self.data_stack.num_values(), 0);
     }
 }
 
