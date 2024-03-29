@@ -17,6 +17,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 pub struct Lang<'r> {
     data_stack: DataStack,
     frame: &'r mut [u8],
+    fragments: Vec<Fragment>,
 }
 
 impl<'r> Lang<'r> {
@@ -24,24 +25,40 @@ impl<'r> Lang<'r> {
         Self {
             data_stack: DataStack::new(),
             frame,
+            fragments: Vec::new(),
         }
     }
 
     pub fn b(&mut self, name: &'static str) -> &mut Self {
-        match name {
-            "add" => builtins::add(&mut self.data_stack),
-            "mul" => builtins::mul(&mut self.data_stack),
-            "store" => builtins::store(&mut self.data_stack, self.frame),
-            _ => panic!("Unknown builtin: `{name}`"),
-        }
-
+        self.fragments.push(Fragment::Builtin { name });
         self
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.data_stack.push(value);
+        self.fragments.push(Fragment::Value(value));
         self
     }
+
+    pub fn execute(&mut self) {
+        for fragment in self.fragments.drain(..) {
+            match fragment {
+                Fragment::Builtin { name } => match name {
+                    "add" => builtins::add(&mut self.data_stack),
+                    "mul" => builtins::mul(&mut self.data_stack),
+                    "store" => {
+                        builtins::store(&mut self.data_stack, self.frame)
+                    }
+                    _ => panic!("Unknown builtin: `{name}`"),
+                },
+                Fragment::Value(value) => self.data_stack.push(value),
+            }
+        }
+    }
+}
+
+pub enum Fragment {
+    Builtin { name: &'static str },
+    Value(usize),
 }
 
 fn store_all_pixels(lang: &mut Lang) {
@@ -58,6 +75,7 @@ fn store_all_pixels(lang: &mut Lang) {
         lang.data_stack.push(addr);
 
         store_pixel(lang);
+        lang.execute();
     }
 }
 
