@@ -48,7 +48,7 @@ impl<'r> Lang<'r> {
     }
 
     pub fn execute(&mut self) {
-        for instruction in self.compiler.instructions.drain(..) {
+        for &instruction in &self.compiler.instructions {
             match instruction {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
@@ -79,6 +79,7 @@ fn store_all_pixels(lang: &mut Lang) {
 
         store_pixel(&mut lang.compiler);
         lang.execute();
+        lang.compiler.instructions.clear();
     }
 }
 
