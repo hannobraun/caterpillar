@@ -39,11 +39,9 @@ impl<'r> Lang<'r> {
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
     ) {
-        let mut lang = Lang::new(self.frame);
-        f(&mut lang.compiler);
-        self.compiler
-            .functions
-            .insert(name, lang.compiler.fragments);
+        let mut compiler = Compiler::new();
+        f(&mut compiler);
+        self.compiler.functions.insert(name, compiler.fragments);
     }
 
     pub fn execute(&mut self) {
