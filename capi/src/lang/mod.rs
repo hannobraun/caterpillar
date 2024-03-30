@@ -22,6 +22,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     assert_eq!(lang.data_stack.num_values(), 0);
 }
 
+#[derive(Debug)]
 pub struct Lang<'r> {
     compiler: Compiler,
     data_stack: DataStack,
