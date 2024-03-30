@@ -82,7 +82,7 @@ fn store_all_pixels(lang: &mut Lang) {
         }
         lang.data_stack.push(addr);
 
-        store_pixel(lang);
+        store_pixel(&mut lang.compiler);
         lang.execute();
     }
 }
@@ -97,11 +97,11 @@ fn frame_addr(lang: &mut Lang) {
     lang.data_stack.push(0);
 }
 
-fn store_pixel(lang: &mut Lang) {
-    store_red(&mut lang.compiler);
-    store_green(&mut lang.compiler);
-    store_blue(&mut lang.compiler);
-    store_alpha(&mut lang.compiler);
+fn store_pixel(c: &mut Compiler) {
+    store_red(c);
+    store_green(c);
+    store_blue(c);
+    store_alpha(c);
 }
 
 fn store_red(c: &mut Compiler) {
