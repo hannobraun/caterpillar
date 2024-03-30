@@ -48,7 +48,12 @@ impl<'r> Lang<'r> {
     }
 
     pub fn execute(&mut self) {
-        for &instruction in &self.compiler.instructions {
+        let mut current_instruction = 0;
+
+        while current_instruction < self.compiler.instructions.len() {
+            let instruction = self.compiler.instructions[current_instruction];
+            current_instruction += 1;
+
             match instruction {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
