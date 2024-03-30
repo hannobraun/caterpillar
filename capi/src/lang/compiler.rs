@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 pub struct Compiler {
-    pub functions: BTreeMap<&'static str, Vec<Fragment>>,
-    pub fragments: Vec<Fragment>,
+    pub functions: BTreeMap<&'static str, Vec<Instruction>>,
+    pub fragments: Vec<Instruction>,
 }
 
 impl Compiler {
@@ -14,7 +14,7 @@ impl Compiler {
     }
 
     pub fn b(&mut self, name: &'static str) -> &mut Self {
-        self.fragments.push(Fragment::Builtin { name });
+        self.fragments.push(Instruction::Builtin { name });
         self
     }
 
@@ -25,13 +25,13 @@ impl Compiler {
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.fragments.push(Fragment::Value(value));
+        self.fragments.push(Instruction::Value(value));
         self
     }
 }
 
 #[derive(Copy, Clone)]
-pub enum Fragment {
+pub enum Instruction {
     Builtin { name: &'static str },
     Value(usize),
 }

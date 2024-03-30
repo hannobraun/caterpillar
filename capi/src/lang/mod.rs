@@ -3,7 +3,7 @@ mod compiler;
 mod data_stack;
 
 use self::{
-    compiler::{Compiler, Fragment},
+    compiler::{Compiler, Instruction},
     data_stack::DataStack,
 };
 
@@ -50,7 +50,7 @@ impl<'r> Lang<'r> {
     pub fn execute(&mut self) {
         for fragment in self.compiler.fragments.drain(..) {
             match fragment {
-                Fragment::Builtin { name } => match name {
+                Instruction::Builtin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "store" => {
@@ -58,7 +58,7 @@ impl<'r> Lang<'r> {
                     }
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
-                Fragment::Value(value) => self.data_stack.push(value),
+                Instruction::Value(value) => self.data_stack.push(value),
             }
         }
     }
