@@ -86,7 +86,7 @@ fn store_all_pixels(lang: &mut Lang) {
         lang.data_stack.push(addr);
 
         store_pixel(&mut lang.compiler);
-        lang.compiler.r();
+        lang.compiler.instructions.push(Instruction::Return);
         lang.execute();
         lang.compiler.instructions.clear();
     }
