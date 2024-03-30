@@ -13,6 +13,9 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     lang.define_function("inc_addr", |c| {
         c.v(1).b("add");
     });
+    lang.define_function("store_channel", |c| {
+        c.b("store").f("inc_addr");
+    });
 
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
@@ -111,25 +114,17 @@ fn store_pixel(c: &mut Compiler) {
 }
 
 fn store_red(c: &mut Compiler) {
-    c.v(0);
-    store_channel(c);
+    c.v(0).f("store_channel");
 }
 
 fn store_green(c: &mut Compiler) {
-    c.v(255);
-    store_channel(c);
+    c.v(255).f("store_channel");
 }
 
 fn store_blue(c: &mut Compiler) {
-    c.v(0);
-    store_channel(c);
+    c.v(0).f("store_channel");
 }
 
 fn store_alpha(c: &mut Compiler) {
-    c.v(255);
-    store_channel(c);
-}
-
-fn store_channel(c: &mut Compiler) {
-    c.b("store").f("inc_addr");
+    c.v(255).f("store_channel");
 }
