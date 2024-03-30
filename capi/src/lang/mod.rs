@@ -35,10 +35,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .f("store_alpha");
     });
 
-    lang.data_stack.push(frame_width);
-    lang.data_stack.push(frame_height);
-
-    store_all_pixels(&mut lang);
+    store_all_pixels(frame_width, frame_height, &mut lang);
 
     assert_eq!(lang.data_stack.num_values(), 0);
 }
@@ -94,7 +91,9 @@ impl<'r> Lang<'r> {
     }
 }
 
-fn store_all_pixels(lang: &mut Lang) {
+fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
+    lang.data_stack.push(frame_width);
+    lang.data_stack.push(frame_height);
     compute_draw_buffer_len(lang);
     let buffer_len = lang.data_stack.pop();
 
