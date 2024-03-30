@@ -28,10 +28,16 @@ impl Compiler {
         self.instructions.push(Instruction::PushValue(value));
         self
     }
+
+    pub fn r(&mut self) -> &mut Self {
+        self.instructions.push(Instruction::Return);
+        self
+    }
 }
 
 #[derive(Copy, Clone)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
     PushValue(usize),
+    Return,
 }

@@ -50,7 +50,7 @@ impl<'r> Lang<'r> {
     pub fn execute(&mut self) {
         let mut current_instruction = 0;
 
-        while current_instruction < self.compiler.instructions.len() {
+        loop {
             let instruction = self.compiler.instructions[current_instruction];
             current_instruction += 1;
 
@@ -64,6 +64,9 @@ impl<'r> Lang<'r> {
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::PushValue(value) => self.data_stack.push(value),
+                Instruction::Return => {
+                    break;
+                }
             }
         }
     }
@@ -83,6 +86,7 @@ fn store_all_pixels(lang: &mut Lang) {
         lang.data_stack.push(addr);
 
         store_pixel(&mut lang.compiler);
+        lang.compiler.r();
         lang.execute();
         lang.compiler.instructions.clear();
     }
