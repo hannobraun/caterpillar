@@ -7,9 +7,9 @@ pub struct Compiler {
 }
 
 impl Compiler {
-    pub fn new() -> Self {
+    pub fn new(functions: Functions) -> Self {
         Self {
-            functions: BTreeMap::new(),
+            functions,
             instructions: Vec::new(),
         }
     }

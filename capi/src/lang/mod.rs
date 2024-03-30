@@ -3,7 +3,7 @@ mod compiler;
 mod data_stack;
 
 use self::{
-    compiler::{Compiler, Instruction},
+    compiler::{Compiler, Functions, Instruction},
     data_stack::DataStack,
 };
 
@@ -32,7 +32,7 @@ pub struct Lang<'r> {
 impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
-            compiler: Compiler::new(),
+            compiler: Compiler::new(Functions::new()),
             data_stack: DataStack::new(),
             frame,
         }
@@ -43,7 +43,7 @@ impl<'r> Lang<'r> {
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
     ) {
-        let mut compiler = Compiler::new();
+        let mut compiler = Compiler::new(self.compiler.functions.clone());
         f(&mut compiler);
         self.compiler.functions.insert(name, compiler.instructions);
     }
