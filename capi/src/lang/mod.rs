@@ -48,8 +48,8 @@ impl<'r> Lang<'r> {
     }
 
     pub fn execute(&mut self) {
-        for fragment in self.compiler.instructions.drain(..) {
-            match fragment {
+        for instruction in self.compiler.instructions.drain(..) {
+            match instruction {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
