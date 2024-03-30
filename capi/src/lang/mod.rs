@@ -16,6 +16,18 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     lang.define_function("store_channel", |c| {
         c.b("store").f("inc_addr");
     });
+    lang.define_function("store_red", |c| {
+        c.v(0).f("store_channel");
+    });
+    lang.define_function("store_green", |c| {
+        c.v(255).f("store_channel");
+    });
+    lang.define_function("store_blue", |c| {
+        c.v(0).f("store_channel");
+    });
+    lang.define_function("store_alpha", |c| {
+        c.v(255).f("store_channel");
+    });
 
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
@@ -107,24 +119,8 @@ fn frame_addr(lang: &mut Lang) {
 }
 
 fn store_pixel(c: &mut Compiler) {
-    store_red(c);
-    store_green(c);
-    store_blue(c);
-    store_alpha(c);
-}
-
-fn store_red(c: &mut Compiler) {
-    c.v(0).f("store_channel");
-}
-
-fn store_green(c: &mut Compiler) {
-    c.v(255).f("store_channel");
-}
-
-fn store_blue(c: &mut Compiler) {
-    c.v(0).f("store_channel");
-}
-
-fn store_alpha(c: &mut Compiler) {
-    c.v(255).f("store_channel");
+    c.f("store_red");
+    c.f("store_green");
+    c.f("store_blue");
+    c.f("store_alpha");
 }
