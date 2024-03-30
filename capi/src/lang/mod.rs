@@ -7,8 +7,8 @@ use self::{compiler::Compiler, data_stack::DataStack};
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
 
-    lang.define_function("inc_addr", |lang| {
-        lang.compiler.v(1).b("add");
+    lang.define_function("inc_addr", |c| {
+        c.v(1).b("add");
     });
 
     lang.data_stack.push(frame_width);
@@ -37,10 +37,10 @@ impl<'r> Lang<'r> {
     pub fn define_function(
         &mut self,
         name: &'static str,
-        f: impl FnOnce(&mut Lang),
+        f: impl FnOnce(&mut Compiler),
     ) {
         let mut lang = Lang::new(self.frame);
-        f(&mut lang);
+        f(&mut lang.compiler);
         self.compiler
             .functions
             .insert(name, lang.compiler.fragments);
