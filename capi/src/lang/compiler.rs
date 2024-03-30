@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Compiler {
-    pub functions: BTreeMap<&'static str, Vec<Instruction>>,
+    pub functions: Functions,
     pub instructions: Vec<Instruction>,
 }
 
@@ -32,6 +32,8 @@ impl Compiler {
         self
     }
 }
+
+pub type Functions = BTreeMap<&'static str, Vec<Instruction>>;
 
 #[derive(Copy, Clone, Debug)]
 pub enum Instruction {
