@@ -30,7 +30,7 @@ impl Compiler {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
     PushValue(usize),
