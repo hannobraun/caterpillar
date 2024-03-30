@@ -50,7 +50,7 @@ impl<'r> Lang<'r> {
     pub fn execute(&mut self) {
         for fragment in self.compiler.fragments.drain(..) {
             match fragment {
-                Instruction::Builtin { name } => match name {
+                Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "store" => {
