@@ -98,30 +98,30 @@ fn frame_addr(lang: &mut Lang) {
 }
 
 fn store_pixel(lang: &mut Lang) {
-    store_red(lang);
-    store_green(lang);
-    store_blue(lang);
-    store_alpha(lang);
+    store_red(&mut lang.compiler);
+    store_green(&mut lang.compiler);
+    store_blue(&mut lang.compiler);
+    store_alpha(&mut lang.compiler);
 }
 
-fn store_red(lang: &mut Lang) {
-    lang.compiler.v(0);
-    store_channel(&mut lang.compiler);
+fn store_red(c: &mut Compiler) {
+    c.v(0);
+    store_channel(c);
 }
 
-fn store_green(lang: &mut Lang) {
-    lang.compiler.v(255);
-    store_channel(&mut lang.compiler);
+fn store_green(c: &mut Compiler) {
+    c.v(255);
+    store_channel(c);
 }
 
-fn store_blue(lang: &mut Lang) {
-    lang.compiler.v(0);
-    store_channel(&mut lang.compiler);
+fn store_blue(c: &mut Compiler) {
+    c.v(0);
+    store_channel(c);
 }
 
-fn store_alpha(lang: &mut Lang) {
-    lang.compiler.v(255);
-    store_channel(&mut lang.compiler);
+fn store_alpha(c: &mut Compiler) {
+    c.v(255);
+    store_channel(c);
 }
 
 fn store_channel(c: &mut Compiler) {
