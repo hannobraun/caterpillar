@@ -58,7 +58,7 @@ impl<'r> Lang<'r> {
                     }
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
-                Instruction::Value(value) => self.data_stack.push(value),
+                Instruction::PushValue(value) => self.data_stack.push(value),
             }
         }
     }

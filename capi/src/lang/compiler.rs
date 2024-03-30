@@ -25,7 +25,7 @@ impl Compiler {
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.fragments.push(Instruction::Value(value));
+        self.fragments.push(Instruction::PushValue(value));
         self
     }
 }
@@ -33,5 +33,5 @@ impl Compiler {
 #[derive(Copy, Clone)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
-    Value(usize),
+    PushValue(usize),
 }
