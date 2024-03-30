@@ -28,6 +28,12 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     lang.define_function("store_alpha", |c| {
         c.v(255).f("store_channel");
     });
+    lang.define_function("store_pixel", |c| {
+        c.f("store_red");
+        c.f("store_green");
+        c.f("store_blue");
+        c.f("store_alpha");
+    });
 
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
@@ -101,7 +107,7 @@ fn store_all_pixels(lang: &mut Lang) {
         }
         lang.data_stack.push(addr);
 
-        store_pixel(&mut lang.compiler);
+        lang.compiler.f("store_pixel");
         lang.compiler.instructions.push(Instruction::Return);
         lang.execute();
         lang.compiler.instructions.clear();
@@ -116,11 +122,4 @@ fn compute_draw_buffer_len(lang: &mut Lang) {
 
 fn frame_addr(lang: &mut Lang) {
     lang.data_stack.push(0);
-}
-
-fn store_pixel(c: &mut Compiler) {
-    c.f("store_red");
-    c.f("store_green");
-    c.f("store_blue");
-    c.f("store_alpha");
 }
