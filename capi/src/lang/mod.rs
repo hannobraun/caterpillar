@@ -2,8 +2,6 @@ mod builtins;
 mod compiler;
 mod data_stack;
 
-use std::collections::BTreeMap;
-
 use self::{compiler::Compiler, data_stack::DataStack};
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
@@ -30,10 +28,7 @@ pub struct Lang<'r> {
 impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
-            compiler: Compiler {
-                functions: BTreeMap::new(),
-                fragments: Vec::new(),
-            },
+            compiler: Compiler::new(),
             data_stack: DataStack::new(),
             frame,
         }
