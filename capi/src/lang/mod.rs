@@ -56,6 +56,7 @@ impl<'r> Lang<'r> {
     }
 }
 
+#[derive(Copy, Clone)]
 pub enum Fragment {
     Builtin { name: &'static str },
     Value(usize),
