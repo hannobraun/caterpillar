@@ -106,24 +106,24 @@ fn store_pixel(lang: &mut Lang) {
 
 fn store_red(lang: &mut Lang) {
     lang.compiler.v(0);
-    store_channel(lang);
+    store_channel(&mut lang.compiler);
 }
 
 fn store_green(lang: &mut Lang) {
     lang.compiler.v(255);
-    store_channel(lang);
+    store_channel(&mut lang.compiler);
 }
 
 fn store_blue(lang: &mut Lang) {
     lang.compiler.v(0);
-    store_channel(lang);
+    store_channel(&mut lang.compiler);
 }
 
 fn store_alpha(lang: &mut Lang) {
     lang.compiler.v(255);
-    store_channel(lang);
+    store_channel(&mut lang.compiler);
 }
 
-fn store_channel(lang: &mut Lang) {
-    lang.compiler.b("store").f("inc_addr");
+fn store_channel(c: &mut Compiler) {
+    c.b("store").f("inc_addr");
 }
