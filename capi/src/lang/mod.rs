@@ -1,9 +1,10 @@
 mod builtins;
+mod compiler;
 mod data_stack;
 
 use std::collections::BTreeMap;
 
-use self::data_stack::DataStack;
+use self::{compiler::Compiler, data_stack::DataStack};
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
@@ -21,19 +22,20 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 }
 
 pub struct Lang<'r> {
-    functions: BTreeMap<&'static str, Vec<Fragment>>,
+    compiler: Compiler,
     data_stack: DataStack,
     frame: &'r mut [u8],
-    fragments: Vec<Fragment>,
 }
 
 impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
-            functions: BTreeMap::new(),
+            compiler: Compiler {
+                functions: BTreeMap::new(),
+                fragments: Vec::new(),
+            },
             data_stack: DataStack::new(),
             frame,
-            fragments: Vec::new(),
         }
     }
 
@@ -44,27 +46,29 @@ impl<'r> Lang<'r> {
     ) {
         let mut lang = Lang::new(self.frame);
         f(&mut lang);
-        self.functions.insert(name, lang.fragments);
+        self.compiler
+            .functions
+            .insert(name, lang.compiler.fragments);
     }
 
     pub fn b(&mut self, name: &'static str) -> &mut Self {
-        self.fragments.push(Fragment::Builtin { name });
+        self.compiler.fragments.push(Fragment::Builtin { name });
         self
     }
 
     pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let function = self.functions.get(name).unwrap();
-        self.fragments.extend(function.iter().copied());
+        let function = self.compiler.functions.get(name).unwrap();
+        self.compiler.fragments.extend(function.iter().copied());
         self
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.fragments.push(Fragment::Value(value));
+        self.compiler.fragments.push(Fragment::Value(value));
         self
     }
 
     pub fn execute(&mut self) {
-        for fragment in self.fragments.drain(..) {
+        for fragment in self.compiler.fragments.drain(..) {
             match fragment {
                 Fragment::Builtin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
