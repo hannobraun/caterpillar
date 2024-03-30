@@ -29,10 +29,10 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
         c.v(255).f("store_channel");
     });
     lang.define_function("store_pixel", |c| {
-        c.f("store_red");
-        c.f("store_green");
-        c.f("store_blue");
-        c.f("store_alpha");
+        c.f("store_red")
+            .f("store_green")
+            .f("store_blue")
+            .f("store_alpha");
     });
 
     lang.data_stack.push(frame_width);
