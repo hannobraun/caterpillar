@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+#[derive(Debug)]
 pub struct Compiler {
     pub functions: BTreeMap<&'static str, Vec<Instruction>>,
     pub instructions: Vec<Instruction>,
