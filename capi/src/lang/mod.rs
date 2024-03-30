@@ -8,7 +8,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
 
     lang.define_function("inc_addr", |lang| {
-        lang.v(1).b("add");
+        lang.compiler.v(1).b("add");
     });
 
     lang.data_stack.push(frame_width);
@@ -44,22 +44,6 @@ impl<'r> Lang<'r> {
         self.compiler
             .functions
             .insert(name, lang.compiler.fragments);
-    }
-
-    pub fn b(&mut self, name: &'static str) -> &mut Self {
-        self.compiler.fragments.push(Fragment::Builtin { name });
-        self
-    }
-
-    pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let function = self.compiler.functions.get(name).unwrap();
-        self.compiler.fragments.extend(function.iter().copied());
-        self
-    }
-
-    pub fn v(&mut self, value: usize) -> &mut Self {
-        self.compiler.fragments.push(Fragment::Value(value));
-        self
     }
 
     pub fn execute(&mut self) {
@@ -121,25 +105,25 @@ fn store_pixel(lang: &mut Lang) {
 }
 
 fn store_red(lang: &mut Lang) {
-    lang.v(0);
+    lang.compiler.v(0);
     store_channel(lang);
 }
 
 fn store_green(lang: &mut Lang) {
-    lang.v(255);
+    lang.compiler.v(255);
     store_channel(lang);
 }
 
 fn store_blue(lang: &mut Lang) {
-    lang.v(0);
+    lang.compiler.v(0);
     store_channel(lang);
 }
 
 fn store_alpha(lang: &mut Lang) {
-    lang.v(255);
+    lang.compiler.v(255);
     store_channel(lang);
 }
 
 fn store_channel(lang: &mut Lang) {
-    lang.b("store").f("inc_addr");
+    lang.compiler.b("store").f("inc_addr");
 }
