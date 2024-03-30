@@ -1,10 +1,16 @@
 mod builtins;
 mod data_stack;
 
+use std::collections::BTreeMap;
+
 use self::data_stack::DataStack;
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
+
+    lang.define_function("inc_addr", |lang| {
+        lang.v(1).b("add");
+    });
 
     lang.data_stack.push(frame_width);
     lang.data_stack.push(frame_height);
@@ -15,6 +21,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 }
 
 pub struct Lang<'r> {
+    functions: BTreeMap<&'static str, Vec<Fragment>>,
     data_stack: DataStack,
     frame: &'r mut [u8],
     fragments: Vec<Fragment>,
@@ -23,14 +30,31 @@ pub struct Lang<'r> {
 impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
+            functions: BTreeMap::new(),
             data_stack: DataStack::new(),
             frame,
             fragments: Vec::new(),
         }
     }
 
+    pub fn define_function(
+        &mut self,
+        name: &'static str,
+        f: impl FnOnce(&mut Lang),
+    ) {
+        let mut lang = Lang::new(self.frame);
+        f(&mut lang);
+        self.functions.insert(name, lang.fragments);
+    }
+
     pub fn b(&mut self, name: &'static str) -> &mut Self {
         self.fragments.push(Fragment::Builtin { name });
+        self
+    }
+
+    pub fn f(&mut self, name: &'static str) -> &mut Self {
+        let function = self.functions.get(name).unwrap();
+        self.fragments.extend(function.iter().copied());
         self
     }
 
@@ -118,10 +142,5 @@ fn store_alpha(lang: &mut Lang) {
 }
 
 fn store_channel(lang: &mut Lang) {
-    lang.b("store");
-    inc_addr(lang);
-}
-
-fn inc_addr(lang: &mut Lang) {
-    lang.v(1).b("add");
+    lang.b("store").f("inc_addr");
 }
