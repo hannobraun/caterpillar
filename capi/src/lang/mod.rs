@@ -44,11 +44,11 @@ impl<'r> Lang<'r> {
     ) {
         let mut compiler = Compiler::new();
         f(&mut compiler);
-        self.compiler.functions.insert(name, compiler.fragments);
+        self.compiler.functions.insert(name, compiler.instructions);
     }
 
     pub fn execute(&mut self) {
-        for fragment in self.compiler.fragments.drain(..) {
+        for fragment in self.compiler.instructions.drain(..) {
             match fragment {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
