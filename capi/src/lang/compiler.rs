@@ -19,7 +19,9 @@ impl Compiler {
     }
 
     pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let function = self.functions.get(name).unwrap();
+        let Some(function) = self.functions.get(name) else {
+            panic!("Could not resolve function `{name}`.");
+        };
         self.instructions.extend(function.iter().copied());
         self
     }
