@@ -92,10 +92,7 @@ impl<'r> Lang<'r> {
 }
 
 fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
-    lang.data_stack.push(frame_width);
-    lang.data_stack.push(frame_height);
-    compute_draw_buffer_len(lang);
-    let buffer_len = lang.data_stack.pop();
+    let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
 
     frame_addr(lang);
 
@@ -113,10 +110,8 @@ fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
     }
 }
 
-fn compute_draw_buffer_len(lang: &mut Lang) {
-    builtins::mul(&mut lang.data_stack);
-    lang.data_stack.push(4);
-    builtins::mul(&mut lang.data_stack);
+fn compute_draw_buffer_len(frame_width: usize, frame_height: usize) -> usize {
+    frame_width * frame_height * 4
 }
 
 fn frame_addr(lang: &mut Lang) {
