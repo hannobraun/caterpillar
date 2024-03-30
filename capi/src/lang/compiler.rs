@@ -1,7 +1,5 @@
 use std::collections::BTreeMap;
 
-use super::Fragment;
-
 pub struct Compiler {
     pub functions: BTreeMap<&'static str, Vec<Fragment>>,
     pub fragments: Vec<Fragment>,
@@ -30,4 +28,10 @@ impl Compiler {
         self.fragments.push(Fragment::Value(value));
         self
     }
+}
+
+#[derive(Copy, Clone)]
+pub enum Fragment {
+    Builtin { name: &'static str },
+    Value(usize),
 }

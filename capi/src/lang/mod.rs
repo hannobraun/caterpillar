@@ -2,7 +2,10 @@ mod builtins;
 mod compiler;
 mod data_stack;
 
-use self::{compiler::Compiler, data_stack::DataStack};
+use self::{
+    compiler::{Compiler, Fragment},
+    data_stack::DataStack,
+};
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut lang = Lang::new(frame);
@@ -59,12 +62,6 @@ impl<'r> Lang<'r> {
             }
         }
     }
-}
-
-#[derive(Copy, Clone)]
-pub enum Fragment {
-    Builtin { name: &'static str },
-    Value(usize),
 }
 
 fn store_all_pixels(lang: &mut Lang) {
