@@ -40,14 +40,13 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::new(capi.instructions);
 
     store_all_pixels(
         frame_width,
         frame_height,
         store_pixel,
         &mut evaluator,
-        &capi.instructions,
         frame,
     );
 
@@ -90,7 +89,6 @@ fn store_all_pixels(
     frame_height: usize,
     store_pixel: usize,
     evaluator: &mut Evaluator,
-    instructions: &[Instruction],
     frame: &mut [u8],
 ) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
@@ -103,7 +101,7 @@ fn store_all_pixels(
         }
 
         evaluator.data_stack.push(addr);
-        evaluator.execute(store_pixel, instructions, frame);
+        evaluator.execute(store_pixel, frame);
         addr = evaluator.data_stack.pop();
     }
 }
