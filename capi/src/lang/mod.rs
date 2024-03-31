@@ -70,7 +70,7 @@ impl Capi {
         let address = self.instructions.len();
 
         let mut syntax = Vec::new();
-        f(&mut Syntax::new(&self.functions, &mut syntax));
+        f(&mut Syntax::new(&mut syntax));
         compile(syntax, &self.functions, &mut self.instructions);
 
         self.functions.define(name, address);

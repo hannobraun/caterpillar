@@ -1,21 +1,11 @@
-use super::functions::Functions;
-
 #[derive(Debug)]
 pub struct Syntax<'r> {
-    #[allow(dead_code)]
-    functions: &'r Functions,
     elements: &'r mut Vec<SyntaxElement>,
 }
 
 impl<'r> Syntax<'r> {
-    pub fn new(
-        functions: &'r Functions,
-        elements: &'r mut Vec<SyntaxElement>,
-    ) -> Self {
-        Self {
-            functions,
-            elements,
-        }
+    pub fn new(elements: &'r mut Vec<SyntaxElement>) -> Self {
+        Self { elements }
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
