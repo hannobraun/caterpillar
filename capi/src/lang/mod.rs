@@ -78,38 +78,7 @@ impl Capi {
     }
 
     pub fn execute(&mut self, entry: usize, frame: &mut [u8]) {
-        let mut current_instruction = entry;
-
-        loop {
-            let instruction = self.instructions[current_instruction];
-            current_instruction += 1;
-
-            match instruction {
-                Instruction::CallBuiltin { name } => match name {
-                    "add" => builtins::add(&mut self.evaluator.data_stack),
-                    "mul" => builtins::mul(&mut self.evaluator.data_stack),
-                    "store" => {
-                        builtins::store(&mut self.evaluator.data_stack, frame)
-                    }
-                    _ => panic!("Unknown builtin: `{name}`"),
-                },
-                Instruction::CallFunction { address } => {
-                    self.evaluator.call_stack.push(current_instruction);
-                    current_instruction = address;
-                }
-                Instruction::PushValue(value) => {
-                    self.evaluator.data_stack.push(value)
-                }
-                Instruction::Return => {
-                    let Some(return_address) = self.evaluator.call_stack.pop()
-                    else {
-                        break;
-                    };
-
-                    current_instruction = return_address;
-                }
-            }
-        }
+        self.evaluator.execute(entry, &self.instructions, frame);
     }
 }
 
