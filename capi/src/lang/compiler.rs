@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Compiler<'r> {
-    pub functions: &'r Functions,
-    pub instructions: &'r mut Vec<Instruction>,
+    functions: &'r Functions,
+    instructions: &'r mut Vec<Instruction>,
 }
 
 impl<'r> Compiler<'r> {
