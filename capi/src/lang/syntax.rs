@@ -36,7 +36,7 @@ impl<'r> Syntax<'r> {
 
 #[derive(Debug)]
 pub enum SyntaxElement {
-    Word { name: &'static str },
     CallFunction { address: usize },
     PushValue(usize),
+    Word { name: &'static str },
 }
