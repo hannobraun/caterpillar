@@ -65,13 +65,14 @@ impl<'r> Lang<'r> {
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
     ) -> usize {
+        let address = self.instructions.len();
+
         let mut compiler = Compiler::new(&self.functions);
         f(&mut compiler);
         let Compiler { instructions, .. } = compiler;
 
         self.functions.insert(name, instructions.clone());
 
-        let address = self.instructions.len();
         self.instructions
             .extend(instructions.into_iter().chain([Instruction::Return]));
 
