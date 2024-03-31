@@ -112,7 +112,7 @@ fn store_all_pixels(
     frame_width: usize,
     frame_height: usize,
     store_pixel: usize,
-    lang: &mut Capi,
+    capi: &mut Capi,
     frame: &mut [u8],
 ) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
@@ -124,9 +124,9 @@ fn store_all_pixels(
             break;
         }
 
-        lang.data_stack.push(addr);
-        lang.execute(store_pixel, frame);
-        addr = lang.data_stack.pop();
+        capi.data_stack.push(addr);
+        capi.execute(store_pixel, frame);
+        addr = capi.data_stack.pop();
     }
 }
 
