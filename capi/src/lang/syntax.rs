@@ -18,7 +18,7 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn b(&mut self, name: &'static str) -> &mut Self {
-        self.elements.push(SyntaxElement::CallBuiltin { name });
+        self.elements.push(SyntaxElement::Word { name });
         self
     }
 
@@ -36,7 +36,7 @@ impl<'r> Syntax<'r> {
 
 #[derive(Debug)]
 pub enum SyntaxElement {
-    CallBuiltin { name: &'static str },
+    Word { name: &'static str },
     CallFunction { address: usize },
     PushValue(usize),
 }

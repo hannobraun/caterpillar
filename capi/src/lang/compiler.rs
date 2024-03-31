@@ -7,9 +7,7 @@ pub fn compile(
 ) {
     instructions.extend(syntax.into_iter().map(|syntax_element| {
         match syntax_element {
-            SyntaxElement::CallBuiltin { name } => {
-                Instruction::CallBuiltin { name }
-            }
+            SyntaxElement::Word { name } => Instruction::CallBuiltin { name },
             SyntaxElement::CallFunction { address } => {
                 Instruction::CallFunction { address }
             }
