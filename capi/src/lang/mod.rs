@@ -10,7 +10,7 @@ use self::{
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut lang = Lang::new();
+    let mut lang = Capi::new();
 
     lang.define_function("inc_addr", |c| {
         c.v(1).b("add");
@@ -43,14 +43,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 }
 
 #[derive(Debug)]
-pub struct Lang {
+pub struct Capi {
     instructions: Vec<Instruction>,
     functions: Functions,
     call_stack: Vec<usize>,
     data_stack: DataStack,
 }
 
-impl Lang {
+impl Capi {
     pub fn new() -> Self {
         Self {
             instructions: Vec::new(),
@@ -112,7 +112,7 @@ fn store_all_pixels(
     frame_width: usize,
     frame_height: usize,
     store_pixel: usize,
-    lang: &mut Lang,
+    lang: &mut Capi,
     frame: &mut [u8],
 ) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
