@@ -23,10 +23,11 @@ impl<'r> Compiler<'r> {
     }
 
     pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let Some(function) = self.functions.get(name) else {
+        let Some(function) = self.functions.get(name).copied() else {
             panic!("Could not resolve function `{name}`.");
         };
-        self.instructions.extend(function.iter().copied());
+        self.instructions
+            .push(Instruction::CallFunction { address: function });
         self
     }
 
@@ -36,11 +37,12 @@ impl<'r> Compiler<'r> {
     }
 }
 
-pub type Functions = BTreeMap<&'static str, Vec<Instruction>>;
+pub type Functions = BTreeMap<&'static str, usize>;
 
 #[derive(Copy, Clone, Debug)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
+    CallFunction { address: usize },
     PushValue(usize),
     Return,
 }

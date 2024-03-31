@@ -71,8 +71,7 @@ impl<'r> Lang<'r> {
             Compiler::new(&self.functions, &mut self.instructions);
         f(&mut compiler);
 
-        self.functions
-            .insert(name, self.instructions[address..].to_vec());
+        self.functions.insert(name, address);
 
         self.instructions.push(Instruction::Return);
 
@@ -95,6 +94,10 @@ impl<'r> Lang<'r> {
                     }
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
+                Instruction::CallFunction { address } => {
+                    self.call_stack.push(current_instruction);
+                    current_instruction = address;
+                }
                 Instruction::PushValue(value) => self.data_stack.push(value),
                 Instruction::Return => {
                     let Some(return_address) = self.call_stack.pop() else {
