@@ -40,7 +40,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
-    let mut evaluator = capi.evaluator;
+    let mut evaluator = Evaluator::new();
 
     store_all_pixels(
         frame_width,
@@ -58,7 +58,6 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 pub struct Capi {
     instructions: Vec<Instruction>,
     functions: Functions,
-    evaluator: Evaluator,
 }
 
 impl Capi {
@@ -66,7 +65,6 @@ impl Capi {
         Self {
             instructions: Vec::new(),
             functions: Functions::new(),
-            evaluator: Evaluator::new(),
         }
     }
 
