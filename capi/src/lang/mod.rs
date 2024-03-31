@@ -7,7 +7,6 @@ mod syntax;
 
 use self::{
     compiler::{compile, Instruction},
-    data_stack::DataStack,
     evaluator::Evaluator,
     functions::Functions,
     syntax::Syntax,
@@ -58,10 +57,7 @@ impl Capi {
         Self {
             instructions: Vec::new(),
             functions: Functions::new(),
-            evaluator: Evaluator {
-                call_stack: Vec::new(),
-                data_stack: DataStack::new(),
-            },
+            evaluator: Evaluator::new(),
         }
     }
 
