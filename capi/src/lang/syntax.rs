@@ -2,6 +2,7 @@ use super::functions::Functions;
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
+    #[allow(dead_code)]
     functions: &'r Functions,
     elements: &'r mut Vec<SyntaxElement>,
 }
@@ -17,14 +18,6 @@ impl<'r> Syntax<'r> {
         }
     }
 
-    pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let Some(address) = self.functions.resolve(name) else {
-            panic!("Could not resolve function `{name}`.");
-        };
-        self.elements.push(SyntaxElement::CallFunction { address });
-        self
-    }
-
     pub fn v(&mut self, value: usize) -> &mut Self {
         self.elements.push(SyntaxElement::Value(value));
         self
@@ -38,7 +31,6 @@ impl<'r> Syntax<'r> {
 
 #[derive(Debug)]
 pub enum SyntaxElement {
-    CallFunction { address: usize },
     Value(usize),
     Word { name: &'static str },
 }

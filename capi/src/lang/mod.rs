@@ -18,25 +18,25 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
         s.v(1).w("add");
     });
     capi.define_function("store_channel", |s| {
-        s.w("store").f("inc_addr");
+        s.w("store").w("inc_addr");
     });
     capi.define_function("store_red", |s| {
-        s.v(0).f("store_channel");
+        s.v(0).w("store_channel");
     });
     capi.define_function("store_green", |s| {
-        s.v(255).f("store_channel");
+        s.v(255).w("store_channel");
     });
     capi.define_function("store_blue", |s| {
-        s.v(0).f("store_channel");
+        s.v(0).w("store_channel");
     });
     capi.define_function("store_alpha", |s| {
-        s.v(255).f("store_channel");
+        s.v(255).w("store_channel");
     });
     let store_pixel = capi.define_function("store_pixel", |s| {
-        s.f("store_red")
-            .f("store_green")
-            .f("store_blue")
-            .f("store_alpha");
+        s.w("store_red")
+            .w("store_green")
+            .w("store_blue")
+            .w("store_alpha");
     });
 
     store_all_pixels(frame_width, frame_height, store_pixel, &mut capi, frame);
