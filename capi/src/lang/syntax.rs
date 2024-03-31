@@ -18,7 +18,9 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let address = self.functions.resolve(name);
+        let Some(address) = self.functions.resolve(name) else {
+            panic!("Could not resolve function `{name}`.");
+        };
         self.elements.push(SyntaxElement::CallFunction { address });
         self
     }

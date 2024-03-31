@@ -19,11 +19,7 @@ impl Functions {
         self.inner.insert(name, address);
     }
 
-    pub fn resolve(&self, name: &str) -> usize {
-        let Some(address) = self.inner.get(name).copied() else {
-            panic!("Could not resolve function `{name}`.");
-        };
-
-        address
+    pub fn resolve(&self, name: &str) -> Option<usize> {
+        self.inner.get(name).copied()
     }
 }
