@@ -94,19 +94,19 @@ impl<'r> Lang<'r> {
 fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
 
-    frame_addr(lang);
+    let mut addr = frame_addr();
 
     loop {
-        let addr = lang.data_stack.pop();
         if addr >= buffer_len {
             break;
         }
-        lang.data_stack.push(addr);
 
+        lang.data_stack.push(addr);
         lang.compiler.f("store_pixel");
         lang.compiler.instructions.push(Instruction::Return);
         lang.execute();
         lang.compiler.instructions.clear();
+        addr = lang.data_stack.pop();
     }
 }
 
@@ -114,6 +114,6 @@ fn compute_draw_buffer_len(frame_width: usize, frame_height: usize) -> usize {
     frame_width * frame_height * 4
 }
 
-fn frame_addr(lang: &mut Lang) {
-    lang.data_stack.push(0);
+fn frame_addr() -> usize {
+    0
 }
