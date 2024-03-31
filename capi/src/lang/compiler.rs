@@ -1,12 +1,12 @@
 use super::functions::Functions;
 
 #[derive(Debug)]
-pub struct Compiler<'r> {
+pub struct Syntax<'r> {
     functions: &'r Functions,
     instructions: &'r mut Vec<Instruction>,
 }
 
-impl<'r> Compiler<'r> {
+impl<'r> Syntax<'r> {
     pub fn new(
         functions: &'r Functions,
         instructions: &'r mut Vec<Instruction>,

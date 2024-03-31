@@ -4,7 +4,7 @@ mod data_stack;
 mod functions;
 
 use self::{
-    compiler::{Compiler, Instruction},
+    compiler::{Instruction, Syntax},
     data_stack::DataStack,
     functions::Functions,
 };
@@ -63,12 +63,11 @@ impl Capi {
     pub fn define_function(
         &mut self,
         name: &'static str,
-        f: impl FnOnce(&mut Compiler),
+        f: impl FnOnce(&mut Syntax),
     ) -> usize {
         let address = self.instructions.len();
 
-        let mut compiler =
-            Compiler::new(&self.functions, &mut self.instructions);
+        let mut compiler = Syntax::new(&self.functions, &mut self.instructions);
         f(&mut compiler);
         self.instructions.push(Instruction::Return);
 
