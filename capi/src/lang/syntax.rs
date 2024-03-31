@@ -24,7 +24,7 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.elements.push(SyntaxElement::PushValue(value));
+        self.elements.push(SyntaxElement::Value(value));
         self
     }
 
@@ -37,6 +37,6 @@ impl<'r> Syntax<'r> {
 #[derive(Debug)]
 pub enum SyntaxElement {
     CallFunction { address: usize },
-    PushValue(usize),
+    Value(usize),
     Word { name: &'static str },
 }

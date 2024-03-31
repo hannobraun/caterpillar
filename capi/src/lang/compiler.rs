@@ -11,7 +11,7 @@ pub fn compile(
             SyntaxElement::CallFunction { address } => {
                 Instruction::CallFunction { address }
             }
-            SyntaxElement::PushValue(value) => Instruction::PushValue(value),
+            SyntaxElement::Value(value) => Instruction::PushValue(value),
         }
     }));
     instructions.push(Instruction::Return);
