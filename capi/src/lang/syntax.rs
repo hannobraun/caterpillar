@@ -1,4 +1,4 @@
-use super::functions::Functions;
+use super::{compiler::Instruction, functions::Functions};
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
@@ -33,12 +33,4 @@ impl<'r> Syntax<'r> {
         self.instructions.push(Instruction::PushValue(value));
         self
     }
-}
-
-#[derive(Copy, Clone, Debug)]
-pub enum Instruction {
-    CallBuiltin { name: &'static str },
-    CallFunction { address: usize },
-    PushValue(usize),
-    Return,
 }
