@@ -10,36 +10,36 @@ use self::{
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut lang = Capi::new();
+    let mut capi = Capi::new();
 
-    lang.define_function("inc_addr", |c| {
+    capi.define_function("inc_addr", |c| {
         c.v(1).b("add");
     });
-    lang.define_function("store_channel", |c| {
+    capi.define_function("store_channel", |c| {
         c.b("store").f("inc_addr");
     });
-    lang.define_function("store_red", |c| {
+    capi.define_function("store_red", |c| {
         c.v(0).f("store_channel");
     });
-    lang.define_function("store_green", |c| {
+    capi.define_function("store_green", |c| {
         c.v(255).f("store_channel");
     });
-    lang.define_function("store_blue", |c| {
+    capi.define_function("store_blue", |c| {
         c.v(0).f("store_channel");
     });
-    lang.define_function("store_alpha", |c| {
+    capi.define_function("store_alpha", |c| {
         c.v(255).f("store_channel");
     });
-    let store_pixel = lang.define_function("store_pixel", |c| {
+    let store_pixel = capi.define_function("store_pixel", |c| {
         c.f("store_red")
             .f("store_green")
             .f("store_blue")
             .f("store_alpha");
     });
 
-    store_all_pixels(frame_width, frame_height, store_pixel, &mut lang, frame);
+    store_all_pixels(frame_width, frame_height, store_pixel, &mut capi, frame);
 
-    assert_eq!(lang.data_stack.num_values(), 0);
+    assert_eq!(capi.data_stack.num_values(), 0);
 }
 
 #[derive(Debug)]
