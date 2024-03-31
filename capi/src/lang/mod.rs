@@ -70,7 +70,6 @@ impl<'r> Lang<'r> {
         let mut compiler =
             Compiler::new(&self.functions, &mut self.instructions);
         f(&mut compiler);
-        let Compiler { .. } = compiler;
 
         self.functions
             .insert(name, self.instructions[address..].to_vec());
