@@ -1,11 +1,21 @@
-use super::functions::Functions;
+use super::{functions::Functions, syntax::SyntaxElement};
 
 pub fn compile(
-    syntax: Vec<Instruction>,
+    syntax: Vec<SyntaxElement>,
     _: &Functions,
     instructions: &mut Vec<Instruction>,
 ) {
-    instructions.extend(syntax);
+    instructions.extend(syntax.into_iter().map(|syntax_element| {
+        match syntax_element {
+            SyntaxElement::CallBuiltin { name } => {
+                Instruction::CallBuiltin { name }
+            }
+            SyntaxElement::CallFunction { address } => {
+                Instruction::CallFunction { address }
+            }
+            SyntaxElement::PushValue(value) => Instruction::PushValue(value),
+        }
+    }));
     instructions.push(Instruction::Return);
 }
 
