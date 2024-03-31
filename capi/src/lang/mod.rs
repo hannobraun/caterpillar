@@ -28,14 +28,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     lang.define_function("store_alpha", |c| {
         c.v(255).f("store_channel");
     });
-    lang.define_function("store_pixel", |c| {
+    let store_pixel = lang.define_function("store_pixel", |c| {
         c.f("store_red")
             .f("store_green")
             .f("store_blue")
             .f("store_alpha");
     });
 
-    store_all_pixels(frame_width, frame_height, &mut lang);
+    store_all_pixels(frame_width, frame_height, store_pixel, &mut lang);
 
     assert_eq!(lang.data_stack.num_values(), 0);
 }
@@ -62,18 +62,22 @@ impl<'r> Lang<'r> {
         &mut self,
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
-    ) {
+    ) -> usize {
         let mut compiler = Compiler::new(self.compiler.functions.clone());
         f(&mut compiler);
         self.compiler
             .functions
             .insert(name, compiler.instructions.clone());
+
+        let address = self.compiler.instructions.len();
         self.compiler.instructions.extend(
             compiler
                 .instructions
                 .into_iter()
                 .chain([Instruction::Return]),
         );
+
+        address
     }
 
     pub fn execute(&mut self, entry: usize) {
@@ -105,7 +109,12 @@ impl<'r> Lang<'r> {
     }
 }
 
-fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
+fn store_all_pixels(
+    frame_width: usize,
+    frame_height: usize,
+    store_pixel: usize,
+    lang: &mut Lang,
+) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
 
     let mut addr = frame_addr();
@@ -116,11 +125,7 @@ fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
         }
 
         lang.data_stack.push(addr);
-        let entry = lang.compiler.instructions.len();
-        lang.compiler.f("store_pixel");
-        lang.compiler.instructions.push(Instruction::Return);
-        lang.execute(entry);
-        lang.compiler.instructions.clear();
+        lang.execute(store_pixel);
         addr = lang.data_stack.pop();
     }
 }
