@@ -12,26 +12,26 @@ use self::{
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut capi = Capi::new();
 
-    capi.define_function("inc_addr", |c| {
-        c.v(1).b("add");
+    capi.define_function("inc_addr", |s| {
+        s.v(1).b("add");
     });
-    capi.define_function("store_channel", |c| {
-        c.b("store").f("inc_addr");
+    capi.define_function("store_channel", |s| {
+        s.b("store").f("inc_addr");
     });
-    capi.define_function("store_red", |c| {
-        c.v(0).f("store_channel");
+    capi.define_function("store_red", |s| {
+        s.v(0).f("store_channel");
     });
-    capi.define_function("store_green", |c| {
-        c.v(255).f("store_channel");
+    capi.define_function("store_green", |s| {
+        s.v(255).f("store_channel");
     });
-    capi.define_function("store_blue", |c| {
-        c.v(0).f("store_channel");
+    capi.define_function("store_blue", |s| {
+        s.v(0).f("store_channel");
     });
-    capi.define_function("store_alpha", |c| {
-        c.v(255).f("store_channel");
+    capi.define_function("store_alpha", |s| {
+        s.v(255).f("store_channel");
     });
-    let store_pixel = capi.define_function("store_pixel", |c| {
-        c.f("store_red")
+    let store_pixel = capi.define_function("store_pixel", |s| {
+        s.f("store_red")
             .f("store_green")
             .f("store_blue")
             .f("store_alpha");
