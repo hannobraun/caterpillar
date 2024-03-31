@@ -1,12 +1,14 @@
 mod builtins;
 mod compiler;
 mod data_stack;
+mod evaluator;
 mod functions;
 mod syntax;
 
 use self::{
     compiler::{compile, Instruction},
     data_stack::DataStack,
+    evaluator::Evaluator,
     functions::Functions,
     syntax::Syntax,
 };
@@ -41,15 +43,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
     store_all_pixels(frame_width, frame_height, store_pixel, &mut capi, frame);
 
-    assert_eq!(capi.data_stack.num_values(), 0);
+    assert_eq!(capi.evaluator.data_stack.num_values(), 0);
 }
 
 #[derive(Debug)]
 pub struct Capi {
     instructions: Vec<Instruction>,
     functions: Functions,
-    call_stack: Vec<usize>,
-    data_stack: DataStack,
+    evaluator: Evaluator,
 }
 
 impl Capi {
@@ -57,8 +58,10 @@ impl Capi {
         Self {
             instructions: Vec::new(),
             functions: Functions::new(),
-            call_stack: Vec::new(),
-            data_stack: DataStack::new(),
+            evaluator: Evaluator {
+                call_stack: Vec::new(),
+                data_stack: DataStack::new(),
+            },
         }
     }
 
@@ -87,18 +90,23 @@ impl Capi {
 
             match instruction {
                 Instruction::CallBuiltin { name } => match name {
-                    "add" => builtins::add(&mut self.data_stack),
-                    "mul" => builtins::mul(&mut self.data_stack),
-                    "store" => builtins::store(&mut self.data_stack, frame),
+                    "add" => builtins::add(&mut self.evaluator.data_stack),
+                    "mul" => builtins::mul(&mut self.evaluator.data_stack),
+                    "store" => {
+                        builtins::store(&mut self.evaluator.data_stack, frame)
+                    }
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::CallFunction { address } => {
-                    self.call_stack.push(current_instruction);
+                    self.evaluator.call_stack.push(current_instruction);
                     current_instruction = address;
                 }
-                Instruction::PushValue(value) => self.data_stack.push(value),
+                Instruction::PushValue(value) => {
+                    self.evaluator.data_stack.push(value)
+                }
                 Instruction::Return => {
-                    let Some(return_address) = self.call_stack.pop() else {
+                    let Some(return_address) = self.evaluator.call_stack.pop()
+                    else {
                         break;
                     };
 
@@ -125,9 +133,9 @@ fn store_all_pixels(
             break;
         }
 
-        capi.data_stack.push(addr);
+        capi.evaluator.data_stack.push(addr);
         capi.execute(store_pixel, frame);
-        addr = capi.data_stack.pop();
+        addr = capi.evaluator.data_stack.pop();
     }
 }
 
