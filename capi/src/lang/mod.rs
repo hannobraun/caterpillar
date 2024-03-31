@@ -68,7 +68,12 @@ impl<'r> Lang<'r> {
         self.compiler
             .functions
             .insert(name, compiler.instructions.clone());
-        self.compiler.instructions.extend(compiler.instructions);
+        self.compiler.instructions.extend(
+            compiler
+                .instructions
+                .into_iter()
+                .chain([Instruction::Return]),
+        );
     }
 
     pub fn execute(&mut self, entry: usize) {
