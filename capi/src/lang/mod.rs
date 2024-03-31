@@ -70,10 +70,9 @@ impl<'r> Lang<'r> {
         let mut compiler =
             Compiler::new(&self.functions, &mut self.instructions);
         f(&mut compiler);
+        self.instructions.push(Instruction::Return);
 
         self.functions.insert(name, address);
-
-        self.instructions.push(Instruction::Return);
 
         address
     }
