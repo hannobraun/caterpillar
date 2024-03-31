@@ -40,16 +40,18 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
+    let mut evaluator = capi.evaluator;
+
     store_all_pixels(
         frame_width,
         frame_height,
         store_pixel,
-        &mut capi.evaluator,
+        &mut evaluator,
         &capi.instructions,
         frame,
     );
 
-    assert_eq!(capi.evaluator.data_stack.num_values(), 0);
+    assert_eq!(evaluator.data_stack.num_values(), 0);
 }
 
 #[derive(Debug)]
