@@ -67,8 +67,9 @@ impl Capi {
     ) -> usize {
         let address = self.instructions.len();
 
-        let mut syntax = Syntax::new(&self.functions, &mut self.instructions);
-        f(&mut syntax);
+        let mut syntax = Vec::new();
+        f(&mut Syntax::new(&self.functions, &mut syntax));
+        self.instructions.extend(syntax);
         self.instructions.push(Instruction::Return);
 
         self.functions.define(name, address);
