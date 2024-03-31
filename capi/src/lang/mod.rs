@@ -65,7 +65,7 @@ impl<'r> Lang<'r> {
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
     ) -> usize {
-        let mut compiler = Compiler::new(self.functions.clone());
+        let mut compiler = Compiler::new(&self.functions);
         f(&mut compiler);
         let Compiler { instructions, .. } = compiler;
 
