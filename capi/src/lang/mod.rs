@@ -10,7 +10,7 @@ use self::{
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let mut lang = Lang::new(frame);
+    let mut lang = Lang::new();
 
     lang.define_function("inc_addr", |c| {
         c.v(1).b("add");
@@ -37,28 +37,26 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .f("store_alpha");
     });
 
-    store_all_pixels(frame_width, frame_height, store_pixel, &mut lang);
+    store_all_pixels(frame_width, frame_height, store_pixel, &mut lang, frame);
 
     assert_eq!(lang.data_stack.num_values(), 0);
 }
 
 #[derive(Debug)]
-pub struct Lang<'r> {
+pub struct Lang {
     instructions: Vec<Instruction>,
     functions: Functions,
     call_stack: Vec<usize>,
     data_stack: DataStack,
-    frame: &'r mut [u8],
 }
 
-impl<'r> Lang<'r> {
-    pub fn new(frame: &'r mut [u8]) -> Self {
+impl Lang {
+    pub fn new() -> Self {
         Self {
             instructions: Vec::new(),
             functions: Functions::new(),
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
-            frame,
         }
     }
 
@@ -79,7 +77,7 @@ impl<'r> Lang<'r> {
         address
     }
 
-    pub fn execute(&mut self, entry: usize) {
+    pub fn execute(&mut self, entry: usize, frame: &mut [u8]) {
         let mut current_instruction = entry;
 
         loop {
@@ -90,9 +88,7 @@ impl<'r> Lang<'r> {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
-                    "store" => {
-                        builtins::store(&mut self.data_stack, self.frame)
-                    }
+                    "store" => builtins::store(&mut self.data_stack, frame),
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::CallFunction { address } => {
@@ -117,6 +113,7 @@ fn store_all_pixels(
     frame_height: usize,
     store_pixel: usize,
     lang: &mut Lang,
+    frame: &mut [u8],
 ) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
 
@@ -128,7 +125,7 @@ fn store_all_pixels(
         }
 
         lang.data_stack.push(addr);
-        lang.execute(store_pixel);
+        lang.execute(store_pixel, frame);
         addr = lang.data_stack.pop();
     }
 }
