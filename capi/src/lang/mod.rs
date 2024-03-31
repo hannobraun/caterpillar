@@ -67,14 +67,15 @@ impl<'r> Lang<'r> {
     ) -> usize {
         let address = self.instructions.len();
 
-        let mut compiler = Compiler::new(&self.functions);
+        let mut compiler =
+            Compiler::new(&self.functions, &mut self.instructions);
         f(&mut compiler);
-        let Compiler { instructions, .. } = compiler;
+        let Compiler { .. } = compiler;
 
-        self.functions.insert(name, instructions.clone());
+        self.functions
+            .insert(name, self.instructions[address..].to_vec());
 
-        self.instructions
-            .extend(instructions.into_iter().chain([Instruction::Return]));
+        self.instructions.push(Instruction::Return);
 
         address
     }

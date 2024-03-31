@@ -3,14 +3,17 @@ use std::collections::BTreeMap;
 #[derive(Debug)]
 pub struct Compiler<'r> {
     pub functions: &'r Functions,
-    pub instructions: Vec<Instruction>,
+    pub instructions: &'r mut Vec<Instruction>,
 }
 
 impl<'r> Compiler<'r> {
-    pub fn new(functions: &'r Functions) -> Self {
+    pub fn new(
+        functions: &'r Functions,
+        instructions: &'r mut Vec<Instruction>,
+    ) -> Self {
         Self {
             functions,
-            instructions: Vec::new(),
+            instructions,
         }
     }
 
