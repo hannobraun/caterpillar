@@ -10,4 +10,8 @@ impl Functions {
             inner: BTreeMap::new(),
         }
     }
+
+    pub fn define(&mut self, name: &'static str, address: usize) {
+        self.inner.insert(name, address);
+    }
 }

@@ -74,7 +74,7 @@ impl<'r> Lang<'r> {
         f(&mut compiler);
         self.instructions.push(Instruction::Return);
 
-        self.functions.inner.insert(name, address);
+        self.functions.define(name, address);
 
         address
     }
