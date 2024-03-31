@@ -108,9 +108,10 @@ fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
         }
 
         lang.data_stack.push(addr);
+        let entry = lang.compiler.instructions.len();
         lang.compiler.f("store_pixel");
         lang.compiler.instructions.push(Instruction::Return);
-        lang.execute(0);
+        lang.execute(entry);
         lang.compiler.instructions.clear();
         addr = lang.data_stack.pop();
     }
