@@ -1,3 +1,6 @@
 use std::collections::BTreeMap;
 
-pub type Functions = BTreeMap<&'static str, usize>;
+#[derive(Debug)]
+pub struct Functions {
+    pub inner: BTreeMap<&'static str, usize>,
+}

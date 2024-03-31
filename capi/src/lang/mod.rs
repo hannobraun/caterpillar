@@ -3,6 +3,8 @@ mod compiler;
 mod data_stack;
 mod functions;
 
+use std::collections::BTreeMap;
+
 use self::{
     compiler::{Compiler, Instruction},
     data_stack::DataStack,
@@ -55,7 +57,9 @@ impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
             instructions: Vec::new(),
-            functions: Functions::new(),
+            functions: Functions {
+                inner: BTreeMap::new(),
+            },
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
             frame,
@@ -74,7 +78,7 @@ impl<'r> Lang<'r> {
         f(&mut compiler);
         self.instructions.push(Instruction::Return);
 
-        self.functions.insert(name, address);
+        self.functions.inner.insert(name, address);
 
         address
     }
