@@ -15,10 +15,10 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut capi = Capi::new();
 
     capi.define_function("inc_addr", |s| {
-        s.v(1).b("add");
+        s.v(1).w("add");
     });
     capi.define_function("store_channel", |s| {
-        s.b("store").f("inc_addr");
+        s.w("store").f("inc_addr");
     });
     capi.define_function("store_red", |s| {
         s.v(0).f("store_channel");
