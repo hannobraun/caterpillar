@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use super::functions::Functions;
 
 #[derive(Debug)]
 pub struct Compiler<'r> {
@@ -36,8 +36,6 @@ impl<'r> Compiler<'r> {
         self
     }
 }
-
-pub type Functions = BTreeMap<&'static str, usize>;
 
 #[derive(Copy, Clone, Debug)]
 pub enum Instruction {
