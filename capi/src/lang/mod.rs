@@ -42,7 +42,8 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
 #[derive(Debug)]
 pub struct Lang<'r> {
-    compiler: Compiler,
+    instructions: Vec<Instruction>,
+    functions: Functions,
     call_stack: Vec<usize>,
     data_stack: DataStack,
     frame: &'r mut [u8],
@@ -51,7 +52,8 @@ pub struct Lang<'r> {
 impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
-            compiler: Compiler::new(Functions::new()),
+            instructions: Vec::new(),
+            functions: Functions::new(),
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
             frame,
@@ -63,14 +65,12 @@ impl<'r> Lang<'r> {
         name: &'static str,
         f: impl FnOnce(&mut Compiler),
     ) -> usize {
-        let mut compiler = Compiler::new(self.compiler.functions.clone());
+        let mut compiler = Compiler::new(self.functions.clone());
         f(&mut compiler);
-        self.compiler
-            .functions
-            .insert(name, compiler.instructions.clone());
+        self.functions.insert(name, compiler.instructions.clone());
 
-        let address = self.compiler.instructions.len();
-        self.compiler.instructions.extend(
+        let address = self.instructions.len();
+        self.instructions.extend(
             compiler
                 .instructions
                 .into_iter()
@@ -84,7 +84,7 @@ impl<'r> Lang<'r> {
         let mut current_instruction = entry;
 
         loop {
-            let instruction = self.compiler.instructions[current_instruction];
+            let instruction = self.instructions[current_instruction];
             current_instruction += 1;
 
             match instruction {
