@@ -40,7 +40,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
-    store_all_pixels(frame_width, frame_height, store_pixel, &mut capi, frame);
+    store_all_pixels(
+        frame_width,
+        frame_height,
+        store_pixel,
+        &mut capi.evaluator,
+        &capi.instructions,
+        frame,
+    );
 
     assert_eq!(capi.evaluator.data_stack.num_values(), 0);
 }
@@ -76,17 +83,14 @@ impl Capi {
 
         address
     }
-
-    pub fn execute(&mut self, entry: usize, frame: &mut [u8]) {
-        self.evaluator.execute(entry, &self.instructions, frame);
-    }
 }
 
 fn store_all_pixels(
     frame_width: usize,
     frame_height: usize,
     store_pixel: usize,
-    capi: &mut Capi,
+    evaluator: &mut Evaluator,
+    instructions: &[Instruction],
     frame: &mut [u8],
 ) {
     let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
@@ -98,9 +102,9 @@ fn store_all_pixels(
             break;
         }
 
-        capi.evaluator.data_stack.push(addr);
-        capi.execute(store_pixel, frame);
-        addr = capi.evaluator.data_stack.pop();
+        evaluator.data_stack.push(addr);
+        evaluator.execute(store_pixel, instructions, frame);
+        addr = evaluator.data_stack.pop();
     }
 }
 
