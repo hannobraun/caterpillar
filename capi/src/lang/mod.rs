@@ -68,8 +68,8 @@ impl<'r> Lang<'r> {
         self.compiler.functions.insert(name, compiler.instructions);
     }
 
-    pub fn execute(&mut self) {
-        let mut current_instruction = 0;
+    pub fn execute(&mut self, entry: usize) {
+        let mut current_instruction = entry;
 
         loop {
             let instruction = self.compiler.instructions[current_instruction];
@@ -110,7 +110,7 @@ fn store_all_pixels(frame_width: usize, frame_height: usize, lang: &mut Lang) {
         lang.data_stack.push(addr);
         lang.compiler.f("store_pixel");
         lang.compiler.instructions.push(Instruction::Return);
-        lang.execute();
+        lang.execute(0);
         lang.compiler.instructions.clear();
         addr = lang.data_stack.pop();
     }
