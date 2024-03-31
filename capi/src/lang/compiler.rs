@@ -23,9 +23,7 @@ impl<'r> Compiler<'r> {
     }
 
     pub fn f(&mut self, name: &'static str) -> &mut Self {
-        let Some(address) = self.functions.inner.get(name).copied() else {
-            panic!("Could not resolve function `{name}`.");
-        };
+        let address = self.functions.resolve(name);
         self.instructions
             .push(Instruction::CallFunction { address });
         self
