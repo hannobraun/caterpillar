@@ -1,12 +1,12 @@
 mod builtins;
-mod compiler;
 mod data_stack;
 mod functions;
+mod syntax;
 
 use self::{
-    compiler::{Instruction, Syntax},
     data_stack::DataStack,
     functions::Functions,
+    syntax::{Instruction, Syntax},
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
