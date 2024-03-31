@@ -5,7 +5,9 @@ mod functions;
 mod syntax;
 
 use self::{
-    compiler::Instruction, data_stack::DataStack, functions::Functions,
+    compiler::{compile, Instruction},
+    data_stack::DataStack,
+    functions::Functions,
     syntax::Syntax,
 };
 
@@ -69,8 +71,7 @@ impl Capi {
 
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&self.functions, &mut syntax));
-        self.instructions.extend(syntax);
-        self.instructions.push(Instruction::Return);
+        compile(syntax, &self.functions, &mut self.instructions);
 
         self.functions.define(name, address);
 
