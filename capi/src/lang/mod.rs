@@ -43,6 +43,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 #[derive(Debug)]
 pub struct Lang<'r> {
     compiler: Compiler,
+    call_stack: Vec<usize>,
     data_stack: DataStack,
     frame: &'r mut [u8],
 }
@@ -51,6 +52,7 @@ impl<'r> Lang<'r> {
     pub fn new(frame: &'r mut [u8]) -> Self {
         Self {
             compiler: Compiler::new(Functions::new()),
+            call_stack: Vec::new(),
             data_stack: DataStack::new(),
             frame,
         }
@@ -84,7 +86,11 @@ impl<'r> Lang<'r> {
                 },
                 Instruction::PushValue(value) => self.data_stack.push(value),
                 Instruction::Return => {
-                    break;
+                    let Some(return_address) = self.call_stack.pop() else {
+                        break;
+                    };
+
+                    current_instruction = return_address;
                 }
             }
         }
