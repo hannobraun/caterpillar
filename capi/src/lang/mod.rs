@@ -65,7 +65,10 @@ impl<'r> Lang<'r> {
     ) {
         let mut compiler = Compiler::new(self.compiler.functions.clone());
         f(&mut compiler);
-        self.compiler.functions.insert(name, compiler.instructions);
+        self.compiler
+            .functions
+            .insert(name, compiler.instructions.clone());
+        self.compiler.instructions.extend(compiler.instructions);
     }
 
     pub fn execute(&mut self, entry: usize) {
