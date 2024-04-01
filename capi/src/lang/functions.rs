@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use super::{
     compiler::{compile, Instruction},
+    resolver::resolve,
     symbols::Symbols,
     syntax::{Syntax, SyntaxElement},
 };
@@ -37,6 +38,7 @@ impl Functions {
         let mut symbols = Symbols::new();
 
         for (name, syntax) in self.inner {
+            let syntax = resolve(syntax);
             compile(name, syntax, &mut symbols, &mut instructions);
         }
 
