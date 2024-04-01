@@ -6,3 +6,11 @@ use super::syntax::SyntaxElement;
 pub struct Functions {
     pub inner: BTreeMap<&'static str, Vec<SyntaxElement>>,
 }
+
+impl Functions {
+    pub fn new() -> Self {
+        Self {
+            inner: BTreeMap::new(),
+        }
+    }
+}

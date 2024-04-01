@@ -6,8 +6,6 @@ mod functions;
 mod symbols;
 mod syntax;
 
-use std::collections::BTreeMap;
-
 use self::{
     compiler::{compile, Instruction},
     evaluator::Evaluator,
@@ -67,9 +65,7 @@ pub struct Capi {
 impl Capi {
     pub fn new() -> Self {
         Self {
-            functions: Functions {
-                inner: BTreeMap::new(),
-            },
+            functions: Functions::new(),
             instructions: Vec::new(),
             symbols: Symbols::new(),
         }
