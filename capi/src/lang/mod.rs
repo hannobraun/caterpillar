@@ -6,10 +6,7 @@ mod functions;
 mod symbols;
 mod syntax;
 
-use self::{
-    compiler::Instruction, evaluator::Evaluator, functions::Functions,
-    symbols::Symbols,
-};
+use self::{evaluator::Evaluator, functions::Functions};
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut capi = Capi::new();
@@ -39,7 +36,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
-    let (instructions, symbols) = capi.compile();
+    let (instructions, symbols) = capi.functions.compile();
     let store_pixel = symbols
         .resolve("store_pixel")
         .expect("Can't find function that was just defined.");
@@ -67,10 +64,6 @@ impl Capi {
         Self {
             functions: Functions::new(),
         }
-    }
-
-    pub fn compile(self) -> (Vec<Instruction>, Symbols) {
-        self.functions.compile()
     }
 }
 
