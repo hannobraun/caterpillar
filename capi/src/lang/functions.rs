@@ -1,18 +1,18 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 use super::syntax::SyntaxElement;
 
 #[derive(Debug)]
 pub struct Functions {
     pub names: BTreeSet<&'static str>,
-    pub inner: BTreeMap<&'static str, Vec<SyntaxElement>>,
+    pub inner: Vec<(&'static str, Vec<SyntaxElement>)>,
 }
 
 impl Functions {
     pub fn new() -> Self {
         Self {
             names: BTreeSet::new(),
-            inner: BTreeMap::new(),
+            inner: Vec::new(),
         }
     }
 
@@ -22,6 +22,6 @@ impl Functions {
         }
 
         self.names.insert(name);
-        self.inner.insert(name, syntax);
+        self.inner.push((name, syntax));
     }
 }
