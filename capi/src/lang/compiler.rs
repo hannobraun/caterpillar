@@ -10,19 +10,10 @@ pub fn compile(
 
     instructions.extend(expressions.into_iter().map(|expression| {
         match expression {
-            Expression::Word { name } => {
-                // The code here would allow user-defined functions to shadow
-                // built-in functions, which seems undesirable. It's better to
-                // catch this when defining the function though, and while it
-                // would be nice to have a fallback assertion here, that's not
-                // practical, given the way built-in function resolution is
-                // implemented right now.
-
-                if let Some(address) = symbols.resolve(name) {
-                    return Instruction::CallFunction { address };
-                }
-
-                Instruction::CallBuiltin { name }
+            Expression::Builtin { name } => Instruction::CallBuiltin { name },
+            Expression::Function { name } => {
+                let address = symbols.resolve(name).unwrap();
+                Instruction::CallFunction { address }
             }
             Expression::Value(value) => Instruction::PushValue(value),
         }
