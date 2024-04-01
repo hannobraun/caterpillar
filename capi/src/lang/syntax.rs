@@ -19,7 +19,7 @@ impl<'r> Syntax<'r> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum SyntaxElement {
     Value(usize),
     Word { name: &'static str },
