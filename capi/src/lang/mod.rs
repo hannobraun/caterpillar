@@ -80,12 +80,7 @@ impl Capi {
         f(&mut Syntax::new(&mut syntax));
         self.functions.define(name, syntax.clone());
 
-        let address =
-            compile(syntax, &mut self.symbols, &mut self.instructions);
-
-        self.symbols.define(name, address);
-
-        address
+        compile(name, syntax, &mut self.symbols, &mut self.instructions)
     }
 }
 

@@ -1,6 +1,7 @@
 use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
+    name: &'static str,
     syntax: Vec<SyntaxElement>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
@@ -27,6 +28,8 @@ pub fn compile(
         }
     }));
     instructions.push(Instruction::Return);
+
+    symbols.define(name, address);
 
     address
 }
