@@ -38,9 +38,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     });
 
     let (instructions, symbols) = functions.compile();
-    let store_pixel = symbols
-        .resolve("store_pixel")
-        .expect("Can't find function that was just defined.");
+    let store_pixel = symbols.resolve("store_pixel");
 
     let mut evaluator = Evaluator::new(instructions);
 

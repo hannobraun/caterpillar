@@ -15,7 +15,7 @@ impl Symbols {
         self.inner.insert(name, address);
     }
 
-    pub fn resolve(&self, name: &str) -> Option<usize> {
-        self.inner.get(name).copied()
+    pub fn resolve(&self, name: &str) -> usize {
+        self.inner.get(name).copied().unwrap()
     }
 }

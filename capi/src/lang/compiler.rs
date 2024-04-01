@@ -12,7 +12,7 @@ pub fn compile(
         match expression {
             Expression::Builtin { name } => Instruction::CallBuiltin { name },
             Expression::Function { name } => {
-                let address = symbols.resolve(name).unwrap();
+                let address = symbols.resolve(name);
                 Instruction::CallFunction { address }
             }
             Expression::Value(value) => Instruction::PushValue(value),
