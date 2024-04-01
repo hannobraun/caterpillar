@@ -42,6 +42,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
+    capi.compile();
     let store_pixel = capi
         .symbols
         .resolve("store_pixel")
@@ -84,8 +85,12 @@ impl Capi {
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
         self.functions.define(name, syntax.clone());
+    }
 
-        compile(name, syntax, &mut self.symbols, &mut self.instructions);
+    pub fn compile(&mut self) {
+        for (name, syntax) in self.functions.inner.drain(..) {
+            compile(name, syntax, &mut self.symbols, &mut self.instructions);
+        }
     }
 }
 
