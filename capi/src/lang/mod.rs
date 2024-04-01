@@ -35,12 +35,17 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     capi.define_function("store_alpha", |s| {
         s.v(255).w("store_channel");
     });
-    let store_pixel = capi.define_function("store_pixel", |s| {
+    capi.define_function("store_pixel", |s| {
         s.w("store_red")
             .w("store_green")
             .w("store_blue")
             .w("store_alpha");
     });
+
+    let store_pixel = capi
+        .symbols
+        .resolve("store_pixel")
+        .expect("Can't find function that was just defined.");
 
     let mut evaluator = Evaluator::new(capi.instructions);
 
