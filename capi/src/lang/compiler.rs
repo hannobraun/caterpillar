@@ -2,7 +2,7 @@ use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     syntax: Vec<SyntaxElement>,
-    symbols: &Symbols,
+    symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
     instructions.extend(syntax.into_iter().map(|syntax_element| {

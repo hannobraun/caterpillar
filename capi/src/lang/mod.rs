@@ -82,7 +82,7 @@ impl Capi {
         f(&mut Syntax::new(&mut syntax));
         self.functions.define(name, syntax.clone());
 
-        compile(syntax, &self.symbols, &mut self.instructions);
+        compile(syntax, &mut self.symbols, &mut self.instructions);
 
         self.symbols.define(name, address);
 
