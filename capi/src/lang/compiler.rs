@@ -5,7 +5,7 @@ pub fn compile(
     syntax: Vec<SyntaxElement>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
-) -> usize {
+) {
     let address = instructions.len();
 
     instructions.extend(syntax.into_iter().map(|syntax_element| {
@@ -30,8 +30,6 @@ pub fn compile(
     instructions.push(Instruction::Return);
 
     symbols.define(name, address);
-
-    address
 }
 
 #[derive(Copy, Clone, Debug)]
