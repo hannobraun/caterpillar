@@ -2,13 +2,13 @@ mod builtins;
 mod compiler;
 mod data_stack;
 mod evaluator;
-mod functions;
+mod symbols;
 mod syntax;
 
 use self::{
     compiler::{compile, Instruction},
     evaluator::Evaluator,
-    functions::Symbols,
+    symbols::Symbols,
     syntax::Syntax,
 };
 

@@ -1,4 +1,4 @@
-use super::{functions::Symbols, syntax::SyntaxElement};
+use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     syntax: Vec<SyntaxElement>,
