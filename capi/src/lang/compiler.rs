@@ -8,8 +8,8 @@ pub fn compile(
 ) {
     let address = instructions.len();
 
-    instructions.extend(expressions.into_iter().map(|syntax_element| {
-        match syntax_element {
+    instructions.extend(expressions.into_iter().map(|expression| {
+        match expression {
             Expression::Word { name } => {
                 // The code here would allow user-defined functions to shadow
                 // built-in functions, which seems undesirable. It's better to
