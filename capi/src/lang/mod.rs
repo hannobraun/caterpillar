@@ -76,13 +76,12 @@ impl Capi {
         name: &'static str,
         f: impl FnOnce(&mut Syntax),
     ) -> usize {
-        let address = self.instructions.len();
-
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
         self.functions.define(name, syntax.clone());
 
-        compile(syntax, &mut self.symbols, &mut self.instructions);
+        let address =
+            compile(syntax, &mut self.symbols, &mut self.instructions);
 
         self.symbols.define(name, address);
 
