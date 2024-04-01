@@ -83,11 +83,11 @@ impl Capi {
         self.functions.define(name, syntax.clone());
     }
 
-    pub fn compile(&mut self) -> (Vec<Instruction>, Symbols) {
+    pub fn compile(self) -> (Vec<Instruction>, Symbols) {
         let mut instructions = Vec::new();
         let mut symbols = Symbols::new();
 
-        for (name, syntax) in self.functions.inner.drain(..) {
+        for (name, syntax) in self.functions.inner {
             compile(name, syntax, &mut symbols, &mut instructions);
         }
 
