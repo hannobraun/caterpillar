@@ -8,7 +8,7 @@ mod syntax;
 use self::{
     compiler::{compile, Instruction},
     evaluator::Evaluator,
-    functions::Functions,
+    functions::Symbols,
     syntax::Syntax,
 };
 
@@ -56,14 +56,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 #[derive(Debug)]
 pub struct Capi {
     instructions: Vec<Instruction>,
-    functions: Functions,
+    functions: Symbols,
 }
 
 impl Capi {
     pub fn new() -> Self {
         Self {
             instructions: Vec::new(),
-            functions: Functions::new(),
+            functions: Symbols::new(),
         }
     }
 

@@ -1,8 +1,8 @@
-use super::{functions::Functions, syntax::SyntaxElement};
+use super::{functions::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     syntax: Vec<SyntaxElement>,
-    functions: &Functions,
+    functions: &Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
     instructions.extend(syntax.into_iter().map(|syntax_element| {

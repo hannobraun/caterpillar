@@ -1,10 +1,10 @@
 use std::collections::BTreeMap;
 
 #[derive(Debug)]
-pub struct Functions {
+pub struct Symbols {
     inner: BTreeMap<&'static str, usize>,
 }
-impl Functions {
+impl Symbols {
     pub fn new() -> Self {
         Self {
             inner: BTreeMap::new(),
