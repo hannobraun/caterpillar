@@ -77,10 +77,7 @@ impl Capi {
         name: &'static str,
         f: impl FnOnce(&mut Syntax),
     ) {
-        let mut syntax = Vec::new();
-        f(&mut Syntax::new(&mut syntax));
-
-        self.functions.define(name, syntax.clone());
+        self.functions.define(name, f);
     }
 
     pub fn compile(self) -> (Vec<Instruction>, Symbols) {

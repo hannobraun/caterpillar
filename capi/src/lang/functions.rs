@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::syntax::SyntaxElement;
+use super::syntax::{Syntax, SyntaxElement};
 
 #[derive(Debug)]
 pub struct Functions {
@@ -16,10 +16,13 @@ impl Functions {
         }
     }
 
-    pub fn define(&mut self, name: &'static str, syntax: Vec<SyntaxElement>) {
+    pub fn define(&mut self, name: &'static str, f: impl FnOnce(&mut Syntax)) {
         if self.names.contains(name) {
             panic!("Can't re-define existing function `{name}`.");
         }
+
+        let mut syntax = Vec::new();
+        f(&mut Syntax::new(&mut syntax));
 
         self.names.insert(name);
         self.inner.push((name, syntax));
