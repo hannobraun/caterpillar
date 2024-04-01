@@ -56,14 +56,14 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 #[derive(Debug)]
 pub struct Capi {
     instructions: Vec<Instruction>,
-    functions: Symbols,
+    symbols: Symbols,
 }
 
 impl Capi {
     pub fn new() -> Self {
         Self {
             instructions: Vec::new(),
-            functions: Symbols::new(),
+            symbols: Symbols::new(),
         }
     }
 
@@ -76,9 +76,9 @@ impl Capi {
 
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
-        compile(syntax, &self.functions, &mut self.instructions);
+        compile(syntax, &self.symbols, &mut self.instructions);
 
-        self.functions.define(name, address);
+        self.symbols.define(name, address);
 
         address
     }
