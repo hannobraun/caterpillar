@@ -71,7 +71,7 @@ fn store_all_pixels(
         }
 
         evaluator.data_stack.push(addr);
-        evaluator.execute(store_pixel, frame);
+        evaluator.evaluate(store_pixel, frame);
         addr = evaluator.data_stack.pop();
     }
 }

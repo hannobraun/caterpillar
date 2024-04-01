@@ -16,7 +16,7 @@ impl Evaluator {
         }
     }
 
-    pub fn execute(&mut self, entry: usize, frame: &mut [u8]) {
+    pub fn evaluate(&mut self, entry: usize, frame: &mut [u8]) {
         let mut current_instruction = entry;
 
         loop {
