@@ -2,13 +2,13 @@ use super::{resolver::Expression, symbols::Symbols};
 
 pub fn compile(
     name: &'static str,
-    syntax: Vec<Expression>,
+    expressions: Vec<Expression>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
     let address = instructions.len();
 
-    instructions.extend(syntax.into_iter().map(|syntax_element| {
+    instructions.extend(expressions.into_iter().map(|syntax_element| {
         match syntax_element {
             Expression::Word { name } => {
                 // The code here would allow user-defined functions to shadow
