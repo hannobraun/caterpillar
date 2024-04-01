@@ -80,7 +80,7 @@ impl Capi {
 
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
-        self.functions.inner.insert(name, syntax.clone());
+        self.functions.define(name, syntax.clone());
 
         compile(syntax, &self.symbols, &mut self.instructions);
 

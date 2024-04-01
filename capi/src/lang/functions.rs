@@ -13,4 +13,8 @@ impl Functions {
             inner: BTreeMap::new(),
         }
     }
+
+    pub fn define(&mut self, name: &'static str, syntax: Vec<SyntaxElement>) {
+        self.inner.insert(name, syntax);
+    }
 }
