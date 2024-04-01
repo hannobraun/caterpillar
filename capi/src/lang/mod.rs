@@ -42,13 +42,13 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
             .w("store_alpha");
     });
 
-    capi.compile();
+    let instructions = capi.compile();
     let store_pixel = capi
         .symbols
         .resolve("store_pixel")
         .expect("Can't find function that was just defined.");
 
-    let mut evaluator = Evaluator::new(capi.instructions);
+    let mut evaluator = Evaluator::new(instructions);
 
     store_all_pixels(
         frame_width,
@@ -64,7 +64,6 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 #[derive(Debug)]
 pub struct Capi {
     functions: Functions,
-    instructions: Vec<Instruction>,
     symbols: Symbols,
 }
 
@@ -72,7 +71,6 @@ impl Capi {
     pub fn new() -> Self {
         Self {
             functions: Functions::new(),
-            instructions: Vec::new(),
             symbols: Symbols::new(),
         }
     }
@@ -88,10 +86,14 @@ impl Capi {
         self.functions.define(name, syntax.clone());
     }
 
-    pub fn compile(&mut self) {
+    pub fn compile(&mut self) -> Vec<Instruction> {
+        let mut instructions = Vec::new();
+
         for (name, syntax) in self.functions.inner.drain(..) {
-            compile(name, syntax, &mut self.symbols, &mut self.instructions);
+            compile(name, syntax, &mut self.symbols, &mut instructions);
         }
+
+        instructions
     }
 }
 
