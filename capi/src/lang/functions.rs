@@ -38,8 +38,8 @@ impl Functions {
         let mut symbols = Symbols::new();
 
         for (name, syntax) in self.inner {
-            let syntax = resolve(syntax);
-            compile(name, syntax, &mut symbols, &mut instructions);
+            let expressions = resolve(syntax);
+            compile(name, expressions, &mut symbols, &mut instructions);
         }
 
         (instructions, symbols)
