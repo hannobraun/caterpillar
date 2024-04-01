@@ -2,7 +2,7 @@ use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     syntax: Vec<SyntaxElement>,
-    functions: &Symbols,
+    symbols: &Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
     instructions.extend(syntax.into_iter().map(|syntax_element| {
@@ -15,7 +15,7 @@ pub fn compile(
                 // practical, given the way built-in function resolution is
                 // implemented right now.
 
-                if let Some(address) = functions.resolve(name) {
+                if let Some(address) = symbols.resolve(name) {
                     return Instruction::CallFunction { address };
                 }
 
