@@ -1,8 +1,8 @@
-use super::{symbols::Symbols, syntax::SyntaxElement};
+use super::{resolver::Expression, symbols::Symbols};
 
 pub fn compile(
     name: &'static str,
-    syntax: Vec<SyntaxElement>,
+    syntax: Vec<Expression>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
@@ -10,7 +10,7 @@ pub fn compile(
 
     instructions.extend(syntax.into_iter().map(|syntax_element| {
         match syntax_element {
-            SyntaxElement::Word { name } => {
+            Expression::Word { name } => {
                 // The code here would allow user-defined functions to shadow
                 // built-in functions, which seems undesirable. It's better to
                 // catch this when defining the function though, and while it
@@ -24,7 +24,7 @@ pub fn compile(
 
                 Instruction::CallBuiltin { name }
             }
-            SyntaxElement::Value(value) => Instruction::PushValue(value),
+            Expression::Value(value) => Instruction::PushValue(value),
         }
     }));
     instructions.push(Instruction::Return);
