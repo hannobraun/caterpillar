@@ -1,6 +1,10 @@
 use std::collections::BTreeSet;
 
-use super::syntax::{Syntax, SyntaxElement};
+use super::{
+    compiler::{compile, Instruction},
+    symbols::Symbols,
+    syntax::{Syntax, SyntaxElement},
+};
 
 #[derive(Debug)]
 pub struct Functions {
@@ -26,5 +30,16 @@ impl Functions {
 
         self.names.insert(name);
         self.inner.push((name, syntax));
+    }
+
+    pub fn compile(self) -> (Vec<Instruction>, Symbols) {
+        let mut instructions = Vec::new();
+        let mut symbols = Symbols::new();
+
+        for (name, syntax) in self.inner {
+            compile(name, syntax, &mut symbols, &mut instructions);
+        }
+
+        (instructions, symbols)
     }
 }

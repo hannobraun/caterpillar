@@ -7,9 +7,7 @@ mod symbols;
 mod syntax;
 
 use self::{
-    compiler::{compile, Instruction},
-    evaluator::Evaluator,
-    functions::Functions,
+    compiler::Instruction, evaluator::Evaluator, functions::Functions,
     symbols::Symbols,
 };
 
@@ -72,14 +70,7 @@ impl Capi {
     }
 
     pub fn compile(self) -> (Vec<Instruction>, Symbols) {
-        let mut instructions = Vec::new();
-        let mut symbols = Symbols::new();
-
-        for (name, syntax) in self.functions.inner {
-            compile(name, syntax, &mut symbols, &mut instructions);
-        }
-
-        (instructions, symbols)
+        self.functions.compile()
     }
 }
 
