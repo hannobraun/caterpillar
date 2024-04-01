@@ -16,6 +16,9 @@ impl Symbols {
     }
 
     pub fn resolve(&self, name: &str) -> usize {
-        self.inner.get(name).copied().unwrap()
+        let Some(address) = self.inner.get(name).copied() else {
+            panic!("Can't find function `{name}`");
+        };
+        address
     }
 }
