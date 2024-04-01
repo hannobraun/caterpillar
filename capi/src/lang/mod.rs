@@ -11,31 +11,30 @@ use self::{
     evaluator::Evaluator,
     functions::Functions,
     symbols::Symbols,
-    syntax::Syntax,
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut capi = Capi::new();
 
-    capi.define_function("inc_addr", |s| {
+    capi.functions.define("inc_addr", |s| {
         s.v(1).w("add");
     });
-    capi.define_function("store_channel", |s| {
+    capi.functions.define("store_channel", |s| {
         s.w("store").w("inc_addr");
     });
-    capi.define_function("store_red", |s| {
+    capi.functions.define("store_red", |s| {
         s.v(0).w("store_channel");
     });
-    capi.define_function("store_green", |s| {
+    capi.functions.define("store_green", |s| {
         s.v(255).w("store_channel");
     });
-    capi.define_function("store_blue", |s| {
+    capi.functions.define("store_blue", |s| {
         s.v(0).w("store_channel");
     });
-    capi.define_function("store_alpha", |s| {
+    capi.functions.define("store_alpha", |s| {
         s.v(255).w("store_channel");
     });
-    capi.define_function("store_pixel", |s| {
+    capi.functions.define("store_pixel", |s| {
         s.w("store_red")
             .w("store_green")
             .w("store_blue")
@@ -70,14 +69,6 @@ impl Capi {
         Self {
             functions: Functions::new(),
         }
-    }
-
-    pub fn define_function(
-        &mut self,
-        name: &'static str,
-        f: impl FnOnce(&mut Syntax),
-    ) {
-        self.functions.define(name, f);
     }
 
     pub fn compile(self) -> (Vec<Instruction>, Symbols) {
