@@ -5,11 +5,13 @@ mod evaluator;
 mod symbols;
 mod syntax;
 
+use std::collections::BTreeMap;
+
 use self::{
     compiler::{compile, Instruction},
     evaluator::Evaluator,
     symbols::Symbols,
-    syntax::Syntax,
+    syntax::{Syntax, SyntaxElement},
 };
 
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
@@ -55,6 +57,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
 #[derive(Debug)]
 pub struct Capi {
+    functions: BTreeMap<&'static str, Vec<SyntaxElement>>,
     instructions: Vec<Instruction>,
     symbols: Symbols,
 }
@@ -62,6 +65,7 @@ pub struct Capi {
 impl Capi {
     pub fn new() -> Self {
         Self {
+            functions: BTreeMap::new(),
             instructions: Vec::new(),
             symbols: Symbols::new(),
         }
@@ -76,6 +80,8 @@ impl Capi {
 
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
+        self.functions.insert(name, syntax.clone());
+
         compile(syntax, &self.symbols, &mut self.instructions);
 
         self.symbols.define(name, address);
