@@ -84,6 +84,7 @@ impl Capi {
     ) {
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
+
         self.functions.define(name, syntax.clone());
     }
 
