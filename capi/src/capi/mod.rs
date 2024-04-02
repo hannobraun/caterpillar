@@ -12,6 +12,13 @@ use self::{evaluator::Evaluator, functions::Functions};
 pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut functions = Functions::new();
 
+    functions.define("store_all_pixels", |s| {
+        s.w("clone2")
+            .w("sub")
+            .w("return_if_zero")
+            .w("store_pixel")
+            .w("store_all_pixels");
+    });
     functions.define("store_pixel", |s| {
         s.w("store_red")
             .w("store_green")
@@ -38,7 +45,7 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     });
 
     let code = functions.compile();
-    let entry = code.symbols.resolve("store_pixel");
+    let entry = code.symbols.resolve("store_all_pixels");
 
     let mut evaluator = Evaluator::new(code);
 
@@ -62,7 +69,12 @@ fn draw_to_frame_buffer(
 ) {
     let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
     let addr = frame_addr();
-    store_all_pixels(addr, buffer_len, entry, evaluator, frame);
+
+    evaluator.data_stack.push(buffer_len);
+    evaluator.data_stack.push(addr);
+    evaluator.evaluate(entry, frame);
+    let _addr = evaluator.data_stack.pop();
+    let _buffer_len = evaluator.data_stack.pop();
 }
 
 fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
@@ -71,22 +83,4 @@ fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
 
 fn frame_addr() -> usize {
     0
-}
-
-fn store_all_pixels(
-    mut addr: usize,
-    buffer_len: usize,
-    store_pixel: usize,
-    evaluator: &mut Evaluator,
-    frame: &mut [u8],
-) {
-    loop {
-        if addr >= buffer_len {
-            break;
-        }
-
-        evaluator.data_stack.push(addr);
-        evaluator.evaluate(store_pixel, frame);
-        addr = evaluator.data_stack.pop();
-    }
 }
