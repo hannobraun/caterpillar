@@ -8,7 +8,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::capi::lang;
+use crate::capi::capi;
 
 fn main() -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
@@ -24,7 +24,7 @@ fn main() -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            lang(
+            capi(
                 WIDTH.try_into().unwrap(),
                 HEIGHT.try_into().unwrap(),
                 pixels.frame_mut(),

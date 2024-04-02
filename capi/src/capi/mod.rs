@@ -9,7 +9,7 @@ mod syntax;
 
 use self::{evaluator::Evaluator, functions::Functions};
 
-pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
+pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut functions = Functions::new();
 
     functions.define("store_pixel", |s| {
