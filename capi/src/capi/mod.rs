@@ -56,13 +56,13 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 fn draw_to_frame_buffer(
     frame_width: usize,
     frame_height: usize,
-    store_pixel: usize,
+    entry: usize,
     evaluator: &mut Evaluator,
     frame: &mut [u8],
 ) {
     let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
     let addr = frame_addr();
-    store_all_pixels(addr, buffer_len, store_pixel, evaluator, frame);
+    store_all_pixels(addr, buffer_len, entry, evaluator, frame);
 }
 
 fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
