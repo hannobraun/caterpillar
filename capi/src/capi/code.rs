@@ -1,5 +1,6 @@
 use super::{compiler::Instruction, symbols::Symbols};
 
+#[derive(Debug)]
 pub struct Code {
     pub symbols: Symbols,
     pub instructions: Vec<Instruction>,
