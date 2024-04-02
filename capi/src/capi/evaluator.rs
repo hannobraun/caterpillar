@@ -28,6 +28,7 @@ impl Evaluator {
             match instruction {
                 Instruction::CallBuiltin { name } => match name {
                     "add" => builtins::add(&mut self.data_stack),
+                    "clone2" => builtins::clone2(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "store" => builtins::store(&mut self.data_stack, frame),
                     _ => panic!("Unknown builtin: `{name}`"),

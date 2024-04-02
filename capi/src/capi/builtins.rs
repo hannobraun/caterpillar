@@ -11,6 +11,16 @@ pub fn add(data_stack: &mut DataStack) {
     data_stack.push(c);
 }
 
+pub fn clone2(data_stack: &mut DataStack) {
+    let b = data_stack.pop();
+    let a = data_stack.pop();
+
+    data_stack.push(a);
+    data_stack.push(b);
+    data_stack.push(a);
+    data_stack.push(b);
+}
+
 pub fn mul(data_stack: &mut DataStack) {
     let b = data_stack.pop();
     let a = data_stack.pop();
