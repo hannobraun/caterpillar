@@ -1,4 +1,4 @@
-mod lang;
+mod capi;
 
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
@@ -8,7 +8,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::lang::lang;
+use crate::capi::lang;
 
 fn main() -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
