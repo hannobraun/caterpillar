@@ -17,7 +17,6 @@ pub fn resolve(
                 // would be nice to have a fallback assertion here, that's not
                 // practical, given the way built-in function resolution is
                 // implemented right now.
-
                 if functions.contains(name) {
                     return Expression::Function { name };
                 }
