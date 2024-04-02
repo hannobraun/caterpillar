@@ -12,6 +12,11 @@ use self::{evaluator::Evaluator, functions::Functions};
 pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut functions = Functions::new();
 
+    functions.define("draw_to_frame_buffer", |s| {
+        s.w("compute_frame_buffer_len")
+            .w("frame_buffer_addr")
+            .w("store_all_pixels");
+    });
     functions.define("compute_frame_buffer_len", |s| {
         s.w("mul").w("num_channels").w("mul");
     });
@@ -54,37 +59,15 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     });
 
     let code = functions.compile();
-
-    let compute_frame_buffer_len =
-        code.symbols.resolve("compute_frame_buffer_len");
-    let frame_buffer_addr = code.symbols.resolve("frame_buffer_addr");
-    let store_all_pixels = code.symbols.resolve("store_all_pixels");
+    let draw_to_frame_buffer = code.symbols.resolve("draw_to_frame_buffer");
 
     let mut evaluator = Evaluator::new(code);
 
     evaluator.data_stack.push(frame_width);
     evaluator.data_stack.push(frame_height);
-    draw_to_frame_buffer(
-        compute_frame_buffer_len,
-        frame_buffer_addr,
-        store_all_pixels,
-        &mut evaluator,
-        frame,
-    );
-
-    assert_eq!(evaluator.data_stack.num_values(), 0);
-}
-
-fn draw_to_frame_buffer(
-    compute_frame_buffer_len: usize,
-    frame_buffer_addr: usize,
-    store_all_pixels: usize,
-    evaluator: &mut Evaluator,
-    frame: &mut [u8],
-) {
-    evaluator.evaluate(compute_frame_buffer_len, frame);
-    evaluator.evaluate(frame_buffer_addr, frame);
-    evaluator.evaluate(store_all_pixels, frame);
+    evaluator.evaluate(draw_to_frame_buffer, frame);
     let _addr = evaluator.data_stack.pop();
     let _buffer_len = evaluator.data_stack.pop();
+
+    assert_eq!(evaluator.data_stack.num_values(), 0);
 }
