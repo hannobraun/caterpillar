@@ -45,14 +45,14 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     });
 
     let code = functions.compile();
-    let entry = code.symbols.resolve("store_all_pixels");
+    let store_all_pixels = code.symbols.resolve("store_all_pixels");
 
     let mut evaluator = Evaluator::new(code);
 
     draw_to_frame_buffer(
         frame_width,
         frame_height,
-        entry,
+        store_all_pixels,
         &mut evaluator,
         frame,
     );
