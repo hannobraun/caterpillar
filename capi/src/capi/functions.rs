@@ -37,13 +37,7 @@ impl Functions {
         let mut code = Code::new();
 
         for (name, syntax) in self.inner {
-            compile(
-                name,
-                syntax,
-                &self.names,
-                &mut code.symbols,
-                &mut code.instructions,
-            );
+            compile(name, syntax, &self.names, &mut code);
         }
 
         (code.instructions, code.symbols)
