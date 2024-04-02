@@ -1,15 +1,15 @@
 use std::collections::BTreeSet;
 
-use super::syntax::SyntaxElement;
+use super::{compiler::Instruction, syntax::SyntaxElement};
 
 pub fn resolve(
     syntax: Vec<SyntaxElement>,
     functions: &BTreeSet<&'static str>,
-) -> Vec<Expression> {
+) -> Vec<Instruction> {
     syntax
         .into_iter()
         .map(|syntax_element| match syntax_element {
-            SyntaxElement::Value(value) => Expression::Value(value),
+            SyntaxElement::Value(value) => Instruction::PushValue(value),
             SyntaxElement::Word { name } => {
                 // The code here would allow user-defined functions to shadow
                 // built-in functions, which seems undesirable. It's better to
@@ -18,20 +18,14 @@ pub fn resolve(
                 // practical, given the way built-in function resolution is
                 // implemented right now.
                 if functions.contains(name) {
-                    return Expression::Function { name };
+                    return Instruction::CallFunction { name };
                 }
 
                 // This doesn't check whether the built-in function exists, and
                 // given how built-in functions are currently defined, it's not
                 // practical to implement.
-                Expression::Builtin { name }
+                Instruction::CallBuiltin { name }
             }
         })
         .collect()
-}
-
-pub enum Expression {
-    Builtin { name: &'static str },
-    Function { name: &'static str },
-    Value(usize),
 }

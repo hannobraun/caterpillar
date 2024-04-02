@@ -1,8 +1,8 @@
-use super::{resolver::Expression, symbols::Symbols};
+use super::symbols::Symbols;
 
 pub fn compile(
     name: &'static str,
-    expressions: Vec<Expression>,
+    expressions: Vec<Instruction>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
@@ -10,9 +10,14 @@ pub fn compile(
 
     instructions.extend(expressions.into_iter().map(|expression| {
         match expression {
-            Expression::Builtin { name } => Instruction::CallBuiltin { name },
-            Expression::Function { name } => Instruction::CallFunction { name },
-            Expression::Value(value) => Instruction::PushValue(value),
+            Instruction::CallBuiltin { name } => {
+                Instruction::CallBuiltin { name }
+            }
+            Instruction::CallFunction { name } => {
+                Instruction::CallFunction { name }
+            }
+            Instruction::PushValue(value) => Instruction::PushValue(value),
+            Instruction::Return => Instruction::Return,
         }
     }));
     instructions.push(Instruction::Return);
