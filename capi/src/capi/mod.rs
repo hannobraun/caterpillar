@@ -62,9 +62,9 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
     let mut evaluator = Evaluator::new(code);
 
+    evaluator.data_stack.push(frame_width);
+    evaluator.data_stack.push(frame_height);
     draw_to_frame_buffer(
-        frame_width,
-        frame_height,
         compute_frame_buffer_len,
         frame_buffer_addr,
         store_all_pixels,
@@ -76,16 +76,12 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 }
 
 fn draw_to_frame_buffer(
-    frame_width: usize,
-    frame_height: usize,
     compute_frame_buffer_len: usize,
     frame_buffer_addr: usize,
     store_all_pixels: usize,
     evaluator: &mut Evaluator,
     frame: &mut [u8],
 ) {
-    evaluator.data_stack.push(frame_width);
-    evaluator.data_stack.push(frame_height);
     evaluator.evaluate(compute_frame_buffer_len, frame);
     evaluator.evaluate(frame_buffer_addr, frame);
     evaluator.evaluate(store_all_pixels, frame);
