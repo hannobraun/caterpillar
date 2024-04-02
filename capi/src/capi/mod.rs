@@ -13,7 +13,10 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut functions = Functions::new();
 
     functions.define("compute_frame_buffer_len", |s| {
-        s.w("mul").v(4).w("mul");
+        s.w("mul").w("num_channels").w("mul");
+    });
+    functions.define("num_channels", |s| {
+        s.v(4);
     });
     functions.define("frame_buffer_addr", |s| {
         s.v(0);
