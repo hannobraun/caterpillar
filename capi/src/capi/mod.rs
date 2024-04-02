@@ -37,10 +37,10 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
         s.v(1).w("add");
     });
 
-    let (instructions, symbols) = functions.compile();
-    let store_pixel = symbols.resolve("store_pixel");
+    let code = functions.compile();
+    let store_pixel = code.symbols.resolve("store_pixel");
 
-    let mut evaluator = Evaluator::new(symbols, instructions);
+    let mut evaluator = Evaluator::new(code.symbols, code.instructions);
 
     store_all_pixels(
         frame_width,
