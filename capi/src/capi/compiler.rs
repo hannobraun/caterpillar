@@ -11,10 +11,7 @@ pub fn compile(
     instructions.extend(expressions.into_iter().map(|expression| {
         match expression {
             Expression::Builtin { name } => Instruction::CallBuiltin { name },
-            Expression::Function { name } => {
-                let address = symbols.resolve(name);
-                Instruction::CallFunction { address }
-            }
+            Expression::Function { name } => Instruction::CallFunction { name },
             Expression::Value(value) => Instruction::PushValue(value),
         }
     }));
@@ -26,7 +23,7 @@ pub fn compile(
 #[derive(Copy, Clone, Debug)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
-    CallFunction { address: usize },
+    CallFunction { name: &'static str },
     PushValue(usize),
     Return,
 }

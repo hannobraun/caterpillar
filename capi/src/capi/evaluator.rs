@@ -1,15 +1,19 @@
-use super::{builtins, compiler::Instruction, data_stack::DataStack};
+use super::{
+    builtins, compiler::Instruction, data_stack::DataStack, symbols::Symbols,
+};
 
 #[derive(Debug)]
 pub struct Evaluator {
+    pub symbols: Symbols,
     pub instructions: Vec<Instruction>,
     pub call_stack: Vec<usize>,
     pub data_stack: DataStack,
 }
 
 impl Evaluator {
-    pub fn new(instructions: Vec<Instruction>) -> Self {
+    pub fn new(symbols: Symbols, instructions: Vec<Instruction>) -> Self {
         Self {
+            symbols,
             instructions,
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
@@ -30,7 +34,8 @@ impl Evaluator {
                     "store" => builtins::store(&mut self.data_stack, frame),
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
-                Instruction::CallFunction { address } => {
+                Instruction::CallFunction { name } => {
+                    let address = self.symbols.resolve(name);
                     self.call_stack.push(current_instruction);
                     current_instruction = address;
                 }
