@@ -11,11 +11,11 @@ use self::{evaluator::Evaluator, functions::Functions};
 pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let mut functions = Functions::new();
 
-    functions.define("inc_addr", |s| {
-        s.v(1).w("add");
-    });
-    functions.define("store_channel", |s| {
-        s.w("store").w("inc_addr");
+    functions.define("store_pixel", |s| {
+        s.w("store_red")
+            .w("store_green")
+            .w("store_blue")
+            .w("store_alpha");
     });
     functions.define("store_red", |s| {
         s.v(0).w("store_channel");
@@ -29,11 +29,11 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     functions.define("store_alpha", |s| {
         s.v(255).w("store_channel");
     });
-    functions.define("store_pixel", |s| {
-        s.w("store_red")
-            .w("store_green")
-            .w("store_blue")
-            .w("store_alpha");
+    functions.define("store_channel", |s| {
+        s.w("store").w("inc_addr");
+    });
+    functions.define("inc_addr", |s| {
+        s.v(1).w("add");
     });
 
     let (instructions, symbols) = functions.compile();
