@@ -15,6 +15,18 @@ pub fn compile(
             match expression {
                 SyntaxElement::Value(value) => Instruction::PushValue(value),
                 SyntaxElement::Word { name } => {
+                    // Here we check for the one special built-in function that
+                    // is implemented differently, without making sure anywhere,
+                    // that its name doesn't conflict with any user-defined
+                    // functions.
+                    //
+                    // I think it's fine for now. This seems like a temporary
+                    // hack anyway, while the language is not powerful enough to
+                    // support an actual `if`.
+                    if name == "return_if_zero" {
+                        return Instruction::ReturnIfZero;
+                    }
+
                     // The code here would allow user-defined functions to
                     // shadow built-in functions, which seems undesirable. It's
                     // better to catch this when defining the function though,
@@ -43,4 +55,5 @@ pub enum Instruction {
     CallFunction { name: &'static str },
     PushValue(usize),
     Return,
+    ReturnIfZero,
 }
