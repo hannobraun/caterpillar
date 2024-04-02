@@ -42,7 +42,7 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 
     let mut evaluator = Evaluator::new(code);
 
-    store_all_pixels(
+    draw_to_frame_buffer(
         frame_width,
         frame_height,
         store_pixel,
@@ -53,7 +53,7 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     assert_eq!(evaluator.data_stack.num_values(), 0);
 }
 
-fn store_all_pixels(
+fn draw_to_frame_buffer(
     frame_width: usize,
     frame_height: usize,
     store_pixel: usize,
