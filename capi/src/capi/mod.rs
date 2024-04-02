@@ -61,8 +61,25 @@ fn draw_to_frame_buffer(
     frame: &mut [u8],
 ) {
     let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
-    let mut addr = frame_addr();
+    let addr = frame_addr();
+    store_all_pixels(addr, buffer_len, store_pixel, evaluator, frame);
+}
 
+fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
+    frame_width * frame_height * 4
+}
+
+fn frame_addr() -> usize {
+    0
+}
+
+fn store_all_pixels(
+    mut addr: usize,
+    buffer_len: usize,
+    store_pixel: usize,
+    evaluator: &mut Evaluator,
+    frame: &mut [u8],
+) {
     loop {
         if addr >= buffer_len {
             break;
@@ -72,12 +89,4 @@ fn draw_to_frame_buffer(
         evaluator.evaluate(store_pixel, frame);
         addr = evaluator.data_stack.pop();
     }
-}
-
-fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
-    frame_width * frame_height * 4
-}
-
-fn frame_addr() -> usize {
-    0
 }
