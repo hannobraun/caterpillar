@@ -63,7 +63,7 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
 fn draw_to_frame_buffer(
     frame_width: usize,
     frame_height: usize,
-    entry: usize,
+    store_all_pixels: usize,
     evaluator: &mut Evaluator,
     frame: &mut [u8],
 ) {
@@ -72,7 +72,7 @@ fn draw_to_frame_buffer(
 
     evaluator.data_stack.push(buffer_len);
     evaluator.data_stack.push(addr);
-    evaluator.evaluate(entry, frame);
+    evaluator.evaluate(store_all_pixels, frame);
     let _addr = evaluator.data_stack.pop();
     let _buffer_len = evaluator.data_stack.pop();
 }
