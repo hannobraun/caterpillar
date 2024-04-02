@@ -34,10 +34,7 @@ impl Functions {
     }
 
     pub fn compile(self) -> (Vec<Instruction>, Symbols) {
-        let mut code = Code {
-            instructions: Vec::new(),
-            symbols: Symbols::new(),
-        };
+        let mut code = Code::new();
 
         for (name, syntax) in self.inner {
             compile(
