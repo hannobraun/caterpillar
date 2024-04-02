@@ -60,7 +60,7 @@ fn store_all_pixels(
     evaluator: &mut Evaluator,
     frame: &mut [u8],
 ) {
-    let buffer_len = compute_draw_buffer_len(frame_width, frame_height);
+    let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
 
     let mut addr = frame_addr();
 
@@ -75,7 +75,7 @@ fn store_all_pixels(
     }
 }
 
-fn compute_draw_buffer_len(frame_width: usize, frame_height: usize) -> usize {
+fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
     frame_width * frame_height * 4
 }
 
