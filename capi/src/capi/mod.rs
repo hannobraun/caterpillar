@@ -61,7 +61,6 @@ fn draw_to_frame_buffer(
     frame: &mut [u8],
 ) {
     let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
-
     let mut addr = frame_addr();
 
     loop {
