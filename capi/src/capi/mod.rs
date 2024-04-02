@@ -15,7 +15,8 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     functions.define("draw_to_frame_buffer", |s| {
         s.w("compute_frame_buffer_len")
             .w("frame_buffer_addr")
-            .w("store_all_pixels");
+            .w("store_all_pixels")
+            .w("drop2");
     });
     functions.define("compute_frame_buffer_len", |s| {
         s.w("mul").w("num_channels").w("mul");
@@ -66,8 +67,6 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     evaluator.data_stack.push(frame_width);
     evaluator.data_stack.push(frame_height);
     evaluator.evaluate(draw_to_frame_buffer, frame);
-    let _addr = evaluator.data_stack.pop();
-    let _buffer_len = evaluator.data_stack.pop();
 
     assert_eq!(evaluator.data_stack.num_values(), 0);
 }
