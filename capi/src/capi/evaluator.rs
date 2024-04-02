@@ -1,12 +1,10 @@
 use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
-    symbols::Symbols,
 };
 
 #[derive(Debug)]
 pub struct Evaluator {
-    pub symbols: Symbols,
-    pub instructions: Vec<Instruction>,
+    pub code: Code,
     pub call_stack: Vec<usize>,
     pub data_stack: DataStack,
 }
@@ -14,8 +12,7 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn new(code: Code) -> Self {
         Self {
-            symbols: code.symbols,
-            instructions: code.instructions,
+            code,
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
         }
@@ -25,7 +22,7 @@ impl Evaluator {
         let mut current_instruction = entry;
 
         loop {
-            let instruction = self.instructions[current_instruction];
+            let instruction = self.code.instructions[current_instruction];
             current_instruction += 1;
 
             match instruction {
@@ -36,7 +33,7 @@ impl Evaluator {
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::CallFunction { name } => {
-                    let address = self.symbols.resolve(name);
+                    let address = self.code.symbols.resolve(name);
                     self.call_stack.push(current_instruction);
                     current_instruction = address;
                 }
