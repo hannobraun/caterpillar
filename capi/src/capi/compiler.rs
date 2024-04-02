@@ -1,8 +1,11 @@
-use super::symbols::Symbols;
+use std::collections::BTreeSet;
+
+use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     name: &'static str,
-    expressions: Vec<Instruction>,
+    expressions: Vec<SyntaxElement>,
+    functions: &BTreeSet<&'static str>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
@@ -10,14 +13,23 @@ pub fn compile(
 
     instructions.extend(expressions.into_iter().map(|expression| {
         match expression {
-            Instruction::CallBuiltin { name } => {
+            SyntaxElement::Value(value) => Instruction::PushValue(value),
+            SyntaxElement::Word { name } => {
+                // The code here would allow user-defined functions to shadow
+                // built-in functions, which seems undesirable. It's better to
+                // catch this when defining the function though, and while it
+                // would be nice to have a fallback assertion here, that's not
+                // practical, given the way built-in function resolution is
+                // implemented right now.
+                if functions.contains(name) {
+                    return Instruction::CallFunction { name };
+                }
+
+                // This doesn't check whether the built-in function exists, and
+                // given how built-in functions are currently defined, it's not
+                // practical to implement.
                 Instruction::CallBuiltin { name }
             }
-            Instruction::CallFunction { name } => {
-                Instruction::CallFunction { name }
-            }
-            Instruction::PushValue(value) => Instruction::PushValue(value),
-            Instruction::Return => Instruction::Return,
         }
     }));
     instructions.push(Instruction::Return);

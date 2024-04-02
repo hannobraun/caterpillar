@@ -3,7 +3,6 @@ mod compiler;
 mod data_stack;
 mod evaluator;
 mod functions;
-mod resolver;
 mod symbols;
 mod syntax;
 
