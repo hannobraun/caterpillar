@@ -40,7 +40,7 @@ pub fn lang(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let code = functions.compile();
     let store_pixel = code.symbols.resolve("store_pixel");
 
-    let mut evaluator = Evaluator::new(code.symbols, code.instructions);
+    let mut evaluator = Evaluator::new(code);
 
     store_all_pixels(
         frame_width,

@@ -1,5 +1,6 @@
 use super::{
-    builtins, compiler::Instruction, data_stack::DataStack, symbols::Symbols,
+    builtins, code::Code, compiler::Instruction, data_stack::DataStack,
+    symbols::Symbols,
 };
 
 #[derive(Debug)]
@@ -11,10 +12,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(symbols: Symbols, instructions: Vec<Instruction>) -> Self {
+    pub fn new(code: Code) -> Self {
         Self {
-            symbols,
-            instructions,
+            symbols: code.symbols,
+            instructions: code.instructions,
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
         }
