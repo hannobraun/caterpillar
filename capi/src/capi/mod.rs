@@ -68,7 +68,7 @@ fn draw_to_frame_buffer(
     frame: &mut [u8],
 ) {
     let buffer_len = compute_frame_buffer_len(frame_width, frame_height);
-    let addr = frame_addr();
+    let addr = frame_buffer_addr();
 
     evaluator.data_stack.push(buffer_len);
     evaluator.data_stack.push(addr);
@@ -81,6 +81,6 @@ fn compute_frame_buffer_len(frame_width: usize, frame_height: usize) -> usize {
     frame_width * frame_height * 4
 }
 
-fn frame_addr() -> usize {
+fn frame_buffer_addr() -> usize {
     0
 }
