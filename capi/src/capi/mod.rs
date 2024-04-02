@@ -1,4 +1,5 @@
 mod builtins;
+mod code;
 mod compiler;
 mod data_stack;
 mod evaluator;

@@ -1,6 +1,7 @@
 use std::collections::BTreeSet;
 
 use super::{
+    code::Code,
     compiler::{compile, Instruction},
     symbols::Symbols,
     syntax::{Syntax, SyntaxElement},
@@ -33,13 +34,21 @@ impl Functions {
     }
 
     pub fn compile(self) -> (Vec<Instruction>, Symbols) {
-        let mut instructions = Vec::new();
-        let mut symbols = Symbols::new();
+        let mut code = Code {
+            instructions: Vec::new(),
+            symbols: Symbols::new(),
+        };
 
         for (name, syntax) in self.inner {
-            compile(name, syntax, &self.names, &mut symbols, &mut instructions);
+            compile(
+                name,
+                syntax,
+                &self.names,
+                &mut code.symbols,
+                &mut code.instructions,
+            );
         }
 
-        (instructions, symbols)
+        (code.instructions, code.symbols)
     }
 }
