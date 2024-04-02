@@ -30,6 +30,7 @@ impl Evaluator {
                     "add" => builtins::add(&mut self.data_stack),
                     "clone2" => builtins::clone2(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
+                    "sub" => builtins::sub(&mut self.data_stack),
                     "store" => builtins::store(&mut self.data_stack, frame),
                     _ => panic!("Unknown builtin: `{name}`"),
                 },

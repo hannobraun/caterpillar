@@ -40,6 +40,15 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
     data_stack.push(addr);
 }
 
+pub fn sub(data_stack: &mut DataStack) {
+    let b = data_stack.pop();
+    let a = data_stack.pop();
+
+    let c = a.wrapping_sub(b);
+
+    data_stack.push(c);
+}
+
 pub fn swap(data_stack: &mut DataStack) {
     let b = data_stack.pop();
     let a = data_stack.pop();
