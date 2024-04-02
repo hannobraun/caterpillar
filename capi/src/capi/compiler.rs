@@ -4,14 +4,14 @@ use super::{symbols::Symbols, syntax::SyntaxElement};
 
 pub fn compile(
     name: &'static str,
-    expressions: Vec<SyntaxElement>,
+    syntax: Vec<SyntaxElement>,
     functions: &BTreeSet<&'static str>,
     symbols: &mut Symbols,
     instructions: &mut Vec<Instruction>,
 ) {
     let address = instructions.len();
 
-    instructions.extend(expressions.into_iter().map(|expression| {
+    instructions.extend(syntax.into_iter().map(|expression| {
         match expression {
             SyntaxElement::Value(value) => Instruction::PushValue(value),
             SyntaxElement::Word { name } => {
