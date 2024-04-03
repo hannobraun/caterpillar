@@ -76,16 +76,15 @@ impl Program {
     }
 
     pub fn run(
+        &mut self,
         frame_width: usize,
         frame_height: usize,
-        evaluator: &mut Evaluator,
-        entry: usize,
         frame: &mut [u8],
     ) {
-        evaluator.data_stack.push(frame_width);
-        evaluator.data_stack.push(frame_height);
-        evaluator.evaluate(entry, frame);
+        self.evaluator.data_stack.push(frame_width);
+        self.evaluator.data_stack.push(frame_height);
+        self.evaluator.evaluate(self.entry, frame);
 
-        assert_eq!(evaluator.data_stack.num_values(), 0);
+        assert_eq!(self.evaluator.data_stack.num_values(), 0);
     }
 }

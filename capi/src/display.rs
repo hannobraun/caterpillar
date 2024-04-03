@@ -24,11 +24,9 @@ pub fn run() -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            capi::Program::run(
+            program.run(
                 WIDTH.try_into().unwrap(),
                 HEIGHT.try_into().unwrap(),
-                &mut program.evaluator,
-                program.entry,
                 pixels.frame_mut(),
             );
             window.request_redraw();
