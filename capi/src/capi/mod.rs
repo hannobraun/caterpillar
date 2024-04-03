@@ -11,12 +11,7 @@ use self::{evaluator::Evaluator, functions::Functions};
 
 pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     let (mut evaluator, entry) = create_program();
-
-    evaluator.data_stack.push(frame_width);
-    evaluator.data_stack.push(frame_height);
-    evaluator.evaluate(entry, frame);
-
-    assert_eq!(evaluator.data_stack.num_values(), 0);
+    run_program(frame_width, frame_height, &mut evaluator, entry, frame);
 }
 
 pub fn create_program() -> (Evaluator, usize) {
@@ -75,4 +70,18 @@ pub fn create_program() -> (Evaluator, usize) {
     let evaluator = Evaluator::new(code);
 
     (evaluator, entry)
+}
+
+pub fn run_program(
+    frame_width: usize,
+    frame_height: usize,
+    evaluator: &mut Evaluator,
+    entry: usize,
+    frame: &mut [u8],
+) {
+    evaluator.data_stack.push(frame_width);
+    evaluator.data_stack.push(frame_height);
+    evaluator.evaluate(entry, frame);
+
+    assert_eq!(evaluator.data_stack.num_values(), 0);
 }
