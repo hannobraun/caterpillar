@@ -9,11 +9,6 @@ mod syntax;
 
 use self::{evaluator::Evaluator, functions::Functions};
 
-pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
-    let (mut evaluator, entry) = create_program();
-    run_program(frame_width, frame_height, &mut evaluator, entry, frame);
-}
-
 pub fn create_program() -> (Evaluator, usize) {
     let mut functions = Functions::new();
 

@@ -6,7 +6,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::capi::capi;
+use crate::capi;
 
 pub fn run() -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
@@ -22,9 +22,12 @@ pub fn run() -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            capi(
+            let (mut evaluator, entry) = capi::create_program();
+            capi::run_program(
                 WIDTH.try_into().unwrap(),
                 HEIGHT.try_into().unwrap(),
+                &mut evaluator,
+                entry,
                 pixels.frame_mut(),
             );
             window.request_redraw();
