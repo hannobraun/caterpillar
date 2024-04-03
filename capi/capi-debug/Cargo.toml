@@ -9,3 +9,4 @@ log = "*"
 
 [dependencies.console_log]
 version = "*"
+features = ["color"]
