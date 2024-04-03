@@ -8,10 +8,7 @@ use winit::{
 
 use crate::capi;
 
-pub fn run() -> anyhow::Result<()> {
-    let mut program = capi::Program::new();
-    program.functions.print();
-
+pub fn run(mut program: capi::Program) -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
 
