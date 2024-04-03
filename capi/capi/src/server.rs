@@ -2,6 +2,10 @@ use std::thread;
 
 pub fn start() {
     thread::spawn(|| {
-        println!("Hello, world!");
+        serve();
     });
+}
+
+fn serve() {
+    println!("Hello, world!");
 }
