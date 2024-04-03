@@ -1,6 +1,7 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
-use tokio::runtime::Runtime;
+use axum::{routing::get, Router};
+use tokio::{net::TcpListener, runtime::Runtime};
 
 pub fn start() {
     thread::spawn(|| {
@@ -24,6 +25,12 @@ fn serve() -> anyhow::Result<()> {
 }
 
 async fn serve_async() -> anyhow::Result<()> {
-    println!("Hello, world!");
+    let app = Router::new().route("/", get(handler));
+    let listener = TcpListener::bind("localhost:34481").await?;
+    axum::serve(listener, app).await?;
     Ok(())
+}
+
+async fn handler() -> &'static str {
+    "Hello, world!"
 }
