@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 console_error_panic_hook = "*"
+console_log = "*"
