@@ -10,3 +10,7 @@ log = "*"
 [dependencies.console_log]
 version = "*"
 features = ["color"]
+
+[dependencies.leptos]
+version = "*"
+features = ["csr"]
