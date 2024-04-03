@@ -4,7 +4,7 @@ use super::{code::Code, syntax::SyntaxElement};
 
 pub fn compile(
     name: &'static str,
-    syntax: Vec<SyntaxElement>,
+    syntax: &[SyntaxElement],
     functions: &BTreeSet<&'static str>,
     code: &mut Code,
 ) {
