@@ -60,13 +60,13 @@ pub fn capi(frame_width: usize, frame_height: usize, frame: &mut [u8]) {
     });
 
     let code = functions.compile();
-    let draw_to_frame_buffer = code.symbols.resolve("draw_to_frame_buffer");
+    let entry = code.symbols.resolve("draw_to_frame_buffer");
 
     let mut evaluator = Evaluator::new(code);
 
     evaluator.data_stack.push(frame_width);
     evaluator.data_stack.push(frame_height);
-    evaluator.evaluate(draw_to_frame_buffer, frame);
+    evaluator.evaluate(entry, frame);
 
     assert_eq!(evaluator.data_stack.num_values(), 0);
 }
