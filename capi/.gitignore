@@ -1,2 +1,5 @@
 # Cargo
 /target
+
+# Trunk
+/capi-debug/dist
