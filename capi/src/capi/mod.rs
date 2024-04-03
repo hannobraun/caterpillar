@@ -10,6 +10,7 @@ mod syntax;
 use self::{evaluator::Evaluator, functions::Functions};
 
 pub struct Program {
+    pub functions: Functions,
     pub evaluator: Evaluator,
     pub entry: usize,
 }
@@ -72,7 +73,11 @@ impl Program {
 
         let evaluator = Evaluator::new(code);
 
-        Self { evaluator, entry }
+        Self {
+            functions,
+            evaluator,
+            entry,
+        }
     }
 
     pub fn run(
