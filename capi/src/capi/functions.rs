@@ -29,13 +29,13 @@ impl Functions {
         f(&mut Syntax::new(&mut syntax));
 
         self.names.insert(name);
-        self.inner.push((name, syntax));
+        self.inner.push(Function { name, syntax });
     }
 
     pub fn compile(self) -> Code {
         let mut code = Code::new();
 
-        for (name, syntax) in self.inner {
+        for Function { name, syntax } in self.inner {
             compile(name, syntax, &self.names, &mut code);
         }
 
@@ -43,4 +43,8 @@ impl Functions {
     }
 }
 
-pub type Function = (&'static str, Vec<SyntaxElement>);
+#[derive(Debug)]
+pub struct Function {
+    pub name: &'static str,
+    pub syntax: Vec<SyntaxElement>,
+}
