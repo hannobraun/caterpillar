@@ -9,7 +9,7 @@ use super::{
 #[derive(Debug)]
 pub struct Functions {
     pub names: BTreeSet<&'static str>,
-    pub inner: Vec<(&'static str, Vec<SyntaxElement>)>,
+    pub inner: Vec<Function>,
 }
 
 impl Functions {
@@ -42,3 +42,5 @@ impl Functions {
         code
     }
 }
+
+pub type Function = (&'static str, Vec<SyntaxElement>);
