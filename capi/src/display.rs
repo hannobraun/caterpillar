@@ -9,10 +9,7 @@ use winit::{
 use crate::capi;
 
 pub fn run() -> anyhow::Result<()> {
-    let capi::Program {
-        mut evaluator,
-        entry,
-    } = capi::create_program();
+    let mut program = capi::create_program();
 
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
@@ -30,8 +27,8 @@ pub fn run() -> anyhow::Result<()> {
             capi::run_program(
                 WIDTH.try_into().unwrap(),
                 HEIGHT.try_into().unwrap(),
-                &mut evaluator,
-                entry,
+                &mut program.evaluator,
+                program.entry,
                 pixels.frame_mut(),
             );
             window.request_redraw();
