@@ -9,6 +9,8 @@ use winit::{
 use crate::capi;
 
 pub fn run() -> anyhow::Result<()> {
+    let (mut evaluator, entry) = capi::create_program();
+
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
 
@@ -22,7 +24,6 @@ pub fn run() -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            let (mut evaluator, entry) = capi::create_program();
             capi::run_program(
                 WIDTH.try_into().unwrap(),
                 HEIGHT.try_into().unwrap(),
