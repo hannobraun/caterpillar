@@ -10,6 +10,7 @@ use crate::capi;
 
 pub fn run() -> anyhow::Result<()> {
     let mut program = capi::Program::new();
+    program.functions.print();
 
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
