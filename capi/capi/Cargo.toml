@@ -7,6 +7,10 @@ edition = "2021"
 anyhow = "*"
 pixels = "*"
 
+[dependencies.tokio]
+version = "*"
+features = ["full"]
+
 [dependencies.winit]
 version = "*"
 features = ["rwh_05"]
