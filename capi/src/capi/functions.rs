@@ -46,8 +46,8 @@ impl Functions {
     pub fn compile(self) -> Code {
         let mut code = Code::new();
 
-        for Function { name, syntax } in self.inner {
-            compile(name, &syntax, &self.names, &mut code);
+        for Function { name, syntax } in &self.inner {
+            compile(name, syntax, &self.names, &mut code);
         }
 
         code
