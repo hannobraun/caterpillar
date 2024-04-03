@@ -1,3 +1,5 @@
+use std::fmt;
+
 #[derive(Debug)]
 pub struct Syntax<'r> {
     elements: &'r mut Vec<SyntaxElement>,
@@ -23,4 +25,13 @@ impl<'r> Syntax<'r> {
 pub enum SyntaxElement {
     Value(usize),
     Word { name: &'static str },
+}
+
+impl fmt::Display for SyntaxElement {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            SyntaxElement::Value(value) => write!(f, "{value}"),
+            SyntaxElement::Word { name } => write!(f, "{name}"),
+        }
+    }
 }
