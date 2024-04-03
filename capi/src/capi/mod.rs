@@ -59,6 +59,8 @@ pub fn create_program() -> (Evaluator, usize) {
         s.v(1).w("add");
     });
 
+    functions.print();
+
     let code = functions.compile();
     let entry = code.symbols.resolve("draw_to_frame_buffer");
 

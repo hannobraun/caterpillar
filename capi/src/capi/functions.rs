@@ -32,6 +32,17 @@ impl Functions {
         self.inner.push(Function { name, syntax });
     }
 
+    pub fn print(&self) {
+        for Function { name, syntax } in &self.inner {
+            println!();
+            println!("{name}:");
+
+            for element in syntax {
+                println!("    {element}");
+            }
+        }
+    }
+
     pub fn compile(self) -> Code {
         let mut code = Code::new();
 
