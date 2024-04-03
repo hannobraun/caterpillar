@@ -75,7 +75,7 @@ impl Program {
         Self { evaluator, entry }
     }
 
-    pub fn run_program(
+    pub fn run(
         frame_width: usize,
         frame_height: usize,
         evaluator: &mut Evaluator,
