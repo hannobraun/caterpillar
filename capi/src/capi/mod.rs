@@ -15,7 +15,7 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn create_program() -> Self {
+    pub fn new() -> Self {
         let mut functions = Functions::new();
 
         functions.define("draw_to_frame_buffer", |s| {
