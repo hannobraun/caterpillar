@@ -3,5 +3,5 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    println!("Hello, world!");
+    log::info!("Hello, world!");
 }
