@@ -9,7 +9,12 @@ mod syntax;
 
 use self::{evaluator::Evaluator, functions::Functions};
 
-pub fn create_program() -> (Evaluator, usize) {
+pub struct Program {
+    pub evaluator: Evaluator,
+    pub entry: usize,
+}
+
+pub fn create_program() -> Program {
     let mut functions = Functions::new();
 
     functions.define("draw_to_frame_buffer", |s| {
@@ -66,7 +71,7 @@ pub fn create_program() -> (Evaluator, usize) {
 
     let evaluator = Evaluator::new(code);
 
-    (evaluator, entry)
+    Program { evaluator, entry }
 }
 
 pub fn run_program(

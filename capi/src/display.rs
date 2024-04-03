@@ -9,7 +9,10 @@ use winit::{
 use crate::capi;
 
 pub fn run() -> anyhow::Result<()> {
-    let (mut evaluator, entry) = capi::create_program();
+    let capi::Program {
+        mut evaluator,
+        entry,
+    } = capi::create_program();
 
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
