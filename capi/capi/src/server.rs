@@ -1,5 +1,7 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
+use tokio::runtime::Runtime;
+
 pub fn start() {
     thread::spawn(|| {
         let res = catch_unwind(|| {
@@ -16,6 +18,12 @@ pub fn start() {
 }
 
 fn serve() -> anyhow::Result<()> {
+    let runtime = Runtime::new()?;
+    runtime.block_on(serve_async())?;
+    Ok(())
+}
+
+async fn serve_async() -> anyhow::Result<()> {
     println!("Hello, world!");
     Ok(())
 }
