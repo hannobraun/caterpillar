@@ -6,7 +6,7 @@ use super::{
     syntax::{Syntax, SyntaxElement},
 };
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Functions {
     pub names: BTreeSet<&'static str>,
     pub inner: Vec<Function>,
@@ -54,7 +54,7 @@ impl Functions {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Function {
     pub name: &'static str,
     pub syntax: Vec<SyntaxElement>,
