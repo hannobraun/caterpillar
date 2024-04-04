@@ -13,6 +13,10 @@ tower = "*"
 version = "*"
 features = ["full"]
 
+[dependencies.tower-http]
+version = "*"
+features = ["full"]
+
 [dependencies.winit]
 version = "*"
 features = ["rwh_05"]
