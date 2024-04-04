@@ -6,11 +6,9 @@ use tokio::{net::TcpListener, runtime::Runtime};
 use crate::capi::Functions;
 
 pub fn start(functions: Functions) {
-    functions.print();
-
     thread::spawn(|| {
         let res = catch_unwind(|| {
-            if let Err(err) = serve() {
+            if let Err(err) = serve(functions) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
@@ -22,7 +20,9 @@ pub fn start(functions: Functions) {
     });
 }
 
-fn serve() -> anyhow::Result<()> {
+fn serve(functions: Functions) -> anyhow::Result<()> {
+    functions.print();
+
     let runtime = Runtime::new()?;
     runtime.block_on(serve_async())?;
     Ok(())
