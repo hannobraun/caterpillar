@@ -3,7 +3,11 @@ use std::{panic::catch_unwind, process::exit, thread};
 use axum::{routing::get, Router};
 use tokio::{net::TcpListener, runtime::Runtime};
 
-pub fn start() {
+use crate::capi::Functions;
+
+pub fn start(functions: Functions) {
+    functions.print();
+
     thread::spawn(|| {
         let res = catch_unwind(|| {
             if let Err(err) = serve() {

@@ -4,8 +4,7 @@ mod server;
 
 fn main() -> anyhow::Result<()> {
     let program = capi::Program::new();
-    program.functions.print();
 
-    server::start();
+    server::start(program.functions.clone());
     display::run(program)
 }
