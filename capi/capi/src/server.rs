@@ -1,6 +1,6 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
-use axum::{routing::get, Router};
+use axum::{extract::State, routing::get, Router};
 use tokio::{net::TcpListener, runtime::Runtime};
 
 use crate::capi::Functions;
@@ -27,14 +27,13 @@ fn serve(functions: Functions) -> anyhow::Result<()> {
 }
 
 async fn serve_async(functions: Functions) -> anyhow::Result<()> {
-    functions.print();
-
-    let app = Router::new().route("/", get(handler));
+    let app = Router::new().route("/", get(handler)).with_state(functions);
     let listener = TcpListener::bind("localhost:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
 }
 
-async fn handler() -> &'static str {
+async fn handler(State(functions): State<Functions>) -> &'static str {
+    functions.print();
     "Hello, world!"
 }
