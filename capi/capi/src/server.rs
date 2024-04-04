@@ -40,7 +40,7 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
             ),
         )
         .with_state(functions);
-    let listener = TcpListener::bind("localhost:34481").await?;
+    let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
 }
