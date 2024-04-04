@@ -7,7 +7,7 @@ mod functions;
 mod symbols;
 mod syntax;
 
-use self::{evaluator::Evaluator, functions::Functions};
+pub use self::{evaluator::Evaluator, functions::Functions};
 
 pub struct Program {
     pub functions: Functions,
