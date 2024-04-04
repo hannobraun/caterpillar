@@ -2,6 +2,9 @@ use std::{panic::catch_unwind, process::exit, thread};
 
 use axum::{extract::State, routing::get, Router};
 use tokio::{net::TcpListener, runtime::Runtime};
+use tower::ServiceBuilder;
+use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
+use tracing::Level;
 
 use crate::capi::Functions;
 
@@ -27,7 +30,16 @@ fn serve(functions: Functions) -> anyhow::Result<()> {
 }
 
 async fn serve_async(functions: Functions) -> anyhow::Result<()> {
-    let app = Router::new().route("/", get(handler)).with_state(functions);
+    let app = Router::new()
+        .route("/", get(handler))
+        .layer(
+            ServiceBuilder::new().layer(
+                TraceLayer::new_for_http()
+                    .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
+                    .on_response(DefaultOnResponse::new().level(Level::INFO)),
+            ),
+        )
+        .with_state(functions);
     let listener = TcpListener::bind("localhost:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
