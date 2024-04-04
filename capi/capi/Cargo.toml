@@ -17,6 +17,10 @@ features = ["full"]
 version = "*"
 features = ["full"]
 
+[dependencies.tracing-subscriber]
+version = "*"
+features = ["env-filter"]
+
 [dependencies.winit]
 version = "*"
 features = ["rwh_05"]
