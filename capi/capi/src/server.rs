@@ -21,14 +21,14 @@ pub fn start(functions: Functions) {
 }
 
 fn serve(functions: Functions) -> anyhow::Result<()> {
-    functions.print();
-
     let runtime = Runtime::new()?;
-    runtime.block_on(serve_async())?;
+    runtime.block_on(serve_async(functions))?;
     Ok(())
 }
 
-async fn serve_async() -> anyhow::Result<()> {
+async fn serve_async(functions: Functions) -> anyhow::Result<()> {
+    functions.print();
+
     let app = Router::new().route("/", get(handler));
     let listener = TcpListener::bind("localhost:34481").await?;
     axum::serve(listener, app).await?;
