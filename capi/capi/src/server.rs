@@ -33,7 +33,7 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn handler(State(functions): State<Functions>) -> &'static str {
+async fn handler(State(functions): State<Functions>) -> String {
     println!("{functions}");
-    "Hello, world!"
+    "Hello, world!".to_string()
 }
