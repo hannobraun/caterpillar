@@ -386,6 +386,7 @@ dependencies = [
  "axum",
  "pixels",
  "tokio",
+ "tower",
  "winit",
 ]
 
