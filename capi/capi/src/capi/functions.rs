@@ -32,10 +32,6 @@ impl Functions {
         self.inner.push(Function { name, syntax });
     }
 
-    pub fn print(&self) {
-        println!("{self}");
-    }
-
     pub fn compile(&self) -> Code {
         let mut code = Code::new();
 

@@ -34,6 +34,6 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
 }
 
 async fn handler(State(functions): State<Functions>) -> &'static str {
-    functions.print();
+    println!("{functions}");
     "Hello, world!"
 }
