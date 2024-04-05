@@ -6,7 +6,7 @@ use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-use crate::capi::Functions;
+use crate::runtime::Functions;
 
 pub fn start(functions: Functions) {
     thread::spawn(|| {

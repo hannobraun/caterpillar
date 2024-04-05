@@ -1,5 +1,5 @@
-mod capi;
 mod display;
+mod runtime;
 mod server;
 
 fn main() -> anyhow::Result<()> {
@@ -7,7 +7,7 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let program = capi::Program::new();
+    let program = runtime::Program::new();
 
     server::start(program.functions.clone());
     display::run(program)
