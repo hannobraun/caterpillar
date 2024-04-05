@@ -1,5 +1,3 @@
-#![allow(clippy::new_without_default)]
-
 mod builtins;
 mod code;
 mod compiler;

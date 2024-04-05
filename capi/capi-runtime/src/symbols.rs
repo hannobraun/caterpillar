@@ -1,14 +1,12 @@
 use std::collections::BTreeMap;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Symbols {
     inner: BTreeMap<&'static str, usize>,
 }
 impl Symbols {
     pub fn new() -> Self {
-        Self {
-            inner: BTreeMap::new(),
-        }
+        Self::default()
     }
 
     pub fn define(&mut self, name: &'static str, address: usize) {

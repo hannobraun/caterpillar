@@ -6,7 +6,7 @@ use super::{
     syntax::{Syntax, SyntaxElement},
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Functions {
     pub names: BTreeSet<&'static str>,
     pub inner: Vec<Function>,
@@ -14,10 +14,7 @@ pub struct Functions {
 
 impl Functions {
     pub fn new() -> Self {
-        Self {
-            names: BTreeSet::new(),
-            inner: Vec::new(),
-        }
+        Self::default()
     }
 
     pub fn define(&mut self, name: &'static str, f: impl FnOnce(&mut Syntax)) {

@@ -1,11 +1,11 @@
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct DataStack {
     values: Vec<usize>,
 }
 
 impl DataStack {
     pub fn new() -> Self {
-        Self { values: Vec::new() }
+        Self::default()
     }
 
     pub fn push(&mut self, value: usize) {

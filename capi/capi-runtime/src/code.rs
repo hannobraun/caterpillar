@@ -1,6 +1,6 @@
 use super::{compiler::Instruction, symbols::Symbols};
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Code {
     pub symbols: Symbols,
     pub instructions: Vec<Instruction>,
@@ -8,9 +8,6 @@ pub struct Code {
 
 impl Code {
     pub fn new() -> Self {
-        Self {
-            instructions: Vec::new(),
-            symbols: Symbols::new(),
-        }
+        Self::default()
     }
 }
