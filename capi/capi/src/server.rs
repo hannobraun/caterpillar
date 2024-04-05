@@ -1,12 +1,11 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
 use axum::{extract::State, routing::get, Router};
+use capi_runtime::Functions;
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
-
-use crate::runtime::Functions;
 
 pub fn start(functions: Functions) {
     thread::spawn(|| {

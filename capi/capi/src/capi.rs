@@ -1,4 +1,4 @@
-use crate::runtime::{Evaluator, Functions};
+use capi_runtime::{Evaluator, Functions};
 
 pub struct Program {
     pub functions: Functions,

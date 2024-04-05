@@ -1,5 +1,3 @@
-extern crate capi_runtime as runtime;
-
 mod capi;
 mod display;
 mod server;
