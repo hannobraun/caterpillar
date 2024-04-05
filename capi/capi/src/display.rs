@@ -6,9 +6,9 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::runtime;
+use crate::runtime::Program;
 
-pub fn run(mut program: runtime::Program) -> anyhow::Result<()> {
+pub fn run(mut program: Program) -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
     const HEIGHT: u32 = 480;
 
