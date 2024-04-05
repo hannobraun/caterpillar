@@ -10,6 +10,9 @@ pixels = "*"
 tower = "*"
 tracing = "*"
 
+[dependencies.capi-runtime]
+path = "../capi-runtime"
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
