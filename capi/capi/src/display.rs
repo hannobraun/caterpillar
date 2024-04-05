@@ -6,7 +6,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::runtime::Program;
+use crate::capi::Program;
 
 pub fn run(mut program: Program) -> anyhow::Result<()> {
     const WIDTH: u32 = 640;
