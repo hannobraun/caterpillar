@@ -48,7 +48,7 @@ pub fn compile(
     code.symbols.define(name, address);
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub enum Instruction {
     CallBuiltin { name: &'static str },
     CallFunction { name: &'static str },
