@@ -26,7 +26,7 @@ impl Evaluator {
             current_instruction += 1;
 
             match instruction {
-                Instruction::CallBuiltin { name } => match *name {
+                Instruction::CallBuiltin { name } => match name.as_str() {
                     "add" => builtins::add(&mut self.data_stack),
                     "clone2" => builtins::clone2(&mut self.data_stack),
                     "drop2" => builtins::drop2(&mut self.data_stack),

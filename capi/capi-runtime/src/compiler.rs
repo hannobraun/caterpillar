@@ -39,7 +39,9 @@ pub fn compile(
                 // This doesn't check whether the built-in function exists,
                 // and given how built-in functions are currently defined,
                 // it's not practical to implement.
-                Instruction::CallBuiltin { name }
+                Instruction::CallBuiltin {
+                    name: name.to_string(),
+                }
             }
         }
     }));
@@ -50,7 +52,7 @@ pub fn compile(
 
 #[derive(Clone, Debug)]
 pub enum Instruction {
-    CallBuiltin { name: &'static str },
+    CallBuiltin { name: String },
     CallFunction { name: &'static str },
     PushValue(usize),
     Return,
