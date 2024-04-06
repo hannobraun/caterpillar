@@ -33,7 +33,9 @@ pub fn compile(
                 // here, that's not practical, given the way built-in
                 // function resolution is implemented right now.
                 if functions.contains(&name.to_string()) {
-                    return Instruction::CallFunction { name };
+                    return Instruction::CallFunction {
+                        name: name.to_string(),
+                    };
                 }
 
                 // This doesn't check whether the built-in function exists,
@@ -53,7 +55,7 @@ pub fn compile(
 #[derive(Clone, Debug)]
 pub enum Instruction {
     CallBuiltin { name: String },
-    CallFunction { name: &'static str },
+    CallFunction { name: String },
     PushValue(usize),
     Return,
     ReturnIfZero,
