@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use super::{code::Code, syntax::SyntaxElement};
 
 pub fn compile(
-    name: &'static str,
+    name: String,
     syntax: &[SyntaxElement],
     functions: &BTreeSet<&'static str>,
     code: &mut Code,
@@ -45,7 +45,7 @@ pub fn compile(
     }));
     code.instructions.push(Instruction::Return);
 
-    code.symbols.define(name.to_string(), address);
+    code.symbols.define(name, address);
 }
 
 #[derive(Copy, Clone, Debug)]
