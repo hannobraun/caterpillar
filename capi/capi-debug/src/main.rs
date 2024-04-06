@@ -1,3 +1,4 @@
+use capi_runtime::Function;
 use leptos::SignalGet;
 
 fn main() {
@@ -17,10 +18,14 @@ fn main() {
 }
 
 async fn fetch_code((): ()) -> String {
-    reqwest::get("http://127.0.0.1:8080/code")
+    let code = reqwest::get("http://127.0.0.1:8080/code")
         .await
         .unwrap()
         .text()
         .await
-        .unwrap()
+        .unwrap();
+
+    let code: Vec<Function> = serde_json::from_str(&code).unwrap();
+
+    format!("{code:?}")
 }
