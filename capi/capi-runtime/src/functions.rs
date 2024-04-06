@@ -26,7 +26,10 @@ impl Functions {
         f(&mut Syntax::new(&mut syntax));
 
         self.names.insert(name.to_string());
-        self.inner.push(Function { name, syntax });
+        self.inner.push(Function {
+            name: name.to_string(),
+            syntax,
+        });
     }
 
     pub fn compile(&self) -> Code {
@@ -42,6 +45,6 @@ impl Functions {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
-    pub name: &'static str,
+    pub name: String,
     pub syntax: Vec<SyntaxElement>,
 }
