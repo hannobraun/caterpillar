@@ -457,6 +457,7 @@ dependencies = [
  "leptos",
  "log",
  "reqwest",
+ "serde_json",
 ]
 
 [[package]]
