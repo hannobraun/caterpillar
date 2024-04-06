@@ -55,7 +55,7 @@ impl fmt::Display for Functions {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: &'static str,
     pub syntax: Vec<SyntaxElement>,

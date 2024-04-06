@@ -21,7 +21,7 @@ impl<'r> Syntax<'r> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum SyntaxElement {
     Value(usize),
     Word { name: &'static str },
