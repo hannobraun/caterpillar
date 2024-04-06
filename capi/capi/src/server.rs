@@ -45,5 +45,5 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
 }
 
 async fn handler(State(functions): State<Functions>) -> String {
-    functions.to_string()
+    serde_json::to_string(&functions.inner).unwrap()
 }
