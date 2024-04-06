@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Default)]
 pub struct Symbols {
-    inner: BTreeMap<&'static str, usize>,
+    inner: BTreeMap<String, usize>,
 }
 impl Symbols {
     pub fn new() -> Self {
@@ -10,7 +10,7 @@ impl Symbols {
     }
 
     pub fn define(&mut self, name: &'static str, address: usize) {
-        self.inner.insert(name, address);
+        self.inner.insert(name.to_string(), address);
     }
 
     pub fn resolve(&self, name: &str) -> usize {
