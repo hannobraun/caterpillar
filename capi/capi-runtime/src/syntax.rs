@@ -15,7 +15,7 @@ impl<'r> Syntax<'r> {
         self
     }
 
-    pub fn w(&mut self, name: &'static str) -> &mut Self {
+    pub fn w(&mut self, name: &str) -> &mut Self {
         self.elements.push(SyntaxElement::Word {
             name: name.to_string(),
         });
