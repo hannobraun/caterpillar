@@ -5,7 +5,7 @@ use super::{code::Code, syntax::SyntaxElement};
 pub fn compile(
     name: String,
     syntax: &[SyntaxElement],
-    functions: &BTreeSet<&'static str>,
+    functions: &BTreeSet<String>,
     code: &mut Code,
 ) {
     let address = code.instructions.len();
@@ -32,7 +32,7 @@ pub fn compile(
                 // and while it would be nice to have a fallback assertion
                 // here, that's not practical, given the way built-in
                 // function resolution is implemented right now.
-                if functions.contains(name) {
+                if functions.contains(&name.to_string()) {
                     return Instruction::CallFunction { name };
                 }
 

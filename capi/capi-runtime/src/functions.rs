@@ -8,7 +8,7 @@ use super::{
 
 #[derive(Clone, Debug, Default)]
 pub struct Functions {
-    pub names: BTreeSet<&'static str>,
+    pub names: BTreeSet<String>,
     pub inner: Vec<Function>,
 }
 
@@ -25,7 +25,7 @@ impl Functions {
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
 
-        self.names.insert(name);
+        self.names.insert(name.to_string());
         self.inner.push(Function { name, syntax });
     }
 
