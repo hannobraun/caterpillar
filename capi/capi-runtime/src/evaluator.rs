@@ -22,11 +22,11 @@ impl Evaluator {
         let mut current_instruction = entry;
 
         loop {
-            let instruction = self.code.instructions[current_instruction];
+            let instruction = &self.code.instructions[current_instruction];
             current_instruction += 1;
 
             match instruction {
-                Instruction::CallBuiltin { name } => match name {
+                Instruction::CallBuiltin { name } => match *name {
                     "add" => builtins::add(&mut self.data_stack),
                     "clone2" => builtins::clone2(&mut self.data_stack),
                     "drop2" => builtins::drop2(&mut self.data_stack),
@@ -40,7 +40,7 @@ impl Evaluator {
                     self.call_stack.push(current_instruction);
                     current_instruction = address;
                 }
-                Instruction::PushValue(value) => self.data_stack.push(value),
+                Instruction::PushValue(value) => self.data_stack.push(*value),
                 Instruction::Return => {
                     let Some(return_address) = self.call_stack.pop() else {
                         break;
