@@ -16,7 +16,9 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn w(&mut self, name: &'static str) -> &mut Self {
-        self.elements.push(SyntaxElement::Word { name });
+        self.elements.push(SyntaxElement::Word {
+            name: name.to_string(),
+        });
         self
     }
 }
@@ -24,7 +26,7 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum SyntaxElement {
     Value(usize),
-    Word { name: &'static str },
+    Word { name: String },
 }
 
 impl fmt::Display for SyntaxElement {
