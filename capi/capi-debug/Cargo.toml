@@ -7,6 +7,9 @@ edition = "2021"
 console_error_panic_hook = "*"
 log = "*"
 
+[dependencies.capi-runtime]
+path = "../capi-runtime"
+
 [dependencies.console_log]
 version = "*"
 features = ["color"]
