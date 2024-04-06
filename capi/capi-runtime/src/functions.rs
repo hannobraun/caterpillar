@@ -17,7 +17,7 @@ impl Functions {
         Self::default()
     }
 
-    pub fn define(&mut self, name: &'static str, f: impl FnOnce(&mut Syntax)) {
+    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut Syntax)) {
         if self.names.contains(name) {
             panic!("Can't re-define existing function `{name}`.");
         }
