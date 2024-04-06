@@ -32,7 +32,7 @@ pub fn compile(
                 // and while it would be nice to have a fallback assertion
                 // here, that's not practical, given the way built-in
                 // function resolution is implemented right now.
-                if functions.contains(&name.to_string()) {
+                if functions.contains(name) {
                     return Instruction::CallFunction {
                         name: name.to_string(),
                     };
