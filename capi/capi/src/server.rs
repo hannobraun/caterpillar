@@ -1,7 +1,7 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
 use axum::{extract::State, routing::get, Router};
-use capi_runtime::Functions;
+use capi_runtime::{Function, Functions};
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -38,12 +38,12 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(functions);
+        .with_state(functions.inner);
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
 }
 
-async fn handler(State(functions): State<Functions>) -> String {
-    serde_json::to_string(&functions.inner).unwrap()
+async fn handler(State(functions): State<Vec<Function>>) -> String {
+    serde_json::to_string(&functions).unwrap()
 }
