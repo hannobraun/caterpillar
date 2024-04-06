@@ -45,7 +45,7 @@ pub fn compile(
     }));
     code.instructions.push(Instruction::Return);
 
-    code.symbols.define(name, address);
+    code.symbols.define(name.to_string(), address);
 }
 
 #[derive(Copy, Clone, Debug)]

@@ -9,8 +9,8 @@ impl Symbols {
         Self::default()
     }
 
-    pub fn define(&mut self, name: &'static str, address: usize) {
-        self.inner.insert(name.to_string(), address);
+    pub fn define(&mut self, name: String, address: usize) {
+        self.inner.insert(name, address);
     }
 
     pub fn resolve(&self, name: &str) -> usize {
