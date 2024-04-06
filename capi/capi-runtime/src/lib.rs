@@ -7,4 +7,7 @@ mod functions;
 mod symbols;
 mod syntax;
 
-pub use self::{evaluator::Evaluator, functions::Functions};
+pub use self::{
+    evaluator::Evaluator,
+    functions::{Function, Functions},
+};
