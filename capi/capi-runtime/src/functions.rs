@@ -1,4 +1,4 @@
-use std::{collections::BTreeSet, fmt};
+use std::collections::BTreeSet;
 
 use super::{
     code::Code,
@@ -37,21 +37,6 @@ impl Functions {
         }
 
         code
-    }
-}
-
-impl fmt::Display for Functions {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for Function { name, syntax } in &self.inner {
-            writeln!(f)?;
-            writeln!(f, "{name}:")?;
-
-            for element in syntax {
-                writeln!(f, "    {element}")?;
-            }
-        }
-
-        Ok(())
     }
 }
 
