@@ -12,7 +12,7 @@ various levels of completion.
 ## Design
 
 I'm currently working on collecting the ideas that have been guiding me into a
-rough design document: [DESIGN.md](DESIGN.md)
+rough design document: [design.md](design.md)
 
 But please don't read too much into that. This project has already gone through
 a large number of prototypes, and I'm sure it will go through more. My ideas
