@@ -21,14 +21,10 @@ fn main() {
 
 #[component]
 pub fn function(f: capi_runtime::Function) -> impl IntoView {
-    let lines: Vec<_> = f
+    let lines = f
         .syntax
         .into_iter()
         .map(|syntax| format!("{syntax}"))
-        .collect();
-
-    let lines = lines
-        .into_iter()
         .map(|line| format!("    {line}\n"))
         .collect::<Vec<_>>()
         .join("");
