@@ -24,8 +24,7 @@ pub fn function(f: capi_runtime::Function) -> impl IntoView {
     let lines = f
         .syntax
         .into_iter()
-        .map(|syntax| format!("{syntax}"))
-        .map(|line| format!("    {line}\n"))
+        .map(|syntax| format!("    {syntax}\n"))
         .collect::<Vec<_>>()
         .join("");
 
