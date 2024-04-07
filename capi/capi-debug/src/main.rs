@@ -19,10 +19,12 @@ fn main() {
                         .join("");
 
                     leptos::view! {
-                        <pre>
-                            {function.name}:{'\n'}
-                            {lines}
-                        </pre>
+                        <div>
+                            <pre>
+                                {function.name}:{'\n'}
+                                {lines}
+                            </pre>
+                        </div>
                     }
                 })
                 .collect::<Vec<_>>()
