@@ -20,8 +20,10 @@ fn main() {
 
                     leptos::view! {
                         <div>
-                            <pre>
+                            <div>
                                 {function.name}:{'\n'}
+                            </div>
+                            <pre>
                                 {lines}
                             </pre>
                         </div>
