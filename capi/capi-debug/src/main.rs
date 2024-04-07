@@ -31,16 +31,12 @@ async fn fetch_code((): ()) -> String {
 
     let mut s = String::new();
 
-    for (i, Function { name, syntax }) in code.into_iter().enumerate() {
+    for (i, function) in code.into_iter().enumerate() {
         if i > 0 {
             writeln!(s).unwrap();
         }
 
-        writeln!(s, "{name}:").unwrap();
-
-        for element in syntax {
-            writeln!(s, "    {element}").unwrap();
-        }
+        write!(s, "{function}").unwrap();
     }
 
     s

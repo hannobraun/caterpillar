@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, fmt};
 
 use super::{
     code::Code,
@@ -47,4 +47,16 @@ impl Functions {
 pub struct Function {
     pub name: String,
     pub syntax: Vec<SyntaxElement>,
+}
+
+impl fmt::Display for Function {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        writeln!(f, "{}:", self.name)?;
+
+        for element in &self.syntax {
+            writeln!(f, "    {element}")?;
+        }
+
+        Ok(())
+    }
 }
