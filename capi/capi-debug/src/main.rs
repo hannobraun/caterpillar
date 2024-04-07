@@ -47,14 +47,7 @@ async fn fetch_code((): ()) -> Vec<FunctionView> {
         .unwrap();
 
     let code: Vec<Function> = serde_json::from_str(&code).unwrap();
-
-    let mut s = Vec::new();
-
-    for function in code.into_iter() {
-        s.push(function.into());
-    }
-
-    s
+    code.into_iter().map(Into::into).collect()
 }
 
 #[derive(Clone)]
