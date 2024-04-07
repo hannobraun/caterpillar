@@ -64,11 +64,10 @@ pub struct FunctionView {
 }
 
 impl From<Function> for FunctionView {
-    fn from(function: Function) -> Self {
+    fn from(Function { name, syntax }: Function) -> Self {
         Self {
-            name: function.name,
-            lines: function
-                .syntax
+            name,
+            lines: syntax
                 .into_iter()
                 .map(|syntax| format!("{syntax}"))
                 .collect(),
