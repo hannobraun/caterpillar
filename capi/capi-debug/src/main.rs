@@ -21,10 +21,13 @@ fn main() {
 
 #[component]
 pub fn function(f: capi_runtime::Function) -> impl IntoView {
-    let f = FunctionView::from(f);
+    let lines: Vec<_> = f
+        .syntax
+        .into_iter()
+        .map(|syntax| format!("{syntax}"))
+        .collect();
 
-    let lines = f
-        .lines
+    let lines = lines
         .into_iter()
         .map(|line| format!("    {line}\n"))
         .collect::<Vec<_>>()
@@ -51,24 +54,4 @@ async fn fetch_code((): ()) -> Vec<capi_runtime::Function> {
         .unwrap();
 
     serde_json::from_str(&code).unwrap()
-}
-
-#[derive(Clone)]
-pub struct FunctionView {
-    pub name: String,
-    pub lines: Vec<String>,
-}
-
-impl From<capi_runtime::Function> for FunctionView {
-    fn from(
-        capi_runtime::Function { name, syntax }: capi_runtime::Function,
-    ) -> Self {
-        Self {
-            name,
-            lines: syntax
-                .into_iter()
-                .map(|syntax| format!("{syntax}"))
-                .collect(),
-        }
-    }
 }
