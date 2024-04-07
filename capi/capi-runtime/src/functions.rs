@@ -36,7 +36,7 @@ impl Functions {
         let mut code = Code::new();
 
         for Function { name, syntax } in self.inner {
-            compile(name.clone(), &syntax, &self.names, &mut code);
+            compile(name.clone(), syntax, &self.names, &mut code);
         }
 
         code

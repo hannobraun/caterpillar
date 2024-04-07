@@ -4,7 +4,7 @@ use super::{code::Code, syntax::SyntaxElement};
 
 pub fn compile(
     name: String,
-    syntax: &[SyntaxElement],
+    syntax: Vec<SyntaxElement>,
     functions: &BTreeSet<String>,
     code: &mut Code,
 ) {
