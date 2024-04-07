@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use capi_runtime::Function;
 use leptos::SignalGet;
 
@@ -27,5 +29,19 @@ async fn fetch_code((): ()) -> String {
 
     let code: Vec<Function> = serde_json::from_str(&code).unwrap();
 
-    format!("{code:?}")
+    let mut s = String::new();
+
+    for (i, Function { name, syntax }) in code.into_iter().enumerate() {
+        if i > 0 {
+            writeln!(s).unwrap();
+        }
+
+        writeln!(s, "{name}:").unwrap();
+
+        for element in syntax {
+            writeln!(s, "    {element}").unwrap();
+        }
+    }
+
+    s
 }
