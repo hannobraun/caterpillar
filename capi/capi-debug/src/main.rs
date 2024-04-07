@@ -10,8 +10,8 @@ fn main() {
     let code = move || {
         code.get().map(|code| {
             code.into_iter()
-                .map(|function| {
-                    let lines = function
+                .map(|f| {
+                    let lines = f
                         .lines
                         .into_iter()
                         .map(|line| format!("    {line}\n"))
@@ -21,7 +21,7 @@ fn main() {
                     leptos::view! {
                         <div>
                             <div>
-                                {function.name}:{'\n'}
+                                {f.name}:{'\n'}
                             </div>
                             <pre>
                                 {lines}
