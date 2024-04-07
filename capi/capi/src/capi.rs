@@ -57,7 +57,7 @@ impl Program {
             s.v(1).w("add");
         });
 
-        let code = functions.compile();
+        let code = functions.clone().compile();
         let entry = code.symbols.resolve("draw_to_frame_buffer");
 
         let evaluator = Evaluator::new(code);

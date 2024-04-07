@@ -32,7 +32,7 @@ impl Functions {
         });
     }
 
-    pub fn compile(&self) -> Code {
+    pub fn compile(self) -> Code {
         let mut code = Code::new();
 
         for Function { name, syntax } in &self.inner {
