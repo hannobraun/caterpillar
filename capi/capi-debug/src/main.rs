@@ -29,11 +29,11 @@ fn main() {
         })
     };
 
-    leptos::mount_to_body(move || {
-        leptos::view! {
-            <pre>{code}</pre>
-        }
-    });
+    let code = leptos::view! {
+        <pre>{code}</pre>
+    };
+
+    leptos::mount_to_body(move || code);
 
     log::info!("Capi Debug initialized.");
 }
