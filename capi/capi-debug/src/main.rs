@@ -7,10 +7,11 @@ fn main() {
         .expect("Failed to initialize logging to console");
 
     let code = leptos::create_local_resource(|| (), fetch_code);
+    let code = move || code.get();
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <pre>{move || code.get()}</pre>
+            <pre>{code}</pre>
         }
     });
 
