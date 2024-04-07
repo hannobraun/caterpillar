@@ -11,26 +11,20 @@ fn main() {
         code.get().map(|code| {
             code.into_iter()
                 .map(|function| {
-                    let mut s = String::new();
-
-                    s.push_str(&function.name);
-                    s.push_str(":\n");
-
-                    for line in function.lines {
-                        s.push_str("    ");
-                        s.push_str(&line);
-                        s.push('\n');
+                    leptos::view! {
+                        <pre>
+                            {function.name}:{'\n'}
+                            {
+                                function.lines.into_iter()
+                                    .map(|line| format!("    {line}\n"))
+                                    .collect::<Vec<_>>()
+                                    .join("")
+                            }
+                        </pre>
                     }
-
-                    s
                 })
                 .collect::<Vec<_>>()
-                .join("\n")
         })
-    };
-
-    let code = leptos::view! {
-        <pre>{code}</pre>
     };
 
     leptos::mount_to_body(move || code);
