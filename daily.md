@@ -1,5 +1,8 @@
 # Daily Thoughts
 
+These are my daily thoughts on Caterpillar. If you have any questions, comments, or feedback, please [get in touch](mailto:hello@hannobraun.com).
+
+
 ## 2024-04-07
 
 I've been working on Caterpillar for over a year now, sinking countless hours into it. So far, I've seen it as a side project. With long-term potential, yes, but mostly as something to learn from and have fun with.
