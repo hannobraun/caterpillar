@@ -11,15 +11,17 @@ fn main() {
         code.get().map(|code| {
             code.into_iter()
                 .map(|function| {
+                    let lines = function
+                        .lines
+                        .into_iter()
+                        .map(|line| format!("    {line}\n"))
+                        .collect::<Vec<_>>()
+                        .join("");
+
                     leptos::view! {
                         <pre>
                             {function.name}:{'\n'}
-                            {
-                                function.lines.into_iter()
-                                    .map(|line| format!("    {line}\n"))
-                                    .collect::<Vec<_>>()
-                                    .join("")
-                            }
+                            {lines}
                         </pre>
                     }
                 })
