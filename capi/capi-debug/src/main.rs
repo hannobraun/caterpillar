@@ -51,14 +51,7 @@ async fn fetch_code((): ()) -> Vec<FunctionView> {
     let mut s = Vec::new();
 
     for function in code.into_iter() {
-        s.push(FunctionView {
-            name: function.name,
-            lines: function
-                .syntax
-                .into_iter()
-                .map(|syntax| format!("{syntax}"))
-                .collect(),
-        });
+        s.push(function.into());
     }
 
     s
@@ -68,4 +61,17 @@ async fn fetch_code((): ()) -> Vec<FunctionView> {
 pub struct FunctionView {
     pub name: String,
     pub lines: Vec<String>,
+}
+
+impl From<Function> for FunctionView {
+    fn from(function: Function) -> Self {
+        Self {
+            name: function.name,
+            lines: function
+                .syntax
+                .into_iter()
+                .map(|syntax| format!("{syntax}"))
+                .collect(),
+        }
+    }
 }
