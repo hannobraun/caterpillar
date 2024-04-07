@@ -34,15 +34,13 @@ pub fn compile(
                     // here, that's not practical, given the way built-in
                     // function resolution is implemented right now.
                     if functions.contains(&name) {
-                        return Instruction::CallFunction {
-                            name: name.clone(),
-                        };
+                        return Instruction::CallFunction { name };
                     }
 
                     // This doesn't check whether the built-in function exists,
                     // and given how built-in functions are currently defined,
                     // it's not practical to implement.
-                    Instruction::CallBuiltin { name: name.clone() }
+                    Instruction::CallBuiltin { name }
                 }
             }
         }));
