@@ -1,5 +1,3 @@
-use std::fmt::Write;
-
 use capi_runtime::Function;
 use leptos::SignalGet;
 
@@ -19,7 +17,7 @@ fn main() {
     log::info!("Capi Debug initialized.");
 }
 
-async fn fetch_code((): ()) -> String {
+async fn fetch_code((): ()) -> Vec<String> {
     let code = reqwest::get("http://127.0.0.1:8080/code")
         .await
         .unwrap()
@@ -29,14 +27,14 @@ async fn fetch_code((): ()) -> String {
 
     let code: Vec<Function> = serde_json::from_str(&code).unwrap();
 
-    let mut s = String::new();
+    let mut s = Vec::new();
 
     for (i, function) in code.into_iter().enumerate() {
         if i > 0 {
-            writeln!(s).unwrap();
+            s.push("\n".to_string());
         }
 
-        write!(s, "{function}").unwrap();
+        s.push(format!("{function}"));
     }
 
     s
