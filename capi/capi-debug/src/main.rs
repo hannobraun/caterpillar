@@ -20,7 +20,9 @@ fn main() {
 }
 
 #[component]
-pub fn function(f: FunctionView) -> impl IntoView {
+pub fn function(f: capi_runtime::Function) -> impl IntoView {
+    let f = FunctionView::from(f);
+
     let lines = f
         .lines
         .into_iter()
@@ -40,7 +42,7 @@ pub fn function(f: FunctionView) -> impl IntoView {
     }
 }
 
-async fn fetch_code((): ()) -> Vec<FunctionView> {
+async fn fetch_code((): ()) -> Vec<capi_runtime::Function> {
     let code = reqwest::get("http://127.0.0.1:8080/code")
         .await
         .unwrap()
@@ -48,9 +50,7 @@ async fn fetch_code((): ()) -> Vec<FunctionView> {
         .await
         .unwrap();
 
-    let code: Vec<capi_runtime::Function> =
-        serde_json::from_str(&code).unwrap();
-    code.into_iter().map(Into::into).collect()
+    serde_json::from_str(&code).unwrap()
 }
 
 #[derive(Clone)]
