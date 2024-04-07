@@ -20,7 +20,7 @@ fn main() {
 }
 
 #[component]
-pub fn function(f: capi_runtime::Function) -> impl IntoView {
+pub fn Function(f: capi_runtime::Function) -> impl IntoView {
     let lines = f
         .syntax
         .into_iter()
