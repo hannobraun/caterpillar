@@ -1,4 +1,3 @@
-use capi_runtime::Function;
 use leptos::{component, IntoView, SignalGet};
 
 fn main() {
@@ -49,7 +48,8 @@ async fn fetch_code((): ()) -> Vec<FunctionView> {
         .await
         .unwrap();
 
-    let code: Vec<Function> = serde_json::from_str(&code).unwrap();
+    let code: Vec<capi_runtime::Function> =
+        serde_json::from_str(&code).unwrap();
     code.into_iter().map(Into::into).collect()
 }
 
@@ -59,8 +59,10 @@ pub struct FunctionView {
     pub lines: Vec<String>,
 }
 
-impl From<Function> for FunctionView {
-    fn from(Function { name, syntax }: Function) -> Self {
+impl From<capi_runtime::Function> for FunctionView {
+    fn from(
+        capi_runtime::Function { name, syntax }: capi_runtime::Function,
+    ) -> Self {
         Self {
             name,
             lines: syntax
