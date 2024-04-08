@@ -1,11 +1,13 @@
-use leptos::{component, view, CollectView, IntoView, SignalGet};
+use leptos::{
+    component, create_local_resource, view, CollectView, IntoView, SignalGet,
+};
 
 fn main() {
     console_error_panic_hook::set_once();
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let code = leptos::create_local_resource(|| (), fetch_code);
+    let code = create_local_resource(|| (), fetch_code);
     let code = move || {
         code.get().map(|code| {
             code.into_iter()
