@@ -13,7 +13,7 @@ impl Program {
         functions.define("write_to_tile_buffer", |s| {
             s.w("compute_tile_buffer_len")
                 .w("first_tile_index")
-                .w("store_all_pixels")
+                .w("set_all_tiles")
                 .w("drop2");
         });
         functions.define("compute_tile_buffer_len", |s| {
@@ -22,12 +22,12 @@ impl Program {
         functions.define("first_tile_index", |s| {
             s.v(0);
         });
-        functions.define("store_all_pixels", |s| {
+        functions.define("set_all_tiles", |s| {
             s.w("clone2")
                 .w("sub")
                 .w("return_if_zero")
                 .w("store_pixel")
-                .w("store_all_pixels");
+                .w("set_all_tiles");
         });
         functions.define("store_pixel", |s| {
             s.v(1).w("store").w("inc_addr");
