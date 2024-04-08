@@ -1,4 +1,4 @@
-use leptos::{component, IntoView, SignalGet};
+use leptos::{component, view, IntoView, SignalGet};
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -9,7 +9,7 @@ fn main() {
     let code = move || {
         code.get().map(|code| {
             code.into_iter()
-                .map(|f| leptos::view! { <Function f=f/> })
+                .map(|f| view! { <Function f=f/> })
                 .collect::<Vec<_>>()
         })
     };
@@ -28,7 +28,7 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
         .collect::<Vec<_>>()
         .join("");
 
-    leptos::view! {
+    view! {
         <div>
             <div>
                 {f.name}:{'\n'}
