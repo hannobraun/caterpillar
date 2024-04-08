@@ -14,8 +14,9 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
 
     // I don't like the `as`, but I can't use `try_into` in a const context.
     // Given this is a screen resolution, this is unlikely to ever be a problem.
-    const SIZE: u32 = (TILES_PER_AXIS * PIXELS_PER_TILE_AXIS) as u32;
-    let size_u32 = SIZE;
+    const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+    let size_u32: u32 =
+        SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
@@ -27,11 +28,7 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            program.run(
-                SIZE.try_into().unwrap(),
-                SIZE.try_into().unwrap(),
-                pixels.frame_mut(),
-            );
+            program.run(SIZE, SIZE, pixels.frame_mut());
             window.request_redraw();
         }
         Event::WindowEvent {
