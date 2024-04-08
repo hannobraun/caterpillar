@@ -10,7 +10,7 @@ impl Program {
     pub fn new() -> Self {
         let mut functions = Functions::new();
 
-        functions.define("draw_to_frame_buffer", |s| {
+        functions.define("set_tiles", |s| {
             s.w("compute_frame_buffer_len")
                 .w("frame_buffer_addr")
                 .w("store_all_pixels")
@@ -37,7 +37,7 @@ impl Program {
         });
 
         let code = functions.clone().compile();
-        let entry = code.symbols.resolve("draw_to_frame_buffer");
+        let entry = code.symbols.resolve("set_tiles");
 
         let evaluator = Evaluator::new(code);
 
