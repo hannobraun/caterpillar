@@ -24,18 +24,20 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
     let lines = f
         .syntax
         .into_iter()
-        .map(|syntax| format!("    {syntax}\n"))
-        .collect::<Vec<_>>()
-        .join("");
+        .map(|syntax| {
+            let line = format!("{syntax}");
+            view! { <li>{line}</li> }
+        })
+        .collect::<Vec<_>>();
 
     view! {
         <div>
             <div>
                 {f.name}:{'\n'}
             </div>
-            <pre>
+            <ol>
                 {lines}
-            </pre>
+            </ol>
         </div>
     }
 }
