@@ -30,9 +30,9 @@ impl Program {
                 .w("set_all_tiles");
         });
         functions.define("set_tile", |s| {
-            s.v(1).w("store").w("inc_addr");
+            s.v(1).w("store").w("inc_tile_index");
         });
-        functions.define("inc_addr", |s| {
+        functions.define("inc_tile_index", |s| {
             s.v(1).w("add");
         });
 
