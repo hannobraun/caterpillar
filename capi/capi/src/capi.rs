@@ -12,14 +12,14 @@ impl Program {
 
         functions.define("set_tiles", |s| {
             s.w("compute_tile_buffer_len")
-                .w("frame_buffer_addr")
+                .w("first_tile_index")
                 .w("store_all_pixels")
                 .w("drop2");
         });
         functions.define("compute_tile_buffer_len", |s| {
             s.w("mul");
         });
-        functions.define("frame_buffer_addr", |s| {
+        functions.define("first_tile_index", |s| {
             s.v(0);
         });
         functions.define("store_all_pixels", |s| {
