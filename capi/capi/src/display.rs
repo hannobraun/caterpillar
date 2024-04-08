@@ -9,22 +9,21 @@ use winit::{
 use crate::capi::Program;
 
 pub fn run(mut program: Program) -> anyhow::Result<()> {
-    const WIDTH: u32 = 256;
-    const HEIGHT: u32 = 256;
+    const SIZE: u32 = 256;
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
         .with_title("Caterpillar")
         .build(&event_loop)?;
 
-    let surface_texture = SurfaceTexture::new(WIDTH, HEIGHT, &window);
-    let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
+    let surface_texture = SurfaceTexture::new(SIZE, SIZE, &window);
+    let mut pixels = Pixels::new(SIZE, SIZE, surface_texture)?;
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             program.run(
-                WIDTH.try_into().unwrap(),
-                HEIGHT.try_into().unwrap(),
+                SIZE.try_into().unwrap(),
+                SIZE.try_into().unwrap(),
                 pixels.frame_mut(),
             );
             window.request_redraw();
