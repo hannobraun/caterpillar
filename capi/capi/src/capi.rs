@@ -10,7 +10,7 @@ impl Program {
     pub fn new() -> Self {
         let mut functions = Functions::new();
 
-        functions.define("set_tiles", |s| {
+        functions.define("write_to_tile_buffer", |s| {
             s.w("compute_tile_buffer_len")
                 .w("first_tile_index")
                 .w("store_all_pixels")
@@ -37,7 +37,7 @@ impl Program {
         });
 
         let code = functions.clone().compile();
-        let entry = code.symbols.resolve("set_tiles");
+        let entry = code.symbols.resolve("write_to_tile_buffer");
 
         let evaluator = Evaluator::new(code);
 
