@@ -9,7 +9,10 @@ use winit::{
 use crate::capi::Program;
 
 pub fn run(mut program: Program) -> anyhow::Result<()> {
-    const SIZE: u32 = 256;
+    const TILES_PER_AXIS: u32 = 32;
+    const PIXELS_PER_TILE_AXIS: u32 = 8;
+
+    const SIZE: u32 = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
