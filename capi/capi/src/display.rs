@@ -9,10 +9,12 @@ use winit::{
 use crate::capi::Program;
 
 pub fn run(mut program: Program) -> anyhow::Result<()> {
-    const TILES_PER_AXIS: u32 = 32;
-    const PIXELS_PER_TILE_AXIS: u32 = 8;
+    const TILES_PER_AXIS: usize = 32;
+    const PIXELS_PER_TILE_AXIS: usize = 8;
 
-    const SIZE: u32 = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+    // I don't like the `as`, but I can't use `try_into` in a const context.
+    // Given this is a screen resolution, this is unlikely to ever be a problem.
+    const SIZE: u32 = (TILES_PER_AXIS * PIXELS_PER_TILE_AXIS) as u32;
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
