@@ -18,7 +18,7 @@ impl Evaluator {
         }
     }
 
-    pub fn evaluate(&mut self, entry: usize, frame: &mut [u8]) {
+    pub fn evaluate(&mut self, entry: usize, mem: &mut [u8]) {
         let mut current_instruction = entry;
 
         loop {
@@ -32,7 +32,7 @@ impl Evaluator {
                     "drop2" => builtins::drop2(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
-                    "store" => builtins::store(&mut self.data_stack, frame),
+                    "store" => builtins::store(&mut self.data_stack, mem),
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::CallFunction { name } => {
