@@ -26,10 +26,10 @@ impl Program {
             s.w("clone2")
                 .w("sub")
                 .w("return_if_zero")
-                .w("store_pixel")
+                .w("set_tile")
                 .w("set_all_tiles");
         });
-        functions.define("store_pixel", |s| {
+        functions.define("set_tile", |s| {
             s.v(1).w("store").w("inc_addr");
         });
         functions.define("inc_addr", |s| {
