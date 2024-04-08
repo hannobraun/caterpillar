@@ -9,8 +9,8 @@ use winit::{
 use crate::capi::Program;
 
 pub fn run(mut program: Program) -> anyhow::Result<()> {
-    const WIDTH: u32 = 640;
-    const HEIGHT: u32 = 480;
+    const WIDTH: u32 = 256;
+    const HEIGHT: u32 = 256;
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
