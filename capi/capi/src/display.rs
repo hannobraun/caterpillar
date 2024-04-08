@@ -18,6 +18,8 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
+    let mut tiles = [0; TILES_PER_AXIS * TILES_PER_AXIS];
+
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
         .with_title("Caterpillar")
@@ -28,7 +30,38 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            program.run(SIZE, SIZE, pixels.frame_mut());
+            program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut tiles);
+
+            for tile_y in 0..TILES_PER_AXIS {
+                for tile_x in 0..TILES_PER_AXIS {
+                    let i = tile_y * TILES_PER_AXIS + tile_x;
+                    let tile = tiles[i];
+
+                    let color = if tile == 0 {
+                        [0, 0, 0, 0]
+                    } else {
+                        [255, 255, 255, 255]
+                    };
+
+                    for offset_y in 0..PIXELS_PER_TILE_AXIS {
+                        for offset_x in 0..PIXELS_PER_TILE_AXIS {
+                            let num_channels = 4;
+
+                            let frame_x = (tile_x * PIXELS_PER_TILE_AXIS
+                                + offset_x)
+                                * num_channels;
+                            let frame_y = (tile_y * PIXELS_PER_TILE_AXIS
+                                + offset_y)
+                                * num_channels;
+
+                            let i = frame_y * SIZE + frame_x;
+                            pixels.frame_mut()[i..i + num_channels]
+                                .copy_from_slice(&color);
+                        }
+                    }
+                }
+            }
+
             window.request_redraw();
         }
         Event::WindowEvent {

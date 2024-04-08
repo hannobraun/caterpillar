@@ -17,10 +17,7 @@ impl Program {
                 .w("drop2");
         });
         functions.define("compute_frame_buffer_len", |s| {
-            s.w("mul").w("num_channels").w("mul");
-        });
-        functions.define("num_channels", |s| {
-            s.v(4);
+            s.w("mul");
         });
         functions.define("frame_buffer_addr", |s| {
             s.v(0);
@@ -33,25 +30,7 @@ impl Program {
                 .w("store_all_pixels");
         });
         functions.define("store_pixel", |s| {
-            s.w("store_red")
-                .w("store_green")
-                .w("store_blue")
-                .w("store_alpha");
-        });
-        functions.define("store_red", |s| {
-            s.v(0).w("store_channel");
-        });
-        functions.define("store_green", |s| {
-            s.v(255).w("store_channel");
-        });
-        functions.define("store_blue", |s| {
-            s.v(0).w("store_channel");
-        });
-        functions.define("store_alpha", |s| {
-            s.v(255).w("store_channel");
-        });
-        functions.define("store_channel", |s| {
-            s.w("store").w("inc_addr");
+            s.v(1).w("store").w("inc_addr");
         });
         functions.define("inc_addr", |s| {
             s.v(1).w("add");
