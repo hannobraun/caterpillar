@@ -12,8 +12,6 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
     const TILES_PER_AXIS: usize = 32;
     const PIXELS_PER_TILE_AXIS: usize = 8;
 
-    // I don't like the `as`, but I can't use `try_into` in a const context.
-    // Given this is a screen resolution, this is unlikely to ever be a problem.
     const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
