@@ -11,12 +11,12 @@ impl Program {
         let mut functions = Functions::new();
 
         functions.define("write_to_tile_buffer", |s| {
-            s.w("compute_tile_buffer_len")
+            s.w("last_tile_index")
                 .w("first_tile_index")
                 .w("set_all_tiles")
                 .w("drop2");
         });
-        functions.define("compute_tile_buffer_len", |s| {
+        functions.define("last_tile_index", |s| {
             s.w("mul").w("first_tile_index").w("add");
         });
         functions.define("first_tile_index", |s| {
