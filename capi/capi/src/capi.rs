@@ -17,10 +17,10 @@ impl Program {
                 .w("drop2");
         });
         functions.define("compute_tile_buffer_len", |s| {
-            s.w("mul");
+            s.w("mul").w("first_tile_index").w("add");
         });
         functions.define("first_tile_index", |s| {
-            s.v(0);
+            s.v(256);
         });
         functions.define("set_all_tiles", |s| {
             s.w("clone2")
