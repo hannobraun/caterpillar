@@ -3,6 +3,25 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-09
+
+Many years ago, I watched Bret Victor's [Inventing on Principle]. It was
+extremely inspiring, but I never used that inspiration. I never created
+something from it.
+
+Years later, I saw [Stop Writing Dead Programs] by Jack Rusher, and it hit me
+like a brick. It shamed me! All these years that I knew of a better approach,
+and I wasn't doing anything about it. This couldn't continue. And so I started
+working on Caterpillar, an interactive language.
+
+Interactivity isn't all that Caterpillar is about. I have many more ideas, some
+of which [I already wrote about][design.md]. But it's how it all started. The
+first seed of this project.
+
+[Inventing on Principle]: https://vimeo.com/906418692
+[Stop Writing Dead Programs]: https://www.youtube.com/watch?v=8Ab3ArE8W3s
+[design.md]: https://github.com/hannobraun/caterpillar/blob/main/design.md
+
 ## 2024-04-08
 
 I sometimes have this tendency to overthink and overplan. Projects that should
