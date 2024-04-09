@@ -18,7 +18,7 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
-    let mut tiles = [0; TILES_PER_AXIS * TILES_PER_AXIS];
+    let mut mem = [0; TILES_PER_AXIS * TILES_PER_AXIS];
 
     let event_loop = EventLoop::new()?;
     let window = WindowBuilder::new()
@@ -30,12 +30,12 @@ pub fn run(mut program: Program) -> anyhow::Result<()> {
 
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut tiles);
+            program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut mem);
 
             for tile_y in 0..TILES_PER_AXIS {
                 for tile_x in 0..TILES_PER_AXIS {
                     let i = tile_y * TILES_PER_AXIS + tile_x;
-                    let tile = tiles[i];
+                    let tile = mem[i];
 
                     let color = if tile == 0 {
                         [0, 0, 0, 0]
