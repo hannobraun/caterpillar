@@ -1,3 +1,4 @@
+use capi_runtime::DebugState;
 use futures::StreamExt;
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
@@ -15,7 +16,8 @@ fn main() {
 
     let code = move || {
         code.get().map(|code| {
-            code.into_iter()
+            code.functions
+                .into_iter()
                 .map(|f| view! { <Function f=f/> })
                 .collect_view()
         })
@@ -49,9 +51,7 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
     }
 }
 
-async fn fetch_code(
-    set_code: WriteSignal<Option<Vec<capi_runtime::Function>>>,
-) {
+async fn fetch_code(set_code: WriteSignal<Option<DebugState>>) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     while let Some(message) = socket.next().await {
@@ -63,7 +63,7 @@ async fn fetch_code(
             }
         };
 
-        let code: Vec<capi_runtime::Function> = match message {
+        let code: DebugState = match message {
             Message::Text(text) => serde_json::from_str(&text).unwrap(),
             Message::Bytes(bytes) => serde_json::from_slice(&bytes).unwrap(),
         };
