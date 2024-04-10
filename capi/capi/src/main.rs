@@ -10,6 +10,6 @@ fn main() -> anyhow::Result<()> {
 
     let (program, functions) = capi::Program::new();
 
-    server::start(debug::DebugState { functions });
+    server::start(debug::DebugState::new(functions));
     display::run(program)
 }
