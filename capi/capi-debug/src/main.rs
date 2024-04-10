@@ -34,7 +34,7 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
         .syntax
         .into_iter()
         .map(|syntax| {
-            let line = format!("{syntax}");
+            let line = format!("{}", syntax);
             view! { <li class="ml-8">{line}</li> }
         })
         .collect_view();
