@@ -9,7 +9,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::{Function, Functions};
+use capi_runtime::Function;
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -34,11 +34,11 @@ pub fn start(debug_state: DebugState) {
 
 fn serve(debug_state: DebugState) -> anyhow::Result<()> {
     let runtime = Runtime::new()?;
-    runtime.block_on(serve_async(debug_state.functions))?;
+    runtime.block_on(serve_async(debug_state))?;
     Ok(())
 }
 
-async fn serve_async(functions: Functions) -> anyhow::Result<()> {
+async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(handler))
         .layer(
@@ -48,7 +48,7 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(functions.inner);
+        .with_state(debug_state.functions.inner);
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
