@@ -9,7 +9,6 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::Function;
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -48,7 +47,7 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(debug_state.functions);
+        .with_state(debug_state);
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
@@ -56,9 +55,9 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State(functions): State<Vec<Function>>,
+    State(debug_state): State<DebugState>,
 ) -> impl IntoResponse {
-    let functions = serde_json::to_string(&functions).unwrap();
+    let functions = serde_json::to_string(&debug_state.functions).unwrap();
 
     socket.on_upgrade(|socket| handle_socket(socket, functions))
 }
