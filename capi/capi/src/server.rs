@@ -57,7 +57,6 @@ async fn handler(
     State(debug_state): State<DebugState>,
 ) -> impl IntoResponse {
     let debug_state = serde_json::to_string(&debug_state).unwrap();
-
     socket.on_upgrade(|socket| handle_socket(socket, debug_state))
 }
 
