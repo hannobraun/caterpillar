@@ -1,6 +1,6 @@
 use std::{panic::catch_unwind, process::exit, thread};
 
-use axum::{extract::State, routing::get, Router};
+use axum::{extract::State, response::IntoResponse, routing::get, Router};
 use capi_runtime::{Function, Functions};
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
@@ -44,6 +44,6 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn handler(State(functions): State<Vec<Function>>) -> String {
+async fn handler(State(functions): State<Vec<Function>>) -> impl IntoResponse {
     serde_json::to_string(&functions).unwrap()
 }
