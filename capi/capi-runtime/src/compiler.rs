@@ -23,6 +23,9 @@ pub fn compile(
                     // I think it's fine for now. This seems like a temporary
                     // hack anyway, while the language is not powerful enough to
                     // support an actual `if`.
+                    if name == "return_if_non_zero" {
+                        return Instruction::ReturnIfNonZero;
+                    }
                     if name == "return_if_zero" {
                         return Instruction::ReturnIfZero;
                     }
