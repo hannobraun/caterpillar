@@ -14,7 +14,7 @@ impl Program {
             s.w("last_tile_index")
                 .w("first_tile_index")
                 .w("set_all_tiles")
-                .w("drop2");
+                .w("clean_up_arguments");
         });
         functions.define("last_tile_index", |s| {
             s.w("mul").w("first_tile_index").w("add");
@@ -36,6 +36,9 @@ impl Program {
         });
         functions.define("inc_tile_index", |s| {
             s.v(1).w("add");
+        });
+        functions.define("clean_up_arguments", |s| {
+            s.w("drop2");
         });
 
         let code = functions.clone().compile();
