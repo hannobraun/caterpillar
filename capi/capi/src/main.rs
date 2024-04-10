@@ -1,5 +1,4 @@
 mod capi;
-mod debug;
 mod display;
 mod server;
 
@@ -10,6 +9,6 @@ fn main() -> anyhow::Result<()> {
 
     let (program, functions) = capi::Program::new();
 
-    server::start(debug::DebugState::new(functions));
+    server::start(capi_runtime::DebugState::new(functions));
     display::run(program)
 }

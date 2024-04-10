@@ -9,12 +9,11 @@ use axum::{
     routing::get,
     Router,
 };
+use capi_runtime::DebugState;
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
-
-use crate::debug::DebugState;
 
 pub fn start(debug_state: DebugState) {
     thread::spawn(|| {

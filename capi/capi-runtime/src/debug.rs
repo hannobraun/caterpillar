@@ -1,4 +1,4 @@
-use capi_runtime::{Function, Functions};
+use crate::{Function, Functions};
 
 #[derive(Clone, serde::Serialize)]
 pub struct DebugState {
