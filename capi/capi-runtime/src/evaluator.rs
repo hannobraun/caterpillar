@@ -30,7 +30,6 @@ impl Evaluator {
                     "add" => builtins::add(&mut self.data_stack),
                     "copy" => builtins::copy(&mut self.data_stack),
                     "drop" => builtins::drop(&mut self.data_stack),
-                    "drop2" => builtins::drop2(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
                     "store" => builtins::store(&mut self.data_stack, mem),

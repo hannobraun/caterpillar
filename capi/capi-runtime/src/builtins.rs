@@ -29,11 +29,6 @@ pub fn drop(data_stack: &mut DataStack) {
     data_stack.restore();
 }
 
-pub fn drop2(data_stack: &mut DataStack) {
-    data_stack.pop();
-    data_stack.pop();
-}
-
 pub fn mul(data_stack: &mut DataStack) {
     let b = data_stack.pop();
     let a = data_stack.pop();
