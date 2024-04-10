@@ -12,14 +12,7 @@ impl DebugState {
             .into_iter()
             .map(|function| DebugFunction {
                 name: function.name,
-                syntax: function
-                    .syntax
-                    .into_iter()
-                    .map(|syntax_element| DebugSyntaxElement {
-                        inner: syntax_element,
-                        breakpoint: false,
-                    })
-                    .collect(),
+                syntax: function.syntax.into_iter().map(Into::into).collect(),
             })
             .collect();
 
@@ -37,4 +30,13 @@ pub struct DebugFunction {
 pub struct DebugSyntaxElement {
     pub inner: SyntaxElement,
     pub breakpoint: bool,
+}
+
+impl From<SyntaxElement> for DebugSyntaxElement {
+    fn from(syntax_element: SyntaxElement) -> Self {
+        Self {
+            inner: syntax_element,
+            breakpoint: false,
+        }
+    }
 }
