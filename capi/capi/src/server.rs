@@ -60,6 +60,6 @@ async fn handler(
     socket.on_upgrade(|socket| handle_socket(socket, debug_state))
 }
 
-async fn handle_socket(mut socket: WebSocket, functions: String) {
-    socket.send(Message::Text(functions)).await.unwrap();
+async fn handle_socket(mut socket: WebSocket, debug_state: String) {
+    socket.send(Message::Text(debug_state)).await.unwrap();
 }
