@@ -7,8 +7,7 @@ pub struct DebugState {
 
 impl DebugState {
     pub fn new(functions: Functions) -> Self {
-        Self {
-            functions: functions.inner,
-        }
+        let functions = functions.inner;
+        Self { functions }
     }
 }
