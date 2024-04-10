@@ -48,7 +48,7 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(debug_state.functions.inner);
+        .with_state(debug_state.functions);
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())

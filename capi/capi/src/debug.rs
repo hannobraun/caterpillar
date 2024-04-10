@@ -1,12 +1,14 @@
-use capi_runtime::Functions;
+use capi_runtime::{Function, Functions};
 
 #[derive(Clone)]
 pub struct DebugState {
-    pub functions: Functions,
+    pub functions: Vec<Function>,
 }
 
 impl DebugState {
     pub fn new(functions: Functions) -> Self {
-        Self { functions }
+        Self {
+            functions: functions.inner,
+        }
     }
 }
