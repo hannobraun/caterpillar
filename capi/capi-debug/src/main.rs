@@ -11,16 +11,15 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let (code, set_code) = create_signal(None);
+    let (code, set_code) = create_signal(DebugState::default());
     leptos::spawn_local(fetch_code(set_code));
 
     let code = move || {
-        code.get().map(|code| {
-            code.functions
-                .into_iter()
-                .map(|f| view! { <Function f=f/> })
-                .collect_view()
-        })
+        code.get()
+            .functions
+            .into_iter()
+            .map(|f| view! { <Function f=f/> })
+            .collect_view()
     };
 
     leptos::mount_to_body(move || code);
@@ -51,7 +50,7 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
     }
 }
 
-async fn fetch_code(set_code: WriteSignal<Option<DebugState>>) {
+async fn fetch_code(set_code: WriteSignal<DebugState>) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     while let Some(message) = socket.next().await {
@@ -68,6 +67,6 @@ async fn fetch_code(set_code: WriteSignal<Option<DebugState>>) {
             Message::Bytes(bytes) => serde_json::from_slice(&bytes).unwrap(),
         };
 
-        set_code.set(Some(code));
+        set_code.set(code);
     }
 }
