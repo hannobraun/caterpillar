@@ -29,7 +29,7 @@ impl Program {
                 .w("set_all_tiles");
         });
         functions.define("check_tile_index", |s| {
-            s.w("clone2").w("sub");
+            s.v(1).w("pick").v(1).w("pick").w("sub");
         });
         functions.define("set_tile", |s| {
             s.v(1).w("store").w("inc_tile_index");
