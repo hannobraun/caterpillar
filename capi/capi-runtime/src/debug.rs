@@ -1,6 +1,6 @@
 use crate::{Function, Functions};
 
-#[derive(Clone, serde::Serialize)]
+#[derive(Clone, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
     pub functions: Vec<Function>,
 }
