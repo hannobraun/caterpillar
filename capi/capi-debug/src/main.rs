@@ -29,12 +29,12 @@ fn main() {
 }
 
 #[component]
-pub fn Function(f: capi_runtime::Function) -> impl IntoView {
+pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
     let lines = f
         .syntax
         .into_iter()
         .map(|syntax| {
-            let line = format!("{}", syntax);
+            let line = format!("{}", syntax.inner);
             view! { <li class="ml-8">{line}</li> }
         })
         .collect_view();
