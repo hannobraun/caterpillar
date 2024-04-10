@@ -7,8 +7,8 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let program = capi::Program::new();
+    let (program, functions) = capi::Program::new();
 
-    server::start(program.functions.clone());
+    server::start(functions);
     display::run(program)
 }
