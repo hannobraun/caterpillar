@@ -1,3 +1,5 @@
+use futures::StreamExt;
+use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
     component, create_signal, view, CollectView, IntoView, SignalGet,
     SignalSet, WriteSignal,
@@ -50,13 +52,22 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
 async fn fetch_code(
     set_code: WriteSignal<Option<Vec<capi_runtime::Function>>>,
 ) {
-    let code = reqwest::get("http://127.0.0.1:8080/code")
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
+    let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
-    let code = serde_json::from_str(&code).unwrap();
-    set_code.set(code);
+    while let Some(message) = socket.next().await {
+        let message = match message {
+            Ok(message) => message,
+            Err(err) => {
+                log::error!("Error receiving WebSocket message: {err}");
+                return;
+            }
+        };
+
+        let code: Vec<capi_runtime::Function> = match message {
+            Message::Text(text) => serde_json::from_str(&text).unwrap(),
+            Message::Bytes(bytes) => serde_json::from_slice(&bytes).unwrap(),
+        };
+
+        set_code.set(Some(code));
+    }
 }
