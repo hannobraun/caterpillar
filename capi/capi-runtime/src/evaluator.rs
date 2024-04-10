@@ -51,9 +51,9 @@ impl Evaluator {
                     current_instruction = return_address;
                 }
                 Instruction::ReturnIfZero => {
-                    let value = self.data_stack.pop();
+                    let a = self.data_stack.pop();
 
-                    if value == 0 {
+                    if a == 0 {
                         // Here we just duplicate the code from the regular
                         // return instruction above, which isn't great. Getting
                         // rid of the duplication completely isn't easy though,
