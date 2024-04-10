@@ -5,11 +5,13 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-axum = "*"
 pixels = "*"
 serde_json = "*"
 tower = "*"
 tracing = "*"
+
+[dependencies.axum]
+version = "*"
 
 [dependencies.capi-runtime]
 path = "../capi-runtime"
