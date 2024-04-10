@@ -1,6 +1,6 @@
 use capi_runtime::{Function, Functions};
 
-#[derive(Clone)]
+#[derive(Clone, serde::Serialize)]
 pub struct DebugState {
     pub functions: Vec<Function>,
 }
