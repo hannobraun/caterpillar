@@ -38,6 +38,15 @@ pub fn mul(data_stack: &mut DataStack) {
     data_stack.push(c);
 }
 
+pub fn place(data_stack: &mut DataStack) {
+    let mut i = data_stack.pop();
+    let mut a = data_stack.pop();
+
+    data_stack.save(i);
+    data_stack.push(a);
+    data_stack.restore();
+}
+
 pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
     let value = data_stack.pop();
     let addr = data_stack.pop();
