@@ -25,7 +25,7 @@ pub fn mul(data_stack: &mut DataStack) {
     data_stack.push(c);
 }
 
-pub fn pick(data_stack: &mut DataStack) {
+pub fn copy(data_stack: &mut DataStack) {
     let mut i = data_stack.pop();
 
     let mut tmp = Vec::new();
