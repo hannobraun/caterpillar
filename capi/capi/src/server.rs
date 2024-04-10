@@ -15,10 +15,12 @@ use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-pub fn start(functions: Functions) {
+use crate::debug::DebugState;
+
+pub fn start(debug_state: DebugState) {
     thread::spawn(|| {
         let res = catch_unwind(|| {
-            if let Err(err) = serve(functions) {
+            if let Err(err) = serve(debug_state.functions) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
