@@ -465,6 +465,7 @@ dependencies = [
  "axum",
  "capi-runtime",
  "pixels",
+ "serde",
  "serde_json",
  "tokio",
  "tower",
