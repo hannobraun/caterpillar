@@ -35,6 +35,24 @@ pub fn mul(data_stack: &mut DataStack) {
     data_stack.push(c);
 }
 
+pub fn pick(data_stack: &mut DataStack) {
+    let mut i = data_stack.pop();
+
+    let mut tmp = Vec::new();
+    for _ in 0..i {
+        tmp.push(data_stack.pop());
+    }
+
+    let a = data_stack.pop();
+    data_stack.push(a);
+
+    while let Some(x) = tmp.pop() {
+        data_stack.push(x);
+    }
+
+    data_stack.push(a);
+}
+
 pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) {
     let value = data_stack.pop();
     let addr = data_stack.pop();
