@@ -28,13 +28,13 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
         .into_iter()
         .map(|syntax| {
             let line = format!("{syntax}");
-            view! { <li>{line}</li> }
+            view! { <li class="ml-8">{line}</li> }
         })
         .collect_view();
 
     view! {
-        <div>
-            <div>
+        <div class="m-2 mb-4">
+            <div class="font-bold">
                 {f.name}:{'\n'}
             </div>
             <ol>
