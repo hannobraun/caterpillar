@@ -15,8 +15,8 @@ pub fn compile(
             match expression {
                 SyntaxElement::Value(value) => Instruction::PushValue(value),
                 SyntaxElement::Word { name } => {
-                    // Here we check for the one special built-in function that
-                    // is implemented differently, without making sure anywhere,
+                    // Here we check for special built-in functions that are
+                    // implemented differently, without making sure anywhere,
                     // that its name doesn't conflict with any user-defined
                     // functions.
                     //
