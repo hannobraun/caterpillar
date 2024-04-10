@@ -23,11 +23,13 @@ impl Program {
             s.v(256);
         });
         functions.define("set_all_tiles", |s| {
-            s.w("clone2")
-                .w("sub")
+            s.w("check_tile_index")
                 .w("return_if_zero")
                 .w("set_tile")
                 .w("set_all_tiles");
+        });
+        functions.define("check_tile_index", |s| {
+            s.w("clone2").w("sub");
         });
         functions.define("set_tile", |s| {
             s.v(1).w("store").w("inc_tile_index");
