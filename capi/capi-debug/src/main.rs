@@ -1,5 +1,6 @@
 use leptos::{
-    component, create_local_resource, view, CollectView, IntoView, SignalGet,
+    component, create_signal, view, CollectView, IntoView, SignalGet,
+    SignalSet, WriteSignal,
 };
 
 fn main() {
@@ -7,7 +8,9 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let code = create_local_resource(|| (), fetch_code);
+    let (code, set_code) = create_signal(None);
+    leptos::spawn_local(fetch_code(set_code));
+
     let code = move || {
         code.get().map(|code| {
             code.into_iter()
@@ -44,7 +47,9 @@ pub fn Function(f: capi_runtime::Function) -> impl IntoView {
     }
 }
 
-async fn fetch_code((): ()) -> Vec<capi_runtime::Function> {
+async fn fetch_code(
+    set_code: WriteSignal<Option<Vec<capi_runtime::Function>>>,
+) {
     let code = reqwest::get("http://127.0.0.1:8080/code")
         .await
         .unwrap()
@@ -52,5 +57,6 @@ async fn fetch_code((): ()) -> Vec<capi_runtime::Function> {
         .await
         .unwrap();
 
-    serde_json::from_str(&code).unwrap()
+    let code = serde_json::from_str(&code).unwrap();
+    set_code.set(code);
 }
