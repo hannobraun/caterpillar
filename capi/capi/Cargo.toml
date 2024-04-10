@@ -12,6 +12,7 @@ tracing = "*"
 
 [dependencies.axum]
 version = "*"
+features = ["ws"]
 
 [dependencies.capi-runtime]
 path = "../capi-runtime"
