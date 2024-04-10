@@ -64,3 +64,13 @@ pub fn swap(data_stack: &mut DataStack) {
     data_stack.push(b);
     data_stack.push(a);
 }
+
+pub fn take(data_stack: &mut DataStack) {
+    let mut i = data_stack.pop();
+
+    data_stack.save(i);
+    let a = data_stack.pop();
+    data_stack.restore();
+
+    data_stack.push(a);
+}

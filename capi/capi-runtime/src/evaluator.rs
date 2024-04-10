@@ -33,6 +33,7 @@ impl Evaluator {
                     "mul" => builtins::mul(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
                     "store" => builtins::store(&mut self.data_stack, mem),
+                    "take" => builtins::take(&mut self.data_stack),
                     _ => panic!("Unknown builtin: `{name}`"),
                 },
                 Instruction::CallFunction { name } => {
