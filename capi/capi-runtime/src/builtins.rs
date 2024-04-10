@@ -21,6 +21,14 @@ pub fn copy(data_stack: &mut DataStack) {
     data_stack.push(a);
 }
 
+pub fn drop(data_stack: &mut DataStack) {
+    let i = data_stack.pop();
+
+    data_stack.save(i);
+    data_stack.pop();
+    data_stack.restore();
+}
+
 pub fn drop2(data_stack: &mut DataStack) {
     data_stack.pop();
     data_stack.pop();

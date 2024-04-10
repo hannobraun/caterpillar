@@ -29,6 +29,7 @@ impl Evaluator {
                 Instruction::CallBuiltin { name } => match name.as_str() {
                     "add" => builtins::add(&mut self.data_stack),
                     "copy" => builtins::copy(&mut self.data_stack),
+                    "drop" => builtins::drop(&mut self.data_stack),
                     "drop2" => builtins::drop2(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
