@@ -1,4 +1,4 @@
-use crate::{syntax::SyntaxElement, Functions};
+use crate::{syntax::SyntaxElement, Function, Functions};
 
 #[derive(Clone, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
@@ -7,14 +7,7 @@ pub struct DebugState {
 
 impl DebugState {
     pub fn new(functions: Functions) -> Self {
-        let functions = functions
-            .inner
-            .into_iter()
-            .map(|function| DebugFunction {
-                name: function.name,
-                syntax: function.syntax.into_iter().map(Into::into).collect(),
-            })
-            .collect();
+        let functions = functions.inner.into_iter().map(Into::into).collect();
 
         Self { functions }
     }
@@ -24,6 +17,15 @@ impl DebugState {
 pub struct DebugFunction {
     pub name: String,
     pub syntax: Vec<DebugSyntaxElement>,
+}
+
+impl From<Function> for DebugFunction {
+    fn from(function: Function) -> Self {
+        Self {
+            name: function.name,
+            syntax: function.syntax.into_iter().map(Into::into).collect(),
+        }
+    }
 }
 
 #[derive(Clone, serde::Deserialize, serde::Serialize)]
