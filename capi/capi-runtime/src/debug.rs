@@ -17,6 +17,7 @@ impl DebugState {
                     .into_iter()
                     .map(|syntax_element| DebugSyntaxElement {
                         inner: syntax_element,
+                        breakpoint: false,
                     })
                     .collect(),
             })
@@ -35,4 +36,5 @@ pub struct DebugFunction {
 #[derive(Clone, serde::Deserialize, serde::Serialize)]
 pub struct DebugSyntaxElement {
     pub inner: SyntaxElement,
+    pub breakpoint: bool,
 }
