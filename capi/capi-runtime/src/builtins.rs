@@ -14,16 +14,11 @@ pub fn add(data_stack: &mut DataStack) {
 pub fn copy(data_stack: &mut DataStack) {
     let mut i = data_stack.pop();
 
-    let mut tmp = Vec::new();
-    for _ in 0..i {
-        tmp.push(data_stack.pop());
-    }
+    data_stack.save(i);
 
     let a = data_stack.clone();
 
-    while let Some(x) = tmp.pop() {
-        data_stack.push(x);
-    }
+    data_stack.restore();
 
     data_stack.push(a);
 }
