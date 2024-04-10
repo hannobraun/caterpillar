@@ -38,7 +38,7 @@ impl Program {
             s.v(1).w("add");
         });
         functions.define("clean_up_arguments", |s| {
-            s.w("drop2");
+            s.v(0).w("drop").v(0).w("drop");
         });
 
         let code = functions.clone().compile();
