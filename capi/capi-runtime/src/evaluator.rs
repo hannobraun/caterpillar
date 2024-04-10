@@ -50,6 +50,24 @@ impl Evaluator {
 
                     current_instruction = return_address;
                 }
+                Instruction::ReturnIfNonZero => {
+                    let a = self.data_stack.pop();
+
+                    if a != 0 {
+                        // Here we just duplicate the code from the regular
+                        // return instruction above, which isn't great. Getting
+                        // rid of the duplication completely isn't easy though,
+                        // due to the `break`. And since I suspect that this
+                        // instruction is temporary, until the language grows
+                        // more features, I'm inclined to just leave this be.
+
+                        let Some(return_address) = self.call_stack.pop() else {
+                            break;
+                        };
+
+                        current_instruction = return_address;
+                    }
+                }
                 Instruction::ReturnIfZero => {
                     let a = self.data_stack.pop();
 

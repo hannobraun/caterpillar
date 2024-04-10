@@ -55,5 +55,6 @@ pub enum Instruction {
     CallFunction { name: String },
     PushValue(usize),
     Return,
+    ReturnIfNonZero,
     ReturnIfZero,
 }
