@@ -1,5 +1,6 @@
 use capi_runtime::Functions;
 
+#[derive(Clone)]
 pub struct DebugState {
     pub functions: Functions,
 }
