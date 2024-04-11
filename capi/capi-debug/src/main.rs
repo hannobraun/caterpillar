@@ -1,5 +1,3 @@
-use std::mem;
-
 use capi_runtime::{DebugState, DebugSyntaxElement};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -20,28 +18,29 @@ fn main() {
     let (code, set_code) = create_signal(DebugState::default());
     let (events_tx, events_rx) = mpsc::unbounded();
 
-    leptos::spawn_local(send_event(events_tx.clone()));
     leptos::spawn_local(fetch_code(set_code, events_rx));
 
-    leptos::mount_to_body(move || view! { <Debugger code=code /> });
-
-    // This is a short-term hack, to make sure the receiver doesn't immediately
-    // finish `.await`ing in the loop. Once we use the channel not just as a
-    // placeholder, we can remove this.
-    mem::forget(events_tx);
+    leptos::mount_to_body(
+        move || view! { <Debugger code=code events=events_tx /> },
+    );
 
     log::info!("Capi Debug initialized.");
 }
 
 #[component]
-pub fn Debugger(code: ReadSignal<DebugState>) -> impl IntoView {
+pub fn Debugger(
+    code: ReadSignal<DebugState>,
+    events: UnboundedSender<()>,
+) -> impl IntoView {
     view! {
         {
             move || {
                 code.get()
                     .functions
                     .into_iter()
-                    .map(|f| view! { <Function function=f/> })
+                    .map(|f| view! {
+                        <Function function=f events=events.clone() />
+                    })
                     .collect_view()
             }
         }
@@ -49,12 +48,17 @@ pub fn Debugger(code: ReadSignal<DebugState>) -> impl IntoView {
 }
 
 #[component]
-pub fn Function(function: capi_runtime::DebugFunction) -> impl IntoView {
+pub fn Function(
+    function: capi_runtime::DebugFunction,
+    events: UnboundedSender<()>,
+) -> impl IntoView {
     let lines = function
         .syntax
         .into_iter()
         .map(|syntax_element| {
-            view! { <Line syntax_element=syntax_element />}
+            view! {
+                <Line syntax_element=syntax_element events=events.clone() />
+            }
         })
         .collect_view();
 
@@ -71,7 +75,10 @@ pub fn Function(function: capi_runtime::DebugFunction) -> impl IntoView {
 }
 
 #[component]
-pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
+pub fn Line(
+    syntax_element: DebugSyntaxElement,
+    events: UnboundedSender<()>,
+) -> impl IntoView {
     let breakpoint_color = if syntax_element.breakpoint {
         "text-red-600"
     } else {
@@ -81,7 +88,9 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
 
     let class = format!("mr-1 {breakpoint_color}");
 
-    let toggle_breakpoint = |_| log::info!("Breakpoint toggled!");
+    let toggle_breakpoint = move |_| {
+        leptos::spawn_local(send_event(events.clone()));
+    };
 
     view! {
         <li class="ml-8">
@@ -140,7 +149,7 @@ async fn fetch_code(
                     return;
                 };
 
-                log::info!("Test event!");
+                log::info!("Breakpoint toggled!");
             }
         }
     }
