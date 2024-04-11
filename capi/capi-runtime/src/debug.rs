@@ -42,6 +42,7 @@ impl From<SyntaxElement> for DebugSyntaxElement {
     }
 }
 
+#[derive(Debug)]
 pub enum DebugEvent {
     ToggleBreakpoint,
 }
