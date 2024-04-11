@@ -1,4 +1,4 @@
-use capi_runtime::{DebugEvent, DebugState, DebugSyntaxElement};
+use capi_runtime::{DebugEvent, DebugState, DebugSyntaxElement, LineLocation};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -90,7 +90,9 @@ pub fn Line(
 
     let toggle_breakpoint = move |_| {
         leptos::spawn_local(send_event(
-            DebugEvent::ToggleBreakpoint,
+            DebugEvent::ToggleBreakpoint {
+                location: LineLocation {},
+            },
             events.clone(),
         ));
     };

@@ -13,7 +13,7 @@ impl DebugState {
 
     pub fn apply_event(&mut self, event: DebugEvent) {
         match event {
-            DebugEvent::ToggleBreakpoint => {
+            DebugEvent::ToggleBreakpoint { location: _ } => {
                 for function in &mut self.functions {
                     for syntax_element in &mut function.syntax {
                         syntax_element.breakpoint = !syntax_element.breakpoint;
@@ -56,7 +56,7 @@ impl From<SyntaxElement> for DebugSyntaxElement {
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugEvent {
-    ToggleBreakpoint,
+    ToggleBreakpoint { location: LineLocation },
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
