@@ -101,6 +101,10 @@ pub fn Line(
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
         let function = element.get_attribute("data-function").unwrap();
+        let line: u32 =
+            element.get_attribute("data-line").unwrap().parse().unwrap();
+
+        log::debug!("{line}");
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
