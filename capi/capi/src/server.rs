@@ -56,11 +56,11 @@ async fn handler(
     socket: WebSocketUpgrade,
     State(debug_state): State<Arc<DebugState>>,
 ) -> impl IntoResponse {
-    let debug_state = serde_json::to_string(debug_state.deref()).unwrap();
     socket.on_upgrade(|socket| handle_socket(socket, debug_state))
 }
 
-async fn handle_socket(mut socket: WebSocket, debug_state: String) {
+async fn handle_socket(mut socket: WebSocket, debug_state: Arc<DebugState>) {
+    let debug_state = serde_json::to_string(debug_state.deref()).unwrap();
     socket.send(Message::Text(debug_state)).await.unwrap();
 
     while let Some(message) = socket.recv().await {
