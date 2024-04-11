@@ -62,4 +62,8 @@ async fn handler(
 
 async fn handle_socket(mut socket: WebSocket, debug_state: String) {
     socket.send(Message::Text(debug_state)).await.unwrap();
+
+    while let Some(message) = socket.recv().await {
+        let _ = dbg!(message);
+    }
 }
