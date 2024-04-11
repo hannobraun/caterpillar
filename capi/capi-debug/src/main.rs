@@ -112,15 +112,19 @@ async fn send_event(event: DebugEvent, mut events: EventsTx) {
 async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
-    let mut message = socket.next();
-    let mut event = events.next();
-
     loop {
-        match select(message, event).await {
-            Either::Left((msg, evt)) => {
-                message = socket.next();
-                event = evt;
-
+        // When one future gets selected, we drop the other one. I assume that
+        // this doesn't consume an item in the stream then.
+        //
+        // I had another implementation here before, that kept around all the
+        // futures until they're polled to completion. That would prevent
+        // sending anything through the socket though (as the existing future
+        // borrows the socket).
+        //
+        // Let's hope this works out! If weird stuff starts happening, this
+        // might be one of the places to take a closer look at.
+        match select(socket.next(), events.next()).await {
+            Either::Left((msg, _)) => {
                 let Some(msg) = msg else { break };
 
                 let msg = match msg {
@@ -140,10 +144,7 @@ async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
 
                 set_code.set(code);
             }
-            Either::Right((evt, msg)) => {
-                event = events.next();
-                message = msg;
-
+            Either::Right((evt, _)) => {
                 let Some(evt) = evt else {
                     log::error!("No more events.");
                     return;
