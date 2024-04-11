@@ -76,6 +76,7 @@ async fn handle_socket(
             _ => continue,
         };
 
-        dbg!(event);
+        debug_state.lock().await.apply_event(event);
+        dbg!(&debug_state);
     }
 }

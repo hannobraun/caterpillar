@@ -10,6 +10,18 @@ impl DebugState {
         let functions = functions.inner.into_iter().map(Into::into).collect();
         Self { functions }
     }
+
+    pub fn apply_event(&mut self, event: DebugEvent) {
+        match event {
+            DebugEvent::ToggleBreakpoint => {
+                for function in &mut self.functions {
+                    for syntax_element in &mut function.syntax {
+                        syntax_element.breakpoint = !syntax_element.breakpoint;
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
