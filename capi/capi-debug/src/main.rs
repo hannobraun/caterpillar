@@ -58,6 +58,7 @@ pub fn Function(
         .map(|syntax_element| {
             view! {
                 <Line
+                    function=function.name.clone()
                     syntax_element=syntax_element
                     events=events.clone() />
             }
@@ -79,6 +80,7 @@ pub fn Function(
 #[component]
 pub fn Line(
     syntax_element: DebugSyntaxElement,
+    function: String,
     events: EventsTx,
 ) -> impl IntoView {
     let breakpoint_color = if syntax_element.breakpoint {
@@ -100,7 +102,7 @@ pub fn Line(
     };
 
     view! {
-        <li class="ml-8" on:click=toggle_breakpoint>
+        <li data-function=function class="ml-8" on:click=toggle_breakpoint>
             <span class=class>{'⦿'}</span>
             <span>{line}</span>
         </li>
