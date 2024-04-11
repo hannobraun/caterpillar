@@ -6,9 +6,10 @@ use futures::{
 };
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
-    component, create_signal, view, CollectView, IntoView, ReadSignal,
-    SignalGet, SignalSet, WriteSignal,
+    component, create_signal, ev::MouseEvent, view, CollectView, IntoView,
+    ReadSignal, SignalGet, SignalSet, WriteSignal,
 };
+use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement};
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -92,7 +93,15 @@ pub fn Line(
 
     let class = format!("mr-1 {breakpoint_color}");
 
-    let toggle_breakpoint = move |_| {
+    let toggle_breakpoint = move |event: MouseEvent| {
+        let event_target = event.target().unwrap();
+        let function = event_target
+            .dyn_ref::<HtmlSpanElement>()
+            .unwrap()
+            .get_attribute("data-function")
+            .unwrap();
+        log::debug!("{function:?}");
+
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
                 location: LineLocation {},
