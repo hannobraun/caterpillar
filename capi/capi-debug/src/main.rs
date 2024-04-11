@@ -71,7 +71,7 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
 
     view! {
         <li class="ml-8">
-            <span class={class} on:click=toggle_breakpoint>{'⦿'}</span>
+            <span class=class on:click=toggle_breakpoint>{'⦿'}</span>
             <span>{line}</span>
         </li>
     }
