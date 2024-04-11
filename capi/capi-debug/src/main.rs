@@ -100,11 +100,10 @@ pub fn Line(
             .unwrap()
             .get_attribute("data-function")
             .unwrap();
-        log::debug!("{function:?}");
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
-                location: LineLocation {},
+                location: LineLocation { function },
             },
             events.clone(),
         ));
