@@ -65,8 +65,7 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
     };
     let line = format!("{}", syntax_element.inner);
 
-    let mut class = String::from("mr-1 ");
-    class.push_str(breakpoint_color);
+    let class = format!("mr-1 {breakpoint_color}");
 
     let toggle_breakpoint = |_| log::info!("Breakpoint toggled!");
 
