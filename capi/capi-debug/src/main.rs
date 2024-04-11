@@ -58,10 +58,19 @@ pub fn Function(function: capi_runtime::DebugFunction) -> impl IntoView {
 
 #[component]
 pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
+    let breakpoint_color = if syntax_element.breakpoint {
+        "text-red-600"
+    } else {
+        "text-red-300"
+    };
     let line = format!("{}", syntax_element.inner);
+
+    let mut class = String::from("mr-1 ");
+    class.push_str(breakpoint_color);
 
     view! {
         <li class="ml-8">
+            <span class={class}>{'⦿'}</span>
             <span>{line}</span>
         </li>
     }
