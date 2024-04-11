@@ -42,7 +42,7 @@ impl From<SyntaxElement> for DebugSyntaxElement {
     }
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugEvent {
     ToggleBreakpoint,
 }
