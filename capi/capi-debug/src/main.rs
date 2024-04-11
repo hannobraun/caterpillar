@@ -18,7 +18,7 @@ fn main() {
     let (code, set_code) = create_signal(DebugState::default());
     let (events_tx, events_rx) = mpsc::unbounded();
 
-    leptos::spawn_local(fetch_code(set_code, events_rx));
+    leptos::spawn_local(handle_server(set_code, events_rx));
 
     leptos::mount_to_body(
         move || view! { <Debugger code=code events=events_tx /> },
@@ -109,7 +109,10 @@ async fn send_event(event: DebugEvent, mut events: EventsTx) {
     }
 }
 
-async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
+async fn handle_server(
+    set_code: WriteSignal<DebugState>,
+    mut events: EventsRx,
+) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     loop {
