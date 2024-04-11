@@ -101,10 +101,20 @@ pub fn Line(
         ));
     };
 
+    // It would be nicer to have the click handler on the outer element, to make
+    // it less finicky for the user. But for some reason, I'm getting a
+    // reference to the window on `event.current_target()`, so I have to rely on
+    // `event.target()` to find the metadata. And that means, I can't have
+    // events coming from multiple elements.
+    //
+    // There are probably better ways to solve this problem, but for now, this
+    // is fine, if unfortunate.
     view! {
-        <li data-function=function class="ml-8" on:click=toggle_breakpoint>
+        <li class="ml-8">
             <span
-                class=class>
+                class=class
+                data-function=function
+                on:click=toggle_breakpoint>
                 {'⦿'}
             </span>
             <span>{line}</span>
