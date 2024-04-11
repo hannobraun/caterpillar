@@ -81,11 +81,11 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     loop {
-        let Some(message) = socket.next().await else {
+        let Some(msg) = socket.next().await else {
             break;
         };
 
-        let message = match message {
+        let message = match msg {
             Ok(message) => message,
             Err(err) => {
                 log::error!("Error receiving WebSocket message: {err}");
