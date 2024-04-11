@@ -33,7 +33,7 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
         .syntax
         .into_iter()
         .map(|syntax| {
-            view! { <Line syntax=syntax />}
+            view! { <Line syntax_element=syntax />}
         })
         .collect_view();
 
@@ -50,8 +50,8 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
 }
 
 #[component]
-pub fn Line(syntax: DebugSyntaxElement) -> impl IntoView {
-    let line = format!("{}", syntax.inner);
+pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
+    let line = format!("{}", syntax_element.inner);
     view! { <li class="ml-8">{line}</li> }
 }
 
