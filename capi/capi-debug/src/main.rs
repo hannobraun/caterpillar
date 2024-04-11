@@ -86,7 +86,7 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
         };
 
         let msg = match msg {
-            Ok(message) => message,
+            Ok(msg) => msg,
             Err(err) => {
                 log::error!("Error receiving WebSocket message: {err}");
                 return;
