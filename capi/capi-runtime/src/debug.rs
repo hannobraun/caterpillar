@@ -58,3 +58,8 @@ impl From<SyntaxElement> for DebugSyntaxElement {
 pub enum DebugEvent {
     ToggleBreakpoint,
 }
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+pub struct LineLocation {
+    // This is just a placeholder right now.
+}
