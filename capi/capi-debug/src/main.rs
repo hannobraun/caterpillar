@@ -92,7 +92,9 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
 }
 
 async fn send_event(mut events: UnboundedSender<()>) {
-    events.send(()).await.unwrap();
+    if let Err(err) = events.send(()).await {
+        log::error!("Error sending event: {err}");
+    }
 }
 
 async fn fetch_code(
