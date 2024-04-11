@@ -9,6 +9,7 @@ futures = "*"
 gloo = "*"
 log = "*"
 serde_json = "*"
+web-sys = "*"
 
 [dependencies.capi-runtime]
 path = "../capi-runtime"
