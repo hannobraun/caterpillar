@@ -103,7 +103,10 @@ pub fn Line(
 
     view! {
         <li data-function=function class="ml-8" on:click=toggle_breakpoint>
-            <span class=class>{'⦿'}</span>
+            <span
+                class=class>
+                {'⦿'}
+            </span>
             <span>{line}</span>
         </li>
     }
