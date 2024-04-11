@@ -2,8 +2,8 @@ use capi_runtime::{DebugState, DebugSyntaxElement};
 use futures::StreamExt;
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
-    component, create_signal, view, CollectView, IntoView, SignalGet,
-    SignalSet, WriteSignal,
+    component, create_signal, view, CollectView, IntoView, ReadSignal,
+    SignalGet, SignalSet, WriteSignal,
 };
 
 fn main() {
@@ -14,17 +14,26 @@ fn main() {
     let (code, set_code) = create_signal(DebugState::default());
     leptos::spawn_local(fetch_code(set_code));
 
-    let code = move || {
-        code.get()
-            .functions
-            .into_iter()
-            .map(|f| view! { <Function f=f/> })
-            .collect_view()
-    };
+    let code = move || view! { <Debugger code=code /> };
 
     leptos::mount_to_body(move || code);
 
     log::info!("Capi Debug initialized.");
+}
+
+#[component]
+pub fn Debugger(code: ReadSignal<DebugState>) -> impl IntoView {
+    view! {
+        {
+            move || {
+                code.get()
+                    .functions
+                    .into_iter()
+                    .map(|f| view! { <Function f=f/> })
+                    .collect_view()
+            }
+        }
+    }
 }
 
 #[component]
