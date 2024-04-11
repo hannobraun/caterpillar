@@ -84,11 +84,13 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     let mut message = socket.next();
+    let mut event = future::pending::<()>();
 
     loop {
-        match select(message, future::pending::<()>()).await {
-            Either::Left((msg, _)) => {
+        match select(message, event).await {
+            Either::Left((msg, evt)) => {
                 message = socket.next();
+                event = evt;
 
                 let Some(msg) = msg else { break };
 
@@ -109,8 +111,9 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
 
                 set_code.set(code);
             }
-            Either::Right(_) => {
-                unreachable!()
+            Either::Right((_evt, msg)) => {
+                event = future::pending();
+                message = msg;
             }
         }
     }
