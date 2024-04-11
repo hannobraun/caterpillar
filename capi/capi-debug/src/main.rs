@@ -24,7 +24,7 @@ fn main() {
         move || view! { <Debugger code=code events=events_tx /> },
     );
 
-    log::info!("Capi Debug initialized.");
+    log::info!("Caterpillar initialized.");
 }
 
 #[component]
