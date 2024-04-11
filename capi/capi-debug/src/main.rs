@@ -59,7 +59,10 @@ pub fn Function(function: capi_runtime::DebugFunction) -> impl IntoView {
 #[component]
 pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
     let line = format!("{}", syntax_element.inner);
-    view! { <li class="ml-8">{line}</li> }
+
+    view! {
+        <li class="ml-8">{line}</li>
+    }
 }
 
 async fn fetch_code(set_code: WriteSignal<DebugState>) {
