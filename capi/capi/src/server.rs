@@ -1,4 +1,4 @@
-use std::{panic::catch_unwind, process::exit, thread};
+use std::{ops::Deref, panic::catch_unwind, process::exit, sync::Arc, thread};
 
 use axum::{
     extract::{
@@ -46,7 +46,7 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(debug_state);
+        .with_state(Arc::new(debug_state));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
@@ -54,9 +54,9 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State(debug_state): State<DebugState>,
+    State(debug_state): State<Arc<DebugState>>,
 ) -> impl IntoResponse {
-    let debug_state = serde_json::to_string(&debug_state).unwrap();
+    let debug_state = serde_json::to_string(debug_state.deref()).unwrap();
     socket.on_upgrade(|socket| handle_socket(socket, debug_state))
 }
 
