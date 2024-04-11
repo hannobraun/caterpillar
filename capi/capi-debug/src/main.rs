@@ -89,7 +89,10 @@ pub fn Line(
     let class = format!("mr-1 {breakpoint_color}");
 
     let toggle_breakpoint = move |_| {
-        leptos::spawn_local(send_event(events.clone()));
+        leptos::spawn_local(send_event(
+            DebugEvent::ToggleBreakpoint,
+            events.clone(),
+        ));
     };
 
     view! {
@@ -100,8 +103,8 @@ pub fn Line(
     }
 }
 
-async fn send_event(mut events: EventsTx) {
-    if let Err(err) = events.send(DebugEvent::ToggleBreakpoint).await {
+async fn send_event(event: DebugEvent, mut events: EventsTx) {
+    if let Err(err) = events.send(event).await {
         log::error!("Error sending event: {err}");
     }
 }
