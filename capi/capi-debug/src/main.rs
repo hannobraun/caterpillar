@@ -30,7 +30,7 @@ fn main() {
 #[component]
 pub fn Debugger(
     code: ReadSignal<DebugState>,
-    events: UnboundedSender<()>,
+    events: EventsTx,
 ) -> impl IntoView {
     view! {
         {
@@ -50,7 +50,7 @@ pub fn Debugger(
 #[component]
 pub fn Function(
     function: capi_runtime::DebugFunction,
-    events: UnboundedSender<()>,
+    events: EventsTx,
 ) -> impl IntoView {
     let lines = function
         .syntax
@@ -77,7 +77,7 @@ pub fn Function(
 #[component]
 pub fn Line(
     syntax_element: DebugSyntaxElement,
-    events: UnboundedSender<()>,
+    events: EventsTx,
 ) -> impl IntoView {
     let breakpoint_color = if syntax_element.breakpoint {
         "text-red-600"
@@ -100,7 +100,7 @@ pub fn Line(
     }
 }
 
-async fn send_event(mut events: UnboundedSender<()>) {
+async fn send_event(mut events: EventsTx) {
     if let Err(err) = events.send(()).await {
         log::error!("Error sending event: {err}");
     }
@@ -152,4 +152,5 @@ async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
     }
 }
 
+pub type EventsTx = UnboundedSender<()>;
 pub type EventsRx = UnboundedReceiver<()>;
