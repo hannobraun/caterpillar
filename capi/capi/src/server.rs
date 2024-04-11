@@ -60,8 +60,8 @@ async fn handler(
 }
 
 async fn handle_socket(mut socket: WebSocket, debug_state: Arc<DebugState>) {
-    let debug_state = serde_json::to_string(debug_state.deref()).unwrap();
-    socket.send(Message::Text(debug_state)).await.unwrap();
+    let message = serde_json::to_string(debug_state.deref()).unwrap();
+    socket.send(Message::Text(message)).await.unwrap();
 
     while let Some(message) = socket.recv().await {
         let message = message.unwrap();
