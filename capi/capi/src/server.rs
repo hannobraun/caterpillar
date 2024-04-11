@@ -9,7 +9,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::DebugState;
+use capi_runtime::{DebugEvent, DebugState};
 use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -64,6 +64,14 @@ async fn handle_socket(mut socket: WebSocket, debug_state: String) {
     socket.send(Message::Text(debug_state)).await.unwrap();
 
     while let Some(message) = socket.recv().await {
-        let _ = dbg!(message);
+        let message = message.unwrap();
+
+        let event: DebugEvent = match message {
+            Message::Text(event) => serde_json::from_str(&event).unwrap(),
+            Message::Binary(event) => serde_json::from_slice(&event).unwrap(),
+            _ => continue,
+        };
+
+        dbg!(event);
     }
 }
