@@ -98,11 +98,9 @@ pub fn Line(
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
-        let function = event_target
-            .dyn_ref::<HtmlSpanElement>()
-            .unwrap()
-            .get_attribute("data-function")
-            .unwrap();
+        let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
+
+        let function = element.get_attribute("data-function").unwrap();
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
