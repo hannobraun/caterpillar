@@ -85,7 +85,7 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
             break;
         };
 
-        let message = match msg {
+        let msg = match msg {
             Ok(message) => message,
             Err(err) => {
                 log::error!("Error receiving WebSocket message: {err}");
@@ -93,7 +93,7 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
             }
         };
 
-        let code: DebugState = match message {
+        let code: DebugState = match msg {
             Message::Text(text) => serde_json::from_str(&text).unwrap(),
             Message::Bytes(bytes) => serde_json::from_slice(&bytes).unwrap(),
         };
