@@ -1,4 +1,4 @@
-use capi_runtime::{DebugState, DebugSyntaxElement};
+use capi_runtime::{DebugEvent, DebugState, DebugSyntaxElement};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -101,7 +101,7 @@ pub fn Line(
 }
 
 async fn send_event(mut events: EventsTx) {
-    if let Err(err) = events.send(()).await {
+    if let Err(err) = events.send(DebugEvent::ToggleBreakpoint).await {
         log::error!("Error sending event: {err}");
     }
 }
@@ -152,5 +152,5 @@ async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
     }
 }
 
-pub type EventsTx = UnboundedSender<()>;
-pub type EventsRx = UnboundedReceiver<()>;
+pub type EventsTx = UnboundedSender<DebugEvent>;
+pub type EventsRx = UnboundedReceiver<DebugEvent>;
