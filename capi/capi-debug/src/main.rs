@@ -98,8 +98,8 @@ pub fn Line(
     };
 
     view! {
-        <li class="ml-8">
-            <span class=class on:click=toggle_breakpoint>{'⦿'}</span>
+        <li class="ml-8" on:click=toggle_breakpoint>
+            <span class=class>{'⦿'}</span>
             <span>{line}</span>
         </li>
     }
