@@ -62,4 +62,5 @@ pub enum DebugEvent {
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct LineLocation {
     pub function: String,
+    pub line: u32,
 }

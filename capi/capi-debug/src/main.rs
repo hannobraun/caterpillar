@@ -104,11 +104,9 @@ pub fn Line(
         let line: u32 =
             element.get_attribute("data-line").unwrap().parse().unwrap();
 
-        log::debug!("{line}");
-
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
-                location: LineLocation { function },
+                location: LineLocation { function, line },
             },
             events.clone(),
         ));
