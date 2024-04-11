@@ -32,8 +32,8 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
     let lines = f
         .syntax
         .into_iter()
-        .map(|syntax| {
-            view! { <Line syntax_element=syntax />}
+        .map(|syntax_element| {
+            view! { <Line syntax_element=syntax_element />}
         })
         .collect_view();
 
