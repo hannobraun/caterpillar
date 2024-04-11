@@ -10,7 +10,7 @@ use axum::{
     Router,
 };
 use capi_runtime::{DebugEvent, DebugState};
-use tokio::{net::TcpListener, runtime::Runtime};
+use tokio::{net::TcpListener, runtime::Runtime, sync::Mutex};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
@@ -46,7 +46,7 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(Arc::new(debug_state));
+        .with_state(Arc::new(Mutex::new(debug_state)));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
@@ -54,13 +54,17 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State(debug_state): State<Arc<DebugState>>,
+    State(debug_state): State<Arc<Mutex<DebugState>>>,
 ) -> impl IntoResponse {
     socket.on_upgrade(|socket| handle_socket(socket, debug_state))
 }
 
-async fn handle_socket(mut socket: WebSocket, debug_state: Arc<DebugState>) {
-    let message = serde_json::to_string(debug_state.deref()).unwrap();
+async fn handle_socket(
+    mut socket: WebSocket,
+    debug_state: Arc<Mutex<DebugState>>,
+) {
+    let message =
+        serde_json::to_string(debug_state.lock().await.deref()).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 
     while let Some(message) = socket.recv().await {
