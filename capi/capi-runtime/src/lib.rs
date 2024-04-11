@@ -9,7 +9,7 @@ mod symbols;
 mod syntax;
 
 pub use self::{
-    debug::{DebugFunction, DebugState, DebugSyntaxElement},
+    debug::{DebugEvent, DebugFunction, DebugState, DebugSyntaxElement},
     evaluator::Evaluator,
     functions::{Function, Functions},
 };

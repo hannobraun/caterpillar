@@ -41,3 +41,7 @@ impl From<SyntaxElement> for DebugSyntaxElement {
         }
     }
 }
+
+pub enum DebugEvent {
+    ToggleBreakpoint,
+}
