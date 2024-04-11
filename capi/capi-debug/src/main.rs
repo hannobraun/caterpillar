@@ -80,10 +80,13 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
 async fn fetch_code(set_code: WriteSignal<DebugState>) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
+    let mut message = socket.next();
+
     loop {
-        let Some(msg) = socket.next().await else {
+        let Some(msg) = message.await else {
             break;
         };
+        message = socket.next();
 
         let msg = match msg {
             Ok(msg) => msg,
