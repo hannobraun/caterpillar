@@ -61,7 +61,9 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
     let line = format!("{}", syntax_element.inner);
 
     view! {
-        <li class="ml-8">{line}</li>
+        <li class="ml-8">
+            <span>{line}</span>
+        </li>
     }
 }
 
