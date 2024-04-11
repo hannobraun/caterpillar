@@ -14,9 +14,7 @@ fn main() {
     let (code, set_code) = create_signal(DebugState::default());
     leptos::spawn_local(fetch_code(set_code));
 
-    let code = move || view! { <Debugger code=code /> };
-
-    leptos::mount_to_body(move || code);
+    leptos::mount_to_body(move || view! { <Debugger code=code /> });
 
     log::info!("Capi Debug initialized.");
 }
