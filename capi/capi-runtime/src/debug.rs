@@ -1,6 +1,6 @@
 use crate::{syntax::SyntaxElement, Function, Functions};
 
-#[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
     pub functions: Vec<DebugFunction>,
 }
@@ -12,7 +12,7 @@ impl DebugState {
     }
 }
 
-#[derive(Clone, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct DebugFunction {
     pub name: String,
     pub syntax: Vec<DebugSyntaxElement>,
@@ -27,7 +27,7 @@ impl From<Function> for DebugFunction {
     }
 }
 
-#[derive(Clone, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct DebugSyntaxElement {
     pub inner: SyntaxElement,
     pub breakpoint: bool,
