@@ -1,4 +1,4 @@
-use capi_runtime::DebugState;
+use capi_runtime::{DebugState, DebugSyntaxElement};
 use futures::StreamExt;
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
@@ -33,8 +33,7 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
         .syntax
         .into_iter()
         .map(|syntax| {
-            let line = format!("{}", syntax.inner);
-            view! { <li class="ml-8">{line}</li> }
+            view! { <Line syntax=syntax />}
         })
         .collect_view();
 
@@ -48,6 +47,12 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
             </ol>
         </div>
     }
+}
+
+#[component]
+pub fn Line(syntax: DebugSyntaxElement) -> impl IntoView {
+    let line = format!("{}", syntax.inner);
+    view! { <li class="ml-8">{line}</li> }
 }
 
 async fn fetch_code(set_code: WriteSignal<DebugState>) {
