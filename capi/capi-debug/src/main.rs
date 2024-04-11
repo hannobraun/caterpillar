@@ -1,5 +1,8 @@
 use capi_runtime::{DebugState, DebugSyntaxElement};
-use futures::StreamExt;
+use futures::{
+    future::{self, select, Either},
+    StreamExt,
+};
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
     component, create_signal, view, CollectView, IntoView, ReadSignal,
@@ -83,24 +86,32 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
     let mut message = socket.next();
 
     loop {
-        let Some(msg) = message.await else {
-            break;
-        };
-        message = socket.next();
+        match select(message, future::pending::<()>()).await {
+            Either::Left((msg, _)) => {
+                message = socket.next();
 
-        let msg = match msg {
-            Ok(msg) => msg,
-            Err(err) => {
-                log::error!("Error receiving WebSocket message: {err}");
-                return;
+                let Some(msg) = msg else { break };
+
+                let msg = match msg {
+                    Ok(msg) => msg,
+                    Err(err) => {
+                        log::error!("Error receiving WebSocket message: {err}");
+                        return;
+                    }
+                };
+
+                let code: DebugState = match msg {
+                    Message::Text(text) => serde_json::from_str(&text).unwrap(),
+                    Message::Bytes(bytes) => {
+                        serde_json::from_slice(&bytes).unwrap()
+                    }
+                };
+
+                set_code.set(code);
             }
-        };
-
-        let code: DebugState = match msg {
-            Message::Text(text) => serde_json::from_str(&text).unwrap(),
-            Message::Bytes(bytes) => serde_json::from_slice(&bytes).unwrap(),
-        };
-
-        set_code.set(code);
+            Either::Right(_) => {
+                unreachable!()
+            }
+        }
     }
 }
