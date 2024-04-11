@@ -1,7 +1,10 @@
+use std::mem;
+
 use capi_runtime::{DebugState, DebugSyntaxElement};
 use futures::{
-    future::{self, select, Either},
-    StreamExt,
+    channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
+    future::{select, Either},
+    SinkExt, StreamExt,
 };
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
@@ -15,9 +18,17 @@ fn main() {
         .expect("Failed to initialize logging to console");
 
     let (code, set_code) = create_signal(DebugState::default());
-    leptos::spawn_local(fetch_code(set_code));
+    let (events_tx, events_rx) = mpsc::unbounded();
+
+    leptos::spawn_local(send_event(events_tx.clone()));
+    leptos::spawn_local(fetch_code(set_code, events_rx));
 
     leptos::mount_to_body(move || view! { <Debugger code=code /> });
+
+    // This is a short-term hack, to make sure the receiver doesn't immediately
+    // finish `.await`ing in the loop. Once we use the channel not just as a
+    // placeholder, we can remove this.
+    mem::forget(events_tx);
 
     log::info!("Capi Debug initialized.");
 }
@@ -80,11 +91,18 @@ pub fn Line(syntax_element: DebugSyntaxElement) -> impl IntoView {
     }
 }
 
-async fn fetch_code(set_code: WriteSignal<DebugState>) {
+async fn send_event(mut events: UnboundedSender<()>) {
+    events.send(()).await.unwrap();
+}
+
+async fn fetch_code(
+    set_code: WriteSignal<DebugState>,
+    mut events: UnboundedReceiver<()>,
+) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     let mut message = socket.next();
-    let mut event = future::pending::<()>();
+    let mut event = events.next();
 
     loop {
         match select(message, event).await {
@@ -111,9 +129,16 @@ async fn fetch_code(set_code: WriteSignal<DebugState>) {
 
                 set_code.set(code);
             }
-            Either::Right((_evt, msg)) => {
-                event = future::pending();
+            Either::Right((evt, msg)) => {
+                event = events.next();
                 message = msg;
+
+                let Some(_evt) = evt else {
+                    log::error!("No more events.");
+                    return;
+                };
+
+                log::info!("Test event!");
             }
         }
     }
