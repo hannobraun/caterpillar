@@ -56,11 +56,13 @@ pub fn Function(
     let lines = function
         .syntax
         .into_iter()
-        .map(|syntax_element| {
+        .enumerate()
+        .map(|(line_number, syntax_element)| {
             view! {
                 <Line
                     function=function.name.clone()
                     syntax_element=syntax_element
+                    line_number=line_number
                     events=events.clone() />
             }
         })
@@ -82,6 +84,7 @@ pub fn Function(
 pub fn Line(
     syntax_element: DebugSyntaxElement,
     function: String,
+    line_number: usize,
     events: EventsTx,
 ) -> impl IntoView {
     let breakpoint_color = if syntax_element.breakpoint {
@@ -122,6 +125,7 @@ pub fn Line(
             <span
                 class=class
                 data-function=function
+                data-line=line_number
                 on:click=toggle_breakpoint>
                 {'⦿'}
             </span>
