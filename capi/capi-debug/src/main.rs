@@ -150,7 +150,8 @@ async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
                     return;
                 };
 
-                log::info!("Debug event: {evt:?}");
+                let evt = serde_json::to_string(&evt).unwrap();
+                socket.send(Message::Text(evt)).await.unwrap();
             }
         }
     }
