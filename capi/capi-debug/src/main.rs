@@ -27,7 +27,7 @@ pub fn Debugger(code: ReadSignal<DebugState>) -> impl IntoView {
                 code.get()
                     .functions
                     .into_iter()
-                    .map(|f| view! { <Function f=f/> })
+                    .map(|f| view! { <Function function=f/> })
                     .collect_view()
             }
         }
@@ -35,8 +35,8 @@ pub fn Debugger(code: ReadSignal<DebugState>) -> impl IntoView {
 }
 
 #[component]
-pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
-    let lines = f
+pub fn Function(function: capi_runtime::DebugFunction) -> impl IntoView {
+    let lines = function
         .syntax
         .into_iter()
         .map(|syntax_element| {
@@ -47,7 +47,7 @@ pub fn Function(f: capi_runtime::DebugFunction) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <div class="font-bold">
-                {f.name}:{'\n'}
+                {function.name}:{'\n'}
             </div>
             <ol>
                 {lines}
