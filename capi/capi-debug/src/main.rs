@@ -106,10 +106,7 @@ async fn send_event(mut events: UnboundedSender<()>) {
     }
 }
 
-async fn fetch_code(
-    set_code: WriteSignal<DebugState>,
-    mut events: UnboundedReceiver<()>,
-) {
+async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     let mut message = socket.next();
@@ -154,3 +151,5 @@ async fn fetch_code(
         }
     }
 }
+
+pub type EventsRx = UnboundedReceiver<()>;
