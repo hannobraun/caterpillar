@@ -141,12 +141,12 @@ async fn fetch_code(set_code: WriteSignal<DebugState>, mut events: EventsRx) {
                 event = events.next();
                 message = msg;
 
-                let Some(_evt) = evt else {
+                let Some(evt) = evt else {
                     log::error!("No more events.");
                     return;
                 };
 
-                log::info!("Breakpoint toggled!");
+                log::info!("Debug event: {evt:?}");
             }
         }
     }
