@@ -13,11 +13,17 @@ impl DebugState {
 
     pub fn apply_event(&mut self, event: DebugEvent) {
         match event {
-            DebugEvent::ToggleBreakpoint { location: _ } => {
-                for function in &mut self.functions {
-                    for syntax_element in &mut function.syntax {
-                        syntax_element.breakpoint = !syntax_element.breakpoint;
-                    }
+            DebugEvent::ToggleBreakpoint {
+                location: LineLocation { function, line: _ },
+            } => {
+                let function = self
+                    .functions
+                    .iter_mut()
+                    .find(|f| f.name == function)
+                    .unwrap();
+
+                for syntax_element in &mut function.syntax {
+                    syntax_element.breakpoint = !syntax_element.breakpoint;
                 }
             }
         }
