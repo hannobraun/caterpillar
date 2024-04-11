@@ -57,7 +57,9 @@ pub fn Function(
         .into_iter()
         .map(|syntax_element| {
             view! {
-                <Line syntax_element=syntax_element events=events.clone() />
+                <Line
+                    syntax_element=syntax_element
+                    events=events.clone() />
             }
         })
         .collect_view();
