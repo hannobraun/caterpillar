@@ -1,4 +1,4 @@
-use crate::{syntax::SyntaxElement, Function, Functions};
+use crate::{syntax::SyntaxElementKind, Function, Functions};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
@@ -48,12 +48,12 @@ impl From<Function> for DebugFunction {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct DebugSyntaxElement {
-    pub inner: SyntaxElement,
+    pub inner: SyntaxElementKind,
     pub breakpoint: bool,
 }
 
-impl From<SyntaxElement> for DebugSyntaxElement {
-    fn from(syntax_element: SyntaxElement) -> Self {
+impl From<SyntaxElementKind> for DebugSyntaxElement {
+    fn from(syntax_element: SyntaxElementKind) -> Self {
         Self {
             inner: syntax_element,
             breakpoint: false,

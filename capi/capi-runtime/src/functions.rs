@@ -3,7 +3,7 @@ use std::{collections::BTreeSet, fmt};
 use super::{
     code::Code,
     compiler::compile,
-    syntax::{Syntax, SyntaxElement},
+    syntax::{Syntax, SyntaxElementKind},
 };
 
 #[derive(Clone, Debug, Default)]
@@ -46,7 +46,7 @@ impl Functions {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub syntax: Vec<SyntaxElement>,
+    pub syntax: Vec<SyntaxElementKind>,
 }
 
 impl fmt::Display for Function {

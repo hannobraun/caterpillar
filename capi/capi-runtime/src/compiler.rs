@@ -1,10 +1,10 @@
 use std::collections::BTreeSet;
 
-use super::{code::Code, syntax::SyntaxElement};
+use super::{code::Code, syntax::SyntaxElementKind};
 
 pub fn compile(
     name: String,
-    syntax: Vec<SyntaxElement>,
+    syntax: Vec<SyntaxElementKind>,
     functions: &BTreeSet<String>,
     code: &mut Code,
 ) {
@@ -13,8 +13,10 @@ pub fn compile(
     code.instructions
         .extend(syntax.into_iter().map(|expression| {
             match expression {
-                SyntaxElement::Value(value) => Instruction::PushValue(value),
-                SyntaxElement::Word { name } => {
+                SyntaxElementKind::Value(value) => {
+                    Instruction::PushValue(value)
+                }
+                SyntaxElementKind::Word { name } => {
                     // Here we check for special built-in functions that are
                     // implemented differently, without making sure anywhere,
                     // that its name doesn't conflict with any user-defined
