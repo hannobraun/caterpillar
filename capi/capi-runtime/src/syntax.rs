@@ -12,14 +12,14 @@ impl<'r> Syntax<'r> {
 
     pub fn v(&mut self, value: usize) -> &mut Self {
         self.expressions.push(Expression {
-            kind: SyntaxElementKind::Value(value),
+            kind: ExpressionKind::Value(value),
         });
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
         self.expressions.push(Expression {
-            kind: SyntaxElementKind::Word {
+            kind: ExpressionKind::Word {
                 name: name.to_string(),
             },
         });
@@ -29,20 +29,20 @@ impl<'r> Syntax<'r> {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
-    pub kind: SyntaxElementKind,
+    pub kind: ExpressionKind,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum SyntaxElementKind {
+pub enum ExpressionKind {
     Value(usize),
     Word { name: String },
 }
 
-impl fmt::Display for SyntaxElementKind {
+impl fmt::Display for ExpressionKind {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            SyntaxElementKind::Value(value) => write!(f, "{value}"),
-            SyntaxElementKind::Word { name } => write!(f, "{name}"),
+            ExpressionKind::Value(value) => write!(f, "{value}"),
+            ExpressionKind::Word { name } => write!(f, "{name}"),
         }
     }
 }

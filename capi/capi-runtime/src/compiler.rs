@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::syntax::Expression;
 
-use super::{code::Code, syntax::SyntaxElementKind};
+use super::{code::Code, syntax::ExpressionKind};
 
 pub fn compile(
     name: String,
@@ -15,10 +15,8 @@ pub fn compile(
     code.instructions
         .extend(syntax.into_iter().map(|expression| {
             match expression.kind {
-                SyntaxElementKind::Value(value) => {
-                    Instruction::PushValue(value)
-                }
-                SyntaxElementKind::Word { name } => {
+                ExpressionKind::Value(value) => Instruction::PushValue(value),
+                ExpressionKind::Word { name } => {
                     // Here we check for special built-in functions that are
                     // implemented differently, without making sure anywhere,
                     // that its name doesn't conflict with any user-defined
