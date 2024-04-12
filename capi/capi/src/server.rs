@@ -61,9 +61,9 @@ async fn handler(
 
 async fn handle_socket(
     mut socket: WebSocket,
-    debug_state: Arc<Mutex<Functions>>,
+    functions: Arc<Mutex<Functions>>,
 ) {
-    send_debug_state(&debug_state, &mut socket).await;
+    send_debug_state(&functions, &mut socket).await;
 
     while let Some(message) = socket.recv().await {
         let message = message.unwrap();
@@ -74,8 +74,8 @@ async fn handle_socket(
             _ => continue,
         };
 
-        debug_state.lock().await.apply_debug_event(event);
-        send_debug_state(&debug_state, &mut socket).await;
+        functions.lock().await.apply_debug_event(event);
+        send_debug_state(&functions, &mut socket).await;
     }
 }
 
