@@ -25,6 +25,11 @@ impl Functions {
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
 
+        let syntax = syntax
+            .into_iter()
+            .map(|syntax_element| syntax_element.kind)
+            .collect();
+
         self.names.insert(name.to_string());
         self.inner.push(Function {
             name: name.to_string(),

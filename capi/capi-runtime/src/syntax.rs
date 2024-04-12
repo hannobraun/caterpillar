@@ -2,22 +2,26 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
-    elements: &'r mut Vec<SyntaxElementKind>,
+    elements: &'r mut Vec<SyntaxElement>,
 }
 
 impl<'r> Syntax<'r> {
-    pub fn new(elements: &'r mut Vec<SyntaxElementKind>) -> Self {
+    pub fn new(elements: &'r mut Vec<SyntaxElement>) -> Self {
         Self { elements }
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.elements.push(SyntaxElementKind::Value(value));
+        self.elements.push(SyntaxElement {
+            kind: SyntaxElementKind::Value(value),
+        });
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.elements.push(SyntaxElementKind::Word {
-            name: name.to_string(),
+        self.elements.push(SyntaxElement {
+            kind: SyntaxElementKind::Word {
+                name: name.to_string(),
+            },
         });
         self
     }
