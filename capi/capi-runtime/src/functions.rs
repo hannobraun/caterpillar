@@ -40,7 +40,7 @@ impl Functions {
         code
     }
 
-    pub fn apply_event(&mut self, event: DebugEvent) {
+    pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::ToggleBreakpoint {
                 location: LineLocation { function, line },
