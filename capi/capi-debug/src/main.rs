@@ -57,11 +57,11 @@ pub fn Function(
         .syntax
         .into_iter()
         .enumerate()
-        .map(|(line_number, syntax_element)| {
+        .map(|(line_number, expression)| {
             view! {
                 <Line
                     function=function.name.clone()
-                    expression=syntax_element
+                    expression=expression
                     line_number=line_number
                     events=events.clone() />
             }
