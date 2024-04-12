@@ -50,7 +50,7 @@ pub fn Debugger(
 
 #[component]
 pub fn Function(
-    function: capi_runtime::DebugFunction,
+    function: capi_runtime::Function,
     events: EventsTx,
 ) -> impl IntoView {
     let lines = function

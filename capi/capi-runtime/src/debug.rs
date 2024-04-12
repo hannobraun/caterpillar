@@ -1,8 +1,8 @@
-use crate::{syntax::Expression, Function, Functions};
+use crate::{Function, Functions};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
-    pub functions: Vec<DebugFunction>,
+    pub functions: Vec<Function>,
 }
 
 impl DebugState {
@@ -27,21 +27,6 @@ impl DebugState {
 
                 syntax_element.breakpoint = !syntax_element.breakpoint;
             }
-        }
-    }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct DebugFunction {
-    pub name: String,
-    pub syntax: Vec<Expression>,
-}
-
-impl From<Function> for DebugFunction {
-    fn from(function: Function) -> Self {
-        Self {
-            name: function.name,
-            syntax: function.syntax,
         }
     }
 }
