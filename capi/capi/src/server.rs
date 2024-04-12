@@ -54,9 +54,9 @@ async fn serve_async(debug_state: DebugState) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State(debug_state): State<Arc<Mutex<Functions>>>,
+    State(functions): State<Arc<Mutex<Functions>>>,
 ) -> impl IntoResponse {
-    socket.on_upgrade(|socket| handle_socket(socket, debug_state))
+    socket.on_upgrade(|socket| handle_socket(socket, functions))
 }
 
 async fn handle_socket(
