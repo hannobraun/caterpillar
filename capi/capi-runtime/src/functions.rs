@@ -4,7 +4,7 @@ use crate::syntax::Expression;
 
 use super::{code::Code, compiler::compile, syntax::Syntax};
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
     pub names: BTreeSet<String>,
     pub inner: Vec<Function>,
