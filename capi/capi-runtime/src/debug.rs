@@ -41,7 +41,12 @@ impl From<Function> for DebugFunction {
     fn from(function: Function) -> Self {
         Self {
             name: function.name,
-            syntax: function.syntax.into_iter().map(Into::into).collect(),
+            syntax: function
+                .syntax
+                .into_iter()
+                .map(|syntax_element| syntax_element.kind)
+                .map(Into::into)
+                .collect(),
         }
     }
 }

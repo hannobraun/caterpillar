@@ -1,10 +1,8 @@
 use std::collections::BTreeSet;
 
-use super::{
-    code::Code,
-    compiler::compile,
-    syntax::{Syntax, SyntaxElementKind},
-};
+use crate::syntax::SyntaxElement;
+
+use super::{code::Code, compiler::compile, syntax::Syntax};
 
 #[derive(Clone, Debug, Default)]
 pub struct Functions {
@@ -25,11 +23,6 @@ impl Functions {
         let mut syntax = Vec::new();
         f(&mut Syntax::new(&mut syntax));
 
-        let syntax = syntax
-            .into_iter()
-            .map(|syntax_element| syntax_element.kind)
-            .collect();
-
         self.names.insert(name.to_string());
         self.inner.push(Function {
             name: name.to_string(),
@@ -41,6 +34,10 @@ impl Functions {
         let mut code = Code::new();
 
         for Function { name, syntax } in self.inner {
+            let syntax = syntax
+                .into_iter()
+                .map(|syntax_element| syntax_element.kind)
+                .collect();
             compile(name, syntax, &self.names, &mut code);
         }
 
@@ -51,5 +48,5 @@ impl Functions {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub syntax: Vec<SyntaxElementKind>,
+    pub syntax: Vec<SyntaxElement>,
 }
