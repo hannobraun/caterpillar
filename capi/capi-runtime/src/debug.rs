@@ -1,13 +1,12 @@
-use crate::{Function, Functions};
+use crate::Functions;
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
-    pub functions: Vec<Function>,
+    pub functions: Functions,
 }
 
 impl DebugState {
     pub fn new(functions: Functions) -> Self {
-        let functions = functions.inner;
         Self { functions }
     }
 
@@ -20,6 +19,7 @@ impl DebugState {
 
                 let function = self
                     .functions
+                    .inner
                     .iter_mut()
                     .find(|f| f.name == function)
                     .unwrap();

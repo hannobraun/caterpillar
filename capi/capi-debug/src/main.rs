@@ -38,6 +38,7 @@ pub fn Debugger(
             move || {
                 code.get()
                     .functions
+                    .inner
                     .into_iter()
                     .map(|f| view! {
                         <Function function=f events=events.clone() />
