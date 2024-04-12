@@ -61,7 +61,7 @@ pub fn Function(
             view! {
                 <Line
                     function=function.name.clone()
-                    syntax_element=syntax_element
+                    expression=syntax_element
                     line_number=line_number
                     events=events.clone() />
             }
@@ -82,17 +82,17 @@ pub fn Function(
 
 #[component]
 pub fn Line(
-    syntax_element: Expression,
+    expression: Expression,
     function: String,
     line_number: usize,
     events: EventsTx,
 ) -> impl IntoView {
-    let breakpoint_color = if syntax_element.breakpoint {
+    let breakpoint_color = if expression.breakpoint {
         "text-red-600"
     } else {
         "text-red-300"
     };
-    let line = format!("{}", syntax_element.kind);
+    let line = format!("{}", expression.kind);
 
     let class = format!("mr-1 {breakpoint_color}");
 
