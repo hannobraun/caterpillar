@@ -63,7 +63,7 @@ async fn handle_socket(
     mut socket: WebSocket,
     functions: Arc<Mutex<Functions>>,
 ) {
-    send_debug_state(&functions, &mut socket).await;
+    send(&functions, &mut socket).await;
 
     while let Some(message) = socket.recv().await {
         let message = message.unwrap();
@@ -75,14 +75,11 @@ async fn handle_socket(
         };
 
         functions.lock().await.apply_debug_event(event);
-        send_debug_state(&functions, &mut socket).await;
+        send(&functions, &mut socket).await;
     }
 }
 
-async fn send_debug_state(
-    functions: &Arc<Mutex<Functions>>,
-    socket: &mut WebSocket,
-) {
+async fn send(functions: &Arc<Mutex<Functions>>, socket: &mut WebSocket) {
     let message =
         serde_json::to_string(&functions.lock().await.deref()).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
