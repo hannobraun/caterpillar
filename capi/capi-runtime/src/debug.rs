@@ -7,7 +7,7 @@ pub struct DebugState {
 
 impl DebugState {
     pub fn new(functions: Functions) -> Self {
-        let functions = functions.inner.into_iter().map(Into::into).collect();
+        let functions = functions.inner;
         Self { functions }
     }
 
