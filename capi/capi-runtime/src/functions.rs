@@ -34,10 +34,6 @@ impl Functions {
         let mut code = Code::new();
 
         for Function { name, syntax } in self.inner {
-            let syntax = syntax
-                .into_iter()
-                .map(|syntax_element| syntax_element.kind)
-                .collect();
             compile(name, syntax, &self.names, &mut code);
         }
 

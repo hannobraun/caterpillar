@@ -1,10 +1,12 @@
 use std::collections::BTreeSet;
 
+use crate::syntax::SyntaxElement;
+
 use super::{code::Code, syntax::SyntaxElementKind};
 
 pub fn compile(
     name: String,
-    syntax: Vec<SyntaxElementKind>,
+    syntax: Vec<SyntaxElement>,
     functions: &BTreeSet<String>,
     code: &mut Code,
 ) {
@@ -12,7 +14,7 @@ pub fn compile(
 
     code.instructions
         .extend(syntax.into_iter().map(|expression| {
-            match expression {
+            match expression.kind {
                 SyntaxElementKind::Value(value) => {
                     Instruction::PushValue(value)
                 }
