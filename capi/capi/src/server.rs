@@ -18,7 +18,7 @@ use tracing::Level;
 pub fn start(debug_state: DebugState) {
     thread::spawn(|| {
         let res = catch_unwind(|| {
-            if let Err(err) = serve(debug_state) {
+            if let Err(err) = serve(debug_state.functions) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
@@ -30,9 +30,9 @@ pub fn start(debug_state: DebugState) {
     });
 }
 
-fn serve(debug_state: DebugState) -> anyhow::Result<()> {
+fn serve(functions: Functions) -> anyhow::Result<()> {
     let runtime = Runtime::new()?;
-    runtime.block_on(serve_async(debug_state.functions))?;
+    runtime.block_on(serve_async(functions))?;
     Ok(())
 }
 
