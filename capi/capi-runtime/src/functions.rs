@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::Expression;
+use crate::{syntax::Expression, DebugEvent, LineLocation};
 
 use super::{code::Code, compiler::compile, syntax::Syntax};
 
@@ -38,6 +38,22 @@ impl Functions {
         }
 
         code
+    }
+
+    pub fn apply_event(&mut self, event: DebugEvent) {
+        match event {
+            DebugEvent::ToggleBreakpoint {
+                location: LineLocation { function, line },
+            } => {
+                let line: usize = line.try_into().unwrap();
+
+                let function =
+                    self.inner.iter_mut().find(|f| f.name == function).unwrap();
+                let syntax_element = function.syntax.get_mut(line).unwrap();
+
+                syntax_element.breakpoint = !syntax_element.breakpoint;
+            }
+        }
     }
 }
 
