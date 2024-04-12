@@ -1,4 +1,4 @@
-use capi_runtime::{DebugEvent, DebugState, DebugSyntaxElement, LineLocation};
+use capi_runtime::{DebugEvent, DebugState, Expression, LineLocation};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -82,7 +82,7 @@ pub fn Function(
 
 #[component]
 pub fn Line(
-    syntax_element: DebugSyntaxElement,
+    syntax_element: Expression,
     function: String,
     line_number: usize,
     events: EventsTx,
@@ -92,7 +92,7 @@ pub fn Line(
     } else {
         "text-red-300"
     };
-    let line = format!("{}", syntax_element.inner);
+    let line = format!("{}", syntax_element.kind);
 
     let class = format!("mr-1 {breakpoint_color}");
 

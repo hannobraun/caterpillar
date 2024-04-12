@@ -9,9 +9,8 @@ mod symbols;
 mod syntax;
 
 pub use self::{
-    debug::{
-        DebugEvent, DebugFunction, DebugState, DebugSyntaxElement, LineLocation,
-    },
+    debug::{DebugEvent, DebugFunction, DebugState, LineLocation},
     evaluator::Evaluator,
     functions::{Function, Functions},
+    syntax::Expression,
 };

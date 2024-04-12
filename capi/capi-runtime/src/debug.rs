@@ -1,4 +1,4 @@
-use crate::{syntax::ExpressionKind, Function, Functions};
+use crate::{syntax::Expression, Function, Functions};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DebugState {
@@ -34,34 +34,14 @@ impl DebugState {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct DebugFunction {
     pub name: String,
-    pub syntax: Vec<DebugSyntaxElement>,
+    pub syntax: Vec<Expression>,
 }
 
 impl From<Function> for DebugFunction {
     fn from(function: Function) -> Self {
         Self {
             name: function.name,
-            syntax: function
-                .syntax
-                .into_iter()
-                .map(|syntax_element| syntax_element.kind)
-                .map(Into::into)
-                .collect(),
-        }
-    }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct DebugSyntaxElement {
-    pub inner: ExpressionKind,
-    pub breakpoint: bool,
-}
-
-impl From<ExpressionKind> for DebugSyntaxElement {
-    fn from(syntax_element: ExpressionKind) -> Self {
-        Self {
-            inner: syntax_element,
-            breakpoint: false,
+            syntax: function.syntax,
         }
     }
 }
