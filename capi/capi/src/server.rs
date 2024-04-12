@@ -36,7 +36,7 @@ fn serve(debug_state: DebugState) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve_async(debug_state: Functions) -> anyhow::Result<()> {
+async fn serve_async(functions: Functions) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(handler))
         .layer(
@@ -46,7 +46,7 @@ async fn serve_async(debug_state: Functions) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(Arc::new(Mutex::new(debug_state)));
+        .with_state(Arc::new(Mutex::new(functions)));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
