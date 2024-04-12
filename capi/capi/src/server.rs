@@ -9,16 +9,16 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::{DebugEvent, DebugState, Functions};
+use capi_runtime::{DebugEvent, Functions};
 use tokio::{net::TcpListener, runtime::Runtime, sync::Mutex};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-pub fn start(debug_state: DebugState) {
+pub fn start(functions: Functions) {
     thread::spawn(|| {
         let res = catch_unwind(|| {
-            if let Err(err) = serve(debug_state.functions) {
+            if let Err(err) = serve(functions) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
