@@ -1,6 +1,4 @@
-use capi_runtime::{
-    DebugEvent, DebugState, Expression, Functions, LineLocation,
-};
+use capi_runtime::{DebugEvent, Expression, Functions, LineLocation};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -168,14 +166,14 @@ async fn handle_server(set_code: WriteSignal<Functions>, mut events: EventsRx) {
                     }
                 };
 
-                let code: DebugState = match msg {
+                let code: Functions = match msg {
                     Message::Text(text) => serde_json::from_str(&text).unwrap(),
                     Message::Bytes(bytes) => {
                         serde_json::from_slice(&bytes).unwrap()
                     }
                 };
 
-                set_code.set(code.functions);
+                set_code.set(code);
             }
             Either::Right((evt, _)) => {
                 let Some(evt) = evt else {

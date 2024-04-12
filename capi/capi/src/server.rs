@@ -84,6 +84,7 @@ async fn send_debug_state(
     socket: &mut WebSocket,
 ) {
     let message =
-        serde_json::to_string(debug_state.lock().await.deref()).unwrap();
+        serde_json::to_string(&debug_state.lock().await.deref().functions)
+            .unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 }
