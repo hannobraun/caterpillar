@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::SyntaxElement;
+use crate::syntax::Expression;
 
 use super::{code::Code, compiler::compile, syntax::Syntax};
 
@@ -44,5 +44,5 @@ impl Functions {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub syntax: Vec<SyntaxElement>,
+    pub syntax: Vec<Expression>,
 }

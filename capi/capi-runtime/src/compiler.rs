@@ -1,12 +1,12 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::SyntaxElement;
+use crate::syntax::Expression;
 
 use super::{code::Code, syntax::SyntaxElementKind};
 
 pub fn compile(
     name: String,
-    syntax: Vec<SyntaxElement>,
+    syntax: Vec<Expression>,
     functions: &BTreeSet<String>,
     code: &mut Code,
 ) {

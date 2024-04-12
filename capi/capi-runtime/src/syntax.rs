@@ -2,23 +2,23 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
-    elements: &'r mut Vec<SyntaxElement>,
+    elements: &'r mut Vec<Expression>,
 }
 
 impl<'r> Syntax<'r> {
-    pub fn new(elements: &'r mut Vec<SyntaxElement>) -> Self {
+    pub fn new(elements: &'r mut Vec<Expression>) -> Self {
         Self { elements }
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.elements.push(SyntaxElement {
+        self.elements.push(Expression {
             kind: SyntaxElementKind::Value(value),
         });
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.elements.push(SyntaxElement {
+        self.elements.push(Expression {
             kind: SyntaxElementKind::Word {
                 name: name.to_string(),
             },
@@ -28,7 +28,7 @@ impl<'r> Syntax<'r> {
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct SyntaxElement {
+pub struct Expression {
     pub kind: SyntaxElementKind,
 }
 
