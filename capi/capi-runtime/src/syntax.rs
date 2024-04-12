@@ -11,18 +11,15 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        self.expressions.push(Expression {
-            kind: ExpressionKind::Value(value),
-        });
+        self.expressions
+            .push(Expression::new(ExpressionKind::Value(value)));
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.expressions.push(Expression {
-            kind: ExpressionKind::Word {
-                name: name.to_string(),
-            },
-        });
+        self.expressions.push(Expression::new(ExpressionKind::Word {
+            name: name.to_string(),
+        }));
         self
     }
 }
@@ -30,6 +27,12 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
+}
+
+impl Expression {
+    pub fn new(kind: ExpressionKind) -> Self {
+        Self { kind }
+    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
