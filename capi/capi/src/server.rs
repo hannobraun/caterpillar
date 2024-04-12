@@ -80,10 +80,10 @@ async fn handle_socket(
 }
 
 async fn send_debug_state(
-    debug_state: &Arc<Mutex<Functions>>,
+    functions: &Arc<Mutex<Functions>>,
     socket: &mut WebSocket,
 ) {
     let message =
-        serde_json::to_string(&debug_state.lock().await.deref()).unwrap();
+        serde_json::to_string(&functions.lock().await.deref()).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 }
