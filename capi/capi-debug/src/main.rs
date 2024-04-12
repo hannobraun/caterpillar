@@ -1,4 +1,6 @@
-use capi_runtime::{DebugEvent, DebugState, Expression, LineLocation};
+use capi_runtime::{
+    DebugEvent, DebugState, Expression, Functions, LineLocation,
+};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -16,7 +18,7 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let (code, set_code) = create_signal(DebugState::default());
+    let (code, set_code) = create_signal(Functions::default());
     let (events_tx, events_rx) = mpsc::unbounded();
 
     leptos::spawn_local(handle_server(set_code, events_rx));
@@ -30,14 +32,13 @@ fn main() {
 
 #[component]
 pub fn Debugger(
-    code: ReadSignal<DebugState>,
+    code: ReadSignal<Functions>,
     events: EventsTx,
 ) -> impl IntoView {
     view! {
         {
             move || {
                 code.get()
-                    .functions
                     .inner
                     .into_iter()
                     .map(|f| view! {
@@ -141,10 +142,7 @@ async fn send_event(event: DebugEvent, mut events: EventsTx) {
     }
 }
 
-async fn handle_server(
-    set_code: WriteSignal<DebugState>,
-    mut events: EventsRx,
-) {
+async fn handle_server(set_code: WriteSignal<Functions>, mut events: EventsRx) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     loop {
@@ -177,7 +175,7 @@ async fn handle_server(
                     }
                 };
 
-                set_code.set(code);
+                set_code.set(code.functions);
             }
             Either::Right((evt, _)) => {
                 let Some(evt) = evt else {
