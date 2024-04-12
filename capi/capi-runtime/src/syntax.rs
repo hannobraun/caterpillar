@@ -24,6 +24,11 @@ impl<'r> Syntax<'r> {
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+pub struct SyntaxElement {
+    pub kind: SyntaxElementKind,
+}
+
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum SyntaxElementKind {
     Value(usize),
     Word { name: String },
