@@ -27,11 +27,15 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
+    pub breakpoint: bool,
 }
 
 impl Expression {
     pub fn new(kind: ExpressionKind) -> Self {
-        Self { kind }
+        Self {
+            kind,
+            breakpoint: false,
+        }
     }
 }
 
