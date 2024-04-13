@@ -107,9 +107,9 @@ Caterpillar. It's been all about prototypes and learning from the start. And
 I've never been shy to throw away any of those prototypes to just start fresh
 with a new approach.
 
-I'm doing again a similar thing again, with this new format. Start small and,
-more importantly, get started. Then learn, correct, or abandon. Whatever turns
-out to be appropriate.
+I'm doing a similar thing again, with this new format. Start small and, more
+importantly, get started. Then learn, correct, or abandon. Whatever turns out to
+be appropriate.
 
 ## 2024-04-07
 
