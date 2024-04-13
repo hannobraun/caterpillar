@@ -10,7 +10,14 @@ use axum::{
     Router,
 };
 use capi_runtime::{DebugEvent, Functions};
-use tokio::{net::TcpListener, runtime::Runtime, sync::Mutex};
+use tokio::{
+    net::TcpListener,
+    runtime::Runtime,
+    sync::{
+        mpsc::{self, UnboundedSender},
+        Mutex,
+    },
+};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
@@ -37,6 +44,14 @@ fn serve(functions: Functions) -> anyhow::Result<()> {
 }
 
 async fn serve_async(functions: Functions) -> anyhow::Result<()> {
+    let (events_tx, mut events_rx) = mpsc::unbounded_channel();
+
+    tokio::spawn(async move {
+        while let Some(event) = events_rx.recv().await {
+            dbg!(event);
+        }
+    });
+
     let app = Router::new()
         .route("/", get(handler))
         .layer(
@@ -46,7 +61,7 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state(Arc::new(Mutex::new(functions)));
+        .with_state((Arc::new(Mutex::new(functions)), events_tx));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
@@ -54,14 +69,18 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State(functions): State<Arc<Mutex<Functions>>>,
+    State((functions, events)): State<(
+        Arc<Mutex<Functions>>,
+        UnboundedSender<DebugEvent>,
+    )>,
 ) -> impl IntoResponse {
-    socket.on_upgrade(|socket| handle_socket(socket, functions))
+    socket.on_upgrade(|socket| handle_socket(socket, functions, events))
 }
 
 async fn handle_socket(
     mut socket: WebSocket,
     functions: Arc<Mutex<Functions>>,
+    events: UnboundedSender<DebugEvent>,
 ) {
     send(&functions, &mut socket).await;
 
@@ -73,6 +92,8 @@ async fn handle_socket(
             Message::Binary(event) => serde_json::from_slice(&event).unwrap(),
             _ => continue,
         };
+
+        events.send(event.clone()).unwrap();
 
         functions.lock().await.apply_debug_event(event);
         send(&functions, &mut socket).await;
