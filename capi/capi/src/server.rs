@@ -69,10 +69,7 @@ async fn serve_async(functions: Functions) -> anyhow::Result<()> {
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State((functions, events)): State<(
-        Arc<Mutex<Functions>>,
-        UnboundedSender<DebugEvent>,
-    )>,
+    State((functions, events)): State<(Arc<Mutex<Functions>>, EventsTx)>,
 ) -> impl IntoResponse {
     socket.on_upgrade(|socket| handle_socket(socket, functions, events))
 }
@@ -80,7 +77,7 @@ async fn handler(
 async fn handle_socket(
     mut socket: WebSocket,
     functions: Arc<Mutex<Functions>>,
-    events: UnboundedSender<DebugEvent>,
+    events: EventsTx,
 ) {
     send(&functions, &mut socket).await;
 
@@ -105,3 +102,5 @@ async fn send(functions: &Arc<Mutex<Functions>>, socket: &mut WebSocket) {
         serde_json::to_string(&functions.lock().await.deref()).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 }
+
+pub type EventsTx = UnboundedSender<DebugEvent>;
