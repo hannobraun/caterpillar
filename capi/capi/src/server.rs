@@ -13,10 +13,7 @@ use capi_runtime::{DebugEvent, Functions};
 use tokio::{
     net::TcpListener,
     runtime::Runtime,
-    sync::{
-        mpsc::{self, UnboundedSender},
-        Mutex,
-    },
+    sync::{mpsc, Mutex},
 };
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
@@ -103,4 +100,4 @@ async fn send(functions: &Arc<Mutex<Functions>>, socket: &mut WebSocket) {
     socket.send(Message::Text(message)).await.unwrap();
 }
 
-pub type EventsTx = UnboundedSender<DebugEvent>;
+pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
