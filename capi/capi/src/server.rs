@@ -82,7 +82,7 @@ async fn handle_socket(
     functions: Arc<Mutex<Functions>>,
     events: EventsTx,
 ) {
-    send(&functions, &mut socket).await;
+    send(functions.lock().await.deref(), &mut socket).await;
 
     while let Some(message) = socket.recv().await {
         let message = message.unwrap();
@@ -96,13 +96,12 @@ async fn handle_socket(
         events.send(event.clone()).unwrap();
 
         functions.lock().await.apply_debug_event(event);
-        send(&functions, &mut socket).await;
+        send(functions.lock().await.deref(), &mut socket).await;
     }
 }
 
-async fn send(functions: &Arc<Mutex<Functions>>, socket: &mut WebSocket) {
-    let message =
-        serde_json::to_string(&functions.lock().await.deref()).unwrap();
+async fn send(functions: &Functions, socket: &mut WebSocket) {
+    let message = serde_json::to_string(functions).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 }
 
