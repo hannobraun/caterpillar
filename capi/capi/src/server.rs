@@ -50,7 +50,7 @@ fn serve(functions: Functions, events: EventsTx) -> anyhow::Result<()> {
 
 async fn serve_async(
     functions: Functions,
-    events_tx: EventsTx,
+    events: EventsTx,
 ) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(handler))
@@ -61,7 +61,7 @@ async fn serve_async(
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state((Arc::new(Mutex::new(functions)), events_tx));
+        .with_state((Arc::new(Mutex::new(functions)), events));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
