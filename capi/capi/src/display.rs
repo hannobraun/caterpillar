@@ -1,6 +1,4 @@
-use capi_runtime::DebugEvent;
 use pixels::{Pixels, SurfaceTexture};
-use tokio::sync::mpsc::UnboundedReceiver;
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
@@ -8,12 +6,9 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::capi::Program;
+use crate::{capi::Program, server::EventsRx};
 
-pub fn run(
-    mut program: Program,
-    mut events: UnboundedReceiver<DebugEvent>,
-) -> anyhow::Result<()> {
+pub fn run(mut program: Program, mut events: EventsRx) -> anyhow::Result<()> {
     const TILES_PER_AXIS: usize = 32;
     const PIXELS_PER_TILE_AXIS: usize = 8;
 

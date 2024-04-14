@@ -106,4 +106,5 @@ async fn send(functions: &Arc<Mutex<Functions>>, socket: &mut WebSocket) {
     socket.send(Message::Text(message)).await.unwrap();
 }
 
+pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
