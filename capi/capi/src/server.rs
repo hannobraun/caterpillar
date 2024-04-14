@@ -25,12 +25,12 @@ use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-pub fn start(functions: Functions) {
+pub fn start(functions: Functions, events: EventsTx) {
     thread::spawn(|| {
         // Unwind safety doesn't matter, because we access no data from within
         // the panicking context after the panic. We just exit the process.
         let res = catch_unwind(AssertUnwindSafe(|| {
-            if let Err(err) = serve(functions) {
+            if let Err(err) = serve(functions, events) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
@@ -42,21 +42,16 @@ pub fn start(functions: Functions) {
     });
 }
 
-fn serve(functions: Functions) -> anyhow::Result<()> {
+fn serve(functions: Functions, events: EventsTx) -> anyhow::Result<()> {
     let runtime = Runtime::new()?;
-    runtime.block_on(serve_async(functions))?;
+    runtime.block_on(serve_async(functions, events))?;
     Ok(())
 }
 
-async fn serve_async(functions: Functions) -> anyhow::Result<()> {
-    let (events_tx, mut events_rx) = mpsc::unbounded_channel();
-
-    tokio::spawn(async move {
-        while let Some(event) = events_rx.recv().await {
-            dbg!(event);
-        }
-    });
-
+async fn serve_async(
+    functions: Functions,
+    events_tx: EventsTx,
+) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(handler))
         .layer(

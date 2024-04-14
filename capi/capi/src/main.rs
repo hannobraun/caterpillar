@@ -9,6 +9,14 @@ fn main() -> anyhow::Result<()> {
 
     let (program, functions) = capi::Program::new();
 
-    server::start(functions);
+    let (events_tx, mut events_rx) = tokio::sync::mpsc::unbounded_channel();
+
+    std::thread::spawn(move || {
+        while let Some(event) = events_rx.blocking_recv() {
+            dbg!(event);
+        }
+    });
+
+    server::start(functions, events_tx);
     display::run(program)
 }
