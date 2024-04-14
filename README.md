@@ -2,8 +2,12 @@
 
 ## About
 
-The goal of the Caterpillar project is to explore the practical use of
-[interactive programming].
+The idealistic long-term goal of Caterpillar is to advance the state of the art
+in programming, by creating a more direct, intuitive connection between the
+developer and the program they work on.
+
+The practical short-term goal is to explore how [interactive programming] can
+help advance this long-term goal.
 
 You can find the currently active prototype in the [`capi/` directory](capi/).
 The [`archive/` directory](archive/) contains a number of previous prototypes at
