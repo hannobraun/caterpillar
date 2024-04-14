@@ -1,4 +1,10 @@
-use std::{ops::Deref, panic::catch_unwind, process::exit, sync::Arc, thread};
+use std::{
+    ops::Deref,
+    panic::{catch_unwind, AssertUnwindSafe},
+    process::exit,
+    sync::Arc,
+    thread,
+};
 
 use axum::{
     extract::{
@@ -21,12 +27,14 @@ use tracing::Level;
 
 pub fn start(functions: Functions) {
     thread::spawn(|| {
-        let res = catch_unwind(|| {
+        // Unwind safety doesn't matter, because we access no data from within
+        // the panicking context after the panic. We just exit the process.
+        let res = catch_unwind(AssertUnwindSafe(|| {
             if let Err(err) = serve(functions) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
-        });
+        }));
 
         if res.is_err() {
             exit(2);
