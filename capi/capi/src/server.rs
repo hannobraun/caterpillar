@@ -29,6 +29,9 @@ pub fn start(functions: Functions, events: EventsTx) {
     thread::spawn(|| {
         // Unwind safety doesn't matter, because we access no data from within
         // the panicking context after the panic. We just exit the process.
+        //
+        // The only thing we need it for in the first place, is the `event`
+        // channel.
         let res = catch_unwind(AssertUnwindSafe(|| {
             if let Err(err) = serve(functions, events) {
                 eprintln!("Server error: {err}");
