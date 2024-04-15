@@ -38,7 +38,7 @@ pub fn run(
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
                 program.functions.apply_debug_event(event);
-                updates.send(program.functions.clone()).unwrap();
+                updates.send(program.clone()).unwrap();
             }
 
             program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut mem);

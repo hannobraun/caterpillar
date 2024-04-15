@@ -14,7 +14,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::{DebugEvent, Functions};
+use capi_runtime::DebugEvent;
 use futures::{SinkExt, StreamExt};
 use tokio::{
     net::TcpListener,
@@ -24,6 +24,8 @@ use tokio::{
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
+
+use crate::capi::Program;
 
 pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
@@ -99,7 +101,7 @@ where
 
     loop {
         let functions = match updates.changed().await {
-            Ok(()) => updates.borrow_and_update().clone(),
+            Ok(()) => updates.borrow_and_update().functions.clone(),
             Err(err) => panic!("{err}"),
         };
 
@@ -128,5 +130,5 @@ where
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
-pub type UpdatesRx = watch::Receiver<Functions>;
-pub type UpdatesTx = watch::Sender<Functions>;
+pub type UpdatesRx = watch::Receiver<Program>;
+pub type UpdatesTx = watch::Sender<Program>;

@@ -10,8 +10,7 @@ fn main() -> anyhow::Result<()> {
     let program = capi::Program::new();
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
-    let (updates_tx, updates_rx) =
-        tokio::sync::watch::channel(program.functions.clone());
+    let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());
 
     server::start(updates_rx, events_tx);
     display::run(program, events_rx, updates_tx)
