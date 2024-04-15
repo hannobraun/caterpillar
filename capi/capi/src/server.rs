@@ -85,21 +85,10 @@ async fn handle_socket(
     updates: watch::Receiver<Functions>,
     events: EventsTx,
 ) {
-    let (socket_tx, mut socket_rx) = socket.split();
+    let (socket_tx, socket_rx) = socket.split();
 
     tokio::spawn(handle_updates(updates, socket_tx));
-
-    while let Some(message) = socket_rx.next().await {
-        let message = message.unwrap();
-
-        let event: DebugEvent = match message {
-            Message::Text(event) => serde_json::from_str(&event).unwrap(),
-            Message::Binary(event) => serde_json::from_slice(&event).unwrap(),
-            _ => continue,
-        };
-
-        events.send(event.clone()).unwrap();
-    }
+    handle_events(events, socket_rx).await;
 }
 
 async fn handle_updates<S>(
@@ -121,6 +110,23 @@ async fn handle_updates<S>(
 
         let message = serde_json::to_string(&functions).unwrap();
         socket.send(Message::Text(message)).await.unwrap();
+    }
+}
+
+async fn handle_events<S>(events: EventsTx, mut socket_rx: S)
+where
+    S: StreamExt<Item = Result<Message, axum::Error>> + Unpin,
+{
+    while let Some(message) = socket_rx.next().await {
+        let message = message.unwrap();
+
+        let event: DebugEvent = match message {
+            Message::Text(event) => serde_json::from_str(&event).unwrap(),
+            Message::Binary(event) => serde_json::from_slice(&event).unwrap(),
+            _ => continue,
+        };
+
+        events.send(event.clone()).unwrap();
     }
 }
 
