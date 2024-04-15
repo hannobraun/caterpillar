@@ -11,13 +11,19 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(code: Code, entry: usize) -> Self {
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> Self {
         Self {
-            code,
-            instruction: entry,
+            code: Code::default(),
+            instruction: usize::default(),
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
         }
+    }
+
+    pub fn update(&mut self, code: Code, entry: usize) {
+        self.code = code;
+        self.instruction = entry;
     }
 
     pub fn evaluate(&mut self, entry: usize, mem: &mut [u8]) {
