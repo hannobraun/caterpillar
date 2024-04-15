@@ -16,7 +16,7 @@ impl Program {
 
     pub fn run(&mut self, frame: &mut [u8]) {
         self.evaluator.instruction = self.entry;
-        while self.evaluator.evaluate(frame) {}
+        while self.evaluator.step(frame) {}
         assert_eq!(self.evaluator.data_stack.num_values(), 0);
     }
 }
