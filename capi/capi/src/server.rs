@@ -80,13 +80,15 @@ async fn handler(
 }
 
 async fn handle_socket(
-    mut socket: WebSocket,
+    socket: WebSocket,
     functions: Arc<Mutex<Functions>>,
     events: EventsTx,
 ) {
-    send(functions.lock().await.deref(), &mut socket).await;
+    let (mut socket_tx, mut socket_rx) = socket.split();
 
-    while let Some(message) = socket.next().await {
+    send(functions.lock().await.deref(), &mut socket_tx).await;
+
+    while let Some(message) = socket_rx.next().await {
         let message = message.unwrap();
 
         let event: DebugEvent = match message {
@@ -98,7 +100,7 @@ async fn handle_socket(
         events.send(event.clone()).unwrap();
 
         functions.lock().await.apply_debug_event(event);
-        send(functions.lock().await.deref(), &mut socket).await;
+        send(functions.lock().await.deref(), &mut socket_tx).await;
     }
 }
 
