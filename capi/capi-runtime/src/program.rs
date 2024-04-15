@@ -18,7 +18,7 @@ impl Program {
         self.evaluator.instruction = self.entry;
     }
 
-    pub fn run(&mut self, mem: &mut [u8]) -> EvaluatorState {
+    pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         self.evaluator.step(mem)
     }
 }
