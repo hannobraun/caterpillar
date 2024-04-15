@@ -41,7 +41,7 @@ pub fn run(
 
             program.push([TILES_PER_AXIS; 2]);
             program.reset();
-            while program.step(&mut mem).is_running() {}
+            while !program.step(&mut mem).is_finished() {}
             assert_eq!(program.evaluator.data_stack.num_values(), 0);
 
             for tile_y in 0..TILES_PER_AXIS {
