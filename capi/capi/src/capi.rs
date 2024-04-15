@@ -1,12 +1,13 @@
 use capi_runtime::{Evaluator, Functions};
 
 pub struct Program {
+    pub functions: Functions,
     pub evaluator: Evaluator,
     pub entry: usize,
 }
 
 impl Program {
-    pub fn new() -> (Self, Functions) {
+    pub fn new() -> Self {
         let mut functions = Functions::new();
 
         functions.define("write_to_tile_buffer", |s| {
@@ -45,7 +46,11 @@ impl Program {
 
         let evaluator = Evaluator::new(code);
 
-        (Self { evaluator, entry }, functions)
+        Self {
+            functions,
+            evaluator,
+            entry,
+        }
     }
 
     pub fn run(

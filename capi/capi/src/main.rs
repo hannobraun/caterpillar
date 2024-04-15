@@ -7,12 +7,12 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let (program, functions) = capi::Program::new();
+    let program = capi::Program::new();
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) =
-        tokio::sync::watch::channel(functions.clone());
+        tokio::sync::watch::channel(program.functions.clone());
 
     server::start(updates_rx, events_tx);
-    display::run(program, functions, events_rx, updates_tx)
+    display::run(program, events_rx, updates_tx)
 }

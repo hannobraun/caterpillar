@@ -12,7 +12,6 @@ use crate::{capi::Program, server::EventsRx};
 
 pub fn run(
     mut program: Program,
-    mut functions: Functions,
     mut events: EventsRx,
     updates: watch::Sender<Functions>,
 ) -> anyhow::Result<()> {
@@ -37,8 +36,8 @@ pub fn run(
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
-                functions.apply_debug_event(event);
-                updates.send(functions.clone()).unwrap();
+                program.functions.apply_debug_event(event);
+                updates.send(program.functions.clone()).unwrap();
             }
 
             program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut mem);
