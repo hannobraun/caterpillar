@@ -121,7 +121,7 @@ where
             _ => continue,
         };
 
-        events.send(event.clone()).unwrap();
+        events.send(event).unwrap();
     }
 }
 
