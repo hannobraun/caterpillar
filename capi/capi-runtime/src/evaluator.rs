@@ -16,7 +16,7 @@ impl Evaluator {
         self.instruction = entry;
     }
 
-    pub fn step(&mut self, mem: &mut [u8]) -> bool {
+    pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let instruction = &self.code.instructions[self.instruction];
         self.instruction += 1;
 
@@ -40,7 +40,7 @@ impl Evaluator {
             Instruction::PushValue(value) => self.data_stack.push(*value),
             Instruction::Return => {
                 let Some(return_address) = self.call_stack.pop() else {
-                    return false;
+                    return EvaluatorState::Finished;
                 };
 
                 self.instruction = return_address;
@@ -57,7 +57,7 @@ impl Evaluator {
                     // inclined to just leave this be.
 
                     let Some(return_address) = self.call_stack.pop() else {
-                        return false;
+                        return EvaluatorState::Finished;
                     };
 
                     self.instruction = return_address;
@@ -75,7 +75,7 @@ impl Evaluator {
                     // inclined to just leave this be.
 
                     let Some(return_address) = self.call_stack.pop() else {
-                        return false;
+                        return EvaluatorState::Finished;
                     };
 
                     self.instruction = return_address;
@@ -83,6 +83,18 @@ impl Evaluator {
             }
         }
 
-        true
+        EvaluatorState::Running
+    }
+}
+
+#[must_use]
+pub enum EvaluatorState {
+    Running,
+    Finished,
+}
+
+impl EvaluatorState {
+    pub fn is_running(&self) -> bool {
+        matches!(self, Self::Running)
     }
 }

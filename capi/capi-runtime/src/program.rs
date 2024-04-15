@@ -19,6 +19,6 @@ impl Program {
     }
 
     pub fn run(&mut self, mem: &mut [u8]) {
-        while self.evaluator.step(mem) {}
+        while self.evaluator.step(mem).is_running() {}
     }
 }
