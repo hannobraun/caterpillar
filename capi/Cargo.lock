@@ -464,6 +464,7 @@ dependencies = [
  "anyhow",
  "axum",
  "capi-runtime",
+ "futures",
  "pixels",
  "serde",
  "serde_json",

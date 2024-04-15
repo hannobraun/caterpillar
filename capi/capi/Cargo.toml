@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
+futures = "*"
 pixels = "*"
 serde = "*"
 serde_json = "*"
