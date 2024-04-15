@@ -3,6 +3,25 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-15
+
+Writing daily is awesome. I feel myself constantly immersed in Caterpillar, the
+topic I'm writing about. When I write weekly or monthly, there's always this
+hurdle. It can be difficult to get into again.
+
+Not so with daily writing! The ideas just flow, and the list of future topic
+keeps growing day by day. This requires a setup to capture ideas, and I'm using
+[Joplin] to do that (I sync the notes between my devices with [Syncthing]). And
+since ideas come whenever, wherever, I find myself writing on my phone a lot.
+Something I've never enjoyed before, but that works surprisingly well.
+
+This makes me want a full programming environment on my phone. Even if just for
+quickly demonstrating something on the go. It will be a while before I can
+provide something like that for Caterpillar, but I'd love to have it some day.
+
+[Joplin]: https://joplinapp.org/
+[Syncthing]: https://syncthing.net/
+
 ## 2024-04-14
 
 For the last few day's, I've been talking about the platform concept that I'm
