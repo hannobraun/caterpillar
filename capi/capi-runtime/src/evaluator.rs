@@ -49,12 +49,12 @@ impl Evaluator {
                 let a = self.data_stack.pop();
 
                 if a != 0 {
-                    // Here we just duplicate the code from the regular
-                    // return instruction above, which isn't great. Getting
-                    // rid of the duplication completely isn't easy though,
-                    // due to the `return`. And since I suspect that this
-                    // instruction is temporary, until the language grows
-                    // more features, I'm inclined to just leave this be.
+                    // Here we just duplicate the code from the regular return
+                    // instruction above, which isn't great. Getting rid of the
+                    // duplication completely isn't easy though, due to the
+                    // `return`. And since I suspect that this instruction is
+                    // temporary, until the language grows more features, I'm
+                    // inclined to just leave this be.
 
                     let Some(return_address) = self.call_stack.pop() else {
                         return false;
@@ -67,12 +67,12 @@ impl Evaluator {
                 let a = self.data_stack.pop();
 
                 if a == 0 {
-                    // Here we just duplicate the code from the regular
-                    // return instruction above, which isn't great. Getting
-                    // rid of the duplication completely isn't easy though,
-                    // due to the `return`. And since I suspect that this
-                    // instruction is temporary, until the language grows
-                    // more features, I'm inclined to just leave this be.
+                    // Here we just duplicate the code from the regular return
+                    // instruction above, which isn't great. Getting rid of the
+                    // duplication completely isn't easy though, due to the
+                    // `return`. And since I suspect that this instruction is
+                    // temporary, until the language grows more features, I'm
+                    // inclined to just leave this be.
 
                     let Some(return_address) = self.call_stack.pop() else {
                         return false;
