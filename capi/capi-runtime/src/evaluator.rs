@@ -53,7 +53,7 @@ impl Evaluator {
                         // Here we just duplicate the code from the regular
                         // return instruction above, which isn't great. Getting
                         // rid of the duplication completely isn't easy though,
-                        // due to the `break`. And since I suspect that this
+                        // due to the `return`. And since I suspect that this
                         // instruction is temporary, until the language grows
                         // more features, I'm inclined to just leave this be.
 
@@ -71,7 +71,7 @@ impl Evaluator {
                         // Here we just duplicate the code from the regular
                         // return instruction above, which isn't great. Getting
                         // rid of the duplication completely isn't easy though,
-                        // due to the `break`. And since I suspect that this
+                        // due to the `return`. And since I suspect that this
                         // instruction is temporary, until the language grows
                         // more features, I'm inclined to just leave this be.
 
