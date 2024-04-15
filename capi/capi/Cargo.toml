@@ -23,6 +23,10 @@ path = "../capi-runtime"
 version = "*"
 features = ["full"]
 
+[dependencies.tokio-stream]
+version = "*"
+features = ["full"]
+
 [dependencies.tower-http]
 version = "*"
 features = ["full"]
