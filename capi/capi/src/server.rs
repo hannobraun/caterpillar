@@ -82,25 +82,12 @@ async fn handler(
 
 async fn handle_socket(
     socket: WebSocket,
-    mut updates: watch::Receiver<Functions>,
+    updates: watch::Receiver<Functions>,
     events: EventsTx,
 ) {
-    let (mut socket_tx, mut socket_rx) = socket.split();
+    let (socket_tx, mut socket_rx) = socket.split();
 
-    tokio::spawn(async move {
-        // The initial value is considered to be "seen". Mark the receiver as
-        // changed, so we send an initial update to the client immediately.
-        updates.mark_changed();
-
-        loop {
-            let functions = match updates.changed().await {
-                Ok(()) => updates.borrow_and_update().clone(),
-                Err(err) => panic!("{err}"),
-            };
-
-            send(&functions, &mut socket_tx).await;
-        }
-    });
+    tokio::spawn(send(updates, socket_tx));
 
     while let Some(message) = socket_rx.next().await {
         let message = message.unwrap();
@@ -115,13 +102,24 @@ async fn handle_socket(
     }
 }
 
-async fn send<S>(functions: &Functions, mut socket: S)
+async fn send<S>(mut updates: watch::Receiver<Functions>, mut socket: S)
 where
     S: SinkExt<Message> + Unpin,
     S::Error: fmt::Debug,
 {
-    let message = serde_json::to_string(functions).unwrap();
-    socket.send(Message::Text(message)).await.unwrap();
+    // The initial value is considered to be "seen". Mark the receiver as
+    // changed, so we send an initial update to the client immediately.
+    updates.mark_changed();
+
+    loop {
+        let functions = match updates.changed().await {
+            Ok(()) => updates.borrow_and_update().clone(),
+            Err(err) => panic!("{err}"),
+        };
+
+        let message = serde_json::to_string(&functions).unwrap();
+        socket.send(Message::Text(message)).await.unwrap();
+    }
 }
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
