@@ -41,7 +41,7 @@ impl Evaluator {
                 Instruction::PushValue(value) => self.data_stack.push(*value),
                 Instruction::Return => {
                     let Some(return_address) = self.call_stack.pop() else {
-                        break;
+                        return;
                     };
 
                     self.instruction = return_address;
@@ -58,7 +58,7 @@ impl Evaluator {
                         // more features, I'm inclined to just leave this be.
 
                         let Some(return_address) = self.call_stack.pop() else {
-                            break;
+                            return;
                         };
 
                         self.instruction = return_address;
@@ -76,7 +76,7 @@ impl Evaluator {
                         // more features, I'm inclined to just leave this be.
 
                         let Some(return_address) = self.call_stack.pop() else {
-                            break;
+                            return;
                         };
 
                         self.instruction = return_address;
