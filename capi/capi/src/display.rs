@@ -1,3 +1,4 @@
+use capi_runtime::Program;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
@@ -6,10 +7,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::{
-    capi::Program,
-    server::{EventsRx, UpdatesTx},
-};
+use crate::server::{EventsRx, UpdatesTx};
 
 pub fn run(
     mut program: Program,

@@ -14,7 +14,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::DebugEvent;
+use capi_runtime::{DebugEvent, Program};
 use futures::{SinkExt, StreamExt};
 use tokio::{
     net::TcpListener,
@@ -24,8 +24,6 @@ use tokio::{
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
-
-use crate::capi::Program;
 
 pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
