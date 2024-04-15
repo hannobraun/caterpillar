@@ -5,6 +5,7 @@ use super::{
 #[derive(Clone, Debug)]
 pub struct Evaluator {
     pub code: Code,
+    pub instruction: usize,
     pub call_stack: Vec<usize>,
     pub data_stack: DataStack,
 }
@@ -13,17 +14,18 @@ impl Evaluator {
     pub fn new(code: Code) -> Self {
         Self {
             code,
+            instruction: 0,
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
         }
     }
 
     pub fn evaluate(&mut self, entry: usize, mem: &mut [u8]) {
-        let mut current_instruction = entry;
+        self.instruction = entry;
 
         loop {
-            let instruction = &self.code.instructions[current_instruction];
-            current_instruction += 1;
+            let instruction = &self.code.instructions[self.instruction];
+            self.instruction += 1;
 
             match instruction {
                 Instruction::CallBuiltin { name } => match name.as_str() {
@@ -39,8 +41,8 @@ impl Evaluator {
                 },
                 Instruction::CallFunction { name } => {
                     let address = self.code.symbols.resolve(name);
-                    self.call_stack.push(current_instruction);
-                    current_instruction = address;
+                    self.call_stack.push(self.instruction);
+                    self.instruction = address;
                 }
                 Instruction::PushValue(value) => self.data_stack.push(*value),
                 Instruction::Return => {
@@ -48,7 +50,7 @@ impl Evaluator {
                         break;
                     };
 
-                    current_instruction = return_address;
+                    self.instruction = return_address;
                 }
                 Instruction::ReturnIfNonZero => {
                     let a = self.data_stack.pop();
@@ -65,7 +67,7 @@ impl Evaluator {
                             break;
                         };
 
-                        current_instruction = return_address;
+                        self.instruction = return_address;
                     }
                 }
                 Instruction::ReturnIfZero => {
@@ -83,7 +85,7 @@ impl Evaluator {
                             break;
                         };
 
-                        current_instruction = return_address;
+                        self.instruction = return_address;
                     }
                 }
             }
