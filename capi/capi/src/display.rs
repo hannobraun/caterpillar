@@ -1,5 +1,6 @@
 use capi_runtime::Functions;
 use pixels::{Pixels, SurfaceTexture};
+use tokio::sync::watch;
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
@@ -13,6 +14,7 @@ pub fn run(
     mut program: Program,
     mut functions: Functions,
     mut events: EventsRx,
+    updates: watch::Sender<Functions>,
 ) -> anyhow::Result<()> {
     const TILES_PER_AXIS: usize = 32;
     const PIXELS_PER_TILE_AXIS: usize = 8;
@@ -36,7 +38,7 @@ pub fn run(
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
                 functions.apply_debug_event(event);
-                dbg!(&functions);
+                updates.send(functions.clone()).unwrap();
             }
 
             program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut mem);
