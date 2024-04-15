@@ -17,7 +17,7 @@ use axum::{
     Router,
 };
 use capi_runtime::{DebugEvent, Functions};
-use futures::SinkExt;
+use futures::{SinkExt, StreamExt};
 use tokio::{
     net::TcpListener,
     runtime::Runtime,
@@ -86,7 +86,7 @@ async fn handle_socket(
 ) {
     send(functions.lock().await.deref(), &mut socket).await;
 
-    while let Some(message) = socket.recv().await {
+    while let Some(message) = socket.next().await {
         let message = message.unwrap();
 
         let event: DebugEvent = match message {
