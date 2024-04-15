@@ -87,7 +87,7 @@ async fn handle_socket(
 ) {
     let (socket_tx, mut socket_rx) = socket.split();
 
-    tokio::spawn(send(updates, socket_tx));
+    tokio::spawn(handle_updates(updates, socket_tx));
 
     while let Some(message) = socket_rx.next().await {
         let message = message.unwrap();
@@ -102,8 +102,10 @@ async fn handle_socket(
     }
 }
 
-async fn send<S>(mut updates: watch::Receiver<Functions>, mut socket: S)
-where
+async fn handle_updates<S>(
+    mut updates: watch::Receiver<Functions>,
+    mut socket: S,
+) where
     S: SinkExt<Message> + Unpin,
     S::Error: fmt::Debug,
 {
