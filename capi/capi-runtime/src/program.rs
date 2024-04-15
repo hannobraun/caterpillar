@@ -18,7 +18,6 @@ impl Program {
         }
 
         self.evaluator.evaluate(self.entry, frame);
-
         assert_eq!(self.evaluator.data_stack.num_values(), 0);
     }
 }
