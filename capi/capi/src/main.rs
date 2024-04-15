@@ -11,7 +11,7 @@ fn main() -> anyhow::Result<()> {
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) =
-        tokio::sync::watch::channel(Default::default());
+        tokio::sync::watch::channel(capi_runtime::Functions::default());
 
     std::thread::spawn(|| {
         use futures::StreamExt;
