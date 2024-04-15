@@ -14,8 +14,11 @@ impl Program {
         }
     }
 
-    pub fn run(&mut self, mem: &mut [u8]) {
+    pub fn reset(&mut self) {
         self.evaluator.instruction = self.entry;
+    }
+
+    pub fn run(&mut self, mem: &mut [u8]) {
         while self.evaluator.step(mem) {}
     }
 }

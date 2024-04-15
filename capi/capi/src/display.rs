@@ -40,6 +40,7 @@ pub fn run(
             }
 
             program.push([TILES_PER_AXIS; 2]);
+            program.reset();
             program.run(&mut mem);
             assert_eq!(program.evaluator.data_stack.num_values(), 0);
 
