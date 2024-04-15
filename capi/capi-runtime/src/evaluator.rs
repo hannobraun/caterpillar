@@ -11,10 +11,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(code: Code) -> Self {
+    pub fn new(code: Code, entry: usize) -> Self {
         Self {
             code,
-            instruction: 0,
+            instruction: entry,
             call_stack: Vec::new(),
             data_stack: DataStack::new(),
         }
