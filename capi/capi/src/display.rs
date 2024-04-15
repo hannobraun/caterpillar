@@ -39,7 +39,7 @@ pub fn run(
                 updates.send(program.clone()).unwrap();
             }
 
-            program.run([TILES_PER_AXIS, TILES_PER_AXIS], &mut mem);
+            program.run([TILES_PER_AXIS; 2], &mut mem);
 
             for tile_y in 0..TILES_PER_AXIS {
                 for tile_x in 0..TILES_PER_AXIS {
