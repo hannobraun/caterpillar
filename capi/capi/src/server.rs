@@ -1,9 +1,7 @@
 use std::{
     fmt,
-    ops::Deref,
     panic::{catch_unwind, AssertUnwindSafe},
     process::exit,
-    sync::Arc,
     thread,
 };
 
@@ -21,13 +19,13 @@ use futures::{SinkExt, StreamExt};
 use tokio::{
     net::TcpListener,
     runtime::Runtime,
-    sync::{mpsc, Mutex},
+    sync::{mpsc, watch},
 };
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-pub fn start(functions: Functions, events: EventsTx) {
+pub fn start(updates: watch::Receiver<Functions>, events: EventsTx) {
     thread::spawn(|| {
         // Unwind safety doesn't matter, because we access no data from within
         // the panicking context after the panic. We just exit the process.
@@ -35,7 +33,7 @@ pub fn start(functions: Functions, events: EventsTx) {
         // The only thing we need it for in the first place, is the `event`
         // channel.
         let res = catch_unwind(AssertUnwindSafe(|| {
-            if let Err(err) = serve(functions, events) {
+            if let Err(err) = serve(updates, events) {
                 eprintln!("Server error: {err}");
                 exit(1);
             }
@@ -47,14 +45,17 @@ pub fn start(functions: Functions, events: EventsTx) {
     });
 }
 
-fn serve(functions: Functions, events: EventsTx) -> anyhow::Result<()> {
+fn serve(
+    updates: watch::Receiver<Functions>,
+    events: EventsTx,
+) -> anyhow::Result<()> {
     let runtime = Runtime::new()?;
-    runtime.block_on(serve_async(functions, events))?;
+    runtime.block_on(serve_async(updates, events))?;
     Ok(())
 }
 
 async fn serve_async(
-    functions: Functions,
+    updates: watch::Receiver<Functions>,
     events: EventsTx,
 ) -> anyhow::Result<()> {
     let app = Router::new()
@@ -66,7 +67,7 @@ async fn serve_async(
                     .on_response(DefaultOnResponse::new().level(Level::INFO)),
             ),
         )
-        .with_state((Arc::new(Mutex::new(functions)), events));
+        .with_state((updates, events));
     let listener = TcpListener::bind("127.0.0.1:34481").await?;
     axum::serve(listener, app).await?;
     Ok(())
@@ -74,19 +75,32 @@ async fn serve_async(
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State((functions, events)): State<(Arc<Mutex<Functions>>, EventsTx)>,
+    State((updates, events)): State<(watch::Receiver<Functions>, EventsTx)>,
 ) -> impl IntoResponse {
-    socket.on_upgrade(|socket| handle_socket(socket, functions, events))
+    socket.on_upgrade(|socket| handle_socket(socket, updates, events))
 }
 
 async fn handle_socket(
     socket: WebSocket,
-    functions: Arc<Mutex<Functions>>,
+    mut updates: watch::Receiver<Functions>,
     events: EventsTx,
 ) {
     let (mut socket_tx, mut socket_rx) = socket.split();
 
-    send(functions.lock().await.deref(), &mut socket_tx).await;
+    tokio::spawn(async move {
+        // The initial value is considered to be "seen". Mark the receiver as
+        // changed, so we send an initial update to the client immediately.
+        updates.mark_changed();
+
+        loop {
+            let functions = match updates.changed().await {
+                Ok(()) => updates.borrow_and_update().clone(),
+                Err(err) => panic!("{err}"),
+            };
+
+            send(&functions, &mut socket_tx).await;
+        }
+    });
 
     while let Some(message) = socket_rx.next().await {
         let message = message.unwrap();
@@ -98,9 +112,6 @@ async fn handle_socket(
         };
 
         events.send(event.clone()).unwrap();
-
-        functions.lock().await.apply_debug_event(event);
-        send(functions.lock().await.deref(), &mut socket_tx).await;
     }
 }
 

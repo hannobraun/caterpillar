@@ -13,15 +13,6 @@ fn main() -> anyhow::Result<()> {
     let (updates_tx, updates_rx) =
         tokio::sync::watch::channel(functions.clone());
 
-    std::thread::spawn(|| {
-        use futures::StreamExt;
-        let mut updates = tokio_stream::wrappers::WatchStream::new(updates_rx);
-        while let Some(functions) = futures::executor::block_on(updates.next())
-        {
-            dbg!(functions);
-        }
-    });
-
-    server::start(functions.clone(), events_tx);
+    server::start(updates_rx, events_tx);
     display::run(program, functions, events_rx, updates_tx)
 }
