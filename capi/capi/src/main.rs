@@ -11,6 +11,6 @@ fn main() -> anyhow::Result<()> {
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
 
-    server::start(functions, events_tx);
-    display::run(program, events_rx)
+    server::start(functions.clone(), events_tx);
+    display::run(program, functions, events_rx)
 }

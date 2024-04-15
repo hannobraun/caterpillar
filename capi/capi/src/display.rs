@@ -1,3 +1,4 @@
+use capi_runtime::Functions;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
@@ -8,7 +9,11 @@ use winit::{
 
 use crate::{capi::Program, server::EventsRx};
 
-pub fn run(mut program: Program, mut events: EventsRx) -> anyhow::Result<()> {
+pub fn run(
+    mut program: Program,
+    mut functions: Functions,
+    mut events: EventsRx,
+) -> anyhow::Result<()> {
     const TILES_PER_AXIS: usize = 32;
     const PIXELS_PER_TILE_AXIS: usize = 8;
 
@@ -30,7 +35,8 @@ pub fn run(mut program: Program, mut events: EventsRx) -> anyhow::Result<()> {
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
-                dbg!(event);
+                functions.apply_debug_event(event);
+                dbg!(&functions);
             }
 
             program.run(TILES_PER_AXIS, TILES_PER_AXIS, &mut mem);
