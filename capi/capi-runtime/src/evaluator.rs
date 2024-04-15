@@ -16,7 +16,7 @@ impl Evaluator {
         self.instruction = entry;
     }
 
-    pub fn evaluate(&mut self, mem: &mut [u8]) {
+    pub fn evaluate(&mut self, mem: &mut [u8]) -> bool {
         loop {
             let instruction = &self.code.instructions[self.instruction];
             self.instruction += 1;
@@ -41,7 +41,7 @@ impl Evaluator {
                 Instruction::PushValue(value) => self.data_stack.push(*value),
                 Instruction::Return => {
                     let Some(return_address) = self.call_stack.pop() else {
-                        return;
+                        return false;
                     };
 
                     self.instruction = return_address;
@@ -58,7 +58,7 @@ impl Evaluator {
                         // more features, I'm inclined to just leave this be.
 
                         let Some(return_address) = self.call_stack.pop() else {
-                            return;
+                            return false;
                         };
 
                         self.instruction = return_address;
@@ -76,7 +76,7 @@ impl Evaluator {
                         // more features, I'm inclined to just leave this be.
 
                         let Some(return_address) = self.call_stack.pop() else {
-                            return;
+                            return false;
                         };
 
                         self.instruction = return_address;
