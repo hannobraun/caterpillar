@@ -2,7 +2,7 @@ use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Evaluator {
     pub code: Code,
     pub instruction: usize,
@@ -11,14 +11,8 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
-        Self {
-            code: Code::default(),
-            instruction: usize::default(),
-            call_stack: Vec::new(),
-            data_stack: DataStack::new(),
-        }
+        Self::default()
     }
 
     pub fn update(&mut self, code: Code, entry: usize) {
