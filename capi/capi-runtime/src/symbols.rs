@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Symbols {
     inner: BTreeMap<String, usize>,
 }

@@ -2,7 +2,7 @@ use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
 };
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Evaluator {
     pub code: Code,
     pub call_stack: Vec<usize>,

@@ -1,5 +1,6 @@
 use capi_runtime::{Evaluator, Functions};
 
+#[derive(Clone)]
 pub struct Program {
     pub functions: Functions,
     pub evaluator: Evaluator,

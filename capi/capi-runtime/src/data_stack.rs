@@ -1,4 +1,4 @@
-#[derive(Debug, Default)]
+#[derive(Clone, Debug, Default)]
 pub struct DataStack {
     values: Vec<usize>,
     saved: Vec<usize>,
