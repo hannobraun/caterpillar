@@ -101,6 +101,19 @@ pub fn take(data_stack: &mut DataStack) -> Result {
     Ok(())
 }
 
+pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
+    let value = data_stack.pop()?;
+    let y = data_stack.pop()?;
+    let x = data_stack.pop()?;
+
+    mem[(256 + y.0 * 32 + x.0) as usize] = value.0 as u8;
+
+    data_stack.push(x);
+    data_stack.push(y);
+
+    Ok(())
+}
+
 pub type Result = std::result::Result<(), Error>;
 
 #[derive(
