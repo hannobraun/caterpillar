@@ -37,7 +37,7 @@ pub fn program() -> Program {
     let code = functions.clone().compile();
     let entry = code.symbols.resolve("write_to_tile_buffer");
 
-    let mut evaluator = Evaluator::new();
+    let mut evaluator = Evaluator::default();
     evaluator.update(code, entry);
 
     Program {

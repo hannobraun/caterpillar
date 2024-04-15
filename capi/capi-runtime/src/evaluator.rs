@@ -11,10 +11,6 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn update(&mut self, code: Code, entry: usize) {
         self.code = code;
         self.instruction = entry;
