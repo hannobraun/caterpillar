@@ -1,4 +1,5 @@
 use std::{
+    fmt,
     ops::Deref,
     panic::{catch_unwind, AssertUnwindSafe},
     process::exit,
@@ -16,6 +17,7 @@ use axum::{
     Router,
 };
 use capi_runtime::{DebugEvent, Functions};
+use futures::SinkExt;
 use tokio::{
     net::TcpListener,
     runtime::Runtime,
@@ -100,7 +102,11 @@ async fn handle_socket(
     }
 }
 
-async fn send(functions: &Functions, socket: &mut WebSocket) {
+async fn send<S>(functions: &Functions, mut socket: S)
+where
+    S: SinkExt<Message> + Unpin,
+    S::Error: fmt::Debug,
+{
     let message = serde_json::to_string(functions).unwrap();
     socket.send(Message::Text(message)).await.unwrap();
 }
