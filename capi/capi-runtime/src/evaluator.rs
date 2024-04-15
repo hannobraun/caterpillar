@@ -16,9 +16,7 @@ impl Evaluator {
         self.instruction = entry;
     }
 
-    pub fn evaluate(&mut self, entry: usize, mem: &mut [u8]) {
-        self.instruction = entry;
-
+    pub fn evaluate(&mut self, mem: &mut [u8]) {
         loop {
             let instruction = &self.code.instructions[self.instruction];
             self.instruction += 1;
