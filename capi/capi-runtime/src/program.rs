@@ -1,4 +1,4 @@
-use crate::{Evaluator, Functions};
+use crate::{evaluator::EvaluatorState, Evaluator, Functions};
 
 #[derive(Clone)]
 pub struct Program {
@@ -18,7 +18,7 @@ impl Program {
         self.evaluator.instruction = self.entry;
     }
 
-    pub fn run(&mut self, mem: &mut [u8]) {
-        while self.evaluator.step(mem).is_running() {}
+    pub fn run(&mut self, mem: &mut [u8]) -> EvaluatorState {
+        self.evaluator.step(mem)
     }
 }
