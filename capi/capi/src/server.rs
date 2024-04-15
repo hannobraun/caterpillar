@@ -25,7 +25,7 @@ use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
-pub fn start(updates: watch::Receiver<Functions>, events: EventsTx) {
+pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
         // Unwind safety doesn't matter, because we access no data from within
         // the panicking context after the panic. We just exit the process.
@@ -45,17 +45,14 @@ pub fn start(updates: watch::Receiver<Functions>, events: EventsTx) {
     });
 }
 
-fn serve(
-    updates: watch::Receiver<Functions>,
-    events: EventsTx,
-) -> anyhow::Result<()> {
+fn serve(updates: UpdatesRx, events: EventsTx) -> anyhow::Result<()> {
     let runtime = Runtime::new()?;
     runtime.block_on(serve_async(updates, events))?;
     Ok(())
 }
 
 async fn serve_async(
-    updates: watch::Receiver<Functions>,
+    updates: UpdatesRx,
     events: EventsTx,
 ) -> anyhow::Result<()> {
     let app = Router::new()
@@ -75,14 +72,14 @@ async fn serve_async(
 
 async fn handler(
     socket: WebSocketUpgrade,
-    State((updates, events)): State<(watch::Receiver<Functions>, EventsTx)>,
+    State((updates, events)): State<(UpdatesRx, EventsTx)>,
 ) -> impl IntoResponse {
     socket.on_upgrade(|socket| handle_socket(socket, updates, events))
 }
 
 async fn handle_socket(
     socket: WebSocket,
-    updates: watch::Receiver<Functions>,
+    updates: UpdatesRx,
     events: EventsTx,
 ) {
     let (socket_tx, socket_rx) = socket.split();
@@ -91,10 +88,8 @@ async fn handle_socket(
     handle_events(events, socket_rx).await;
 }
 
-async fn handle_updates<S>(
-    mut updates: watch::Receiver<Functions>,
-    mut socket: S,
-) where
+async fn handle_updates<S>(mut updates: UpdatesRx, mut socket: S)
+where
     S: SinkExt<Message> + Unpin,
     S::Error: fmt::Debug,
 {
@@ -132,3 +127,5 @@ where
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
+
+pub type UpdatesRx = watch::Receiver<Functions>;
