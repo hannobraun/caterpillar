@@ -129,3 +129,4 @@ pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub type UpdatesRx = watch::Receiver<Functions>;
+pub type UpdatesTx = watch::Sender<Functions>;

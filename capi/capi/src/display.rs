@@ -1,6 +1,4 @@
-use capi_runtime::Functions;
 use pixels::{Pixels, SurfaceTexture};
-use tokio::sync::watch;
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
@@ -8,12 +6,15 @@ use winit::{
     window::WindowBuilder,
 };
 
-use crate::{capi::Program, server::EventsRx};
+use crate::{
+    capi::Program,
+    server::{EventsRx, UpdatesTx},
+};
 
 pub fn run(
     mut program: Program,
     mut events: EventsRx,
-    updates: watch::Sender<Functions>,
+    updates: UpdatesTx,
 ) -> anyhow::Result<()> {
     const TILES_PER_AXIS: usize = 32;
     const PIXELS_PER_TILE_AXIS: usize = 8;
