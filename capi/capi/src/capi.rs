@@ -34,15 +34,5 @@ pub fn program() -> Program {
         s.v(0).w("drop").v(0).w("drop");
     });
 
-    let code = source.functions.clone().compile();
-    let entry = code.symbols.resolve("write_to_tile_buffer");
-
-    let mut program = Program {
-        functions: source.functions,
-        ..Program::default()
-    };
-    program.evaluator.update(code, entry);
-    program.entry = entry;
-
-    program
+    source.compile("write_to_tile_buffer")
 }
