@@ -2,7 +2,6 @@ use capi_runtime::{Program, Source};
 
 pub fn program() -> Program {
     let mut source = Source::default();
-    let mut program = Program::default();
 
     source.define("write_to_tile_buffer", |s| {
         s.w("last_tile_index")
@@ -38,7 +37,10 @@ pub fn program() -> Program {
     let code = source.functions.clone().compile();
     let entry = code.symbols.resolve("write_to_tile_buffer");
 
-    program.functions = source.functions;
+    let mut program = Program {
+        functions: source.functions,
+        ..Program::default()
+    };
     program.evaluator.update(code, entry);
     program.entry = entry;
 
