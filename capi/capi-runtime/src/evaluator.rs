@@ -92,9 +92,3 @@ pub enum EvaluatorState {
     Running,
     Finished,
 }
-
-impl EvaluatorState {
-    pub fn is_finished(&self) -> bool {
-        matches!(self, Self::Finished)
-    }
-}

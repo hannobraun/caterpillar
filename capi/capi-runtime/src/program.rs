@@ -22,7 +22,27 @@ impl Program {
         self.evaluator.instruction = self.entry;
     }
 
-    pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
-        self.evaluator.step(mem)
+    pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
+        self.evaluator.step(mem).into()
+    }
+}
+
+pub enum ProgramState {
+    Running,
+    Finished,
+}
+
+impl ProgramState {
+    pub fn is_finished(&self) -> bool {
+        matches!(self, Self::Finished)
+    }
+}
+
+impl From<EvaluatorState> for ProgramState {
+    fn from(state: EvaluatorState) -> Self {
+        match state {
+            EvaluatorState::Running => Self::Running,
+            EvaluatorState::Finished => Self::Finished,
+        }
     }
 }
