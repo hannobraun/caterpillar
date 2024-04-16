@@ -6,6 +6,7 @@ mod debug;
 mod evaluator;
 mod functions;
 mod program;
+mod source;
 mod symbols;
 mod syntax;
 
@@ -14,5 +15,6 @@ pub use self::{
     evaluator::Evaluator,
     functions::{Function, Functions},
     program::Program,
+    source::Source,
     syntax::Expression,
 };

@@ -1,4 +1,4 @@
-use crate::{evaluator::EvaluatorState, syntax::Syntax, Evaluator, Functions};
+use crate::{evaluator::EvaluatorState, Evaluator, Functions};
 
 #[derive(Clone, Default)]
 pub struct Program {
@@ -8,10 +8,6 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut Syntax)) {
-        self.functions.define(name, f)
-    }
-
     pub fn push(&mut self, arguments: impl IntoIterator<Item = usize>) {
         for value in arguments {
             self.evaluator.data_stack.push(value);
