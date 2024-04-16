@@ -1,4 +1,4 @@
-use crate::{evaluator::EvaluatorState, Evaluator, Functions};
+use crate::{evaluator::EvaluatorState, Evaluator, Functions, LineLocation};
 
 #[derive(Clone, Default)]
 pub struct Program {
@@ -25,6 +25,7 @@ impl Program {
 
 pub enum ProgramState {
     Running,
+    Paused { location: LineLocation },
     Finished,
 }
 
