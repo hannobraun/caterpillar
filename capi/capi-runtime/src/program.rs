@@ -1,6 +1,6 @@
 use crate::{evaluator::EvaluatorState, Evaluator, Functions};
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Program {
     pub functions: Functions,
     pub evaluator: Evaluator,
