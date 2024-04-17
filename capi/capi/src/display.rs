@@ -47,8 +47,8 @@ pub fn run(
             loop {
                 match program.step(&mut mem) {
                     ProgramState::Running => {}
-                    ProgramState::Paused { location } => {
-                        println!("Supposed to pause at {location:?}")
+                    ProgramState::Paused { .. } => {
+                        break;
                     }
                     ProgramState::Finished => {
                         assert_eq!(
