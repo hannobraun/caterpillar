@@ -1,28 +1,41 @@
 use std::fmt;
 
+use crate::LineLocation;
+
 #[derive(Debug)]
 pub struct Syntax<'r> {
+    next_location: LineLocation,
     expressions: &'r mut Vec<Expression>,
 }
 
 impl<'r> Syntax<'r> {
-    pub fn new(
-        _function: String,
-        expressions: &'r mut Vec<Expression>,
-    ) -> Self {
-        Self { expressions }
+    pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
+        let next_location = LineLocation { function, line: 0 };
+        Self {
+            next_location,
+            expressions,
+        }
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
+        let location = self.next_location.clone();
+        self.next_location.line += 1;
+
         self.expressions
-            .push(Expression::new(ExpressionKind::Value(value)));
+            .push(Expression::new(ExpressionKind::Value(value), location));
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.expressions.push(Expression::new(ExpressionKind::Word {
-            name: name.to_string(),
-        }));
+        let location = self.next_location.clone();
+        self.next_location.line += 1;
+
+        self.expressions.push(Expression::new(
+            ExpressionKind::Word {
+                name: name.to_string(),
+            },
+            location,
+        ));
         self
     }
 }
@@ -30,13 +43,15 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
+    pub location: LineLocation,
     pub breakpoint: bool,
 }
 
 impl Expression {
-    pub fn new(kind: ExpressionKind) -> Self {
+    pub fn new(kind: ExpressionKind, location: LineLocation) -> Self {
         Self {
             kind,
+            location,
             breakpoint: false,
         }
     }
