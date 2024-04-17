@@ -17,18 +17,14 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn v(&mut self, value: usize) -> &mut Self {
-        let location = self.next_location.clone();
-        self.next_location.line += 1;
-
+        let location = self.next_location.increment();
         self.expressions
             .push(Expression::new(ExpressionKind::Value(value), location));
         self
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        let location = self.next_location.clone();
-        self.next_location.line += 1;
-
+        let location = self.next_location.increment();
         self.expressions.push(Expression::new(
             ExpressionKind::Word {
                 name: name.to_string(),

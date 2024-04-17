@@ -13,4 +13,10 @@ impl LineLocation {
     pub fn first_in_function(function: String) -> Self {
         Self { function, line: 0 }
     }
+
+    pub fn increment(&mut self) -> Self {
+        let self_ = self.clone();
+        self.line += 1;
+        self_
+    }
 }
