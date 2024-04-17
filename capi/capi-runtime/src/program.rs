@@ -59,12 +59,6 @@ pub enum ProgramState {
     Finished,
 }
 
-impl ProgramState {
-    pub fn is_finished(&self) -> bool {
-        matches!(self, Self::Finished)
-    }
-}
-
 impl From<EvaluatorState> for ProgramState {
     fn from(state: EvaluatorState) -> Self {
         match state {
