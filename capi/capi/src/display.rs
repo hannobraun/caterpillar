@@ -39,8 +39,10 @@ pub fn run(
                 updates.send(program.clone()).unwrap();
             }
 
-            program.push([TILES_PER_AXIS; 2]);
-            program.reset();
+            if let ProgramState::Finished = program.state {
+                program.push([TILES_PER_AXIS; 2]);
+                program.reset();
+            }
 
             loop {
                 match program.step(&mut mem) {
