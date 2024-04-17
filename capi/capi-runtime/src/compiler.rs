@@ -13,15 +13,14 @@ pub fn compile(
     let address = code.instructions.len();
 
     for expression in syntax {
-        match expression.kind {
-            ExpressionKind::Value(value) => {
-                code.push(Instruction::PushValue(value));
-            }
+        let instruction = match expression.kind {
+            ExpressionKind::Value(value) => Instruction::PushValue(value),
             ExpressionKind::Word { name } => {
-                let instruction = word_to_instruction(name, functions);
-                code.push(instruction);
+                word_to_instruction(name, functions)
             }
-        }
+        };
+
+        code.push(instruction);
     }
 
     code.push(Instruction::Return);
