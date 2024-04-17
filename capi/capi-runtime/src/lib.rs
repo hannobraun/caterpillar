@@ -7,6 +7,7 @@ mod evaluator;
 mod functions;
 mod program;
 mod source;
+mod source_map;
 mod symbols;
 mod syntax;
 
