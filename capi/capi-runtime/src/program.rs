@@ -23,6 +23,10 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
+        self.step_inner(mem)
+    }
+
+    fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
         if let Some(location) = self
             .source_map
             .inner
