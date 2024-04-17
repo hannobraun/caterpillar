@@ -1,4 +1,6 @@
-use crate::{syntax::Syntax, Functions, Program};
+use crate::{
+    code::Code, compiler::compile, syntax::Syntax, Function, Functions, Program,
+};
 
 #[derive(Default)]
 pub struct Source {
@@ -11,7 +13,17 @@ impl Source {
     }
 
     pub fn compile(self, entry: &str) -> Program {
-        let code = self.functions.clone().compile();
+        let mut code = Code::new();
+
+        for Function { name, syntax } in &self.functions.inner {
+            compile(
+                name.clone(),
+                syntax.clone(),
+                &self.functions.names,
+                &mut code,
+            );
+        }
+
         let entry = code.symbols.resolve(entry);
 
         let mut program = Program {

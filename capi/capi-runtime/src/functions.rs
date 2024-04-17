@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{syntax::Expression, DebugEvent, LineLocation};
 
-use super::{code::Code, compiler::compile, syntax::Syntax};
+use super::syntax::Syntax;
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Functions {
@@ -28,16 +28,6 @@ impl Functions {
             name: name.to_string(),
             syntax,
         });
-    }
-
-    pub fn compile(self) -> Code {
-        let mut code = Code::new();
-
-        for Function { name, syntax } in self.inner {
-            compile(name, syntax, &self.names, &mut code);
-        }
-
-        code
     }
 
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
