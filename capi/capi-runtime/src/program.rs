@@ -53,7 +53,7 @@ impl Program {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum ProgramState {
     Running,
     Paused { location: LineLocation },
