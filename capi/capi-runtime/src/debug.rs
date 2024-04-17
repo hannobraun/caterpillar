@@ -3,7 +3,7 @@ pub enum DebugEvent {
     ToggleBreakpoint { location: LineLocation },
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct LineLocation {
     pub function: String,
     pub line: u32,
