@@ -21,7 +21,7 @@ impl Functions {
         }
 
         let mut syntax = Vec::new();
-        f(&mut Syntax::new(&mut syntax));
+        f(&mut Syntax::new(name.to_string(), &mut syntax));
 
         self.names.insert(name.to_string());
         self.inner.push(Function {

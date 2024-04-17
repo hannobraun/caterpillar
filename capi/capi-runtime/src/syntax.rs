@@ -6,7 +6,10 @@ pub struct Syntax<'r> {
 }
 
 impl<'r> Syntax<'r> {
-    pub fn new(expressions: &'r mut Vec<Expression>) -> Self {
+    pub fn new(
+        _function: String,
+        expressions: &'r mut Vec<Expression>,
+    ) -> Self {
         Self { expressions }
     }
 
