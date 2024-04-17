@@ -32,7 +32,21 @@ impl Program {
             // Not all instructions have a location in the source. Return
             // instructions, for example, don't.
 
-            dbg!(location);
+            let function = self
+                .functions
+                .inner
+                .iter()
+                .find(|function| function.name == location.function)
+                .unwrap();
+            let expression = function
+                .syntax
+                .iter()
+                .find(|expression| expression.location == location)
+                .unwrap();
+
+            if expression.breakpoint {
+                return ProgramState::Paused { location };
+            }
         }
 
         self.evaluator.step(mem).into()
