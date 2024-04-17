@@ -8,6 +8,7 @@ pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
     pub evaluator: Evaluator,
+    pub state: ProgramState,
     pub entry: usize,
 }
 
@@ -23,7 +24,9 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
-        self.step_inner(mem)
+        let state = self.step_inner(mem);
+        self.state = state.clone();
+        state
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
