@@ -33,13 +33,12 @@ fn word_to_instruction(
     word: String,
     functions: &BTreeSet<String>,
 ) -> Instruction {
-    // Here we check for special built-in functions that are
-    // implemented differently, without making sure anywhere, that
-    // its name doesn't conflict with any user-defined functions.
+    // Here we check for special built-in functions that are implemented
+    // differently, without making sure anywhere, that its name doesn't conflict
+    // with any user-defined functions.
     //
-    // I think it's fine for now. This seems like a temporary hack
-    // anyway, while the language is not powerful enough to support
-    // an actual `if`.
+    // I think it's fine for now. This seems like a temporary hack anyway, while
+    // the language is not powerful enough to support an actual `if`.
     if word == "return_if_non_zero" {
         return Instruction::ReturnIfNonZero;
     }
@@ -47,19 +46,18 @@ fn word_to_instruction(
         return Instruction::ReturnIfZero;
     }
 
-    // The code here would allow user-defined functions to shadow
-    // built-in functions, which seems undesirable. It's better to
-    // catch this when defining the function though, and while it
-    // would be nice to have a fallback assertion here, that's not
-    // practical, given the way built-in function resolution is
-    // implemented right now.
+    // The code here would allow user-defined functions to shadow built-in
+    // functions, which seems undesirable. It's better to catch this when
+    // defining the function though, and while it would be nice to have a
+    // fallback assertion here, that's not practical, given the way built-in
+    // function resolution is implemented right now.
     if functions.contains(&word) {
         return Instruction::CallFunction { name: word };
     }
 
-    // This doesn't check whether the built-in function exists, and
-    // given how built-in functions are currently defined, it's not
-    // practical to implement.
+    // This doesn't check whether the built-in function exists, and given how
+    // built-in functions are currently defined, it's not practical to
+    // implement.
     Instruction::CallBuiltin { name: word }
 }
 
