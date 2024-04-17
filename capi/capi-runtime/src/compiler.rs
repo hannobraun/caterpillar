@@ -15,7 +15,7 @@ pub fn compile(
     for expression in syntax {
         match expression.kind {
             ExpressionKind::Value(value) => {
-                code.instructions.push(Instruction::PushValue(value));
+                code.push(Instruction::PushValue(value));
             }
             ExpressionKind::Word { name } => {
                 // Here we check for special built-in functions that are
@@ -27,11 +27,11 @@ pub fn compile(
                 // hack anyway, while the language is not powerful enough to
                 // support an actual `if`.
                 if name == "return_if_non_zero" {
-                    code.instructions.push(Instruction::ReturnIfNonZero);
+                    code.push(Instruction::ReturnIfNonZero);
                     continue;
                 }
                 if name == "return_if_zero" {
-                    code.instructions.push(Instruction::ReturnIfZero);
+                    code.push(Instruction::ReturnIfZero);
                     continue;
                 }
 
@@ -42,19 +42,19 @@ pub fn compile(
                 // here, that's not practical, given the way built-in
                 // function resolution is implemented right now.
                 if functions.contains(&name) {
-                    code.instructions.push(Instruction::CallFunction { name });
+                    code.push(Instruction::CallFunction { name });
                     continue;
                 }
 
                 // This doesn't check whether the built-in function exists,
                 // and given how built-in functions are currently defined,
                 // it's not practical to implement.
-                code.instructions.push(Instruction::CallBuiltin { name });
+                code.push(Instruction::CallBuiltin { name });
             }
         }
     }
 
-    code.instructions.push(Instruction::Return);
+    code.push(Instruction::Return);
 
     code.symbols.define(name, address);
 }

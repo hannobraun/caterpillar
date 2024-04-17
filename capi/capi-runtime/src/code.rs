@@ -10,4 +10,8 @@ impl Code {
     pub fn new() -> Self {
         Self::default()
     }
+
+    pub fn push(&mut self, instruction: Instruction) {
+        self.instructions.push(instruction);
+    }
 }
