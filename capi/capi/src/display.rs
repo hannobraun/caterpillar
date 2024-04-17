@@ -1,4 +1,4 @@
-use capi_runtime::Program;
+use capi_runtime::{Program, ProgramState};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
@@ -41,7 +41,17 @@ pub fn run(
 
             program.push([TILES_PER_AXIS; 2]);
             program.reset();
-            while !program.step(&mut mem).is_finished() {}
+
+            loop {
+                match program.step(&mut mem) {
+                    ProgramState::Running => {}
+                    ProgramState::Paused { location } => {
+                        println!("Supposed to pause at {location:?}")
+                    }
+                    ProgramState::Finished => break,
+                }
+            }
+
             assert_eq!(program.evaluator.data_stack.num_values(), 0);
 
             for tile_y in 0..TILES_PER_AXIS {
