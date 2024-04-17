@@ -30,7 +30,7 @@ pub fn compile(
 }
 
 fn word_to_instruction(
-    name: String,
+    word: String,
     functions: &BTreeSet<String>,
 ) -> Instruction {
     // Here we check for special built-in functions that are
@@ -40,10 +40,10 @@ fn word_to_instruction(
     // I think it's fine for now. This seems like a temporary hack
     // anyway, while the language is not powerful enough to support
     // an actual `if`.
-    if name == "return_if_non_zero" {
+    if word == "return_if_non_zero" {
         return Instruction::ReturnIfNonZero;
     }
-    if name == "return_if_zero" {
+    if word == "return_if_zero" {
         return Instruction::ReturnIfZero;
     }
 
@@ -53,14 +53,14 @@ fn word_to_instruction(
     // would be nice to have a fallback assertion here, that's not
     // practical, given the way built-in function resolution is
     // implemented right now.
-    if functions.contains(&name) {
-        return Instruction::CallFunction { name };
+    if functions.contains(&word) {
+        return Instruction::CallFunction { name: word };
     }
 
     // This doesn't check whether the built-in function exists, and
     // given how built-in functions are currently defined, it's not
     // practical to implement.
-    Instruction::CallBuiltin { name }
+    Instruction::CallBuiltin { name: word }
 }
 
 #[derive(Clone, Debug)]
