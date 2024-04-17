@@ -57,9 +57,11 @@ impl Program {
 pub enum ProgramState {
     #[default]
     Running,
+
     Paused {
         location: LineLocation,
     },
+
     Finished,
 }
 
