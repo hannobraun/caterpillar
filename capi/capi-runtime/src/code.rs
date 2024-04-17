@@ -11,7 +11,9 @@ impl Code {
         Self::default()
     }
 
-    pub fn push(&mut self, instruction: Instruction) {
+    pub fn push(&mut self, instruction: Instruction) -> usize {
+        let address = self.instructions.len();
         self.instructions.push(instruction);
+        address
     }
 }
