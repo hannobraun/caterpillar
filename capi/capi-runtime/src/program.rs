@@ -1,8 +1,12 @@
-use crate::{evaluator::EvaluatorState, Evaluator, Functions, LineLocation};
+use crate::{
+    evaluator::EvaluatorState, source_map::SourceMap, Evaluator, Functions,
+    LineLocation,
+};
 
 #[derive(Clone, Default)]
 pub struct Program {
     pub functions: Functions,
+    pub source_map: SourceMap,
     pub evaluator: Evaluator,
     pub entry: usize,
 }

@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::Expression;
+use crate::{source_map::SourceMap, syntax::Expression};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -9,6 +9,7 @@ pub fn compile(
     syntax: Vec<Expression>,
     functions: &BTreeSet<String>,
     code: &mut Code,
+    source_map: &mut SourceMap,
 ) {
     let address = code.instructions.len();
 
@@ -20,7 +21,8 @@ pub fn compile(
             }
         };
 
-        code.push(instruction);
+        let address = code.push(instruction);
+        source_map.inner.insert(address, expression.location);
     }
 
     code.push(Instruction::Return);
