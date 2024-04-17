@@ -10,7 +10,7 @@ pub struct Syntax<'r> {
 
 impl<'r> Syntax<'r> {
     pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
-        let next_location = LineLocation { function, line: 0 };
+        let next_location = LineLocation::first_in_function(function);
         Self {
             next_location,
             expressions,

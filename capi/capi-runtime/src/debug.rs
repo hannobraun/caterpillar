@@ -8,3 +8,9 @@ pub struct LineLocation {
     pub function: String,
     pub line: u32,
 }
+
+impl LineLocation {
+    pub fn first_in_function(function: String) -> Self {
+        Self { function, line: 0 }
+    }
+}
