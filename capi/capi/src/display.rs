@@ -48,11 +48,15 @@ pub fn run(
                     ProgramState::Paused { location } => {
                         println!("Supposed to pause at {location:?}")
                     }
-                    ProgramState::Finished => break,
+                    ProgramState::Finished => {
+                        assert_eq!(
+                            program.evaluator.data_stack.num_values(),
+                            0
+                        );
+                        break;
+                    }
                 }
             }
-
-            assert_eq!(program.evaluator.data_stack.num_values(), 0);
 
             for tile_y in 0..TILES_PER_AXIS {
                 for tile_x in 0..TILES_PER_AXIS {
