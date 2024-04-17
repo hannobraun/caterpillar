@@ -23,6 +23,15 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
+        if let Some(location) =
+            self.source_map.inner.get(&self.evaluator.instruction)
+        {
+            // Not all instructions have a location in the source. Return
+            // instructions, for example, don't.
+
+            dbg!(location);
+        }
+
         self.evaluator.step(mem).into()
     }
 }
