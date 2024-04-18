@@ -17,5 +17,5 @@ pub use self::{
     functions::{Function, Functions},
     program::{Program, ProgramState},
     source::Source,
-    syntax::Expression,
+    syntax::{Expression, ExpressionKind},
 };
