@@ -99,7 +99,7 @@ where
 
     loop {
         let functions = match updates.changed().await {
-            Ok(()) => updates.borrow_and_update().functions.clone(),
+            Ok(()) => updates.borrow_and_update().clone(),
             Err(err) => panic!("{err}"),
         };
 
