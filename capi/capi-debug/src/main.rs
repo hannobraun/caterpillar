@@ -16,10 +16,10 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let (program, set_code) = create_signal(Program::default());
+    let (program, set_program) = create_signal(Program::default());
     let (events_tx, events_rx) = mpsc::unbounded();
 
-    leptos::spawn_local(handle_server(set_code, events_rx));
+    leptos::spawn_local(handle_server(set_program, events_rx));
 
     leptos::mount_to_body(
         move || view! { <Debugger code=program events=events_tx /> },
