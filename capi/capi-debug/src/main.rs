@@ -118,8 +118,8 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
         ));
     };
 
-    // It would be nicer to have the click handler on the outer element, to make
-    // it less finicky for the user. But for some reason, I'm getting a
+    // It would be nicer to have the click handler on the enclosing element, to
+    // make it less finicky for the user. But for some reason, I'm getting a
     // reference to the window on `event.current_target()`, so I have to rely on
     // `event.target()` to find the metadata. And that means, I can't have
     // events coming from multiple elements.
