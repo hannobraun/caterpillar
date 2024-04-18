@@ -1,4 +1,6 @@
-use capi_runtime::{DebugEvent, Expression, LineLocation, Program};
+use capi_runtime::{
+    DebugEvent, Expression, LineLocation, Program, ProgramState,
+};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -42,6 +44,7 @@ pub fn Debugger(
                     .into_iter()
                     .map(|f| view! {
                         <Function
+                            state=program.get().state
                             function=f
                             events=events.clone() />
                     })
@@ -53,6 +56,7 @@ pub fn Debugger(
 
 #[component]
 pub fn Function(
+    state: ProgramState,
     function: capi_runtime::Function,
     events: EventsTx,
 ) -> impl IntoView {
@@ -62,6 +66,7 @@ pub fn Function(
         .map(|expression| {
             view! {
                 <LineWithBreakpoint
+                    state=state.clone()
                     expression=expression
                     events=events.clone() />
             }
@@ -82,13 +87,14 @@ pub fn Function(
 
 #[component]
 pub fn LineWithBreakpoint(
+    state: ProgramState,
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
     view! {
         <li class="ml-8">
             <Breakpoint expression=expression.clone() events=events />
-            <Line expression=expression />
+            <Line state=state expression=expression />
         </li>
     }
 }
@@ -139,7 +145,8 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Line(expression: Expression) -> impl IntoView {
+pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
+    let _ = state;
     let line = format!("{}", expression.kind);
 
     view! {
