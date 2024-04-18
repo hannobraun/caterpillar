@@ -22,18 +22,21 @@ fn main() {
     leptos::spawn_local(handle_server(set_program, events_rx));
 
     leptos::mount_to_body(
-        move || view! { <Debugger code=program events=events_tx /> },
+        move || view! { <Debugger program=program events=events_tx /> },
     );
 
     log::info!("Caterpillar initialized.");
 }
 
 #[component]
-pub fn Debugger(code: ReadSignal<Program>, events: EventsTx) -> impl IntoView {
+pub fn Debugger(
+    program: ReadSignal<Program>,
+    events: EventsTx,
+) -> impl IntoView {
     view! {
         {
             move || {
-                code.get()
+                program.get()
                     .functions
                     .inner
                     .into_iter()
