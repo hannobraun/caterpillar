@@ -84,6 +84,16 @@ pub fn LineWithBreakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
+    view! {
+        <li class="ml-8">
+            <Breakpoint expression=expression.clone() events=events />
+            <Line expression=expression.kind />
+        </li>
+    }
+}
+
+#[component]
+pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
     let breakpoint_color = if expression.breakpoint {
         "text-red-600"
     } else {
@@ -117,16 +127,13 @@ pub fn LineWithBreakpoint(
     // There are probably better ways to solve this problem, but for now, this
     // is fine, if unfortunate.
     view! {
-        <li class="ml-8">
-            <span
-                class=class
-                data-function=expression.location.function
-                data-line=expression.location.line
-                on:click=toggle_breakpoint>
-                {'⦿'}
-            </span>
-            <Line expression=expression.kind />
-        </li>
+        <span
+            class=class
+            data-function=expression.location.function
+            data-line=expression.location.line
+            on:click=toggle_breakpoint>
+            {'⦿'}
+        </span>
     }
 }
 
