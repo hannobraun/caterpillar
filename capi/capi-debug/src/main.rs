@@ -59,12 +59,10 @@ pub fn Function(
         .syntax
         .into_iter()
         .enumerate()
-        .map(|(line_number, expression)| {
+        .map(|(_, expression)| {
             view! {
                 <LineWithBreakpoint
-                    function=function.name.clone()
                     expression=expression
-                    line_number=line_number
                     events=events.clone() />
             }
         })
@@ -85,8 +83,6 @@ pub fn Function(
 #[component]
 pub fn LineWithBreakpoint(
     expression: Expression,
-    function: String,
-    line_number: usize,
     events: EventsTx,
 ) -> impl IntoView {
     let breakpoint_color = if expression.breakpoint {
@@ -125,8 +121,8 @@ pub fn LineWithBreakpoint(
         <li class="ml-8">
             <span
                 class=class
-                data-function=function
-                data-line=line_number
+                data-function=expression.location.function
+                data-line=expression.location.line
                 on:click=toggle_breakpoint>
                 {'⦿'}
             </span>
