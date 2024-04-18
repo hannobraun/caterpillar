@@ -174,14 +174,14 @@ async fn handle_server(set_code: WriteSignal<Program>, mut events: EventsRx) {
                     }
                 };
 
-                let program: Program = match msg {
+                let new_program: Program = match msg {
                     Message::Text(text) => serde_json::from_str(&text).unwrap(),
                     Message::Bytes(bytes) => {
                         serde_json::from_slice(&bytes).unwrap()
                     }
                 };
 
-                set_code.set(program);
+                set_code.set(new_program);
             }
             Either::Right((evt, _)) => {
                 let Some(evt) = evt else {
