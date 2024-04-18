@@ -1,6 +1,4 @@
-use capi_runtime::{
-    DebugEvent, Expression, ExpressionKind, Functions, LineLocation,
-};
+use capi_runtime::{DebugEvent, Expression, Functions, LineLocation};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -87,7 +85,7 @@ pub fn LineWithBreakpoint(
     view! {
         <li class="ml-8">
             <Breakpoint expression=expression.clone() events=events />
-            <Line expression=expression.kind />
+            <Line expression=expression />
         </li>
     }
 }
@@ -138,8 +136,8 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Line(expression: ExpressionKind) -> impl IntoView {
-    let line = format!("{}", expression);
+pub fn Line(expression: Expression) -> impl IntoView {
+    let line = format!("{}", expression.kind);
 
     view! {
         <span>{line}</span>
