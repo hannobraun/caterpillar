@@ -98,12 +98,12 @@ where
     updates.mark_changed();
 
     loop {
-        let functions = match updates.changed().await {
+        let program = match updates.changed().await {
             Ok(()) => updates.borrow_and_update().clone(),
             Err(err) => panic!("{err}"),
         };
 
-        let message = serde_json::to_string(&functions).unwrap();
+        let message = serde_json::to_string(&program).unwrap();
         socket.send(Message::Text(message)).await.unwrap();
     }
 }
