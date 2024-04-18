@@ -156,6 +156,8 @@ pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
     };
     let line = format!("{}", expression.kind);
 
+    let class = format!("px-0.5 {class}");
+
     view! {
         <span class=class>{line}</span>
     }
