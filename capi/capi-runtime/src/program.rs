@@ -3,7 +3,7 @@ use crate::{
     LineLocation,
 };
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
@@ -60,7 +60,7 @@ impl Program {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub enum ProgramState {
     Running,
 

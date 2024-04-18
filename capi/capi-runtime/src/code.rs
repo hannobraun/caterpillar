@@ -1,6 +1,6 @@
 use super::{compiler::Instruction, symbols::Symbols};
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Code {
     pub symbols: Symbols,
     pub instructions: Vec<Instruction>,

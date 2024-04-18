@@ -2,7 +2,7 @@ use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
 };
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     pub code: Code,
     pub instruction: usize,
