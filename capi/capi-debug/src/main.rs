@@ -148,7 +148,7 @@ async fn send_event(event: DebugEvent, mut events: EventsTx) {
     }
 }
 
-async fn handle_server(set_code: WriteSignal<Program>, mut events: EventsRx) {
+async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     loop {
@@ -181,7 +181,7 @@ async fn handle_server(set_code: WriteSignal<Program>, mut events: EventsRx) {
                     }
                 };
 
-                set_code.set(new_program);
+                program.set(new_program);
             }
             Either::Right((evt, _)) => {
                 let Some(evt) = evt else {
