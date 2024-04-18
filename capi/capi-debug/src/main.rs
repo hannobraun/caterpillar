@@ -59,7 +59,7 @@ pub fn Function(
         .enumerate()
         .map(|(line_number, expression)| {
             view! {
-                <Line
+                <LineWithBreakpoint
                     function=function.name.clone()
                     expression=expression
                     line_number=line_number
@@ -81,7 +81,7 @@ pub fn Function(
 }
 
 #[component]
-pub fn Line(
+pub fn LineWithBreakpoint(
     expression: Expression,
     function: String,
     line_number: usize,
