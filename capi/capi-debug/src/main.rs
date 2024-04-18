@@ -1,4 +1,6 @@
-use capi_runtime::{DebugEvent, Expression, Functions, LineLocation};
+use capi_runtime::{
+    DebugEvent, Expression, ExpressionKind, Functions, LineLocation,
+};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -92,7 +94,6 @@ pub fn LineWithBreakpoint(
     } else {
         "text-red-300"
     };
-    let line = format!("{}", expression.kind);
 
     let class = format!("mr-1 {breakpoint_color}");
 
@@ -129,8 +130,17 @@ pub fn LineWithBreakpoint(
                 on:click=toggle_breakpoint>
                 {'⦿'}
             </span>
-            <span>{line}</span>
+            <Line expression=expression.kind />
         </li>
+    }
+}
+
+#[component]
+pub fn Line(expression: ExpressionKind) -> impl IntoView {
+    let line = format!("{}", expression);
+
+    view! {
+        <span>{line}</span>
     }
 }
 
