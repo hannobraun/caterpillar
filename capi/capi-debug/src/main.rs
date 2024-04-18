@@ -58,8 +58,7 @@ pub fn Function(
     let lines = function
         .syntax
         .into_iter()
-        .enumerate()
-        .map(|(_, expression)| {
+        .map(|expression| {
             view! {
                 <LineWithBreakpoint
                     expression=expression
