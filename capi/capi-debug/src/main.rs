@@ -41,7 +41,9 @@ pub fn Debugger(
                     .inner
                     .into_iter()
                     .map(|f| view! {
-                        <Function function=f events=events.clone() />
+                        <Function
+                            function=f
+                            events=events.clone() />
                     })
                     .collect_view()
             }
