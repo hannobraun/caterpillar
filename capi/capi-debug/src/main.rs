@@ -146,11 +146,18 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 
 #[component]
 pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
-    let _ = state;
+    let class = match state {
+        ProgramState::Paused { location }
+            if location == expression.location =>
+        {
+            "bg-red-300"
+        }
+        _ => "",
+    };
     let line = format!("{}", expression.kind);
 
     view! {
-        <span>{line}</span>
+        <span class=class>{line}</span>
     }
 }
 
