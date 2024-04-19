@@ -44,11 +44,12 @@ pub fn run(
                 program.reset();
             }
 
+            let previous_state = program.state.clone();
+
             loop {
                 match program.step(&mut mem) {
                     ProgramState::Running => {}
                     ProgramState::Paused { .. } => {
-                        updates.send(program.clone()).unwrap();
                         break;
                     }
                     ProgramState::Finished => {
@@ -59,6 +60,12 @@ pub fn run(
                         break;
                     }
                 }
+            }
+
+            if program.state != previous_state
+                && (program.state.is_paused() || previous_state.is_paused())
+            {
+                updates.send(program.clone()).unwrap();
             }
 
             for tile_y in 0..TILES_PER_AXIS {
