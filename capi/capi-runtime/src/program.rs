@@ -72,6 +72,12 @@ pub enum ProgramState {
     Finished,
 }
 
+impl ProgramState {
+    pub fn is_paused(&self) -> bool {
+        matches!(self, Self::Paused { .. })
+    }
+}
+
 impl From<EvaluatorState> for ProgramState {
     fn from(state: EvaluatorState) -> Self {
         match state {
