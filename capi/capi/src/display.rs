@@ -48,6 +48,7 @@ pub fn run(
                 match program.step(&mut mem) {
                     ProgramState::Running => {}
                     ProgramState::Paused { .. } => {
+                        updates.send(program.clone()).unwrap();
                         break;
                     }
                     ProgramState::Finished => {
