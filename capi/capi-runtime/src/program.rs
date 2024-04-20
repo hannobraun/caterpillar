@@ -38,16 +38,15 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
+        // Not all instructions have a location in the source. Return
+        // instructions, for example, don't. That doesn't matter, because
+        // The debugger won't show those, and the user won't expect to set
+        // breakpoints for them.
         let location = self
             .source_map
             .inner
             .get(&self.evaluator.next_instruction)
             .cloned()?;
-
-        // Not all instructions have a location in the source. Return
-        // instructions, for example, don't. That doesn't matter, because
-        // The debugger won't show those, and the user won't expect to set
-        // breakpoints for them.
 
         let function = self
             .functions
