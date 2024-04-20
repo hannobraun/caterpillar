@@ -3,7 +3,7 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
-## 2025-04-19
+## 2024-04-19
 
 Yesterday, I talked about stepping backwards in a debugger. There is an inherent
 overhead to this. Not only to you need to generate the instructions to do this
