@@ -30,6 +30,14 @@ impl Program {
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
+        if let Some(location) = self.breakpoint_set_for_next_instruction() {
+            return ProgramState::Paused { location };
+        }
+
+        self.evaluator.step(mem).into()
+    }
+
+    fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
         if let Some(location) = self
             .source_map
             .inner
@@ -54,11 +62,11 @@ impl Program {
                 .unwrap();
 
             if expression.breakpoint {
-                return ProgramState::Paused { location };
+                return Some(location);
             }
         }
 
-        self.evaluator.step(mem).into()
+        None
     }
 }
 
