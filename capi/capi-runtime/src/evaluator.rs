@@ -5,7 +5,7 @@ use super::{
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     pub code: Code,
-    pub instruction: usize,
+    pub next_instruction: usize,
     pub call_stack: Vec<usize>,
     pub data_stack: DataStack,
 }
@@ -13,12 +13,12 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn update(&mut self, code: Code, entry: usize) {
         self.code = code;
-        self.instruction = entry;
+        self.next_instruction = entry;
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
-        let instruction = &self.code.instructions[self.instruction];
-        self.instruction += 1;
+        let instruction = &self.code.instructions[self.next_instruction];
+        self.next_instruction += 1;
 
         match instruction {
             Instruction::CallBuiltin { name } => match name.as_str() {
@@ -34,8 +34,8 @@ impl Evaluator {
             },
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve(name);
-                self.call_stack.push(self.instruction);
-                self.instruction = address;
+                self.call_stack.push(self.next_instruction);
+                self.next_instruction = address;
             }
             Instruction::PushValue(value) => self.data_stack.push(*value),
             Instruction::Return => {
@@ -43,7 +43,7 @@ impl Evaluator {
                     return EvaluatorState::Finished;
                 };
 
-                self.instruction = return_address;
+                self.next_instruction = return_address;
             }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop();
@@ -60,7 +60,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.instruction = return_address;
+                    self.next_instruction = return_address;
                 }
             }
             Instruction::ReturnIfZero => {
@@ -78,7 +78,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.instruction = return_address;
+                    self.next_instruction = return_address;
                 }
             }
         }

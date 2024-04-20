@@ -20,7 +20,7 @@ impl Program {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.instruction = self.entry;
+        self.evaluator.next_instruction = self.entry;
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
@@ -33,7 +33,7 @@ impl Program {
         if let Some(location) = self
             .source_map
             .inner
-            .get(&self.evaluator.instruction)
+            .get(&self.evaluator.next_instruction)
             .cloned()
         {
             // Not all instructions have a location in the source. Return
