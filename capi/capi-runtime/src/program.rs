@@ -38,32 +38,31 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        if let Some(location) = self
+        let location = self
             .source_map
             .inner
             .get(&self.evaluator.next_instruction)
-            .cloned()
-        {
-            // Not all instructions have a location in the source. Return
-            // instructions, for example, don't. That doesn't matter, because
-            // The debugger won't show those, and the user won't expect to set
-            // breakpoints for them.
+            .cloned()?;
 
-            let function = self
-                .functions
-                .inner
-                .iter()
-                .find(|function| function.name == location.function)
-                .unwrap();
-            let expression = function
-                .syntax
-                .iter()
-                .find(|expression| expression.location == location)
-                .unwrap();
+        // Not all instructions have a location in the source. Return
+        // instructions, for example, don't. That doesn't matter, because
+        // The debugger won't show those, and the user won't expect to set
+        // breakpoints for them.
 
-            if expression.breakpoint {
-                return Some(location);
-            }
+        let function = self
+            .functions
+            .inner
+            .iter()
+            .find(|function| function.name == location.function)
+            .unwrap();
+        let expression = function
+            .syntax
+            .iter()
+            .find(|expression| expression.location == location)
+            .unwrap();
+
+        if expression.breakpoint {
+            return Some(location);
         }
 
         None
