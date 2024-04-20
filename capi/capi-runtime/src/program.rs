@@ -37,7 +37,9 @@ impl Program {
             .cloned()
         {
             // Not all instructions have a location in the source. Return
-            // instructions, for example, don't.
+            // instructions, for example, don't. That doesn't matter, because
+            // The debugger won't show those, and the user won't expect to set
+            // breakpoints for them.
 
             let function = self
                 .functions
