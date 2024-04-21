@@ -53,9 +53,7 @@ pub fn Debugger(
     };
 
     view! {
-        <div>
-            {functions}
-        </div>
+        <div>{functions}</div>
     }
 }
 
