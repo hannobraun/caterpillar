@@ -35,23 +35,26 @@ pub fn Debugger(
     program: ReadSignal<Program>,
     events: EventsTx,
 ) -> impl IntoView {
+    let functions = move || {
+        program
+            .get()
+            .functions
+            .inner
+            .into_iter()
+            .map(|f| {
+                view! {
+                    <Function
+                        state=program.get().state
+                        function=f
+                        events=events.clone() />
+                }
+            })
+            .collect_view()
+    };
+
     view! {
         <div>
-            {
-                move || {
-                    program.get()
-                        .functions
-                        .inner
-                        .into_iter()
-                        .map(|f| view! {
-                            <Function
-                                state=program.get().state
-                                function=f
-                                events=events.clone() />
-                        })
-                        .collect_view()
-                }
-            }
+            {functions}
         </div>
     }
 }
