@@ -36,21 +36,23 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     view! {
-        {
-            move || {
-                program.get()
-                    .functions
-                    .inner
-                    .into_iter()
-                    .map(|f| view! {
-                        <Function
-                            state=program.get().state
-                            function=f
-                            events=events.clone() />
-                    })
-                    .collect_view()
+        <div>
+            {
+                move || {
+                    program.get()
+                        .functions
+                        .inner
+                        .into_iter()
+                        .map(|f| view! {
+                            <Function
+                                state=program.get().state
+                                function=f
+                                events=events.clone() />
+                        })
+                        .collect_view()
+                }
             }
-        }
+        </div>
     }
 }
 
