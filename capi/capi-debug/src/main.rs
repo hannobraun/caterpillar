@@ -35,6 +35,16 @@ pub fn Debugger(
     program: ReadSignal<Program>,
     events: EventsTx,
 ) -> impl IntoView {
+    view! {
+        <div><Functions program=program events=events /></div>
+    }
+}
+
+#[component]
+pub fn Functions(
+    program: ReadSignal<Program>,
+    events: EventsTx,
+) -> impl IntoView {
     let functions = move || {
         program
             .get()
