@@ -68,7 +68,7 @@ going beyond that where I can:
 
 - It will stay functional and stack-based.
 - No local variables.
-- Completely untyped. Every value is a 32-bit integer.
+- Completely untyped. Every value is an integer (maybe 8 or 32 bits; we'll see).
 
 Having no local variables doesn't help with understanding what's going on, but I
 hope that I can more than offset this with an early focus on tooling (see
