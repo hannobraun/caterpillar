@@ -115,6 +115,14 @@ possibilities:
   like to deploy those to players easily.
 - Higher level of abstraction: Expanding the language semantics, to make the
   language more productive.
+  - A prime candidate for this is making the type system dynamically typed, as
+    opposed to untyped.
+    - This shouldn't be too much work, and would enable additional types to be
+      introduced.
+    - The main thing I'm missing is function types. Those would enable a
+      built-in `if` function, to replace the current placeholders.
+    - It would also provide a pathway to the eventual goal to a static type
+      system through gradual typing.
 - Interactivity: This can be realized by defining the language in a separate
   Rust library, and sending the runtime representation into the language
   runtime.
