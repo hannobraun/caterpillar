@@ -36,7 +36,11 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     view! {
-        <div><Functions program=program events=events /></div>
+        <div>
+            <Functions
+                program=program
+                events=events />
+        </div>
     }
 }
 
