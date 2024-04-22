@@ -2,18 +2,24 @@
 
 ## About
 
-The idealistic long-term goal of Caterpillar is to advance the state of the art
-in programming, by creating a more direct, intuitive connection between the
-developer and the program they work on.
+The goal of the Caterpillar project is to create a programming language for
+controlling computers **precisely**, **intuitively**, and **reliably**:
 
-The practical short-term goal is to explore how [interactive programming] can
-help advance this long-term goal.
+- **Precisely:** Provide low-level control over what the computer does, while
+  enabling high-level code via zero-overhead (also called zero-cost)
+  abstractions.
+- **Intuitively:** Create an immediate feedback loop by allowing direct
+  interaction with a running program (this is called interactive programming).
+- **Reliably:** Make whole classes of errors impossible, through the use of a
+  powerful static type system.
+
+Caterpillar is still early-stage and experimental. This goal has not nearly been
+achieved yet. I'm incrementally approaching this long-term vision through a
+series of practical prototypes with specific, short-term goals.
 
 You can find the currently active prototype in the [`capi/` directory](capi/).
 The [`archive/` directory](archive/) contains a number of previous prototypes at
 various levels of completion.
-
-[interactive programming]: https://en.wikipedia.org/wiki/Interactive_programming
 
 ## Design
 
