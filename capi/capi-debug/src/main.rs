@@ -40,9 +40,9 @@ pub fn Debugger(
             <Functions
                 program=program
                 events=events />
-            <DataStack
-                program=program />
         </div>
+        <DataStack
+            program=program />
     }
 }
 
