@@ -11,8 +11,8 @@ controlling computers **precisely**, **intuitively**, and **reliably**:
 - **Intuitively:** Create an immediate feedback loop by allowing direct
   interaction with a running program, as opposed to having to re-compile,
   re-start, and re-find the relevant place in your program every single time.
-- **Reliably:** Make whole classes of errors impossible, through the use of a
-  powerful static type system.
+- **Reliably:** Make whole classes of errors impossible, by using a powerful
+  static type system.
 
 Caterpillar is still early-stage and experimental. This goal has not nearly been
 achieved yet. I'm incrementally approaching this long-term vision through a
