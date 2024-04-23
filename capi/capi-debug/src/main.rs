@@ -40,6 +40,7 @@ pub fn Debugger(
             <Functions
                 program=program
                 events=events />
+            <DataStack />
         </div>
     }
 }
@@ -177,6 +178,13 @@ pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
 
     view! {
         <span class=class>{line}</span>
+    }
+}
+
+#[component]
+pub fn DataStack() -> impl IntoView {
+    view! {
+        <p>Placeholder for data stack</p>
     }
 }
 
