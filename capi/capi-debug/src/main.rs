@@ -184,8 +184,10 @@ pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
 pub fn DataStack() -> impl IntoView {
-    let data_stack = view! {
-        <p>Placeholder for data stack</p>
+    let data_stack = move || {
+        view! {
+            <p>Placeholder for data stack</p>
+        }
     };
 
     view! {
