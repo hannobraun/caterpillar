@@ -195,7 +195,7 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
         );
 
         view! {
-            <p>Placeholder for data stack</p>
+            <p>{format!("{:?}", program.get().evaluator.data_stack)}</p>
         }
     };
 
