@@ -37,8 +37,8 @@ that.
 
 ## Acknowledgements
 
-Thanks go to [Martin Dederer](https://github.com/martindederer) for suggesting
-the name!
+I'd like to thank [Martin Dederer](https://github.com/martindederer) for
+suggesting the name!
 
 ## License
 
