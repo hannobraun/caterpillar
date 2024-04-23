@@ -40,7 +40,8 @@ pub fn Debugger(
             <Functions
                 program=program
                 events=events />
-            <DataStack />
+            <DataStack
+                program=program />
         </div>
     }
 }
@@ -183,8 +184,16 @@ pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn DataStack() -> impl IntoView {
+pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
     let data_stack = move || {
+        // Right now, the server never sends the program while it is running, so
+        // we don't need to handle that case here. But that could change in the
+        // future, and this assertion makes sure we notice.
+        assert!(
+            !program.get().state.is_running(),
+            "Stack can't be up-to-date, if program is running."
+        );
+
         view! {
             <p>Placeholder for data stack</p>
         }
