@@ -9,7 +9,8 @@ controlling computers **precisely**, **intuitively**, and **reliably**:
   enabling high-level code via zero-overhead (also called zero-cost)
   abstractions.
 - **Intuitively:** Create an immediate feedback loop by allowing direct
-  interaction with a running program (this is called interactive programming).
+  interaction with a running program, as opposed to having to re-compile,
+  re-start, and re-find the relevant place in your program every single time.
 - **Reliably:** Make whole classes of errors impossible, through the use of a
   powerful static type system.
 
