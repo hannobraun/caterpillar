@@ -36,6 +36,7 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     view! {
+        <CallStack />
         <div>
             <Functions
                 program=program
@@ -43,6 +44,13 @@ pub fn Debugger(
         </div>
         <DataStack
             program=program />
+    }
+}
+
+#[component]
+pub fn CallStack() -> impl IntoView {
+    view! {
+        <p>"placeholder for call stack"</p>
     }
 }
 
