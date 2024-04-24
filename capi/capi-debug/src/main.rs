@@ -36,7 +36,8 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     view! {
-        <ProgramState />
+        <ProgramState
+            program=program />
         <CallStack />
         <div>
             <Functions
@@ -49,9 +50,9 @@ pub fn Debugger(
 }
 
 #[component]
-pub fn ProgramState() -> impl IntoView {
+pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
     view! {
-        <p>"Placeholder for program state"</p>
+        <p>"Program state: "{format!("{:?}", program.get().state)}</p>
     }
 }
 
