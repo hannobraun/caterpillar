@@ -38,7 +38,8 @@ pub fn Debugger(
     view! {
         <ProgramState
             program=program />
-        <CallStack />
+        <CallStack
+            program=program />
         <div>
             <Functions
                 program=program
@@ -57,9 +58,9 @@ pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
 }
 
 #[component]
-pub fn CallStack() -> impl IntoView {
+pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
     view! {
-        <p>"placeholder for call stack"</p>
+        <p>{format!("{:?}", program.get().evaluator.call_stack)}</p>
     }
 }
 
