@@ -53,7 +53,7 @@ pub fn Debugger(
 #[component]
 pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
     view! {
-        <p>"Program state: "{format!("{:?}", program.get().state)}</p>
+        <p>"Program state: "{move || format!("{:?}", program.get().state)}</p>
     }
 }
 
