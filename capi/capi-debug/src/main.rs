@@ -60,7 +60,7 @@ pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
 #[component]
 pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
     view! {
-        <p>{format!("{:?}", program.get().evaluator.call_stack)}</p>
+        <p>{move || format!("{:?}", program.get().evaluator.call_stack)}</p>
     }
 }
 
