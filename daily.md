@@ -3,6 +3,26 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-24
+
+I've talked about the platform concept before, and how Caterpillar code will be
+sandboxed. Code you call will be able to do very little, unless you explicitly
+provide capabilities as arguments.
+
+In that context I wonder, would it be practical to make Caterpillar [total] by
+default? Then you could be sure that a function you call always terminates,
+which protects against bugs and restricts what malicious code can do. A function
+that needs it, could accept an argument (which could be a built-in function)
+that allows unrestricted recursion, unlocking full Turing-completeness.
+
+This was inspired by hearing about [Dhall] on the Software Unscripted podcast.
+I've never worked with Dhall or another total programming language, so I don't
+have a good intuition for what's possible. But this is something to keep in
+mind, for sure.
+
+[total]: https://en.wikipedia.org/wiki/Total_functional_programming
+[Dhall]: https://dhall-lang.org/
+
 ## 2024-04-23
 
 I've been talking about how to step through Caterpillar programs, forward and
