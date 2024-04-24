@@ -123,6 +123,8 @@ possibilities:
       built-in `if` function, to replace the current placeholders.
     - It would also provide a pathway to the eventual goal to a static type
       system through gradual typing.
+  - Another good option would be to introduce variables, to replace the tedious
+    stack manipulation that the language currently requires.
 - Interactivity: This can be realized by defining the language in a separate
   Rust library, and sending the runtime representation into the language
   runtime.
