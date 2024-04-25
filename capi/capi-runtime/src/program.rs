@@ -37,11 +37,8 @@ impl Program {
     /// This shouldn't matter, since users can't set breakpoints there, nor do
     /// those instructions produce errors. So in cases where you actually need a
     /// location, this should return one.
-    pub fn location(&self) -> Option<LineLocation> {
-        self.source_map
-            .inner
-            .get(&self.evaluator.next_instruction)
-            .cloned()
+    pub fn location(&self, instruction: usize) -> Option<LineLocation> {
+        self.source_map.inner.get(&instruction).cloned()
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
@@ -53,7 +50,7 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let location = self.location()?;
+        let location = self.location(self.evaluator.next_instruction)?;
 
         let function = self
             .functions
