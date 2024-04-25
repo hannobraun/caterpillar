@@ -47,6 +47,16 @@ pub fn run(
             let previous_state = program.state.clone();
 
             loop {
+                if let ProgramState::Error(_) = program.state {
+                    // If there's an error, never run the program again. As of
+                    // this writing, that's it, and for now that's fine.
+                    //
+                    // Eventually, it would be great if we could get out of this
+                    // by resetting the program, or rewinding the builtin that
+                    // caused the error.
+                    break;
+                }
+
                 match program.step(&mut mem) {
                     ProgramState::Running => {}
                     ProgramState::Paused { .. } => {
