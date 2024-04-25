@@ -1,10 +1,12 @@
 #![allow(unused)]
 
+use crate::data_stack::PopFromEmptyStack;
+
 use super::data_stack::DataStack;
 
 pub fn add(data_stack: &mut DataStack) -> Result {
-    let b = data_stack.pop().unwrap();
-    let a = data_stack.pop().unwrap();
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
 
     let Some(c) = a.checked_add(b) else {
         return Err(Error::IntegerOverflow);
@@ -16,7 +18,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn copy(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop().unwrap();
+    let mut i = data_stack.pop()?;
 
     data_stack.save(i);
     let a = data_stack.clone();
@@ -28,7 +30,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn drop(data_stack: &mut DataStack) -> Result {
-    let i = data_stack.pop().unwrap();
+    let i = data_stack.pop()?;
 
     data_stack.save(i);
     data_stack.pop();
@@ -38,8 +40,8 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn mul(data_stack: &mut DataStack) -> Result {
-    let b = data_stack.pop().unwrap();
-    let a = data_stack.pop().unwrap();
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
 
     let c = a * b;
 
@@ -49,8 +51,8 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn place(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop().unwrap();
-    let mut a = data_stack.pop().unwrap();
+    let mut i = data_stack.pop()?;
+    let mut a = data_stack.pop()?;
 
     data_stack.save(i);
     data_stack.push(a);
@@ -60,8 +62,8 @@ pub fn place(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
-    let value = data_stack.pop().unwrap();
-    let addr = data_stack.pop().unwrap();
+    let value = data_stack.pop()?;
+    let addr = data_stack.pop()?;
 
     let value: u8 = value.try_into().unwrap();
     mem[addr] = value;
@@ -72,8 +74,8 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
 }
 
 pub fn sub(data_stack: &mut DataStack) -> Result {
-    let b = data_stack.pop().unwrap();
-    let a = data_stack.pop().unwrap();
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
 
     let c = a.wrapping_sub(b);
 
@@ -83,8 +85,8 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn swap(data_stack: &mut DataStack) -> Result {
-    let b = data_stack.pop().unwrap();
-    let a = data_stack.pop().unwrap();
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
 
     data_stack.push(b);
     data_stack.push(a);
@@ -93,10 +95,10 @@ pub fn swap(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn take(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop().unwrap();
+    let mut i = data_stack.pop()?;
 
     data_stack.save(i);
-    let a = data_stack.pop().unwrap();
+    let a = data_stack.pop()?;
     data_stack.restore();
 
     data_stack.push(a);
@@ -118,4 +120,7 @@ pub type Result = std::result::Result<(), Error>;
 pub enum Error {
     #[error("Integer overflow")]
     IntegerOverflow,
+
+    #[error(transparent)]
+    PopFromEmptyStack(#[from] PopFromEmptyStack),
 }
