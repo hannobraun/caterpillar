@@ -97,6 +97,7 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
+            EvaluatorState::Error(err) => panic!("{err}"),
         }
     }
 }
