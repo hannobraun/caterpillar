@@ -139,9 +139,9 @@ pub fn LineWithBreakpoint(
 #[component]
 pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
     let breakpoint_color = if expression.breakpoint {
-        "text-red-600"
+        "text-green-600"
     } else {
-        "text-red-300"
+        "text-green-300"
     };
 
     let class = format!("mr-1 {breakpoint_color}");
