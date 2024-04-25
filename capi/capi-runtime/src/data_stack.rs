@@ -17,8 +17,8 @@ impl DataStack {
         self.values.push(value);
     }
 
-    pub fn pop(&mut self) -> Option<usize> {
-        self.values.pop()
+    pub fn pop(&mut self) -> Result<usize, PopFromEmptyStack> {
+        self.values.pop().ok_or(PopFromEmptyStack)
     }
 
     pub fn num_values(&self) -> usize {
@@ -38,3 +38,6 @@ impl DataStack {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct PopFromEmptyStack;
