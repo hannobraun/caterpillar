@@ -20,8 +20,8 @@ works!
 
 It would sure be great for someone with an eye for design and a preference for
 frontend work to show up and save me right about now, but I guess I'm on my own
-for the time being. Oh well. Time to figure out if I can use this to make sense
-of that broken code I have sitting in a local branch.
+for the time being. Oh well. Time to figure out if I can use this thing to make
+sense of that broken code I have sitting in a local branch.
 
 ## 2024-04-24
 
