@@ -39,5 +39,6 @@ impl DataStack {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
+#[error("Tried to pop value from empty stack")]
 pub struct PopFromEmptyStack;
