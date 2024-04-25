@@ -29,11 +29,15 @@ impl Program {
         state
     }
 
+    /// Get `LineLocation` for current instruction
+    ///
+    /// This might return `None`, as not all instructions have locations in the
+    /// code. Return instructions are an example of that.
+    ///
+    /// This shouldn't matter, since users can't set breakpoints there, nor do
+    /// those instructions produce errors. So in cases where you actually need a
+    /// location, this should return one.
     pub fn location(&self) -> Option<LineLocation> {
-        // Not all instructions have a location in the source. Return
-        // instructions, for example, don't. That doesn't matter, because the
-        // debugger won't show those, and the user won't expect to set
-        // breakpoints for them.
         self.source_map
             .inner
             .get(&self.evaluator.next_instruction)
