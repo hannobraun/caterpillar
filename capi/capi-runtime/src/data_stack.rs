@@ -17,8 +17,8 @@ impl DataStack {
         self.values.push(value);
     }
 
-    pub fn pop(&mut self) -> usize {
-        self.values.pop().unwrap()
+    pub fn pop(&mut self) -> Option<usize> {
+        self.values.pop()
     }
 
     pub fn num_values(&self) -> usize {
@@ -27,7 +27,7 @@ impl DataStack {
 
     pub fn save(&mut self, num: usize) {
         for _ in 0..num {
-            let value = self.pop();
+            let value = self.pop().unwrap();
             self.saved.push(value);
         }
     }

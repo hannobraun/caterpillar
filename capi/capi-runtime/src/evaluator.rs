@@ -52,7 +52,7 @@ impl Evaluator {
                 self.next_instruction = return_address;
             }
             Instruction::ReturnIfNonZero => {
-                let a = self.data_stack.pop();
+                let a = self.data_stack.pop().unwrap();
 
                 if a != 0 {
                     // Here we just duplicate the code from the regular return
@@ -70,7 +70,7 @@ impl Evaluator {
                 }
             }
             Instruction::ReturnIfZero => {
-                let a = self.data_stack.pop();
+                let a = self.data_stack.pop().unwrap();
 
                 if a == 0 {
                     // Here we just duplicate the code from the regular return
