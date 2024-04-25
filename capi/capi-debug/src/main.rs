@@ -187,7 +187,7 @@ pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
         ProgramState::Paused { location }
             if location == expression.location =>
         {
-            "bg-red-300"
+            "bg-green-300"
         }
         _ => "",
     };
