@@ -59,8 +59,24 @@ pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
 
 #[component]
 pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
+    let addresses = move || {
+        program
+            .get()
+            .evaluator
+            .call_stack
+            .into_iter()
+            .map(|address| {
+                view! {
+                    <li>{address}</li>
+                }
+            })
+            .collect_view()
+    };
+
     view! {
-        <p>{move || format!("{:?}", program.get().evaluator.call_stack)}</p>
+        <ol>
+            {addresses}
+        </ol>
     }
 }
 
