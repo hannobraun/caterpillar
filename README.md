@@ -1,5 +1,7 @@
 # Caterpillar
 
+[**Daily Thoughts**](daily.md)
+
 ## About
 
 The goal of the Caterpillar project is to create a programming language for
