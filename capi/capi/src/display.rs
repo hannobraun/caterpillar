@@ -59,6 +59,9 @@ pub fn run(
                         );
                         break;
                     }
+                    ProgramState::Error(_) => {
+                        break;
+                    }
                 }
             }
 

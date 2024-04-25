@@ -1,6 +1,6 @@
 use crate::{
-    evaluator::EvaluatorState, source_map::SourceMap, Evaluator, Functions,
-    LineLocation,
+    builtins, evaluator::EvaluatorState, source_map::SourceMap, Evaluator,
+    Functions, LineLocation,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -80,6 +80,8 @@ pub enum ProgramState {
 
     #[default]
     Finished,
+
+    Error(builtins::Error),
 }
 
 impl ProgramState {
@@ -97,7 +99,7 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Error(err) => panic!("{err}"),
+            EvaluatorState::Error(err) => Self::Error(err),
         }
     }
 }
