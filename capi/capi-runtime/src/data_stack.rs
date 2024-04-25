@@ -39,6 +39,14 @@ impl DataStack {
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
 #[error("Tried to pop value from empty stack")]
 pub struct PopFromEmptyStack;
