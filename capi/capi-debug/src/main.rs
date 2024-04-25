@@ -74,9 +74,11 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
     };
 
     view! {
-        <ol>
-            {addresses}
-        </ol>
+        <div>
+            <ol>
+                {addresses}
+            </ol>
+        </div>
     }
 }
 
