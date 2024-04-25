@@ -75,6 +75,7 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
 
     view! {
         <div>
+            <h2>"Call stack:"</h2>
             <ol>
                 {addresses}
             </ol>
