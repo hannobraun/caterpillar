@@ -21,17 +21,23 @@ impl Evaluator {
         self.next_instruction += 1;
 
         match instruction {
-            Instruction::CallBuiltin { name } => match name.as_str() {
-                "add" => builtins::add(&mut self.data_stack),
-                "copy" => builtins::copy(&mut self.data_stack),
-                "drop" => builtins::drop(&mut self.data_stack),
-                "mul" => builtins::mul(&mut self.data_stack),
-                "place" => builtins::place(&mut self.data_stack),
-                "sub" => builtins::sub(&mut self.data_stack),
-                "store" => builtins::store(&mut self.data_stack, mem),
-                "take" => builtins::take(&mut self.data_stack),
-                _ => panic!("Unknown builtin: `{name}`"),
-            },
+            Instruction::CallBuiltin { name } => {
+                let result = match name.as_str() {
+                    "add" => builtins::add(&mut self.data_stack),
+                    "copy" => builtins::copy(&mut self.data_stack),
+                    "drop" => builtins::drop(&mut self.data_stack),
+                    "mul" => builtins::mul(&mut self.data_stack),
+                    "place" => builtins::place(&mut self.data_stack),
+                    "sub" => builtins::sub(&mut self.data_stack),
+                    "store" => builtins::store(&mut self.data_stack, mem),
+                    "take" => builtins::take(&mut self.data_stack),
+                    _ => panic!("Unknown builtin: `{name}`"),
+                };
+
+                if let Err(err) = result {
+                    panic!("{err}");
+                }
+            }
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve(name);
                 self.call_stack.push(self.next_instruction);
