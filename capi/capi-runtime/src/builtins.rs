@@ -6,7 +6,9 @@ pub fn add(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop();
     let a = data_stack.pop();
 
-    let c = a + b;
+    let Some(c) = a.checked_add(b) else {
+        return Err(Error::IntegerOverflow);
+    };
 
     data_stack.push(c);
 
@@ -105,4 +107,7 @@ pub fn take(data_stack: &mut DataStack) -> Result {
 pub type Result = std::result::Result<(), Error>;
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {}
+pub enum Error {
+    #[error("Integer overflow")]
+    IntegerOverflow,
+}
