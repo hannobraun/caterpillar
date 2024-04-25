@@ -75,9 +75,7 @@ pub fn run(
                 }
             }
 
-            if program.state != previous_state
-                && (program.state.is_paused() || previous_state.is_paused())
-            {
+            if program.state != previous_state {
                 updates.send(program.clone()).unwrap();
             }
 
