@@ -106,7 +106,15 @@ pub fn take(data_stack: &mut DataStack) -> Result {
 
 pub type Result = std::result::Result<(), Error>;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
 pub enum Error {
     #[error("Integer overflow")]
     IntegerOverflow,
