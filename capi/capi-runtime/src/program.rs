@@ -63,7 +63,9 @@ impl Program {
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
         if let Some(location) = self.breakpoint_set_for_next_instruction() {
-            return ProgramState::Paused { location };
+            let address =
+                self.source_map.location_to_address(&location).unwrap();
+            return ProgramState::Paused { address, location };
         }
 
         self.evaluator.step(mem).into()
@@ -101,6 +103,8 @@ pub enum ProgramState {
     Running,
 
     Paused {
+        address: InstructionAddress,
+
         /// The location at which the program is paused
         location: SourceLocation,
     },
