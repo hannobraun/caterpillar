@@ -151,8 +151,12 @@ pub fn LineWithBreakpoint(
 ) -> impl IntoView {
     view! {
         <li class="ml-8">
-            <Breakpoint expression=expression.clone() events=events />
-            <Line state=state expression=expression />
+            <Breakpoint
+                expression=expression.clone()
+                events=events />
+            <Line
+                state=state
+                expression=expression />
         </li>
     }
 }
