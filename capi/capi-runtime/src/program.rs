@@ -39,7 +39,10 @@ impl Program {
     /// stacks. So in cases where you actually need a location, this should
     /// return one.
     pub fn location(&self, instruction: usize) -> Option<LineLocation> {
-        self.source_map.inner.get(&instruction).cloned()
+        self.source_map
+            .address_to_location
+            .get(&instruction)
+            .cloned()
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {

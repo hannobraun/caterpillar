@@ -22,7 +22,9 @@ pub fn compile(
         };
 
         let address = code.push(instruction);
-        source_map.inner.insert(address, expression.location);
+        source_map
+            .address_to_location
+            .insert(address, expression.location);
     }
 
     code.push(Instruction::Return);
