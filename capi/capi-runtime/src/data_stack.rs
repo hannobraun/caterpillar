@@ -1,6 +1,6 @@
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DataStack {
-    values: Vec<usize>,
+    values: Vec<Value>,
     saved: Vec<usize>,
 }
 
@@ -10,15 +10,18 @@ impl DataStack {
     }
 
     pub fn clone(&mut self) -> usize {
-        self.values.last().copied().unwrap()
+        self.values.last().copied().unwrap().0
     }
 
     pub fn push(&mut self, value: usize) {
-        self.values.push(value);
+        self.values.push(Value(value));
     }
 
     pub fn pop(&mut self) -> Result<usize, PopFromEmptyStack> {
-        self.values.pop().ok_or(PopFromEmptyStack)
+        self.values
+            .pop()
+            .ok_or(PopFromEmptyStack)
+            .map(|value| value.0)
     }
 
     pub fn num_values(&self) -> usize {
