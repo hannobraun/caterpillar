@@ -1,3 +1,5 @@
+use crate::InstructionAddress;
+
 use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
 };
@@ -97,20 +99,6 @@ impl Evaluator {
         EvaluatorState::Running
     }
 }
-
-#[derive(
-    Copy,
-    Clone,
-    Debug,
-    Default,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub struct InstructionAddress(pub usize);
 
 impl InstructionAddress {
     pub fn inc(&mut self) {

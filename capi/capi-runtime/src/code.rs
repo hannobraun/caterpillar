@@ -1,5 +1,3 @@
-use crate::InstructionAddress;
-
 use super::{compiler::Instruction, symbols::Symbols};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -19,3 +17,17 @@ impl Code {
         InstructionAddress(address)
     }
 }
+
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
+pub struct InstructionAddress(pub usize);

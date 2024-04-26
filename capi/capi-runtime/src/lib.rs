@@ -12,8 +12,9 @@ mod symbols;
 mod syntax;
 
 pub use self::{
+    code::InstructionAddress,
     debug::{DebugEvent, LineLocation},
-    evaluator::{Evaluator, InstructionAddress},
+    evaluator::Evaluator,
     functions::{Function, Functions},
     program::{Program, ProgramState},
     source::Source,
