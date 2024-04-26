@@ -7,7 +7,6 @@ edition = "2021"
 anyhow = "*"
 futures = "*"
 pixels = "*"
-postcard = "*"
 serde = "*"
 serde_json = "*"
 tower = "*"
@@ -19,6 +18,9 @@ features = ["ws"]
 
 [dependencies.capi-runtime]
 path = "../capi-runtime"
+
+[dependencies.postcard]
+version = "*"
 
 [dependencies.tokio]
 version = "*"

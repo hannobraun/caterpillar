@@ -8,7 +8,6 @@ console_error_panic_hook = "*"
 futures = "*"
 gloo = "*"
 log = "*"
-postcard = "*"
 serde_json = "*"
 web-sys = "*"
 
@@ -22,6 +21,9 @@ features = ["color"]
 [dependencies.leptos]
 version = "*"
 features = ["csr"]
+
+[dependencies.postcard]
+version = "*"
 
 [dependencies.reqwest]
 version = "*"
