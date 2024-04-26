@@ -38,10 +38,13 @@ impl Program {
     /// those instructions produce errors, nor should they show up in call
     /// stacks. So in cases where you actually need a location, this should
     /// return one.
-    pub fn location(&self, instruction: usize) -> Option<LineLocation> {
+    pub fn location(
+        &self,
+        instruction: InstructionAddress,
+    ) -> Option<LineLocation> {
         self.source_map
             .address_to_location
-            .get(&instruction)
+            .get(&instruction.0)
             .cloned()
     }
 
@@ -54,7 +57,7 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let next_location = self.location(self.evaluator.next_instruction.0)?;
+        let next_location = self.location(self.evaluator.next_instruction)?;
 
         let function = self
             .functions

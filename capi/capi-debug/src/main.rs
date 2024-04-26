@@ -1,5 +1,6 @@
 use capi_runtime::{
-    DebugEvent, Expression, LineLocation, Program, ProgramState,
+    DebugEvent, Expression, InstructionAddress, LineLocation, Program,
+    ProgramState,
 };
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -66,7 +67,7 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
             .call_stack
             .into_iter()
             .filter_map(|address| {
-                let location = program.get().location(address.0)?;
+                let location = program.get().location(address)?;
 
                 Some(view! {
                     <li>{format!("{location:?}")}</li>
@@ -243,7 +244,10 @@ pub fn Line(
                 "bg-green-300"
             }
             ProgramState::Error { instruction, .. }
-                if program.get().location(instruction).as_ref()
+                if program
+                    .get()
+                    .location(InstructionAddress(instruction))
+                    .as_ref()
                     == Some(&expression.location) =>
             {
                 "bg-red-300"
