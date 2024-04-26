@@ -5,6 +5,7 @@ use crate::{InstructionAddress, SourceLocation};
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct SourceMap {
     address_to_location: BTreeMap<InstructionAddress, SourceLocation>,
+    location_to_address: BTreeMap<SourceLocation, InstructionAddress>,
 }
 
 impl SourceMap {
@@ -13,7 +14,8 @@ impl SourceMap {
         address: InstructionAddress,
         location: SourceLocation,
     ) {
-        self.address_to_location.insert(address, location);
+        self.address_to_location.insert(address, location.clone());
+        self.location_to_address.insert(location, address);
     }
 
     /// Get `LineLocation` for the provided `InstructionAddress`
