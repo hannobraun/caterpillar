@@ -124,7 +124,7 @@ pub fn Function(
         .map(|expression| {
             view! {
                 <LineWithBreakpoint
-                    state=program.get().state
+                    program=program
                     expression=expression
                     events=events.clone() />
             }
@@ -145,7 +145,7 @@ pub fn Function(
 
 #[component]
 pub fn LineWithBreakpoint(
-    state: ProgramState,
+    program: ReadSignal<Program>,
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
@@ -155,7 +155,7 @@ pub fn LineWithBreakpoint(
                 expression=expression.clone()
                 events=events />
             <Line
-                state=state
+                state=program.get().state
                 expression=expression />
         </li>
     }
