@@ -17,7 +17,8 @@ impl Evaluator {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
-        let instruction = &self.code.instructions[self.next_instruction];
+        let current_instruction = self.next_instruction;
+        let instruction = &self.code.instructions[current_instruction];
         self.next_instruction += 1;
 
         match instruction {
