@@ -204,7 +204,10 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
-                location: SourceLocation { function, line },
+                location: SourceLocation {
+                    function,
+                    index: line,
+                },
             },
             events.clone(),
         ));
@@ -222,7 +225,7 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
         <span
             class=class
             data-function=expression.location.function
-            data-line=expression.location.line
+            data-line=expression.location.index
             on:click=toggle_breakpoint>
             {'⦿'}
         </span>

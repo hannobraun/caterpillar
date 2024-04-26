@@ -26,7 +26,11 @@ impl Program {
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::ToggleBreakpoint {
-                location: SourceLocation { function, line },
+                location:
+                    SourceLocation {
+                        function,
+                        index: line,
+                    },
                 ..
             } => {
                 let line: usize = line.try_into().unwrap();
