@@ -9,8 +9,8 @@ impl DataStack {
         Self::default()
     }
 
-    pub fn clone(&mut self) -> usize {
-        self.values.last().copied().unwrap().0
+    pub fn clone(&mut self) -> Value {
+        self.values.last().copied().unwrap()
     }
 
     pub fn push(&mut self, value: usize) {

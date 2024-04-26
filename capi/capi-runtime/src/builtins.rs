@@ -24,7 +24,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     let a = data_stack.clone();
     data_stack.restore();
 
-    data_stack.push(a);
+    data_stack.push(a.0);
 
     Ok(())
 }
