@@ -8,6 +8,14 @@ pub struct SourceMap {
 }
 
 impl SourceMap {
+    pub fn define_mapping(
+        &mut self,
+        address: InstructionAddress,
+        location: LineLocation,
+    ) {
+        self.address_to_location.insert(address, location);
+    }
+
     /// Get `LineLocation` for the provided `InstructionAddress`
     ///
     /// This might return `None`, as not all instructions have locations in the
