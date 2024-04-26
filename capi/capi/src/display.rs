@@ -1,4 +1,4 @@
-use capi_runtime::{Program, ProgramState};
+use capi_runtime::{Program, ProgramState, Value};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     event::{Event, KeyEvent, WindowEvent},
@@ -40,7 +40,7 @@ pub fn run(
             }
 
             if let ProgramState::Finished = program.state {
-                program.push([TILES_PER_AXIS; 2]);
+                program.push([Value(TILES_PER_AXIS); 2]);
                 program.reset();
             }
 
