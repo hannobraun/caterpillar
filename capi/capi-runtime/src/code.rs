@@ -11,8 +11,12 @@ impl Code {
         Self::default()
     }
 
+    pub fn next_address(&self) -> InstructionAddress {
+        InstructionAddress(self.instructions.len())
+    }
+
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = InstructionAddress(self.instructions.len());
+        let address = self.next_address();
         self.instructions.push(instruction);
         address
     }
