@@ -43,7 +43,9 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
-    let c = a.0 * b.0;
+    let Some(c) = a.0.checked_mul(b.0) else {
+        return Err(Error::IntegerOverflow);
+    };
 
     data_stack.push(Value(c));
 
