@@ -86,16 +86,6 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
     Ok(())
 }
 
-pub fn swap(data_stack: &mut DataStack) -> Result {
-    let b = data_stack.pop()?;
-    let a = data_stack.pop()?;
-
-    data_stack.push(b);
-    data_stack.push(a);
-
-    Ok(())
-}
-
 pub fn take(data_stack: &mut DataStack) -> Result {
     let mut i = data_stack.pop()?;
 
