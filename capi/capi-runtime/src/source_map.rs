@@ -6,3 +6,21 @@ use crate::{InstructionAddress, LineLocation};
 pub struct SourceMap {
     pub address_to_location: BTreeMap<InstructionAddress, LineLocation>,
 }
+
+impl SourceMap {
+    /// Get `LineLocation` for the provided `InstructionAddress`
+    ///
+    /// This might return `None`, as not all instructions have locations in the
+    /// code. Return instructions are an example of that.
+    ///
+    /// This shouldn't matter, since users can't set breakpoints there, nor do
+    /// those instructions produce errors, nor should they show up in a call
+    /// stack. So in cases where you actually need a location, this should
+    /// return one.
+    pub fn address_to_location(
+        &self,
+        address: InstructionAddress,
+    ) -> Option<LineLocation> {
+        self.address_to_location.get(&address).cloned()
+    }
+}

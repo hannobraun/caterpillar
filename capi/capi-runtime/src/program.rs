@@ -42,7 +42,7 @@ impl Program {
         &self,
         address: InstructionAddress,
     ) -> Option<LineLocation> {
-        self.source_map.address_to_location.get(&address).cloned()
+        self.source_map.address_to_location(address)
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
