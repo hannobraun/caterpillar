@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use super::{compiler::Instruction, symbols::Symbols};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -43,5 +45,14 @@ impl InstructionAddress {
 
     pub fn to_usize(self) -> usize {
         self.0.try_into().unwrap()
+    }
+}
+
+impl FromStr for InstructionAddress {
+    type Err = <u32 as FromStr>::Err;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let address = u32::from_str(s)?;
+        Ok(Self(address))
     }
 }
