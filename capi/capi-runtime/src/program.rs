@@ -103,7 +103,9 @@ pub enum ProgramState {
     #[default]
     Finished,
 
-    Error(builtins::Error),
+    Error {
+        err: builtins::Error,
+    },
 }
 
 impl ProgramState {
