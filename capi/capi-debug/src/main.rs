@@ -211,12 +211,14 @@ pub fn Line(
     program: ReadSignal<Program>,
     expression: Expression,
 ) -> impl IntoView {
-    let state = program.get().state;
-    let location = program.get().current_location();
+    let class = {
+        let state = program.get().state;
+        let location = program.get().current_location();
 
-    let class = match (state, location == Some(expression.location)) {
-        (ProgramState::Paused { .. }, true) => "bg-green-300",
-        _ => "",
+        match (state, location == Some(expression.location)) {
+            (ProgramState::Paused { .. }, true) => "bg-green-300",
+            _ => "",
+        }
     };
     let line = format!("{}", expression.kind);
 
