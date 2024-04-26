@@ -3,6 +3,23 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-26
+
+My primary language for the last 10+ years has been Rust, which has zero-cost
+abstractions (I prefer the term "zero-overhead"). An abstraction is zero-cost
+(or zero-overhead), if you couldn't implement it any faster "by hand", and if it
+doesn't impose a performance cost on code that doesn't use it.
+
+While I rarely, if ever, use Rust to its full potential in terms of performance,
+I very much appreciate that concept. It ensures that the language can be used in
+many different environments. Heavier abstractions, like garbage collection, can
+rule out many microcontroller or WebAssembly use cases, for example.
+
+It is unlikely that Caterpillar will support as diverse a set of use cases as
+Rust does. But I don't want to make design decisions that rule out whole classes
+of those outright. And for that reason, I absolutely want to implement the
+concept of zero-overhead abstractions in Caterpillar.
+
 ## 2024-04-25
 
 The core questions I want to answer with the current prototype are a) whether
