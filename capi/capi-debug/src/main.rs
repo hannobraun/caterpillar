@@ -244,8 +244,6 @@ pub fn Breakpoint(
         <span
             class=class
             data-address=address
-            data-function=expression.location.function
-            data-line=expression.location.index
             on:click=toggle_breakpoint>
             {'⦿'}
         </span>
