@@ -18,7 +18,7 @@ impl Evaluator {
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
-        self.next_instruction.0 += 1;
+        self.next_instruction.inc();
 
         let instruction = &self.code.instructions[current_instruction.0];
 
@@ -100,6 +100,12 @@ impl Evaluator {
 
 #[derive(Copy, Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct InstructionAddress(pub usize);
+
+impl InstructionAddress {
+    pub fn inc(&mut self) {
+        self.0 += 1;
+    }
+}
 
 #[must_use]
 pub enum EvaluatorState {
