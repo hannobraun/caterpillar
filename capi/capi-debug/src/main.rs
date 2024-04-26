@@ -220,6 +220,12 @@ pub fn Line(
             {
                 "bg-green-300"
             }
+            ProgramState::Error { instruction, .. }
+                if program.get().location(instruction).as_ref()
+                    == Some(&expression.location) =>
+            {
+                "bg-red-300"
+            }
             _ => "",
         };
 
