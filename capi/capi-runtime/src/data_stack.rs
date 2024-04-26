@@ -1,3 +1,5 @@
+use core::fmt;
+
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DataStack {
     values: Vec<Value>,
@@ -50,6 +52,12 @@ impl DataStack {
     serde::Serialize,
 )]
 pub struct Value(pub usize);
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
 
 #[derive(
     Clone,
