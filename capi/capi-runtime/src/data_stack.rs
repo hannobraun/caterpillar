@@ -17,11 +17,8 @@ impl DataStack {
         self.values.push(value);
     }
 
-    pub fn pop(&mut self) -> Result<usize, PopFromEmptyStack> {
-        self.values
-            .pop()
-            .ok_or(PopFromEmptyStack)
-            .map(|value| value.0)
+    pub fn pop(&mut self) -> Result<Value, PopFromEmptyStack> {
+        self.values.pop().ok_or(PopFromEmptyStack)
     }
 
     pub fn num_values(&self) -> usize {
@@ -31,7 +28,7 @@ impl DataStack {
     pub fn save(&mut self, num: usize) {
         for _ in 0..num {
             let value = self.pop().unwrap();
-            self.saved.push(value);
+            self.saved.push(value.0);
         }
     }
 

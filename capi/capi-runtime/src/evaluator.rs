@@ -64,7 +64,7 @@ impl Evaluator {
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
 
-                if a != 0 {
+                if a != Value(0) {
                     // Here we just duplicate the code from the regular return
                     // instruction above, which isn't great. Getting rid of the
                     // duplication completely isn't easy though, due to the
@@ -82,7 +82,7 @@ impl Evaluator {
             Instruction::ReturnIfZero => {
                 let a = self.data_stack.pop().unwrap();
 
-                if a == 0 {
+                if a == Value(0) {
                     // Here we just duplicate the code from the regular return
                     // instruction above, which isn't great. Getting rid of the
                     // duplication completely isn't easy though, due to the
