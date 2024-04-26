@@ -298,11 +298,11 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                 };
 
                 let new_program: Program = match msg {
-                    Message::Text(text) => {
-                        panic!("Unexpectedly received text message: {text}");
-                    }
                     Message::Bytes(bytes) => {
                         serde_json::from_slice(&bytes).unwrap()
+                    }
+                    Message::Text(text) => {
+                        panic!("Unexpectedly received text message: {text}");
                     }
                 };
 
