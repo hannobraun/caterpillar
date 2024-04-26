@@ -211,7 +211,7 @@ pub fn Line(
     program: ReadSignal<Program>,
     expression: Expression,
 ) -> impl IntoView {
-    let class = {
+    let class = move || {
         let state = program.get().state;
         let location = program.get().current_location();
 
