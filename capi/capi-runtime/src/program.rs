@@ -40,12 +40,9 @@ impl Program {
     /// return one.
     pub fn location(
         &self,
-        instruction: InstructionAddress,
+        address: InstructionAddress,
     ) -> Option<LineLocation> {
-        self.source_map
-            .address_to_location
-            .get(&instruction)
-            .cloned()
+        self.source_map.address_to_location.get(&address).cloned()
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
