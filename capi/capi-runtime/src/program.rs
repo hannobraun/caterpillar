@@ -27,6 +27,7 @@ impl Program {
         match event {
             DebugEvent::ToggleBreakpoint {
                 location: LineLocation { function, line },
+                ..
             } => {
                 let line: usize = line.try_into().unwrap();
 
