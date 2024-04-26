@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{source_map::SourceMap, syntax::Expression};
+use crate::{source_map::SourceMap, syntax::Expression, Value};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -15,7 +15,9 @@ pub fn compile(
 
     for expression in syntax {
         let instruction = match expression.kind {
-            ExpressionKind::Value(value) => Instruction::PushValue(value),
+            ExpressionKind::Value(value) => {
+                Instruction::PushValue(Value(value))
+            }
             ExpressionKind::Word { name } => {
                 word_to_instruction(name, functions)
             }
@@ -66,7 +68,7 @@ fn word_to_instruction(
 pub enum Instruction {
     CallBuiltin { name: String },
     CallFunction { name: String },
-    PushValue(usize),
+    PushValue(Value),
     Return,
     ReturnIfNonZero,
     ReturnIfZero,

@@ -51,9 +51,7 @@ impl Evaluator {
                 self.call_stack.push(self.next_instruction);
                 self.next_instruction = address;
             }
-            Instruction::PushValue(value) => {
-                self.data_stack.push(Value(*value))
-            }
+            Instruction::PushValue(value) => self.data_stack.push(*value),
             Instruction::Return => {
                 let Some(return_address) = self.call_stack.pop() else {
                     return EvaluatorState::Finished;
