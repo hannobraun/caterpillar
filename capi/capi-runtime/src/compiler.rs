@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{source_map::SourceMap, syntax::Expression};
+use crate::{source_map::SourceMap, syntax::Expression, InstructionAddress};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -24,7 +24,7 @@ pub fn compile(
         let address = code.push(instruction);
         source_map
             .address_to_location
-            .insert(address, expression.location);
+            .insert(InstructionAddress(address), expression.location);
     }
 
     code.push(Instruction::Return);

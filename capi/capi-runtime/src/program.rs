@@ -44,7 +44,7 @@ impl Program {
     ) -> Option<LineLocation> {
         self.source_map
             .address_to_location
-            .get(&instruction.0)
+            .get(&instruction)
             .cloned()
     }
 
