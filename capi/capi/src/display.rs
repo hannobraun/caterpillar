@@ -47,7 +47,7 @@ pub fn run(
             let previous_state = program.state.clone();
 
             loop {
-                if let ProgramState::Error(_) = program.state {
+                if let ProgramState::Error { .. } = program.state {
                     // If there's an error, never run the program again. As of
                     // this writing, that's it, and for now that's fine.
                     //
@@ -69,7 +69,7 @@ pub fn run(
                         );
                         break;
                     }
-                    ProgramState::Error(_) => {
+                    ProgramState::Error { .. } => {
                         break;
                     }
                 }
