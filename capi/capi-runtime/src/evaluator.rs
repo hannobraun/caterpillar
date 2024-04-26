@@ -20,7 +20,7 @@ impl Evaluator {
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
-        self.next_instruction.inc();
+        self.next_instruction.increment();
 
         let instruction = &self.code.instructions[current_instruction.0];
 

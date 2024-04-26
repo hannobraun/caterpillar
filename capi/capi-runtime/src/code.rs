@@ -37,7 +37,7 @@ impl Code {
 pub struct InstructionAddress(pub usize);
 
 impl InstructionAddress {
-    pub fn inc(&mut self) {
+    pub fn increment(&mut self) {
         self.0 += 1;
     }
 }
