@@ -24,7 +24,23 @@ impl Program {
     }
 
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
-        self.functions.apply_debug_event(event);
+        match event {
+            DebugEvent::ToggleBreakpoint {
+                location: LineLocation { function, line },
+            } => {
+                let line: usize = line.try_into().unwrap();
+
+                let function = self
+                    .functions
+                    .inner
+                    .iter_mut()
+                    .find(|f| f.name == function)
+                    .unwrap();
+                let syntax_element = function.syntax.get_mut(line).unwrap();
+
+                syntax_element.breakpoint = !syntax_element.breakpoint;
+            }
+        }
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
