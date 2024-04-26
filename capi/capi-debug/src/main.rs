@@ -199,15 +199,12 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
         let function = element.get_attribute("data-function").unwrap();
-        let line: u32 =
+        let index: u32 =
             element.get_attribute("data-line").unwrap().parse().unwrap();
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
-                location: SourceLocation {
-                    function,
-                    index: line,
-                },
+                location: SourceLocation { function, index },
             },
             events.clone(),
         ));
