@@ -98,6 +98,9 @@ impl Evaluator {
     }
 }
 
+#[derive(Copy, Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+pub struct InstructionAddress(pub usize);
+
 #[must_use]
 pub enum EvaluatorState {
     Running,
