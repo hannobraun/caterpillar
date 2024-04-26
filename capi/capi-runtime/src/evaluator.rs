@@ -35,7 +35,7 @@ impl Evaluator {
                 };
 
                 if let Err(err) = result {
-                    return EvaluatorState::Error(err);
+                    return EvaluatorState::Error { err };
                 }
             }
             Instruction::CallFunction { name } => {
@@ -97,5 +97,5 @@ impl Evaluator {
 pub enum EvaluatorState {
     Running,
     Finished,
-    Error(builtins::Error),
+    Error { err: builtins::Error },
 }
