@@ -8,6 +8,7 @@ console_error_panic_hook = "*"
 futures = "*"
 gloo = "*"
 log = "*"
+postcard = "*"
 serde_json = "*"
 web-sys = "*"
 
