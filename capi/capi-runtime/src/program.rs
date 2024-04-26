@@ -65,7 +65,7 @@ impl Program {
         if let Some(location) = self.breakpoint_set_for_next_instruction() {
             let address =
                 self.source_map.location_to_address(&location).unwrap();
-            return ProgramState::Paused { address, location };
+            return ProgramState::Paused { address };
         }
 
         self.evaluator.step(mem).into()
@@ -104,9 +104,6 @@ pub enum ProgramState {
 
     Paused {
         address: InstructionAddress,
-
-        /// The location at which the program is paused
-        location: SourceLocation,
     },
 
     #[default]
