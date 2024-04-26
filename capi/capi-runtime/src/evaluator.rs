@@ -5,7 +5,7 @@ use super::{
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     pub code: Code,
-    pub next_instruction: usize,
+    pub next_instruction: InstructionAddress,
     pub call_stack: Vec<usize>,
     pub data_stack: DataStack,
 }
@@ -13,14 +13,14 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn update(&mut self, code: Code, entry: usize) {
         self.code = code;
-        self.next_instruction = entry;
+        self.next_instruction = InstructionAddress(entry);
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
-        self.next_instruction += 1;
+        self.next_instruction.0 += 1;
 
-        let instruction = &self.code.instructions[current_instruction];
+        let instruction = &self.code.instructions[current_instruction.0];
 
         match instruction {
             Instruction::CallBuiltin { name } => {
@@ -39,14 +39,14 @@ impl Evaluator {
                 if let Err(err) = result {
                     return EvaluatorState::Error {
                         err,
-                        instruction: current_instruction,
+                        instruction: current_instruction.0,
                     };
                 }
             }
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve(name);
-                self.call_stack.push(self.next_instruction);
-                self.next_instruction = address;
+                self.call_stack.push(self.next_instruction.0);
+                self.next_instruction = InstructionAddress(address);
             }
             Instruction::PushValue(value) => self.data_stack.push(*value),
             Instruction::Return => {
@@ -54,7 +54,7 @@ impl Evaluator {
                     return EvaluatorState::Finished;
                 };
 
-                self.next_instruction = return_address;
+                self.next_instruction = InstructionAddress(return_address);
             }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
@@ -71,7 +71,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.next_instruction = return_address;
+                    self.next_instruction = InstructionAddress(return_address);
                 }
             }
             Instruction::ReturnIfZero => {
@@ -89,7 +89,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.next_instruction = return_address;
+                    self.next_instruction = InstructionAddress(return_address);
                 }
             }
         }

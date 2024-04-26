@@ -1,6 +1,6 @@
 use crate::{
     builtins, evaluator::EvaluatorState, source_map::SourceMap, Evaluator,
-    Functions, LineLocation,
+    Functions, InstructionAddress, LineLocation,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -20,7 +20,7 @@ impl Program {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.next_instruction = self.entry;
+        self.evaluator.next_instruction = InstructionAddress(self.entry);
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
@@ -54,7 +54,7 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let next_location = self.location(self.evaluator.next_instruction)?;
+        let next_location = self.location(self.evaluator.next_instruction.0)?;
 
         let function = self
             .functions
