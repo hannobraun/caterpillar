@@ -314,7 +314,7 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                     return;
                 };
 
-                let evt = serde_json::to_vec(&evt).unwrap();
+                let evt = postcard::to_stdvec(&evt).unwrap();
                 socket.send(Message::Bytes(evt)).await.unwrap();
             }
         }
