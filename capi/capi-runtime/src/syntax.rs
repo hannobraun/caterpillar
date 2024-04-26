@@ -41,16 +41,11 @@ impl<'r> Syntax<'r> {
 pub struct Expression {
     pub kind: ExpressionKind,
     pub location: SourceLocation,
-    pub breakpoint: bool,
 }
 
 impl Expression {
     pub fn new(kind: ExpressionKind, location: SourceLocation) -> Self {
-        Self {
-            kind,
-            location,
-            breakpoint: false,
-        }
+        Self { kind, location }
     }
 }
 
