@@ -35,3 +35,9 @@ impl Code {
     serde::Serialize,
 )]
 pub struct InstructionAddress(pub usize);
+
+impl InstructionAddress {
+    pub fn inc(&mut self) {
+        self.0 += 1;
+    }
+}
