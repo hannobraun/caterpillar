@@ -215,14 +215,14 @@ pub fn Line(
         let state = program.get().state;
         let location = program.get().current_location();
 
-        match (state, location == Some(expression.location)) {
+        let class = match (state, location == Some(expression.location)) {
             (ProgramState::Paused { .. }, true) => "bg-green-300",
             _ => "",
-        }
+        };
+
+        format!("px-0.5 {class}")
     };
     let line = format!("{}", expression.kind);
-
-    let class = format!("px-0.5 {class}");
 
     view! {
         <span class=class>{line}</span>
