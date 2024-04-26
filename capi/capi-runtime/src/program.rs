@@ -66,37 +66,12 @@ impl Program {
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
-        if let Some(location) = self.breakpoint_set_for_next_instruction() {
-            let address =
-                self.source_map.location_to_address(&location).unwrap();
+        let address = self.evaluator.next_instruction;
+        if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };
         }
 
         self.evaluator.step(mem).into()
-    }
-
-    fn breakpoint_set_for_next_instruction(&self) -> Option<SourceLocation> {
-        let next_location = self
-            .source_map
-            .address_to_location(&self.evaluator.next_instruction)?;
-
-        let function = self
-            .functions
-            .inner
-            .iter()
-            .find(|function| function.name == next_location.function)
-            .unwrap();
-        let expression = function
-            .syntax
-            .iter()
-            .find(|expression| expression.location == next_location)
-            .unwrap();
-
-        if expression.breakpoint {
-            return Some(next_location);
-        }
-
-        None
     }
 }
 
