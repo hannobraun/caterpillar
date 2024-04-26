@@ -88,6 +88,15 @@ pub enum ProgramState {
     Running,
 
     Paused {
+        /// The location at which the program is paused
+        ///
+        /// Please note that even though, as of this writing, this field is no
+        /// no longer used by the client, we still need it, or something like
+        /// it, here.
+        ///
+        /// Having the location here means that we can distinguish between two
+        /// paused states at different locations by comparing them, which is how
+        /// we decide whether to send an update to teh client.
         location: LineLocation,
     },
 
