@@ -39,7 +39,7 @@ impl Evaluator {
                 if let Err(err) = result {
                     return EvaluatorState::Error {
                         err,
-                        instruction: current_instruction.0,
+                        instruction: current_instruction,
                     };
                 }
             }
@@ -113,6 +113,6 @@ pub enum EvaluatorState {
     Finished,
     Error {
         err: builtins::Error,
-        instruction: usize,
+        instruction: InstructionAddress,
     },
 }

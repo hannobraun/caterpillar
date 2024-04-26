@@ -111,9 +111,10 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Error { err, instruction } => {
-                Self::Error { err, instruction }
-            }
+            EvaluatorState::Error { err, instruction } => Self::Error {
+                err,
+                instruction: instruction.0,
+            },
         }
     }
 }
