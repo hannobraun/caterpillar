@@ -12,9 +12,9 @@ impl Code {
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = self.instructions.len();
+        let address = InstructionAddress(self.instructions.len());
         self.instructions.push(instruction);
-        InstructionAddress(address)
+        address
     }
 }
 
