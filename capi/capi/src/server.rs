@@ -116,10 +116,10 @@ where
         let message = message.unwrap();
 
         let event: DebugEvent = match message {
+            Message::Binary(bytes) => serde_json::from_slice(&bytes).unwrap(),
             Message::Text(text) => {
                 panic!("Unexpectedly received text message: {text}");
             }
-            Message::Binary(bytes) => serde_json::from_slice(&bytes).unwrap(),
             _ => continue,
         };
 
