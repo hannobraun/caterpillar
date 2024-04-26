@@ -191,8 +191,15 @@ pub fn Breakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
+    let expression2 = expression.clone();
     let class = move || {
-        let breakpoint_color = if expression.breakpoint {
+        let address = program
+            .get()
+            .source_map
+            .location_to_address(&expression2.location)
+            .expect("Expected address to be associated with location");
+
+        let breakpoint_color = if program.get().breakpoint_at(&address) {
             "text-green-600"
         } else {
             "text-green-300"
