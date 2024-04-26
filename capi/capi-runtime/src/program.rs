@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
     Evaluator, Functions, InstructionAddress, SourceLocation, Value,
@@ -7,6 +9,7 @@ use crate::{
 pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
+    pub breakpoints: BTreeMap<InstructionAddress, bool>,
     pub evaluator: Evaluator,
     pub state: ProgramState,
     pub entry_address: InstructionAddress,
@@ -26,13 +29,17 @@ impl Program {
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::ToggleBreakpoint {
+                address,
                 location:
                     SourceLocation {
                         function,
                         index: line,
                     },
-                ..
             } => {
+                let breakpoint =
+                    self.breakpoints.entry(address).or_insert(false);
+                *breakpoint = !*breakpoint;
+
                 let line: usize = line.try_into().unwrap();
 
                 let function = self
