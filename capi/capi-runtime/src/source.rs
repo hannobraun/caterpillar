@@ -1,6 +1,6 @@
 use crate::{
     code::Code, compiler::compile, source_map::SourceMap, syntax::Syntax,
-    Function, Functions, Program,
+    Function, Functions, InstructionAddress, Program,
 };
 
 #[derive(Default)]
@@ -34,7 +34,7 @@ impl Source {
             source_map,
             ..Program::default()
         };
-        program.evaluator.update(code, entry);
+        program.evaluator.update(code, InstructionAddress(entry));
         program.entry = entry;
 
         program

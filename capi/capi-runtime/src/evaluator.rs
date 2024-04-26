@@ -11,9 +11,9 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn update(&mut self, code: Code, entry: usize) {
+    pub fn update(&mut self, code: Code, entry: InstructionAddress) {
         self.code = code;
-        self.next_instruction = InstructionAddress(entry);
+        self.next_instruction = entry;
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
