@@ -19,15 +19,7 @@ features = ["ws"]
 [dependencies.capi-runtime]
 path = "../capi-runtime"
 
-[dependencies.postcard]
-version = "*"
-features = ["use-std"]
-
 [dependencies.tokio]
-version = "*"
-features = ["full"]
-
-[dependencies.tokio-stream]
 version = "*"
 features = ["full"]
 

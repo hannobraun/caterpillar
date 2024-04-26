@@ -21,11 +21,3 @@ features = ["color"]
 [dependencies.leptos]
 version = "*"
 features = ["csr"]
-
-[dependencies.postcard]
-version = "*"
-features = ["use-std"]
-
-[dependencies.reqwest]
-version = "*"
-default-features = false
