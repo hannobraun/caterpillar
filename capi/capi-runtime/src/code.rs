@@ -1,3 +1,5 @@
+use crate::InstructionAddress;
+
 use super::{compiler::Instruction, symbols::Symbols};
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
@@ -11,9 +13,9 @@ impl Code {
         Self::default()
     }
 
-    pub fn push(&mut self, instruction: Instruction) -> usize {
+    pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
         let address = self.instructions.len();
         self.instructions.push(instruction);
-        address
+        InstructionAddress(address)
     }
 }
