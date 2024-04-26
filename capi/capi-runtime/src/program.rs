@@ -1,6 +1,6 @@
 use crate::{
     builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
-    Evaluator, Functions, InstructionAddress, SourceLocation, Value,
+    Evaluator, Functions, InstructionAddress, SourceLocation,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -15,7 +15,7 @@ pub struct Program {
 impl Program {
     pub fn push(&mut self, arguments: impl IntoIterator<Item = usize>) {
         for value in arguments {
-            self.evaluator.data_stack.push(Value(value));
+            self.evaluator.data_stack.push(value);
         }
     }
 

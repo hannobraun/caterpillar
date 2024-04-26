@@ -12,7 +12,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
         return Err(Error::IntegerOverflow);
     };
 
-    data_stack.push(Value(c));
+    data_stack.push(c);
 
     Ok(())
 }
@@ -47,7 +47,7 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
         return Err(Error::IntegerOverflow);
     };
 
-    data_stack.push(Value(c));
+    data_stack.push(c);
 
     Ok(())
 }
@@ -81,7 +81,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 
     let c = a.0.wrapping_sub(b.0);
 
-    data_stack.push(Value(c));
+    data_stack.push(c);
 
     Ok(())
 }
