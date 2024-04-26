@@ -260,7 +260,7 @@ pub fn Line(
         let state = program.get().state;
 
         let class = match state {
-            ProgramState::Paused { location }
+            ProgramState::Paused { location, .. }
                 if location == expression.location =>
             {
                 "bg-green-300"
