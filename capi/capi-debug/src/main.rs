@@ -99,7 +99,7 @@ pub fn Functions(
             .map(|f| {
                 view! {
                     <Function
-                        state=program.get().state
+                        program=program
                         function=f
                         events=events.clone() />
                 }
@@ -114,7 +114,7 @@ pub fn Functions(
 
 #[component]
 pub fn Function(
-    state: ProgramState,
+    program: ReadSignal<Program>,
     function: capi_runtime::Function,
     events: EventsTx,
 ) -> impl IntoView {
@@ -124,7 +124,7 @@ pub fn Function(
         .map(|expression| {
             view! {
                 <LineWithBreakpoint
-                    state=state.clone()
+                    state=program.get().state
                     expression=expression
                     events=events.clone() />
             }
