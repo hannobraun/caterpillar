@@ -6,7 +6,7 @@ use super::{
 pub struct Evaluator {
     pub code: Code,
     pub next_instruction: InstructionAddress,
-    pub call_stack: Vec<usize>,
+    pub call_stack: Vec<InstructionAddress>,
     pub data_stack: DataStack,
 }
 
@@ -45,7 +45,7 @@ impl Evaluator {
             }
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve(name);
-                self.call_stack.push(self.next_instruction.0);
+                self.call_stack.push(self.next_instruction);
                 self.next_instruction = InstructionAddress(address);
             }
             Instruction::PushValue(value) => self.data_stack.push(*value),
@@ -54,7 +54,7 @@ impl Evaluator {
                     return EvaluatorState::Finished;
                 };
 
-                self.next_instruction = InstructionAddress(return_address);
+                self.next_instruction = return_address;
             }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
@@ -71,7 +71,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.next_instruction = InstructionAddress(return_address);
+                    self.next_instruction = return_address;
                 }
             }
             Instruction::ReturnIfZero => {
@@ -89,7 +89,7 @@ impl Evaluator {
                         return EvaluatorState::Finished;
                     };
 
-                    self.next_instruction = InstructionAddress(return_address);
+                    self.next_instruction = return_address;
                 }
             }
         }

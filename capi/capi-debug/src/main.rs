@@ -66,7 +66,7 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
             .call_stack
             .into_iter()
             .filter_map(|address| {
-                let location = program.get().location(address)?;
+                let location = program.get().location(address.0)?;
 
                 Some(view! {
                     <li>{format!("{location:?}")}</li>
