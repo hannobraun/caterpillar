@@ -1,5 +1,7 @@
 use std::fmt;
 
+use crate::Value;
+
 #[derive(Debug)]
 pub struct Syntax<'r> {
     next_location: SourceLocation,
@@ -16,8 +18,10 @@ impl<'r> Syntax<'r> {
 
     pub fn v(&mut self, value: usize) -> &mut Self {
         let location = self.next_location.increment();
-        self.expressions
-            .push(Expression::new(ExpressionKind::Value(value), location));
+        self.expressions.push(Expression::new(
+            ExpressionKind::Value(Value(value)),
+            location,
+        ));
         self
     }
 
@@ -52,7 +56,7 @@ impl Expression {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum ExpressionKind {
-    Value(usize),
+    Value(Value),
     Word { name: String },
 }
 
