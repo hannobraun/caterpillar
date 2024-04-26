@@ -1,7 +1,7 @@
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct DataStack {
     values: Vec<Value>,
-    saved: Vec<usize>,
+    saved: Vec<Value>,
 }
 
 impl DataStack {
@@ -28,13 +28,13 @@ impl DataStack {
     pub fn save(&mut self, num: usize) {
         for _ in 0..num {
             let value = self.pop().unwrap();
-            self.saved.push(value.0);
+            self.saved.push(value);
         }
     }
 
     pub fn restore(&mut self) {
         while let Some(x) = self.saved.pop() {
-            self.push(Value(x));
+            self.push(x);
         }
     }
 }
