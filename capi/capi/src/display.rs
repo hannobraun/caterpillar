@@ -35,7 +35,7 @@ pub fn run(
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
-                program.functions.apply_debug_event(event);
+                program.apply_debug_event(event);
                 updates.send(program.clone()).unwrap();
             }
 

@@ -1,6 +1,6 @@
 use crate::{
-    builtins, evaluator::EvaluatorState, source_map::SourceMap, Evaluator,
-    Functions, InstructionAddress, LineLocation,
+    builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
+    Evaluator, Functions, InstructionAddress, LineLocation,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -21,6 +21,10 @@ impl Program {
 
     pub fn reset(&mut self) {
         self.evaluator.next_instruction = self.entry_address;
+    }
+
+    pub fn apply_debug_event(&mut self, event: DebugEvent) {
+        self.functions.apply_debug_event(event);
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
