@@ -4,7 +4,7 @@ use crate::InstructionAddress;
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Symbols {
-    inner: BTreeMap<String, usize>,
+    inner: BTreeMap<String, InstructionAddress>,
 }
 impl Symbols {
     pub fn new() -> Self {
@@ -12,13 +12,13 @@ impl Symbols {
     }
 
     pub fn define(&mut self, name: String, address: usize) {
-        self.inner.insert(name, address);
+        self.inner.insert(name, InstructionAddress(address));
     }
 
     pub fn resolve(&self, name: &str) -> InstructionAddress {
         let Some(address) = self.inner.get(name).copied() else {
             panic!("Can't find function `{name}`");
         };
-        InstructionAddress(address)
+        address
     }
 }
