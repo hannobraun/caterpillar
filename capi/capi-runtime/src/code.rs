@@ -12,7 +12,7 @@ impl Code {
     }
 
     pub fn next_address(&self) -> InstructionAddress {
-        InstructionAddress(self.instructions.len())
+        InstructionAddress(self.instructions.len().try_into().unwrap())
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
@@ -34,7 +34,7 @@ impl Code {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionAddress(usize);
+pub struct InstructionAddress(u32);
 
 impl InstructionAddress {
     pub fn increment(&mut self) {
@@ -42,6 +42,6 @@ impl InstructionAddress {
     }
 
     pub fn to_usize(self) -> usize {
-        self.0
+        self.0.try_into().unwrap()
     }
 }
