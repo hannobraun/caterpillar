@@ -27,15 +27,15 @@ impl Source {
             );
         }
 
-        let entry = code.symbols.resolve(entry);
+        let entry_address = code.symbols.resolve(entry);
 
         let mut program = Program {
             functions: self.functions,
             source_map,
             ..Program::default()
         };
-        program.evaluator.update(code, entry);
-        program.entry_address = entry;
+        program.evaluator.update(code, entry_address);
+        program.entry_address = entry_address;
 
         program
     }
