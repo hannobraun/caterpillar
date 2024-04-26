@@ -85,6 +85,28 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
     }
 }
 
+#[allow(unused_braces)] // working around a warning from the `view!` macro
+#[component]
+pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
+    let data_stack = move || {
+        // Right now, the server never sends the program while it is running, so
+        // we don't need to handle that case here. But that could change in the
+        // future, and this assertion makes sure we notice.
+        assert!(
+            !program.get().state.is_running(),
+            "Stack can't be up-to-date, if program is running."
+        );
+
+        view! {
+            <p>{format!("{:?}", program.get().evaluator.data_stack)}</p>
+        }
+    };
+
+    view! {
+        {data_stack}
+    }
+}
+
 #[component]
 pub fn Functions(
     program: ReadSignal<Program>,
@@ -235,28 +257,6 @@ pub fn Line(
 
     view! {
         <span class=class>{line}</span>
-    }
-}
-
-#[allow(unused_braces)] // working around a warning from the `view!` macro
-#[component]
-pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
-    let data_stack = move || {
-        // Right now, the server never sends the program while it is running, so
-        // we don't need to handle that case here. But that could change in the
-        // future, and this assertion makes sure we notice.
-        assert!(
-            !program.get().state.is_running(),
-            "Stack can't be up-to-date, if program is running."
-        );
-
-        view! {
-            <p>{format!("{:?}", program.get().evaluator.data_stack)}</p>
-        }
-    };
-
-    view! {
-        {data_stack}
     }
 }
 
