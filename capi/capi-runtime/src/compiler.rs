@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{source_map::SourceMap, syntax::Expression, InstructionAddress};
+use crate::{source_map::SourceMap, syntax::Expression};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -11,7 +11,7 @@ pub fn compile(
     code: &mut Code,
     source_map: &mut SourceMap,
 ) {
-    let address = code.instructions.len();
+    let address = code.next_address();
 
     for expression in syntax {
         let instruction = match expression.kind {
@@ -29,7 +29,7 @@ pub fn compile(
 
     code.push(Instruction::Return);
 
-    code.symbols.define(name, InstructionAddress(address));
+    code.symbols.define(name, address);
 }
 
 fn word_to_instruction(
