@@ -75,8 +75,8 @@ impl fmt::Display for ExpressionKind {
     serde::Serialize,
 )]
 pub struct SourceLocation {
-    pub function: String,
-    pub index: u32,
+    function: String,
+    index: u32,
 }
 
 impl SourceLocation {
