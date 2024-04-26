@@ -191,7 +191,7 @@ pub fn Breakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
-    let class = {
+    let class = move || {
         let breakpoint_color = if expression.breakpoint {
             "text-green-600"
         } else {
