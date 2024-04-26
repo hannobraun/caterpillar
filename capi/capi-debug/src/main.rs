@@ -265,11 +265,11 @@ pub fn Line(
             {
                 "bg-green-300"
             }
-            ProgramState::Error { instruction, .. }
+            ProgramState::Error { address, .. }
                 if program
                     .get()
                     .source_map
-                    .address_to_location(&instruction)
+                    .address_to_location(&address)
                     .as_ref()
                     == Some(&expression.location) =>
             {
