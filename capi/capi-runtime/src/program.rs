@@ -9,7 +9,7 @@ pub struct Program {
     pub source_map: SourceMap,
     pub evaluator: Evaluator,
     pub state: ProgramState,
-    pub entry: usize,
+    pub entry: InstructionAddress,
 }
 
 impl Program {
@@ -20,7 +20,7 @@ impl Program {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.next_instruction = InstructionAddress(self.entry);
+        self.evaluator.next_instruction = self.entry;
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {

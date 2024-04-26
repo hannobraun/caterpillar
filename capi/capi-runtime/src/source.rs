@@ -35,7 +35,7 @@ impl Source {
             ..Program::default()
         };
         program.evaluator.update(code, entry);
-        program.entry = entry.0;
+        program.entry = entry;
 
         program
     }
