@@ -477,7 +477,6 @@ dependencies = [
  "pixels",
  "postcard",
  "serde",
- "serde_json",
  "tokio",
  "tokio-stream",
  "tower",
@@ -500,7 +499,6 @@ dependencies = [
  "log",
  "postcard",
  "reqwest",
- "serde_json",
  "web-sys",
 ]
 

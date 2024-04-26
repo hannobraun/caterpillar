@@ -8,7 +8,6 @@ anyhow = "*"
 futures = "*"
 pixels = "*"
 serde = "*"
-serde_json = "*"
 tower = "*"
 tracing = "*"
 

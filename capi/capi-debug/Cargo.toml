@@ -8,7 +8,6 @@ console_error_panic_hook = "*"
 futures = "*"
 gloo = "*"
 log = "*"
-serde_json = "*"
 web-sys = "*"
 
 [dependencies.capi-runtime]
