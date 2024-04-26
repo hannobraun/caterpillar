@@ -1,6 +1,9 @@
-use crate::SourceLocation;
+use crate::{InstructionAddress, SourceLocation};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugEvent {
-    ToggleBreakpoint { location: SourceLocation },
+    ToggleBreakpoint {
+        address: InstructionAddress,
+        location: SourceLocation,
+    },
 }

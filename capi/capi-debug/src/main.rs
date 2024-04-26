@@ -213,12 +213,18 @@ pub fn Breakpoint(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
+        let address = element
+            .get_attribute("data-address")
+            .unwrap()
+            .parse()
+            .unwrap();
         let function = element.get_attribute("data-function").unwrap();
         let index: u32 =
             element.get_attribute("data-line").unwrap().parse().unwrap();
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
+                address,
                 location: SourceLocation { function, index },
             },
             events.clone(),
