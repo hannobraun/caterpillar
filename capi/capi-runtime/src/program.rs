@@ -29,7 +29,7 @@ impl Program {
         state
     }
 
-    /// Get `LineLocation` for current instruction
+    /// Get `LineLocation` for the provided instruction
     ///
     /// This might return `None`, as not all instructions have locations in the
     /// code. Return instructions are an example of that.
