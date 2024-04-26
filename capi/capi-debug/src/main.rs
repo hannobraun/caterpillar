@@ -312,8 +312,8 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                     return;
                 };
 
-                let evt = serde_json::to_string(&evt).unwrap();
-                socket.send(Message::Text(evt)).await.unwrap();
+                let evt = serde_json::to_vec(&evt).unwrap();
+                socket.send(Message::Bytes(evt)).await.unwrap();
             }
         }
     }
