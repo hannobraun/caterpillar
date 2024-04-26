@@ -13,10 +13,10 @@ mod syntax;
 
 pub use self::{
     code::InstructionAddress,
-    debug::{DebugEvent, SourceLocation},
+    debug::DebugEvent,
     evaluator::Evaluator,
     functions::{Function, Functions},
     program::{Program, ProgramState},
     source::Source,
-    syntax::{Expression, ExpressionKind},
+    syntax::{Expression, ExpressionKind, SourceLocation},
 };

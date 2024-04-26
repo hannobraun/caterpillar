@@ -1,7 +1,5 @@
 use std::fmt;
 
-use crate::SourceLocation;
-
 #[derive(Debug)]
 pub struct Syntax<'r> {
     next_location: SourceLocation,
@@ -64,5 +62,23 @@ impl fmt::Display for ExpressionKind {
             ExpressionKind::Value(value) => write!(f, "{value}"),
             ExpressionKind::Word { name } => write!(f, "{name}"),
         }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct SourceLocation {
+    pub function: String,
+    pub index: u32,
+}
+
+impl SourceLocation {
+    pub fn first_in_function(function: String) -> Self {
+        Self { function, index: 0 }
+    }
+
+    pub fn increment(&mut self) -> Self {
+        let self_ = self.clone();
+        self.index += 1;
+        self_
     }
 }
