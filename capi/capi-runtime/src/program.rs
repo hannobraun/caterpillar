@@ -42,6 +42,14 @@ impl Program {
         self.source_map.inner.get(&instruction).cloned()
     }
 
+    /// Get `LineLocation` for the current location
+    ///
+    /// See documentation of [`Program::location`], which this method uses
+    /// internally, for more information.
+    pub fn current_location(&self) -> Option<LineLocation> {
+        self.location(self.evaluator.next_instruction)
+    }
+
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
         if let Some(location) = self.breakpoint_set_for_next_instruction() {
             return ProgramState::Paused { location };
@@ -51,7 +59,7 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let location = self.location(self.evaluator.next_instruction)?;
+        let location = self.current_location()?;
 
         let function = self
             .functions
