@@ -33,4 +33,16 @@ impl SourceMap {
     ) -> Option<SourceLocation> {
         self.address_to_location.get(&address).cloned()
     }
+
+    /// Get `InstructionAddress` for the provided `LineLocation`
+    ///
+    /// Returns an `Option`, because this might be called for a mapping that has
+    /// not been defined. If that happens, it is likely to be a bug outside of
+    /// this module.
+    pub fn location_to_address(
+        &self,
+        location: &SourceLocation,
+    ) -> Option<InstructionAddress> {
+        self.location_to_address.get(location).cloned()
+    }
 }
