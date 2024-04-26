@@ -53,6 +53,12 @@ impl DataStack {
 )]
 pub struct Value(pub usize);
 
+impl From<usize> for Value {
+    fn from(value: usize) -> Self {
+        Self(value)
+    }
+}
+
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
