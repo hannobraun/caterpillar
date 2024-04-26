@@ -65,7 +65,16 @@ impl fmt::Display for ExpressionKind {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct SourceLocation {
     pub function: String,
     pub index: u32,
