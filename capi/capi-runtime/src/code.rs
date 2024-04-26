@@ -34,7 +34,7 @@ impl Code {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionAddress(pub usize);
+pub struct InstructionAddress(usize);
 
 impl InstructionAddress {
     pub fn increment(&mut self) {
