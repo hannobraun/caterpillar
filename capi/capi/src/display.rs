@@ -40,7 +40,7 @@ pub fn run(
             }
 
             if let ProgramState::Finished = program.state {
-                program.push([Value(TILES_PER_AXIS); 2]);
+                program.push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
                 program.reset();
             }
 

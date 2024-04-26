@@ -27,7 +27,7 @@ impl DataStack {
         self.values.len()
     }
 
-    pub fn save(&mut self, num: usize) {
+    pub fn save(&mut self, num: u32) {
         for _ in 0..num {
             let value = self.pop().unwrap();
             self.saved.push(value);
@@ -51,10 +51,10 @@ impl DataStack {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct Value(pub usize);
+pub struct Value(pub u32);
 
-impl From<usize> for Value {
-    fn from(value: usize) -> Self {
+impl From<u32> for Value {
+    fn from(value: u32) -> Self {
         Self(value)
     }
 }
