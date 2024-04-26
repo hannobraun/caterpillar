@@ -206,12 +206,11 @@ pub fn Breakpoint(
         format!("mr-1 {breakpoint_color}")
     };
 
-    let expression2 = expression.clone();
     let address = move || {
         program
             .get()
             .source_map
-            .location_to_address(&expression2.location)
+            .location_to_address(&expression.location)
             .expect("Every location in the source should have an address")
             .to_usize()
     };
