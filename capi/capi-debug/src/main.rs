@@ -155,7 +155,7 @@ pub fn LineWithBreakpoint(
                 expression=expression.clone()
                 events=events />
             <Line
-                state=program.get().state
+                program=program
                 expression=expression />
         </li>
     }
@@ -207,8 +207,11 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Line(state: ProgramState, expression: Expression) -> impl IntoView {
-    let class = match state {
+pub fn Line(
+    program: ReadSignal<Program>,
+    expression: Expression,
+) -> impl IntoView {
+    let class = match program.get().state {
         ProgramState::Paused { location }
             if location == expression.location =>
         {
