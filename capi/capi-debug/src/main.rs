@@ -213,13 +213,13 @@ pub fn Line(
 ) -> impl IntoView {
     let class = move || {
         let state = program.get().state;
-        let location = program.get().current_location();
 
-        let is_current_location =
-            location.as_ref() == Some(&expression.location);
-
-        let class = match (state, is_current_location) {
-            (ProgramState::Paused { .. }, true) => "bg-green-300",
+        let class = match state {
+            ProgramState::Paused { location }
+                if location == expression.location =>
+            {
+                "bg-green-300"
+            }
             _ => "",
         };
 
