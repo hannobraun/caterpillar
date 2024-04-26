@@ -40,13 +40,13 @@ pub fn Debugger(
             program=program />
         <CallStack
             program=program />
+        <DataStack
+            program=program />
         <div>
             <Functions
                 program=program
                 events=events />
         </div>
-        <DataStack
-            program=program />
     }
 }
 
