@@ -98,7 +98,16 @@ impl Evaluator {
     }
 }
 
-#[derive(Copy, Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct InstructionAddress(pub usize);
 
 impl InstructionAddress {
