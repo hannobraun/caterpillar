@@ -105,6 +105,8 @@ impl Evaluator {
     Default,
     Eq,
     PartialEq,
+    Ord,
+    PartialOrd,
     serde::Deserialize,
     serde::Serialize,
 )]
