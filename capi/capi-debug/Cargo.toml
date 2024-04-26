@@ -24,6 +24,7 @@ features = ["csr"]
 
 [dependencies.postcard]
 version = "*"
+features = ["use-std"]
 
 [dependencies.reqwest]
 version = "*"

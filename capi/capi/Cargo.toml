@@ -21,6 +21,7 @@ path = "../capi-runtime"
 
 [dependencies.postcard]
 version = "*"
+features = ["use-std"]
 
 [dependencies.tokio]
 version = "*"
