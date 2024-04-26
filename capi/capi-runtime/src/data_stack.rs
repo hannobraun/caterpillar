@@ -13,8 +13,8 @@ impl DataStack {
         self.values.last().copied().unwrap()
     }
 
-    pub fn push(&mut self, value: usize) {
-        self.values.push(Value(value));
+    pub fn push(&mut self, value: Value) {
+        self.values.push(value);
     }
 
     pub fn pop(&mut self) -> Result<usize, PopFromEmptyStack> {
@@ -37,7 +37,7 @@ impl DataStack {
 
     pub fn restore(&mut self) {
         while let Some(x) = self.saved.pop() {
-            self.push(x);
+            self.push(Value(x));
         }
     }
 }

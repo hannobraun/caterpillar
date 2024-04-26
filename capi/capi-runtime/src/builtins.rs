@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use crate::data_stack::PopFromEmptyStack;
+use crate::{data_stack::PopFromEmptyStack, Value};
 
 use super::data_stack::DataStack;
 
@@ -12,7 +12,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
         return Err(Error::IntegerOverflow);
     };
 
-    data_stack.push(c);
+    data_stack.push(Value(c));
 
     Ok(())
 }
@@ -24,7 +24,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     let a = data_stack.clone();
     data_stack.restore();
 
-    data_stack.push(a.0);
+    data_stack.push(a);
 
     Ok(())
 }
@@ -45,7 +45,7 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
 
     let c = a * b;
 
-    data_stack.push(c);
+    data_stack.push(Value(c));
 
     Ok(())
 }
@@ -55,7 +55,7 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     let mut a = data_stack.pop()?;
 
     data_stack.save(i);
-    data_stack.push(a);
+    data_stack.push(Value(a));
     data_stack.restore();
 
     Ok(())
@@ -68,7 +68,7 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     let value: u8 = value.try_into().unwrap();
     mem[addr] = value;
 
-    data_stack.push(addr);
+    data_stack.push(Value(addr));
 
     Ok(())
 }
@@ -79,7 +79,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 
     let c = a.wrapping_sub(b);
 
-    data_stack.push(c);
+    data_stack.push(Value(c));
 
     Ok(())
 }
@@ -88,8 +88,8 @@ pub fn swap(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
-    data_stack.push(b);
-    data_stack.push(a);
+    data_stack.push(Value(b));
+    data_stack.push(Value(a));
 
     Ok(())
 }
@@ -101,7 +101,7 @@ pub fn take(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
     data_stack.restore();
 
-    data_stack.push(a);
+    data_stack.push(Value(a));
 
     Ok(())
 }
