@@ -191,13 +191,15 @@ pub fn Breakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
-    let breakpoint_color = if expression.breakpoint {
-        "text-green-600"
-    } else {
-        "text-green-300"
-    };
+    let class = {
+        let breakpoint_color = if expression.breakpoint {
+            "text-green-600"
+        } else {
+            "text-green-300"
+        };
 
-    let class = format!("mr-1 {breakpoint_color}");
+        format!("mr-1 {breakpoint_color}")
+    };
 
     let expression2 = expression.clone();
     let address = move || {
