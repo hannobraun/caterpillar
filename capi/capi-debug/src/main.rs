@@ -314,8 +314,8 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                     return;
                 };
 
-                let evt = postcard::to_stdvec(&evt).unwrap();
-                socket.send(Message::Bytes(evt)).await.unwrap();
+                let evt = ron::to_string(&evt).unwrap();
+                socket.send(Message::Text(evt)).await.unwrap();
             }
         }
     }

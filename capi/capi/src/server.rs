@@ -116,9 +116,9 @@ where
         let message = message.unwrap();
 
         let event: DebugEvent = match message {
-            Message::Binary(bytes) => postcard::from_bytes(&bytes).unwrap(),
-            Message::Text(text) => {
-                panic!("Unexpectedly received text message: {text}");
+            Message::Text(text) => ron::from_str(&text).unwrap(),
+            Message::Binary(binary) => {
+                panic!("Unexpectedly received binary message: {binary:?}");
             }
             _ => continue,
         };
