@@ -51,22 +51,22 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let location = self.location(self.evaluator.next_instruction)?;
+        let next_location = self.location(self.evaluator.next_instruction)?;
 
         let function = self
             .functions
             .inner
             .iter()
-            .find(|function| function.name == location.function)
+            .find(|function| function.name == next_location.function)
             .unwrap();
         let expression = function
             .syntax
             .iter()
-            .find(|expression| expression.location == location)
+            .find(|expression| expression.location == next_location)
             .unwrap();
 
         if expression.breakpoint {
-            return Some(location);
+            return Some(next_location);
         }
 
         None
