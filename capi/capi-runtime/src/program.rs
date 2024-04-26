@@ -35,8 +35,9 @@ impl Program {
     /// code. Return instructions are an example of that.
     ///
     /// This shouldn't matter, since users can't set breakpoints there, nor do
-    /// those instructions produce errors. So in cases where you actually need a
-    /// location, this should return one.
+    /// those instructions produce errors, nor should they show up in call
+    /// stacks. So in cases where you actually need a location, this should
+    /// return one.
     pub fn location(&self, instruction: usize) -> Option<LineLocation> {
         self.source_map.inner.get(&instruction).cloned()
     }
