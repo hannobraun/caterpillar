@@ -16,10 +16,10 @@ impl<'r> Syntax<'r> {
         }
     }
 
-    pub fn v(&mut self, value: usize) -> &mut Self {
+    pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
         let location = self.next_location.increment();
         self.expressions.push(Expression::new(
-            ExpressionKind::Value(Value(value)),
+            ExpressionKind::Value(value.into()),
             location,
         ));
         self
