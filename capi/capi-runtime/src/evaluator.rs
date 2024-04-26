@@ -18,8 +18,9 @@ impl Evaluator {
 
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
-        let instruction = &self.code.instructions[current_instruction];
         self.next_instruction += 1;
+
+        let instruction = &self.code.instructions[current_instruction];
 
         match instruction {
             Instruction::CallBuiltin { name } => {
