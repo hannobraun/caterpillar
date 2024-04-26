@@ -215,7 +215,8 @@ pub fn Line(
         let state = program.get().state;
         let location = program.get().current_location();
 
-        let is_current_location = location == Some(expression.location);
+        let is_current_location =
+            location.as_ref() == Some(&expression.location);
 
         let class = match (state, is_current_location) {
             (ProgramState::Paused { .. }, true) => "bg-green-300",
