@@ -299,7 +299,7 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
 
                 let new_program: Program = match msg {
                     Message::Bytes(bytes) => {
-                        serde_json::from_slice(&bytes).unwrap()
+                        postcard::from_bytes(&bytes).unwrap()
                     }
                     Message::Text(text) => {
                         panic!("Unexpectedly received text message: {text}");

@@ -103,7 +103,7 @@ where
             Err(err) => panic!("{err}"),
         };
 
-        let message = serde_json::to_vec(&program).unwrap();
+        let message = postcard::to_stdvec(&program).unwrap();
         socket.send(Message::Binary(message)).await.unwrap();
     }
 }
