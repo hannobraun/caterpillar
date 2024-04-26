@@ -55,6 +55,10 @@ impl Program {
         }
     }
 
+    pub fn breakpoint_at(&self, address: &InstructionAddress) -> bool {
+        self.breakpoints.get(address) == Some(&true)
+    }
+
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
         let state = self.step_inner(mem);
         self.state = state.clone();
