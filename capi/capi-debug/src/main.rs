@@ -1,5 +1,5 @@
 use capi_runtime::{
-    DebugEvent, Expression, LineLocation, Program, ProgramState,
+    DebugEvent, Expression, Program, ProgramState, SourceLocation,
 };
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -204,7 +204,7 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
 
         leptos::spawn_local(send_event(
             DebugEvent::ToggleBreakpoint {
-                location: LineLocation { function, line },
+                location: SourceLocation { function, line },
             },
             events.clone(),
         ));

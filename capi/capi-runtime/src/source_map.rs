@@ -1,17 +1,17 @@
 use std::collections::BTreeMap;
 
-use crate::{InstructionAddress, LineLocation};
+use crate::{InstructionAddress, SourceLocation};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct SourceMap {
-    address_to_location: BTreeMap<InstructionAddress, LineLocation>,
+    address_to_location: BTreeMap<InstructionAddress, SourceLocation>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
         address: InstructionAddress,
-        location: LineLocation,
+        location: SourceLocation,
     ) {
         self.address_to_location.insert(address, location);
     }
@@ -28,7 +28,7 @@ impl SourceMap {
     pub fn address_to_location(
         &self,
         address: InstructionAddress,
-    ) -> Option<LineLocation> {
+    ) -> Option<SourceLocation> {
         self.address_to_location.get(&address).cloned()
     }
 }

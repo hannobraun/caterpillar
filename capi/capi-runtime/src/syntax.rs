@@ -1,17 +1,17 @@
 use std::fmt;
 
-use crate::LineLocation;
+use crate::SourceLocation;
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
-    next_location: LineLocation,
+    next_location: SourceLocation,
     expressions: &'r mut Vec<Expression>,
 }
 
 impl<'r> Syntax<'r> {
     pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
         Self {
-            next_location: LineLocation::first_in_function(function),
+            next_location: SourceLocation::first_in_function(function),
             expressions,
         }
     }
@@ -38,12 +38,12 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
-    pub location: LineLocation,
+    pub location: SourceLocation,
     pub breakpoint: bool,
 }
 
 impl Expression {
-    pub fn new(kind: ExpressionKind, location: LineLocation) -> Self {
+    pub fn new(kind: ExpressionKind, location: SourceLocation) -> Self {
         Self {
             kind,
             location,

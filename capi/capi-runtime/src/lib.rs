@@ -13,7 +13,7 @@ mod syntax;
 
 pub use self::{
     code::InstructionAddress,
-    debug::{DebugEvent, LineLocation},
+    debug::{DebugEvent, SourceLocation},
     evaluator::Evaluator,
     functions::{Function, Functions},
     program::{Program, ProgramState},

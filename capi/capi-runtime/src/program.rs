@@ -1,6 +1,6 @@
 use crate::{
     builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
-    Evaluator, Functions, InstructionAddress, LineLocation,
+    Evaluator, Functions, InstructionAddress, SourceLocation,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -26,7 +26,7 @@ impl Program {
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::ToggleBreakpoint {
-                location: LineLocation { function, line },
+                location: SourceLocation { function, line },
                 ..
             } => {
                 let line: usize = line.try_into().unwrap();
@@ -58,7 +58,7 @@ impl Program {
         self.evaluator.step(mem).into()
     }
 
-    fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
+    fn breakpoint_set_for_next_instruction(&self) -> Option<SourceLocation> {
         let next_location = self
             .source_map
             .address_to_location(self.evaluator.next_instruction)?;
@@ -91,7 +91,7 @@ pub enum ProgramState {
 
     Paused {
         /// The location at which the program is paused
-        location: LineLocation,
+        location: SourceLocation,
     },
 
     #[default]
