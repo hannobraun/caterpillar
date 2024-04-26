@@ -65,7 +65,7 @@ impl Program {
     fn breakpoint_set_for_next_instruction(&self) -> Option<SourceLocation> {
         let next_location = self
             .source_map
-            .address_to_location(self.evaluator.next_instruction)?;
+            .address_to_location(&self.evaluator.next_instruction)?;
 
         let function = self
             .functions

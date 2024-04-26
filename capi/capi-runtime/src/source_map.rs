@@ -29,9 +29,9 @@ impl SourceMap {
     /// return one.
     pub fn address_to_location(
         &self,
-        address: InstructionAddress,
+        address: &InstructionAddress,
     ) -> Option<SourceLocation> {
-        self.address_to_location.get(&address).cloned()
+        self.address_to_location.get(address).cloned()
     }
 
     /// Get `InstructionAddress` for the provided `LineLocation`

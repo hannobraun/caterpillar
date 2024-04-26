@@ -67,7 +67,7 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
             .into_iter()
             .filter_map(|address| {
                 let location =
-                    program.get().source_map.address_to_location(address)?;
+                    program.get().source_map.address_to_location(&address)?;
 
                 Some(view! {
                     <li>{format!("{location:?}")}</li>
@@ -263,7 +263,7 @@ pub fn Line(
                 if program
                     .get()
                     .source_map
-                    .address_to_location(instruction)
+                    .address_to_location(&instruction)
                     .as_ref()
                     == Some(&expression.location) =>
             {
