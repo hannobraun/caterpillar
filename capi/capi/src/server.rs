@@ -103,8 +103,8 @@ where
             Err(err) => panic!("{err}"),
         };
 
-        let message = postcard::to_stdvec(&program).unwrap();
-        socket.send(Message::Binary(message)).await.unwrap();
+        let message = ron::to_string(&program).unwrap();
+        socket.send(Message::Text(message)).await.unwrap();
     }
 }
 

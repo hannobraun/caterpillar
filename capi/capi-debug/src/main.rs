@@ -298,11 +298,11 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                 };
 
                 let new_program: Program = match msg {
+                    Message::Text(text) => ron::from_str(&text).unwrap(),
                     Message::Bytes(bytes) => {
-                        postcard::from_bytes(&bytes).unwrap()
-                    }
-                    Message::Text(text) => {
-                        panic!("Unexpectedly received text message: {text}");
+                        panic!(
+                            "Unexpectedly received binary message: {bytes:?}"
+                        );
                     }
                 };
 
