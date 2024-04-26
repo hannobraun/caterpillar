@@ -13,7 +13,7 @@ mod syntax;
 
 pub use self::{
     code::InstructionAddress,
-    data_stack::DataStack,
+    data_stack::{DataStack, Value},
     debug::DebugEvent,
     evaluator::Evaluator,
     functions::{Function, Functions},

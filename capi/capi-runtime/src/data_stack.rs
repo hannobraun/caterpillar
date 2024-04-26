@@ -39,6 +39,9 @@ impl DataStack {
     }
 }
 
+#[derive(Copy, Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+pub struct Value(pub usize);
+
 #[derive(
     Clone,
     Debug,
