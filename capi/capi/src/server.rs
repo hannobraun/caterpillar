@@ -117,7 +117,7 @@ where
 
         let event: DebugEvent = match message {
             Message::Text(text) => serde_json::from_str(&text).unwrap(),
-            Message::Binary(event) => serde_json::from_slice(&event).unwrap(),
+            Message::Binary(bytes) => serde_json::from_slice(&bytes).unwrap(),
             _ => continue,
         };
 
