@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{source_map::SourceMap, syntax::Expression};
+use crate::{source_map::SourceMap, syntax::Expression, InstructionAddress};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -29,7 +29,7 @@ pub fn compile(
 
     code.push(Instruction::Return);
 
-    code.symbols.define(name, address);
+    code.symbols.define(name, InstructionAddress(address));
 }
 
 fn word_to_instruction(

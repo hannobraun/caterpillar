@@ -11,8 +11,8 @@ impl Symbols {
         Self::default()
     }
 
-    pub fn define(&mut self, name: String, address: usize) {
-        self.inner.insert(name, InstructionAddress(address));
+    pub fn define(&mut self, name: String, address: InstructionAddress) {
+        self.inner.insert(name, address);
     }
 
     pub fn resolve(&self, name: &str) -> InstructionAddress {
