@@ -29,22 +29,6 @@ impl Program {
         state
     }
 
-    /// Get `LineLocation` for the provided instruction
-    ///
-    /// This might return `None`, as not all instructions have locations in the
-    /// code. Return instructions are an example of that.
-    ///
-    /// This shouldn't matter, since users can't set breakpoints there, nor do
-    /// those instructions produce errors, nor should they show up in call
-    /// stacks. So in cases where you actually need a location, this should
-    /// return one.
-    pub fn location(
-        &self,
-        address: InstructionAddress,
-    ) -> Option<LineLocation> {
-        self.source_map.address_to_location(address)
-    }
-
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
         if let Some(location) = self.breakpoint_set_for_next_instruction() {
             return ProgramState::Paused { location };
@@ -54,7 +38,9 @@ impl Program {
     }
 
     fn breakpoint_set_for_next_instruction(&self) -> Option<LineLocation> {
-        let next_location = self.location(self.evaluator.next_instruction)?;
+        let next_location = self
+            .source_map
+            .address_to_location(self.evaluator.next_instruction)?;
 
         let function = self
             .functions

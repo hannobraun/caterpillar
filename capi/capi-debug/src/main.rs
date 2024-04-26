@@ -66,7 +66,8 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
             .call_stack
             .into_iter()
             .filter_map(|address| {
-                let location = program.get().location(address)?;
+                let location =
+                    program.get().source_map.address_to_location(address)?;
 
                 Some(view! {
                     <li>{format!("{location:?}")}</li>
@@ -243,7 +244,11 @@ pub fn Line(
                 "bg-green-300"
             }
             ProgramState::Error { instruction, .. }
-                if program.get().location(instruction).as_ref()
+                if program
+                    .get()
+                    .source_map
+                    .address_to_location(instruction)
+                    .as_ref()
                     == Some(&expression.location) =>
             {
                 "bg-red-300"
