@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
-    Evaluator, Functions, InstructionAddress, SourceLocation, Value,
+    Evaluator, Functions, InstructionAddress, Value,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -28,29 +28,10 @@ impl Program {
 
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
-            DebugEvent::ToggleBreakpoint {
-                address,
-                location:
-                    SourceLocation {
-                        function,
-                        index: line,
-                    },
-            } => {
+            DebugEvent::ToggleBreakpoint { address } => {
                 let breakpoint =
                     self.breakpoints.entry(address).or_insert(false);
                 *breakpoint = !*breakpoint;
-
-                let line: usize = line.try_into().unwrap();
-
-                let function = self
-                    .functions
-                    .inner
-                    .iter_mut()
-                    .find(|f| f.name == function)
-                    .unwrap();
-                let syntax_element = function.syntax.get_mut(line).unwrap();
-
-                syntax_element.breakpoint = !syntax_element.breakpoint;
             }
         }
     }

@@ -1,6 +1,4 @@
-use capi_runtime::{
-    DebugEvent, Expression, Program, ProgramState, SourceLocation,
-};
+use capi_runtime::{DebugEvent, Expression, Program, ProgramState};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -227,15 +225,9 @@ pub fn Breakpoint(
             .unwrap()
             .parse()
             .unwrap();
-        let function = element.get_attribute("data-function").unwrap();
-        let index: u32 =
-            element.get_attribute("data-line").unwrap().parse().unwrap();
 
         leptos::spawn_local(send_event(
-            DebugEvent::ToggleBreakpoint {
-                address,
-                location: SourceLocation { function, index },
-            },
+            DebugEvent::ToggleBreakpoint { address },
             events.clone(),
         ));
     };
