@@ -211,7 +211,9 @@ pub fn Line(
     program: ReadSignal<Program>,
     expression: Expression,
 ) -> impl IntoView {
-    let class = match program.get().state {
+    let state = program.get().state;
+
+    let class = match state {
         ProgramState::Paused { location }
             if location == expression.location =>
         {
