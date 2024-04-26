@@ -175,6 +175,7 @@ pub fn LineWithBreakpoint(
     view! {
         <li class="ml-8">
             <Breakpoint
+                program=program
                 expression=expression.clone()
                 events=events />
             <Line
@@ -185,7 +186,11 @@ pub fn LineWithBreakpoint(
 }
 
 #[component]
-pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
+pub fn Breakpoint(
+    program: ReadSignal<Program>,
+    expression: Expression,
+    events: EventsTx,
+) -> impl IntoView {
     let breakpoint_color = if expression.breakpoint {
         "text-green-600"
     } else {
@@ -193,6 +198,16 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
     };
 
     let class = format!("mr-1 {breakpoint_color}");
+
+    let expression2 = expression.clone();
+    let address = move || {
+        program
+            .get()
+            .source_map
+            .location_to_address(&expression2.location)
+            .expect("Every location in the source should have an address")
+            .to_usize()
+    };
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
@@ -221,6 +236,7 @@ pub fn Breakpoint(expression: Expression, events: EventsTx) -> impl IntoView {
     view! {
         <span
             class=class
+            data-address=address
             data-function=expression.location.function
             data-line=expression.location.index
             on:click=toggle_breakpoint>
