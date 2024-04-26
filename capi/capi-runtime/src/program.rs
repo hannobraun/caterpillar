@@ -95,7 +95,7 @@ pub enum ProgramState {
 
     Error {
         err: builtins::Error,
-        instruction: usize,
+        instruction: InstructionAddress,
     },
 }
 
@@ -114,10 +114,9 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Error { err, instruction } => Self::Error {
-                err,
-                instruction: instruction.0,
-            },
+            EvaluatorState::Error { err, instruction } => {
+                Self::Error { err, instruction }
+            }
         }
     }
 }

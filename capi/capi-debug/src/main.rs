@@ -1,6 +1,5 @@
 use capi_runtime::{
-    DebugEvent, Expression, InstructionAddress, LineLocation, Program,
-    ProgramState,
+    DebugEvent, Expression, LineLocation, Program, ProgramState,
 };
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -244,10 +243,7 @@ pub fn Line(
                 "bg-green-300"
             }
             ProgramState::Error { instruction, .. }
-                if program
-                    .get()
-                    .location(InstructionAddress(instruction))
-                    .as_ref()
+                if program.get().location(instruction).as_ref()
                     == Some(&expression.location) =>
             {
                 "bg-red-300"
