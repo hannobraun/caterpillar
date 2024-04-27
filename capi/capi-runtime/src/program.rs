@@ -44,9 +44,8 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
-        let state = self.step_inner(mem);
-        self.state = state.clone();
-        state
+        self.state = self.step_inner(mem);
+        self.state.clone()
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
