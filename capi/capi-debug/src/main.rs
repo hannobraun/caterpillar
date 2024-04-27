@@ -99,6 +99,10 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
         view! {
             <div>
                 <p>
+                    "Previous data stack: "
+                    {format!("{:?}", program.get().previous_data_stack)}
+                </p>
+                <p>
                     "Current data stack: "
                     {format!("{:?}", program.get().evaluator.data_stack)}
                 </p>
