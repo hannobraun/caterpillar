@@ -50,7 +50,7 @@ impl Program {
     }
 
     fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
-        let address = self.evaluator.next_instruction;
+        let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };
         }
