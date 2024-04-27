@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins, evaluator::EvaluatorState, source_map::SourceMap, DebugEvent,
-    Evaluator, Functions, InstructionAddress, Value,
+    builtins, evaluator::EvaluatorState, source_map::SourceMap, DataStack,
+    DebugEvent, Evaluator, Functions, InstructionAddress, Value,
 };
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
@@ -16,6 +16,9 @@ pub struct Program {
 
     /// The most recently executed instruction
     pub most_recent_instruction: InstructionAddress,
+
+    /// The data stack, before the most recent instruction was executed
+    pub previous_data_stack: DataStack,
 }
 
 impl Program {
@@ -54,6 +57,7 @@ impl Program {
             return ProgramState::Paused { address };
         }
 
+        self.previous_data_stack = self.evaluator.data_stack.clone();
         self.most_recent_instruction = self.evaluator.next_instruction;
         self.evaluator.step(mem).into()
     }
