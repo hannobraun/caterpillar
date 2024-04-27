@@ -13,6 +13,9 @@ pub struct Program {
     pub evaluator: Evaluator,
     pub state: ProgramState,
     pub entry_address: InstructionAddress,
+
+    /// The most recently executed instruction
+    pub most_recent_instruction: InstructionAddress,
 }
 
 impl Program {
@@ -52,6 +55,7 @@ impl Program {
             return ProgramState::Paused { address };
         }
 
+        self.most_recent_instruction = address;
         self.evaluator.step(mem).into()
     }
 }
