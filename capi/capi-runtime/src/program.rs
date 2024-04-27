@@ -55,7 +55,7 @@ impl Program {
             return ProgramState::Paused { address };
         }
 
-        self.most_recent_instruction = address;
+        self.most_recent_instruction = self.evaluator.next_instruction;
         self.evaluator.step(mem).into()
     }
 }
