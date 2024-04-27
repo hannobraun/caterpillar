@@ -59,6 +59,7 @@ impl Program {
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.most_recent_instruction = self.evaluator.next_instruction;
+
         self.evaluator.step(mem).into()
     }
 }
