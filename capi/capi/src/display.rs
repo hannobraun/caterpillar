@@ -17,7 +17,7 @@ pub fn run(
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
-    let mut mem = [0; TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS];
+    let mut mem = [0; MEM_SIZE];
 
     let event_loop = EventLoop::new()?;
     #[allow(deprecated)] // only for the transition to winit 0.30
@@ -148,3 +148,5 @@ const PIXELS_PER_TILE_AXIS: usize = 8;
 const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 
 const TILES_OFFSET: usize = 256;
+
+const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
