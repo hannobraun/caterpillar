@@ -26,7 +26,10 @@ pub fn run(
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
     let mut pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
 
-    let mut state = State { mem: [0; MEM_SIZE] };
+    let mut state = State {
+        mem: [0; MEM_SIZE],
+        window,
+    };
 
     #[allow(deprecated)] // only for the transition to winit 0.30
     event_loop.run(|event, event_loop_window_target| match event {
@@ -106,7 +109,7 @@ pub fn run(
                 }
             }
 
-            window.request_redraw();
+            state.window.request_redraw();
         }
         Event::WindowEvent {
             event: WindowEvent::CloseRequested,
@@ -153,4 +156,5 @@ const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 
 struct State {
     mem: [u8; MEM_SIZE],
+    window: Window,
 }
