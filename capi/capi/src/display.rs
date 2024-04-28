@@ -17,8 +17,6 @@ pub fn run(
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
-    let mem = [0; MEM_SIZE];
-
     let event_loop = EventLoop::new()?;
     #[allow(deprecated)] // only for the transition to winit 0.30
     let window = event_loop.create_window(
@@ -28,7 +26,7 @@ pub fn run(
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
     let mut pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
 
-    let mut state = State { mem };
+    let mut state = State { mem: [0; MEM_SIZE] };
 
     #[allow(deprecated)] // only for the transition to winit 0.30
     event_loop.run(|event, event_loop_window_target| match event {
