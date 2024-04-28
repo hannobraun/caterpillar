@@ -17,7 +17,7 @@ pub fn run(
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
-    let mut mem = [0; MEM_SIZE];
+    let mem = [0; MEM_SIZE];
 
     let event_loop = EventLoop::new()?;
     #[allow(deprecated)] // only for the transition to winit 0.30
@@ -27,6 +27,8 @@ pub fn run(
 
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
     let mut pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
+
+    let mut state = State { mem };
 
     #[allow(deprecated)] // only for the transition to winit 0.30
     event_loop.run(|event, event_loop_window_target| match event {
@@ -54,7 +56,7 @@ pub fn run(
                     break;
                 }
 
-                match program.step(&mut mem) {
+                match program.step(&mut state.mem) {
                     ProgramState::Running => {}
                     ProgramState::Paused { .. } => {
                         break;
@@ -79,7 +81,7 @@ pub fn run(
             for tile_y in 0..TILES_PER_AXIS {
                 for tile_x in 0..TILES_PER_AXIS {
                     let i = TILES_OFFSET + tile_y * TILES_PER_AXIS + tile_x;
-                    let tile = mem[i];
+                    let tile = state.mem[i];
 
                     let color = if tile == 0 {
                         [0, 0, 0, 0]
@@ -150,3 +152,7 @@ const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 const TILES_OFFSET: usize = 256;
 
 const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
+
+struct State {
+    mem: [u8; MEM_SIZE],
+}
