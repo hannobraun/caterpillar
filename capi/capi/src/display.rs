@@ -4,7 +4,7 @@ use winit::{
     event::{Event, KeyEvent, WindowEvent},
     event_loop::EventLoop,
     keyboard::{KeyCode, PhysicalKey},
-    window::WindowBuilder,
+    window::Window,
 };
 
 use crate::server::{EventsRx, UpdatesTx};
@@ -25,13 +25,15 @@ pub fn run(
     let mut mem = [0; TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS];
 
     let event_loop = EventLoop::new()?;
-    let window = WindowBuilder::new()
-        .with_title("Caterpillar")
-        .build(&event_loop)?;
+    #[allow(deprecated)] // only for the transition to winit 0.30
+    let window = event_loop.create_window(
+        Window::default_attributes().with_title("Caterpillar"),
+    )?;
 
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
     let mut pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
 
+    #[allow(deprecated)] // only for the transition to winit 0.30
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
