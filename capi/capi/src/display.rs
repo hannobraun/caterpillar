@@ -14,14 +14,9 @@ pub fn run(
     mut events: EventsRx,
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
-    const TILES_PER_AXIS: usize = 32;
-    const PIXELS_PER_TILE_AXIS: usize = 8;
-
-    const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
     let size_u32: u32 =
         SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
 
-    const TILES_OFFSET: usize = 256;
     let mut mem = [0; TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS];
 
     let event_loop = EventLoop::new()?;
@@ -146,3 +141,10 @@ pub fn run(
 
     Ok(())
 }
+
+const TILES_PER_AXIS: usize = 32;
+const PIXELS_PER_TILE_AXIS: usize = 8;
+
+const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+
+const TILES_OFFSET: usize = 256;
