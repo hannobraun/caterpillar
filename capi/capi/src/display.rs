@@ -24,11 +24,12 @@ pub fn run(
     )?;
 
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
-    let mut pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
+    let pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
 
     let mut state = State {
         mem: [0; MEM_SIZE],
         window,
+        pixels,
     };
 
     #[allow(deprecated)] // only for the transition to winit 0.30
@@ -102,7 +103,7 @@ pub fn run(
                                 * num_channels;
 
                             let i = frame_y * SIZE + frame_x;
-                            pixels.frame_mut()[i..i + num_channels]
+                            state.pixels.frame_mut()[i..i + num_channels]
                                 .copy_from_slice(&color);
                         }
                     }
@@ -135,7 +136,7 @@ pub fn run(
             event: WindowEvent::RedrawRequested,
             ..
         } => {
-            if let Err(err) = pixels.render() {
+            if let Err(err) = state.pixels.render() {
                 eprintln!("Render error: {err}");
             }
         }
@@ -157,4 +158,5 @@ const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 struct State {
     mem: [u8; MEM_SIZE],
     window: Window,
+    pixels: Pixels,
 }
