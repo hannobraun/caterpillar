@@ -3,6 +3,24 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-28
+
+Yesterday, I implied that supporting interactive programming in production
+environments can be useful. Maybe to log into your server system to inspect a
+weird edge case, instead of having to reproduce that locally. Or even a
+customer's local system, working with them to reproduce an elusive bug.
+
+Obviously this needs to be regulated somehow. You probably don't want to just
+deploy a change directly to production, without any review or testing. And it
+would be very rude (at the very least) to ship your application with a built-in
+backdoor.
+
+But I think there are ways to make this work. Permissions. Some kind of "sudo"
+mode. Providing ways for the user to consent to remote access. Maybe even
+teaching the runtime about staging and production environments, and integrate
+with a CI/CD pipeline. I think there's a lot of potential here waiting to be
+explored!
+
 ## 2024-04-27
 
 When it comes to zero-overhead abstractions and Caterpillar, the elephant in the
