@@ -1,5 +1,6 @@
 use capi_runtime::{
-    DebugEvent, Expression, InstructionAddress, Program, ProgramState,
+    DebugEvent, Expression, ExpressionKind, InstructionAddress, Program,
+    ProgramState,
 };
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -281,8 +282,15 @@ pub fn Line(
     program: ReadSignal<Program>,
     expression: Expression,
 ) -> impl IntoView {
+    let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
     let class = move || {
         let state = program.get().state;
+
+        let text_classes = if is_comment {
+            "italic text-gray-500"
+        } else {
+            ""
+        };
 
         let bg_class = match state {
             ProgramState::Paused { address, .. }
@@ -308,7 +316,7 @@ pub fn Line(
             _ => "",
         };
 
-        format!("px-0.5 {bg_class}")
+        format!("px-0.5 {text_classes} {bg_class}")
     };
     let line = format!("{}", expression.kind);
 
