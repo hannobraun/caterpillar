@@ -200,22 +200,18 @@ pub fn LineWithBreakpoint(
 ) -> impl IntoView {
     let location = expression.location.clone();
     let address = create_memo(move |_| {
-        program
-            .get()
-            .source_map
-            .location_to_address(&location)
-            .expect("Every location in the source should have an address")
+        program.get().source_map.location_to_address(&location)
     });
 
     let breakpoint = move || {
-        let address = address.get();
+        let address = address.get()?;
 
-        view! {
+        Some(view! {
             <Breakpoint
                 program=program
                 address=address
                 events=events.clone() />
-        }
+        })
     };
 
     view! {
