@@ -16,6 +16,15 @@ impl<'r> Syntax<'r> {
         }
     }
 
+    pub fn c(&mut self, text: &str) -> &mut Self {
+        let location = self.next_location.increment();
+        self.expressions.push(Expression::new(
+            ExpressionKind::Comment { text: text.into() },
+            location,
+        ));
+        self
+    }
+
     pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
         let location = self.next_location.increment();
         self.expressions.push(Expression::new(
