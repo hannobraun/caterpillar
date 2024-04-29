@@ -32,7 +32,7 @@ pub fn run(
         events,
         updates,
         mem: [0; MEM_SIZE],
-        window,
+        window: Some(window),
         pixels: Some(pixels),
     };
 
@@ -55,7 +55,7 @@ struct State {
     events: EventsRx,
     updates: UpdatesTx,
     mem: [u8; MEM_SIZE],
-    window: Window,
+    window: Option<Window>,
     pixels: Option<Pixels>,
 }
 
@@ -96,7 +96,7 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let window = &self.window;
+        let Some(window) = &self.window else { return };
         let Some(pixels) = self.pixels.as_mut() else {
             return;
         };
