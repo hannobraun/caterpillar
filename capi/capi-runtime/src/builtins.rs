@@ -117,5 +117,5 @@ pub enum Error {
     IntegerOverflow,
 
     #[error(transparent)]
-    PopFromEmptyStack(#[from] StackUnderflow),
+    StackUnderflow(#[from] StackUnderflow),
 }
