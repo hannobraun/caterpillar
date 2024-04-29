@@ -216,6 +216,16 @@ pub fn Breakpoint(
     events: EventsTx,
 ) -> impl IntoView {
     let expression2 = expression.clone();
+
+    let address = create_memo(move |_| {
+        program
+            .get()
+            .source_map
+            .location_to_address(&expression.location)
+            .expect("Every location in the source should have an address")
+    });
+    let data_address = move || address.get().to_usize();
+
     let class = move || {
         let address = program
             .get()
@@ -231,15 +241,6 @@ pub fn Breakpoint(
 
         format!("mr-1 {breakpoint_color}")
     };
-
-    let address = create_memo(move |_| {
-        program
-            .get()
-            .source_map
-            .location_to_address(&expression.location)
-            .expect("Every location in the source should have an address")
-    });
-    let data_address = move || address.get().to_usize();
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
