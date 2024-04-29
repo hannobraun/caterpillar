@@ -68,7 +68,7 @@ impl ApplicationHandler for State {
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        let Some(pixels) = self.pixels.as_ref() else {
+        let Some(pixels) = &self.pixels else {
             return;
         };
 
