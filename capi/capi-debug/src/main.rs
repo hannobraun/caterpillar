@@ -40,6 +40,8 @@ pub fn Debugger(
             program=program />
         <DataStack
             program=program />
+        <ResetButton
+            events=events.clone() />
         <div>
             <Functions
                 program=program
@@ -112,6 +114,21 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
 
     view! {
         {data_stack}
+    }
+}
+
+#[component]
+pub fn ResetButton(events: EventsTx) -> impl IntoView {
+    let send_reset = move |_| {
+        leptos::spawn_local(send_event(DebugEvent::Reset, events.clone()));
+    };
+
+    view! {
+        <input
+            type="button"
+            value="Reset"
+            class="m-1 px-1 bg-gray-300 font-bold"
+            on:click=send_reset />
     }
 }
 
