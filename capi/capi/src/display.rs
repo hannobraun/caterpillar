@@ -64,13 +64,13 @@ impl ApplicationHandler for State {
 
     fn window_event(
         &mut self,
-        event_loop_window_target: &ActiveEventLoop,
+        event_loop: &ActiveEventLoop,
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
         match event {
             WindowEvent::CloseRequested => {
-                event_loop_window_target.exit();
+                event_loop.exit();
             }
             WindowEvent::KeyboardInput {
                 event:
@@ -80,7 +80,7 @@ impl ApplicationHandler for State {
                     },
                 ..
             } => {
-                event_loop_window_target.exit();
+                event_loop.exit();
             }
             WindowEvent::RedrawRequested => {
                 if let Err(err) = self.pixels.render() {
