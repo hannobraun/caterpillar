@@ -94,6 +94,8 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
+        let pixels = &mut self.pixels;
+
         while let Ok(event) = self.events.try_recv() {
             self.program.apply_debug_event(event);
             self.updates.send(self.program.clone()).unwrap();
@@ -163,7 +165,7 @@ impl ApplicationHandler for State {
                             * num_channels;
 
                         let i = frame_y * SIZE + frame_x;
-                        self.pixels.frame_mut()[i..i + num_channels]
+                        pixels.frame_mut()[i..i + num_channels]
                             .copy_from_slice(&color);
                     }
                 }
