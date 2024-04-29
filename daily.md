@@ -3,6 +3,26 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-04-29
+
+I've talked about the possibility of exporting a program from the interactive
+runtime, into a fully compiled and optimized form for production deployment. But
+what if we had a more advanced, more flexible form of that concept? What if we
+could decide on the fly which parts of the program are "solid", i.e. compiled
+and optimized, or "fluid", i.e. with full support for interactive programming.
+
+At any point, we could decide to change the boundary between solid and fluid,
+whether the program is running in a local development environment or a remote
+staging/production environment. That might take a few seconds,
+compiling/optimizing/linking the solid code and deploying the new version, but
+so what? Afterwards, we could manipulate the fluid parts of the program in a
+fully interactive way.
+
+This is just an idea. Maybe it wouldn't be as useful as I imagine it. But if it
+worked out, it would turn interactive programming in Caterpillar into a
+zero-overhead abstraction. It would no longer slow down code that doesn't use
+it.
+
 ## 2024-04-28
 
 Yesterday, I implied that supporting interactive programming in production
