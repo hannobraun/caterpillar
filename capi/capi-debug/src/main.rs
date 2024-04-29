@@ -196,12 +196,16 @@ pub fn LineWithBreakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
+    let breakpoint = view! {
+        <Breakpoint
+            program=program
+            expression=expression.clone()
+            events=events />
+    };
+
     view! {
         <li class="ml-8">
-            <Breakpoint
-                program=program
-                expression=expression.clone()
-                events=events />
+            {breakpoint}
             <Line
                 program=program
                 expression=expression />
