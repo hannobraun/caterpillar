@@ -24,6 +24,10 @@ pub struct Program {
 }
 
 impl Program {
+    pub fn reset(&mut self) {
+        self.evaluator.next_instruction = self.entry_address;
+    }
+
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
         assert!(
             self.evaluator.data_stack.is_empty(),
@@ -33,10 +37,6 @@ impl Program {
         for value in arguments {
             self.evaluator.data_stack.push(value);
         }
-    }
-
-    pub fn reset(&mut self) {
-        self.evaluator.next_instruction = self.entry_address;
     }
 
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
