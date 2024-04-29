@@ -6,8 +6,8 @@ use futures::{
 };
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{
-    component, create_signal, ev::MouseEvent, view, CollectView, IntoView,
-    ReadSignal, SignalGet, SignalSet, WriteSignal,
+    component, create_memo, create_signal, ev::MouseEvent, view, CollectView,
+    IntoView, ReadSignal, SignalGet, SignalSet, WriteSignal,
 };
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement};
 
@@ -232,14 +232,14 @@ pub fn Breakpoint(
         format!("mr-1 {breakpoint_color}")
     };
 
-    let data_address = move || {
+    let address = create_memo(move |_| {
         program
             .get()
             .source_map
             .location_to_address(&expression.location)
             .expect("Every location in the source should have an address")
-            .to_usize()
-    };
+    });
+    let data_address = move || address.get().to_usize();
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
