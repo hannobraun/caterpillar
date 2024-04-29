@@ -13,6 +13,10 @@ impl DataStack {
         Self::default()
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.values.is_empty()
+    }
+
     pub fn clone(&mut self) -> Value {
         self.values.last().copied().unwrap()
     }
