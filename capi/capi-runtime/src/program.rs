@@ -27,6 +27,8 @@ impl Program {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
+        self.most_recent_instruction = InstructionAddress::default();
+        self.previous_data_stack.clear();
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
