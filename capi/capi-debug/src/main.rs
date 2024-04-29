@@ -1,4 +1,6 @@
-use capi_runtime::{DebugEvent, Expression, Program, ProgramState};
+use capi_runtime::{
+    DebugEvent, Expression, InstructionAddress, Program, ProgramState,
+};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -196,11 +198,24 @@ pub fn LineWithBreakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
-    let breakpoint = view! {
-        <Breakpoint
-            program=program
-            expression=expression.clone()
-            events=events />
+    let location = expression.location.clone();
+    let address = create_memo(move |_| {
+        program
+            .get()
+            .source_map
+            .location_to_address(&location)
+            .expect("Every location in the source should have an address")
+    });
+
+    let breakpoint = move || {
+        let address = address.get();
+
+        view! {
+            <Breakpoint
+                program=program
+                address=address
+                events=events.clone() />
+        }
     };
 
     view! {
@@ -216,19 +231,11 @@ pub fn LineWithBreakpoint(
 #[component]
 pub fn Breakpoint(
     program: ReadSignal<Program>,
-    expression: Expression,
+    address: InstructionAddress,
     events: EventsTx,
 ) -> impl IntoView {
-    let address = create_memo(move |_| {
-        program
-            .get()
-            .source_map
-            .location_to_address(&expression.location)
-            .expect("Every location in the source should have an address")
-    });
-
     let class = move || {
-        let breakpoint_color = if program.get().breakpoint_at(&address.get()) {
+        let breakpoint_color = if program.get().breakpoint_at(&address) {
             "text-green-600"
         } else {
             "text-green-300"
@@ -237,7 +244,7 @@ pub fn Breakpoint(
         format!("mr-1 {breakpoint_color}")
     };
 
-    let data_address = move || address.get().to_usize();
+    let data_address = move || address.to_usize();
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
