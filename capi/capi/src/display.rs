@@ -15,25 +15,15 @@ pub fn run(
     events: EventsRx,
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
-    let size_u32: u32 =
-        SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
-
     let event_loop = EventLoop::new()?;
-    #[allow(deprecated)] // only for the transition to winit 0.30
-    let window = event_loop
-        .create_window(Window::default_attributes().with_title("Caterpillar"))
-        .unwrap();
-
-    let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
-    let pixels = Pixels::new(size_u32, size_u32, surface_texture).unwrap();
 
     let mut state = State {
         program,
         events,
         updates,
         mem: [0; MEM_SIZE],
-        window: Some(window),
-        pixels: Some(pixels),
+        window: None,
+        pixels: None,
     };
 
     event_loop.run_app(&mut state)?;
@@ -60,7 +50,24 @@ struct State {
 }
 
 impl ApplicationHandler for State {
-    fn resumed(&mut self, _: &ActiveEventLoop) {}
+    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        let window = self.window.get_or_insert_with(|| {
+            event_loop
+                .create_window(
+                    Window::default_attributes().with_title("Caterpillar"),
+                )
+                .unwrap()
+        });
+
+        self.pixels.get_or_insert_with(|| {
+            let size_u32: u32 =
+                SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
+
+            let surface_texture =
+                SurfaceTexture::new(size_u32, size_u32, window);
+            Pixels::new(size_u32, size_u32, surface_texture).unwrap()
+        });
+    }
 
     fn window_event(
         &mut self,
