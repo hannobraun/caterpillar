@@ -11,7 +11,7 @@ use crate::server::{EventsRx, UpdatesTx};
 
 pub fn run(
     program: Program,
-    mut events: EventsRx,
+    events: EventsRx,
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
     let size_u32: u32 =
@@ -28,6 +28,7 @@ pub fn run(
 
     let mut state = State {
         program,
+        events,
         mem: [0; MEM_SIZE],
         window,
         pixels,
@@ -36,7 +37,7 @@ pub fn run(
     #[allow(deprecated)] // only for the transition to winit 0.30
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
-            while let Ok(event) = events.try_recv() {
+            while let Ok(event) = state.events.try_recv() {
                 state.program.apply_debug_event(event);
                 updates.send(state.program.clone()).unwrap();
             }
@@ -160,6 +161,7 @@ const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 
 struct State {
     program: Program,
+    events: EventsRx,
     mem: [u8; MEM_SIZE],
     window: Window,
     pixels: Pixels,
