@@ -15,6 +15,9 @@ pub fn compile(
 
     for expression in syntax {
         let instruction = match expression.kind {
+            ExpressionKind::Comment { .. } => {
+                continue;
+            }
             ExpressionKind::Value(value) => Instruction::PushValue(value),
             ExpressionKind::Word { name } => {
                 word_to_instruction(name, functions)
