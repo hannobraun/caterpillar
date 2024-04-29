@@ -25,7 +25,7 @@ pub struct Program {
 
 impl Program {
     pub fn reset(&mut self) {
-        self.evaluator.next_instruction = self.entry_address;
+        self.evaluator.reset(self.entry_address);
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {

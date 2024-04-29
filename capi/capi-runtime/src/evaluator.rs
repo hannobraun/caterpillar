@@ -18,6 +18,10 @@ impl Evaluator {
         self.next_instruction = entry;
     }
 
+    pub fn reset(&mut self, entry: InstructionAddress) {
+        self.next_instruction = entry;
+    }
+
     pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
         self.next_instruction.increment();
