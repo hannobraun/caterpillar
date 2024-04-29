@@ -232,7 +232,7 @@ pub fn Breakpoint(
         format!("mr-1 {breakpoint_color}")
     };
 
-    let address = move || {
+    let data_address = move || {
         program
             .get()
             .source_map
@@ -268,7 +268,7 @@ pub fn Breakpoint(
     view! {
         <span
             class=class
-            data-address=address
+            data-address=data_address
             on:click=toggle_breakpoint>
             {'⦿'}
         </span>
