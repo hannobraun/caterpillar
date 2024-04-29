@@ -10,7 +10,7 @@ use winit::{
 use crate::server::{EventsRx, UpdatesTx};
 
 pub fn run(
-    mut program: Program,
+    program: Program,
     mut events: EventsRx,
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
@@ -27,6 +27,7 @@ pub fn run(
     let pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
 
     let mut state = State {
+        program,
         mem: [0; MEM_SIZE],
         window,
         pixels,
@@ -36,19 +37,21 @@ pub fn run(
     event_loop.run(|event, event_loop_window_target| match event {
         Event::AboutToWait => {
             while let Ok(event) = events.try_recv() {
-                program.apply_debug_event(event);
-                updates.send(program.clone()).unwrap();
+                state.program.apply_debug_event(event);
+                updates.send(state.program.clone()).unwrap();
             }
 
-            if let ProgramState::Finished = program.state {
-                program.push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
-                program.reset();
+            if let ProgramState::Finished = state.program.state {
+                state
+                    .program
+                    .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
+                state.program.reset();
             }
 
-            let previous_state = program.state.clone();
+            let previous_state = state.program.state.clone();
 
             loop {
-                if let ProgramState::Error { .. } = program.state {
+                if let ProgramState::Error { .. } = state.program.state {
                     // If there's an error, never run the program again. As of
                     // this writing, that's it, and for now that's fine.
                     //
@@ -58,14 +61,14 @@ pub fn run(
                     break;
                 }
 
-                match program.step(&mut state.mem) {
+                match state.program.step(&mut state.mem) {
                     ProgramState::Running => {}
                     ProgramState::Paused { .. } => {
                         break;
                     }
                     ProgramState::Finished => {
                         assert_eq!(
-                            program.evaluator.data_stack.num_values(),
+                            state.program.evaluator.data_stack.num_values(),
                             0
                         );
                         break;
@@ -76,8 +79,8 @@ pub fn run(
                 }
             }
 
-            if program.state != previous_state {
-                updates.send(program.clone()).unwrap();
+            if state.program.state != previous_state {
+                updates.send(state.program.clone()).unwrap();
             }
 
             for tile_y in 0..TILES_PER_AXIS {
@@ -156,6 +159,7 @@ const TILES_OFFSET: usize = 256;
 const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 
 struct State {
+    program: Program,
     mem: [u8; MEM_SIZE],
     window: Window,
     pixels: Pixels,
