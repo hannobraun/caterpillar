@@ -44,6 +44,9 @@ impl Program {
 
     pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
+            DebugEvent::Reset => {
+                self.reset();
+            }
             DebugEvent::ToggleBreakpoint { address } => {
                 let breakpoint =
                     self.breakpoints.entry(address).or_insert(false);
