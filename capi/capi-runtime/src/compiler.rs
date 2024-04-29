@@ -62,7 +62,7 @@ fn word_to_instruction(
     Instruction::CallBuiltin { name: word }
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
     CallBuiltin { name: String },
     CallFunction { name: String },

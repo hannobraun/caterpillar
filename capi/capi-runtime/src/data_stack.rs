@@ -1,6 +1,8 @@
 use core::fmt;
 
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
+)]
 pub struct DataStack {
     values: Vec<Value>,
     saved: Vec<Value>,

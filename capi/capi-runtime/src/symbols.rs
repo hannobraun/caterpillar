@@ -2,7 +2,9 @@ use std::collections::BTreeMap;
 
 use crate::InstructionAddress;
 
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
+)]
 pub struct Symbols {
     inner: BTreeMap<String, InstructionAddress>,
 }

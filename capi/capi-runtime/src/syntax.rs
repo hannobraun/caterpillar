@@ -37,7 +37,7 @@ impl<'r> Syntax<'r> {
     }
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
     pub location: SourceLocation,
@@ -49,7 +49,7 @@ impl Expression {
     }
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ExpressionKind {
     Value(Value),
     Word { name: String },

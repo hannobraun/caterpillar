@@ -5,7 +5,9 @@ use crate::{
     DebugEvent, Evaluator, Functions, InstructionAddress, Value,
 };
 
-#[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
