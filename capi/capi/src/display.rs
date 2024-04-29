@@ -114,9 +114,9 @@ impl ApplicationHandler for State {
         }
 
         if let ProgramState::Finished = self.program.state {
+            self.program.reset();
             self.program
                 .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
-            self.program.reset();
         }
 
         loop {
