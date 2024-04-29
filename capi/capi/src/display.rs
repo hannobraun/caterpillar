@@ -68,9 +68,7 @@ impl ApplicationHandler for State {
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        let Some(pixels) = &self.pixels else {
-            return;
-        };
+        let Some(pixels) = &self.pixels else { return };
 
         match event {
             WindowEvent::CloseRequested => {
