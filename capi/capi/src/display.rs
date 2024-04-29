@@ -33,7 +33,7 @@ pub fn run(
         updates,
         mem: [0; MEM_SIZE],
         window,
-        pixels,
+        pixels: Some(pixels),
     };
 
     event_loop.run_app(&mut state)?;
@@ -56,7 +56,7 @@ struct State {
     updates: UpdatesTx,
     mem: [u8; MEM_SIZE],
     window: Window,
-    pixels: Pixels,
+    pixels: Option<Pixels>,
 }
 
 impl ApplicationHandler for State {
@@ -68,7 +68,9 @@ impl ApplicationHandler for State {
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        let pixels = &self.pixels;
+        let Some(pixels) = self.pixels.as_ref() else {
+            return;
+        };
 
         match event {
             WindowEvent::CloseRequested => {
@@ -94,7 +96,9 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let pixels = &mut self.pixels;
+        let Some(pixels) = self.pixels.as_mut() else {
+            return;
+        };
 
         while let Ok(event) = self.events.try_recv() {
             self.program.apply_debug_event(event);
