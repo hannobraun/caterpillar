@@ -29,6 +29,7 @@ pub fn run(
     let mut state = State {
         program,
         events,
+        updates,
         mem: [0; MEM_SIZE],
         window,
         pixels,
@@ -39,7 +40,7 @@ pub fn run(
         Event::AboutToWait => {
             while let Ok(event) = state.events.try_recv() {
                 state.program.apply_debug_event(event);
-                updates.send(state.program.clone()).unwrap();
+                state.updates.send(state.program.clone()).unwrap();
             }
 
             if let ProgramState::Finished = state.program.state {
@@ -81,7 +82,7 @@ pub fn run(
             }
 
             if state.program.state != previous_state {
-                updates.send(state.program.clone()).unwrap();
+                state.updates.send(state.program.clone()).unwrap();
             }
 
             for tile_y in 0..TILES_PER_AXIS {
@@ -162,6 +163,7 @@ const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 struct State {
     program: Program,
     events: EventsRx,
+    updates: UpdatesTx,
     mem: [u8; MEM_SIZE],
     window: Window,
     pixels: Pixels,
