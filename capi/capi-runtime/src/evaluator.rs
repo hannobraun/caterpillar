@@ -21,6 +21,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, entry: InstructionAddress) {
+        self.data_stack.clear();
         self.next_instruction = entry;
     }
 
