@@ -4,9 +4,13 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("write_to_tile_buffer", |s| {
-        s.w("last_tile_index")
+        s.c("Let `set_all_tiles` know when it's done")
+            .w("last_tile_index")
+            .c("Let `set_all_tiles` know where to start")
             .w("first_tile_index")
+            .c("Set all the tiles")
             .w("set_all_tiles")
+            .c("Last and current tile indices (now equal) are left on stack")
             .w("clean_up_arguments");
     });
     source.define("last_tile_index", |s| {
