@@ -80,7 +80,9 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
-    let c = a.0.wrapping_sub(b.0);
+    let Some(c) = a.0.checked_sub(b.0) else {
+        return Err(Error::IntegerOverflow);
+    };
 
     data_stack.push(c);
 
