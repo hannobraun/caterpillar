@@ -13,6 +13,10 @@ impl DataStack {
         Self::default()
     }
 
+    pub fn num_values(&self) -> usize {
+        self.values.len()
+    }
+
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }
@@ -27,10 +31,6 @@ impl DataStack {
 
     pub fn pop(&mut self) -> Result<Value, StackUnderflow> {
         self.values.pop().ok_or(StackUnderflow)
-    }
-
-    pub fn num_values(&self) -> usize {
-        self.values.len()
     }
 
     pub fn save(&mut self, num: u32) {
