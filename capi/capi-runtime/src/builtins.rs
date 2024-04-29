@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use crate::{data_stack::PopFromEmptyStack, Value};
+use crate::{data_stack::StackUnderflow, Value};
 
 use super::data_stack::DataStack;
 
@@ -117,5 +117,5 @@ pub enum Error {
     IntegerOverflow,
 
     #[error(transparent)]
-    PopFromEmptyStack(#[from] PopFromEmptyStack),
+    PopFromEmptyStack(#[from] StackUnderflow),
 }

@@ -25,8 +25,8 @@ impl DataStack {
         self.values.push(value.into());
     }
 
-    pub fn pop(&mut self) -> Result<Value, PopFromEmptyStack> {
-        self.values.pop().ok_or(PopFromEmptyStack)
+    pub fn pop(&mut self) -> Result<Value, StackUnderflow> {
+        self.values.pop().ok_or(StackUnderflow)
     }
 
     pub fn num_values(&self) -> usize {
@@ -81,4 +81,4 @@ impl fmt::Display for Value {
     thiserror::Error,
 )]
 #[error("Tried to pop value from empty stack")]
-pub struct PopFromEmptyStack;
+pub struct StackUnderflow;
