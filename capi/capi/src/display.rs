@@ -20,12 +20,12 @@ pub fn run(
 
     let event_loop = EventLoop::new()?;
     #[allow(deprecated)] // only for the transition to winit 0.30
-    let window = event_loop.create_window(
-        Window::default_attributes().with_title("Caterpillar"),
-    )?;
+    let window = event_loop
+        .create_window(Window::default_attributes().with_title("Caterpillar"))
+        .unwrap();
 
     let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
-    let pixels = Pixels::new(size_u32, size_u32, surface_texture)?;
+    let pixels = Pixels::new(size_u32, size_u32, surface_texture).unwrap();
 
     let mut state = State {
         program,
