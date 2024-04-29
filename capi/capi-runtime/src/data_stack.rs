@@ -13,6 +13,11 @@ impl DataStack {
         Self::default()
     }
 
+    pub fn clear(&mut self) {
+        self.values.clear();
+        self.saved.clear();
+    }
+
     pub fn num_values(&self) -> usize {
         self.values.len()
     }
