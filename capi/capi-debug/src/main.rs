@@ -284,7 +284,7 @@ pub fn Line(
     let class = move || {
         let state = program.get().state;
 
-        let class = match state {
+        let bg_class = match state {
             ProgramState::Paused { address, .. }
                 if program
                     .get()
@@ -308,7 +308,7 @@ pub fn Line(
             _ => "",
         };
 
-        format!("px-0.5 {class}")
+        format!("px-0.5 {bg_class}")
     };
     let line = format!("{}", expression.kind);
 
