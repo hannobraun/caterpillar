@@ -108,12 +108,6 @@ impl ApplicationHandler for State {
             return;
         };
 
-        if let ProgramState::Finished = self.program.state {
-            self.program.reset();
-            self.program
-                .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
-        }
-
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(5);
 
@@ -130,6 +124,15 @@ impl ApplicationHandler for State {
 
                 self.program.apply_debug_event(event);
                 self.updates.send(&self.program);
+            }
+
+            // This block needs to be located here, as receiving events from the
+            // client can lead to a reset, which then must result in the
+            // arguments being available, or the program can't work correctly.
+            if let ProgramState::Finished = self.program.state {
+                self.program.reset();
+                self.program
+                    .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
             match self.program.step(&mut self.mem) {
