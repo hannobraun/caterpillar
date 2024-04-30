@@ -17,6 +17,11 @@ impl UpdatesTx {
     }
 
     pub fn send(&mut self, program: &Program) {
+        if program.state.is_running() {
+            // Allowing the program to be sent when it's running would produce
+            // too many updates. Let's wait until it changed state.
+            return;
+        }
         if self.program_at_client.as_ref() == Some(program) {
             // Client already has this program. Don't need to send it again.
             return;
