@@ -60,6 +60,10 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
+        if let ProgramState::Error { .. } = self.state {
+            return self.state.clone();
+        }
+
         let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };

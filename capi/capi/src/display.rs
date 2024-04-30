@@ -120,10 +120,6 @@ impl ApplicationHandler for State {
                 self.updates.send(self.program.clone()).unwrap();
             }
 
-            if let ProgramState::Error { .. } = self.program.state {
-                break;
-            }
-
             match self.program.step(&mut self.mem) {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
