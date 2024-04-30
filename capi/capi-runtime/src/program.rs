@@ -21,6 +21,9 @@ pub struct Program {
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
+
+    /// Indicate whether the program was halted
+    pub halted: bool,
 }
 
 impl Program {
@@ -73,6 +76,13 @@ impl Program {
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
+        if self.halted {
+            return ProgramState::Error {
+                err: ProgramError::Halted,
+                address: self.evaluator.next_instruction,
+            };
+        }
+
         let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };
@@ -82,6 +92,10 @@ impl Program {
         self.most_recent_instruction = self.evaluator.next_instruction;
 
         self.evaluator.step(mem).into()
+    }
+
+    pub fn halt(&mut self) {
+        self.halted = true;
     }
 }
 
@@ -139,4 +153,7 @@ impl From<EvaluatorState> for ProgramState {
 pub enum ProgramError {
     #[error(transparent)]
     Builtins(#[from] builtins::Error),
+
+    #[error("The program was halted")]
+    Halted,
 }
