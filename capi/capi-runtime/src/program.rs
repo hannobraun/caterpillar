@@ -64,6 +64,15 @@ impl Program {
             return self.state.clone();
         }
 
+        self.state = self.step_inner(mem);
+        self.state.clone()
+    }
+
+    pub fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
+        // This method is separate from the main `step` method, so we can just
+        // return `ProgramState`s here, and have `step` take care of saving them
+        // in `self.state` automatically.
+
         let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };
@@ -72,8 +81,7 @@ impl Program {
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.most_recent_instruction = self.evaluator.next_instruction;
 
-        self.state = self.evaluator.step(mem).into();
-        self.state.clone()
+        self.evaluator.step(mem).into()
     }
 }
 
