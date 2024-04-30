@@ -1,3 +1,5 @@
+use std::time::{Duration, Instant};
+
 use capi_runtime::{Program, ProgramState, Value};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
@@ -112,6 +114,9 @@ impl ApplicationHandler for State {
                 .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
         }
 
+        let start_of_execution = Instant::now();
+        let timeout = Duration::from_millis(5);
+
         loop {
             while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
@@ -142,6 +147,10 @@ impl ApplicationHandler for State {
                 ProgramState::Error { .. } => {
                     break;
                 }
+            }
+
+            if start_of_execution.elapsed() > timeout {
+                self.program.halt();
             }
         }
 
