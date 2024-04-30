@@ -121,12 +121,6 @@ impl ApplicationHandler for State {
             }
 
             if let ProgramState::Error { .. } = self.program.state {
-                // If there's an error, never run the program again. As of
-                // this writing, that's it, and for now that's fine.
-                //
-                // Eventually, it would be great if we could get out of this
-                // by resetting the program, or rewinding the builtin that
-                // caused the error.
                 break;
             }
 
