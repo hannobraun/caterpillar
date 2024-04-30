@@ -108,11 +108,6 @@ impl ApplicationHandler for State {
             return;
         };
 
-        while let Ok(event) = self.events.try_recv() {
-            self.program.apply_debug_event(event);
-            self.updates.send(self.program.clone()).unwrap();
-        }
-
         if let ProgramState::Finished = self.program.state {
             self.program.reset();
             self.program
@@ -120,6 +115,11 @@ impl ApplicationHandler for State {
         }
 
         loop {
+            while let Ok(event) = self.events.try_recv() {
+                self.program.apply_debug_event(event);
+                self.updates.send(self.program.clone()).unwrap();
+            }
+
             if let ProgramState::Error { .. } = self.program.state {
                 // If there's an error, never run the program again. As of
                 // this writing, that's it, and for now that's fine.
