@@ -80,7 +80,7 @@ impl Program {
         if self.halted {
             return ProgramState::Error {
                 err: ProgramError::Halted,
-                address: self.evaluator.next_instruction,
+                address: self.most_recent_instruction,
             };
         }
 
