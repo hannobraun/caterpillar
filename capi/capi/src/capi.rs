@@ -44,9 +44,9 @@ pub fn program() -> Program {
             .w("sub");
     });
     source.define("set_tile", |s| {
-        s.v(1).w("tile").w("inc_tile_index");
+        s.v(1).w("tile").w("inc_tile_pos");
     });
-    source.define("inc_tile_index", |s| {
+    source.define("inc_tile_pos", |s| {
         s.c("Copy the width of the tile field.")
             .v(3)
             .w("copy")
