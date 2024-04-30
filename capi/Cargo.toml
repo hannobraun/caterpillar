@@ -5,3 +5,6 @@ default-members = ["capi"]
 
 [profile.dev.package."*"]
 opt-level = 3
+
+[profile.dev.package.capi-runtime]
+opt-level = 3
