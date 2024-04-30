@@ -30,7 +30,7 @@ pub fn program() -> Program {
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
             .w("set_tile")
-            .w("inc_tile_pos")
+            .w("increment_tile_position")
             .w("set_all_tiles");
     });
     source.define("check_tile_position", |s| {
@@ -47,7 +47,7 @@ pub fn program() -> Program {
     source.define("set_tile", |s| {
         s.v(1).w("tile");
     });
-    source.define("inc_tile_pos", |s| {
+    source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
             .v(3)
             .w("copy")
