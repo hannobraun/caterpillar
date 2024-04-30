@@ -32,6 +32,7 @@ impl Program {
         self.state = ProgramState::default();
         self.most_recent_instruction = InstructionAddress::default();
         self.previous_data_stack.clear();
+        self.halted = false;
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
