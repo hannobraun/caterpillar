@@ -17,7 +17,7 @@ pub use self::{
     debug::DebugEvent,
     evaluator::Evaluator,
     functions::{Function, Functions},
-    program::{Program, ProgramState},
+    program::{Program, ProgramError, ProgramState},
     source::Source,
     syntax::{Expression, ExpressionKind, SourceLocation},
 };
