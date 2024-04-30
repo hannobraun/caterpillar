@@ -19,7 +19,6 @@ pub fn run(
 
     let mut state = State {
         program,
-        program_at_client: None,
         events,
         updates,
         mem: [0; MEM_SIZE],
@@ -43,7 +42,6 @@ const MEM_SIZE: usize = TILES_OFFSET + TILES_PER_AXIS * TILES_PER_AXIS;
 
 struct State {
     program: Program,
-    program_at_client: Option<Program>,
     events: EventsRx,
     updates: UpdatesTx,
     mem: [u8; MEM_SIZE],
@@ -138,9 +136,8 @@ impl ApplicationHandler for State {
             }
         }
 
-        if self.program_at_client.as_ref() != Some(&self.program) {
+        if self.updates.program_at_client.as_ref() != Some(&self.program) {
             self.updates.send(&self.program);
-            self.program_at_client = Some(self.program.clone());
         }
 
         for tile_y in 0..TILES_PER_AXIS {
