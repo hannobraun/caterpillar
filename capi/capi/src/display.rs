@@ -117,7 +117,7 @@ impl ApplicationHandler for State {
         loop {
             while let Ok(event) = self.events.try_recv() {
                 self.program.apply_debug_event(event);
-                self.updates.inner.send(self.program.clone()).unwrap();
+                self.updates.send(self.program.clone()).unwrap();
             }
 
             match self.program.step(&mut self.mem) {
@@ -139,7 +139,7 @@ impl ApplicationHandler for State {
         }
 
         if self.program_at_client.as_ref() != Some(&self.program) {
-            self.updates.inner.send(self.program.clone()).unwrap();
+            self.updates.send(self.program.clone()).unwrap();
             self.program_at_client = Some(self.program.clone());
         }
 
