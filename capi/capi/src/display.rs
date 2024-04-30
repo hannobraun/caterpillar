@@ -136,9 +136,7 @@ impl ApplicationHandler for State {
             }
         }
 
-        if self.updates.program_at_client.as_ref() != Some(&self.program) {
-            self.updates.send(&self.program);
-        }
+        self.updates.send(&self.program);
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
