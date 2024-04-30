@@ -12,8 +12,8 @@ impl UpdatesTx {
         Self { inner }
     }
 
-    pub fn send(&self, program: Program) {
-        self.inner.send(program).unwrap()
+    pub fn send(&self, program: &Program) {
+        self.inner.send(program.clone()).unwrap()
     }
 }
 
