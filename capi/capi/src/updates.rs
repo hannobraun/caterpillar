@@ -12,11 +12,8 @@ impl UpdatesTx {
         Self { inner }
     }
 
-    pub fn send(
-        &self,
-        program: Program,
-    ) -> Result<(), watch::error::SendError<Program>> {
-        self.inner.send(program)
+    pub fn send(&self, program: Program) {
+        self.inner.send(program).unwrap()
     }
 }
 
