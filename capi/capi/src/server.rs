@@ -14,16 +14,14 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::{DebugEvent, Program};
+use capi_runtime::DebugEvent;
 use futures::{SinkExt, StreamExt};
-use tokio::{
-    net::TcpListener,
-    runtime::Runtime,
-    sync::{mpsc, watch},
-};
+use tokio::{net::TcpListener, runtime::Runtime, sync::mpsc};
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
+
+use crate::updates::UpdatesRx;
 
 pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
@@ -129,6 +127,3 @@ where
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
-
-pub type UpdatesRx = watch::Receiver<Program>;
-pub type UpdatesTx = watch::Sender<Program>;

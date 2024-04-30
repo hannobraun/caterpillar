@@ -1,6 +1,7 @@
 mod capi;
 mod display;
 mod server;
+mod updates;
 
 fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()

@@ -8,7 +8,7 @@ use winit::{
     window::Window,
 };
 
-use crate::server::{EventsRx, UpdatesTx};
+use crate::{server::EventsRx, updates::UpdatesTx};
 
 pub fn run(
     program: Program,
