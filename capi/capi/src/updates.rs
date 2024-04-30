@@ -17,10 +17,13 @@ impl UpdatesTx {
     }
 
     pub fn send(&mut self, program: &Program) {
-        if self.program_at_client.as_ref() != Some(program) {
-            self.program_at_client = Some(program.clone());
-            self.inner.send(program.clone()).unwrap();
+        if self.program_at_client.as_ref() == Some(program) {
+            // Client already has this program. Don't need to send it again.
+            return;
         }
+
+        self.program_at_client = Some(program.clone());
+        self.inner.send(program.clone()).unwrap();
     }
 }
 
