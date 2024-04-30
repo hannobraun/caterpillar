@@ -60,11 +60,6 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
-        self.state = self.step_inner(mem);
-        self.state.clone()
-    }
-
-    fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
         let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Paused { address };
@@ -73,7 +68,8 @@ impl Program {
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.most_recent_instruction = self.evaluator.next_instruction;
 
-        self.evaluator.step(mem).into()
+        self.state = self.evaluator.step(mem).into();
+        self.state.clone()
     }
 }
 
