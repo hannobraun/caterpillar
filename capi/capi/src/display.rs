@@ -115,7 +115,9 @@ impl ApplicationHandler for State {
         loop {
             while let Ok(event) = self.events.try_recv() {
                 self.program.apply_debug_event(event);
-                self.updates.send(&self.program);
+                if !self.program.state.is_running() {
+                    self.updates.send(&self.program);
+                }
             }
 
             match self.program.step(&mut self.mem) {
