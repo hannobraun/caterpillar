@@ -114,6 +114,15 @@ impl ApplicationHandler for State {
 
         loop {
             while let Ok(event) = self.events.try_recv() {
+                // This doesn't work so well. This receive loop was moved here,
+                // so we can have some control over the program from the
+                // debugger, while it is stuck in an endless loop.
+                //
+                // And this works somewhat. We can send events. But unless those
+                // events result in the program to stop running, we won't see
+                // any indication of them being received in the debugger, as the
+                // program isn't sent when it's running.
+
                 self.program.apply_debug_event(event);
                 self.updates.send(&self.program);
             }
