@@ -11,7 +11,7 @@ pub fn program() -> Program {
             .c("")
             .c("In addition, it also needs the position of the first tile,")
             .c("from which it will count up.")
-            .w("first_tile_pos")
+            .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("set_all_tiles")
             .c("`set_all_tiles` leaves its arguments on the stack, except that")
@@ -19,7 +19,7 @@ pub fn program() -> Program {
             .c("identical to the last one.")
             .w("clean_up_arguments");
     });
-    source.define("first_tile_pos", |s| {
+    source.define("first_tile_position", |s| {
         s.v(0).v(0);
     });
     source.define("set_all_tiles", |s| {
