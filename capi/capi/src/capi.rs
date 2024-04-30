@@ -26,13 +26,13 @@ pub fn program() -> Program {
         s.c("This is a recursive function, so we might have been at it for a")
             .c("while, if we make it here. Check if the current tile position")
             .c("has reached the last one, which would let us know we're done.")
-            .w("check_tile_index")
+            .w("check_tile_pos")
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
             .w("set_tile")
             .w("set_all_tiles");
     });
-    source.define("check_tile_index", |s| {
+    source.define("check_tile_pos", |s| {
         s.c("Copy height of tile field.")
             .v(2)
             .w("copy")
