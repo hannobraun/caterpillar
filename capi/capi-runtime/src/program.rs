@@ -99,7 +99,7 @@ pub enum ProgramState {
     Finished,
 
     Error {
-        err: builtins::Error,
+        err: ProgramError,
         address: InstructionAddress,
     },
 }
@@ -119,9 +119,24 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Error { err, address } => {
-                Self::Error { err, address }
-            }
+            EvaluatorState::Error { err, address } => Self::Error {
+                err: err.into(),
+                address,
+            },
         }
     }
+}
+
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
+pub enum ProgramError {
+    #[error(transparent)]
+    Builtins(#[from] builtins::Error),
 }
