@@ -27,7 +27,11 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn reset(&mut self) {
+    pub fn reset(&mut self, mem: &mut [u8]) {
+        for b in mem {
+            *b = 0;
+        }
+
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
         self.most_recent_instruction = InstructionAddress::default();
@@ -46,10 +50,10 @@ impl Program {
         }
     }
 
-    pub fn apply_debug_event(&mut self, event: DebugEvent) {
+    pub fn apply_debug_event(&mut self, event: DebugEvent, mem: &mut [u8]) {
         match event {
             DebugEvent::Reset => {
-                self.reset();
+                self.reset(mem);
             }
             DebugEvent::ToggleBreakpoint { address } => {
                 let breakpoint =

@@ -122,7 +122,7 @@ impl ApplicationHandler for State {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                self.program.apply_debug_event(event);
+                self.program.apply_debug_event(event, &mut self.mem);
                 self.updates.send(&self.program);
             }
 
@@ -130,7 +130,7 @@ impl ApplicationHandler for State {
             // client can lead to a reset, which then must result in the
             // arguments being available, or the program can't work correctly.
             if let ProgramState::Finished = self.program.state {
-                self.program.reset();
+                self.program.reset(&mut self.mem);
                 self.program
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
