@@ -4,7 +4,7 @@ use tokio::sync::watch;
 pub type UpdatesRx = watch::Receiver<Program>;
 
 pub struct UpdatesTx {
-    pub inner: watch::Sender<Program>,
+    pub inner: UpdatesTxInner,
 }
 
 impl UpdatesTx {
@@ -15,3 +15,5 @@ impl UpdatesTx {
         self.inner.send(program)
     }
 }
+
+pub type UpdatesTxInner = watch::Sender<Program>;
