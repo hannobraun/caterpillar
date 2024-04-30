@@ -8,6 +8,10 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
+    pub fn new(inner: UpdatesTxInner) -> Self {
+        Self { inner }
+    }
+
     pub fn send(
         &self,
         program: Program,
