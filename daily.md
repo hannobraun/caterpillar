@@ -3,6 +3,26 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-01
+
+Last week, I wrote about that ugly debugger I wrote for the current Caterpillar
+prototype. I still needed to make some improvements to the debugger and the
+language runtime, but I was finally able to debug that broken code I had sitting
+in a local branch.
+
+![A screenshot of a browser window containing Caterpillar's debugger](daily-files/2024-05-01/debugger.png)
+
+The debugger is still ugly as hell, but it's starting to shed some light on the
+core questions that the current prototype was created to answer: Yes, it seems
+practical to build a debugger for Caterpillar. Yes, this debugger makes it
+practical to work with a language that is otherwise very confusing.
+
+My next goal is to further substantiate these answers, by writing more code.
+What I currently have just draws a white background into a window. I want to
+turn this into a small [snake] game.
+
+[snake]: https://en.wikipedia.org/wiki/Snake_(video_game_genre)
+
 ## 2024-04-30
 
 When I talked about the concept of "solid" and "fluid" code yesterday, I glossed
