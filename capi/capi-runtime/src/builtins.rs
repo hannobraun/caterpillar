@@ -67,8 +67,8 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     let value = data_stack.pop()?;
     let addr = data_stack.pop()?;
 
-    let index: usize = addr.0.try_into().unwrap();
-    let value: u8 = value.0.try_into().unwrap();
+    let index: usize = addr.0.into();
+    let value: u8 = value.0;
     mem[index] = value;
 
     data_stack.push(addr);
@@ -106,7 +106,7 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;
 
-    mem[256 + y.0 as usize * 32 + x.0 as usize] = value.0 as u8;
+    mem[256 + y.0 as usize * 32 + x.0 as usize] = value.0;
 
     data_stack.push(x);
     data_stack.push(y);

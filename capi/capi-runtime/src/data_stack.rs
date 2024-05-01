@@ -38,7 +38,7 @@ impl DataStack {
         self.values.pop().ok_or(StackUnderflow)
     }
 
-    pub fn save(&mut self, num: u32) {
+    pub fn save(&mut self, num: u8) {
         for _ in 0..num {
             let value = self.pop().unwrap();
             self.saved.push(value);
@@ -62,10 +62,10 @@ impl DataStack {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct Value(pub u32);
+pub struct Value(pub u8);
 
-impl From<u32> for Value {
-    fn from(value: u32) -> Self {
+impl From<u8> for Value {
+    fn from(value: u8) -> Self {
         Self(value)
     }
 }
