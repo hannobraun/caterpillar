@@ -107,6 +107,15 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
 
     let x_usize: usize = x.0.into();
     let y_usize: usize = y.0.into();
+
+    let index = || {
+        x_usize
+            .checked_add(y_usize.checked_mul(32)?)?
+            .checked_add(256)
+    };
+    let index =
+        index().expect("Working with low numbers; should not overflow `usize`");
+
     mem[256 + y_usize * 32 + x_usize] = value.0;
 
     data_stack.push(x);
