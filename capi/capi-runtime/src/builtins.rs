@@ -68,8 +68,7 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     let addr = data_stack.pop()?;
 
     let index: usize = addr.0.into();
-    let value: u8 = value.0;
-    mem[index] = value;
+    mem[index] = value.0;
 
     data_stack.push(addr);
 
