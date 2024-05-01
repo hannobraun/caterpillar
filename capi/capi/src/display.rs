@@ -37,7 +37,7 @@ pub fn run(
     Ok(())
 }
 
-const SIZE: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 const MEM_SIZE: usize =
     TILES_OFFSET_IN_MEMORY + TILES_PER_AXIS * TILES_PER_AXIS;
 
@@ -61,8 +61,9 @@ impl ApplicationHandler for State {
         });
 
         self.pixels.get_or_insert_with(|| {
-            let size_u32: u32 =
-                SIZE.try_into().expect("Expected `SIZE` to fit into `u32`");
+            let size_u32: u32 = PIXELS_PER_AXIS
+                .try_into()
+                .expect("Expected `SIZE` to fit into `u32`");
 
             let surface_texture =
                 SurfaceTexture::new(size_u32, size_u32, window);
@@ -181,7 +182,7 @@ impl ApplicationHandler for State {
                             + offset_y)
                             * num_channels;
 
-                        let i = frame_y * SIZE + frame_x;
+                        let i = frame_y * PIXELS_PER_AXIS + frame_x;
                         pixels.frame_mut()[i..i + num_channels]
                             .copy_from_slice(&color);
                     }
