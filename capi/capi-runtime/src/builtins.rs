@@ -106,7 +106,7 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;
 
-    mem[(256 + y.0 * 32 + x.0) as usize] = value.0 as u8;
+    mem[256 + y.0 as usize * 32 + x.0 as usize] = value.0 as u8;
 
     data_stack.push(x);
     data_stack.push(y);
