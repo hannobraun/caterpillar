@@ -147,7 +147,7 @@ impl ApplicationHandler for State {
                     );
                     break;
                 }
-                ProgramState::Error { .. } => {
+                ProgramState::Effect { .. } => {
                     break;
                 }
             }

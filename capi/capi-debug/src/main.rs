@@ -303,7 +303,7 @@ pub fn Line(
             {
                 "bg-green-300"
             }
-            ProgramState::Error { address, .. }
+            ProgramState::Effect { address, .. }
                 if program
                     .get()
                     .source_map

@@ -68,7 +68,7 @@ impl Program {
     }
 
     pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
-        if let ProgramState::Error { .. } = self.state {
+        if let ProgramState::Effect { .. } = self.state {
             return self.state.clone();
         }
 
@@ -82,7 +82,7 @@ impl Program {
         // in `self.state` automatically.
 
         if self.halted {
-            return ProgramState::Error {
+            return ProgramState::Effect {
                 effect: ProgramEffect::Halted,
                 address: self.most_recent_instruction,
             };
@@ -117,7 +117,7 @@ pub enum ProgramState {
     #[default]
     Finished,
 
-    Error {
+    Effect {
         effect: ProgramEffect,
         address: InstructionAddress,
     },
@@ -138,7 +138,7 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Effect { effect, address } => Self::Error {
+            EvaluatorState::Effect { effect, address } => Self::Effect {
                 effect: ProgramEffect::Builtin(effect),
                 address,
             },
