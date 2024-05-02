@@ -63,9 +63,9 @@ impl Evaluator {
                     Err(err) => Some(Effect::Error(err)),
                 };
 
-                if let Some(Effect::Error(err)) = effect {
+                if let Some(effect) = effect {
                     return EvaluatorState::Error {
-                        err,
+                        err: effect,
                         address: current_instruction,
                     };
                 }
@@ -130,7 +130,7 @@ pub enum EvaluatorState {
     Running,
     Finished,
     Error {
-        err: builtins::Error,
+        err: Effect,
         address: InstructionAddress,
     },
 }

@@ -1,8 +1,10 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins, evaluator::EvaluatorState, source_map::SourceMap, DataStack,
-    DebugEvent, Evaluator, Functions, InstructionAddress, Value,
+    builtins::{self, Effect},
+    evaluator::EvaluatorState,
+    source_map::SourceMap,
+    DataStack, DebugEvent, Evaluator, Functions, InstructionAddress, Value,
 };
 
 #[derive(
@@ -138,7 +140,10 @@ impl From<EvaluatorState> for ProgramState {
         match state {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Error { err, address } => Self::Error {
+            EvaluatorState::Error {
+                err: Effect::Error(err),
+                address,
+            } => Self::Error {
                 err: err.into(),
                 address,
             },
