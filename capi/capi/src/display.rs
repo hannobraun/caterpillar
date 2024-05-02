@@ -147,18 +147,14 @@ impl ApplicationHandler for State {
                     );
                     break;
                 }
-                ProgramState::Effect {
-                    effect: ProgramEffect::Halted,
-                    ..
-                } => {
-                    break;
-                }
-                ProgramState::Effect {
-                    effect: ProgramEffect::Builtin(Effect::Error(_)),
-                    ..
-                } => {
-                    break;
-                }
+                ProgramState::Effect { effect, .. } => match effect {
+                    ProgramEffect::Halted => {
+                        break;
+                    }
+                    ProgramEffect::Builtin(Effect::Error(_)) => {
+                        break;
+                    }
+                },
             }
 
             if start_of_execution.elapsed() > timeout {
