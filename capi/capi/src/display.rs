@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use capi_runtime::{Program, ProgramState, Value};
+use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -147,7 +147,16 @@ impl ApplicationHandler for State {
                     );
                     break;
                 }
-                ProgramState::Effect { .. } => {
+                ProgramState::Effect {
+                    effect: ProgramEffect::Halted,
+                    ..
+                } => {
+                    break;
+                }
+                ProgramState::Effect {
+                    effect: ProgramEffect::Builtin(Effect::Error(_)),
+                    ..
+                } => {
                     break;
                 }
             }
