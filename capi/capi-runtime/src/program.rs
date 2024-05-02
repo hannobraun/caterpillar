@@ -85,7 +85,7 @@ impl Program {
 
         if self.halted {
             return ProgramState::Error {
-                err: ProgramError::Halted,
+                err: ProgramEffect::Halted,
                 address: self.most_recent_instruction,
             };
         }
@@ -120,7 +120,7 @@ pub enum ProgramState {
     Finished,
 
     Error {
-        err: ProgramError,
+        err: ProgramEffect,
         address: InstructionAddress,
     },
 }
@@ -160,7 +160,7 @@ impl From<EvaluatorState> for ProgramState {
     serde::Serialize,
     thiserror::Error,
 )]
-pub enum ProgramError {
+pub enum ProgramEffect {
     #[error(transparent)]
     Builtins(#[from] builtins::Error),
 
