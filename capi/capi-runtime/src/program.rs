@@ -141,7 +141,7 @@ impl From<EvaluatorState> for ProgramState {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
             EvaluatorState::Error {
-                err: Effect::Error(err),
+                effect: Effect::Error(err),
                 address,
             } => Self::Error {
                 err: err.into(),
