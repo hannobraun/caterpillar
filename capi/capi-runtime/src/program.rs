@@ -139,7 +139,7 @@ impl From<EvaluatorState> for ProgramState {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
             EvaluatorState::Effect { effect, address } => Self::Error {
-                err: ProgramEffect::Builtins(effect),
+                err: ProgramEffect::Builtin(effect),
                 address,
             },
         }
@@ -148,6 +148,6 @@ impl From<EvaluatorState> for ProgramState {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProgramEffect {
-    Builtins(Effect),
+    Builtin(Effect),
     Halted,
 }
