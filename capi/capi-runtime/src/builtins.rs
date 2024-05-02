@@ -126,6 +126,10 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
 
 pub type Result = std::result::Result<(), Error>;
 
+pub enum Effect {
+    Error(Error),
+}
+
 #[derive(
     Clone,
     Debug,
