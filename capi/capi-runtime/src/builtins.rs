@@ -98,28 +98,21 @@ pub fn take(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
+pub fn tile(data_stack: &mut DataStack, _mem: &mut [u8]) -> Result {
     let value = data_stack.pop()?;
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;
 
-    let x_usize: usize = x.0.into();
-    let y_usize: usize = y.0.into();
-
-    let index = || {
-        x_usize
-            .checked_add(y_usize.checked_mul(32)?)?
-            .checked_add(256)
+    let effect = Effect::SetTile {
+        x: x.0,
+        y: y.0,
+        value: value.0,
     };
-    let index =
-        index().expect("Working with low numbers; should not overflow `usize`");
-
-    mem[index] = value.0;
 
     data_stack.push(x);
     data_stack.push(y);
 
-    Ok(None)
+    Ok(Some(effect))
 }
 
 pub type Result = std::result::Result<Option<Effect>, Error>;
@@ -127,6 +120,7 @@ pub type Result = std::result::Result<Option<Effect>, Error>;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Effect {
     Error(Error),
+    SetTile { x: u8, y: u8, value: u8 },
 }
 
 #[derive(

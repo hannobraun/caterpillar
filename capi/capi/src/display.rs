@@ -155,6 +155,21 @@ impl ApplicationHandler for State {
                         Effect::Error(_) => {
                             break;
                         }
+                        Effect::SetTile { x, y, value } => {
+                            let x_usize: usize = x.into();
+                            let y_usize: usize = y.into();
+
+                            let index = || {
+                                x_usize
+                                    .checked_add(y_usize.checked_mul(32)?)?
+                                    .checked_add(256)
+                            };
+                            let index = index().unwrap();
+
+                            self.mem[index] = value;
+
+                            self.program.state = ProgramState::Running;
+                        }
                     },
                 },
             }
