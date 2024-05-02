@@ -18,7 +18,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn copy(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop()?;
+    let i = data_stack.pop()?;
 
     data_stack.save(i.0);
     let a = data_stack.clone()?;
@@ -53,8 +53,8 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn place(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop()?;
-    let mut a = data_stack.pop()?;
+    let i = data_stack.pop()?;
+    let a = data_stack.pop()?;
 
     data_stack.save(i.0);
     data_stack.push(a);
@@ -89,7 +89,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn take(data_stack: &mut DataStack) -> Result {
-    let mut i = data_stack.pop()?;
+    let i = data_stack.pop()?;
 
     data_stack.save(i.0);
     let a = data_stack.pop()?;
