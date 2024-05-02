@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use crate::{data_stack::StackUnderflow, Value};
+use crate::data_stack::StackUnderflow;
 
 use super::data_stack::DataStack;
 
