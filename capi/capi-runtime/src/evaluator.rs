@@ -1,4 +1,4 @@
-use crate::{InstructionAddress, Value};
+use crate::{builtins::Effect, InstructionAddress, Value};
 
 use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
@@ -48,7 +48,22 @@ impl Evaluator {
                     _ => panic!("Unknown builtin: `{name}`"),
                 };
 
-                if let Err(err) = result {
+                // This is a bit weird. An error is an effect, and effects can
+                // be returned as a `Result::Ok` by the builtins. But error by
+                // itself can also be returned as a `Result::Err`.
+                //
+                // This enables builtins to to stack operations using `?`
+                // internally, without requiring effects to always be returned
+                // as errors, which they aren't per se.
+                //
+                // Anyway, here we deal with this situation by  unifying both
+                // variants.
+                let effect = match result {
+                    Ok(effect) => effect,
+                    Err(err) => Some(Effect::Error(err)),
+                };
+
+                if let Some(Effect::Error(err)) = effect {
                     return EvaluatorState::Error {
                         err,
                         address: current_instruction,
