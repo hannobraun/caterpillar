@@ -83,7 +83,7 @@ impl Program {
 
         if self.halted {
             return ProgramState::Error {
-                err: ProgramEffect::Halted,
+                effect: ProgramEffect::Halted,
                 address: self.most_recent_instruction,
             };
         }
@@ -118,7 +118,7 @@ pub enum ProgramState {
     Finished,
 
     Error {
-        err: ProgramEffect,
+        effect: ProgramEffect,
         address: InstructionAddress,
     },
 }
@@ -139,7 +139,7 @@ impl From<EvaluatorState> for ProgramState {
             EvaluatorState::Running => Self::Running,
             EvaluatorState::Finished => Self::Finished,
             EvaluatorState::Effect { effect, address } => Self::Error {
-                err: ProgramEffect::Builtin(effect),
+                effect: ProgramEffect::Builtin(effect),
                 address,
             },
         }
