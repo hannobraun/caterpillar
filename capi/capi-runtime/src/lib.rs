@@ -12,6 +12,7 @@ mod symbols;
 mod syntax;
 
 pub use self::{
+    builtins::Effect,
     code::InstructionAddress,
     data_stack::{DataStack, Value},
     debug::DebugEvent,
