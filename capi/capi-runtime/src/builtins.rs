@@ -33,7 +33,7 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
     data_stack.save(i.0);
-    data_stack.pop();
+    data_stack.pop()?;
     data_stack.restore();
 
     Ok(None)
