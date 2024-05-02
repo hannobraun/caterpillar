@@ -14,7 +14,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
 
     data_stack.push(c);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn copy(data_stack: &mut DataStack) -> Result {
@@ -26,7 +26,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
 
     data_stack.push(a);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn drop(data_stack: &mut DataStack) -> Result {
@@ -36,7 +36,7 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
     data_stack.pop();
     data_stack.restore();
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn mul(data_stack: &mut DataStack) -> Result {
@@ -49,7 +49,7 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
 
     data_stack.push(c);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn place(data_stack: &mut DataStack) -> Result {
@@ -60,7 +60,7 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     data_stack.push(a);
     data_stack.restore();
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
@@ -72,7 +72,7 @@ pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
 
     data_stack.push(addr);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn sub(data_stack: &mut DataStack) -> Result {
@@ -85,7 +85,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 
     data_stack.push(c);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn take(data_stack: &mut DataStack) -> Result {
@@ -97,7 +97,7 @@ pub fn take(data_stack: &mut DataStack) -> Result {
 
     data_stack.push(a);
 
-    Ok(())
+    Ok(None)
 }
 
 pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
@@ -121,10 +121,10 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
     data_stack.push(x);
     data_stack.push(y);
 
-    Ok(())
+    Ok(None)
 }
 
-pub type Result = std::result::Result<(), Error>;
+pub type Result = std::result::Result<Option<Effect>, Error>;
 
 pub enum Effect {
     Error(Error),
