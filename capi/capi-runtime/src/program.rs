@@ -144,26 +144,15 @@ impl From<EvaluatorState> for ProgramState {
                 effect: Effect::Error(err),
                 address,
             } => Self::Error {
-                err: err.into(),
+                err: ProgramEffect::Builtins(err),
                 address,
             },
         }
     }
 }
 
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProgramEffect {
-    #[error(transparent)]
-    Builtins(#[from] builtins::Error),
-
-    #[error("The program was halted")]
+    Builtins(builtins::Error),
     Halted,
 }
