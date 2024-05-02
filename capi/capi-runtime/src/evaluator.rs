@@ -64,7 +64,7 @@ impl Evaluator {
                 };
 
                 if let Some(effect) = effect {
-                    return EvaluatorState::Error {
+                    return EvaluatorState::Effect {
                         effect,
                         address: current_instruction,
                     };
@@ -129,7 +129,7 @@ impl Evaluator {
 pub enum EvaluatorState {
     Running,
     Finished,
-    Error {
+    Effect {
         effect: Effect,
         address: InstructionAddress,
     },
