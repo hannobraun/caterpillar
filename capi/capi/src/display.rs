@@ -151,9 +151,11 @@ impl ApplicationHandler for State {
                     ProgramEffect::Halted => {
                         break;
                     }
-                    ProgramEffect::Builtin(Effect::Error(_)) => {
-                        break;
-                    }
+                    ProgramEffect::Builtin(effect) => match effect {
+                        Effect::Error(_) => {
+                            break;
+                        }
+                    },
                 },
             }
 
