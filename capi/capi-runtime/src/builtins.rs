@@ -126,6 +126,7 @@ pub fn tile(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
 
 pub type Result = std::result::Result<Option<Effect>, Error>;
 
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Effect {
     Error(Error),
 }
