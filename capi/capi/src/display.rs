@@ -37,10 +37,6 @@ pub fn run(
     Ok(())
 }
 
-const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
-const MEM_SIZE: usize =
-    TILES_OFFSET_IN_MEMORY + TILES_PER_AXIS * TILES_PER_AXIS;
-
 struct State {
     program: Program,
     events: EventsRx,
@@ -215,3 +211,7 @@ impl ApplicationHandler for State {
         window.request_redraw();
     }
 }
+
+const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+const MEM_SIZE: usize =
+    TILES_OFFSET_IN_MEMORY + TILES_PER_AXIS * TILES_PER_AXIS;
