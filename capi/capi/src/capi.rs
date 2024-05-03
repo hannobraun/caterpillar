@@ -88,15 +88,11 @@ pub fn program() -> Program {
             .v(1)
             .w("add");
     });
+    source.define("drop_position", |s| {
+        s.v(0).w("drop").v(0).w("drop");
+    });
     source.define("clean_up_arguments", |s| {
-        s.v(0)
-            .w("drop")
-            .v(0)
-            .w("drop")
-            .v(0)
-            .w("drop")
-            .v(0)
-            .w("drop");
+        s.w("drop_position").v(0).w("drop").v(0).w("drop");
     });
 
     source.compile("write_to_tile_buffer")
