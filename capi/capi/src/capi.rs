@@ -34,7 +34,7 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .w("set_tile")
             .w("increment_tile_position")
-            .w("set_all_tiles");
+            .w("write_value_to_all_tiles");
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
