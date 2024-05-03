@@ -98,7 +98,7 @@ pub fn take(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn tile(data_stack: &mut DataStack) -> Result {
+pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let value = data_stack.pop()?;
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;

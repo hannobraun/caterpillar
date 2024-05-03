@@ -44,7 +44,7 @@ impl Evaluator {
                     "sub" => builtins::sub(&mut self.data_stack),
                     "store" => builtins::store(&mut self.data_stack, mem),
                     "take" => builtins::take(&mut self.data_stack),
-                    "write_tile" => builtins::tile(&mut self.data_stack),
+                    "write_tile" => builtins::write_tile(&mut self.data_stack),
                     _ => panic!("Unknown builtin: `{name}`"),
                 };
 
