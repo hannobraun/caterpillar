@@ -52,7 +52,7 @@ pub fn program() -> Program {
             .w("sub");
     });
     source.define("set_tile", |s| {
-        s.v(1).w("tile");
+        s.v(1).w("write_tile");
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
