@@ -23,7 +23,8 @@ pub fn program() -> Program {
             .c("of the first tile, from which it will count up.")
             .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
-            .w("write_value_to_all_tiles_inner");
+            .w("write_value_to_all_tiles_inner")
+            .w("drop_position");
     });
     source.define("first_tile_position", |s| {
         s.v(0).v(0);
@@ -92,7 +93,7 @@ pub fn program() -> Program {
         s.v(0).w("drop").v(0).w("drop");
     });
     source.define("clean_up_arguments", |s| {
-        s.w("drop_position").v(0).w("drop").v(0).w("drop");
+        s.v(0).w("drop").v(0).w("drop");
     });
 
     source.compile("write_to_tile_buffer")
