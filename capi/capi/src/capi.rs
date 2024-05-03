@@ -23,6 +23,9 @@ pub fn program() -> Program {
         s.v(0).v(0);
     });
     source.define("set_all_tiles", |s| {
+        s.w("write_value_to_all_tiles");
+    });
+    source.define("write_value_to_all_tiles", |s| {
         s.c("This is a recursive function, so we might have been at it for a")
             .c("while, if we make it here. Check if the current tile position")
             .c("has reached the last one, which would let us know we're done.")
