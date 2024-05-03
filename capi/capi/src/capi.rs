@@ -15,6 +15,9 @@ pub fn program() -> Program {
             .w("clean_up_arguments");
     });
     source.define("set_all_tiles", |s| {
+        s.w("write_to_all_tiles");
+    });
+    source.define("write_to_all_tiles", |s| {
         s.c("In addition to the size of the tile field, which is already on")
             .c("the stack, `write_value_to_all_tiles` also need the position")
             .c("of the first tile, from which it will count up.")
