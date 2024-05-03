@@ -15,12 +15,12 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub fn run(runner: &mut Runner, mem: &mut [u8]) {
+    pub fn run(&mut self, mem: &mut [u8]) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(5);
 
         loop {
-            while let Ok(event) = runner.events.try_recv() {
+            while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
                 // debugger, while it is stuck in an endless loop.
@@ -30,28 +30,27 @@ impl Runner {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                runner.program.apply_debug_event(event, mem);
-                runner.updates.send(&runner.program);
+                self.program.apply_debug_event(event, mem);
+                self.updates.send(&self.program);
             }
 
             // This block needs to be located here, as receiving events from the
             // client can lead to a reset, which then must result in the
             // arguments being available, or the program can't work correctly.
-            if let ProgramState::Finished = runner.program.state {
-                runner.program.reset(mem);
-                runner
-                    .program
+            if let ProgramState::Finished = self.program.state {
+                self.program.reset(mem);
+                self.program
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
-            match runner.program.step(mem) {
+            match self.program.step(mem) {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
                     break;
                 }
                 ProgramState::Finished => {
                     assert_eq!(
-                        runner.program.evaluator.data_stack.num_values(),
+                        self.program.evaluator.data_stack.num_values(),
                         0
                     );
                     break;
@@ -79,17 +78,17 @@ impl Runner {
 
                             mem[index] = value;
 
-                            runner.program.state = ProgramState::Running;
+                            self.program.state = ProgramState::Running;
                         }
                     },
                 },
             }
 
             if start_of_execution.elapsed() > timeout {
-                runner.program.halt();
+                self.program.halt();
             }
         }
 
-        runner.updates.send(&runner.program);
+        self.updates.send(&self.program);
     }
 }
