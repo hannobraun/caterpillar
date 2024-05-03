@@ -8,11 +8,7 @@ use winit::{
     window::Window,
 };
 
-use crate::{
-    runner::{self, Runner},
-    server::EventsRx,
-    updates::UpdatesTx,
-};
+use crate::{runner::Runner, server::EventsRx, updates::UpdatesTx};
 
 pub fn run(
     program: Program,
@@ -102,7 +98,7 @@ impl ApplicationHandler for State {
             return;
         };
 
-        runner::run(&mut self.runner, &mut self.mem);
+        Runner::run(&mut self.runner, &mut self.mem);
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
