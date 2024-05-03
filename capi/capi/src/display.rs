@@ -10,11 +10,7 @@ use winit::{
     window::Window,
 };
 
-use crate::{
-    server::EventsRx,
-    tiles::{PIXELS_PER_TILE_AXIS, TILES_OFFSET_IN_MEMORY, TILES_PER_AXIS},
-    updates::UpdatesTx,
-};
+use crate::{server::EventsRx, updates::UpdatesTx};
 
 pub fn run(
     program: Program,
@@ -211,6 +207,10 @@ impl ApplicationHandler for State {
         window.request_redraw();
     }
 }
+
+pub const TILES_PER_AXIS: usize = 32;
+pub const PIXELS_PER_TILE_AXIS: usize = 8;
+pub const TILES_OFFSET_IN_MEMORY: usize = 256;
 
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 const MEM_SIZE: usize =
