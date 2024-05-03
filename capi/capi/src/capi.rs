@@ -20,12 +20,12 @@ pub fn program() -> Program {
             .c("of the first tile, from which it will count up.")
             .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
-            .w("write_value_to_all_tiles");
+            .w("write_value_to_all_tiles_inner");
     });
     source.define("first_tile_position", |s| {
         s.v(0).v(0);
     });
-    source.define("write_value_to_all_tiles", |s| {
+    source.define("write_value_to_all_tiles_inner", |s| {
         s.c("This is a recursive function, so we might have been at it for a")
             .c("while, if we make it here. Check if the current tile position")
             .c("has reached the last one, which would let us know we're done.")
@@ -34,7 +34,7 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .w("set_tile")
             .w("increment_tile_position")
-            .w("write_value_to_all_tiles");
+            .w("write_value_to_all_tiles_inner");
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
