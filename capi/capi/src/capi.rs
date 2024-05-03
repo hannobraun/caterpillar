@@ -14,9 +14,6 @@ pub fn program() -> Program {
             .c("identical to the last one.")
             .w("clean_up_arguments");
     });
-    source.define("first_tile_position", |s| {
-        s.v(0).v(0);
-    });
     source.define("set_all_tiles", |s| {
         s.c("In addition to the size of the tile field, which is already on")
             .c("the stack, `write_value_to_all_tiles` also need the position")
@@ -24,6 +21,9 @@ pub fn program() -> Program {
             .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("write_value_to_all_tiles");
+    });
+    source.define("first_tile_position", |s| {
+        s.v(0).v(0);
     });
     source.define("write_value_to_all_tiles", |s| {
         s.c("This is a recursive function, so we might have been at it for a")
