@@ -153,8 +153,10 @@ impl ApplicationHandler for State {
 
                             let index = || {
                                 x_usize
-                                    .checked_add(y_usize.checked_mul(32)?)?
-                                    .checked_add(256)
+                                    .checked_add(
+                                        y_usize.checked_mul(TILES_PER_AXIS)?,
+                                    )?
+                                    .checked_add(TILES_OFFSET_IN_MEMORY)
                             };
                             let index = index().unwrap();
 
