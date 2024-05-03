@@ -9,9 +9,9 @@ use crate::{
 };
 
 pub struct Runner {
-    pub program: Program,
-    pub events: EventsRx,
-    pub updates: UpdatesTx,
+    program: Program,
+    events: EventsRx,
+    updates: UpdatesTx,
 }
 
 impl Runner {
