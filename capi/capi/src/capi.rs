@@ -8,11 +8,6 @@ pub fn program() -> Program {
             .c("We have the size of the tile field already on the stack.")
             .c("This will be used by `set_all_tiles` to traverse positions,")
             .c("and to determine once it's finished.")
-            .c("")
-            .c("In addition, it also needs the position of the first tile,")
-            .c("from which it will count up.")
-            .w("first_tile_position")
-            .c("Arguments are in place. We're ready to set all tiles.")
             .w("set_all_tiles")
             .c("`set_all_tiles` leaves its arguments on the stack, except that")
             .c("it has counted up the first tile position, which should now be")
@@ -23,7 +18,12 @@ pub fn program() -> Program {
         s.v(0).v(0);
     });
     source.define("set_all_tiles", |s| {
-        s.w("write_value_to_all_tiles");
+        s.c("In addition to the size of the tile field, which is already on")
+            .c("the stack, `write_value_to_all_tiles` also need the position")
+            .c("of the first tile, from which it will count up.")
+            .w("first_tile_position")
+            .c("Arguments are in place. We're ready to set all tiles.")
+            .w("write_value_to_all_tiles");
     });
     source.define("write_value_to_all_tiles", |s| {
         s.c("This is a recursive function, so we might have been at it for a")
