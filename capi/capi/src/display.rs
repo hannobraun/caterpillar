@@ -18,11 +18,7 @@ pub fn run(
     let event_loop = EventLoop::new()?;
 
     let mut state = State {
-        runner: Runner {
-            program,
-            events,
-            updates,
-        },
+        runner: Runner::new(program, events, updates),
         mem: [0; MEM_SIZE],
         window: None,
         pixels: None,

@@ -15,6 +15,14 @@ pub struct Runner {
 }
 
 impl Runner {
+    pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
+        Self {
+            program,
+            events,
+            updates,
+        }
+    }
+
     pub fn run(&mut self, mem: &mut [u8]) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(5);
