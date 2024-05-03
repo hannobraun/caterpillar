@@ -8,7 +8,11 @@ use winit::{
     window::Window,
 };
 
-use crate::{runner, server::EventsRx, updates::UpdatesTx};
+use crate::{
+    runner::{self, Runner},
+    server::EventsRx,
+    updates::UpdatesTx,
+};
 
 pub fn run(
     program: Program,
@@ -18,9 +22,11 @@ pub fn run(
     let event_loop = EventLoop::new()?;
 
     let mut state = State {
-        program,
-        events,
-        updates,
+        runner: Runner {
+            program,
+            events,
+            updates,
+        },
         mem: [0; MEM_SIZE],
         window: None,
         pixels: None,
@@ -32,9 +38,7 @@ pub fn run(
 }
 
 struct State {
-    program: Program,
-    events: EventsRx,
-    updates: UpdatesTx,
+    runner: Runner,
     mem: [u8; MEM_SIZE],
     window: Option<Window>,
     pixels: Option<Pixels>,
@@ -98,12 +102,7 @@ impl ApplicationHandler for State {
             return;
         };
 
-        runner::run(
-            &mut self.program,
-            &mut self.mem,
-            &mut self.events,
-            &mut self.updates,
-        );
+        runner::run(&mut self.runner, &mut self.mem);
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {

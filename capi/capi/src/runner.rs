@@ -8,17 +8,18 @@ use crate::{
     updates::UpdatesTx,
 };
 
-pub fn run(
-    program: &mut Program,
-    mem: &mut [u8],
-    events: &mut EventsRx,
-    updates: &mut UpdatesTx,
-) {
+pub struct Runner {
+    pub program: Program,
+    pub events: EventsRx,
+    pub updates: UpdatesTx,
+}
+
+pub fn run(runner: &mut Runner, mem: &mut [u8]) {
     let start_of_execution = Instant::now();
     let timeout = Duration::from_millis(5);
 
     loop {
-        while let Ok(event) = events.try_recv() {
+        while let Ok(event) = runner.events.try_recv() {
             // This doesn't work so well. This receive loop was moved here,
             // so we can have some control over the program from the
             // debugger, while it is stuck in an endless loop.
@@ -28,25 +29,27 @@ pub fn run(
             // any indication of them being received in the debugger, as the
             // program isn't sent when it's running.
 
-            program.apply_debug_event(event, mem);
-            updates.send(program);
+            runner.program.apply_debug_event(event, mem);
+            runner.updates.send(&runner.program);
         }
 
         // This block needs to be located here, as receiving events from the
         // client can lead to a reset, which then must result in the
         // arguments being available, or the program can't work correctly.
-        if let ProgramState::Finished = program.state {
-            program.reset(mem);
-            program.push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
+        if let ProgramState::Finished = runner.program.state {
+            runner.program.reset(mem);
+            runner
+                .program
+                .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
         }
 
-        match program.step(mem) {
+        match runner.program.step(mem) {
             ProgramState::Running => {}
             ProgramState::Paused { .. } => {
                 break;
             }
             ProgramState::Finished => {
-                assert_eq!(program.evaluator.data_stack.num_values(), 0);
+                assert_eq!(runner.program.evaluator.data_stack.num_values(), 0);
                 break;
             }
             ProgramState::Effect { effect, .. } => match effect {
@@ -72,16 +75,16 @@ pub fn run(
 
                         mem[index] = value;
 
-                        program.state = ProgramState::Running;
+                        runner.program.state = ProgramState::Running;
                     }
                 },
             },
         }
 
         if start_of_execution.elapsed() > timeout {
-            program.halt();
+            runner.program.halt();
         }
     }
 
-    updates.send(program);
+    runner.updates.send(&runner.program);
 }
