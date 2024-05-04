@@ -51,7 +51,8 @@ impl Runner {
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
-            match &self.program.step() {
+            self.program.step();
+            match &self.program.state {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
                     break;
