@@ -25,7 +25,7 @@ impl Runner {
 
     pub fn run(&mut self, mem: &mut [u8]) {
         let start_of_execution = Instant::now();
-        let timeout = Duration::from_millis(5);
+        let timeout = Duration::from_millis(10);
 
         loop {
             while let Ok(event) = self.events.try_recv() {
