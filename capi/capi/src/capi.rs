@@ -15,7 +15,7 @@ pub fn program() -> Program {
             .w("clean_up_arguments");
     });
     source.define("set_all_tiles", |s| {
-        s.w("write_to_all_tiles");
+        s.v(1).w("write_to_all_tiles");
     });
     source.define("write_to_all_tiles", |s| {
         s.c("In addition to the size of the tile field, which is already on")
@@ -24,7 +24,8 @@ pub fn program() -> Program {
             .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("write_value_to_all_tiles_inner")
-            .w("drop_position");
+            .w("drop_position")
+            .w("drop_tile_value");
     });
     source.define("first_tile_position", |s| {
         s.v(0).v(0);
@@ -36,14 +37,17 @@ pub fn program() -> Program {
             .w("check_tile_position")
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
-            .v(1)
+            .c("Put the tile value we're supposed to write to the top of the")
+            .c("stack, then write it.")
+            .v(2)
+            .w("copy")
             .w("write_tile")
             .w("increment_tile_position")
             .w("write_value_to_all_tiles_inner");
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
-            .v(2)
+            .v(3)
             .w("copy")
             .c("Copy y-coordinate of current position.")
             .v(1)
@@ -54,7 +58,7 @@ pub fn program() -> Program {
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
-            .v(3)
+            .v(4)
             .w("copy")
             .c("Copy the x-coordinate of the current position.")
             .v(2)
@@ -89,6 +93,9 @@ pub fn program() -> Program {
     });
     source.define("drop_position", |s| {
         s.v(0).w("drop").v(0).w("drop");
+    });
+    source.define("drop_tile_value", |s| {
+        s.v(0).w("drop");
     });
     source.define("clean_up_arguments", |s| {
         s.v(0).w("drop").v(0).w("drop");
