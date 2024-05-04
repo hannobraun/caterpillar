@@ -72,7 +72,7 @@ impl Program {
         self.state.clone()
     }
 
-    pub fn step_inner(&mut self, mem: &mut [u8]) -> ProgramState {
+    pub fn step_inner(&mut self, _mem: &mut [u8]) -> ProgramState {
         // This method is separate from the main `step` method, so we can just
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
@@ -92,7 +92,7 @@ impl Program {
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.most_recent_instruction = self.evaluator.next_instruction;
 
-        self.evaluator.step(mem).into()
+        self.evaluator.step().into()
     }
 
     pub fn halt(&mut self) {
