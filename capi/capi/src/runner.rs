@@ -46,7 +46,7 @@ impl Runner {
             // client can lead to a reset, which then must result in the
             // arguments being available, or the program can't work correctly.
             if let ProgramState::Finished = self.program.state {
-                self.program.reset(mem);
+                self.program.reset();
                 self.program
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
