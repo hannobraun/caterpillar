@@ -36,7 +36,8 @@ pub fn program() -> Program {
             .w("check_tile_position")
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
-            .w("set_tile")
+            .v(1)
+            .w("write_tile")
             .w("increment_tile_position")
             .w("write_value_to_all_tiles_inner");
     });
@@ -50,9 +51,6 @@ pub fn program() -> Program {
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
-    });
-    source.define("set_tile", |s| {
-        s.v(1).w("write_tile");
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
