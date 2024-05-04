@@ -27,11 +27,7 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn reset(&mut self, mem: &mut [u8]) {
-        for b in mem {
-            *b = 0;
-        }
-
+    pub fn reset(&mut self, _mem: &mut [u8]) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
         self.most_recent_instruction = InstructionAddress::default();
