@@ -63,7 +63,7 @@ impl Program {
         self.breakpoints.get(address) == Some(&true)
     }
 
-    pub fn step(&mut self, _mem: &mut [u8]) -> ProgramState {
+    pub fn step(&mut self) -> ProgramState {
         if let ProgramState::Effect { .. } = self.state {
             return self.state.clone();
         }
