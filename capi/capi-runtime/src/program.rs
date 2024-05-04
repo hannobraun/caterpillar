@@ -63,16 +63,16 @@ impl Program {
         self.breakpoints.get(address) == Some(&true)
     }
 
-    pub fn step(&mut self, mem: &mut [u8]) -> ProgramState {
+    pub fn step(&mut self, _mem: &mut [u8]) -> ProgramState {
         if let ProgramState::Effect { .. } = self.state {
             return self.state.clone();
         }
 
-        self.state = self.step_inner(mem);
+        self.state = self.step_inner();
         self.state.clone()
     }
 
-    pub fn step_inner(&mut self, _mem: &mut [u8]) -> ProgramState {
+    pub fn step_inner(&mut self) -> ProgramState {
         // This method is separate from the main `step` method, so we can just
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
