@@ -51,7 +51,7 @@ impl Runner {
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
-            match self.program.step() {
+            match &self.program.step() {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
                     break;
@@ -72,8 +72,8 @@ impl Runner {
                             break;
                         }
                         Effect::SetTile { x, y, value } => {
-                            let x_usize: usize = x.into();
-                            let y_usize: usize = y.into();
+                            let x_usize: usize = (*x).into();
+                            let y_usize: usize = (*y).into();
 
                             let index = || {
                                 x_usize
@@ -84,7 +84,7 @@ impl Runner {
                             };
                             let index = index().unwrap();
 
-                            mem[index] = value;
+                            mem[index] = *value;
 
                             self.program.state = ProgramState::Running;
                         }
