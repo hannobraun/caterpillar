@@ -46,7 +46,7 @@ impl Program {
         }
     }
 
-    pub fn apply_debug_event(&mut self, event: DebugEvent, _mem: &mut [u8]) {
+    pub fn apply_debug_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::Reset => {
                 self.reset();

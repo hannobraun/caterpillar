@@ -38,7 +38,7 @@ impl Runner {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                self.program.apply_debug_event(event, mem);
+                self.program.apply_debug_event(event);
                 self.updates.send(&self.program);
             }
 
