@@ -26,7 +26,7 @@ impl Evaluator {
         self.next_instruction = entry;
     }
 
-    pub fn step(&mut self, mem: &mut [u8]) -> EvaluatorState {
+    pub fn step(&mut self, _mem: &mut [u8]) -> EvaluatorState {
         let current_instruction = self.next_instruction;
         self.next_instruction.increment();
 
@@ -42,7 +42,6 @@ impl Evaluator {
                     "mul" => builtins::mul(&mut self.data_stack),
                     "place" => builtins::place(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
-                    "store" => builtins::store(&mut self.data_stack, mem),
                     "take" => builtins::take(&mut self.data_stack),
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
                     _ => panic!("Unknown builtin: `{name}`"),

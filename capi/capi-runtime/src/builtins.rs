@@ -61,18 +61,6 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn store(data_stack: &mut DataStack, mem: &mut [u8]) -> Result {
-    let value = data_stack.pop()?;
-    let addr = data_stack.pop()?;
-
-    let index: usize = addr.0.into();
-    mem[index] = value.0;
-
-    data_stack.push(addr);
-
-    Ok(None)
-}
-
 pub fn sub(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
