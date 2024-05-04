@@ -5,6 +5,7 @@ pub fn program() -> Program {
 
     source.define("write_to_tile_buffer", |s| {
         s
+            .w("clear_all_tiles")
             .c("We have the size of the tile field already on the stack.")
             .c("This will be used by `set_all_tiles` to traverse positions,")
             .c("and to determine once it's finished.")
@@ -13,6 +14,9 @@ pub fn program() -> Program {
             .c("it has counted up the first tile position, which should now be")
             .c("identical to the last one.")
             .w("clean_up_arguments");
+    });
+    source.define("clear_all_tiles", |s| {
+        s.v(0).w("write_to_all_tiles");
     });
     source.define("set_all_tiles", |s| {
         s.v(1).w("write_to_all_tiles");
