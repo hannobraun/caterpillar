@@ -2,11 +2,7 @@ use std::time::{Duration, Instant};
 
 use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 
-use crate::{
-    display::{TILES_OFFSET_IN_MEMORY, TILES_PER_AXIS},
-    server::EventsRx,
-    updates::UpdatesTx,
-};
+use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
 pub struct Runner {
     program: Program,
@@ -23,7 +19,7 @@ impl Runner {
         }
     }
 
-    pub fn run(&mut self, _handler: impl FnMut(DisplayEffect), mem: &mut [u8]) {
+    pub fn run(&mut self, mut handler: impl FnMut(DisplayEffect)) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
@@ -73,19 +69,10 @@ impl Runner {
                             break;
                         }
                         Effect::SetTile { x, y, value } => {
-                            let x_usize: usize = (*x).into();
-                            let y_usize: usize = (*y).into();
-
-                            let index = || {
-                                x_usize
-                                    .checked_add(
-                                        y_usize.checked_mul(TILES_PER_AXIS)?,
-                                    )?
-                                    .checked_add(TILES_OFFSET_IN_MEMORY)
-                            };
-                            let index = index().unwrap();
-
-                            mem[index] = *value;
+                            let x = *x;
+                            let y = *y;
+                            let value = *value;
+                            handler(DisplayEffect::SetTile { x, y, value });
 
                             self.program.state = ProgramState::Running;
                         }
@@ -102,4 +89,6 @@ impl Runner {
     }
 }
 
-pub enum DisplayEffect {}
+pub enum DisplayEffect {
+    SetTile { x: u8, y: u8, value: u8 },
+}
