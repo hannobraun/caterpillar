@@ -94,7 +94,9 @@ impl ApplicationHandler for State {
             return;
         };
 
-        Runner::run(&mut self.runner, &mut self.mem);
+        if let Some(effect) = Runner::run(&mut self.runner, &mut self.mem) {
+            match effect {}
+        }
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
