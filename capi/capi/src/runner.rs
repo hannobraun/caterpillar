@@ -27,7 +27,7 @@ impl Runner {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
-        loop {
+        let effect = loop {
             while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
@@ -55,22 +55,22 @@ impl Runner {
             match &self.program.state {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
-                    break;
+                    break None;
                 }
                 ProgramState::Finished => {
                     assert_eq!(
                         self.program.evaluator.data_stack.num_values(),
                         0
                     );
-                    break;
+                    break None;
                 }
                 ProgramState::Effect { effect, .. } => match effect {
                     ProgramEffect::Halted => {
-                        break;
+                        break None;
                     }
                     ProgramEffect::Builtin(effect) => match effect {
                         Effect::Error(_) => {
-                            break;
+                            break None;
                         }
                         Effect::SetTile { x, y, value } => {
                             let x_usize: usize = (*x).into();
@@ -96,11 +96,11 @@ impl Runner {
             if start_of_execution.elapsed() > timeout {
                 self.program.halt();
             }
-        }
+        };
 
         self.updates.send(&self.program);
 
-        None
+        effect
     }
 }
 
