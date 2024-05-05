@@ -23,11 +23,11 @@ impl Runner {
         }
     }
 
-    pub fn run(&mut self, mem: &mut [u8]) -> Option<DisplayEffect> {
+    pub fn run(&mut self, _handler: impl FnMut(DisplayEffect), mem: &mut [u8]) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
-        let effect = loop {
+        loop {
             while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
@@ -55,22 +55,22 @@ impl Runner {
             match &self.program.state {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
-                    break None;
+                    break;
                 }
                 ProgramState::Finished => {
                     assert_eq!(
                         self.program.evaluator.data_stack.num_values(),
                         0
                     );
-                    break None;
+                    break;
                 }
                 ProgramState::Effect { effect, .. } => match effect {
                     ProgramEffect::Halted => {
-                        break None;
+                        break;
                     }
                     ProgramEffect::Builtin(effect) => match effect {
                         Effect::Error(_) => {
-                            break None;
+                            break;
                         }
                         Effect::SetTile { x, y, value } => {
                             let x_usize: usize = (*x).into();
@@ -96,11 +96,9 @@ impl Runner {
             if start_of_execution.elapsed() > timeout {
                 self.program.halt();
             }
-        };
+        }
 
         self.updates.send(&self.program);
-
-        effect
     }
 }
 
