@@ -23,7 +23,7 @@ impl Runner {
         }
     }
 
-    pub fn run(&mut self, mem: &mut [u8]) {
+    pub fn run(&mut self, mem: &mut [u8]) -> Option<DisplayEffect> {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
@@ -99,5 +99,9 @@ impl Runner {
         }
 
         self.updates.send(&self.program);
+
+        None
     }
 }
+
+pub enum DisplayEffect {}
