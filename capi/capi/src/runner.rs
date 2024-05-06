@@ -123,8 +123,8 @@ impl Runner {
     }
 }
 
-pub type EffectsTx = mpsc::Sender<DisplayEffect>;
-pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
+type EffectsTx = mpsc::Sender<DisplayEffect>;
+type EffectsRx = mpsc::Receiver<DisplayEffect>;
 
 #[derive(Debug)]
 pub enum DisplayEffect {
