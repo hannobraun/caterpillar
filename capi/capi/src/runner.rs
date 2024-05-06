@@ -19,12 +19,24 @@ impl Runner {
         }
     }
 
-    pub fn run(&mut self, mut handler: impl FnMut(DisplayEffect)) {
+    pub fn run(&mut self, handler: impl FnMut(DisplayEffect)) {
+        self.inner.run(handler)
+    }
+}
+
+struct RunnerInner {
+    program: Program,
+    events: EventsRx,
+    updates: UpdatesTx,
+}
+
+impl RunnerInner {
+    fn run(&mut self, mut handler: impl FnMut(DisplayEffect)) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
         loop {
-            while let Ok(event) = self.inner.events.try_recv() {
+            while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
                 // debugger, while it is stuck in an endless loop.
@@ -34,29 +46,28 @@ impl Runner {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                self.inner.program.apply_debug_event(event);
-                self.inner.updates.send(&self.inner.program);
+                self.program.apply_debug_event(event);
+                self.updates.send(&self.program);
             }
 
             // This block needs to be located here, as receiving events from the
             // client can lead to a reset, which then must result in the
             // arguments being available, or the program can't work correctly.
-            if let ProgramState::Finished = self.inner.program.state {
-                self.inner.program.reset();
-                self.inner
-                    .program
+            if let ProgramState::Finished = self.program.state {
+                self.program.reset();
+                self.program
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
-            self.inner.program.step();
-            match &self.inner.program.state {
+            self.program.step();
+            match &self.program.state {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
                     break;
                 }
                 ProgramState::Finished => {
                     assert_eq!(
-                        self.inner.program.evaluator.data_stack.num_values(),
+                        self.program.evaluator.data_stack.num_values(),
                         0
                     );
                     break;
@@ -75,25 +86,19 @@ impl Runner {
                             let value = *value;
                             handler(DisplayEffect::SetTile { x, y, value });
 
-                            self.inner.program.state = ProgramState::Running;
+                            self.program.state = ProgramState::Running;
                         }
                     },
                 },
             }
 
             if start_of_execution.elapsed() > timeout {
-                self.inner.program.halt();
+                self.program.halt();
             }
         }
 
-        self.inner.updates.send(&self.inner.program);
+        self.updates.send(&self.program);
     }
-}
-
-struct RunnerInner {
-    program: Program,
-    events: EventsRx,
-    updates: UpdatesTx,
 }
 
 pub enum DisplayEffect {
