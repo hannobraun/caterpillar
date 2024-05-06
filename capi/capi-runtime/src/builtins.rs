@@ -109,6 +109,7 @@ pub type Result = std::result::Result<Option<Effect>, Error>;
 pub enum Effect {
     Error(Error),
     SetTile { x: u8, y: u8, value: u8 },
+    RequestRedraw,
 }
 
 #[derive(
