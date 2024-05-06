@@ -1,7 +1,6 @@
 use std::{
     sync::mpsc::{self, TryRecvError},
     thread,
-    time::{Duration, Instant},
 };
 
 use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
@@ -61,9 +60,6 @@ struct Runner {
 
 impl Runner {
     fn start(&mut self) {
-        let start_of_execution = Instant::now();
-        let timeout = Duration::from_millis(10);
-
         loop {
             while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
@@ -141,10 +137,6 @@ impl Runner {
                         }
                     },
                 },
-            }
-
-            if start_of_execution.elapsed() > timeout {
-                self.program.halt();
             }
         }
 
