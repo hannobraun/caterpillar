@@ -1,5 +1,5 @@
 use std::{
-    sync::mpsc,
+    sync::mpsc::{self, TryRecvError},
     time::{Duration, Instant},
 };
 
@@ -10,11 +10,13 @@ use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 pub struct RunnerThread {
     inner: Runner,
     effects: EffectsRx,
+    resume: ResumeTx,
 }
 
 impl RunnerThread {
     pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
         let (effects_tx, effects_rx) = mpsc::channel();
+        let (resume_tx, resume_rx) = mpsc::channel();
 
         Self {
             inner: Runner {
@@ -22,8 +24,10 @@ impl RunnerThread {
                 events,
                 updates,
                 effects: effects_tx,
+                resume: resume_rx,
             },
             effects: effects_rx,
+            resume: resume_tx,
         }
     }
 
@@ -34,6 +38,10 @@ impl RunnerThread {
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
         self.effects.try_iter()
     }
+
+    pub fn resume(&mut self) {
+        self.resume.send(()).unwrap();
+    }
 }
 
 struct Runner {
@@ -41,6 +49,7 @@ struct Runner {
     events: EventsRx,
     updates: UpdatesTx,
     effects: EffectsTx,
+    resume: ResumeRx,
 }
 
 impl Runner {
@@ -109,6 +118,19 @@ impl Runner {
                             self.effects
                                 .send(DisplayEffect::RequestRedraw)
                                 .unwrap();
+
+                            // The purpose of the "request redraw" effect is to
+                            // serve as a synchronization point, where the
+                            // program can pause until the display code has
+                            // processed the effect (and all leading up to it).
+                            //
+                            // Once this is a dedicated thread, we need to wait
+                            // here until a signal is received on the `resume`
+                            // channel. But until then, we can't do that.
+                            assert_eq!(
+                                self.resume.try_recv(),
+                                Err(TryRecvError::Empty)
+                            );
                         }
                     },
                 },
@@ -125,6 +147,9 @@ impl Runner {
 
 type EffectsTx = mpsc::Sender<DisplayEffect>;
 type EffectsRx = mpsc::Receiver<DisplayEffect>;
+
+type ResumeTx = mpsc::Sender<()>;
+type ResumeRx = mpsc::Receiver<()>;
 
 #[derive(Debug)]
 pub enum DisplayEffect {

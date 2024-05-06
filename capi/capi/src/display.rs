@@ -91,6 +91,8 @@ impl ApplicationHandler for State {
             return;
         };
 
+        let mut redraw_requested = false;
+
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
@@ -107,10 +109,13 @@ impl ApplicationHandler for State {
                     self.mem[index] = value;
                 }
                 DisplayEffect::RequestRedraw => {
-                    // Nothing to do for now. This effect exists in preparation
-                    // for moving the runner into a dedicated thread.
+                    redraw_requested = true;
                 }
             }
+        }
+
+        if redraw_requested {
+            self.runner.resume();
         }
 
         for tile_y in 0..TILES_PER_AXIS {
