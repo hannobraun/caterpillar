@@ -119,7 +119,7 @@ impl Runner {
                                 .send(DisplayEffect::SubmitTiles)
                                 .unwrap();
 
-                            // The purpose of the "request redraw" effect is to
+                            // The purpose of the "submit tiles" effect is to
                             // serve as a synchronization point, where the
                             // program can pause until the display code has
                             // processed the effect (and all leading up to it).
