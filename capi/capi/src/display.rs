@@ -1,4 +1,3 @@
-use capi_runtime::Program;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -8,20 +7,11 @@ use winit::{
     window::Window,
 };
 
-use crate::{
-    runner::{DisplayEffect, RunnerThread},
-    server::EventsRx,
-    updates::UpdatesTx,
-};
+use crate::runner::{DisplayEffect, RunnerThread};
 
-pub fn run(
-    program: Program,
-    events: EventsRx,
-    updates: UpdatesTx,
-) -> anyhow::Result<()> {
+pub fn run(mut runner: RunnerThread) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
-    let mut runner = RunnerThread::new(program, events, updates);
     runner.start();
 
     let mut state = State {

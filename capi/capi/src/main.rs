@@ -17,5 +17,6 @@ fn main() -> anyhow::Result<()> {
     let updates_tx = updates::UpdatesTx::new(updates_tx);
 
     server::start(updates_rx, events_tx);
-    display::run(program, events_rx, updates_tx)
+    let runner = runner::RunnerThread::new(program, events_rx, updates_tx);
+    display::run(runner)
 }
