@@ -22,7 +22,7 @@ pub fn run(
     let event_loop = EventLoop::new()?;
 
     let mut runner = RunnerThread::new(program, events, updates);
-    runner.run();
+    runner.start();
 
     let mut state = State {
         runner,

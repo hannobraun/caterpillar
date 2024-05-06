@@ -20,7 +20,7 @@ impl RunnerThread {
         }
     }
 
-    pub fn run(&mut self) {
+    pub fn start(&mut self) {
         self.inner.run()
     }
 
