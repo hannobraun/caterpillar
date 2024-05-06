@@ -42,7 +42,9 @@ impl RunnerThread {
     }
 
     pub fn resume(&mut self) {
-        self.resume.send(()).unwrap();
+        // This will cause an error, if the other end has hung up, which happens
+        // if the program has ended. Nothing we can do about it.
+        let _ = self.resume.send(());
     }
 }
 
