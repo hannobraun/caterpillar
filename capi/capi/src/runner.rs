@@ -18,14 +18,16 @@ impl RunnerThread {
         let (effects_tx, effects_rx) = mpsc::channel();
         let (resume_tx, resume_rx) = mpsc::channel();
 
+        let runner = Runner {
+            program,
+            events,
+            updates,
+            effects: effects_tx,
+            resume: resume_rx,
+        };
+
         Self {
-            inner: Runner {
-                program,
-                events,
-                updates,
-                effects: effects_tx,
-                resume: resume_rx,
-            },
+            inner: runner,
             effects: effects_rx,
             resume: resume_tx,
         }
