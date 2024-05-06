@@ -1,5 +1,6 @@
 use std::{
     sync::mpsc::{self, TryRecvError},
+    thread,
     time::{Duration, Instant},
 };
 
@@ -29,7 +30,9 @@ impl RunnerThread {
             resume: resume_rx,
         };
 
-        runner.start();
+        thread::spawn(move || {
+            runner.start();
+        });
 
         Self {
             effects: effects_rx,
