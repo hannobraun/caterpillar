@@ -8,7 +8,6 @@ use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
 pub struct RunnerThread {
-    inner: Runner,
     effects: EffectsRx,
     resume: ResumeTx,
 }
@@ -18,7 +17,7 @@ impl RunnerThread {
         let (effects_tx, effects_rx) = mpsc::channel();
         let (resume_tx, resume_rx) = mpsc::channel();
 
-        let runner = Runner {
+        let mut runner = Runner {
             program,
             events,
             updates,
@@ -26,15 +25,12 @@ impl RunnerThread {
             resume: resume_rx,
         };
 
+        runner.start();
+
         Self {
-            inner: runner,
             effects: effects_rx,
             resume: resume_tx,
         }
-    }
-
-    pub fn start(&mut self) {
-        self.inner.start()
     }
 
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {

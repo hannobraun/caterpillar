@@ -9,10 +9,8 @@ use winit::{
 
 use crate::runner::{DisplayEffect, RunnerThread};
 
-pub fn run(mut runner: RunnerThread) -> anyhow::Result<()> {
+pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
-
-    runner.start();
 
     let mut state = State {
         runner,
