@@ -21,7 +21,8 @@ pub fn run(
 ) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
-    let runner = RunnerThread::new(program, events, updates);
+    let mut runner = RunnerThread::new(program, events, updates);
+    runner.run();
 
     let mut state = State {
         runner,
@@ -100,7 +101,6 @@ impl ApplicationHandler for State {
             return;
         };
 
-        self.runner.run();
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
