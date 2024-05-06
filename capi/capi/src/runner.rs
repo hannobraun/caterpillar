@@ -5,13 +5,13 @@ use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
 pub struct RunnerThread {
-    inner: RunnerInner,
+    inner: Runner,
 }
 
 impl RunnerThread {
     pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
         Self {
-            inner: RunnerInner {
+            inner: Runner {
                 program,
                 events,
                 updates,
@@ -24,13 +24,13 @@ impl RunnerThread {
     }
 }
 
-struct RunnerInner {
+struct Runner {
     program: Program,
     events: EventsRx,
     updates: UpdatesTx,
 }
 
-impl RunnerInner {
+impl Runner {
     fn run(&mut self, mut handler: impl FnMut(DisplayEffect)) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
