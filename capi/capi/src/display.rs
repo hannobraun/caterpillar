@@ -108,7 +108,7 @@ impl ApplicationHandler for State {
 
                     self.mem[index] = value;
                 }
-                DisplayEffect::RequestRedraw => {
+                DisplayEffect::SubmitTiles => {
                     redraw_requested = true;
                 }
             }

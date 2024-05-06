@@ -116,7 +116,7 @@ impl Runner {
                             self.program.state = ProgramState::Running;
 
                             self.effects
-                                .send(DisplayEffect::RequestRedraw)
+                                .send(DisplayEffect::SubmitTiles)
                                 .unwrap();
 
                             // The purpose of the "request redraw" effect is to
@@ -154,5 +154,5 @@ type ResumeRx = mpsc::Receiver<()>;
 #[derive(Debug)]
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
-    RequestRedraw,
+    SubmitTiles,
 }
