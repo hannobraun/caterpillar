@@ -91,8 +91,7 @@ impl Runner {
                         Effect::RequestRedraw => {
                             self.program.state = ProgramState::Running;
 
-                            // Nothing else to do here yet, until there's a
-                            // matching `DisplayEffect` variant.
+                            handler(DisplayEffect::RequestRedraw);
                         }
                     },
                 },
@@ -109,4 +108,5 @@ impl Runner {
 
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
+    RequestRedraw,
 }

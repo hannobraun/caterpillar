@@ -112,6 +112,10 @@ impl ApplicationHandler for State {
 
                 self.mem[index] = value;
             }
+            DisplayEffect::RequestRedraw => {
+                // Nothing to do for now. This effect exists in preparation for
+                // moving the runner into a dedicated thread.
+            }
         });
 
         for tile_y in 0..TILES_PER_AXIS {
