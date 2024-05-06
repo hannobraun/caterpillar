@@ -5,17 +5,17 @@ use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
 pub struct Runner {
-    program: Program,
-    events: EventsRx,
-    updates: UpdatesTx,
+    inner: RunnerInner,
 }
 
 impl Runner {
     pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
         Self {
-            program,
-            events,
-            updates,
+            inner: RunnerInner {
+                program,
+                events,
+                updates,
+            },
         }
     }
 
@@ -24,7 +24,7 @@ impl Runner {
         let timeout = Duration::from_millis(10);
 
         loop {
-            while let Ok(event) = self.events.try_recv() {
+            while let Ok(event) = self.inner.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
                 // debugger, while it is stuck in an endless loop.
@@ -34,28 +34,29 @@ impl Runner {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                self.program.apply_debug_event(event);
-                self.updates.send(&self.program);
+                self.inner.program.apply_debug_event(event);
+                self.inner.updates.send(&self.inner.program);
             }
 
             // This block needs to be located here, as receiving events from the
             // client can lead to a reset, which then must result in the
             // arguments being available, or the program can't work correctly.
-            if let ProgramState::Finished = self.program.state {
-                self.program.reset();
-                self.program
+            if let ProgramState::Finished = self.inner.program.state {
+                self.inner.program.reset();
+                self.inner
+                    .program
                     .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
             }
 
-            self.program.step();
-            match &self.program.state {
+            self.inner.program.step();
+            match &self.inner.program.state {
                 ProgramState::Running => {}
                 ProgramState::Paused { .. } => {
                     break;
                 }
                 ProgramState::Finished => {
                     assert_eq!(
-                        self.program.evaluator.data_stack.num_values(),
+                        self.inner.program.evaluator.data_stack.num_values(),
                         0
                     );
                     break;
@@ -74,19 +75,25 @@ impl Runner {
                             let value = *value;
                             handler(DisplayEffect::SetTile { x, y, value });
 
-                            self.program.state = ProgramState::Running;
+                            self.inner.program.state = ProgramState::Running;
                         }
                     },
                 },
             }
 
             if start_of_execution.elapsed() > timeout {
-                self.program.halt();
+                self.inner.program.halt();
             }
         }
 
-        self.updates.send(&self.program);
+        self.inner.updates.send(&self.inner.program);
     }
+}
+
+struct RunnerInner {
+    program: Program,
+    events: EventsRx,
+    updates: UpdatesTx,
 }
 
 pub enum DisplayEffect {
