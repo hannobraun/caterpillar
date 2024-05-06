@@ -21,8 +21,10 @@ pub fn run(
 ) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
+    let runner = RunnerThread::new(program, events, updates);
+
     let mut state = State {
-        runner: RunnerThread::new(program, events, updates),
+        runner,
         mem: [0; MEM_SIZE],
         window: None,
         pixels: None,
