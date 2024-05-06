@@ -5,10 +5,10 @@ pub fn program() -> Program {
 
     source.define("write_to_tile_buffer", |s| {
         s
-            .w("clear_all_tiles")
             .c("We have the size of the tile field already on the stack.")
-            .c("This will be used by `set_all_tiles` to traverse positions,")
-            .c("and to determine once it's finished.")
+            .c("This will be used by the following calls to traverse ")
+            .c("positions, and to determine once it's finished.")
+            .w("clear_all_tiles")
             .w("set_all_tiles")
             .c("`set_all_tiles` leaves its arguments on the stack, except that")
             .c("it has counted up the first tile position, which should now be")
