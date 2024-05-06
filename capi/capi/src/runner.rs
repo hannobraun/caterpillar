@@ -106,6 +106,7 @@ impl Runner {
     }
 }
 
+#[derive(Debug)]
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
     RequestRedraw,
