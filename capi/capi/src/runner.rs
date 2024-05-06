@@ -34,7 +34,7 @@ impl RunnerThread {
     }
 
     pub fn start(&mut self) {
-        self.inner.run()
+        self.inner.start()
     }
 
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
@@ -55,7 +55,7 @@ struct Runner {
 }
 
 impl Runner {
-    fn run(&mut self) {
+    fn start(&mut self) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
