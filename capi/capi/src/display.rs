@@ -91,7 +91,7 @@ impl ApplicationHandler for State {
             return;
         };
 
-        let mut redraw_requested = false;
+        let mut submit_tiles = false;
 
         for effect in self.runner.effects() {
             match effect {
@@ -109,12 +109,12 @@ impl ApplicationHandler for State {
                     self.mem[index] = value;
                 }
                 DisplayEffect::SubmitTiles => {
-                    redraw_requested = true;
+                    submit_tiles = true;
                 }
             }
         }
 
-        if redraw_requested {
+        if submit_tiles {
             self.runner.resume();
         }
 
