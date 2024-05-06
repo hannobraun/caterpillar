@@ -91,8 +91,8 @@ impl Runner {
                         Effect::RequestRedraw => {
                             self.program.state = ProgramState::Running;
 
-                            // Nothing to do here yet, until there's a matching
-                            // `DisplayEffect` variant.
+                            // Nothing else to do here yet, until there's a
+                            // matching `DisplayEffect` variant.
                         }
                     },
                 },
