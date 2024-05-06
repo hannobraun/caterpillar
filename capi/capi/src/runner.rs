@@ -15,12 +15,17 @@ impl RunnerThread {
                 program,
                 events,
                 updates,
+                effects: Vec::new(),
             },
         }
     }
 
-    pub fn run(&mut self, handler: impl FnMut(DisplayEffect)) {
-        self.inner.run(handler)
+    pub fn run(&mut self) {
+        self.inner.run()
+    }
+
+    pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
+        self.inner.effects.drain(..)
     }
 }
 
@@ -28,10 +33,11 @@ struct Runner {
     program: Program,
     events: EventsRx,
     updates: UpdatesTx,
+    effects: Vec<DisplayEffect>,
 }
 
 impl Runner {
-    fn run(&mut self, mut handler: impl FnMut(DisplayEffect)) {
+    fn run(&mut self) {
         let start_of_execution = Instant::now();
         let timeout = Duration::from_millis(10);
 
@@ -84,14 +90,18 @@ impl Runner {
                             let x = *x;
                             let y = *y;
                             let value = *value;
-                            handler(DisplayEffect::SetTile { x, y, value });
+                            self.effects.push(DisplayEffect::SetTile {
+                                x,
+                                y,
+                                value,
+                            });
 
                             self.program.state = ProgramState::Running;
                         }
                         Effect::RequestRedraw => {
                             self.program.state = ProgramState::Running;
 
-                            handler(DisplayEffect::RequestRedraw);
+                            self.effects.push(DisplayEffect::RequestRedraw);
                         }
                     },
                 },

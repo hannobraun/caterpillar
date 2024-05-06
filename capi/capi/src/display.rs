@@ -98,25 +98,28 @@ impl ApplicationHandler for State {
             return;
         };
 
-        self.runner.run(|effect| match effect {
-            DisplayEffect::SetTile { x, y, value } => {
-                let x_usize: usize = x.into();
-                let y_usize: usize = y.into();
+        self.runner.run();
+        for effect in self.runner.effects() {
+            match effect {
+                DisplayEffect::SetTile { x, y, value } => {
+                    let x_usize: usize = x.into();
+                    let y_usize: usize = y.into();
 
-                let index = || {
-                    x_usize
-                        .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)?
-                        .checked_add(TILES_OFFSET_IN_MEMORY)
-                };
-                let index = index().unwrap();
+                    let index = || {
+                        x_usize
+                            .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)?
+                            .checked_add(TILES_OFFSET_IN_MEMORY)
+                    };
+                    let index = index().unwrap();
 
-                self.mem[index] = value;
+                    self.mem[index] = value;
+                }
+                DisplayEffect::RequestRedraw => {
+                    // Nothing to do for now. This effect exists in preparation
+                    // for moving the runner into a dedicated thread.
+                }
             }
-            DisplayEffect::RequestRedraw => {
-                // Nothing to do for now. This effect exists in preparation for
-                // moving the runner into a dedicated thread.
-            }
-        });
+        }
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
