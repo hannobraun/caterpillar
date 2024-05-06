@@ -10,10 +10,9 @@ pub fn program() -> Program {
             .c("positions, and to determine once it's finished.")
             .w("clear_all_tiles")
             .w("set_all_tiles")
+            .c("And we're done, basically. Just need to let the display system")
+            .c("know it can draw now, and clean after ourselves.")
             .w("draw")
-            .c("`set_all_tiles` leaves its arguments on the stack, except that")
-            .c("it has counted up the first tile position, which should now be")
-            .c("identical to the last one.")
             .w("clean_up_arguments");
     });
     source.define("clear_all_tiles", |s| {
