@@ -27,6 +27,10 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn draw() -> Result {
+    Ok(Some(Effect::RequestRedraw))
+}
+
 pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
