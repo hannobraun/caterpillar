@@ -98,7 +98,7 @@ impl ApplicationHandler for State {
             return;
         };
 
-        RunnerThread::run(&mut self.runner, |effect| match effect {
+        self.runner.run(|effect| match effect {
             DisplayEffect::SetTile { x, y, value } => {
                 let x_usize: usize = x.into();
                 let y_usize: usize = y.into();
