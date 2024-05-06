@@ -13,7 +13,11 @@ pub struct RunnerThread {
 }
 
 impl RunnerThread {
-    pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
+    pub fn start(
+        program: Program,
+        events: EventsRx,
+        updates: UpdatesTx,
+    ) -> Self {
         let (effects_tx, effects_rx) = mpsc::channel();
         let (resume_tx, resume_rx) = mpsc::channel();
 
