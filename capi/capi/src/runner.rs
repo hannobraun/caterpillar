@@ -4,11 +4,11 @@ use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
-pub struct Runner {
+pub struct RunnerThread {
     inner: RunnerInner,
 }
 
-impl Runner {
+impl RunnerThread {
     pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
         Self {
             inner: RunnerInner {

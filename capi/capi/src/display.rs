@@ -9,7 +9,7 @@ use winit::{
 };
 
 use crate::{
-    runner::{DisplayEffect, Runner},
+    runner::{DisplayEffect, RunnerThread},
     server::EventsRx,
     updates::UpdatesTx,
 };
@@ -22,7 +22,7 @@ pub fn run(
     let event_loop = EventLoop::new()?;
 
     let mut state = State {
-        runner: Runner::new(program, events, updates),
+        runner: RunnerThread::new(program, events, updates),
         mem: [0; MEM_SIZE],
         window: None,
         pixels: None,
@@ -34,7 +34,7 @@ pub fn run(
 }
 
 struct State {
-    runner: Runner,
+    runner: RunnerThread,
     mem: [u8; MEM_SIZE],
     window: Option<Window>,
     pixels: Option<Pixels>,
@@ -98,7 +98,7 @@ impl ApplicationHandler for State {
             return;
         };
 
-        Runner::run(&mut self.runner, |effect| match effect {
+        RunnerThread::run(&mut self.runner, |effect| match effect {
             DisplayEffect::SetTile { x, y, value } => {
                 let x_usize: usize = x.into();
                 let y_usize: usize = y.into();
