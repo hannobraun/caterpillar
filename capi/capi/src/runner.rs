@@ -1,4 +1,7 @@
-use std::time::{Duration, Instant};
+use std::{
+    sync::mpsc,
+    time::{Duration, Instant},
+};
 
 use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
 
@@ -6,17 +9,21 @@ use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
 pub struct RunnerThread {
     inner: Runner,
+    effects: EffectsRx,
 }
 
 impl RunnerThread {
     pub fn new(program: Program, events: EventsRx, updates: UpdatesTx) -> Self {
+        let (effects_tx, effects_rx) = mpsc::channel();
+
         Self {
             inner: Runner {
                 program,
                 events,
                 updates,
-                effects: Vec::new(),
+                effects: effects_tx,
             },
+            effects: effects_rx,
         }
     }
 
@@ -25,7 +32,7 @@ impl RunnerThread {
     }
 
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
-        self.inner.effects.drain(..)
+        self.effects.try_iter()
     }
 }
 
@@ -33,7 +40,7 @@ struct Runner {
     program: Program,
     events: EventsRx,
     updates: UpdatesTx,
-    effects: Vec<DisplayEffect>,
+    effects: EffectsTx,
 }
 
 impl Runner {
@@ -90,18 +97,18 @@ impl Runner {
                             let x = *x;
                             let y = *y;
                             let value = *value;
-                            self.effects.push(DisplayEffect::SetTile {
-                                x,
-                                y,
-                                value,
-                            });
+                            self.effects
+                                .send(DisplayEffect::SetTile { x, y, value })
+                                .unwrap();
 
                             self.program.state = ProgramState::Running;
                         }
                         Effect::RequestRedraw => {
                             self.program.state = ProgramState::Running;
 
-                            self.effects.push(DisplayEffect::RequestRedraw);
+                            self.effects
+                                .send(DisplayEffect::RequestRedraw)
+                                .unwrap();
                         }
                     },
                 },
@@ -115,6 +122,9 @@ impl Runner {
         self.updates.send(&self.program);
     }
 }
+
+pub type EffectsTx = mpsc::Sender<DisplayEffect>;
+pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
 
 #[derive(Debug)]
 pub enum DisplayEffect {
