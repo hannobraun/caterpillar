@@ -115,6 +115,8 @@ impl ApplicationHandler for State {
         }
 
         if submit_tiles {
+            // The program wants to submit the tiles it has previous set. Signal
+            // that we're ready for that now, so it can resume running.
             self.runner.resume();
         }
 
