@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     builtins::Effect, evaluator::EvaluatorState, source_map::SourceMap,
-    DataStack, DebugEvent, Evaluator, Functions, InstructionAddress, Value,
+    DataStack, Evaluator, Functions, InstructionAddress, Value,
 };
 
 #[derive(
@@ -43,19 +43,6 @@ impl Program {
 
         for value in arguments {
             self.evaluator.data_stack.push(value);
-        }
-    }
-
-    pub fn apply_debug_event(&mut self, event: DebugEvent) {
-        match event {
-            DebugEvent::Reset => {
-                self.reset();
-            }
-            DebugEvent::ToggleBreakpoint { address } => {
-                let breakpoint =
-                    self.breakpoints.entry(address).or_insert(false);
-                *breakpoint = !*breakpoint;
-            }
         }
     }
 

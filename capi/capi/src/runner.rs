@@ -3,7 +3,9 @@ use std::{
     thread,
 };
 
-use capi_runtime::{Effect, Program, ProgramEffect, ProgramState, Value};
+use capi_runtime::{
+    DebugEvent, Effect, Program, ProgramEffect, ProgramState, Value,
+};
 
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
 
@@ -71,7 +73,20 @@ impl Runner {
                 // any indication of them being received in the debugger, as the
                 // program isn't sent when it's running.
 
-                self.program.apply_debug_event(event);
+                match event {
+                    DebugEvent::Reset => {
+                        self.program.reset();
+                    }
+                    DebugEvent::ToggleBreakpoint { address } => {
+                        let breakpoint = self
+                            .program
+                            .breakpoints
+                            .entry(address)
+                            .or_insert(false);
+                        *breakpoint = !*breakpoint;
+                    }
+                }
+
                 self.updates.send(&self.program);
             }
 
