@@ -95,13 +95,13 @@ impl Program {
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub enum ProgramState {
+    #[default]
     Running,
 
     Paused {
         address: InstructionAddress,
     },
 
-    #[default]
     Finished,
 
     Effect {
