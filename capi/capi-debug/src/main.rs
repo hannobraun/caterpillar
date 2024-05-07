@@ -98,11 +98,13 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
 #[component]
 pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
     let data_stack = move || {
+        let program = program.get();
+
         // Right now, the server never sends the program while it is running, so
         // we don't need to handle that case here. But that could change in the
         // future, and this assertion makes sure we notice.
         assert!(
-            !program.get().state.is_running(),
+            !program.state.is_running(),
             "Stack can't be up-to-date, if program is running."
         );
 
@@ -110,11 +112,11 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
             <div>
                 <p>
                     "Previous data stack: "
-                    {format!("{:?}", program.get().previous_data_stack)}
+                    {format!("{:?}", program.previous_data_stack)}
                 </p>
                 <p>
                     "Current data stack: "
-                    {format!("{:?}", program.get().evaluator.data_stack)}
+                    {format!("{:?}", program.evaluator.data_stack)}
                 </p>
             </div>
         }
