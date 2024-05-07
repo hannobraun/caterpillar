@@ -65,7 +65,21 @@ impl Runner {
         self.program.push(ARGUMENTS);
 
         loop {
-            while let Ok(event) = self.events.try_recv() {
+            self.updates.send(&self.program);
+
+            let mut event = if self.program.state.is_running() {
+                None
+            } else {
+                // If we're not running, the program won't step anyway, and
+                // there's no point in busy-looping while nothing changes.
+                //
+                // Just wait until we receive an event from the client.
+                Some(self.events.blocking_recv().unwrap())
+            };
+
+            while let Some(event) =
+                event.take().or_else(|| self.events.try_recv().ok())
+            {
                 // This doesn't work so well. This receive loop was moved here,
                 // so we can have some control over the program from the
                 // debugger, while it is stuck in an endless loop.
@@ -84,8 +98,6 @@ impl Runner {
                         self.program.toggle_breakpoint(address);
                     }
                 }
-
-                self.updates.send(&self.program);
             }
 
             self.program.step();
@@ -96,19 +108,12 @@ impl Runner {
                         self.program.evaluator.data_stack.num_values(),
                         0
                     );
-                    break;
                 }
-                ProgramState::Paused { .. } => {
-                    break;
-                }
+                ProgramState::Paused { .. } => {}
                 ProgramState::Effect { effect, .. } => match effect {
-                    ProgramEffect::Halted => {
-                        break;
-                    }
+                    ProgramEffect::Halted => {}
                     ProgramEffect::Builtin(effect) => match effect {
-                        Effect::Error(_) => {
-                            break;
-                        }
+                        Effect::Error(_) => {}
                         Effect::SetTile { x, y, value } => {
                             let x = *x;
                             let y = *y;
@@ -143,8 +148,6 @@ impl Runner {
                 },
             }
         }
-
-        self.updates.send(&self.program);
     }
 }
 
