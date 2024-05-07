@@ -103,12 +103,7 @@ impl Runner {
             self.program.step();
             match &self.program.state {
                 ProgramState::Running => {}
-                ProgramState::Finished => {
-                    assert_eq!(
-                        self.program.evaluator.data_stack.num_values(),
-                        0
-                    );
-                }
+                ProgramState::Finished => {}
                 ProgramState::Paused { .. } => {}
                 ProgramState::Effect { effect, .. } => match effect {
                     ProgramEffect::Halted => {}
