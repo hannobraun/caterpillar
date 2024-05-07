@@ -90,8 +90,7 @@ impl Runner {
             // arguments being available, or the program can't work correctly.
             if let ProgramState::Finished = self.program.state {
                 self.program.reset();
-                self.program
-                    .push([Value(TILES_PER_AXIS.try_into().unwrap()); 2]);
+                self.program.push(ARGUMENTS);
             }
 
             self.program.step();
@@ -165,3 +164,7 @@ pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
     SubmitTiles,
 }
+
+// I don't like the `as` here, but `.try_into().unwrap()` doesn't work in a
+// const context.
+const ARGUMENTS: [Value; 2] = [Value(TILES_PER_AXIS as u8); 2];
