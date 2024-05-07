@@ -19,7 +19,7 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let (program, set_program) = create_signal(Program::default());
+    let (program, set_program) = create_signal(None);
     let (events_tx, events_rx) = mpsc::unbounded();
 
     leptos::spawn_local(handle_server(set_program, events_rx));
@@ -33,7 +33,7 @@ fn main() {
 
 #[component]
 pub fn Debugger(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
     view! {
@@ -54,22 +54,22 @@ pub fn Debugger(
 }
 
 #[component]
-pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
+pub fn ProgramState(program: ReadSignal<Option<Program>>) -> impl IntoView {
     move || {
-        let program = program.get();
+        let program = program.get()?;
 
-        view! {
+        Some(view! {
             <p>"Program state: "{move || format!("{:?}", program.state)}</p>
-        }
+        })
     }
 }
 
 #[component]
-pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
+pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let addresses = move || {
-        let program = program.get();
+        let program = program.get()?;
 
-        program
+        let view = program
             .evaluator
             .call_stack
             .into_iter()
@@ -81,7 +81,9 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
                     <li>{format!("{location:?}")}</li>
                 })
             })
-            .collect_view()
+            .collect_view();
+
+        Some(view)
     };
 
     view! {
@@ -96,9 +98,9 @@ pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
+pub fn DataStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let data_stack = move || {
-        let program = program.get();
+        let program = program.get()?;
 
         // Right now, the server never sends the program while it is running, so
         // we don't need to handle that case here. But that could change in the
@@ -108,7 +110,7 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
             "Stack can't be up-to-date, if program is running."
         );
 
-        view! {
+        let view = view! {
             <div>
                 <p>
                     "Previous data stack: "
@@ -119,7 +121,9 @@ pub fn DataStack(program: ReadSignal<Program>) -> impl IntoView {
                     {format!("{:?}", program.evaluator.data_stack)}
                 </p>
             </div>
-        }
+        };
+
+        Some(view)
     };
 
     view! {
@@ -144,12 +148,12 @@ pub fn ResetButton(events: EventsTx) -> impl IntoView {
 
 #[component]
 pub fn Functions(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
     let functions = move || {
-        program
-            .get()
+        let view = program
+            .get()?
             .functions
             .inner
             .into_iter()
@@ -161,7 +165,9 @@ pub fn Functions(
                         events=events.clone() />
                 }
             })
-            .collect_view()
+            .collect_view();
+
+        Some(view)
     };
 
     view! {
@@ -171,7 +177,7 @@ pub fn Functions(
 
 #[component]
 pub fn Function(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     function: capi_runtime::Function,
     events: EventsTx,
 ) -> impl IntoView {
@@ -202,13 +208,13 @@ pub fn Function(
 
 #[component]
 pub fn LineWithBreakpoint(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
     let location = expression.location.clone();
     let address = create_memo(move |_| {
-        program.get().source_map.location_to_address(&location)
+        program.get()?.source_map.location_to_address(&location)
     });
 
     let breakpoint = move || {
@@ -234,12 +240,12 @@ pub fn LineWithBreakpoint(
 
 #[component]
 pub fn Breakpoint(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     address: InstructionAddress,
     events: EventsTx,
 ) -> impl IntoView {
     let class = move || {
-        let program = program.get();
+        let program = program.get()?;
 
         let breakpoint_color = if program.breakpoint_at(&address) {
             "text-green-600"
@@ -247,7 +253,7 @@ pub fn Breakpoint(
             "text-green-300"
         };
 
-        format!("mr-1 {breakpoint_color}")
+        Some(format!("mr-1 {breakpoint_color}"))
     };
 
     let data_address = move || address.to_usize();
@@ -288,12 +294,12 @@ pub fn Breakpoint(
 
 #[component]
 pub fn Line(
-    program: ReadSignal<Program>,
+    program: ReadSignal<Option<Program>>,
     expression: Expression,
 ) -> impl IntoView {
     let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
     let class = move || {
-        let program = program.get();
+        let program = program.get()?;
         let state = program.state;
 
         let text_classes = if is_comment {
@@ -324,7 +330,7 @@ pub fn Line(
             _ => "",
         };
 
-        format!("px-0.5 {text_classes} {bg_class}")
+        Some(format!("px-0.5 {text_classes} {bg_class}"))
     };
     let line = format!("{}", expression.kind);
 
@@ -339,7 +345,10 @@ async fn send_event(event: DebugEvent, mut events: EventsTx) {
     }
 }
 
-async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
+async fn handle_server(
+    program: WriteSignal<Option<Program>>,
+    mut events: EventsRx,
+) {
     let mut socket = WebSocket::open("ws://127.0.0.1:8080/code").unwrap();
 
     loop {
@@ -374,7 +383,7 @@ async fn handle_server(program: WriteSignal<Program>, mut events: EventsRx) {
                     }
                 };
 
-                program.set(new_program);
+                program.set(Some(new_program));
             }
             Either::Right((evt, _)) => {
                 let Some(evt) = evt else {
