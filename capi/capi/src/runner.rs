@@ -78,12 +78,7 @@ impl Runner {
                         self.program.reset();
                     }
                     DebugEvent::ToggleBreakpoint { address } => {
-                        let breakpoint = self
-                            .program
-                            .breakpoints
-                            .entry(address)
-                            .or_insert(false);
-                        *breakpoint = !*breakpoint;
+                        self.program.toggle_breakpoint(address);
                     }
                 }
 
