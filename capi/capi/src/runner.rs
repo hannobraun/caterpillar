@@ -107,7 +107,6 @@ impl Runner {
             } = &self.program.state
             {
                 match effect {
-                    Effect::Error(_) => {}
                     Effect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
@@ -136,6 +135,7 @@ impl Runner {
                             Err(TryRecvError::Empty)
                         );
                     }
+                    _ => {}
                 }
             }
         }
