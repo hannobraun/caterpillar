@@ -293,7 +293,8 @@ pub fn Line(
 ) -> impl IntoView {
     let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
     let class = move || {
-        let state = program.get().state;
+        let program = program.get();
+        let state = program.state;
 
         let text_classes = if is_comment {
             "italic text-gray-500"
@@ -304,7 +305,6 @@ pub fn Line(
         let bg_class = match state {
             ProgramState::Paused { address, .. }
                 if program
-                    .get()
                     .source_map
                     .address_to_location(&address)
                     .as_ref()
@@ -314,7 +314,6 @@ pub fn Line(
             }
             ProgramState::Effect { address, .. }
                 if program
-                    .get()
                     .source_map
                     .address_to_location(&address)
                     .as_ref()
