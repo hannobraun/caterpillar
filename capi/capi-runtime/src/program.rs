@@ -56,7 +56,7 @@ impl Program {
     }
 
     pub fn step(&mut self) {
-        if let ProgramState::Effect { .. } = self.state {
+        if !self.state.is_running() {
             return;
         }
 
