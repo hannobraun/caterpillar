@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(
-    Clone, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Program {
     pub functions: Functions,

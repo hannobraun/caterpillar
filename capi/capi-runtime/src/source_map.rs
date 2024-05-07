@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::{InstructionAddress, SourceLocation};
 
 #[derive(
-    Clone, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
     address_to_location: BTreeMap<InstructionAddress, SourceLocation>,
