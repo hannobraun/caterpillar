@@ -91,14 +91,14 @@ impl Runner {
             self.program.step();
             match &self.program.state {
                 ProgramState::Running => {}
-                ProgramState::Paused { .. } => {
-                    break;
-                }
                 ProgramState::Finished => {
                     assert_eq!(
                         self.program.evaluator.data_stack.num_values(),
                         0
                     );
+                    break;
+                }
+                ProgramState::Paused { .. } => {
                     break;
                 }
                 ProgramState::Effect { effect, .. } => match effect {

@@ -98,11 +98,11 @@ pub enum ProgramState {
     #[default]
     Running,
 
+    Finished,
+
     Paused {
         address: InstructionAddress,
     },
-
-    Finished,
 
     Effect {
         effect: ProgramEffect,
