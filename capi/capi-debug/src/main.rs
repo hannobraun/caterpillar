@@ -239,7 +239,9 @@ pub fn Breakpoint(
     events: EventsTx,
 ) -> impl IntoView {
     let class = move || {
-        let breakpoint_color = if program.get().breakpoint_at(&address) {
+        let program = program.get();
+
+        let breakpoint_color = if program.breakpoint_at(&address) {
             "text-green-600"
         } else {
             "text-green-300"
