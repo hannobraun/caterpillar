@@ -3,6 +3,30 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-07
+
+Yesterday, I talked about how prefix operators can cause a mismatch between
+reading order and evaluation order. Today, I'd like to look at how other
+programming languages address this problem by using postfix operators, or at
+least constructs that have some postfix-like qualities to them.
+
+Let's start with something that we might see in JavaScript:
+`const c = (await (await a()).b()).c();`. Here we're dealing with multiple
+chained promises, but of course we shouldn't write it this way. We could use
+`then` instead:
+
+```js
+const c = a()
+  .then((a) => a.b())
+  .then((b) => b.c());
+```
+
+Much nicer to read, and while `then` isn't quite a postfix operator, there's
+some postfix-ness in there! And of course, the Rust developers presumably
+studied this and decided to avoid the whole thing, by making their `.await` a
+postfix keyword (there's also `?`). I think this shows that postfix operators
+have some nice properties, that even established languages want to benefit from.
+
 ## 2024-05-06
 
 I explained why I like postfix operators, and why I think infix operators aren't
