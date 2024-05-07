@@ -101,11 +101,8 @@ impl Runner {
             }
 
             self.program.step();
-            match &self.program.state {
-                ProgramState::Running => {}
-                ProgramState::Finished => {}
-                ProgramState::Paused { .. } => {}
-                ProgramState::Effect { effect, .. } => match effect {
+            if let ProgramState::Effect { effect, .. } = &self.program.state {
+                match effect {
                     ProgramEffect::Halted => {}
                     ProgramEffect::Builtin(effect) => match effect {
                         Effect::Error(_) => {}
@@ -140,7 +137,7 @@ impl Runner {
                             );
                         }
                     },
-                },
+                }
             }
         }
     }
