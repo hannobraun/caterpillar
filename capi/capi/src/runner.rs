@@ -101,42 +101,41 @@ impl Runner {
             }
 
             self.program.step();
-            if let ProgramState::Effect { effect, .. } = &self.program.state {
+            if let ProgramState::Effect {
+                effect: ProgramEffect::Builtin(effect),
+                ..
+            } = &self.program.state
+            {
                 match effect {
-                    ProgramEffect::Halted => {}
-                    ProgramEffect::Builtin(effect) => match effect {
-                        Effect::Error(_) => {}
-                        Effect::SetTile { x, y, value } => {
-                            let x = *x;
-                            let y = *y;
-                            let value = *value;
-                            self.effects
-                                .send(DisplayEffect::SetTile { x, y, value })
-                                .unwrap();
+                    Effect::Error(_) => {}
+                    Effect::SetTile { x, y, value } => {
+                        let x = *x;
+                        let y = *y;
+                        let value = *value;
+                        self.effects
+                            .send(DisplayEffect::SetTile { x, y, value })
+                            .unwrap();
 
-                            self.program.state = ProgramState::Running;
-                        }
-                        Effect::RequestRedraw => {
-                            self.program.state = ProgramState::Running;
+                        self.program.state = ProgramState::Running;
+                    }
+                    Effect::RequestRedraw => {
+                        self.program.state = ProgramState::Running;
 
-                            self.effects
-                                .send(DisplayEffect::SubmitTiles)
-                                .unwrap();
+                        self.effects.send(DisplayEffect::SubmitTiles).unwrap();
 
-                            // The purpose of the "submit tiles" effect is to
-                            // serve as a synchronization point, where the
-                            // program can pause until the display code has
-                            // processed the effect (and all leading up to it).
-                            //
-                            // Once this is a dedicated thread, we need to wait
-                            // here until a signal is received on the `resume`
-                            // channel. But until then, we can't do that.
-                            assert_eq!(
-                                self.resume.try_recv(),
-                                Err(TryRecvError::Empty)
-                            );
-                        }
-                    },
+                        // The purpose of the "submit tiles" effect is to serve
+                        // as a synchronization point, where the program can
+                        // pause until the display code has processed the effect
+                        // (and all leading up to it).
+                        //
+                        // Once this is a dedicated thread, we need to wait here
+                        // until a signal is received on the `resume` channel.
+                        // But until then, we can't do that.
+                        assert_eq!(
+                            self.resume.try_recv(),
+                            Err(TryRecvError::Empty)
+                        );
+                    }
                 }
             }
         }
