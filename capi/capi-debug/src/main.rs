@@ -102,14 +102,6 @@ pub fn DataStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let data_stack = move || {
         let program = program.get()?;
 
-        // Right now, the server never sends the program while it is running, so
-        // we don't need to handle that case here. But that could change in the
-        // future, and this assertion makes sure we notice.
-        assert!(
-            !program.state.is_running(),
-            "Stack can't be up-to-date, if program is running."
-        );
-
         let view = view! {
             <div>
                 <p>
