@@ -67,14 +67,15 @@ pub fn ProgramState(program: ReadSignal<Program>) -> impl IntoView {
 #[component]
 pub fn CallStack(program: ReadSignal<Program>) -> impl IntoView {
     let addresses = move || {
+        let program = program.get();
+
         program
-            .get()
             .evaluator
             .call_stack
             .into_iter()
             .filter_map(|address| {
                 let location =
-                    program.get().source_map.address_to_location(&address)?;
+                    program.source_map.address_to_location(&address)?;
 
                 Some(view! {
                     <li>{format!("{location:?}")}</li>
