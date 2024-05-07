@@ -62,6 +62,8 @@ struct Runner {
 
 impl Runner {
     fn start(&mut self) {
+        self.program.push(ARGUMENTS);
+
         loop {
             while let Ok(event) = self.events.try_recv() {
                 // This doesn't work so well. This receive loop was moved here,
@@ -76,6 +78,7 @@ impl Runner {
                 match event {
                     DebugEvent::Reset => {
                         self.program.reset();
+                        self.program.push(ARGUMENTS);
                     }
                     DebugEvent::ToggleBreakpoint { address } => {
                         self.program.toggle_breakpoint(address);
@@ -83,14 +86,6 @@ impl Runner {
                 }
 
                 self.updates.send(&self.program);
-            }
-
-            // This block needs to be located here, as receiving events from the
-            // client can lead to a reset, which then must result in the
-            // arguments being available, or the program can't work correctly.
-            if let ProgramState::Finished = self.program.state {
-                self.program.reset();
-                self.program.push(ARGUMENTS);
             }
 
             self.program.step();
