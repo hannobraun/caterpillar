@@ -5,7 +5,7 @@ pub type UpdatesRx = watch::Receiver<Program>;
 
 pub struct UpdatesTx {
     inner: UpdatesTxInner,
-    pub program_at_client: Option<Program>,
+    program_at_client: Option<Program>,
 }
 
 impl UpdatesTx {
