@@ -1,7 +1,8 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    BuiltinEffect, DebugEvent, Program, ProgramEffect, ProgramState, Value,
+    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffect,
+    ProgramState, Value,
 };
 
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
@@ -119,7 +120,8 @@ impl Runner {
 
             self.program.step();
             if let ProgramState::Effect {
-                effect: ProgramEffect::Evaluator(effect),
+                effect:
+                    ProgramEffect::Evaluator(EvaluatorEffect::Builtin(effect)),
                 ..
             } = &self.program.state
             {
