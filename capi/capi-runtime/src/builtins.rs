@@ -27,7 +27,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn draw() -> Result {
+pub fn submit_frame() -> Result {
     Ok(Some(BuiltinEffect::RequestRedraw))
 }
 
