@@ -7,7 +7,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
 
     let Some(c) = a.0.checked_add(b.0) else {
-        return Err(Error::IntegerOverflow);
+        return Err(BuiltinError::IntegerOverflow);
     };
 
     data_stack.push(c);
@@ -46,7 +46,7 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
 
     let Some(c) = a.0.checked_mul(b.0) else {
-        return Err(Error::IntegerOverflow);
+        return Err(BuiltinError::IntegerOverflow);
     };
 
     data_stack.push(c);
@@ -70,7 +70,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
 
     let Some(c) = a.0.checked_sub(b.0) else {
-        return Err(Error::IntegerOverflow);
+        return Err(BuiltinError::IntegerOverflow);
     };
 
     data_stack.push(c);
@@ -107,11 +107,11 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     Ok(Some(effect))
 }
 
-pub type Result = std::result::Result<Option<Effect>, Error>;
+pub type Result = std::result::Result<Option<Effect>, BuiltinError>;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Effect {
-    Error(Error),
+    Error(BuiltinError),
     SetTile { x: u8, y: u8, value: u8 },
     RequestRedraw,
 }
@@ -125,7 +125,7 @@ pub enum Effect {
     serde::Serialize,
     thiserror::Error,
 )]
-pub enum Error {
+pub enum BuiltinError {
     #[error("Integer overflow")]
     IntegerOverflow,
 
