@@ -16,7 +16,7 @@ pub use self::{
     code::InstructionAddress,
     data_stack::{DataStack, Value},
     debug::DebugEvent,
-    evaluator::Evaluator,
+    evaluator::{Evaluator, EvaluatorEffect},
     functions::{Function, Functions},
     program::{Program, ProgramEffect, ProgramState},
     source::Source,
