@@ -119,7 +119,7 @@ impl Runner {
 
             self.program.step();
             if let ProgramState::Effect {
-                effect: ProgramEffect::Builtin(effect),
+                effect: ProgramEffect::Evaluator(effect),
                 ..
             } = &self.program.state
             {
