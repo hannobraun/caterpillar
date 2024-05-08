@@ -17,10 +17,14 @@ impl UpdatesTx {
     }
 
     pub fn send(&mut self, program: &Program) {
-        if program.state.is_running() {
-            // Allowing the program to be sent when it's running would produce
-            // too many updates. Let's wait until it changed state.
-            return;
+        if let Some(program_at_client) = &self.program_at_client {
+            if program_at_client.state.is_running()
+                && program.state.is_running()
+            {
+                // Don't send updates when the program is running. This would
+                // result in too many updates, at a too rapid rate to be useful.
+                return;
+            }
         }
         if self.program_at_client.as_ref() == Some(program) {
             // Client already has this program. Don't need to send it again.
