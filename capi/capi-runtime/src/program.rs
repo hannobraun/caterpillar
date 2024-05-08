@@ -17,7 +17,7 @@ pub struct Program {
     pub entry_address: InstructionAddress,
 
     /// The most recently executed instruction
-    pub most_recent_instruction: InstructionAddress,
+    pub current_instruction: InstructionAddress,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -30,7 +30,7 @@ impl Program {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
-        self.most_recent_instruction = InstructionAddress::default();
+        self.current_instruction = InstructionAddress::default();
         self.previous_data_stack.clear();
         self.halted = false;
     }
@@ -71,11 +71,11 @@ impl Program {
         if self.halted {
             return ProgramState::Effect {
                 effect: ProgramEffect::Halted,
-                address: self.most_recent_instruction,
+                address: self.current_instruction,
             };
         }
 
-        let address = self.most_recent_instruction;
+        let address = self.current_instruction;
         if self.breakpoint_at(&address) {
             return ProgramState::Effect {
                 effect: ProgramEffect::Paused,
@@ -84,7 +84,7 @@ impl Program {
         }
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-        self.most_recent_instruction = self.evaluator.next_instruction;
+        self.current_instruction = self.evaluator.next_instruction;
 
         self.evaluator.step().into()
     }
