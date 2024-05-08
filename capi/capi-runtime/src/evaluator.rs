@@ -45,7 +45,14 @@ impl Evaluator {
                     "sub" => builtins::sub(&mut self.data_stack),
                     "take" => builtins::take(&mut self.data_stack),
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
-                    _ => panic!("Unknown builtin: `{name}`"),
+                    _ => {
+                        return EvaluatorState::Effect {
+                            effect: EvaluatorEffect::UnknownBuiltin {
+                                name: name.clone(),
+                            },
+                            address: current_instruction,
+                        }
+                    }
                 };
 
                 // This is a bit weird. An error is an effect, and effects can
@@ -138,4 +145,5 @@ pub enum EvaluatorState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
+    UnknownBuiltin { name: String },
 }
