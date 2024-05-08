@@ -13,7 +13,7 @@ pub fn program() -> Program {
             .c("And we're done, basically. Just need to let the display system")
             .c("know it can draw now, and clean after ourselves.")
             .w("draw")
-            .w("clean_up_arguments");
+            .w("fill_tile_buffer");
     });
     source.define("clear_all_tiles", |s| {
         s.v(0).w("write_to_all_tiles");
