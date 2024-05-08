@@ -1,7 +1,4 @@
-use std::{
-    sync::mpsc::{self, TryRecvError},
-    thread,
-};
+use std::{sync::mpsc, thread};
 
 use capi_runtime::{
     DebugEvent, Effect, Program, ProgramEffect, ProgramState, Value,
@@ -142,18 +139,11 @@ impl Runner {
 
                         self.effects.send(DisplayEffect::SubmitTiles).unwrap();
 
-                        // The purpose of the "submit tiles" effect is to serve
-                        // as a synchronization point, where the program can
-                        // pause until the display code has processed the effect
-                        // (and all leading up to it).
-                        //
-                        // Once this is a dedicated thread, we need to wait here
-                        // until a signal is received on the `resume` channel.
-                        // But until then, we can't do that.
-                        assert_eq!(
-                            self.resume.try_recv(),
-                            Err(TryRecvError::Empty)
-                        );
+                        // This effect serves as a synchronization point between
+                        // the program and the display code. Before we continue
+                        // running, we need to wait here, until the display code
+                        // has confirmed that we're ready to continue.
+                        self.resume.recv().unwrap();
                     }
                     _ => {}
                 }
