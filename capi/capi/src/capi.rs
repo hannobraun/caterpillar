@@ -11,7 +11,7 @@ pub fn program() -> Program {
             .w("set_all_tiles")
             .c("Wait until the display system is ready to process the next")
             .c("frame, then start anew.")
-            .w("draw")
+            .w("submit_frame")
             .w("fill_tile_buffer");
     });
     source.define("clear_all_tiles", |s| {
