@@ -13,7 +13,7 @@ pub fn program() -> Program {
             .w("clear_all_tiles")
             .w("set_all_tiles")
             .c("Wait until the display system is ready to process the next")
-            .c("frame, then start anew.")
+            .c("frame.")
             .w("submit_frame");
     });
     source.define("clear_all_tiles", |s| {
