@@ -3,6 +3,9 @@ use capi_runtime::{Program, Source};
 pub fn program() -> Program {
     let mut source = Source::default();
 
+    source.define("main", |s| {
+        s.w("draw");
+    });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
             .c("This will be used by the following calls to traverse ")
@@ -101,5 +104,5 @@ pub fn program() -> Program {
         s.v(0).w("drop");
     });
 
-    source.compile("draw")
+    source.compile("main")
 }
