@@ -1,7 +1,7 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    DebugEvent, Effect, Program, ProgramEffect, ProgramState, Value,
+    BuiltinEffect, DebugEvent, Program, ProgramEffect, ProgramState, Value,
 };
 
 use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
@@ -124,7 +124,7 @@ impl Runner {
             } = &self.program.state
             {
                 match effect {
-                    Effect::SetTile { x, y, value } => {
+                    BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
                         let value = *value;
@@ -134,7 +134,7 @@ impl Runner {
 
                         self.program.state = ProgramState::Running;
                     }
-                    Effect::RequestRedraw => {
+                    BuiltinEffect::RequestRedraw => {
                         self.program.state = ProgramState::Running;
 
                         self.effects.send(DisplayEffect::SubmitTiles).unwrap();

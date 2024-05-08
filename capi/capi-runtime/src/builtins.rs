@@ -28,7 +28,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn draw() -> Result {
-    Ok(Some(Effect::RequestRedraw))
+    Ok(Some(BuiltinEffect::RequestRedraw))
 }
 
 pub fn drop(data_stack: &mut DataStack) -> Result {
@@ -95,7 +95,7 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;
 
-    let effect = Effect::SetTile {
+    let effect = BuiltinEffect::SetTile {
         x: x.0,
         y: y.0,
         value: value.0,
@@ -107,10 +107,10 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     Ok(Some(effect))
 }
 
-pub type Result = std::result::Result<Option<Effect>, BuiltinError>;
+pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Effect {
+pub enum BuiltinEffect {
     Error(BuiltinError),
     SetTile { x: u8, y: u8, value: u8 },
     RequestRedraw,

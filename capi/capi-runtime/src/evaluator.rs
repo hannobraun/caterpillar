@@ -1,4 +1,4 @@
-use crate::{builtins::Effect, InstructionAddress, Value};
+use crate::{builtins::BuiltinEffect, InstructionAddress, Value};
 
 use super::{
     builtins, code::Code, compiler::Instruction, data_stack::DataStack,
@@ -60,7 +60,7 @@ impl Evaluator {
                 // variants.
                 let effect = match result {
                     Ok(effect) => effect,
-                    Err(err) => Some(Effect::Error(err)),
+                    Err(err) => Some(BuiltinEffect::Error(err)),
                 };
 
                 if let Some(effect) = effect {
@@ -130,7 +130,7 @@ pub enum EvaluatorState {
     Running,
     Finished,
     Effect {
-        effect: Effect,
+        effect: BuiltinEffect,
         address: InstructionAddress,
     },
 }

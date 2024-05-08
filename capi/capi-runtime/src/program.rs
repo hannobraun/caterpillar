@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::Effect, evaluator::EvaluatorState, source_map::SourceMap,
+    builtins::BuiltinEffect, evaluator::EvaluatorState, source_map::SourceMap,
     DataStack, Evaluator, Functions, InstructionAddress, Value,
 };
 
@@ -144,7 +144,7 @@ impl From<EvaluatorState> for ProgramState {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProgramEffect {
-    Builtin(Effect),
+    Builtin(BuiltinEffect),
     Halted,
     Paused,
 }
