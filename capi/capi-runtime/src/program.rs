@@ -55,6 +55,18 @@ impl Program {
         self.breakpoints.get(address) == Some(&true)
     }
 
+    pub fn breakpoint_at_current_instruction(
+        &self,
+    ) -> Option<InstructionAddress> {
+        let address = self.current_instruction;
+
+        if self.breakpoint_at(&address) {
+            Some(address)
+        } else {
+            None
+        }
+    }
+
     pub fn step(&mut self) {
         if !self.state.is_running() {
             return;
@@ -75,8 +87,7 @@ impl Program {
             };
         }
 
-        let address = self.current_instruction;
-        if self.breakpoint_at(&address) {
+        if let Some(address) = self.breakpoint_at_current_instruction() {
             return ProgramState::Effect {
                 effect: ProgramEffect::Paused,
                 address,
