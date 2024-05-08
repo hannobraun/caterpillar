@@ -77,7 +77,10 @@ impl Program {
 
         let address = self.most_recent_instruction;
         if self.breakpoint_at(&address) {
-            return ProgramState::Paused { address };
+            return ProgramState::Effect {
+                effect: ProgramEffect::Paused,
+                address,
+            };
         }
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
@@ -99,10 +102,6 @@ pub enum ProgramState {
     Running,
 
     Finished,
-
-    Paused {
-        address: InstructionAddress,
-    },
 
     Effect {
         effect: ProgramEffect,
@@ -133,4 +132,5 @@ impl From<EvaluatorState> for ProgramState {
 pub enum ProgramEffect {
     Builtin(Effect),
     Halted,
+    Paused,
 }

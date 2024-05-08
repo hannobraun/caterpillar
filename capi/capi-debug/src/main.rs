@@ -1,6 +1,6 @@
 use capi_runtime::{
     DebugEvent, Expression, ExpressionKind, InstructionAddress, Program,
-    ProgramState,
+    ProgramEffect, ProgramState,
 };
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
@@ -301,23 +301,17 @@ pub fn Line(
         };
 
         let bg_class = match state {
-            ProgramState::Paused { address, .. }
+            ProgramState::Effect { effect, address }
                 if program
                     .source_map
                     .address_to_location(&address)
                     .as_ref()
                     == Some(&expression.location) =>
             {
-                "bg-green-300"
-            }
-            ProgramState::Effect { address, .. }
-                if program
-                    .source_map
-                    .address_to_location(&address)
-                    .as_ref()
-                    == Some(&expression.location) =>
-            {
-                "bg-red-300"
+                match effect {
+                    ProgramEffect::Paused => "bg-green-300",
+                    _ => "bg-red-300",
+                }
             }
             _ => "",
         };
