@@ -17,7 +17,7 @@ pub struct Program {
     pub entry_address: InstructionAddress,
 
     /// The most recently executed instruction
-    pub current_instruction: InstructionAddress,
+    pub current_instruction: Option<InstructionAddress>,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -30,7 +30,7 @@ impl Program {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
-        self.current_instruction = InstructionAddress::default();
+        self.current_instruction = None;
         self.previous_data_stack.clear();
         self.halted = false;
     }
@@ -58,7 +58,7 @@ impl Program {
     pub fn breakpoint_at_current_instruction(
         &self,
     ) -> Option<InstructionAddress> {
-        let address = self.current_instruction;
+        let address = self.current_instruction?;
 
         if self.breakpoint_at(&address) {
             Some(address)
@@ -83,7 +83,10 @@ impl Program {
         if self.halted {
             return ProgramState::Effect {
                 effect: ProgramEffect::Halted,
-                address: self.current_instruction,
+                // The `or_default` bit can only happen, if we get halted before
+                // the program starts. I guess in that case, it's fine to report
+                // that we're halted at the first instruction.
+                address: self.current_instruction.unwrap_or_default(),
             };
         }
 
@@ -95,7 +98,7 @@ impl Program {
         }
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-        self.current_instruction = self.evaluator.next_instruction;
+        self.current_instruction = Some(self.evaluator.next_instruction);
 
         self.evaluator.step().into()
     }
