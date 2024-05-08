@@ -4,7 +4,7 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("draw");
+        s.w("draw").w("main");
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
@@ -14,8 +14,7 @@ pub fn program() -> Program {
             .w("set_all_tiles")
             .c("Wait until the display system is ready to process the next")
             .c("frame, then start anew.")
-            .w("submit_frame")
-            .w("draw");
+            .w("submit_frame");
     });
     source.define("clear_all_tiles", |s| {
         s.v(0).w("write_to_all_tiles");
