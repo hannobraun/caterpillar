@@ -4,14 +4,13 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("fill_tile_buffer", |s| {
-        s
-            .c("We have the size of the tile field already on the stack.")
+        s.c("We have the size of the tile field already on the stack.")
             .c("This will be used by the following calls to traverse ")
             .c("positions, and to determine once it's finished.")
             .w("clear_all_tiles")
             .w("set_all_tiles")
-            .c("And we're done, basically. Just need to let the display system")
-            .c("know it can draw now, and clean after ourselves.")
+            .c("Wait until the display system is ready to process the next")
+            .c("frame, then start anew.")
             .w("draw")
             .w("fill_tile_buffer");
     });
