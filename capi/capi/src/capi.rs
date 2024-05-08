@@ -17,12 +17,12 @@ pub fn program() -> Program {
             .w("submit_frame");
     });
     source.define("clear_all_tiles", |s| {
-        s.v(0).w("write_to_all_tiles");
+        s.v(0).w("write_all_tiles");
     });
     source.define("set_all_tiles", |s| {
-        s.v(1).w("write_to_all_tiles");
+        s.v(1).w("write_all_tiles");
     });
-    source.define("write_to_all_tiles", |s| {
+    source.define("write_all_tiles", |s| {
         s
             .v(2)
             .w("place")
