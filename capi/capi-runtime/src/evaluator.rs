@@ -65,7 +65,7 @@ impl Evaluator {
 
                 if let Some(effect) = effect {
                     return EvaluatorState::Effect {
-                        effect,
+                        effect: EvaluatorEffect::Builtin(effect),
                         address: current_instruction,
                     };
                 }
@@ -130,7 +130,11 @@ pub enum EvaluatorState {
     Running,
     Finished,
     Effect {
-        effect: BuiltinEffect,
+        effect: EvaluatorEffect,
         address: InstructionAddress,
     },
+}
+
+pub enum EvaluatorEffect {
+    Builtin(BuiltinEffect),
 }
