@@ -3,7 +3,7 @@ use capi_runtime::{Program, Source};
 pub fn program() -> Program {
     let mut source = Source::default();
 
-    source.define("fill_tile_buffer", |s| {
+    source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
             .c("This will be used by the following calls to traverse ")
             .c("positions, and to determine once it's finished.")
@@ -12,7 +12,7 @@ pub fn program() -> Program {
             .c("Wait until the display system is ready to process the next")
             .c("frame, then start anew.")
             .w("submit_frame")
-            .w("fill_tile_buffer");
+            .w("draw");
     });
     source.define("clear_all_tiles", |s| {
         s.v(0).w("write_to_all_tiles");
@@ -101,5 +101,5 @@ pub fn program() -> Program {
         s.v(0).w("drop");
     });
 
-    source.compile("fill_tile_buffer")
+    source.compile("draw")
 }
