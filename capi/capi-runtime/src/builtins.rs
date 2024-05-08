@@ -27,10 +27,6 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn submit_frame() -> Result {
-    Ok(Some(BuiltinEffect::RequestRedraw))
-}
-
 pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
@@ -76,6 +72,10 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
     data_stack.push(c);
 
     Ok(None)
+}
+
+pub fn submit_frame() -> Result {
+    Ok(Some(BuiltinEffect::RequestRedraw))
 }
 
 pub fn take(data_stack: &mut DataStack) -> Result {
