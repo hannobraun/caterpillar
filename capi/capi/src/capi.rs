@@ -100,9 +100,6 @@ pub fn program() -> Program {
     source.define("drop_tile_value", |s| {
         s.v(0).w("drop");
     });
-    source.define("clean_up_arguments", |s| {
-        s.v(0).w("drop").v(0).w("drop");
-    });
 
     source.compile("fill_tile_buffer")
 }
