@@ -23,7 +23,10 @@ pub fn program() -> Program {
         s.v(1).w("write_to_all_tiles");
     });
     source.define("write_to_all_tiles", |s| {
-        s.c("In addition to the size of the tile field, which is already on")
+        s
+            .v(2)
+            .w("place")
+            .c("In addition to the size of the tile field, which is already on")
             .c("the stack, `write_value_to_all_tiles` also need the position")
             .c("of the first tile, from which it will count up.")
             .w("first_tile_position")
@@ -44,7 +47,7 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .c("Put the tile value we're supposed to write to the top of the")
             .c("stack, then write it.")
-            .v(2)
+            .v(4)
             .w("copy")
             .w("write_tile")
             .w("increment_tile_position")
@@ -52,7 +55,7 @@ pub fn program() -> Program {
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
-            .v(3)
+            .v(2)
             .w("copy")
             .c("Copy y-coordinate of current position.")
             .v(1)
@@ -63,7 +66,7 @@ pub fn program() -> Program {
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
-            .v(4)
+            .v(3)
             .w("copy")
             .c("Copy the x-coordinate of the current position.")
             .v(2)
@@ -100,7 +103,7 @@ pub fn program() -> Program {
         s.v(0).w("drop").v(0).w("drop");
     });
     source.define("drop_tile_value", |s| {
-        s.v(0).w("drop");
+        s.v(2).w("drop");
     });
 
     source.compile("main")
