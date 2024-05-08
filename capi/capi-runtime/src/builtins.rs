@@ -75,7 +75,7 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn submit_frame() -> Result {
-    Ok(Some(BuiltinEffect::RequestRedraw))
+    Ok(Some(BuiltinEffect::SubmitFrame))
 }
 
 pub fn take(data_stack: &mut DataStack) -> Result {
@@ -113,7 +113,7 @@ pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 pub enum BuiltinEffect {
     Error(BuiltinError),
     SetTile { x: u8, y: u8, value: u8 },
-    RequestRedraw,
+    SubmitFrame,
 }
 
 #[derive(

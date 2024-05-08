@@ -136,7 +136,7 @@ impl Runner {
 
                         self.program.state = ProgramState::Running;
                     }
-                    BuiltinEffect::RequestRedraw => {
+                    BuiltinEffect::SubmitFrame => {
                         self.program.state = ProgramState::Running;
 
                         self.effects.send(DisplayEffect::SubmitTiles).unwrap();
