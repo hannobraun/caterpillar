@@ -38,11 +38,11 @@ impl Evaluator {
                 let result = match name.as_str() {
                     "add" => builtins::add(&mut self.data_stack),
                     "copy" => builtins::copy(&mut self.data_stack),
-                    "submit_frame" => builtins::submit_frame(),
                     "drop" => builtins::drop(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
                     "place" => builtins::place(&mut self.data_stack),
                     "sub" => builtins::sub(&mut self.data_stack),
+                    "submit_frame" => builtins::submit_frame(),
                     "take" => builtins::take(&mut self.data_stack),
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
                     _ => {
