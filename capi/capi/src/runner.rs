@@ -96,6 +96,26 @@ impl Runner {
                     }
                     DebugEvent::ToggleBreakpoint { address } => {
                         self.program.toggle_breakpoint(address);
+
+                        if let ProgramState::Effect {
+                            effect: ProgramEffect::Paused,
+                            ..
+                        } = self.program.state
+                        {
+                            // The program is currently paused.
+
+                            if self
+                                .program
+                                .breakpoint_at_current_instruction()
+                                .is_none()
+                            {
+                                // And there is no breakpoint at the current
+                                // instruction. That must mean we toggled it
+                                // away.
+
+                                self.program.state = ProgramState::Running;
+                            }
+                        }
                     }
                 }
             }
