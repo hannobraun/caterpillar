@@ -4,7 +4,7 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.v(1).v(2).w("place").w("draw").w("main");
+        s.w("place_tile_value").w("draw").w("main");
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
@@ -21,6 +21,9 @@ pub fn program() -> Program {
     });
     source.define("set_all_tiles", |s| {
         s.v(2).w("take").w("write_all_tiles");
+    });
+    source.define("place_tile_value", |s| {
+        s.v(1).v(2).w("place");
     });
     source.define("write_all_tiles", |s| {
         s
