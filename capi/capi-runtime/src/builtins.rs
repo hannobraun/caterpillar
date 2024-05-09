@@ -126,6 +126,9 @@ pub enum BuiltinEffect {
     thiserror::Error,
 )]
 pub enum BuiltinError {
+    #[error("Divide by zero")]
+    DivideByZero,
+
     #[error("Integer overflow")]
     IntegerOverflow,
 
