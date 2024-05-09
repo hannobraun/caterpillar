@@ -4,10 +4,45 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("main_inner");
+        s.w("init_frame_count").w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("place_tile_value").w("draw").w("main_inner");
+        s.w("place_tile_value")
+            .w("draw")
+            .w("count_frame")
+            .w("main_inner");
+    });
+    source.define("init_frame_count", |s| {
+        s.v(0).v(2).w("place");
+    });
+    source.define("count_frame", |s| {
+        s.c("We are only counting up to a maximum number of frames. Let's")
+            .c("prepare this number for later use.")
+            .v(30)
+            .c("Grab the current frame count.")
+            .v(3)
+            .w("take")
+            .c("Increment the frame count.")
+            .v(1)
+            .w("add")
+            .c("Place a copy of the new new frame count back where it came")
+            .c("from.")
+            .v(0)
+            .w("copy")
+            .v(4)
+            .w("place")
+            .c("We have a copy of the new frame count left on the top of the")
+            .c("stack. Let's see if we counted up to the maximum value. If")
+            .c("not, we're done.")
+            .w("sub")
+            .w("return_if_non_zero")
+            .c("We have counted up to the maximum value. Reset the frame")
+            .c("count.")
+            .v(2)
+            .w("drop")
+            .v(0)
+            .v(2)
+            .w("place");
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
