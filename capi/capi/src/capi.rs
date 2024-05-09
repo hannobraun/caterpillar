@@ -4,13 +4,12 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("init_frame_count").w("main_inner");
+        s.w("init_frame_count")
+            .w("place_tile_value")
+            .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("place_tile_value")
-            .w("draw")
-            .w("count_frame")
-            .w("main_inner");
+        s.w("draw").w("count_frame").w("main_inner");
     });
     source.define("init_frame_count", |s| {
         s.v(0).v(2).w("place");
@@ -20,7 +19,7 @@ pub fn program() -> Program {
             .c("prepare this number for later use.")
             .v(30)
             .c("Grab the current frame count.")
-            .v(3)
+            .v(4)
             .w("take")
             .c("Increment the frame count.")
             .v(1)
@@ -29,7 +28,7 @@ pub fn program() -> Program {
             .c("from.")
             .v(0)
             .w("copy")
-            .v(4)
+            .v(5)
             .w("place")
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
@@ -38,10 +37,10 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
-            .v(2)
+            .v(3)
             .w("drop")
             .v(0)
-            .v(2)
+            .v(3)
             .w("place");
     });
     source.define("draw", |s| {
@@ -64,7 +63,7 @@ pub fn program() -> Program {
         s.v(1).v(2).w("place");
     });
     source.define("take_tile_value", |s| {
-        s.v(2).w("take");
+        s.v(2).w("copy");
     });
     source.define("write_all_tiles", |s| {
         s
