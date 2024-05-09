@@ -135,20 +135,18 @@ impl Runner {
                         let x = *x;
                         let y = *y;
                         let value = *value;
-                        self.effects
-                            .inner
-                            .send(DisplayEffect::SetTile { x, y, value })
-                            .unwrap();
+                        self.effects.send(DisplayEffect::SetTile {
+                            x,
+                            y,
+                            value,
+                        });
 
                         self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::SubmitFrame => {
                         self.program.state = ProgramState::Running;
 
-                        self.effects
-                            .inner
-                            .send(DisplayEffect::SubmitTiles)
-                            .unwrap();
+                        self.effects.send(DisplayEffect::SubmitTiles);
 
                         // This effect serves as a synchronization point between
                         // the program and the display code. Before we continue

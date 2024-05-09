@@ -4,6 +4,12 @@ pub struct EffectsTx {
     pub inner: mpsc::Sender<DisplayEffect>,
 }
 
+impl EffectsTx {
+    pub fn send(&self, effect: DisplayEffect) {
+        self.inner.send(effect).unwrap();
+    }
+}
+
 pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
 
 pub type ResumeTx = mpsc::Sender<()>;
