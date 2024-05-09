@@ -40,7 +40,9 @@ pub fn program() -> Program {
             .c("count.")
             .v(2)
             .w("drop")
-            .w("init_frame_count");
+            .v(0)
+            .v(2)
+            .w("place");
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
