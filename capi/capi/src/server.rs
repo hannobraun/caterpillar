@@ -1,5 +1,4 @@
 use std::{
-    fmt,
     panic::{catch_unwind, AssertUnwindSafe},
     process::exit,
     thread,
@@ -15,7 +14,7 @@ use axum::{
     Router,
 };
 use capi_runtime::DebugEvent;
-use futures::{SinkExt, StreamExt};
+use futures::{stream::SplitSink, SinkExt, StreamExt};
 use tokio::{net::TcpListener, runtime::Runtime, sync::mpsc};
 use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
@@ -79,11 +78,10 @@ async fn handle_socket(
     handle_events(events, socket_rx).await;
 }
 
-async fn handle_updates<S>(mut updates: UpdatesRx, mut socket: S)
-where
-    S: SinkExt<Message> + Unpin,
-    S::Error: fmt::Debug,
-{
+async fn handle_updates(
+    mut updates: UpdatesRx,
+    mut socket: SplitSink<WebSocket, Message>,
+) {
     // The initial value is considered to be "seen". Mark the receiver as
     // changed, so we send an initial update to the client immediately.
     updates.mark_changed();
