@@ -38,11 +38,13 @@ impl DataStack {
         self.values.pop().ok_or(StackUnderflow)
     }
 
-    pub fn save(&mut self, num: u8) {
+    pub fn save(&mut self, num: u8) -> Result<(), StackUnderflow> {
         for _ in 0..num {
-            let value = self.pop().unwrap();
+            let value = self.pop()?;
             self.saved.push(value);
         }
+
+        Ok(())
     }
 
     pub fn restore(&mut self) {
