@@ -30,7 +30,7 @@ impl RunnerThread {
             program,
             events,
             updates,
-            effects: effects_tx,
+            effects: EffectsTx { inner: effects_tx },
             resume: resume_rx,
         };
 
@@ -136,6 +136,7 @@ impl Runner {
                         let y = *y;
                         let value = *value;
                         self.effects
+                            .inner
                             .send(DisplayEffect::SetTile { x, y, value })
                             .unwrap();
 
@@ -144,7 +145,10 @@ impl Runner {
                     BuiltinEffect::SubmitFrame => {
                         self.program.state = ProgramState::Running;
 
-                        self.effects.send(DisplayEffect::SubmitTiles).unwrap();
+                        self.effects
+                            .inner
+                            .send(DisplayEffect::SubmitTiles)
+                            .unwrap();
 
                         // This effect serves as a synchronization point between
                         // the program and the display code. Before we continue

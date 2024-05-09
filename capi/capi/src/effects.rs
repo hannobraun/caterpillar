@@ -1,6 +1,9 @@
 use std::sync::mpsc;
 
-pub type EffectsTx = mpsc::Sender<DisplayEffect>;
+pub struct EffectsTx {
+    pub inner: mpsc::Sender<DisplayEffect>,
+}
+
 pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
 
 pub type ResumeTx = mpsc::Sender<()>;
