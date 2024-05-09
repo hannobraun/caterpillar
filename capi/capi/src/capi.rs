@@ -10,7 +10,7 @@ pub fn program() -> Program {
         s.w("draw").w("count_frame").w("main_inner");
     });
     source.define("init_frame_count", |s| {
-        s.v(0).v(2).w("place");
+        s.v(1).v(2).w("place");
     });
     source.define("count_frame", |s| {
         s.c("We are only counting up to a maximum number of frames. Let's")
@@ -37,7 +37,7 @@ pub fn program() -> Program {
             .c("count.")
             .v(3)
             .w("drop")
-            .v(0)
+            .v(1)
             .v(3)
             .w("place");
     });
