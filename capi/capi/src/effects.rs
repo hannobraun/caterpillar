@@ -6,7 +6,9 @@ pub struct EffectsTx {
 
 impl EffectsTx {
     pub fn send(&self, effect: DisplayEffect) {
-        self.inner.send(effect).unwrap();
+        // This produces an error, if the other end has hung up, which happens
+        // during shutdown. We can safely ignore that.
+        let _ = self.inner.send(effect);
     }
 }
 
