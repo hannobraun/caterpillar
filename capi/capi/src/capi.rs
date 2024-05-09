@@ -20,10 +20,13 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("set_all_tiles", |s| {
-        s.v(2).w("take").w("write_all_tiles");
+        s.w("take_tile_value").w("write_all_tiles");
     });
     source.define("place_tile_value", |s| {
         s.v(1).v(2).w("place");
+    });
+    source.define("take_tile_value", |s| {
+        s.v(2).w("take");
     });
     source.define("write_all_tiles", |s| {
         s
