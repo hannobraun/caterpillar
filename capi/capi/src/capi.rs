@@ -4,7 +4,10 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("place_tile_value").w("draw").w("main");
+        s.w("main_inner");
+    });
+    source.define("main_inner", |s| {
+        s.w("place_tile_value").w("draw").w("main_inner");
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
