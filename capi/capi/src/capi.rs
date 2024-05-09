@@ -13,9 +13,15 @@ pub fn program() -> Program {
         s.v(1).v(2).w("place");
     });
     source.define("count_frame", |s| {
-        s.c("We are only counting up to a maximum number of frames. Let's")
-            .c("prepare this number for later use.")
-            .v(30)
+        s.c("We only have 8 bits to count, so we need to reset the count")
+            .c("every so often. To keep things predictable, let's reset only")
+            .c("at full seconds. Assuming 60 frames per second, `240` is the")
+            .c("highest number we can count up to.")
+            .c("")
+            .c("Since we start counting at `1`, we need to reset *after* we")
+            .c("reach a count of `240`, or we won't reset on a full second.")
+            .c("Let's prepare the number to compare to for later use.")
+            .v(241)
             .c("Grab the current frame count.")
             .v(4)
             .w("take")
