@@ -55,12 +55,12 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("set_all_tiles", |s| {
-        s.w("take_tile_value").w("write_all_tiles");
+        s.w("get_tile_value").w("write_all_tiles");
     });
     source.define("init_tile_value", |s| {
         s.v(1).v(2).w("place");
     });
-    source.define("take_tile_value", |s| {
+    source.define("get_tile_value", |s| {
         s.v(2).w("copy");
     });
     source.define("write_all_tiles", |s| {
