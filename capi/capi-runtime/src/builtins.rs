@@ -61,6 +61,20 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn remainder(data_stack: &mut DataStack) -> Result {
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
+
+    if b.0 == 0 {
+        return Err(BuiltinError::DivideByZero);
+    }
+    let c = a.0 % b.0;
+
+    data_stack.push(c);
+
+    Ok(None)
+}
+
 pub fn sub(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
