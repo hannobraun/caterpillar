@@ -4,9 +4,7 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("init_frame_count")
-            .w("place_tile_value")
-            .w("main_inner");
+        s.w("init_frame_count").w("init_tile_value").w("main_inner");
     });
     source.define("main_inner", |s| {
         s.w("draw").w("count_frame").w("main_inner");
@@ -59,7 +57,7 @@ pub fn program() -> Program {
     source.define("set_all_tiles", |s| {
         s.w("take_tile_value").w("write_all_tiles");
     });
-    source.define("place_tile_value", |s| {
+    source.define("init_tile_value", |s| {
         s.v(1).v(2).w("place");
     });
     source.define("take_tile_value", |s| {
