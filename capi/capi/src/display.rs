@@ -7,7 +7,7 @@ use winit::{
     window::Window,
 };
 
-use crate::runner::{DisplayEffect, RunnerThread};
+use crate::{effects::DisplayEffect, runner::RunnerThread};
 
 pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;

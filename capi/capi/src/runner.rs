@@ -5,7 +5,12 @@ use capi_runtime::{
     ProgramState, Value,
 };
 
-use crate::{display::TILES_PER_AXIS, server::EventsRx, updates::UpdatesTx};
+use crate::{
+    display::TILES_PER_AXIS,
+    effects::{DisplayEffect, EffectsRx, EffectsTx, ResumeRx, ResumeTx},
+    server::EventsRx,
+    updates::UpdatesTx,
+};
 
 pub struct RunnerThread {
     effects: EffectsRx,
@@ -152,18 +157,6 @@ impl Runner {
             }
         }
     }
-}
-
-type EffectsTx = mpsc::Sender<DisplayEffect>;
-type EffectsRx = mpsc::Receiver<DisplayEffect>;
-
-type ResumeTx = mpsc::Sender<()>;
-type ResumeRx = mpsc::Receiver<()>;
-
-#[derive(Debug)]
-pub enum DisplayEffect {
-    SetTile { x: u8, y: u8, value: u8 },
-    SubmitTiles,
 }
 
 // I don't like the `as` here, but `.try_into().unwrap()` doesn't work in a

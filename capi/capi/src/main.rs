@@ -1,5 +1,6 @@
 mod capi;
 mod display;
+mod effects;
 mod runner;
 mod server;
 mod updates;
