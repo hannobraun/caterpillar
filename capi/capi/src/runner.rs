@@ -80,6 +80,10 @@ impl Runner {
                 Some(self.events.blocking_recv().unwrap())
             };
 
+            // We either already have an event available here, if the program
+            // wasn't running and we waited for one, or we might not. Either way
+            // process the event that might or might not be available, as well
+            // as all other events we can get our hands on.
             while let Some(event) =
                 event.take().or_else(|| self.events.try_recv().ok())
             {
