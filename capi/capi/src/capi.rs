@@ -7,7 +7,10 @@ pub fn program() -> Program {
         s.w("init_frame_count").w("init_tile_value").w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("draw").w("count_frame").w("main_inner");
+        s.w("update_tile_value")
+            .w("draw")
+            .w("count_frame")
+            .w("main_inner");
     });
     source.define("init_frame_count", |s| {
         s.v(1).v(2).w("place");
@@ -65,6 +68,35 @@ pub fn program() -> Program {
     });
     source.define("init_tile_value", |s| {
         s.v(1).v(2).w("place");
+    });
+    source.define("update_tile_value", |s| {
+        s
+            .c("Get a copy of the current frame count.")
+            .v(3)
+            .w("copy")
+            .c("We want to make updates at regular intervals. Determine, if")
+            .c("this frame is one we need to make an update int. If not, we're")
+            .c("done.")
+            .v(120)
+            .w("remainder")
+            .w("return_if_non_zero")
+            .c("This is the right frame. Get the current tile value and")
+            .c("replace it with `1`.")
+            .v(2)
+            .w("take")
+            .v(1)
+            .v(3)
+            .w("place")
+            .c("If the current tile value is `0`, the `1` we placed is correct")
+            .c("and we are done.")
+            .w("return_if_zero")
+            .c("The current tile value is `1`. That means we need to replace")
+            .c("the `1` we speculatively placed with a `0`.")
+            .v(2)
+            .w("drop")
+            .v(0)
+            .v(2)
+            .w("place");
     });
     source.define("get_tile_value", |s| {
         s.v(2).w("copy");
