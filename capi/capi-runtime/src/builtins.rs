@@ -75,6 +75,16 @@ pub fn remainder(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn store(data_stack: &mut DataStack) -> Result {
+    let address = data_stack.pop()?;
+    let value = data_stack.pop()?;
+
+    Ok(Some(BuiltinEffect::Store {
+        address: address.0,
+        value: value.0,
+    }))
+}
+
 pub fn sub(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
