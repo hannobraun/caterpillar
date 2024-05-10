@@ -135,6 +135,12 @@ impl Runner {
             } = &self.program.state
             {
                 match effect {
+                    BuiltinEffect::Store { address, value } => {
+                        let address: usize = (*address).into();
+                        self.program.memory.inner[address] = *value;
+
+                        self.program.state = ProgramState::Running;
+                    }
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
