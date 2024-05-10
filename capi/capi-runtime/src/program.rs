@@ -1,5 +1,7 @@
 use std::collections::BTreeMap;
 
+use serde_big_array::BigArray;
+
 use crate::{
     evaluator::{EvaluatorEffect, EvaluatorState},
     source_map::SourceMap,
@@ -25,6 +27,13 @@ pub struct Program {
 
     /// Indicate whether the program was halted
     pub halted: bool,
+
+    /// Linear memory
+    ///
+    /// This is accessed via effects handled by the platform, so logically, it
+    /// shouldn't be part of `Program`. However, for the time being, having it
+    /// here makes it easy to share this with the debugger.
+    pub memory: Memory,
 }
 
 impl Program {
@@ -148,4 +157,16 @@ pub enum ProgramEffect {
     Evaluator(EvaluatorEffect),
     Halted,
     Paused,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Memory {
+    #[serde(with = "BigArray")]
+    pub inner: [u8; 256],
+}
+
+impl Default for Memory {
+    fn default() -> Self {
+        Self { inner: [0; 256] }
+    }
 }
