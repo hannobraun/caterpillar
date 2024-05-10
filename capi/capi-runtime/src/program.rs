@@ -46,11 +46,6 @@ impl Program {
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
-        assert!(
-            self.evaluator.data_stack.is_empty(),
-            "Pushed arguments to active stack."
-        );
-
         for value in arguments {
             self.evaluator.data_stack.push(value);
         }
