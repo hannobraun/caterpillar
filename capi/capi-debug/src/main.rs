@@ -43,6 +43,8 @@ pub fn Debugger(
             program=program />
         <DataStack
             program=program />
+        <Memory
+            program = program />
         <ResetButton
             events=events.clone() />
         <div>
@@ -120,6 +122,29 @@ pub fn DataStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
     view! {
         {data_stack}
+    }
+}
+
+#[allow(unused_braces)] // working around a warning from the `view!` macro
+#[component]
+pub fn Memory(program: ReadSignal<Option<Program>>) -> impl IntoView {
+    let memory = move || {
+        let program = program.get()?;
+
+        let view = view! {
+            <div>
+                <p>
+                    "Current memory: "
+                    {format!("{:?}", program.memory)}
+                </p>
+            </div>
+        };
+
+        Some(view)
+    };
+
+    view! {
+        {memory}
     }
 }
 
