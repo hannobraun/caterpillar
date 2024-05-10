@@ -126,6 +126,9 @@ pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum BuiltinEffect {
     Error(BuiltinError),
+
+    Load { address: u8 },
+
     SetTile { x: u8, y: u8, value: u8 },
     SubmitFrame,
 }
