@@ -128,6 +128,7 @@ pub enum BuiltinEffect {
     Error(BuiltinError),
 
     Load { address: u8 },
+    Store { address: u8, value: u8 },
 
     SetTile { x: u8, y: u8, value: u8 },
     SubmitFrame,
