@@ -75,7 +75,7 @@ pub fn program() -> Program {
             .v(3)
             .w("copy")
             .c("We want to make updates at regular intervals. Determine, if")
-            .c("this frame is one we need to make an update int. If not, we're")
+            .c("this frame is one we need to make an update in. If not, we're")
             .c("done.")
             .v(120)
             .w("remainder")
