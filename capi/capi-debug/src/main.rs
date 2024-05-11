@@ -99,8 +99,14 @@ pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
 }
 
 #[component]
-pub fn ExecutionContext(_: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
     move || {
+        let Some(_) = program.get() else {
+            return view! {
+                <p>"No program available."</p>
+            };
+        };
+
         view! {
             <p>"Placeholder for execution context"</p>
         }
