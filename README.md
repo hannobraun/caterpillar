@@ -4,17 +4,14 @@
 
 ## About
 
-The goal of the Caterpillar project is to create a programming language for
-controlling computers **precisely**, **intuitively**, and **reliably**:
+The goal of the Caterpillar project is to create a **programming language** that
+gives you a **direct connection to the code you write**, enabling an **intuitive
+understanding of the program that you're working on**.
 
-- **Precisely:** Provide low-level control over what the computer does, while
-  enabling high-level code via zero-overhead (also called zero-cost)
-  abstractions.
-- **Intuitively:** Create an immediate feedback loop by allowing direct
-  interaction with a running program, as opposed to having to re-compile,
-  re-start, and re-find the relevant place in your program every single time.
-- **Reliably:** Make whole classes of errors impossible, by using a powerful
-  static type system.
+The method for achieving this is **interactive programming**, the **direct
+manipulation of a running program**, instead of going through an extended loop
+of re-compiling, re-starting, and re-finding the right location in your program
+where you can test the change you made.
 
 Caterpillar is still early-stage and experimental. This goal has not nearly been
 achieved yet. I'm incrementally approaching this long-term vision through a
