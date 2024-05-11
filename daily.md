@@ -3,6 +3,26 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-11
+
+Languages that predominantly employ postfix operators, use a stack-based
+evaluation model. I talked about this yesterday. To the best of my knowledge,
+this stack-based model is inherent to postfix operators. At least I can't come
+up with an alternative, nor can I find examples of languages that use postfix
+notation, but no stack.
+
+What I find surprising though, is how closely these languages adhere to the
+stack-based model. Languages that emphasize prefix and infix operators are not
+completely based around, and allow direct manipulation of, their respective
+model (although that sounds like an interesting experiment).
+
+But languages that focus on postfix operators often display a particular purity.
+Other means of defining data flow, like named variables, are either strongly
+discouraged or not part of the language at all. And I think this might be to
+their detriment. Employing postfix operators within a more traditional
+structure, with expressions, statements, and variables, is possibly a better
+direction.
+
 ## 2024-05-10
 
 I've been talking about postfix operators for days now. If you've already been
