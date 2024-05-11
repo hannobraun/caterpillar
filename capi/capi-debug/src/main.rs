@@ -41,6 +41,8 @@ pub fn Debugger(
             program=program />
         <CallStack
             program=program />
+        <ExecutionContext
+            program=program />
         <DataStack
             program=program />
         <Memory
@@ -93,6 +95,15 @@ pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
                 {addresses}
             </ol>
         </div>
+    }
+}
+
+#[component]
+pub fn ExecutionContext(_: ReadSignal<Option<Program>>) -> impl IntoView {
+    move || {
+        view! {
+            <p>"Placeholder for execution context"</p>
+        }
     }
 }
 
