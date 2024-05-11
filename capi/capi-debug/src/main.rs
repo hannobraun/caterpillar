@@ -121,12 +121,26 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
             ProgramState::Effect { effect, address } => (effect, address),
         };
 
-        let Some(_location) = program.source_map.address_to_location(&address)
+        let Some(location) = program.source_map.address_to_location(&address)
         else {
             return view! {
                 <p>
                     "Program is stopped at instruction with no associated \
                     source location."
+                </p>
+            };
+        };
+
+        let function = program
+            .functions
+            .inner
+            .iter()
+            .find(|function| function.name == location.function());
+        let Some(_function) = function else {
+            return view! {
+                <p>
+                    "Program stopped at unknown function. This is most likely \
+                    a bug in Caterpillar."
                 </p>
             };
         };
