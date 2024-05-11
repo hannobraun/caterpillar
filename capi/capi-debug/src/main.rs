@@ -44,7 +44,7 @@ pub fn Debugger(
         <DataStack
             program=program />
         <Memory
-            program = program />
+            program=program />
         <ResetButton
             events=events.clone() />
         <div>
