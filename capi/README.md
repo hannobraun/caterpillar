@@ -68,7 +68,7 @@ going beyond that where I can:
 
 - It will stay functional and stack-based.
 - No local variables.
-- Completely untyped. Every value is an integer (maybe 8 or 32 bits; we'll see).
+- Completely untyped. Every value is an 8-bit integer.
 
 Having no local variables doesn't help with understanding what's going on, but I
 hope that I can more than offset this with an early focus on tooling (see
@@ -121,8 +121,8 @@ possibilities:
       introduced.
     - The main thing I'm missing is function types. Those would enable a
       built-in `if` function, to replace the current placeholders.
-    - It would also provide a pathway to the eventual goal to a static type
-      system through gradual typing.
+    - It would also provide a pathway to the eventual goal of a static type
+      system, through gradual typing.
   - Another good option would be to introduce variables, to replace the tedious
     stack manipulation that the language currently requires.
 - Interactivity: This can be realized by defining the language in a separate
