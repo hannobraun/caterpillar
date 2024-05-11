@@ -91,6 +91,10 @@ pub struct SourceLocation {
 }
 
 impl SourceLocation {
+    pub fn function(&self) -> &str {
+        &self.function
+    }
+
     pub fn first_in_function(function: String) -> Self {
         Self { function, index: 0 }
     }
