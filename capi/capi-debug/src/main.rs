@@ -47,11 +47,9 @@ pub fn Debugger(
             program=program />
         <ResetButton
             events=events.clone() />
-        <div>
-            <Functions
-                program=program
-                events=events />
-        </div>
+        <Functions
+            program=program
+            events=events />
     }
 }
 
