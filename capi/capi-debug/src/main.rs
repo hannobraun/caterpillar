@@ -47,7 +47,7 @@ pub fn Debugger(
             program=program />
         <ResetButton
             events=events.clone() />
-        <Functions
+        <CodeExplorer
             program=program
             events=events />
     }
@@ -162,7 +162,7 @@ pub fn ResetButton(events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Functions(
+pub fn CodeExplorer(
     program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
