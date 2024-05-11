@@ -101,10 +101,24 @@ pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
 #[component]
 pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
     move || {
-        let Some(_) = program.get() else {
+        let Some(program) = program.get() else {
             return view! {
                 <p>"No program available."</p>
             };
+        };
+
+        let (_effect, _address) = match program.state {
+            ProgramState::Running => {
+                return view! {
+                    <p>"Program is running."</p>
+                }
+            }
+            ProgramState::Finished => {
+                return view! {
+                    <p>"Program has finished running."</p>
+                }
+            }
+            ProgramState::Effect { effect, address } => (effect, address),
         };
 
         view! {
