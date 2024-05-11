@@ -107,7 +107,7 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
             };
         };
 
-        let (_effect, _address) = match program.state {
+        let (_effect, address) = match program.state {
             ProgramState::Running => {
                 return view! {
                     <p>"Program is running."</p>
@@ -119,6 +119,16 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
                 }
             }
             ProgramState::Effect { effect, address } => (effect, address),
+        };
+
+        let Some(_location) = program.source_map.address_to_location(&address)
+        else {
+            return view! {
+                <p>
+                    "Program is stopped at instruction with no associated \
+                    source location."
+                </p>
+            };
         };
 
         view! {
