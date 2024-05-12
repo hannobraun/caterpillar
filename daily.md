@@ -3,6 +3,25 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-12
+
+The current Caterpillar prototype is focused around the question, if a debugger
+is a practical solution for getting the language to a useful state relatively
+quickly. A debugger needs breakpoints, and right now those are implemented by
+always checking between instructions, if there's a breakpoint at the current
+one.
+
+Which is fine, for now. But it seems like the kind of thing that the language
+won't be able to afford in the long-term, for performance reasons. So today, I
+had this idea: If the language is interactive anyway, meaning I can deploy code
+into the running program, then why don't I just deploy new code that implements
+the breakpoint?
+
+Then breakpoints would only cause overhead right where you need them. Which
+would still leave the overhead of the interactive runtime, of course, but since
+that is the central premise of the language, I'll have to make that work
+_somehow_.
+
 ## 2024-05-11
 
 Languages that predominantly employ postfix operators, use a stack-based
