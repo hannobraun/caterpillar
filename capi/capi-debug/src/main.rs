@@ -1,6 +1,5 @@
 mod client;
-mod execution_context;
-mod function;
+mod components;
 
 use capi_runtime::{DebugEvent, Program};
 use client::EventsTx;
@@ -12,8 +11,7 @@ use leptos::{
 
 use crate::{
     client::{handle_server, send_event},
-    execution_context::ExecutionContext,
-    function::Function,
+    components::{execution_context::ExecutionContext, function::Function},
 };
 
 fn main() {

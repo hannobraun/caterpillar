@@ -1,7 +1,7 @@
 use capi_runtime::{Function, Program, ProgramState};
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
-use crate::{client::EventsTx, function::Function};
+use crate::{client::EventsTx, components::function::Function};
 
 #[component]
 pub fn ExecutionContext(
