@@ -9,23 +9,15 @@ use crate::{
 
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {
-    view! {
-        <Panel>
-            <ResetButton
-                events=events />
-        </Panel>
-    }
-}
-
-#[component]
-fn ResetButton(events: EventsTx) -> impl IntoView {
     let send_reset = move |_| {
         leptos::spawn_local(send_event(DebugEvent::Reset, events.clone()));
     };
 
     view! {
-        <Button
-            on_click=send_reset />
+        <Panel>
+            <Button
+                on_click=send_reset />
+        </Panel>
     }
 }
 
