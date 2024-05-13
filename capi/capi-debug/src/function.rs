@@ -151,7 +151,21 @@ pub fn Expression(
                     _ => "bg-red-300",
                 }
             }
-            _ => "",
+            _ => {
+                let address = program
+                    .source_map
+                    .location_to_address(&expression.location);
+
+                if let Some(address) = address {
+                    if program.breakpoint_at(&address) {
+                        "bg-blue-300"
+                    } else {
+                        ""
+                    }
+                } else {
+                    ""
+                }
+            }
         };
 
         Some(format!("px-0.5 {text_classes} {bg_class}"))
