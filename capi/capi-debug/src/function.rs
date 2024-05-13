@@ -174,6 +174,9 @@ pub fn Expression(
     let line = format!("{}", expression.kind);
 
     view! {
-        <span class=class>{line}</span>
+        <span
+            class=class>
+            {line}
+        </span>
     }
 }
