@@ -12,7 +12,7 @@ unsurprisingly, that this is how debuggers work anyway! At least where hardware
 support for debugging is not available.
 
 This technique is called "software breakpoints". I found some
-[documentation on GDB internals](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)
+[documentation of GDB internals](https://sourceware.org/gdb/wiki/Internals/Breakpoint%20Handling)
 that explains it.
 
 ## 2024-05-12
