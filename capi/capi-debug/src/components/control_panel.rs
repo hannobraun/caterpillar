@@ -1,7 +1,20 @@
 use capi_runtime::DebugEvent;
 use leptos::{component, view, IntoView};
 
-use crate::client::{send_event, EventsTx};
+use crate::{
+    client::{send_event, EventsTx},
+    components::panel::Panel,
+};
+
+#[component]
+pub fn ControlPanel(events: EventsTx) -> impl IntoView {
+    view! {
+        <Panel>
+            <ResetButton
+                events=events />
+        </Panel>
+    }
+}
 
 #[component]
 pub fn ResetButton(events: EventsTx) -> impl IntoView {

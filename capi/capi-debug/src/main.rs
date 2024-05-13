@@ -11,7 +11,7 @@ use leptos::{
 use crate::{
     client::{handle_server, EventsTx},
     components::{
-        control_panel::ResetButton, execution_context::ExecutionContext,
+        control_panel::ControlPanel, execution_context::ExecutionContext,
         function::Function,
     },
 };
@@ -46,7 +46,7 @@ pub fn Debugger(
         <ExecutionContext
             program=program
             events=events.clone() />
-        <ResetButton
+        <ControlPanel
             events=events.clone() />
         <DataStack
             program=program />
