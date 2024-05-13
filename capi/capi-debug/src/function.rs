@@ -5,7 +5,7 @@ use capi_runtime::{
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
-use crate::{send_event, EventsTx};
+use crate::client::{send_event, EventsTx};
 
 #[component]
 pub fn Function(
