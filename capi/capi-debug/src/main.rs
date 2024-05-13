@@ -46,12 +46,12 @@ pub fn Debugger(
         <ExecutionContext
             program=program
             events=events.clone() />
+        <ResetButton
+            events=events.clone() />
         <DataStack
             program=program />
         <Memory
             program=program />
-        <ResetButton
-            events=events.clone() />
         <CodeExplorer
             program=program
             events=events />
