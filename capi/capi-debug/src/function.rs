@@ -135,8 +135,9 @@ pub fn Expression(
     move || {
         let program = program.get()?;
 
-        let address =
-            program.source_map.location_to_address(&expression.location);
+        let address = program
+            .source_map
+            .location_to_address(&expression.location)?;
 
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
@@ -158,12 +159,8 @@ pub fn Expression(
                 }
             }
             _ => {
-                if let Some(address) = address {
-                    if program.breakpoint_at(&address) {
-                        "bg-blue-300"
-                    } else {
-                        ""
-                    }
+                if program.breakpoint_at(&address) {
+                    "bg-blue-300"
                 } else {
                     ""
                 }
