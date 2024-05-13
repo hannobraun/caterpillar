@@ -68,7 +68,8 @@ pub fn LineWithBreakpoint(
             {breakpoint}
             <Expression
                 program=program
-                expression=expression />
+                expression=expression
+                events=events />
         </li>
     }
 }
@@ -131,8 +132,13 @@ pub fn Breakpoint(
 pub fn Expression(
     program: ReadSignal<Option<Program>>,
     expression: Expression,
+    events: EventsTx,
 ) -> impl IntoView {
     move || {
+        // Without this line, this closure turns into an `FnOnce` instead of an
+        // `Fn`, and that's no longer an a `leptos::IntoView`.
+        let events = events.clone();
+
         let program = program.get()?;
 
         let address = program
@@ -171,12 +177,29 @@ pub fn Expression(
 
         let data_address = address.to_usize();
 
+        let toggle_breakpoint = move |event: MouseEvent| {
+            let event_target = event.target().unwrap();
+            let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
+
+            let address = element
+                .get_attribute("data-address")
+                .unwrap()
+                .parse()
+                .unwrap();
+
+            leptos::spawn_local(send_event(
+                DebugEvent::ToggleBreakpoint { address },
+                events.clone(),
+            ));
+        };
+
         let line = format!("{}", expression.kind);
 
         Some(view! {
             <span
                 class=class
-                data-address=data_address>
+                data-address=data_address
+                on:click=toggle_breakpoint>
                 {line}
             </span>
         })
