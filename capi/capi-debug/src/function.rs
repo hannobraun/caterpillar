@@ -134,7 +134,7 @@ pub fn Expression(
     let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
     let class = move || {
         let program = program.get()?;
-        let state = program.state;
+        let state = &program.state;
 
         let text_classes = if is_comment {
             "italic text-gray-500"
@@ -144,10 +144,7 @@ pub fn Expression(
 
         let bg_class = match state {
             ProgramState::Effect { effect, address }
-                if program
-                    .source_map
-                    .address_to_location(&address)
-                    .as_ref()
+                if program.source_map.address_to_location(address).as_ref()
                     == Some(&expression.location) =>
             {
                 match effect {
