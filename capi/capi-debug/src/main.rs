@@ -44,7 +44,8 @@ pub fn Debugger(
         <CallStack
             program=program />
         <ExecutionContext
-            program=program />
+            program=program
+            events=events.clone() />
         <DataStack
             program=program />
         <Memory

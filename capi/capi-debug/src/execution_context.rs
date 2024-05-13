@@ -1,10 +1,15 @@
 use capi_runtime::{Function, Program, ProgramState};
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
+use crate::{client::EventsTx, function::Function};
+
 #[component]
-pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn ExecutionContext(
+    program: ReadSignal<Option<Program>>,
+    events: EventsTx,
+) -> impl IntoView {
     move || {
-        let _function = match get_current_function(program) {
+        let function = match get_current_function(program) {
             Ok(function) => function,
             Err(error) => {
                 return view! {
@@ -16,7 +21,10 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
         view! {
             <div class="mx-1 my-3 border p-1">
-                <p>"Placeholder for execution context"</p>
+                <Function
+                    program=program
+                    function=function
+                    events=events.clone() />
             </div>
         }
         .into_any()
