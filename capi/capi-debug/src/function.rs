@@ -51,6 +51,7 @@ pub fn LineWithBreakpoint(
         program.get()?.source_map.location_to_address(&location)
     });
 
+    let events2 = events.clone();
     let breakpoint = move || {
         let address = address.get()?;
 
@@ -58,7 +59,7 @@ pub fn LineWithBreakpoint(
             <Breakpoint
                 program=program
                 address=address
-                events=events.clone() />
+                events=events2.clone() />
         })
     };
 
