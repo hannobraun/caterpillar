@@ -132,9 +132,11 @@ pub fn Expression(
     program: ReadSignal<Option<Program>>,
     expression: Expression,
 ) -> impl IntoView {
-    let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
-    let class = move || {
+    move || {
         let program = program.get()?;
+
+        let is_comment =
+            matches!(expression.kind, ExpressionKind::Comment { .. });
 
         let text_classes = if is_comment {
             "italic text-gray-500"
@@ -169,15 +171,15 @@ pub fn Expression(
             }
         };
 
-        Some(format!("px-0.5 {text_classes} {bg_class}"))
-    };
+        let class = Some(format!("px-0.5 {text_classes} {bg_class}"));
 
-    let line = format!("{}", expression.kind);
+        let line = format!("{}", expression.kind);
 
-    view! {
-        <span
-            class=class>
-            {line}
-        </span>
+        Some(view! {
+            <span
+                class=class>
+                {line}
+            </span>
+        })
     }
 }
