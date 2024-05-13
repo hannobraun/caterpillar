@@ -18,10 +18,12 @@ pub fn Function(
         .into_iter()
         .map(|expression| {
             view! {
-                <LineWithBreakpoint
-                    program=program
-                    expression=expression
-                    events=events.clone() />
+                <li class="ml-8">
+                    <LineWithBreakpoint
+                        program=program
+                        expression=expression
+                        events=events.clone() />
+                </li>
             }
         })
         .collect_view();
@@ -45,12 +47,10 @@ pub fn LineWithBreakpoint(
     events: EventsTx,
 ) -> impl IntoView {
     view! {
-        <li class="ml-8">
-            <Expression
-                program=program
-                expression=expression
-                events=events />
-        </li>
+        <Expression
+            program=program
+            expression=expression
+            events=events />
     }
 }
 
