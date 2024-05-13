@@ -141,9 +141,8 @@ pub fn Expression(
 
         let program = program.get()?;
 
-        let address = program
-            .source_map
-            .location_to_address(&expression.location)?;
+        let address =
+            program.source_map.location_to_address(&expression.location);
 
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
@@ -165,8 +164,12 @@ pub fn Expression(
                 }
             }
             _ => {
-                if program.breakpoint_at(&address) {
-                    "bg-blue-300"
+                if let Some(address) = address {
+                    if program.breakpoint_at(&address) {
+                        "bg-blue-300"
+                    } else {
+                        ""
+                    }
                 } else {
                     ""
                 }
@@ -175,7 +178,7 @@ pub fn Expression(
 
         let class = Some(format!("px-0.5 {text_classes} {bg_class}"));
 
-        let data_address = address.to_usize();
+        let data_address = address.map(|address| address.to_usize());
 
         let toggle_breakpoint = move |event: MouseEvent| {
             let event_target = event.target().unwrap();
