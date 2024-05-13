@@ -252,7 +252,7 @@ pub fn LineWithBreakpoint(
     view! {
         <li class="ml-8">
             {breakpoint}
-            <Line
+            <Expression
                 program=program
                 expression=expression />
         </li>
@@ -314,7 +314,7 @@ pub fn Breakpoint(
 }
 
 #[component]
-pub fn Line(
+pub fn Expression(
     program: ReadSignal<Option<Program>>,
     expression: Expression,
 ) -> impl IntoView {
