@@ -95,17 +95,25 @@ impl Program {
             };
         }
 
-        if let Some(address) = self.breakpoint_at_current_instruction() {
-            return ProgramState::Effect {
-                effect: ProgramEffect::Paused,
-                address,
-            };
-        }
-
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.current_instruction = Some(self.evaluator.next_instruction);
 
-        self.evaluator.step().into()
+        let evaluator_state = self.evaluator.step();
+
+        if let EvaluatorState::Running = evaluator_state {
+            // We only ever want to pause the program due to a breakpoint, if
+            // the evaluator is running normally. Else, we might mask errors or
+            // other important states.
+
+            if let Some(address) = self.breakpoint_at_current_instruction() {
+                return ProgramState::Effect {
+                    effect: ProgramEffect::Paused,
+                    address,
+                };
+            }
+        }
+
+        evaluator_state.into()
     }
 
     pub fn halt(&mut self) {
