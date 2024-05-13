@@ -169,11 +169,14 @@ pub fn Expression(
 
         let class = Some(format!("px-0.5 {text_classes} {bg_class}"));
 
+        let data_address = address.to_usize();
+
         let line = format!("{}", expression.kind);
 
         Some(view! {
             <span
-                class=class>
+                class=class
+                data-address=data_address>
                 {line}
             </span>
         })
