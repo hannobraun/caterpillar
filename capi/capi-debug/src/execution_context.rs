@@ -9,13 +9,15 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
             Err(error) => {
                 return view! {
                     <p>{error}</p>
-                };
+                }
+                .into_any();
             }
         };
 
         view! {
             <p>"Placeholder for execution context"</p>
         }
+        .into_any()
     }
 }
 
