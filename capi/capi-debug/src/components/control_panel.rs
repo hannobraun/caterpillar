@@ -16,20 +16,21 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
     view! {
         <Panel>
             <Button
+                value="Reset"
                 on_click=send_reset />
         </Panel>
     }
 }
 
 #[component]
-fn Button<F>(on_click: F) -> impl IntoView
+fn Button<F>(value: &'static str, on_click: F) -> impl IntoView
 where
     F: FnMut(MouseEvent) + 'static,
 {
     view! {
         <input
             type="button"
-            value="Reset"
+            value=value
             class="m-1 px-1 bg-gray-300 font-bold"
             on:click=on_click />
     }
