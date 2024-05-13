@@ -1,5 +1,5 @@
 mod execution_context;
-mod expression;
+mod function;
 
 use capi_runtime::{DebugEvent, Program};
 use futures::{
@@ -13,7 +13,7 @@ use leptos::{
     SignalGet, SignalSet, WriteSignal,
 };
 
-use crate::{execution_context::ExecutionContext, expression::Function};
+use crate::{execution_context::ExecutionContext, function::Function};
 
 fn main() {
     console_error_panic_hook::set_once();
