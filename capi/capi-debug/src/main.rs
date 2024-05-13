@@ -2,7 +2,6 @@ mod client;
 mod components;
 
 use capi_runtime::{DebugEvent, Program};
-use client::EventsTx;
 use futures::channel::mpsc;
 use leptos::{
     component, create_signal, view, CollectView, IntoView, ReadSignal,
@@ -10,7 +9,7 @@ use leptos::{
 };
 
 use crate::{
-    client::{handle_server, send_event},
+    client::{handle_server, send_event, EventsTx},
     components::{execution_context::ExecutionContext, function::Function},
 };
 
