@@ -17,7 +17,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn ResetButton(events: EventsTx) -> impl IntoView {
+fn ResetButton(events: EventsTx) -> impl IntoView {
     let send_reset = move |_| {
         leptos::spawn_local(send_event(DebugEvent::Reset, events.clone()));
     };
