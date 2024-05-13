@@ -19,7 +19,7 @@ pub fn Function(
         .map(|expression| {
             view! {
                 <li class="ml-8">
-                    <LineWithBreakpoint
+                    <Expression
                         program=program
                         expression=expression
                         events=events.clone() />
@@ -37,20 +37,6 @@ pub fn Function(
                 {lines}
             </ol>
         </div>
-    }
-}
-
-#[component]
-pub fn LineWithBreakpoint(
-    program: ReadSignal<Option<Program>>,
-    expression: Expression,
-    events: EventsTx,
-) -> impl IntoView {
-    view! {
-        <Expression
-            program=program
-            expression=expression
-            events=events />
     }
 }
 
