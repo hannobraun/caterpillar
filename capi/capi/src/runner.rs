@@ -97,6 +97,20 @@ impl Runner {
                 // program isn't sent when it's running.
 
                 match event {
+                    DebugEvent::Continue => {
+                        if let ProgramState::Effect {
+                            effect: ProgramEffect::Paused,
+                            ..
+                        } = self.program.state
+                        {
+                            self.program.state = ProgramState::Running;
+                        } else {
+                            println!(
+                                "Debugger tried to continue, but the program \
+                                wasn't paused."
+                            );
+                        }
+                    }
                     DebugEvent::Reset => {
                         self.program.reset();
                         self.program.push(ARGUMENTS);
