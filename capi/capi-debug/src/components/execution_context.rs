@@ -15,7 +15,7 @@ pub fn ExecutionContext(
                 return view! {
                     <p>{error}</p>
                 }
-                .into_any();
+                .into_view();
             }
         };
 
@@ -27,7 +27,7 @@ pub fn ExecutionContext(
                     events=events.clone() />
             </div>
         }
-        .into_any()
+        .into_view()
     }
 }
 
