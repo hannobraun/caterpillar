@@ -1,10 +1,8 @@
 use capi_runtime::{
-    DebugEvent, Expression, ExpressionKind, InstructionAddress, Program,
-    ProgramEffect, ProgramState,
+    DebugEvent, Expression, ExpressionKind, Program, ProgramEffect,
+    ProgramState,
 };
-use leptos::{
-    component, create_memo, view, CollectView, IntoView, ReadSignal, SignalGet,
-};
+use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{send_event, EventsTx};
@@ -46,85 +44,13 @@ pub fn LineWithBreakpoint(
     expression: Expression,
     events: EventsTx,
 ) -> impl IntoView {
-    let location = expression.location.clone();
-    let address = create_memo(move |_| {
-        program.get()?.source_map.location_to_address(&location)
-    });
-
-    let events2 = events.clone();
-    let breakpoint = move || {
-        let address = address.get()?;
-
-        Some(view! {
-            <Breakpoint
-                program=program
-                address=address
-                events=events2.clone() />
-        })
-    };
-
     view! {
         <li class="ml-8">
-            {breakpoint}
             <Expression
                 program=program
                 expression=expression
                 events=events />
         </li>
-    }
-}
-
-#[component]
-pub fn Breakpoint(
-    program: ReadSignal<Option<Program>>,
-    address: InstructionAddress,
-    events: EventsTx,
-) -> impl IntoView {
-    let class = move || {
-        let program = program.get()?;
-
-        let breakpoint_color = if program.breakpoint_at(&address) {
-            "text-green-600"
-        } else {
-            "text-green-300"
-        };
-
-        Some(format!("mr-1 {breakpoint_color}"))
-    };
-
-    let data_address = move || address.to_usize();
-
-    let toggle_breakpoint = move |event: MouseEvent| {
-        let event_target = event.target().unwrap();
-        let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
-
-        let address = element
-            .get_attribute("data-address")
-            .unwrap()
-            .parse()
-            .unwrap();
-
-        leptos::spawn_local(send_event(
-            DebugEvent::ToggleBreakpoint { address },
-            events.clone(),
-        ));
-    };
-
-    // It would be nicer to have the click handler on the enclosing element, to
-    // make it less finicky for the user. But for some reason, I'm getting a
-    // reference to the window on `event.current_target()`, so I have to rely on
-    // `event.target()` to find the metadata. And that means, I can't have
-    // events coming from multiple elements.
-    //
-    // There are probably better ways to solve this problem, but for now, this
-    // is fine, if unfortunate.
-    view! {
-        <span
-            class=class
-            data-address=data_address
-            on:click=toggle_breakpoint>
-            {'⦿'}
-        </span>
     }
 }
 
