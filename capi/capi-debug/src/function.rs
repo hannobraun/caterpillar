@@ -170,6 +170,7 @@ pub fn Expression(
 
         Some(format!("px-0.5 {text_classes} {bg_class}"))
     };
+
     let line = format!("{}", expression.kind);
 
     view! {
