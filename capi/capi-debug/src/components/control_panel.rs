@@ -1,6 +1,5 @@
 use capi_runtime::DebugEvent;
 use leptos::{component, view, IntoView};
-use web_sys::MouseEvent;
 
 use crate::{
     client::{send_event, EventsTx},
@@ -9,24 +8,26 @@ use crate::{
 
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {
-    let send_reset = move |_| {
-        leptos::spawn_local(send_event(DebugEvent::Reset, events.clone()));
-    };
-
     view! {
         <Panel>
             <Button
                 value="Reset"
-                on_click=send_reset />
+                event=DebugEvent::Reset
+                events=events />
         </Panel>
     }
 }
 
 #[component]
-fn Button<F>(value: &'static str, on_click: F) -> impl IntoView
-where
-    F: FnMut(MouseEvent) + 'static,
-{
+fn Button(
+    value: &'static str,
+    event: DebugEvent,
+    events: EventsTx,
+) -> impl IntoView {
+    let on_click = move |_| {
+        leptos::spawn_local(send_event(event.clone(), events.clone()));
+    };
+
     view! {
         <input
             type="button"
