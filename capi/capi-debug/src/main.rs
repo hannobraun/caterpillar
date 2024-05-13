@@ -1,9 +1,7 @@
 mod execution_context;
+mod expression;
 
-use capi_runtime::{
-    DebugEvent, Expression, ExpressionKind, InstructionAddress, Program,
-    ProgramEffect, ProgramState,
-};
+use capi_runtime::{DebugEvent, Expression, InstructionAddress, Program};
 use futures::{
     channel::mpsc::{self, UnboundedReceiver, UnboundedSender},
     future::{select, Either},
@@ -16,7 +14,7 @@ use leptos::{
 };
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement};
 
-use crate::execution_context::ExecutionContext;
+use crate::{execution_context::ExecutionContext, expression::Expression};
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -310,47 +308,6 @@ pub fn Breakpoint(
             on:click=toggle_breakpoint>
             {'⦿'}
         </span>
-    }
-}
-
-#[component]
-pub fn Expression(
-    program: ReadSignal<Option<Program>>,
-    expression: Expression,
-) -> impl IntoView {
-    let is_comment = matches!(expression.kind, ExpressionKind::Comment { .. });
-    let class = move || {
-        let program = program.get()?;
-        let state = program.state;
-
-        let text_classes = if is_comment {
-            "italic text-gray-500"
-        } else {
-            ""
-        };
-
-        let bg_class = match state {
-            ProgramState::Effect { effect, address }
-                if program
-                    .source_map
-                    .address_to_location(&address)
-                    .as_ref()
-                    == Some(&expression.location) =>
-            {
-                match effect {
-                    ProgramEffect::Paused => "bg-green-300",
-                    _ => "bg-red-300",
-                }
-            }
-            _ => "",
-        };
-
-        Some(format!("px-0.5 {text_classes} {bg_class}"))
-    };
-    let line = format!("{}", expression.kind);
-
-    view! {
-        <span class=class>{line}</span>
     }
 }
 
