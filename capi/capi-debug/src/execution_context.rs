@@ -15,7 +15,9 @@ pub fn ExecutionContext(program: ReadSignal<Option<Program>>) -> impl IntoView {
         };
 
         view! {
-            <p>"Placeholder for execution context"</p>
+            <div class="mx-1 my-3 border p-1">
+                <p>"Placeholder for execution context"</p>
+            </div>
         }
         .into_any()
     }
