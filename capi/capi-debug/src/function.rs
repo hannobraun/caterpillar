@@ -184,7 +184,10 @@ pub fn Expression(
             let event_target = event.target().unwrap();
             let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-            let address = element.get_attribute("data-address").unwrap();
+            let Some(address) = element.get_attribute("data-address") else {
+                // This happens, if the user clicks on a comment.
+                return;
+            };
             let address = address.parse().unwrap();
 
             leptos::spawn_local(send_event(
