@@ -35,7 +35,6 @@ pub fn ExecutionContext(
                     events=events.clone() />
             </Panel>
         }
-        .into_view()
     }
 }
 
