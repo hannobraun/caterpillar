@@ -3,6 +3,8 @@ use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{client::EventsTx, components::function::Function};
 
+use super::panel::Panel;
+
 #[component]
 pub fn ExecutionContext(
     program: ReadSignal<Option<Program>>,
@@ -19,13 +21,19 @@ pub fn ExecutionContext(
             }
         };
 
+        // Without this, this closure turns from an `Fn` into an `FnOnce`, which
+        // then isn't a `leptos::View`. Not sure why this is needed. Leptos does
+        // some magic for the component with children here, and that's what's
+        // causing it.
+        let events = events.clone();
+
         view! {
-            <div class="mx-1 my-3 border p-1">
+            <Panel>
                 <Function
                     program=program
                     function=function
                     events=events.clone() />
-            </div>
+            </Panel>
         }
         .into_view()
     }
