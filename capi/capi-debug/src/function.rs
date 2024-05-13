@@ -184,11 +184,8 @@ pub fn Expression(
             let event_target = event.target().unwrap();
             let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-            let address = element
-                .get_attribute("data-address")
-                .unwrap()
-                .parse()
-                .unwrap();
+            let address = element.get_attribute("data-address").unwrap();
+            let address = address.parse().unwrap();
 
             leptos::spawn_local(send_event(
                 DebugEvent::ToggleBreakpoint { address },
