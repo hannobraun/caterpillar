@@ -56,16 +56,12 @@ impl Program {
         *breakpoint = !*breakpoint;
     }
 
-    pub fn breakpoint_at(&self, address: &InstructionAddress) -> bool {
-        self.breakpoints.durable_breakpoint_at(address)
-    }
-
     pub fn breakpoint_at_current_instruction(
         &self,
     ) -> Option<InstructionAddress> {
         let address = self.current_instruction?;
 
-        if self.breakpoint_at(&address) {
+        if self.breakpoints.durable_breakpoint_at(&address) {
             Some(address)
         } else {
             None

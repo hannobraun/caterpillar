@@ -77,7 +77,7 @@ pub fn Expression(
             }
             _ => {
                 if let Some(address) = address {
-                    if program.breakpoint_at(&address) {
+                    if program.breakpoints.durable_breakpoint_at(&address) {
                         "bg-blue-300"
                     } else {
                         ""
