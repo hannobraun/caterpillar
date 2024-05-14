@@ -56,39 +56,44 @@ pub fn Expression(
         let address =
             program.source_map.location_to_address(&expression.location);
 
-        let is_comment =
-            matches!(expression.kind, ExpressionKind::Comment { .. });
+        let class_inner = {
+            let is_comment =
+                matches!(expression.kind, ExpressionKind::Comment { .. });
 
-        let text_classes = if is_comment {
-            "italic text-gray-500"
-        } else {
-            ""
-        };
+            let text_classes = if is_comment {
+                "italic text-gray-500"
+            } else {
+                ""
+            };
 
-        let bg_class = match &program.state {
-            ProgramState::Effect { effect, address }
-                if program.source_map.address_to_location(address).as_ref()
-                    == Some(&expression.location) =>
-            {
-                match effect {
-                    ProgramEffect::Paused => "bg-green-300",
-                    _ => "bg-red-300",
+            let bg_class = match &program.state {
+                ProgramState::Effect { effect, address }
+                    if program
+                        .source_map
+                        .address_to_location(address)
+                        .as_ref()
+                        == Some(&expression.location) =>
+                {
+                    match effect {
+                        ProgramEffect::Paused => "bg-green-300",
+                        _ => "bg-red-300",
+                    }
                 }
-            }
-            _ => {
-                if let Some(address) = address {
-                    if program.breakpoints.durable_breakpoint_at(&address) {
-                        "bg-blue-300"
+                _ => {
+                    if let Some(address) = address {
+                        if program.breakpoints.durable_breakpoint_at(&address) {
+                            "bg-blue-300"
+                        } else {
+                            ""
+                        }
                     } else {
                         ""
                     }
-                } else {
-                    ""
                 }
-            }
-        };
+            };
 
-        let class_inner = Some(format!("px-0.5 {text_classes} {bg_class}"));
+            Some(format!("px-0.5 {text_classes} {bg_class}"))
+        };
 
         let data_address = address.map(|address| address.to_usize());
 
