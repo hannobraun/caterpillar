@@ -56,7 +56,6 @@ impl Program {
         // in `self.state` automatically.
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-
         let evaluator_state = self.evaluator.step();
 
         if let EvaluatorState::Running { just_executed } = evaluator_state {
