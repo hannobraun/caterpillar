@@ -20,7 +20,7 @@ impl Breakpoints {
         self.durable.contains(address)
     }
 
-    pub fn should_stop_at(&self, address: &InstructionAddress) -> bool {
+    pub fn should_stop_at(&mut self, address: &InstructionAddress) -> bool {
         self.durable_breakpoint_at(address)
     }
 }
