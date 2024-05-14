@@ -3,6 +3,7 @@ use leptos::{ReadSignal, SignalGet};
 
 pub struct ExecutionContext {
     pub function: Function,
+    pub message: Option<&'static str>,
 }
 
 impl ExecutionContext {
@@ -44,6 +45,9 @@ impl ExecutionContext {
             );
         };
 
-        Ok(Self { function })
+        Ok(Self {
+            function,
+            message: None,
+        })
     }
 }
