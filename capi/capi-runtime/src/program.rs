@@ -63,7 +63,10 @@ impl Program {
             // the evaluator is running normally. Else, we might mask errors or
             // other important states.
 
-            if self.breakpoints.should_stop_at(&just_executed) {
+            if self
+                .breakpoints
+                .should_stop_at_and_clear_ephemeral(&just_executed)
+            {
                 return ProgramState::Effect {
                     effect: ProgramEffect::Paused,
                     address: just_executed,

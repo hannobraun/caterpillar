@@ -25,7 +25,10 @@ impl Breakpoints {
         self.durable.contains(address)
     }
 
-    pub fn should_stop_at(&mut self, address: &InstructionAddress) -> bool {
+    pub fn should_stop_at_and_clear_ephemeral(
+        &mut self,
+        address: &InstructionAddress,
+    ) -> bool {
         let ephemeral = self.ephemeral.take(address).is_some();
         ephemeral || self.durable_breakpoint_at(address)
     }
