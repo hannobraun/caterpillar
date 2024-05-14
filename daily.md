@@ -3,6 +3,24 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-14
+
+I have big ideas about what Caterpillar could be one day. I jokingly call that
+my 20-year vision, although I'm not sure I have it in me, to work on this
+project for the next 20 years. (But who knows.)
+
+Rust has been my primary language for the last 9-10 years. Naturally that colors
+my perception of what a language can be, and maybe should be. And Rust has some
+very attractive properties: It can run almost anywhere; it provides low-level
+access, but allows you to build safe abstraction on top; and it promotes robust
+software by preventing a lot of mistakes.
+
+But also, I realize that Rust already exists. I don't need to make another one.
+And what Rust lacks, is immediate feedback. I want to build an interactive
+programming language first, and then see how far I can take it. If the answer
+ends up being, not quite far enough to be as universal, low-level, or robust as
+Rust, then so be it. Immediate feedback comes first.
+
 ## 2024-05-13
 
 Yesterday, I was musing about how I can implement breakpoints more efficiently,
