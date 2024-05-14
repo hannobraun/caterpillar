@@ -45,7 +45,7 @@ fn get_current_function(
         return Err("No program available.");
     };
 
-    let (_effect, address) = match program.state {
+    let (_effect, address) = match &program.state {
         ProgramState::Running => {
             return Err("Program is running.");
         }
@@ -55,8 +55,7 @@ fn get_current_function(
         ProgramState::Effect { effect, address } => (effect, address),
     };
 
-    let Some(location) = program.source_map.address_to_location(&address)
-    else {
+    let Some(location) = program.source_map.address_to_location(address) else {
         return Err(
             "Program is stopped at instruction with no associated source \
             location.",
