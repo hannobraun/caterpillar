@@ -1,6 +1,7 @@
 use capi_runtime::{Function, Program, ProgramState};
 use leptos::{ReadSignal, SignalGet};
 
+#[derive(Eq, PartialEq)]
 pub struct ExecutionContext {
     pub function: Option<Function>,
     pub message: Option<&'static str>,
