@@ -13,7 +13,7 @@ pub fn Function(
     function: capi_runtime::Function,
     events: EventsTx,
 ) -> impl IntoView {
-    let lines = function
+    let expressions = function
         .syntax
         .into_iter()
         .map(|expression| {
@@ -34,7 +34,7 @@ pub fn Function(
                 {function.name}:{'\n'}
             </div>
             <ol>
-                {lines}
+                {expressions}
             </ol>
         </div>
     }
