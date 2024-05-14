@@ -23,10 +23,12 @@ pub fn ExecutionContext(
 
         let function = state.function.map(|function| {
             view! {
-                <Function
-                    program=program
-                    function=function
-                    events=events.clone() />
+                <div>
+                    <Function
+                        program=program
+                        function=function
+                        events=events.clone() />
+                </div>
             }
         });
         let message = state.message.map(|message| {
