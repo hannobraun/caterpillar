@@ -46,16 +46,12 @@ impl Program {
         }
     }
 
-    pub fn breakpoint_at_current_instruction(
-        &self,
-    ) -> Option<InstructionAddress> {
-        let address = self.current_instruction?;
+    pub fn breakpoint_at_current_instruction(&self) -> bool {
+        let Some(address) = self.current_instruction else {
+            return false;
+        };
 
-        if self.breakpoints.durable_breakpoint_at(&address) {
-            Some(address)
-        } else {
-            None
-        }
+        self.breakpoints.durable_breakpoint_at(&address)
     }
 
     pub fn step(&mut self) {
@@ -81,7 +77,7 @@ impl Program {
             // the evaluator is running normally. Else, we might mask errors or
             // other important states.
 
-            if self.breakpoint_at_current_instruction().is_some() {
+            if self.breakpoint_at_current_instruction() {
                 return ProgramState::Effect {
                     effect: ProgramEffect::Paused,
                     address: just_executed,
