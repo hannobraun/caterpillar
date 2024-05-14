@@ -6,7 +6,7 @@ use crate::InstructionAddress;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Breakpoints {
-    pub durable: BTreeMap<InstructionAddress, bool>,
+    durable: BTreeMap<InstructionAddress, bool>,
 }
 
 impl Breakpoints {
