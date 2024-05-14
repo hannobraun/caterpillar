@@ -116,7 +116,7 @@ impl Runner {
                         self.program.push(ARGUMENTS);
                     }
                     DebugEvent::ToggleBreakpoint { address } => {
-                        self.program.toggle_breakpoint(address);
+                        self.program.breakpoints.toggle_durable_at(address);
                     }
                 }
             }

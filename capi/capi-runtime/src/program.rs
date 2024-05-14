@@ -50,10 +50,6 @@ impl Program {
         }
     }
 
-    pub fn toggle_breakpoint(&mut self, address: InstructionAddress) {
-        self.breakpoints.toggle_durable_at(address);
-    }
-
     pub fn breakpoint_at_current_instruction(
         &self,
     ) -> Option<InstructionAddress> {
