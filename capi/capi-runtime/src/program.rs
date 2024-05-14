@@ -76,15 +76,15 @@ impl Program {
 
         let evaluator_state = self.evaluator.step();
 
-        if let EvaluatorState::Running { .. } = evaluator_state {
+        if let EvaluatorState::Running { just_executed } = evaluator_state {
             // We only ever want to pause the program due to a breakpoint, if
             // the evaluator is running normally. Else, we might mask errors or
             // other important states.
 
-            if let Some(address) = self.breakpoint_at_current_instruction() {
+            if self.breakpoint_at_current_instruction().is_some() {
                 return ProgramState::Effect {
                     effect: ProgramEffect::Paused,
-                    address,
+                    address: just_executed,
                 };
             }
         }
