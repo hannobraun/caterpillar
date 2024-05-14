@@ -3,7 +3,17 @@ use leptos::{create_memo, Memo, ReadSignal, SignalGet};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ExecutionContext {
+    /// The function of the current execution context
+    ///
+    /// Can be `None` on initialization, before the program becomes available.
+    /// Even if there is no valid execution context right now, for example
+    /// because the program is running, the function from the most recent
+    /// execution context is available.
     pub function: Option<Function>,
+
+    /// A message that explains why the current execution is not valid
+    ///
+    /// If this is `Some`, that means that the execution context is not valid.
     pub message: Option<&'static str>,
 }
 
