@@ -2,7 +2,6 @@ use capi_runtime::{Function, Program, ProgramState};
 use leptos::{ReadSignal, SignalGet};
 
 pub struct ExecutionContext {
-    pub state: ProgramState,
     pub function: Function,
 }
 
@@ -45,9 +44,6 @@ impl ExecutionContext {
         );
         };
 
-        Ok(Self {
-            state: program.state,
-            function,
-        })
+        Ok(Self { function })
     }
 }
