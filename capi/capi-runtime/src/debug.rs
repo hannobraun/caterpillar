@@ -4,5 +4,6 @@ use crate::InstructionAddress;
 pub enum DebugEvent {
     Continue,
     Reset,
+    Step,
     ToggleBreakpoint { address: InstructionAddress },
 }

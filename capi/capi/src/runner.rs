@@ -115,6 +115,23 @@ impl Runner {
                         self.program.reset();
                         self.program.push(ARGUMENTS);
                     }
+                    DebugEvent::Step => {
+                        if let ProgramState::Effect {
+                            effect: ProgramEffect::Paused,
+                            ..
+                        } = self.program.state
+                        {
+                            self.program.breakpoints.set_ephemeral(
+                                self.program.evaluator.next_instruction,
+                            );
+                            self.program.state = ProgramState::Running;
+                        } else {
+                            println!(
+                                "Debugger tried to step, but the program \
+                                wasn't paused."
+                            );
+                        }
+                    }
                     DebugEvent::ToggleBreakpoint { address } => {
                         self.program.breakpoints.toggle_durable_at(address);
                     }
