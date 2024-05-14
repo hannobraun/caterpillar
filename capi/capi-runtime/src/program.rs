@@ -130,7 +130,6 @@ impl From<EvaluatorState> for ProgramState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProgramEffect {
     Evaluator(EvaluatorEffect),
-    Halted,
     Paused,
 }
 
