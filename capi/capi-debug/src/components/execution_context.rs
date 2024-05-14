@@ -29,11 +29,13 @@ pub fn ExecutionContext(
         // causing it.
         let events = events.clone();
 
-        let function = Some(view! {
-            <Function
-                program=program
-                function=state.function
-                events=events.clone() />
+        let function = state.function.map(|function| {
+            view! {
+                <Function
+                    program=program
+                    function=function
+                    events=events.clone() />
+            }
         });
 
         view! {
