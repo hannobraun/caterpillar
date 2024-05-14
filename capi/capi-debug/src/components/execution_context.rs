@@ -1,7 +1,7 @@
-use capi_runtime::{Function, Program, ProgramState};
+use capi_runtime::{Program, ProgramState};
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
-use crate::{client::EventsTx, components::function::Function};
+use crate::{client::EventsTx, components::function::Function, state};
 
 use super::panel::Panel;
 
@@ -31,7 +31,7 @@ pub fn ExecutionContext(
             <Panel>
                 <Function
                     program=program
-                    function=function
+                    function=function.function
                     events=events.clone() />
             </Panel>
         }
@@ -40,7 +40,7 @@ pub fn ExecutionContext(
 
 fn get_current_function(
     program: ReadSignal<Option<Program>>,
-) -> Result<Function, &'static str> {
+) -> Result<state::ExecutionContext, &'static str> {
     let Some(program) = program.get() else {
         return Err("No program available.");
     };
@@ -75,5 +75,8 @@ fn get_current_function(
         );
     };
 
-    Ok(function)
+    Ok(state::ExecutionContext {
+        state: program.state,
+        function,
+    })
 }

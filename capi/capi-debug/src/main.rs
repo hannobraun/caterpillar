@@ -1,5 +1,6 @@
 mod client;
 mod components;
+mod state;
 
 use capi_runtime::Program;
 use futures::channel::mpsc;
