@@ -131,13 +131,17 @@ impl Evaluator {
             }
         }
 
-        EvaluatorState::Running
+        EvaluatorState::Running {
+            just_executed: current_instruction,
+        }
     }
 }
 
 #[must_use]
 pub enum EvaluatorState {
-    Running,
+    Running {
+        just_executed: InstructionAddress,
+    },
     Finished,
     Effect {
         effect: EvaluatorEffect,

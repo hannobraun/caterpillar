@@ -90,7 +90,7 @@ impl Program {
 
         let evaluator_state = self.evaluator.step();
 
-        if let EvaluatorState::Running = evaluator_state {
+        if let EvaluatorState::Running { .. } = evaluator_state {
             // We only ever want to pause the program due to a breakpoint, if
             // the evaluator is running normally. Else, we might mask errors or
             // other important states.
@@ -135,7 +135,7 @@ impl ProgramState {
 impl From<EvaluatorState> for ProgramState {
     fn from(state: EvaluatorState) -> Self {
         match state {
-            EvaluatorState::Running => Self::Running,
+            EvaluatorState::Running { .. } => Self::Running,
             EvaluatorState::Finished => Self::Finished,
             EvaluatorState::Effect { effect, address } => Self::Effect {
                 effect: ProgramEffect::Evaluator(effect),
