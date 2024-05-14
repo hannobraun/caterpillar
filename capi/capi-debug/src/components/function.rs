@@ -56,14 +56,18 @@ pub fn Expression(
         let address =
             program.source_map.location_to_address(&expression.location);
 
-        let class_outer = if let Some(address) = address {
-            if program.breakpoints.durable_breakpoint_at(&address) {
-                "bg-blue-300"
+        let class_outer = {
+            let bg_class = if let Some(address) = address {
+                if program.breakpoints.durable_breakpoint_at(&address) {
+                    "bg-blue-300"
+                } else {
+                    ""
+                }
             } else {
                 ""
-            }
-        } else {
-            ""
+            };
+
+            format!("py-1 {bg_class}")
         };
 
         let class_inner = {
