@@ -1,8 +1,7 @@
-use std::collections::BTreeMap;
-
 use serde_big_array::BigArray;
 
 use crate::{
+    breakpoints::Breakpoints,
     evaluator::{EvaluatorEffect, EvaluatorState},
     source_map::SourceMap,
     DataStack, Evaluator, Functions, InstructionAddress, Value,
@@ -14,7 +13,7 @@ use crate::{
 pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
-    pub breakpoints: BTreeMap<InstructionAddress, bool>,
+    pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
     pub state: ProgramState,
     pub entry_address: InstructionAddress,

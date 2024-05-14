@@ -1,3 +1,4 @@
+mod breakpoints;
 mod builtins;
 mod code;
 mod compiler;
