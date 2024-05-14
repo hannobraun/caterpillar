@@ -22,8 +22,14 @@ pub fn ExecutionContext(
         let events = events.clone();
 
         let function = state.function.map(|function| {
+            let class = if state.message.is_some() {
+                "blur-sm"
+            } else {
+                ""
+            };
+
             view! {
-                <div>
+                <div class=class>
                     <Function
                         program=program
                         function=function
