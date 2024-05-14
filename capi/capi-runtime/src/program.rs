@@ -24,9 +24,6 @@ pub struct Program {
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
 
-    /// Indicate whether the program was halted
-    pub halted: bool,
-
     /// Linear memory
     ///
     /// This is accessed via effects handled by the platform, so logically, it
@@ -41,7 +38,6 @@ impl Program {
         self.state = ProgramState::default();
         self.current_instruction = None;
         self.previous_data_stack.clear();
-        self.halted = false;
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
@@ -75,16 +71,6 @@ impl Program {
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
-        if self.halted {
-            return ProgramState::Effect {
-                effect: ProgramEffect::Halted,
-                // The `or_default` bit can only happen, if we get halted before
-                // the program starts. I guess in that case, it's fine to report
-                // that we're halted at the first instruction.
-                address: self.current_instruction.unwrap_or_default(),
-            };
-        }
-
         self.previous_data_stack = self.evaluator.data_stack.clone();
         self.current_instruction = Some(self.evaluator.next_instruction);
 
@@ -104,10 +90,6 @@ impl Program {
         }
 
         evaluator_state.into()
-    }
-
-    pub fn halt(&mut self) {
-        self.halted = true;
     }
 }
 
