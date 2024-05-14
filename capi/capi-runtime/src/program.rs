@@ -51,12 +51,13 @@ impl Program {
     }
 
     pub fn toggle_breakpoint(&mut self, address: InstructionAddress) {
-        let breakpoint = self.breakpoints.entry(address).or_insert(false);
+        let breakpoint =
+            self.breakpoints.durable.entry(address).or_insert(false);
         *breakpoint = !*breakpoint;
     }
 
     pub fn breakpoint_at(&self, address: &InstructionAddress) -> bool {
-        self.breakpoints.get(address) == Some(&true)
+        self.breakpoints.durable.get(address) == Some(&true)
     }
 
     pub fn breakpoint_at_current_instruction(

@@ -2,4 +2,9 @@ use std::collections::BTreeMap;
 
 use crate::InstructionAddress;
 
-pub type Breakpoints = BTreeMap<InstructionAddress, bool>;
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
+pub struct Breakpoints {
+    pub durable: BTreeMap<InstructionAddress, bool>,
+}
