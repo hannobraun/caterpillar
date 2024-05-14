@@ -27,7 +27,7 @@ impl ExecutionContext {
         else {
             return Err(
                 "Program is stopped at instruction with no associated source \
-            location.",
+                location.",
             );
         };
 
@@ -39,9 +39,9 @@ impl ExecutionContext {
             .cloned();
         let Some(function) = function else {
             return Err(
-            "Program stopped at unknown function. This is most likely a bug in \
-            Caterpillar.",
-        );
+                "Program stopped at unknown function. This is most likely a \
+                bug in Caterpillar.",
+            );
         };
 
         Ok(Self { function })
