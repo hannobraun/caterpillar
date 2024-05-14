@@ -1,5 +1,5 @@
 use capi_runtime::{Function, Program, ProgramState};
-use leptos::{ReadSignal, SignalGet};
+use leptos::{create_memo, Memo, ReadSignal, SignalGet};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ExecutionContext {
@@ -8,60 +8,63 @@ pub struct ExecutionContext {
 }
 
 impl ExecutionContext {
-    pub fn from_program(program: ReadSignal<Option<Program>>) -> Self {
-        let Some(program) = program.get() else {
-            return Self {
-                function: None,
-                message: Some("No program available."),
+    pub fn from_program(program: ReadSignal<Option<Program>>) -> Memo<Self> {
+        create_memo(move |_| {
+            let Some(program) = program.get() else {
+                return Self {
+                    function: None,
+                    message: Some("No program available."),
+                };
             };
-        };
 
-        let (_effect, address) = match &program.state {
-            ProgramState::Running => {
+            let (_effect, address) = match &program.state {
+                ProgramState::Running => {
+                    return Self {
+                        function: None,
+                        message: Some("Program is running."),
+                    };
+                }
+                ProgramState::Finished => {
+                    return Self {
+                        function: None,
+                        message: Some("Program has finished running."),
+                    };
+                }
+                ProgramState::Effect { effect, address } => (effect, address),
+            };
+
+            let Some(location) =
+                program.source_map.address_to_location(address)
+            else {
                 return Self {
                     function: None,
-                    message: Some("Program is running."),
-                };
-            }
-            ProgramState::Finished => {
-                return Self {
-                    function: None,
-                    message: Some("Program has finished running."),
-                };
-            }
-            ProgramState::Effect { effect, address } => (effect, address),
-        };
-
-        let Some(location) = program.source_map.address_to_location(address)
-        else {
-            return Self {
-                function: None,
-                message: Some(
-                    "Program is stopped at instruction with no associated \
+                    message: Some(
+                        "Program is stopped at instruction with no associated \
                     source location.",
-                ),
+                    ),
+                };
             };
-        };
 
-        let function = program
-            .functions
-            .inner
-            .iter()
-            .find(|function| function.name == location.function())
-            .cloned();
-        let Some(function) = function else {
-            return Self {
+            let function = program
+                .functions
+                .inner
+                .iter()
+                .find(|function| function.name == location.function())
+                .cloned();
+            let Some(function) = function else {
+                return Self {
                 function: None,
                 message: Some(
                     "Program stopped at unknown function. This is most likely \
                     a bug in Caterpillar.",
                 ),
             };
-        };
+            };
 
-        Self {
-            function: Some(function),
-            message: None,
-        }
+            Self {
+                function: Some(function.clone()),
+                message: None,
+            }
+        })
     }
 }

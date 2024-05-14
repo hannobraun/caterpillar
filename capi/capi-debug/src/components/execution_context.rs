@@ -1,5 +1,5 @@
 use capi_runtime::Program;
-use leptos::{component, view, IntoView, ReadSignal};
+use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
     client::EventsTx, components::function::Function, state::ExecutionContext,
@@ -10,7 +10,7 @@ use super::panel::Panel;
 #[component]
 pub fn ExecutionContext(
     program: ReadSignal<Option<Program>>,
-    state: ExecutionContext,
+    state: Memo<ExecutionContext>,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
@@ -18,7 +18,7 @@ pub fn ExecutionContext(
         // then isn't a `leptos::View`. Not sure why this is needed. Leptos does
         // some magic for the component with children here, and that's what's
         // causing it.
-        let state = state.clone();
+        let state = state.get();
         let events = events.clone();
 
         let function = state.function.map(|function| {
