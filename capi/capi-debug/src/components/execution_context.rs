@@ -29,12 +29,16 @@ pub fn ExecutionContext(
         // causing it.
         let events = events.clone();
 
+        let function = view! {
+            <Function
+                program=program
+                function=state.function
+                events=events.clone() />
+        };
+
         view! {
             <Panel>
-                <Function
-                    program=program
-                    function=state.function
-                    events=events.clone() />
+                {function}
             </Panel>
         }
     }
