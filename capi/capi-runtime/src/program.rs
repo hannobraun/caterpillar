@@ -57,7 +57,7 @@ impl Program {
     }
 
     pub fn breakpoint_at(&self, address: &InstructionAddress) -> bool {
-        self.breakpoints.durable.get(address) == Some(&true)
+        self.breakpoints.durable_breakpoint_at(address)
     }
 
     pub fn breakpoint_at_current_instruction(

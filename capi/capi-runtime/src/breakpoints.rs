@@ -8,3 +8,9 @@ use crate::InstructionAddress;
 pub struct Breakpoints {
     pub durable: BTreeMap<InstructionAddress, bool>,
 }
+
+impl Breakpoints {
+    pub fn durable_breakpoint_at(&self, address: &InstructionAddress) -> bool {
+        self.durable.get(address) == Some(&true)
+    }
+}
