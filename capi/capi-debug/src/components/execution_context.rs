@@ -13,7 +13,7 @@ pub fn ExecutionContext(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let state = match ExecutionContext::get_current_function(program) {
+        let state = match ExecutionContext::from_program(program) {
             Ok(function) => function,
             Err(error) => {
                 return view! {

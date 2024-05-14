@@ -7,7 +7,7 @@ pub struct ExecutionContext {
 }
 
 impl ExecutionContext {
-    pub fn get_current_function(
+    pub fn from_program(
         program: ReadSignal<Option<Program>>,
     ) -> Result<Self, &'static str> {
         let Some(program) = program.get() else {
