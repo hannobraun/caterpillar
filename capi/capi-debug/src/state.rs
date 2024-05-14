@@ -9,10 +9,12 @@ pub struct ExecutionContext {
 
 impl ExecutionContext {
     pub fn from_program(program: ReadSignal<Option<Program>>) -> Memo<Self> {
-        create_memo(move |_| {
+        create_memo(move |prev| {
+            let function = prev.and_then(|state: &Self| state.function.clone());
+
             let Some(program) = program.get() else {
                 return Self {
-                    function: None,
+                    function,
                     message: Some("No program available."),
                 };
             };
@@ -20,13 +22,13 @@ impl ExecutionContext {
             let (_effect, address) = match &program.state {
                 ProgramState::Running => {
                     return Self {
-                        function: None,
+                        function,
                         message: Some("Program is running."),
                     };
                 }
                 ProgramState::Finished => {
                     return Self {
-                        function: None,
+                        function,
                         message: Some("Program has finished running."),
                     };
                 }
@@ -37,7 +39,7 @@ impl ExecutionContext {
                 program.source_map.address_to_location(address)
             else {
                 return Self {
-                    function: None,
+                    function,
                     message: Some(
                         "Program is stopped at instruction with no associated \
                     source location.",
@@ -53,7 +55,7 @@ impl ExecutionContext {
                 .cloned();
             let Some(function) = function else {
                 return Self {
-                function: None,
+                function,
                 message: Some(
                     "Program stopped at unknown function. This is most likely \
                     a bug in Caterpillar.",
