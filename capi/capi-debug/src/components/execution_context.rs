@@ -37,10 +37,16 @@ pub fn ExecutionContext(
                     events=events.clone() />
             }
         });
+        let message = state.message.map(|message| {
+            view! {
+                <p>{message}</p>
+            }
+        });
 
         view! {
             <Panel>
                 {function}
+                {message}
             </Panel>
         }
     }
