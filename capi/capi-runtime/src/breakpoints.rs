@@ -7,6 +7,7 @@ use crate::InstructionAddress;
 )]
 pub struct Breakpoints {
     durable: BTreeSet<InstructionAddress>,
+    ephemeral: BTreeSet<InstructionAddress>,
 }
 
 impl Breakpoints {
@@ -16,11 +17,16 @@ impl Breakpoints {
         }
     }
 
+    pub fn set_ephemeral(&mut self, address: InstructionAddress) {
+        self.ephemeral.insert(address);
+    }
+
     pub fn durable_breakpoint_at(&self, address: &InstructionAddress) -> bool {
         self.durable.contains(address)
     }
 
     pub fn should_stop_at(&mut self, address: &InstructionAddress) -> bool {
-        self.durable_breakpoint_at(address)
+        let ephemeral = self.ephemeral.take(address).is_some();
+        ephemeral || self.durable_breakpoint_at(address)
     }
 }
