@@ -46,7 +46,7 @@ pub fn ExecutionContext(
         });
 
         view! {
-            <Panel>
+            <Panel class="">
                 {function}
                 {message}
             </Panel>

@@ -9,7 +9,7 @@ use crate::{
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {
     view! {
-        <Panel>
+        <Panel class="">
             <Button
                 value="Reset"
                 event=DebugEvent::Reset

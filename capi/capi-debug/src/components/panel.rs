@@ -1,8 +1,8 @@
 use leptos::{component, view, Children, IntoView};
 
 #[component]
-pub fn Panel(children: Children) -> impl IntoView {
-    let class = "mx-1 my-3 border p-1 relative";
+pub fn Panel(children: Children, class: &'static str) -> impl IntoView {
+    let class = format!("mx-1 my-3 border p-1 relative {class}");
 
     view! {
         <div class=class>
