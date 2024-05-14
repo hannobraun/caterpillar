@@ -11,7 +11,7 @@ pub fn ExecutionContext(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let function = match get_current_function(program) {
+        let state = match get_current_function(program) {
             Ok(function) => function,
             Err(error) => {
                 return view! {
@@ -31,7 +31,7 @@ pub fn ExecutionContext(
             <Panel>
                 <Function
                     program=program
-                    function=function.function
+                    function=state.function
                     events=events.clone() />
             </Panel>
         }
