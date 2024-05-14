@@ -39,23 +39,27 @@ pub fn Debugger(
     program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
-    view! {
-        <ProgramState
-            program=program />
-        <CallStack
-            program=program />
-        <ExecutionContext
-            program=program
-            events=events.clone() />
-        <ControlPanel
-            events=events.clone() />
-        <DataStack
-            program=program />
-        <Memory
-            program=program />
-        <CodeExplorer
-            program=program
-            events=events />
+    move || {
+        let events = events.clone();
+
+        view! {
+            <ProgramState
+                program=program />
+            <CallStack
+                program=program />
+            <ExecutionContext
+                program=program
+                events=events.clone() />
+            <ControlPanel
+                events=events.clone() />
+            <DataStack
+                program=program />
+            <Memory
+                program=program />
+            <CodeExplorer
+                program=program
+                events=events />
+        }
     }
 }
 
