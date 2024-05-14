@@ -88,7 +88,7 @@ pub fn Expression(
             }
         };
 
-        let class = Some(format!("px-0.5 {text_classes} {bg_class}"));
+        let class_inner = Some(format!("px-0.5 {text_classes} {bg_class}"));
 
         let data_address = address.map(|address| address.to_usize());
 
@@ -113,7 +113,7 @@ pub fn Expression(
         Some(view! {
             <span>
                 <span
-                    class=class
+                    class=class_inner
                     data-address=data_address
                     on:click=toggle_breakpoint>
                     {expression}
