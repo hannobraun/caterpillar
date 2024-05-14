@@ -40,8 +40,6 @@ pub fn Debugger(
     program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
-    let events = events.clone();
-
     let execution_context = ExecutionContext::from_program(program);
 
     view! {
