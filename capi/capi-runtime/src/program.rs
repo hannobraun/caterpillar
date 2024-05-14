@@ -18,9 +18,6 @@ pub struct Program {
     pub state: ProgramState,
     pub entry_address: InstructionAddress,
 
-    /// The most recently executed instruction
-    pub current_instruction: Option<InstructionAddress>,
-
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
 
@@ -36,7 +33,6 @@ impl Program {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
-        self.current_instruction = None;
         self.previous_data_stack.clear();
     }
 
@@ -60,7 +56,6 @@ impl Program {
         // in `self.state` automatically.
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-        self.current_instruction = Some(self.evaluator.next_instruction);
 
         let evaluator_state = self.evaluator.step();
 
