@@ -111,11 +111,13 @@ pub fn Expression(
         let expression = format!("{}", expression.kind);
 
         Some(view! {
-            <span
-                class=class
-                data-address=data_address
-                on:click=toggle_breakpoint>
-                {expression}
+            <span>
+                <span
+                    class=class
+                    data-address=data_address
+                    on:click=toggle_breakpoint>
+                    {expression}
+                </span>
             </span>
         })
     }
