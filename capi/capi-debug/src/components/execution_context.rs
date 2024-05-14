@@ -31,7 +31,9 @@ pub fn ExecutionContext(
         });
         let message = state.message.map(|message| {
             view! {
-                <p>{message}</p>
+                <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
+                    {message}
+                </p>
             }
         });
 
