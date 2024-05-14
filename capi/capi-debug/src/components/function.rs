@@ -56,6 +56,16 @@ pub fn Expression(
         let address =
             program.source_map.location_to_address(&expression.location);
 
+        let class_outer = if let Some(address) = address {
+            if program.breakpoints.durable_breakpoint_at(&address) {
+                "bg-blue-300"
+            } else {
+                ""
+            }
+        } else {
+            ""
+        };
+
         let class_inner = {
             let is_comment =
                 matches!(expression.kind, ExpressionKind::Comment { .. });
@@ -79,17 +89,7 @@ pub fn Expression(
                         _ => "bg-red-300",
                     }
                 }
-                _ => {
-                    if let Some(address) = address {
-                        if program.breakpoints.durable_breakpoint_at(&address) {
-                            "bg-blue-300"
-                        } else {
-                            ""
-                        }
-                    } else {
-                        ""
-                    }
-                }
+                _ => "",
             };
 
             Some(format!("px-0.5 {text_classes} {bg_class}"))
@@ -116,7 +116,7 @@ pub fn Expression(
         let expression = format!("{}", expression.kind);
 
         Some(view! {
-            <span>
+            <span class=class_outer>
                 <span
                     class=class_inner
                     data-address=data_address
