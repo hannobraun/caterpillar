@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::BTreeSet;
 
 use crate::InstructionAddress;
 
@@ -6,17 +6,18 @@ use crate::InstructionAddress;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Breakpoints {
-    durable: BTreeMap<InstructionAddress, bool>,
+    durable: BTreeSet<InstructionAddress>,
 }
 
 impl Breakpoints {
     pub fn toggle_durable_at(&mut self, address: InstructionAddress) {
-        let breakpoint = self.durable.entry(address).or_insert(false);
-        *breakpoint = !*breakpoint;
+        if self.durable.take(&address).is_none() {
+            self.durable.insert(address);
+        }
     }
 
     pub fn durable_breakpoint_at(&self, address: &InstructionAddress) -> bool {
-        self.durable.get(address) == Some(&true)
+        self.durable.contains(address)
     }
 
     pub fn should_stop_at(&self, address: &InstructionAddress) -> bool {
