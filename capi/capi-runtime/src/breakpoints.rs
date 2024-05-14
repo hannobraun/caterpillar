@@ -18,4 +18,8 @@ impl Breakpoints {
     pub fn durable_breakpoint_at(&self, address: &InstructionAddress) -> bool {
         self.durable.get(address) == Some(&true)
     }
+
+    pub fn should_stop_at(&self, address: &InstructionAddress) -> bool {
+        self.durable_breakpoint_at(address)
+    }
 }
