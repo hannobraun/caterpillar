@@ -15,6 +15,7 @@ use crate::{
         control_panel::ControlPanel, execution_context::ExecutionContext,
         function::Function,
     },
+    state::ExecutionContext,
 };
 
 fn main() {
@@ -42,6 +43,8 @@ pub fn Debugger(
     move || {
         let events = events.clone();
 
+        let execution_context = ExecutionContext::from_program(program);
+
         view! {
             <ProgramState
                 program=program />
@@ -49,6 +52,7 @@ pub fn Debugger(
                 program=program />
             <ExecutionContext
                 program=program
+                state=execution_context
                 events=events.clone() />
             <ControlPanel
                 events=events.clone() />

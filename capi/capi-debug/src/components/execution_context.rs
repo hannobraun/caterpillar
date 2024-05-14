@@ -10,15 +10,15 @@ use super::panel::Panel;
 #[component]
 pub fn ExecutionContext(
     program: ReadSignal<Option<Program>>,
+    state: ExecutionContext,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let state = ExecutionContext::from_program(program);
-
         // Without this, this closure turns from an `Fn` into an `FnOnce`, which
         // then isn't a `leptos::View`. Not sure why this is needed. Leptos does
         // some magic for the component with children here, and that's what's
         // causing it.
+        let state = state.clone();
         let events = events.clone();
 
         let function = state.function.map(|function| {
