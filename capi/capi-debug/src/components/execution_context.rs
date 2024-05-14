@@ -13,15 +13,7 @@ pub fn ExecutionContext(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let state = match ExecutionContext::from_program(program) {
-            Ok(function) => function,
-            Err(error) => {
-                return view! {
-                    <p>{error}</p>
-                }
-                .into_view();
-            }
-        };
+        let state = ExecutionContext::from_program(program);
 
         // Without this, this closure turns from an `Fn` into an `FnOnce`, which
         // then isn't a `leptos::View`. Not sure why this is needed. Leptos does
