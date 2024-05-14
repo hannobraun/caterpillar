@@ -108,14 +108,14 @@ pub fn Expression(
             ));
         };
 
-        let line = format!("{}", expression.kind);
+        let expression = format!("{}", expression.kind);
 
         Some(view! {
             <span
                 class=class
                 data-address=data_address
                 on:click=toggle_breakpoint>
-                {line}
+                {expression}
             </span>
         })
     }
