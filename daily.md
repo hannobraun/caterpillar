@@ -3,6 +3,22 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-15
+
+If you had the greatest team of all time, and you set them to work on the wrong
+things, then their output would be worthless to you. And very likely, that would
+not be obvious for a good while. Going fast into the wrong direction can feel
+very productive.
+
+And I don't have the greatest, or any, team. It's just myself, for the time
+being. So it's critical that I don't waste my efforts. That I spend my limited
+resources where it counts.
+
+That's why I always try to think about what is important to work on right now.
+Questioning whether what I'm doing is actually advancing Caterpillar in a
+direction that matters. I'm honestly not sure how well I'm doing that. But I
+guess time will tell, one way or the other.
+
 ## 2024-05-14
 
 I have big ideas about what Caterpillar could be one day. I jokingly call that
