@@ -47,7 +47,7 @@ pub fn ExecutionContext(
         });
 
         view! {
-            <Panel class="h-96">
+            <Panel class="h-80">
                 {function}
                 {message}
             </Panel>
