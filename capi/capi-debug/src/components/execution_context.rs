@@ -18,8 +18,9 @@ pub fn ExecutionContext(
         // then isn't a `leptos::View`. Not sure why this is needed. Leptos does
         // some magic for the component with children here, and that's what's
         // causing it.
-        let state = state.get();
         let events = events.clone();
+
+        let state = state.get();
 
         let function = state.function.map(|function| {
             let class = if state.message.is_some() {
