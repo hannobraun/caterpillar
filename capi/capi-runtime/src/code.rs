@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt, str::FromStr};
 
 use super::{compiler::Instruction, symbols::Symbols};
 
@@ -23,6 +23,16 @@ impl Code {
         let address = self.next_address();
         self.instructions.push(instruction);
         address
+    }
+}
+
+impl fmt::Display for Code {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for (i, instruction) in self.instructions.iter().enumerate() {
+            writeln!(f, "{i:4} {instruction}")?;
+        }
+
+        Ok(())
     }
 }
 
