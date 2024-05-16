@@ -13,6 +13,12 @@ impl Instructions {
     pub fn next_address(&self) -> InstructionAddress {
         InstructionAddress(self.inner.len().try_into().unwrap())
     }
+
+    pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
+        let address = self.next_address();
+        self.inner.push(instruction);
+        address
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

@@ -25,9 +25,7 @@ impl Code {
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = self.next_address();
-        self.instructions.inner.push(instruction);
-        address
+        self.instructions.push(instruction)
     }
 }
 
