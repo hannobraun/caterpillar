@@ -18,6 +18,10 @@ impl UpdatesTx {
 
     pub fn send(&mut self, program: &Program) {
         if let Some(program_at_client) = &self.program_at_client {
+            // The client has previously received a program. We don't want to
+            // saturate the connection with useless updates, so use that to
+            // determine, if we should send an update.
+
             if program_at_client.state.is_running()
                 && program.state.is_running()
             {
