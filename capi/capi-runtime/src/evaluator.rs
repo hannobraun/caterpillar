@@ -137,6 +137,7 @@ impl Evaluator {
     }
 }
 
+#[derive(Debug)]
 #[must_use]
 pub enum EvaluatorState {
     Running {
