@@ -31,8 +31,7 @@ impl Evaluator {
         let current_instruction = self.next_instruction;
         self.next_instruction.increment();
 
-        let instruction =
-            &self.code.instructions.inner[current_instruction.to_usize()].1;
+        let instruction = self.code.instructions.get(&current_instruction);
 
         match instruction {
             Instruction::CallBuiltin { name } => {

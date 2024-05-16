@@ -19,6 +19,12 @@ impl Instructions {
         self.inner.push((address, instruction));
         address
     }
+
+    pub fn get(&self, address: &InstructionAddress) -> &Instruction {
+        let (stored_address, instruction) = &self.inner[address.to_usize()];
+        assert_eq!(address, stored_address);
+        instruction
+    }
 }
 
 impl<'r> IntoIterator for &'r Instructions {
