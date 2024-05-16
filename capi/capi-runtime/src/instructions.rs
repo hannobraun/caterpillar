@@ -21,6 +21,15 @@ impl Instructions {
     }
 }
 
+impl<'r> IntoIterator for &'r Instructions {
+    type Item = <&'r InstructionsInner as IntoIterator>::Item;
+    type IntoIter = <&'r InstructionsInner as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.iter()
+    }
+}
+
 type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
 
 #[derive(
