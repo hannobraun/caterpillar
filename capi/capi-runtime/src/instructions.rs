@@ -6,7 +6,7 @@ use crate::Value;
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Instructions {
-    pub inner: Vec<(InstructionAddress, Instruction)>,
+    pub inner: InstructionsInner,
 }
 
 impl Instructions {
@@ -20,6 +20,8 @@ impl Instructions {
         address
     }
 }
+
+type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
 
 #[derive(
     Copy,
