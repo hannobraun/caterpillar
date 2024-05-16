@@ -16,19 +16,19 @@ impl Code {
     }
 
     pub fn next_address(&self) -> InstructionAddress {
-        InstructionAddress(self.instructions.len().try_into().unwrap())
+        InstructionAddress(self.instructions.inner.len().try_into().unwrap())
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
         let address = self.next_address();
-        self.instructions.push(instruction);
+        self.instructions.inner.push(instruction);
         address
     }
 }
 
 impl fmt::Display for Code {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for (i, instruction) in self.instructions.iter().enumerate() {
+        for (i, instruction) in self.instructions.inner.iter().enumerate() {
             writeln!(f, "{i:4} {instruction}")?;
         }
 
@@ -36,7 +36,12 @@ impl fmt::Display for Code {
     }
 }
 
-pub type Instructions = Vec<Instruction>;
+#[derive(
+    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
+)]
+pub struct Instructions {
+    pub inner: Vec<Instruction>,
+}
 
 #[derive(
     Copy,
