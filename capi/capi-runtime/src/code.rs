@@ -7,7 +7,7 @@ use super::{compiler::Instruction, symbols::Symbols};
 )]
 pub struct Code {
     pub symbols: Symbols,
-    pub instructions: Vec<Instruction>,
+    pub instructions: Instructions,
 }
 
 impl Code {
@@ -35,6 +35,8 @@ impl fmt::Display for Code {
         Ok(())
     }
 }
+
+pub type Instructions = Vec<Instruction>;
 
 #[derive(
     Copy,
