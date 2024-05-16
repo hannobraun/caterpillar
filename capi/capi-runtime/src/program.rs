@@ -34,7 +34,7 @@ impl Program {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
         self.previous_data_stack.clear();
-        self.memory = Memory::default();
+        self.memory.zero();
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
@@ -123,6 +123,12 @@ pub enum ProgramEffect {
 pub struct Memory {
     #[serde(with = "BigArray")]
     pub inner: [u8; 256],
+}
+
+impl Memory {
+    pub fn zero(&mut self) {
+        *self = Self::default();
+    }
 }
 
 impl Default for Memory {
