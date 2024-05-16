@@ -16,7 +16,7 @@ impl UpdatesTx {
         }
     }
 
-    pub fn send(&mut self, program: &Program) {
+    pub fn send_if_relevant_change(&mut self, program: &Program) {
         if let Some(program_at_client) = &self.program_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to

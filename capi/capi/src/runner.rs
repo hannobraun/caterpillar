@@ -68,7 +68,7 @@ impl Runner {
         self.program.push(ARGUMENTS);
 
         loop {
-            self.updates.send(&self.program);
+            self.updates.send_if_relevant_change(&self.program);
 
             let mut event = if self.program.state.is_running() {
                 None
