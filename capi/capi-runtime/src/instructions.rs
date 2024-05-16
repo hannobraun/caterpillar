@@ -68,6 +68,12 @@ impl InstructionAddress {
     }
 }
 
+impl fmt::Display for InstructionAddress {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 impl FromStr for InstructionAddress {
     type Err = <u32 as FromStr>::Err;
 
