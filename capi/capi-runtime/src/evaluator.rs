@@ -1,8 +1,9 @@
-use crate::{builtins::BuiltinEffect, InstructionAddress, Value};
-
-use super::{
-    builtins, code::Code, compiler::Instruction, data_stack::DataStack,
+use crate::{
+    builtins::BuiltinEffect, instructions::Instruction, InstructionAddress,
+    Value,
 };
+
+use super::{builtins, code::Code, data_stack::DataStack};
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,

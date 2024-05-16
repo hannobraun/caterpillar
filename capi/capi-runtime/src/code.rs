@@ -1,8 +1,11 @@
 use std::fmt;
 
-use crate::{instructions::Instructions, InstructionAddress};
+use crate::{
+    instructions::{Instruction, Instructions},
+    InstructionAddress,
+};
 
-use super::{compiler::Instruction, symbols::Symbols};
+use super::symbols::Symbols;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,

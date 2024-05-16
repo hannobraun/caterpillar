@@ -1,6 +1,6 @@
-use std::str::FromStr;
+use std::{fmt, str::FromStr};
 
-use crate::compiler::Instruction;
+use crate::Value;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -12,6 +12,29 @@ pub struct Instructions {
 impl Instructions {
     pub fn next_address(&self) -> InstructionAddress {
         InstructionAddress(self.inner.len().try_into().unwrap())
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum Instruction {
+    CallBuiltin { name: String },
+    CallFunction { name: String },
+    Push { value: Value },
+    Return,
+    ReturnIfNonZero,
+    ReturnIfZero,
+}
+
+impl fmt::Display for Instruction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
+            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
+            Instruction::Push { value } => write!(f, "push {value}"),
+            Instruction::Return => write!(f, "return"),
+            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
+            Instruction::ReturnIfZero => write!(f, "return if zero"),
+        }
     }
 }
 

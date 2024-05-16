@@ -1,6 +1,8 @@
-use std::{collections::BTreeSet, fmt};
+use std::collections::BTreeSet;
 
-use crate::{source_map::SourceMap, syntax::Expression, Value};
+use crate::{
+    instructions::Instruction, source_map::SourceMap, syntax::Expression,
+};
 
 use super::{code::Code, syntax::ExpressionKind};
 
@@ -63,27 +65,4 @@ fn word_to_instruction(
     // built-in functions are currently defined, it's not practical to
     // implement.
     Instruction::CallBuiltin { name: word }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Instruction {
-    CallBuiltin { name: String },
-    CallFunction { name: String },
-    Push { value: Value },
-    Return,
-    ReturnIfNonZero,
-    ReturnIfZero,
-}
-
-impl fmt::Display for Instruction {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
-            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
-            Instruction::Push { value } => write!(f, "push {value}"),
-            Instruction::Return => write!(f, "return"),
-            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
-            Instruction::ReturnIfZero => write!(f, "return if zero"),
-        }
-    }
 }
