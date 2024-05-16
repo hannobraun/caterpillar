@@ -34,6 +34,7 @@ impl Program {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
         self.previous_data_stack.clear();
+        self.memory.inner = [0; 256];
     }
 
     pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
