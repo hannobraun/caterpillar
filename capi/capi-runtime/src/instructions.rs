@@ -6,7 +6,7 @@ use crate::Value;
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Instructions {
-    pub inner: InstructionsInner,
+    inner: InstructionsInner,
 }
 
 impl Instructions {
