@@ -6,7 +6,7 @@ use crate::Value;
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Instructions {
-    pub inner: Vec<Instruction>,
+    pub inner: Vec<(InstructionAddress, Instruction)>,
 }
 
 impl Instructions {
@@ -16,7 +16,7 @@ impl Instructions {
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
         let address = self.next_address();
-        self.inner.push(instruction);
+        self.inner.push((address, instruction));
         address
     }
 }
