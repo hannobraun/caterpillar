@@ -64,7 +64,7 @@ impl InstructionAddress {
 
 impl fmt::Display for InstructionAddress {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.0)
+        self.0.fmt(f)
     }
 }
 
