@@ -17,7 +17,7 @@ impl Symbols {
         self.inner.insert(name, address);
     }
 
-    pub fn resolve(&self, name: &str) -> InstructionAddress {
+    pub fn resolve_name(&self, name: &str) -> InstructionAddress {
         let Some(address) = self.inner.get(name).copied() else {
             panic!("Can't find function `{name}`");
         };

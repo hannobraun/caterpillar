@@ -81,7 +81,7 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction { name } => {
-                let address = self.code.symbols.resolve(name);
+                let address = self.code.symbols.resolve_name(name);
                 self.call_stack.push(self.next_instruction);
                 self.next_instruction = address;
             }

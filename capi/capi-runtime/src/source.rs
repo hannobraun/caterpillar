@@ -27,7 +27,7 @@ impl Source {
             );
         }
 
-        let entry_address = code.symbols.resolve(entry);
+        let entry_address = code.symbols.resolve_name(entry);
 
         let mut program = Program {
             functions: self.functions,
