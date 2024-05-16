@@ -16,7 +16,7 @@ impl Code {
     }
 
     pub fn next_address(&self) -> InstructionAddress {
-        InstructionAddress(self.instructions.inner.len().try_into().unwrap())
+        self.instructions.next_address()
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
@@ -41,6 +41,12 @@ impl fmt::Display for Code {
 )]
 pub struct Instructions {
     pub inner: Vec<Instruction>,
+}
+
+impl Instructions {
+    pub fn next_address(&self) -> InstructionAddress {
+        InstructionAddress(self.inner.len().try_into().unwrap())
+    }
 }
 
 #[derive(
