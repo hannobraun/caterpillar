@@ -18,7 +18,7 @@ pub fn compile(
             ExpressionKind::Comment { .. } => {
                 continue;
             }
-            ExpressionKind::Value(value) => Instruction::PushValue { value },
+            ExpressionKind::Value(value) => Instruction::Push { value },
             ExpressionKind::Word { name } => {
                 word_to_instruction(name, functions)
             }
@@ -69,7 +69,7 @@ fn word_to_instruction(
 pub enum Instruction {
     CallBuiltin { name: String },
     CallFunction { name: String },
-    PushValue { value: Value },
+    Push { value: Value },
     Return,
     ReturnIfNonZero,
     ReturnIfZero,
