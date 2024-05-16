@@ -107,7 +107,7 @@ impl Runner {
                         } else {
                             println!(
                                 "Debugger tried to continue, but the program \
-                                wasn't paused."
+                                isn't paused."
                             );
                         }
                     }
@@ -127,8 +127,8 @@ impl Runner {
                             self.program.state = ProgramState::Running;
                         } else {
                             println!(
-                                "Debugger tried to step, but the program \
-                                wasn't paused."
+                                "Debugger tried to step, but the program isn't \
+                                paused."
                             );
                         }
                     }
