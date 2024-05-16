@@ -27,7 +27,12 @@ impl UpdatesTx {
             {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
-                return;
+
+                if program_at_client.breakpoints == program.breakpoints {
+                    // If the breakpoints haven't changed, we truly have nothing
+                    // useful for the client.
+                    return;
+                }
             }
         }
         if self.program_at_client.as_ref() == Some(program) {
