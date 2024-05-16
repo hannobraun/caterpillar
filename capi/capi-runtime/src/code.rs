@@ -31,8 +31,8 @@ impl Code {
 
 impl fmt::Display for Code {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for (i, instruction) in self.instructions.inner.iter() {
-            writeln!(f, "{i:4} {instruction}")?;
+        for (address, instruction) in self.instructions.inner.iter() {
+            writeln!(f, "{address:4} {instruction}")?;
         }
 
         Ok(())
