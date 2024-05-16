@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, fmt};
 
 use crate::{source_map::SourceMap, syntax::Expression, Value};
 
@@ -73,4 +73,17 @@ pub enum Instruction {
     Return,
     ReturnIfNonZero,
     ReturnIfZero,
+}
+
+impl fmt::Display for Instruction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
+            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
+            Instruction::Push { value } => write!(f, "push {value}"),
+            Instruction::Return => write!(f, "return"),
+            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
+            Instruction::ReturnIfZero => write!(f, "return if zero"),
+        }
+    }
 }
