@@ -25,8 +25,8 @@ impl UpdatesTx {
             if program_at_client.state.is_running()
                 && program.state.is_running()
             {
-                // Don't send updates when the program is running. This would
-                // result in too many updates, at a too rapid rate to be useful.
+                // While the program is running, sending updates on every change
+                // would result in too many updates.
                 return;
             }
         }
