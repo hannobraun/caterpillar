@@ -21,29 +21,6 @@ impl Instructions {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Instruction {
-    CallBuiltin { name: String },
-    CallFunction { name: String },
-    Push { value: Value },
-    Return,
-    ReturnIfNonZero,
-    ReturnIfZero,
-}
-
-impl fmt::Display for Instruction {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
-            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
-            Instruction::Push { value } => write!(f, "push {value}"),
-            Instruction::Return => write!(f, "return"),
-            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
-            Instruction::ReturnIfZero => write!(f, "return if zero"),
-        }
-    }
-}
-
 #[derive(
     Copy,
     Clone,
@@ -80,5 +57,28 @@ impl FromStr for InstructionAddress {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let address = u32::from_str(s)?;
         Ok(Self(address))
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum Instruction {
+    CallBuiltin { name: String },
+    CallFunction { name: String },
+    Push { value: Value },
+    Return,
+    ReturnIfNonZero,
+    ReturnIfZero,
+}
+
+impl fmt::Display for Instruction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
+            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
+            Instruction::Push { value } => write!(f, "push {value}"),
+            Instruction::Return => write!(f, "return"),
+            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
+            Instruction::ReturnIfZero => write!(f, "return if zero"),
+        }
     }
 }
