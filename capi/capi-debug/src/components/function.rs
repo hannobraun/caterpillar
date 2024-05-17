@@ -1,5 +1,5 @@
 use capi_runtime::{
-    DebugEvent, Expression, ExpressionKind, Program, ProgramEffect,
+    DebugEvent, Expression, ExpressionKind, Program, ProgramEffectKind,
     ProgramState,
 };
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
@@ -89,7 +89,7 @@ pub fn Expression(
                         == Some(&expression.location) =>
                 {
                     match effect {
-                        ProgramEffect::Paused => "bg-green-300",
+                        ProgramEffectKind::Paused => "bg-green-300",
                         _ => "bg-red-300",
                     }
                 }

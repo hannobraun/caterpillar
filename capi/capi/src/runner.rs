@@ -1,7 +1,7 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffect,
+    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffectKind,
     ProgramState, Value,
 };
 
@@ -99,7 +99,7 @@ impl Runner {
                 match event {
                     DebugEvent::Continue => {
                         if let ProgramState::Effect {
-                            effect: ProgramEffect::Paused,
+                            effect: ProgramEffectKind::Paused,
                             ..
                         } = self.program.state
                         {
@@ -117,7 +117,7 @@ impl Runner {
                     }
                     DebugEvent::Step => {
                         if let ProgramState::Effect {
-                            effect: ProgramEffect::Paused,
+                            effect: ProgramEffectKind::Paused,
                             ..
                         } = self.program.state
                         {
@@ -141,7 +141,7 @@ impl Runner {
             self.program.step();
             if let ProgramState::Effect {
                 effect:
-                    ProgramEffect::Evaluator(EvaluatorEffect::Builtin(effect)),
+                    ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(effect)),
                 ..
             } = &self.program.state
             {
