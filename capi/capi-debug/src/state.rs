@@ -43,9 +43,6 @@ impl ExecutionContext {
                             message: Some("Program has finished running."),
                         };
                     }
-                    _ => {
-                        unreachable!("Already checked for unhandled effects")
-                    }
                 };
             };
 

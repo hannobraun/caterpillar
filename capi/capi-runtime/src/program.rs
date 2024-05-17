@@ -82,7 +82,7 @@ impl Program {
                     address: just_executed,
                 };
                 self.effects.push_back(effect.clone());
-                return ProgramState::Effect { effect };
+                return ProgramState::Running;
             }
         }
 
@@ -95,7 +95,7 @@ impl Program {
                     address,
                 };
                 self.effects.push_back(effect.clone());
-                ProgramState::Effect { effect }
+                ProgramState::Running
             }
         }
     }
@@ -109,10 +109,6 @@ pub enum ProgramState {
     Running,
 
     Finished,
-
-    Effect {
-        effect: ProgramEffect,
-    },
 }
 
 impl ProgramState {
