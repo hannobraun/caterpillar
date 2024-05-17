@@ -89,12 +89,11 @@ impl Program {
             EvaluatorState::Running { .. } => ProgramState::Running,
             EvaluatorState::Finished => ProgramState::Finished,
             EvaluatorState::Effect { effect, address } => {
-                ProgramState::Effect {
-                    effect: ProgramEffect {
-                        kind: ProgramEffectKind::Evaluator(effect),
-                        address,
-                    },
-                }
+                let effect = ProgramEffect {
+                    kind: ProgramEffectKind::Evaluator(effect),
+                    address,
+                };
+                ProgramState::Effect { effect }
             }
         }
     }
