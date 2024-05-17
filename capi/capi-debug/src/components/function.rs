@@ -71,19 +71,11 @@ pub fn Expression(
                 ""
             };
 
-            let bg_class = match &program.effects.front() {
-                Some(effect)
-                    if program
-                        .source_map
-                        .address_to_location(&effect.address)
-                        .as_ref()
-                        == Some(&expression.location) =>
-                {
-                    match effect.kind {
-                        ProgramEffectKind::Paused => "bg-green-300",
-                        _ => "bg-red-300",
-                    }
-                }
+            let bg_class = match &debugger_expression.effect {
+                Some(effect) => match effect.kind {
+                    ProgramEffectKind::Paused => "bg-green-300",
+                    _ => "bg-red-300",
+                },
                 _ => "",
             };
 

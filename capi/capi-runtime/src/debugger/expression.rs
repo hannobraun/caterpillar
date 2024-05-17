@@ -1,8 +1,9 @@
-use crate::{InstructionAddress, Program};
+use crate::{InstructionAddress, Program, ProgramEffect};
 
 pub struct Expression {
     pub address: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
+    pub effect: Option<ProgramEffect>,
 }
 
 impl Expression {
@@ -16,9 +17,21 @@ impl Expression {
             false
         };
 
+        let effect = program.effects.front().and_then(|effect| {
+            let effect_location =
+                program.source_map.address_to_location(&effect.address);
+
+            if effect_location.as_ref() == Some(&expression.location) {
+                Some(effect.clone())
+            } else {
+                None
+            }
+        });
+
         Self {
             address,
             has_durable_breakpoint,
+            effect,
         }
     }
 }
