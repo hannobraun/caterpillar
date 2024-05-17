@@ -77,12 +77,11 @@ impl Program {
                 .breakpoints
                 .should_stop_at_and_clear_ephemeral(&just_executed)
             {
-                return ProgramState::Effect {
-                    effect: ProgramEffect {
-                        kind: ProgramEffectKind::Paused,
-                        address: just_executed,
-                    },
+                let effect = ProgramEffect {
+                    kind: ProgramEffectKind::Paused,
+                    address: just_executed,
                 };
+                return ProgramState::Effect { effect };
             }
         }
 
