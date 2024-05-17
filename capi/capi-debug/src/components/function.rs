@@ -57,12 +57,8 @@ pub fn Expression(
             debugger::Expression::new(&expression, &program);
 
         let class_outer = {
-            let bg_class = if let Some(address) = debugger_expression.address {
-                if program.breakpoints.durable_breakpoint_at(&address) {
-                    "bg-blue-300"
-                } else {
-                    ""
-                }
+            let bg_class = if debugger_expression.has_durable_breakpoint {
+                "bg-blue-300"
             } else {
                 ""
             };
