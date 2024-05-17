@@ -74,7 +74,7 @@ impl Program {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,
                 });
-                return ProgramState::Running;
+                address
             }
         };
 
