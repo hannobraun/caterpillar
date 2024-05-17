@@ -29,20 +29,24 @@ impl ExecutionContext {
                 };
             };
 
-            let effect = match &program.state {
-                ProgramState::Running => {
-                    return Self {
-                        function,
-                        message: Some("Program is running."),
-                    };
-                }
-                ProgramState::Finished => {
-                    return Self {
-                        function,
-                        message: Some("Program has finished running."),
-                    };
-                }
-                ProgramState::Effect { effect } => effect,
+            let Some(effect) = program.effects.front() else {
+                match &program.state {
+                    ProgramState::Running => {
+                        return Self {
+                            function,
+                            message: Some("Program is running."),
+                        };
+                    }
+                    ProgramState::Finished => {
+                        return Self {
+                            function,
+                            message: Some("Program has finished running."),
+                        };
+                    }
+                    _ => {
+                        unreachable!("Already checked for unhandled effects")
+                    }
+                };
             };
 
             let Some(location) =

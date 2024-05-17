@@ -1,6 +1,5 @@
 use capi_runtime::{
     DebugEvent, Expression, ExpressionKind, Program, ProgramEffectKind,
-    ProgramState,
 };
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
@@ -80,8 +79,8 @@ pub fn Expression(
                 ""
             };
 
-            let bg_class = match &program.state {
-                ProgramState::Effect { effect }
+            let bg_class = match &program.effects.front() {
+                Some(effect)
                     if program
                         .source_map
                         .address_to_location(&effect.address)
