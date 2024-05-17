@@ -22,9 +22,7 @@ impl UpdatesTx {
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
 
-            if program_at_client.state.is_running()
-                && program.state.is_running()
-            {
+            if program_at_client.can_step() && program.can_step() {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
 
