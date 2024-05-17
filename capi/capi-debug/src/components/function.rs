@@ -52,11 +52,11 @@ pub fn Expression(
 
         let program = program.get()?;
 
-        let address =
+        let expression_address =
             program.source_map.location_to_address(&expression.location);
 
         let class_outer = {
-            let bg_class = if let Some(address) = address {
+            let bg_class = if let Some(address) = expression_address {
                 if program.breakpoints.durable_breakpoint_at(&address) {
                     "bg-blue-300"
                 } else {
@@ -98,7 +98,7 @@ pub fn Expression(
             Some(format!("px-0.5 {text_classes} {bg_class}"))
         };
 
-        let data_address = address.map(|address| address.to_usize());
+        let data_address = expression_address.map(|address| address.to_usize());
 
         let toggle_breakpoint = move |event: MouseEvent| {
             let event_target = event.target().unwrap();
