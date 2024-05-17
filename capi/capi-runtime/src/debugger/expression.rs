@@ -1,8 +1,9 @@
-use crate::{InstructionAddress, Program, ProgramEffect};
+use crate::{ExpressionKind, InstructionAddress, Program, ProgramEffect};
 
 pub struct Expression {
     pub address: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
+    pub is_comment: bool,
     pub effect: Option<ProgramEffect>,
 }
 
@@ -16,6 +17,9 @@ impl Expression {
         } else {
             false
         };
+
+        let is_comment =
+            matches!(expression.kind, ExpressionKind::Comment { .. });
 
         let effect = program.effects.front().and_then(|effect| {
             let effect_location =
@@ -31,6 +35,7 @@ impl Expression {
         Self {
             address,
             has_durable_breakpoint,
+            is_comment,
             effect,
         }
     }

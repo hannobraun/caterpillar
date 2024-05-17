@@ -1,6 +1,6 @@
 use capi_runtime::{
     debugger::{self, DebugEvent},
-    Expression, ExpressionKind, Program, ProgramEffectKind,
+    Expression, Program, ProgramEffectKind,
 };
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
@@ -62,10 +62,7 @@ pub fn Expression(
         }
 
         let class_inner = {
-            let is_comment =
-                matches!(expression.kind, ExpressionKind::Comment { .. });
-
-            let text_classes = if is_comment {
+            let text_classes = if debugger_expression.is_comment {
                 "italic text-gray-500"
             } else {
                 ""
