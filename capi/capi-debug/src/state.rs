@@ -29,7 +29,7 @@ impl ExecutionContext {
                 };
             };
 
-            let (_effect, address) = match &program.state {
+            let effect = match &program.state {
                 ProgramState::Running => {
                     return Self {
                         function,
@@ -42,13 +42,11 @@ impl ExecutionContext {
                         message: Some("Program has finished running."),
                     };
                 }
-                ProgramState::Effect { effect } => {
-                    (&effect.kind, effect.address)
-                }
+                ProgramState::Effect { effect } => effect,
             };
 
             let Some(location) =
-                program.source_map.address_to_location(&address)
+                program.source_map.address_to_location(&effect.address)
             else {
                 return Self {
                     function,
