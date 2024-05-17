@@ -43,8 +43,6 @@ pub fn Debugger(
     let execution_context = ExecutionContext::from_program(program);
 
     view! {
-        <ProgramState
-            program=program />
         <CallStack
             program=program />
         <ExecutionContext
@@ -60,17 +58,6 @@ pub fn Debugger(
         <CodeExplorer
             program=program
             events=events />
-    }
-}
-
-#[component]
-pub fn ProgramState(program: ReadSignal<Option<Program>>) -> impl IntoView {
-    move || {
-        let program = program.get()?;
-
-        Some(view! {
-            <p>"Program state: "{move || format!("{:?}", program.state)}</p>
-        })
     }
 }
 
