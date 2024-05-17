@@ -70,7 +70,7 @@ impl Runner {
         loop {
             self.updates.send_if_relevant_change(&self.program);
 
-            let mut event = if self.program.state.is_running() {
+            let mut event = if self.program.can_step() {
                 None
             } else {
                 // If we're not running, the program won't step anyway, and

@@ -43,8 +43,12 @@ impl Program {
         }
     }
 
+    pub fn can_step(&self) -> bool {
+        self.state.is_running()
+    }
+
     pub fn step(&mut self) {
-        if !self.state.is_running() {
+        if !self.can_step() {
             return;
         }
 
