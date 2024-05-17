@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use serde_big_array::BigArray;
 
 use crate::{
@@ -17,6 +19,9 @@ pub struct Program {
     pub evaluator: Evaluator,
     pub state: ProgramState,
     pub entry_address: InstructionAddress,
+
+    /// Effects that have not been handled yet
+    pub effects: VecDeque<ProgramEffect>,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -44,7 +49,7 @@ impl Program {
     }
 
     pub fn can_step(&self) -> bool {
-        self.state.is_running()
+        self.state.is_running() && self.effects.is_empty()
     }
 
     pub fn step(&mut self) {
