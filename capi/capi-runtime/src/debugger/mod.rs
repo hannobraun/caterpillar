@@ -1,12 +1,6 @@
-use crate::{Function, InstructionAddress, Program, ProgramState};
+pub mod event;
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum DebugEvent {
-    Continue,
-    Reset,
-    Step,
-    ToggleBreakpoint { address: InstructionAddress },
-}
+use crate::{Function, Program, ProgramState};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ExecutionContext {
