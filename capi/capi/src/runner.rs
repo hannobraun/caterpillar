@@ -167,12 +167,14 @@ impl Runner {
                         let value = self.program.memory.inner[address];
                         self.program.push([Value(value)]);
 
+                        self.program.effects.pop_front();
                         self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
                         self.program.memory.inner[address] = *value;
 
+                        self.program.effects.pop_front();
                         self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::SetTile { x, y, value } => {
@@ -185,9 +187,11 @@ impl Runner {
                             value,
                         });
 
+                        self.program.effects.pop_front();
                         self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::SubmitFrame => {
+                        self.program.effects.pop_front();
                         self.program.state = ProgramState::Running;
 
                         self.effects.send(DisplayEffect::SubmitTiles);

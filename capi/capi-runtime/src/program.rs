@@ -94,6 +94,7 @@ impl Program {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,
                 };
+                self.effects.push_back(effect.clone());
                 ProgramState::Effect { effect }
             }
         }
