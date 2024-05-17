@@ -4,7 +4,10 @@ pub fn program() -> Program {
     let mut source = Source::default();
 
     source.define("main", |s| {
-        s.w("init_frame_count").w("init_tile_value").w("main_inner");
+        s.w("store_tile_field_size")
+            .w("init_frame_count")
+            .w("init_tile_value")
+            .w("main_inner");
     });
     source.define("main_inner", |s| {
         s.w("update_tile_value")
@@ -13,7 +16,7 @@ pub fn program() -> Program {
             .w("main_inner");
     });
     source.define("init_frame_count", |s| {
-        s.v(1).v(2).w("place");
+        s.v(1);
     });
     source.define("count_frame", |s| {
         s.c("We only have 8 bits to count, so we need to reset the count")
@@ -26,7 +29,7 @@ pub fn program() -> Program {
             .c("Let's prepare the number to compare to for later use.")
             .v(241)
             .c("Grab the current frame count.")
-            .v(4)
+            .v(2)
             .w("take")
             .c("Increment the frame count.")
             .v(1)
@@ -35,7 +38,7 @@ pub fn program() -> Program {
             .c("from.")
             .v(0)
             .w("copy")
-            .v(5)
+            .v(3)
             .w("place")
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
@@ -44,10 +47,10 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
-            .v(3)
+            .v(1)
             .w("drop")
             .v(1)
-            .v(3)
+            .v(1)
             .w("place");
     });
     source.define("draw", |s| {
@@ -67,12 +70,12 @@ pub fn program() -> Program {
         s.w("get_tile_value").w("write_all_tiles");
     });
     source.define("init_tile_value", |s| {
-        s.v(1).v(2).w("place");
+        s.v(1);
     });
     source.define("update_tile_value", |s| {
         s
             .c("Get a copy of the current frame count.")
-            .v(3)
+            .v(1)
             .w("copy")
             .c("We want to make updates at regular intervals. Determine, if")
             .c("this frame is one we need to make an update in. If not, we're")
@@ -82,30 +85,23 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("This is the right frame. Get the current tile value and")
             .c("replace it with `1`.")
-            .v(2)
-            .w("take")
             .v(1)
-            .v(3)
+            .v(1)
             .w("place")
             .c("If the current tile value is `0`, the `1` we placed is correct")
             .c("and we are done.")
             .w("return_if_zero")
             .c("The current tile value is `1`. That means we need to replace")
             .c("the `1` we speculatively placed with a `0`.")
-            .v(2)
-            .w("drop")
             .v(0)
-            .v(2)
-            .w("place");
+            .w("drop")
+            .v(0);
     });
     source.define("get_tile_value", |s| {
-        s.v(2).w("copy");
+        s.v(0).w("copy");
     });
     source.define("write_all_tiles", |s| {
-        s
-            .v(2)
-            .w("place")
-            .c("In addition to the size of the tile field, which is already on")
+        s.c("In addition to the size of the tile field, which is already on")
             .c("the stack, `write_value_to_all_tiles` also need the position")
             .c("of the first tile, from which it will count up.")
             .w("first_tile_position")
@@ -126,7 +122,7 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .c("Put the tile value we're supposed to write to the top of the")
             .c("stack, then write it.")
-            .v(4)
+            .v(2)
             .w("copy")
             .w("write_tile")
             .w("increment_tile_position")
@@ -134,8 +130,8 @@ pub fn program() -> Program {
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
-            .v(2)
-            .w("copy")
+            .w("tile_field_height")
+            .w("load")
             .c("Copy y-coordinate of current position.")
             .v(1)
             .w("copy")
@@ -145,8 +141,8 @@ pub fn program() -> Program {
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
-            .v(3)
-            .w("copy")
+            .w("tile_field_width")
+            .w("load")
             .c("Copy the x-coordinate of the current position.")
             .v(2)
             .w("copy")
@@ -182,7 +178,19 @@ pub fn program() -> Program {
         s.v(0).w("drop").v(0).w("drop");
     });
     source.define("drop_tile_value", |s| {
-        s.v(2).w("drop");
+        s.v(0).w("drop");
+    });
+    source.define("store_tile_field_size", |s| {
+        s.w("tile_field_height")
+            .w("store")
+            .w("tile_field_width")
+            .w("store");
+    });
+    source.define("tile_field_width", |s| {
+        s.v(0);
+    });
+    source.define("tile_field_height", |s| {
+        s.v(1);
     });
 
     source.compile("main")
