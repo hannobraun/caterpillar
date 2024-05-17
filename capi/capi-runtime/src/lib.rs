@@ -3,7 +3,7 @@ mod builtins;
 mod code;
 mod compiler;
 mod data_stack;
-mod debug;
+mod debugger;
 mod evaluator;
 mod functions;
 mod instructions;
@@ -16,7 +16,7 @@ mod syntax;
 pub use self::{
     builtins::BuiltinEffect,
     data_stack::{DataStack, Value},
-    debug::DebugEvent,
+    debugger::DebugEvent,
     evaluator::{Evaluator, EvaluatorEffect},
     functions::{Function, Functions},
     instructions::InstructionAddress,
