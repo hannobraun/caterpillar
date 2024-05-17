@@ -88,11 +88,10 @@ impl Program {
             EvaluatorState::Running { .. } => ProgramState::Running,
             EvaluatorState::Finished => ProgramState::Finished,
             EvaluatorState::Effect { effect, address } => {
-                let effect = ProgramEffect {
+                self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,
-                };
-                self.effects.push_back(effect);
+                });
                 ProgramState::Running
             }
         }
