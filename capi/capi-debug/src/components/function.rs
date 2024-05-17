@@ -78,6 +78,14 @@ pub fn Expression(
             .address
             .map(|address| address.to_usize());
 
+        let error = debugger_expression.effect.and_then(|effect| {
+            if let ProgramEffectKind::Evaluator(effect) = effect.kind {
+                Some(format!("{effect:?}"))
+            } else {
+                None
+            }
+        });
+
         let toggle_breakpoint = move |event: MouseEvent| {
             let event_target = event.target().unwrap();
             let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
@@ -105,6 +113,9 @@ pub fn Expression(
                         on:click=toggle_breakpoint>
                         {expression}
                     </span>
+                </span>
+                <span class="mx-2 font-bold text-red-800">
+                    {error}
                 </span>
             </span>
         })
