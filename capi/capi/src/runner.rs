@@ -149,17 +149,11 @@ impl Runner {
             }
 
             self.program.step();
-            if let ProgramState::Effect {
-                effect:
-                    ProgramEffect {
-                        kind:
-                            ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(
-                                effect,
-                            )),
-                        ..
-                    },
+            if let Some(ProgramEffect {
+                kind:
+                    ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(effect)),
                 ..
-            } = &self.program.state
+            }) = self.program.effects.front()
             {
                 match effect {
                     BuiltinEffect::Load { address } => {
