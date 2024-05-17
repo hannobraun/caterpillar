@@ -1,4 +1,4 @@
-use capi_runtime::DebugEvent;
+use capi_runtime::debugger::DebugEvent;
 use leptos::{component, view, IntoView};
 
 use crate::{

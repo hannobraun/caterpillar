@@ -13,7 +13,7 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::DebugEvent;
+use capi_runtime::debugger::DebugEvent;
 use futures::{stream::SplitSink, SinkExt, StreamExt};
 use tokio::{net::TcpListener, runtime::Runtime, sync::mpsc};
 use tower::ServiceBuilder;

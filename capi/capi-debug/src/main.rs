@@ -1,7 +1,7 @@
 mod client;
 mod components;
 
-use capi_runtime::{ExecutionContext, Program};
+use capi_runtime::{debugger::ExecutionContext, Program};
 use futures::channel::mpsc;
 use leptos::{
     component, create_memo, create_signal, view, CollectView, IntoView,

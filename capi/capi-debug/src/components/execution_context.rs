@@ -1,4 +1,4 @@
-use capi_runtime::{ExecutionContext, Program};
+use capi_runtime::{debugger::ExecutionContext, Program};
 use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{client::EventsTx, components::function::Function};

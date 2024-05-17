@@ -1,4 +1,4 @@
-use capi_runtime::{DebugEvent, Program};
+use capi_runtime::{debugger::DebugEvent, Program};
 use futures::{
     channel::mpsc::{UnboundedReceiver, UnboundedSender},
     future::{select, Either},

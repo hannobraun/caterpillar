@@ -1,8 +1,8 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffect,
-    ProgramEffectKind, Value,
+    debugger::DebugEvent, BuiltinEffect, EvaluatorEffect, Program,
+    ProgramEffect, ProgramEffectKind, Value,
 };
 
 use crate::{
