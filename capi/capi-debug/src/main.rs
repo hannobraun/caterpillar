@@ -1,8 +1,7 @@
 mod client;
 mod components;
-mod state;
 
-use capi_runtime::Program;
+use capi_runtime::{ExecutionContext, Program};
 use futures::channel::mpsc;
 use leptos::{
     component, create_memo, create_signal, view, CollectView, IntoView,
@@ -15,7 +14,6 @@ use crate::{
         control_panel::ControlPanel, execution_context::ExecutionContext,
         function::Function,
     },
-    state::ExecutionContext,
 };
 
 fn main() {

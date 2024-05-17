@@ -1,9 +1,7 @@
-use capi_runtime::Program;
+use capi_runtime::{ExecutionContext, Program};
 use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
-use crate::{
-    client::EventsTx, components::function::Function, state::ExecutionContext,
-};
+use crate::{client::EventsTx, components::function::Function};
 
 use super::panel::Panel;
 

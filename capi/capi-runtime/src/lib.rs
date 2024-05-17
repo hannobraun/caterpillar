@@ -16,7 +16,7 @@ mod syntax;
 pub use self::{
     builtins::BuiltinEffect,
     data_stack::{DataStack, Value},
-    debugger::DebugEvent,
+    debugger::{DebugEvent, ExecutionContext},
     evaluator::{Evaluator, EvaluatorEffect},
     functions::{Function, Functions},
     instructions::InstructionAddress,
