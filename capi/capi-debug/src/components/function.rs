@@ -53,11 +53,8 @@ pub fn Expression(
 
         let program = program.get()?;
 
-        let debugger_expression = debugger::Expression {
-            address: program
-                .source_map
-                .location_to_address(&expression.location),
-        };
+        let debugger_expression =
+            debugger::Expression::new(&expression, &program);
 
         let class_outer = {
             let bg_class = if let Some(address) = debugger_expression.address {
