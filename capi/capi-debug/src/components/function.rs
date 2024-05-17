@@ -62,11 +62,9 @@ pub fn Expression(
         }
 
         let mut class_inner = String::from("px-0.5");
-
         if debugger_expression.is_comment {
             class_inner.push_str(" italic text-gray-500");
         }
-
         if let Some(effect) = &debugger_expression.effect {
             match effect.kind {
                 ProgramEffectKind::Paused => {
