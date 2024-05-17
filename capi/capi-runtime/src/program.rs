@@ -66,7 +66,17 @@ impl Program {
         // in `self.state` automatically.
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-        let evaluator_state = self.evaluator.step();
+        let evaluator_state = match self.evaluator.step() {
+            EvaluatorState::Finished => return ProgramState::Finished,
+            EvaluatorState::Effect { effect, address } => {
+                self.effects.push_back(ProgramEffect {
+                    kind: ProgramEffectKind::Evaluator(effect),
+                    address,
+                });
+                return ProgramState::Running;
+            }
+            state => state,
+        };
 
         if let EvaluatorState::Running { just_executed } = evaluator_state {
             // We only ever want to pause the program due to a breakpoint, if
@@ -84,17 +94,7 @@ impl Program {
             }
         }
 
-        match evaluator_state {
-            EvaluatorState::Running { .. } => ProgramState::Running,
-            EvaluatorState::Finished => ProgramState::Finished,
-            EvaluatorState::Effect { effect, address } => {
-                self.effects.push_back(ProgramEffect {
-                    kind: ProgramEffectKind::Evaluator(effect),
-                    address,
-                });
-                ProgramState::Running
-            }
-        }
+        ProgramState::Running
     }
 }
 
