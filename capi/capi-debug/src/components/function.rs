@@ -56,15 +56,10 @@ pub fn Expression(
         let debugger_expression =
             debugger::Expression::new(&expression, &program);
 
-        let class_outer = {
-            let bg_class = if debugger_expression.has_durable_breakpoint {
-                "bg-blue-300"
-            } else {
-                ""
-            };
-
-            format!("py-1 {bg_class}")
-        };
+        let mut class_outer = String::from("py-1");
+        if debugger_expression.has_durable_breakpoint {
+            class_outer.push_str(" bg-blue-300");
+        }
 
         let class_inner = {
             let is_comment =
