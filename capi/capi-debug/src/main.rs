@@ -5,8 +5,8 @@ mod state;
 use capi_runtime::Program;
 use futures::channel::mpsc;
 use leptos::{
-    component, create_signal, view, CollectView, IntoView, ReadSignal,
-    SignalGet,
+    component, create_memo, create_signal, view, CollectView, IntoView,
+    ReadSignal, SignalGet,
 };
 
 use crate::{
@@ -40,7 +40,9 @@ pub fn Debugger(
     program: ReadSignal<Option<Program>>,
     events: EventsTx,
 ) -> impl IntoView {
-    let execution_context = ExecutionContext::from_program(program);
+    let execution_context = create_memo(move |prev| {
+        ExecutionContext::from_program(prev, program.get())
+    });
 
     view! {
         <CallStack
