@@ -61,23 +61,20 @@ pub fn Expression(
             class_outer.push_str(" bg-blue-300");
         }
 
-        let class_inner = {
-            let text_classes = if debugger_expression.is_comment {
-                "italic text-gray-500"
-            } else {
-                ""
-            };
+        let mut class_inner = String::from("px-0.5");
 
-            let bg_class = match &debugger_expression.effect {
-                Some(effect) => match effect.kind {
-                    ProgramEffectKind::Paused => "bg-green-300",
-                    _ => "bg-red-300",
-                },
-                _ => "",
-            };
+        if debugger_expression.is_comment {
+            class_inner.push_str(" italic text-gray-500");
+        }
 
-            Some(format!("px-0.5 {text_classes} {bg_class}"))
-        };
+        if let Some(effect) = &debugger_expression.effect {
+            match effect.kind {
+                ProgramEffectKind::Paused => {
+                    class_inner.push_str(" bg-green-300")
+                }
+                _ => class_inner.push_str(" bg-red-300"),
+            }
+        }
 
         let data_address = debugger_expression
             .address
