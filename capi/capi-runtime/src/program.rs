@@ -81,7 +81,7 @@ impl Program {
                     kind: ProgramEffectKind::Paused,
                     address: just_executed,
                 };
-                self.effects.push_back(effect.clone());
+                self.effects.push_back(effect);
             }
         }
 
@@ -93,7 +93,7 @@ impl Program {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,
                 };
-                self.effects.push_back(effect.clone());
+                self.effects.push_back(effect);
                 ProgramState::Running
             }
         }
