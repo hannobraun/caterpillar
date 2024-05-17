@@ -2,7 +2,7 @@ use std::{sync::mpsc, thread};
 
 use capi_runtime::{
     BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffect,
-    ProgramEffectKind, ProgramState, Value,
+    ProgramEffectKind, Value,
 };
 
 use crate::{
@@ -104,7 +104,6 @@ impl Runner {
                         }) = self.program.effects.front()
                         {
                             self.program.effects.pop_front();
-                            self.program.state = ProgramState::Running;
                         } else {
                             println!(
                                 "Debugger tried to continue, but the program \
@@ -126,7 +125,6 @@ impl Runner {
                                 self.program.evaluator.next_instruction,
                             );
                             self.program.effects.pop_front();
-                            self.program.state = ProgramState::Running;
                         } else {
                             println!(
                                 "Debugger tried to step, but the program isn't \
@@ -154,14 +152,12 @@ impl Runner {
                         self.program.push([Value(value)]);
 
                         self.program.effects.pop_front();
-                        self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
                         self.program.memory.inner[address] = *value;
 
                         self.program.effects.pop_front();
-                        self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
@@ -174,11 +170,9 @@ impl Runner {
                         });
 
                         self.program.effects.pop_front();
-                        self.program.state = ProgramState::Running;
                     }
                     BuiltinEffect::SubmitFrame => {
                         self.program.effects.pop_front();
-                        self.program.state = ProgramState::Running;
 
                         self.effects.send(DisplayEffect::SubmitTiles);
 
