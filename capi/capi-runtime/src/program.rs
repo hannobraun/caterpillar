@@ -82,7 +82,6 @@ impl Program {
                     address: just_executed,
                 };
                 self.effects.push_back(effect.clone());
-                return ProgramState::Running;
             }
         }
 
