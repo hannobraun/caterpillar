@@ -54,7 +54,7 @@ impl ExecutionContext {
                     function,
                     message: Some(
                         "Program is stopped at instruction with no associated \
-                    source location.",
+                        source location.",
                     ),
                 };
             };
