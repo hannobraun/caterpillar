@@ -98,14 +98,10 @@ impl Runner {
 
                 match event {
                     DebugEvent::Continue => {
-                        if let ProgramState::Effect {
-                            effect:
-                                ProgramEffect {
-                                    kind: ProgramEffectKind::Paused,
-                                    ..
-                                },
+                        if let Some(ProgramEffect {
+                            kind: ProgramEffectKind::Paused,
                             ..
-                        } = self.program.state
+                        }) = self.program.effects.front()
                         {
                             self.program.effects.pop_front();
                             self.program.state = ProgramState::Running;
@@ -121,14 +117,10 @@ impl Runner {
                         self.program.push(ARGUMENTS);
                     }
                     DebugEvent::Step => {
-                        if let ProgramState::Effect {
-                            effect:
-                                ProgramEffect {
-                                    kind: ProgramEffectKind::Paused,
-                                    ..
-                                },
+                        if let Some(ProgramEffect {
+                            kind: ProgramEffectKind::Paused,
                             ..
-                        } = self.program.state
+                        }) = self.program.effects.front()
                         {
                             self.program.breakpoints.set_ephemeral(
                                 self.program.evaluator.next_instruction,
