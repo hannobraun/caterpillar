@@ -3,6 +3,21 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-17
+
+Once Caterpillar is capable enough to support writing a simple game that runs in
+the browser, that's arguably a useful result. But it won't mean that I'm done
+thinking about risks. They will just shift.
+
+A simple game is nice, but will Caterpillar's performance be good enough to run
+a less simple game at 60 frames per second? Will the previously implemented
+approach to interactive programming still work under those constraints? Can I
+improve the language to the point that it has _any_ advantage over more
+established ones?
+
+All those risks will have to be addressed, one by one. I think it will take
+quite some time before I can say with confidence, that Caterpillar works.
+
 ## 2024-05-16
 
 When it comes to Caterpillar, I think about my priorities in terms of goals and
