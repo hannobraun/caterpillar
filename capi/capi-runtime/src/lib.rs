@@ -1,9 +1,10 @@
+pub mod debugger;
+
 mod breakpoints;
 mod builtins;
 mod code;
 mod compiler;
 mod data_stack;
-mod debugger;
 mod evaluator;
 mod functions;
 mod instructions;
