@@ -66,7 +66,8 @@ impl Program {
         // in `self.state` automatically.
 
         self.previous_data_stack = self.evaluator.data_stack.clone();
-        let evaluator_state = match self.evaluator.step() {
+        let just_executed = match self.evaluator.step() {
+            EvaluatorState::Running { just_executed } => just_executed,
             EvaluatorState::Finished => return ProgramState::Finished,
             EvaluatorState::Effect { effect, address } => {
                 self.effects.push_back(ProgramEffect {
@@ -75,23 +76,16 @@ impl Program {
                 });
                 return ProgramState::Running;
             }
-            state => state,
         };
 
-        if let EvaluatorState::Running { just_executed } = evaluator_state {
-            // We only ever want to pause the program due to a breakpoint, if
-            // the evaluator is running normally. Else, we might mask errors or
-            // other important states.
-
-            if self
-                .breakpoints
-                .should_stop_at_and_clear_ephemeral(&just_executed)
-            {
-                self.effects.push_back(ProgramEffect {
-                    kind: ProgramEffectKind::Paused,
-                    address: just_executed,
-                });
-            }
+        if self
+            .breakpoints
+            .should_stop_at_and_clear_ephemeral(&just_executed)
+        {
+            self.effects.push_back(ProgramEffect {
+                kind: ProgramEffectKind::Paused,
+                address: just_executed,
+            });
         }
 
         ProgramState::Running
