@@ -81,6 +81,7 @@ impl Program {
                     kind: ProgramEffectKind::Paused,
                     address: just_executed,
                 };
+                self.effects.push_back(effect.clone());
                 return ProgramState::Effect { effect };
             }
         }

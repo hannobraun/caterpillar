@@ -107,6 +107,7 @@ impl Runner {
                             ..
                         } = self.program.state
                         {
+                            self.program.effects.pop_front();
                             self.program.state = ProgramState::Running;
                         } else {
                             println!(
@@ -132,6 +133,7 @@ impl Runner {
                             self.program.breakpoints.set_ephemeral(
                                 self.program.evaluator.next_instruction,
                             );
+                            self.program.effects.pop_front();
                             self.program.state = ProgramState::Running;
                         } else {
                             println!(
