@@ -77,7 +77,18 @@ impl Program {
             }
         }
 
-        evaluator_state.into()
+        match evaluator_state {
+            EvaluatorState::Running { .. } => ProgramState::Running,
+            EvaluatorState::Finished => ProgramState::Finished,
+            EvaluatorState::Effect { effect, address } => {
+                ProgramState::Effect {
+                    effect: ProgramEffect {
+                        kind: ProgramEffectKind::Evaluator(effect),
+                        address,
+                    },
+                }
+            }
+        }
     }
 }
 
@@ -98,21 +109,6 @@ pub enum ProgramState {
 impl ProgramState {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
-    }
-}
-
-impl From<EvaluatorState> for ProgramState {
-    fn from(state: EvaluatorState) -> Self {
-        match state {
-            EvaluatorState::Running { .. } => Self::Running,
-            EvaluatorState::Finished => Self::Finished,
-            EvaluatorState::Effect { effect, address } => Self::Effect {
-                effect: ProgramEffect {
-                    kind: ProgramEffectKind::Evaluator(effect),
-                    address,
-                },
-            },
-        }
     }
 }
 
