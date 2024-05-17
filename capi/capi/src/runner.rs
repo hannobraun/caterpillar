@@ -1,8 +1,8 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffectKind,
-    ProgramState, Value,
+    BuiltinEffect, DebugEvent, EvaluatorEffect, Program, ProgramEffect,
+    ProgramEffectKind, ProgramState, Value,
 };
 
 use crate::{
@@ -99,7 +99,11 @@ impl Runner {
                 match event {
                     DebugEvent::Continue => {
                         if let ProgramState::Effect {
-                            effect: ProgramEffectKind::Paused,
+                            effect:
+                                ProgramEffect {
+                                    kind: ProgramEffectKind::Paused,
+                                    ..
+                                },
                             ..
                         } = self.program.state
                         {
@@ -117,7 +121,11 @@ impl Runner {
                     }
                     DebugEvent::Step => {
                         if let ProgramState::Effect {
-                            effect: ProgramEffectKind::Paused,
+                            effect:
+                                ProgramEffect {
+                                    kind: ProgramEffectKind::Paused,
+                                    ..
+                                },
                             ..
                         } = self.program.state
                         {
@@ -141,7 +149,13 @@ impl Runner {
             self.program.step();
             if let ProgramState::Effect {
                 effect:
-                    ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(effect)),
+                    ProgramEffect {
+                        kind:
+                            ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(
+                                effect,
+                            )),
+                        ..
+                    },
                 ..
             } = &self.program.state
             {

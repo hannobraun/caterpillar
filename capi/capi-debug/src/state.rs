@@ -42,11 +42,13 @@ impl ExecutionContext {
                         message: Some("Program has finished running."),
                     };
                 }
-                ProgramState::Effect { effect, address } => (effect, address),
+                ProgramState::Effect { effect } => {
+                    (&effect.kind, effect.address)
+                }
             };
 
             let Some(location) =
-                program.source_map.address_to_location(address)
+                program.source_map.address_to_location(&address)
             else {
                 return Self {
                     function,

@@ -20,7 +20,7 @@ pub use self::{
     evaluator::{Evaluator, EvaluatorEffect},
     functions::{Function, Functions},
     instructions::InstructionAddress,
-    program::{Program, ProgramEffectKind, ProgramState},
+    program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
     source::Source,
     syntax::{Expression, ExpressionKind, SourceLocation},
 };

@@ -69,8 +69,10 @@ impl Program {
                 .should_stop_at_and_clear_ephemeral(&just_executed)
             {
                 return ProgramState::Effect {
-                    effect: ProgramEffectKind::Paused,
-                    address: just_executed,
+                    effect: ProgramEffect {
+                        kind: ProgramEffectKind::Paused,
+                        address: just_executed,
+                    },
                 };
             }
         }
@@ -89,8 +91,7 @@ pub enum ProgramState {
     Finished,
 
     Effect {
-        effect: ProgramEffectKind,
-        address: InstructionAddress,
+        effect: ProgramEffect,
     },
 }
 
@@ -106,11 +107,19 @@ impl From<EvaluatorState> for ProgramState {
             EvaluatorState::Running { .. } => Self::Running,
             EvaluatorState::Finished => Self::Finished,
             EvaluatorState::Effect { effect, address } => Self::Effect {
-                effect: ProgramEffectKind::Evaluator(effect),
-                address,
+                effect: ProgramEffect {
+                    kind: ProgramEffectKind::Evaluator(effect),
+                    address,
+                },
             },
         }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ProgramEffect {
+    pub kind: ProgramEffectKind,
+    pub address: InstructionAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

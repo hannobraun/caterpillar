@@ -81,14 +81,14 @@ pub fn Expression(
             };
 
             let bg_class = match &program.state {
-                ProgramState::Effect { effect, address }
+                ProgramState::Effect { effect }
                     if program
                         .source_map
-                        .address_to_location(address)
+                        .address_to_location(&effect.address)
                         .as_ref()
                         == Some(&expression.location) =>
                 {
-                    match effect {
+                    match effect.kind {
                         ProgramEffectKind::Paused => "bg-green-300",
                         _ => "bg-red-300",
                     }
