@@ -101,9 +101,8 @@ pub fn program() -> Program {
         s.v(0).w("copy");
     });
     source.define("write_all_tiles", |s| {
-        s.c("In addition to the size of the tile field, which is already on")
-            .c("the stack, `write_value_to_all_tiles` also need the position")
-            .c("of the first tile, from which it will count up.")
+        s.c("`write_all_tiles_inner` needs a tile position to count up.")
+            .c("Initialize it with the position of the first tile.")
             .w("first_tile_position")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("write_all_tiles_inner")
