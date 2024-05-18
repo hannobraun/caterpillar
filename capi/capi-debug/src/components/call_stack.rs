@@ -26,7 +26,7 @@ pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     };
 
     view! {
-        <Panel class="">
+        <Panel class="h-48">
             <div>
                 <h2>"Call stack:"</h2>
                 <ol>
