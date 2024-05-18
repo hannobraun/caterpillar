@@ -68,7 +68,7 @@ impl ExecutionContext {
         };
 
         Self {
-            function: Some(function.clone()),
+            function: Some(function),
             message: None,
         }
     }
