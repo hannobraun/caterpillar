@@ -1,6 +1,8 @@
 use capi_runtime::Program;
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
+use crate::components::panel::Panel;
+
 #[component]
 pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let addresses = move || {
@@ -24,11 +26,13 @@ pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
     };
 
     view! {
-        <div>
-            <h2>"Call stack:"</h2>
-            <ol>
-                {addresses}
-            </ol>
-        </div>
+        <Panel class="">
+            <div>
+                <h2>"Call stack:"</h2>
+                <ol>
+                    {addresses}
+                </ol>
+            </div>
+        </Panel>
     }
 }
