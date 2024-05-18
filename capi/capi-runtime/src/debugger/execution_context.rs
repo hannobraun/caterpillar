@@ -56,12 +56,7 @@ impl ExecutionContext {
             };
         };
 
-        let function = program
-            .functions
-            .inner
-            .iter()
-            .find(|function| function.name == location.function())
-            .cloned();
+        let function = program.functions.get_from_location(location).cloned();
         let Some(function) = function else {
             return Self {
                 function,
