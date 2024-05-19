@@ -15,9 +15,6 @@ pub fn program() -> Program {
             .w("count_frame")
             .w("main_inner");
     });
-    source.define("init_frame_count", |s| {
-        s.v(1);
-    });
     source.define("count_frame", |s| {
         s.c("We only have 8 bits to count, so we need to reset the count")
             .c("every so often. To keep things predictable, let's reset only")
@@ -190,6 +187,9 @@ pub fn program() -> Program {
     });
     source.define("tile_field_height", |s| {
         s.c("Address of the tile field height in memory.").v(1);
+    });
+    source.define("init_frame_count", |s| {
+        s.v(1);
     });
 
     source.compile("main")
