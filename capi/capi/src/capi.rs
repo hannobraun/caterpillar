@@ -26,8 +26,8 @@ pub fn program() -> Program {
             .c("Let's prepare the number to compare to for later use.")
             .v(241)
             .c("Grab the current frame count.")
-            .v(2)
-            .w("take")
+            .w("frame_count")
+            .w("load")
             .c("Increment the frame count.")
             .v(1)
             .w("add")
@@ -35,8 +35,8 @@ pub fn program() -> Program {
             .c("from.")
             .v(0)
             .w("copy")
-            .v(3)
-            .w("place")
+            .w("frame_count")
+            .w("store")
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
             .c("not, we're done.")
@@ -44,11 +44,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
-            .v(1)
-            .w("drop")
-            .v(1)
-            .v(1)
-            .w("place");
+            .w("init_frame_count");
     });
     source.define("draw", |s| {
         s.w("clear_all_tiles")
@@ -69,8 +65,8 @@ pub fn program() -> Program {
     source.define("update_tile_value", |s| {
         s
             .c("Get a copy of the current frame count.")
-            .v(1)
-            .w("copy")
+            .w("frame_count")
+            .w("load")
             .c("We want to make updates at regular intervals. Determine, if")
             .c("this frame is one we need to make an update in. If not, we're")
             .c("done.")
@@ -186,7 +182,10 @@ pub fn program() -> Program {
         s.c("Address of the tile field height in memory.").v(1);
     });
     source.define("init_frame_count", |s| {
-        s.v(1);
+        s.v(1).w("frame_count").w("store");
+    });
+    source.define("frame_count", |s| {
+        s.c("Address of the frame count in memory.").v(2);
     });
 
     source.compile("main")
