@@ -28,17 +28,19 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("This is the right frame. Speculatively replace the current")
             .c("tile value with `1`.")
+            .w("tile_value")
+            .w("load")
             .v(1)
-            .v(1)
-            .w("place")
+            .w("tile_value")
+            .w("store")
             .c("If the current tile value is `0`, the `1` we placed is correct")
             .c("and we are done.")
             .w("return_if_zero")
             .c("The current tile value is `1`. That means we need to replace")
             .c("the `1` we speculatively placed with a `0`.")
             .v(0)
-            .w("drop")
-            .v(0);
+            .w("tile_value")
+            .w("store");
     });
     source.define("draw", |s| {
         s.w("clear_all_tiles")
@@ -54,7 +56,7 @@ pub fn program() -> Program {
         s.w("get_tile_value").w("write_all_tiles");
     });
     source.define("get_tile_value", |s| {
-        s.v(0).w("copy");
+        s.w("tile_value").w("load");
     });
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
@@ -185,7 +187,10 @@ pub fn program() -> Program {
         s.c("Address of the frame count in memory.").v(2);
     });
     source.define("init_tile_value", |s| {
-        s.v(1);
+        s.v(1).w("tile_value").w("store");
+    });
+    source.define("tile_value", |s| {
+        s.c("Address of the tile value in memory.").v(3);
     });
 
     source.compile("main")
