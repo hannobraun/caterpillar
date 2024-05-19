@@ -52,7 +52,7 @@ pub fn program() -> Program {
     });
     source.define("draw", |s| {
         s.c("We have the size of the tile field already on the stack.")
-            .c("This will be used by the following calls to traverse ")
+            .c("This will be used by the following calls to traverse")
             .c("positions, and to determine once it's finished.")
             .w("clear_all_tiles")
             .w("set_all_tiles")
