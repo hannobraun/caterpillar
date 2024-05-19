@@ -15,37 +15,6 @@ pub fn program() -> Program {
             .w("count_frame")
             .w("main_inner");
     });
-    source.define("count_frame", |s| {
-        s.c("We only have 8 bits to count, so we need to reset the count")
-            .c("every so often. To keep things predictable, let's reset only")
-            .c("at full seconds. Assuming 60 frames per second, `240` is the")
-            .c("highest number we can count up to.")
-            .c("")
-            .c("Since we start counting at `1`, we need to reset *after* we")
-            .c("reach a count of `240`, or we won't reset on a full second.")
-            .c("Let's prepare the number to compare to for later use.")
-            .v(241)
-            .c("Grab the current frame count.")
-            .w("frame_count")
-            .w("load")
-            .c("Increment the frame count.")
-            .v(1)
-            .w("add")
-            .c("Place a copy of the new new frame count back where it came")
-            .c("from.")
-            .v(0)
-            .w("copy")
-            .w("frame_count")
-            .w("store")
-            .c("We have a copy of the new frame count left on the top of the")
-            .c("stack. Let's see if we counted up to the maximum value. If")
-            .c("not, we're done.")
-            .w("sub")
-            .w("return_if_non_zero")
-            .c("We have counted up to the maximum value. Reset the frame")
-            .c("count.")
-            .w("init_frame_count");
-    });
     source.define("draw", |s| {
         s.w("clear_all_tiles")
             .w("set_all_tiles")
@@ -168,6 +137,37 @@ pub fn program() -> Program {
     });
     source.define("drop_tile_value", |s| {
         s.v(0).w("drop");
+    });
+    source.define("count_frame", |s| {
+        s.c("We only have 8 bits to count, so we need to reset the count")
+            .c("every so often. To keep things predictable, let's reset only")
+            .c("at full seconds. Assuming 60 frames per second, `240` is the")
+            .c("highest number we can count up to.")
+            .c("")
+            .c("Since we start counting at `1`, we need to reset *after* we")
+            .c("reach a count of `240`, or we won't reset on a full second.")
+            .c("Let's prepare the number to compare to for later use.")
+            .v(241)
+            .c("Grab the current frame count.")
+            .w("frame_count")
+            .w("load")
+            .c("Increment the frame count.")
+            .v(1)
+            .w("add")
+            .c("Place a copy of the new new frame count back where it came")
+            .c("from.")
+            .v(0)
+            .w("copy")
+            .w("frame_count")
+            .w("store")
+            .c("We have a copy of the new frame count left on the top of the")
+            .c("stack. Let's see if we counted up to the maximum value. If")
+            .c("not, we're done.")
+            .w("sub")
+            .w("return_if_non_zero")
+            .c("We have counted up to the maximum value. Reset the frame")
+            .c("count.")
+            .w("init_frame_count");
     });
     source.define("store_tile_field_size", |s| {
         s.w("tile_field_height")
