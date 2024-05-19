@@ -15,19 +15,6 @@ pub fn program() -> Program {
             .w("count_frame")
             .w("main_inner");
     });
-    source.define("draw", |s| {
-        s.w("clear_all_tiles")
-            .w("set_all_tiles")
-            .c("Wait until the display system is ready to process the next")
-            .c("frame.")
-            .w("submit_frame");
-    });
-    source.define("clear_all_tiles", |s| {
-        s.v(0).w("write_all_tiles");
-    });
-    source.define("set_all_tiles", |s| {
-        s.w("get_tile_value").w("write_all_tiles");
-    });
     source.define("update_tile_value", |s| {
         s
             .c("Get a copy of the current frame count.")
@@ -52,6 +39,19 @@ pub fn program() -> Program {
             .v(0)
             .w("drop")
             .v(0);
+    });
+    source.define("draw", |s| {
+        s.w("clear_all_tiles")
+            .w("set_all_tiles")
+            .c("Wait until the display system is ready to process the next")
+            .c("frame.")
+            .w("submit_frame");
+    });
+    source.define("clear_all_tiles", |s| {
+        s.v(0).w("write_all_tiles");
+    });
+    source.define("set_all_tiles", |s| {
+        s.w("get_tile_value").w("write_all_tiles");
     });
     source.define("get_tile_value", |s| {
         s.v(0).w("copy");
