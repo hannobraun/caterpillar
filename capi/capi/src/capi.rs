@@ -53,10 +53,7 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("set_all_tiles", |s| {
-        s.w("get_tile_value").w("write_all_tiles");
-    });
-    source.define("get_tile_value", |s| {
-        s.w("tile_value").w("load");
+        s.w("tile_value").w("load").w("write_all_tiles");
     });
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
