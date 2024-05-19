@@ -28,9 +28,6 @@ pub fn program() -> Program {
     source.define("set_all_tiles", |s| {
         s.w("get_tile_value").w("write_all_tiles");
     });
-    source.define("init_tile_value", |s| {
-        s.v(1);
-    });
     source.define("update_tile_value", |s| {
         s
             .c("Get a copy of the current frame count.")
@@ -186,6 +183,9 @@ pub fn program() -> Program {
     });
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
+    });
+    source.define("init_tile_value", |s| {
+        s.v(1);
     });
 
     source.compile("main")
