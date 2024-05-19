@@ -51,10 +51,7 @@ pub fn program() -> Program {
             .w("place");
     });
     source.define("draw", |s| {
-        s.c("We have the size of the tile field already on the stack.")
-            .c("This will be used by the following calls to traverse")
-            .c("positions, and to determine once it's finished.")
-            .w("clear_all_tiles")
+        s.w("clear_all_tiles")
             .w("set_all_tiles")
             .c("Wait until the display system is ready to process the next")
             .c("frame.")
