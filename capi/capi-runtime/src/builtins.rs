@@ -1,4 +1,4 @@
-use crate::data_stack::StackUnderflow;
+use crate::{data_stack::StackUnderflow, Value};
 
 use super::data_stack::DataStack;
 
@@ -95,7 +95,7 @@ pub fn store(data_stack: &mut DataStack) -> Result {
 
     Ok(Some(BuiltinEffect::Store {
         address: address.0,
-        value: value.0,
+        value,
     }))
 }
 
@@ -154,7 +154,7 @@ pub enum BuiltinEffect {
     Error(BuiltinError),
 
     Load { address: u8 },
-    Store { address: u8, value: u8 },
+    Store { address: u8, value: Value },
 
     SetTile { x: u8, y: u8, value: u8 },
     SubmitFrame,

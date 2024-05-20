@@ -155,7 +155,7 @@ impl Runner {
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        self.program.memory.inner[address] = *value;
+                        self.program.memory.inner[address] = value.0;
 
                         self.program.effects.pop_front();
                     }
