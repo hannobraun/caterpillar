@@ -203,7 +203,7 @@ pub fn program() -> Program {
             .w("store");
     });
     source.define("tile_position", |s| {
-        s.v(3);
+        s.c("Address of the position vector in memory").v(3);
     });
     source.define("init_tile_value", |s| {
         s.v(1).w("tile_value").w("store");
