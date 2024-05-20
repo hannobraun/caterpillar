@@ -61,7 +61,7 @@ pub fn program() -> Program {
             .v(2)
             .w("copy")
             .w("write_tile")
-            .w("increment_tile_position")
+            .w("increment_tile_index")
             .w("write_all_tiles_inner");
     });
     source.define("drop_tile_position", |s| {
@@ -87,7 +87,7 @@ pub fn program() -> Program {
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
     });
-    source.define("increment_tile_position", |s| {
+    source.define("increment_tile_index", |s| {
         s.c("Copy the width of the tile field.")
             .w("tile_field_size")
             .w("x")
