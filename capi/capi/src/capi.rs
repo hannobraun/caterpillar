@@ -137,6 +137,7 @@ pub fn program() -> Program {
             .w("remainder")
             .w("return_if_non_zero")
             .c("Time for more updates!")
+            .w("update_position")
             .w("update_velocity")
             .w("update_tile_value");
     });
@@ -195,6 +196,24 @@ pub fn program() -> Program {
     });
     source.define("init_position", |s| {
         s.v(15).v(15).w("position").w("store_vector");
+    });
+    source.define("update_position", |s| {
+        s.w("position")
+            .w("x")
+            .w("load")
+            .w("velocity")
+            .w("x")
+            .w("load")
+            .w("add")
+            .w("position")
+            .w("y")
+            .w("load")
+            .w("velocity")
+            .w("y")
+            .w("load")
+            .w("add")
+            .w("position")
+            .w("store_vector");
     });
 
     // Game state - velocity
