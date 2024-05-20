@@ -193,14 +193,7 @@ pub fn program() -> Program {
         s.c("Address of the frame count in memory.").v(2);
     });
     source.define("init_position", |s| {
-        s.v(15)
-            .w("position")
-            .w("x")
-            .w("store")
-            .v(15)
-            .w("position")
-            .w("y")
-            .w("store");
+        s.v(15).v(15).w("position").w("init_vector");
     });
     source.define("position", |s| {
         s.c("Address of the position vector in memory").v(3);
@@ -210,6 +203,21 @@ pub fn program() -> Program {
     });
     source.define("tile_value", |s| {
         s.c("Address of the tile value in memory.").v(7);
+    });
+    source.define("init_vector", |s| {
+        s.c("Make a copy of the vector address.")
+            .v(0)
+            .w("copy")
+            .c("Place one copy of the vector address next to the x coordinate")
+            .c("value, so both coordinate values have the address next to")
+            .c("them.")
+            .v(2)
+            .w("place")
+            .c("Everything is prepared. We can just store the coordinate now")
+            .w("y")
+            .w("store")
+            .w("x")
+            .w("store");
     });
     source.define("x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
