@@ -143,6 +143,22 @@ pub fn program() -> Program {
     source.define("drop_tile_value", |s| {
         s.v(0).w("drop");
     });
+
+    // Game state - tile field size
+    source.define("tile_field_size", |s| {
+        s.c("Address of the tile field height in memory.").v(0);
+    });
+    source.define("store_tile_field_size", |s| {
+        s.w("tile_field_size").w("store_vector");
+    });
+
+    // Game state - frame count
+    source.define("frame_count", |s| {
+        s.c("Address of the frame count in memory.").v(2);
+    });
+    source.define("init_frame_count", |s| {
+        s.v(1).w("frame_count").w("store");
+    });
     source.define("count_frame", |s| {
         s
             .c("We only have 7 bits to count (our 8-bit values are signed), so")
@@ -174,22 +190,6 @@ pub fn program() -> Program {
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
             .w("init_frame_count");
-    });
-
-    // Game state - tile field size
-    source.define("tile_field_size", |s| {
-        s.c("Address of the tile field height in memory.").v(0);
-    });
-    source.define("store_tile_field_size", |s| {
-        s.w("tile_field_size").w("store_vector");
-    });
-
-    // Game state - frame count
-    source.define("frame_count", |s| {
-        s.c("Address of the frame count in memory.").v(2);
-    });
-    source.define("init_frame_count", |s| {
-        s.v(1).w("frame_count").w("store");
     });
 
     // Game state - position
