@@ -149,13 +149,13 @@ impl Runner {
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
                         let value = self.program.memory.inner[address];
-                        self.program.push([Value(value)]);
+                        self.program.push([value]);
 
                         self.program.effects.pop_front();
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        self.program.memory.inner[address] = value.0;
+                        self.program.memory.inner[address] = *value;
 
                         self.program.effects.pop_front();
                     }

@@ -123,7 +123,7 @@ pub enum ProgramEffectKind {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Memory {
     #[serde(with = "BigArray")]
-    pub inner: [u8; 256],
+    pub inner: [Value; 256],
 }
 
 impl Memory {
@@ -134,6 +134,8 @@ impl Memory {
 
 impl Default for Memory {
     fn default() -> Self {
-        Self { inner: [0; 256] }
+        Self {
+            inner: [Value(0); 256],
+        }
     }
 }
