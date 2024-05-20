@@ -126,6 +126,17 @@ pub fn program() -> Program {
     });
     source.define("update", |s| {
         s.w("update_frame_count")
+            .c("Update we want to do every frame are done. Get a copy of the")
+            .c("current frame count, to figure out if we need to do more.")
+            .w("frame_count")
+            .w("load")
+            .c("We want to make updates at regular intervals. Determine, if")
+            .c("this frame is one we need to make an update in. If not, we're")
+            .c("done.")
+            .v(30)
+            .w("remainder")
+            .w("return_if_non_zero")
+            .c("Time for more updates!")
             .w("update_velocity")
             .w("update_tile_value");
     });
@@ -241,15 +252,6 @@ pub fn program() -> Program {
     });
     source.define("update_tile_value", |s| {
         s
-            .c("Get a copy of the current frame count.")
-            .w("frame_count")
-            .w("load")
-            .c("We want to make updates at regular intervals. Determine, if")
-            .c("this frame is one we need to make an update in. If not, we're")
-            .c("done.")
-            .v(30)
-            .w("remainder")
-            .w("return_if_non_zero")
             .c("This is the right frame. Make a copy of the current one, then")
             .c("speculatively replace is with `1`.")
             .w("tile_value")
