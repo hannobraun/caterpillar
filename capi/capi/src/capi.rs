@@ -201,7 +201,7 @@ pub fn program() -> Program {
         s.c("Address of the frame count in memory.").v(2);
     });
     source.define("init_position", |s| {
-        s.v(15).v(15).w("position").w("init_vector");
+        s.v(15).v(15).w("position").w("store_vector");
     });
     source.define("position", |s| {
         s.c("Address of the position vector in memory").v(3);
@@ -236,7 +236,7 @@ pub fn program() -> Program {
             .w("y")
             .w("load");
     });
-    source.define("init_vector", |s| {
+    source.define("store_vector", |s| {
         s.c("Make a copy of the vector address.")
             .v(0)
             .w("copy")
