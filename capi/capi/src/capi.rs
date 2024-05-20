@@ -54,10 +54,10 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("draw_snake", |s| {
-        s.w("tile_position")
+        s.w("position")
             .w("x")
             .w("load")
-            .w("tile_position")
+            .w("position")
             .w("y")
             .w("load")
             .w("tile_value")
@@ -194,15 +194,15 @@ pub fn program() -> Program {
     });
     source.define("init_position", |s| {
         s.v(15)
-            .w("tile_position")
+            .w("position")
             .w("x")
             .w("store")
             .v(15)
-            .w("tile_position")
+            .w("position")
             .w("y")
             .w("store");
     });
-    source.define("tile_position", |s| {
+    source.define("position", |s| {
         s.c("Address of the position vector in memory").v(3);
     });
     source.define("init_tile_value", |s| {
