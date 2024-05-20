@@ -214,21 +214,6 @@ pub fn program() -> Program {
     });
 
     // Vectors
-    source.define("init_vector", |s| {
-        s.c("Make a copy of the vector address.")
-            .v(0)
-            .w("copy")
-            .c("Place one copy of the vector address next to the x coordinate")
-            .c("value, so both coordinate values have the address next to")
-            .c("them.")
-            .v(2)
-            .w("place")
-            .c("Everything is prepared. We can just store the coordinate now")
-            .w("y")
-            .w("store")
-            .w("x")
-            .w("store");
-    });
     source.define("x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
             .c("here.");
@@ -250,6 +235,21 @@ pub fn program() -> Program {
             .c("Load y coordinate.")
             .w("y")
             .w("load");
+    });
+    source.define("init_vector", |s| {
+        s.c("Make a copy of the vector address.")
+            .v(0)
+            .w("copy")
+            .c("Place one copy of the vector address next to the x coordinate")
+            .c("value, so both coordinate values have the address next to")
+            .c("them.")
+            .v(2)
+            .w("place")
+            .c("Everything is prepared. We can just store the coordinate now")
+            .w("y")
+            .w("store")
+            .w("x")
+            .w("store");
     });
     source.define("drop_vector", |s| {
         s.v(0).w("drop").v(0).w("drop");
