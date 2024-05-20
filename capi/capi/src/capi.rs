@@ -252,8 +252,8 @@ pub fn program() -> Program {
     });
     source.define("update_tile_value", |s| {
         s
-            .c("This is the right frame. Make a copy of the current one, then")
-            .c("speculatively replace is with `1`.")
+            .c("Make a copy of the current tile value, then speculatively")
+            .c("replace is with `1`.")
             .w("tile_value")
             .w("load")
             .v(1)
