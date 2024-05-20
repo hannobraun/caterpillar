@@ -138,8 +138,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("Time for more updates!")
             .w("update_position")
-            .w("update_velocity")
-            .w("update_tile_value");
+            .w("update_velocity");
     });
 
     // Game state - tile field size
@@ -268,24 +267,6 @@ pub fn program() -> Program {
     });
     source.define("init_tile_value", |s| {
         s.v(1).w("tile_value").w("store");
-    });
-    source.define("update_tile_value", |s| {
-        s
-            .c("Make a copy of the current tile value, then speculatively")
-            .c("replace is with `1`.")
-            .w("tile_value")
-            .w("load")
-            .v(1)
-            .w("tile_value")
-            .w("store")
-            .c("If the current tile value is `0`, the `1` we placed is correct")
-            .c("and we are done.")
-            .w("return_if_zero")
-            .c("The current tile value is `1`. That means we need to replace")
-            .c("the `1` we speculatively placed with a `0`.")
-            .v(0)
-            .w("tile_value")
-            .w("store");
     });
 
     // Vectors
