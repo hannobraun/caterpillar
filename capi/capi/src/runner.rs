@@ -163,6 +163,7 @@ impl Runner {
                         let x = *x;
                         let y = *y;
                         let value = value.0;
+
                         self.effects.send(DisplayEffect::SetTile {
                             x,
                             y,
