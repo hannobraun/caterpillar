@@ -18,7 +18,9 @@ pub fn add(data_stack: &mut DataStack) -> Result {
 pub fn copy(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    data_stack.save(i.0)?;
+    let i = i.0;
+
+    data_stack.save(i)?;
     let a = data_stack.clone()?;
     data_stack.restore();
 
@@ -30,7 +32,9 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
 pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    data_stack.save(i.0)?;
+    let i = i.0;
+
+    data_stack.save(i)?;
     data_stack.pop()?;
     data_stack.restore();
 
@@ -59,7 +63,9 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
     let a = data_stack.pop()?;
 
-    data_stack.save(i.0)?;
+    let i = i.0;
+
+    data_stack.save(i)?;
     data_stack.push(a);
     data_stack.restore();
 
@@ -110,7 +116,9 @@ pub fn submit_frame() -> Result {
 pub fn take(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    data_stack.save(i.0)?;
+    let i = i.0;
+
+    data_stack.save(i)?;
     let a = data_stack.pop()?;
     data_stack.restore();
 
