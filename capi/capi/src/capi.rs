@@ -121,6 +121,7 @@ pub fn program() -> Program {
     source.define("init", |s| {
         s.w("init_frame_count")
             .w("init_position")
+            .w("init_velocity")
             .w("init_tile_value");
     });
     source.define("update", |s| {
@@ -181,6 +182,14 @@ pub fn program() -> Program {
     });
     source.define("init_position", |s| {
         s.v(15).v(15).w("position").w("store_vector");
+    });
+
+    // Game state - velocity
+    source.define("velocity", |s| {
+        s.c("Address of the velocity vector in memory").v(5);
+    });
+    source.define("init_velocity", |s| {
+        s.v(1).v(0).w("velocity").w("store_vector");
     });
 
     // Game state - tile value
