@@ -3,6 +3,23 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-20
+
+I plan to develop Caterpillar to the point that I prefer it over other options,
+independently of my desire to improve it further. That introduces its own risk:
+I might create a product that only I like, but that nobody else will want to
+use.
+
+But I'm not too worried about that. I don't think I'm that special, that my
+tastes and preferences are truly unique. And of course my personal seal of
+approval isn't the last word. Once others start using the language (or try to),
+I can incorporate their feedback.
+
+However, having something that I genuinely want to use, will hopefully be a
+strong start. I think adjusting course from there, to make the language more
+palatable to others, will be more productive than trying to please everybody in
+the first place.
+
 ## 2024-05-19
 
 Right now, I'm focused on addressing technical risks to Caterpillar's success.
