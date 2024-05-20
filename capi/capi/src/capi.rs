@@ -6,41 +6,10 @@ pub fn program() -> Program {
     source.define("main", |s| {
         s.w("store_tile_field_size")
             .w("init_frame_count")
-            .w("init_tile_value")
             .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("update_tile_value")
-            .w("draw")
-            .w("count_frame")
-            .w("main_inner");
-    });
-    source.define("update_tile_value", |s| {
-        s
-            .c("Get a copy of the current frame count.")
-            .w("frame_count")
-            .w("load")
-            .c("We want to make updates at regular intervals. Determine, if")
-            .c("this frame is one we need to make an update in. If not, we're")
-            .c("done.")
-            .v(120)
-            .w("remainder")
-            .w("return_if_non_zero")
-            .c("This is the right frame. Make a copy of the current one, then")
-            .c("speculatively replace is with `1`.")
-            .w("tile_value")
-            .w("load")
-            .v(1)
-            .w("tile_value")
-            .w("store")
-            .c("If the current tile value is `0`, the `1` we placed is correct")
-            .c("and we are done.")
-            .w("return_if_zero")
-            .c("The current tile value is `1`. That means we need to replace")
-            .c("the `1` we speculatively placed with a `0`.")
-            .v(0)
-            .w("tile_value")
-            .w("store");
+        s.w("draw").w("count_frame").w("main_inner");
     });
     source.define("draw", |s| {
         s.w("clear_all_tiles")
@@ -182,12 +151,6 @@ pub fn program() -> Program {
     });
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
-    });
-    source.define("init_tile_value", |s| {
-        s.v(1).w("tile_value").w("store");
-    });
-    source.define("tile_value", |s| {
-        s.c("Address of the tile value in memory.").v(3);
     });
 
     source.compile("main")
