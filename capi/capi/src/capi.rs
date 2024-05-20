@@ -6,6 +6,7 @@ pub fn program() -> Program {
     source.define("main", |s| {
         s.w("store_tile_field_size")
             .w("init_frame_count")
+            .w("init_tile_position")
             .w("main_inner");
     });
     source.define("main_inner", |s| {
@@ -22,7 +23,12 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("draw_snake", |s| {
-        s.v(15).v(15).v(1).w("write_tile");
+        s.w("tile_position_x")
+            .w("load")
+            .w("tile_position_y")
+            .w("load")
+            .v(1)
+            .w("write_tile");
     });
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
@@ -151,6 +157,20 @@ pub fn program() -> Program {
     });
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
+    });
+    source.define("init_tile_position", |s| {
+        s.v(15)
+            .w("tile_position_x")
+            .w("store")
+            .v(15)
+            .w("tile_position_y")
+            .w("store");
+    });
+    source.define("tile_position_x", |s| {
+        s.v(3);
+    });
+    source.define("tile_position_y", |s| {
+        s.v(4);
     });
 
     source.compile("main")
