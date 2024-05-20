@@ -23,9 +23,11 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("draw_snake", |s| {
-        s.w("tile_position_x")
+        s.w("tile_position")
+            .w("x")
             .w("load")
-            .w("tile_position_y")
+            .w("tile_position")
+            .w("y")
             .w("load")
             .v(1)
             .w("write_tile");
@@ -160,17 +162,23 @@ pub fn program() -> Program {
     });
     source.define("init_tile_position", |s| {
         s.v(15)
-            .w("tile_position_x")
+            .w("tile_position")
+            .w("x")
             .w("store")
             .v(15)
-            .w("tile_position_y")
+            .w("tile_position")
+            .w("y")
             .w("store");
     });
-    source.define("tile_position_x", |s| {
+    source.define("tile_position", |s| {
         s.v(3);
     });
-    source.define("tile_position_y", |s| {
-        s.v(4);
+    source.define("x", |s| {
+        s.c("Offset of x coordinate within vector is zero. Nothing to do")
+            .c("here.");
+    });
+    source.define("y", |s| {
+        s.c("Offset of y coordinate within vector.").v(1).w("add");
     });
 
     source.compile("main")
