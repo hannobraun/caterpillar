@@ -46,7 +46,7 @@ pub fn program() -> Program {
             .w("first_tile_index")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("write_all_tiles_inner")
-            .w("drop_tile_position")
+            .w("drop_tile_index")
             .w("drop_tile_value");
     });
     source.define("write_all_tiles_inner", |s| {
@@ -64,7 +64,7 @@ pub fn program() -> Program {
             .w("increment_tile_index")
             .w("write_all_tiles_inner");
     });
-    source.define("drop_tile_position", |s| {
+    source.define("drop_tile_index", |s| {
         s.v(0).w("drop").v(0).w("drop");
     });
     source.define("drop_tile_value", |s| {
