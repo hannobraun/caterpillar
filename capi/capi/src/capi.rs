@@ -173,6 +173,8 @@ pub fn program() -> Program {
             .c("count.")
             .w("init_frame_count");
     });
+
+    // Game state
     source.define("store_tile_field_size", |s| {
         s.w("tile_field_height")
             .w("store")
@@ -203,6 +205,8 @@ pub fn program() -> Program {
     source.define("tile_value", |s| {
         s.c("Address of the tile value in memory.").v(7);
     });
+
+    // Vectors
     source.define("init_vector", |s| {
         s.c("Make a copy of the vector address.")
             .v(0)
