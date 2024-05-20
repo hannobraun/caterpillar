@@ -62,7 +62,12 @@ pub fn program() -> Program {
             .w("load")
             .w("tile_value")
             .w("load")
-            .w("write_tile");
+            .w("write_tile")
+            .c("Drop the position that we loaded previously")
+            .v(0)
+            .w("drop")
+            .v(0)
+            .w("drop");
     });
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
