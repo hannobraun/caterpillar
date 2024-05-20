@@ -13,7 +13,7 @@ pub fn program() -> Program {
     source.define("main_inner", |s| {
         s.w("update_tile_value")
             .w("draw")
-            .w("count_frame")
+            .w("update_frame_count")
             .w("main_inner");
     });
     source.define("update_tile_value", |s| {
@@ -159,7 +159,7 @@ pub fn program() -> Program {
     source.define("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
     });
-    source.define("count_frame", |s| {
+    source.define("update_frame_count", |s| {
         s
             .c("We only have 7 bits to count (our 8-bit values are signed), so")
             .c("we need to reset the count every so often. To keep things")
