@@ -125,7 +125,9 @@ pub fn program() -> Program {
             .w("init_tile_value");
     });
     source.define("update", |s| {
-        s.w("update_frame_count").w("update_tile_value");
+        s.w("update_frame_count")
+            .w("update_velocity")
+            .w("update_tile_value");
     });
 
     // Game state - tile field size
@@ -190,6 +192,44 @@ pub fn program() -> Program {
     });
     source.define("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("store_vector");
+    });
+    source.define("update_velocity", |s| {
+        s.c("Load the velocity.")
+            .w("velocity")
+            .w("load_vector")
+            .c("Make a copy of the x coordinate.")
+            .v(1)
+            .w("copy")
+            .c("Speculatively replace the x coordinate with `1`.")
+            .v(2)
+            .w("drop")
+            .v(1)
+            .v(2)
+            .w("place")
+            .c("Put aside the copy of the x coordinate for the moment, so we")
+            .c("can store the updated velocity.")
+            .v(2)
+            .w("place")
+            .w("velocity")
+            .w("store_vector")
+            .c("Figure out, if the x coordinate already was `1`. If not,")
+            .c("we're done.")
+            .v(1)
+            .w("sub")
+            .w("return_if_non_zero")
+            .c("Looks like our speculative replacement wasn't the right one.")
+            .c("Need to load the velocity again.")
+            .w("velocity")
+            .w("load_vector")
+            .c("And replace the wrong x coordinate with `-1` instead.")
+            .v(1)
+            .w("drop")
+            .v(-1)
+            .v(1)
+            .w("place")
+            .c("And we're done! Just need to store the updated velocity.")
+            .w("velocity")
+            .w("store_vector");
     });
 
     // Game state - tile value
