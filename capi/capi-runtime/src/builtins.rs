@@ -43,7 +43,10 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
 
 pub fn load(data_stack: &mut DataStack) -> Result {
     let address = data_stack.pop()?;
-    Ok(Some(BuiltinEffect::Load { address: address.0 }))
+
+    let address = address.0;
+
+    Ok(Some(BuiltinEffect::Load { address }))
 }
 
 pub fn mul(data_stack: &mut DataStack) -> Result {
