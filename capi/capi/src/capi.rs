@@ -12,9 +12,9 @@ pub fn program() -> Program {
             .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("update_tile_value")
-            .w("draw")
+        s.w("draw")
             .w("update_frame_count")
+            .w("update_tile_value")
             .w("main_inner");
     });
 
