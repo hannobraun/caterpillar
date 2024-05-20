@@ -25,8 +25,7 @@ pub fn program() -> Program {
     source.define("draw_snake", |s| {
         s.w("position")
             .w("load_vector")
-            .w("tile_value")
-            .w("load")
+            .v(1)
             .w("write_tile")
             .c("Drop the position that we loaded previously")
             .w("drop_vector");
@@ -121,8 +120,7 @@ pub fn program() -> Program {
     source.define("init", |s| {
         s.w("init_frame_count")
             .w("init_position")
-            .w("init_velocity")
-            .w("init_tile_value");
+            .w("init_velocity");
     });
     source.define("update", |s| {
         s.w("update_frame_count")
@@ -259,14 +257,6 @@ pub fn program() -> Program {
             .c("And we're done! Just need to store the updated velocity.")
             .w("velocity")
             .w("store_vector");
-    });
-
-    // Game state - tile value
-    source.define("tile_value", |s| {
-        s.c("Address of the tile value in memory.").v(7);
-    });
-    source.define("init_tile_value", |s| {
-        s.v(1).w("tile_value").w("store");
     });
 
     // Vectors
