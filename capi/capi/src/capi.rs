@@ -177,35 +177,35 @@ pub fn program() -> Program {
     });
 
     // Game state - tile field size
-    source.define("store_tile_field_size", |s| {
-        s.w("tile_field_size").w("store_vector");
-    });
     source.define("tile_field_size", |s| {
         s.c("Address of the tile field height in memory.").v(0);
     });
+    source.define("store_tile_field_size", |s| {
+        s.w("tile_field_size").w("store_vector");
+    });
 
     // Game state - frame count
-    source.define("init_frame_count", |s| {
-        s.v(1).w("frame_count").w("store");
-    });
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
     });
+    source.define("init_frame_count", |s| {
+        s.v(1).w("frame_count").w("store");
+    });
 
     // Game state - position
-    source.define("init_position", |s| {
-        s.v(15).v(15).w("position").w("store_vector");
-    });
     source.define("position", |s| {
         s.c("Address of the position vector in memory").v(3);
     });
+    source.define("init_position", |s| {
+        s.v(15).v(15).w("position").w("store_vector");
+    });
 
     // Game state - tile value
-    source.define("init_tile_value", |s| {
-        s.v(1).w("tile_value").w("store");
-    });
     source.define("tile_value", |s| {
         s.c("Address of the tile value in memory.").v(7);
+    });
+    source.define("init_tile_value", |s| {
+        s.v(1).w("tile_value").w("store");
     });
 
     // Vectors
