@@ -38,6 +38,7 @@ impl Program {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();
+        self.effects.clear();
         self.previous_data_stack.clear();
         self.memory.zero();
     }
