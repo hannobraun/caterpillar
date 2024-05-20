@@ -20,7 +20,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
 pub fn copy(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    let i = i.0;
+    let i = i.0.try_into()?;
 
     data_stack.save(i)?;
     let a = data_stack.clone()?;
@@ -34,7 +34,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
 pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    let i = i.0;
+    let i = i.0.try_into()?;
 
     data_stack.save(i)?;
     data_stack.pop()?;
@@ -46,7 +46,7 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
 pub fn load(data_stack: &mut DataStack) -> Result {
     let address = data_stack.pop()?;
 
-    let address = address.0;
+    let address = address.0.try_into()?;
 
     Ok(Some(BuiltinEffect::Load { address }))
 }
@@ -68,7 +68,7 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
     let a = data_stack.pop()?;
 
-    let i = i.0;
+    let i = i.0.try_into()?;
 
     data_stack.save(i)?;
     data_stack.push(a);
@@ -95,7 +95,7 @@ pub fn store(data_stack: &mut DataStack) -> Result {
     let address = data_stack.pop()?;
     let value = data_stack.pop()?;
 
-    let address = address.0;
+    let address = address.0.try_into()?;
 
     Ok(Some(BuiltinEffect::Store { address, value }))
 }
@@ -120,7 +120,7 @@ pub fn submit_frame() -> Result {
 pub fn take(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
-    let i = i.0;
+    let i = i.0.try_into()?;
 
     data_stack.save(i)?;
     let a = data_stack.pop()?;
@@ -137,9 +137,9 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let x = data_stack.pop()?;
 
     let effect = {
-        let x = x.0;
-        let y = y.0;
-        let value = value.0;
+        let x = x.0.try_into()?;
+        let y = y.0.try_into()?;
+        let value = value.0.try_into()?;
 
         BuiltinEffect::SetTile { x, y, value }
     };

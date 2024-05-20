@@ -192,4 +192,4 @@ impl Runner {
 
 // I don't like the `as` here, but `.try_into().unwrap()` doesn't work in a
 // const context.
-const ARGUMENTS: [Value; 2] = [Value(TILES_PER_AXIS as u8); 2];
+const ARGUMENTS: [Value; 2] = [Value(TILES_PER_AXIS as i8); 2];

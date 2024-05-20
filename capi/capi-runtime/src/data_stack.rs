@@ -64,10 +64,10 @@ impl DataStack {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct Value(pub u8);
+pub struct Value(pub i8);
 
-impl From<u8> for Value {
-    fn from(value: u8) -> Self {
+impl From<i8> for Value {
+    fn from(value: i8) -> Self {
         Self(value)
     }
 }
