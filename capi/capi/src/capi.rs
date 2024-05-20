@@ -5,11 +5,7 @@ pub fn program() -> Program {
 
     // Main loop
     source.define("main", |s| {
-        s.w("store_tile_field_size")
-            .w("init_frame_count")
-            .w("init_position")
-            .w("init_tile_value")
-            .w("main_inner");
+        s.w("store_tile_field_size").w("init").w("main_inner");
     });
     source.define("main_inner", |s| {
         s.w("draw").w("update").w("main_inner");
@@ -122,6 +118,11 @@ pub fn program() -> Program {
     });
 
     // Game state
+    source.define("init", |s| {
+        s.w("init_frame_count")
+            .w("init_position")
+            .w("init_tile_value");
+    });
     source.define("update", |s| {
         s.w("update_frame_count").w("update_tile_value");
     });
