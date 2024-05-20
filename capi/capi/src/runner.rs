@@ -162,7 +162,7 @@ impl Runner {
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
-                        let value = *value;
+                        let value = value.0;
                         self.effects.send(DisplayEffect::SetTile {
                             x,
                             y,
