@@ -209,7 +209,7 @@ pub fn program() -> Program {
         s.v(1).w("tile_value").w("store");
     });
     source.define("tile_value", |s| {
-        s.c("Address of the tile value in memory.").v(5);
+        s.c("Address of the tile value in memory.").v(7);
     });
     source.define("x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
