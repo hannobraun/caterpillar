@@ -33,9 +33,6 @@ pub fn program() -> Program {
             .w("drop_position")
             .w("drop_tile_value");
     });
-    source.define("first_tile_position", |s| {
-        s.v(0).v(0);
-    });
     source.define("write_all_tiles_inner", |s| {
         s.c("This is a recursive function, so we might have been at it for a")
             .c("while, if we make it here. Check if the current tile position")
@@ -50,6 +47,9 @@ pub fn program() -> Program {
             .w("write_tile")
             .w("increment_tile_position")
             .w("write_all_tiles_inner");
+    });
+    source.define("first_tile_position", |s| {
+        s.v(0).v(0);
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
