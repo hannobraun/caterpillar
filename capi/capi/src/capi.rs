@@ -6,7 +6,7 @@ pub fn program() -> Program {
     source.define("main", |s| {
         s.w("store_tile_field_size")
             .w("init_frame_count")
-            .w("init_tile_position")
+            .w("init_position")
             .w("init_tile_value")
             .w("main_inner");
     });
@@ -192,7 +192,7 @@ pub fn program() -> Program {
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
     });
-    source.define("init_tile_position", |s| {
+    source.define("init_position", |s| {
         s.v(15)
             .w("tile_position")
             .w("x")
