@@ -178,20 +178,7 @@ pub fn program() -> Program {
 
     // Game state
     source.define("store_tile_field_size", |s| {
-        s.w("tile_field_height")
-            .w("store")
-            .w("tile_field_width")
-            .w("store");
-    });
-    source.define("tile_field_width", |s| {
-        s.c("Address of the tile field width in memory.")
-            .w("tile_field_size")
-            .w("x");
-    });
-    source.define("tile_field_height", |s| {
-        s.c("Address of the tile field height in memory.")
-            .w("tile_field_size")
-            .w("y");
+        s.w("tile_field_size").w("store_vector");
     });
     source.define("tile_field_size", |s| {
         s.c("Address of the tile field height in memory.").v(0);
