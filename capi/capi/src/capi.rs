@@ -12,10 +12,7 @@ pub fn program() -> Program {
             .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("draw")
-            .w("update_frame_count")
-            .w("update_tile_value")
-            .w("main_inner");
+        s.w("draw").w("update").w("main_inner");
     });
 
     // Draw
@@ -122,6 +119,11 @@ pub fn program() -> Program {
             .c("Increment y-coordinate.")
             .v(1)
             .w("add");
+    });
+
+    // Game state
+    source.define("update", |s| {
+        s.w("update_frame_count").w("update_tile_value");
     });
 
     // Game state - tile field size
