@@ -137,6 +137,7 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let effect = {
         let x = x.0;
         let y = y.0;
+        let value = value.0;
 
         BuiltinEffect::SetTile { x, y, value }
     };
@@ -156,7 +157,7 @@ pub enum BuiltinEffect {
     Load { address: u8 },
     Store { address: u8, value: Value },
 
-    SetTile { x: u8, y: u8, value: Value },
+    SetTile { x: u8, y: u8, value: u8 },
     SubmitFrame,
 }
 
