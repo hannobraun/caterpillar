@@ -182,10 +182,17 @@ pub fn program() -> Program {
             .w("store");
     });
     source.define("tile_field_width", |s| {
-        s.c("Address of the tile field width in memory.").v(0);
+        s.c("Address of the tile field width in memory.")
+            .w("tile_field_size")
+            .w("x");
     });
     source.define("tile_field_height", |s| {
-        s.c("Address of the tile field height in memory.").v(1);
+        s.c("Address of the tile field height in memory.")
+            .w("tile_field_size")
+            .w("y");
+    });
+    source.define("tile_field_size", |s| {
+        s.c("Address of the tile field height in memory.").v(0);
     });
     source.define("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
