@@ -93,10 +93,9 @@ pub fn store(data_stack: &mut DataStack) -> Result {
     let address = data_stack.pop()?;
     let value = data_stack.pop()?;
 
-    Ok(Some(BuiltinEffect::Store {
-        address: address.0,
-        value,
-    }))
+    let address = address.0;
+
+    Ok(Some(BuiltinEffect::Store { address, value }))
 }
 
 pub fn sub(data_stack: &mut DataStack) -> Result {
