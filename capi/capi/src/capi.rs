@@ -103,7 +103,8 @@ pub fn program() -> Program {
     });
     source.define("increment_tile_position", |s| {
         s.c("Copy the width of the tile field.")
-            .w("tile_field_width")
+            .w("tile_field_size")
+            .w("x")
             .w("load")
             .c("Copy the x-coordinate of the current position.")
             .v(2)
