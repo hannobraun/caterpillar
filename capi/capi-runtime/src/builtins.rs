@@ -1,3 +1,5 @@
+use std::num::TryFromIntError;
+
 use crate::{data_stack::StackUnderflow, Value};
 
 use super::data_stack::DataStack;
@@ -182,4 +184,13 @@ pub enum BuiltinError {
 
     #[error(transparent)]
     StackUnderflow(#[from] StackUnderflow),
+}
+
+// This conversion is implemented manually, because doing it automatically using
+// `thiserror`'s from would add an instance of the error into the type, and it
+// doesn't implement `serde::Deserialize`.
+impl From<TryFromIntError> for BuiltinError {
+    fn from(_: TryFromIntError) -> Self {
+        Self::ExpectedPositiveValue
+    }
 }
