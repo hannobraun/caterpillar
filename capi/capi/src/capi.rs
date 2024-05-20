@@ -91,7 +91,8 @@ pub fn program() -> Program {
     });
     source.define("check_tile_position", |s| {
         s.c("Copy height of tile field.")
-            .w("tile_field_height")
+            .w("tile_field_size")
+            .w("y")
             .w("load")
             .c("Copy y-coordinate of current position.")
             .v(1)
