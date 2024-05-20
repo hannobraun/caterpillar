@@ -59,6 +59,12 @@ pub fn program() -> Program {
             .w("increment_tile_position")
             .w("write_all_tiles_inner");
     });
+    source.define("drop_tile_position", |s| {
+        s.v(0).w("drop").v(0).w("drop");
+    });
+    source.define("drop_tile_value", |s| {
+        s.v(0).w("drop");
+    });
     source.define("first_tile_position", |s| {
         s.v(0).v(0);
     });
@@ -109,12 +115,6 @@ pub fn program() -> Program {
             .c("Increment y-coordinate.")
             .v(1)
             .w("add");
-    });
-    source.define("drop_tile_position", |s| {
-        s.v(0).w("drop").v(0).w("drop");
-    });
-    source.define("drop_tile_value", |s| {
-        s.v(0).w("drop");
     });
 
     // Game state - tile field size
