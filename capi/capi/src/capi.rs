@@ -44,7 +44,7 @@ pub fn program() -> Program {
     });
     source.define("draw", |s| {
         s.w("clear_all_tiles")
-            .w("set_all_tiles")
+            .w("draw_snake")
             .c("Wait until the display system is ready to process the next")
             .c("frame.")
             .w("submit_frame");
@@ -52,7 +52,7 @@ pub fn program() -> Program {
     source.define("clear_all_tiles", |s| {
         s.v(0).w("write_all_tiles");
     });
-    source.define("set_all_tiles", |s| {
+    source.define("draw_snake", |s| {
         s.v(15).v(15).v(1).w("write_tile");
     });
     source.define("write_all_tiles", |s| {
