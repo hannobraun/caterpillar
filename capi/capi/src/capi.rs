@@ -3,6 +3,7 @@ use capi_runtime::{Program, Source};
 pub fn program() -> Program {
     let mut source = Source::default();
 
+    // Main loop
     source.define("main", |s| {
         s.w("store_tile_field_size")
             .w("init_frame_count")
@@ -16,6 +17,8 @@ pub fn program() -> Program {
             .w("update_frame_count")
             .w("main_inner");
     });
+
+    // Draw
     source.define("draw", |s| {
         s.w("clear_all_tiles")
             .w("draw_snake")
@@ -35,6 +38,8 @@ pub fn program() -> Program {
             .c("Drop the position that we loaded previously")
             .w("drop_vector");
     });
+
+    // Draw - write tiles
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
             .c("Initialize it with the position of the first tile.")
@@ -65,6 +70,8 @@ pub fn program() -> Program {
     source.define("drop_tile_value", |s| {
         s.v(0).w("drop");
     });
+
+    // Draw - write tiles - tile index
     source.define("first_tile_position", |s| {
         s.v(0).v(0);
     });
