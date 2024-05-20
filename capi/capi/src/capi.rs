@@ -64,10 +64,7 @@ pub fn program() -> Program {
             .w("load")
             .w("write_tile")
             .c("Drop the position that we loaded previously")
-            .v(0)
-            .w("drop")
-            .v(0)
-            .w("drop");
+            .w("drop_vector");
     });
     source.define("write_all_tiles", |s| {
         s.c("`write_all_tiles_inner` needs a tile position to count up.")
@@ -230,6 +227,9 @@ pub fn program() -> Program {
     });
     source.define("y", |s| {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
+    });
+    source.define("drop_vector", |s| {
+        s.v(0).w("drop").v(0).w("drop");
     });
 
     source.compile("main")
