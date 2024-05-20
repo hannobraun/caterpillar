@@ -150,7 +150,7 @@ pub fn program() -> Program {
             .c("Since we start counting at `1`, we need to reset *after* we")
             .c("reach a count of `240`, or we won't reset on a full second.")
             .c("Let's prepare the number to compare to for later use.")
-            .v(241)
+            .v(121)
             .c("Grab the current frame count.")
             .w("frame_count")
             .w("load")
