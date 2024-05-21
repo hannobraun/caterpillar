@@ -161,6 +161,8 @@ pub enum BuiltinEffect {
 
     SetTile { x: u8, y: u8, value: u8 },
     SubmitFrame,
+
+    ReadInput,
 }
 
 #[derive(

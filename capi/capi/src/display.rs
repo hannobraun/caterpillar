@@ -155,6 +155,10 @@ impl ApplicationHandler for State {
                 DisplayEffect::SubmitTiles { reply } => {
                     reply.send(()).unwrap();
                 }
+                DisplayEffect::ReadInput { reply } => {
+                    let input = self.input.pop_front().unwrap_or(0);
+                    reply.send(input).unwrap();
+                }
             }
         }
 

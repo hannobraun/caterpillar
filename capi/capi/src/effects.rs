@@ -18,4 +18,5 @@ pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
     SubmitTiles { reply: mpsc::Sender<()> },
+    ReadInput { reply: mpsc::Sender<i8> },
 }

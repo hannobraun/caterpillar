@@ -178,6 +178,16 @@ impl Runner {
 
                         self.program.effects.pop_front();
                     }
+                    BuiltinEffect::ReadInput => {
+                        let (tx, rx) = mpsc::channel();
+
+                        self.effects
+                            .send(DisplayEffect::ReadInput { reply: tx });
+                        let input = rx.recv().unwrap();
+
+                        self.program.push([Value(input)]);
+                        self.program.effects.pop_front();
+                    }
                 }
             }
         }
