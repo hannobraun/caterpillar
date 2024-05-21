@@ -178,12 +178,11 @@ impl Runner {
                         self.program.effects.pop_front();
                     }
                     BuiltinEffect::SubmitFrame => {
-                        self.effects.send(DisplayEffect::SubmitTiles);
-
                         // This effect serves as a synchronization point between
                         // the program and the display code. Before we continue
                         // running, we need to wait here, until the display code
                         // has confirmed that we're ready to continue.
+                        self.effects.send(DisplayEffect::SubmitTiles);
                         self.resume.recv().unwrap();
 
                         self.program.effects.pop_front();
