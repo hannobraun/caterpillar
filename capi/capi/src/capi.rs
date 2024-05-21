@@ -136,6 +136,8 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .c("Time for more updates!")
             .w("handle_input")
+            .v(0)
+            .w("drop")
             .w("update_position");
     });
 
