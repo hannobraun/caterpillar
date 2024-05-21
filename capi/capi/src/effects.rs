@@ -14,8 +14,6 @@ impl EffectsTx {
 
 pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
 
-pub type ResumeTx = mpsc::Sender<()>;
-
 #[derive(Debug)]
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },

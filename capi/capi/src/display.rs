@@ -89,8 +89,6 @@ impl ApplicationHandler for State {
             return;
         };
 
-        let mut submit_tiles = false;
-
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
@@ -108,15 +106,8 @@ impl ApplicationHandler for State {
                 }
                 DisplayEffect::SubmitTiles { reply } => {
                     reply.send(()).unwrap();
-                    submit_tiles = true;
                 }
             }
-        }
-
-        if submit_tiles {
-            // The program wants to submit the tiles it has previous set. Signal
-            // that we're ready for that now, so it can resume running.
-            self.runner.resume();
         }
 
         for tile_y in 0..TILES_PER_AXIS {

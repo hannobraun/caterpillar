@@ -7,14 +7,13 @@ use capi_runtime::{
 
 use crate::{
     display::TILES_PER_AXIS,
-    effects::{DisplayEffect, EffectsRx, EffectsTx, ResumeTx},
+    effects::{DisplayEffect, EffectsRx, EffectsTx},
     server::EventsRx,
     updates::UpdatesTx,
 };
 
 pub struct RunnerThread {
     effects: EffectsRx,
-    resume: ResumeTx,
 }
 
 impl RunnerThread {
@@ -24,7 +23,6 @@ impl RunnerThread {
         updates: UpdatesTx,
     ) -> Self {
         let (effects_tx, effects_rx) = mpsc::channel();
-        let (resume_tx, _) = mpsc::channel();
 
         let mut runner = Runner {
             program,
@@ -39,18 +37,11 @@ impl RunnerThread {
 
         Self {
             effects: effects_rx,
-            resume: resume_tx,
         }
     }
 
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
         self.effects.try_iter()
-    }
-
-    pub fn resume(&mut self) {
-        // This will cause an error, if the other end has hung up, which happens
-        // if the program has ended. Nothing we can do about it.
-        let _ = self.resume.send(());
     }
 }
 
