@@ -146,6 +146,11 @@ impl Runner {
             }) = self.program.effects.front()
             {
                 match effect {
+                    BuiltinEffect::Error(_) => {
+                        // Nothing needs to be done. With an unhandled effect,
+                        // the program won't continue running, and the debugger
+                        // will see the error and display it.
+                    }
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
                         let value = self.program.memory.inner[address];
@@ -183,7 +188,6 @@ impl Runner {
                         // has confirmed that we're ready to continue.
                         self.resume.recv().unwrap();
                     }
-                    _ => {}
                 }
             }
         }
