@@ -3,6 +3,18 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-21
+
+As I've explained before, I'm using the development of a simple game to drive
+the development of Caterpillar. I just posted about my progress on the language
+and tooling side a few days ago. Thanks to that, I was able to make some
+progress on the game side now.
+
+![Short video of a window titled "Caterpillar"; a small white square is moving left and right in front of a black background](daily-files/2024-05-21/almost-snake.png)
+
+Simple graphics, timed movement... only input is missing. We almost got a Snake
+game here!
+
 ## 2024-05-20
 
 I plan to develop Caterpillar to the point that I prefer it over other options,
