@@ -7,7 +7,7 @@ use capi_runtime::{
 
 use crate::{
     display::TILES_PER_AXIS,
-    effects::{DisplayEffect, EffectsRx, EffectsTx, ResumeRx, ResumeTx},
+    effects::{DisplayEffect, EffectsRx, EffectsTx, ResumeTx},
     server::EventsRx,
     updates::UpdatesTx,
 };
@@ -24,14 +24,13 @@ impl RunnerThread {
         updates: UpdatesTx,
     ) -> Self {
         let (effects_tx, effects_rx) = mpsc::channel();
-        let (resume_tx, resume_rx) = mpsc::channel();
+        let (resume_tx, _) = mpsc::channel();
 
         let mut runner = Runner {
             program,
             events,
             updates,
             effects: EffectsTx { inner: effects_tx },
-            resume: resume_rx,
         };
 
         thread::spawn(move || {
@@ -60,7 +59,6 @@ struct Runner {
     events: EventsRx,
     updates: UpdatesTx,
     effects: EffectsTx,
-    resume: ResumeRx,
 }
 
 impl Runner {
@@ -182,8 +180,10 @@ impl Runner {
                         // the program and the display code. Before we continue
                         // running, we need to wait here, until the display code
                         // has confirmed that we're ready to continue.
-                        self.effects.send(DisplayEffect::SubmitTiles);
-                        self.resume.recv().unwrap();
+                        let (tx, rx) = mpsc::channel();
+                        self.effects
+                            .send(DisplayEffect::SubmitTiles { reply: tx });
+                        let () = rx.recv().unwrap();
 
                         self.program.effects.pop_front();
                     }

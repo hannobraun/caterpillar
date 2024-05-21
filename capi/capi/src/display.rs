@@ -106,7 +106,8 @@ impl ApplicationHandler for State {
 
                     self.mem[index] = value;
                 }
-                DisplayEffect::SubmitTiles => {
+                DisplayEffect::SubmitTiles { reply } => {
+                    reply.send(()).unwrap();
                     submit_tiles = true;
                 }
             }
