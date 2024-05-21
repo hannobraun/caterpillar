@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -17,6 +19,7 @@ pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
         mem: [0; MEM_SIZE],
         window: None,
         pixels: None,
+        input: VecDeque::new(),
     };
 
     event_loop.run_app(&mut state)?;
@@ -29,6 +32,7 @@ struct State {
     mem: [u8; MEM_SIZE],
     window: Option<Window>,
     pixels: Option<Pixels>,
+    input: VecDeque<i8>,
 }
 
 impl ApplicationHandler for State {
@@ -73,6 +77,50 @@ impl ApplicationHandler for State {
                 ..
             } => {
                 event_loop.exit();
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        physical_key:
+                            PhysicalKey::Code(KeyCode::ArrowUp | KeyCode::KeyW),
+                        ..
+                    },
+                ..
+            } => {
+                self.input.push_back(1);
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        physical_key:
+                            PhysicalKey::Code(KeyCode::ArrowLeft | KeyCode::KeyA),
+                        ..
+                    },
+                ..
+            } => {
+                self.input.push_back(2);
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        physical_key:
+                            PhysicalKey::Code(KeyCode::ArrowDown | KeyCode::KeyS),
+                        ..
+                    },
+                ..
+            } => {
+                self.input.push_back(3);
+            }
+            WindowEvent::KeyboardInput {
+                event:
+                    KeyEvent {
+                        physical_key:
+                            PhysicalKey::Code(KeyCode::ArrowRight | KeyCode::KeyD),
+                        ..
+                    },
+                ..
+            } => {
+                self.input.push_back(4);
             }
             WindowEvent::RedrawRequested => {
                 if let Err(err) = pixels.render() {
