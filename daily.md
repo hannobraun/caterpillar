@@ -10,7 +10,7 @@ the development of Caterpillar. I just posted about my progress on the language
 and tooling side a few days ago. Thanks to that, I was able to make some
 progress on the game side now.
 
-![Short video of a window titled "Caterpillar"; a small white square is moving left and right in front of a black background](daily-files/2024-05-21/almost-snake.png)
+![Short video of a window titled "Caterpillar"; a small white square is moving left and right in front of a black background](daily-files/2024-05-21/almost-snake.webm)
 
 Simple graphics, timed movement... only input is missing. We almost got a Snake
 game here!
