@@ -77,6 +77,10 @@ pub fn place(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn read_input() -> Result {
+    Ok(Some(BuiltinEffect::ReadInput))
+}
+
 pub fn remainder(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
