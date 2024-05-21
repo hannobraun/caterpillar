@@ -178,8 +178,6 @@ impl Runner {
                         self.program.effects.pop_front();
                     }
                     BuiltinEffect::SubmitFrame => {
-                        self.program.effects.pop_front();
-
                         self.effects.send(DisplayEffect::SubmitTiles);
 
                         // This effect serves as a synchronization point between
@@ -187,6 +185,8 @@ impl Runner {
                         // running, we need to wait here, until the display code
                         // has confirmed that we're ready to continue.
                         self.resume.recv().unwrap();
+
+                        self.program.effects.pop_front();
                     }
                 }
             }
