@@ -12,6 +12,11 @@ progress on the game side now.
 
 ![Short video of a window titled "Caterpillar"; a small white square is moving left and right in front of a black background](daily-files/2024-05-21/almost-snake.webm)
 
+(Sorry, I tried to embed the actual video, but GitHub wouldn't cooperate. You
+can follow the link and download it instead. At some point in the not too far
+future, all of this will hopefully move to a website, and then I'll have more
+control over these things.)
+
 Simple graphics, timed movement... only input is missing. We almost got a Snake
 game here!
 
