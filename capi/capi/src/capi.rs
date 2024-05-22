@@ -191,7 +191,7 @@ pub fn program() -> Program {
 
     // Game state - position
     source.define("position", |s| {
-        s.c("Address of the position vector in memory").v(3);
+        s.c("Address of the position vector in memory").v(4);
     });
     source.define("init_position", |s| {
         s.v(15).v(15).w("position").w("store_vector");
@@ -217,7 +217,7 @@ pub fn program() -> Program {
 
     // Game state - velocity
     source.define("velocity", |s| {
-        s.c("Address of the velocity vector in memory").v(5);
+        s.c("Address of the velocity vector in memory").v(6);
     });
     source.define("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("store_vector");
