@@ -3,6 +3,21 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-22
+
+I've been talking about risks, and how they guide my development priorities.
+Today, I'd like to talk about a few things that I don't consider relevant risks.
+
+I want Caterpillar to have a static type system, that prevents most bugs from
+being possible. To provide powerful compile-time meta-programming. To be highly
+performant, with zero-overhead abstractions. To run everywhere: browsers,
+servers, desktops, phones, watches, microcontrollers; CPUs and GPUs.
+
+It is totally unclear if either of those goals will work out. But that doesn't
+make them risks to the success of the project. Because a dynamically typed,
+interpreted language that's suitable for browser games, and helps you gain an
+intuitive understanding of your code; that would already be a big success.
+
 ## 2024-05-21
 
 As I've explained before, I'm using the development of a simple game to drive
