@@ -119,6 +119,7 @@ pub fn program() -> Program {
     // Game state
     source.define("init", |s| {
         s.w("init_frame_count")
+            .w("init_run_game")
             .w("init_position")
             .w("init_velocity");
     });
@@ -135,6 +136,9 @@ pub fn program() -> Program {
             .w("remainder")
             .w("return_if_non_zero")
             .c("Time for more updates!")
+            .w("run_game")
+            .w("load")
+            .w("return_if_zero")
             .w("handle_input")
             .v(0)
             .w("drop")
@@ -187,6 +191,14 @@ pub fn program() -> Program {
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
             .w("init_frame_count");
+    });
+
+    // Game state - run game
+    source.define("run_game", |s| {
+        s.v(3);
+    });
+    source.define("init_run_game", |s| {
+        s.v(0).w("run_game").w("store");
     });
 
     // Game state - position
