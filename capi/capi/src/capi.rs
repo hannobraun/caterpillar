@@ -210,22 +210,7 @@ pub fn program() -> Program {
         s.v(15).v(15).w("position").w("store_vector");
     });
     source.define("update_position", |s| {
-        s.w("position")
-            .w("x")
-            .w("load")
-            .w("velocity")
-            .w("x")
-            .w("load")
-            .w("add")
-            .w("position")
-            .w("y")
-            .w("load")
-            .w("velocity")
-            .w("y")
-            .w("load")
-            .w("add")
-            .w("next_position")
-            .w("store_vector")
+        s.w("update_next_position")
             .w("next_position")
             .w("load_vector")
             .w("position")
@@ -247,6 +232,24 @@ pub fn program() -> Program {
     source.define("init_next_position", |s| {
         s.w("position")
             .w("load_vector")
+            .w("next_position")
+            .w("store_vector");
+    });
+    source.define("update_next_position", |s| {
+        s.w("position")
+            .w("x")
+            .w("load")
+            .w("velocity")
+            .w("x")
+            .w("load")
+            .w("add")
+            .w("position")
+            .w("y")
+            .w("load")
+            .w("velocity")
+            .w("y")
+            .w("load")
+            .w("add")
             .w("next_position")
             .w("store_vector");
     });
