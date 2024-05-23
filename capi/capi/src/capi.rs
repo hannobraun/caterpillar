@@ -143,8 +143,7 @@ pub fn program() -> Program {
             .w("handle_input")
             .v(0)
             .w("drop")
-            .w("update_position")
-            .w("drop_vector");
+            .w("update_position");
     });
 
     // Game state - tile field size
@@ -257,10 +256,10 @@ pub fn program() -> Program {
         s.w("update_next_position")
             .w("next_position")
             .w("load_vector")
-            .w("copy_vector")
             .w("is_out_of_bounds")
             .w("return_if_non_zero")
-            .w("copy_vector")
+            .w("next_position")
+            .w("load_vector")
             .w("position")
             .w("store_vector");
     });
