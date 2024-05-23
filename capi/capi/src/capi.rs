@@ -121,7 +121,8 @@ pub fn program() -> Program {
         s.w("init_frame_count")
             .w("init_run_game")
             .w("init_position")
-            .w("init_velocity");
+            .w("init_velocity")
+            .w("init_next_position");
     });
     source.define("update", |s| {
         s.w("update_frame_count")
@@ -233,6 +234,17 @@ pub fn program() -> Program {
     });
     source.define("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("store_vector");
+    });
+
+    // Game state - next position
+    source.define("next_position", |s| {
+        s.c("Address of the next position vector in memory").v(8);
+    });
+    source.define("init_next_position", |s| {
+        s.w("position")
+            .w("load_vector")
+            .w("next_position")
+            .w("store_vector");
     });
 
     // Input
