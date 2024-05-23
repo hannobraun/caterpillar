@@ -224,6 +224,10 @@ pub fn program() -> Program {
             .w("y")
             .w("load")
             .w("add")
+            .w("next_position")
+            .w("store_vector")
+            .w("next_position")
+            .w("load_vector")
             .w("position")
             .w("store_vector");
     });
