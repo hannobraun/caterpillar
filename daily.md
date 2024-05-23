@@ -11,9 +11,9 @@ something basic that works, will lead to a better result than building up to
 some grand vision, without tangible benefits on the way there.
 
 This means I have to define milestones that provide those tangible benefits. And
-it means I have decide what _won't_ make it into a milestone. Which is going to
-be most of what I eventually want to achieve. As a result, these milestones will
-look very different from the desired end result.
+it means I have to decide what _won't_ make it into a milestone. Which is going
+to be most of what I eventually want to achieve. As a result, these milestones
+will look very different from the desired end result.
 
 And sometimes, I might need a placeholder. For example, if I decide we need
 better types, but a static type system is too much work for now, I'll go for a
