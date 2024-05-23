@@ -358,6 +358,8 @@ pub fn program() -> Program {
             .w("store_vector")
             .v(1)
             .w("sub")
+            .v(0)
+            .w("copy")
             .w("return_if_zero")
             .c("It seems it wasn't that either, which means we received an")
             .c("invalid return value. This would be a good place to trigger a")
