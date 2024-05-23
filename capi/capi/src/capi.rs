@@ -198,7 +198,7 @@ pub fn program() -> Program {
         s.v(3);
     });
     source.define("init_run_game", |s| {
-        s.v(0).w("run_game").w("store");
+        s.v(1).w("run_game").w("store");
     });
 
     // Game state - position
