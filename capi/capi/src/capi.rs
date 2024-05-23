@@ -143,7 +143,8 @@ pub fn program() -> Program {
             .w("handle_input")
             .v(0)
             .w("drop")
-            .w("update_position");
+            .w("update_position")
+            .w("drop_vector");
     });
 
     // Game state - tile field size
@@ -213,6 +214,35 @@ pub fn program() -> Program {
         s.w("update_next_position")
             .w("next_position")
             .w("load_vector")
+            .c("Compare x coordinate against lower bound.")
+            .v(1)
+            .w("copy")
+            .v(-1)
+            .w("greater")
+            .w("return_if_zero")
+            .c("Compare y coordinate against lower bound.")
+            .v(0)
+            .w("copy")
+            .v(-1)
+            .w("greater")
+            .w("return_if_zero")
+            .c("Compare x coordinate against upper bound")
+            .w("tile_field_size")
+            .w("x")
+            .w("load")
+            .v(2)
+            .w("copy")
+            .w("greater")
+            .w("return_if_zero")
+            .c("Compare y coordinate against upper bound")
+            .w("tile_field_size")
+            .w("y")
+            .w("load")
+            .v(1)
+            .w("copy")
+            .w("greater")
+            .w("return_if_zero")
+            .w("copy_vector")
             .w("position")
             .w("store_vector");
     });
