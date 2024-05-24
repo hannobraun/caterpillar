@@ -71,7 +71,7 @@ impl Evaluator {
                 // internally, without requiring effects to always be returned
                 // as errors, which they aren't per se.
                 //
-                // Anyway, here we deal with this situation by  unifying both
+                // Anyway, here we deal with this situation by unifying both
                 // variants.
                 let effect = match result {
                     Ok(effect) => effect,
