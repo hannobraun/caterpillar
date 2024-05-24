@@ -1,6 +1,12 @@
 Deno.serve((request) => {
     const url = new URL(request.url);
 
+    if (url.pathname == "/") {
+        return Response.redirect(
+            `${url.origin}/daily`,
+            307,
+        );
+    }
     if (url.pathname == "/daily") {
         return Response.redirect(
             "https://github.com/hannobraun/caterpillar/blob/main/daily.md",
