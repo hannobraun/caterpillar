@@ -1,1 +1,3 @@
-console.log("Hello, world!")
+Deno.serve((_request) => {
+    return new Response("Hello, world!");
+});
