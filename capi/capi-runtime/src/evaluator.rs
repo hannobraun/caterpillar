@@ -1,6 +1,6 @@
 use crate::{
-    builtins::BuiltinEffect, instructions::Instruction, InstructionAddress,
-    Value,
+    builtins::BuiltinEffect, data_stack::StackUnderflow,
+    instructions::Instruction, InstructionAddress, Value,
 };
 
 use super::{builtins, code::Code, data_stack::DataStack};
@@ -158,5 +158,6 @@ pub enum EvaluatorState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
+    StackError(StackUnderflow),
     UnknownBuiltin { name: String },
 }
