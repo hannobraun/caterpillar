@@ -15,20 +15,30 @@ pub struct Compiler<'r> {
 
 impl Compiler<'_> {
     pub fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
+        let mut bindings = BTreeSet::new();
         let address = self.code.next_address();
 
         for expression in syntax {
-            self.compile_expression(expression);
+            self.compile_expression(expression, &mut bindings);
         }
 
         self.code.push(Instruction::Return);
         self.code.symbols.define(name, address);
     }
 
-    fn compile_expression(&mut self, expression: Expression) {
+    fn compile_expression(
+        &mut self,
+        expression: Expression,
+        bindings: &mut BTreeSet<String>,
+    ) {
         match expression.kind {
             ExpressionKind::Binding { names } => {
                 for name in names.into_iter().rev() {
+                    // Inserting bindings unconditionally like that does mean
+                    // that bindings can overwrite previously defined bindings.
+                    // This is undesirable, but it'll do for now.
+                    bindings.insert(name.clone());
+
                     self.generate(
                         Instruction::BindingDefine { name },
                         expression.location.clone(),
@@ -40,7 +50,8 @@ impl Compiler<'_> {
                 self.generate(Instruction::Push { value }, expression.location);
             }
             ExpressionKind::Word { name } => {
-                let instruction = word_to_instruction(name, self.functions);
+                let instruction =
+                    word_to_instruction(name, bindings, self.functions);
                 self.generate(instruction, expression.location);
             }
         };
@@ -54,6 +65,7 @@ impl Compiler<'_> {
 
 fn word_to_instruction(
     word: String,
+    bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Instruction {
     // Here we check for special built-in functions that are implemented
@@ -67,6 +79,15 @@ fn word_to_instruction(
     }
     if word == "return_if_zero" {
         return Instruction::ReturnIfZero;
+    }
+
+    // The code here would allow bindings to shadow both user-defined and
+    // builtin functions. This seems undesirable, without further handling to
+    // prevent mistakes.
+    //
+    // It's better to catch this when defining bindings, though.
+    if bindings.contains(&word) {
+        return Instruction::BindingEvaluate { name: word };
     }
 
     // The code here would allow user-defined functions to shadow built-in
