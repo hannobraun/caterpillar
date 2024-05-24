@@ -17,31 +17,22 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn c(&mut self, text: &str) -> &mut Self {
-        let location = self.next_location.increment();
-        self.expressions.push(Expression::new(
-            ExpressionKind::Comment { text: text.into() },
-            location,
-        ));
-        self
+        self.push_expression(ExpressionKind::Comment { text: text.into() })
     }
 
     pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
-        let location = self.next_location.increment();
-        self.expressions.push(Expression::new(
-            ExpressionKind::Value(value.into()),
-            location,
-        ));
-        self
+        self.push_expression(ExpressionKind::Value(value.into()))
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
+        self.push_expression(ExpressionKind::Word {
+            name: name.to_string(),
+        })
+    }
+
+    fn push_expression(&mut self, kind: ExpressionKind) -> &mut Self {
         let location = self.next_location.increment();
-        self.expressions.push(Expression::new(
-            ExpressionKind::Word {
-                name: name.to_string(),
-            },
-            location,
-        ));
+        self.expressions.push(Expression::new(kind, location));
         self
     }
 }
