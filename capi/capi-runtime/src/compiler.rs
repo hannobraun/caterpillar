@@ -17,14 +17,14 @@ impl Compiler<'_> {
         let address = self.code.next_address();
 
         for expression in syntax {
-            Self::compile_expression(expression, self);
+            self.compile_expression(expression);
         }
 
         self.code.push(Instruction::Return);
         self.code.symbols.define(name, address);
     }
 
-    fn compile_expression(expression: Expression, compiler: &mut Compiler) {
+    fn compile_expression(&mut self, expression: Expression) {
         let instruction = match expression.kind {
             ExpressionKind::Binding { .. } => {
                 todo!("Compiling bindings is not supported yet.")
@@ -34,14 +34,12 @@ impl Compiler<'_> {
             }
             ExpressionKind::Value(value) => Instruction::Push { value },
             ExpressionKind::Word { name } => {
-                word_to_instruction(name, compiler.functions)
+                word_to_instruction(name, self.functions)
             }
         };
 
-        let address = compiler.code.push(instruction);
-        compiler
-            .source_map
-            .define_mapping(address, expression.location)
+        let address = self.code.push(instruction);
+        self.source_map.define_mapping(address, expression.location)
     }
 }
 
