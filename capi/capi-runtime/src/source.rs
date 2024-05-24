@@ -1,6 +1,6 @@
 use crate::{
-    code::Code, compiler::compile, source_map::SourceMap, syntax::Syntax,
-    Function, Functions, Program,
+    code::Code, compiler::compile_function, source_map::SourceMap,
+    syntax::Syntax, Function, Functions, Program,
 };
 
 #[derive(Default)]
@@ -18,7 +18,7 @@ impl Source {
         let mut source_map = SourceMap::default();
 
         for Function { name, syntax } in &self.functions.inner {
-            compile(
+            compile_function(
                 name.clone(),
                 syntax.clone(),
                 &self.functions.names,

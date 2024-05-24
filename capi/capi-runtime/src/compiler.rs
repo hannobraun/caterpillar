@@ -6,7 +6,7 @@ use crate::{
 
 use super::{code::Code, syntax::ExpressionKind};
 
-pub fn compile(
+pub fn compile_function(
     name: String,
     syntax: Vec<Expression>,
     functions: &BTreeSet<String>,
