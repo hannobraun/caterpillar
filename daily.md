@@ -3,7 +3,7 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
-## 2024-05-04
+## 2024-05-24
 
 After the latest improvements to the debugger, I've been able to make
 significant progress on the game side. There's basic user input; there's game
