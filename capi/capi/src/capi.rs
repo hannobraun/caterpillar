@@ -33,19 +33,17 @@ pub fn program() -> Program {
 
     // Draw - write tiles
     source.define("write_all_tiles", |s| {
-        s.c("`write_all_tiles_inner` needs a tile position to count up.")
+        s.b(["tile_value"])
+            .c("`write_all_tiles_inner` needs a tile position to count up.")
             .c("Initialize it with the position of the first tile.")
             .w("first_tile_index")
             .c("Arguments are in place. We're ready to set all tiles.")
+            .w("tile_value")
             .w("write_all_tiles_inner")
             .w("drop_tile_value");
     });
     source.define("write_all_tiles_inner", |s| {
-        s.b(["tile_value", "current_x", "current_y"])
-            .c("Put the current tile position back on the stack, as we'll we")
-            .c("using it throughout this function.")
-            .w("current_x")
-            .w("current_y")
+        s.b(["tile_value"])
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the current tile")
             .c("position has reached the last one, which would let us know ")
@@ -57,8 +55,6 @@ pub fn program() -> Program {
             .w("write_tile")
             .w("increment_tile_index")
             .w("tile_value")
-            .v(2)
-            .w("place")
             .w("write_all_tiles_inner");
     });
     source.define("drop_tile_value", |s| {
