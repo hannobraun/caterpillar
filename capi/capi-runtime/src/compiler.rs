@@ -26,20 +26,19 @@ impl Compiler<'_> {
     }
 
     fn compile_expression(&mut self, expression: Expression) {
-        let instruction = match expression.kind {
+        match expression.kind {
             ExpressionKind::Binding { .. } => {
                 todo!("Compiling bindings is not supported yet.")
             }
-            ExpressionKind::Comment { .. } => {
-                return;
+            ExpressionKind::Comment { .. } => {}
+            ExpressionKind::Value(value) => {
+                self.generate(Instruction::Push { value }, expression.location);
             }
-            ExpressionKind::Value(value) => Instruction::Push { value },
             ExpressionKind::Word { name } => {
-                word_to_instruction(name, self.functions)
+                let instruction = word_to_instruction(name, self.functions);
+                self.generate(instruction, expression.location);
             }
         };
-
-        self.generate(instruction, expression.location);
     }
 
     fn generate(&mut self, instruction: Instruction, location: SourceLocation) {
