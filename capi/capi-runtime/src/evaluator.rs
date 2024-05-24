@@ -37,7 +37,7 @@ impl Evaluator {
         let instruction = self.code.instructions.get(&current_instruction);
 
         match instruction {
-            Instruction::BindValue { name } => {
+            Instruction::BindingDefine { name } => {
                 let value = match self.data_stack.pop() {
                     Ok(value) => value,
                     Err(err) => {

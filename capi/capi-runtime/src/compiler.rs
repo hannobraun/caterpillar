@@ -30,7 +30,7 @@ impl Compiler<'_> {
             ExpressionKind::Binding { names } => {
                 for name in names.into_iter().rev() {
                     self.generate(
-                        Instruction::BindValue { name },
+                        Instruction::BindingDefine { name },
                         expression.location.clone(),
                     );
                 }
