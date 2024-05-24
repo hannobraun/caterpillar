@@ -24,11 +24,7 @@ impl Source {
         };
 
         for Function { name, syntax } in &self.functions.inner {
-            Compiler::compile_function(
-                name.clone(),
-                syntax.clone(),
-                &mut compiler,
-            );
+            compiler.compile_function(name.clone(), syntax.clone());
         }
 
         let entry_address = code.symbols.resolve_name(entry);

@@ -13,19 +13,15 @@ pub struct Compiler<'r> {
 }
 
 impl Compiler<'_> {
-    pub fn compile_function(
-        name: String,
-        syntax: Vec<Expression>,
-        compiler: &mut Compiler,
-    ) {
-        let address = compiler.code.next_address();
+    pub fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
+        let address = self.code.next_address();
 
         for expression in syntax {
-            compile_expression(expression, compiler);
+            compile_expression(expression, self);
         }
 
-        compiler.code.push(Instruction::Return);
-        compiler.code.symbols.define(name, address);
+        self.code.push(Instruction::Return);
+        self.code.symbols.define(name, address);
     }
 }
 
