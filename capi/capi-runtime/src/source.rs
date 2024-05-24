@@ -1,8 +1,5 @@
 use crate::{
-    code::Code,
-    compiler::{compile_function, Compiler},
-    source_map::SourceMap,
-    syntax::Syntax,
+    code::Code, compiler::Compiler, source_map::SourceMap, syntax::Syntax,
     Function, Functions, Program,
 };
 
@@ -27,7 +24,11 @@ impl Source {
         };
 
         for Function { name, syntax } in &self.functions.inner {
-            compile_function(name.clone(), syntax.clone(), &mut compiler);
+            Compiler::compile_function(
+                name.clone(),
+                syntax.clone(),
+                &mut compiler,
+            );
         }
 
         let entry_address = code.symbols.resolve_name(entry);

@@ -12,19 +12,21 @@ pub struct Compiler<'r> {
     pub source_map: &'r mut SourceMap,
 }
 
-pub fn compile_function(
-    name: String,
-    syntax: Vec<Expression>,
-    compiler: &mut Compiler,
-) {
-    let address = compiler.code.next_address();
+impl Compiler<'_> {
+    pub fn compile_function(
+        name: String,
+        syntax: Vec<Expression>,
+        compiler: &mut Compiler,
+    ) {
+        let address = compiler.code.next_address();
 
-    for expression in syntax {
-        compile_expression(expression, compiler);
+        for expression in syntax {
+            compile_expression(expression, compiler);
+        }
+
+        compiler.code.push(Instruction::Return);
+        compiler.code.symbols.define(name, address);
     }
-
-    compiler.code.push(Instruction::Return);
-    compiler.code.symbols.define(name, address);
 }
 
 fn compile_expression(expression: Expression, compiler: &mut Compiler) {
