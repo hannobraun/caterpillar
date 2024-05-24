@@ -16,26 +16,33 @@ pub fn compile_function(
     let address = code.next_address();
 
     for expression in syntax {
-        let instruction = match expression.kind {
-            ExpressionKind::Binding { .. } => {
-                todo!("Compiling bindings is not supported yet.")
-            }
-            ExpressionKind::Comment { .. } => {
-                continue;
-            }
-            ExpressionKind::Value(value) => Instruction::Push { value },
-            ExpressionKind::Word { name } => {
-                word_to_instruction(name, functions)
-            }
-        };
-
-        let address = code.push(instruction);
-        source_map.define_mapping(address, expression.location)
+        compile_expression(expression, functions, code, source_map);
     }
 
     code.push(Instruction::Return);
 
     code.symbols.define(name, address);
+}
+
+fn compile_expression(
+    expression: Expression,
+    functions: &BTreeSet<String>,
+    code: &mut Code,
+    source_map: &mut SourceMap,
+) {
+    let instruction = match expression.kind {
+        ExpressionKind::Binding { .. } => {
+            todo!("Compiling bindings is not supported yet.")
+        }
+        ExpressionKind::Comment { .. } => {
+            return;
+        }
+        ExpressionKind::Value(value) => Instruction::Push { value },
+        ExpressionKind::Word { name } => word_to_instruction(name, functions),
+    };
+
+    let address = code.push(instruction);
+    source_map.define_mapping(address, expression.location)
 }
 
 fn word_to_instruction(
