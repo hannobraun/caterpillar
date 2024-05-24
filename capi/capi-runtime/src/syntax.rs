@@ -25,9 +25,7 @@ impl<'r> Syntax<'r> {
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.push_expression(ExpressionKind::Word {
-            name: name.to_string(),
-        })
+        self.push_expression(ExpressionKind::Word { name: name.into() })
     }
 
     fn push_expression(&mut self, kind: ExpressionKind) -> &mut Self {
