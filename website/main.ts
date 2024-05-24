@@ -7,6 +7,12 @@ Deno.serve((request) => {
             307,
         );
     }
+    if (url.pathname == "/daily/") {
+        return Response.redirect(
+            `${url.origin}/daily`,
+            307,
+        );
+    }
 
     return new Response("not found", { status: 404 });
 });
