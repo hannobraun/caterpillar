@@ -49,8 +49,9 @@ impl Evaluator {
                 };
                 self.bindings.insert(name.clone(), value);
             }
-            Instruction::BindingEvaluate { .. } => {
-                todo!("Evaluating bindings is not supported yet.")
+            Instruction::BindingEvaluate { name } => {
+                let value = self.bindings.get(name).copied().unwrap();
+                self.data_stack.push(value);
             }
             Instruction::CallBuiltin { name } => {
                 let result = match name.as_str() {
