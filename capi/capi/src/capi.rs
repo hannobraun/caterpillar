@@ -38,26 +38,28 @@ pub fn program() -> Program {
             .w("first_tile_index")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("write_all_tiles_inner")
-            .w("drop_tile_index")
             .w("drop_tile_value");
     });
     source.define("write_all_tiles_inner", |s| {
-        s.c("This is a recursive function, so we might have been at it for a")
-            .c("while, if we make it here. Check if the current tile position")
-            .c("has reached the last one, which would let us know we're done.")
+        s.b(["tile_value", "current_x", "current_y"])
+            .c("Put the current tile position back on the stack, as we'll we")
+            .c("using it throughout this function.")
+            .w("current_x")
+            .w("current_y")
+            .c("This is a recursive function, so we might have been at it for")
+            .c("a while, if we make it here. Check if the current tile")
+            .c("position has reached the last one, which would let us know ")
+            .c("we're done.")
             .w("check_tile_index")
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
-            .c("Put the tile value we're supposed to write to the top of the")
-            .c("stack, then write it.")
-            .v(2)
-            .w("copy")
+            .w("tile_value")
             .w("write_tile")
             .w("increment_tile_index")
+            .w("tile_value")
+            .v(2)
+            .w("place")
             .w("write_all_tiles_inner");
-    });
-    source.define("drop_tile_index", |s| {
-        s.v(0).w("drop").v(0).w("drop");
     });
     source.define("drop_tile_value", |s| {
         s.v(0).w("drop");
