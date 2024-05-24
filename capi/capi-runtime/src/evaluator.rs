@@ -34,6 +34,9 @@ impl Evaluator {
         let instruction = self.code.instructions.get(&current_instruction);
 
         match instruction {
+            Instruction::BindValue { .. } => {
+                todo!("Binding values is not supported yet.")
+            }
             Instruction::CallBuiltin { name } => {
                 let result = match name.as_str() {
                     "add" => builtins::add(&mut self.data_stack),
