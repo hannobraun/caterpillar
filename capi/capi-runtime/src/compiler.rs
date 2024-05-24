@@ -20,24 +20,14 @@ pub fn compile_function(
     let address = compiler.code.next_address();
 
     for expression in syntax {
-        compile_expression(
-            expression,
-            compiler.functions,
-            compiler.code,
-            compiler.source_map,
-        );
+        compile_expression(expression, compiler);
     }
 
     compiler.code.push(Instruction::Return);
     compiler.code.symbols.define(name, address);
 }
 
-fn compile_expression(
-    expression: Expression,
-    functions: &BTreeSet<String>,
-    code: &mut Code,
-    source_map: &mut SourceMap,
-) {
+fn compile_expression(expression: Expression, compiler: &mut Compiler) {
     let instruction = match expression.kind {
         ExpressionKind::Binding { .. } => {
             todo!("Compiling bindings is not supported yet.")
@@ -46,11 +36,15 @@ fn compile_expression(
             return;
         }
         ExpressionKind::Value(value) => Instruction::Push { value },
-        ExpressionKind::Word { name } => word_to_instruction(name, functions),
+        ExpressionKind::Word { name } => {
+            word_to_instruction(name, compiler.functions)
+        }
     };
 
-    let address = code.push(instruction);
-    source_map.define_mapping(address, expression.location)
+    let address = compiler.code.push(instruction);
+    compiler
+        .source_map
+        .define_mapping(address, expression.location)
 }
 
 fn word_to_instruction(
