@@ -3,6 +3,26 @@
 These are my daily thoughts on Caterpillar. If you have any questions, comments,
 or feedback, please [get in touch](mailto:hello@hannobraun.com).
 
+## 2024-05-04
+
+After the latest improvements to the debugger, I've been able to make
+significant progress on the game side. There's basic user input; there's game
+state, updated in an ongoing simulation that considers input; and there are
+simple graphics to display all that. What's still missing to complete the game,
+is some kind of challenge, and win/lose conditions.
+
+This is definitely the most advanced thing I ever wrote in any version of
+Caterpillar (although the language itself was more sophisticated in earlier
+prototypes). Which further strengthens the hypothesis, that a debugger is both
+practical to implement, and sufficient to tame a very basic language that would
+otherwise be too confusing.
+
+Keeping the language so basic, was a decision made to keep the current prototype
+manageable. But I'm now considering to deviate from that plan. Working with
+Caterpillar was an interesting (if tedious) puzzle at first, but it's starting
+to grate on me. I think putting some work into the language itself might be a
+good investment right now.
+
 ## 2024-05-23
 
 I have big ideas that I want to see realized in Caterpillar. But I have to spend
