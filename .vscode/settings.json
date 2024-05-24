@@ -6,5 +6,12 @@
     "search.exclude": {
         "archive/**": true
     },
-    "nixEnvSelector.nixFile": "${workspaceRoot}/capi/shell.nix"
+    "nixEnvSelector.nixFile": "${workspaceRoot}/capi/shell.nix",
+    "deno.enablePaths": [
+        "./website"
+    ],
+    "typescript.format.enable": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno"
+    }
 }
