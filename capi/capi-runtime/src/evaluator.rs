@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     builtins::BuiltinEffect, data_stack::StackUnderflow,
     instructions::Instruction, InstructionAddress, Value,
@@ -13,6 +15,7 @@ pub struct Evaluator {
     pub next_instruction: InstructionAddress,
     pub call_stack: Vec<InstructionAddress>,
     pub data_stack: DataStack,
+    pub bindings: BTreeMap<String, Value>,
 }
 
 impl Evaluator {
@@ -34,8 +37,17 @@ impl Evaluator {
         let instruction = self.code.instructions.get(&current_instruction);
 
         match instruction {
-            Instruction::BindValue { .. } => {
-                todo!("Binding values is not supported yet.")
+            Instruction::BindValue { name } => {
+                let value = match self.data_stack.pop() {
+                    Ok(value) => value,
+                    Err(err) => {
+                        return EvaluatorState::Effect {
+                            effect: EvaluatorEffect::StackError(err),
+                            address: current_instruction,
+                        }
+                    }
+                };
+                self.bindings.insert(name.clone(), value);
             }
             Instruction::CallBuiltin { name } => {
                 let result = match name.as_str() {
