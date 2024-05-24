@@ -20,7 +20,6 @@ pub fn compile_function(
     }
 
     code.push(Instruction::Return);
-
     code.symbols.define(name, address);
 }
 
