@@ -1,6 +1,9 @@
 use crate::{
-    code::Code, compiler::compile_function, source_map::SourceMap,
-    syntax::Syntax, Function, Functions, Program,
+    code::Code,
+    compiler::{compile_function, Compiler},
+    source_map::SourceMap,
+    syntax::Syntax,
+    Function, Functions, Program,
 };
 
 #[derive(Default)]
@@ -17,14 +20,14 @@ impl Source {
         let mut code = Code::new();
         let mut source_map = SourceMap::default();
 
+        let mut compiler = Compiler {
+            functions: &self.functions.names,
+            code: &mut code,
+            source_map: &mut source_map,
+        };
+
         for Function { name, syntax } in &self.functions.inner {
-            compile_function(
-                name.clone(),
-                syntax.clone(),
-                &self.functions.names,
-                &mut code,
-                &mut source_map,
-            );
+            compile_function(name.clone(), syntax.clone(), &mut compiler);
         }
 
         let entry_address = code.symbols.resolve_name(entry);

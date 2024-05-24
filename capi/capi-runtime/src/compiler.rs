@@ -6,21 +6,30 @@ use crate::{
 
 use super::{code::Code, syntax::ExpressionKind};
 
+pub struct Compiler<'r> {
+    pub functions: &'r BTreeSet<String>,
+    pub code: &'r mut Code,
+    pub source_map: &'r mut SourceMap,
+}
+
 pub fn compile_function(
     name: String,
     syntax: Vec<Expression>,
-    functions: &BTreeSet<String>,
-    code: &mut Code,
-    source_map: &mut SourceMap,
+    compiler: &mut Compiler,
 ) {
-    let address = code.next_address();
+    let address = compiler.code.next_address();
 
     for expression in syntax {
-        compile_expression(expression, functions, code, source_map);
+        compile_expression(
+            expression,
+            compiler.functions,
+            compiler.code,
+            compiler.source_map,
+        );
     }
 
-    code.push(Instruction::Return);
-    code.symbols.define(name, address);
+    compiler.code.push(Instruction::Return);
+    compiler.code.symbols.define(name, address);
 }
 
 fn compile_expression(
