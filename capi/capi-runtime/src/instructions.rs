@@ -80,6 +80,7 @@ impl FromStr for InstructionAddress {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
     BindingDefine { name: String },
+    BindingEvaluate { name: String },
     CallBuiltin { name: String },
     CallFunction { name: String },
     Push { value: Value },
@@ -92,6 +93,9 @@ impl fmt::Display for Instruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Instruction::BindingDefine { name } => write!(f, "bind `{name}`"),
+            Instruction::BindingEvaluate { name } => {
+                write!(f, "eval binding `{name}`")
+            }
             Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
             Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
             Instruction::Push { value } => write!(f, "push {value}"),
