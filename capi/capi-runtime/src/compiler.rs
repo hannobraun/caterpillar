@@ -27,8 +27,13 @@ impl Compiler<'_> {
 
     fn compile_expression(&mut self, expression: Expression) {
         match expression.kind {
-            ExpressionKind::Binding { .. } => {
-                todo!("Compiling bindings is not supported yet.")
+            ExpressionKind::Binding { names } => {
+                for name in names.into_iter().rev() {
+                    self.generate(
+                        Instruction::BindValue { name },
+                        expression.location.clone(),
+                    );
+                }
             }
             ExpressionKind::Comment { .. } => {}
             ExpressionKind::Value(value) => {
