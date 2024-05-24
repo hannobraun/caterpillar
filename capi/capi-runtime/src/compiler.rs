@@ -17,6 +17,9 @@ pub fn compile(
 
     for expression in syntax {
         let instruction = match expression.kind {
+            ExpressionKind::Binding { .. } => {
+                todo!("Compiling bindings is not supported yet.")
+            }
             ExpressionKind::Comment { .. } => {
                 continue;
             }
