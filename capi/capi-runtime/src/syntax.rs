@@ -16,6 +16,15 @@ impl<'r> Syntax<'r> {
         }
     }
 
+    pub fn b(
+        &mut self,
+        names: impl IntoIterator<Item = impl Into<String>>,
+    ) -> &mut Self {
+        self.push_expression(ExpressionKind::Binding {
+            names: names.into_iter().map(Into::into).collect(),
+        })
+    }
+
     pub fn c(&mut self, text: &str) -> &mut Self {
         self.push_expression(ExpressionKind::Comment { text: text.into() })
     }
