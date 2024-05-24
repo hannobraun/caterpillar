@@ -8,5 +8,5 @@ Deno.serve((request) => {
         );
     }
 
-    return new Response("Hello, world!");
+    return new Response("not found", { status: 404 });
 });
