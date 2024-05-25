@@ -82,7 +82,6 @@ pub fn program() -> Program {
             .c("Remove the old x-coordinate to make space for the updated one.")
             .v(3)
             .w("drop")
-            .c("Make a copy of the updated x-coordinate.")
             .b(["tile_x_new"])
             .c("Put the updated x-coordinate where the old one was.")
             .w("tile_x_new")
