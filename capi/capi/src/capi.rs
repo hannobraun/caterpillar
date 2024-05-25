@@ -15,8 +15,8 @@ pub fn program() -> Program {
     source.define("draw", |s| {
         s.w("clear_all_tiles")
             .w("draw_snake")
-            .c("Wait until the display system is ready to process the next")
-            .c("frame.")
+            .c("This blocks until the display system is ready to process the")
+            .c("next frame.")
             .w("submit_frame");
     });
     source.define("clear_all_tiles", |s| {
