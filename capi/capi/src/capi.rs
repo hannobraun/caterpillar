@@ -63,11 +63,11 @@ pub fn program() -> Program {
         s.v(0).v(0);
     });
     source.define("check_tile_index", |s| {
-        s.b(["current_y"])
+        s.b(["tile_y"])
             .w("tile_field_size")
             .w("y")
             .w("load")
-            .w("current_y")
+            .w("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
