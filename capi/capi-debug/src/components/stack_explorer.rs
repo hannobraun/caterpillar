@@ -1,6 +1,8 @@
 use capi_runtime::Program;
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
+use crate::components::panel::Panel;
+
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
 pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
@@ -8,7 +10,7 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
         let program = program.get()?;
 
         let view = view! {
-            <div>
+            <Panel class="">
                 <div>
                     <p>
                         "Previous data stack: "
@@ -25,7 +27,7 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
                         {format!("{:?}", program.evaluator.data_stack)}
                     </p>
                 </div>
-            </div>
+            </Panel>
         };
 
         Some(view)
