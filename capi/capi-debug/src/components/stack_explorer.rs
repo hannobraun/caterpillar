@@ -9,14 +9,18 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
         let view = view! {
             <div>
-                <p>
-                    "Previous data stack: "
-                    {format!("{:?}", program.previous_data_stack)}
-                </p>
-                <p>
-                    "Current data stack: "
-                    {format!("{:?}", program.evaluator.data_stack)}
-                </p>
+                <div>
+                    <p>
+                        "Previous data stack: "
+                        {format!("{:?}", program.previous_data_stack)}
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        "Current data stack: "
+                        {format!("{:?}", program.evaluator.data_stack)}
+                    </p>
+                </div>
             </div>
         };
 
