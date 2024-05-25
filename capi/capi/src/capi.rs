@@ -35,7 +35,7 @@ pub fn program() -> Program {
         s.b(["tile_value"])
             .c("`write_all_tiles_inner` needs a tile position to count up.")
             .c("Initialize it with the position of the first tile.")
-            .w("first_tile_index")
+            .w("init_tile_index")
             .c("Arguments are in place. We're ready to set all tiles.")
             .w("tile_value")
             .w("write_all_tiles_inner")
@@ -61,7 +61,7 @@ pub fn program() -> Program {
     });
 
     // Draw - write tiles - tile index
-    source.define("first_tile_index", |s| {
+    source.define("init_tile_index", |s| {
         s.v(0).v(0);
     });
     source.define("check_tile_index", |s| {
