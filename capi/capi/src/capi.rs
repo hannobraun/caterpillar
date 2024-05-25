@@ -36,7 +36,7 @@ pub fn program() -> Program {
             .w("init_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner")
-            .w("drop_tile_value");
+            .w("drop_vector");
     });
     source.define("write_all_tiles_inner", |s| {
         s.b(["tile_value"])
@@ -53,9 +53,6 @@ pub fn program() -> Program {
             .w("increment_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner");
-    });
-    source.define("drop_tile_value", |s| {
-        s.v(0).w("drop");
     });
 
     // Draw - write tiles - tile index
