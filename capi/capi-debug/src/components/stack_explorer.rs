@@ -1,4 +1,4 @@
-use capi_runtime::Program;
+use capi_runtime::{DataStack, Program};
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::components::panel::Panel;
@@ -15,17 +15,13 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
                     <p>
                         "Previous data stack: "
                     </p>
-                    <p>
-                        {format!("{:?}", program.previous_data_stack)}
-                    </p>
+                    <DataStack data_stack=program.previous_data_stack />
                 </div>
                 <div>
                     <p>
                         "Current data stack: "
                     </p>
-                    <p>
-                        {format!("{:?}", program.evaluator.data_stack)}
-                    </p>
+                    <DataStack data_stack=program.evaluator.data_stack />
                 </div>
             </Panel>
         };
@@ -35,5 +31,14 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
     view! {
         {data_stack}
+    }
+}
+
+#[component]
+pub fn DataStack(data_stack: DataStack) -> impl IntoView {
+    view! {
+        <p>
+            {format!("{:?}", data_stack)}
+        </p>
     }
 }
