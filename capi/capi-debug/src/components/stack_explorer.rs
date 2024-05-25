@@ -12,12 +12,16 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
                 <div>
                     <p>
                         "Previous data stack: "
+                    </p>
+                    <p>
                         {format!("{:?}", program.previous_data_stack)}
                     </p>
                 </div>
                 <div>
                     <p>
                         "Current data stack: "
+                    </p>
+                    <p>
                         {format!("{:?}", program.evaluator.data_stack)}
                     </p>
                 </div>
