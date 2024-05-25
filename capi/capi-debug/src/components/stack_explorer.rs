@@ -13,13 +13,13 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
             <Panel class="">
                 <div>
                     <p>
-                        "Previous data stack: "
+                        "Previous data stack:"
                     </p>
                     <DataStack data_stack=program.previous_data_stack />
                 </div>
                 <div>
                     <p>
-                        "Current data stack: "
+                        "Current data stack:"
                     </p>
                     <DataStack data_stack=program.evaluator.data_stack />
                 </div>
