@@ -43,6 +43,8 @@ pub fn program() -> Program {
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
+            .v(0)
+            .w("copy")
             .w("check_tile_index")
             .w("return_if_zero")
             .c("Apparently we're not done yet.")
@@ -61,12 +63,11 @@ pub fn program() -> Program {
         s.v(0).v(0);
     });
     source.define("check_tile_index", |s| {
-        s.w("tile_field_size")
+        s.b(["current_y"])
+            .w("tile_field_size")
             .w("y")
             .w("load")
-            .c("Copy y-coordinate of current position.")
-            .v(1)
-            .w("copy")
+            .w("current_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
