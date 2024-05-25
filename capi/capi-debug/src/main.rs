@@ -51,7 +51,7 @@ pub fn Debugger(
             events=events.clone() />
         <ControlPanel
             events=events.clone() />
-        <DataStack
+        <StackExplorer
             program=program />
         <Memory
             program=program />
@@ -63,7 +63,7 @@ pub fn Debugger(
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn DataStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let data_stack = move || {
         let program = program.get()?;
 
