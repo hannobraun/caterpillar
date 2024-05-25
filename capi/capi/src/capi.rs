@@ -89,16 +89,16 @@ pub fn program() -> Program {
             .w("tile_y")
             .w("zero_if_x_overflowed")
             .w("return_if_non_zero")
-            .c("Remove the overflowed x-coordinate from the stack.")
-            .v(1)
-            .w("drop")
-            .c("Reset the x-coordinate back to zero.")
-            .v(0)
-            .v(1)
-            .w("place")
+            .c("Looks like we're not done!")
+            .b(["tile_x_new", "tile_y"])
             .c("Increment y-coordinate.")
+            .w("tile_y")
             .v(1)
-            .w("add");
+            .w("add")
+            .b(["tile_y_new"])
+            .c("Return updated coordinates")
+            .v(0)
+            .w("tile_y_new");
     });
 
     // Game state
