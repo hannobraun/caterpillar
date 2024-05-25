@@ -45,6 +45,7 @@ pub fn program() -> Program {
             .c("beyond the last tile, which would let us know that we're done.")
             .w("check_tile_index")
             .w("return_if_zero")
+            .c("Apparently we're not done yet.")
             .w("tile_value")
             .w("write_tile")
             .w("increment_tile_index")
