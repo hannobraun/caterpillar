@@ -27,7 +27,6 @@ pub fn program() -> Program {
             .w("load_vector")
             .v(1)
             .w("write_tile")
-            .c("Drop the position that we loaded previously")
             .w("drop_vector");
     });
 
