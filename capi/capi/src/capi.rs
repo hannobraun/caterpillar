@@ -44,7 +44,6 @@ pub fn program() -> Program {
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
             .w("check_tile_index")
-            .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
             .w("tile_value")
             .w("write_tile")
