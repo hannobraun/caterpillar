@@ -71,7 +71,6 @@ pub fn program() -> Program {
     });
     source.define("increment_tile_index", |s| {
         s.b(["tile_x", "tile_y"])
-            .c("Copy the x-coordinate of the current position.")
             .w("tile_x")
             .c("Increment the x-coordinate.")
             .v(1)
