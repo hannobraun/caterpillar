@@ -33,10 +33,7 @@ pub fn program() -> Program {
     // Draw - write tiles
     source.define("write_all_tiles", |s| {
         s.b(["tile_value"])
-            .c("`write_all_tiles_inner` needs a tile position to count up.")
-            .c("Initialize it with the position of the first tile.")
             .w("init_tile_index")
-            .c("Arguments are in place. We're ready to set all tiles.")
             .w("tile_value")
             .w("write_all_tiles_inner")
             .w("drop_tile_value");
