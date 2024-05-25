@@ -1,5 +1,5 @@
 use capi_runtime::{DataStack, Program};
-use leptos::{component, view, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::components::panel::Panel;
 
@@ -36,9 +36,18 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
 #[component]
 pub fn DataStack(data_stack: DataStack) -> impl IntoView {
+    let values = data_stack
+        .values()
+        .map(|value| {
+            view! {
+                <li class="inline-block mr-2">{value.to_string()}</li>
+            }
+        })
+        .collect_view();
+
     view! {
-        <p>
-            {format!("{:?}", data_stack)}
-        </p>
+        <ol>
+            {values}
+        </ol>
     }
 }
