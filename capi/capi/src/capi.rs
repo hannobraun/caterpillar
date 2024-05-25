@@ -41,9 +41,8 @@ pub fn program() -> Program {
     source.define("write_all_tiles_inner", |s| {
         s.b(["tile_value"])
             .c("This is a recursive function, so we might have been at it for")
-            .c("a while, if we make it here. Check if the current tile")
-            .c("position has reached the last one, which would let us know ")
-            .c("we're done.")
+            .c("a while, if we make it here. Check if the tile index has gone")
+            .c("beyond the last tile, which would let us know that we're done.")
             .w("check_tile_index")
             .c("Return, if current position has reached beyond the last tile.")
             .w("return_if_zero")
