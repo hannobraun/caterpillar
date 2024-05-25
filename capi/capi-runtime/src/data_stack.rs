@@ -52,6 +52,10 @@ impl DataStack {
             self.push(x);
         }
     }
+
+    pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
+        self.values.iter().copied()
+    }
 }
 
 #[derive(
