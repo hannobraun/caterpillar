@@ -76,7 +76,7 @@ pub fn program() -> Program {
             .v(1)
             .w("add")
             .b(["tile_x_new"])
-            .c("Leave zero, if the x-coordinate has advanced beyond the width.")
+            .c("Check if the x coordinate has advanced beyond the width.")
             .w("tile_field_size")
             .w("x")
             .w("load")
