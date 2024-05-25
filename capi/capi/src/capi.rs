@@ -70,21 +70,16 @@ pub fn program() -> Program {
             .w("sub");
     });
     source.define("increment_tile_index", |s| {
-        s
+        s.b(["tile_x", "tile_y"])
             .c("Copy the x-coordinate of the current position.")
-            .v(1)
-            .w("copy")
+            .w("tile_x")
             .c("Increment the x-coordinate.")
             .v(1)
             .w("add")
             .b(["tile_x_new"])
-            .c("Remove the old x-coordinate to make space for the updated one.")
-            .v(1)
-            .w("drop")
             .c("Put the updated x-coordinate where the old one was.")
             .w("tile_x_new")
-            .v(1)
-            .w("place")
+            .w("tile_y")
             .c("Leave zero, if the x-coordinate has advanced beyond the width.")
             .w("tile_field_size")
             .w("x")
