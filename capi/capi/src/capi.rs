@@ -344,7 +344,7 @@ pub fn program() -> Program {
         s.v(3);
     });
     source.define("position", |s| {
-        s.c("Address of the position vector in memory").v(4);
+        s.c("Address of the position vector in memory").v(10);
     });
     source.define("velocity", |s| {
         s.c("Address of the velocity vector in memory").v(6);
