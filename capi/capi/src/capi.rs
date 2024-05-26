@@ -343,14 +343,14 @@ pub fn program() -> Program {
     source.define("should_game_run", |s| {
         s.v(3);
     });
-    source.define("position", |s| {
-        s.c("Address of the position vector in memory").v(10);
-    });
     source.define("velocity", |s| {
         s.c("Address of the velocity vector in memory").v(6);
     });
     source.define("next_position", |s| {
         s.c("Address of the next position vector in memory").v(8);
+    });
+    source.define("position", |s| {
+        s.c("Address of the position vector in memory").v(10);
     });
 
     // Vectors
