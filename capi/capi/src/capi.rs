@@ -132,9 +132,6 @@ pub fn program() -> Program {
     });
 
     // Game state - tile field size
-    source.define("tile_field_size", |s| {
-        s.c("Address of the tile field height in memory.").v(0);
-    });
     source.define("store_tile_field_size", |s| {
         s.w("tile_field_size").w("store_vector");
     });
@@ -183,9 +180,6 @@ pub fn program() -> Program {
     });
 
     // Game state - frame count
-    source.define("frame_count", |s| {
-        s.c("Address of the frame count in memory.").v(2);
-    });
     source.define("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
     });
@@ -223,17 +217,11 @@ pub fn program() -> Program {
     });
 
     // Game state - run game
-    source.define("run_game", |s| {
-        s.v(3);
-    });
     source.define("init_run_game", |s| {
         s.v(1).w("run_game").w("store");
     });
 
     // Game state - position
-    source.define("position", |s| {
-        s.c("Address of the position vector in memory").v(4);
-    });
     source.define("init_position", |s| {
         s.v(15).v(15).w("position").w("store_vector");
     });
@@ -250,17 +238,11 @@ pub fn program() -> Program {
     });
 
     // Game state - velocity
-    source.define("velocity", |s| {
-        s.c("Address of the velocity vector in memory").v(6);
-    });
     source.define("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("store_vector");
     });
 
     // Game state - next position
-    source.define("next_position", |s| {
-        s.c("Address of the next position vector in memory").v(8);
-    });
     source.define("init_next_position", |s| {
         s.w("position")
             .w("load_vector")
@@ -349,6 +331,26 @@ pub fn program() -> Program {
             .c("It seems it wasn't that either, which means we received an")
             .c("invalid return value. This would be a good place to trigger a")
             .c("panic, but the language doesn't support that yet.");
+    });
+
+    // Memory map
+    source.define("tile_field_size", |s| {
+        s.c("Address of the tile field height in memory.").v(0);
+    });
+    source.define("frame_count", |s| {
+        s.c("Address of the frame count in memory.").v(2);
+    });
+    source.define("run_game", |s| {
+        s.v(3);
+    });
+    source.define("position", |s| {
+        s.c("Address of the position vector in memory").v(4);
+    });
+    source.define("velocity", |s| {
+        s.c("Address of the velocity vector in memory").v(6);
+    });
+    source.define("next_position", |s| {
+        s.c("Address of the next position vector in memory").v(8);
     });
 
     // Vectors
