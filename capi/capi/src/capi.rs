@@ -5,7 +5,10 @@ pub fn program() -> Program {
 
     // Main loop
     source.define("main", |s| {
-        s.w("store_tile_field_size").w("init").w("main_inner");
+        s.w("tile_field_size")
+            .w("store_vector")
+            .w("init")
+            .w("main_inner");
     });
     source.define("main_inner", |s| {
         s.w("draw").w("update").w("main_inner");
@@ -132,9 +135,6 @@ pub fn program() -> Program {
     });
 
     // Game state - tile field size
-    source.define("store_tile_field_size", |s| {
-        s.w("tile_field_size").w("store_vector");
-    });
     source.define("is_out_of_bounds", |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
