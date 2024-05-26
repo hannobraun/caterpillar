@@ -344,10 +344,10 @@ pub fn program() -> Program {
         s.v(3);
     });
     source.define("velocity", |s| {
-        s.c("Address of the velocity vector in memory").v(6);
+        s.c("Address of the velocity vector in memory").v(4);
     });
     source.define("next_position", |s| {
-        s.c("Address of the next position vector in memory").v(8);
+        s.c("Address of the next position vector in memory").v(6);
     });
     source.define("position", |s| {
         s.c("Address of the position vector in memory").v(10);
