@@ -104,7 +104,7 @@ pub fn program() -> Program {
     // Game state
     source.define("init", |s| {
         s.w("init_frame_count")
-            .w("init_run_game")
+            .w("init_should_game_run")
             .w("init_position")
             .w("init_velocity")
             .w("init_next_position");
@@ -217,7 +217,7 @@ pub fn program() -> Program {
     });
 
     // Game state - run game
-    source.define("init_run_game", |s| {
+    source.define("init_should_game_run", |s| {
         s.v(1).w("should_game_run").w("store");
     });
 
