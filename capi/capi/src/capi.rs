@@ -122,7 +122,7 @@ pub fn program() -> Program {
             .w("remainder")
             .w("return_if_non_zero")
             .c("Time for more updates!")
-            .w("run_game")
+            .w("should_game_run")
             .w("load")
             .w("return_if_zero")
             .w("handle_input")
@@ -218,7 +218,7 @@ pub fn program() -> Program {
 
     // Game state - run game
     source.define("init_run_game", |s| {
-        s.v(1).w("run_game").w("store");
+        s.v(1).w("should_game_run").w("store");
     });
 
     // Game state - position
@@ -340,7 +340,7 @@ pub fn program() -> Program {
     source.define("frame_count", |s| {
         s.c("Address of the frame count in memory.").v(2);
     });
-    source.define("run_game", |s| {
+    source.define("should_game_run", |s| {
         s.v(3);
     });
     source.define("position", |s| {
