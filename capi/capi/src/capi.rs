@@ -26,7 +26,7 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("draw_snake", |s| {
-        s.w("position")
+        s.w("positions")
             .w("load_vector")
             .v(1)
             .w("write_tile")
@@ -223,7 +223,7 @@ pub fn program() -> Program {
 
     // Game state - position
     source.define("init_position", |s| {
-        s.v(15).v(15).w("position").w("store_vector");
+        s.v(15).v(15).w("positions").w("store_vector");
     });
     source.define("update_position", |s| {
         s.w("update_next_position")
@@ -233,7 +233,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("load_vector")
-            .w("position")
+            .w("positions")
             .w("store_vector");
     });
 
@@ -244,20 +244,20 @@ pub fn program() -> Program {
 
     // Game state - next position
     source.define("init_next_position", |s| {
-        s.w("position")
+        s.w("positions")
             .w("load_vector")
             .w("next_position")
             .w("store_vector");
     });
     source.define("update_next_position", |s| {
-        s.w("position")
+        s.w("positions")
             .w("x")
             .w("load")
             .w("velocity")
             .w("x")
             .w("load")
             .w("add")
-            .w("position")
+            .w("positions")
             .w("y")
             .w("load")
             .w("velocity")
@@ -349,7 +349,7 @@ pub fn program() -> Program {
     source.define("next_position", |s| {
         s.c("Address of the next position vector in memory").v(6);
     });
-    source.define("position", |s| {
+    source.define("positions", |s| {
         s.c("Address of the position vector in memory").v(10);
     });
 
