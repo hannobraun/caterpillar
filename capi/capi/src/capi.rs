@@ -216,7 +216,7 @@ pub fn program() -> Program {
             .w("init_frame_count");
     });
 
-    // Game state - run game
+    // Game state - should game run
     source.define("init_should_game_run", |s| {
         s.v(1).w("should_game_run").w("store");
     });
