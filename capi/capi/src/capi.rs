@@ -108,7 +108,7 @@ pub fn program() -> Program {
     source.define("init", |s| {
         s.w("init_frame_count")
             .w("init_should_game_run")
-            .w("init_position")
+            .w("init_positions")
             .w("init_velocity")
             .w("init_next_position");
     });
@@ -253,7 +253,7 @@ pub fn program() -> Program {
     });
 
     // Game state - position
-    source.define("init_position", |s| {
+    source.define("init_positions", |s| {
         s.v(15).v(15).w("positions").w("store_vector");
     });
     source.define("update_position", |s| {
