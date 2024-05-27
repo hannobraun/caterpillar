@@ -27,7 +27,7 @@ pub fn program() -> Program {
     });
     source.define("draw_snake", |s| {
         s.w("positions")
-            .w("load_vector")
+            .w("vec_load")
             .v(1)
             .w("write_tile")
             .w("drop_vector");
@@ -229,7 +229,7 @@ pub fn program() -> Program {
     // Game state - next position
     source.define("init_next_position", |s| {
         s.w("positions")
-            .w("load_vector")
+            .w("vec_load")
             .w("next_position")
             .w("store_vector");
     });
@@ -259,11 +259,11 @@ pub fn program() -> Program {
     source.define("update_positions", |s| {
         s.w("update_next_position")
             .w("next_position")
-            .w("load_vector")
+            .w("vec_load")
             .w("is_out_of_bounds")
             .w("return_if_non_zero")
             .w("next_position")
-            .w("load_vector")
+            .w("vec_load")
             .w("positions")
             .w("store_vector");
     });
@@ -361,7 +361,7 @@ pub fn program() -> Program {
     source.define("y", |s| {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
     });
-    source.define("load_vector", |s| {
+    source.define("vec_load", |s| {
         s.c("Make a copy of the vector address, since we're going to need")
             .c("it for each coordinate.")
             .v(0)
