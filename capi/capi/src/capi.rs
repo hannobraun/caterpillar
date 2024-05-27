@@ -252,7 +252,7 @@ pub fn program() -> Program {
             .w("store_vector");
     });
 
-    // Game state - position
+    // Game state - positions
     source.define("init_positions", |s| {
         s.v(15).v(15).w("positions").w("store_vector");
     });
