@@ -25,13 +25,14 @@ impl UpdatesTx {
             if program_at_client.can_step() && program.can_step() {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
+                //
+                // Let's check if there's a change that we consider worthy of
+                // sending an update for.
 
                 let breakpoints_unchanged =
                     program_at_client.breakpoints == program.breakpoints;
 
                 if breakpoints_unchanged {
-                    // If the breakpoints haven't changed, we truly have nothing
-                    // useful for the client.
                     return;
                 }
             }
