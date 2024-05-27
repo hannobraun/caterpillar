@@ -264,6 +264,8 @@ pub fn program() -> Program {
             .b(["first"])
             .w("positions_buffer")
             .w("first")
+            .w("add")
+            .w("index")
             .w("add");
     });
     source.define("init_positions", |s| {
