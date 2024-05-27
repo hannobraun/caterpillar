@@ -267,7 +267,11 @@ pub fn program() -> Program {
             .w("pos_address");
     });
     source.define("pos_push", |s| {
-        s.v(0).w("pos_get").w("store_vector");
+        s.w("positions_first")
+            .w("load")
+            .v(0)
+            .w("pos_address")
+            .w("store_vector");
     });
     source.define("pos_address", |s| {
         s.b(["base", "offset"])
