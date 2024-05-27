@@ -1,6 +1,8 @@
 use capi_runtime::Program;
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
+use crate::components::panel::Panel;
+
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
 pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
@@ -8,12 +10,12 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
         let program = program.get()?;
 
         let view = view! {
-            <div>
+            <Panel class="">
                 <p>
                     "Current memory: "
                     {format!("{:?}", program.memory)}
                 </p>
-            </div>
+            </Panel>
         };
 
         Some(view)
