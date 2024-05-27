@@ -1,5 +1,5 @@
-use capi_runtime::Program;
-use leptos::{component, view, IntoView, ReadSignal, SignalGet};
+use capi_runtime::{self, Program};
+use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::components::panel::Panel;
 
@@ -9,12 +9,23 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let memory = move || {
         let program = program.get()?;
 
+        let values = program
+            .memory
+            .inner
+            .into_iter()
+            .map(|value| {
+                view! {
+                    <Value value=value />
+                }
+            })
+            .collect_view();
+
         let view = view! {
             <Panel class="">
                 <p>"Memory:"</p>
-                <p>
-                    {format!("{:?}", program.memory)}
-                </p>
+                <ol>
+                    {values}
+                </ol>
             </Panel>
         };
 
@@ -23,5 +34,12 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
     view! {
         {memory}
+    }
+}
+
+#[component]
+fn Value(value: capi_runtime::Value) -> impl IntoView {
+    view! {
+        <li class="inline-block w-6 mr-2 text-right">{value.to_string()}</li>
     }
 }
