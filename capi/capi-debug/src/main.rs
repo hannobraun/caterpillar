@@ -54,7 +54,7 @@ pub fn Debugger(
             events=events.clone() />
         <StackExplorer
             program=program />
-        <Memory
+        <MemoryExplorer
             program=program />
         <CodeExplorer
             program=program
@@ -64,7 +64,7 @@ pub fn Debugger(
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn Memory(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let memory = move || {
         let program = program.get()?;
 
