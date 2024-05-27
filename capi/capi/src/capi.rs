@@ -262,14 +262,20 @@ pub fn program() -> Program {
             .w("positions_first")
             .w("load")
             .b(["base"])
+            .w("base")
+            .w("offset")
+            .w("pos_address");
+    });
+    source.define("pos_push", |s| {
+        s.v(0).w("pos_get").w("store_vector");
+    });
+    source.define("pos_address", |s| {
+        s.b(["base", "offset"])
             .w("positions_buffer")
             .w("base")
             .w("add")
             .w("offset")
             .w("add");
-    });
-    source.define("pos_push", |s| {
-        s.v(0).w("pos_get").w("store_vector");
     });
     source.define("init_positions", |s| {
         s.v(0)
