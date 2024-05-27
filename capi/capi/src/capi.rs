@@ -274,7 +274,8 @@ pub fn program() -> Program {
             .w("store")
             .v(15)
             .v(15)
-            .w("positions_buffer")
+            .v(0)
+            .w("pos_address")
             .w("store_vector");
     });
     source.define("update_positions", |s| {
