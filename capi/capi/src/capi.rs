@@ -268,15 +268,16 @@ pub fn program() -> Program {
             .w("index")
             .w("add");
     });
+    source.define("pos_push", |s| {
+        s.v(0).w("pos_address").w("store_vector");
+    });
     source.define("init_positions", |s| {
         s.v(0)
             .w("positions_first")
             .w("store")
             .v(15)
             .v(15)
-            .v(0)
-            .w("pos_address")
-            .w("store_vector");
+            .w("pos_push");
     });
     source.define("update_positions", |s| {
         s.w("update_next_position")
@@ -286,9 +287,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("vec_load")
-            .v(0)
-            .w("pos_address")
-            .w("store_vector");
+            .w("pos_push");
     });
 
     // Input
