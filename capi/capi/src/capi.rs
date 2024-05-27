@@ -122,7 +122,7 @@ pub fn program() -> Program {
             .c("We want to make updates at regular intervals. Determine, if")
             .c("this frame is one we need to make an update in. If not, we're")
             .c("done.")
-            .v(30)
+            .v(10)
             .w("remainder")
             .w("return_if_non_zero")
             .c("Time for more updates!")
