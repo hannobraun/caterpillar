@@ -258,10 +258,10 @@ pub fn program() -> Program {
 
     // Game state - positions
     source.define("position", |s| {
-        s.b(["index"]).w("positions");
+        s.b(["index"]).w("positions_buffer");
     });
     source.define("init_positions", |s| {
-        s.v(15).v(15).w("positions").w("store_vector");
+        s.v(15).v(15).w("positions_buffer").w("store_vector");
     });
     source.define("update_positions", |s| {
         s.w("update_next_position")
@@ -271,7 +271,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("vec_load")
-            .w("positions")
+            .w("positions_buffer")
             .w("store_vector");
     });
 
@@ -356,7 +356,7 @@ pub fn program() -> Program {
     source.define("next_position", |s| {
         s.c("Address of the next position vector in memory").v(6);
     });
-    source.define("positions", |s| {
+    source.define("positions_buffer", |s| {
         s.c("Address of the position vector in memory").v(11);
     });
 
