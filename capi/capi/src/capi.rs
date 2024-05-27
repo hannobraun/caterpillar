@@ -261,9 +261,9 @@ pub fn program() -> Program {
         s.b(["offset"])
             .w("positions_first")
             .w("load")
-            .b(["first"])
+            .b(["base"])
             .w("positions_buffer")
-            .w("first")
+            .w("base")
             .w("add")
             .w("offset")
             .w("add");
