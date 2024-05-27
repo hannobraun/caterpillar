@@ -26,7 +26,10 @@ impl UpdatesTx {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
 
-                if program_at_client.breakpoints == program.breakpoints {
+                let breakpoints_unchanged =
+                    program_at_client.breakpoints == program.breakpoints;
+
+                if breakpoints_unchanged {
                     // If the breakpoints haven't changed, we truly have nothing
                     // useful for the client.
                     return;
