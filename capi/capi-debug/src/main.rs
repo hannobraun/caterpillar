@@ -13,7 +13,7 @@ use crate::{
     components::{
         call_stack::CallStack, control_panel::ControlPanel,
         execution_context::ExecutionContext, function::Function,
-        stack_explorer::StackExplorer,
+        memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
     },
 };
 
@@ -59,29 +59,6 @@ pub fn Debugger(
         <CodeExplorer
             program=program
             events=events />
-    }
-}
-
-#[allow(unused_braces)] // working around a warning from the `view!` macro
-#[component]
-pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
-    let memory = move || {
-        let program = program.get()?;
-
-        let view = view! {
-            <div>
-                <p>
-                    "Current memory: "
-                    {format!("{:?}", program.memory)}
-                </p>
-            </div>
-        };
-
-        Some(view)
-    };
-
-    view! {
-        {memory}
     }
 }
 
