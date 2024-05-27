@@ -357,7 +357,7 @@ pub fn program() -> Program {
         s.c("Address of the next position vector in memory").v(6);
     });
     source.define("positions", |s| {
-        s.c("Address of the position vector in memory").v(8);
+        s.c("Address of the position vector in memory").v(11);
     });
 
     // Vectors
