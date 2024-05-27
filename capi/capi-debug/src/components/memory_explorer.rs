@@ -11,8 +11,8 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
         let view = view! {
             <Panel class="">
+                <p>"Current memory: "</p>
                 <p>
-                    "Current memory: "
                     {format!("{:?}", program.memory)}
                 </p>
             </Panel>
