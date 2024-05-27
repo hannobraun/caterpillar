@@ -258,14 +258,14 @@ pub fn program() -> Program {
 
     // Game state - positions
     source.define("pos_get", |s| {
-        s.b(["index"])
+        s.b(["offset"])
             .w("positions_first")
             .w("load")
             .b(["first"])
             .w("positions_buffer")
             .w("first")
             .w("add")
-            .w("index")
+            .w("offset")
             .w("add");
     });
     source.define("pos_push", |s| {
