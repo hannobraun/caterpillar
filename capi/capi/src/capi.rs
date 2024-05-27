@@ -131,7 +131,7 @@ pub fn program() -> Program {
             .w("handle_input")
             .v(0)
             .w("drop")
-            .w("update_position");
+            .w("update_positions");
     });
 
     // Game state - tile field size
@@ -256,7 +256,7 @@ pub fn program() -> Program {
     source.define("init_positions", |s| {
         s.v(15).v(15).w("positions").w("store_vector");
     });
-    source.define("update_position", |s| {
+    source.define("update_positions", |s| {
         s.w("update_next_position")
             .w("next_position")
             .w("load_vector")
