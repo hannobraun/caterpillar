@@ -221,22 +221,6 @@ pub fn program() -> Program {
         s.v(1).w("should_game_run").w("store");
     });
 
-    // Game state - position
-    source.define("init_position", |s| {
-        s.v(15).v(15).w("positions").w("store_vector");
-    });
-    source.define("update_position", |s| {
-        s.w("update_next_position")
-            .w("next_position")
-            .w("load_vector")
-            .w("is_out_of_bounds")
-            .w("return_if_non_zero")
-            .w("next_position")
-            .w("load_vector")
-            .w("positions")
-            .w("store_vector");
-    });
-
     // Game state - velocity
     source.define("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("store_vector");
@@ -265,6 +249,22 @@ pub fn program() -> Program {
             .w("load")
             .w("add")
             .w("next_position")
+            .w("store_vector");
+    });
+
+    // Game state - position
+    source.define("init_position", |s| {
+        s.v(15).v(15).w("positions").w("store_vector");
+    });
+    source.define("update_position", |s| {
+        s.w("update_next_position")
+            .w("next_position")
+            .w("load_vector")
+            .w("is_out_of_bounds")
+            .w("return_if_non_zero")
+            .w("next_position")
+            .w("load_vector")
+            .w("positions")
             .w("store_vector");
     });
 
