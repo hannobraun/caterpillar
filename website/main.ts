@@ -1,6 +1,13 @@
 Deno.serve((request) => {
     const url = new URL(request.url);
 
+    if (url.hostname == "caterpillar.deno.dev") {
+        return Response.redirect(
+            "https://capi.hannobraun.com/",
+            308,
+        );
+    }
+
     if (url.pathname == "/") {
         return Response.redirect(
             `${url.origin}/daily`,
