@@ -286,7 +286,8 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("vec_load")
-            .w("positions_buffer")
+            .v(0)
+            .w("pos_address")
             .w("store_vector");
     });
 
