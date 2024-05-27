@@ -27,7 +27,7 @@ pub fn program() -> Program {
     });
     source.define("draw_snake", |s| {
         s.v(0)
-            .w("position")
+            .w("pos_address")
             .w("vec_load")
             .v(1)
             .w("write_tile")
@@ -230,14 +230,14 @@ pub fn program() -> Program {
     // Game state - next position
     source.define("init_next_position", |s| {
         s.v(0)
-            .w("position")
+            .w("pos_address")
             .w("vec_load")
             .w("next_position")
             .w("store_vector");
     });
     source.define("update_next_position", |s| {
         s.v(0)
-            .w("position")
+            .w("pos_address")
             .w("x")
             .w("load")
             .w("velocity")
@@ -245,7 +245,7 @@ pub fn program() -> Program {
             .w("load")
             .w("add")
             .v(0)
-            .w("position")
+            .w("pos_address")
             .w("y")
             .w("load")
             .w("velocity")
@@ -257,7 +257,7 @@ pub fn program() -> Program {
     });
 
     // Game state - positions
-    source.define("position", |s| {
+    source.define("pos_address", |s| {
         s.b(["index"])
             .w("positions_first")
             .w("load")
