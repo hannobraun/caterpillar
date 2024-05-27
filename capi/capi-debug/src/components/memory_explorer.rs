@@ -9,13 +9,21 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let memory = move || {
         let program = program.get()?;
 
-        let values = program
-            .memory
-            .inner
+        let mut values = program.memory.inner.into_iter().peekable();
+        let values = values.by_ref();
+
+        let mut lines = Vec::new();
+
+        while values.peek().is_some() {
+            let line = values.take(16).collect::<Vec<_>>();
+            lines.push(line);
+        }
+
+        let lines = lines
             .into_iter()
-            .map(|value| {
+            .map(|line| {
                 view! {
-                    <Value value=value />
+                    <Line line=line />
                 }
             })
             .collect_view();
@@ -24,7 +32,7 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
             <Panel class="">
                 <p>"Memory:"</p>
                 <ol>
-                    {values}
+                    {lines}
                 </ol>
             </Panel>
         };
@@ -34,6 +42,24 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 
     view! {
         {memory}
+    }
+}
+
+#[component]
+fn Line(line: Vec<capi_runtime::Value>) -> impl IntoView {
+    let values = line
+        .into_iter()
+        .map(|value| {
+            view! {
+                <Value value=value />
+            }
+        })
+        .collect_view();
+
+    view! {
+        <li>
+            <ol>{values}</ol>
+        </li>
     }
 }
 
