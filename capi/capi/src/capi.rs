@@ -261,7 +261,13 @@ pub fn program() -> Program {
         s.b(["index"]).w("positions_buffer");
     });
     source.define("init_positions", |s| {
-        s.v(15).v(15).w("positions_buffer").w("store_vector");
+        s.v(0)
+            .w("positions_first")
+            .w("store")
+            .v(15)
+            .v(15)
+            .w("positions_buffer")
+            .w("store_vector");
     });
     source.define("update_positions", |s| {
         s.w("update_next_position")
@@ -355,6 +361,9 @@ pub fn program() -> Program {
     });
     source.define("next_position", |s| {
         s.c("Address of the next position vector in memory").v(6);
+    });
+    source.define("positions_first", |s| {
+        s.v(8);
     });
     source.define("positions_buffer", |s| {
         s.c("Address of the position vector in memory").v(11);
