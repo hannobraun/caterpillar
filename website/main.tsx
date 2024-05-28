@@ -127,7 +127,7 @@ Deno.serve(async (request) => {
         /^\/daily\/(\d{4}-\d{2}-\d{2})$/,
     );
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
-        const path = `daily/${dailyDateWithNoSlash[1]}.md`;
+        const path = `website/daily/${dailyDateWithNoSlash[1]}.md`;
         const file = await Deno.readTextFile(path);
         return new Response(file, { status: 200 });
     }
