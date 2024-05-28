@@ -391,7 +391,7 @@ pub fn program() -> Program {
         s.v(9);
     });
     source.define("positions_buffer", |s| {
-        s.c("Address of the position vector in memory").v(11);
+        s.c("Address of the position vector in memory").v(12);
     });
 
     // Vectors
