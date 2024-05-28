@@ -22,23 +22,28 @@ Deno.serve(async (request) => {
     }
 
     if (url.pathname == "/daily") {
-        const entries = [];
-
+        const dates = [];
         for await (const dirEntry of Deno.readDir("daily")) {
             const date = dirEntry.name.match(
                 /^(\d{4}-\d{2}-\d{2}).md$/,
             );
 
             if (date) {
-                const link = `/daily/${date[1]}`;
-                entries.push(
-                    <li>
-                        <a href={link}>
-                            {date[1]}
-                        </a>
-                    </li>,
-                );
+                dates.push(date[1]);
             }
+        }
+
+        const entries = [];
+
+        for (const date of dates) {
+            const link = `/daily/${date}`;
+            entries.push(
+                <li>
+                    <a href={link}>
+                        {date}
+                    </a>
+                </li>,
+            );
         }
 
         const page = (
