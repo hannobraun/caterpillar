@@ -6,7 +6,7 @@ pub fn program() -> Program {
     // Main loop
     source.define("main", |s| {
         s.w("tile_field_size")
-            .w("store_vector")
+            .w("vec_store")
             .w("init")
             .w("main_inner");
     });
@@ -224,7 +224,7 @@ pub fn program() -> Program {
 
     // Game state - velocity
     source.define("init_velocity", |s| {
-        s.v(1).v(0).w("velocity").w("store_vector");
+        s.v(1).v(0).w("velocity").w("vec_store");
     });
 
     // Game state - next position
@@ -233,7 +233,7 @@ pub fn program() -> Program {
             .w("pos_get")
             .w("vec_load")
             .w("next_position")
-            .w("store_vector");
+            .w("vec_store");
     });
     source.define("update_next_position", |s| {
         s.v(0)
@@ -253,7 +253,7 @@ pub fn program() -> Program {
             .w("load")
             .w("add")
             .w("next_position")
-            .w("store_vector");
+            .w("vec_store");
     });
 
     // Game state - positions
@@ -271,7 +271,7 @@ pub fn program() -> Program {
             .w("load")
             .v(0)
             .w("pos_address")
-            .w("store_vector");
+            .w("vec_store");
     });
     source.define("pos_address", |s| {
         s.b(["base", "offset"])
@@ -326,7 +326,7 @@ pub fn program() -> Program {
             .v(0)
             .v(-1)
             .w("velocity")
-            .w("store_vector")
+            .w("vec_store")
             .c("Now check if it actually was an Up event, and if so, return.")
             .v(1)
             .w("sub")
@@ -337,7 +337,7 @@ pub fn program() -> Program {
             .v(-1)
             .v(0)
             .w("velocity")
-            .w("store_vector")
+            .w("vec_store")
             .v(1)
             .w("sub")
             .v(0)
@@ -347,7 +347,7 @@ pub fn program() -> Program {
             .v(0)
             .v(1)
             .w("velocity")
-            .w("store_vector")
+            .w("vec_store")
             .v(1)
             .w("sub")
             .v(0)
@@ -357,7 +357,7 @@ pub fn program() -> Program {
             .v(1)
             .v(0)
             .w("velocity")
-            .w("store_vector")
+            .w("vec_store")
             .v(1)
             .w("sub")
             .v(0)
@@ -417,7 +417,7 @@ pub fn program() -> Program {
             .w("y")
             .w("load");
     });
-    source.define("store_vector", |s| {
+    source.define("vec_store", |s| {
         s.c("Make a copy of the vector address.")
             .v(0)
             .w("copy")
