@@ -292,7 +292,7 @@ pub fn program() -> Program {
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
-            .w("positions_length")
+            .w("positions_capacity")
             .w("load")
             .w("remainder")
             .w("positions_buffer")
@@ -306,7 +306,7 @@ pub fn program() -> Program {
             .w("positions_next")
             .w("store")
             .v(64)
-            .w("positions_length")
+            .w("positions_capacity")
             .w("store")
             .v(15)
             .v(15)
@@ -411,7 +411,7 @@ pub fn program() -> Program {
     source.define("positions_next", |s| {
         s.v(9);
     });
-    source.define("positions_length", |s| {
+    source.define("positions_capacity", |s| {
         s.v(10);
     });
     source.define("positions_buffer", |s| {
