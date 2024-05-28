@@ -56,6 +56,9 @@ impl Evaluator {
             Instruction::CallBuiltin { name } => {
                 let result = match name.as_str() {
                     "add" => builtins::add(&mut self.data_stack),
+                    "add_wrap_unsigned" => {
+                        builtins::add_wrap_unsigned(&mut self.data_stack)
+                    }
                     "copy" => builtins::copy(&mut self.data_stack),
                     "drop" => builtins::drop(&mut self.data_stack),
                     "greater" => builtins::greater(&mut self.data_stack),

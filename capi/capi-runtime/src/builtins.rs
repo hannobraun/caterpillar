@@ -17,6 +17,18 @@ pub fn add(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn add_wrap_unsigned(data_stack: &mut DataStack) -> Result {
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
+
+    let c = a.0.wrapping_add(b.0);
+    let c = if c >= 0 { c } else { c - i8::MIN };
+
+    data_stack.push(c);
+
+    Ok(None)
+}
+
 pub fn copy(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
