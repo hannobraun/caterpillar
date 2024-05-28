@@ -31,7 +31,7 @@ pub fn program() -> Program {
             .w("vec_load")
             .v(1)
             .w("write_tile")
-            .w("drop_vector");
+            .w("vec_drop");
     });
 
     // Draw - write tiles
@@ -40,7 +40,7 @@ pub fn program() -> Program {
             .w("init_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner")
-            .w("drop_vector");
+            .w("vec_drop");
     });
     source.define("write_all_tiles_inner", |s| {
         s.b(["tile_value"])
@@ -432,7 +432,7 @@ pub fn program() -> Program {
             .w("x")
             .w("store");
     });
-    source.define("drop_vector", |s| {
+    source.define("vec_drop", |s| {
         s.v(0).w("drop").v(0).w("drop");
     });
 
