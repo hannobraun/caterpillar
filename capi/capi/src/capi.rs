@@ -288,6 +288,9 @@ pub fn program() -> Program {
             .v(0)
             .w("positions_next")
             .w("store")
+            .v(64)
+            .w("positions_length")
+            .w("store")
             .v(15)
             .v(15)
             .w("pos_push");
@@ -389,6 +392,9 @@ pub fn program() -> Program {
     });
     source.define("positions_next", |s| {
         s.v(9);
+    });
+    source.define("positions_length", |s| {
+        s.v(10);
     });
     source.define("positions_buffer", |s| {
         s.c("Address of the position vector in memory").v(12);
