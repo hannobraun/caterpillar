@@ -34,7 +34,6 @@ Deno.serve(async (request) => {
         }
 
         const entries = [];
-
         for (const date of dates) {
             const link = `/daily/${date}`;
             entries.push(
