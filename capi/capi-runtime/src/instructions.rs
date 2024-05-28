@@ -57,6 +57,11 @@ impl InstructionAddress {
         self.0 += 1;
     }
 
+    pub fn next(mut self) -> Self {
+        self.increment();
+        self
+    }
+
     pub fn to_usize(self) -> usize {
         self.0.try_into().unwrap()
     }
