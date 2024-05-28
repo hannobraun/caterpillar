@@ -65,9 +65,16 @@ Deno.serve(async (request) => {
             .font-bold {
                 font-weight: 700;
             }
+            .max-w-xl {
+                width: 36rem;
+            }
             .mx-auto {
                 margin-left: auto;
                 margin-right: auto;
+            }
+            .mx-8 {
+                margin-left: 2rem;
+                margin-right: 2rem;
             }
             .my-4 {
                 margin-top: 1rem;
@@ -75,9 +82,6 @@ Deno.serve(async (request) => {
             }
             .text-lg {
                 font-size: 1.125rem;
-            }
-            .w-fit {
-                width: fit-content;
             }
         `;
 
@@ -89,8 +93,12 @@ Deno.serve(async (request) => {
                         <title>Daily Thoughts - Caterpillar</title>
                         <style>{css}</style>
                     </head>
-                    <body class="w-fit mx-auto">
-                        <ol>{entries}</ol>
+                    <body class="max-w-xl mx-auto">
+                        <h2>Daily Thoughts</h2>
+                        <p>
+                            Hey, I'm Hanno! These are my daily thoughts on <a href="https://github.com/hannobraun/caterpillar">Caterpillar</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:hello@hannobraun.com">get in touch</a>!
+                        </p>
+                        <ol class="mx-8">{entries}</ol>
                     </body>
                 </html>
             </>
