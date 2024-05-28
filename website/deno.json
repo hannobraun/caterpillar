@@ -1,6 +1,6 @@
 {
     "tasks": {
-        "start": "deno run --allow-net --watch main.ts"
+        "start": "deno run --allow-net --allow-read=./daily --watch main.ts"
     },
     "fmt": {
         "indentWidth": 4
