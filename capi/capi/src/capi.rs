@@ -432,9 +432,6 @@ pub fn program() -> Program {
             .w("x")
             .w("store");
     });
-    source.define("copy_vector", |s| {
-        s.v(1).w("copy").v(1).w("copy");
-    });
     source.define("drop_vector", |s| {
         s.v(0).w("drop").v(0).w("drop");
     });
