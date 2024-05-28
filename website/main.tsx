@@ -33,6 +33,9 @@ Deno.serve(async (request) => {
             }
         }
 
+        dates.sort();
+        dates.reverse();
+
         const entries = [];
         for (const date of dates) {
             const link = `/daily/${date}`;
