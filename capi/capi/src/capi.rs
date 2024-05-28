@@ -267,11 +267,25 @@ pub fn program() -> Program {
             .w("pos_address");
     });
     source.define("pos_push", |s| {
-        s.w("positions_first")
+        s.w("positions_next")
             .w("load")
             .v(0)
             .w("pos_address")
-            .w("vec_store");
+            .w("vec_store")
+            .w("positions_next")
+            .w("load")
+            .v(2)
+            .w("add_wrap_unsigned")
+            .w("positions_next")
+            .w("store");
+    });
+    source.define("pos_pop", |s| {
+        s.w("positions_first")
+            .w("load")
+            .v(2)
+            .w("add_wrap_unsigned")
+            .w("positions_first")
+            .w("store");
     });
     source.define("pos_address", |s| {
         s.b(["base", "offset"])
@@ -306,7 +320,8 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("vec_load")
-            .w("pos_push");
+            .w("pos_push")
+            .w("pos_pop");
     });
 
     // Input
