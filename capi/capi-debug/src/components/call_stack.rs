@@ -39,7 +39,7 @@ pub fn CallStack(
     };
 
     view! {
-        <Panel class="h-48">
+        <Panel class="h-64">
             <div>
                 <h2>"Call stack:"</h2>
                 <ol>
