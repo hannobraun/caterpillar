@@ -4,6 +4,7 @@ pub struct Expression {
     pub address: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
+    pub is_on_call_stack: bool,
     pub effect: Option<ProgramEffect>,
 }
 
@@ -32,10 +33,25 @@ impl Expression {
             }
         });
 
+        // This does not work reliably, for reasons I don't fully understand.
+        // But it's better than nothing, so I'm keeping it for now, and will
+        // hopefully fix it soon.
+        let is_on_call_stack =
+            address
+                .map(|address| {
+                    program.evaluator.call_stack.iter().any(
+                        |&call_stack_address| {
+                            call_stack_address == address.next()
+                        },
+                    )
+                })
+                .unwrap_or(false);
+
         Self {
             address,
             has_durable_breakpoint,
             is_comment,
+            is_on_call_stack,
             effect,
         }
     }
