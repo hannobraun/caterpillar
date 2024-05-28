@@ -1,10 +1,15 @@
 use capi_runtime::Program;
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::components::panel::Panel;
+use crate::{client::EventsTx, components::panel::Panel};
 
 #[component]
-pub fn CallStack(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn CallStack(
+    program: ReadSignal<Option<Program>>,
+    events: EventsTx,
+) -> impl IntoView {
+    let _ = events;
+
     let addresses = move || {
         let view = program
             .get()?

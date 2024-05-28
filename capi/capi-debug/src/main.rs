@@ -45,7 +45,8 @@ pub fn Debugger(
 
     view! {
         <CallStack
-            program=program />
+            program=program
+            events=events.clone() />
         <ExecutionContext
             program=program
             state=execution_context
