@@ -277,9 +277,9 @@ pub fn program() -> Program {
         s.b(["base", "offset"])
             .w("positions_buffer")
             .w("base")
-            .w("add")
+            .w("add_wrap_unsigned")
             .w("offset")
-            .w("add");
+            .w("add_wrap_unsigned");
     });
     source.define("init_positions", |s| {
         s.v(0)
