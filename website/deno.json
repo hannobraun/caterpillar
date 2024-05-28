@@ -4,5 +4,8 @@
     },
     "fmt": {
         "indentWidth": 4
+    },
+    "imports": {
+        "@bossley9/sjsx": "jsr:@bossley9/sjsx@^0.7.0"
     }
 }
