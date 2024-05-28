@@ -275,10 +275,10 @@ pub fn program() -> Program {
     });
     source.define("pos_address", |s| {
         s.b(["base", "offset"])
-            .w("positions_buffer")
             .w("base")
-            .w("add_wrap_unsigned")
             .w("offset")
+            .w("add_wrap_unsigned")
+            .w("positions_buffer")
             .w("add_wrap_unsigned");
     });
     source.define("init_positions", |s| {
