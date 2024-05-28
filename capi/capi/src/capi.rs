@@ -278,6 +278,9 @@ pub fn program() -> Program {
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
+            .w("positions_length")
+            .w("load")
+            .w("remainder")
             .w("positions_buffer")
             .w("add_wrap_unsigned");
     });
