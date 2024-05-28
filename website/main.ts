@@ -28,5 +28,15 @@ Deno.serve((request) => {
         );
     }
 
+    const dailyDateWithSlash = url.pathname.match(
+        /^\/daily\/(\d{4}-\d{2}-\d{2})\/$/,
+    );
+    if (dailyDateWithSlash && dailyDateWithSlash[1]) {
+        return Response.redirect(
+            `${url.origin}/daily/${dailyDateWithSlash[1]}`,
+            307,
+        );
+    }
+
     return new Response("not found", { status: 404 });
 });
