@@ -1,4 +1,4 @@
-Deno.serve((request) => {
+Deno.serve(async (request) => {
     const url = new URL(request.url);
 
     if (url.hostname == "caterpillar.deno.dev") {
@@ -36,6 +36,15 @@ Deno.serve((request) => {
             `${url.origin}/daily/${dailyDateWithSlash[1]}`,
             307,
         );
+    }
+
+    const dailyDateWithNoSlash = url.pathname.match(
+        /^\/daily\/(\d{4}-\d{2}-\d{2})$/,
+    );
+    if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
+        const path = `daily/${dailyDateWithNoSlash[1]}.md`;
+        const file = await Deno.readTextFile(path);
+        return new Response(file, { status: 200 });
     }
 
     return new Response("not found", { status: 404 });
