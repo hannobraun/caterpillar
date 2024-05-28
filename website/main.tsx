@@ -22,9 +22,45 @@ Deno.serve(async (request) => {
     }
 
     if (url.pathname == "/daily") {
-        return Response.redirect(
-            "https://github.com/hannobraun/caterpillar/blob/main/daily.md",
-            307,
+        const entries = [];
+
+        for await (const dirEntry of Deno.readDir("daily")) {
+            const date = dirEntry.name.match(
+                /^(\d{4}-\d{2}-\d{2}).md$/,
+            );
+
+            if (date) {
+                const link = `/daily/${date[1]}`;
+                entries.push(
+                    <li>
+                        <a href={link}>
+                            {date[1]}
+                        </a>
+                    </li>,
+                );
+            }
+        }
+
+        const page = (
+            <>
+                {"<!doctype html>"}
+                <html>
+                    <head>
+                        <title>Daily Thoughts - Caterpillar</title>
+                    </head>
+                    <body>
+                        <ol>{entries}</ol>
+                    </body>
+                </html>
+            </>
+        );
+
+        return new Response(
+            page,
+            {
+                status: 200,
+                headers: new Headers([["Content-Type", "text/html"]]),
+            },
         );
     }
 
