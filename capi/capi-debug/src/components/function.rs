@@ -73,6 +73,9 @@ pub fn Expression(
                 _ => class_inner.push_str(" bg-red-300"),
             }
         }
+        if debugger_expression.is_on_call_stack {
+            class_inner.push_str(" font-bold");
+        }
 
         let data_address = debugger_expression
             .address
