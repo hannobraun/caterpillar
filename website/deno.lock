@@ -1,0 +1,19 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@bossley9/sjsx@^0.7.0": "jsr:@bossley9/sjsx@0.7.0"
+    },
+    "jsr": {
+      "@bossley9/sjsx@0.7.0": {
+        "integrity": "2daa603123ffc04fb870c68b23ef66bb8b881b2532887f6b343e7bf8c5337cac"
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "jsr:@bossley9/sjsx@^0.7.0"
+    ]
+  }
+}
