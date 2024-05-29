@@ -105,7 +105,7 @@ Deno.serve(async (request) => {
         );
 
         return new Response(
-            page,
+            page.toString(),
             {
                 status: 200,
                 headers: new Headers([["Content-Type", "text/html"]]),
