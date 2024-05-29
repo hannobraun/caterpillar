@@ -1,3 +1,5 @@
+import { dailyThoughtItem } from "./code/templates.tsx";
+
 Deno.serve(async (request) => {
     const url = new URL(request.url);
 
@@ -38,14 +40,7 @@ Deno.serve(async (request) => {
 
         const entries = [];
         for (const date of dates) {
-            const link = `/daily/${date}`;
-            entries.push(
-                <li class="my-4 font-bold text-lg">
-                    <a href={link}>
-                        {date}
-                    </a>
-                </li>,
-            );
+            entries.push(dailyThoughtItem(date));
         }
 
         const css = `
