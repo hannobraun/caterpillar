@@ -1,3 +1,4 @@
+import * as response from "./code/response.ts";
 import { dailyThoughtsPage } from "./code/templates.tsx";
 
 Deno.serve(async (request) => {
@@ -36,14 +37,7 @@ Deno.serve(async (request) => {
         }
 
         const page = dailyThoughtsPage(dates);
-
-        return new Response(
-            page.toString(),
-            {
-                status: 200,
-                headers: new Headers([["Content-Type", "text/html"]]),
-            },
-        );
+        return response.page(page);
     }
 
     const dailyDateWithSlash = url.pathname.match(
