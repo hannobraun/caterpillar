@@ -120,30 +120,6 @@ pub fn program() -> Program {
             .w("tile_y_new");
     });
 
-    // Game state
-    source.define("init", |s| {
-        s.w("init_should_game_run")
-            .w("init_positions")
-            .w("init_velocity")
-            .w("init_next_position");
-    });
-    source.define("update", |s| {
-        s.c("The update logic does not run every frame.")
-            .w("frame_count")
-            .w("load")
-            .v(5)
-            .w("remainder")
-            .w("return_if_non_zero")
-            .c("Looks like it's time to run updates!")
-            .w("should_game_run")
-            .w("load")
-            .w("return_if_zero")
-            .w("handle_input")
-            .v(0)
-            .w("drop")
-            .w("update_positions");
-    });
-
     // Game state - tile field size
     source.define("is_out_of_bounds", |s| {
         s.c("Compare x coordinate against lower bound.")
@@ -224,6 +200,30 @@ pub fn program() -> Program {
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
             .w("init_frame_count");
+    });
+
+    // Game state
+    source.define("init", |s| {
+        s.w("init_should_game_run")
+            .w("init_positions")
+            .w("init_velocity")
+            .w("init_next_position");
+    });
+    source.define("update", |s| {
+        s.c("The update logic does not run every frame.")
+            .w("frame_count")
+            .w("load")
+            .v(5)
+            .w("remainder")
+            .w("return_if_non_zero")
+            .c("Looks like it's time to run updates!")
+            .w("should_game_run")
+            .w("load")
+            .w("return_if_zero")
+            .w("handle_input")
+            .v(0)
+            .w("drop")
+            .w("update_positions");
     });
 
     // Game state - should game run
