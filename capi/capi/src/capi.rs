@@ -120,7 +120,7 @@ pub fn program() -> Program {
             .w("tile_y_new");
     });
 
-    // Game state - tile field size
+    // Tile field size
     source.define("is_out_of_bounds", |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
@@ -165,7 +165,7 @@ pub fn program() -> Program {
             .w("greater");
     });
 
-    // Game state - frame count
+    // Frame count
     source.define("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
     });
