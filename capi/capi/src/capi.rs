@@ -437,19 +437,19 @@ pub fn program() -> Program {
 
     // Memory map
     source.define("tile_field_size", |s| {
-        s.c("Address of the tile field height in memory.").v(0);
+        s.v(0);
     });
     source.define("frame_count", |s| {
-        s.c("Address of the frame count in memory.").v(2);
+        s.v(2);
     });
     source.define("should_game_run", |s| {
         s.v(3);
     });
     source.define("velocity", |s| {
-        s.c("Address of the velocity vector in memory").v(4);
+        s.v(4);
     });
     source.define("next_position", |s| {
-        s.c("Address of the next position vector in memory").v(6);
+        s.v(6);
     });
     source.define("positions_first", |s| {
         s.v(8);
@@ -461,7 +461,7 @@ pub fn program() -> Program {
         s.v(10);
     });
     source.define("positions_buffer", |s| {
-        s.c("Address of the position vector in memory").v(12);
+        s.v(12);
     });
 
     // Vectors
