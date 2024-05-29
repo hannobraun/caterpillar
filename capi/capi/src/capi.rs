@@ -11,7 +11,10 @@ pub fn program() -> Program {
             .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("draw").w("update").w("main_inner");
+        s.w("draw")
+            .w("update_frame_count")
+            .w("update")
+            .w("main_inner");
     });
 
     // Draw
@@ -128,8 +131,7 @@ pub fn program() -> Program {
             .w("init_next_position");
     });
     source.define("update", |s| {
-        s.w("update_frame_count")
-            .c("Updates we want to do every frame are done. Get a copy of the")
+        s.c("Updates we want to do every frame are done. Get a copy of the")
             .c("current frame count, to figure out if we need to do more.")
             .w("frame_count")
             .w("load")
