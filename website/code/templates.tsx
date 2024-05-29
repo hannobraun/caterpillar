@@ -156,6 +156,9 @@ const css = `
         font-size: 1.125rem;
     }
 
+    .prose img {
+        max-width: 100%;
+    }
     .prose video {
         max-width: 100%;
     }
