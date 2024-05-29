@@ -26,18 +26,6 @@ export const dailyThoughtsPage = (dates: string[]) => {
     );
 };
 
-const dailyThoughtItem = (date: string) => {
-    const link = `/daily/${date}`;
-
-    return (
-        <li class="my-4 font-bold text-lg">
-            <a href={link}>
-                {date}
-            </a>
-        </li>
-    );
-};
-
 export const singleDailyThoughtPage = (date: string, md: string) => {
     const html = gfm.render(md);
     return page(
@@ -49,6 +37,18 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
                 {html}
             </main>
         </>,
+    );
+};
+
+const dailyThoughtItem = (date: string) => {
+    const link = `/daily/${date}`;
+
+    return (
+        <li class="my-4 font-bold text-lg">
+            <a href={link}>
+                {date}
+            </a>
+        </li>
     );
 };
 
