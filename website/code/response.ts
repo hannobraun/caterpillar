@@ -3,7 +3,7 @@ export const page = (html: { toString(): string }) => {
         html.toString(),
         {
             status: 200,
-            headers: new Headers([["Content-Type", "text/html"]]),
+            headers: { "Content-Type": "text/html" },
         },
     );
 };
