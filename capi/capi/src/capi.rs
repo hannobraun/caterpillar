@@ -318,8 +318,6 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .w("positions_capacity")
             .w("load")
-            .v(2)
-            .w("div")
             .w("add");
     });
     source.define("pos_address", |s| {
