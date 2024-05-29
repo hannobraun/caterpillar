@@ -452,17 +452,17 @@ pub fn program() -> Program {
         s.v(6);
     });
     source.define("positions_first", |s| {
-        s.v(8);
+        s.v(10);
     });
     source.define("positions_next", |s| {
-        s.v(9);
+        s.v(11);
     });
     source.define("positions_capacity", |s| {
-        s.v(10);
+        s.v(12);
     });
     // One byte left free here, due to alignment of `positions_buffer`.
     source.define("positions_buffer", |s| {
-        s.v(12);
+        s.v(14);
     });
 
     // Vectors
