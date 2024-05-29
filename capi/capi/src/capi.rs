@@ -19,6 +19,7 @@ pub fn program() -> Program {
     source.define("draw", |s| {
         s.w("clear_all_tiles")
             .w("draw_snake")
+            .w("draw_food")
             .c("This blocks until the display system is ready to process the")
             .c("next frame.")
             .w("submit_frame");
@@ -47,6 +48,9 @@ pub fn program() -> Program {
             .v(1)
             .w("add")
             .w("draw_snake_inner");
+    });
+    source.define("draw_food", |s| {
+        s.w("food_position").w("vec_load").v(1).w("write_tile");
     });
 
     // Draw - write tiles
