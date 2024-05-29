@@ -367,7 +367,12 @@ pub fn program() -> Program {
             .w("pop_positions");
     });
     source.define("pop_positions", |s| {
-        s.w("pos_pop");
+        s.w("pos_len")
+            .v(3)
+            .w("greater")
+            .w("return_if_zero")
+            .w("pos_pop")
+            .w("pop_positions");
     });
 
     // Input
