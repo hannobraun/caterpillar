@@ -35,7 +35,7 @@ export const dailyThoughtsPage = (dates: string[]) => {
     );
 };
 
-export const dailyThoughtItem = (date: string) => {
+const dailyThoughtItem = (date: string) => {
     const link = `/daily/${date}`;
 
     return (
@@ -47,7 +47,7 @@ export const dailyThoughtItem = (date: string) => {
     );
 };
 
-export const css = `
+const css = `
     html {
         font-family: sans-serif;
     }
