@@ -1,4 +1,4 @@
-import { css, dailyThoughtItem, dailyThoughtsPage } from "./code/templates.tsx";
+import { dailyThoughtsPage } from "./code/templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);
