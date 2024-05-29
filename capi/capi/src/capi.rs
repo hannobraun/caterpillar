@@ -258,7 +258,11 @@ pub fn program() -> Program {
 
     // Game state - positions
     source.define("pos_get", |s| {
-        s.b(["offset"])
+        s.b(["index"])
+            .w("index")
+            .v(2)
+            .w("mul")
+            .b(["offset"])
             .w("positions_first")
             .w("load")
             .b(["base"])
