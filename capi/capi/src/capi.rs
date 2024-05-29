@@ -131,17 +131,13 @@ pub fn program() -> Program {
             .w("init_next_position");
     });
     source.define("update", |s| {
-        s.c("Updates we want to do every frame are done. Get a copy of the")
-            .c("current frame count, to figure out if we need to do more.")
+        s.c("The update logic does not run every frame.")
             .w("frame_count")
             .w("load")
-            .c("We want to make updates at regular intervals. Determine, if")
-            .c("this frame is one we need to make an update in. If not, we're")
-            .c("done.")
             .v(5)
             .w("remainder")
             .w("return_if_non_zero")
-            .c("Time for more updates!")
+            .c("Looks like it's time to run updates!")
             .w("should_game_run")
             .w("load")
             .w("return_if_zero")
