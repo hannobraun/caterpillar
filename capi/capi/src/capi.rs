@@ -460,6 +460,7 @@ pub fn program() -> Program {
     source.define("positions_capacity", |s| {
         s.v(10);
     });
+    // One byte left free here, due to alignment of `positions_buffer`.
     source.define("positions_buffer", |s| {
         s.v(12);
     });
