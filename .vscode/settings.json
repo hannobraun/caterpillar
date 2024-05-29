@@ -10,6 +10,7 @@
     "deno.enablePaths": [
         "./website"
     ],
+    "deno.config": "./website/deno.json",
     "typescript.format.enable": true,
     "[typescript]": {
         "editor.defaultFormatter": "denoland.vscode-deno"
