@@ -62,7 +62,9 @@ const page = (title: string, content: JSX.Element) => {
                     <style>{css}</style>
                 </head>
                 <body class="max-w-xl mx-auto">
-                    <h1>Caterpillar</h1>
+                    <header>
+                        <h1>Caterpillar</h1>
+                    </header>
                     <main>
                         {content}
                     </main>
