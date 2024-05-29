@@ -1,3 +1,4 @@
+import * as content from "./code/content.ts";
 import * as response from "./code/response.ts";
 import { dailyThoughtsPage, singleDailyThoughtPage } from "./code/templates.tsx";
 
@@ -25,17 +26,7 @@ Deno.serve(async (request) => {
     }
 
     if (url.pathname == "/daily") {
-        const dates = [];
-        for await (const dirEntry of Deno.readDir("daily")) {
-            const date = dirEntry.name.match(
-                /^(\d{4}-\d{2}-\d{2}).md$/,
-            );
-
-            if (date) {
-                dates.push(date[1]);
-            }
-        }
-
+        const dates = await content.listDailyThoughts();
         const page = dailyThoughtsPage(dates);
         return response.page(page);
     }
