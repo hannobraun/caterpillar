@@ -11,10 +11,7 @@ pub fn program() -> Program {
             .w("main_inner");
     });
     source.define("main_inner", |s| {
-        s.w("draw")
-            .w("update_frame_count")
-            .w("update")
-            .w("main_inner");
+        s.w("draw").w("count_frame").w("update").w("main_inner");
     });
 
     // Draw
@@ -196,7 +193,7 @@ pub fn program() -> Program {
     source.define("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
     });
-    source.define("update_frame_count", |s| {
+    source.define("count_frame", |s| {
         s
             .c("We only have 7 bits to count (our 8-bit values are signed), so")
             .c("we need to reset the count every so often. To keep things")
