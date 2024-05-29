@@ -2,9 +2,6 @@ import { JSX } from "@bossley9/sjsx/jsx-runtime";
 import * as gfm from "@deno/gfm";
 
 export const dailyThoughtsPage = (dates: string[]) => {
-    dates.sort();
-    dates.reverse();
-
     const entries = [];
     for (const date of dates) {
         entries.push(dailyThoughtItem(date));

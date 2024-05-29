@@ -11,5 +11,8 @@ export const listDailyThoughts = async () => {
         }
     }
 
+    dates.sort();
+    dates.reverse();
+
     return dates;
 };
