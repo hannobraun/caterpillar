@@ -31,7 +31,10 @@ export const singleDailyThoughtPage = (
     md: string,
     dates: string[],
 ) => {
-    const html = gfm.render(md);
+    const html = gfm.render(md, {
+        allowedTags: ["source"],
+        allowedAttributes: { "source": ["src"] },
+    });
 
     const index = dates.findIndex((element) => element == date);
 
