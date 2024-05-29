@@ -26,8 +26,10 @@ pub fn program() -> Program {
         s.v(0).w("write_all_tiles");
     });
     source.define("draw_snake", |s| {
-        s.v(0)
-            .w("pos_get")
+        s.v(0).w("draw_snake_inner");
+    });
+    source.define("draw_snake_inner", |s| {
+        s.w("pos_get")
             .w("vec_load")
             .v(1)
             .w("write_tile")
