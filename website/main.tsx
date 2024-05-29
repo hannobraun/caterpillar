@@ -55,8 +55,8 @@ Deno.serve(async (request) => {
     );
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
         const path = `daily/${dailyDateWithNoSlash[1]}.md`;
-        const file = await Deno.readTextFile(path);
-        return new Response(file, { status: 200 });
+        const md = await Deno.readTextFile(path);
+        return new Response(md, { status: 200 });
     }
 
     return new Response("not found", { status: 404 });
