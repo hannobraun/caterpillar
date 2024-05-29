@@ -26,8 +26,18 @@ export const dailyThoughtsPage = (dates: string[]) => {
     );
 };
 
-export const singleDailyThoughtPage = (date: string, md: string) => {
+export const singleDailyThoughtPage = (
+    date: string,
+    md: string,
+    dates: string[],
+) => {
     const html = gfm.render(md);
+
+    const index = dates.findIndex((element) => element == date);
+
+    const prev = dates[index + 1];
+    const next = dates[index - 1];
+
     return page(
         `Daily Thought - ${date}`,
         <>
@@ -36,6 +46,18 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
             <main>
                 {html}
             </main>
+            <div class="grid grid-cols-2">
+                {prev && (
+                    <span class="col-1 justify-self-start">
+                        {dailyThoughtLink(prev, "<< previous thought")}
+                    </span>
+                )}
+                {next && (
+                    <span class="col-2 justify-self-end">
+                        {dailyThoughtLink(next, "next thought >>")}
+                    </span>
+                )}
+            </div>
         </>,
     );
 };
@@ -92,8 +114,26 @@ const css = `
         padding: 0;
     }
 
+    .col-1 {
+        grid-column: 1;
+    }
+    .col-2 {
+        grid-column: 2;
+    }
     .font-bold {
         font-weight: 700;
+    }
+    .grid {
+        display: grid;
+    }
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .justify-self-end {
+        justify-self: end;
+    }
+    .justify-self-start {
+        justify-self: start;
     }
     .m-8 {
         margin: 2rem;
