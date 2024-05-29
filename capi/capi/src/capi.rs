@@ -35,7 +35,17 @@ pub fn program() -> Program {
             .w("vec_load")
             .v(1)
             .w("write_tile")
-            .w("vec_drop");
+            .w("vec_drop")
+            .w("pos_len")
+            .w("index")
+            .v(1)
+            .w("add")
+            .w("sub")
+            .w("return_if_zero")
+            .w("index")
+            .v(1)
+            .w("add")
+            .w("draw_snake_inner");
     });
 
     // Draw - write tiles
