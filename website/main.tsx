@@ -1,3 +1,5 @@
+import * as http from "@std/http";
+
 import * as content from "./code/content.ts";
 import * as response from "./code/response.ts";
 import {
@@ -59,5 +61,7 @@ Deno.serve(async (request) => {
         return response.page(page);
     }
 
-    return new Response("not found", { status: 404 });
+    return http.serveDir(request, {
+        fsRoot: "static",
+    });
 });
