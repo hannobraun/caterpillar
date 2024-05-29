@@ -19,7 +19,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
                 event=DebugEvent::Continue
                 events=events.clone() />
             <Button
-                value="Step"
+                value="Step Into"
                 event=DebugEvent::Step
                 events=events.clone() />
             <Button
