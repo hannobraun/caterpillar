@@ -129,7 +129,7 @@ pub fn program() -> Program {
     });
     source.define("update", |s| {
         s.w("update_frame_count")
-            .c("Update we want to do every frame are done. Get a copy of the")
+            .c("Updates we want to do every frame are done. Get a copy of the")
             .c("current frame count, to figure out if we need to do more.")
             .w("frame_count")
             .w("load")
