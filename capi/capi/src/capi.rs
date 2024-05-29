@@ -207,7 +207,8 @@ pub fn program() -> Program {
         s.w("init_should_game_run")
             .w("init_positions")
             .w("init_velocity")
-            .w("init_next_position");
+            .w("init_next_position")
+            .w("init_food_position");
     });
     source.define("update", |s| {
         s.c("The update logic does not run every frame.")
@@ -261,6 +262,33 @@ pub fn program() -> Program {
             .w("add")
             .w("next_position")
             .w("vec_store");
+    });
+
+    // Game state - food position
+    source.define("init_food_position", |s| {
+        s.w("read_random")
+            .w("abs")
+            .w("tile_field_size")
+            .w("x")
+            .w("load")
+            .w("remainder")
+            .w("read_random")
+            .w("abs")
+            .w("tile_field_size")
+            .w("y")
+            .w("load")
+            .w("remainder")
+            .w("food_position")
+            .w("vec_store");
+    });
+    source.define("abs", |s| {
+        s.b(["v"])
+            .w("v")
+            .w("v")
+            .v(-1)
+            .w("greater")
+            .w("return_if_non_zero")
+            .w("neg");
     });
 
     // Game state - positions
@@ -450,6 +478,9 @@ pub fn program() -> Program {
     });
     source.define("next_position", |s| {
         s.v(6);
+    });
+    source.define("food_position", |s| {
+        s.v(8);
     });
     source.define("positions_first", |s| {
         s.v(10);
