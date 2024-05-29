@@ -1,3 +1,5 @@
+import { JSX } from "@bossley9/sjsx/jsx-runtime";
+
 export const dailyThoughtsPage = (dates: string[]) => {
     dates.sort();
     dates.reverse();
@@ -7,28 +9,37 @@ export const dailyThoughtsPage = (dates: string[]) => {
         entries.push(dailyThoughtItem(date));
     }
 
+    return page(
+        "Daily Thoughts",
+        <>
+            <h2>Daily Thoughts</h2>
+            <p>
+                Hey, I'm Hanno! These are my daily thoughts on{" "}
+                <a href="https://github.com/hannobraun/caterpillar">
+                    Caterpillar
+                </a>, the programming language I'm creating. If you have any
+                questions, comments, or feedback, please{" "}
+                <a href="mailto:hello@hannobraun.com">
+                    get in touch
+                </a>!
+            </p>
+            <ol class="m-8">{entries}</ol>
+        </>,
+    );
+};
+
+const page = (title: string, content: JSX.Element) => {
     return (
         <>
             {"<!doctype html>"}
             <html>
                 <head>
-                    <title>Daily Thoughts - Caterpillar</title>
+                    <title>{title} - Caterpillar</title>
                     <style>{css}</style>
                 </head>
                 <body class="max-w-xl mx-auto">
                     <h1>Caterpillar</h1>
-                    <h2>Daily Thoughts</h2>
-                    <p>
-                        Hey, I'm Hanno! These are my daily thoughts on{" "}
-                        <a href="https://github.com/hannobraun/caterpillar">
-                            Caterpillar
-                        </a>, the programming language I'm creating. If you have
-                        any questions, comments, or feedback, please{" "}
-                        <a href="mailto:hello@hannobraun.com">
-                            get in touch
-                        </a>!
-                    </p>
-                    <ol class="m-8">{entries}</ol>
+                    {content}
                 </body>
             </html>
         </>
