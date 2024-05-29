@@ -47,6 +47,7 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
         `Daily Thought - ${date}`,
         <>
             <h2>Daily Thought - {date}</h2>
+            <a href="/daily">{"< "}back to list</a>
             <main>
                 {html}
             </main>
