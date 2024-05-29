@@ -29,7 +29,9 @@ pub fn program() -> Program {
         s.v(0).w("draw_snake_inner");
     });
     source.define("draw_snake_inner", |s| {
-        s.w("pos_get")
+        s.b(["index"])
+            .w("index")
+            .w("pos_get")
             .w("vec_load")
             .v(1)
             .w("write_tile")
