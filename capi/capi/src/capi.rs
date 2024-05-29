@@ -7,6 +7,7 @@ pub fn program() -> Program {
     source.define("main", |s| {
         s.w("tile_field_size")
             .w("vec_store")
+            .w("init_frame_count")
             .w("init")
             .w("main_inner");
     });
@@ -121,8 +122,7 @@ pub fn program() -> Program {
 
     // Game state
     source.define("init", |s| {
-        s.w("init_frame_count")
-            .w("init_should_game_run")
+        s.w("init_should_game_run")
             .w("init_positions")
             .w("init_velocity")
             .w("init_next_position");
