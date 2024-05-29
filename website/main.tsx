@@ -96,7 +96,15 @@ Deno.serve(async (request) => {
                         <h1>Caterpillar</h1>
                         <h2>Daily Thoughts</h2>
                         <p>
-                            Hey, I'm Hanno! These are my daily thoughts on <a href="https://github.com/hannobraun/caterpillar">Caterpillar</a>, the programming language I'm creating. If you have any questions, comments, or feedback, please <a href="mailto:hello@hannobraun.com">get in touch</a>!
+                            Hey, I'm Hanno! These are my daily thoughts on{" "}
+                            <a href="https://github.com/hannobraun/caterpillar">
+                                Caterpillar
+                            </a>, the programming language I'm creating. If you
+                            have any questions, comments, or feedback, please
+                            {" "}
+                            <a href="mailto:hello@hannobraun.com">
+                                get in touch
+                            </a>!
                         </p>
                         <ol class="m-8">{entries}</ol>
                     </body>
