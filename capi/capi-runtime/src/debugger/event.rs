@@ -5,5 +5,6 @@ pub enum DebugEvent {
     Continue,
     Reset,
     Step,
+    Stop,
     ToggleBreakpoint { address: InstructionAddress },
 }
