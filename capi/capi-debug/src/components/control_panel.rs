@@ -11,19 +11,19 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
     view! {
         <Panel class="">
             <Button
-                value="Stop"
+                label="Stop"
                 event=DebugEvent::Stop
                 events=events.clone() />
             <Button
-                value="Continue"
+                label="Continue"
                 event=DebugEvent::Continue
                 events=events.clone() />
             <Button
-                value="Step Into"
+                label="Step Into"
                 event=DebugEvent::Step
                 events=events.clone() />
             <Button
-                value="Reset"
+                label="Reset"
                 event=DebugEvent::Reset
                 events=events />
         </Panel>
@@ -32,7 +32,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
 
 #[component]
 fn Button(
-    value: &'static str,
+    label: &'static str,
     event: DebugEvent,
     events: EventsTx,
 ) -> impl IntoView {
@@ -43,7 +43,7 @@ fn Button(
     view! {
         <input
             type="button"
-            value=value
+            value=label
             class="m-1 px-1 bg-gray-300 font-bold"
             on:click=on_click />
     }
