@@ -269,7 +269,7 @@ pub fn program() -> Program {
             .w("pos_address");
     });
     source.define("pos_last", |s| {
-        s.v(0).w("pos_get");
+        s.w("pos_len").v(1).w("sub").w("pos_get");
     });
     source.define("pos_push", |s| {
         s.w("positions_next")
@@ -291,6 +291,32 @@ pub fn program() -> Program {
             .w("add_wrap_unsigned")
             .w("positions_first")
             .w("store");
+    });
+    source.define("pos_len", |s| {
+        s.w("positions_first")
+            .w("load")
+            .b(["first"])
+            .w("positions_next")
+            .w("load")
+            .b(["next"])
+            .w("next")
+            .w("first")
+            .w("sub")
+            .v(2)
+            .w("div")
+            .b(["difference"])
+            .w("difference")
+            .w("difference")
+            .w("return_if_zero")
+            .v(0)
+            .w("difference")
+            .w("greater")
+            .w("return_if_zero")
+            .w("positions_capacity")
+            .w("load")
+            .v(2)
+            .w("div")
+            .w("add");
     });
     source.define("pos_address", |s| {
         s.b(["base", "offset"])
