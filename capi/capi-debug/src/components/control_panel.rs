@@ -8,6 +8,8 @@ use crate::{
 
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {
+    let event_continue = DebugEvent::Continue { and_stop_at: None };
+
     view! {
         <Panel class="">
             <Button
@@ -16,7 +18,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
                 events=events.clone() />
             <Button
                 label="Continue"
-                event=DebugEvent::Continue {and_stop_at: None }
+                event=event_continue
                 events=events.clone() />
             <Button
                 label="Step Into"
