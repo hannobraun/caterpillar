@@ -270,13 +270,13 @@ pub fn program() -> Program {
 
     // Game state - food position
     source.define("init_food_position", |s| {
-        s.w("read_random")
+        s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
             .w("x")
             .w("load")
             .w("remainder")
-            .w("read_random")
+            .w("negatable_random")
             .w("abs")
             .w("tile_field_size")
             .w("y")
@@ -284,6 +284,19 @@ pub fn program() -> Program {
             .w("remainder")
             .w("food_position")
             .w("vec_store");
+    });
+    source.define("negatable_random", |s| {
+        s.c("Negating -128 would result in an integer overflow.")
+            .w("read_random")
+            .v(0)
+            .w("copy")
+            .v(-128)
+            .w("eq")
+            .w("return_if_zero")
+            .v(0)
+            .w("drop")
+            .c("Looks like we ran into -128. Try again!")
+            .w("negatable_random");
     });
     source.define("abs", |s| {
         s.b(["v"])
