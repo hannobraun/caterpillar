@@ -1,4 +1,4 @@
-import { css, dailyThoughtItem } from "./code/templates.tsx";
+import { css, dailyThoughtItem, dailyThoughtsPage } from "./code/templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);
@@ -35,41 +35,7 @@ Deno.serve(async (request) => {
             }
         }
 
-        dates.sort();
-        dates.reverse();
-
-        const entries = [];
-        for (const date of dates) {
-            entries.push(dailyThoughtItem(date));
-        }
-
-        const page = (
-            <>
-                {"<!doctype html>"}
-                <html>
-                    <head>
-                        <title>Daily Thoughts - Caterpillar</title>
-                        <style>{css}</style>
-                    </head>
-                    <body class="max-w-xl mx-auto">
-                        <h1>Caterpillar</h1>
-                        <h2>Daily Thoughts</h2>
-                        <p>
-                            Hey, I'm Hanno! These are my daily thoughts on{" "}
-                            <a href="https://github.com/hannobraun/caterpillar">
-                                Caterpillar
-                            </a>, the programming language I'm creating. If you
-                            have any questions, comments, or feedback, please
-                            {" "}
-                            <a href="mailto:hello@hannobraun.com">
-                                get in touch
-                            </a>!
-                        </p>
-                        <ol class="m-8">{entries}</ol>
-                    </body>
-                </html>
-            </>
-        );
+        const page = dailyThoughtsPage(dates);
 
         return new Response(
             page.toString(),
