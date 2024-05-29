@@ -13,6 +13,10 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
     view! {
         <Panel class="">
             <Button
+                label="Reset"
+                event=DebugEvent::Reset
+                events=events.clone() />
+            <Button
                 label="Stop"
                 event=DebugEvent::Stop
                 events=events.clone() />
@@ -23,10 +27,6 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
             <Button
                 label="Step Into"
                 event=DebugEvent::Step
-                events=events.clone() />
-            <Button
-                label="Reset"
-                event=DebugEvent::Reset
                 events=events />
         </Panel>
     }
