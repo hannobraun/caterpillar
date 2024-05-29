@@ -1,3 +1,7 @@
 [workspace]
 resolver = "2"
-members = ["tools/daily"]
+members = ["capi/capi", "capi/capi-debug", "capi/capi-runtime", "tools/daily"]
+default-members = ["capi/capi"]
+
+[profile.dev]
+opt-level = 3
