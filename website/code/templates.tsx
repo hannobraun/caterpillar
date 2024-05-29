@@ -41,7 +41,7 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
 };
 
 const dailyThoughtItem = (date: string) => {
-    const link = dailyThoughtLink(date);
+    const link = dailyThoughtLink(date, date);
 
     return (
         <li class="my-4 font-bold text-lg">
@@ -50,12 +50,12 @@ const dailyThoughtItem = (date: string) => {
     );
 };
 
-const dailyThoughtLink = (date: string) => {
+const dailyThoughtLink = (date: string, label: string) => {
     const link = `/daily/${date}`;
 
     return (
         <a href={link}>
-            {date}
+            {label}
         </a>
     );
 };
