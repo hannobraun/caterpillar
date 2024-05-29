@@ -77,12 +77,18 @@ impl Runner {
                 event.take().or_else(|| self.events.try_recv().ok())
             {
                 match event {
-                    DebugEvent::Continue => {
+                    DebugEvent::Continue { and_stop_at } => {
                         if let Some(ProgramEffect {
                             kind: ProgramEffectKind::Paused,
                             ..
                         }) = self.program.effects.front()
                         {
+                            if let Some(instruction) = and_stop_at {
+                                self.program
+                                    .breakpoints
+                                    .set_ephemeral(instruction);
+                            }
+
                             self.program.effects.pop_front();
                         } else {
                             println!(

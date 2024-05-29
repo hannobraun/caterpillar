@@ -16,7 +16,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
                 events=events.clone() />
             <Button
                 label="Continue"
-                event=DebugEvent::Continue
+                event=DebugEvent::Continue {and_stop_at: None }
                 events=events.clone() />
             <Button
                 label="Step Into"
