@@ -107,6 +107,9 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
 pub fn neg(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
 
+    if a.0 == i8::MIN {
+        return Err(BuiltinError::IntegerOverflow);
+    }
     let b = -a.0;
 
     data_stack.push(b);
