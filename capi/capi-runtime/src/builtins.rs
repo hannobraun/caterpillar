@@ -87,6 +87,16 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn neg(data_stack: &mut DataStack) -> Result {
+    let a = data_stack.pop()?;
+
+    let b = -a.0;
+
+    data_stack.push(b);
+
+    Ok(None)
+}
+
 pub fn place(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
     let a = data_stack.pop()?;

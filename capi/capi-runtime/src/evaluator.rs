@@ -64,6 +64,7 @@ impl Evaluator {
                     "greater" => builtins::greater(&mut self.data_stack),
                     "load" => builtins::load(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),
+                    "neg" => builtins::neg(&mut self.data_stack),
                     "place" => builtins::place(&mut self.data_stack),
                     "read_input" => builtins::read_input(),
                     "remainder" => builtins::remainder(&mut self.data_stack),
