@@ -15,16 +15,16 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
                 event=DebugEvent::Stop
                 events=events.clone() />
             <Button
-                value="Reset"
-                event=DebugEvent::Reset
-                events=events.clone() />
-            <Button
                 value="Continue"
                 event=DebugEvent::Continue
                 events=events.clone() />
             <Button
                 value="Step"
                 event=DebugEvent::Step
+                events=events.clone() />
+            <Button
+                value="Reset"
+                event=DebugEvent::Reset
                 events=events />
         </Panel>
     }
