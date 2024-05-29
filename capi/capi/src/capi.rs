@@ -236,16 +236,14 @@ pub fn program() -> Program {
             .w("vec_store");
     });
     source.define("update_next_position", |s| {
-        s.v(0)
-            .w("pos_get")
+        s.w("pos_last")
             .w("x")
             .w("load")
             .w("velocity")
             .w("x")
             .w("load")
             .w("add")
-            .v(0)
-            .w("pos_get")
+            .w("pos_last")
             .w("y")
             .w("load")
             .w("velocity")
@@ -269,6 +267,9 @@ pub fn program() -> Program {
             .w("base")
             .w("offset")
             .w("pos_address");
+    });
+    source.define("pos_last", |s| {
+        s.v(0).w("pos_get");
     });
     source.define("pos_push", |s| {
         s.w("positions_next")
