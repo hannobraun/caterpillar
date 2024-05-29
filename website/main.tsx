@@ -23,7 +23,7 @@ Deno.serve(async (request) => {
 
     if (url.pathname == "/daily") {
         const dates = [];
-        for await (const dirEntry of Deno.readDir("website/daily")) {
+        for await (const dirEntry of Deno.readDir("daily")) {
             const date = dirEntry.name.match(
                 /^(\d{4}-\d{2}-\d{2}).md$/,
             );
@@ -135,7 +135,7 @@ Deno.serve(async (request) => {
         /^\/daily\/(\d{4}-\d{2}-\d{2})$/,
     );
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
-        const path = `website/daily/${dailyDateWithNoSlash[1]}.md`;
+        const path = `daily/${dailyDateWithNoSlash[1]}.md`;
         const file = await Deno.readTextFile(path);
         return new Response(file, { status: 200 });
     }
