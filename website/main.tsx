@@ -1,6 +1,9 @@
 import * as content from "./code/content.ts";
 import * as response from "./code/response.ts";
-import { dailyThoughtsPage, singleDailyThoughtPage } from "./code/templates.tsx";
+import {
+    dailyThoughtsPage,
+    singleDailyThoughtPage,
+} from "./code/templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);

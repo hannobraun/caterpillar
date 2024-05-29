@@ -51,7 +51,7 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
             <main>
                 {html}
             </main>
-        </>
+        </>,
     );
 };
 
