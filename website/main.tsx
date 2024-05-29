@@ -54,7 +54,8 @@ Deno.serve(async (request) => {
         /^\/daily\/(\d{4}-\d{2}-\d{2})$/,
     );
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
-        const path = `daily/${dailyDateWithNoSlash[1]}.md`;
+        const date = dailyDateWithNoSlash[1];
+        const path = `daily/${date}.md`;
         const md = await Deno.readTextFile(path);
         const page = singleDailyThoughtPage(md);
         return response.page(page);
