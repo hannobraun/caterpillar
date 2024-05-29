@@ -47,7 +47,9 @@ export const singleDailyThoughtPage = (date: string, md: string) => {
         `Daily Thought - ${date}`,
         <>
             <h2>Daily Thought - {date}</h2>
-            {html}
+            <main>
+                {html}
+            </main>
         </>
     );
 };
