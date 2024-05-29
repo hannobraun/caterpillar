@@ -43,6 +43,23 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn div(data_stack: &mut DataStack) -> Result {
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
+
+    if b.0 == 0 {
+        return Err(BuiltinError::DivideByZero);
+    }
+    let Some(c) = a.0.checked_div(b.0) else {
+        // Can't be divide by zero. Already handled that.
+        return Err(BuiltinError::IntegerOverflow);
+    };
+
+    data_stack.push(c);
+
+    Ok(None)
+}
+
 pub fn drop(data_stack: &mut DataStack) -> Result {
     let i = data_stack.pop()?;
 
