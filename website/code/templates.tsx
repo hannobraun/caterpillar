@@ -46,7 +46,7 @@ export const singleDailyThoughtPage = (
         <>
             <h2>Daily Thought - {date}</h2>
             <a href="/daily">{"< "}back to list</a>
-            <main>
+            <main class="prose">
                 {html}
             </main>
             <div class="grid grid-cols-2">
@@ -154,5 +154,9 @@ const css = `
     }
     .text-lg {
         font-size: 1.125rem;
+    }
+
+    .prose video {
+        max-width: 100%;
     }
 `;
