@@ -217,6 +217,7 @@ pub enum BuiltinEffect {
     SubmitFrame,
 
     ReadInput,
+    ReadRandom,
 }
 
 #[derive(

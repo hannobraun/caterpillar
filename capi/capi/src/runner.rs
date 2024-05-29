@@ -4,6 +4,7 @@ use capi_runtime::{
     debugger::DebugEvent, BuiltinEffect, EvaluatorEffect, Program,
     ProgramEffect, ProgramEffectKind, Value,
 };
+use rand::random;
 
 use crate::{
     display::TILES_PER_AXIS,
@@ -188,6 +189,10 @@ impl Runner {
                         let input = rx.recv().unwrap();
 
                         self.program.push([Value(input)]);
+                        self.program.effects.pop_front();
+                    }
+                    BuiltinEffect::ReadRandom => {
+                        self.program.push([Value(random())]);
                         self.program.effects.pop_front();
                     }
                 }
