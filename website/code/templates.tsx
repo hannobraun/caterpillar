@@ -41,12 +41,12 @@ const dailyThoughtItem = (date: string) => {
     );
 };
 
-export const singleDailyThoughtPage = (md: string) => {
+export const singleDailyThoughtPage = (date: string, md: string) => {
     const html = gfm.render(md);
     return page(
-        "Daily Thought",
+        `Daily Thought - ${date}`,
         <>
-            <h2>Daily Thought</h2>
+            <h2>Daily Thought - {date}</h2>
             {html}
         </>
     );
