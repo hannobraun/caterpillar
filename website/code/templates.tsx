@@ -1,4 +1,5 @@
 import { JSX } from "@bossley9/sjsx/jsx-runtime";
+import * as gfm from "@deno/gfm";
 
 export const dailyThoughtsPage = (dates: string[]) => {
     dates.sort();
@@ -25,6 +26,17 @@ export const dailyThoughtsPage = (dates: string[]) => {
             </p>
             <ol class="m-8">{entries}</ol>
         </>,
+    );
+};
+
+export const singleDailyThoughtPage = (md: string) => {
+    const html = gfm.render(md);
+    return page(
+        "Daily Thought",
+        <>
+            <h2>Daily Thought</h2>
+            {html}
+        </>
     );
 };
 

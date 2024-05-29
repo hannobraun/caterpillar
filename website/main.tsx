@@ -1,5 +1,5 @@
 import * as response from "./code/response.ts";
-import { dailyThoughtsPage } from "./code/templates.tsx";
+import { dailyThoughtsPage, singleDailyThoughtPage } from "./code/templates.tsx";
 
 Deno.serve(async (request) => {
     const url = new URL(request.url);
@@ -56,7 +56,8 @@ Deno.serve(async (request) => {
     if (dailyDateWithNoSlash && dailyDateWithNoSlash[1]) {
         const path = `daily/${dailyDateWithNoSlash[1]}.md`;
         const md = await Deno.readTextFile(path);
-        return new Response(md, { status: 200 });
+        const page = singleDailyThoughtPage(md);
+        return response.page(page);
     }
 
     return new Response("not found", { status: 404 });
