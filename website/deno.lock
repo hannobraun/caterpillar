@@ -5,6 +5,16 @@
       "jsr:@bossley9/sjsx@^0.7.0": "jsr:@bossley9/sjsx@0.7.0",
       "jsr:@deno/gfm@^0.8.2": "jsr:@deno/gfm@0.8.2",
       "jsr:@denosaurs/emoji@0.3": "jsr:@denosaurs/emoji@0.3.0",
+      "jsr:@std/assert@^0.225.2": "jsr:@std/assert@0.225.3",
+      "jsr:@std/assert@^0.225.3": "jsr:@std/assert@0.225.3",
+      "jsr:@std/async@^0.224.1": "jsr:@std/async@0.224.1",
+      "jsr:@std/cli@^0.224.4": "jsr:@std/cli@0.224.4",
+      "jsr:@std/encoding@^0.224.3": "jsr:@std/encoding@0.224.3",
+      "jsr:@std/fmt@^0.225.2": "jsr:@std/fmt@0.225.2",
+      "jsr:@std/http@^0.224.2": "jsr:@std/http@0.224.2",
+      "jsr:@std/media-types@^1.0.0-rc.1": "jsr:@std/media-types@1.0.0-rc.1",
+      "jsr:@std/path@^0.225.1": "jsr:@std/path@0.225.1",
+      "jsr:@std/streams@^0.224.2": "jsr:@std/streams@0.224.2",
       "npm:github-slugger@^2.0": "npm:github-slugger@2.0.0",
       "npm:he@^1.2": "npm:he@1.2.0",
       "npm:katex@^0.16": "npm:katex@0.16.10",
@@ -36,6 +46,46 @@
       },
       "@denosaurs/emoji@0.3.0": {
         "integrity": "a03aaaebe00d7c6108c304d02b60484dc6c452a505031f26ef040030ad61d400"
+      },
+      "@std/assert@0.225.3": {
+        "integrity": "b3c2847aecf6955b50644cdb9cf072004ea3d1998dd7579fc0acb99dbb23bd4f"
+      },
+      "@std/async@0.224.1": {
+        "integrity": "2fda2c8151cc5811a6ca37fe825f1f71c95e02a374abb6ef868e0e19eca814a5"
+      },
+      "@std/cli@0.224.4": {
+        "integrity": "1f6a8fb983013e7743393e144d05c15094debc6f79032e32441846ef6196c9a3"
+      },
+      "@std/encoding@0.224.3": {
+        "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
+      },
+      "@std/fmt@0.225.2": {
+        "integrity": "8a2d157586372f9d5e74cdf0f463a828dee5d09d7de10e56394d8f20dbb5bf26"
+      },
+      "@std/http@0.224.2": {
+        "integrity": "7cab08ed3edaa9d0bcd25f302dcee21975e24dedbd19fbee092498387a30d521",
+        "dependencies": [
+          "jsr:@std/assert@^0.225.3",
+          "jsr:@std/async@^0.224.1",
+          "jsr:@std/cli@^0.224.4",
+          "jsr:@std/encoding@^0.224.3",
+          "jsr:@std/fmt@^0.225.2",
+          "jsr:@std/media-types@^1.0.0-rc.1",
+          "jsr:@std/path@^0.225.1",
+          "jsr:@std/streams@^0.224.2"
+        ]
+      },
+      "@std/media-types@1.0.0-rc.1": {
+        "integrity": "ff3cc8d5b536be2730fc4d446865007faf69bf4d46e7bea426d5e1d9c6ba9053"
+      },
+      "@std/path@0.225.1": {
+        "integrity": "8c3220635a73730eb51fe43de9e10b79e2724a5bb8638b9355d35ae012fd9429",
+        "dependencies": [
+          "jsr:@std/assert@^0.225.2"
+        ]
+      },
+      "@std/streams@0.224.2": {
+        "integrity": "5d437af1423e4f616111b986ea783c15e0bc998b53e23e93b623de7ef0b14c2b"
       }
     },
     "npm": {
@@ -176,7 +226,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@bossley9/sjsx@^0.7.0",
-      "jsr:@deno/gfm@^0.8.2"
+      "jsr:@deno/gfm@^0.8.2",
+      "jsr:@std/http@^0.224.2"
     ]
   }
 }

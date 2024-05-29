@@ -7,7 +7,8 @@
     },
     "imports": {
         "@bossley9/sjsx": "jsr:@bossley9/sjsx@^0.7.0",
-        "@deno/gfm": "jsr:@deno/gfm@^0.8.2"
+        "@deno/gfm": "jsr:@deno/gfm@^0.8.2",
+        "@std/http": "jsr:@std/http@^0.224.2"
     },
     "compilerOptions": {
         "jsx": "react-jsx",
