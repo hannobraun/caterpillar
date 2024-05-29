@@ -62,6 +62,7 @@ impl Evaluator {
                     "copy" => builtins::copy(&mut self.data_stack),
                     "div" => builtins::div(&mut self.data_stack),
                     "drop" => builtins::drop(&mut self.data_stack),
+                    "eq" => builtins::eq(&mut self.data_stack),
                     "greater" => builtins::greater(&mut self.data_stack),
                     "load" => builtins::load(&mut self.data_stack),
                     "mul" => builtins::mul(&mut self.data_stack),

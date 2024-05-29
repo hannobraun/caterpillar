@@ -72,6 +72,17 @@ pub fn drop(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn eq(data_stack: &mut DataStack) -> Result {
+    let b = data_stack.pop()?;
+    let a = data_stack.pop()?;
+
+    let c = if a.0 == b.0 { 1 } else { 0 };
+
+    data_stack.push(c);
+
+    Ok(None)
+}
+
 pub fn greater(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
