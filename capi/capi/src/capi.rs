@@ -321,7 +321,10 @@ pub fn program() -> Program {
             .w("next_position")
             .w("vec_load")
             .w("pos_push")
-            .w("pos_pop");
+            .w("pop_positions");
+    });
+    source.define("pop_positions", |s| {
+        s.w("pos_pop");
     });
 
     // Input
