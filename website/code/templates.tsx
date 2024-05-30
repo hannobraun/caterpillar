@@ -101,7 +101,7 @@ const page = (title: string, content: JSX.Element) => {
 
                     <style>{css}</style>
                 </head>
-                <body class="max-w-xl mx-auto">
+                <body class="max-w-xl mx-auto p-2">
                     <h1>Caterpillar</h1>
                     {content}
                 </body>
@@ -158,6 +158,9 @@ const css = `
     .my-4 {
         margin-top: 1rem;
         margin-bottom: 1rem;
+    }
+    .p-2 {
+        padding: 0.5rem;
     }
     .text-lg {
         font-size: 1.125rem;
