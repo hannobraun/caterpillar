@@ -50,7 +50,11 @@ pub fn program() -> Program {
             .w("draw_snake_inner");
     });
     source.define("draw_food", |s| {
-        s.w("food_position").w("vec_load").v(1).w("write_tile");
+        s.w("food_position")
+            .w("vec_load")
+            .v(1)
+            .w("write_tile")
+            .w("vec_drop");
     });
 
     // Draw - write tiles
