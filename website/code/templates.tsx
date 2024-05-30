@@ -149,7 +149,7 @@ const css = `
         margin: 2rem;
     }
     .max-w-xl {
-        width: 36rem;
+        max-width: 36rem;
     }
     .mx-auto {
         margin-left: auto;
