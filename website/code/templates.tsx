@@ -92,6 +92,7 @@ const page = (title: string, content: JSX.Element) => {
             <html lang="en">
                 <head>
                     <title>{title} - Caterpillar</title>
+                    <meta charSet="UTF-8" />
                     <style>{css}</style>
                 </head>
                 <body class="max-w-xl mx-auto">
