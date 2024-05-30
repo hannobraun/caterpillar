@@ -89,7 +89,7 @@ const page = (title: string, content: JSX.Element) => {
     return (
         <>
             {"<!doctype html>"}
-            <html>
+            <html lang="en">
                 <head>
                     <title>{title} - Caterpillar</title>
                     <style>{css}</style>
