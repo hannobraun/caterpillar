@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
-    event::{KeyEvent, WindowEvent},
+    event::{ElementState, KeyEvent, WindowEvent},
     event_loop::{ActiveEventLoop, EventLoop},
     keyboard::{KeyCode, PhysicalKey},
     window::Window,
@@ -83,6 +83,7 @@ impl ApplicationHandler for State {
                     KeyEvent {
                         physical_key:
                             PhysicalKey::Code(KeyCode::ArrowUp | KeyCode::KeyW),
+                        state: ElementState::Pressed,
                         ..
                     },
                 ..
@@ -94,6 +95,7 @@ impl ApplicationHandler for State {
                     KeyEvent {
                         physical_key:
                             PhysicalKey::Code(KeyCode::ArrowLeft | KeyCode::KeyA),
+                        state: ElementState::Pressed,
                         ..
                     },
                 ..
@@ -105,6 +107,7 @@ impl ApplicationHandler for State {
                     KeyEvent {
                         physical_key:
                             PhysicalKey::Code(KeyCode::ArrowDown | KeyCode::KeyS),
+                        state: ElementState::Pressed,
                         ..
                     },
                 ..
@@ -116,6 +119,7 @@ impl ApplicationHandler for State {
                     KeyEvent {
                         physical_key:
                             PhysicalKey::Code(KeyCode::ArrowRight | KeyCode::KeyD),
+                        state: ElementState::Pressed,
                         ..
                     },
                 ..
