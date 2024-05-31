@@ -61,14 +61,7 @@ pub fn div(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn drop(data_stack: &mut DataStack) -> Result {
-    let i = data_stack.pop()?;
-
-    let i = i.0.try_into()?;
-
-    data_stack.save(i)?;
     data_stack.pop()?;
-    data_stack.restore();
-
     Ok(None)
 }
 

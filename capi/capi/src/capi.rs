@@ -138,7 +138,6 @@ pub fn program() -> Program {
             .v(0)
             .w("copy")
             .w("return_if_non_zero")
-            .v(0)
             .w("drop")
             .c("Compare y coordinate against lower bound.")
             .v(0)
@@ -148,7 +147,6 @@ pub fn program() -> Program {
             .v(0)
             .w("copy")
             .w("return_if_non_zero")
-            .v(0)
             .w("drop")
             .c("Compare x coordinate against upper bound")
             .v(1)
@@ -162,7 +160,6 @@ pub fn program() -> Program {
             .v(0)
             .w("copy")
             .w("return_if_non_zero")
-            .v(0)
             .w("drop")
             .c("Compare y coordinate against upper bound")
             .w("tile_field_size")
@@ -230,7 +227,6 @@ pub fn program() -> Program {
             .w("load")
             .w("return_if_zero")
             .w("handle_input")
-            .v(0)
             .w("drop")
             .w("update_positions");
     });
@@ -297,7 +293,6 @@ pub fn program() -> Program {
             .v(-128)
             .w("eq")
             .w("return_if_zero")
-            .v(0)
             .w("drop")
             .c("Looks like we ran into -128. Try again!")
             .w("negatable_random");
@@ -556,7 +551,7 @@ pub fn program() -> Program {
             .w("store");
     });
     source.define("vec_drop", |s| {
-        s.v(0).w("drop").v(0).w("drop");
+        s.w("drop").w("drop");
     });
 
     source.compile("main")
