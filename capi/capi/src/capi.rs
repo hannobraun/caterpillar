@@ -213,7 +213,7 @@ pub fn program() -> Program {
             .w("init_positions")
             .w("init_velocity")
             .w("init_next_position")
-            .w("init_food_position");
+            .w("init_food");
     });
     source.define("update", |s| {
         s.c("The update logic does not run every frame.")
@@ -269,7 +269,7 @@ pub fn program() -> Program {
     });
 
     // Game state - food
-    source.define("init_food_position", |s| {
+    source.define("init_food", |s| {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
