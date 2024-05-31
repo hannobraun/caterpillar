@@ -26,7 +26,7 @@ features = ["full"]
 
 [dependencies.tower-http]
 version = "*"
-features = ["full"]
+features = ["trace"]
 
 [dependencies.tracing-subscriber]
 version = "*"
