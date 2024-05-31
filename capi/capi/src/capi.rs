@@ -491,7 +491,7 @@ pub fn program() -> Program {
         s.v(14);
     });
 
-    // Vectors
+    // Utilities - Vector
     source.define("x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
             .c("here.");
@@ -533,7 +533,7 @@ pub fn program() -> Program {
         s.w("drop").w("drop");
     });
 
-    // Other utility functions
+    // Utilities - Miscellaneous
     source.define("negatable_random", |s| {
         s.c("Negating -128 would result in an integer overflow.")
             .w("read_random")
