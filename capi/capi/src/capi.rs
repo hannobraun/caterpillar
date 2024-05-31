@@ -285,27 +285,6 @@ pub fn program() -> Program {
             .w("food_position")
             .w("vec_store");
     });
-    source.define("negatable_random", |s| {
-        s.c("Negating -128 would result in an integer overflow.")
-            .w("read_random")
-            .v(0)
-            .w("copy")
-            .v(-128)
-            .w("eq")
-            .w("return_if_zero")
-            .w("drop")
-            .c("Looks like we ran into -128. Try again!")
-            .w("negatable_random");
-    });
-    source.define("abs", |s| {
-        s.b(["v"])
-            .w("v")
-            .w("v")
-            .v(-1)
-            .w("greater")
-            .w("return_if_non_zero")
-            .w("neg");
-    });
 
     // Game state - positions
     source.define("pos_get", |s| {
@@ -552,6 +531,29 @@ pub fn program() -> Program {
     });
     source.define("vec_drop", |s| {
         s.w("drop").w("drop");
+    });
+
+    // Other utility functions
+    source.define("negatable_random", |s| {
+        s.c("Negating -128 would result in an integer overflow.")
+            .w("read_random")
+            .v(0)
+            .w("copy")
+            .v(-128)
+            .w("eq")
+            .w("return_if_zero")
+            .w("drop")
+            .c("Looks like we ran into -128. Try again!")
+            .w("negatable_random");
+    });
+    source.define("abs", |s| {
+        s.b(["v"])
+            .w("v")
+            .w("v")
+            .v(-1)
+            .w("greater")
+            .w("return_if_non_zero")
+            .w("neg");
     });
 
     source.compile("main")
