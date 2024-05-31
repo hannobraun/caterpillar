@@ -268,7 +268,7 @@ pub fn program() -> Program {
             .w("vec_store");
     });
 
-    // Game state - food position
+    // Game state - food
     source.define("init_food_position", |s| {
         s.w("negatable_random")
             .w("abs")
