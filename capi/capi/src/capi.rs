@@ -228,7 +228,8 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .w("handle_input")
             .w("drop")
-            .w("update_positions");
+            .w("update_positions")
+            .w("eat_food");
     });
 
     // Game state - should game run
@@ -284,6 +285,16 @@ pub fn program() -> Program {
             .w("remainder")
             .w("food_position")
             .w("vec_store");
+    });
+    source.define("eat_food", |s| {
+        s.w("pos_last")
+            .w("vec_load")
+            .w("food_position")
+            .w("vec_load")
+            .w("vec_eq")
+            .w("return_if_zero")
+            .c("The snake's head and the food are at the same position.")
+            .w("init_food");
     });
 
     // Game state - positions
@@ -531,6 +542,24 @@ pub fn program() -> Program {
     });
     source.define("vec_drop", |s| {
         s.w("drop").w("drop");
+    });
+    source.define("vec_eq", |s| {
+        s.b(["ax", "ay", "bx", "by"])
+            .w("ax")
+            .w("bx")
+            .w("eq")
+            .v(0)
+            .w("copy")
+            .w("return_if_zero")
+            .w("ay")
+            .w("by")
+            .w("eq")
+            .v(0)
+            .w("copy")
+            .w("return_if_zero")
+            .w("drop")
+            .c("Vectors are equal!")
+            .v(1);
     });
 
     // Utilities - Miscellaneous
