@@ -509,6 +509,8 @@ pub fn program() -> Program {
             .w("vec_buf_len")
             .v(1)
             .w("sub")
+            .b(["index"])
+            .w("index")
             .w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
