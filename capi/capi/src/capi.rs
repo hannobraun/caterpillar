@@ -525,11 +525,12 @@ pub fn program() -> Program {
     source.define("vec_buf_pop", |s| {
         s.w("positions")
             .w("_vec_buf_first")
+            .b(["first_addr"])
+            .w("first_addr")
             .w("load")
             .v(2)
             .w("add_wrap_unsigned")
-            .w("positions")
-            .w("_vec_buf_first")
+            .w("first_addr")
             .w("store");
     });
     source.define("vec_buf_len", |s| {
