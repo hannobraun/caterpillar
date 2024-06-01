@@ -310,7 +310,7 @@ pub fn program() -> Program {
             .w("store")
             .v(15)
             .v(15)
-            .w("pos_push");
+            .w("vec_buf_push");
     });
     source.define("update_positions", |s| {
         s.w("update_next_position")
@@ -320,7 +320,7 @@ pub fn program() -> Program {
             .w("return_if_non_zero")
             .w("next_position")
             .w("vec_load")
-            .w("pos_push")
+            .w("vec_buf_push")
             .w("pop_positions");
     });
     source.define("pop_positions", |s| {
@@ -506,7 +506,7 @@ pub fn program() -> Program {
     source.define("vec_buf_last", |s| {
         s.w("pos_len").v(1).w("sub").w("vec_buf_get");
     });
-    source.define("pos_push", |s| {
+    source.define("vec_buf_push", |s| {
         s.w("positions_next")
             .w("load")
             .v(0)
