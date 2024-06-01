@@ -254,13 +254,15 @@ pub fn program() -> Program {
             .w("vec_store");
     });
     source.define("update_next_position", |s| {
-        s.w("vec_buf_last")
+        s.w("positions")
+            .w("vec_buf_last")
             .w("x")
             .w("load")
             .w("velocity")
             .w("x")
             .w("load")
             .w("add")
+            .w("positions")
             .w("vec_buf_last")
             .w("y")
             .w("load")
@@ -290,7 +292,8 @@ pub fn program() -> Program {
             .w("vec_store");
     });
     source.define("eat_food", |s| {
-        s.w("vec_buf_last")
+        s.w("positions")
+            .w("vec_buf_last")
             .w("vec_load")
             .w("food_position")
             .w("vec_load")
@@ -507,12 +510,13 @@ pub fn program() -> Program {
             .w("_vec_buf_address");
     });
     source.define("vec_buf_last", |s| {
-        s.w("positions")
+        s.b(["vec_buf"])
+            .w("vec_buf")
             .w("vec_buf_len")
             .v(1)
             .w("sub")
             .b(["index"])
-            .w("positions")
+            .w("vec_buf")
             .w("index")
             .w("vec_buf_get");
     });
