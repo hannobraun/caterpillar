@@ -305,18 +305,8 @@ pub fn program() -> Program {
 
     // Game state - positions
     source.define("init_positions", |s| {
-        s.v(0)
-            .w("positions")
-            .w("_vec_buf_first")
-            .w("store")
-            .v(0)
-            .w("positions")
-            .w("_vec_buf_next")
-            .w("store")
-            .v(64)
-            .w("positions")
-            .w("_vec_buf_capacity")
-            .w("store")
+        s.w("positions")
+            .w("vec_buf_init")
             .w("positions")
             .v(15)
             .v(15)
@@ -494,6 +484,21 @@ pub fn program() -> Program {
     });
 
     // Utilities - Vector Buffer
+    source.define("vec_buf_init", |s| {
+        s.b(["vec_buf"])
+            .v(0)
+            .w("vec_buf")
+            .w("_vec_buf_first")
+            .w("store")
+            .v(0)
+            .w("vec_buf")
+            .w("_vec_buf_next")
+            .w("store")
+            .v(64)
+            .w("vec_buf")
+            .w("_vec_buf_capacity")
+            .w("store");
+    });
     source.define("vec_buf_get", |s| {
         s.b(["vec_buf", "index"])
             .w("index")
