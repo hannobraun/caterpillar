@@ -309,7 +309,7 @@ pub fn program() -> Program {
             .w("store");
     });
 
-    // Game state - positions
+    // Game state - snake
     source.define("init_positions", |s| {
         s.v(3)
             .w("snake_length")
