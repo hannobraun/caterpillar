@@ -38,7 +38,7 @@ pub fn program() -> Program {
             .v(1)
             .w("write_tile")
             .w("vec_drop")
-            .w("pos_len")
+            .w("vec_buf_len")
             .w("index")
             .v(1)
             .w("add")
@@ -324,7 +324,7 @@ pub fn program() -> Program {
             .w("pop_positions");
     });
     source.define("pop_positions", |s| {
-        s.w("pos_len")
+        s.w("vec_buf_len")
             .v(3)
             .w("greater")
             .w("return_if_zero")
@@ -504,7 +504,7 @@ pub fn program() -> Program {
             .w("pos_address");
     });
     source.define("vec_buf_last", |s| {
-        s.w("pos_len").v(1).w("sub").w("vec_buf_get");
+        s.w("vec_buf_len").v(1).w("sub").w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
         s.w("positions_next")
@@ -527,7 +527,7 @@ pub fn program() -> Program {
             .w("positions_first")
             .w("store");
     });
-    source.define("pos_len", |s| {
+    source.define("vec_buf_len", |s| {
         s.w("positions_first")
             .w("load")
             .b(["first"])
