@@ -328,7 +328,7 @@ pub fn program() -> Program {
             .v(3)
             .w("greater")
             .w("return_if_zero")
-            .w("pos_pop")
+            .w("vec_buf_pop")
             .w("pop_positions");
     });
 
@@ -519,7 +519,7 @@ pub fn program() -> Program {
             .w("positions_next")
             .w("store");
     });
-    source.define("pos_pop", |s| {
+    source.define("vec_buf_pop", |s| {
         s.w("positions_first")
             .w("load")
             .v(2)
