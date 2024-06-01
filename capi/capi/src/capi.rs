@@ -503,13 +503,15 @@ pub fn program() -> Program {
     });
     source.define("vec_buf_push", |s| {
         s.b(["vec_x", "vec_y"])
-            .w("vec_x")
-            .w("vec_y")
             .w("positions")
             .w("_vec_buf_next")
             .w("load")
             .v(0)
             .w("_vec_buf_address")
+            .b(["address"])
+            .w("vec_x")
+            .w("vec_y")
+            .w("address")
             .w("vec_store")
             .w("positions")
             .w("_vec_buf_next")
