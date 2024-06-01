@@ -212,7 +212,7 @@ pub fn program() -> Program {
     // Game state
     source.define("init", |s| {
         s.w("init_should_game_run")
-            .w("init_positions")
+            .w("init_snake")
             .w("init_velocity")
             .w("init_next_position")
             .w("init_food");
@@ -310,7 +310,7 @@ pub fn program() -> Program {
     });
 
     // Game state - snake
-    source.define("init_positions", |s| {
+    source.define("init_snake", |s| {
         s.v(3)
             .w("snake_length")
             .w("store")
