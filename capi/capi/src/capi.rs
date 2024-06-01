@@ -516,22 +516,14 @@ pub fn program() -> Program {
             .w("address")
             .w("vec_store")
             .w("next_addr")
-            .w("load")
-            .v(2)
-            .w("add_wrap_unsigned")
-            .w("next_addr")
-            .w("store");
+            .w("_vec_buf_inc_index");
     });
     source.define("vec_buf_pop", |s| {
         s.w("positions")
             .w("_vec_buf_first")
             .b(["first_addr"])
             .w("first_addr")
-            .w("load")
-            .v(2)
-            .w("add_wrap_unsigned")
-            .w("first_addr")
-            .w("store");
+            .w("_vec_buf_inc_index");
     });
     source.define("vec_buf_len", |s| {
         s.w("positions")
@@ -583,6 +575,15 @@ pub fn program() -> Program {
             .w("positions")
             .w("_vec_buf_buffer")
             .w("add_wrap_unsigned");
+    });
+    source.define("_vec_buf_inc_index", |s| {
+        s.b(["index_addr"])
+            .w("index_addr")
+            .w("load")
+            .v(2)
+            .w("add_wrap_unsigned")
+            .w("index_addr")
+            .w("store");
     });
     source.define("_vec_buf_first", |s| {
         s.v(0).w("add");
