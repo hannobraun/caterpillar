@@ -298,78 +298,6 @@ pub fn program() -> Program {
     });
 
     // Game state - positions
-    source.define("pos_get", |s| {
-        s.b(["index"])
-            .w("index")
-            .v(2)
-            .w("mul")
-            .b(["offset"])
-            .w("positions_first")
-            .w("load")
-            .b(["base"])
-            .w("base")
-            .w("offset")
-            .w("pos_address");
-    });
-    source.define("pos_last", |s| {
-        s.w("pos_len").v(1).w("sub").w("pos_get");
-    });
-    source.define("pos_push", |s| {
-        s.w("positions_next")
-            .w("load")
-            .v(0)
-            .w("pos_address")
-            .w("vec_store")
-            .w("positions_next")
-            .w("load")
-            .v(2)
-            .w("add_wrap_unsigned")
-            .w("positions_next")
-            .w("store");
-    });
-    source.define("pos_pop", |s| {
-        s.w("positions_first")
-            .w("load")
-            .v(2)
-            .w("add_wrap_unsigned")
-            .w("positions_first")
-            .w("store");
-    });
-    source.define("pos_len", |s| {
-        s.w("positions_first")
-            .w("load")
-            .b(["first"])
-            .w("positions_next")
-            .w("load")
-            .b(["next"])
-            .w("next")
-            .w("first")
-            .w("sub")
-            .v(2)
-            .w("div")
-            .b(["difference"])
-            .w("difference")
-            .w("difference")
-            .w("return_if_zero")
-            .v(0)
-            .w("difference")
-            .w("greater")
-            .w("return_if_zero")
-            .w("positions_capacity")
-            .w("load")
-            .w("add");
-    });
-    source.define("pos_address", |s| {
-        s.b(["base", "offset"])
-            .w("base")
-            .w("offset")
-            .w("add_wrap_unsigned")
-            .w("positions_capacity")
-            .w("load")
-            .w("remainder")
-            .w("positions_buffer")
-            .w("add_wrap_unsigned");
-    });
     source.define("init_positions", |s| {
         s.v(0)
             .w("positions_first")
@@ -559,6 +487,80 @@ pub fn program() -> Program {
             .w("drop")
             .c("Vectors are equal!")
             .v(1);
+    });
+
+    // Utilities - Vector Buffer
+    source.define("pos_get", |s| {
+        s.b(["index"])
+            .w("index")
+            .v(2)
+            .w("mul")
+            .b(["offset"])
+            .w("positions_first")
+            .w("load")
+            .b(["base"])
+            .w("base")
+            .w("offset")
+            .w("pos_address");
+    });
+    source.define("pos_last", |s| {
+        s.w("pos_len").v(1).w("sub").w("pos_get");
+    });
+    source.define("pos_push", |s| {
+        s.w("positions_next")
+            .w("load")
+            .v(0)
+            .w("pos_address")
+            .w("vec_store")
+            .w("positions_next")
+            .w("load")
+            .v(2)
+            .w("add_wrap_unsigned")
+            .w("positions_next")
+            .w("store");
+    });
+    source.define("pos_pop", |s| {
+        s.w("positions_first")
+            .w("load")
+            .v(2)
+            .w("add_wrap_unsigned")
+            .w("positions_first")
+            .w("store");
+    });
+    source.define("pos_len", |s| {
+        s.w("positions_first")
+            .w("load")
+            .b(["first"])
+            .w("positions_next")
+            .w("load")
+            .b(["next"])
+            .w("next")
+            .w("first")
+            .w("sub")
+            .v(2)
+            .w("div")
+            .b(["difference"])
+            .w("difference")
+            .w("difference")
+            .w("return_if_zero")
+            .v(0)
+            .w("difference")
+            .w("greater")
+            .w("return_if_zero")
+            .w("positions_capacity")
+            .w("load")
+            .w("add");
+    });
+    source.define("pos_address", |s| {
+        s.b(["base", "offset"])
+            .w("base")
+            .w("offset")
+            .w("add_wrap_unsigned")
+            .w("positions_capacity")
+            .w("load")
+            .w("remainder")
+            .w("positions_buffer")
+            .w("add_wrap_unsigned");
     });
 
     // Utilities - Miscellaneous
