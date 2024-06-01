@@ -304,7 +304,8 @@ pub fn program() -> Program {
             .w("_vec_buf_first")
             .w("store")
             .v(0)
-            .w("positions_next")
+            .w("positions")
+            .w("_vec_buf_next")
             .w("store")
             .v(64)
             .w("positions_capacity")
@@ -420,9 +421,6 @@ pub fn program() -> Program {
     source.define("positions", |s| {
         s.v(11);
     });
-    source.define("positions_next", |s| {
-        s.v(12);
-    });
     source.define("positions_capacity", |s| {
         s.v(13);
     });
@@ -509,16 +507,19 @@ pub fn program() -> Program {
         s.w("vec_buf_len").v(1).w("sub").w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
-        s.w("positions_next")
+        s.w("positions")
+            .w("_vec_buf_next")
             .w("load")
             .v(0)
             .w("_vec_buf_address")
             .w("vec_store")
-            .w("positions_next")
+            .w("positions")
+            .w("_vec_buf_next")
             .w("load")
             .v(2)
             .w("add_wrap_unsigned")
-            .w("positions_next")
+            .w("positions")
+            .w("_vec_buf_next")
             .w("store");
     });
     source.define("vec_buf_pop", |s| {
@@ -536,7 +537,8 @@ pub fn program() -> Program {
             .w("_vec_buf_first")
             .w("load")
             .b(["first"])
-            .w("positions_next")
+            .w("positions")
+            .w("_vec_buf_next")
             .w("load")
             .b(["next"])
             .w("next")
@@ -569,6 +571,9 @@ pub fn program() -> Program {
     });
     source.define("_vec_buf_first", |s| {
         s.v(0).w("add");
+    });
+    source.define("_vec_buf_next", |s| {
+        s.v(1).w("add");
     });
 
     // Utilities - Miscellaneous
