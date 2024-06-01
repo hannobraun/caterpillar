@@ -501,7 +501,7 @@ pub fn program() -> Program {
             .b(["base"])
             .w("base")
             .w("offset")
-            .w("pos_address");
+            .w("_vec_buf_address");
     });
     source.define("vec_buf_last", |s| {
         s.w("vec_buf_len").v(1).w("sub").w("vec_buf_get");
@@ -510,7 +510,7 @@ pub fn program() -> Program {
         s.w("positions_next")
             .w("load")
             .v(0)
-            .w("pos_address")
+            .w("_vec_buf_address")
             .w("vec_store")
             .w("positions_next")
             .w("load")
@@ -551,7 +551,7 @@ pub fn program() -> Program {
             .w("load")
             .w("add");
     });
-    source.define("pos_address", |s| {
+    source.define("_vec_buf_address", |s| {
         s.b(["base", "offset"])
             .w("base")
             .w("offset")
