@@ -555,7 +555,18 @@ pub fn program() -> Program {
             .w("add");
     });
     source.define("_vec_buf_address", |s| {
-        s.b(["base", "offset"])
+        s.c("Compute the memory address of a location within the vector")
+            .c("buffer.")
+            .c("")
+            .c("Takes two arguments:")
+            .c("")
+            .c("- `base`, which is an index into the buffer, as opposed to a")
+            .c("  real address. It can be larger than any actual address")
+            .c("  within the buffer.")
+            .c("- `offset`, which is the offset of the desired address from")
+            .c("  `base`.")
+            .c("that it can ")
+            .b(["base", "offset"])
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
