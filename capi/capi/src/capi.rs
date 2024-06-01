@@ -519,11 +519,7 @@ pub fn program() -> Program {
             .w("_vec_buf_inc_index");
     });
     source.define("vec_buf_pop", |s| {
-        s.w("positions")
-            .w("_vec_buf_first")
-            .b(["first_addr"])
-            .w("first_addr")
-            .w("_vec_buf_inc_index");
+        s.w("positions").w("_vec_buf_first").w("_vec_buf_inc_index");
     });
     source.define("vec_buf_len", |s| {
         s.w("positions")
