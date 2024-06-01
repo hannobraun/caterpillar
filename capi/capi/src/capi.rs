@@ -422,9 +422,6 @@ pub fn program() -> Program {
     source.define("positions", |s| {
         s.v(11);
     });
-    source.define("positions_buffer", |s| {
-        s.v(14);
-    });
 
     // Utilities - Vector
     source.define("x", |s| {
@@ -566,7 +563,8 @@ pub fn program() -> Program {
             .w("_vec_buf_capacity")
             .w("load")
             .w("remainder")
-            .w("positions_buffer")
+            .w("positions")
+            .w("_vec_buf_buffer")
             .w("add_wrap_unsigned");
     });
     source.define("_vec_buf_first", |s| {
@@ -577,6 +575,9 @@ pub fn program() -> Program {
     });
     source.define("_vec_buf_capacity", |s| {
         s.v(2).w("add");
+    });
+    source.define("_vec_buf_buffer", |s| {
+        s.v(3).w("add");
     });
 
     // Utilities - Miscellaneous
