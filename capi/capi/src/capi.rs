@@ -300,7 +300,8 @@ pub fn program() -> Program {
     // Game state - positions
     source.define("init_positions", |s| {
         s.v(0)
-            .w("positions_first")
+            .w("positions")
+            .w("_vec_buf_first")
             .w("store")
             .v(0)
             .w("positions_next")
@@ -416,7 +417,7 @@ pub fn program() -> Program {
     source.define("food_position", |s| {
         s.v(8);
     });
-    source.define("positions_first", |s| {
+    source.define("positions", |s| {
         s.v(11);
     });
     source.define("positions_next", |s| {
@@ -496,7 +497,8 @@ pub fn program() -> Program {
             .v(2)
             .w("mul")
             .b(["offset"])
-            .w("positions_first")
+            .w("positions")
+            .w("_vec_buf_first")
             .w("load")
             .b(["base"])
             .w("base")
@@ -520,15 +522,18 @@ pub fn program() -> Program {
             .w("store");
     });
     source.define("vec_buf_pop", |s| {
-        s.w("positions_first")
+        s.w("positions")
+            .w("_vec_buf_first")
             .w("load")
             .v(2)
             .w("add_wrap_unsigned")
-            .w("positions_first")
+            .w("positions")
+            .w("_vec_buf_first")
             .w("store");
     });
     source.define("vec_buf_len", |s| {
-        s.w("positions_first")
+        s.w("positions")
+            .w("_vec_buf_first")
             .w("load")
             .b(["first"])
             .w("positions_next")
@@ -561,6 +566,9 @@ pub fn program() -> Program {
             .w("remainder")
             .w("positions_buffer")
             .w("add_wrap_unsigned");
+    });
+    source.define("_vec_buf_first", |s| {
+        s.v(0).w("add");
     });
 
     // Utilities - Miscellaneous
