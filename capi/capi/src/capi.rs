@@ -300,7 +300,13 @@ pub fn program() -> Program {
             .w("vec_eq")
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
-            .w("init_food");
+            .w("init_food")
+            .w("snake_length")
+            .w("load")
+            .v(1)
+            .w("add")
+            .w("snake_length")
+            .w("store");
     });
 
     // Game state - positions
