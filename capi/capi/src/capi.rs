@@ -308,7 +308,8 @@ pub fn program() -> Program {
             .w("_vec_buf_next")
             .w("store")
             .v(64)
-            .w("positions_capacity")
+            .w("positions")
+            .w("_vec_buf_capacity")
             .w("store")
             .v(15)
             .v(15)
@@ -420,9 +421,6 @@ pub fn program() -> Program {
     });
     source.define("positions", |s| {
         s.v(11);
-    });
-    source.define("positions_capacity", |s| {
-        s.v(13);
     });
     source.define("positions_buffer", |s| {
         s.v(14);
@@ -554,7 +552,8 @@ pub fn program() -> Program {
             .w("difference")
             .w("greater")
             .w("return_if_zero")
-            .w("positions_capacity")
+            .w("positions")
+            .w("_vec_buf_capacity")
             .w("load")
             .w("add");
     });
@@ -563,7 +562,8 @@ pub fn program() -> Program {
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
-            .w("positions_capacity")
+            .w("positions")
+            .w("_vec_buf_capacity")
             .w("load")
             .w("remainder")
             .w("positions_buffer")
@@ -574,6 +574,9 @@ pub fn program() -> Program {
     });
     source.define("_vec_buf_next", |s| {
         s.v(1).w("add");
+    });
+    source.define("_vec_buf_capacity", |s| {
+        s.v(2).w("add");
     });
 
     // Utilities - Miscellaneous
