@@ -502,7 +502,10 @@ pub fn program() -> Program {
         s.w("vec_buf_len").v(1).w("sub").w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
-        s.w("positions")
+        s.b(["vec_x", "vec_y"])
+            .w("vec_x")
+            .w("vec_y")
+            .w("positions")
             .w("_vec_buf_next")
             .w("load")
             .v(0)
