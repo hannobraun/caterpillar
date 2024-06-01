@@ -32,6 +32,7 @@ pub fn program() -> Program {
     });
     source.define("draw_snake_inner", |s| {
         s.b(["index"])
+            .w("positions")
             .w("index")
             .w("vec_buf_get")
             .w("vec_load")
@@ -245,7 +246,8 @@ pub fn program() -> Program {
 
     // Game state - next position
     source.define("init_next_position", |s| {
-        s.v(0)
+        s.w("positions")
+            .v(0)
             .w("vec_buf_get")
             .w("vec_load")
             .w("next_position")
@@ -490,16 +492,16 @@ pub fn program() -> Program {
 
     // Utilities - Vector Buffer
     source.define("vec_buf_get", |s| {
-        s.b(["index"])
+        s.b(["vec_buf", "index"])
             .w("index")
             .v(2)
             .w("mul")
             .b(["offset"])
-            .w("positions")
+            .w("vec_buf")
             .w("_vec_buf_first")
             .w("load")
             .b(["base"])
-            .w("positions")
+            .w("vec_buf")
             .w("base")
             .w("offset")
             .w("_vec_buf_address");
@@ -510,6 +512,7 @@ pub fn program() -> Program {
             .v(1)
             .w("sub")
             .b(["index"])
+            .w("positions")
             .w("index")
             .w("vec_buf_get");
     });
