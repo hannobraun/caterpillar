@@ -312,6 +312,7 @@ pub fn program() -> Program {
             .w("positions")
             .w("_vec_buf_capacity")
             .w("store")
+            .w("positions")
             .v(15)
             .v(15)
             .w("vec_buf_push");
@@ -322,6 +323,7 @@ pub fn program() -> Program {
             .w("vec_load")
             .w("is_out_of_bounds")
             .w("return_if_non_zero")
+            .w("positions")
             .w("next_position")
             .w("vec_load")
             .w("vec_buf_push")
@@ -510,11 +512,11 @@ pub fn program() -> Program {
             .w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
-        s.b(["vec_x", "vec_y"])
-            .w("positions")
+        s.b(["vec_buf", "vec_x", "vec_y"])
+            .w("vec_buf")
             .w("_vec_buf_next")
             .b(["next_addr"])
-            .w("positions")
+            .w("vec_buf")
             .w("next_addr")
             .w("load")
             .v(0)
