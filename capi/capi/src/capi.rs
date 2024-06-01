@@ -505,6 +505,8 @@ pub fn program() -> Program {
         s.b(["vec_x", "vec_y"])
             .w("positions")
             .w("_vec_buf_next")
+            .b(["next_addr"])
+            .w("next_addr")
             .w("load")
             .v(0)
             .w("_vec_buf_address")
@@ -513,13 +515,11 @@ pub fn program() -> Program {
             .w("vec_y")
             .w("address")
             .w("vec_store")
-            .w("positions")
-            .w("_vec_buf_next")
+            .w("next_addr")
             .w("load")
             .v(2)
             .w("add_wrap_unsigned")
-            .w("positions")
-            .w("_vec_buf_next")
+            .w("next_addr")
             .w("store");
     });
     source.define("vec_buf_pop", |s| {
