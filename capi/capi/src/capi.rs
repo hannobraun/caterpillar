@@ -305,7 +305,10 @@ pub fn program() -> Program {
 
     // Game state - positions
     source.define("init_positions", |s| {
-        s.w("positions")
+        s.v(3)
+            .w("snake_length")
+            .w("store")
+            .w("positions")
             .w("vec_buf_init")
             .w("positions")
             .v(15)
@@ -327,7 +330,8 @@ pub fn program() -> Program {
     source.define("pop_positions", |s| {
         s.w("positions")
             .w("vec_buf_len")
-            .v(3)
+            .w("snake_length")
+            .w("load")
             .w("greater")
             .w("return_if_zero")
             .w("positions")
@@ -418,6 +422,9 @@ pub fn program() -> Program {
     });
     source.define("food_position", |s| {
         s.v(8);
+    });
+    source.define("snake_length", |s| {
+        s.v(10);
     });
     source.define("positions", |s| {
         s.v(11);
