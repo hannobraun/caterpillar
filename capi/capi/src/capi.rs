@@ -38,6 +38,7 @@ pub fn program() -> Program {
             .v(1)
             .w("write_tile")
             .w("vec_drop")
+            .w("positions")
             .w("vec_buf_len")
             .w("index")
             .v(1)
@@ -327,7 +328,8 @@ pub fn program() -> Program {
             .w("pop_positions");
     });
     source.define("pop_positions", |s| {
-        s.w("vec_buf_len")
+        s.w("positions")
+            .w("vec_buf_len")
             .v(3)
             .w("greater")
             .w("return_if_zero")
@@ -500,7 +502,11 @@ pub fn program() -> Program {
             .w("_vec_buf_address");
     });
     source.define("vec_buf_last", |s| {
-        s.w("vec_buf_len").v(1).w("sub").w("vec_buf_get");
+        s.w("positions")
+            .w("vec_buf_len")
+            .v(1)
+            .w("sub")
+            .w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
         s.b(["vec_x", "vec_y"])
@@ -524,11 +530,12 @@ pub fn program() -> Program {
         s.w("positions").w("_vec_buf_first").w("_vec_buf_inc_index");
     });
     source.define("vec_buf_len", |s| {
-        s.w("positions")
+        s.b(["vec_buf"])
+            .w("vec_buf")
             .w("_vec_buf_first")
             .w("load")
             .b(["first"])
-            .w("positions")
+            .w("vec_buf")
             .w("_vec_buf_next")
             .w("load")
             .b(["next"])
@@ -545,7 +552,7 @@ pub fn program() -> Program {
             .w("difference")
             .w("greater")
             .w("return_if_zero")
-            .w("positions")
+            .w("vec_buf")
             .w("_vec_buf_capacity")
             .w("load")
             .w("add");
