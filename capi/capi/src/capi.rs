@@ -297,12 +297,7 @@ pub fn program() -> Program {
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
             .w("init_food")
-            .w("snake_length")
-            .w("load")
-            .v(1)
-            .w("add")
-            .w("snake_length")
-            .w("store");
+            .w("grow_snake");
     });
 
     // Game state - snake
@@ -339,6 +334,14 @@ pub fn program() -> Program {
             .w("positions")
             .w("vec_buf_pop")
             .w("pop_positions");
+    });
+    source.define("grow_snake", |s| {
+        s.w("snake_length")
+            .w("load")
+            .v(1)
+            .w("add")
+            .w("snake_length")
+            .w("store");
     });
 
     // Input
