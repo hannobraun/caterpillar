@@ -201,13 +201,11 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;
 
-    let effect = {
-        let x = x.0.try_into()?;
-        let y = y.0.try_into()?;
-        let value = value.0.try_into()?;
+    let x = x.0.try_into()?;
+    let y = y.0.try_into()?;
+    let value = value.0.try_into()?;
 
-        BuiltinEffect::SetTile { x, y, value }
-    };
+    let effect = BuiltinEffect::SetTile { x, y, value };
 
     Ok(Some(effect))
 }
