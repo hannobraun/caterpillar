@@ -342,6 +342,11 @@ pub fn program() -> Program {
             .w("add")
             .b(["snake_length_plus_growth"])
             .w("snake_length_plus_growth")
+            .w("positions")
+            .w("vec_buf_capacity")
+            .w("greater")
+            .w("return_if_non_zero")
+            .w("snake_length_plus_growth")
             .w("snake_length")
             .w("store");
     });
@@ -590,6 +595,9 @@ pub fn program() -> Program {
             .w("_vec_buf_capacity")
             .w("load")
             .w("add");
+    });
+    source.define("vec_buf_capacity", |s| {
+        s.w("_vec_buf_capacity").w("load").v(2).w("div");
     });
     source.define("_vec_buf_address", |s| {
         s.c("Compute the memory address of a location within the vector")
