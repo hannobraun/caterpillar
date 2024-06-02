@@ -38,7 +38,6 @@ pub fn program() -> Program {
             .w("vec_load")
             .v(1)
             .w("write_tile")
-            .w("vec_drop")
             .w("positions")
             .w("vec_buf_len")
             .w("index")
@@ -52,11 +51,7 @@ pub fn program() -> Program {
             .w("draw_snake_inner");
     });
     source.define("draw_food", |s| {
-        s.w("food_position")
-            .w("vec_load")
-            .v(1)
-            .w("write_tile")
-            .w("vec_drop");
+        s.w("food_position").w("vec_load").v(1).w("write_tile");
     });
 
     // Draw - write tiles
@@ -77,6 +72,7 @@ pub fn program() -> Program {
             .w("check_tile_index")
             .w("return_if_zero")
             .c("Apparently we're not done yet.")
+            .w("vec_copy")
             .w("tile_value")
             .w("write_tile")
             .w("increment_tile_index")
@@ -473,6 +469,9 @@ pub fn program() -> Program {
             .w("store")
             .w("x")
             .w("store");
+    });
+    source.define("vec_copy", |s| {
+        s.b(["vx", "vy"]).w("vx").w("vy").w("vx").w("vy");
     });
     source.define("vec_drop", |s| {
         s.w("drop").w("drop");

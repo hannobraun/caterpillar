@@ -209,9 +209,6 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
         BuiltinEffect::SetTile { x, y, value }
     };
 
-    data_stack.push(x);
-    data_stack.push(y);
-
     Ok(Some(effect))
 }
 
