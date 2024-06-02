@@ -340,6 +340,8 @@ pub fn program() -> Program {
             .w("load")
             .v(1)
             .w("add")
+            .b(["snake_length_plus_growth"])
+            .w("snake_length_plus_growth")
             .w("snake_length")
             .w("store");
     });
