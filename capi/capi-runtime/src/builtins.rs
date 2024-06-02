@@ -205,9 +205,7 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
     let y = y.0.try_into()?;
     let value = value.0.try_into()?;
 
-    let effect = BuiltinEffect::SetTile { x, y, value };
-
-    Ok(Some(effect))
+    Ok(Some(BuiltinEffect::SetTile { x, y, value }))
 }
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
