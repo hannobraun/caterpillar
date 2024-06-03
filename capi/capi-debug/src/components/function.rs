@@ -1,6 +1,7 @@
 use capi_runtime::{
     debugger::{self, DebugEvent},
-    Expression, Program, ProgramEffectKind,
+    syntax::Expression,
+    Program, ProgramEffectKind,
 };
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};

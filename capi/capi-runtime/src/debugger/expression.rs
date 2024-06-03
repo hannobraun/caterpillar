@@ -1,5 +1,6 @@
 use crate::{
-    syntax::ExpressionKind, InstructionAddress, Program, ProgramEffect,
+    syntax::{self, ExpressionKind},
+    InstructionAddress, Program, ProgramEffect,
 };
 
 pub struct Expression {
@@ -11,7 +12,7 @@ pub struct Expression {
 }
 
 impl Expression {
-    pub fn new(expression: &crate::Expression, program: &Program) -> Self {
+    pub fn new(expression: &syntax::Expression, program: &Program) -> Self {
         let address =
             program.source_map.location_to_address(&expression.location);
 

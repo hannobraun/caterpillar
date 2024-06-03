@@ -1,6 +1,6 @@
 use crate::{
-    syntax::{ExpressionKind, Location},
-    Expression, Value,
+    syntax::{Expression, ExpressionKind, Location},
+    Value,
 };
 
 #[derive(Debug)]
