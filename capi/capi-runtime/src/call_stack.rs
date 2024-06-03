@@ -12,8 +12,12 @@ impl CallStack {
         self.inner.contains(&address.next())
     }
 
-    pub fn push(&mut self, address: InstructionAddress) {
+    pub fn push(
+        &mut self,
+        address: InstructionAddress,
+    ) -> Result<(), CallStackOverflow> {
         self.inner.push(address);
+        Ok(())
     }
 
     pub fn pop(&mut self) -> Option<InstructionAddress> {
@@ -35,3 +39,6 @@ impl IntoIterator for CallStack {
 }
 
 type CallStackInner = Vec<InstructionAddress>;
+
+#[derive(Debug)]
+pub struct CallStackOverflow;
