@@ -1,8 +1,11 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::BuiltinEffect, call_stack::CallStack, data_stack::StackUnderflow,
-    instructions::Instruction, InstructionAddress, Value,
+    builtins::BuiltinEffect,
+    call_stack::{CallStack, CallStackOverflow},
+    data_stack::StackUnderflow,
+    instructions::Instruction,
+    InstructionAddress, Value,
 };
 
 use super::{builtins, code::Code, data_stack::DataStack};
@@ -110,7 +113,14 @@ impl Evaluator {
             }
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve_name(name);
-                self.call_stack.push(self.next_instruction).unwrap();
+
+                if let Err(err) = self.call_stack.push(self.next_instruction) {
+                    return EvaluatorState::Effect {
+                        effect: EvaluatorEffect::CallStack(err),
+                        address: current_instruction,
+                    };
+                }
+
                 self.next_instruction = address;
             }
             Instruction::Push { value } => self.data_stack.push(*value),
@@ -181,6 +191,7 @@ pub enum EvaluatorState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
+    CallStack(CallStackOverflow),
     StackError(StackUnderflow),
     UnknownBuiltin { name: String },
 }
