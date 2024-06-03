@@ -115,7 +115,7 @@ impl Evaluator {
             }
             Instruction::Push { value } => self.data_stack.push(*value),
             Instruction::Return => {
-                let Some(return_address) = self.call_stack.inner.pop() else {
+                let Some(return_address) = self.call_stack.pop() else {
                     return EvaluatorState::Finished;
                 };
 
@@ -132,8 +132,7 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.inner.pop()
-                    else {
+                    let Some(return_address) = self.call_stack.pop() else {
                         return EvaluatorState::Finished;
                     };
 
@@ -151,8 +150,7 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.inner.pop()
-                    else {
+                    let Some(return_address) = self.call_stack.pop() else {
                         return EvaluatorState::Finished;
                     };
 

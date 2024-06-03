@@ -16,6 +16,10 @@ impl CallStack {
         self.inner.push(address);
     }
 
+    pub fn pop(&mut self) -> Option<InstructionAddress> {
+        self.inner.pop()
+    }
+
     pub fn clear(&mut self) {
         self.inner.clear();
     }
