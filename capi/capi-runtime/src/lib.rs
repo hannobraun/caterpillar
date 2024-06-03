@@ -1,4 +1,5 @@
 pub mod debugger;
+pub mod syntax;
 
 mod breakpoints;
 mod builtins;
@@ -13,7 +14,6 @@ mod program;
 mod source;
 mod source_map;
 mod symbols;
-mod syntax;
 
 pub use self::{
     builtins::BuiltinEffect,
