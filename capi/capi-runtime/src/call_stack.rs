@@ -40,5 +40,5 @@ impl IntoIterator for CallStack {
 
 type CallStackInner = Vec<InstructionAddress>;
 
-#[derive(Debug)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStackOverflow;
