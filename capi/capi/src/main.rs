@@ -10,7 +10,8 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let program = snake::program(capi_runtime::Script::default());
+    let script = snake::program(capi_runtime::Script::default());
+    let program = script.compile("main");
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());

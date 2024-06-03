@@ -1,6 +1,6 @@
-use capi_runtime::{Program, Script};
+use capi_runtime::Script;
 
-pub fn program(mut script: Script) -> Program {
+pub fn program(mut script: Script) -> Script {
     // Main loop
     script.function("main", |s| {
         s.w("tile_field_size")
@@ -662,5 +662,5 @@ pub fn program(mut script: Script) -> Program {
             .w("neg");
     });
 
-    script.compile("main")
+    script
 }
