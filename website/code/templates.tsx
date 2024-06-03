@@ -99,7 +99,7 @@ const page = (title: string, content: JSX.Element) => {
                         content="width=device-width, initial-scale=1"
                     />
 
-                    <style>{css}</style>
+                    <link href="/style.css" rel="stylesheet" />
                 </head>
                 <body class="max-w-xl mx-auto p-2">
                     <header>
@@ -113,67 +113,3 @@ const page = (title: string, content: JSX.Element) => {
         </>
     );
 };
-
-const css = `
-    html {
-        font-family: sans-serif;
-    }
-    a {
-        color: #0000ff;
-    }
-    ol {
-        list-style-type: none;
-
-        margin: 0;
-        padding: 0;
-    }
-
-    .col-1 {
-        grid-column: 1;
-    }
-    .col-2 {
-        grid-column: 2;
-    }
-    .font-bold {
-        font-weight: 700;
-    }
-    .grid {
-        display: grid;
-    }
-    .grid-cols-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .justify-self-end {
-        justify-self: end;
-    }
-    .justify-self-start {
-        justify-self: start;
-    }
-    .m-8 {
-        margin: 2rem;
-    }
-    .max-w-xl {
-        max-width: 36rem;
-    }
-    .mx-auto {
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .my-4 {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-    .p-2 {
-        padding: 0.5rem;
-    }
-    .text-lg {
-        font-size: 1.125rem;
-    }
-
-    .prose img {
-        max-width: 100%;
-    }
-    .prose video {
-        max-width: 100%;
-    }
-`;
