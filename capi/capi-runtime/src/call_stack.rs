@@ -6,3 +6,9 @@ use crate::InstructionAddress;
 pub struct CallStack {
     pub inner: Vec<InstructionAddress>,
 }
+
+impl CallStack {
+    pub fn contains(&self, address: InstructionAddress) -> bool {
+        self.inner.contains(&address.next())
+    }
+}
