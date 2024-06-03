@@ -38,9 +38,7 @@ impl Expression {
         // hopefully fix it soon.
         let is_on_call_stack = address
             .map(|address| {
-                program.evaluator.call_stack.inner.iter().any(
-                    |&call_stack_address| call_stack_address == address.next(),
-                )
+                program.evaluator.call_stack.inner.contains(&address.next())
             })
             .unwrap_or(false);
 
