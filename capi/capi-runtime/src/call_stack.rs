@@ -25,4 +25,13 @@ impl CallStack {
     }
 }
 
+impl IntoIterator for CallStack {
+    type Item = <CallStackInner as IntoIterator>::Item;
+    type IntoIter = <CallStackInner as IntoIterator>::IntoIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.inner.into_iter()
+    }
+}
+
 type CallStackInner = Vec<InstructionAddress>;
