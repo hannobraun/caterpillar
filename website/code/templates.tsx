@@ -45,7 +45,7 @@ export const singleDailyThoughtPage = (
         `Daily Thought - ${date}`,
         <>
             <h2>Daily Thought - {date}</h2>
-            <a href="/daily">{"< "}back to list</a>
+            {link("/daily", "< back to list")}
             <main class="prose">
                 {html}
             </main>
