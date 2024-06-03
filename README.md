@@ -41,7 +41,7 @@ phase out, but that still provides some value.
 ### Postfix operators
 
 The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
-opposed to prefix (like `do_thing(arg1, arg2)` or `(+ 1 2)`) or infix (`1 + 2`)
+opposed to prefix (`do_thing(arg1, arg2)`, `(+ 1 2)`) or infix (`1 + 2`)
 operators.
 
 To keep the language simple, I want to (at least initially) restrict it to one
