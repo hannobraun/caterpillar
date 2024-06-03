@@ -1,6 +1,6 @@
 use capi_runtime::Script;
 
-pub fn program(mut script: Script) -> Script {
+pub fn snake(mut script: Script) -> Script {
     // Main loop
     script.function("main", |s| {
         s.w("tile_field_size")
