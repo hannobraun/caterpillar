@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{syntax::Expression, Location};
+use crate::syntax::{Expression, Location};
 
 use super::syntax::SyntaxBuilder;
 

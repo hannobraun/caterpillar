@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{InstructionAddress, Location};
+use crate::{syntax::Location, InstructionAddress};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,

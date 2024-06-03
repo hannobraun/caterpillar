@@ -1,8 +1,9 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    instructions::Instruction, source_map::SourceMap, syntax::Expression,
-    Location,
+    instructions::Instruction,
+    source_map::SourceMap,
+    syntax::{Expression, Location},
 };
 
 use super::{code::Code, syntax::ExpressionKind};
