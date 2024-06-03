@@ -16,24 +16,24 @@ impl Script {
         self.functions.define(name, f)
     }
 
-    pub fn compile(self, entry: &str) -> Program {
+    pub fn compile(script: Script, entry: &str) -> Program {
         let mut code = Code::new();
         let mut source_map = SourceMap::default();
 
         let mut compiler = Compiler {
-            functions: &self.functions.names,
+            functions: &script.functions.names,
             code: &mut code,
             source_map: &mut source_map,
         };
 
-        for Function { name, syntax } in &self.functions.inner {
+        for Function { name, syntax } in &script.functions.inner {
             compiler.compile_function(name.clone(), syntax.clone());
         }
 
         let entry_address = code.symbols.resolve_name(entry);
 
         let mut program = Program {
-            functions: self.functions,
+            functions: script.functions,
             source_map,
             ..Program::default()
         };
