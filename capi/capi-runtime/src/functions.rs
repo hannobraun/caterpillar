@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{syntax::Expression, SourceLocation};
+use crate::{syntax::Expression, Location};
 
 use super::syntax::Syntax;
 
@@ -32,10 +32,7 @@ impl Functions {
         });
     }
 
-    pub fn get_from_location(
-        &self,
-        location: SourceLocation,
-    ) -> Option<&Function> {
+    pub fn get_from_location(&self, location: Location) -> Option<&Function> {
         self.inner
             .iter()
             .find(|function| function.name == location.function())

@@ -4,14 +4,14 @@ use crate::Value;
 
 #[derive(Debug)]
 pub struct Syntax<'r> {
-    next_location: SourceLocation,
+    next_location: Location,
     expressions: &'r mut Vec<Expression>,
 }
 
 impl<'r> Syntax<'r> {
     pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
         Self {
-            next_location: SourceLocation::first_in_function(function),
+            next_location: Location::first_in_function(function),
             expressions,
         }
     }
@@ -47,11 +47,11 @@ impl<'r> Syntax<'r> {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
-    pub location: SourceLocation,
+    pub location: Location,
 }
 
 impl Expression {
-    pub fn new(kind: ExpressionKind, location: SourceLocation) -> Self {
+    pub fn new(kind: ExpressionKind, location: Location) -> Self {
         Self { kind, location }
     }
 }
@@ -91,12 +91,12 @@ impl fmt::Display for ExpressionKind {
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct SourceLocation {
+pub struct Location {
     function: String,
     index: u32,
 }
 
-impl SourceLocation {
+impl Location {
     pub fn function(&self) -> &str {
         &self.function
     }

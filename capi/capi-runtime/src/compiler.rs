@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     instructions::Instruction, source_map::SourceMap, syntax::Expression,
-    SourceLocation,
+    Location,
 };
 
 use super::{code::Code, syntax::ExpressionKind};
@@ -65,7 +65,7 @@ impl Compiler<'_> {
     fn generate(
         &mut self,
         instruction: Instruction,
-        location: Option<SourceLocation>,
+        location: Option<Location>,
     ) {
         let address = self.code.push(instruction);
         if let Some(location) = location {
