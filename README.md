@@ -2,24 +2,34 @@
 
 [**Daily Thoughts**](daily.md)
 
-## About
+## Vision
 
-The goal of the Caterpillar project is to create a **programming language** that
-gives you a **immediate connection to the code** you're writing, enabling an
-**intuitive understanding** of the program that you're working on.
+**Caterpillar is a programming language** with a dual goal:
 
-The method for achieving this is **interactive programming**, the **direct
-manipulation of a running program**, instead of going through an extended loop
-of re-compiling, re-starting, and re-finding the right location in your program
-where you can test the change you made.
+- Create an **immediate connection to the code you're writing**, to give you an
+  intuitive understanding of what it's doing.
+- Bring this experience to many places: browsers, servers, desktops, phones,
+  watches, microcontrollers; CPUs and GPUs.
 
-Caterpillar is still early-stage and experimental. This goal has not nearly been
-achieved yet. I'm incrementally approaching this long-term vision through a
-series of practical prototypes with specific, short-term goals.
+Caterpillar aims to achieve this via **interactive programming**; the practice
+of directly manipulating your running program, instead of going through an
+extended loop of re-compiling, re-starting, then navigating to where you can
+test your change.
 
-You can find the currently active prototype in the [`capi/` directory](capi/).
-The [`archive/` directory](archive/) contains a number of previous prototypes at
-various levels of completion.
+## Status
+
+Caterpillar is still early-stage and experimental. It can hardly be called a
+language right now. Development is focused on creating a basic solution for one
+use case (game development) on one platform (browsers).
+
+Caterpillar has gone through [a series of prototypes](archive/), of varying
+levels of sophistication, each of which provided answers to different questions.
+The [current prototype](capi/) explores whether an early focus on tooling is a
+practical approach.
+
+You can keep up with the project reading my
+[daily thoughts](https://capi.hannobraun.com/daily), which include development
+updates.
 
 ## Design
 
