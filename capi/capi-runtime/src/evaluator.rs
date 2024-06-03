@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::BuiltinEffect, call_stack::CallStack, data_stack::StackUnderflow, instructions::Instruction, InstructionAddress, Value
+    builtins::BuiltinEffect, call_stack::CallStack, data_stack::StackUnderflow,
+    instructions::Instruction, InstructionAddress, Value,
 };
 
 use super::{builtins, code::Code, data_stack::DataStack};
@@ -24,7 +25,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, entry: InstructionAddress) {
-        self.call_stack.clear();
+        self.call_stack.inner.clear();
         self.data_stack.clear();
         self.next_instruction = entry;
     }
@@ -109,12 +110,12 @@ impl Evaluator {
             }
             Instruction::CallFunction { name } => {
                 let address = self.code.symbols.resolve_name(name);
-                self.call_stack.push(self.next_instruction);
+                self.call_stack.inner.push(self.next_instruction);
                 self.next_instruction = address;
             }
             Instruction::Push { value } => self.data_stack.push(*value),
             Instruction::Return => {
-                let Some(return_address) = self.call_stack.pop() else {
+                let Some(return_address) = self.call_stack.inner.pop() else {
                     return EvaluatorState::Finished;
                 };
 
@@ -131,7 +132,8 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.pop() else {
+                    let Some(return_address) = self.call_stack.inner.pop()
+                    else {
                         return EvaluatorState::Finished;
                     };
 
@@ -149,7 +151,8 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.pop() else {
+                    let Some(return_address) = self.call_stack.inner.pop()
+                    else {
                         return EvaluatorState::Finished;
                     };
 

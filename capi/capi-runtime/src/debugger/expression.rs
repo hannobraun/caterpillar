@@ -36,16 +36,13 @@ impl Expression {
         // This does not work reliably, for reasons I don't fully understand.
         // But it's better than nothing, so I'm keeping it for now, and will
         // hopefully fix it soon.
-        let is_on_call_stack =
-            address
-                .map(|address| {
-                    program.evaluator.call_stack.iter().any(
-                        |&call_stack_address| {
-                            call_stack_address == address.next()
-                        },
-                    )
-                })
-                .unwrap_or(false);
+        let is_on_call_stack = address
+            .map(|address| {
+                program.evaluator.call_stack.inner.iter().any(
+                    |&call_stack_address| call_stack_address == address.next(),
+                )
+            })
+            .unwrap_or(false);
 
         Self {
             address,
