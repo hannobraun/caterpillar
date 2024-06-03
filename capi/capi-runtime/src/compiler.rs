@@ -4,7 +4,7 @@ use crate::{
     instructions::Instruction,
     source_map::SourceMap,
     syntax::{Expression, Function, Location, Script},
-    Program,
+    InstructionAddress, Program,
 };
 
 use super::{code::Code, syntax::ExpressionKind};
@@ -20,7 +20,8 @@ pub fn compile(script: Script, entry: &str) -> Program {
     };
 
     for Function { name, syntax } in &script.functions.inner {
-        compiler.compile_function(name.clone(), syntax.clone());
+        let mut output = Vec::new();
+        compiler.compile_function(name.clone(), syntax.clone(), &mut output);
     }
 
     let entry_address = code.symbols.resolve_name(entry);
@@ -43,24 +44,32 @@ struct Compiler<'r> {
 }
 
 impl Compiler<'_> {
-    fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
+    fn compile_function(
+        &mut self,
+        name: String,
+        syntax: Vec<Expression>,
+        output: &mut Vec<InstructionAddress>,
+    ) {
         let mut bindings = BTreeSet::new();
         let address = self.code.next_address();
 
         let mut last_location = None;
         for expression in syntax {
             last_location = Some(expression.location.clone());
-            self.compile_expression(expression, &mut bindings);
+            self.compile_expression(expression, &mut bindings, output);
         }
 
-        self.generate(Instruction::Return, last_location);
+        self.generate(Instruction::Return, last_location, output);
         self.code.symbols.define(name, address);
+
+        dbg!(&output);
     }
 
     fn compile_expression(
         &mut self,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
+        output: &mut Vec<InstructionAddress>,
     ) {
         match expression.kind {
             ExpressionKind::Binding { names } => {
@@ -73,6 +82,7 @@ impl Compiler<'_> {
                     self.generate(
                         Instruction::BindingDefine { name },
                         Some(expression.location.clone()),
+                        output,
                     );
                 }
             }
@@ -81,12 +91,13 @@ impl Compiler<'_> {
                 self.generate(
                     Instruction::Push { value },
                     Some(expression.location),
+                    output,
                 );
             }
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, Some(expression.location));
+                self.generate(instruction, Some(expression.location), output);
             }
         };
     }
@@ -95,11 +106,13 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         location: Option<Location>,
+        output: &mut Vec<InstructionAddress>,
     ) {
         let address = self.code.push(instruction);
         if let Some(location) = location {
             self.source_map.define_mapping(address, location);
         }
+        output.push(address);
     }
 }
 
