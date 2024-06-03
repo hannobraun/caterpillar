@@ -22,7 +22,7 @@ impl Compiler<'_> {
             self.compile_expression(expression, &mut bindings);
         }
 
-        self.code.push(Instruction::Return);
+        self.generate(Instruction::Return, None);
         self.code.symbols.define(name, address);
     }
 
