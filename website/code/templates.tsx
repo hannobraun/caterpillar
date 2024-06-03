@@ -121,7 +121,7 @@ const page = (title: string, content: JSX.Element) => {
                                 Germany<br />
                             </div>
                             <div class="my-4">
-                                📧
+                                📧{" "}
                                 <a href="mailto:hello@hannobraun.com">
                                     hello@hannobraun.com
                                 </a>
