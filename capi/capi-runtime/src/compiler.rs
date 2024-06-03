@@ -36,14 +36,14 @@ pub fn compile(script: Script, entry: &str) -> Program {
     program
 }
 
-pub struct Compiler<'r> {
-    pub functions: &'r BTreeSet<String>,
-    pub code: &'r mut Code,
-    pub source_map: &'r mut SourceMap,
+struct Compiler<'r> {
+    functions: &'r BTreeSet<String>,
+    code: &'r mut Code,
+    source_map: &'r mut SourceMap,
 }
 
 impl Compiler<'_> {
-    pub fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
+    fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
         let mut bindings = BTreeSet::new();
         let address = self.code.next_address();
 
