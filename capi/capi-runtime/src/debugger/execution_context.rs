@@ -1,4 +1,4 @@
-use crate::{Function, Program, ProgramState};
+use crate::{syntax::Function, Program, ProgramState};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ExecutionContext {

@@ -10,7 +10,7 @@ use crate::client::{send_event, EventsTx};
 #[component]
 pub fn Function(
     program: ReadSignal<Option<Program>>,
-    function: capi_runtime::Function,
+    function: syntax::Function,
     events: EventsTx,
 ) -> impl IntoView {
     let expressions = function
