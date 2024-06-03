@@ -1,7 +1,5 @@
 # Caterpillar
 
-[**Daily Thoughts**](daily.md)
-
 ## Vision
 
 **Caterpillar is a programming language** with a dual goal:
