@@ -1,3 +1,7 @@
+mod location;
+
+pub use self::location::Location;
+
 use std::fmt;
 
 use crate::Value;
@@ -78,36 +82,5 @@ impl fmt::Display for ExpressionKind {
             ExpressionKind::Value(value) => write!(f, "{value}"),
             ExpressionKind::Word { name } => write!(f, "{name}"),
         }
-    }
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub struct Location {
-    function: String,
-    index: u32,
-}
-
-impl Location {
-    pub fn function(&self) -> &str {
-        &self.function
-    }
-
-    pub fn first_in_function(function: String) -> Self {
-        Self { function, index: 0 }
-    }
-
-    pub fn increment(&mut self) -> Self {
-        let self_ = self.clone();
-        self.index += 1;
-        self_
     }
 }
