@@ -108,6 +108,26 @@ const page = (title: string, content: JSX.Element) => {
                     <main>
                         {content}
                     </main>
+
+                    <hr class="w-1/2 mx-auto my-16" />
+
+                    <footer class="max-w-fit mx-auto text-sm">
+                        <p class="max-w-fit mx-auto italic">A website by</p>
+                        <address>
+                            <div>
+                                Hanno Braun<br />
+                                Untere Pfarrgasse 19<br />
+                                64720 Michelstadt<br />
+                                Germany<br />
+                            </div>
+                            <div class="my-4">
+                                📧
+                                <a href="mailto:hello@hannobraun.com">
+                                    hello@hannobraun.com
+                                </a>
+                            </div>
+                        </address>
+                    </footer>
                 </body>
             </html>
         </>

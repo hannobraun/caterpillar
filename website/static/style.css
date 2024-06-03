@@ -15,6 +15,10 @@ ol {
     padding: 0;
 }
 
+address {
+    font-style: unset;
+}
+
 
 /* Mostly Tailwind-compatible utility classes */
 
@@ -38,6 +42,10 @@ ol {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.italic {
+    font-style: italic;
+}
+
 .justify-self-end {
     justify-self: end;
 }
@@ -48,6 +56,20 @@ ol {
 
 .m-8 {
     margin: 2rem;
+}
+
+.my-4 {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.my-16 {
+    margin-bottom: 4rem;
+    margin-top: 4rem;
+}
+
+.max-w-fit {
+    max-width: fit-content;
 }
 
 .max-w-xl {
@@ -70,6 +92,14 @@ ol {
 
 .text-lg {
     font-size: 1.125rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.w-1\/2 {
+    width: 50%;
 }
 
 
