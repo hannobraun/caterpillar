@@ -51,6 +51,7 @@ impl Compiler<'_> {
         output: &mut Vec<InstructionAddress>,
     ) {
         let mut bindings = BTreeSet::new();
+
         let address = self.code.next_address();
 
         let mut last_location = None;
