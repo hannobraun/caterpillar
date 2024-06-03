@@ -2,6 +2,7 @@ pub mod debugger;
 
 mod breakpoints;
 mod builtins;
+mod call_stack;
 mod code;
 mod compiler;
 mod data_stack;

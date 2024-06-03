@@ -1,8 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    builtins::BuiltinEffect, data_stack::StackUnderflow,
-    instructions::Instruction, InstructionAddress, Value,
+    builtins::BuiltinEffect, call_stack::CallStack, data_stack::StackUnderflow, instructions::Instruction, InstructionAddress, Value
 };
 
 use super::{builtins, code::Code, data_stack::DataStack};
@@ -13,7 +12,7 @@ use super::{builtins, code::Code, data_stack::DataStack};
 pub struct Evaluator {
     pub code: Code,
     pub next_instruction: InstructionAddress,
-    pub call_stack: Vec<InstructionAddress>,
+    pub call_stack: CallStack,
     pub data_stack: DataStack,
     pub bindings: BTreeMap<String, Value>,
 }
