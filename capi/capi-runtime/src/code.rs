@@ -1,8 +1,7 @@
 use std::{collections::BTreeMap, fmt};
 
 use crate::{
-    instructions::{Instruction, Instructions},
-    InstructionAddress,
+    instructions::{Instruction, Instructions}, runtime, InstructionAddress
 };
 
 use super::symbols::Symbols;
@@ -13,7 +12,7 @@ use super::symbols::Symbols;
 pub struct Code {
     pub symbols: Symbols,
     pub instructions: Instructions,
-    pub functions: BTreeMap<String, Vec<InstructionAddress>>,
+    pub functions: BTreeMap<String, runtime::Function>,
 }
 
 impl Code {

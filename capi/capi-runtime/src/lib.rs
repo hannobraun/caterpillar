@@ -10,6 +10,7 @@ mod data_stack;
 mod evaluator;
 mod instructions;
 mod program;
+mod runtime;
 mod source_map;
 mod symbols;
 
