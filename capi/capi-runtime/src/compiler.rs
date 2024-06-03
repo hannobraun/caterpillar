@@ -56,9 +56,8 @@ impl Compiler<'_> {
         }
 
         self.generate(Instruction::Return, last_location, &mut output);
-        self.code.symbols.define(name, address);
-
-        dbg!(&output);
+        self.code.symbols.define(name.clone(), address);
+        self.code.functions.insert(name, output);
     }
 
     fn compile_expression(

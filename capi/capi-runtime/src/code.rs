@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::BTreeMap, fmt};
 
 use crate::{
     instructions::{Instruction, Instructions},
@@ -13,6 +13,7 @@ use super::symbols::Symbols;
 pub struct Code {
     pub symbols: Symbols,
     pub instructions: Instructions,
+    pub functions: BTreeMap<String, Vec<InstructionAddress>>,
 }
 
 impl Code {
