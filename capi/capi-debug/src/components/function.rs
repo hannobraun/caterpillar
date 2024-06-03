@@ -1,7 +1,6 @@
 use capi_runtime::{
     debugger::{self, DebugEvent},
-    syntax::Expression,
-    Program, ProgramEffectKind,
+    syntax, Program, ProgramEffectKind,
 };
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
@@ -44,7 +43,7 @@ pub fn Function(
 #[component]
 pub fn Expression(
     program: ReadSignal<Option<Program>>,
-    expression: Expression,
+    expression: syntax::Expression,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
