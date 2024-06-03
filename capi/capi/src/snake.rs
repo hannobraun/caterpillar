@@ -466,18 +466,14 @@ pub fn program() -> Program {
             .w("load");
     });
     source.define("vec_store", |s| {
-        s.c("Make a copy of the vector address.")
-            .v(0)
-            .w("copy")
-            .c("Place one copy of the vector address next to the x coordinate")
-            .c("value, so both coordinate values have the address next to")
-            .c("them.")
-            .v(2)
-            .w("place")
-            .c("Everything is prepared. We can just store the coordinate now")
-            .w("vec_y")
+        s.b(["x", "y", "addr"])
+            .w("x")
+            .w("addr")
             .w("store")
-            .w("vec_x")
+            .w("y")
+            .w("addr")
+            .v(1)
+            .w("add")
             .w("store");
     });
     source.define("vec_copy", |s| {
