@@ -8,7 +8,6 @@ mod code;
 mod compiler;
 mod data_stack;
 mod evaluator;
-mod functions;
 mod instructions;
 mod program;
 mod source;
@@ -19,8 +18,8 @@ pub use self::{
     builtins::BuiltinEffect,
     data_stack::{DataStack, Value},
     evaluator::{Evaluator, EvaluatorEffect},
-    functions::{Function, Functions},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
     source::Source,
+    syntax::{Function, Functions},
 };

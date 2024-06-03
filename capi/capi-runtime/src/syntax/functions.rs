@@ -1,8 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::{Expression, Location};
-
-use super::syntax::SyntaxBuilder;
+use super::{Expression, Location, SyntaxBuilder};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
