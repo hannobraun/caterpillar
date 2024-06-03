@@ -11,4 +11,8 @@ impl CallStack {
     pub fn contains(&self, address: InstructionAddress) -> bool {
         self.inner.contains(&address.next())
     }
+
+    pub fn clear(&mut self) {
+        self.inner.clear();
+    }
 }
