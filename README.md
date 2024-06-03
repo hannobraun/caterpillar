@@ -25,7 +25,7 @@ levels of sophistication, each of which provided answers to different questions.
 The [current prototype](capi/) explores whether an early focus on tooling is a
 practical approach.
 
-You can keep up with the project reading my [daily thoughts], which include
+You can keep up with the project by reading my [daily thoughts], which include
 development updates.
 
 ## Design
