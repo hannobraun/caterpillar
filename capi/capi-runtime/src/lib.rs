@@ -10,7 +10,6 @@ mod data_stack;
 mod evaluator;
 mod instructions;
 mod program;
-mod script;
 mod source_map;
 mod symbols;
 
@@ -21,5 +20,5 @@ pub use self::{
     evaluator::{Evaluator, EvaluatorEffect},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
-    script::Script,
+    syntax::Script,
 };

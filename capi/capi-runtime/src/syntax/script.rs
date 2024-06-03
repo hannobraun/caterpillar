@@ -1,4 +1,4 @@
-use crate::syntax::{Functions, SyntaxBuilder};
+use super::{Functions, SyntaxBuilder};
 
 #[derive(Default)]
 pub struct Script {
