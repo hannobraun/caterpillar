@@ -5,8 +5,7 @@ html {
 }
 
 a {
-    /* Tailwind's `text-blue-700` */
-    color: rgb(29 78 216);
+    color: unset;
 }
 
 ol {
@@ -91,6 +90,10 @@ address {
     padding: 0.5rem;
 }
 
+.text-blue-700 {
+    color: rgb(29 78 216);
+}
+
 .text-lg {
     font-size: 1.125rem;
 }
@@ -105,6 +108,11 @@ address {
 
 
 /* Rules for tool-generated HTML code */
+
+.prose a {
+    /* Tailwind's `text-blue-700` */
+    color: rgb(29 78 216);
+}
 
 .prose img {
     max-width: 100%;
