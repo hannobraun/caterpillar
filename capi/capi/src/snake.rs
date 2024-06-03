@@ -103,7 +103,7 @@ pub fn program() -> Program {
             .b(["tile_x_new"])
             .c("Check if the x coordinate has advanced beyond the width.")
             .w("tile_field_size")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .w("tile_x_new")
             .w("sub")
@@ -150,7 +150,7 @@ pub fn program() -> Program {
             .v(1)
             .w("take")
             .w("tile_field_size")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .v(1)
             .w("sub")
@@ -252,10 +252,10 @@ pub fn program() -> Program {
     source.define("update_next_position", |s| {
         s.w("positions")
             .w("vec_buf_last")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .w("velocity")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .w("add")
             .w("positions")
@@ -275,7 +275,7 @@ pub fn program() -> Program {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .w("remainder")
             .w("negatable_random")
@@ -443,7 +443,7 @@ pub fn program() -> Program {
     });
 
     // Utilities - Vector
-    source.define("x", |s| {
+    source.define("vec_x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
             .c("here.");
     });
@@ -456,7 +456,7 @@ pub fn program() -> Program {
             .v(0)
             .w("copy")
             .c("Load x coordinate.")
-            .w("x")
+            .w("vec_x")
             .w("load")
             .c("Get that copy of the vector address that we made.")
             .v(1)
@@ -477,7 +477,7 @@ pub fn program() -> Program {
             .c("Everything is prepared. We can just store the coordinate now")
             .w("y")
             .w("store")
-            .w("x")
+            .w("vec_x")
             .w("store");
     });
     source.define("vec_copy", |s| {
