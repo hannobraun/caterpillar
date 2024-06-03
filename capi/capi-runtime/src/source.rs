@@ -2,8 +2,8 @@ use crate::{
     code::Code,
     compiler::Compiler,
     source_map::SourceMap,
-    syntax::{Function, SyntaxBuilder},
-    Functions, Program,
+    syntax::{Function, Functions, SyntaxBuilder},
+    Program,
 };
 
 #[derive(Default)]

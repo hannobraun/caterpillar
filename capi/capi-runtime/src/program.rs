@@ -6,7 +6,8 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{EvaluatorEffect, EvaluatorState},
     source_map::SourceMap,
-    DataStack, Evaluator, Functions, InstructionAddress, Value,
+    syntax::Functions,
+    DataStack, Evaluator, InstructionAddress, Value,
 };
 
 #[derive(
