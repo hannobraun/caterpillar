@@ -25,9 +25,8 @@ levels of sophistication, each of which provided answers to different questions.
 The [current prototype](capi/) explores whether an early focus on tooling is a
 practical approach.
 
-You can keep up with the project reading my
-[daily thoughts](https://capi.hannobraun.com/daily), which include development
-updates.
+You can keep up with the project reading my [daily thoughts], which include
+development updates.
 
 ## Design
 
@@ -56,5 +55,6 @@ liable for problems.
 
 See [LICENSE.md] for full details.
 
+[daily thoughts]: https://capi.hannobraun.com/daily
 [Zero Clause BSD License]: https://opensource.org/licenses/0BSD
 [LICENSE.md]: LICENSE.md
