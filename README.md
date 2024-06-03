@@ -30,16 +30,35 @@ development updates.
 
 ## Design
 
-I'm currently working on collecting the ideas that have been guiding me into a
-rough design document: [design.md](design.md)
+This section aims to document the decisions that have gone into the language
+design. Due to the current state of the project, this isn't (yet) a long list,
+nor is anything here going to be final.
 
-But please don't read too much into that. This project has already gone through
-a large number of prototypes, and I'm sure it will go through more. My ideas
-have changed significantly during that time, and they will keep evolving.
+For more information on future design directions, please follow my
+[daily thoughts]. There's also a [design document](design.md), which I'd like to
+phase out, but that still provides some value.
 
-At some point, I hope to develop one of these prototypes into a productive
-language. The only design that is really relevant is the one implemented in
-that.
+### Postfix operators
+
+The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
+opposed to prefix (like `do_thing(arg1, arg2)` or `(+ 1 2)`) or infix (`1 + 2`)
+operators.
+
+To keep the language simple, I want to (at least initially) restrict it to one
+type of operator. I believe postfix operators are the best option under that
+constraint, due to their combination of simplicity, conciseness, and natural
+support for chaining operations. That comes at the cost of familiarity.
+
+Further information in daily thoughts
+[2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
+[2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
+[2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
+[2024-05-06](https://capi.hannobraun.com/daily/2024-05-06),
+[2024-05-07](https://capi.hannobraun.com/daily/2024-05-07),
+[2024-05-08](https://capi.hannobraun.com/daily/2024-05-08),
+[2024-05-09](https://capi.hannobraun.com/daily/2024-05-09),
+[2024-05-10](https://capi.hannobraun.com/daily/2024-05-10), and
+[2024-05-11](https://capi.hannobraun.com/daily/2024-05-11).
 
 ## Acknowledgements
 
