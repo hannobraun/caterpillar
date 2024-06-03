@@ -20,5 +20,5 @@ pub use self::{
     evaluator::{Evaluator, EvaluatorEffect},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
-    source::Source,
+    source::Script,
 };

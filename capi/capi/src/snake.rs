@@ -1,7 +1,7 @@
-use capi_runtime::{Program, Source};
+use capi_runtime::{Program, Script};
 
 pub fn program() -> Program {
-    let mut source = Source::default();
+    let mut source = Script::default();
 
     // Main loop
     source.function("main", |s| {
