@@ -12,7 +12,7 @@ pub struct Source {
 }
 
 impl Source {
-    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut SyntaxBuilder)) {
+    pub fn function(&mut self, name: &str, f: impl FnOnce(&mut SyntaxBuilder)) {
         self.functions.define(name, f)
     }
 
