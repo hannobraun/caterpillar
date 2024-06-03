@@ -12,6 +12,10 @@ impl CallStack {
         self.inner.contains(&address.next())
     }
 
+    pub fn push(&mut self, address: InstructionAddress) {
+        self.inner.push(address);
+    }
+
     pub fn clear(&mut self) {
         self.inner.clear();
     }
