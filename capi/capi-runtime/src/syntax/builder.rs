@@ -1,4 +1,7 @@
-use crate::{syntax::Location, Expression, ExpressionKind, Value};
+use crate::{
+    syntax::{ExpressionKind, Location},
+    Expression, Value,
+};
 
 #[derive(Debug)]
 pub struct SyntaxBuilder<'r> {

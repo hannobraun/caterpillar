@@ -1,4 +1,6 @@
-use crate::{ExpressionKind, InstructionAddress, Program, ProgramEffect};
+use crate::{
+    syntax::ExpressionKind, InstructionAddress, Program, ProgramEffect,
+};
 
 pub struct Expression {
     pub address: Option<InstructionAddress>,
