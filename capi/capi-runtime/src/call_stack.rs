@@ -4,7 +4,7 @@ use crate::InstructionAddress;
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct CallStack {
-    pub inner: CallStackInner,
+    inner: CallStackInner,
 }
 
 impl CallStack {
