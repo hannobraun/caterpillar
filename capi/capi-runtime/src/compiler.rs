@@ -59,7 +59,7 @@ impl Compiler<'_> {
 
     fn generate(&mut self, instruction: Instruction, location: SourceLocation) {
         let address = self.code.push(instruction);
-        self.source_map.define_mapping(address, location)
+        self.source_map.define_mapping(address, location);
     }
 }
 
