@@ -6,6 +6,7 @@ html {
 
 a {
     color: unset;
+    text-decoration: unset;
 }
 
 ol {
@@ -102,6 +103,10 @@ address {
     font-size: 0.875rem;
 }
 
+.underline {
+    text-decoration-line: underline;
+}
+
 .w-1\/2 {
     width: 50%;
 }
@@ -112,6 +117,7 @@ address {
 .prose a {
     /* Tailwind's `text-blue-700` */
     color: rgb(29 78 216);
+    text-decoration-line: underline;
 }
 
 .prose img {

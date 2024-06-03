@@ -79,7 +79,7 @@ const dailyThoughtLink = (date: string, label: string) => {
     const link = `/daily/${date}`;
 
     return (
-        <a href={link} class="text-blue-700">
+        <a href={link} class="text-blue-700 underline">
             {label}
         </a>
     );
