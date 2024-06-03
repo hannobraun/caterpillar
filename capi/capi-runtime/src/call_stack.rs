@@ -4,7 +4,7 @@ use crate::InstructionAddress;
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct CallStack {
-    pub inner: Vec<InstructionAddress>,
+    pub inner: CallStackInner,
 }
 
 impl CallStack {
@@ -24,3 +24,5 @@ impl CallStack {
         self.inner.clear();
     }
 }
+
+type CallStackInner = Vec<InstructionAddress>;
