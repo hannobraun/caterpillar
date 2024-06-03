@@ -21,5 +21,4 @@ pub use self::{
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
     source::Source,
-    syntax::Functions,
 };
