@@ -20,8 +20,7 @@ pub fn compile(script: Script, entry: &str) -> Program {
     };
 
     for Function { name, syntax } in &script.functions.inner {
-        let mut output = Vec::new();
-        compiler.compile_function(name.clone(), syntax.clone(), &mut output);
+        compiler.compile_function(name.clone(), syntax.clone());
     }
 
     let entry_address = code.symbols.resolve_name(entry);
@@ -44,23 +43,19 @@ struct Compiler<'r> {
 }
 
 impl Compiler<'_> {
-    fn compile_function(
-        &mut self,
-        name: String,
-        syntax: Vec<Expression>,
-        output: &mut Vec<InstructionAddress>,
-    ) {
+    fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
         let mut bindings = BTreeSet::new();
+        let mut output = Vec::new();
 
         let address = self.code.next_address();
 
         let mut last_location = None;
         for expression in syntax {
             last_location = Some(expression.location.clone());
-            self.compile_expression(expression, &mut bindings, output);
+            self.compile_expression(expression, &mut bindings, &mut output);
         }
 
-        self.generate(Instruction::Return, last_location, output);
+        self.generate(Instruction::Return, last_location, &mut output);
         self.code.symbols.define(name, address);
 
         dbg!(&output);
