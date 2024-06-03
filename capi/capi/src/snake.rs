@@ -548,7 +548,7 @@ pub fn program() -> Program {
             .w("vec_buf_get");
     });
     source.define("vec_buf_push", |s| {
-        s.b(["vec_buf", "x", "vec_y"])
+        s.b(["vec_buf", "x", "y"])
             .w("vec_buf")
             .w("_vec_buf_next")
             .b(["next_addr"])
@@ -559,7 +559,7 @@ pub fn program() -> Program {
             .w("_vec_buf_address")
             .b(["address"])
             .w("x")
-            .w("vec_y")
+            .w("y")
             .w("address")
             .w("vec_store")
             .w("next_addr")
