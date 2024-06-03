@@ -1,22 +1,22 @@
 use capi_runtime::{Program, Script};
 
 pub fn program() -> Program {
-    let mut source = Script::default();
+    let mut script = Script::default();
 
     // Main loop
-    source.function("main", |s| {
+    script.function("main", |s| {
         s.w("tile_field_size")
             .w("vec_store")
             .w("init_frame_count")
             .w("init")
             .w("main_inner");
     });
-    source.function("main_inner", |s| {
+    script.function("main_inner", |s| {
         s.w("draw").w("count_frame").w("update").w("main_inner");
     });
 
     // Draw
-    source.function("draw", |s| {
+    script.function("draw", |s| {
         s.w("clear_all_tiles")
             .w("draw_snake")
             .w("draw_food")
@@ -24,13 +24,13 @@ pub fn program() -> Program {
             .c("next frame.")
             .w("submit_frame");
     });
-    source.function("clear_all_tiles", |s| {
+    script.function("clear_all_tiles", |s| {
         s.v(0).w("write_all_tiles");
     });
-    source.function("draw_snake", |s| {
+    script.function("draw_snake", |s| {
         s.v(0).w("draw_snake_inner");
     });
-    source.function("draw_snake_inner", |s| {
+    script.function("draw_snake_inner", |s| {
         s.b(["index"])
             .w("positions")
             .w("index")
@@ -50,19 +50,19 @@ pub fn program() -> Program {
             .w("add")
             .w("draw_snake_inner");
     });
-    source.function("draw_food", |s| {
+    script.function("draw_food", |s| {
         s.w("food_position").w("vec_load").v(1).w("write_tile");
     });
 
     // Draw - write tiles
-    source.function("write_all_tiles", |s| {
+    script.function("write_all_tiles", |s| {
         s.b(["tile_value"])
             .w("init_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner")
             .w("vec_drop");
     });
-    source.function("write_all_tiles_inner", |s| {
+    script.function("write_all_tiles_inner", |s| {
         s.b(["tile_value"])
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
@@ -81,10 +81,10 @@ pub fn program() -> Program {
     });
 
     // Draw - write tiles - tile index
-    source.function("init_tile_index", |s| {
+    script.function("init_tile_index", |s| {
         s.v(0).v(0);
     });
-    source.function("check_tile_index", |s| {
+    script.function("check_tile_index", |s| {
         s.b(["tile_y"])
             .w("tile_field_size")
             .w("vec_y")
@@ -94,7 +94,7 @@ pub fn program() -> Program {
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
     });
-    source.function("increment_tile_index", |s| {
+    script.function("increment_tile_index", |s| {
         s.b(["tile_x", "tile_y"])
             .c("Increment the x-coordinate.")
             .w("tile_x")
@@ -127,7 +127,7 @@ pub fn program() -> Program {
     });
 
     // Tile field size
-    source.function("is_out_of_bounds", |s| {
+    script.function("is_out_of_bounds", |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
             .v(2)
@@ -169,10 +169,10 @@ pub fn program() -> Program {
     });
 
     // Frame count
-    source.function("init_frame_count", |s| {
+    script.function("init_frame_count", |s| {
         s.v(1).w("frame_count").w("store");
     });
-    source.function("count_frame", |s| {
+    script.function("count_frame", |s| {
         s
             .c("We only have 7 bits to count (our 8-bit values are signed), so")
             .c("we need to reset the count every so often. To keep things")
@@ -206,14 +206,14 @@ pub fn program() -> Program {
     });
 
     // Game state
-    source.function("init", |s| {
+    script.function("init", |s| {
         s.w("init_should_game_run")
             .w("init_snake")
             .w("init_velocity")
             .w("init_next_position")
             .w("init_food");
     });
-    source.function("update", |s| {
+    script.function("update", |s| {
         s.c("The update logic does not run every frame.")
             .w("frame_count")
             .w("load")
@@ -231,17 +231,17 @@ pub fn program() -> Program {
     });
 
     // Game state - should game run
-    source.function("init_should_game_run", |s| {
+    script.function("init_should_game_run", |s| {
         s.v(1).w("should_game_run").w("store");
     });
 
     // Game state - velocity
-    source.function("init_velocity", |s| {
+    script.function("init_velocity", |s| {
         s.v(1).v(0).w("velocity").w("vec_store");
     });
 
     // Game state - next position
-    source.function("init_next_position", |s| {
+    script.function("init_next_position", |s| {
         s.w("positions")
             .v(0)
             .w("vec_buf_get")
@@ -249,7 +249,7 @@ pub fn program() -> Program {
             .w("next_position")
             .w("vec_store");
     });
-    source.function("update_next_position", |s| {
+    script.function("update_next_position", |s| {
         s.w("positions")
             .w("vec_buf_last")
             .w("vec_x")
@@ -271,7 +271,7 @@ pub fn program() -> Program {
     });
 
     // Game state - food
-    source.function("init_food", |s| {
+    script.function("init_food", |s| {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
@@ -287,7 +287,7 @@ pub fn program() -> Program {
             .w("food_position")
             .w("vec_store");
     });
-    source.function("eat_food", |s| {
+    script.function("eat_food", |s| {
         s.w("positions")
             .w("vec_buf_last")
             .w("vec_load")
@@ -301,7 +301,7 @@ pub fn program() -> Program {
     });
 
     // Game state - snake
-    source.function("init_snake", |s| {
+    script.function("init_snake", |s| {
         s.v(3)
             .w("snake_length")
             .w("store")
@@ -312,7 +312,7 @@ pub fn program() -> Program {
             .v(15)
             .w("vec_buf_push");
     });
-    source.function("update_positions", |s| {
+    script.function("update_positions", |s| {
         s.w("update_next_position")
             .w("next_position")
             .w("vec_load")
@@ -324,7 +324,7 @@ pub fn program() -> Program {
             .w("vec_buf_push")
             .w("pop_positions");
     });
-    source.function("pop_positions", |s| {
+    script.function("pop_positions", |s| {
         s.w("positions")
             .w("vec_buf_len")
             .w("snake_length")
@@ -335,7 +335,7 @@ pub fn program() -> Program {
             .w("vec_buf_pop")
             .w("pop_positions");
     });
-    source.function("grow_snake", |s| {
+    script.function("grow_snake", |s| {
         s.w("snake_length")
             .w("load")
             .v(1)
@@ -352,7 +352,7 @@ pub fn program() -> Program {
     });
 
     // Input
-    source.function("handle_input", |s| {
+    script.function("handle_input", |s| {
         s.c("This function handles a single input event, so the absence of")
             .c("any recursive calls is by design. The next input event should")
             .c("only be applied, after the effects of the current one have")
@@ -417,40 +417,40 @@ pub fn program() -> Program {
     });
 
     // Memory map
-    source.function("tile_field_size", |s| {
+    script.function("tile_field_size", |s| {
         s.v(0);
     });
-    source.function("frame_count", |s| {
+    script.function("frame_count", |s| {
         s.v(2);
     });
-    source.function("should_game_run", |s| {
+    script.function("should_game_run", |s| {
         s.v(3);
     });
-    source.function("velocity", |s| {
+    script.function("velocity", |s| {
         s.v(4);
     });
-    source.function("next_position", |s| {
+    script.function("next_position", |s| {
         s.v(6);
     });
-    source.function("food_position", |s| {
+    script.function("food_position", |s| {
         s.v(8);
     });
-    source.function("snake_length", |s| {
+    script.function("snake_length", |s| {
         s.v(10);
     });
-    source.function("positions", |s| {
+    script.function("positions", |s| {
         s.v(11);
     });
 
     // Utilities - Vector
-    source.function("vec_x", |s| {
+    script.function("vec_x", |s| {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
             .c("here.");
     });
-    source.function("vec_y", |s| {
+    script.function("vec_y", |s| {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
     });
-    source.function("vec_load", |s| {
+    script.function("vec_load", |s| {
         s.c("Make a copy of the vector address, since we're going to need")
             .c("it for each coordinate.")
             .v(0)
@@ -465,7 +465,7 @@ pub fn program() -> Program {
             .w("vec_y")
             .w("load");
     });
-    source.function("vec_store", |s| {
+    script.function("vec_store", |s| {
         s.b(["x", "y", "addr"])
             .w("x")
             .w("addr")
@@ -476,13 +476,13 @@ pub fn program() -> Program {
             .w("add")
             .w("store");
     });
-    source.function("vec_copy", |s| {
+    script.function("vec_copy", |s| {
         s.b(["vx", "vy"]).w("vx").w("vy").w("vx").w("vy");
     });
-    source.function("vec_drop", |s| {
+    script.function("vec_drop", |s| {
         s.w("drop").w("drop");
     });
-    source.function("vec_eq", |s| {
+    script.function("vec_eq", |s| {
         s.b(["ax", "ay", "bx", "by"])
             .w("ax")
             .w("bx")
@@ -502,7 +502,7 @@ pub fn program() -> Program {
     });
 
     // Utilities - Vector Buffer
-    source.function("vec_buf_init", |s| {
+    script.function("vec_buf_init", |s| {
         s.b(["vec_buf"])
             .v(0)
             .w("vec_buf")
@@ -517,7 +517,7 @@ pub fn program() -> Program {
             .w("_vec_buf_capacity")
             .w("store");
     });
-    source.function("vec_buf_get", |s| {
+    script.function("vec_buf_get", |s| {
         s.b(["vec_buf", "index"])
             .w("index")
             .v(2)
@@ -532,7 +532,7 @@ pub fn program() -> Program {
             .w("offset")
             .w("_vec_buf_address");
     });
-    source.function("vec_buf_last", |s| {
+    script.function("vec_buf_last", |s| {
         s.b(["vec_buf"])
             .w("vec_buf")
             .w("vec_buf_len")
@@ -543,7 +543,7 @@ pub fn program() -> Program {
             .w("index")
             .w("vec_buf_get");
     });
-    source.function("vec_buf_push", |s| {
+    script.function("vec_buf_push", |s| {
         s.b(["vec_buf", "x", "y"])
             .w("vec_buf")
             .w("_vec_buf_next")
@@ -561,10 +561,10 @@ pub fn program() -> Program {
             .w("next_addr")
             .w("_vec_buf_inc_index");
     });
-    source.function("vec_buf_pop", |s| {
+    script.function("vec_buf_pop", |s| {
         s.w("_vec_buf_first").w("_vec_buf_inc_index");
     });
-    source.function("vec_buf_len", |s| {
+    script.function("vec_buf_len", |s| {
         s.b(["vec_buf"])
             .w("vec_buf")
             .w("_vec_buf_first")
@@ -592,10 +592,10 @@ pub fn program() -> Program {
             .w("load")
             .w("add");
     });
-    source.function("vec_buf_capacity", |s| {
+    script.function("vec_buf_capacity", |s| {
         s.w("_vec_buf_capacity").w("load").v(2).w("div");
     });
-    source.function("_vec_buf_address", |s| {
+    script.function("_vec_buf_address", |s| {
         s.c("Compute the memory address of a location within the vector")
             .c("buffer.")
             .c("")
@@ -619,7 +619,7 @@ pub fn program() -> Program {
             .w("_vec_buf_buffer")
             .w("add_wrap_unsigned");
     });
-    source.function("_vec_buf_inc_index", |s| {
+    script.function("_vec_buf_inc_index", |s| {
         s.b(["index_addr"])
             .w("index_addr")
             .w("load")
@@ -628,21 +628,21 @@ pub fn program() -> Program {
             .w("index_addr")
             .w("store");
     });
-    source.function("_vec_buf_first", |s| {
+    script.function("_vec_buf_first", |s| {
         s.v(0).w("add");
     });
-    source.function("_vec_buf_next", |s| {
+    script.function("_vec_buf_next", |s| {
         s.v(1).w("add");
     });
-    source.function("_vec_buf_capacity", |s| {
+    script.function("_vec_buf_capacity", |s| {
         s.v(2).w("add");
     });
-    source.function("_vec_buf_buffer", |s| {
+    script.function("_vec_buf_buffer", |s| {
         s.v(3).w("add");
     });
 
     // Utilities - Miscellaneous
-    source.function("negatable_random", |s| {
+    script.function("negatable_random", |s| {
         s.c("Negating -128 would result in an integer overflow.")
             .w("read_random")
             .v(0)
@@ -654,7 +654,7 @@ pub fn program() -> Program {
             .c("Looks like we ran into -128. Try again!")
             .w("negatable_random");
     });
-    source.function("abs", |s| {
+    script.function("abs", |s| {
         s.b(["v"])
             .w("v")
             .w("v")
@@ -664,5 +664,5 @@ pub fn program() -> Program {
             .w("neg");
     });
 
-    source.compile("main")
+    script.compile("main")
 }
