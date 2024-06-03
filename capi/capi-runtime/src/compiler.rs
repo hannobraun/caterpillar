@@ -41,25 +41,34 @@ impl Compiler<'_> {
 
                     self.generate(
                         Instruction::BindingDefine { name },
-                        expression.location.clone(),
+                        Some(expression.location.clone()),
                     );
                 }
             }
             ExpressionKind::Comment { .. } => {}
             ExpressionKind::Value(value) => {
-                self.generate(Instruction::Push { value }, expression.location);
+                self.generate(
+                    Instruction::Push { value },
+                    Some(expression.location),
+                );
             }
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, expression.location);
+                self.generate(instruction, Some(expression.location));
             }
         };
     }
 
-    fn generate(&mut self, instruction: Instruction, location: SourceLocation) {
+    fn generate(
+        &mut self,
+        instruction: Instruction,
+        location: Option<SourceLocation>,
+    ) {
         let address = self.code.push(instruction);
-        self.source_map.define_mapping(address, location);
+        if let Some(location) = location {
+            self.source_map.define_mapping(address, location);
+        }
     }
 }
 
