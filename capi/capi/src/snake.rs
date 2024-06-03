@@ -87,7 +87,7 @@ pub fn program() -> Program {
     source.define("check_tile_index", |s| {
         s.b(["tile_y"])
             .w("tile_field_size")
-            .w("y")
+            .w("vec_y")
             .w("load")
             .w("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
@@ -161,7 +161,7 @@ pub fn program() -> Program {
             .w("drop")
             .c("Compare y coordinate against upper bound")
             .w("tile_field_size")
-            .w("y")
+            .w("vec_y")
             .w("load")
             .v(1)
             .w("sub")
@@ -260,10 +260,10 @@ pub fn program() -> Program {
             .w("add")
             .w("positions")
             .w("vec_buf_last")
-            .w("y")
+            .w("vec_y")
             .w("load")
             .w("velocity")
-            .w("y")
+            .w("vec_y")
             .w("load")
             .w("add")
             .w("next_position")
@@ -281,7 +281,7 @@ pub fn program() -> Program {
             .w("negatable_random")
             .w("abs")
             .w("tile_field_size")
-            .w("y")
+            .w("vec_y")
             .w("load")
             .w("remainder")
             .w("food_position")
@@ -447,7 +447,7 @@ pub fn program() -> Program {
         s.c("Offset of x coordinate within vector is zero. Nothing to do")
             .c("here.");
     });
-    source.define("y", |s| {
+    source.define("vec_y", |s| {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
     });
     source.define("vec_load", |s| {
@@ -462,7 +462,7 @@ pub fn program() -> Program {
             .v(1)
             .w("take")
             .c("Load y coordinate.")
-            .w("y")
+            .w("vec_y")
             .w("load");
     });
     source.define("vec_store", |s| {
@@ -475,7 +475,7 @@ pub fn program() -> Program {
             .v(2)
             .w("place")
             .c("Everything is prepared. We can just store the coordinate now")
-            .w("y")
+            .w("vec_y")
             .w("store")
             .w("vec_x")
             .w("store");
