@@ -1,8 +1,8 @@
-mod capi;
 mod display;
 mod effects;
 mod runner;
 mod server;
+mod snake;
 mod updates;
 
 fn main() -> anyhow::Result<()> {
@@ -10,7 +10,7 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let program = capi::program();
+    let program = snake::program();
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());
