@@ -9,12 +9,12 @@ pub use self::{
 use crate::Value;
 
 #[derive(Debug)]
-pub struct Syntax<'r> {
+pub struct SyntaxBuilder<'r> {
     next_location: Location,
     expressions: &'r mut Vec<Expression>,
 }
 
-impl<'r> Syntax<'r> {
+impl<'r> SyntaxBuilder<'r> {
     pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
         Self {
             next_location: Location::first_in_function(function),

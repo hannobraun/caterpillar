@@ -1,6 +1,6 @@
 use crate::{
-    code::Code, compiler::Compiler, source_map::SourceMap, syntax::Syntax,
-    Function, Functions, Program,
+    code::Code, compiler::Compiler, source_map::SourceMap,
+    syntax::SyntaxBuilder, Function, Functions, Program,
 };
 
 #[derive(Default)]
@@ -9,7 +9,7 @@ pub struct Source {
 }
 
 impl Source {
-    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut Syntax)) {
+    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut SyntaxBuilder)) {
         self.functions.define(name, f)
     }
 
