@@ -5,7 +5,8 @@ html {
 }
 
 a {
-    color: #0000ff;
+    /* Tailwind's `text-blue-700` */
+    color: rgb(29 78 216);
 }
 
 ol {
