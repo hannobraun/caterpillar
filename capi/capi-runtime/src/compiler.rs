@@ -3,8 +3,8 @@ use std::collections::BTreeSet;
 use crate::{
     instructions::Instruction,
     source_map::SourceMap,
-    syntax::{Expression, Function, Location},
-    Program, Script,
+    syntax::{Expression, Function, Location, Script},
+    Program,
 };
 
 use super::{code::Code, syntax::ExpressionKind};

@@ -10,7 +10,7 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let mut script = capi_runtime::Script::default();
+    let mut script = capi_runtime::syntax::Script::default();
     snake::snake(&mut script);
     let program = capi_runtime::compile(script, "main");
 
