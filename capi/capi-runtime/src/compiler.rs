@@ -18,11 +18,13 @@ impl Compiler<'_> {
         let mut bindings = BTreeSet::new();
         let address = self.code.next_address();
 
+        let mut last_location = None;
         for expression in syntax {
+            last_location = Some(expression.location.clone());
             self.compile_expression(expression, &mut bindings);
         }
 
-        self.generate(Instruction::Return, None);
+        self.generate(Instruction::Return, last_location);
         self.code.symbols.define(name, address);
     }
 
