@@ -106,7 +106,9 @@ const page = (title: string, content: JSX.Element) => {
                 </head>
                 <body class="max-w-xl mx-auto p-2">
                     <header>
-                        <h1>Caterpillar</h1>
+                        <a href="/">
+                            <h1>Caterpillar</h1>
+                        </a>
                     </header>
                     <main>
                         {content}
