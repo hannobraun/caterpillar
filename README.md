@@ -5,7 +5,7 @@
 ## About
 
 The goal of the Caterpillar project is to create a **programming language** that
-gives you a **immediate connection to the code** you write, enabling an
+gives you a **immediate connection to the code** you're writing, enabling an
 **intuitive understanding** of the program that you're working on.
 
 The method for achieving this is **interactive programming**, the **direct
