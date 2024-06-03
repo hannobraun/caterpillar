@@ -16,6 +16,7 @@ mod symbols;
 
 pub use self::{
     builtins::BuiltinEffect,
+    compiler::compile,
     data_stack::{DataStack, Value},
     evaluator::{Evaluator, EvaluatorEffect},
     instructions::InstructionAddress,

@@ -3,10 +3,38 @@ use std::collections::BTreeSet;
 use crate::{
     instructions::Instruction,
     source_map::SourceMap,
-    syntax::{Expression, Location},
+    syntax::{Expression, Function, Location},
+    Program, Script,
 };
 
 use super::{code::Code, syntax::ExpressionKind};
+
+pub fn compile(script: Script, entry: &str) -> Program {
+    let mut code = Code::new();
+    let mut source_map = SourceMap::default();
+
+    let mut compiler = Compiler {
+        functions: &script.functions.names,
+        code: &mut code,
+        source_map: &mut source_map,
+    };
+
+    for Function { name, syntax } in &script.functions.inner {
+        compiler.compile_function(name.clone(), syntax.clone());
+    }
+
+    let entry_address = code.symbols.resolve_name(entry);
+
+    let mut program = Program {
+        functions: script.functions,
+        source_map,
+        ..Program::default()
+    };
+    program.evaluator.update(code, entry_address);
+    program.entry_address = entry_address;
+
+    program
+}
 
 pub struct Compiler<'r> {
     pub functions: &'r BTreeSet<String>,
