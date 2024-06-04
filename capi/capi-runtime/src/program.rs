@@ -44,8 +44,8 @@ impl Program {
         self.memory.zero();
     }
 
-    pub fn push(&mut self, arguments: impl IntoIterator<Item = Value>) {
-        for value in arguments {
+    pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
+        for value in values {
             self.evaluator.data_stack.push(value);
         }
     }
