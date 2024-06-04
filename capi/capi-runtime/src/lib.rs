@@ -12,7 +12,6 @@ mod instructions;
 mod program;
 mod runtime;
 mod source_map;
-mod symbols;
 
 pub use self::{
     builtins::BuiltinEffect,

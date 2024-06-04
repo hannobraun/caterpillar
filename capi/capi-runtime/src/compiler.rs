@@ -39,8 +39,6 @@ impl Compiler<'_> {
         let mut bindings = BTreeSet::new();
         let mut output = runtime::Function::new();
 
-        let address = self.code.next_address();
-
         let mut last_location = None;
         for expression in syntax {
             last_location = Some(expression.location.clone());
@@ -48,7 +46,6 @@ impl Compiler<'_> {
         }
 
         self.generate(Instruction::Return, last_location, &mut output);
-        self.code.symbols.define(name.clone(), address);
         self.code.functions.insert(name, output);
     }
 
