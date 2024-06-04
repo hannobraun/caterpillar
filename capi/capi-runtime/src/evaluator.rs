@@ -48,7 +48,7 @@ impl Evaluator {
     pub fn reset(&mut self, entry: Function) {
         let next_instruction = entry.iter().copied().next().unwrap();
 
-        self.call_stack.clear();
+        self.call_stack = CallStack::new(next_instruction);
         self.data_stack.clear();
         self.next_instruction = next_instruction;
     }
