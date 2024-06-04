@@ -26,6 +26,10 @@ impl CallStack {
         &mut self,
         function: Function,
     ) -> Result<(), CallStackOverflow> {
+        if self.frames.len() >= RECURSION_LIMIT {
+            return Err(CallStackOverflow);
+        }
+
         self.frames.push(function);
         Ok(())
     }
@@ -41,3 +45,5 @@ impl CallStack {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStackOverflow;
+
+const RECURSION_LIMIT: usize = 8;
