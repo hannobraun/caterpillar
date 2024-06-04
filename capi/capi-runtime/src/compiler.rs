@@ -62,7 +62,7 @@ impl Compiler<'_> {
 
                     self.generate(
                         Instruction::BindingDefine { name },
-                        Some(expression.location.clone()),
+                        expression.location.clone(),
                         output,
                     );
                 }
@@ -71,14 +71,14 @@ impl Compiler<'_> {
             ExpressionKind::Value(value) => {
                 self.generate(
                     Instruction::Push { value },
-                    Some(expression.location),
+                    expression.location,
                     output,
                 );
             }
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, Some(expression.location), output);
+                self.generate(instruction, expression.location, output);
             }
         };
     }
@@ -86,13 +86,11 @@ impl Compiler<'_> {
     fn generate(
         &mut self,
         instruction: Instruction,
-        location: Option<Location>,
+        location: Location,
         output: &mut runtime::Function,
     ) {
         let address = self.code.push(instruction);
-        if let Some(location) = location {
-            self.source_map.define_mapping(address, location);
-        }
+        self.source_map.define_mapping(address, location);
         output.push_back(address);
     }
 }
