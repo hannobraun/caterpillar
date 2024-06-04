@@ -408,9 +408,8 @@ pub fn snake(script: &mut Script) {
             .w("sub")
             .v(0)
             .w("copy")
-            .c("It seems it wasn't that either, which means we received an")
-            .c("invalid return value. This would be a good place to trigger a")
-            .c("panic, but the language doesn't support that yet.");
+            .c("If it wasn't `right` either, this would be a good place to")
+            .c("trigger a panic. But the language doesn't support that yet.");
     });
 
     // Memory map
