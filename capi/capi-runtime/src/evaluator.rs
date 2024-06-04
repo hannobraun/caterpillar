@@ -22,7 +22,7 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(code: Code, entry: Function) -> Self {
-        let next_instruction = entry.into_iter().next().unwrap();
+        let next_instruction = entry.iter().copied().next().unwrap();
 
         Self {
             code,
