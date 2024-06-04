@@ -7,7 +7,11 @@ pub struct CallStack {
 
 impl CallStack {
     pub fn new(next: Function) -> Self {
-        Self { frames: vec![next] }
+        let mut self_ = Self { frames: Vec::new() };
+        self_
+            .push(next)
+            .expect("Expected recursion limit to be more than zero.");
+        self_
     }
 
     pub fn next(&self) -> Option<InstructionAddress> {
