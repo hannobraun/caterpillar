@@ -2,7 +2,7 @@ use crate::{runtime::Function, InstructionAddress};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
-    frames: Vec<Function>,
+    frames: Vec<StackFrame>,
 }
 
 impl CallStack {
@@ -17,13 +17,13 @@ impl CallStack {
     pub fn next(&self) -> Option<InstructionAddress> {
         self.frames
             .last()
-            .and_then(|function| function.front().copied())
+            .and_then(|frame| frame.function.front().copied())
     }
 
     pub fn contains(&self, address: InstructionAddress) -> bool {
         self.frames
             .iter()
-            .any(|function| function.front() == Some(&address.next()))
+            .any(|frame| frame.function.front() == Some(&address.next()))
     }
 
     pub fn push(
@@ -34,17 +34,24 @@ impl CallStack {
             return Err(CallStackOverflow);
         }
 
-        self.frames.push(function);
+        self.frames.push(StackFrame { function });
         Ok(())
     }
 
     pub fn pop(&mut self) -> Option<Function> {
-        self.frames.pop()
+        self.frames.pop().map(|frame| frame.function)
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
-        self.frames.iter().filter_map(|function| function.front())
+        self.frames
+            .iter()
+            .filter_map(|frame| frame.function.front())
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct StackFrame {
+    pub function: Function,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
