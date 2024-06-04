@@ -83,7 +83,7 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        if let Some(effect) = self.evaluate_instruction(address, instruction) {
+        if let Some(effect) = self.evaluate_instruction(instruction) {
             return EvaluatorState::Effect { effect, address };
         }
 
@@ -94,7 +94,6 @@ impl Evaluator {
 
     fn evaluate_instruction(
         &mut self,
-        _: InstructionAddress,
         instruction: Instruction,
     ) -> Option<EvaluatorEffect> {
         match instruction {
