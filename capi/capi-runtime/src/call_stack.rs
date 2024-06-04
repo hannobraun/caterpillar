@@ -2,46 +2,44 @@ use crate::{runtime::Function, InstructionAddress};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
-    inner: Vec<InstructionAddress>,
+    inner: Vec<Function>,
 }
 
 impl CallStack {
     pub fn new(next: Function) -> Self {
-        let next = next.iter().copied().next().unwrap();
         Self { inner: vec![next] }
     }
 
     pub fn next(&self) -> Option<InstructionAddress> {
-        self.inner.last().copied()
+        self.inner
+            .last()
+            .and_then(|function| function.front().copied())
     }
 
     pub fn contains(&self, address: InstructionAddress) -> bool {
         self.inner
             .iter()
-            .any(|stack_address| stack_address == &address.next())
+            .any(|function| function.front() == Some(&address.next()))
     }
 
     pub fn advance(&mut self) -> Option<InstructionAddress> {
-        let address = self.next();
-        self.inner.last_mut()?.increment();
-        address
+        self.inner.last_mut()?.pop_front()
     }
 
     pub fn push(
         &mut self,
         function: Function,
     ) -> Result<(), CallStackOverflow> {
-        let address = function.iter().copied().next().unwrap();
-        self.inner.push(address);
+        self.inner.push(function);
         Ok(())
     }
 
-    pub fn pop(&mut self) -> Option<InstructionAddress> {
+    pub fn pop(&mut self) -> Option<Function> {
         self.inner.pop()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
-        self.inner.iter()
+        self.inner.iter().filter_map(|function| function.front())
     }
 }
 
