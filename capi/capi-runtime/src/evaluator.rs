@@ -54,9 +54,10 @@ impl Evaluator {
 
     pub fn step(&mut self) -> EvaluatorState {
         let address = loop {
-            let Some(mut function) = self.call_stack.pop() else {
+            let Some(frame) = self.call_stack.pop() else {
                 return EvaluatorState::Finished;
             };
+            let mut function = frame.function;
 
             if let Some(address) = function.pop_front() {
                 // Don't put the stack frame back, if it is empty. This is

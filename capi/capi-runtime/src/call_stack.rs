@@ -38,8 +38,8 @@ impl CallStack {
         Ok(())
     }
 
-    pub fn pop(&mut self) -> Option<Function> {
-        self.frames.pop().map(|frame| frame.function)
+    pub fn pop(&mut self) -> Option<StackFrame> {
+        self.frames.pop()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
