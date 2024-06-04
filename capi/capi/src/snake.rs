@@ -246,15 +246,13 @@ pub fn snake(script: &mut Script) {
             .w("vec_store");
     });
     script.function("update_next_position", |s| {
-        s.w("positions")
-            .w("vec_buf_last")
+        s.w("snake_head")
             .w("vec_x")
             .w("velocity")
             .w("vec_load")
             .w("vec_x")
             .w("add")
-            .w("positions")
-            .w("vec_buf_last")
+            .w("snake_head")
             .w("vec_y")
             .w("velocity")
             .w("vec_load")
@@ -282,8 +280,7 @@ pub fn snake(script: &mut Script) {
             .w("vec_store");
     });
     script.function("eat_food", |s| {
-        s.w("positions")
-            .w("vec_buf_last")
+        s.w("snake_head")
             .w("food_position")
             .w("vec_load")
             .w("vec_eq")
@@ -304,6 +301,9 @@ pub fn snake(script: &mut Script) {
             .v(15)
             .v(15)
             .w("vec_buf_push");
+    });
+    script.function("snake_head", |s| {
+        s.w("positions").w("vec_buf_last");
     });
     script.function("update_positions", |s| {
         s.w("update_next_position")
