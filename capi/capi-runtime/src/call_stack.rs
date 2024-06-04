@@ -28,13 +28,13 @@ impl CallStack {
 
     pub fn push(
         &mut self,
-        function: Function,
+        frame: impl Into<StackFrame>,
     ) -> Result<(), CallStackOverflow> {
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(CallStackOverflow);
         }
 
-        self.frames.push(StackFrame { function });
+        self.frames.push(frame.into());
         Ok(())
     }
 
@@ -52,6 +52,12 @@ impl CallStack {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct StackFrame {
     pub function: Function,
+}
+
+impl From<Function> for StackFrame {
+    fn from(function: Function) -> Self {
+        Self { function }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
