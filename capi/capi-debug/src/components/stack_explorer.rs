@@ -10,6 +10,7 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
         let program = program.get()?;
 
         let previous = program.previous_data_stack;
+        let current = program.evaluator.data_stack;
 
         let view = view! {
             <Panel class="h-32">
@@ -23,7 +24,7 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
                     <p>
                         "Current data stack:"
                     </p>
-                    <DataStack data_stack=program.evaluator.data_stack />
+                    <DataStack data_stack=current />
                 </div>
             </Panel>
         };
