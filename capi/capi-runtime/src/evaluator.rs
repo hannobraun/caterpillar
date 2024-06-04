@@ -14,11 +14,11 @@ use super::{builtins, code::Code, data_stack::DataStack};
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Evaluator {
-    pub code: Code,
+    code: Code,
     pub next_instruction: InstructionAddress,
     pub call_stack: CallStack,
     pub data_stack: DataStack,
-    pub bindings: BTreeMap<String, Value>,
+    bindings: BTreeMap<String, Value>,
 }
 
 impl Evaluator {
