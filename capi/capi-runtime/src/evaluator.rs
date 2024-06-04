@@ -158,13 +158,6 @@ impl Evaluator {
                 let a = self.data_stack.pop().unwrap();
 
                 if a != Value(0) {
-                    // Here we just duplicate the code from the regular return
-                    // instruction above, which isn't great. Getting rid of the
-                    // duplication completely isn't easy though, due to the
-                    // `return`. And since I suspect that this instruction is
-                    // temporary, until the language grows more features, I'm
-                    // inclined to just leave this be.
-
                     self.call_stack.pop();
                 }
             }
@@ -172,13 +165,6 @@ impl Evaluator {
                 let a = self.data_stack.pop().unwrap();
 
                 if a == Value(0) {
-                    // Here we just duplicate the code from the regular return
-                    // instruction above, which isn't great. Getting rid of the
-                    // duplication completely isn't easy though, due to the
-                    // `return`. And since I suspect that this instruction is
-                    // temporary, until the language grows more features, I'm
-                    // inclined to just leave this be.
-
                     self.call_stack.pop();
                 }
             }
