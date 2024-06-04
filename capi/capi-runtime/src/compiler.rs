@@ -39,13 +39,10 @@ impl Compiler<'_> {
         let mut bindings = BTreeSet::new();
         let mut output = runtime::Function::new();
 
-        let mut last_location = None;
         for expression in syntax {
-            last_location = Some(expression.location.clone());
             self.compile_expression(expression, &mut bindings, &mut output);
         }
 
-        self.generate(Instruction::Return, last_location, &mut output);
         self.code.functions.insert(name, output);
     }
 
