@@ -12,8 +12,17 @@ impl CallStack {
         Self { inner: vec![next] }
     }
 
+    pub fn next(&self) -> Option<InstructionAddress> {
+        self.inner.last().copied()
+    }
+
     pub fn contains(&self, address: InstructionAddress) -> bool {
         self.inner.contains(&address.next())
+    }
+
+    pub fn advance(&mut self) {
+        let instruction = self.inner.last_mut().unwrap();
+        instruction.increment();
     }
 
     pub fn push(

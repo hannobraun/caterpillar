@@ -14,7 +14,6 @@ use super::{builtins, code::Code, data_stack::DataStack};
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     code: Code,
-    next_instruction: InstructionAddress,
     call_stack: CallStack,
     data_stack: DataStack,
     bindings: BTreeMap<String, Value>,
@@ -26,7 +25,6 @@ impl Evaluator {
 
         Self {
             code,
-            next_instruction,
             call_stack: CallStack::new(next_instruction),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
@@ -34,7 +32,7 @@ impl Evaluator {
     }
 
     pub fn next_instruction(&self) -> InstructionAddress {
-        self.next_instruction
+        self.call_stack.next().unwrap()
     }
 
     pub fn call_stack(&self) -> &CallStack {
@@ -50,7 +48,6 @@ impl Evaluator {
 
         self.call_stack = CallStack::new(next_instruction);
         self.data_stack.clear();
-        self.next_instruction = next_instruction;
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
@@ -60,8 +57,8 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> EvaluatorState {
-        let current_instruction = self.next_instruction;
-        self.next_instruction.increment();
+        let current_instruction = self.call_stack.next().unwrap();
+        self.call_stack.advance();
 
         let instruction = self.code.instructions.get(&current_instruction);
 
@@ -142,22 +139,18 @@ impl Evaluator {
             Instruction::CallFunction { name } => {
                 let next_instruction = self.code.symbols.resolve_name(name);
 
-                if let Err(err) = self.call_stack.push(self.next_instruction) {
+                if let Err(err) = self.call_stack.push(next_instruction) {
                     return EvaluatorState::Effect {
                         effect: EvaluatorEffect::CallStack(err),
                         address: current_instruction,
                     };
                 }
-
-                self.next_instruction = next_instruction;
             }
             Instruction::Push { value } => self.data_stack.push(*value),
             Instruction::Return => {
-                let Some(return_address) = self.call_stack.pop() else {
+                let Some(_) = self.call_stack.pop() else {
                     return EvaluatorState::Finished;
                 };
-
-                self.next_instruction = return_address;
             }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
@@ -170,11 +163,9 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.pop() else {
+                    let Some(_) = self.call_stack.pop() else {
                         return EvaluatorState::Finished;
                     };
-
-                    self.next_instruction = return_address;
                 }
             }
             Instruction::ReturnIfZero => {
@@ -188,11 +179,9 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(return_address) = self.call_stack.pop() else {
+                    let Some(_) = self.call_stack.pop() else {
                         return EvaluatorState::Finished;
                     };
-
-                    self.next_instruction = return_address;
                 }
             }
         }
