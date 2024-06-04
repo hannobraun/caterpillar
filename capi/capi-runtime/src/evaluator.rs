@@ -59,9 +59,24 @@ impl Evaluator {
             };
 
             if let Some(address) = function.pop_front() {
-                self.call_stack.push(function).expect(
-                    "Just popped a stack frame; pushing one can't overflow",
-                );
+                // Don't put the stack frame back, if it is empty. This is
+                // essentially tail call optimization.
+                //
+                // This will lead to trouble, if the last instruction in the
+                // function (the one whose address we just acquired, and are
+                // about to execute) is an explicit return instruction. Those
+                // will pop *another* stack frame, which is one too many.
+                //
+                // I've decided not to address that, for the moment. First, that
+                // is a weird pattern anyway, and doesn't really make sense in
+                // the language. Second, explicit return instructions are a
+                // stopgap anyway, and will go away once we have anonymous
+                // functions that we can use for more advanced control flow.
+                if !function.is_empty() {
+                    self.call_stack.push(function).expect(
+                        "Just popped a stack frame; pushing one can't overflow",
+                    );
+                }
 
                 break address;
             }
