@@ -17,7 +17,7 @@ pub struct Evaluator {
     code: Code,
     next_instruction: InstructionAddress,
     call_stack: CallStack,
-    pub data_stack: DataStack,
+    data_stack: DataStack,
     bindings: BTreeMap<String, Value>,
 }
 
