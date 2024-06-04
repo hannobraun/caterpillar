@@ -83,7 +83,7 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        if let Some(effect) = self.evaluate_instruction(instruction) {
+        if let Err(effect) = self.evaluate_instruction(instruction) {
             return EvaluatorState::Effect { effect, address };
         }
 
@@ -95,12 +95,12 @@ impl Evaluator {
     fn evaluate_instruction(
         &mut self,
         instruction: Instruction,
-    ) -> Option<EvaluatorEffect> {
+    ) -> Result<(), EvaluatorEffect> {
         match instruction {
             Instruction::BindingDefine { name } => {
                 let value = match self.data_stack.pop() {
                     Ok(value) => value,
-                    Err(err) => return Some(EvaluatorEffect::StackError(err)),
+                    Err(err) => return Err(EvaluatorEffect::StackError(err)),
                 };
                 self.bindings.insert(name, value);
             }
@@ -133,7 +133,7 @@ impl Evaluator {
                     "submit_frame" => builtins::submit_frame(),
                     "take" => builtins::take(&mut self.data_stack),
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
-                    _ => return Some(EvaluatorEffect::UnknownBuiltin { name }),
+                    _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
                 };
 
                 // This is a bit weird. An error is an effect, and effects can
@@ -152,14 +152,14 @@ impl Evaluator {
                 };
 
                 if let Some(effect) = effect {
-                    return Some(EvaluatorEffect::Builtin(effect));
+                    return Err(EvaluatorEffect::Builtin(effect));
                 }
             }
             Instruction::CallFunction { name } => {
                 let function = self.code.functions.get(&name).cloned().unwrap();
 
                 if let Err(err) = self.call_stack.push(function) {
-                    return Some(EvaluatorEffect::CallStack(err));
+                    return Err(EvaluatorEffect::CallStack(err));
                 }
             }
             Instruction::Push { value } => self.data_stack.push(value),
@@ -177,7 +177,7 @@ impl Evaluator {
             }
         }
 
-        None
+        Ok(())
     }
 }
 
