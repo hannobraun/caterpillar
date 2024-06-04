@@ -33,6 +33,14 @@ existing ones up-to-date.
 
 ## Concepts
 
+**Please note: I've started removing topics here, as per the note above.**
+
+Some of the remaining ones might still reference removed ones. I don't intend to
+update them to fix that, as the rest of them are also due to be removed sooner
+or later.
+
+---
+
 ### Functional
 
 Caterpillar will be purely functional, without mutable state. I won't justify
