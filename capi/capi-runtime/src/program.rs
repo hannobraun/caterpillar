@@ -35,11 +35,13 @@ pub struct Program {
 
 impl Program {
     pub fn new(functions: syntax::Functions, source_map: SourceMap) -> Self {
+        let evaluator = Evaluator::new();
+
         Self {
             functions,
             source_map,
             breakpoints: Breakpoints::default(),
-            evaluator: Evaluator::new(),
+            evaluator,
             state: ProgramState::default(),
             entry_address: InstructionAddress::default(),
             effects: VecDeque::default(),
