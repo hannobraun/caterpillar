@@ -456,12 +456,12 @@ pub fn snake(script: &mut Script) {
             .w("load");
     });
     script.function("vec_store", |s| {
-        s.b(["x", "y", "addr"])
+        s.b(["x", "y", "address"])
             .w("x")
-            .w("addr")
+            .w("address")
             .w("store")
             .w("y")
-            .w("addr")
+            .w("address")
             .v(1)
             .w("add")
             .w("store");
