@@ -45,9 +45,7 @@ impl Program {
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
-        for value in values {
-            self.evaluator.data_stack.push(value);
-        }
+        self.evaluator.push(values);
     }
 
     pub fn can_step(&self) -> bool {

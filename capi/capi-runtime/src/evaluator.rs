@@ -41,6 +41,12 @@ impl Evaluator {
         self.next_instruction = entry;
     }
 
+    pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
+        for value in values {
+            self.data_stack.push(value);
+        }
+    }
+
     pub fn step(&mut self) -> EvaluatorState {
         let current_instruction = self.next_instruction;
         self.next_instruction.increment();
