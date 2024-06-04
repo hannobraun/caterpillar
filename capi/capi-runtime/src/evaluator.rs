@@ -82,8 +82,15 @@ impl Evaluator {
             }
         };
 
-        let instruction = self.code.instructions.get(&address);
+        let instruction = self.code.instructions.get(&address).clone();
+        self.evaluate_instruction(address, instruction)
+    }
 
+    fn evaluate_instruction(
+        &mut self,
+        address: InstructionAddress,
+        instruction: Instruction,
+    ) -> EvaluatorState {
         match instruction {
             Instruction::BindingDefine { name } => {
                 let value = match self.data_stack.pop() {
@@ -98,7 +105,7 @@ impl Evaluator {
                 self.bindings.insert(name.clone(), value);
             }
             Instruction::BindingEvaluate { name } => {
-                let value = self.bindings.get(name).copied().expect(
+                let value = self.bindings.get(&name).copied().expect(
                     "Binding instruction only generated for existing bindings",
                 );
                 self.data_stack.push(value);
@@ -159,7 +166,7 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction { name } => {
-                let function = self.code.functions.get(name).cloned().unwrap();
+                let function = self.code.functions.get(&name).cloned().unwrap();
 
                 if let Err(err) = self.call_stack.push(function) {
                     return EvaluatorState::Effect {
@@ -168,7 +175,7 @@ impl Evaluator {
                     };
                 }
             }
-            Instruction::Push { value } => self.data_stack.push(*value),
+            Instruction::Push { value } => self.data_stack.push(value),
             Instruction::ReturnIfNonZero => {
                 let value = self.data_stack.pop().unwrap();
                 if value != Value(0) {
