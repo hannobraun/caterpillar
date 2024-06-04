@@ -158,9 +158,7 @@ impl Evaluator {
             Instruction::CallFunction { name } => {
                 let function = self.code.functions.get(&name).cloned().unwrap();
 
-                if let Err(err) = self.call_stack.push(function) {
-                    return Err(EvaluatorEffect::CallStack(err));
-                }
+                self.call_stack.push(function)?;
             }
             Instruction::Push { value } => self.data_stack.push(value),
             Instruction::ReturnIfNonZero => {
@@ -200,4 +198,10 @@ pub enum EvaluatorEffect {
     CallStack(CallStackOverflow),
     StackError(StackUnderflow),
     UnknownBuiltin { name: String },
+}
+
+impl From<CallStackOverflow> for EvaluatorEffect {
+    fn from(err: CallStackOverflow) -> Self {
+        Self::CallStack(err)
+    }
 }
