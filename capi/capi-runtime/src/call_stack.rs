@@ -23,7 +23,7 @@ impl CallStack {
 
     pub fn advance(&mut self) -> Option<InstructionAddress> {
         let address = self.next();
-        self.inner.last_mut().unwrap().increment();
+        self.inner.last_mut()?.increment();
         address
     }
 
