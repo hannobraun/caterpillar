@@ -10,7 +10,7 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
         let program = program.get()?;
 
         let previous = program.previous_data_stack;
-        let current = program.evaluator.data_stack;
+        let current = program.evaluator.data_stack().clone();
 
         let view = view! {
             <Panel class="h-32">

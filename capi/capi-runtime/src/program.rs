@@ -65,7 +65,7 @@ impl Program {
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
-        self.previous_data_stack = self.evaluator.data_stack.clone();
+        self.previous_data_stack = self.evaluator.data_stack().clone();
         let just_executed = match self.evaluator.step() {
             EvaluatorState::Running { just_executed } => just_executed,
             EvaluatorState::Finished => return ProgramState::Finished,

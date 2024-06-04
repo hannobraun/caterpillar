@@ -30,6 +30,10 @@ impl Evaluator {
         &self.call_stack
     }
 
+    pub fn data_stack(&self) -> &DataStack {
+        &self.data_stack
+    }
+
     pub fn update(&mut self, code: Code, entry: InstructionAddress) {
         self.code = code;
         self.next_instruction = entry;
