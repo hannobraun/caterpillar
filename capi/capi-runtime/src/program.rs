@@ -10,9 +10,7 @@ use crate::{
     DataStack, Evaluator, InstructionAddress, Value,
 };
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Program {
     pub functions: Functions,
     pub source_map: SourceMap,
