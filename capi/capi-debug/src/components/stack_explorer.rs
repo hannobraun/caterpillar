@@ -9,13 +9,15 @@ pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
     let data_stack = move || {
         let program = program.get()?;
 
+        let previous = program.previous_data_stack;
+
         let view = view! {
             <Panel class="h-32">
                 <div>
                     <p>
                         "Previous data stack:"
                     </p>
-                    <DataStack data_stack=program.previous_data_stack />
+                    <DataStack data_stack=previous />
                 </div>
                 <div>
                     <p>
