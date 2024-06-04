@@ -16,7 +16,7 @@ use super::{builtins, code::Code, data_stack::DataStack};
 pub struct Evaluator {
     code: Code,
     next_instruction: InstructionAddress,
-    pub call_stack: CallStack,
+    call_stack: CallStack,
     pub data_stack: DataStack,
     bindings: BTreeMap<String, Value>,
 }
