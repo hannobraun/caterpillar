@@ -73,7 +73,7 @@ impl Evaluator {
                 // stopgap anyway, and will go away once we have anonymous
                 // functions that we can use for more advanced control flow.
                 if !frame.function.is_empty() {
-                    self.call_stack.push(frame.function).expect(
+                    self.call_stack.push(frame).expect(
                         "Just popped a stack frame; pushing one can't overflow",
                     );
                 }
