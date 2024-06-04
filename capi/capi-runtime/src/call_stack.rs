@@ -16,7 +16,9 @@ impl CallStack {
     }
 
     pub fn contains(&self, address: InstructionAddress) -> bool {
-        self.inner.contains(&address.next())
+        self.inner
+            .iter()
+            .any(|stack_address| stack_address == &address.next())
     }
 
     pub fn advance(&mut self) -> Option<InstructionAddress> {
