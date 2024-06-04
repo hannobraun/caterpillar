@@ -1,8 +1,6 @@
 use crate::InstructionAddress;
 
-#[derive(
-    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
     inner: Vec<InstructionAddress>,
 }
