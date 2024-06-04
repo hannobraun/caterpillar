@@ -27,7 +27,7 @@ impl Evaluator {
         Self {
             code,
             next_instruction,
-            call_stack: CallStack::default(),
+            call_stack: CallStack::new(),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
         }
