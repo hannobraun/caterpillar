@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     instructions::Instruction,
+    runtime,
     source_map::SourceMap,
     syntax::{Expression, Function, Location, Script},
     InstructionAddress, Program,
@@ -36,7 +37,7 @@ struct Compiler<'r> {
 impl Compiler<'_> {
     fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
         let mut bindings = BTreeSet::new();
-        let mut output = Vec::new();
+        let mut output = runtime::Function::new();
 
         let address = self.code.next_address();
 
