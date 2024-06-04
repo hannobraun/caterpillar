@@ -50,7 +50,7 @@ impl Program {
             breakpoints: Breakpoints::default(),
             evaluator,
             state: ProgramState::default(),
-            entry_address: InstructionAddress::default(),
+            entry_address,
             effects: VecDeque::default(),
             previous_data_stack: DataStack::default(),
             memory: Memory::default(),

@@ -24,12 +24,7 @@ pub fn compile(script: Script, entry: &str) -> Program {
     }
 
     let entry_address = code.symbols.resolve_name(entry);
-
-    let mut program =
-        Program::new(script.functions, source_map, code, entry_address);
-    program.entry_address = entry_address;
-
-    program
+    Program::new(script.functions, source_map, code, entry_address)
 }
 
 struct Compiler<'r> {
