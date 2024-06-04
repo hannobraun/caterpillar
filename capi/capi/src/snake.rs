@@ -101,8 +101,8 @@ pub fn snake(script: &mut Script) {
             .b(["tile_x_new"])
             .c("Check if the x coordinate has advanced beyond the width.")
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_x")
-            .w("load")
             .w("tile_x_new")
             .w("sub")
             .b(["zero_if_x_overflowed"])
@@ -148,8 +148,8 @@ pub fn snake(script: &mut Script) {
             .v(1)
             .w("take")
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_x")
-            .w("load")
             .v(1)
             .w("sub")
             .w("greater")
@@ -250,11 +250,11 @@ pub fn snake(script: &mut Script) {
     script.function("update_next_position", |s| {
         s.w("positions")
             .w("vec_buf_last")
+            .w("vec_load")
             .w("vec_x")
-            .w("load")
             .w("velocity")
+            .w("vec_load")
             .w("vec_x")
-            .w("load")
             .w("add")
             .w("positions")
             .w("vec_buf_last")
@@ -273,8 +273,8 @@ pub fn snake(script: &mut Script) {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_x")
-            .w("load")
             .w("remainder")
             .w("negatable_random")
             .w("abs")
@@ -440,8 +440,7 @@ pub fn snake(script: &mut Script) {
 
     // Utilities - Vector
     script.function("vec_x", |s| {
-        s.c("Offset of x coordinate within vector is zero. Nothing to do")
-            .c("here.");
+        s.b(["x", "_"]).w("x");
     });
     script.function("vec_y", |s| {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
