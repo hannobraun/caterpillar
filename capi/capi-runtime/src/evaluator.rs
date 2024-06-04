@@ -102,7 +102,7 @@ impl Evaluator {
                         }
                     }
                 };
-                self.bindings.insert(name.clone(), value);
+                self.bindings.insert(name, value);
             }
             Instruction::BindingEvaluate { name } => {
                 let value = self.bindings.get(&name).copied().expect(
@@ -135,9 +135,7 @@ impl Evaluator {
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
                     _ => {
                         return EvaluatorState::Effect {
-                            effect: EvaluatorEffect::UnknownBuiltin {
-                                name: name.clone(),
-                            },
+                            effect: EvaluatorEffect::UnknownBuiltin { name },
                             address,
                         }
                     }
