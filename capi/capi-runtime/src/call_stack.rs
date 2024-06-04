@@ -22,11 +22,6 @@ impl CallStack {
             .any(|function| function.front() == Some(&address.next()))
     }
 
-    pub fn advance(&mut self) -> Option<InstructionAddress> {
-        let function = self.frames.last_mut()?;
-        function.pop_front()
-    }
-
     pub fn push(
         &mut self,
         function: Function,

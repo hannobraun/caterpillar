@@ -53,7 +53,20 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> EvaluatorState {
-        let address = self.call_stack.advance().unwrap();
+        let address = loop {
+            let Some(mut function) = self.call_stack.pop() else {
+                return EvaluatorState::Finished;
+            };
+
+            if let Some(address) = function.pop_front() {
+                self.call_stack.push(function).expect(
+                    "Just popped a stack frame; pushing one can't overflow",
+                );
+
+                break address;
+            }
+        };
+
         let instruction = self.code.instructions.get(&address);
 
         match instruction {
