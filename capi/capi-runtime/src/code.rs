@@ -1,7 +1,8 @@
-use std::{collections::BTreeMap, fmt};
+use std::collections::BTreeMap;
 
 use crate::{
-    instructions::{Instruction, Instructions}, runtime, InstructionAddress
+    instructions::{Instruction, Instructions},
+    runtime, InstructionAddress,
 };
 
 use super::symbols::Symbols;
@@ -26,20 +27,5 @@ impl Code {
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
         self.instructions.push(instruction)
-    }
-}
-
-impl fmt::Display for Code {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for (address, instruction) in &self.instructions {
-            if let Some(name) = self.symbols.resolve_address(address) {
-                writeln!(f)?;
-                writeln!(f, "{name}:")?;
-            }
-
-            writeln!(f, "{address:4} {instruction}")?;
-        }
-
-        Ok(())
     }
 }
