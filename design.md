@@ -2,6 +2,22 @@
 
 ## About
 
+**Please note: This document is on its way to being deprecated.**
+
+- Caterpillar is an early-stage project, and the plans for its design are still
+  speculative; a work in progress. Yet, this document gives the impression that
+  they are stable, my warning in the introduction notwithstanding. I don't like
+  that.
+- I've started documenting design decisions that have already been implemented
+  in the [README](README.md).
+- And I've started talking about the more transient design ideas in a format
+  that better fits their nature, my
+  [daily thought](https://capi.hannobraun.com/daily).
+- Over time, I'll remove more and more topics from this document, as they are
+  handled in either (or both) of those places.
+
+---
+
 Caterpillar has always been developed as a series of prototypes. Each of those
 prototypes had a limited scope, exploring specific objectives. This document
 attempts to explain the long-term vision I've been working towards, separate
