@@ -5,7 +5,7 @@ use crate::{
     runtime,
     source_map::SourceMap,
     syntax::{Expression, Function, Location, Script},
-    InstructionAddress, Program,
+    Program,
 };
 
 use super::{code::Code, syntax::ExpressionKind};
@@ -56,7 +56,7 @@ impl Compiler<'_> {
         &mut self,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
-        output: &mut Vec<InstructionAddress>,
+        output: &mut runtime::Function,
     ) {
         match expression.kind {
             ExpressionKind::Binding { names } => {
@@ -93,7 +93,7 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         location: Option<Location>,
-        output: &mut Vec<InstructionAddress>,
+        output: &mut runtime::Function,
     ) {
         let address = self.code.push(instruction);
         if let Some(location) = location {
