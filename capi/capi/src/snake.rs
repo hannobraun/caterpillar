@@ -449,7 +449,6 @@ pub fn snake(script: &mut Script) {
     script.function("vec_load", |s| {
         s.b(["address"])
             .w("address")
-            .w("vec_x")
             .w("load")
             .w("address")
             .w("vec_y")
