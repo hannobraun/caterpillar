@@ -54,12 +54,11 @@ impl Evaluator {
 
     pub fn step(&mut self) -> EvaluatorState {
         let address = loop {
-            let Some(frame) = self.call_stack.pop() else {
+            let Some(mut frame) = self.call_stack.pop() else {
                 return EvaluatorState::Finished;
             };
-            let mut function = frame.function;
 
-            if let Some(address) = function.pop_front() {
+            if let Some(address) = frame.function.pop_front() {
                 // Don't put the stack frame back, if it is empty. This is
                 // essentially tail call optimization.
                 //
@@ -73,8 +72,8 @@ impl Evaluator {
                 // the language. Second, explicit return instructions are a
                 // stopgap anyway, and will go away once we have anonymous
                 // functions that we can use for more advanced control flow.
-                if !function.is_empty() {
-                    self.call_stack.push(function).expect(
+                if !frame.function.is_empty() {
+                    self.call_stack.push(frame.function).expect(
                         "Just popped a stack frame; pushing one can't overflow",
                     );
                 }
