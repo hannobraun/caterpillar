@@ -54,7 +54,6 @@ impl Evaluator {
 
     pub fn step(&mut self) -> EvaluatorState {
         let current_instruction = self.call_stack.advance().unwrap();
-
         let instruction = self.code.instructions.get(&current_instruction);
 
         match instruction {
