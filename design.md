@@ -12,7 +12,7 @@
   in the [README](README.md).
 - And I've started talking about the more transient design ideas in a format
   that better fits their nature, my
-  [daily thought](https://capi.hannobraun.com/daily).
+  [daily thoughts](https://capi.hannobraun.com/daily).
 - Over time, I'll remove more and more topics from this document, as they are
   handled in either (or both) of those places.
 
