@@ -20,8 +20,7 @@ impl CallStack {
     }
 
     pub fn advance(&mut self) {
-        let instruction = self.inner.last_mut().unwrap();
-        instruction.increment();
+        self.inner.last_mut().unwrap().increment();
     }
 
     pub fn push(
