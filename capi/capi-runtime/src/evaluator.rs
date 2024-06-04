@@ -148,9 +148,9 @@ impl Evaluator {
             }
             Instruction::Push { value } => self.data_stack.push(*value),
             Instruction::Return => {
-                let Some(_) = self.call_stack.pop() else {
+                if self.call_stack.pop().is_none() {
                     return EvaluatorState::Finished;
-                };
+                }
             }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
@@ -163,9 +163,9 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(_) = self.call_stack.pop() else {
+                    if self.call_stack.pop().is_none() {
                         return EvaluatorState::Finished;
-                    };
+                    }
                 }
             }
             Instruction::ReturnIfZero => {
@@ -179,9 +179,9 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    let Some(_) = self.call_stack.pop() else {
+                    if self.call_stack.pop().is_none() {
                         return EvaluatorState::Finished;
-                    };
+                    }
                 }
             }
         }
