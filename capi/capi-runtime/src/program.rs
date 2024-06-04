@@ -19,7 +19,7 @@ pub struct Program {
     pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
     pub state: ProgramState,
-    pub entry_address: InstructionAddress,
+    pub entry: InstructionAddress,
 
     /// Effects that have not been handled yet
     pub effects: VecDeque<ProgramEffect>,
@@ -50,7 +50,7 @@ impl Program {
             breakpoints: Breakpoints::default(),
             evaluator: Evaluator::new(code, entry),
             state: ProgramState::default(),
-            entry_address,
+            entry: entry_address,
             effects: VecDeque::default(),
             previous_data_stack: DataStack::default(),
             memory: Memory::default(),
@@ -58,7 +58,7 @@ impl Program {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.reset(self.entry_address);
+        self.evaluator.reset(self.entry);
         self.state = ProgramState::default();
         self.effects.clear();
         self.previous_data_stack.clear();
