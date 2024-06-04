@@ -45,10 +45,10 @@ impl Evaluator {
         &self.data_stack
     }
 
-    pub fn reset(&mut self, entry: InstructionAddress) {
+    pub fn reset(&mut self, entry: Function) {
         self.call_stack.clear();
         self.data_stack.clear();
-        self.next_instruction = entry;
+        self.next_instruction = entry.iter().copied().next().unwrap();
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {

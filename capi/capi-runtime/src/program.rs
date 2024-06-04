@@ -56,7 +56,7 @@ impl Program {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.reset(self.entry.first().copied().unwrap());
+        self.evaluator.reset(self.entry.clone());
         self.state = ProgramState::default();
         self.effects.clear();
         self.previous_data_stack.clear();
