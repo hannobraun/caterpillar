@@ -4,6 +4,7 @@ use serde_big_array::BigArray;
 
 use crate::{
     breakpoints::Breakpoints,
+    code::Code,
     evaluator::{EvaluatorEffect, EvaluatorState},
     source_map::SourceMap,
     syntax::{self, Functions},
@@ -34,8 +35,14 @@ pub struct Program {
 }
 
 impl Program {
-    pub fn new(functions: syntax::Functions, source_map: SourceMap) -> Self {
-        let evaluator = Evaluator::new();
+    pub fn new(
+        functions: syntax::Functions,
+        source_map: SourceMap,
+        code: Code,
+        entry_address: InstructionAddress,
+    ) -> Self {
+        let mut evaluator = Evaluator::new();
+        evaluator.update(code, entry_address);
 
         Self {
             functions,
