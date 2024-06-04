@@ -16,10 +16,10 @@ pub fn CallStack(
             .get()?
             .evaluator
             .call_stack
-            .into_iter()
+            .iter()
             .filter_map(|address| {
                 let location =
-                    program.get()?.source_map.address_to_location(&address)?;
+                    program.get()?.source_map.address_to_location(address)?;
                 let function = program
                     .get()?
                     .functions

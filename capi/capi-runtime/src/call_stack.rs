@@ -27,6 +27,10 @@ impl CallStack {
     pub fn clear(&mut self) {
         self.inner.clear();
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
+        self.inner.iter()
+    }
 }
 
 impl IntoIterator for CallStack {
