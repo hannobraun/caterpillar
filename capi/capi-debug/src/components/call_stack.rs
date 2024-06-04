@@ -15,7 +15,7 @@ pub fn CallStack(
         let view = program
             .get()?
             .evaluator
-            .call_stack
+            .call_stack()
             .iter()
             .filter_map(|address| {
                 let location =
