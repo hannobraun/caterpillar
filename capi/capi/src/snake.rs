@@ -451,7 +451,8 @@ pub fn snake(script: &mut Script) {
             .w("address")
             .w("load")
             .w("address")
-            .w("vec_y")
+            .v(1)
+            .w("add")
             .w("load");
     });
     script.function("vec_store", |s| {
