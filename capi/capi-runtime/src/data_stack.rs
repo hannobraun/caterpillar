@@ -26,7 +26,7 @@ impl DataStack {
         self.values.is_empty()
     }
 
-    pub fn clone(&mut self) -> Result<Value, StackUnderflow> {
+    pub fn copy(&mut self) -> Result<Value, StackUnderflow> {
         self.values.last().copied().ok_or(StackUnderflow)
     }
 
