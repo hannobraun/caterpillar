@@ -10,9 +10,7 @@ use crate::{
 
 use super::{builtins, code::Code, data_stack::DataStack};
 
-#[derive(
-    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     code: Code,
     next_instruction: InstructionAddress,
@@ -200,6 +198,12 @@ impl Evaluator {
         EvaluatorState::Running {
             just_executed: current_instruction,
         }
+    }
+}
+
+impl Default for Evaluator {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
