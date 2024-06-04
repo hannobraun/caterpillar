@@ -205,7 +205,7 @@ pub fn snake(script: &mut Script) {
     // Game state
     script.function("init", |s| {
         s.w("init_should_game_run")
-            .w("init_snake")
+            .w("snake_init")
             .w("init_velocity")
             .w("init_next_position")
             .w("init_food");
@@ -294,7 +294,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state - snake
-    script.function("init_snake", |s| {
+    script.function("snake_init", |s| {
         s.v(3)
             .w("snake_length")
             .w("store")
