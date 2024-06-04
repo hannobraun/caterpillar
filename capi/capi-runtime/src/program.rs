@@ -39,7 +39,7 @@ impl Program {
             functions,
             source_map,
             breakpoints: Breakpoints::default(),
-            evaluator: Evaluator::default(),
+            evaluator: Evaluator::new(),
             state: ProgramState::default(),
             entry_address: InstructionAddress::default(),
             effects: VecDeque::default(),

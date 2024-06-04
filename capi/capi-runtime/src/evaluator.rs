@@ -22,6 +22,16 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
+    pub fn new() -> Self {
+        Self {
+            code: Code::default(),
+            next_instruction: InstructionAddress::default(),
+            call_stack: CallStack::default(),
+            data_stack: DataStack::default(),
+            bindings: BTreeMap::default(),
+        }
+    }
+
     pub fn next_instruction(&self) -> InstructionAddress {
         self.next_instruction
     }
