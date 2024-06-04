@@ -99,7 +99,7 @@ impl Compiler<'_> {
         if let Some(location) = location {
             self.source_map.define_mapping(address, location);
         }
-        output.push(address);
+        output.push_back(address);
     }
 }
 
