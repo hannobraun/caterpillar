@@ -22,9 +22,11 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(code: Code, entry: Function) -> Self {
+        let next_instruction = entry.into_iter().next().unwrap();
+
         Self {
             code,
-            next_instruction: entry.into_iter().next().unwrap(),
+            next_instruction,
             call_stack: CallStack::default(),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
