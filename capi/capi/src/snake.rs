@@ -85,8 +85,8 @@ pub fn snake(script: &mut Script) {
     script.function("check_tile_index", |s| {
         s.b(["tile_y"])
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_y")
-            .w("load")
             .w("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
@@ -159,8 +159,8 @@ pub fn snake(script: &mut Script) {
             .w("drop")
             .c("Compare y coordinate against upper bound")
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_y")
-            .w("load")
             .v(1)
             .w("sub")
             .w("greater");
@@ -258,11 +258,11 @@ pub fn snake(script: &mut Script) {
             .w("add")
             .w("positions")
             .w("vec_buf_last")
+            .w("vec_load")
             .w("vec_y")
-            .w("load")
             .w("velocity")
+            .w("vec_load")
             .w("vec_y")
-            .w("load")
             .w("add")
             .w("next_position")
             .w("vec_store");
@@ -279,8 +279,8 @@ pub fn snake(script: &mut Script) {
             .w("negatable_random")
             .w("abs")
             .w("tile_field_size")
+            .w("vec_load")
             .w("vec_y")
-            .w("load")
             .w("remainder")
             .w("food_position")
             .w("vec_store");
@@ -443,7 +443,7 @@ pub fn snake(script: &mut Script) {
         s.b(["x", "_"]).w("x");
     });
     script.function("vec_y", |s| {
-        s.c("Offset of y coordinate within vector.").v(1).w("add");
+        s.b(["_", "y"]).w("y");
     });
     script.function("vec_load", |s| {
         s.b(["address"])
