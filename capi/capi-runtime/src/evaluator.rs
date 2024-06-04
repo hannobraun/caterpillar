@@ -53,8 +53,8 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> EvaluatorState {
-        let current_instruction = self.call_stack.advance().unwrap();
-        let instruction = self.code.instructions.get(&current_instruction);
+        let address = self.call_stack.advance().unwrap();
+        let instruction = self.code.instructions.get(&address);
 
         match instruction {
             Instruction::BindingDefine { name } => {
@@ -63,7 +63,7 @@ impl Evaluator {
                     Err(err) => {
                         return EvaluatorState::Effect {
                             effect: EvaluatorEffect::StackError(err),
-                            address: current_instruction,
+                            address,
                         }
                     }
                 };
@@ -103,7 +103,7 @@ impl Evaluator {
                             effect: EvaluatorEffect::UnknownBuiltin {
                                 name: name.clone(),
                             },
-                            address: current_instruction,
+                            address,
                         }
                     }
                 };
@@ -126,7 +126,7 @@ impl Evaluator {
                 if let Some(effect) = effect {
                     return EvaluatorState::Effect {
                         effect: EvaluatorEffect::Builtin(effect),
-                        address: current_instruction,
+                        address,
                     };
                 }
             }
@@ -136,7 +136,7 @@ impl Evaluator {
                 if let Err(err) = self.call_stack.push(function) {
                     return EvaluatorState::Effect {
                         effect: EvaluatorEffect::CallStack(err),
-                        address: current_instruction,
+                        address,
                     };
                 }
             }
@@ -181,7 +181,7 @@ impl Evaluator {
         }
 
         EvaluatorState::Running {
-            just_executed: current_instruction,
+            just_executed: address,
         }
     }
 }
