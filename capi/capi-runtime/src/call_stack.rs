@@ -23,7 +23,8 @@ impl CallStack {
     }
 
     pub fn advance(&mut self) -> Option<InstructionAddress> {
-        self.inner.last_mut()?.pop_front()
+        let function = self.inner.last_mut()?;
+        function.pop_front()
     }
 
     pub fn push(
