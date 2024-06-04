@@ -41,8 +41,7 @@ impl Program {
         code: Code,
         entry_address: InstructionAddress,
     ) -> Self {
-        let mut evaluator = Evaluator::new();
-        evaluator.update(code, entry_address);
+        let evaluator = Evaluator::new(code, entry_address);
 
         Self {
             functions,

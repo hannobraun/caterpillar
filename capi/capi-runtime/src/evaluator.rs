@@ -20,10 +20,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new() -> Self {
+    pub fn new(code: Code, entry: InstructionAddress) -> Self {
         Self {
-            code: Code::default(),
-            next_instruction: InstructionAddress::default(),
+            code,
+            next_instruction: entry,
             call_stack: CallStack::default(),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
@@ -40,11 +40,6 @@ impl Evaluator {
 
     pub fn data_stack(&self) -> &DataStack {
         &self.data_stack
-    }
-
-    pub fn update(&mut self, code: Code, entry: InstructionAddress) {
-        self.code = code;
-        self.next_instruction = entry;
     }
 
     pub fn reset(&mut self, entry: InstructionAddress) {
@@ -198,12 +193,6 @@ impl Evaluator {
         EvaluatorState::Running {
             just_executed: current_instruction,
         }
-    }
-}
-
-impl Default for Evaluator {
-    fn default() -> Self {
-        Self::new()
     }
 }
 
