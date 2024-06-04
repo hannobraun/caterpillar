@@ -136,8 +136,6 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction { name } => {
-                let address = self.code.symbols.resolve_name(name);
-
                 if let Err(err) = self.call_stack.push(self.next_instruction) {
                     return EvaluatorState::Effect {
                         effect: EvaluatorEffect::CallStack(err),
@@ -145,7 +143,7 @@ impl Evaluator {
                     };
                 }
 
-                self.next_instruction = address;
+                self.next_instruction = self.code.symbols.resolve_name(name);
             }
             Instruction::Push { value } => self.data_stack.push(*value),
             Instruction::Return => {
