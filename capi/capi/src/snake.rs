@@ -33,7 +33,6 @@ pub fn snake(script: &mut Script) {
             .w("positions")
             .w("index")
             .w("vec_buf_get")
-            .w("vec_load")
             .v(1)
             .w("write_tile")
             .w("positions")
@@ -243,7 +242,6 @@ pub fn snake(script: &mut Script) {
         s.w("positions")
             .v(0)
             .w("vec_buf_get")
-            .w("vec_load")
             .w("next_position")
             .w("vec_store");
     });
@@ -516,7 +514,8 @@ pub fn snake(script: &mut Script) {
             .w("vec_buf")
             .w("base")
             .w("offset")
-            .w("_vec_buf_address");
+            .w("_vec_buf_address")
+            .w("vec_load");
     });
     script.function("vec_buf_last", |s| {
         s.b(["vec_buf"])
@@ -527,8 +526,7 @@ pub fn snake(script: &mut Script) {
             .b(["index"])
             .w("vec_buf")
             .w("index")
-            .w("vec_buf_get")
-            .w("vec_load");
+            .w("vec_buf_get");
     });
     script.function("vec_buf_push", |s| {
         s.b(["vec_buf", "x", "y"])
