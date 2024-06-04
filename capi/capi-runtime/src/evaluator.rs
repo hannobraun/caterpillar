@@ -98,10 +98,7 @@ impl Evaluator {
     ) -> Result<(), EvaluatorEffect> {
         match instruction {
             Instruction::BindingDefine { name } => {
-                let value = match self.data_stack.pop() {
-                    Ok(value) => value,
-                    Err(err) => return Err(EvaluatorEffect::StackError(err)),
-                };
+                let value = self.data_stack.pop()?;
                 self.bindings.insert(name, value);
             }
             Instruction::BindingEvaluate { name } => {
@@ -203,5 +200,11 @@ pub enum EvaluatorEffect {
 impl From<CallStackOverflow> for EvaluatorEffect {
     fn from(err: CallStackOverflow) -> Self {
         Self::CallStack(err)
+    }
+}
+
+impl From<StackUnderflow> for EvaluatorEffect {
+    fn from(err: StackUnderflow) -> Self {
+        Self::StackError(err)
     }
 }
