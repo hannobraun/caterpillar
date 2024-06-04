@@ -83,24 +83,25 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        self.evaluate_instruction(address, instruction)
+        if let Some(effect) = self.evaluate_instruction(address, instruction) {
+            return EvaluatorState::Effect { effect, address };
+        }
+
+        EvaluatorState::Running {
+            just_executed: address,
+        }
     }
 
     fn evaluate_instruction(
         &mut self,
-        address: InstructionAddress,
+        _: InstructionAddress,
         instruction: Instruction,
-    ) -> EvaluatorState {
+    ) -> Option<EvaluatorEffect> {
         match instruction {
             Instruction::BindingDefine { name } => {
                 let value = match self.data_stack.pop() {
                     Ok(value) => value,
-                    Err(err) => {
-                        return EvaluatorState::Effect {
-                            effect: EvaluatorEffect::StackError(err),
-                            address,
-                        }
-                    }
+                    Err(err) => return Some(EvaluatorEffect::StackError(err)),
                 };
                 self.bindings.insert(name, value);
             }
@@ -133,12 +134,7 @@ impl Evaluator {
                     "submit_frame" => builtins::submit_frame(),
                     "take" => builtins::take(&mut self.data_stack),
                     "write_tile" => builtins::write_tile(&mut self.data_stack),
-                    _ => {
-                        return EvaluatorState::Effect {
-                            effect: EvaluatorEffect::UnknownBuiltin { name },
-                            address,
-                        }
-                    }
+                    _ => return Some(EvaluatorEffect::UnknownBuiltin { name }),
                 };
 
                 // This is a bit weird. An error is an effect, and effects can
@@ -157,20 +153,14 @@ impl Evaluator {
                 };
 
                 if let Some(effect) = effect {
-                    return EvaluatorState::Effect {
-                        effect: EvaluatorEffect::Builtin(effect),
-                        address,
-                    };
+                    return Some(EvaluatorEffect::Builtin(effect));
                 }
             }
             Instruction::CallFunction { name } => {
                 let function = self.code.functions.get(&name).cloned().unwrap();
 
                 if let Err(err) = self.call_stack.push(function) {
-                    return EvaluatorState::Effect {
-                        effect: EvaluatorEffect::CallStack(err),
-                        address,
-                    };
+                    return Some(EvaluatorEffect::CallStack(err));
                 }
             }
             Instruction::Push { value } => self.data_stack.push(value),
@@ -188,9 +178,7 @@ impl Evaluator {
             }
         }
 
-        EvaluatorState::Running {
-            just_executed: address,
-        }
+        None
     }
 }
 
