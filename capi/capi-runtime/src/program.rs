@@ -41,13 +41,11 @@ impl Program {
         code: Code,
         entry_address: InstructionAddress,
     ) -> Self {
-        let evaluator = Evaluator::new(code, entry_address);
-
         Self {
             functions,
             source_map,
             breakpoints: Breakpoints::default(),
-            evaluator,
+            evaluator: Evaluator::new(code, entry_address),
             state: ProgramState::default(),
             entry_address,
             effects: VecDeque::default(),
