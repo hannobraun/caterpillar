@@ -165,9 +165,7 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    if self.call_stack.pop().is_none() {
-                        return EvaluatorState::Finished;
-                    }
+                    self.call_stack.pop();
                 }
             }
             Instruction::ReturnIfZero => {
@@ -181,9 +179,7 @@ impl Evaluator {
                     // temporary, until the language grows more features, I'm
                     // inclined to just leave this be.
 
-                    if self.call_stack.pop().is_none() {
-                        return EvaluatorState::Finished;
-                    }
+                    self.call_stack.pop();
                 }
             }
         }
