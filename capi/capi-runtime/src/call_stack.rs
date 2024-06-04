@@ -27,8 +27,9 @@ impl CallStack {
 
     pub fn push(
         &mut self,
-        address: InstructionAddress,
+        function: Function,
     ) -> Result<(), CallStackOverflow> {
+        let address = function.iter().copied().next().unwrap();
         self.inner.push(address);
         Ok(())
     }

@@ -132,9 +132,9 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction { name } => {
-                let next_instruction = self.code.symbols.resolve_name(name);
+                let function = self.code.functions.get(name).cloned().unwrap();
 
-                if let Err(err) = self.call_stack.push(next_instruction) {
+                if let Err(err) = self.call_stack.push(function) {
                     return EvaluatorState::Effect {
                         effect: EvaluatorEffect::CallStack(err),
                         address: current_instruction,
