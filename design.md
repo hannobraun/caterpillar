@@ -33,39 +33,6 @@ existing ones up-to-date.
 
 ## Concepts
 
-### Interactive
-
-Developing in Caterpillar will be interactive, meaning that you apply changes to
-the running program directly, instead of having to restart it after every
-change.
-
-I hope that this can help close the gap between the programmer and the computer,
-leading to a much more direct experience of controlling and understanding what
-the computer does.
-
-This is inspired by the work of [Bret Victor], specifically
-[Inventing on Principle].
-
-[Bret Victor]: https://worrydream.com/
-[Inventing on Principle]: https://vimeo.com/906418692
-
-### Zero overhead
-
-My frame of reference for what a language can and should be, is [Rust] (I was
-already nearing a decade of experience with it when I first started working on
-Caterpillar).
-
-That doesn't mean that Rust is the final word. I think that we can and should do
-better. But it does mean, that I'd be able to do the same kinds of things with
-Caterpillar that I can do with Rust.
-
-This implies that Caterpillar needs to provide a static type system and
-[zero cost abstractions], just like Rust. I do prefer the term "zero overhead"
-though, as that seems clearer to me.
-
-[Rust]: https://www.rust-lang.org/
-[zero cost abstractions]: https://boats.gitlab.io/blog/post/zero-cost-abstractions/
-
 ### Functional
 
 Caterpillar will be purely functional, without mutable state. I won't justify
@@ -124,29 +91,6 @@ vs "create a file") in different contexts.
 I can't credit this idea to a single source of inspiration. It just came to me
 while working on Caterpillar. But I'm certain I haven't invented it. Lisp
 probably works like that.
-
-### Concatenative, stack-based
-
-Many languages provide a mix of prefix, infix, and postfix operators (the latter
-often as method syntax). I would like to avoid this kind of complexity.
-
-If I have to choose only one of those models, postfix seems to provide the best
-attributes. No operator precedence, no parentheses, and easy to parse. And it
-lends itself to stack-based model evaluation, which is simple and efficient.
-
-Please note that having a stack does not imply that there won't be local
-variables and named arguments. How heavily the stack will be used in idiomatic
-code will depend on the experiences we get from practical use.
-
-Mainstream programming languages typically use a tree model for evaluation, but
-that doesn't mean we have to think about this tree constantly. It is usually
-used in a very limited way, for single expressions between assignments to
-variables.
-
-We can do the same in a stack-based language. [Forth] is simply one possible
-expression of that concept.
-
-[Forth]: https://en.wikipedia.org/wiki/Forth_(programming_language)
 
 ### Memory safe
 
