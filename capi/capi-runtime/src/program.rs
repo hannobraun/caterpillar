@@ -6,7 +6,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{EvaluatorEffect, EvaluatorState},
     source_map::SourceMap,
-    syntax::Functions,
+    syntax::{self, Functions},
     DataStack, Evaluator, InstructionAddress, Value,
 };
 
@@ -36,6 +36,14 @@ pub struct Program {
 }
 
 impl Program {
+    pub fn new(functions: syntax::Functions, source_map: SourceMap) -> Self {
+        Self {
+            functions,
+            source_map,
+            ..Self::default()
+        }
+    }
+
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry_address);
         self.state = ProgramState::default();

@@ -25,11 +25,7 @@ pub fn compile(script: Script, entry: &str) -> Program {
 
     let entry_address = code.symbols.resolve_name(entry);
 
-    let mut program = Program {
-        functions: script.functions,
-        source_map,
-        ..Program::default()
-    };
+    let mut program = Program::new(script.functions, source_map);
     program.evaluator.update(code, entry_address);
     program.entry_address = entry_address;
 
