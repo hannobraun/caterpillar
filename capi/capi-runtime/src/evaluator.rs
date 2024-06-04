@@ -159,13 +159,13 @@ impl Evaluator {
             }
             Instruction::Push { value } => self.data_stack.push(value),
             Instruction::ReturnIfNonZero => {
-                let value = self.data_stack.pop().unwrap();
+                let value = self.data_stack.pop()?;
                 if value != Value(0) {
                     self.call_stack.pop();
                 }
             }
             Instruction::ReturnIfZero => {
-                let value = self.data_stack.pop().unwrap();
+                let value = self.data_stack.pop()?;
                 if value == Value(0) {
                     self.call_stack.pop();
                 }
