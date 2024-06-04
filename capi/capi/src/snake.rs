@@ -447,16 +447,13 @@ pub fn snake(script: &mut Script) {
         s.c("Offset of y coordinate within vector.").v(1).w("add");
     });
     script.function("vec_load", |s| {
-        s.c("Make a copy of the vector address, since we're going to need")
-            .c("it for each coordinate.")
-            .v(0)
-            .w("copy")
+        s.b(["address"])
+            .w("address")
             .c("Load x coordinate.")
             .w("vec_x")
             .w("load")
             .c("Get that copy of the vector address that we made.")
-            .v(1)
-            .w("take")
+            .w("address")
             .c("Load y coordinate.")
             .w("vec_y")
             .w("load");
