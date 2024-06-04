@@ -449,12 +449,9 @@ pub fn snake(script: &mut Script) {
     script.function("vec_load", |s| {
         s.b(["address"])
             .w("address")
-            .c("Load x coordinate.")
             .w("vec_x")
             .w("load")
-            .c("Get that copy of the vector address that we made.")
             .w("address")
-            .c("Load y coordinate.")
             .w("vec_y")
             .w("load");
     });
