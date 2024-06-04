@@ -89,7 +89,6 @@ pub enum Instruction {
     CallBuiltin { name: String },
     CallFunction { name: String },
     Push { value: Value },
-    Return,
     ReturnIfNonZero,
     ReturnIfZero,
 }
@@ -104,7 +103,6 @@ impl fmt::Display for Instruction {
             Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
             Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
             Instruction::Push { value } => write!(f, "push {value}"),
-            Instruction::Return => write!(f, "return"),
             Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
             Instruction::ReturnIfZero => write!(f, "return if zero"),
         }

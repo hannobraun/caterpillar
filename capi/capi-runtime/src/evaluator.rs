@@ -154,11 +154,6 @@ impl Evaluator {
                 }
             }
             Instruction::Push { value } => self.data_stack.push(*value),
-            Instruction::Return => {
-                if self.call_stack.pop().is_none() {
-                    return EvaluatorState::Finished;
-                }
-            }
             Instruction::ReturnIfNonZero => {
                 let a = self.data_stack.pop().unwrap();
 
