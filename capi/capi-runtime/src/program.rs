@@ -40,7 +40,13 @@ impl Program {
         Self {
             functions,
             source_map,
-            ..Self::default()
+            breakpoints: Breakpoints::default(),
+            evaluator: Evaluator::default(),
+            state: ProgramState::default(),
+            entry_address: InstructionAddress::default(),
+            effects: VecDeque::default(),
+            previous_data_stack: DataStack::default(),
+            memory: Memory::default(),
         }
     }
 
