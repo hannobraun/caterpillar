@@ -8,8 +8,8 @@ pub struct CallStack {
 }
 
 impl CallStack {
-    pub fn new() -> Self {
-        Self { inner: Vec::new() }
+    pub fn new(next: InstructionAddress) -> Self {
+        Self { inner: vec![next] }
     }
 
     pub fn contains(&self, address: InstructionAddress) -> bool {
