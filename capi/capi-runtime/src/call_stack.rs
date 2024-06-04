@@ -19,8 +19,10 @@ impl CallStack {
         self.inner.contains(&address.next())
     }
 
-    pub fn advance(&mut self) {
+    pub fn advance(&mut self) -> Option<InstructionAddress> {
+        let address = self.next();
         self.inner.last_mut().unwrap().increment();
+        address
     }
 
     pub fn push(

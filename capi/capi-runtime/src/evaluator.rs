@@ -53,8 +53,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> EvaluatorState {
-        let current_instruction = self.call_stack.next().unwrap();
-        self.call_stack.advance();
+        let current_instruction = self.call_stack.advance().unwrap();
 
         let instruction = self.code.instructions.get(&current_instruction);
 
