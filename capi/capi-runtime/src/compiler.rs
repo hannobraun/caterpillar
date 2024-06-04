@@ -23,8 +23,8 @@ pub fn compile(script: Script, entry: &str) -> Program {
         compiler.compile_function(name.clone(), syntax.clone());
     }
 
-    let entry_address = code.symbols.resolve_name(entry);
-    Program::new(script.functions, source_map, code, entry_address)
+    let entry = code.functions.get(entry).cloned().unwrap();
+    Program::new(script.functions, source_map, code, entry)
 }
 
 struct Compiler<'r> {

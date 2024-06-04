@@ -6,6 +6,7 @@ use crate::{
     breakpoints::Breakpoints,
     code::Code,
     evaluator::{EvaluatorEffect, EvaluatorState},
+    runtime,
     source_map::SourceMap,
     syntax::{self, Functions},
     DataStack, Evaluator, InstructionAddress, Value,
@@ -39,8 +40,10 @@ impl Program {
         functions: syntax::Functions,
         source_map: SourceMap,
         code: Code,
-        entry_address: InstructionAddress,
+        entry: runtime::Function,
     ) -> Self {
+        let entry_address = entry.first().copied().unwrap();
+
         Self {
             functions,
             source_map,
