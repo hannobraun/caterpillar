@@ -408,7 +408,6 @@ pub fn snake(script: &mut Script) {
             .w("sub")
             .v(0)
             .w("copy")
-            .w("return_if_zero")
             .c("It seems it wasn't that either, which means we received an")
             .c("invalid return value. This would be a good place to trigger a")
             .c("panic, but the language doesn't support that yet.");
