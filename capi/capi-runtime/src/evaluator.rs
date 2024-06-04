@@ -5,6 +5,7 @@ use crate::{
     call_stack::{CallStack, CallStackOverflow},
     data_stack::StackUnderflow,
     instructions::Instruction,
+    runtime::Function,
     InstructionAddress, Value,
 };
 
@@ -20,10 +21,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(code: Code, entry: InstructionAddress) -> Self {
+    pub fn new(code: Code, entry: Function) -> Self {
         Self {
             code,
-            next_instruction: entry,
+            next_instruction: entry.into_iter().next().unwrap(),
             call_stack: CallStack::default(),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
