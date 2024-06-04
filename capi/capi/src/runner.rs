@@ -109,7 +109,7 @@ impl Runner {
                         }) = self.program.effects.front()
                         {
                             self.program.breakpoints.set_ephemeral(
-                                self.program.evaluator.next_instruction,
+                                self.program.evaluator.next_instruction(),
                             );
                             self.program.effects.pop_front();
                         } else {
@@ -121,7 +121,7 @@ impl Runner {
                     }
                     DebugEvent::Stop => {
                         self.program.breakpoints.set_ephemeral(
-                            self.program.evaluator.next_instruction,
+                            self.program.evaluator.next_instruction(),
                         );
                     }
                     DebugEvent::ToggleBreakpoint { address } => {

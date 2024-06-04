@@ -22,6 +22,10 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
+    pub fn next_instruction(&self) -> InstructionAddress {
+        self.next_instruction
+    }
+
     pub fn update(&mut self, code: Code, entry: InstructionAddress) {
         self.code = code;
         self.next_instruction = entry;
