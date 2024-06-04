@@ -77,7 +77,9 @@ impl Evaluator {
                 self.bindings.insert(name.clone(), value);
             }
             Instruction::BindingEvaluate { name } => {
-                let value = self.bindings.get(name).copied().unwrap();
+                let value = self.bindings.get(name).copied().expect(
+                    "Binding instruction only generated for existing bindings",
+                );
                 self.data_stack.push(value);
             }
             Instruction::CallBuiltin { name } => {
