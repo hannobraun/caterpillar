@@ -1,4 +1,4 @@
-use crate::InstructionAddress;
+use crate::{runtime::Function, InstructionAddress};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
@@ -6,7 +6,8 @@ pub struct CallStack {
 }
 
 impl CallStack {
-    pub fn new(next: InstructionAddress) -> Self {
+    pub fn new(next: Function) -> Self {
+        let next = next.iter().copied().next().unwrap();
         Self { inner: vec![next] }
     }
 

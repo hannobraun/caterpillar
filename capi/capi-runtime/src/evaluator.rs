@@ -21,11 +21,9 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn new(code: Code, entry: Function) -> Self {
-        let next_instruction = entry.iter().copied().next().unwrap();
-
         Self {
             code,
-            call_stack: CallStack::new(next_instruction),
+            call_stack: CallStack::new(entry),
             data_stack: DataStack::default(),
             bindings: BTreeMap::default(),
         }
@@ -44,9 +42,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, entry: Function) {
-        let next_instruction = entry.iter().copied().next().unwrap();
-
-        self.call_stack = CallStack::new(next_instruction);
+        self.call_stack = CallStack::new(entry);
         self.data_stack.clear();
     }
 
