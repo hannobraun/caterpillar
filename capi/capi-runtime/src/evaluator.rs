@@ -57,6 +57,9 @@ impl Evaluator {
             if let Some(address) = frame.function.pop_front() {
                 break (frame, address);
             }
+
+            // If the function has no more instructions, we don't put it back,
+            // meaning it returns.
         };
 
         let instruction = self.code.instructions.get(&address).clone();
