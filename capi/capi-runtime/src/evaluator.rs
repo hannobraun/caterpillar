@@ -110,26 +110,26 @@ pub enum EvaluatorState {
     },
     Finished,
     Effect {
-        effect: EvaluatorEffect,
+        effect: EvaluatorEffectKind,
         address: InstructionAddress,
     },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum EvaluatorEffect {
+pub enum EvaluatorEffectKind {
     Builtin(BuiltinEffect),
     CallStack(CallStackOverflow),
     StackError(StackUnderflow),
     UnknownBuiltin { name: String },
 }
 
-impl From<CallStackOverflow> for EvaluatorEffect {
+impl From<CallStackOverflow> for EvaluatorEffectKind {
     fn from(err: CallStackOverflow) -> Self {
         Self::CallStack(err)
     }
 }
 
-impl From<StackUnderflow> for EvaluatorEffect {
+impl From<StackUnderflow> for EvaluatorEffectKind {
     fn from(err: StackUnderflow) -> Self {
         Self::StackError(err)
     }
@@ -141,7 +141,7 @@ fn evaluate_instruction(
     data_stack: &mut DataStack,
     call_stack: &mut CallStack,
     bindings: &mut Bindings,
-) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
+) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
         Instruction::BindingDefine { name } => {
             let value = data_stack.pop()?;
@@ -174,7 +174,7 @@ fn evaluate_instruction(
                 "submit_frame" => builtins::submit_frame(),
                 "take" => builtins::take(data_stack),
                 "write_tile" => builtins::write_tile(data_stack),
-                _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
+                _ => return Err(EvaluatorEffectKind::UnknownBuiltin { name }),
             };
 
             // This is a bit weird. An error is an effect, and effects can be
@@ -193,7 +193,7 @@ fn evaluate_instruction(
             };
 
             if let Some(effect) = effect {
-                return Err(EvaluatorEffect::Builtin(effect));
+                return Err(EvaluatorEffectKind::Builtin(effect));
             }
         }
         Instruction::CallFunction { name } => {

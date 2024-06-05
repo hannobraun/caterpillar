@@ -1,7 +1,7 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    debugger::DebugEvent, BuiltinEffect, EvaluatorEffect, Program,
+    debugger::DebugEvent, BuiltinEffect, EvaluatorEffectKind, Program,
     ProgramEffect, ProgramEffectKind, Value,
 };
 use rand::random;
@@ -133,7 +133,9 @@ impl Runner {
             self.program.step();
             if let Some(ProgramEffect {
                 kind:
-                    ProgramEffectKind::Evaluator(EvaluatorEffect::Builtin(effect)),
+                    ProgramEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
+                        effect,
+                    )),
                 ..
             }) = self.program.effects.front()
             {

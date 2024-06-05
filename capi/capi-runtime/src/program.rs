@@ -5,7 +5,7 @@ use serde_big_array::BigArray;
 use crate::{
     breakpoints::Breakpoints,
     code::Code,
-    evaluator::{EvaluatorEffect, EvaluatorState},
+    evaluator::{EvaluatorEffectKind, EvaluatorState},
     runtime,
     source_map::SourceMap,
     syntax::{self, Functions},
@@ -135,7 +135,7 @@ pub struct ProgramEffect {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProgramEffectKind {
-    Evaluator(EvaluatorEffect),
+    Evaluator(EvaluatorEffectKind),
     Paused,
 }
 
