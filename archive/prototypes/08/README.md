@@ -54,8 +54,8 @@ I managed to create the following components, all of which work:
 
 As I said, all of this works, but it isn't really useful, even after a huge
 amount of work. The assembler (and bytecode) had just started to be
-Turing-complete, ore thereabouts, but was barely usable without a debugger,
-which perhaps is not surprising.
+Turing-complete, or thereabouts, but was barely usable without a debugger, which
+perhaps is not surprising.
 
 ## Flaws
 
@@ -70,7 +70,7 @@ language to it, and would actually have been more portable.
 
 I'm going to gloss over those first two reasons, as they seem obvious enough,
 but I'd like to expand on the last. If you compile a high-level language to a
-low-level instruction set, you use context. For example, vectors (as in math,
+low-level instruction set, you lose context. For example, vectors (as in math,
 not the ill-named data structure) just become numbers in registers (or in this
 case, numbers on the stack).
 
