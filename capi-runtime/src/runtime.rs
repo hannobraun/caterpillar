@@ -9,7 +9,6 @@ pub struct Function {
 }
 
 impl Function {
-    #[allow(clippy::new_without_default)]
     pub fn new(arguments: Vec<String>) -> Self {
         Self {
             arguments,
