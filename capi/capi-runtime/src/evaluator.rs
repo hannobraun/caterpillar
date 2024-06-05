@@ -98,6 +98,9 @@ impl Evaluator {
                         }
                     })?;
                 }
+                CallStackUpdate::Pop => {
+                    self.call_stack.pop();
+                }
             },
             Ok(None) => {}
             Err(effect) => {
@@ -151,7 +154,7 @@ fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
     data_stack: &mut DataStack,
-    call_stack: &mut CallStack,
+    _: &mut CallStack,
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
@@ -216,13 +219,13 @@ fn evaluate_instruction(
         Instruction::ReturnIfNonZero => {
             let value = data_stack.pop()?;
             if value != Value(0) {
-                call_stack.pop();
+                return Ok(Some(CallStackUpdate::Pop));
             }
         }
         Instruction::ReturnIfZero => {
             let value = data_stack.pop()?;
             if value == Value(0) {
-                call_stack.pop();
+                return Ok(Some(CallStackUpdate::Pop));
             }
         }
     }
@@ -232,4 +235,5 @@ fn evaluate_instruction(
 
 enum CallStackUpdate {
     Push(Function),
+    Pop,
 }
