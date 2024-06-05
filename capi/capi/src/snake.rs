@@ -311,6 +311,9 @@ pub fn snake(script: &mut Script) {
             .w("vec_load")
             .w("is_out_of_bounds")
             .w("return_if_non_zero")
+            .w("snake_head")
+            .w("check_body_collision")
+            .w("return_if_non_zero")
             .w("positions")
             .w("next_position")
             .w("vec_load")
@@ -342,6 +345,51 @@ pub fn snake(script: &mut Script) {
             .w("snake_length_plus_growth")
             .w("snake_length")
             .w("store");
+    });
+    script.function("check_body_collision", |s| {
+        s.v(0).w("check_body_collision_inner");
+    });
+    script.function("check_body_collision_inner", |s| {
+        s.b(["x", "y", "index"])
+            .w("positions")
+            .w("vec_buf_len")
+            .v(1)
+            .w("sub")
+            .w("index")
+            .w("greater")
+            .v(0)
+            .w("copy")
+            .w("return_if_zero")
+            .w("drop")
+            .w("positions")
+            .w("index")
+            .w("vec_buf_get")
+            .w("vec_x")
+            .w("x")
+            .w("eq")
+            .b(["x_matches"])
+            .w("positions")
+            .w("index")
+            .w("vec_buf_get")
+            .w("vec_y")
+            .w("y")
+            .w("eq")
+            .b(["y_matches"])
+            .w("x_matches")
+            .w("y_matches")
+            .w("add")
+            .v(2)
+            .w("eq")
+            .v(0)
+            .w("copy")
+            .w("return_if_non_zero")
+            .w("drop")
+            .w("x")
+            .w("y")
+            .w("index")
+            .v(1)
+            .w("add")
+            .w("check_body_collision_inner");
     });
 
     // Input
