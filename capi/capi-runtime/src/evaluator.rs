@@ -129,25 +129,13 @@ pub enum EvaluatorEffectKind {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    CallStack(CallStackOverflow),
+    CallStack(#[from] CallStackOverflow),
 
     #[error(transparent)]
-    StackError(StackUnderflow),
+    StackError(#[from] StackUnderflow),
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
-}
-
-impl From<CallStackOverflow> for EvaluatorEffectKind {
-    fn from(err: CallStackOverflow) -> Self {
-        Self::CallStack(err)
-    }
-}
-
-impl From<StackUnderflow> for EvaluatorEffectKind {
-    fn from(err: StackUnderflow) -> Self {
-        Self::StackError(err)
-    }
 }
 
 fn evaluate_instruction(
