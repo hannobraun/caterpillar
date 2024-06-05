@@ -81,7 +81,7 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        if let Err(effect) = Self::evaluate_instruction(
+        if let Err(effect) = evaluate_instruction(
             instruction,
             &self.code,
             &mut self.data_stack,
@@ -94,92 +94,6 @@ impl Evaluator {
         EvaluatorState::Running {
             just_executed: address,
         }
-    }
-
-    fn evaluate_instruction(
-        instruction: Instruction,
-        code: &Code,
-        data_stack: &mut DataStack,
-        call_stack: &mut CallStack,
-        bindings: &mut Bindings,
-    ) -> Result<(), EvaluatorEffect> {
-        match instruction {
-            Instruction::BindingDefine { name } => {
-                let value = data_stack.pop()?;
-                bindings.insert(name, value);
-            }
-            Instruction::BindingEvaluate { name } => {
-                let value = bindings.get(&name).copied().expect(
-                    "Binding instruction only generated for existing bindings",
-                );
-                data_stack.push(value);
-            }
-            Instruction::CallBuiltin { name } => {
-                let result = match name.as_str() {
-                    "add" => builtins::add(data_stack),
-                    "add_wrap_unsigned" => {
-                        builtins::add_wrap_unsigned(data_stack)
-                    }
-                    "copy" => builtins::copy(data_stack),
-                    "div" => builtins::div(data_stack),
-                    "drop" => builtins::drop(data_stack),
-                    "eq" => builtins::eq(data_stack),
-                    "greater" => builtins::greater(data_stack),
-                    "load" => builtins::load(data_stack),
-                    "mul" => builtins::mul(data_stack),
-                    "neg" => builtins::neg(data_stack),
-                    "place" => builtins::place(data_stack),
-                    "read_input" => builtins::read_input(),
-                    "read_random" => builtins::read_random(),
-                    "remainder" => builtins::remainder(data_stack),
-                    "store" => builtins::store(data_stack),
-                    "sub" => builtins::sub(data_stack),
-                    "submit_frame" => builtins::submit_frame(),
-                    "take" => builtins::take(data_stack),
-                    "write_tile" => builtins::write_tile(data_stack),
-                    _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
-                };
-
-                // This is a bit weird. An error is an effect, and effects can
-                // be returned as a `Result::Ok` by the builtins. But error by
-                // itself can also be returned as a `Result::Err`.
-                //
-                // This enables builtins to to stack operations using `?`
-                // internally, without requiring effects to always be returned
-                // as errors, which they aren't per se.
-                //
-                // Anyway, here we deal with this situation by unifying both
-                // variants.
-                let effect = match result {
-                    Ok(effect) => effect,
-                    Err(err) => Some(BuiltinEffect::Error(err)),
-                };
-
-                if let Some(effect) = effect {
-                    return Err(EvaluatorEffect::Builtin(effect));
-                }
-            }
-            Instruction::CallFunction { name } => {
-                let function = code.functions.get(&name).cloned().unwrap();
-
-                call_stack.push(function)?;
-            }
-            Instruction::Push { value } => data_stack.push(value),
-            Instruction::ReturnIfNonZero => {
-                let value = data_stack.pop()?;
-                if value != Value(0) {
-                    call_stack.pop();
-                }
-            }
-            Instruction::ReturnIfZero => {
-                let value = data_stack.pop()?;
-                if value == Value(0) {
-                    call_stack.pop();
-                }
-            }
-        }
-
-        Ok(())
     }
 }
 
@@ -214,4 +128,88 @@ impl From<StackUnderflow> for EvaluatorEffect {
     fn from(err: StackUnderflow) -> Self {
         Self::StackError(err)
     }
+}
+
+fn evaluate_instruction(
+    instruction: Instruction,
+    code: &Code,
+    data_stack: &mut DataStack,
+    call_stack: &mut CallStack,
+    bindings: &mut Bindings,
+) -> Result<(), EvaluatorEffect> {
+    match instruction {
+        Instruction::BindingDefine { name } => {
+            let value = data_stack.pop()?;
+            bindings.insert(name, value);
+        }
+        Instruction::BindingEvaluate { name } => {
+            let value = bindings.get(&name).copied().expect(
+                "Binding instruction only generated for existing bindings",
+            );
+            data_stack.push(value);
+        }
+        Instruction::CallBuiltin { name } => {
+            let result = match name.as_str() {
+                "add" => builtins::add(data_stack),
+                "add_wrap_unsigned" => builtins::add_wrap_unsigned(data_stack),
+                "copy" => builtins::copy(data_stack),
+                "div" => builtins::div(data_stack),
+                "drop" => builtins::drop(data_stack),
+                "eq" => builtins::eq(data_stack),
+                "greater" => builtins::greater(data_stack),
+                "load" => builtins::load(data_stack),
+                "mul" => builtins::mul(data_stack),
+                "neg" => builtins::neg(data_stack),
+                "place" => builtins::place(data_stack),
+                "read_input" => builtins::read_input(),
+                "read_random" => builtins::read_random(),
+                "remainder" => builtins::remainder(data_stack),
+                "store" => builtins::store(data_stack),
+                "sub" => builtins::sub(data_stack),
+                "submit_frame" => builtins::submit_frame(),
+                "take" => builtins::take(data_stack),
+                "write_tile" => builtins::write_tile(data_stack),
+                _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
+            };
+
+            // This is a bit weird. An error is an effect, and effects can be
+            // returned as a `Result::Ok` by the builtins. But error by itself
+            // can also be returned as a `Result::Err`.
+            //
+            // This enables builtins to to stack operations using `?`
+            // internally, without requiring effects to always be returned as
+            // errors, which they aren't per se.
+            //
+            // Anyway, here we deal with this situation by unifying both
+            // variants.
+            let effect = match result {
+                Ok(effect) => effect,
+                Err(err) => Some(BuiltinEffect::Error(err)),
+            };
+
+            if let Some(effect) = effect {
+                return Err(EvaluatorEffect::Builtin(effect));
+            }
+        }
+        Instruction::CallFunction { name } => {
+            let function = code.functions.get(&name).cloned().unwrap();
+
+            call_stack.push(function)?;
+        }
+        Instruction::Push { value } => data_stack.push(value),
+        Instruction::ReturnIfNonZero => {
+            let value = data_stack.pop()?;
+            if value != Value(0) {
+                call_stack.pop();
+            }
+        }
+        Instruction::ReturnIfZero => {
+            let value = data_stack.pop()?;
+            if value == Value(0) {
+                call_stack.pop();
+            }
+        }
+    }
+
+    Ok(())
 }
