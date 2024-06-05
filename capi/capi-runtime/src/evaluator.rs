@@ -82,9 +82,8 @@ impl Evaluator {
         //
         // 1. That is a weird pattern anyway, and doesn't really make sense to
         //    write.
-        // 2. Explicit return instructions are a stopgap anyway, and will go
-        //    away once we have anonymous functions that we can use for more
-        //    advanced control flow.
+        // 2. Explicit return instructions are a stopgap anyway, until we have
+        //    more advanced control flow.
         if !frame.function.is_empty() {
             self.call_stack.push(frame).expect(
                 "Just popped a stack frame; pushing one can't overflow",
