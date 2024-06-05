@@ -83,8 +83,8 @@ or if your target is a shader language (which supports vectors natively).
 
 I believe that creating a VM for Caterpillar can make a lot of sense. It means
 that the (possibly limited) target doesn't have to run a whole language
-implementation. Stuff like tokenizing, parsing, type checking, and whatever
-else needs to happen to make a programming language work, can stay on the more
+implementation. Stuff like tokenizing, parsing, type checking, and whatever else
+needs to happen to make a programming language work, can stay on the more
 powerful dev machine.
 
 But if I attempt this in the future, I will design an instruction set that is
