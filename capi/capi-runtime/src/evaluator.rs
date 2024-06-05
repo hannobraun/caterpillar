@@ -89,7 +89,16 @@ impl Evaluator {
             &mut self.bindings,
         );
         match evaluate_result {
-            Ok(Some(call_stack_update)) => match call_stack_update {},
+            Ok(Some(call_stack_update)) => match call_stack_update {
+                CallStackUpdate::Push(function) => {
+                    self.call_stack.push(function).map_err(|effect| {
+                        EvaluatorEffect {
+                            effect: effect.into(),
+                            address,
+                        }
+                    })?;
+                }
+            },
             Ok(None) => {}
             Err(effect) => {
                 return Err(EvaluatorEffect { effect, address });
@@ -201,7 +210,7 @@ fn evaluate_instruction(
         }
         Instruction::CallFunction { name } => {
             let function = code.functions.get(&name).cloned().unwrap();
-            call_stack.push(function)?;
+            return Ok(Some(CallStackUpdate::Push(function)));
         }
         Instruction::Push { value } => data_stack.push(value),
         Instruction::ReturnIfNonZero => {
@@ -221,4 +230,6 @@ fn evaluate_instruction(
     Ok(None)
 }
 
-enum CallStackUpdate {}
+enum CallStackUpdate {
+    Push(Function),
+}
