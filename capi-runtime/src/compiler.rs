@@ -20,7 +20,7 @@ pub fn compile(script: Script, entry: &str) -> Program {
         source_map: &mut source_map,
     };
 
-    for Function { name, syntax } in &script.functions.inner {
+    for Function { name, syntax, .. } in &script.functions.inner {
         compiler.compile_function(name.clone(), syntax.clone());
     }
 
