@@ -81,7 +81,13 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        if let Err(effect) = self.evaluate_instruction(instruction) {
+        if let Err(effect) = Self::evaluate_instruction(
+            instruction,
+            &self.code,
+            &mut self.data_stack,
+            &mut self.call_stack,
+            &mut self.bindings,
+        ) {
             return EvaluatorState::Effect { effect, address };
         }
 
@@ -91,43 +97,46 @@ impl Evaluator {
     }
 
     fn evaluate_instruction(
-        &mut self,
         instruction: Instruction,
+        code: &Code,
+        data_stack: &mut DataStack,
+        call_stack: &mut CallStack,
+        bindings: &mut Bindings,
     ) -> Result<(), EvaluatorEffect> {
         match instruction {
             Instruction::BindingDefine { name } => {
-                let value = self.data_stack.pop()?;
-                self.bindings.insert(name, value);
+                let value = data_stack.pop()?;
+                bindings.insert(name, value);
             }
             Instruction::BindingEvaluate { name } => {
-                let value = self.bindings.get(&name).copied().expect(
+                let value = bindings.get(&name).copied().expect(
                     "Binding instruction only generated for existing bindings",
                 );
-                self.data_stack.push(value);
+                data_stack.push(value);
             }
             Instruction::CallBuiltin { name } => {
                 let result = match name.as_str() {
-                    "add" => builtins::add(&mut self.data_stack),
+                    "add" => builtins::add(data_stack),
                     "add_wrap_unsigned" => {
-                        builtins::add_wrap_unsigned(&mut self.data_stack)
+                        builtins::add_wrap_unsigned(data_stack)
                     }
-                    "copy" => builtins::copy(&mut self.data_stack),
-                    "div" => builtins::div(&mut self.data_stack),
-                    "drop" => builtins::drop(&mut self.data_stack),
-                    "eq" => builtins::eq(&mut self.data_stack),
-                    "greater" => builtins::greater(&mut self.data_stack),
-                    "load" => builtins::load(&mut self.data_stack),
-                    "mul" => builtins::mul(&mut self.data_stack),
-                    "neg" => builtins::neg(&mut self.data_stack),
-                    "place" => builtins::place(&mut self.data_stack),
+                    "copy" => builtins::copy(data_stack),
+                    "div" => builtins::div(data_stack),
+                    "drop" => builtins::drop(data_stack),
+                    "eq" => builtins::eq(data_stack),
+                    "greater" => builtins::greater(data_stack),
+                    "load" => builtins::load(data_stack),
+                    "mul" => builtins::mul(data_stack),
+                    "neg" => builtins::neg(data_stack),
+                    "place" => builtins::place(data_stack),
                     "read_input" => builtins::read_input(),
                     "read_random" => builtins::read_random(),
-                    "remainder" => builtins::remainder(&mut self.data_stack),
-                    "store" => builtins::store(&mut self.data_stack),
-                    "sub" => builtins::sub(&mut self.data_stack),
+                    "remainder" => builtins::remainder(data_stack),
+                    "store" => builtins::store(data_stack),
+                    "sub" => builtins::sub(data_stack),
                     "submit_frame" => builtins::submit_frame(),
-                    "take" => builtins::take(&mut self.data_stack),
-                    "write_tile" => builtins::write_tile(&mut self.data_stack),
+                    "take" => builtins::take(data_stack),
+                    "write_tile" => builtins::write_tile(data_stack),
                     _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
                 };
 
@@ -151,21 +160,21 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction { name } => {
-                let function = self.code.functions.get(&name).cloned().unwrap();
+                let function = code.functions.get(&name).cloned().unwrap();
 
-                self.call_stack.push(function)?;
+                call_stack.push(function)?;
             }
-            Instruction::Push { value } => self.data_stack.push(value),
+            Instruction::Push { value } => data_stack.push(value),
             Instruction::ReturnIfNonZero => {
-                let value = self.data_stack.pop()?;
+                let value = data_stack.pop()?;
                 if value != Value(0) {
-                    self.call_stack.pop();
+                    call_stack.pop();
                 }
             }
             Instruction::ReturnIfZero => {
-                let value = self.data_stack.pop()?;
+                let value = data_stack.pop()?;
                 if value == Value(0) {
-                    self.call_stack.pop();
+                    call_stack.pop();
                 }
             }
         }
