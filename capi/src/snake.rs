@@ -663,7 +663,10 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_inc_index");
     });
     script.function("vec_buf_pop", [], |s| {
-        s.w("_vec_buf_first").w("_vec_buf_inc_index");
+        s.b(["vec_buf"])
+            .w("vec_buf")
+            .w("_vec_buf_first")
+            .w("_vec_buf_inc_index");
     });
     script.function("vec_buf_len", [], |s| {
         s.b(["vec_buf"])
