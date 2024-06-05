@@ -37,7 +37,7 @@ struct Compiler<'r> {
 impl Compiler<'_> {
     fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
         let mut bindings = BTreeSet::new();
-        let mut output = runtime::Function::new();
+        let mut output = runtime::Function::new(Vec::new());
 
         for expression in syntax {
             self.compile_expression(expression, &mut bindings, &mut output);
