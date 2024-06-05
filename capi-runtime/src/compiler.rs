@@ -91,7 +91,7 @@ impl Compiler<'_> {
     ) {
         let address = self.code.push(instruction);
         self.source_map.define_mapping(address, location);
-        output.push_back(address);
+        output.instructions.push_back(address);
     }
 }
 

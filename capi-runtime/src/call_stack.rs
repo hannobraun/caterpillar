@@ -19,13 +19,13 @@ impl CallStack {
     pub fn next(&self) -> Option<InstructionAddress> {
         self.frames
             .last()
-            .and_then(|frame| frame.function.front().copied())
+            .and_then(|frame| frame.function.instructions.front().copied())
     }
 
     pub fn contains(&self, address: InstructionAddress) -> bool {
-        self.frames
-            .iter()
-            .any(|frame| frame.function.front() == Some(&address.next()))
+        self.frames.iter().any(|frame| {
+            frame.function.instructions.front() == Some(&address.next())
+        })
     }
 
     pub fn push(
@@ -47,7 +47,7 @@ impl CallStack {
     pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
         self.frames
             .iter()
-            .filter_map(|frame| frame.function.front())
+            .filter_map(|frame| frame.function.instructions.front())
     }
 }
 
