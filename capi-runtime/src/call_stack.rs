@@ -22,6 +22,14 @@ impl CallStack {
             .and_then(|frame| frame.function.instructions.front().copied())
     }
 
+    pub fn top(&self) -> Option<&StackFrame> {
+        self.frames.last()
+    }
+
+    pub fn top_mut(&mut self) -> Option<&mut StackFrame> {
+        self.frames.last_mut()
+    }
+
     pub fn contains(&self, address: InstructionAddress) -> bool {
         self.frames.iter().any(|frame| {
             frame.function.instructions.front() == Some(&address.next())

@@ -13,7 +13,6 @@ use super::{builtins, code::Code, data_stack::DataStack};
 pub struct Evaluator {
     code: Code,
     call_stack: CallStack,
-    data_stack: DataStack,
 }
 
 impl Evaluator {
@@ -21,7 +20,6 @@ impl Evaluator {
         Self {
             code,
             call_stack: CallStack::new(entry),
-            data_stack: DataStack::default(),
         }
     }
 
@@ -34,17 +32,16 @@ impl Evaluator {
     }
 
     pub fn data_stack(&self) -> &DataStack {
-        &self.data_stack
+        &self.call_stack.top().unwrap().data_stack
     }
 
     pub fn reset(&mut self, entry: Function) {
         self.call_stack = CallStack::new(entry);
-        self.data_stack.clear();
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         for value in values {
-            self.data_stack.push(value);
+            self.call_stack.top_mut().unwrap().data_stack.push(value);
         }
     }
 
@@ -66,7 +63,7 @@ impl Evaluator {
         let evaluate_result = evaluate_instruction(
             instruction,
             &self.code,
-            &mut self.data_stack,
+            &mut frame.data_stack,
             &mut frame.bindings,
         );
 
@@ -87,6 +84,24 @@ impl Evaluator {
             self.call_stack.push(frame).expect(
                 "Just popped a stack frame; pushing one can't overflow",
             );
+        } else {
+            for value in frame.data_stack.values() {
+                if let Some(stack_frame) = self.call_stack.top_mut() {
+                    stack_frame.data_stack.push(value);
+                } else {
+                    // If we end up here, one of the following happened:
+                    //
+                    // 1. We've returned from the top-level function.
+                    // 2. The top-level function has made a tail call.
+                    //
+                    // In case of 1, what we're doing here is irrelevant,
+                    // because the program is over.
+                    //
+                    // In case of 2, we might be leaving useless stuff on the
+                    // stack, I guess. Not critical right now, but longer-term,
+                    // we can clean that up.
+                }
+            }
         }
 
         match evaluate_result {
@@ -96,7 +111,16 @@ impl Evaluator {
                     let mut stack_frame = StackFrame::new(function);
 
                     for argument in arguments.into_iter().rev() {
-                        let value = self.data_stack.pop().unwrap();
+                        let value = self
+                            .call_stack
+                            .top_mut()
+                            .unwrap()
+                            .data_stack
+                            .pop()
+                            .map_err(|effect| EvaluatorEffect {
+                                effect: effect.into(),
+                                address,
+                            })?;
                         stack_frame.bindings.insert(argument.clone(), value);
                     }
 
@@ -108,7 +132,15 @@ impl Evaluator {
                     })?;
                 }
                 CallStackUpdate::Pop => {
-                    self.call_stack.pop();
+                    if let Some(stack_frame) = self.call_stack.pop() {
+                        for value in stack_frame.data_stack.values() {
+                            self.call_stack
+                                .top_mut()
+                                .unwrap()
+                                .data_stack
+                                .push(value);
+                        }
+                    }
                 }
             },
             Ok(None) => {}
