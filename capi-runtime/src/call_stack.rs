@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{runtime::Function, InstructionAddress, Value};
+use crate::{runtime::Function, DataStack, InstructionAddress, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
@@ -54,6 +54,7 @@ impl CallStack {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct StackFrame {
     pub function: Function,
+    pub data_stack: DataStack,
     pub bindings: Bindings,
 }
 
@@ -61,6 +62,7 @@ impl StackFrame {
     pub fn new(function: Function) -> Self {
         Self {
             function,
+            data_stack: DataStack::new(),
             bindings: Bindings::new(),
         }
     }
