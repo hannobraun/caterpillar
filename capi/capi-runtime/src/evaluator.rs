@@ -115,11 +115,26 @@ pub struct EvaluatorEffect {
     pub address: InstructionAddress,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
 pub enum EvaluatorEffectKind {
+    #[error("Builtin effect: {self:?}")]
     Builtin(BuiltinEffect),
+
+    #[error(transparent)]
     CallStack(CallStackOverflow),
+
+    #[error(transparent)]
     StackError(StackUnderflow),
+
+    #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
 }
 
