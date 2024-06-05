@@ -64,7 +64,16 @@ impl From<Function> for StackFrame {
 
 pub type Bindings = BTreeMap<String, Value>;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
+#[error("Overflowed call stack")]
 pub struct CallStackOverflow;
 
 const RECURSION_LIMIT: usize = 8;
