@@ -577,7 +577,7 @@ pub fn snake(script: &mut Script) {
         s.b(["vx", "vy"]).w("vx").w("vy").w("vx").w("vy");
     });
     script.function("vec_drop", [], |s| {
-        s.w("drop").w("drop");
+        s.b(["_", "_"]);
     });
     script.function("vec_eq", [], |s| {
         s.b(["ax", "ay", "bx", "by"])
