@@ -74,9 +74,8 @@ impl Evaluator {
         // optimization.
         //
         // This will lead to trouble, if the last instruction in the function
-        // (the one whose address we just acquired, and are about to execute) is
-        // an explicit return instruction. Those will pop *another* stack frame,
-        // which is one too many.
+        // (the one we just executed) is an explicit return instruction. Those
+        // pop *another* stack frame, which is one too many.
         //
         // I've decided not to address that, for the moment:
         //
