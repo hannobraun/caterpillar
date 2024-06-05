@@ -697,7 +697,12 @@ pub fn snake(script: &mut Script) {
             .w("add");
     });
     script.function("vec_buf_capacity", [], |s| {
-        s.w("_vec_buf_capacity").w("load").v(2).w("div");
+        s.b(["vec_buf"])
+            .w("vec_buf")
+            .w("_vec_buf_capacity")
+            .w("load")
+            .v(2)
+            .w("div");
     });
     script.function("_vec_buf_address", [], |s| {
         s.c("Compute the memory address of a location within the vector")
