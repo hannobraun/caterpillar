@@ -5,7 +5,7 @@
 This is (one of many) prototypes for the Caterpillar programming language. Check
 out the top-level README in this repository for more info.
 
-This iteration of Caterpillar is a variation of an [earlier prototype](../cp3/),
+This iteration of Caterpillar is a variation of an [earlier prototype](../03/),
 which it is identical to in objective and scope. It deviates in the architecture
 of the language implementation.
 
@@ -47,4 +47,4 @@ prototype, here are some stretch goals I could work on:
 ## Status
 
 The objective has been reached. Work is continuing in a
-[follow-up prototype](../cp6/).
+[follow-up prototype](../06/).

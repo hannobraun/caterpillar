@@ -51,8 +51,8 @@ This list is not complete, and my vision keeps developing as I experiment.
 ## Objective
 
 Create a basic web-based programming environment for Caterpillar, with the main
-feature being a test runner. Basically, port the
-[previous prototype](../archive/cp5/) to the web.
+feature being a test runner. Basically, port the [previous prototype](../05/) to
+the web.
 
 Compared to the previous prototype, it would be nice to have a more powerful UI
 that goes beyond a simple command-line interface.
@@ -81,5 +81,5 @@ prototype, here are some stretch goals I could work on:
 ## Status
 
 The objective has been reached and this prototype is completed. It has been
-succeeded by a [follow-up prototype](../../cp7/) which aims to take a subset of
-the ideas explored here to a usable state.
+succeeded by a [follow-up prototype](../07/) which aims to take a subset of the
+ideas explored here to a usable state.

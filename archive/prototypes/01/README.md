@@ -2,14 +2,14 @@
 
 An experimental programming language, to explore interactive programming.
 
-Caterpillar builds on the results of an [earlier experiment](../cp0/) of the
-same name. Its predecessor used a broad, exploratory approach that in the end
-got bogged down in too many details. This new experiment is more focused on the
+Caterpillar builds on the results of an [earlier experiment](../00/) of the same
+name. Its predecessor used a broad, exploratory approach that in the end got
+bogged down in too many details. This new experiment is more focused on the
 language itself, trying to keep all other aspects as simple as possible.
 
 ## Status
 
-This prototype has been abandoned. [There was a successor.](../cp2/)
+This prototype has been abandoned. [There was a successor.](../02/)
 
 ## Concept
 

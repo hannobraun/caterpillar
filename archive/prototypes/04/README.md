@@ -12,7 +12,7 @@ An experimental programming language that is inspired by two insights:
 I'm also exploring other aspects of programming language design, but those two
 are at the core of what this project is about.
 
-This iteration of Caterpillar is a variation of an [earlier prototype](../cp3/),
+This iteration of Caterpillar is a variation of an [earlier prototype](../03/),
 which it is identical to in objective and scope. It deviates in the architecture
 of the language implementation though, experimenting with a piecemeal and
 pull-based (i.e. async) approach to the execution pipeline.
