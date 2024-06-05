@@ -41,7 +41,7 @@ impl Compiler<'_> {
         args: Vec<String>,
         syntax: Vec<Expression>,
     ) {
-        let mut bindings = BTreeSet::new();
+        let mut bindings = args.iter().cloned().collect();
         let mut output = runtime::Function::new(args);
 
         for expression in syntax {
