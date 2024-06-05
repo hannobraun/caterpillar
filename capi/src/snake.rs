@@ -726,16 +726,16 @@ pub fn snake(script: &mut Script) {
             .w("store");
     });
     script.function("_vec_buf_first", [], |s| {
-        s.v(0).w("add");
+        s.b(["vec_buf"]).w("vec_buf").v(0).w("add");
     });
     script.function("_vec_buf_next", [], |s| {
-        s.v(1).w("add");
+        s.b(["vec_buf"]).w("vec_buf").v(1).w("add");
     });
     script.function("_vec_buf_capacity", [], |s| {
-        s.v(2).w("add");
+        s.b(["vec_buf"]).w("vec_buf").v(2).w("add");
     });
     script.function("_vec_buf_buffer", [], |s| {
-        s.v(3).w("add");
+        s.b(["vec_buf"]).w("vec_buf").v(3).w("add");
     });
 
     // Utilities - Miscellaneous
