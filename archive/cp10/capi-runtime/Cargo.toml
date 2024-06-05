@@ -1,0 +1,12 @@
+[package]
+name = "capi-runtime"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde-big-array = "*"
+thiserror = "*"
+
+[dependencies.serde]
+version = "*"
+features = ["derive"]

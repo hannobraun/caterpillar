@@ -1,0 +1,37 @@
+[package]
+name = "capi"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+futures = "*"
+pixels = "*"
+rand = "*"
+ron = "*"
+serde = "*"
+tower = "*"
+tracing = "*"
+
+[dependencies.axum]
+version = "*"
+features = ["ws"]
+
+[dependencies.capi-runtime]
+path = "../capi-runtime"
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
+
+[dependencies.tower-http]
+version = "*"
+features = ["trace"]
+
+[dependencies.tracing-subscriber]
+version = "*"
+features = ["env-filter"]
+
+[dependencies.winit]
+version = "*"
+features = ["rwh_05"]

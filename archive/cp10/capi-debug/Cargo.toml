@@ -1,0 +1,23 @@
+[package]
+name = "capi-debug"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+console_error_panic_hook = "*"
+futures = "*"
+gloo = "*"
+log = "*"
+ron = "*"
+web-sys = "*"
+
+[dependencies.capi-runtime]
+path = "../capi-runtime"
+
+[dependencies.console_log]
+version = "*"
+features = ["color"]
+
+[dependencies.leptos]
+version = "*"
+features = ["csr"]
