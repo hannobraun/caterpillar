@@ -85,7 +85,6 @@ impl Evaluator {
             instruction,
             &self.code,
             &mut self.data_stack,
-            &mut self.call_stack,
             &mut self.bindings,
         );
         match evaluate_result {
@@ -154,7 +153,6 @@ fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
     data_stack: &mut DataStack,
-    _: &mut CallStack,
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
