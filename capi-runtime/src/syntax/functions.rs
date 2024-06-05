@@ -15,7 +15,12 @@ impl Functions {
         Self::default()
     }
 
-    pub fn define(&mut self, name: &str, f: impl FnOnce(&mut SyntaxBuilder)) {
+    pub fn define<'r>(
+        &mut self,
+        name: &str,
+        args: impl IntoIterator<Item = &'r str>,
+        f: impl FnOnce(&mut SyntaxBuilder),
+    ) {
         if self.names.contains(name) {
             panic!("Can't re-define existing function `{name}`.");
         }
@@ -26,7 +31,7 @@ impl Functions {
         self.names.insert(name.to_string());
         self.inner.push(Function {
             name: name.to_string(),
-            args: Vec::new(),
+            args: args.into_iter().map(String::from).collect(),
             syntax,
         });
     }
