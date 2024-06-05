@@ -5,7 +5,7 @@ use serde_big_array::BigArray;
 use crate::{
     breakpoints::Breakpoints,
     code::Code,
-    evaluator::{EvaluatorEffectKind, EvaluatorState},
+    evaluator::{EvaluatorEffect, EvaluatorEffectKind, EvaluatorState},
     runtime,
     source_map::SourceMap,
     syntax::{self, Functions},
@@ -88,7 +88,7 @@ impl Program {
         let just_executed = match self.evaluator.step() {
             EvaluatorState::Running { just_executed } => just_executed,
             EvaluatorState::Finished => return ProgramState::Finished,
-            EvaluatorState::Effect { effect, address } => {
+            EvaluatorState::Effect(EvaluatorEffect { effect, address }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,

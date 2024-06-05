@@ -92,7 +92,10 @@ impl Evaluator {
             Ok(Some(call_stack_update)) => match call_stack_update {},
             Ok(None) => {}
             Err(effect) => {
-                return EvaluatorState::Effect { effect, address };
+                return EvaluatorState::Effect(EvaluatorEffect {
+                    effect,
+                    address,
+                });
             }
         }
 
@@ -105,14 +108,15 @@ impl Evaluator {
 #[derive(Debug)]
 #[must_use]
 pub enum EvaluatorState {
-    Running {
-        just_executed: InstructionAddress,
-    },
+    Running { just_executed: InstructionAddress },
     Finished,
-    Effect {
-        effect: EvaluatorEffectKind,
-        address: InstructionAddress,
-    },
+    Effect(EvaluatorEffect),
+}
+
+#[derive(Debug)]
+pub struct EvaluatorEffect {
+    pub effect: EvaluatorEffectKind,
+    pub address: InstructionAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
