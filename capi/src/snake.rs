@@ -2,19 +2,19 @@ use capi_runtime::syntax::Script;
 
 pub fn snake(script: &mut Script) {
     // Main loop
-    script.function("main", |s| {
+    script.function("main", &[], |s| {
         s.w("tile_field_size")
             .w("vec_store")
             .w("init_frame_count")
             .w("init")
             .w("main_inner");
     });
-    script.function("main_inner", |s| {
+    script.function("main_inner", &[], |s| {
         s.w("draw").w("count_frame").w("update").w("main_inner");
     });
 
     // Draw
-    script.function("draw", |s| {
+    script.function("draw", &[], |s| {
         s.w("clear_all_tiles")
             .w("draw_snake")
             .w("draw_food")
@@ -22,13 +22,13 @@ pub fn snake(script: &mut Script) {
             .c("next frame.")
             .w("submit_frame");
     });
-    script.function("clear_all_tiles", |s| {
+    script.function("clear_all_tiles", &[], |s| {
         s.v(0).w("write_all_tiles");
     });
-    script.function("draw_snake", |s| {
+    script.function("draw_snake", &[], |s| {
         s.v(0).w("draw_snake_inner");
     });
-    script.function("draw_snake_inner", |s| {
+    script.function("draw_snake_inner", &[], |s| {
         s.b(["index"])
             .w("positions")
             .w("index")
@@ -47,19 +47,19 @@ pub fn snake(script: &mut Script) {
             .w("add")
             .w("draw_snake_inner");
     });
-    script.function("draw_food", |s| {
+    script.function("draw_food", &[], |s| {
         s.w("food_position").w("vec_load").v(1).w("write_tile");
     });
 
     // Draw - write tiles
-    script.function("write_all_tiles", |s| {
+    script.function("write_all_tiles", &[], |s| {
         s.b(["tile_value"])
             .w("init_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner")
             .w("vec_drop");
     });
-    script.function("write_all_tiles_inner", |s| {
+    script.function("write_all_tiles_inner", &[], |s| {
         s.b(["tile_value"])
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
@@ -78,10 +78,10 @@ pub fn snake(script: &mut Script) {
     });
 
     // Draw - write tiles - tile index
-    script.function("init_tile_index", |s| {
+    script.function("init_tile_index", &[], |s| {
         s.v(0).v(0);
     });
-    script.function("check_tile_index", |s| {
+    script.function("check_tile_index", &[], |s| {
         s.b(["tile_y"])
             .w("tile_field_size")
             .w("vec_load")
@@ -91,7 +91,7 @@ pub fn snake(script: &mut Script) {
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
     });
-    script.function("increment_tile_index", |s| {
+    script.function("increment_tile_index", &[], |s| {
         s.b(["tile_x", "tile_y"])
             .c("Increment the x-coordinate.")
             .w("tile_x")
@@ -124,7 +124,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Tile field size
-    script.function("is_out_of_bounds", |s| {
+    script.function("is_out_of_bounds", &[], |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
             .v(2)
@@ -166,10 +166,10 @@ pub fn snake(script: &mut Script) {
     });
 
     // Frame count
-    script.function("init_frame_count", |s| {
+    script.function("init_frame_count", &[], |s| {
         s.v(1).w("frame_count").w("store");
     });
-    script.function("count_frame", |s| {
+    script.function("count_frame", &[], |s| {
         s
             .c("We only have 7 bits to count (our 8-bit values are signed), so")
             .c("we need to reset the count every so often. To keep things")
@@ -203,14 +203,14 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state
-    script.function("init", |s| {
+    script.function("init", &[], |s| {
         s.w("init_should_game_run")
             .w("snake_init")
             .w("init_velocity")
             .w("init_next_position")
             .w("food_init");
     });
-    script.function("update", |s| {
+    script.function("update", &[], |s| {
         s.c("The update logic does not run every frame.")
             .w("frame_count")
             .w("load")
@@ -228,24 +228,24 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state - should game run
-    script.function("init_should_game_run", |s| {
+    script.function("init_should_game_run", &[], |s| {
         s.v(1).w("should_game_run").w("store");
     });
 
     // Game state - velocity
-    script.function("init_velocity", |s| {
+    script.function("init_velocity", &[], |s| {
         s.v(1).v(0).w("velocity").w("vec_store");
     });
 
     // Game state - next position
-    script.function("init_next_position", |s| {
+    script.function("init_next_position", &[], |s| {
         s.w("positions")
             .v(0)
             .w("vec_buf_get")
             .w("next_position")
             .w("vec_store");
     });
-    script.function("update_next_position", |s| {
+    script.function("update_next_position", &[], |s| {
         s.w("snake_head")
             .w("vec_x")
             .w("velocity")
@@ -291,7 +291,7 @@ pub fn snake(script: &mut Script) {
             .w("next_position")
             .w("vec_store");
     });
-    script.function("handle_coordinate_smaller_than_zero", |s| {
+    script.function("handle_coordinate_smaller_than_zero", &[], |s| {
         s.b(["coord", "limit"])
             .v(0)
             .w("coord")
@@ -303,7 +303,7 @@ pub fn snake(script: &mut Script) {
             .w("limit")
             .w("add");
     });
-    script.function("handle_coordinate_larger_than_limit", |s| {
+    script.function("handle_coordinate_larger_than_limit", &[], |s| {
         s.b(["coord", "limit"])
             .w("limit")
             .w("coord")
@@ -317,7 +317,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state - food
-    script.function("food_init", |s| {
+    script.function("food_init", &[], |s| {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
@@ -333,14 +333,14 @@ pub fn snake(script: &mut Script) {
             .w("food_position")
             .w("vec_store");
     });
-    script.function("food_eat", |s| {
+    script.function("food_eat", &[], |s| {
         s.w("_food_collides_with_snake")
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
             .w("food_init")
             .w("grow_snake");
     });
-    script.function("_food_collides_with_snake", |s| {
+    script.function("_food_collides_with_snake", &[], |s| {
         s.w("snake_head")
             .w("food_position")
             .w("vec_load")
@@ -358,7 +358,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state - snake
-    script.function("snake_init", |s| {
+    script.function("snake_init", &[], |s| {
         s.v(3)
             .w("snake_length")
             .w("store")
@@ -369,10 +369,10 @@ pub fn snake(script: &mut Script) {
             .v(15)
             .w("vec_buf_push");
     });
-    script.function("snake_head", |s| {
+    script.function("snake_head", &[], |s| {
         s.w("positions").w("vec_buf_last");
     });
-    script.function("update_positions", |s| {
+    script.function("update_positions", &[], |s| {
         s.w("update_next_position")
             .w("snake_head")
             .w("check_body_collision")
@@ -383,7 +383,7 @@ pub fn snake(script: &mut Script) {
             .w("vec_buf_push")
             .w("pop_positions");
     });
-    script.function("pop_positions", |s| {
+    script.function("pop_positions", &[], |s| {
         s.w("positions")
             .w("vec_buf_len")
             .w("snake_length")
@@ -394,7 +394,7 @@ pub fn snake(script: &mut Script) {
             .w("vec_buf_pop")
             .w("pop_positions");
     });
-    script.function("grow_snake", |s| {
+    script.function("grow_snake", &[], |s| {
         s.w("snake_length")
             .w("load")
             .v(1)
@@ -409,10 +409,10 @@ pub fn snake(script: &mut Script) {
             .w("snake_length")
             .w("store");
     });
-    script.function("check_body_collision", |s| {
+    script.function("check_body_collision", &[], |s| {
         s.v(0).w("check_body_collision_inner");
     });
-    script.function("check_body_collision_inner", |s| {
+    script.function("check_body_collision_inner", &[], |s| {
         s.b(["x", "y", "index"])
             .w("positions")
             .w("vec_buf_len")
@@ -456,7 +456,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Input
-    script.function("handle_input", |s| {
+    script.function("handle_input", &[], |s| {
         s.c("This function handles a single input event, so the absence of")
             .c("any recursive calls is by design. The next input event should")
             .c("only be applied, after the effects of the current one have")
@@ -519,39 +519,39 @@ pub fn snake(script: &mut Script) {
     });
 
     // Memory map
-    script.function("tile_field_size", |s| {
+    script.function("tile_field_size", &[], |s| {
         s.v(0);
     });
-    script.function("frame_count", |s| {
+    script.function("frame_count", &[], |s| {
         s.v(2);
     });
-    script.function("should_game_run", |s| {
+    script.function("should_game_run", &[], |s| {
         s.v(3);
     });
-    script.function("velocity", |s| {
+    script.function("velocity", &[], |s| {
         s.v(4);
     });
-    script.function("next_position", |s| {
+    script.function("next_position", &[], |s| {
         s.v(6);
     });
-    script.function("food_position", |s| {
+    script.function("food_position", &[], |s| {
         s.v(8);
     });
-    script.function("snake_length", |s| {
+    script.function("snake_length", &[], |s| {
         s.v(10);
     });
-    script.function("positions", |s| {
+    script.function("positions", &[], |s| {
         s.v(11);
     });
 
     // Utilities - Vector
-    script.function("vec_x", |s| {
+    script.function("vec_x", &[], |s| {
         s.b(["x", "_"]).w("x");
     });
-    script.function("vec_y", |s| {
+    script.function("vec_y", &[], |s| {
         s.b(["_", "y"]).w("y");
     });
-    script.function("vec_load", |s| {
+    script.function("vec_load", &[], |s| {
         s.b(["address"])
             .w("address")
             .w("load")
@@ -560,7 +560,7 @@ pub fn snake(script: &mut Script) {
             .w("add")
             .w("load");
     });
-    script.function("vec_store", |s| {
+    script.function("vec_store", &[], |s| {
         s.b(["x", "y", "address"])
             .w("x")
             .w("address")
@@ -571,13 +571,13 @@ pub fn snake(script: &mut Script) {
             .w("add")
             .w("store");
     });
-    script.function("vec_copy", |s| {
+    script.function("vec_copy", &[], |s| {
         s.b(["vx", "vy"]).w("vx").w("vy").w("vx").w("vy");
     });
-    script.function("vec_drop", |s| {
+    script.function("vec_drop", &[], |s| {
         s.w("drop").w("drop");
     });
-    script.function("vec_eq", |s| {
+    script.function("vec_eq", &[], |s| {
         s.b(["ax", "ay", "bx", "by"])
             .w("ax")
             .w("bx")
@@ -597,7 +597,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Utilities - Vector Buffer
-    script.function("vec_buf_init", |s| {
+    script.function("vec_buf_init", &[], |s| {
         s.b(["vec_buf"])
             .v(0)
             .w("vec_buf")
@@ -612,7 +612,7 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_capacity")
             .w("store");
     });
-    script.function("vec_buf_get", |s| {
+    script.function("vec_buf_get", &[], |s| {
         s.b(["vec_buf", "index"])
             .w("index")
             .v(2)
@@ -628,7 +628,7 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_address")
             .w("vec_load");
     });
-    script.function("vec_buf_last", |s| {
+    script.function("vec_buf_last", &[], |s| {
         s.b(["vec_buf"])
             .w("vec_buf")
             .w("vec_buf_len")
@@ -639,7 +639,7 @@ pub fn snake(script: &mut Script) {
             .w("index")
             .w("vec_buf_get");
     });
-    script.function("vec_buf_push", |s| {
+    script.function("vec_buf_push", &[], |s| {
         s.b(["vec_buf", "x", "y"])
             .w("vec_buf")
             .w("_vec_buf_next")
@@ -657,10 +657,10 @@ pub fn snake(script: &mut Script) {
             .w("next_addr")
             .w("_vec_buf_inc_index");
     });
-    script.function("vec_buf_pop", |s| {
+    script.function("vec_buf_pop", &[], |s| {
         s.w("_vec_buf_first").w("_vec_buf_inc_index");
     });
-    script.function("vec_buf_len", |s| {
+    script.function("vec_buf_len", &[], |s| {
         s.b(["vec_buf"])
             .w("vec_buf")
             .w("_vec_buf_first")
@@ -688,10 +688,10 @@ pub fn snake(script: &mut Script) {
             .w("load")
             .w("add");
     });
-    script.function("vec_buf_capacity", |s| {
+    script.function("vec_buf_capacity", &[], |s| {
         s.w("_vec_buf_capacity").w("load").v(2).w("div");
     });
-    script.function("_vec_buf_address", |s| {
+    script.function("_vec_buf_address", &[], |s| {
         s.c("Compute the memory address of a location within the vector")
             .c("buffer.")
             .c("")
@@ -715,7 +715,7 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_buffer")
             .w("add_wrap_unsigned");
     });
-    script.function("_vec_buf_inc_index", |s| {
+    script.function("_vec_buf_inc_index", &[], |s| {
         s.b(["index_addr"])
             .w("index_addr")
             .w("load")
@@ -724,21 +724,21 @@ pub fn snake(script: &mut Script) {
             .w("index_addr")
             .w("store");
     });
-    script.function("_vec_buf_first", |s| {
+    script.function("_vec_buf_first", &[], |s| {
         s.v(0).w("add");
     });
-    script.function("_vec_buf_next", |s| {
+    script.function("_vec_buf_next", &[], |s| {
         s.v(1).w("add");
     });
-    script.function("_vec_buf_capacity", |s| {
+    script.function("_vec_buf_capacity", &[], |s| {
         s.v(2).w("add");
     });
-    script.function("_vec_buf_buffer", |s| {
+    script.function("_vec_buf_buffer", &[], |s| {
         s.v(3).w("add");
     });
 
     // Utilities - Miscellaneous
-    script.function("negatable_random", |s| {
+    script.function("negatable_random", &[], |s| {
         s.c("Negating -128 would result in an integer overflow.")
             .w("read_random")
             .v(0)
@@ -750,7 +750,7 @@ pub fn snake(script: &mut Script) {
             .c("Looks like we ran into -128. Try again!")
             .w("negatable_random");
     });
-    script.function("abs", |s| {
+    script.function("abs", &[], |s| {
         s.b(["v"])
             .w("v")
             .w("v")

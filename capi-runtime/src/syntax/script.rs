@@ -6,7 +6,12 @@ pub struct Script {
 }
 
 impl Script {
-    pub fn function(&mut self, name: &str, f: impl FnOnce(&mut SyntaxBuilder)) {
+    pub fn function(
+        &mut self,
+        name: &str,
+        _args: &[&str],
+        f: impl FnOnce(&mut SyntaxBuilder),
+    ) {
         self.functions.define(name, f)
     }
 }
