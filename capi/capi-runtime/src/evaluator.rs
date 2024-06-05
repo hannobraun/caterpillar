@@ -88,8 +88,12 @@ impl Evaluator {
             &mut self.call_stack,
             &mut self.bindings,
         );
-        if let Err(effect) = evaluate_result {
-            return EvaluatorState::Effect { effect, address };
+        match evaluate_result {
+            Ok(Some(call_stack_update)) => match call_stack_update {},
+            Ok(None) => {}
+            Err(effect) => {
+                return EvaluatorState::Effect { effect, address };
+            }
         }
 
         EvaluatorState::Running {
