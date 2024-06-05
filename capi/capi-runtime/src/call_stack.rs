@@ -54,11 +54,15 @@ impl CallStack {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct StackFrame {
     pub function: Function,
+    pub bindings: Bindings,
 }
 
 impl From<Function> for StackFrame {
     fn from(function: Function) -> Self {
-        Self { function }
+        Self {
+            function,
+            bindings: Bindings::new(),
+        }
     }
 }
 

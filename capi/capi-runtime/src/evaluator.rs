@@ -14,7 +14,6 @@ pub struct Evaluator {
     code: Code,
     call_stack: CallStack,
     data_stack: DataStack,
-    bindings: Bindings,
 }
 
 impl Evaluator {
@@ -23,7 +22,6 @@ impl Evaluator {
             code,
             call_stack: CallStack::new(entry),
             data_stack: DataStack::default(),
-            bindings: Bindings::default(),
         }
     }
 
@@ -51,7 +49,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
-        let (frame, address) = loop {
+        let (mut frame, address) = loop {
             let Some(mut frame) = self.call_stack.pop() else {
                 return Ok(EvaluatorState::Finished);
             };
@@ -66,7 +64,7 @@ impl Evaluator {
             instruction,
             &self.code,
             &mut self.data_stack,
-            &mut self.bindings,
+            &mut frame.bindings,
         );
 
         // Don't put the stack frame back, if it is empty. This is essentially
