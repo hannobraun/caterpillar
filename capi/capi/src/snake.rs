@@ -479,7 +479,7 @@ pub fn snake(script: &mut Script) {
             .v(-1)
             .w("velocity")
             .w("vec_store")
-            .c("Now check if it actually was an Up event, and if so, return.")
+            .c("Now check if it actually was an `up` event, and if so, return.")
             .v(1)
             .w("sub")
             .v(0)
