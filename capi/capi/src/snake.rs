@@ -208,7 +208,7 @@ pub fn snake(script: &mut Script) {
             .w("snake_init")
             .w("init_velocity")
             .w("init_next_position")
-            .w("init_food");
+            .w("food_init");
     });
     script.function("update", |s| {
         s.c("The update logic does not run every frame.")
@@ -263,7 +263,7 @@ pub fn snake(script: &mut Script) {
     });
 
     // Game state - food
-    script.function("init_food", |s| {
+    script.function("food_init", |s| {
         s.w("negatable_random")
             .w("abs")
             .w("tile_field_size")
@@ -283,7 +283,7 @@ pub fn snake(script: &mut Script) {
         s.w("_food_collides_with_snake")
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
-            .w("init_food")
+            .w("food_init")
             .w("grow_snake");
     });
     script.function("_food_collides_with_snake", |s| {
