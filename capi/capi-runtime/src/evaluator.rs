@@ -80,8 +80,8 @@ impl Evaluator {
         //
         // I've decided not to address that, for the moment:
         //
-        // 1. That is a weird pattern anyway, and doesn't really make sense in
-        //    the language.
+        // 1. That is a weird pattern anyway, and doesn't really make sense to
+        //    write.
         // 2. Explicit return instructions are a stopgap anyway, and will go
         //    away once we have anonymous functions that we can use for more
         //    advanced control flow.
