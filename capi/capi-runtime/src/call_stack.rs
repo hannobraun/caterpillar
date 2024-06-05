@@ -1,4 +1,6 @@
-use crate::{runtime::Function, InstructionAddress};
+use std::collections::BTreeMap;
+
+use crate::{runtime::Function, InstructionAddress, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
@@ -59,6 +61,8 @@ impl From<Function> for StackFrame {
         Self { function }
     }
 }
+
+pub type Bindings = BTreeMap<String, Value>;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStackOverflow;

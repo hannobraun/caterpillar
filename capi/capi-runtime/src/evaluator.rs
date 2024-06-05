@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     builtins::BuiltinEffect,
-    call_stack::{CallStack, CallStackOverflow},
+    call_stack::{Bindings, CallStack, CallStackOverflow},
     data_stack::StackUnderflow,
     instructions::Instruction,
     runtime::Function,
@@ -16,7 +16,7 @@ pub struct Evaluator {
     code: Code,
     call_stack: CallStack,
     data_stack: DataStack,
-    bindings: BTreeMap<String, Value>,
+    bindings: Bindings,
 }
 
 impl Evaluator {
