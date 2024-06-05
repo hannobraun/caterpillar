@@ -224,7 +224,7 @@ pub fn snake(script: &mut Script) {
             .w("handle_input")
             .w("drop")
             .w("update_positions")
-            .w("eat_food");
+            .w("food_eat");
     });
 
     // Game state - should game run
@@ -279,7 +279,7 @@ pub fn snake(script: &mut Script) {
             .w("food_position")
             .w("vec_store");
     });
-    script.function("eat_food", |s| {
+    script.function("food_eat", |s| {
         s.w("_food_collides_with_snake")
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
