@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use crate::{
     builtins::BuiltinEffect,
     call_stack::{Bindings, CallStack, CallStackOverflow},
@@ -25,7 +23,7 @@ impl Evaluator {
             code,
             call_stack: CallStack::new(entry),
             data_stack: DataStack::default(),
-            bindings: BTreeMap::default(),
+            bindings: Bindings::default(),
         }
     }
 
