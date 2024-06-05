@@ -78,11 +78,13 @@ impl Evaluator {
         // an explicit return instruction. Those will pop *another* stack frame,
         // which is one too many.
         //
-        // I've decided not to address that, for the moment. First, that is a
-        // weird pattern anyway, and doesn't really make sense in the language.
-        // Second, explicit return instructions are a stopgap anyway, and will
-        // go away once we have anonymous functions that we can use for more
-        // advanced control flow.
+        // I've decided not to address that, for the moment:
+        //
+        // 1. That is a weird pattern anyway, and doesn't really make sense in
+        //    the language.
+        // 2. Explicit return instructions are a stopgap anyway, and will go
+        //    away once we have anonymous functions that we can use for more
+        //    advanced control flow.
         if !frame.function.is_empty() {
             self.call_stack.push(frame).expect(
                 "Just popped a stack frame; pushing one can't overflow",
