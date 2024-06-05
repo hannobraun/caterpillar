@@ -20,11 +20,6 @@ Caterpillar is still early-stage and experimental. It can hardly be called a
 programming language right now. Development is focused on creating a basic
 solution for one use case (game development) on one platform (browsers).
 
-Caterpillar has gone through [a series of prototypes](archive/), of varying
-levels of sophistication, each of which provided answers to different questions.
-The [current prototype](capi/) explores whether an early focus on tooling is a
-practical approach.
-
 You can keep up with the project by reading my [daily thoughts], which include
 development updates.
 
