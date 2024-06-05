@@ -193,7 +193,6 @@ fn evaluate_instruction(
         }
         Instruction::CallFunction { name } => {
             let function = code.functions.get(&name).cloned().unwrap();
-
             call_stack.push(function)?;
         }
         Instruction::Push { value } => data_stack.push(value),
