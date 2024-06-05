@@ -20,8 +20,8 @@ pub fn compile(script: Script, entry: &str) -> Program {
         source_map: &mut source_map,
     };
 
-    for Function { name, syntax, .. } in &script.functions.inner {
-        compiler.compile_function(name.clone(), syntax.clone());
+    for Function { name, args, syntax } in &script.functions.inner {
+        compiler.compile_function(name.clone(), args.clone(), syntax.clone());
     }
 
     let entry = code.functions.get(entry).cloned().unwrap();
@@ -35,9 +35,14 @@ struct Compiler<'r> {
 }
 
 impl Compiler<'_> {
-    fn compile_function(&mut self, name: String, syntax: Vec<Expression>) {
+    fn compile_function(
+        &mut self,
+        name: String,
+        args: Vec<String>,
+        syntax: Vec<Expression>,
+    ) {
         let mut bindings = BTreeSet::new();
-        let mut output = runtime::Function::new(Vec::new());
+        let mut output = runtime::Function::new(args);
 
         for expression in syntax {
             self.compile_expression(expression, &mut bindings, &mut output);
