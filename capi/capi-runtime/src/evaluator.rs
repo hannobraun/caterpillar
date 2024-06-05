@@ -70,8 +70,8 @@ impl Evaluator {
             &mut frame.bindings,
         );
 
-        // Don't put the stack frame back, if it is empty. This is essentially
-        // tail call optimization.
+        // Don't put the stack frame back, if it is empty. This is tail call
+        // optimization.
         //
         // This will lead to trouble, if the last instruction in the function
         // (the one whose address we just acquired, and are about to execute) is
