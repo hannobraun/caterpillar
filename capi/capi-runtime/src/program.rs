@@ -88,13 +88,6 @@ impl Program {
         let just_executed = match self.evaluator.step() {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
             Ok(EvaluatorState::Finished) => return ProgramState::Finished,
-            Ok(EvaluatorState::Effect(EvaluatorEffect { effect, address })) => {
-                self.effects.push_back(ProgramEffect {
-                    kind: ProgramEffectKind::Evaluator(effect),
-                    address,
-                });
-                address
-            }
             Err(EvaluatorEffect { effect, address }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),

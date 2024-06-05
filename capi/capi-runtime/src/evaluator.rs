@@ -92,10 +92,7 @@ impl Evaluator {
             Ok(Some(call_stack_update)) => match call_stack_update {},
             Ok(None) => {}
             Err(effect) => {
-                return Ok(EvaluatorState::Effect(EvaluatorEffect {
-                    effect,
-                    address,
-                }));
+                return Err(EvaluatorEffect { effect, address });
             }
         }
 
@@ -110,7 +107,6 @@ impl Evaluator {
 pub enum EvaluatorState {
     Running { just_executed: InstructionAddress },
     Finished,
-    Effect(EvaluatorEffect),
 }
 
 #[derive(Debug)]
