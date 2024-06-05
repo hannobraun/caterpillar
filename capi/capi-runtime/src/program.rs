@@ -86,9 +86,16 @@ impl Program {
 
         self.previous_data_stack = self.evaluator.data_stack().clone();
         let just_executed = match self.evaluator.step() {
-            EvaluatorState::Running { just_executed } => just_executed,
-            EvaluatorState::Finished => return ProgramState::Finished,
-            EvaluatorState::Effect(EvaluatorEffect { effect, address }) => {
+            Ok(EvaluatorState::Running { just_executed }) => just_executed,
+            Ok(EvaluatorState::Finished) => return ProgramState::Finished,
+            Ok(EvaluatorState::Effect(EvaluatorEffect { effect, address })) => {
+                self.effects.push_back(ProgramEffect {
+                    kind: ProgramEffectKind::Evaluator(effect),
+                    address,
+                });
+                address
+            }
+            Err(EvaluatorEffect { effect, address }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
                     address,

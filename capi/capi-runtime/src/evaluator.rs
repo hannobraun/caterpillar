@@ -50,10 +50,10 @@ impl Evaluator {
         }
     }
 
-    pub fn step(&mut self) -> EvaluatorState {
+    pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
         let address = loop {
             let Some(mut frame) = self.call_stack.pop() else {
-                return EvaluatorState::Finished;
+                return Ok(EvaluatorState::Finished);
             };
 
             if let Some(address) = frame.function.pop_front() {
@@ -92,16 +92,16 @@ impl Evaluator {
             Ok(Some(call_stack_update)) => match call_stack_update {},
             Ok(None) => {}
             Err(effect) => {
-                return EvaluatorState::Effect(EvaluatorEffect {
+                return Ok(EvaluatorState::Effect(EvaluatorEffect {
                     effect,
                     address,
-                });
+                }));
             }
         }
 
-        EvaluatorState::Running {
+        Ok(EvaluatorState::Running {
             just_executed: address,
-        }
+        })
     }
 }
 
