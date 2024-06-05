@@ -92,12 +92,13 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    self.call_stack.push(StackFrame::new(function)).map_err(
-                        |effect| EvaluatorEffect {
+                    let stack_frame = StackFrame::new(function);
+                    self.call_stack.push(stack_frame).map_err(|effect| {
+                        EvaluatorEffect {
                             effect: effect.into(),
                             address,
-                        },
-                    )?;
+                        }
+                    })?;
                 }
                 CallStackUpdate::Pop => {
                     self.call_stack.pop();
