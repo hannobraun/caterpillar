@@ -127,7 +127,10 @@ pub fn snake(script: &mut Script) {
 
     // Tile field size
     script.function("is_out_of_bounds", [], |s| {
-        s.c("Compare x coordinate against lower bound.")
+        s.b(["x", "y"])
+            .w("x")
+            .w("y")
+            .c("Compare x coordinate against lower bound.")
             .v(0)
             .v(2)
             .w("copy")
