@@ -136,7 +136,7 @@ fn evaluate_instruction(
     data_stack: &mut DataStack,
     call_stack: &mut CallStack,
     bindings: &mut Bindings,
-) -> Result<(), EvaluatorEffect> {
+) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {
         Instruction::BindingDefine { name } => {
             let value = data_stack.pop()?;
@@ -211,5 +211,7 @@ fn evaluate_instruction(
         }
     }
 
-    Ok(())
+    Ok(None)
 }
+
+enum CallStackUpdate {}
