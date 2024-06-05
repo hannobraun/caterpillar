@@ -24,7 +24,18 @@ list, which the next prototype can incorporate.
 
 ## Status
 
-I'm just getting started. Not much to see yet.
+This is finished, and can be considered a success! I've created a simple game, a
+variant of [snake](https://en.wikipedia.org/wiki/Snake_(video_game_genre)).
+
+The approach laid out here _mostly_ worked as intended. The debugger turned out
+practical and very helpful, but by itself, not sufficient to manage the language
+as envisioned. I ended up implementing function-scoped bindings (basically local
+variables), which wasn't much work.
+
+I'm going to build on this prototype, continuing with porting the existing game
+to the browser. Despite this, I've decided to treat that as a new prototype,
+archiving this one. I expect the coming work to remove and significantly change
+a lot of code, and I'd like to preserve this as-is.
 
 ## Approach
 
