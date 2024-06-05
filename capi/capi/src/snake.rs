@@ -259,7 +259,61 @@ pub fn snake(script: &mut Script) {
             .w("vec_y")
             .w("add")
             .w("next_position")
+            .w("vec_store")
+            .w("next_position")
+            .w("vec_load")
+            .w("is_out_of_bounds")
+            .w("return_if_zero")
+            .w("next_position")
+            .w("vec_load")
+            .b(["next_x", "next_y"])
+            .w("tile_field_size")
+            .w("vec_load")
+            .b(["limit_x", "limit_y"])
+            .w("next_x")
+            .w("limit_x")
+            .w("handle_coordinate_smaller_than_zero")
+            .b(["next_x"])
+            .w("next_y")
+            .w("limit_y")
+            .w("handle_coordinate_smaller_than_zero")
+            .b(["next_y"])
+            .w("next_x")
+            .w("limit_x")
+            .w("handle_coordinate_larger_than_limit")
+            .b(["next_x"])
+            .w("next_y")
+            .w("limit_y")
+            .w("handle_coordinate_larger_than_limit")
+            .b(["next_y"])
+            .w("next_x")
+            .w("next_y")
+            .w("next_position")
             .w("vec_store");
+    });
+    script.function("handle_coordinate_smaller_than_zero", |s| {
+        s.b(["coord", "limit"])
+            .v(0)
+            .w("coord")
+            .w("greater")
+            .b(["coord_smaller_than_zero"])
+            .w("coord")
+            .w("coord_smaller_than_zero")
+            .w("return_if_zero")
+            .w("limit")
+            .w("add");
+    });
+    script.function("handle_coordinate_larger_than_limit", |s| {
+        s.b(["coord", "limit"])
+            .w("limit")
+            .w("coord")
+            .w("greater")
+            .b(["limit_greater_than_coord"])
+            .w("coord")
+            .w("limit_greater_than_coord")
+            .w("return_if_non_zero")
+            .w("limit")
+            .w("sub");
     });
 
     // Game state - food
@@ -320,10 +374,6 @@ pub fn snake(script: &mut Script) {
     });
     script.function("update_positions", |s| {
         s.w("update_next_position")
-            .w("next_position")
-            .w("vec_load")
-            .w("is_out_of_bounds")
-            .w("return_if_non_zero")
             .w("snake_head")
             .w("check_body_collision")
             .w("return_if_non_zero")
