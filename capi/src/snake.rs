@@ -28,9 +28,8 @@ pub fn snake(script: &mut Script) {
     script.function("draw_snake", [], |s| {
         s.v(0).w("draw_snake_inner");
     });
-    script.function("draw_snake_inner", [], |s| {
-        s.b(["index"])
-            .w("positions")
+    script.function("draw_snake_inner", ["index"], |s| {
+        s.w("positions")
             .w("index")
             .w("vec_buf_get")
             .v(1)
@@ -52,15 +51,17 @@ pub fn snake(script: &mut Script) {
     });
 
     // Draw - write tiles
-    script.function("write_all_tiles", [], |s| {
-        s.b(["tile_value"])
-            .w("init_tile_index")
+    script.function("write_all_tiles", ["tile_value"], |s| {
+        s.w("init_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner")
             .w("vec_drop");
     });
-    script.function("write_all_tiles_inner", [], |s| {
-        s.b(["tile_x", "tile_y", "tile_value"])
+    script.function(
+        "write_all_tiles_inner",
+        ["tile_x", "tile_y", "tile_value"],
+        |s| {
+            s
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
@@ -77,15 +78,15 @@ pub fn snake(script: &mut Script) {
             .w("increment_tile_index")
             .w("tile_value")
             .w("write_all_tiles_inner");
-    });
+        },
+    );
 
     // Draw - write tiles - tile index
     script.function("init_tile_index", [], |s| {
         s.v(0).v(0);
     });
-    script.function("check_tile_index", [], |s| {
-        s.b(["tile_y"])
-            .w("tile_field_size")
+    script.function("check_tile_index", ["tile_y"], |s| {
+        s.w("tile_field_size")
             .w("vec_load")
             .w("vec_y")
             .w("tile_y")
@@ -93,9 +94,8 @@ pub fn snake(script: &mut Script) {
             .c("line of the tile field. Otherwise, leave non-zero value.")
             .w("sub");
     });
-    script.function("increment_tile_index", [], |s| {
-        s.b(["tile_x", "tile_y"])
-            .c("Increment the x-coordinate.")
+    script.function("increment_tile_index", ["tile_x", "tile_y"], |s| {
+        s.c("Increment the x-coordinate.")
             .w("tile_x")
             .v(1)
             .w("add")
@@ -126,9 +126,8 @@ pub fn snake(script: &mut Script) {
     });
 
     // Tile field size
-    script.function("is_out_of_bounds", [], |s| {
-        s.b(["x", "y"])
-            .w("x")
+    script.function("is_out_of_bounds", ["x", "y"], |s| {
+        s.w("x")
             .w("y")
             .c("Compare x coordinate against lower bound.")
             .v(0)
@@ -296,30 +295,36 @@ pub fn snake(script: &mut Script) {
             .w("next_position")
             .w("vec_store");
     });
-    script.function("handle_coordinate_smaller_than_zero", [], |s| {
-        s.b(["coord", "limit"])
-            .v(0)
-            .w("coord")
-            .w("greater")
-            .b(["coord_smaller_than_zero"])
-            .w("coord")
-            .w("coord_smaller_than_zero")
-            .w("return_if_zero")
-            .w("limit")
-            .w("add");
-    });
-    script.function("handle_coordinate_larger_than_limit", [], |s| {
-        s.b(["coord", "limit"])
-            .w("limit")
-            .w("coord")
-            .w("greater")
-            .b(["limit_greater_than_coord"])
-            .w("coord")
-            .w("limit_greater_than_coord")
-            .w("return_if_non_zero")
-            .w("limit")
-            .w("sub");
-    });
+    script.function(
+        "handle_coordinate_smaller_than_zero",
+        ["coord", "limit"],
+        |s| {
+            s.v(0)
+                .w("coord")
+                .w("greater")
+                .b(["coord_smaller_than_zero"])
+                .w("coord")
+                .w("coord_smaller_than_zero")
+                .w("return_if_zero")
+                .w("limit")
+                .w("add");
+        },
+    );
+    script.function(
+        "handle_coordinate_larger_than_limit",
+        ["coord", "limit"],
+        |s| {
+            s.w("limit")
+                .w("coord")
+                .w("greater")
+                .b(["limit_greater_than_coord"])
+                .w("coord")
+                .w("limit_greater_than_coord")
+                .w("return_if_non_zero")
+                .w("limit")
+                .w("sub");
+        },
+    );
 
     // Game state - food
     script.function("food_init", [], |s| {
@@ -417,9 +422,8 @@ pub fn snake(script: &mut Script) {
     script.function("check_body_collision", [], |s| {
         s.v(0).w("check_body_collision_inner");
     });
-    script.function("check_body_collision_inner", [], |s| {
-        s.b(["x", "y", "index"])
-            .w("positions")
+    script.function("check_body_collision_inner", ["x", "y", "index"], |s| {
+        s.w("positions")
             .w("vec_buf_len")
             .v(1)
             .w("sub")
@@ -550,24 +554,22 @@ pub fn snake(script: &mut Script) {
     });
 
     // Utilities - Vector
-    script.function("vec_x", [], |s| {
-        s.b(["x", "_"]).w("x");
+    script.function("vec_x", ["x", "_"], |s| {
+        s.w("x");
     });
-    script.function("vec_y", [], |s| {
-        s.b(["_", "y"]).w("y");
+    script.function("vec_y", ["_", "y"], |s| {
+        s.w("y");
     });
-    script.function("vec_load", [], |s| {
-        s.b(["address"])
-            .w("address")
+    script.function("vec_load", ["address"], |s| {
+        s.w("address")
             .w("load")
             .w("address")
             .v(1)
             .w("add")
             .w("load");
     });
-    script.function("vec_store", [], |s| {
-        s.b(["x", "y", "address"])
-            .w("x")
+    script.function("vec_store", ["x", "y", "address"], |s| {
+        s.w("x")
             .w("address")
             .w("store")
             .w("y")
@@ -576,15 +578,12 @@ pub fn snake(script: &mut Script) {
             .w("add")
             .w("store");
     });
-    script.function("vec_copy", [], |s| {
-        s.b(["vx", "vy"]).w("vx").w("vy").w("vx").w("vy");
+    script.function("vec_copy", ["vx", "vy"], |s| {
+        s.w("vx").w("vy").w("vx").w("vy");
     });
-    script.function("vec_drop", [], |s| {
-        s.b(["_", "_"]);
-    });
-    script.function("vec_eq", [], |s| {
-        s.b(["ax", "ay", "bx", "by"])
-            .w("ax")
+    script.function("vec_drop", ["_", "_"], |_| {});
+    script.function("vec_eq", ["ax", "ay", "bx", "by"], |s| {
+        s.w("ax")
             .w("bx")
             .w("eq")
             .v(0)
@@ -602,9 +601,8 @@ pub fn snake(script: &mut Script) {
     });
 
     // Utilities - Vector Buffer
-    script.function("vec_buf_init", [], |s| {
-        s.b(["vec_buf"])
-            .v(0)
+    script.function("vec_buf_init", ["vec_buf"], |s| {
+        s.v(0)
             .w("vec_buf")
             .w("_vec_buf_first")
             .w("store")
@@ -617,9 +615,8 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_capacity")
             .w("store");
     });
-    script.function("vec_buf_get", [], |s| {
-        s.b(["vec_buf", "index"])
-            .w("index")
+    script.function("vec_buf_get", ["vec_buf", "index"], |s| {
+        s.w("index")
             .v(2)
             .w("mul")
             .b(["offset"])
@@ -633,9 +630,8 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_address")
             .w("vec_load");
     });
-    script.function("vec_buf_last", [], |s| {
-        s.b(["vec_buf"])
-            .w("vec_buf")
+    script.function("vec_buf_last", ["vec_buf"], |s| {
+        s.w("vec_buf")
             .w("vec_buf_len")
             .v(1)
             .w("sub")
@@ -644,9 +640,8 @@ pub fn snake(script: &mut Script) {
             .w("index")
             .w("vec_buf_get");
     });
-    script.function("vec_buf_push", [], |s| {
-        s.b(["vec_buf", "x", "y"])
-            .w("vec_buf")
+    script.function("vec_buf_push", ["vec_buf", "x", "y"], |s| {
+        s.w("vec_buf")
             .w("_vec_buf_next")
             .b(["next_addr"])
             .w("vec_buf")
@@ -662,15 +657,11 @@ pub fn snake(script: &mut Script) {
             .w("next_addr")
             .w("_vec_buf_inc_index");
     });
-    script.function("vec_buf_pop", [], |s| {
-        s.b(["vec_buf"])
-            .w("vec_buf")
-            .w("_vec_buf_first")
-            .w("_vec_buf_inc_index");
+    script.function("vec_buf_pop", ["vec_buf"], |s| {
+        s.w("vec_buf").w("_vec_buf_first").w("_vec_buf_inc_index");
     });
-    script.function("vec_buf_len", [], |s| {
-        s.b(["vec_buf"])
-            .w("vec_buf")
+    script.function("vec_buf_len", ["vec_buf"], |s| {
+        s.w("vec_buf")
             .w("_vec_buf_first")
             .w("load")
             .b(["first"])
@@ -696,15 +687,14 @@ pub fn snake(script: &mut Script) {
             .w("load")
             .w("add");
     });
-    script.function("vec_buf_capacity", [], |s| {
-        s.b(["vec_buf"])
-            .w("vec_buf")
+    script.function("vec_buf_capacity", ["vec_buf"], |s| {
+        s.w("vec_buf")
             .w("_vec_buf_capacity")
             .w("load")
             .v(2)
             .w("div");
     });
-    script.function("_vec_buf_address", [], |s| {
+    script.function("_vec_buf_address", ["vec_buf", "base", "offset"], |s| {
         s.c("Compute the memory address of a location within the vector")
             .c("buffer.")
             .c("")
@@ -716,7 +706,6 @@ pub fn snake(script: &mut Script) {
             .c("- `offset`, which is the offset of the desired address from")
             .c("  `base`.")
             .c("that it can ")
-            .b(["vec_buf", "base", "offset"])
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
@@ -728,26 +717,25 @@ pub fn snake(script: &mut Script) {
             .w("_vec_buf_buffer")
             .w("add_wrap_unsigned");
     });
-    script.function("_vec_buf_inc_index", [], |s| {
-        s.b(["index_addr"])
-            .w("index_addr")
+    script.function("_vec_buf_inc_index", ["index_addr"], |s| {
+        s.w("index_addr")
             .w("load")
             .v(2)
             .w("add_wrap_unsigned")
             .w("index_addr")
             .w("store");
     });
-    script.function("_vec_buf_first", [], |s| {
-        s.b(["vec_buf"]).w("vec_buf").v(0).w("add");
+    script.function("_vec_buf_first", ["vec_buf"], |s| {
+        s.w("vec_buf").v(0).w("add");
     });
-    script.function("_vec_buf_next", [], |s| {
-        s.b(["vec_buf"]).w("vec_buf").v(1).w("add");
+    script.function("_vec_buf_next", ["vec_buf"], |s| {
+        s.w("vec_buf").v(1).w("add");
     });
-    script.function("_vec_buf_capacity", [], |s| {
-        s.b(["vec_buf"]).w("vec_buf").v(2).w("add");
+    script.function("_vec_buf_capacity", ["vec_buf"], |s| {
+        s.w("vec_buf").v(2).w("add");
     });
-    script.function("_vec_buf_buffer", [], |s| {
-        s.b(["vec_buf"]).w("vec_buf").v(3).w("add");
+    script.function("_vec_buf_buffer", ["vec_buf"], |s| {
+        s.w("vec_buf").v(3).w("add");
     });
 
     // Utilities - Miscellaneous
@@ -763,9 +751,8 @@ pub fn snake(script: &mut Script) {
             .c("Looks like we ran into -128. Try again!")
             .w("negatable_random");
     });
-    script.function("abs", [], |s| {
-        s.b(["v"])
-            .w("v")
+    script.function("abs", ["v"], |s| {
+        s.w("v")
             .w("v")
             .v(-1)
             .w("greater")
