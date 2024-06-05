@@ -290,7 +290,17 @@ pub fn snake(script: &mut Script) {
         s.w("snake_head")
             .w("food_position")
             .w("vec_load")
-            .w("vec_eq");
+            .w("vec_eq")
+            .b(["head_collides"])
+            .w("food_position")
+            .w("vec_load")
+            .w("check_body_collision")
+            .b(["body_collides"])
+            .w("head_collides")
+            .w("body_collides")
+            .w("add")
+            .v(0)
+            .w("greater");
     });
 
     // Game state - snake
