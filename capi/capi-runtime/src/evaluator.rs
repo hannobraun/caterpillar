@@ -81,13 +81,14 @@ impl Evaluator {
         };
 
         let instruction = self.code.instructions.get(&address).clone();
-        if let Err(effect) = evaluate_instruction(
+        let evaluate_result = evaluate_instruction(
             instruction,
             &self.code,
             &mut self.data_stack,
             &mut self.call_stack,
             &mut self.bindings,
-        ) {
+        );
+        if let Err(effect) = evaluate_result {
             return EvaluatorState::Effect { effect, address };
         }
 
