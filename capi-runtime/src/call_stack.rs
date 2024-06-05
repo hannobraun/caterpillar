@@ -11,7 +11,7 @@ impl CallStack {
     pub fn new(next: Function) -> Self {
         let mut self_ = Self { frames: Vec::new() };
         self_
-            .push(next)
+            .push(StackFrame::new(next))
             .expect("Expected recursion limit to be more than zero.");
         self_
     }
@@ -57,8 +57,8 @@ pub struct StackFrame {
     pub bindings: Bindings,
 }
 
-impl From<Function> for StackFrame {
-    fn from(function: Function) -> Self {
+impl StackFrame {
+    pub fn new(function: Function) -> Self {
         Self {
             function,
             bindings: Bindings::new(),

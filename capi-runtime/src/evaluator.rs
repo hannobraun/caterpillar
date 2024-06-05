@@ -1,6 +1,6 @@
 use crate::{
     builtins::BuiltinEffect,
-    call_stack::{Bindings, CallStack, CallStackOverflow},
+    call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
     data_stack::StackUnderflow,
     instructions::Instruction,
     runtime::Function,
@@ -92,12 +92,12 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    self.call_stack.push(function).map_err(|effect| {
-                        EvaluatorEffect {
+                    self.call_stack.push(StackFrame::new(function)).map_err(
+                        |effect| EvaluatorEffect {
                             effect: effect.into(),
                             address,
-                        }
-                    })?;
+                        },
+                    )?;
                 }
                 CallStackUpdate::Pop => {
                     self.call_stack.pop();
