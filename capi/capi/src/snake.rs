@@ -280,14 +280,17 @@ pub fn snake(script: &mut Script) {
             .w("vec_store");
     });
     script.function("eat_food", |s| {
-        s.w("snake_head")
-            .w("food_position")
-            .w("vec_load")
-            .w("vec_eq")
+        s.w("_food_collides_with_snake")
             .w("return_if_zero")
             .c("The snake's head and the food are at the same position.")
             .w("init_food")
             .w("grow_snake");
+    });
+    script.function("_food_collides_with_snake", |s| {
+        s.w("snake_head")
+            .w("food_position")
+            .w("vec_load")
+            .w("vec_eq");
     });
 
     // Game state - snake
