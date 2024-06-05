@@ -1,5 +1,5 @@
 [build]
-target = "capi/capi-debug/index.html"
+target = "capi-debug/index.html"
 
 [[proxy]]
 rewrite = "/code"

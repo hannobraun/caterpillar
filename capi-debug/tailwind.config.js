@@ -1,5 +1,5 @@
 module.exports = {
     content: [
-        "./capi/capi-debug/src/**/*.rs",
+        "./capi-debug/src/**/*.rs",
     ],
 };
