@@ -26,6 +26,7 @@ impl Functions {
         self.names.insert(name.to_string());
         self.inner.push(Function {
             name: name.to_string(),
+            args: Vec::new(),
             syntax,
         });
     }
@@ -40,5 +41,6 @@ impl Functions {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
+    pub args: Vec<String>,
     pub syntax: Vec<Expression>,
 }
