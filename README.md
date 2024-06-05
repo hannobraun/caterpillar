@@ -60,6 +60,26 @@ Further information in daily thoughts
 [2024-05-10](https://capi.hannobraun.com/daily/2024-05-10), and
 [2024-05-11](https://capi.hannobraun.com/daily/2024-05-11).
 
+### No commitment to backwards compatibility
+
+I'm not targeting a 1.0 release after which the language is expected to have few
+or no breaking changes. Right now, everything is early-stage and experimental
+anyway. But even long-term, I don't want to commit to backwards compatibility.
+
+As the language matures, the focus will be on making any given upgrade easy. But
+each release might introduce changes that require updates to Caterpillar code.
+Where possible, users will be given ample time to make those changes, or they
+will be automated outright.
+
+See the following daily thoughts for further information:
+[2024-05-28](https://capi.hannobraun.com/daily/2024-05-28),
+[2024-05-29](https://capi.hannobraun.com/daily/2024-05-29),
+[2024-05-31](https://capi.hannobraun.com/daily/2024-05-31),
+[2024-06-01](https://capi.hannobraun.com/daily/2024-06-01),
+[2024-06-02](https://capi.hannobraun.com/daily/2024-06-02),
+[2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
+[2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
+
 ## Acknowledgements
 
 I'd like to thank [Martin Dederer](https://github.com/martindederer) for
