@@ -49,7 +49,7 @@ type of operator. I believe postfix operators are the best option under that
 constraint, due to their combination of simplicity, conciseness, and natural
 support for chaining operations. That comes at the cost of familiarity.
 
-Further information in daily thoughts
+See the following daily thoughts for further information:
 [2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
 [2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
 [2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
