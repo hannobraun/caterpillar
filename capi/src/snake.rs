@@ -60,11 +60,11 @@ pub fn snake(script: &mut Script) {
             .w("vec_drop");
     });
     script.function("write_all_tiles_inner", [], |s| {
-        s.b(["tile_index", "tile_value"])
+        s.b(["tile_y", "tile_value"])
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
-            .w("tile_index")
+            .w("tile_y")
             .v(0)
             .w("copy")
             .w("check_tile_index")
