@@ -10,7 +10,7 @@ use crate::{
 use super::{code::Code, syntax::ExpressionKind};
 
 pub fn compile(script: Script, entry: &str) -> Program {
-    let mut code = Code::new();
+    let mut code = Code::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {

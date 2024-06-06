@@ -9,9 +9,3 @@ pub struct Code {
     pub instructions: Instructions,
     pub functions: BTreeMap<String, runtime::Function>,
 }
-
-impl Code {
-    pub fn new() -> Self {
-        Self::default()
-    }
-}
