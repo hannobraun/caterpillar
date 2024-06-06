@@ -3,7 +3,7 @@ use tokio::sync::watch;
 use crate::Program;
 
 pub fn updates(program: Program) -> (UpdatesTx, UpdatesRx) {
-    let (tx, rx) = tokio::sync::watch::channel(program);
+    let (tx, rx) = watch::channel(program);
 
     let tx = UpdatesTx {
         inner: tx,
