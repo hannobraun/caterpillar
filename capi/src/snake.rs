@@ -127,8 +127,7 @@ pub fn snake(script: &mut Script) {
 
     // Tile field size
     script.function("is_out_of_bounds", ["x", "y"], |s| {
-        s.w("y")
-            .c("Compare x coordinate against lower bound.")
+        s.c("Compare x coordinate against lower bound.")
             .v(0)
             .w("x")
             .w("greater")
@@ -157,6 +156,7 @@ pub fn snake(script: &mut Script) {
             .w("return_if_non_zero")
             .w("drop")
             .c("Compare y coordinate against upper bound")
+            .w("y")
             .w("tile_field_size")
             .w("vec_load")
             .w("vec_y")
