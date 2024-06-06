@@ -15,6 +15,7 @@ members = [
 
     "tools/builder",
     "tools/daily",
+    "tools/website",
 ]
 default-members = ["tools/builder"]
 
