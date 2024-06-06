@@ -16,7 +16,7 @@ mod source_map;
 pub use self::{
     builtins::BuiltinEffect,
     compiler::compile,
-    data_stack::{DataStack, Value},
+    data_stack::{DataStack, StackUnderflow, Value},
     evaluator::{Evaluator, EvaluatorEffectKind},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},

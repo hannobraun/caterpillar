@@ -1,6 +1,6 @@
 use std::num::TryFromIntError;
 
-use crate::{data_stack::StackUnderflow, Value};
+use crate::{StackUnderflow, Value};
 
 use super::DataStack;
 

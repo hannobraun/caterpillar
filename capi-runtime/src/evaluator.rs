@@ -1,10 +1,9 @@
 use crate::{
     builtins::BuiltinEffect,
     call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
-    data_stack::StackUnderflow,
     instructions::Instruction,
     runtime::Function,
-    InstructionAddress, Value,
+    InstructionAddress, StackUnderflow, Value,
 };
 
 use super::{builtins, code::Code, DataStack};
