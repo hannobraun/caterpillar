@@ -5,7 +5,7 @@ use crate::{
 };
 
 pub struct Expression {
-    pub address: Option<runtime::InstructionAddress>,
+    pub location: Option<runtime::InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
@@ -45,7 +45,7 @@ impl Expression {
             .unwrap_or(false);
 
         Self {
-            address,
+            location: address,
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,

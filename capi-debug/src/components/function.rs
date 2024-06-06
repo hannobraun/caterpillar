@@ -78,7 +78,7 @@ pub fn Expression(
         }
 
         let data_location = debugger_expression
-            .address
+            .location
             .map(|address| ron::to_string(&address).unwrap());
 
         let error = debugger_expression.effect.and_then(|effect| {
