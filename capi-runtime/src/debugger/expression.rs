@@ -1,11 +1,11 @@
 use crate::{
-    runtime::InstructionAddress,
+    runtime,
     syntax::{self, ExpressionKind},
     Program, ProgramEffect,
 };
 
 pub struct Expression {
-    pub address: Option<InstructionAddress>,
+    pub address: Option<runtime::InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
