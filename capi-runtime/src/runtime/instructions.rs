@@ -53,13 +53,13 @@ type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
 pub struct InstructionAddress(u32);
 
 impl InstructionAddress {
-    fn increment(&mut self) {
-        self.0 += 1;
-    }
-
     pub fn next(mut self) -> Self {
         self.increment();
         self
+    }
+
+    fn increment(&mut self) {
+        self.0 += 1;
     }
 
     fn to_usize(self) -> usize {
