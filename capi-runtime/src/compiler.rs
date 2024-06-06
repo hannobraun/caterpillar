@@ -93,7 +93,6 @@ impl Compiler<'_> {
         syntax_location: syntax::Location,
         output: &mut runtime::Function,
     ) {
-        self.code.instructions.push(instruction.clone());
         let index = output.instructions.push(instruction);
 
         let runtime_location = runtime::Location {
