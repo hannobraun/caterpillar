@@ -1,11 +1,11 @@
 use std::collections::VecDeque;
 
-use super::InstructionAddress;
+use super::Location;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub arguments: Vec<String>,
-    pub instructions: VecDeque<InstructionAddress>,
+    pub instructions: VecDeque<Location>,
 }
 
 impl Function {

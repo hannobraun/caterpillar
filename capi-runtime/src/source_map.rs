@@ -6,14 +6,14 @@ use crate::{runtime, syntax};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    runtime_to_syntax: BTreeMap<runtime::InstructionAddress, syntax::Location>,
-    syntax_to_runtime: BTreeMap<syntax::Location, runtime::InstructionAddress>,
+    runtime_to_syntax: BTreeMap<runtime::Location, syntax::Location>,
+    syntax_to_runtime: BTreeMap<syntax::Location, runtime::Location>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        runtime: runtime::InstructionAddress,
+        runtime: runtime::Location,
         syntax: syntax::Location,
     ) {
         self.runtime_to_syntax.insert(runtime, syntax.clone());
@@ -22,7 +22,7 @@ impl SourceMap {
 
     pub fn runtime_to_syntax(
         &self,
-        runtime: &runtime::InstructionAddress,
+        runtime: &runtime::Location,
     ) -> syntax::Location {
         self.runtime_to_syntax
             .get(runtime)
@@ -33,7 +33,7 @@ impl SourceMap {
     pub fn syntax_to_runtime(
         &self,
         syntax: &syntax::Location,
-    ) -> runtime::InstructionAddress {
+    ) -> runtime::Location {
         self.syntax_to_runtime
             .get(syntax)
             .cloned()

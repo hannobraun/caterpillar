@@ -2,8 +2,7 @@ use crate::code::Code;
 
 use super::{
     builtins, Bindings, BuiltinEffect, CallStack, CallStackOverflow, DataStack,
-    Function, Instruction, InstructionAddress, StackFrame, StackUnderflow,
-    Value,
+    Function, Instruction, Location, StackFrame, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -20,7 +19,7 @@ impl Evaluator {
         }
     }
 
-    pub fn next_instruction(&self) -> InstructionAddress {
+    pub fn next_instruction(&self) -> Location {
         self.call_stack.next().unwrap()
     }
 
@@ -155,14 +154,14 @@ impl Evaluator {
 #[derive(Debug)]
 #[must_use]
 pub enum EvaluatorState {
-    Running { just_executed: InstructionAddress },
+    Running { just_executed: Location },
     Finished,
 }
 
 #[derive(Debug)]
 pub struct EvaluatorEffect {
     pub effect: EvaluatorEffectKind,
-    pub location: InstructionAddress,
+    pub location: Location,
 }
 
 #[derive(

@@ -10,17 +10,17 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn next_location(&self) -> InstructionAddress {
-        InstructionAddress(self.inner.len().try_into().unwrap())
+    pub fn next_location(&self) -> Location {
+        Location(self.inner.len().try_into().unwrap())
     }
 
-    pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
+    pub fn push(&mut self, instruction: Instruction) -> Location {
         let location = self.next_location();
         self.inner.push((location, instruction));
         location
     }
 
-    pub fn get(&self, location: &InstructionAddress) -> &Instruction {
+    pub fn get(&self, location: &Location) -> &Instruction {
         let (stored_location, instruction) = &self.inner[location.to_usize()];
         assert_eq!(location, stored_location);
         instruction
@@ -36,7 +36,7 @@ impl<'r> IntoIterator for &'r Instructions {
     }
 }
 
-type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
+type InstructionsInner = Vec<(Location, Instruction)>;
 
 #[derive(
     Copy,
@@ -50,9 +50,9 @@ type InstructionsInner = Vec<(InstructionAddress, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionAddress(u32);
+pub struct Location(u32);
 
-impl InstructionAddress {
+impl Location {
     pub fn next(mut self) -> Self {
         self.increment();
         self
@@ -67,7 +67,7 @@ impl InstructionAddress {
     }
 }
 
-impl fmt::Display for InstructionAddress {
+impl fmt::Display for Location {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.0.fmt(f)
     }

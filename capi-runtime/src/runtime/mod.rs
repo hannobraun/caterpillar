@@ -14,5 +14,5 @@ pub use self::{
         Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState,
     },
     function::Function,
-    instructions::{Instruction, InstructionAddress, Instructions},
+    instructions::{Instruction, Location, Instructions},
 };

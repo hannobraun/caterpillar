@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{DataStack, Function, InstructionAddress, Value};
+use super::{DataStack, Function, Location, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
@@ -16,7 +16,7 @@ impl CallStack {
         self_
     }
 
-    pub fn next(&self) -> Option<InstructionAddress> {
+    pub fn next(&self) -> Option<Location> {
         self.frames
             .last()
             .and_then(|frame| frame.function.instructions.front().copied())
@@ -30,7 +30,7 @@ impl CallStack {
         self.frames.last_mut()
     }
 
-    pub fn contains(&self, location: InstructionAddress) -> bool {
+    pub fn contains(&self, location: Location) -> bool {
         self.frames.iter().any(|frame| {
             frame.function.instructions.front() == Some(&location.next())
         })
@@ -52,7 +52,7 @@ impl CallStack {
         self.frames.pop()
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &InstructionAddress> {
+    pub fn iter(&self) -> impl Iterator<Item = &Location> {
         self.frames
             .iter()
             .filter_map(|frame| frame.function.instructions.front())

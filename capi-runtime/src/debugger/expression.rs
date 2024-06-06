@@ -5,7 +5,7 @@ use crate::{
 };
 
 pub struct Expression {
-    pub location: runtime::InstructionAddress,
+    pub location: runtime::Location,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,

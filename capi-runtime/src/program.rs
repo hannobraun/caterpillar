@@ -131,7 +131,7 @@ impl ProgramState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProgramEffect {
     pub kind: ProgramEffectKind,
-    pub location: runtime::InstructionAddress,
+    pub location: runtime::Location,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
