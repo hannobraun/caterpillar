@@ -198,7 +198,7 @@ fn evaluate_instruction(
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
-        Instruction::BindingDefine { names } => {
+        Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
                 let value = data_stack.pop()?;
                 bindings.insert(name, value);
