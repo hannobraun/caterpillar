@@ -14,7 +14,7 @@ use crate::{
 pub fn runner(
     program: Program,
     updates: UpdatesTx,
-) -> (EventsTx, RunnerThread) {
+) -> (EventsTx, RunnerHandle) {
     let (events_tx, events_rx) = mpsc::unbounded_channel();
     let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
@@ -27,7 +27,7 @@ pub fn runner(
     thread::spawn(move || {
         runner.start();
     });
-    let runner = RunnerThread {
+    let runner = RunnerHandle {
         effects: effects_rx,
     };
 
@@ -37,11 +37,11 @@ pub fn runner(
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
-pub struct RunnerThread {
+pub struct RunnerHandle {
     effects: EffectsRx,
 }
 
-impl RunnerThread {
+impl RunnerHandle {
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
         iter::from_fn(|| self.effects.try_recv().ok())
     }

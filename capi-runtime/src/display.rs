@@ -11,10 +11,10 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    runner::RunnerThread,
+    runner::RunnerHandle,
 };
 
-pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
+pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
     let mut state = State {
@@ -31,7 +31,7 @@ pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
 }
 
 struct State {
-    runner: RunnerThread,
+    runner: RunnerHandle,
     mem: [u8; MEM_SIZE],
     window: Option<Window>,
     pixels: Option<Pixels>,
