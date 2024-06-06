@@ -33,7 +33,10 @@ impl SourceMap {
     pub fn syntax_to_runtime(
         &self,
         syntax: &syntax::Location,
-    ) -> Option<runtime::InstructionAddress> {
-        self.syntax_to_runtime.get(syntax).cloned()
+    ) -> runtime::InstructionAddress {
+        self.syntax_to_runtime
+            .get(syntax)
+            .cloned()
+            .expect("Expect every syntax location to map to a runtime location")
     }
 }

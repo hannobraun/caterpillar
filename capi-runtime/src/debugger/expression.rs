@@ -17,11 +17,8 @@ impl Expression {
         let location =
             program.source_map.syntax_to_runtime(&expression.location);
 
-        let has_durable_breakpoint = if let Some(location) = location {
-            program.breakpoints.durable_breakpoint_at(&location)
-        } else {
-            false
-        };
+        let has_durable_breakpoint =
+            program.breakpoints.durable_breakpoint_at(&location);
 
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
@@ -37,12 +34,11 @@ impl Expression {
             }
         });
 
-        let is_on_call_stack = location
-            .map(|location| program.evaluator.call_stack().contains(location))
-            .unwrap_or(false);
+        let is_on_call_stack =
+            program.evaluator.call_stack().contains(location);
 
         Self {
-            location,
+            location: Some(location),
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,
