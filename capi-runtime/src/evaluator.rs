@@ -199,8 +199,10 @@ fn evaluate_instruction(
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
         Instruction::BindingDefine { name } => {
-            let value = data_stack.pop()?;
-            bindings.insert(name, value);
+            for name in name.into_iter().rev() {
+                let value = data_stack.pop()?;
+                bindings.insert(name, value);
+            }
         }
         Instruction::BindingEvaluate { name } => {
             let value = bindings.get(&name).copied().expect(

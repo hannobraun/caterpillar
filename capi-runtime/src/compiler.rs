@@ -64,13 +64,13 @@ impl Compiler<'_> {
                     // that bindings can overwrite previously defined bindings.
                     // This is undesirable, but it'll do for now.
                     bindings.insert(name.clone());
-
-                    self.generate(
-                        Instruction::BindingDefine { name },
-                        expression.location.clone(),
-                        output,
-                    );
                 }
+
+                self.generate(
+                    Instruction::BindingDefine { name: names },
+                    expression.location.clone(),
+                    output,
+                );
             }
             ExpressionKind::Comment { .. } => {}
             ExpressionKind::Value(value) => {
