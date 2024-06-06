@@ -3,7 +3,6 @@ pub mod runtime;
 pub mod syntax;
 
 mod breakpoints;
-mod call_stack;
 mod code;
 mod compiler;
 mod evaluator;

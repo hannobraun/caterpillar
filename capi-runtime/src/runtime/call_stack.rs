@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::runtime::{DataStack, Function, InstructionAddress, Value};
+use super::{DataStack, Function, InstructionAddress, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct CallStack {
