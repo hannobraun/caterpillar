@@ -99,27 +99,27 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 
     let mut signals = BTreeMap::new();
 
-    let mut process = Runtime::new([]);
+    let mut runtime = Runtime::new([]);
 
-    while process.state().is_running() {
-        process.evaluate_next_instruction(&instructions);
+    while runtime.state().is_running() {
+        runtime.evaluate_next_instruction(&instructions);
 
-        match process.effects_mut().handle_first() {
+        match runtime.effects_mut().handle_first() {
             Some(Effect::Host) => {
-                let effect = process.stack_mut().pop_operand().unwrap();
+                let effect = runtime.stack_mut().pop_operand().unwrap();
                 assert_eq!(effect.to_u32(), 0);
 
-                let channel = process.stack_mut().pop_operand().unwrap();
+                let channel = runtime.stack_mut().pop_operand().unwrap();
                 let channel: u32 = u32::from_le_bytes(channel.0);
 
                 *signals.entry(channel).or_default() += 1;
 
-                process.ignore_next_instruction();
+                runtime.ignore_next_instruction();
             }
             Some(effect) => {
                 panic!(
                     "Unexpected effect: {effect}\n\
-                    Process: {process:#?}\n\
+                    Process: {runtime:#?}\n\
                     Instructions: {instructions:#?}",
                 );
             }
