@@ -12,7 +12,7 @@
 
 use std::collections::BTreeMap;
 
-use capi_runtime::{Effect, Process};
+use capi_runtime::{Effect, Runtime};
 
 use crate::{compile, host::Host};
 
@@ -99,7 +99,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
 
     let mut signals = BTreeMap::new();
 
-    let mut process = Process::new([]);
+    let mut process = Runtime::new([]);
 
     while process.state().is_running() {
         process.evaluate_next_instruction(&instructions);

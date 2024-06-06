@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_runtime::{Effect, Instructions, Process, Value};
+use capi_runtime::{Effect, Instructions, Runtime, Value};
 
 use crate::{
     command::Command,
@@ -11,7 +11,7 @@ use crate::{
 
 #[derive(Debug)]
 pub struct GameEngine {
-    pub process: Process,
+    pub process: Runtime,
 
     arguments: [Value; 2],
     last_frame_start_s: Option<f64>,
@@ -26,7 +26,7 @@ impl GameEngine {
         let arguments = [Value::from(TILES_PER_AXIS); 2];
 
         Self {
-            process: Process::new(arguments),
+            process: Runtime::new(arguments),
             arguments,
             last_frame_start_s: None,
             instructions: None,

@@ -12,7 +12,7 @@ pub use self::{
     function::{Branch, Function, Pattern},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,
-    process::{Process, ProcessState},
+    process::{ProcessState, Runtime},
     stack::Stack,
     value::Value,
 };

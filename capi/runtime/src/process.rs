@@ -3,12 +3,12 @@ use crate::{evaluator::Evaluator, Effects, Instructions, Stack, Value};
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct Process {
+pub struct Runtime {
     effects: Effects,
     evaluator: Evaluator,
 }
 
-impl Process {
+impl Runtime {
     pub fn new(arguments: impl IntoIterator<Item = Value>) -> Self {
         let mut self_ = Self::default();
         self_.reset(arguments);

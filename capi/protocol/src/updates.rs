@@ -1,16 +1,16 @@
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
-use capi_runtime::{Instructions, Process};
+use capi_runtime::{Instructions, Runtime};
 
 #[derive(Debug, Default)]
 pub struct Updates {
     latest_memory: Option<Memory>,
-    process_at_client: Option<Process>,
+    process_at_client: Option<Runtime>,
     queue: Vec<UpdateFromRuntime>,
 }
 
 impl Updates {
-    pub fn queue_updates(&mut self, process: &Process, memory: &Memory) {
+    pub fn queue_updates(&mut self, process: &Runtime, memory: &Memory) {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
@@ -29,7 +29,7 @@ impl Updates {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Process) -> bool {
+    fn update_is_necessary(&self, process: &Runtime) -> bool {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
@@ -51,7 +51,7 @@ impl Updates {
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum UpdateFromRuntime {
-    Process(Process),
+    Process(Runtime),
     Memory { memory: Memory },
 }
 
