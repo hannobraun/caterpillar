@@ -11,7 +11,9 @@ pub struct Instructions {
 
 impl Instructions {
     pub fn next_location(&self) -> Location {
-        Location(self.inner.len().try_into().unwrap())
+        Location {
+            index: self.inner.len().try_into().unwrap(),
+        }
     }
 
     pub fn push(&mut self, instruction: Instruction) -> Location {
@@ -50,7 +52,9 @@ type InstructionsInner = Vec<(Location, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct Location(u32);
+pub struct Location {
+    index: u32,
+}
 
 impl Location {
     pub fn next(mut self) -> Self {
@@ -59,17 +63,17 @@ impl Location {
     }
 
     fn increment(&mut self) {
-        self.0 += 1;
+        self.index += 1;
     }
 
     fn to_index(self) -> usize {
-        self.0.try_into().unwrap()
+        self.index.try_into().unwrap()
     }
 }
 
 impl fmt::Display for Location {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.0.fmt(f)
+        self.index.fmt(f)
     }
 }
 
