@@ -30,9 +30,9 @@ impl Breakpoints {
 
     pub fn should_stop_at_and_clear_ephemeral(
         &mut self,
-        address: &runtime::InstructionAddress,
+        location: &runtime::InstructionAddress,
     ) -> bool {
-        let ephemeral = self.ephemeral.take(address).is_some();
-        ephemeral || self.durable_breakpoint_at(address)
+        let ephemeral = self.ephemeral.take(location).is_some();
+        ephemeral || self.durable_breakpoint_at(location)
     }
 }
