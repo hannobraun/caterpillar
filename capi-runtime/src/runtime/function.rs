@@ -22,7 +22,9 @@ impl Function {
         self.instructions.front().cloned()
     }
 
-    pub fn consume_instruction(&mut self) -> Option<(Location, Instruction)> {
+    pub fn consume_next_instruction(
+        &mut self,
+    ) -> Option<(Location, Instruction)> {
         self.instructions.pop_front()
     }
 }
