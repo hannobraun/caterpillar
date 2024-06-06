@@ -7,8 +7,7 @@ use crate::{runtime, syntax};
 )]
 pub struct SourceMap {
     runtime_to_syntax: BTreeMap<runtime::InstructionAddress, syntax::Location>,
-    location_to_address:
-        BTreeMap<syntax::Location, runtime::InstructionAddress>,
+    syntax_to_runtime: BTreeMap<syntax::Location, runtime::InstructionAddress>,
 }
 
 impl SourceMap {
@@ -18,7 +17,7 @@ impl SourceMap {
         location: syntax::Location,
     ) {
         self.runtime_to_syntax.insert(address, location.clone());
-        self.location_to_address.insert(location, address);
+        self.syntax_to_runtime.insert(location, address);
     }
 
     /// Get `LineLocation` for the provided `InstructionAddress`
@@ -46,6 +45,6 @@ impl SourceMap {
         &self,
         location: &syntax::Location,
     ) -> Option<runtime::InstructionAddress> {
-        self.location_to_address.get(location).cloned()
+        self.syntax_to_runtime.get(location).cloned()
     }
 }
