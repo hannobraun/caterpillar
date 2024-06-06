@@ -1,4 +1,4 @@
-use std::{sync::mpsc, thread};
+use std::{iter, thread};
 
 use capi_runtime::{
     debugger::DebugEvent,
@@ -7,6 +7,7 @@ use capi_runtime::{
     Program, ProgramEffect, ProgramEffectKind,
 };
 use rand::random;
+use tokio::sync::mpsc;
 
 use crate::{
     display::TILES_PER_AXIS,
@@ -33,7 +34,7 @@ impl RunnerThread {
         events: EventsRx,
         updates: UpdatesTx,
     ) -> Self {
-        let (effects_tx, effects_rx) = mpsc::channel();
+        let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
         let mut runner = Runner {
             program,
@@ -52,7 +53,7 @@ impl RunnerThread {
     }
 
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
-        self.effects.try_iter()
+        iter::from_fn(|| self.effects.try_recv().ok())
     }
 }
 
@@ -186,19 +187,19 @@ impl Runner {
                         // the program and the display code. Before we continue
                         // running, we need to wait here, until the display code
                         // has confirmed that we're ready to continue.
-                        let (tx, rx) = mpsc::channel();
+                        let (tx, mut rx) = mpsc::unbounded_channel();
                         self.effects
                             .send(DisplayEffect::SubmitTiles { reply: tx });
-                        let () = rx.recv().unwrap();
+                        let () = rx.blocking_recv().unwrap();
 
                         self.program.effects.pop_front();
                     }
                     BuiltinEffect::ReadInput => {
-                        let (tx, rx) = mpsc::channel();
+                        let (tx, mut rx) = mpsc::unbounded_channel();
 
                         self.effects
                             .send(DisplayEffect::ReadInput { reply: tx });
-                        let input = rx.recv().unwrap();
+                        let input = rx.blocking_recv().unwrap();
 
                         self.program.push([Value(input)]);
                         self.program.effects.pop_front();

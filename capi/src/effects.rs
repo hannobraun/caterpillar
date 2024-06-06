@@ -1,7 +1,7 @@
-use std::sync::mpsc;
+use tokio::sync::mpsc;
 
 pub struct EffectsTx {
-    pub inner: mpsc::Sender<DisplayEffect>,
+    pub inner: mpsc::UnboundedSender<DisplayEffect>,
 }
 
 impl EffectsTx {
@@ -12,11 +12,11 @@ impl EffectsTx {
     }
 }
 
-pub type EffectsRx = mpsc::Receiver<DisplayEffect>;
+pub type EffectsRx = mpsc::UnboundedReceiver<DisplayEffect>;
 
 #[derive(Debug)]
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
-    SubmitTiles { reply: mpsc::Sender<()> },
-    ReadInput { reply: mpsc::Sender<i8> },
+    SubmitTiles { reply: mpsc::UnboundedSender<()> },
+    ReadInput { reply: mpsc::UnboundedSender<i8> },
 }
