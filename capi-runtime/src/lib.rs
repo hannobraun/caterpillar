@@ -1,4 +1,5 @@
 pub mod debugger;
+pub mod runtime;
 pub mod syntax;
 
 mod breakpoints;
@@ -9,7 +10,6 @@ mod compiler;
 mod evaluator;
 mod instructions;
 mod program;
-mod runtime;
 mod source_map;
 
 pub use self::{
