@@ -14,7 +14,7 @@ use super::{
 pub struct PersistentState {
     pub code: DebugCode,
     pub breakpoints: Breakpoints,
-    pub runtime_state: Option<HostState>,
+    pub host_state: Option<HostState>,
     pub memory: Option<Memory>,
 }
 
@@ -48,7 +48,7 @@ impl PersistentState {
                     },
                 };
 
-                self.runtime_state = Some(runtime_state);
+                self.host_state = Some(runtime_state);
             }
         }
     }
@@ -240,9 +240,9 @@ impl PersistentState {
         let active_functions = ActiveFunctions::new(
             self.code.inner.as_ref(),
             &self.breakpoints,
-            self.runtime_state.as_ref(),
+            self.host_state.as_ref(),
         );
-        let operands = match &self.runtime_state {
+        let operands = match &self.host_state {
             Some(HostState::Stopped {
                 current_operands, ..
             }) => current_operands.clone(),
