@@ -76,12 +76,6 @@ impl Location {
     }
 }
 
-impl fmt::Display for Location {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.index.fmt(f)
-    }
-}
-
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
     BindingEvaluate { name: String },
