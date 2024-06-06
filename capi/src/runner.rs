@@ -19,7 +19,7 @@ pub fn runner(
     program: Program,
     updates: UpdatesTx,
 ) -> (EventsTx, RunnerThread) {
-    let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
+    let (events_tx, events_rx) = mpsc::unbounded_channel();
     let runner = RunnerThread::start(program, events_rx, updates);
     (events_tx, runner)
 }
