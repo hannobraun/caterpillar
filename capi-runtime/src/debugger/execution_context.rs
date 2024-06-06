@@ -44,17 +44,7 @@ impl ExecutionContext {
             };
         };
 
-        let Some(location) =
-            program.source_map.runtime_to_syntax(&effect.location)
-        else {
-            return Self {
-                function,
-                message: Some(
-                    "Program is stopped at instruction with no associated \
-                    source location.",
-                ),
-            };
-        };
+        let location = program.source_map.runtime_to_syntax(&effect.location);
 
         let function = program.functions.get_from_location(location).cloned();
         let Some(function) = function else {

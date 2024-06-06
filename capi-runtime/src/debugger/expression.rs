@@ -30,7 +30,7 @@ impl Expression {
             let effect_location =
                 program.source_map.runtime_to_syntax(&effect.location);
 
-            if effect_location.as_ref() == Some(&expression.location) {
+            if effect_location == expression.location {
                 Some(effect.clone())
             } else {
                 None
