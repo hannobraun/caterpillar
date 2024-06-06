@@ -198,17 +198,17 @@ fn evaluate_instruction(
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
     match instruction {
-        Instruction::BindingsDefine { names } => {
-            for name in names.into_iter().rev() {
-                let value = data_stack.pop()?;
-                bindings.insert(name, value);
-            }
-        }
         Instruction::BindingEvaluate { name } => {
             let value = bindings.get(&name).copied().expect(
                 "Binding instruction only generated for existing bindings",
             );
             data_stack.push(value);
+        }
+        Instruction::BindingsDefine { names } => {
+            for name in names.into_iter().rev() {
+                let value = data_stack.pop()?;
+                bindings.insert(name, value);
+            }
         }
         Instruction::CallBuiltin { name } => {
             let result = match name.as_str() {
