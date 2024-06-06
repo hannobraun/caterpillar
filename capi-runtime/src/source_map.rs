@@ -13,11 +13,11 @@ pub struct SourceMap {
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        address: runtime::InstructionAddress,
+        runtime: runtime::InstructionAddress,
         location: syntax::Location,
     ) {
-        self.runtime_to_syntax.insert(address, location.clone());
-        self.syntax_to_runtime.insert(location, address);
+        self.runtime_to_syntax.insert(runtime, location.clone());
+        self.syntax_to_runtime.insert(location, runtime);
     }
 
     /// Get `LineLocation` for the provided `InstructionAddress`
