@@ -18,5 +18,5 @@ pub use self::{
     evaluator::{Evaluator, EvaluatorEffectKind},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
-    runtime::{DataStack, StackUnderflow, Value},
+    runtime::{StackUnderflow, Value},
 };

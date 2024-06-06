@@ -1,4 +1,4 @@
-use capi_runtime::{DataStack, Program};
+use capi_runtime::{runtime::DataStack, Program};
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::components::panel::Panel;

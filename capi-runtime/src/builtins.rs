@@ -1,8 +1,6 @@
 use std::num::TryFromIntError;
 
-use crate::{StackUnderflow, Value};
-
-use super::DataStack;
+use crate::{runtime::DataStack, StackUnderflow, Value};
 
 pub fn add(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;
