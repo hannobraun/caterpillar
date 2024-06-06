@@ -107,11 +107,8 @@ impl Compiler<'_> {
         syntax_location: syntax::Location,
         output: &mut runtime::Function,
     ) {
-        let runtime_location = self.code.instructions.push(instruction);
-        let runtime_location = runtime::Location {
-            function,
-            index: runtime_location,
-        };
+        let index = self.code.instructions.push(instruction);
+        let runtime_location = runtime::Location { function, index };
         self.source_map
             .define_mapping(runtime_location.clone(), syntax_location);
         output.instructions.push_back(runtime_location);
