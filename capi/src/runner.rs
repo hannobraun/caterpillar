@@ -2,15 +2,13 @@ use std::{iter, thread};
 
 use capi_runtime::{
     debugger::DebugEvent,
-    effects::{DisplayEffect, EffectsRx, EffectsTx},
+    effects::{DisplayEffect, EffectsRx, EffectsTx, TILES_PER_AXIS},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     updates::UpdatesTx,
     Program, ProgramEffect, ProgramEffectKind,
 };
 use rand::random;
 use tokio::sync::mpsc;
-
-use crate::display::TILES_PER_AXIS;
 
 pub fn runner(
     program: Program,

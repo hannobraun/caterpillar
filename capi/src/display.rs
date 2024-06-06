@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_runtime::effects::DisplayEffect;
+use capi_runtime::effects::{DisplayEffect, TILES_PER_AXIS};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -199,8 +199,6 @@ impl ApplicationHandler for State {
         window.request_redraw();
     }
 }
-
-pub const TILES_PER_AXIS: usize = 32;
 
 const PIXELS_PER_TILE_AXIS: usize = 8;
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
