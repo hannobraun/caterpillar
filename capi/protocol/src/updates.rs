@@ -29,14 +29,14 @@ impl Updates {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Runtime) -> bool {
+    fn update_is_necessary(&self, runtime: &Runtime) -> bool {
         if let Some(process_at_client) = &self.runtime_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
 
             if process_at_client.state().is_running()
-                && process.state().is_running()
+                && runtime.state().is_running()
             {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
@@ -44,7 +44,7 @@ impl Updates {
             }
         }
 
-        self.runtime_at_client.as_ref() != Some(process)
+        self.runtime_at_client.as_ref() != Some(runtime)
     }
 }
 
