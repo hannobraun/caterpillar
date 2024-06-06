@@ -23,9 +23,9 @@ impl Breakpoints {
 
     pub fn durable_breakpoint_at(
         &self,
-        address: &runtime::InstructionAddress,
+        location: &runtime::InstructionAddress,
     ) -> bool {
-        self.durable.contains(address)
+        self.durable.contains(location)
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
