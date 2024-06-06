@@ -9,9 +9,7 @@ fn main() -> anyhow::Result<()> {
         .with_env_filter("tower_http::trace=info")
         .init();
 
-    let mut script = capi_runtime::syntax::Script::default();
-    capi_runtime::games::snake::snake(&mut script);
-    let program = capi_runtime::compiler::compile(script, "main");
+    let program = capi_runtime::games::build(capi_runtime::games::snake::snake);
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());
