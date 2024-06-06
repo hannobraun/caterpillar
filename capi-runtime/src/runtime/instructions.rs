@@ -13,7 +13,7 @@ impl Instructions {
     pub fn next_location(&self, function: String) -> Location {
         Location {
             function,
-            index: self.inner.len().try_into().unwrap(),
+            index: InstructionIndex(self.inner.len().try_into().unwrap()),
         }
     }
 
@@ -58,7 +58,7 @@ type InstructionsInner = Vec<(Location, Instruction)>;
 )]
 pub struct Location {
     function: String,
-    index: u32,
+    index: InstructionIndex,
 }
 
 impl Location {
@@ -68,13 +68,26 @@ impl Location {
     }
 
     fn increment(&mut self) {
-        self.index += 1;
+        self.index.0 += 1;
     }
 
     fn index(&self) -> usize {
-        self.index.try_into().unwrap()
+        self.index.0.try_into().unwrap()
     }
 }
+
+#[derive(
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    serde::Deserialize,
+    serde::Serialize,
+)]
+pub struct InstructionIndex(u32);
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
