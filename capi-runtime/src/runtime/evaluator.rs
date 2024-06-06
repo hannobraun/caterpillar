@@ -77,7 +77,7 @@ impl Evaluator {
         //    write.
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
-        if !frame.function.instructions.is_empty() {
+        if frame.function.next_instruction().is_some() {
             self.call_stack.push(frame).expect(
                 "Just popped a stack frame; pushing one can't overflow",
             );
