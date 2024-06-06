@@ -19,14 +19,14 @@ impl Instructions {
             function,
             index: InstructionIndex(self.inner.len().try_into().unwrap()),
         };
-        self.inner.push((location.clone(), instruction));
+        self.inner.push((location.index, instruction));
         location
     }
 
     pub fn get(&self, location: &Location) -> &Instruction {
         let (stored_location, instruction) =
             &self.inner[location.index.to_usize()];
-        assert_eq!(location, stored_location);
+        assert_eq!(&location.index, stored_location);
         instruction
     }
 }
@@ -40,7 +40,7 @@ impl<'r> IntoIterator for &'r Instructions {
     }
 }
 
-type InstructionsInner = Vec<(Location, Instruction)>;
+type InstructionsInner = Vec<(InstructionIndex, Instruction)>;
 
 #[derive(
     Copy,
