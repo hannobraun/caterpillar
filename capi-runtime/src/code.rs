@@ -15,10 +15,6 @@ impl Code {
         Self::default()
     }
 
-    pub fn next_address(&self) -> InstructionAddress {
-        self.instructions.next_address()
-    }
-
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
         self.instructions.push(instruction)
     }
