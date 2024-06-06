@@ -29,8 +29,8 @@ impl SourceMap {
 
     pub fn syntax_to_runtime(
         &self,
-        location: &syntax::Location,
+        syntax: &syntax::Location,
     ) -> Option<runtime::InstructionAddress> {
-        self.syntax_to_runtime.get(location).cloned()
+        self.syntax_to_runtime.get(syntax).cloned()
     }
 }
