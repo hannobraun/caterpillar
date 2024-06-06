@@ -94,11 +94,12 @@ impl Compiler<'_> {
         output: &mut runtime::Function,
     ) {
         let index = self.code.instructions.push(instruction.clone());
+        output.instructions.push(instruction);
+
         let runtime_location = runtime::Location {
             function: output.name.clone(),
             index,
         };
-        output.instructions.push(instruction);
         self.source_map
             .define_mapping(runtime_location, syntax_location);
     }
