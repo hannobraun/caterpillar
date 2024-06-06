@@ -45,7 +45,7 @@ impl ExecutionContext {
         };
 
         let Some(location) =
-            program.source_map.address_to_location(&effect.location)
+            program.source_map.runtime_to_syntax(&effect.location)
         else {
             return Self {
                 function,

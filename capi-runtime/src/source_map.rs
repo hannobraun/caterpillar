@@ -29,7 +29,7 @@ impl SourceMap {
     /// those instructions produce errors, nor should they show up in a call
     /// stack. So in cases where you actually need a location, this should
     /// return one.
-    pub fn address_to_location(
+    pub fn runtime_to_syntax(
         &self,
         address: &runtime::InstructionAddress,
     ) -> Option<syntax::Location> {

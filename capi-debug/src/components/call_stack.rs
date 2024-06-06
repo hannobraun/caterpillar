@@ -19,7 +19,7 @@ pub fn CallStack(
             .iter()
             .filter_map(|address| {
                 let location =
-                    program.get()?.source_map.address_to_location(address)?;
+                    program.get()?.source_map.runtime_to_syntax(address)?;
                 let function = program
                     .get()?
                     .functions

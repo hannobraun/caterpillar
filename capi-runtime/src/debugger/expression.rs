@@ -28,7 +28,7 @@ impl Expression {
 
         let effect = program.effects.front().and_then(|effect| {
             let effect_location =
-                program.source_map.address_to_location(&effect.location);
+                program.source_map.runtime_to_syntax(&effect.location);
 
             if effect_location.as_ref() == Some(&expression.location) {
                 Some(effect.clone())
