@@ -57,7 +57,7 @@ impl Compiler<'_> {
 
     fn compile_expression(
         &mut self,
-        function: String,
+        _: String,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
         output: &mut runtime::Function,
@@ -72,7 +72,6 @@ impl Compiler<'_> {
                 }
 
                 self.generate(
-                    function,
                     Instruction::BindingsDefine { names },
                     expression.location,
                     output,
@@ -81,7 +80,6 @@ impl Compiler<'_> {
             ExpressionKind::Comment { .. } => {}
             ExpressionKind::Value(value) => {
                 self.generate(
-                    function,
                     Instruction::Push { value },
                     expression.location,
                     output,
@@ -90,19 +88,13 @@ impl Compiler<'_> {
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(
-                    function,
-                    instruction,
-                    expression.location,
-                    output,
-                );
+                self.generate(instruction, expression.location, output);
             }
         };
     }
 
     fn generate(
         &mut self,
-        _: String,
         instruction: Instruction,
         syntax_location: syntax::Location,
         output: &mut runtime::Function,
