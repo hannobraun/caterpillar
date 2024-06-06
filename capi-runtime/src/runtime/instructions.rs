@@ -10,12 +10,12 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn next_address(&self) -> InstructionAddress {
+    pub fn next_location(&self) -> InstructionAddress {
         InstructionAddress(self.inner.len().try_into().unwrap())
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = self.next_address();
+        let address = self.next_location();
         self.inner.push((address, instruction));
         address
     }
