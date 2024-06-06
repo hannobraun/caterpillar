@@ -5,7 +5,6 @@ pub mod syntax;
 mod breakpoints;
 mod code;
 mod compiler;
-mod evaluator;
 mod program;
 mod source_map;
 

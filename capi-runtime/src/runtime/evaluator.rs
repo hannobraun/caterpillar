@@ -1,10 +1,10 @@
-use crate::runtime::{
+use crate::code::Code;
+
+use super::{
     builtins, Bindings, BuiltinEffect, CallStack, CallStackOverflow, DataStack,
     Function, Instruction, InstructionAddress, StackFrame, StackUnderflow,
     Value,
 };
-
-use super::code::Code;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
