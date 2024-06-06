@@ -10,19 +10,15 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn next_location(&self, function: String) -> Location {
-        Location {
-            function,
-            index: InstructionIndex(self.inner.len().try_into().unwrap()),
-        }
-    }
-
     pub fn push(
         &mut self,
         function: String,
         instruction: Instruction,
     ) -> Location {
-        let location = self.next_location(function);
+        let location = Location {
+            function,
+            index: InstructionIndex(self.inner.len().try_into().unwrap()),
+        };
         self.inner.push((location.clone(), instruction));
         location
     }
