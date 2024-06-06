@@ -72,7 +72,7 @@ impl Location {
     }
 
     fn index(&self) -> usize {
-        self.index.0.try_into().unwrap()
+        self.index.to_usize()
     }
 }
 
@@ -88,6 +88,12 @@ impl Location {
     serde::Serialize,
 )]
 pub struct InstructionIndex(u32);
+
+impl InstructionIndex {
+    fn to_usize(&self) -> usize {
+        self.0.try_into().unwrap()
+    }
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
