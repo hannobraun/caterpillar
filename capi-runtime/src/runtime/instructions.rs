@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::VecDeque, fmt};
 
 use super::{Location, Value};
 
@@ -12,7 +12,7 @@ pub struct Instructions {
 impl Instructions {
     pub fn push(&mut self, instruction: Instruction) -> InstructionIndex {
         let index = InstructionIndex(self.inner.len().try_into().unwrap());
-        self.inner.push((index, instruction));
+        self.inner.push_back((index, instruction));
         index
     }
 
@@ -33,7 +33,7 @@ impl<'r> IntoIterator for &'r Instructions {
     }
 }
 
-type InstructionsInner = Vec<(InstructionIndex, Instruction)>;
+type InstructionsInner = VecDeque<(InstructionIndex, Instruction)>;
 
 #[derive(
     Copy,
