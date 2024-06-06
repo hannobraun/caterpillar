@@ -125,8 +125,8 @@ impl Runner {
                             self.program.evaluator.next_instruction(),
                         );
                     }
-                    DebugEvent::ToggleBreakpoint { location: address } => {
-                        self.program.breakpoints.toggle_durable_at(address);
+                    DebugEvent::ToggleBreakpoint { location } => {
+                        self.program.breakpoints.toggle_durable_at(location);
                     }
                 }
             }
