@@ -10,14 +10,19 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn next_location(&self) -> Location {
+    pub fn next_location(&self, function: String) -> Location {
         Location {
+            function,
             index: self.inner.len().try_into().unwrap(),
         }
     }
 
-    pub fn push(&mut self, instruction: Instruction) -> Location {
-        let location = self.next_location();
+    pub fn push(
+        &mut self,
+        function: String,
+        instruction: Instruction,
+    ) -> Location {
+        let location = self.next_location(function);
         self.inner.push((location.clone(), instruction));
         location
     }
@@ -52,6 +57,7 @@ type InstructionsInner = Vec<(Location, Instruction)>;
     serde::Serialize,
 )]
 pub struct Location {
+    function: String,
     index: u32,
 }
 

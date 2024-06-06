@@ -44,7 +44,12 @@ impl Compiler<'_> {
         let mut output = runtime::Function::new(args);
 
         for expression in syntax {
-            self.compile_expression(expression, &mut bindings, &mut output);
+            self.compile_expression(
+                name.clone(),
+                expression,
+                &mut bindings,
+                &mut output,
+            );
         }
 
         self.code.functions.insert(name, output);
@@ -52,6 +57,7 @@ impl Compiler<'_> {
 
     fn compile_expression(
         &mut self,
+        function: String,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
         output: &mut runtime::Function,
@@ -66,6 +72,7 @@ impl Compiler<'_> {
                 }
 
                 self.generate(
+                    function,
                     Instruction::BindingsDefine { names },
                     expression.location,
                     output,
@@ -74,6 +81,7 @@ impl Compiler<'_> {
             ExpressionKind::Comment { .. } => {}
             ExpressionKind::Value(value) => {
                 self.generate(
+                    function,
                     Instruction::Push { value },
                     expression.location,
                     output,
@@ -82,18 +90,24 @@ impl Compiler<'_> {
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, expression.location, output);
+                self.generate(
+                    function,
+                    instruction,
+                    expression.location,
+                    output,
+                );
             }
         };
     }
 
     fn generate(
         &mut self,
+        function: String,
         instruction: Instruction,
         location: Location,
         output: &mut runtime::Function,
     ) {
-        let address = self.code.instructions.push(instruction);
+        let address = self.code.instructions.push(function, instruction);
         self.source_map.define_mapping(address.clone(), location);
         output.instructions.push_back(address);
     }
