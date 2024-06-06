@@ -28,7 +28,8 @@ impl Instructions {
     }
 
     pub fn get(&self, location: &Location) -> &Instruction {
-        let (stored_location, instruction) = &self.inner[location.index()];
+        let (stored_location, instruction) =
+            &self.inner[location.index.to_usize()];
         assert_eq!(location, stored_location);
         instruction
     }
@@ -69,10 +70,6 @@ impl Location {
 
     fn increment(&mut self) {
         self.index.0 += 1;
-    }
-
-    fn index(&self) -> usize {
-        self.index.to_usize()
     }
 }
 
