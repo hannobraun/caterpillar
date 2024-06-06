@@ -48,8 +48,8 @@ impl Evaluator {
                 return Ok(EvaluatorState::Finished);
             };
 
-            if let Some(address) = frame.function.instructions.pop_front() {
-                break (frame, address);
+            if let Some(location) = frame.function.instructions.pop_front() {
+                break (frame, location);
             }
 
             // If the function has no more instructions, we don't put it back,
