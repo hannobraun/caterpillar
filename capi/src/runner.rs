@@ -3,6 +3,7 @@ use std::{sync::mpsc, thread};
 use capi_runtime::{
     debugger::DebugEvent,
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
+    updates::UpdatesTx,
     Program, ProgramEffect, ProgramEffectKind,
 };
 use rand::random;
@@ -11,7 +12,6 @@ use crate::{
     display::TILES_PER_AXIS,
     effects::{DisplayEffect, EffectsRx, EffectsTx},
     server::EventsRx,
-    updates::UpdatesTx,
 };
 
 pub struct RunnerThread {

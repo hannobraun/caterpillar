@@ -3,6 +3,7 @@ pub mod debugger;
 pub mod games;
 pub mod runtime;
 pub mod syntax;
+pub mod updates;
 
 mod breakpoints;
 mod code;

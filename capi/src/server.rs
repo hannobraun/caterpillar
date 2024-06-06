@@ -13,13 +13,11 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_runtime::debugger::DebugEvent;
+use capi_runtime::{debugger::DebugEvent, updates::UpdatesRx};
 use futures::{stream::SplitSink, SinkExt, StreamExt};
 use tokio::{net::TcpListener, runtime::Runtime, sync::mpsc};
 use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
-
-use crate::updates::UpdatesRx;
 
 pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
