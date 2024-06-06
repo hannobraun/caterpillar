@@ -11,7 +11,7 @@ use crate::{
 
 #[derive(Debug)]
 pub struct GameEngine {
-    pub process: Runtime,
+    pub runtime: Runtime,
 
     arguments: [Value; 2],
     last_frame_start_s: Option<f64>,
@@ -26,7 +26,7 @@ impl GameEngine {
         let arguments = [Value::from(TILES_PER_AXIS); 2];
 
         Self {
-            process: Runtime::new(arguments),
+            runtime: Runtime::new(arguments),
             arguments,
             last_frame_start_s: None,
             instructions: None,
@@ -52,16 +52,16 @@ impl GameEngine {
         match command {
             Command::ClearBreakpointAndContinue => {
                 if let Some(Effect::Breakpoint) =
-                    self.process.effects_mut().inspect_first()
+                    self.runtime.effects_mut().inspect_first()
                 {
-                    self.process.effects_mut().handle_first();
+                    self.runtime.effects_mut().handle_first();
                 }
             }
             Command::ClearBreakpointAndEvaluateNextInstruction => {
                 if let Some(Effect::Breakpoint) =
-                    self.process.effects().inspect_first()
+                    self.runtime.effects().inspect_first()
                 {
-                    self.process.effects_mut().handle_first();
+                    self.runtime.effects_mut().handle_first();
                 } else {
                     // This shouldn't happen, unless there's a bug in the
                     // debugger. There's no point in panicking here though.
@@ -72,17 +72,17 @@ impl GameEngine {
                 }
 
                 if let Some(instructions) = &self.instructions {
-                    self.process.evaluate_next_instruction(instructions);
+                    self.runtime.evaluate_next_instruction(instructions);
                 } else {
                     // Same as above: This should only happen if the debugger is
                     // buggy.
                 }
             }
             Command::Reset => {
-                self.process.reset(self.arguments);
+                self.runtime.reset(self.arguments);
             }
             Command::Stop => {
-                self.process.effects_mut().trigger(Effect::Breakpoint);
+                self.runtime.effects_mut().trigger(Effect::Breakpoint);
             }
             Command::UpdateCode { instructions } => {
                 self.instructions = Some(instructions);
@@ -156,20 +156,20 @@ impl GameEngine {
             self.last_frame_start_s = Some(current_time_s);
         }
 
-        while self.process.state().is_running() {
+        while self.runtime.state().is_running() {
             let Some(instructions) = &self.instructions else {
                 return true;
             };
 
-            self.process.evaluate_next_instruction(instructions);
+            self.runtime.evaluate_next_instruction(instructions);
 
-            if let Some(effect) = self.process.effects_mut().handle_first() {
+            if let Some(effect) = self.runtime.effects_mut().handle_first() {
                 match self.handle_effect(&effect, pixels) {
                     Ok(EffectOutcome::Handled) => {
-                        self.process.ignore_next_instruction();
+                        self.runtime.ignore_next_instruction();
                     }
                     Ok(EffectOutcome::WasSubmit) => {
-                        self.process.ignore_next_instruction();
+                        self.runtime.ignore_next_instruction();
 
                         // The game is done rendering. This is our sign to break
                         // out of this loop.
@@ -181,10 +181,10 @@ impl GameEngine {
                         break;
                     }
                     Ok(EffectOutcome::Unhandled) => {
-                        self.process.effects_mut().trigger(effect);
+                        self.runtime.effects_mut().trigger(effect);
                     }
                     Err(new_effect) => {
-                        self.process.effects_mut().trigger(new_effect);
+                        self.runtime.effects_mut().trigger(new_effect);
                     }
                 }
             }
@@ -200,7 +200,7 @@ impl GameEngine {
     ) -> Result<EffectOutcome, Effect> {
         let host_effect = match effect {
             Effect::Host => {
-                let effect = self.process.stack_mut().pop_operand()?;
+                let effect = self.runtime.stack_mut().pop_operand()?;
                 let effect =
                     effect.to_u8().map_err(|_| Effect::InvalidHostEffect)?;
                 GameEngineEffect::try_from(effect)
@@ -220,18 +220,18 @@ impl GameEngine {
             }
 
             GameEngineEffect::Load => {
-                let address = self.process.stack_mut().pop_operand()?;
+                let address = self.runtime.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
 
                 let address: usize = address.into();
                 let value = self.memory.inner[address];
 
-                self.process.stack_mut().push_operand(value);
+                self.runtime.stack_mut().push_operand(value);
             }
             GameEngineEffect::Store => {
-                let address = self.process.stack_mut().pop_operand()?;
-                let value = self.process.stack_mut().pop_operand()?;
+                let address = self.runtime.stack_mut().pop_operand()?;
+                let value = self.runtime.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
                 let value = value.to_u8()?;
@@ -241,20 +241,20 @@ impl GameEngine {
             }
             GameEngineEffect::ReadInput => {
                 let input = self.input.pop_front().unwrap_or(0);
-                self.process.stack_mut().push_operand(input);
+                self.runtime.stack_mut().push_operand(input);
             }
             GameEngineEffect::ReadRandom => {
                 // See `GameEngine::push_random` for context.
                 let random = self.random.pop_front().unwrap();
-                self.process.stack_mut().push_operand(random);
+                self.runtime.stack_mut().push_operand(random);
             }
             GameEngineEffect::SetPixel => {
-                let a = self.process.stack_mut().pop_operand()?;
-                let b = self.process.stack_mut().pop_operand()?;
-                let g = self.process.stack_mut().pop_operand()?;
-                let r = self.process.stack_mut().pop_operand()?;
-                let y = self.process.stack_mut().pop_operand()?;
-                let x = self.process.stack_mut().pop_operand()?;
+                let a = self.runtime.stack_mut().pop_operand()?;
+                let b = self.runtime.stack_mut().pop_operand()?;
+                let g = self.runtime.stack_mut().pop_operand()?;
+                let r = self.runtime.stack_mut().pop_operand()?;
+                let y = self.runtime.stack_mut().pop_operand()?;
+                let x = self.runtime.stack_mut().pop_operand()?;
 
                 let x = x.to_u8()?;
                 let y = y.to_u8()?;

@@ -24,7 +24,7 @@ async fn main() -> anyhow::Result<()> {
     let mut times_net = Measurements::default();
     let mut times_gross = Measurements::default();
 
-    while !game_engine.process.state().has_finished() {
+    while !game_engine.runtime.state().has_finished() {
         start_of_loop = Instant::now();
 
         while game_engine.push_random(random()) {}
@@ -37,9 +37,9 @@ async fn main() -> anyhow::Result<()> {
             continue;
         }
 
-        if let Some(effect) = game_engine.process.effects().inspect_first() {
+        if let Some(effect) = game_engine.runtime.effects().inspect_first() {
             eprintln!("Unhandled effect: {effect:#?}");
-            eprintln!("Current stack:\n{:#?}", game_engine.process.stack());
+            eprintln!("Current stack:\n{:#?}", game_engine.runtime.stack());
             break;
         }
 

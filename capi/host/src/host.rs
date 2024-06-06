@@ -37,7 +37,7 @@ impl Host {
             .run_until_end_of_frame(current_time_ms / 1000.0, pixels);
 
         self.updates.queue_updates(
-            &self.game_engine.process,
+            &self.game_engine.runtime,
             self.game_engine.memory(),
         );
     }

@@ -89,7 +89,7 @@ impl TestDebugger {
     fn process_updates(&mut self) {
         if let Some(game_engine) = &self.game_engine {
             self.updates
-                .queue_updates(&game_engine.process, &self.memory);
+                .queue_updates(&game_engine.runtime, &self.memory);
             for update in self.updates.take_queued_updates() {
                 self.persistent.on_update_from_runtime(update);
             }
