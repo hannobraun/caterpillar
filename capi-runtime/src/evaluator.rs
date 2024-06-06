@@ -2,8 +2,8 @@ use crate::{
     builtins::BuiltinEffect,
     call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
     instructions::Instruction,
-    runtime::{DataStack, Function},
-    InstructionAddress, StackUnderflow, Value,
+    runtime::{DataStack, Function, StackUnderflow},
+    InstructionAddress, Value,
 };
 
 use super::{builtins, code::Code};
