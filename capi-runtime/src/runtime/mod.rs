@@ -10,3 +10,7 @@ pub use self::{
     function::Function,
     instructions::{Instruction, InstructionAddress, Instructions},
 };
+
+pub use crate::call_stack::{
+    Bindings, CallStack, CallStackOverflow, StackFrame,
+};
