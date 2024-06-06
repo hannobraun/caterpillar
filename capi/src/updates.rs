@@ -2,7 +2,14 @@ use capi_runtime::Program;
 use tokio::sync::watch;
 
 pub fn updates(program: Program) -> (UpdatesTx, UpdatesRx) {
-    UpdatesTx::new(program)
+    let (tx, rx) = tokio::sync::watch::channel(program);
+
+    let tx = UpdatesTx {
+        inner: tx,
+        program_at_client: None,
+    };
+
+    (tx, rx)
 }
 
 pub type UpdatesRx = watch::Receiver<Program>;
@@ -13,17 +20,6 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn new(program: Program) -> (Self, UpdatesRx) {
-        let (tx, rx) = tokio::sync::watch::channel(program);
-
-        let self_ = Self {
-            inner: tx,
-            program_at_client: None,
-        };
-
-        (self_, rx)
-    }
-
     pub fn send_if_relevant_change(&mut self, program: &Program) {
         if let Some(program_at_client) = &self.program_at_client {
             // The client has previously received a program. We don't want to
