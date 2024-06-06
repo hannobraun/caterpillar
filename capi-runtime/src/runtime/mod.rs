@@ -5,6 +5,7 @@ mod data_stack;
 mod evaluator;
 mod function;
 mod instructions;
+mod location;
 
 pub use self::{
     builtins::BuiltinEffect,
@@ -14,5 +15,6 @@ pub use self::{
         Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState,
     },
     function::Function,
-    instructions::{Instruction, Location, Instructions},
+    instructions::{Instruction, Instructions},
+    location::Location,
 };

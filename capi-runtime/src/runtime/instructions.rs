@@ -1,6 +1,6 @@
 use std::fmt;
 
-use super::Value;
+use super::{Location, Value};
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -41,29 +41,6 @@ impl<'r> IntoIterator for &'r Instructions {
 }
 
 type InstructionsInner = Vec<(Location, Instruction)>;
-
-#[derive(
-    Clone,
-    Debug,
-    Default,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub struct Location {
-    pub function: String,
-    pub index: InstructionIndex,
-}
-
-impl Location {
-    pub fn next(mut self) -> Self {
-        self.index.increment();
-        self
-    }
-}
 
 #[derive(
     Clone,
