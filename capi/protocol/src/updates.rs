@@ -10,12 +10,12 @@ pub struct Updates {
 }
 
 impl Updates {
-    pub fn queue_updates(&mut self, process: &Runtime, memory: &Memory) {
+    pub fn queue_updates(&mut self, runtime: &Runtime, memory: &Memory) {
         self.latest_memory = Some(memory.clone());
 
-        if self.update_is_necessary(process) {
-            self.runtime_at_client = Some(process.clone());
-            self.queue.push(UpdateFromHost::Process(process.clone()));
+        if self.update_is_necessary(runtime) {
+            self.runtime_at_client = Some(runtime.clone());
+            self.queue.push(UpdateFromHost::Process(runtime.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
                 self.queue.push(UpdateFromHost::Memory { memory });
