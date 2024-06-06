@@ -17,9 +17,11 @@ pub fn CallStack(
             .evaluator
             .call_stack()
             .iter()
-            .filter_map(|address| {
-                let location =
-                    program.get()?.source_map.runtime_to_syntax(address)?;
+            .filter_map(|runtime_location| {
+                let location = program
+                    .get()?
+                    .source_map
+                    .runtime_to_syntax(runtime_location)?;
                 let function = program
                     .get()?
                     .functions
