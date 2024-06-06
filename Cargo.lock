@@ -443,6 +443,7 @@ dependencies = [
 name = "capi-runtime"
 version = "0.1.0"
 dependencies = [
+ "pixels",
  "rand",
  "serde",
  "serde-big-array",
