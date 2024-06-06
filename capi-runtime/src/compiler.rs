@@ -102,13 +102,16 @@ impl Compiler<'_> {
 
     fn generate(
         &mut self,
-        function: String,
+        _: String,
         instruction: Instruction,
         syntax_location: syntax::Location,
         output: &mut runtime::Function,
     ) {
         let index = self.code.instructions.push(instruction);
-        let runtime_location = runtime::Location { function, index };
+        let runtime_location = runtime::Location {
+            function: output.name.clone(),
+            index,
+        };
         self.source_map
             .define_mapping(runtime_location.clone(), syntax_location);
         output.instructions.push_back(runtime_location);
