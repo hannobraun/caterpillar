@@ -107,10 +107,11 @@ impl Compiler<'_> {
         syntax_location: syntax::Location,
         output: &mut runtime::Function,
     ) {
-        let address = self.code.instructions.push(function, instruction);
+        let runtime_location =
+            self.code.instructions.push(function, instruction);
         self.source_map
-            .define_mapping(address.clone(), syntax_location);
-        output.instructions.push_back(address);
+            .define_mapping(runtime_location.clone(), syntax_location);
+        output.instructions.push_back(runtime_location);
     }
 }
 
