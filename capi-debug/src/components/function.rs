@@ -77,7 +77,7 @@ pub fn Expression(
             class_inner.push_str(" font-bold");
         }
 
-        let data_address = debugger_expression
+        let data_location = debugger_expression
             .address
             .map(|address| ron::to_string(&address).unwrap());
 
@@ -112,7 +112,7 @@ pub fn Expression(
                 <span class=class_outer>
                     <span
                         class=class_inner
-                        data-location=data_address
+                        data-location=data_location
                         on:click=toggle_breakpoint>
                         {expression}
                     </span>
