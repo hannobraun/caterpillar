@@ -42,22 +42,21 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
-        let (mut frame, location) = loop {
+        let (mut frame, location, instruction) = loop {
             let Some(mut frame) = self.call_stack.pop() else {
                 return Ok(EvaluatorState::Finished);
             };
 
-            if let Some((location, _instruction)) =
+            if let Some((location, instruction)) =
                 frame.function.instructions.pop_front()
             {
-                break (frame, location);
+                break (frame, location, instruction);
             }
 
             // If the function has no more instructions, we don't put it back,
             // meaning it returns.
         };
 
-        let instruction = self.code.instructions.get(&location).clone();
         let evaluate_result = evaluate_instruction(
             instruction,
             &self.code,
