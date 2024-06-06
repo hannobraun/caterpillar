@@ -15,7 +15,7 @@ pub struct Expression {
 impl Expression {
     pub fn new(expression: &syntax::Expression, program: &Program) -> Self {
         let location =
-            program.source_map.location_to_address(&expression.location);
+            program.source_map.syntax_to_runtime(&expression.location);
 
         let has_durable_breakpoint = if let Some(address) = location {
             program.breakpoints.durable_breakpoint_at(&address)

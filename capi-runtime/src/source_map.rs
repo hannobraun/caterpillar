@@ -41,7 +41,7 @@ impl SourceMap {
     /// Returns an `Option`, because this might be called for a mapping that has
     /// not been defined. If that happens, it is likely to be a bug outside of
     /// this module.
-    pub fn location_to_address(
+    pub fn syntax_to_runtime(
         &self,
         location: &syntax::Location,
     ) -> Option<runtime::InstructionAddress> {
