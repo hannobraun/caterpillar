@@ -5,7 +5,6 @@ use core::fmt;
 )]
 pub struct DataStack {
     values: Vec<Value>,
-    saved: Vec<Value>,
 }
 
 impl DataStack {
@@ -15,7 +14,6 @@ impl DataStack {
 
     pub fn clear(&mut self) {
         self.values.clear();
-        self.saved.clear();
     }
 
     pub fn num_values(&self) -> usize {
@@ -32,21 +30,6 @@ impl DataStack {
 
     pub fn pop(&mut self) -> Result<Value, StackUnderflow> {
         self.values.pop().ok_or(StackUnderflow)
-    }
-
-    pub fn save(&mut self, num: u8) -> Result<(), StackUnderflow> {
-        for _ in 0..num {
-            let value = self.pop()?;
-            self.saved.push(value);
-        }
-
-        Ok(())
-    }
-
-    pub fn restore(&mut self) {
-        while let Some(x) = self.saved.pop() {
-            self.push(x);
-        }
     }
 
     pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
