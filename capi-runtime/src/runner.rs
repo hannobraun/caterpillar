@@ -16,7 +16,21 @@ pub fn runner(
     updates: UpdatesTx,
 ) -> (EventsTx, RunnerThread) {
     let (events_tx, events_rx) = mpsc::unbounded_channel();
-    let runner = RunnerThread::start(program, events_rx, updates);
+    let (effects_tx, effects_rx) = mpsc::unbounded_channel();
+
+    let mut runner = Runner {
+        program,
+        events: events_rx,
+        updates,
+        effects: EffectsTx { inner: effects_tx },
+    };
+    thread::spawn(move || {
+        runner.start();
+    });
+    let runner = RunnerThread {
+        effects: effects_rx,
+    };
+
     (events_tx, runner)
 }
 
@@ -28,29 +42,6 @@ pub struct RunnerThread {
 }
 
 impl RunnerThread {
-    pub fn start(
-        program: Program,
-        events: EventsRx,
-        updates: UpdatesTx,
-    ) -> Self {
-        let (effects_tx, effects_rx) = mpsc::unbounded_channel();
-
-        let mut runner = Runner {
-            program,
-            events,
-            updates,
-            effects: EffectsTx { inner: effects_tx },
-        };
-
-        thread::spawn(move || {
-            runner.start();
-        });
-
-        Self {
-            effects: effects_rx,
-        }
-    }
-
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
         iter::from_fn(|| self.effects.try_recv().ok())
     }
