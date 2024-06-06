@@ -54,8 +54,8 @@ type InstructionsInner = Vec<(Location, Instruction)>;
     serde::Serialize,
 )]
 pub struct Location {
-    function: String,
-    index: InstructionIndex,
+    pub function: String,
+    pub index: InstructionIndex,
 }
 
 impl Location {
