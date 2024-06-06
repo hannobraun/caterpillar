@@ -27,11 +27,11 @@ pub fn runner(
     thread::spawn(move || {
         runner.start();
     });
-    let runner = RunnerHandle {
+    let handle = RunnerHandle {
         effects: effects_rx,
     };
 
-    (events_tx, runner)
+    (events_tx, handle)
 }
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
