@@ -15,7 +15,9 @@ impl Updates {
 
         if self.update_is_necessary(runtime) {
             self.runtime_at_client = Some(runtime.clone());
-            self.queue.push(UpdateFromHost::Runtime(runtime.clone()));
+            self.queue.push(UpdateFromHost::Runtime {
+                runtime: runtime.clone(),
+            });
 
             if let Some(memory) = self.latest_memory.take() {
                 self.queue.push(UpdateFromHost::Memory { memory });
@@ -51,7 +53,7 @@ impl Updates {
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum UpdateFromHost {
-    Runtime(Runtime),
+    Runtime { runtime: Runtime },
     Memory { memory: Memory },
 }
 
