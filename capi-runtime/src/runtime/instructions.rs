@@ -20,6 +20,10 @@ impl Instructions {
         self.inner.front().cloned()
     }
 
+    pub fn consume_next(&mut self) -> Option<(InstructionIndex, Instruction)> {
+        self.inner.pop_front()
+    }
+
     pub fn get(&self, location: &Location) -> &Instruction {
         let (stored_index, instruction) =
             &self.inner[location.index.to_usize()];
