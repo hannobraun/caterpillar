@@ -104,11 +104,12 @@ impl Compiler<'_> {
         &mut self,
         function: String,
         instruction: Instruction,
-        location: syntax::Location,
+        syntax_location: syntax::Location,
         output: &mut runtime::Function,
     ) {
         let address = self.code.instructions.push(function, instruction);
-        self.source_map.define_mapping(address.clone(), location);
+        self.source_map
+            .define_mapping(address.clone(), syntax_location);
         output.instructions.push_back(address);
     }
 }
