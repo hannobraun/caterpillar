@@ -1,4 +1,4 @@
-use capi_runtime::syntax::Script;
+use crate::syntax::Script;
 
 pub fn snake(script: &mut Script) {
     // Main loop

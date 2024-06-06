@@ -2,7 +2,6 @@ mod display;
 mod effects;
 mod runner;
 mod server;
-mod snake;
 mod updates;
 
 fn main() -> anyhow::Result<()> {
@@ -11,7 +10,7 @@ fn main() -> anyhow::Result<()> {
         .init();
 
     let mut script = capi_runtime::syntax::Script::default();
-    snake::snake(&mut script);
+    capi_runtime::games::snake::snake(&mut script);
     let program = capi_runtime::compiler::compile(script, "main");
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
