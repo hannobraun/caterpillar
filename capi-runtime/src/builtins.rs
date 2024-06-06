@@ -2,7 +2,7 @@ use std::num::TryFromIntError;
 
 use crate::{data_stack::StackUnderflow, Value};
 
-use super::data_stack::DataStack;
+use super::DataStack;
 
 pub fn add(data_stack: &mut DataStack) -> Result {
     let b = data_stack.pop()?;

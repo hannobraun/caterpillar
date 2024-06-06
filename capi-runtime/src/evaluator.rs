@@ -7,7 +7,7 @@ use crate::{
     InstructionAddress, Value,
 };
 
-use super::{builtins, code::Code, data_stack::DataStack};
+use super::{builtins, code::Code, DataStack};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
