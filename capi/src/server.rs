@@ -15,9 +15,11 @@ use axum::{
 };
 use capi_runtime::{debugger::DebugEvent, updates::UpdatesRx};
 use futures::{stream::SplitSink, SinkExt, StreamExt};
-use tokio::{net::TcpListener, runtime::Runtime, sync::mpsc};
+use tokio::{net::TcpListener, runtime::Runtime};
 use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
+
+use crate::runner::EventsTx;
 
 pub fn start(updates: UpdatesRx, events: EventsTx) {
     thread::spawn(|| {
@@ -113,6 +115,3 @@ where
         events.send(event).unwrap();
     }
 }
-
-pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
-pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;

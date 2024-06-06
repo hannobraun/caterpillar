@@ -12,7 +12,6 @@ use tokio::sync::mpsc;
 use crate::{
     display::TILES_PER_AXIS,
     effects::{DisplayEffect, EffectsRx, EffectsTx},
-    server::{EventsRx, EventsTx},
 };
 
 pub fn runner(
@@ -23,6 +22,9 @@ pub fn runner(
     let runner = RunnerThread::start(program, events_rx, updates);
     (events_tx, runner)
 }
+
+pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
+pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub struct RunnerThread {
     effects: EffectsRx,
