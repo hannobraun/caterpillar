@@ -12,3 +12,5 @@ pub use self::{
     function::Function,
     instructions::{Instruction, InstructionAddress, Instructions},
 };
+
+pub use crate::evaluator::Evaluator;
