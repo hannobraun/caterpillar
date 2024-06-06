@@ -96,9 +96,9 @@ pub enum Instruction {
 impl fmt::Display for Instruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Instruction::BindingDefine { names: name } => {
+            Instruction::BindingDefine { names } => {
                 write!(f, "bind")?;
-                for name in name {
+                for name in names {
                     write!(f, " `{name}`")?;
                 }
             }
