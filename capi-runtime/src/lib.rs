@@ -11,6 +11,5 @@ mod source_map;
 
 pub use self::{
     compiler::compile,
-    evaluator::EvaluatorEffectKind,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
 };

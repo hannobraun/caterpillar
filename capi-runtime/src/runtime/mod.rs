@@ -13,4 +13,4 @@ pub use self::{
     instructions::{Instruction, InstructionAddress, Instructions},
 };
 
-pub use crate::evaluator::Evaluator;
+pub use crate::evaluator::{Evaluator, EvaluatorEffectKind};
