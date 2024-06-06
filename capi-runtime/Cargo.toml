@@ -7,6 +7,7 @@ edition = "2021"
 rand = "*"
 serde-big-array = "*"
 thiserror = "*"
+winit = "*"
 
 [dependencies.serde]
 version = "*"
