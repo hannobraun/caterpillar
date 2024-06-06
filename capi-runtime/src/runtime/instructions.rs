@@ -20,9 +20,9 @@ impl Instructions {
         location
     }
 
-    pub fn get(&self, address: &InstructionAddress) -> &Instruction {
-        let (stored_address, instruction) = &self.inner[address.to_usize()];
-        assert_eq!(address, stored_address);
+    pub fn get(&self, location: &InstructionAddress) -> &Instruction {
+        let (stored_address, instruction) = &self.inner[location.to_usize()];
+        assert_eq!(location, stored_address);
         instruction
     }
 }
