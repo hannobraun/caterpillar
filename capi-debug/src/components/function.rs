@@ -79,7 +79,7 @@ pub fn Expression(
 
         let data_address = debugger_expression
             .address
-            .map(|address| address.to_usize());
+            .map(|address| ron::to_string(&address).unwrap());
 
         let error = debugger_expression.effect.and_then(|effect| {
             if let ProgramEffectKind::Evaluator(effect) = effect.kind {
@@ -97,7 +97,7 @@ pub fn Expression(
                 // This happens, if the user clicks on a comment.
                 return;
             };
-            let address = address.parse().unwrap();
+            let address = ron::from_str(&address).unwrap();
 
             leptos::spawn_local(send_event(
                 DebugEvent::ToggleBreakpoint { address },
