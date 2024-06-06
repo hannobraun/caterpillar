@@ -14,10 +14,10 @@ impl SourceMap {
     pub fn define_mapping(
         &mut self,
         runtime: runtime::InstructionAddress,
-        location: syntax::Location,
+        syntax: syntax::Location,
     ) {
-        self.runtime_to_syntax.insert(runtime, location.clone());
-        self.syntax_to_runtime.insert(location, runtime);
+        self.runtime_to_syntax.insert(runtime, syntax.clone());
+        self.syntax_to_runtime.insert(syntax, runtime);
     }
 
     /// Get `LineLocation` for the provided `InstructionAddress`
