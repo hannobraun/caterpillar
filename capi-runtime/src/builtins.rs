@@ -30,8 +30,9 @@ pub fn add_wrap_unsigned(data_stack: &mut DataStack) -> Result {
 }
 
 pub fn copy(data_stack: &mut DataStack) -> Result {
-    let a = data_stack.copy()?;
+    let a = data_stack.pop()?;
 
+    data_stack.push(a);
     data_stack.push(a);
 
     Ok(None)
