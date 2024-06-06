@@ -14,10 +14,10 @@ pub struct Expression {
 
 impl Expression {
     pub fn new(expression: &syntax::Expression, program: &Program) -> Self {
-        let address =
+        let location =
             program.source_map.location_to_address(&expression.location);
 
-        let has_durable_breakpoint = if let Some(address) = address {
+        let has_durable_breakpoint = if let Some(address) = location {
             program.breakpoints.durable_breakpoint_at(&address)
         } else {
             false
@@ -40,12 +40,12 @@ impl Expression {
         // This does not work reliably, for reasons I don't fully understand.
         // But it's better than nothing, so I'm keeping it for now, and will
         // hopefully fix it soon.
-        let is_on_call_stack = address
+        let is_on_call_stack = location
             .map(|address| program.evaluator.call_stack().contains(address))
             .unwrap_or(false);
 
         Self {
-            location: address,
+            location,
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,
