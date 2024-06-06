@@ -1,7 +1,7 @@
 use capi_runtime::{Effect, InstructionAddress, Value};
 
 /// # The current state of the runtime
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum HostState {
     /// # The process is currently running
     Running,
