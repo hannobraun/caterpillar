@@ -58,11 +58,12 @@ impl CallStack {
         self.frames.pop()
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &Location> {
+    pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
         self.frames
             .iter()
             .filter_map(|frame| frame.function.instructions.front())
             .map(|(location, _instruction)| location)
+            .cloned()
     }
 }
 

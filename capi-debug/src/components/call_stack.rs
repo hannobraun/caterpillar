@@ -21,7 +21,7 @@ pub fn CallStack(
                 let syntax_location = program
                     .get()?
                     .source_map
-                    .runtime_to_syntax(runtime_location);
+                    .runtime_to_syntax(&runtime_location);
                 let function = program
                     .get()?
                     .functions
