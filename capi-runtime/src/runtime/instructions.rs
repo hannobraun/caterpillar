@@ -21,7 +21,7 @@ impl Instructions {
     }
 
     pub fn get(&self, location: &Location) -> &Instruction {
-        let (stored_location, instruction) = &self.inner[location.to_usize()];
+        let (stored_location, instruction) = &self.inner[location.to_index()];
         assert_eq!(location, stored_location);
         instruction
     }
@@ -62,7 +62,7 @@ impl Location {
         self.0 += 1;
     }
 
-    fn to_usize(self) -> usize {
+    fn to_index(self) -> usize {
         self.0.try_into().unwrap()
     }
 }
