@@ -59,7 +59,7 @@ impl Compiler<'_> {
     ) {
         match expression.kind {
             ExpressionKind::Binding { names } => {
-                for name in names.into_iter().rev() {
+                for name in names.iter().cloned().rev() {
                     // Inserting bindings unconditionally like that does mean
                     // that bindings can overwrite previously defined bindings.
                     // This is undesirable, but it'll do for now.
