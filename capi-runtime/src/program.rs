@@ -92,7 +92,7 @@ impl Program {
             Err(EvaluatorEffect { effect, address }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
-                    address,
+                    location: address,
                 });
                 address
             }
@@ -104,7 +104,7 @@ impl Program {
         {
             self.effects.push_back(ProgramEffect {
                 kind: ProgramEffectKind::Paused,
-                address: just_executed,
+                location: just_executed,
             });
         }
 
@@ -131,7 +131,7 @@ impl ProgramState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProgramEffect {
     pub kind: ProgramEffectKind,
-    pub address: runtime::InstructionAddress,
+    pub location: runtime::InstructionAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
