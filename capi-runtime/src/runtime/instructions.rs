@@ -1,4 +1,4 @@
-use std::{fmt, str::FromStr};
+use std::fmt;
 
 use super::Value;
 
@@ -70,15 +70,6 @@ impl InstructionAddress {
 impl fmt::Display for InstructionAddress {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.0.fmt(f)
-    }
-}
-
-impl FromStr for InstructionAddress {
-    type Err = <u32 as FromStr>::Err;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let address = u32::from_str(s)?;
-        Ok(Self(address))
     }
 }
 
