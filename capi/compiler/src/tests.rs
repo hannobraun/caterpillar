@@ -119,7 +119,7 @@ fn compile_and_run(source: &str) -> BTreeMap<u32, u32> {
             Some(effect) => {
                 panic!(
                     "Unexpected effect: {effect}\n\
-                    Process: {runtime:#?}\n\
+                    Runtime: {runtime:#?}\n\
                     Instructions: {instructions:#?}",
                 );
             }
