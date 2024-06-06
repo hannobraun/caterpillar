@@ -79,7 +79,7 @@ impl Location {
 pub struct InstructionIndex(u32);
 
 impl InstructionIndex {
-    fn increment(&mut self) {
+    pub fn increment(&mut self) {
         self.0 += 1;
     }
 
