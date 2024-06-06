@@ -43,6 +43,7 @@ impl<'r> IntoIterator for &'r Instructions {
 type InstructionsInner = Vec<(Location, Instruction)>;
 
 #[derive(
+    Copy,
     Clone,
     Debug,
     Default,
@@ -60,7 +61,7 @@ impl InstructionIndex {
         self.0 += 1;
     }
 
-    fn to_usize(&self) -> usize {
+    fn to_usize(self) -> usize {
         self.0.try_into().unwrap()
     }
 }
