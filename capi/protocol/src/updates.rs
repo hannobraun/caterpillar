@@ -30,12 +30,12 @@ impl Updates {
     }
 
     fn update_is_necessary(&self, runtime: &Runtime) -> bool {
-        if let Some(process_at_client) = &self.runtime_at_client {
+        if let Some(runtime_at_client) = &self.runtime_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
 
-            if process_at_client.state().is_running()
+            if runtime_at_client.state().is_running()
                 && runtime.state().is_running()
             {
                 // While the program is running, sending updates on every change
