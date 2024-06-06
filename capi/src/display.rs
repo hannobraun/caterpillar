@@ -150,8 +150,7 @@ impl ApplicationHandler for State {
 
                     let index = || {
                         x_usize
-                            .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)?
-                            .checked_add(TILES_OFFSET_IN_MEMORY)
+                            .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
                     };
                     let index = index().unwrap();
 
@@ -169,8 +168,7 @@ impl ApplicationHandler for State {
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
-                let i =
-                    TILES_OFFSET_IN_MEMORY + tile_y * TILES_PER_AXIS + tile_x;
+                let i = tile_y * TILES_PER_AXIS + tile_x;
                 let tile = self.mem[i];
 
                 let color = if tile == 0 {
@@ -204,8 +202,6 @@ impl ApplicationHandler for State {
 
 pub const TILES_PER_AXIS: usize = 32;
 pub const PIXELS_PER_TILE_AXIS: usize = 8;
-pub const TILES_OFFSET_IN_MEMORY: usize = 256;
 
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
-const MEM_SIZE: usize =
-    TILES_OFFSET_IN_MEMORY + TILES_PER_AXIS * TILES_PER_AXIS;
+const MEM_SIZE: usize = TILES_PER_AXIS * TILES_PER_AXIS;
