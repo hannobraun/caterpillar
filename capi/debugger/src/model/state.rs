@@ -30,7 +30,7 @@ impl PersistentState {
             UpdateFromHost::Memory { memory } => {
                 self.memory = Some(memory);
             }
-            UpdateFromHost::Process(process) => {
+            UpdateFromHost::Runtime(process) => {
                 let runtime_state = match process.state() {
                     ProcessState::Running => RuntimeState::Running,
                     ProcessState::Finished => RuntimeState::Finished,
