@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 use crate::{
     runtime::{self, Instruction},
     source_map::SourceMap,
-    syntax::{Expression, Function, Location, Script},
+    syntax::{self, Expression, Function, Script},
     Program,
 };
 
@@ -104,7 +104,7 @@ impl Compiler<'_> {
         &mut self,
         function: String,
         instruction: Instruction,
-        location: Location,
+        location: syntax::Location,
         output: &mut runtime::Function,
     ) {
         let address = self.code.instructions.push(function, instruction);
