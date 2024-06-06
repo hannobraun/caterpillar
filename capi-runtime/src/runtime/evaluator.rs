@@ -48,7 +48,7 @@ impl Evaluator {
             };
 
             if let Some((location, instruction)) =
-                frame.function.instructions.pop_front()
+                frame.function.consume_instruction()
             {
                 break (frame, location, instruction);
             }

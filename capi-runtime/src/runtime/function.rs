@@ -17,4 +17,8 @@ impl Function {
             instructions: VecDeque::new(),
         }
     }
+
+    pub fn consume_instruction(&mut self) -> Option<(Location, Instruction)> {
+        self.instructions.pop_front()
+    }
 }
