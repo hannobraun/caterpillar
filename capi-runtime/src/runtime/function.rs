@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use crate::InstructionAddress;
+use super::InstructionAddress;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {

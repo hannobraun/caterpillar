@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     instructions::{Instruction, Instructions},
-    runtime, InstructionAddress,
+    runtime::{self, InstructionAddress},
 };
 
 #[derive(

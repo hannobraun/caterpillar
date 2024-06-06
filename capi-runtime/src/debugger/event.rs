@@ -1,4 +1,4 @@
-use crate::InstructionAddress;
+use crate::runtime::InstructionAddress;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugEvent {

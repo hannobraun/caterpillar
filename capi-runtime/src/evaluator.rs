@@ -2,9 +2,9 @@ use crate::{
     call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
     instructions::Instruction,
     runtime::{
-        builtins, BuiltinEffect, DataStack, Function, StackUnderflow, Value,
+        builtins, BuiltinEffect, DataStack, Function, InstructionAddress,
+        StackUnderflow, Value,
     },
-    InstructionAddress,
 };
 
 use super::code::Code;

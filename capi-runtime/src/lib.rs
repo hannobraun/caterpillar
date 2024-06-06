@@ -14,6 +14,5 @@ mod source_map;
 pub use self::{
     compiler::compile,
     evaluator::{Evaluator, EvaluatorEffectKind},
-    instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
 };
