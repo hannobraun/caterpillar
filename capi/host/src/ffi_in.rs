@@ -4,7 +4,7 @@ use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_game_engine::display::NUM_PIXEL_BYTES;
 use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 
-use crate::runtime::Host;
+use crate::host::Host;
 
 pub static STATE: Mutex<Option<Host>> = Mutex::new(None);
 
