@@ -2,6 +2,7 @@ pub mod compiler;
 pub mod debugger;
 pub mod effects;
 pub mod games;
+pub mod runner;
 pub mod runtime;
 pub mod syntax;
 pub mod updates;
