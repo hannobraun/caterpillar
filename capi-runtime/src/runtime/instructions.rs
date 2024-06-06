@@ -60,12 +60,8 @@ pub struct Location {
 
 impl Location {
     pub fn next(mut self) -> Self {
-        self.increment();
+        self.index.increment();
         self
-    }
-
-    fn increment(&mut self) {
-        self.index.0 += 1;
     }
 }
 
@@ -83,6 +79,10 @@ impl Location {
 pub struct InstructionIndex(u32);
 
 impl InstructionIndex {
+    fn increment(&mut self) {
+        self.0 += 1;
+    }
+
     fn to_usize(&self) -> usize {
         self.0.try_into().unwrap()
     }
