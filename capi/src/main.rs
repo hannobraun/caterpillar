@@ -12,7 +12,7 @@ fn main() -> anyhow::Result<()> {
 
     let mut script = capi_runtime::syntax::Script::default();
     snake::snake(&mut script);
-    let program = capi_runtime::compile(script, "main");
+    let program = capi_runtime::compiler::compile(script, "main");
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
     let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());

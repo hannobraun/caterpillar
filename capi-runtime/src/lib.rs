@@ -8,7 +8,6 @@ mod code;
 mod program;
 mod source_map;
 
-pub use self::{
-    compiler::compile,
-    program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
+pub use self::program::{
+    Program, ProgramEffect, ProgramEffectKind, ProgramState,
 };
