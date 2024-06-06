@@ -5,8 +5,11 @@ use serde_big_array::BigArray;
 use crate::{
     breakpoints::Breakpoints,
     code::Code,
-    evaluator::{EvaluatorEffect, EvaluatorEffectKind, EvaluatorState},
-    runtime::{self, DataStack, Evaluator, InstructionAddress, Value},
+    evaluator::{EvaluatorEffect, EvaluatorState},
+    runtime::{
+        self, DataStack, Evaluator, EvaluatorEffectKind, InstructionAddress,
+        Value,
+    },
     source_map::SourceMap,
     syntax::{self, Functions},
 };
