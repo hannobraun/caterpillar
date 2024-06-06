@@ -30,7 +30,7 @@ impl CallStack {
         self.frames.last_mut()
     }
 
-    pub fn contains(&self, location: Location) -> bool {
+    pub fn contains(&self, location: &Location) -> bool {
         self.frames.iter().any(|frame| {
             frame.function.instructions.front() == Some(&location.next())
         })

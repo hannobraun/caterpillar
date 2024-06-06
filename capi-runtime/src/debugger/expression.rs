@@ -35,7 +35,7 @@ impl Expression {
         });
 
         let is_on_call_stack =
-            program.evaluator.call_stack().contains(location);
+            program.evaluator.call_stack().contains(&location);
 
         Self {
             location,
