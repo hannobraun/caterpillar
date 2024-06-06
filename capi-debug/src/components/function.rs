@@ -97,10 +97,10 @@ pub fn Expression(
                 // This happens, if the user clicks on a comment.
                 return;
             };
-            let address = ron::from_str(&address).unwrap();
+            let location = ron::from_str(&address).unwrap();
 
             leptos::spawn_local(send_event(
-                DebugEvent::ToggleBreakpoint { location: address },
+                DebugEvent::ToggleBreakpoint { location },
                 events.clone(),
             ));
         };
