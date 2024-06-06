@@ -589,6 +589,7 @@ pub fn snake(script: &mut Script) {
             .v(0)
             .w("copy")
             .w("return_if_zero")
+            .w("drop")
             .w("ay")
             .w("by")
             .w("eq")
