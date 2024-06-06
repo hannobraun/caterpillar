@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    runtime::{DataStack, Function},
-    InstructionAddress, Value,
+    runtime::{DataStack, Function, Value},
+    InstructionAddress,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

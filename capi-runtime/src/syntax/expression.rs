@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::{syntax::Location, Value};
+use crate::{runtime::Value, syntax::Location};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {

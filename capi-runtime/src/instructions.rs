@@ -1,6 +1,6 @@
 use std::{fmt, str::FromStr};
 
-use crate::Value;
+use crate::runtime::Value;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,

@@ -46,7 +46,7 @@ pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
 }
 
 #[component]
-fn Line(line: Vec<capi_runtime::Value>) -> impl IntoView {
+fn Line(line: Vec<capi_runtime::runtime::Value>) -> impl IntoView {
     let values = line
         .into_iter()
         .map(|value| {
@@ -64,7 +64,7 @@ fn Line(line: Vec<capi_runtime::Value>) -> impl IntoView {
 }
 
 #[component]
-fn Value(value: capi_runtime::Value) -> impl IntoView {
+fn Value(value: capi_runtime::runtime::Value) -> impl IntoView {
     view! {
         <li class="inline-block w-6 mr-2 text-right">{value.to_string()}</li>
     }

@@ -6,10 +6,10 @@ use crate::{
     breakpoints::Breakpoints,
     code::Code,
     evaluator::{EvaluatorEffect, EvaluatorEffectKind, EvaluatorState},
-    runtime::{self, DataStack},
+    runtime::{self, DataStack, Value},
     source_map::SourceMap,
     syntax::{self, Functions},
-    Evaluator, InstructionAddress, Value,
+    Evaluator, InstructionAddress,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

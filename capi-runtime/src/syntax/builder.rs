@@ -1,6 +1,6 @@
 use crate::{
+    runtime::Value,
     syntax::{Expression, ExpressionKind, Location},
-    Value,
 };
 
 #[derive(Debug)]
