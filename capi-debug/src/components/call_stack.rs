@@ -18,14 +18,14 @@ pub fn CallStack(
             .call_stack()
             .iter()
             .filter_map(|runtime_location| {
-                let location = program
+                let syntax_location = program
                     .get()?
                     .source_map
                     .runtime_to_syntax(runtime_location)?;
                 let function = program
                     .get()?
                     .functions
-                    .get_from_location(location)
+                    .get_from_location(syntax_location)
                     .cloned()?;
 
                 Some(view! {
