@@ -15,9 +15,9 @@ impl Instructions {
     }
 
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let address = self.next_location();
-        self.inner.push((address, instruction));
-        address
+        let location = self.next_location();
+        self.inner.push((location, instruction));
+        location
     }
 
     pub fn get(&self, address: &InstructionAddress) -> &Instruction {
