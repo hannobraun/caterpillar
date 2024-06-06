@@ -5,7 +5,7 @@ use crate::{
 };
 
 pub struct Expression {
-    pub location: runtime::Location,
+    pub location: Option<runtime::Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
@@ -38,7 +38,7 @@ impl Expression {
             program.evaluator.call_stack().contains(&location);
 
         Self {
-            location,
+            location: Some(location),
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,

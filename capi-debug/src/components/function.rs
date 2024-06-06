@@ -77,8 +77,9 @@ pub fn Expression(
             class_inner.push_str(" font-bold");
         }
 
-        let data_location =
-            ron::to_string(&debugger_expression.location).unwrap();
+        let data_location = debugger_expression
+            .location
+            .map(|location| ron::to_string(&location).unwrap());
 
         let error = debugger_expression.effect.and_then(|effect| {
             if let ProgramEffectKind::Evaluator(effect) = effect.kind {
