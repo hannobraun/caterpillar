@@ -11,9 +11,9 @@ pub struct Breakpoints {
 }
 
 impl Breakpoints {
-    pub fn toggle_durable_at(&mut self, address: runtime::InstructionAddress) {
-        if self.durable.take(&address).is_none() {
-            self.durable.insert(address);
+    pub fn toggle_durable_at(&mut self, location: runtime::InstructionAddress) {
+        if self.durable.take(&location).is_none() {
+            self.durable.insert(location);
         }
     }
 
