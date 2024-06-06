@@ -2,7 +2,7 @@ use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
     runtime_state::RuntimeState,
-    updates::{Code, UpdateFromRuntime},
+    updates::{Code, UpdateFromHost},
 };
 use capi_runtime::{Effect, Instruction, Instructions, ProcessState, Value};
 
@@ -25,12 +25,12 @@ impl PersistentState {
         Command::UpdateCode { instructions }
     }
 
-    pub fn on_update_from_runtime(&mut self, update: UpdateFromRuntime) {
+    pub fn on_update_from_runtime(&mut self, update: UpdateFromHost) {
         match update {
-            UpdateFromRuntime::Memory { memory } => {
+            UpdateFromHost::Memory { memory } => {
                 self.memory = Some(memory);
             }
-            UpdateFromRuntime::Process(process) => {
+            UpdateFromHost::Process(process) => {
                 let runtime_state = match process.state() {
                     ProcessState::Running => RuntimeState::Running,
                     ProcessState::Finished => RuntimeState::Finished,

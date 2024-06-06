@@ -1,6 +1,6 @@
 use capi_protocol::{
     command::CommandExt,
-    updates::{SerializedUpdate, UpdateFromRuntime},
+    updates::{SerializedUpdate, UpdateFromHost},
 };
 use leptos::SignalSet;
 use tokio::{select, sync::mpsc};
@@ -99,7 +99,7 @@ impl Default for Debugger {
 }
 
 fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
-    let update = UpdateFromRuntime::deserialize(update);
+    let update = UpdateFromHost::deserialize(update);
     state.on_update_from_runtime(update);
 }
 

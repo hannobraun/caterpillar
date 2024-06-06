@@ -6,7 +6,7 @@ use capi_runtime::{Instructions, Runtime};
 pub struct Updates {
     latest_memory: Option<Memory>,
     runtime_at_client: Option<Runtime>,
-    queue: Vec<UpdateFromRuntime>,
+    queue: Vec<UpdateFromHost>,
 }
 
 impl Updates {
@@ -15,17 +15,17 @@ impl Updates {
 
         if self.update_is_necessary(process) {
             self.runtime_at_client = Some(process.clone());
-            self.queue.push(UpdateFromRuntime::Process(process.clone()));
+            self.queue.push(UpdateFromHost::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
-                self.queue.push(UpdateFromRuntime::Memory { memory });
+                self.queue.push(UpdateFromHost::Memory { memory });
             }
         }
     }
 
     pub fn take_queued_updates(
         &mut self,
-    ) -> impl Iterator<Item = UpdateFromRuntime> + '_ {
+    ) -> impl Iterator<Item = UpdateFromHost> + '_ {
         self.queue.drain(..)
     }
 
@@ -50,12 +50,12 @@ impl Updates {
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
-pub enum UpdateFromRuntime {
+pub enum UpdateFromHost {
     Process(Runtime),
     Memory { memory: Memory },
 }
 
-impl UpdateFromRuntime {
+impl UpdateFromHost {
     pub fn deserialize(bytes: SerializedUpdate) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
