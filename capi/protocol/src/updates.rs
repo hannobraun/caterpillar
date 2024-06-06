@@ -5,7 +5,7 @@ use capi_runtime::{Instructions, Runtime};
 #[derive(Debug, Default)]
 pub struct Updates {
     latest_memory: Option<Memory>,
-    process_at_client: Option<Runtime>,
+    runtime_at_client: Option<Runtime>,
     queue: Vec<UpdateFromRuntime>,
 }
 
@@ -14,7 +14,7 @@ impl Updates {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
-            self.process_at_client = Some(process.clone());
+            self.runtime_at_client = Some(process.clone());
             self.queue.push(UpdateFromRuntime::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
@@ -30,7 +30,7 @@ impl Updates {
     }
 
     fn update_is_necessary(&self, process: &Runtime) -> bool {
-        if let Some(process_at_client) = &self.process_at_client {
+        if let Some(process_at_client) = &self.runtime_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
@@ -44,7 +44,7 @@ impl Updates {
             }
         }
 
-        self.process_at_client.as_ref() != Some(process)
+        self.runtime_at_client.as_ref() != Some(process)
     }
 }
 
