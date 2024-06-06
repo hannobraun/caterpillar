@@ -7,7 +7,6 @@ mod call_stack;
 mod code;
 mod compiler;
 mod evaluator;
-mod instructions;
 mod program;
 mod source_map;
 
