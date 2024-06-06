@@ -68,7 +68,7 @@ impl Compiler<'_> {
 
                 self.generate(
                     Instruction::BindingDefine { name: names },
-                    expression.location.clone(),
+                    expression.location,
                     output,
                 );
             }
