@@ -44,12 +44,7 @@ impl Compiler<'_> {
         let mut output = runtime::Function::new(name.clone(), args);
 
         for expression in syntax {
-            self.compile_expression(
-                name.clone(),
-                expression,
-                &mut bindings,
-                &mut output,
-            );
+            self.compile_expression(expression, &mut bindings, &mut output);
         }
 
         self.code.functions.insert(name, output);
@@ -57,7 +52,6 @@ impl Compiler<'_> {
 
     fn compile_expression(
         &mut self,
-        _: String,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
         output: &mut runtime::Function,
