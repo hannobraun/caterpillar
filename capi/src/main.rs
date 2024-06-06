@@ -1,5 +1,4 @@
 mod display;
-mod effects;
 mod runner;
 mod server;
 

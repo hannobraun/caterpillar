@@ -2,6 +2,7 @@ use std::{iter, thread};
 
 use capi_runtime::{
     debugger::DebugEvent,
+    effects::{DisplayEffect, EffectsRx, EffectsTx},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     updates::UpdatesTx,
     Program, ProgramEffect, ProgramEffectKind,
@@ -9,10 +10,7 @@ use capi_runtime::{
 use rand::random;
 use tokio::sync::mpsc;
 
-use crate::{
-    display::TILES_PER_AXIS,
-    effects::{DisplayEffect, EffectsRx, EffectsTx},
-};
+use crate::display::TILES_PER_AXIS;
 
 pub fn runner(
     program: Program,

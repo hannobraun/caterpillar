@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+use capi_runtime::effects::DisplayEffect;
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -9,7 +10,7 @@ use winit::{
     window::Window,
 };
 
-use crate::{effects::DisplayEffect, runner::RunnerThread};
+use crate::runner::RunnerThread;
 
 pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
