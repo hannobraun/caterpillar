@@ -1,20 +1,20 @@
 use std::collections::BTreeMap;
 
-use crate::{runtime::InstructionAddress, syntax::Location};
+use crate::{runtime::InstructionAddress, syntax};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    address_to_location: BTreeMap<InstructionAddress, Location>,
-    location_to_address: BTreeMap<Location, InstructionAddress>,
+    address_to_location: BTreeMap<InstructionAddress, syntax::Location>,
+    location_to_address: BTreeMap<syntax::Location, InstructionAddress>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
         address: InstructionAddress,
-        location: Location,
+        location: syntax::Location,
     ) {
         self.address_to_location.insert(address, location.clone());
         self.location_to_address.insert(location, address);
@@ -32,7 +32,7 @@ impl SourceMap {
     pub fn address_to_location(
         &self,
         address: &InstructionAddress,
-    ) -> Option<Location> {
+    ) -> Option<syntax::Location> {
         self.address_to_location.get(address).cloned()
     }
 
@@ -43,7 +43,7 @@ impl SourceMap {
     /// this module.
     pub fn location_to_address(
         &self,
-        location: &Location,
+        location: &syntax::Location,
     ) -> Option<InstructionAddress> {
         self.location_to_address.get(location).cloned()
     }
