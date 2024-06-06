@@ -4,7 +4,7 @@ use capi_protocol::{
     host_state::HostState,
     updates::{Code, UpdateFromHost},
 };
-use capi_runtime::{Effect, Instruction, Instructions, ProcessState, Value};
+use capi_runtime::{Effect, Instruction, Instructions, RuntimeState, Value};
 
 use super::{
     ActiveFunctions, Breakpoints, DebugCode, DebugFragmentKind, UserAction,
@@ -32,9 +32,9 @@ impl PersistentState {
             }
             UpdateFromHost::Runtime { runtime } => {
                 let runtime_state = match runtime.state() {
-                    ProcessState::Running => HostState::Running,
-                    ProcessState::Finished => HostState::Finished,
-                    ProcessState::Stopped => HostState::Stopped {
+                    RuntimeState::Running => HostState::Running,
+                    RuntimeState::Finished => HostState::Finished,
+                    RuntimeState::Stopped => HostState::Stopped {
                         effects: runtime.effects().queue().collect(),
                         active_instructions: runtime
                             .evaluator()

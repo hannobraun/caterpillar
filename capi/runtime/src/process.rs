@@ -15,13 +15,13 @@ impl Runtime {
         self_
     }
 
-    pub fn state(&self) -> ProcessState {
+    pub fn state(&self) -> RuntimeState {
         if self.effects.inspect_first().is_some() {
-            ProcessState::Stopped
+            RuntimeState::Stopped
         } else if self.evaluator.stack.no_frames_left() {
-            ProcessState::Finished
+            RuntimeState::Finished
         } else {
-            ProcessState::Running
+            RuntimeState::Running
         }
     }
 
@@ -97,13 +97,13 @@ impl Runtime {
     }
 }
 
-pub enum ProcessState {
+pub enum RuntimeState {
     Running,
     Finished,
     Stopped,
 }
 
-impl ProcessState {
+impl RuntimeState {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
     }
