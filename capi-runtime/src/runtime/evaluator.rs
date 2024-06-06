@@ -116,7 +116,7 @@ impl Evaluator {
                             .pop()
                             .map_err(|effect| EvaluatorEffect {
                                 effect: effect.into(),
-                                address,
+                                location: address,
                             })?;
                         stack_frame.bindings.insert(argument.clone(), value);
                     }
@@ -124,7 +124,7 @@ impl Evaluator {
                     self.call_stack.push(stack_frame).map_err(|effect| {
                         EvaluatorEffect {
                             effect: effect.into(),
-                            address,
+                            location: address,
                         }
                     })?;
                 }
@@ -142,7 +142,10 @@ impl Evaluator {
             },
             Ok(None) => {}
             Err(effect) => {
-                return Err(EvaluatorEffect { effect, address });
+                return Err(EvaluatorEffect {
+                    effect,
+                    location: address,
+                });
             }
         }
 
@@ -162,7 +165,7 @@ pub enum EvaluatorState {
 #[derive(Debug)]
 pub struct EvaluatorEffect {
     pub effect: EvaluatorEffectKind,
-    pub address: InstructionAddress,
+    pub location: InstructionAddress,
 }
 
 #[derive(
