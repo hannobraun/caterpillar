@@ -41,7 +41,7 @@ impl Expression {
         // But it's better than nothing, so I'm keeping it for now, and will
         // hopefully fix it soon.
         let is_on_call_stack = location
-            .map(|address| program.evaluator.call_stack().contains(address))
+            .map(|location| program.evaluator.call_stack().contains(location))
             .unwrap_or(false);
 
         Self {
