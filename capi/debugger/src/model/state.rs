@@ -25,7 +25,7 @@ impl PersistentState {
         Command::UpdateCode { instructions }
     }
 
-    pub fn on_update_from_runtime(&mut self, update: UpdateFromHost) {
+    pub fn on_update_from_host(&mut self, update: UpdateFromHost) {
         match update {
             UpdateFromHost::Memory { memory } => {
                 self.memory = Some(memory);

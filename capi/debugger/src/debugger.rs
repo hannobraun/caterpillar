@@ -100,7 +100,7 @@ impl Default for Debugger {
 
 fn on_update_from_runtime(update: Vec<u8>, state: &mut PersistentState) {
     let update = UpdateFromHost::deserialize(update);
-    state.on_update_from_runtime(update);
+    state.on_update_from_host(update);
 }
 
 fn on_ui_action(

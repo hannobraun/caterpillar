@@ -91,7 +91,7 @@ impl TestDebugger {
             self.updates
                 .queue_updates(&game_engine.runtime, &self.memory);
             for update in self.updates.take_queued_updates() {
-                self.persistent.on_update_from_runtime(update);
+                self.persistent.on_update_from_host(update);
             }
         }
     }
