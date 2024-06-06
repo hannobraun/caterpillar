@@ -79,7 +79,7 @@ pub fn Expression(
 
         let data_location = debugger_expression
             .location
-            .map(|address| ron::to_string(&address).unwrap());
+            .map(|location| ron::to_string(&location).unwrap());
 
         let error = debugger_expression.effect.and_then(|effect| {
             if let ProgramEffectKind::Evaluator(effect) = effect.kind {
