@@ -178,6 +178,9 @@ pub struct EvaluatorEffect {
     thiserror::Error,
 )]
 pub enum EvaluatorEffectKind {
+    #[error("Binding expression left values on stack")]
+    BindingLeftValuesOnStack,
+
     #[error("Builtin effect: {self:?}")]
     Builtin(BuiltinEffect),
 
@@ -208,6 +211,10 @@ fn evaluate_instruction(
             for name in names.into_iter().rev() {
                 let value = data_stack.pop()?;
                 bindings.insert(name, value);
+            }
+
+            if !data_stack.is_empty() {
+                return Err(EvaluatorEffectKind::BindingLeftValuesOnStack);
             }
         }
         Instruction::CallBuiltin { name } => {
