@@ -24,9 +24,9 @@ impl Instructions {
     }
 
     pub fn get(&self, location: &Location) -> &Instruction {
-        let (stored_location, instruction) =
+        let (stored_index, instruction) =
             &self.inner[location.index.to_usize()];
-        assert_eq!(&location.index, stored_location);
+        assert_eq!(&location.index, stored_index);
         instruction
     }
 }
