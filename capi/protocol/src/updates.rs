@@ -1,6 +1,8 @@
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
-use capi_runtime::{Instructions, Runtime};
+use capi_runtime::{Instructions, Runtime, RuntimeState};
+
+use crate::host_state::HostState;
 
 #[derive(Debug, Default)]
 pub struct Updates {
@@ -15,9 +17,25 @@ impl Updates {
 
         if self.update_is_necessary(runtime) {
             self.runtime_at_client = Some(runtime.clone());
-            self.queue.push(UpdateFromHost::Runtime {
-                runtime: runtime.clone(),
-            });
+
+            let state = match runtime.state() {
+                RuntimeState::Running => HostState::Running,
+                RuntimeState::Finished => HostState::Finished,
+                RuntimeState::Stopped => HostState::Stopped {
+                    effects: runtime.effects().queue().collect(),
+                    active_instructions: runtime
+                        .evaluator()
+                        .active_instructions()
+                        .collect(),
+                    current_operands: runtime
+                        .stack()
+                        .operands_in_current_stack_frame()
+                        .copied()
+                        .collect::<Vec<_>>(),
+                },
+            };
+
+            self.queue.push(UpdateFromHost::State { state });
 
             if let Some(memory) = self.latest_memory.take() {
                 self.queue.push(UpdateFromHost::Memory { memory });
@@ -53,7 +71,7 @@ impl Updates {
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub enum UpdateFromHost {
-    Runtime { runtime: Runtime },
+    State { state: HostState },
     Memory { memory: Memory },
 }
 
