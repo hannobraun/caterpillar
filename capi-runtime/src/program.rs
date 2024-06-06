@@ -7,7 +7,7 @@ use crate::{
     code::Code,
     runtime::{
         self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
-        EvaluatorState, InstructionAddress, Value,
+        EvaluatorState, Value,
     },
     source_map::SourceMap,
     syntax::{self, Functions},
@@ -131,7 +131,7 @@ impl ProgramState {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProgramEffect {
     pub kind: ProgramEffectKind,
-    pub address: InstructionAddress,
+    pub address: runtime::InstructionAddress,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
