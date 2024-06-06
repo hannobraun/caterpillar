@@ -20,6 +20,7 @@ impl CallStack {
         self.frames
             .last()
             .and_then(|frame| frame.function.instructions.front().cloned())
+            .map(|(location, _instruction)| location)
     }
 
     pub fn top(&self) -> Option<&StackFrame> {
@@ -32,7 +33,11 @@ impl CallStack {
 
     pub fn contains(&self, location: &Location) -> bool {
         self.frames.iter().any(|frame| {
-            frame.function.instructions.front()
+            frame
+                .function
+                .instructions
+                .front()
+                .map(|(location, _instruction)| location)
                 == Some(&location.clone().next())
         })
     }
@@ -57,6 +62,7 @@ impl CallStack {
         self.frames
             .iter()
             .filter_map(|frame| frame.function.instructions.front())
+            .map(|(location, _instruction)| location)
     }
 }
 

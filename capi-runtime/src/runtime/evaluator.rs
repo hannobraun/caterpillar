@@ -47,7 +47,9 @@ impl Evaluator {
                 return Ok(EvaluatorState::Finished);
             };
 
-            if let Some(location) = frame.function.instructions.pop_front() {
+            if let Some((location, _instruction)) =
+                frame.function.instructions.pop_front()
+            {
                 break (frame, location);
             }
 
