@@ -116,19 +116,6 @@ pub fn neg(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn place(data_stack: &mut DataStack) -> Result {
-    let i = data_stack.pop()?;
-    let a = data_stack.pop()?;
-
-    let i = i.0.try_into()?;
-
-    data_stack.save(i)?;
-    data_stack.push(a);
-    data_stack.restore();
-
-    Ok(None)
-}
-
 pub fn read_input() -> Result {
     Ok(Some(BuiltinEffect::ReadInput))
 }
@@ -175,20 +162,6 @@ pub fn sub(data_stack: &mut DataStack) -> Result {
 
 pub fn submit_frame() -> Result {
     Ok(Some(BuiltinEffect::SubmitFrame))
-}
-
-pub fn take(data_stack: &mut DataStack) -> Result {
-    let i = data_stack.pop()?;
-
-    let i = i.0.try_into()?;
-
-    data_stack.save(i)?;
-    let a = data_stack.pop()?;
-    data_stack.restore();
-
-    data_stack.push(a);
-
-    Ok(None)
 }
 
 pub fn write_tile(data_stack: &mut DataStack) -> Result {
