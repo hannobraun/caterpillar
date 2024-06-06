@@ -93,7 +93,7 @@ pub fn Expression(
             let event_target = event.target().unwrap();
             let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-            let Some(location) = element.get_attribute("data-address") else {
+            let Some(location) = element.get_attribute("data-location") else {
                 // This happens, if the user clicks on a comment.
                 return;
             };
@@ -112,7 +112,7 @@ pub fn Expression(
                 <span class=class_outer>
                     <span
                         class=class_inner
-                        data-address=data_address
+                        data-location=data_address
                         on:click=toggle_breakpoint>
                         {expression}
                     </span>
