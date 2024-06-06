@@ -63,7 +63,7 @@ impl Compiler<'_> {
                     // Inserting bindings unconditionally like that does mean
                     // that bindings can overwrite previously defined bindings.
                     // This is undesirable, but it'll do for now.
-                    bindings.insert(name.clone());
+                    bindings.insert(name);
                 }
 
                 self.generate(
