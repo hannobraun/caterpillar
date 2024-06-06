@@ -2,7 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use anyhow::anyhow;
 use capi_compiler::fragments::{self, FragmentId, FragmentKind, Payload};
-use capi_protocol::{runtime_state::RuntimeState, updates::Code};
+use capi_protocol::{runtime_state::HostState, updates::Code};
 use capi_runtime::{Effect, InstructionAddress};
 
 use super::{Breakpoints, DebugBranch, DebugFragment, DebugFunction};
@@ -17,7 +17,7 @@ impl ActiveFunctions {
     pub fn new(
         code: Option<&Code>,
         breakpoints: &Breakpoints,
-        state: Option<&RuntimeState>,
+        state: Option<&HostState>,
     ) -> Self {
         let Some(code) = code else {
             return Self::Message {
@@ -26,17 +26,17 @@ impl ActiveFunctions {
         };
         let (effects, active_instructions) = match state {
             Some(state) => match state {
-                RuntimeState::Running => {
+                HostState::Running => {
                     return Self::Message {
                         message: ActiveFunctionsMessage::ProcessRunning,
                     };
                 }
-                RuntimeState::Finished => {
+                HostState::Finished => {
                     return Self::Message {
                         message: ActiveFunctionsMessage::ProcessFinished,
                     };
                 }
-                RuntimeState::Stopped {
+                HostState::Stopped {
                     effects,
                     active_instructions,
                     current_operands: _,

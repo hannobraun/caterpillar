@@ -1,7 +1,7 @@
 use capi_compiler::fragments::FragmentId;
 use capi_game_engine::{command::Command, memory::Memory};
 use capi_protocol::{
-    runtime_state::RuntimeState,
+    runtime_state::HostState,
     updates::{Code, UpdateFromHost},
 };
 use capi_runtime::{Effect, Instruction, Instructions, ProcessState, Value};
@@ -14,7 +14,7 @@ use super::{
 pub struct PersistentState {
     pub code: DebugCode,
     pub breakpoints: Breakpoints,
-    pub runtime_state: Option<RuntimeState>,
+    pub runtime_state: Option<HostState>,
     pub memory: Option<Memory>,
 }
 
@@ -32,9 +32,9 @@ impl PersistentState {
             }
             UpdateFromHost::Runtime { runtime } => {
                 let runtime_state = match runtime.state() {
-                    ProcessState::Running => RuntimeState::Running,
-                    ProcessState::Finished => RuntimeState::Finished,
-                    ProcessState::Stopped => RuntimeState::Stopped {
+                    ProcessState::Running => HostState::Running,
+                    ProcessState::Finished => HostState::Finished,
+                    ProcessState::Stopped => HostState::Stopped {
                         effects: runtime.effects().queue().collect(),
                         active_instructions: runtime
                             .evaluator()
@@ -243,7 +243,7 @@ impl PersistentState {
             self.runtime_state.as_ref(),
         );
         let operands = match &self.runtime_state {
-            Some(RuntimeState::Stopped {
+            Some(HostState::Stopped {
                 current_operands, ..
             }) => current_operands.clone(),
             _ => Vec::new(),
