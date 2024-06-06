@@ -201,7 +201,7 @@ impl ApplicationHandler for State {
 }
 
 pub const TILES_PER_AXIS: usize = 32;
-pub const PIXELS_PER_TILE_AXIS: usize = 8;
+const PIXELS_PER_TILE_AXIS: usize = 8;
 
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
 const MEM_SIZE: usize = TILES_PER_AXIS * TILES_PER_AXIS;
