@@ -16,6 +16,10 @@ impl Instructions {
         index
     }
 
+    pub fn next(&self) -> Option<(InstructionIndex, Instruction)> {
+        self.inner.front().cloned()
+    }
+
     pub fn get(&self, location: &Location) -> &Instruction {
         let (stored_index, instruction) =
             &self.inner[location.index.to_usize()];
