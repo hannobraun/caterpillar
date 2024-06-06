@@ -93,11 +93,11 @@ pub fn Expression(
             let event_target = event.target().unwrap();
             let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-            let Some(address) = element.get_attribute("data-address") else {
+            let Some(location) = element.get_attribute("data-address") else {
                 // This happens, if the user clicks on a comment.
                 return;
             };
-            let location = ron::from_str(&address).unwrap();
+            let location = ron::from_str(&location).unwrap();
 
             leptos::spawn_local(send_event(
                 DebugEvent::ToggleBreakpoint { location },
