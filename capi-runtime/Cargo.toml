@@ -13,3 +13,4 @@ features = ["derive"]
 
 [dependencies.tokio]
 version = "*"
+features = ["sync"]
