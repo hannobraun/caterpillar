@@ -17,8 +17,8 @@ impl Breakpoints {
         }
     }
 
-    pub fn set_ephemeral(&mut self, address: runtime::InstructionAddress) {
-        self.ephemeral.insert(address);
+    pub fn set_ephemeral(&mut self, location: runtime::InstructionAddress) {
+        self.ephemeral.insert(location);
     }
 
     pub fn durable_breakpoint_at(
