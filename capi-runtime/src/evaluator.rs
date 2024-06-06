@@ -1,8 +1,10 @@
 use crate::{
     call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
     instructions::Instruction,
-    runtime::{builtins, DataStack, Function, StackUnderflow, Value},
-    BuiltinEffect, InstructionAddress,
+    runtime::{
+        builtins, BuiltinEffect, DataStack, Function, StackUnderflow, Value,
+    },
+    InstructionAddress,
 };
 
 use super::code::Code;

@@ -1,8 +1,9 @@
 use std::{sync::mpsc, thread};
 
 use capi_runtime::{
-    debugger::DebugEvent, runtime::Value, BuiltinEffect, EvaluatorEffectKind,
-    Program, ProgramEffect, ProgramEffectKind,
+    debugger::DebugEvent,
+    runtime::{BuiltinEffect, Value},
+    EvaluatorEffectKind, Program, ProgramEffect, ProgramEffectKind,
 };
 use rand::random;
 

@@ -16,5 +16,4 @@ pub use self::{
     evaluator::{Evaluator, EvaluatorEffectKind},
     instructions::InstructionAddress,
     program::{Program, ProgramEffect, ProgramEffectKind, ProgramState},
-    runtime::builtins::BuiltinEffect,
 };
