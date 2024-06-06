@@ -1,4 +1,3 @@
-mod display;
 mod server;
 
 fn main() -> anyhow::Result<()> {
@@ -13,5 +12,5 @@ fn main() -> anyhow::Result<()> {
 
     let (events_tx, runner) = capi_runtime::runner::runner(program, updates_tx);
     server::start(updates_rx, events_tx);
-    display::run(runner)
+    capi_runtime::display::run(runner)
 }

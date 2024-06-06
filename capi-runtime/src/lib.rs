@@ -1,5 +1,6 @@
 pub mod compiler;
 pub mod debugger;
+pub mod display;
 pub mod effects;
 pub mod games;
 pub mod runner;

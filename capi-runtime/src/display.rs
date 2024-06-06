@@ -1,9 +1,5 @@
 use std::collections::VecDeque;
 
-use capi_runtime::{
-    effects::{DisplayEffect, TILES_PER_AXIS},
-    runner::RunnerThread,
-};
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
@@ -11,6 +7,11 @@ use winit::{
     event_loop::{ActiveEventLoop, EventLoop},
     keyboard::{KeyCode, PhysicalKey},
     window::Window,
+};
+
+use crate::{
+    effects::{DisplayEffect, TILES_PER_AXIS},
+    runner::RunnerThread,
 };
 
 pub fn run(runner: RunnerThread) -> anyhow::Result<()> {
