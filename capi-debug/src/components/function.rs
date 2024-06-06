@@ -100,7 +100,7 @@ pub fn Expression(
             let address = ron::from_str(&address).unwrap();
 
             leptos::spawn_local(send_event(
-                DebugEvent::ToggleBreakpoint { address },
+                DebugEvent::ToggleBreakpoint { location: address },
                 events.clone(),
             ));
         };

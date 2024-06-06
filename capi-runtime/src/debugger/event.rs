@@ -9,6 +9,6 @@ pub enum DebugEvent {
     Step,
     Stop,
     ToggleBreakpoint {
-        address: runtime::InstructionAddress,
+        location: runtime::InstructionAddress,
     },
 }
