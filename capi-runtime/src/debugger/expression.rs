@@ -17,8 +17,8 @@ impl Expression {
         let location =
             program.source_map.syntax_to_runtime(&expression.location);
 
-        let has_durable_breakpoint = if let Some(address) = location {
-            program.breakpoints.durable_breakpoint_at(&address)
+        let has_durable_breakpoint = if let Some(location) = location {
+            program.breakpoints.durable_breakpoint_at(&location)
         } else {
             false
         };
