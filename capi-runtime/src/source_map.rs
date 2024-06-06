@@ -31,6 +31,9 @@ impl SourceMap {
             .expect("Expect every runtime location to map to a syntax location")
     }
 
+    /// Get the runtime location that a given syntax location is mapped to
+    ///
+    /// Can return `None`, as comments have no mapping to runtime locations.
     pub fn syntax_to_runtime(
         &self,
         syntax: &syntax::Location,
