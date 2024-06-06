@@ -1,6 +1,10 @@
 use capi_runtime::Program;
 use tokio::sync::watch;
 
+pub fn updates(program: Program) -> (UpdatesTx, UpdatesRx) {
+    UpdatesTx::new(program)
+}
+
 pub type UpdatesRx = watch::Receiver<Program>;
 
 pub struct UpdatesTx {

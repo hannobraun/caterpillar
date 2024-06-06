@@ -13,7 +13,7 @@ fn main() -> anyhow::Result<()> {
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
 
-    let (updates_tx, updates_rx) = updates::UpdatesTx::new(program.clone());
+    let (updates_tx, updates_rx) = updates::updates(program.clone());
 
     server::start(updates_rx, events_tx);
     let runner = runner::RunnerThread::start(program, events_rx, updates_tx);
