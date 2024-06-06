@@ -66,7 +66,7 @@ impl Location {
         self.index += 1;
     }
 
-    fn index(self) -> usize {
+    fn index(&self) -> usize {
         self.index.try_into().unwrap()
     }
 }
