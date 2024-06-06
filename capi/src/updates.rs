@@ -9,11 +9,15 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn new(inner: UpdatesTxInner) -> Self {
-        Self {
-            inner,
+    pub fn new(program: Program) -> (Self, UpdatesRx) {
+        let (tx, rx) = tokio::sync::watch::channel(program);
+
+        let self_ = Self {
+            inner: tx,
             program_at_client: None,
-        }
+        };
+
+        (self_, rx)
     }
 
     pub fn send_if_relevant_change(&mut self, program: &Program) {

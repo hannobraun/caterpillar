@@ -12,9 +12,8 @@ fn main() -> anyhow::Result<()> {
     let program = capi_runtime::games::build(capi_runtime::games::snake::snake);
 
     let (events_tx, events_rx) = tokio::sync::mpsc::unbounded_channel();
-    let (updates_tx, updates_rx) = tokio::sync::watch::channel(program.clone());
 
-    let updates_tx = updates::UpdatesTx::new(updates_tx);
+    let (updates_tx, updates_rx) = updates::UpdatesTx::new(program.clone());
 
     server::start(updates_rx, events_tx);
     let runner = runner::RunnerThread::start(program, events_rx, updates_tx);
