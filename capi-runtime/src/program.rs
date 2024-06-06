@@ -92,7 +92,7 @@ impl Program {
             Err(EvaluatorEffect { effect, location }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
-                    location,
+                    location: location.clone(),
                 });
                 location
             }

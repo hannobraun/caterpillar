@@ -18,7 +18,7 @@ impl Instructions {
 
     pub fn push(&mut self, instruction: Instruction) -> Location {
         let location = self.next_location();
-        self.inner.push((location, instruction));
+        self.inner.push((location.clone(), instruction));
         location
     }
 
@@ -41,7 +41,6 @@ impl<'r> IntoIterator for &'r Instructions {
 type InstructionsInner = Vec<(Location, Instruction)>;
 
 #[derive(
-    Copy,
     Clone,
     Debug,
     Default,

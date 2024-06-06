@@ -115,7 +115,7 @@ impl Evaluator {
                             .pop()
                             .map_err(|effect| EvaluatorEffect {
                                 effect: effect.into(),
-                                location,
+                                location: location.clone(),
                             })?;
                         stack_frame.bindings.insert(argument.clone(), value);
                     }
@@ -123,7 +123,7 @@ impl Evaluator {
                     self.call_stack.push(stack_frame).map_err(|effect| {
                         EvaluatorEffect {
                             effect: effect.into(),
-                            location,
+                            location: location.clone(),
                         }
                     })?;
                 }

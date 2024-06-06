@@ -19,7 +19,7 @@ impl CallStack {
     pub fn next(&self) -> Option<Location> {
         self.frames
             .last()
-            .and_then(|frame| frame.function.instructions.front().copied())
+            .and_then(|frame| frame.function.instructions.front().cloned())
     }
 
     pub fn top(&self) -> Option<&StackFrame> {
@@ -32,7 +32,8 @@ impl CallStack {
 
     pub fn contains(&self, location: &Location) -> bool {
         self.frames.iter().any(|frame| {
-            frame.function.instructions.front() == Some(&location.next())
+            frame.function.instructions.front()
+                == Some(&location.clone().next())
         })
     }
 

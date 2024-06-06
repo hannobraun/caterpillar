@@ -16,7 +16,8 @@ impl SourceMap {
         runtime: runtime::Location,
         syntax: syntax::Location,
     ) {
-        self.runtime_to_syntax.insert(runtime, syntax.clone());
+        self.runtime_to_syntax
+            .insert(runtime.clone(), syntax.clone());
         self.syntax_to_runtime.insert(syntax, runtime);
     }
 
