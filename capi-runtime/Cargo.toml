@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 serde-big-array = "*"
 thiserror = "*"
+tokio = "*"
 
 [dependencies.serde]
 version = "*"
