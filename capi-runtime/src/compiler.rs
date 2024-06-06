@@ -98,7 +98,7 @@ impl Compiler<'_> {
             function: output.name.clone(),
             index,
         };
-        output.instructions.push_back((index, instruction));
+        output.instructions.push(instruction);
         self.source_map
             .define_mapping(runtime_location, syntax_location);
     }
