@@ -96,15 +96,17 @@ pub enum Instruction {
 impl fmt::Display for Instruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Instruction::BindingDefine { name } => write!(f, "bind `{name}`"),
+            Instruction::BindingDefine { name } => write!(f, "bind `{name}`")?,
             Instruction::BindingEvaluate { name } => {
-                write!(f, "eval binding `{name}`")
+                write!(f, "eval binding `{name}`")?
             }
-            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`"),
-            Instruction::CallFunction { name } => write!(f, "fn `{name}`"),
-            Instruction::Push { value } => write!(f, "push {value}"),
-            Instruction::ReturnIfNonZero => write!(f, "return if non-zero"),
-            Instruction::ReturnIfZero => write!(f, "return if zero"),
+            Instruction::CallBuiltin { name } => write!(f, "builtin `{name}`")?,
+            Instruction::CallFunction { name } => write!(f, "fn `{name}`")?,
+            Instruction::Push { value } => write!(f, "push {value}")?,
+            Instruction::ReturnIfNonZero => write!(f, "return if non-zero")?,
+            Instruction::ReturnIfZero => write!(f, "return if zero")?,
         }
+
+        Ok(())
     }
 }
