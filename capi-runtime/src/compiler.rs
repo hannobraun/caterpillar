@@ -67,7 +67,7 @@ impl Compiler<'_> {
                 }
 
                 self.generate(
-                    Instruction::BindingDefine { name: names },
+                    Instruction::BindingDefine { names },
                     expression.location,
                     output,
                 );
