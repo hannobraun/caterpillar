@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    instructions::{Instruction, Instructions},
-    runtime::{self, InstructionAddress},
+    instructions::Instructions,
+    runtime::{self, Instruction, InstructionAddress},
 };
 
 #[derive(

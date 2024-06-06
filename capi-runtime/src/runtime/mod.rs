@@ -9,4 +9,4 @@ pub use self::{
     function::Function,
 };
 
-pub use crate::instructions::InstructionAddress;
+pub use crate::instructions::{Instruction, InstructionAddress};
