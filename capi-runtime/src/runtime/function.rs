@@ -18,6 +18,10 @@ impl Function {
         }
     }
 
+    pub fn next_instruction(&self) -> Option<(Location, Instruction)> {
+        self.instructions.front().cloned()
+    }
+
     pub fn consume_instruction(&mut self) -> Option<(Location, Instruction)> {
         self.instructions.pop_front()
     }

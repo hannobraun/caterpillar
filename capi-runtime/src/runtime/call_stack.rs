@@ -19,7 +19,7 @@ impl CallStack {
     pub fn next(&self) -> Option<Location> {
         self.frames
             .last()
-            .and_then(|frame| frame.function.instructions.front().cloned())
+            .and_then(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
     }
 
@@ -35,10 +35,9 @@ impl CallStack {
         self.frames.iter().any(|frame| {
             frame
                 .function
-                .instructions
-                .front()
+                .next_instruction()
                 .map(|(location, _instruction)| location)
-                == Some(&location.clone().next())
+                == Some(location.clone().next())
         })
     }
 
@@ -61,9 +60,8 @@ impl CallStack {
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
         self.frames
             .iter()
-            .filter_map(|frame| frame.function.instructions.front())
+            .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
-            .cloned()
     }
 }
 
