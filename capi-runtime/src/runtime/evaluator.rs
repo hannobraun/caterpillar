@@ -43,7 +43,7 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
-        let (mut frame, address) = loop {
+        let (mut frame, location) = loop {
             let Some(mut frame) = self.call_stack.pop() else {
                 return Ok(EvaluatorState::Finished);
             };
@@ -56,7 +56,7 @@ impl Evaluator {
             // meaning it returns.
         };
 
-        let instruction = self.code.instructions.get(&address).clone();
+        let instruction = self.code.instructions.get(&location).clone();
         let evaluate_result = evaluate_instruction(
             instruction,
             &self.code,
@@ -116,7 +116,7 @@ impl Evaluator {
                             .pop()
                             .map_err(|effect| EvaluatorEffect {
                                 effect: effect.into(),
-                                location: address,
+                                location,
                             })?;
                         stack_frame.bindings.insert(argument.clone(), value);
                     }
@@ -124,7 +124,7 @@ impl Evaluator {
                     self.call_stack.push(stack_frame).map_err(|effect| {
                         EvaluatorEffect {
                             effect: effect.into(),
-                            location: address,
+                            location,
                         }
                     })?;
                 }
@@ -142,15 +142,12 @@ impl Evaluator {
             },
             Ok(None) => {}
             Err(effect) => {
-                return Err(EvaluatorEffect {
-                    effect,
-                    location: address,
-                });
+                return Err(EvaluatorEffect { effect, location });
             }
         }
 
         Ok(EvaluatorState::Running {
-            just_executed: address,
+            just_executed: location,
         })
     }
 }
