@@ -93,7 +93,7 @@ impl Compiler<'_> {
         location: Location,
         output: &mut runtime::Function,
     ) {
-        let address = self.code.push(instruction);
+        let address = self.code.instructions.push(instruction);
         self.source_map.define_mapping(address, location);
         output.instructions.push_back(address);
     }
