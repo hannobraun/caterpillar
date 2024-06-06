@@ -41,7 +41,7 @@ impl Compiler<'_> {
         syntax: Vec<Expression>,
     ) {
         let mut bindings = args.iter().cloned().collect();
-        let mut output = runtime::Function::new(args);
+        let mut output = runtime::Function::new(name.clone(), args);
 
         for expression in syntax {
             self.compile_expression(
