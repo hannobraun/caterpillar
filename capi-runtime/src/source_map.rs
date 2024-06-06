@@ -6,8 +6,7 @@ use crate::{runtime, syntax};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    address_to_location:
-        BTreeMap<runtime::InstructionAddress, syntax::Location>,
+    runtime_to_syntax: BTreeMap<runtime::InstructionAddress, syntax::Location>,
     location_to_address:
         BTreeMap<syntax::Location, runtime::InstructionAddress>,
 }
@@ -18,7 +17,7 @@ impl SourceMap {
         address: runtime::InstructionAddress,
         location: syntax::Location,
     ) {
-        self.address_to_location.insert(address, location.clone());
+        self.runtime_to_syntax.insert(address, location.clone());
         self.location_to_address.insert(location, address);
     }
 
@@ -35,7 +34,7 @@ impl SourceMap {
         &self,
         address: &runtime::InstructionAddress,
     ) -> Option<syntax::Location> {
-        self.address_to_location.get(address).cloned()
+        self.runtime_to_syntax.get(address).cloned()
     }
 
     /// Get `InstructionAddress` for the provided `LineLocation`
