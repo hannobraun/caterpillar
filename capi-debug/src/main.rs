@@ -1,4 +1,5 @@
-mod client;
+use leptos::SignalSet;
+
 mod ui;
 
 fn main() {
@@ -10,10 +11,40 @@ fn main() {
 }
 
 async fn main_async() {
-    let (events_tx, events_rx) = futures::channel::mpsc::unbounded();
+    let program = capi_runtime::games::build(capi_runtime::games::snake::snake);
+
+    let (updates_tx, updates_rx) =
+        capi_runtime::updates::updates(program.clone());
+
+    let (events_tx, runner) = {
+        let (events_tx, handle, mut runner) =
+            capi_runtime::runner::runner(program, updates_tx);
+        leptos::spawn_local(async move {
+            loop {
+                runner.step().await;
+            }
+        });
+        (events_tx, handle)
+    };
 
     let set_program = ui::start(events_tx);
-    leptos::spawn_local(client::handle_server(set_program, events_rx));
+    leptos::spawn_local(handle_updates(updates_rx, set_program));
+
+    capi_runtime::display::run(runner).await.unwrap();
 
     log::info!("Caterpillar initialized.");
+}
+
+async fn handle_updates(
+    mut updates: capi_runtime::updates::UpdatesRx,
+    set_program: leptos::WriteSignal<Option<capi_runtime::Program>>,
+) {
+    loop {
+        let program = match updates.changed().await {
+            Ok(()) => updates.borrow_and_update().clone(),
+            Err(err) => panic!("{err}"),
+        };
+
+        set_program.set(Some(program));
+    }
 }
