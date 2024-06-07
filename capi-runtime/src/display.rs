@@ -143,8 +143,6 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let pixels = &mut self.pixels;
-
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
@@ -192,7 +190,7 @@ impl ApplicationHandler for State {
                             * num_channels;
 
                         let i = frame_y * PIXELS_PER_AXIS + frame_x;
-                        pixels.frame_mut()[i..i + num_channels]
+                        self.pixels.frame_mut()[i..i + num_channels]
                             .copy_from_slice(&color);
                     }
                 }
