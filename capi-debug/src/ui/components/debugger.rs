@@ -20,14 +20,14 @@ pub fn Debugger(
     });
 
     view! {
+        <ControlPanel
+            events=events.clone() />
         <CallStack
             program=program
             events=events.clone() />
         <ExecutionContext
             program=program
             state=execution_context
-            events=events.clone() />
-        <ControlPanel
             events=events.clone() />
         <StackExplorer
             program=program />
