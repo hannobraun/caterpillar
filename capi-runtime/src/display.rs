@@ -53,15 +53,13 @@ struct State {
 
 impl ApplicationHandler for State {
     fn resumed(&mut self, _: &ActiveEventLoop) {
-        let window = &self.window;
-
         self.pixels.get_or_insert_with(|| {
             let size_u32: u32 = PIXELS_PER_AXIS
                 .try_into()
                 .expect("Expected `SIZE` to fit into `u32`");
 
             let surface_texture =
-                SurfaceTexture::new(size_u32, size_u32, window);
+                SurfaceTexture::new(size_u32, size_u32, &self.window);
             Pixels::new(size_u32, size_u32, surface_texture).unwrap()
         });
     }
