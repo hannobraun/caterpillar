@@ -12,9 +12,11 @@ async fn main() -> anyhow::Result<()> {
         capi_runtime::updates::updates(program.clone());
 
     let (events_tx, runner) = {
-        let (events_tx, handle, start) =
+        let (events_tx, handle, mut runner) =
             capi_runtime::runner::runner(program, updates_tx);
-        std::thread::spawn(start);
+        std::thread::spawn(move || {
+            runner.start();
+        });
         (events_tx, handle)
     };
 

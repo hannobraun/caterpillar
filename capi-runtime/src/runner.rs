@@ -14,24 +14,21 @@ use crate::{
 pub fn runner(
     program: Program,
     updates: UpdatesTx,
-) -> (EventsTx, RunnerHandle, impl FnOnce()) {
+) -> (EventsTx, RunnerHandle, Runner) {
     let (events_tx, events_rx) = mpsc::unbounded_channel();
     let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
-    let mut runner = Runner {
+    let runner = Runner {
         program,
         events: events_rx,
         updates,
         effects: EffectsTx { inner: effects_tx },
     };
-    let start = move || {
-        runner.start();
-    };
     let handle = RunnerHandle {
         effects: effects_rx,
     };
 
-    (events_tx, handle, start)
+    (events_tx, handle, runner)
 }
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
