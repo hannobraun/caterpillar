@@ -26,9 +26,30 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     // think winit is a bit too heavyweight anyway, for what I'm trying to do
     // here, and I plan to phase it out.
     #[allow(deprecated)]
-    let window = event_loop.create_window(
-        Window::default_attributes().with_title("Caterpillar"),
-    )?;
+    let window = event_loop.create_window({
+        #[allow(unused_mut)]
+        let mut window_attributes =
+            Window::default_attributes().with_title("Caterpillar");
+
+        #[cfg(target_arch = "wasm32")]
+        {
+            use web_sys::wasm_bindgen::JsCast;
+            use winit::platform::web::WindowAttributesExtWebSys;
+
+            let canvas = web_sys::window()
+                .unwrap()
+                .document()
+                .unwrap()
+                .get_element_by_id("capi")
+                .unwrap()
+                .dyn_into::<web_sys::HtmlCanvasElement>()
+                .unwrap();
+
+            window_attributes = window_attributes.with_canvas(Some(canvas));
+        }
+
+        window_attributes
+    })?;
 
     let pixels = {
         let size_u32: u32 = PIXELS_PER_AXIS
