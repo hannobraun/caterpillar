@@ -26,9 +26,9 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     // think winit is a bit too heavyweight anyway, for what I'm trying to do
     // here, and I plan to phase it out.
     #[allow(deprecated)]
-    let window = event_loop
-        .create_window(Window::default_attributes().with_title("Caterpillar"))
-        .unwrap();
+    let window = event_loop.create_window(
+        Window::default_attributes().with_title("Caterpillar"),
+    )?;
 
     let pixels = {
         let size_u32: u32 = PIXELS_PER_AXIS
@@ -36,7 +36,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
             .expect("Expected `SIZE` to fit into `u32`");
 
         let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
-        Pixels::new(size_u32, size_u32, surface_texture).unwrap()
+        Pixels::new(size_u32, size_u32, surface_texture)?
     };
 
     let mut state = State {
