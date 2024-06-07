@@ -1,13 +1,13 @@
 use capi_runtime::{debugger::DebugEvent, Program};
-use futures::channel::mpsc::UnboundedSender;
+use futures::channel::mpsc::{self, UnboundedReceiver};
 use leptos::{create_signal, WriteSignal};
 
 use crate::ui::components::debugger::Debugger;
 
-pub fn start(
-    events_tx: UnboundedSender<DebugEvent>,
-) -> WriteSignal<Option<Program>> {
+pub fn start() -> (WriteSignal<Option<Program>>, UnboundedReceiver<DebugEvent>)
+{
     let (program, set_program) = create_signal(None);
+    let (events_tx, events_rx) = mpsc::unbounded();
 
     leptos::mount_to_body(move || {
         leptos::view! {
@@ -15,5 +15,5 @@ pub fn start(
         }
     });
 
-    set_program
+    (set_program, events_rx)
 }
