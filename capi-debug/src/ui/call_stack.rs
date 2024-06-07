@@ -3,7 +3,7 @@ use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     client::EventsTx,
-    components::{function::Function, panel::Panel},
+    ui::{function::Function, panel::Panel},
 };
 
 #[component]

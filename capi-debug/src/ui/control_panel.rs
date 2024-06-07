@@ -3,7 +3,7 @@ use leptos::{component, view, IntoView};
 
 use crate::{
     client::{send_event, EventsTx},
-    components::panel::Panel,
+    ui::panel::Panel,
 };
 
 #[component]

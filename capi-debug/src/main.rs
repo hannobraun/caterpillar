@@ -1,5 +1,5 @@
 mod client;
-mod components;
+mod ui;
 
 use capi_runtime::{debugger::ExecutionContext, Program};
 use futures::channel::mpsc;
@@ -10,7 +10,7 @@ use leptos::{
 
 use crate::{
     client::{handle_server, EventsTx},
-    components::{
+    ui::{
         call_stack::CallStack, control_panel::ControlPanel,
         execution_context::ExecutionContext, function::Function,
         memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
