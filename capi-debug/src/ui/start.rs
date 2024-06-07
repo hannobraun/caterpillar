@@ -1,12 +1,16 @@
+use capi_runtime::{debugger::DebugEvent, Program};
+use futures::channel::mpsc::UnboundedSender;
+use leptos::ReadSignal;
+
+use crate::ui::components::debugger::Debugger;
+
 pub fn start(
-    program: leptos::ReadSignal<Option<capi_runtime::Program>>,
-    events_tx: futures::channel::mpsc::UnboundedSender<
-        capi_runtime::debugger::DebugEvent,
-    >,
+    program: ReadSignal<Option<Program>>,
+    events_tx: UnboundedSender<DebugEvent>,
 ) {
     leptos::mount_to_body(move || {
         leptos::view! {
-            <super::components::debugger::Debugger program=program events=events_tx />
+            <Debugger program=program events=events_tx />
         }
     });
 }
