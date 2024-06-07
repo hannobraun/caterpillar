@@ -33,7 +33,7 @@ pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     let mut state = State {
         runner,
         mem: [0; MEM_SIZE],
-        window: Some(window),
+        window,
         pixels: None,
         input: VecDeque::new(),
     };
@@ -46,14 +46,14 @@ pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 struct State {
     runner: RunnerHandle,
     mem: [u8; MEM_SIZE],
-    window: Option<Window>,
+    window: Window,
     pixels: Option<Pixels>,
     input: VecDeque<i8>,
 }
 
 impl ApplicationHandler for State {
     fn resumed(&mut self, _: &ActiveEventLoop) {
-        let window = self.window.as_ref().unwrap();
+        let window = &self.window;
 
         self.pixels.get_or_insert_with(|| {
             let size_u32: u32 = PIXELS_PER_AXIS
@@ -146,7 +146,7 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(window) = &self.window else { return };
+        let window = &self.window;
         let Some(pixels) = &mut self.pixels else {
             return;
         };
