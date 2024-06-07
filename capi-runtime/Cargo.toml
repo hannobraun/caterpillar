@@ -9,7 +9,6 @@ pixels = "*"
 rand = "*"
 serde-big-array = "*"
 thiserror = "*"
-winit = "*"
 
 [dependencies.serde]
 version = "*"
@@ -18,3 +17,6 @@ features = ["derive"]
 [dependencies.tokio]
 version = "*"
 features = ["sync"]
+
+[dependencies.winit]
+version = "*"
