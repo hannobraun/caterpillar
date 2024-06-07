@@ -36,7 +36,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
             .expect("Expected `SIZE` to fit into `u32`");
 
         let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
-        Pixels::new(size_u32, size_u32, surface_texture)?
+        Pixels::new_async(size_u32, size_u32, surface_texture).await?
     };
 
     let mut state = State {
