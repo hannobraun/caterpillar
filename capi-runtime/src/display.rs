@@ -43,7 +43,7 @@ pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         runner,
         mem: [0; MEM_SIZE],
         window,
-        pixels: Some(pixels),
+        pixels,
         input: VecDeque::new(),
     };
 
@@ -56,7 +56,7 @@ struct State {
     runner: RunnerHandle,
     mem: [u8; MEM_SIZE],
     window: Window,
-    pixels: Option<Pixels>,
+    pixels: Pixels,
     input: VecDeque<i8>,
 }
 
@@ -69,7 +69,7 @@ impl ApplicationHandler for State {
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        let Some(pixels) = &self.pixels else { return };
+        let pixels = &self.pixels;
 
         match event {
             WindowEvent::CloseRequested => {
@@ -143,9 +143,7 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let Some(pixels) = &mut self.pixels else {
-            return;
-        };
+        let pixels = &mut self.pixels;
 
         for effect in self.runner.effects() {
             match effect {
