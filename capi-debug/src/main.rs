@@ -6,6 +6,10 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
+    leptos::spawn_local(main_async());
+}
+
+async fn main_async() {
     let (set_program, events_rx) = ui::start();
     leptos::spawn_local(client::handle_server(set_program, events_rx));
 
