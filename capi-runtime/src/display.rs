@@ -17,10 +17,23 @@ use crate::{
 pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
+    // Winit's new approach won't work for us in the browser, as `Pixels`
+    // doesn't have its blocking constructor there, and we need to use an async
+    // one. But winit's new `ApplicationHandler` isn't async-aware, and we can't
+    // block on a future in the browser, as far as I understand.
+    //
+    // So we're back to the old and deprecated way. It won't matter much, as I
+    // think winit is a bit too heavyweight anyway, for what I'm trying to do
+    // here, and I plan to phase it out.
+    #[allow(deprecated)]
+    let window = event_loop
+        .create_window(Window::default_attributes().with_title("Caterpillar"))
+        .unwrap();
+
     let mut state = State {
         runner,
         mem: [0; MEM_SIZE],
-        window: None,
+        window: Some(window),
         pixels: None,
         input: VecDeque::new(),
     };
@@ -39,14 +52,8 @@ struct State {
 }
 
 impl ApplicationHandler for State {
-    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        let window = self.window.get_or_insert_with(|| {
-            event_loop
-                .create_window(
-                    Window::default_attributes().with_title("Caterpillar"),
-                )
-                .unwrap()
-        });
+    fn resumed(&mut self, _: &ActiveEventLoop) {
+        let window = self.window.as_ref().unwrap();
 
         self.pixels.get_or_insert_with(|| {
             let size_u32: u32 = PIXELS_PER_AXIS
