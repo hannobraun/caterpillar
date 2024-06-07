@@ -26,9 +26,7 @@ pub fn runner(
     };
     runner.program.push(ARGUMENTS);
 
-    let handle = RunnerHandle {
-        effects: effects_rx,
-    };
+    let handle = RunnerHandle { effects_rx };
 
     (events_tx, handle, runner)
 }
@@ -37,12 +35,12 @@ pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub struct RunnerHandle {
-    effects: EffectsRx,
+    effects_rx: EffectsRx,
 }
 
 impl RunnerHandle {
     pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
-        iter::from_fn(|| self.effects.try_recv().ok())
+        iter::from_fn(|| self.effects_rx.try_recv().ok())
     }
 }
 
