@@ -52,7 +52,7 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub fn step(&mut self) {
+    pub async fn step(&mut self) {
         self.updates.send_if_relevant_change(&self.program);
 
         let mut event = if self.program.can_step() {
@@ -62,7 +62,7 @@ impl Runner {
             // no point in busy-looping while nothing changes.
             //
             // Just wait until we receive an event from the client.
-            Some(self.events.blocking_recv().unwrap())
+            Some(self.events.recv().await.unwrap())
         };
 
         // We either already have an event available here, if the program wasn't
@@ -170,7 +170,7 @@ impl Runner {
                     let (tx, mut rx) = mpsc::unbounded_channel();
                     self.effects_tx
                         .send(DisplayEffect::SubmitTiles { reply: tx });
-                    let () = rx.blocking_recv().unwrap();
+                    let () = rx.recv().await.unwrap();
 
                     self.program.effects.pop_front();
                 }
@@ -179,7 +179,7 @@ impl Runner {
 
                     self.effects_tx
                         .send(DisplayEffect::ReadInput { reply: tx });
-                    let input = rx.blocking_recv().unwrap();
+                    let input = rx.recv().await.unwrap();
 
                     self.program.push([Value(input)]);
                     self.program.effects.pop_front();
