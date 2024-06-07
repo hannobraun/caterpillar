@@ -18,12 +18,14 @@ pub fn runner(
     let (events_tx, events_rx) = mpsc::unbounded_channel();
     let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
-    let runner = Runner {
+    let mut runner = Runner {
         program,
         events: events_rx,
         updates,
         effects: EffectsTx { inner: effects_tx },
     };
+    runner.program.push(ARGUMENTS);
+
     let handle = RunnerHandle {
         effects: effects_rx,
     };
@@ -53,8 +55,6 @@ pub struct Runner {
 
 impl Runner {
     pub fn start(&mut self) {
-        self.program.push(ARGUMENTS);
-
         loop {
             self.updates.send_if_relevant_change(&self.program);
 
