@@ -2,7 +2,7 @@ mod client;
 mod ui;
 
 use futures::channel::mpsc;
-use leptos::{create_signal, view};
+use leptos::create_signal;
 
 use crate::client::handle_server;
 
@@ -15,10 +15,7 @@ fn main() {
     let (events_tx, events_rx) = mpsc::unbounded();
 
     leptos::spawn_local(handle_server(set_program, events_rx));
-
-    leptos::mount_to_body(
-        move || view! { <ui::debugger::Debugger program=program events=events_tx /> },
-    );
+    ui::start(program, events_tx);
 
     log::info!("Caterpillar initialized.");
 }
