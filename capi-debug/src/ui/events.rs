@@ -1,5 +1,5 @@
 use capi_runtime::debugger::DebugEvent;
-use futures::channel::mpsc::{UnboundedReceiver, UnboundedSender};
+use futures::channel::mpsc;
 
-pub type EventsTx = UnboundedSender<DebugEvent>;
-pub type EventsRx = UnboundedReceiver<DebugEvent>;
+pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
+pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
