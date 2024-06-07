@@ -15,7 +15,7 @@ async fn main() -> anyhow::Result<()> {
         let (events_tx, handle, mut runner) =
             capi_runtime::runner::runner(program, updates_tx);
         std::thread::spawn(move || loop {
-            runner.start();
+            runner.step();
         });
         (events_tx, handle)
     };

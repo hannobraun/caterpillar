@@ -54,7 +54,7 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub fn start(&mut self) {
+    pub fn step(&mut self) {
         self.updates.send_if_relevant_change(&self.program);
 
         let mut event = if self.program.can_step() {
