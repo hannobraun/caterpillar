@@ -412,16 +412,11 @@ dependencies = [
  "axum",
  "capi-runtime",
  "futures",
- "pixels",
- "rand",
  "ron",
- "serde",
  "tokio",
  "tower",
  "tower-http",
- "tracing",
  "tracing-subscriber",
- "winit",
 ]
 
 [[package]]

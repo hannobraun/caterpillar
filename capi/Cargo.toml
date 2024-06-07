@@ -6,12 +6,8 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 futures = "*"
-pixels = "*"
-rand = "*"
 ron = "*"
-serde = "*"
 tower = "*"
-tracing = "*"
 
 [dependencies.axum]
 version = "*"
@@ -31,7 +27,3 @@ features = ["trace"]
 [dependencies.tracing-subscriber]
 version = "*"
 features = ["env-filter"]
-
-[dependencies.winit]
-version = "*"
-features = ["rwh_05"]
