@@ -1,12 +1,4 @@
-mod call_stack;
-mod code_explorer;
-mod control_panel;
-mod debugger;
-mod execution_context;
-mod function;
-mod memory_explorer;
-mod panel;
-mod stack_explorer;
+mod components;
 
 pub fn start(
     program: leptos::ReadSignal<Option<capi_runtime::Program>>,
@@ -16,7 +8,7 @@ pub fn start(
 ) {
     leptos::mount_to_body(move || {
         leptos::view! {
-            <debugger::Debugger program=program events=events_tx />
+            <components::debugger::Debugger program=program events=events_tx />
         }
     });
 }

@@ -1,7 +1,7 @@
 use capi_runtime::{self, Program};
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::ui::panel::Panel;
+use crate::ui::components::panel::Panel;
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
