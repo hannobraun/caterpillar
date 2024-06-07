@@ -22,7 +22,7 @@ pub fn runner(
         program,
         events: events_rx,
         updates,
-        effects: EffectsTx { inner: effects_tx },
+        effects_tx: EffectsTx { inner: effects_tx },
     };
     runner.program.push(ARGUMENTS);
 
@@ -50,7 +50,7 @@ pub struct Runner {
     program: Program,
     events: EventsRx,
     updates: UpdatesTx,
-    effects: EffectsTx,
+    effects_tx: EffectsTx,
 }
 
 impl Runner {
@@ -156,7 +156,11 @@ impl Runner {
                     let y = *y;
                     let value = *value;
 
-                    self.effects.send(DisplayEffect::SetTile { x, y, value });
+                    self.effects_tx.send(DisplayEffect::SetTile {
+                        x,
+                        y,
+                        value,
+                    });
 
                     self.program.effects.pop_front();
                 }
@@ -166,7 +170,8 @@ impl Runner {
                     // we need to wait here, until the display code has
                     // confirmed that we're ready to continue.
                     let (tx, mut rx) = mpsc::unbounded_channel();
-                    self.effects.send(DisplayEffect::SubmitTiles { reply: tx });
+                    self.effects_tx
+                        .send(DisplayEffect::SubmitTiles { reply: tx });
                     let () = rx.blocking_recv().unwrap();
 
                     self.program.effects.pop_front();
@@ -174,7 +179,8 @@ impl Runner {
                 BuiltinEffect::ReadInput => {
                     let (tx, mut rx) = mpsc::unbounded_channel();
 
-                    self.effects.send(DisplayEffect::ReadInput { reply: tx });
+                    self.effects_tx
+                        .send(DisplayEffect::ReadInput { reply: tx });
                     let input = rx.blocking_recv().unwrap();
 
                     self.program.push([Value(input)]);
