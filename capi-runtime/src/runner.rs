@@ -1,4 +1,4 @@
-use std::{iter, thread};
+use std::iter;
 
 use rand::random;
 use tokio::sync::mpsc;
@@ -14,7 +14,7 @@ use crate::{
 pub fn runner(
     program: Program,
     updates: UpdatesTx,
-) -> (EventsTx, RunnerHandle) {
+) -> (EventsTx, RunnerHandle, impl FnOnce()) {
     let (events_tx, events_rx) = mpsc::unbounded_channel();
     let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
@@ -24,14 +24,14 @@ pub fn runner(
         updates,
         effects: EffectsTx { inner: effects_tx },
     };
-    thread::spawn(move || {
+    let start = move || {
         runner.start();
-    });
+    };
     let handle = RunnerHandle {
         effects: effects_rx,
     };
 
-    (events_tx, handle)
+    (events_tx, handle, start)
 }
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
