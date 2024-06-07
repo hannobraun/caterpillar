@@ -1,12 +1,12 @@
-pub mod call_stack;
-pub mod code_explorer;
-pub mod control_panel;
-pub mod debugger;
-pub mod execution_context;
-pub mod function;
-pub mod memory_explorer;
-pub mod panel;
-pub mod stack_explorer;
+mod call_stack;
+mod code_explorer;
+mod control_panel;
+mod debugger;
+mod execution_context;
+mod function;
+mod memory_explorer;
+mod panel;
+mod stack_explorer;
 
 pub fn start(
     program: leptos::ReadSignal<Option<capi_runtime::Program>>,
