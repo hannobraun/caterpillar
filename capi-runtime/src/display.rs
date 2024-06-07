@@ -30,11 +30,20 @@ pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         .create_window(Window::default_attributes().with_title("Caterpillar"))
         .unwrap();
 
+    let pixels = {
+        let size_u32: u32 = PIXELS_PER_AXIS
+            .try_into()
+            .expect("Expected `SIZE` to fit into `u32`");
+
+        let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
+        Pixels::new(size_u32, size_u32, surface_texture).unwrap()
+    };
+
     let mut state = State {
         runner,
         mem: [0; MEM_SIZE],
         window,
-        pixels: None,
+        pixels: Some(pixels),
         input: VecDeque::new(),
     };
 
@@ -52,17 +61,7 @@ struct State {
 }
 
 impl ApplicationHandler for State {
-    fn resumed(&mut self, _: &ActiveEventLoop) {
-        self.pixels.get_or_insert_with(|| {
-            let size_u32: u32 = PIXELS_PER_AXIS
-                .try_into()
-                .expect("Expected `SIZE` to fit into `u32`");
-
-            let surface_texture =
-                SurfaceTexture::new(size_u32, size_u32, &self.window);
-            Pixels::new(size_u32, size_u32, surface_texture).unwrap()
-        });
-    }
+    fn resumed(&mut self, _: &ActiveEventLoop) {}
 
     fn window_event(
         &mut self,
