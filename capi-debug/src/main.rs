@@ -14,8 +14,8 @@ fn main() {
     let (program, set_program) = create_signal(None);
     let (events_tx, events_rx) = mpsc::unbounded();
 
-    leptos::spawn_local(handle_server(set_program, events_rx));
     ui::start(program, events_tx);
+    leptos::spawn_local(handle_server(set_program, events_rx));
 
     log::info!("Caterpillar initialized.");
 }
