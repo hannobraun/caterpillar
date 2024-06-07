@@ -1,4 +1,4 @@
-use capi_runtime::{debugger::DebugEvent, Program};
+use capi_runtime::Program;
 use futures::{
     future::{select, Either},
     SinkExt, StreamExt,
@@ -6,13 +6,7 @@ use futures::{
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{SignalSet, WriteSignal};
 
-use crate::ui::{EventsRx, EventsTx};
-
-pub async fn send_event(event: DebugEvent, mut events: EventsTx) {
-    if let Err(err) = events.send(event).await {
-        log::error!("Error sending event: {err}");
-    }
-}
+use crate::ui::EventsRx;
 
 pub async fn handle_server(
     program: WriteSignal<Option<Program>>,
