@@ -1,9 +1,9 @@
 use capi_runtime::Program;
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::{
-    client::EventsTx,
-    ui::components::{function::Function, panel::Panel},
+use crate::ui::{
+    components::{function::Function, panel::Panel},
+    EventsTx,
 };
 
 #[component]

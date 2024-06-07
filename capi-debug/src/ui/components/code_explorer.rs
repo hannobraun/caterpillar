@@ -1,7 +1,7 @@
 use capi_runtime::Program;
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::{client::EventsTx, ui::components::function::Function};
+use crate::ui::{components::function::Function, EventsTx};
 
 #[component]
 pub fn CodeExplorer(

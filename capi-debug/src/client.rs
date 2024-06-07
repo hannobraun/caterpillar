@@ -1,11 +1,12 @@
 use capi_runtime::{debugger::DebugEvent, Program};
 use futures::{
-    channel::mpsc::{UnboundedReceiver, UnboundedSender},
     future::{select, Either},
     SinkExt, StreamExt,
 };
 use gloo::net::websocket::{futures::WebSocket, Message};
 use leptos::{SignalSet, WriteSignal};
+
+use crate::ui::{EventsRx, EventsTx};
 
 pub async fn send_event(event: DebugEvent, mut events: EventsTx) {
     if let Err(err) = events.send(event).await {
@@ -65,6 +66,3 @@ pub async fn handle_server(
         }
     }
 }
-
-pub type EventsTx = UnboundedSender<DebugEvent>;
-pub type EventsRx = UnboundedReceiver<DebugEvent>;

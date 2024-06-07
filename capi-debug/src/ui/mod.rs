@@ -1,4 +1,8 @@
 mod components;
+mod events;
 mod start;
 
-pub use self::start::start;
+pub use self::{
+    events::{EventsRx, EventsTx},
+    start::start,
+};

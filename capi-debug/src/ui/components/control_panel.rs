@@ -2,8 +2,8 @@ use capi_runtime::debugger::DebugEvent;
 use leptos::{component, view, IntoView};
 
 use crate::{
-    client::{send_event, EventsTx},
-    ui::components::panel::Panel,
+    client::send_event,
+    ui::{components::panel::Panel, EventsTx},
 };
 
 #[component]

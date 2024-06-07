@@ -1,7 +1,7 @@
 use capi_runtime::{debugger::ExecutionContext, Program};
 use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
-use crate::{client::EventsTx, ui::components::function::Function};
+use crate::ui::{components::function::Function, EventsTx};
 
 use super::panel::Panel;
 
