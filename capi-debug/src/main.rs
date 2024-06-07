@@ -4,16 +4,17 @@ mod ui;
 use capi_runtime::{debugger::ExecutionContext, Program};
 use futures::channel::mpsc;
 use leptos::{
-    component, create_memo, create_signal, view, CollectView, IntoView,
-    ReadSignal, SignalGet,
+    component, create_memo, create_signal, view, IntoView, ReadSignal,
+    SignalGet,
 };
+use ui::code_explorer::CodeExplorer;
 
 use crate::{
     client::{handle_server, EventsTx},
     ui::{
         call_stack::CallStack, control_panel::ControlPanel,
-        execution_context::ExecutionContext, function::Function,
-        memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
+        execution_context::ExecutionContext, memory_explorer::MemoryExplorer,
+        stack_explorer::StackExplorer,
     },
 };
 
@@ -60,34 +61,5 @@ pub fn Debugger(
         <CodeExplorer
             program=program
             events=events />
-    }
-}
-
-#[component]
-pub fn CodeExplorer(
-    program: ReadSignal<Option<Program>>,
-    events: EventsTx,
-) -> impl IntoView {
-    let functions = move || {
-        let view = program
-            .get()?
-            .functions
-            .inner
-            .into_iter()
-            .map(|f| {
-                view! {
-                    <Function
-                        program=program
-                        function=f
-                        events=events.clone() />
-                }
-            })
-            .collect_view();
-
-        Some(view)
-    };
-
-    view! {
-        <div>{functions}</div>
     }
 }
