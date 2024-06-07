@@ -2,7 +2,6 @@ mod client;
 mod ui;
 
 use futures::channel::mpsc;
-use leptos::create_signal;
 
 use crate::client::handle_server;
 
@@ -11,10 +10,9 @@ fn main() {
     console_log::init_with_level(log::Level::Debug)
         .expect("Failed to initialize logging to console");
 
-    let (program, set_program) = create_signal(None);
     let (events_tx, events_rx) = mpsc::unbounded();
 
-    ui::start(program, events_tx);
+    let set_program = ui::start(events_tx);
     leptos::spawn_local(handle_server(set_program, events_rx));
 
     log::info!("Caterpillar initialized.");
