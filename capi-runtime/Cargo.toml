@@ -9,6 +9,7 @@ pixels = "*"
 rand = "*"
 serde-big-array = "*"
 thiserror = "*"
+web-sys = "*"
 
 [dependencies.serde]
 version = "*"
