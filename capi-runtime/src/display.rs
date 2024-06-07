@@ -69,8 +69,6 @@ impl ApplicationHandler for State {
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        let pixels = &self.pixels;
-
         match event {
             WindowEvent::CloseRequested => {
                 event_loop.exit();
@@ -134,7 +132,7 @@ impl ApplicationHandler for State {
                 self.input.push_back(4);
             }
             WindowEvent::RedrawRequested => {
-                if let Err(err) = pixels.render() {
+                if let Err(err) = self.pixels.render() {
                     eprintln!("Render error: {err}");
                 }
             }
