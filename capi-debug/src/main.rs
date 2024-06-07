@@ -10,7 +10,9 @@ fn main() {
 }
 
 async fn main_async() {
-    let (set_program, events_rx) = ui::start();
+    let (events_tx, events_rx) = futures::channel::mpsc::unbounded();
+
+    let set_program = ui::start(events_tx);
     leptos::spawn_local(client::handle_server(set_program, events_rx));
 
     log::info!("Caterpillar initialized.");
