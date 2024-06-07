@@ -11,9 +11,13 @@ async fn main() -> anyhow::Result<()> {
     let (updates_tx, updates_rx) =
         capi_runtime::updates::updates(program.clone());
 
-    let (events_tx, runner, start) =
-        capi_runtime::runner::runner(program, updates_tx);
-    std::thread::spawn(start);
+    let (events_tx, runner) = {
+        let (events_tx, runner, start) =
+            capi_runtime::runner::runner(program, updates_tx);
+        std::thread::spawn(start);
+        (events_tx, runner)
+    };
+
     server::start(updates_rx, events_tx);
     capi_runtime::display::run(runner).await?;
 
