@@ -14,7 +14,7 @@ use crate::{
     runner::RunnerHandle,
 };
 
-pub fn run(runner: RunnerHandle) -> anyhow::Result<()> {
+pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     let event_loop = EventLoop::new()?;
 
     // Winit's new approach won't work for us in the browser, as `Pixels`
