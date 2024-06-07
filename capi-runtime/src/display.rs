@@ -144,7 +144,6 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        let window = &self.window;
         let Some(pixels) = &mut self.pixels else {
             return;
         };
@@ -203,7 +202,7 @@ impl ApplicationHandler for State {
             }
         }
 
-        window.request_redraw();
+        self.window.request_redraw();
     }
 }
 
