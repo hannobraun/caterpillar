@@ -21,10 +21,7 @@ impl Breakpoints {
         self.ephemeral.insert(location);
     }
 
-    pub fn durable_breakpoint_at(
-        &self,
-        location: &runtime::Location,
-    ) -> bool {
+    pub fn durable_breakpoint_at(&self, location: &runtime::Location) -> bool {
         self.durable.contains(location)
     }
 
