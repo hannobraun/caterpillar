@@ -47,7 +47,7 @@ impl RunnerHandle {
     }
 }
 
-struct Runner {
+pub struct Runner {
     program: Program,
     events: EventsRx,
     updates: UpdatesTx,
@@ -55,7 +55,7 @@ struct Runner {
 }
 
 impl Runner {
-    fn start(&mut self) {
+    pub fn start(&mut self) {
         self.program.push(ARGUMENTS);
 
         loop {
