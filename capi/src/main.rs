@@ -1,18 +1,17 @@
+mod breakpoints;
+mod code;
 mod compiler;
 mod debugger;
 mod display;
 mod effects;
 mod games;
+mod program;
 mod runner;
 mod runtime;
-mod syntax;
-mod updates;
-
-mod breakpoints;
-mod code;
-mod program;
 mod source_map;
+mod syntax;
 mod ui;
+mod updates;
 
 pub use self::program::{
     Program, ProgramEffect, ProgramEffectKind, ProgramState,
