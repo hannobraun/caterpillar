@@ -1,7 +1,10 @@
-use capi_runtime::debugger::DebugEvent;
 use leptos::{component, view, IntoView};
 
-use crate::ui::{components::panel::Panel, send_event, EventsTx};
+use crate::{
+    debugger::DebugEvent,
+    runner::EventsTx,
+    ui::{components::panel::Panel, send_event},
+};
 
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {

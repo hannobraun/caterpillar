@@ -4,15 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "*"
 console_error_panic_hook = "*"
 futures = "*"
 gloo = "*"
 log = "*"
+pixels = "*"
+rand = "*"
 ron = "*"
+serde-big-array = "*"
+thiserror = "*"
 web-sys = "*"
-
-[dependencies.capi-runtime]
-path = "../capi-runtime"
 
 [dependencies.console_log]
 version = "*"
@@ -22,6 +24,14 @@ features = ["color"]
 version = "*"
 features = ["csr"]
 
+[dependencies.serde]
+version = "*"
+features = ["derive"]
+
 [dependencies.tokio]
 version = "*"
 features = ["sync"]
+
+[dependencies.winit]
+version = "*"
+features = ["rwh_05"]

@@ -1,11 +1,13 @@
-use capi_runtime::{
-    debugger::{self, DebugEvent},
-    syntax, Program, ProgramEffectKind,
-};
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
-use crate::ui::{send_event, EventsTx};
+use crate::{
+    debugger::{self, DebugEvent},
+    runner::EventsTx,
+    syntax,
+    ui::send_event,
+    Program, ProgramEffectKind,
+};
 
 #[component]
 pub fn Function(

@@ -1,6 +1,24 @@
 use leptos::SignalSet;
 
+pub mod compiler;
+pub mod debugger;
+pub mod display;
+pub mod effects;
+pub mod games;
+pub mod runner;
+pub mod runtime;
+pub mod syntax;
+pub mod updates;
+
+mod breakpoints;
+mod code;
+mod program;
+mod source_map;
 mod ui;
+
+pub use self::program::{
+    Program, ProgramEffect, ProgramEffectKind, ProgramState,
+};
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -11,14 +29,13 @@ fn main() {
 }
 
 async fn main_async() {
-    let program = capi_runtime::games::build(capi_runtime::games::snake::snake);
+    let program = crate::games::build(crate::games::snake::snake);
 
-    let (updates_tx, updates_rx) =
-        capi_runtime::updates::updates(program.clone());
+    let (updates_tx, updates_rx) = crate::updates::updates(program.clone());
 
     let (events_tx, runner) = {
         let (events_tx, handle, mut runner) =
-            capi_runtime::runner::runner(program, updates_tx);
+            crate::runner::runner(program, updates_tx);
         leptos::spawn_local(async move {
             loop {
                 runner.step().await;
@@ -30,14 +47,14 @@ async fn main_async() {
     let set_program = ui::start(events_tx);
     leptos::spawn_local(handle_updates(updates_rx, set_program));
 
-    capi_runtime::display::run(runner).await.unwrap();
+    crate::display::run(runner).await.unwrap();
 
     log::info!("Caterpillar initialized.");
 }
 
 async fn handle_updates(
-    mut updates: capi_runtime::updates::UpdatesRx,
-    set_program: leptos::WriteSignal<Option<capi_runtime::Program>>,
+    mut updates: crate::updates::UpdatesRx,
+    set_program: leptos::WriteSignal<Option<crate::Program>>,
 ) {
     loop {
         let program = match updates.changed().await {

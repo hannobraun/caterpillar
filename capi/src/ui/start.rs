@@ -1,7 +1,6 @@
-use capi_runtime::Program;
 use leptos::{create_signal, WriteSignal};
 
-use crate::ui::components::debugger::Debugger;
+use crate::{ui::components::debugger::Debugger, Program};
 
 use super::EventsTx;
 
