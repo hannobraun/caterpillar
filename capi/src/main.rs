@@ -51,7 +51,7 @@ async fn main_async() {
 
 async fn handle_updates(
     mut updates: crate::updates::UpdatesRx,
-    set_program: leptos::WriteSignal<Option<crate::Program>>,
+    set_program: leptos::WriteSignal<Option<crate::program::Program>>,
 ) {
     use leptos::SignalSet;
 

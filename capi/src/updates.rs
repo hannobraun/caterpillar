@@ -1,6 +1,6 @@
 use tokio::sync::watch;
 
-use crate::Program;
+use crate::program::Program;
 
 pub fn updates(program: Program) -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = watch::channel(program);

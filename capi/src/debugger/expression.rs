@@ -1,7 +1,8 @@
 use crate::{
+    program::Program,
     runtime,
     syntax::{self, ExpressionKind},
-    Program, ProgramEffect,
+    ProgramEffect,
 };
 
 pub struct Expression {

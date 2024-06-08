@@ -1,6 +1,6 @@
 use leptos::{create_signal, WriteSignal};
 
-use crate::{ui::components::debugger::Debugger, Program};
+use crate::{program::Program, ui::components::debugger::Debugger};
 
 use super::EventsTx;
 

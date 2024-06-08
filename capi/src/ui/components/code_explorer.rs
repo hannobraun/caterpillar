@@ -1,6 +1,8 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::{runner::EventsTx, ui::components::function::Function, Program};
+use crate::{
+    program::Program, runner::EventsTx, ui::components::function::Function,
+};
 
 #[component]
 pub fn CodeExplorer(

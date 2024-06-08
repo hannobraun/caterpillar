@@ -1,10 +1,10 @@
 use std::collections::BTreeSet;
 
 use crate::{
+    program::Program,
     runtime::{self, Instruction},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
-    Program,
 };
 
 use super::{code::Code, syntax::ExpressionKind};

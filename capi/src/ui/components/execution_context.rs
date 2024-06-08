@@ -1,8 +1,8 @@
 use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
-    debugger::ExecutionContext, runner::EventsTx,
-    ui::components::function::Function, Program,
+    debugger::ExecutionContext, program::Program, runner::EventsTx,
+    ui::components::function::Function,
 };
 
 use super::panel::Panel;
