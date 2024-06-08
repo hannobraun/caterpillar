@@ -1,12 +1,12 @@
-pub mod compiler;
-pub mod debugger;
-pub mod display;
-pub mod effects;
-pub mod games;
-pub mod runner;
-pub mod runtime;
-pub mod syntax;
-pub mod updates;
+mod compiler;
+mod debugger;
+mod display;
+mod effects;
+mod games;
+mod runner;
+mod runtime;
+mod syntax;
+mod updates;
 
 mod breakpoints;
 mod code;
