@@ -1,5 +1,3 @@
-use leptos::SignalSet;
-
 pub mod compiler;
 pub mod debugger;
 pub mod display;
@@ -56,6 +54,8 @@ async fn handle_updates(
     mut updates: crate::updates::UpdatesRx,
     set_program: leptos::WriteSignal<Option<crate::Program>>,
 ) {
+    use leptos::SignalSet;
+
     loop {
         let program = match updates.changed().await {
             Ok(()) => updates.borrow_and_update().clone(),
