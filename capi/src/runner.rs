@@ -6,10 +6,9 @@ use tokio::sync::mpsc;
 use crate::{
     debugger::DebugEvent,
     effects::{DisplayEffect, EffectsRx, EffectsTx, TILES_PER_AXIS},
-    program::{Program, ProgramEffect},
+    program::{Program, ProgramEffect, ProgramEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     updates::UpdatesTx,
-    ProgramEffectKind,
 };
 
 pub fn runner(

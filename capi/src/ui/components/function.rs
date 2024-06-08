@@ -3,11 +3,10 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{self, DebugEvent},
-    program::Program,
+    program::{Program, ProgramEffectKind},
     runner::EventsTx,
     syntax,
     ui::send_event,
-    ProgramEffectKind,
 };
 
 #[component]

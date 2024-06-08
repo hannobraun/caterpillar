@@ -13,7 +13,7 @@ mod syntax;
 mod ui;
 mod updates;
 
-pub use self::program::{ProgramEffectKind, ProgramState};
+pub use self::program::ProgramState;
 
 fn main() {
     console_error_panic_hook::set_once();
