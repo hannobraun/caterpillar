@@ -11,10 +11,6 @@ pub struct Functions {
 }
 
 impl Functions {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn define<'r>(
         &mut self,
         name: &str,
