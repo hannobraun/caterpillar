@@ -5,28 +5,27 @@ use std::{
     time::Duration,
 };
 
-use tokio::{
-    sync::mpsc,
-    time::{sleep, Sleep},
-};
-use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
+use tokio::time::{sleep, Sleep};
+use tokio_stream::Stream;
+
+use super::filter::FilteredChanges;
 
 pub struct DebouncedChanges {
-    changes: Changes,
+    changes: FilteredChanges,
     delay: Option<Pin<Box<Sleep>>>,
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
+    pub fn new(changes: FilteredChanges) -> Self {
         Self {
-            changes: Changes::new(changes),
+            changes,
             delay: None,
         }
     }
 }
 
 impl Stream for DebouncedChanges {
-    type Item = <Changes as Stream>::Item;
+    type Item = <FilteredChanges as Stream>::Item;
 
     fn poll_next(
         mut self: Pin<&mut Self>,
@@ -89,5 +88,3 @@ impl Stream for DebouncedChanges {
         Poll::Pending
     }
 }
-
-type Changes = UnboundedReceiverStream<()>;

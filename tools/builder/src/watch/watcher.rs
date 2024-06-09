@@ -3,7 +3,7 @@ use std::path::Path;
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
 
-use super::debounce::DebouncedChanges;
+use super::{debounce::DebouncedChanges, filter::FilteredChanges};
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
@@ -29,7 +29,8 @@ impl Watcher {
         })?;
         watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
-        let changes = DebouncedChanges::new(rx);
+        let changes = FilteredChanges::new(rx);
+        let changes = DebouncedChanges::new(changes);
 
         Ok(Self {
             _watcher: watcher,
