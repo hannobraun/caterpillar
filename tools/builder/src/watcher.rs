@@ -14,9 +14,13 @@ pub fn watch() -> anyhow::Result<Watcher> {
     })?;
     watcher.watch(Path::new("."), RecursiveMode::Recursive)?;
 
-    Ok(Watcher { channel: rx })
+    Ok(Watcher {
+        _watcher: watcher,
+        channel: rx,
+    })
 }
 
 pub struct Watcher {
+    _watcher: notify::RecommendedWatcher,
     pub channel: mpsc::UnboundedReceiver<()>,
 }
