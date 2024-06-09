@@ -29,7 +29,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
     Ok(Watcher {
         _watcher: watcher,
         changes: DebouncedChanges {
-            inner: changes,
+            changes,
             delay: None,
         },
     })
@@ -41,7 +41,7 @@ pub struct Watcher {
 }
 
 pub struct DebouncedChanges {
-    inner: UnboundedReceiverStream<()>,
+    changes: UnboundedReceiverStream<()>,
     delay: Option<Pin<Box<Sleep>>>,
 }
 
@@ -58,7 +58,7 @@ impl Stream for DebouncedChanges {
         // unprocessed changes will trigger another debounced event, next time
         // we get polled.
         loop {
-            match pin!(&mut self.inner).poll_next(cx) {
+            match pin!(&mut self.changes).poll_next(cx) {
                 Poll::Ready(Some(())) => {
                     if self.delay.is_none() {
                         // If there's a change, and there's no delay (meaning we
