@@ -3,7 +3,7 @@ use std::path::Path;
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
 
-pub fn watch() -> anyhow::Result<mpsc::UnboundedReceiver<()>> {
+pub fn watch() -> anyhow::Result<Watcher> {
     let (tx, rx) = mpsc::unbounded_channel();
 
     let mut watcher = notify::recommended_watcher(move |_| {
@@ -14,5 +14,9 @@ pub fn watch() -> anyhow::Result<mpsc::UnboundedReceiver<()>> {
     })?;
     watcher.watch(Path::new("."), RecursiveMode::Recursive)?;
 
-    Ok(rx)
+    Ok(Watcher { channel: rx })
+}
+
+pub struct Watcher {
+    pub channel: mpsc::UnboundedReceiver<()>,
 }
