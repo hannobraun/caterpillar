@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = ["capi", "tools/builder", "tools/daily"]
+default-members = ["tools/builder"]
 
 [profile.dev]
 opt-level = 3
