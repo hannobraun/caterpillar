@@ -16,6 +16,13 @@ use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
 pub fn watch() -> anyhow::Result<Watcher> {
     let (tx, rx) = mpsc::unbounded_channel();
 
+    // We interpret the intent behind calling this function as wanting to "load"
+    // the game code, as opposed to just wanting to watch it after possibly
+    // having or not having loaded it via other means.
+    //
+    // Therefore, we need to trigger an initial change.
+    tx.send(())?;
+
     let mut watcher = notify::recommended_watcher(move |_| {
         if tx.send(()).is_err() {
             // The other end has hung up. Not much we can do about that. The
