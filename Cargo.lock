@@ -338,6 +338,7 @@ dependencies = [
  "serde-big-array",
  "thiserror",
  "tokio",
+ "wasm-bindgen",
  "web-sys",
  "winit",
 ]
