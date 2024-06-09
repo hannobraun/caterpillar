@@ -25,5 +25,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
-    pub changes: UnboundedReceiverStream<()>,
+    pub changes: Changes,
 }
+
+pub type Changes = UnboundedReceiverStream<()>;
