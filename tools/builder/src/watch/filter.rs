@@ -4,7 +4,9 @@ use std::{
 };
 
 use tokio::sync::mpsc;
-use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
+use tokio_stream::Stream;
+
+use super::raw::Changes;
 
 pub struct FilteredChanges {
     pub changes: Changes,
@@ -28,5 +30,3 @@ impl Stream for FilteredChanges {
         pin!(&mut self.changes).poll_next(cx)
     }
 }
-
-type Changes = UnboundedReceiverStream<()>;
