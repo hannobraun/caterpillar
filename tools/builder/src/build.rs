@@ -8,7 +8,8 @@ pub async fn build(
         Command::new("trunk")
             .arg("serve")
             .args(["--ignore", "."])
-            .status()
+            .spawn()?
+            .wait()
             .await?;
     }
 
