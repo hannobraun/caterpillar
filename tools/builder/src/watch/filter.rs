@@ -6,22 +6,22 @@ use std::{
 use tokio::sync::mpsc;
 use tokio_stream::Stream;
 
-use super::raw::Changes;
+use super::raw::RawChanges;
 
 pub struct FilteredChanges {
-    pub changes: Changes,
+    pub changes: RawChanges,
 }
 
 impl FilteredChanges {
     pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
         Self {
-            changes: Changes::new(changes),
+            changes: RawChanges::new(changes),
         }
     }
 }
 
 impl Stream for FilteredChanges {
-    type Item = <Changes as Stream>::Item;
+    type Item = <RawChanges as Stream>::Item;
 
     fn poll_next(
         mut self: Pin<&mut Self>,
