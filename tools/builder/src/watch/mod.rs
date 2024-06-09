@@ -1,5 +1,4 @@
 mod debounce;
-mod filter;
 mod raw;
 mod watcher;
 
