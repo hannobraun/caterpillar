@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use tokio::sync::mpsc;
 
 pub fn watch(
@@ -11,8 +13,7 @@ pub fn watch(
             // thread this is running on will probably also end soon.
         }
     })?;
-    watcher
-        .watch(std::path::Path::new("."), notify::RecursiveMode::Recursive)?;
+    watcher.watch(Path::new("."), notify::RecursiveMode::Recursive)?;
 
     Ok(rx)
 }
