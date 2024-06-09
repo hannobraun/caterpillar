@@ -6,7 +6,7 @@ use std::{
 };
 
 use tokio::{
-    sync::mpsc::UnboundedReceiver,
+    sync::mpsc,
     time::{sleep, Sleep},
 };
 use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
@@ -17,7 +17,7 @@ pub struct DebouncedChanges {
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: UnboundedReceiver<()>) -> Self {
+    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
         Self {
             changes: Changes::new(changes),
             delay: None,
