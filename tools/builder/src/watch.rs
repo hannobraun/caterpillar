@@ -110,4 +110,4 @@ impl Stream for DebouncedChanges {
     }
 }
 
-pub type Changes = UnboundedReceiverStream<()>;
+type Changes = UnboundedReceiverStream<()>;
