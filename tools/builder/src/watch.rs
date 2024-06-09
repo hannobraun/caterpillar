@@ -24,14 +24,14 @@ pub fn watch() -> anyhow::Result<Watcher> {
     })?;
     watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
-    let changes = Changes::new(rx);
+    let changes = DebouncedChanges {
+        changes: Changes::new(rx),
+        delay: None,
+    };
 
     Ok(Watcher {
         _watcher: watcher,
-        changes: DebouncedChanges {
-            changes,
-            delay: None,
-        },
+        changes,
     })
 }
 
