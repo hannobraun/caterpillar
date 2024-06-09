@@ -25,7 +25,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
 
     let changes = debounce::DebouncedChanges::new(rx);
 
-    Ok(Watcher::new(watcher, changes))
+    Watcher::new(watcher, changes)
 }
 
 pub struct Watcher {
@@ -37,10 +37,10 @@ impl Watcher {
     fn new(
         watcher: notify::RecommendedWatcher,
         changes: debounce::DebouncedChanges,
-    ) -> Self {
-        Self {
+    ) -> anyhow::Result<Self> {
+        Ok(Self {
             _watcher: watcher,
             changes,
-        }
+        })
     }
 }
