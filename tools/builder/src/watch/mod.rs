@@ -25,13 +25,22 @@ pub fn watch() -> anyhow::Result<Watcher> {
 
     let changes = debounce::DebouncedChanges::new(rx);
 
-    Ok(Watcher {
-        _watcher: watcher,
-        changes,
-    })
+    Ok(Watcher::new(watcher, changes))
 }
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
     pub changes: debounce::DebouncedChanges,
+}
+
+impl Watcher {
+    fn new(
+        watcher: notify::RecommendedWatcher,
+        changes: debounce::DebouncedChanges,
+    ) -> Self {
+        Self {
+            _watcher: watcher,
+            changes,
+        }
+    }
 }
