@@ -12,7 +12,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
             // thread this is running on will probably also end soon.
         }
     })?;
-    watcher.watch(Path::new("."), RecursiveMode::Recursive)?;
+    watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
     Ok(Watcher {
         _watcher: watcher,
