@@ -1,3 +1,5 @@
+use web_sys::js_sys::wasm_bindgen;
+
 mod breakpoints;
 mod code;
 mod compiler;
@@ -19,6 +21,8 @@ fn main() {
         .expect("Failed to initialize logging to console");
 
     leptos::spawn_local(main_async());
+
+    capi_test();
 }
 
 async fn main_async() {
@@ -59,4 +63,9 @@ async fn handle_updates(
 
         set_program.set(Some(program));
     }
+}
+
+#[wasm_bindgen::prelude::wasm_bindgen]
+extern "C" {
+    fn capi_test();
 }
