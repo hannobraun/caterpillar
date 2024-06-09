@@ -2,9 +2,9 @@ mod watcher;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let mut rx = watcher::watch()?;
+    let mut watcher = watcher::watch()?;
 
-    while let Some(event) = rx.channel.recv().await {
+    while let Some(event) = watcher.channel.recv().await {
         dbg!(event);
     }
 
