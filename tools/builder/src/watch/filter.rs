@@ -21,7 +21,7 @@ impl FilteredChanges {
 }
 
 impl Stream for FilteredChanges {
-    type Item = <RawChanges as Stream>::Item;
+    type Item = ();
 
     fn poll_next(
         mut self: Pin<&mut Self>,
