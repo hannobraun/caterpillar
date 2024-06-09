@@ -6,14 +6,14 @@ use std::{
 use tokio::sync::mpsc;
 use tokio_stream::Stream;
 
-use super::raw::RawChanges;
+use super::raw::{RawChanges, RawEvent};
 
 pub struct FilteredChanges {
     pub changes: RawChanges,
 }
 
 impl FilteredChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
+    pub fn new(changes: mpsc::UnboundedReceiver<RawEvent>) -> Self {
         Self {
             changes: RawChanges::new(changes),
         }
