@@ -9,3 +9,7 @@ anyhow = "*"
 [dependencies.notify]
 version = "*"
 default-features = false
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
