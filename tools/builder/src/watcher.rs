@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use notify::{RecursiveMode, Watcher};
+use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
 
 pub fn watch() -> anyhow::Result<mpsc::UnboundedReceiver<()>> {
