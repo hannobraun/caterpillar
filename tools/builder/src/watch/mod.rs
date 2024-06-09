@@ -8,7 +8,7 @@ use std::{
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::{
-    sync::mpsc,
+    sync::mpsc::{self, UnboundedReceiver},
     time::{sleep, Sleep},
 };
 use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
@@ -31,10 +31,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
     })?;
     watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
-    let changes = DebouncedChanges {
-        changes: Changes::new(rx),
-        delay: None,
-    };
+    let changes = DebouncedChanges::new(rx);
 
     Ok(Watcher {
         _watcher: watcher,
@@ -50,6 +47,15 @@ pub struct Watcher {
 pub struct DebouncedChanges {
     changes: Changes,
     delay: Option<Pin<Box<Sleep>>>,
+}
+
+impl DebouncedChanges {
+    pub fn new(changes: UnboundedReceiver<()>) -> Self {
+        Self {
+            changes: Changes::new(changes),
+            delay: None,
+        }
+    }
 }
 
 impl Stream for DebouncedChanges {
