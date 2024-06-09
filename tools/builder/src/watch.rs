@@ -15,7 +15,7 @@ pub fn watch() -> anyhow::Result<Watcher> {
     })?;
     watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
-    let changes = UnboundedReceiverStream::new(rx);
+    let changes = Changes::new(rx);
 
     Ok(Watcher {
         _watcher: watcher,
