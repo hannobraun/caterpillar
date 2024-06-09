@@ -4,7 +4,8 @@ mod watch;
 async fn main() -> anyhow::Result<()> {
     let mut watcher = watch::watch()?;
 
-    while let Some(event) = watcher.channel.recv().await {
+    use tokio_stream::StreamExt;
+    while let Some(event) = watcher.channel.next().await {
         dbg!(event);
     }
 

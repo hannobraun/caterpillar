@@ -2,6 +2,7 @@ use std::path::Path;
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
+use tokio_stream::wrappers::UnboundedReceiverStream;
 
 pub fn watch() -> anyhow::Result<Watcher> {
     let (tx, rx) = mpsc::unbounded_channel();
@@ -14,13 +15,15 @@ pub fn watch() -> anyhow::Result<Watcher> {
     })?;
     watcher.watch(Path::new("capi"), RecursiveMode::Recursive)?;
 
+    let changes = UnboundedReceiverStream::new(rx);
+
     Ok(Watcher {
         _watcher: watcher,
-        channel: rx,
+        channel: changes,
     })
 }
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
-    pub channel: mpsc::UnboundedReceiver<()>,
+    pub channel: UnboundedReceiverStream<()>,
 }
