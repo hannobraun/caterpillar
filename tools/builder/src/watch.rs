@@ -2,7 +2,7 @@ use tokio::sync::mpsc;
 
 pub fn watch(
 ) -> anyhow::Result<mpsc::UnboundedReceiver<notify::Result<notify::Event>>> {
-    let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+    let (tx, rx) = mpsc::unbounded_channel();
 
     use notify::Watcher;
     let mut watcher = notify::recommended_watcher(move |event| {
