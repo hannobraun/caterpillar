@@ -2,6 +2,7 @@ use std::path::Path;
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
+use tracing::error;
 
 use super::{debounce::DebouncedChanges, filter::FilteredChanges};
 
@@ -21,7 +22,15 @@ impl Watcher {
         // Therefore, we need to trigger an initial change.
         tx.send(())?;
 
-        let mut watcher = notify::recommended_watcher(move |_| {
+        let mut watcher = notify::recommended_watcher(move |event| {
+            let _ = match event {
+                Ok(event) => event,
+                Err(err) => {
+                    error!("Error watching for changes: {err}");
+                    return;
+                }
+            };
+
             if tx.send(()).is_err() {
                 // The other end has hung up. Not much we can do about that. The
                 // thread this is running on will probably also end soon.
