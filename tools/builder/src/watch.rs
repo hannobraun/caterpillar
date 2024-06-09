@@ -1,8 +1,12 @@
-use std::path::Path;
+use std::{
+    path::Path,
+    pin::{pin, Pin},
+    task::{Context, Poll},
+};
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
-use tokio_stream::wrappers::UnboundedReceiverStream;
+use tokio_stream::{wrappers::UnboundedReceiverStream, Stream};
 
 pub fn watch() -> anyhow::Result<Watcher> {
     let (tx, rx) = mpsc::unbounded_channel();
@@ -19,13 +23,28 @@ pub fn watch() -> anyhow::Result<Watcher> {
 
     Ok(Watcher {
         _watcher: watcher,
-        changes,
+        changes: DebouncedChanges { inner: changes },
     })
 }
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
-    pub changes: Changes,
+    pub changes: DebouncedChanges,
+}
+
+pub struct DebouncedChanges {
+    inner: UnboundedReceiverStream<()>,
+}
+
+impl Stream for DebouncedChanges {
+    type Item = <Changes as Stream>::Item;
+
+    fn poll_next(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context,
+    ) -> Poll<Option<Self::Item>> {
+        pin!(&mut self.inner).poll_next(cx)
+    }
 }
 
 pub type Changes = UnboundedReceiverStream<()>;
