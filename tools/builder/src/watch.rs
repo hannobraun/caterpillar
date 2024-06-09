@@ -19,11 +19,11 @@ pub fn watch() -> anyhow::Result<Watcher> {
 
     Ok(Watcher {
         _watcher: watcher,
-        channel: changes,
+        changes,
     })
 }
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
-    pub channel: UnboundedReceiverStream<()>,
+    pub changes: UnboundedReceiverStream<()>,
 }
