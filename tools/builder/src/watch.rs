@@ -48,7 +48,7 @@ pub struct Watcher {
 }
 
 pub struct DebouncedChanges {
-    changes: UnboundedReceiverStream<()>,
+    changes: Changes,
     delay: Option<Pin<Box<Sleep>>>,
 }
 
