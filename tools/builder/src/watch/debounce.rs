@@ -9,7 +9,7 @@ use tokio::{
     sync::mpsc,
     time::{sleep, Sleep},
 };
-use tokio_stream::Stream;
+use tokio_stream::{Stream, StreamExt};
 
 use super::raw::RawChanges;
 
@@ -24,6 +24,10 @@ impl DebouncedChanges {
             changes: RawChanges::new(changes),
             delay: None,
         }
+    }
+
+    pub async fn wait_for_change(&mut self) -> bool {
+        self.next().await.is_some()
     }
 }
 

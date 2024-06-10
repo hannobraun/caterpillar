@@ -1,12 +1,11 @@
 use tokio::process::{Child, Command};
-use tokio_stream::StreamExt;
 
 use crate::watch::DebouncedChanges;
 
 pub async fn build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     let mut trunk_process: Option<Child> = None;
 
-    while let Some(()) = changes.next().await {
+    while changes.wait_for_change().await {
         let new_process = Command::new("trunk")
             .arg("serve")
             .args(["--ignore", "."])
