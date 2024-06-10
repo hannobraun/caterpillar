@@ -27,10 +27,10 @@ pub async fn start(changes: watch::Receiver<()>) -> anyhow::Result<()> {
 }
 
 async fn serve_changes(
-    State(mut changes): State<watch::Receiver<()>>,
+    State(mut updates): State<watch::Receiver<()>>,
 ) -> StatusCode {
-    changes.mark_unchanged();
-    match changes.changed().await {
+    updates.mark_unchanged();
+    match updates.changed().await {
         Ok(()) => StatusCode::OK,
         Err(_) => {
             error!("Waiting for updates, but updates no longer available.");
