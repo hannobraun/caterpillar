@@ -9,7 +9,7 @@ pub async fn start(changes: watch::Receiver<()>) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
-        .route("/changes", get(serve_changes))
+        .route("/changes", get(serve_updates))
         .nest_service("/", ServeDir::new("capi/dist"))
         .with_state(changes);
     let listener = TcpListener::bind(address).await?;
@@ -26,7 +26,7 @@ pub async fn start(changes: watch::Receiver<()>) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve_changes(
+async fn serve_updates(
     State(mut updates): State<watch::Receiver<()>>,
 ) -> StatusCode {
     updates.mark_unchanged();
