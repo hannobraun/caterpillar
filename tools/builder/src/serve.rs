@@ -5,13 +5,13 @@ use tokio::{net::TcpListener, sync::watch, task};
 use tower_http::services::ServeDir;
 use tracing::error;
 
-pub async fn start(changes: watch::Receiver<()>) -> anyhow::Result<()> {
+pub async fn start(updates: watch::Receiver<()>) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
         .route("/changes", get(serve_updates))
         .nest_service("/", ServeDir::new("capi/dist"))
-        .with_state(changes);
+        .with_state(updates);
     let listener = TcpListener::bind(address).await?;
 
     task::spawn(async {
