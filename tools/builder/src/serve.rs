@@ -2,7 +2,7 @@ use axum::{routing::get, Router};
 use tokio::net::TcpListener;
 
 pub async fn serve() -> anyhow::Result<()> {
-    let router = Router::new().route("/changes", get(changes));
+    let router = Router::new().route("/changes", get(serve_changes));
     let listener = TcpListener::bind("localhost:34480").await?;
 
     axum::serve(listener, router).await?;
@@ -10,6 +10,6 @@ pub async fn serve() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn changes() -> &'static str {
+async fn serve_changes() -> &'static str {
     "Hello, world!"
 }
