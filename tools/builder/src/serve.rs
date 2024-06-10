@@ -1,5 +1,3 @@
-use std::future::IntoFuture;
-
 use axum::{extract::State, http::StatusCode, routing::get, Router};
 use tokio::{net::TcpListener, task};
 
@@ -11,7 +9,7 @@ pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
         .with_state(changes);
     let listener = TcpListener::bind("localhost:34480").await?;
 
-    task::spawn(axum::serve(listener, router).into_future());
+    task::spawn(async { axum::serve(listener, router).await });
 
     Ok(())
 }
