@@ -11,7 +11,7 @@ use tokio::{
 };
 use tokio_stream::Stream;
 
-use super::raw::{RawChanges, RawEvent};
+use super::raw::RawChanges;
 
 pub struct DebouncedChanges {
     changes: RawChanges,
@@ -19,7 +19,7 @@ pub struct DebouncedChanges {
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<RawEvent>) -> Self {
+    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
         Self {
             changes: RawChanges::new(changes),
             delay: None,
