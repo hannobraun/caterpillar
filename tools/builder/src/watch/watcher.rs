@@ -5,7 +5,7 @@ use std::{
 
 use anyhow::Context;
 use notify::{RecursiveMode, Watcher as _};
-use tokio::sync::mpsc;
+use tokio::sync::watch;
 use tracing::error;
 
 use super::debounce::DebouncedChanges;
@@ -17,7 +17,7 @@ pub struct Watcher {
 
 impl Watcher {
     pub fn new() -> anyhow::Result<Self> {
-        let (tx, rx) = mpsc::unbounded_channel();
+        let (tx, rx) = watch::channel(());
 
         // We interpret the intent behind calling this function as wanting to
         // "load" the game code, as opposed to just wanting to watch it after

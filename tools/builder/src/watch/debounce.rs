@@ -1,16 +1,13 @@
 use std::time::Duration;
 
-use tokio::{
-    sync::{mpsc, watch},
-    time::sleep,
-};
+use tokio::{sync::watch, time::sleep};
 
 pub struct DebouncedChanges {
     changes: watch::Receiver<()>,
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
+    pub fn new(changes: watch::Receiver<()>) -> Self {
         let (tx, rx) = watch::channel(());
         tokio::spawn(debounce(changes, tx));
 
@@ -22,9 +19,9 @@ impl DebouncedChanges {
     }
 }
 
-async fn debounce(mut rx: mpsc::UnboundedReceiver<()>, tx: watch::Sender<()>) {
+async fn debounce(mut rx: watch::Receiver<()>, tx: watch::Sender<()>) {
     loop {
-        if rx.recv().await.is_none() {
+        if rx.changed().await.is_err() {
             // The other end has hung up. This means we're done here too.
             break;
         }
@@ -38,6 +35,6 @@ async fn debounce(mut rx: mpsc::UnboundedReceiver<()>, tx: watch::Sender<()>) {
 
         // We also need to throw away any changes that might or might not have
         // arrived in the meantime, or we haven't actually debounced anything.
-        while rx.try_recv().is_ok() {}
+        rx.mark_unchanged();
     }
 }
