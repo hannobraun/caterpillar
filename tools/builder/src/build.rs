@@ -1,10 +1,18 @@
+use std::process;
+
 use tokio::{process::Command, sync::watch, task};
+use tracing::error;
 
 use crate::watch::DebouncedChanges;
 
 pub fn start(changes: DebouncedChanges) -> watch::Receiver<()> {
     let (tx, rx) = watch::channel(());
-    task::spawn(watch_and_build(changes, tx));
+    task::spawn(async {
+        if let Err(err) = watch_and_build(changes, tx).await {
+            error!("Build error: {err}");
+            process::exit(1);
+        }
+    });
     rx
 }
 
