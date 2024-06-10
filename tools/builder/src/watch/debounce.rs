@@ -14,14 +14,14 @@ use tokio_stream::{Stream, StreamExt};
 use super::raw::RawChanges;
 
 pub struct DebouncedChanges {
-    changes: RawChanges,
+    changes: mpsc::UnboundedReceiver<()>,
     delay: Option<Pin<Box<Sleep>>>,
 }
 
 impl DebouncedChanges {
     pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
         Self {
-            changes: RawChanges::new(changes),
+            changes,
             delay: None,
         }
     }
@@ -45,7 +45,7 @@ impl Stream for DebouncedChanges {
         // we get polled.
         let mut change = false;
         loop {
-            match pin!(&mut self.changes).poll_next(cx) {
+            match pin!(self.changes.recv()).poll(cx) {
                 Poll::Ready(Some(())) => {
                     change = true;
                 }
