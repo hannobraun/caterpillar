@@ -1,7 +1,8 @@
 use std::process;
 
-use tokio::{process::Command, sync::watch, task};
+use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
+use wasm_bindgen_cli_support::Bindgen;
 
 use crate::watch::DebouncedChanges;
 
@@ -32,7 +33,23 @@ async fn watch_and_build(
 }
 
 async fn build_once(updates: &watch::Sender<()>) -> anyhow::Result<bool> {
-    Command::new("trunk").arg("build").status().await?;
+    let cargo_build = Command::new("cargo")
+        .arg("build")
+        .args(["--package", "capi"])
+        .args(["--target", "wasm32-unknown-unknown"])
+        .status()
+        .await?;
+    if !cargo_build.success() {
+        return Ok(true);
+    }
+
+    let mut bindgen = Bindgen::new();
+    bindgen
+        .input_path("target/wasm32-unknown-unknown/debug/capi.wasm")
+        .web(true)?
+        .generate("capi/dist")?;
+
+    fs::copy("capi/index.html", "capi/dist/index.html").await?;
 
     if updates.send(()).is_err() {
         return Ok(false);
