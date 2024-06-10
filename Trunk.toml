@@ -1,7 +1,0 @@
-[build]
-target = "capi/index.html"
-
-[[proxy]]
-rewrite = "/code"
-backend = "ws://127.0.0.1:34481/"
-ws = true
