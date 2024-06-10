@@ -15,13 +15,15 @@ async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     build_once(&mut trunk_process).await?;
 
     while changes.wait_for_change().await {
-        build_once(&mut trunk_process).await?;
+        if !build_once(&mut trunk_process).await? {
+            break;
+        }
     }
 
     Ok(())
 }
 
-async fn build_once(trunk_process: &mut Option<Child>) -> anyhow::Result<()> {
+async fn build_once(trunk_process: &mut Option<Child>) -> anyhow::Result<bool> {
     let new_process = Command::new("trunk")
         .arg("serve")
         .args(["--ignore", "."])
@@ -33,5 +35,5 @@ async fn build_once(trunk_process: &mut Option<Child>) -> anyhow::Result<()> {
 
     *trunk_process = Some(new_process);
 
-    Ok(())
+    Ok(true)
 }
