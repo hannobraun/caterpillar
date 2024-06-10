@@ -8,6 +8,7 @@ anyhow = "*"
 axum = "*"
 tracing = "*"
 tracing-subscriber = "*"
+wasm-bindgen-cli-support = "*"
 
 [dependencies.notify]
 version = "*"
