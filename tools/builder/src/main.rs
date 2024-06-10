@@ -8,7 +8,11 @@ async fn main() -> anyhow::Result<()> {
 
     let watcher = watch::Watcher::new()?;
     serve::start(watcher.changes()).await?;
-    build::start(watcher.changes()).await;
+    let mut updates = build::start(watcher.changes()).await;
+
+    while let Ok(update) = updates.changed().await {
+        dbg!(update);
+    }
 
     Ok(())
 }

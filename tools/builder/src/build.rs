@@ -1,16 +1,21 @@
-use tokio::process::Command;
+use tokio::{process::Command, sync::watch, task};
 
 use crate::watch::DebouncedChanges;
 
-pub async fn start(changes: DebouncedChanges) {
-    watch_and_build(changes).await.unwrap();
+pub async fn start(changes: DebouncedChanges) -> watch::Receiver<()> {
+    let (tx, rx) = watch::channel(());
+    task::spawn(watch_and_build(changes, tx));
+    rx
 }
 
-async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
-    build_once().await?;
+async fn watch_and_build(
+    mut changes: DebouncedChanges,
+    updates: watch::Sender<()>,
+) -> anyhow::Result<()> {
+    build_once(&updates).await?;
 
     while changes.wait_for_change().await {
-        if !build_once().await? {
+        if !build_once(&updates).await? {
             break;
         }
     }
@@ -18,7 +23,12 @@ async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn build_once() -> anyhow::Result<bool> {
+async fn build_once(updates: &watch::Sender<()>) -> anyhow::Result<bool> {
     Command::new("trunk").arg("build").status().await?;
+
+    if updates.send(()).is_err() {
+        return Ok(false);
+    }
+
     Ok(true)
 }
