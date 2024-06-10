@@ -8,11 +8,13 @@ use tracing::error;
 use crate::watch::DebouncedChanges;
 
 pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
+    let address = "localhost:34480";
+
     let router = Router::new()
         .route("/changes", get(serve_changes))
         .nest_service("/", ServeDir::new("capi/dist"))
         .with_state(changes);
-    let listener = TcpListener::bind("localhost:34480").await?;
+    let listener = TcpListener::bind(address).await?;
 
     task::spawn(async {
         if let Err(err) = axum::serve(listener, router).await {
