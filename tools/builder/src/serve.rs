@@ -23,6 +23,8 @@ pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
         }
     });
 
+    println!("Serving Caterpillar at http://{address}");
+
     Ok(())
 }
 
