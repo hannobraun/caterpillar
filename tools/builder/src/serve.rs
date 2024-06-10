@@ -1,6 +1,6 @@
 use std::future::IntoFuture;
 
-use axum::{routing::get, Router};
+use axum::{extract::State, routing::get, Router};
 use tokio::{net::TcpListener, task};
 
 use crate::watch::DebouncedChanges;
@@ -16,6 +16,9 @@ pub async fn serve(changes: DebouncedChanges) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve_changes() -> &'static str {
+async fn serve_changes(
+    State(mut changes): State<DebouncedChanges>,
+) -> &'static str {
+    changes.wait_for_change().await;
     "Hello, world!"
 }
