@@ -6,7 +6,7 @@ use wasm_bindgen_cli_support::Bindgen;
 
 use crate::watch::DebouncedChanges;
 
-pub fn start(changes: DebouncedChanges) -> watch::Receiver<()> {
+pub fn start(changes: DebouncedChanges) -> UpdatesRx {
     let (tx, rx) = watch::channel(());
     task::spawn(async {
         if let Err(err) = watch_and_build(changes, tx).await {
@@ -57,3 +57,5 @@ async fn build_once(updates: &watch::Sender<()>) -> anyhow::Result<bool> {
 
     Ok(true)
 }
+
+pub type UpdatesRx = watch::Receiver<()>;

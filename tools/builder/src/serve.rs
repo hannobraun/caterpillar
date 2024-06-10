@@ -7,10 +7,12 @@ use axum::{
     routing::get,
     Router,
 };
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, sync::watch, task};
+use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, task};
 use tracing::error;
 
-pub async fn start(updates: watch::Receiver<()>) -> anyhow::Result<()> {
+use crate::build::UpdatesRx;
+
+pub async fn start(updates: UpdatesRx) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
@@ -32,9 +34,7 @@ pub async fn start(updates: watch::Receiver<()>) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn serve_updates(
-    State(mut updates): State<watch::Receiver<()>>,
-) -> StatusCode {
+async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
     updates.mark_unchanged();
     match updates.changed().await {
         Ok(()) => StatusCode::OK,
