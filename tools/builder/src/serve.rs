@@ -1,13 +1,11 @@
 use std::process;
 
 use axum::{extract::State, http::StatusCode, routing::get, Router};
-use tokio::{net::TcpListener, task};
+use tokio::{net::TcpListener, sync::watch, task};
 use tower_http::services::ServeDir;
 use tracing::error;
 
-use crate::watch::DebouncedChanges;
-
-pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
+pub async fn start(changes: watch::Receiver<()>) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
@@ -29,8 +27,14 @@ pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
 }
 
 async fn serve_changes(
-    State(mut changes): State<DebouncedChanges>,
+    State(mut changes): State<watch::Receiver<()>>,
 ) -> StatusCode {
-    changes.wait_for_change().await;
-    StatusCode::OK
+    changes.mark_unchanged();
+    match changes.changed().await {
+        Ok(()) => StatusCode::OK,
+        Err(_) => {
+            error!("Waiting for updates, but updates no longer available.");
+            StatusCode::INTERNAL_SERVER_ERROR
+        }
+    }
 }
