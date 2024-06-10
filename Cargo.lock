@@ -343,6 +343,7 @@ dependencies = [
  "anyhow",
  "axum",
  "notify",
+ "tempfile",
  "tokio",
  "tracing",
  "tracing-subscriber",
