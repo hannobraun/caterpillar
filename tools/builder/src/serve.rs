@@ -5,7 +5,7 @@ use tokio::{net::TcpListener, task};
 
 use crate::watch::DebouncedChanges;
 
-pub async fn serve(changes: DebouncedChanges) -> anyhow::Result<()> {
+pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/changes", get(serve_changes))
         .with_state(changes);
