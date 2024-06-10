@@ -43,20 +43,11 @@ impl Stream for DebouncedChanges {
         // over and we trigger a debounced change event during this call, any
         // unprocessed changes will trigger another debounced event, next time
         // we get polled.
+        let mut change = false;
         loop {
             match pin!(&mut self.changes).poll_next(cx) {
                 Poll::Ready(Some(())) => {
-                    if self.delay.is_none() {
-                        // If there's a change, and there's no delay (meaning we
-                        // have no debounced change in the pipeline yet), we
-                        // start a delay, thereby triggering a debounced event.
-                        //
-                        // If there *is* a delay already, we don't need to do
-                        // anything. The change we read just now gets folded
-                        // into the debounced event.
-                        self.delay =
-                            Some(Box::pin(sleep(Duration::from_millis(20))));
-                    }
+                    change = true;
                 }
                 Poll::Ready(None) => {
                     // Looks like there are no more changes. Regardless of
@@ -68,6 +59,16 @@ impl Stream for DebouncedChanges {
                     break;
                 }
             }
+        }
+
+        if change && self.delay.is_none() {
+            // If there's a change, and there's no delay (meaning we have no
+            // debounced change in the pipeline yet), we start a delay, thereby
+            // triggering a debounced event.
+            //
+            // If there *is* a delay already, we don't need to do anything. The
+            // change we read just now gets folded into the debounced event.
+            self.delay = Some(Box::pin(sleep(Duration::from_millis(20))));
         }
 
         // Okay, all pending changes got processed. Let's check if there's a
