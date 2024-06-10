@@ -12,7 +12,7 @@ use super::debounce::DebouncedChanges;
 
 pub struct Watcher {
     _watcher: notify::RecommendedWatcher,
-    pub changes: DebouncedChanges,
+    changes: DebouncedChanges,
 }
 
 impl Watcher {
