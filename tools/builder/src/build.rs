@@ -1,9 +1,9 @@
 use tokio::process::{Child, Command};
-use tokio_stream::{Stream, StreamExt};
+use tokio_stream::StreamExt;
 
-pub async fn build(
-    mut changes: impl Stream<Item = ()> + Unpin,
-) -> anyhow::Result<()> {
+use crate::watch::DebouncedChanges;
+
+pub async fn build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     let mut trunk_process: Option<Child> = None;
 
     while let Some(()) = changes.next().await {

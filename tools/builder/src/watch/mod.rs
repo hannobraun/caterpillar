@@ -2,4 +2,4 @@ mod debounce;
 mod raw;
 mod watcher;
 
-pub use self::watcher::Watcher;
+pub use self::{debounce::DebouncedChanges, watcher::Watcher};
