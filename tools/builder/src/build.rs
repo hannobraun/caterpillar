@@ -58,5 +58,7 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
     Ok(true)
 }
 
-pub type UpdatesRx = watch::Receiver<()>;
-pub type UpdatesTx = watch::Sender<()>;
+pub type UpdatesRx = watch::Receiver<Update>;
+pub type UpdatesTx = watch::Sender<Update>;
+
+pub type Update = ();
