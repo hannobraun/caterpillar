@@ -8,10 +8,12 @@ async fn main() -> anyhow::Result<()> {
 
     let watcher = watch::Watcher::new()?;
     let mut updates = build::start(watcher.changes());
-    serve::start(updates.clone()).await?;
+    let address = serve::start(updates.clone()).await?;
 
-    while let Ok(update) = updates.changed().await {
-        dbg!(update);
+    while let Ok(()) = updates.changed().await {
+        println!();
+        println!("\t🚀 http://{address}/");
+        println!();
     }
 
     Ok(())

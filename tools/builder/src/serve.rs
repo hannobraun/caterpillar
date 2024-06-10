@@ -12,7 +12,7 @@ use tracing::error;
 
 use crate::build::UpdatesRx;
 
-pub async fn start(updates: UpdatesRx) -> anyhow::Result<()> {
+pub async fn start(updates: UpdatesRx) -> anyhow::Result<&'static str> {
     let address = "localhost:34480";
 
     let router = Router::new()
@@ -29,9 +29,7 @@ pub async fn start(updates: UpdatesRx) -> anyhow::Result<()> {
         }
     });
 
-    println!("Serving Caterpillar at http://{address}");
-
-    Ok(())
+    Ok(address)
 }
 
 async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
