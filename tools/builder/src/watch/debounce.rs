@@ -52,8 +52,8 @@ impl Stream for DebouncedChanges {
                         // start a delay, thereby triggering a debounced event.
                         //
                         // If there *is* a delay already, we don't need to do
-                        // anything. The change we read just now just gets
-                        // folded into the debounced event.
+                        // anything. The change we read just now gets folded
+                        // into the debounced event.
                         self.delay =
                             Some(Box::pin(sleep(Duration::from_millis(20))));
                     }
