@@ -3,7 +3,7 @@ use std::{path::PathBuf, process};
 use axum::{
     extract::{Path, State},
     http::{header, StatusCode},
-    response::IntoResponse,
+    response::{IntoResponse, Response},
     routing::get,
     Router,
 };
@@ -53,7 +53,7 @@ async fn serve_static(Path(path): Path<PathBuf>) -> impl IntoResponse {
     file_response(path).await
 }
 
-async fn file_response(path: PathBuf) -> impl IntoResponse {
+async fn file_response(path: PathBuf) -> Response {
     let path = PathBuf::from("capi/dist").join(path);
 
     let content_type = match path.extension() {
@@ -75,4 +75,5 @@ async fn file_response(path: PathBuf) -> impl IntoResponse {
         .unwrap();
 
     (StatusCode::OK, [(header::CONTENT_TYPE, content_type)], data)
+        .into_response()
 }
