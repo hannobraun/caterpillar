@@ -19,7 +19,7 @@ pub fn start(changes: DebouncedChanges) -> UpdatesRx {
 
 async fn watch_and_build(
     mut changes: DebouncedChanges,
-    updates: watch::Sender<()>,
+    updates: UpdatesTx,
 ) -> anyhow::Result<()> {
     build_once(&updates).await?;
 
@@ -32,7 +32,7 @@ async fn watch_and_build(
     Ok(())
 }
 
-async fn build_once(updates: &watch::Sender<()>) -> anyhow::Result<bool> {
+async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
     let cargo_build = Command::new("cargo")
         .arg("build")
         .args(["--package", "capi"])
@@ -59,3 +59,4 @@ async fn build_once(updates: &watch::Sender<()>) -> anyhow::Result<bool> {
 }
 
 pub type UpdatesRx = watch::Receiver<()>;
+pub type UpdatesTx = watch::Sender<()>;
