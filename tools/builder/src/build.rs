@@ -1,12 +1,9 @@
-use tokio::{
-    process::{Child, Command},
-    task,
-};
+use tokio::process::{Child, Command};
 
 use crate::watch::DebouncedChanges;
 
-pub fn start(changes: DebouncedChanges) {
-    task::spawn(watch_and_build(changes));
+pub async fn start(changes: DebouncedChanges) {
+    watch_and_build(changes).await.unwrap();
 }
 
 async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {

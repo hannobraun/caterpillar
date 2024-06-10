@@ -8,7 +8,7 @@ async fn main() -> anyhow::Result<()> {
 
     let watcher = watch::Watcher::new()?;
     serve::start(watcher.changes()).await?;
-    build::start(watcher.changes());
+    build::start(watcher.changes()).await;
 
     Ok(())
 }
