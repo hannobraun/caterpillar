@@ -5,9 +5,8 @@ use tokio::{
 
 use crate::watch::DebouncedChanges;
 
-pub async fn build(changes: DebouncedChanges) -> anyhow::Result<()> {
+pub async fn build(changes: DebouncedChanges) {
     task::spawn(watch_and_build(changes));
-    Ok(())
 }
 
 async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
