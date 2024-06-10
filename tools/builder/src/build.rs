@@ -2,7 +2,7 @@ use tokio::{process::Command, sync::watch, task};
 
 use crate::watch::DebouncedChanges;
 
-pub async fn start(changes: DebouncedChanges) -> watch::Receiver<()> {
+pub fn start(changes: DebouncedChanges) -> watch::Receiver<()> {
     let (tx, rx) = watch::channel(());
     task::spawn(watch_and_build(changes, tx));
     rx

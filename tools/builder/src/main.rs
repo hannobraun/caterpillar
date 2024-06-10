@@ -7,7 +7,7 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let watcher = watch::Watcher::new()?;
-    let mut updates = build::start(watcher.changes()).await;
+    let mut updates = build::start(watcher.changes());
     serve::start(watcher.changes()).await?;
 
     while let Ok(update) = updates.changed().await {
