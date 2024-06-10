@@ -61,6 +61,10 @@ impl Watcher {
             changes,
         })
     }
+
+    pub fn changes(&self) -> DebouncedChanges {
+        self.changes.clone()
+    }
 }
 
 fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
