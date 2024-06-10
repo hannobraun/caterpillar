@@ -9,7 +9,7 @@ pub async fn start(updates: watch::Receiver<()>) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
-        .route("/changes", get(serve_updates))
+        .route("/updates", get(serve_updates))
         .nest_service("/", ServeDir::new("capi/dist"))
         .with_state(updates);
     let listener = TcpListener::bind(address).await?;
