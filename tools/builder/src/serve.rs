@@ -1,4 +1,4 @@
-use std::{path::PathBuf, process};
+use std::{io, path::PathBuf, process};
 
 use axum::{
     extract::{Path, State},
@@ -66,14 +66,25 @@ async fn file_response(path: PathBuf) -> Response {
         _ => "application/octet-stream",
     };
 
+    let mut file = match File::open(path).await {
+        Ok(file) => file,
+        Err(err) => return error_to_response(err),
+    };
+
     let mut data = Vec::new();
-    File::open(path)
-        .await
-        .unwrap()
-        .read_to_end(&mut data)
-        .await
-        .unwrap();
+    if let Err(err) = file.read_to_end(&mut data).await {
+        return error_to_response(err);
+    }
 
     (StatusCode::OK, [(header::CONTENT_TYPE, content_type)], data)
         .into_response()
+}
+
+fn error_to_response(err: io::Error) -> Response {
+    let status = match err.kind() {
+        io::ErrorKind::NotFound => StatusCode::NOT_FOUND,
+        _ => StatusCode::INTERNAL_SERVER_ERROR,
+    };
+
+    status.into_response()
 }
