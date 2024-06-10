@@ -2,7 +2,11 @@ use tokio::process::{Child, Command};
 
 use crate::watch::DebouncedChanges;
 
-pub async fn build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
+pub async fn build(changes: DebouncedChanges) -> anyhow::Result<()> {
+    watch_and_build(changes).await
+}
+
+async fn watch_and_build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     let mut trunk_process: Option<Child> = None;
 
     build_once(&mut trunk_process).await?;
