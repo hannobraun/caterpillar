@@ -11,8 +11,6 @@ use tokio::{
 };
 use tokio_stream::{Stream, StreamExt};
 
-use super::raw::RawChanges;
-
 pub struct DebouncedChanges {
     changes: mpsc::UnboundedReceiver<()>,
     delay: Option<Pin<Box<Sleep>>>,
@@ -32,7 +30,7 @@ impl DebouncedChanges {
 }
 
 impl Stream for DebouncedChanges {
-    type Item = <RawChanges as Stream>::Item;
+    type Item = ();
 
     fn poll_next(
         mut self: Pin<&mut Self>,
