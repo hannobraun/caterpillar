@@ -5,6 +5,8 @@ use crate::watch::DebouncedChanges;
 pub async fn build(mut changes: DebouncedChanges) -> anyhow::Result<()> {
     let mut trunk_process: Option<Child> = None;
 
+    single_build(&mut trunk_process).await?;
+
     while changes.wait_for_change().await {
         single_build(&mut trunk_process).await?;
     }
