@@ -16,3 +16,7 @@ default-features = false
 [dependencies.tokio]
 version = "*"
 features = ["full"]
+
+[dependencies.tower-http]
+version = "*"
+features = ["fs"]
