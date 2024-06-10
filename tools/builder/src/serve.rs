@@ -2,6 +2,7 @@ use std::process;
 
 use axum::{extract::State, http::StatusCode, routing::get, Router};
 use tokio::{net::TcpListener, task};
+use tower_http::services::ServeDir;
 use tracing::error;
 
 use crate::watch::DebouncedChanges;
@@ -9,6 +10,7 @@ use crate::watch::DebouncedChanges;
 pub async fn start(changes: DebouncedChanges) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/changes", get(serve_changes))
+        .nest_service("/", ServeDir::new("capi/dist"))
         .with_state(changes);
     let listener = TcpListener::bind("localhost:34480").await?;
 
