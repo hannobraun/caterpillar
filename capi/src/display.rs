@@ -60,7 +60,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 
     let mut state = State {
         runner,
-        mem: [0; MEM_SIZE],
+        tiles: [0; MEM_SIZE],
         window,
         pixels,
     };
@@ -72,7 +72,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 
 struct State {
     runner: RunnerHandle,
-    mem: [u8; MEM_SIZE],
+    tiles: [u8; MEM_SIZE],
     window: Window,
     pixels: Pixels,
 }
@@ -92,12 +92,12 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        handle_effects(&mut self.runner, &mut self.mem);
+        handle_effects(&mut self.runner, &mut self.tiles);
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
                 let i = tile_y * TILES_PER_AXIS + tile_x;
-                let tile = self.mem[i];
+                let tile = self.tiles[i];
 
                 let color = if tile == 0 {
                     [0, 0, 0, 0]
