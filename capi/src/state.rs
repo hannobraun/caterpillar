@@ -15,13 +15,11 @@ pub struct RuntimeState {
 
 impl Default for RuntimeState {
     fn default() -> Self {
-        let game = Game {
-            program: games::build(snake),
-        };
+        let program = games::build(snake);
 
         let input = Input::default();
-        let updates = Updates::new(&game.program);
-        let runner = Runner::new(game.program.clone(), updates.tx.clone());
+        let updates = Updates::new(&program);
+        let runner = Runner::new(program.clone(), updates.tx.clone());
 
         Self {
             input,
@@ -34,10 +32,6 @@ impl Default for RuntimeState {
 #[derive(Default)]
 pub struct Input {
     pub buffer: VecDeque<u8>,
-}
-
-pub struct Game {
-    pub program: Program,
 }
 
 pub struct Updates {
