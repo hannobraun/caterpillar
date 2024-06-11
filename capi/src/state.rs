@@ -10,7 +10,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub runner: Runner,
+    pub runner: Option<RunnerHandle>,
 }
 
 impl Default for RuntimeState {
@@ -26,9 +26,7 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            runner: Runner {
-                handle: Some(runner),
-            },
+            runner: Some(runner),
         }
     }
 }
@@ -36,8 +34,4 @@ impl Default for RuntimeState {
 #[derive(Default)]
 pub struct Input {
     pub buffer: VecDeque<u8>,
-}
-
-pub struct Runner {
-    pub handle: Option<RunnerHandle>,
 }
