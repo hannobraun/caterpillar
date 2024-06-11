@@ -128,7 +128,7 @@ impl ApplicationHandler for State {
     }
 }
 
-pub fn handle_effects(runner: &mut RunnerHandle, mem: &mut [u8; MEM_SIZE]) {
+pub fn handle_effects(runner: &mut RunnerHandle, tiles: &mut [u8; MEM_SIZE]) {
     for effect in runner.effects() {
         match effect {
             DisplayEffect::SetTile { x, y, value } => {
@@ -140,7 +140,7 @@ pub fn handle_effects(runner: &mut RunnerHandle, mem: &mut [u8; MEM_SIZE]) {
                 };
                 let index = index().unwrap();
 
-                mem[index] = value;
+                tiles[index] = value;
             }
             DisplayEffect::SubmitTiles { reply } => {
                 reply.send(()).unwrap();
