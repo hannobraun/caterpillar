@@ -1,9 +1,7 @@
-use std::collections::VecDeque;
-
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
-    event::{ElementState, KeyEvent, WindowEvent},
+    event::{KeyEvent, WindowEvent},
     event_loop::{ActiveEventLoop, EventLoop},
     keyboard::{KeyCode, PhysicalKey},
     window::Window,
@@ -11,6 +9,7 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
+    ffi,
     runner::RunnerHandle,
 };
 
@@ -65,7 +64,6 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         mem: [0; MEM_SIZE],
         window,
         pixels,
-        input: VecDeque::new(),
     };
 
     event_loop.run_app(&mut state)?;
@@ -78,7 +76,6 @@ struct State {
     mem: [u8; MEM_SIZE],
     window: Window,
     pixels: Pixels,
-    input: VecDeque<i8>,
 }
 
 impl ApplicationHandler for State {
@@ -103,54 +100,6 @@ impl ApplicationHandler for State {
                 ..
             } => {
                 event_loop.exit();
-            }
-            WindowEvent::KeyboardInput {
-                event:
-                    KeyEvent {
-                        physical_key:
-                            PhysicalKey::Code(KeyCode::ArrowUp | KeyCode::KeyW),
-                        state: ElementState::Pressed,
-                        ..
-                    },
-                ..
-            } => {
-                self.input.push_back(1);
-            }
-            WindowEvent::KeyboardInput {
-                event:
-                    KeyEvent {
-                        physical_key:
-                            PhysicalKey::Code(KeyCode::ArrowLeft | KeyCode::KeyA),
-                        state: ElementState::Pressed,
-                        ..
-                    },
-                ..
-            } => {
-                self.input.push_back(2);
-            }
-            WindowEvent::KeyboardInput {
-                event:
-                    KeyEvent {
-                        physical_key:
-                            PhysicalKey::Code(KeyCode::ArrowDown | KeyCode::KeyS),
-                        state: ElementState::Pressed,
-                        ..
-                    },
-                ..
-            } => {
-                self.input.push_back(3);
-            }
-            WindowEvent::KeyboardInput {
-                event:
-                    KeyEvent {
-                        physical_key:
-                            PhysicalKey::Code(KeyCode::ArrowRight | KeyCode::KeyD),
-                        state: ElementState::Pressed,
-                        ..
-                    },
-                ..
-            } => {
-                self.input.push_back(4);
             }
             WindowEvent::RedrawRequested => {
                 if let Err(err) = self.pixels.render() {
@@ -180,8 +129,14 @@ impl ApplicationHandler for State {
                     reply.send(()).unwrap();
                 }
                 DisplayEffect::ReadInput { reply } => {
-                    let input = self.input.pop_front().unwrap_or(0);
-                    reply.send(input).unwrap();
+                    // This is temporary, while winit is being replaced. Once we
+                    // have full control over what runs when, the low-level FFI
+                    // code can just pass this kind of state as an argument.
+                    let mut input = ffi::STATE.lock().unwrap();
+                    let input = input.get_or_insert_with(Default::default);
+
+                    let input = input.pop_front().unwrap_or(0);
+                    reply.send(input.try_into().unwrap()).unwrap();
                 }
             }
         }
