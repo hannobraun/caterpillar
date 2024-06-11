@@ -22,6 +22,10 @@
     <script type="module">
         import init from "/capi.js";
         await init("capi_bg.wasm");
+
+        window.addEventListener("keydown", (event) => {
+            console.log(event);
+        });
     </script>>
     <script type="module">
         fetch("/updates").then((response) => {
