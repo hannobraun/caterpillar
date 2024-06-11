@@ -12,7 +12,7 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    ffi::{self, STATE},
+    ffi,
     runner::RunnerHandle,
     state::Input,
 };
@@ -59,22 +59,9 @@ pub async fn run() -> anyhow::Result<()> {
         window_attributes
     })?;
 
-    let pixels = {
-        let size_u32: u32 = PIXELS_PER_AXIS
-            .try_into()
-            .expect("Expected `SIZE` to fit into `u32`");
-
-        let surface_texture =
-            SurfaceTexture::new(size_u32, size_u32, &CanvasWindow);
-        Pixels::new_async(size_u32, size_u32, surface_texture).await?
-    };
-
     let mut state = State {
         window,
-        display: Display {
-            tiles: [0; NUM_TILES],
-            pixels,
-        },
+        display: Display::new().await?,
     };
 
     event_loop.run_app(&mut state)?;
@@ -120,6 +107,23 @@ struct Display {
 }
 
 impl Display {
+    pub async fn new() -> anyhow::Result<Self> {
+        let pixels = {
+            let size_u32: u32 = PIXELS_PER_AXIS
+                .try_into()
+                .expect("Expected `SIZE` to fit into `u32`");
+
+            let surface_texture =
+                SurfaceTexture::new(size_u32, size_u32, &CanvasWindow);
+            Pixels::new_async(size_u32, size_u32, surface_texture).await?
+        };
+
+        Ok(Self {
+            tiles: [0; NUM_TILES],
+            pixels,
+        })
+    }
+
     pub fn handle_effects(
         &mut self,
         input: &mut Input,
