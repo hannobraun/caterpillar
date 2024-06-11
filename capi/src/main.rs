@@ -1,3 +1,5 @@
+use ffi::STATE;
+
 mod breakpoints;
 mod code;
 mod compiler;
@@ -24,7 +26,12 @@ fn main() {
 }
 
 async fn main_async() {
-    let program = crate::games::build(crate::games::snake::snake);
+    let program = {
+        let mut state = STATE.inner.lock().unwrap();
+        let state = state.get_or_insert_with(Default::default);
+
+        state.game.program.clone()
+    };
 
     let (updates_tx, updates_rx) = crate::updates::updates(program.clone());
 
