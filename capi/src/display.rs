@@ -87,9 +87,7 @@ impl ApplicationHandler for State {
         event: WindowEvent,
     ) {
         if let WindowEvent::RedrawRequested = event {
-            if let Err(err) = self.pixels.render() {
-                eprintln!("Render error: {err}");
-            }
+            render(&self.pixels);
         }
     }
 
@@ -155,6 +153,12 @@ impl ApplicationHandler for State {
         }
 
         self.window.request_redraw();
+    }
+}
+
+pub fn render(pixels: &Pixels) {
+    if let Err(err) = pixels.render() {
+        eprintln!("Render error: {err}");
     }
 }
 
