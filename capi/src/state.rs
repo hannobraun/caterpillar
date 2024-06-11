@@ -9,7 +9,8 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub updates: Updates,
+    pub updates_rx: UpdatesRx,
+    pub updates_tx: UpdatesTx,
     pub runner: Runner,
 }
 
@@ -23,10 +24,8 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            updates: Updates {
-                rx: updates_rx,
-                tx: updates_tx,
-            },
+            updates_rx,
+            updates_tx,
             runner,
         }
     }
@@ -35,11 +34,6 @@ impl Default for RuntimeState {
 #[derive(Default)]
 pub struct Input {
     pub buffer: VecDeque<u8>,
-}
-
-pub struct Updates {
-    pub rx: UpdatesRx,
-    pub tx: UpdatesTx,
 }
 
 pub struct Runner {

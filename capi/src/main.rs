@@ -30,7 +30,7 @@ async fn main_async() {
         let mut state = STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        let updates_rx = state.updates.rx.clone();
+        let updates_rx = state.updates_rx.clone();
         let events_tx = state.runner.events_tx.clone();
         let runner = state.runner.handle.take().unwrap();
 
