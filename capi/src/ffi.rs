@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, sync::Mutex};
 
-pub static STATE: RuntimeState = RuntimeState {
+pub static STATE: StaticRuntimeState = StaticRuntimeState {
     input: Mutex::new(None),
 };
 
@@ -16,6 +16,6 @@ pub extern "C" fn on_frame() {
     log::debug!("on_frame");
 }
 
-pub struct RuntimeState {
+pub struct StaticRuntimeState {
     pub input: Mutex<Option<VecDeque<u8>>>,
 }
