@@ -87,7 +87,7 @@ impl ApplicationHandler for State {
         event: WindowEvent,
     ) {
         if let WindowEvent::RedrawRequested = event {
-            render(&self.pixels);
+            render(&mut self.pixels);
         }
     }
 
@@ -159,7 +159,7 @@ pub fn handle_effects(runner: &mut RunnerHandle, tiles: &mut [u8; NUM_TILES]) {
     }
 }
 
-pub fn render(pixels: &Pixels) {
+pub fn render(pixels: &mut Pixels) {
     if let Err(err) = pixels.render() {
         eprintln!("Render error: {err}");
     }
