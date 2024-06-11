@@ -10,10 +10,6 @@ use crate::{
     state::Input,
 };
 
-pub async fn run() -> anyhow::Result<()> {
-    Ok(())
-}
-
 pub struct Display {
     tiles: [u8; NUM_TILES],
     pixels: Pixels,
