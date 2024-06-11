@@ -58,7 +58,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         Pixels::new_async(size_u32, size_u32, surface_texture).await?
     };
 
-    let mut state = State {
+    let mut state = Display {
         runner,
         tiles: [0; NUM_TILES],
         window,
@@ -70,14 +70,14 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     Ok(())
 }
 
-struct State {
+struct Display {
     runner: RunnerHandle,
     tiles: [u8; NUM_TILES],
     window: Window,
     pixels: Pixels,
 }
 
-impl ApplicationHandler for State {
+impl ApplicationHandler for Display {
     fn resumed(&mut self, _: &ActiveEventLoop) {}
 
     fn window_event(
