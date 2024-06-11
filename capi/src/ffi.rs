@@ -16,7 +16,16 @@ pub extern "C" fn on_key(key_code: u8) {
 
 #[no_mangle]
 pub extern "C" fn on_frame() {
-    log::debug!("on_frame");
+    let mut state = STATE.inner.lock().unwrap();
+    let state = state.get_or_insert_with(Default::default);
+
+    let Some(display) = state.display.as_mut() else {
+        // Display not initialized yet.
+        return;
+    };
+
+    display.handle_effects(&mut state.input, &mut state.runner);
+    display.render();
 }
 
 pub struct StaticRuntimeState {

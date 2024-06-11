@@ -3,84 +3,15 @@ use raw_window_handle::{
     HasRawDisplayHandle, HasRawWindowHandle, RawDisplayHandle, RawWindowHandle,
     WebDisplayHandle, WebWindowHandle,
 };
-use winit::{
-    application::ApplicationHandler,
-    event::WindowEvent,
-    event_loop::{ActiveEventLoop, EventLoop},
-    window::Window,
-};
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    ffi,
     runner::RunnerHandle,
     state::Input,
 };
 
 pub async fn run() -> anyhow::Result<()> {
-    let event_loop = EventLoop::new()?;
-
-    // Winit's new approach won't work for us in the browser, as `Pixels`
-    // doesn't have its blocking constructor there, and we need to use an async
-    // one. But winit's new `ApplicationHandler` isn't async-aware, and we can't
-    // block on a future in the browser, as far as I understand.
-    //
-    // So we're back to the old and deprecated way. It won't matter much, as I
-    // think winit is a bit too heavyweight anyway, for what I'm trying to do
-    // here, and I plan to phase it out.
-    #[allow(deprecated)]
-    let window = event_loop.create_window(
-        Window::default_attributes().with_title("Caterpillar"),
-    )?;
-
-    let mut state = State { window };
-
-    event_loop.run_app(&mut state)?;
-
     Ok(())
-}
-
-struct State {
-    window: Window,
-}
-
-impl ApplicationHandler for State {
-    fn resumed(&mut self, _: &ActiveEventLoop) {}
-
-    fn window_event(
-        &mut self,
-        _: &ActiveEventLoop,
-        _: winit::window::WindowId,
-        event: WindowEvent,
-    ) {
-        if let WindowEvent::RedrawRequested = event {
-            let mut state = ffi::STATE.inner.lock().unwrap();
-            let state = state.get_or_insert_with(Default::default);
-
-            let Some(display) = state.display.as_mut() else {
-                // Display has not been initialized yet.
-                return;
-            };
-
-            display.render();
-        }
-    }
-
-    fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        // This is temporary, while winit is being replaced. Once we have full
-        // control over what runs when, the low-level FFI code can just pass
-        // this kind of state as an argument.
-        let mut state = ffi::STATE.inner.lock().unwrap();
-        let state = state.get_or_insert_with(Default::default);
-
-        let Some(display) = state.display.as_mut() else {
-            // Display has not been initialized yet.
-            return;
-        };
-
-        display.handle_effects(&mut state.input, &mut state.runner);
-        self.window.request_redraw();
-    }
 }
 
 pub struct Display {
