@@ -70,10 +70,10 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
     };
 
     let mut state = State {
+        window,
         display: Display {
             runner,
             tiles: [0; NUM_TILES],
-            window,
             pixels,
         },
     };
@@ -84,6 +84,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 }
 
 struct State {
+    window: Window,
     display: Display,
 }
 
@@ -109,14 +110,13 @@ impl ApplicationHandler for State {
         let state = state.get_or_insert_with(Default::default);
 
         self.display.handle_effects(&mut state.input);
-        self.display.window.request_redraw();
+        self.window.request_redraw();
     }
 }
 
 struct Display {
     runner: RunnerHandle,
     tiles: [u8; NUM_TILES],
-    window: Window,
     pixels: Pixels,
 }
 
