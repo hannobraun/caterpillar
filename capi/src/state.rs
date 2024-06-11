@@ -2,9 +2,8 @@ use std::collections::VecDeque;
 
 use crate::{
     games::{self, snake::snake},
-    handle_updates,
     runner::{runner, RunnerHandle},
-    ui,
+    ui::{self, handle_updates},
     updates::updates,
 };
 
