@@ -119,4 +119,4 @@ unsafe impl HasRawWindowHandle for CanvasWindow {
 
 const PIXELS_PER_TILE_AXIS: usize = 8;
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
-const NUM_TILES: usize = TILES_PER_AXIS * TILES_PER_AXIS;
+pub const NUM_TILES: usize = TILES_PER_AXIS * TILES_PER_AXIS;
