@@ -101,7 +101,7 @@ impl ApplicationHandler for State {
     }
 }
 
-struct Display {
+pub struct Display {
     tiles: [u8; NUM_TILES],
     pixels: Pixels,
 }
