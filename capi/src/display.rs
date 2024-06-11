@@ -110,7 +110,7 @@ impl Display {
                     // This is temporary, while winit is being replaced. Once we
                     // have full control over what runs when, the low-level FFI
                     // code can just pass this kind of state as an argument.
-                    let mut input = ffi::STATE.lock().unwrap();
+                    let mut input = ffi::STATE.input.lock().unwrap();
                     let input = input.get_or_insert_with(Default::default);
 
                     let input = input.pop_front().unwrap_or(0);
