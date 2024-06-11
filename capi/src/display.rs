@@ -11,7 +11,6 @@ use crate::{
 };
 
 pub struct Display {
-    tiles: [u8; NUM_TILES],
     pixels: Pixels,
 }
 
@@ -27,16 +26,14 @@ impl Display {
             Pixels::new_async(size_u32, size_u32, surface_texture).await?
         };
 
-        Ok(Self {
-            tiles: [0; NUM_TILES],
-            pixels,
-        })
+        Ok(Self { pixels })
     }
 
     pub fn handle_effects(
         &mut self,
         input: &mut Input,
         runner: &mut RunnerHandle,
+        tiles: &mut [u8],
     ) {
         for effect in runner.effects() {
             match effect {
@@ -50,7 +47,7 @@ impl Display {
                     };
                     let index = index().unwrap();
 
-                    self.tiles[index] = value;
+                    tiles[index] = value;
                 }
                 DisplayEffect::SubmitTiles { reply } => {
                     reply.send(()).unwrap();
@@ -63,11 +60,11 @@ impl Display {
         }
     }
 
-    pub fn render(&mut self) {
+    pub fn render(&mut self, tiles: &[u8]) {
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
                 let i = tile_y * TILES_PER_AXIS + tile_x;
-                let tile = self.tiles[i];
+                let tile = tiles[i];
 
                 let color = if tile == 0 {
                     [0, 0, 0, 0]
