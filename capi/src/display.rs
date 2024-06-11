@@ -1,9 +1,8 @@
 use pixels::{Pixels, SurfaceTexture};
 use winit::{
     application::ApplicationHandler,
-    event::{KeyEvent, WindowEvent},
+    event::WindowEvent,
     event_loop::{ActiveEventLoop, EventLoop},
-    keyboard::{KeyCode, PhysicalKey},
     window::Window,
 };
 
@@ -83,30 +82,14 @@ impl ApplicationHandler for State {
 
     fn window_event(
         &mut self,
-        event_loop: &ActiveEventLoop,
+        _: &ActiveEventLoop,
         _: winit::window::WindowId,
         event: WindowEvent,
     ) {
-        match event {
-            WindowEvent::CloseRequested => {
-                event_loop.exit();
+        if let WindowEvent::RedrawRequested = event {
+            if let Err(err) = self.pixels.render() {
+                eprintln!("Render error: {err}");
             }
-            WindowEvent::KeyboardInput {
-                event:
-                    KeyEvent {
-                        physical_key: PhysicalKey::Code(KeyCode::Escape),
-                        ..
-                    },
-                ..
-            } => {
-                event_loop.exit();
-            }
-            WindowEvent::RedrawRequested => {
-                if let Err(err) = self.pixels.render() {
-                    eprintln!("Render error: {err}");
-                }
-            }
-            _ => {}
         }
     }
 
