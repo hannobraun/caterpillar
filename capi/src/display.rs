@@ -111,9 +111,9 @@ impl Display {
                     // have full control over what runs when, the low-level FFI
                     // code can just pass this kind of state as an argument.
                     let mut state = ffi::STATE.input.lock().unwrap();
-                    let input = state.get_or_insert_with(Default::default);
+                    let state = state.get_or_insert_with(Default::default);
 
-                    let input = input.pop_front().unwrap_or(0);
+                    let input = state.pop_front().unwrap_or(0);
                     reply.send(input.try_into().unwrap()).unwrap();
                 }
             }
