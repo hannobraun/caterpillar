@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, sync::Mutex};
 
-static STATE: Mutex<Option<VecDeque<u8>>> = Mutex::new(None);
+pub static STATE: Mutex<Option<VecDeque<u8>>> = Mutex::new(None);
 
 #[no_mangle]
 pub extern "C" fn on_key(key_code: u8) {
