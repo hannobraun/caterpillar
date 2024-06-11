@@ -14,11 +14,6 @@
     <canvas width="800" height="800" id="capi" class="mx-auto m-16">
         Display for a game written in Caterpillar.
     </canvas>
-    <script>
-        function capi_test() {
-            console.log("Executing custom JavaScript code.");
-        }
-    </script>
     <script type="module">
         import init from "/capi.js";
         await init("capi_bg.wasm");
