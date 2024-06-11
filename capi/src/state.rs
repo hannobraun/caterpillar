@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use crate::{
     games::{self, snake::snake},
     handle_updates,
-    runner::{runner, EventsTx, RunnerHandle},
+    runner::{runner, RunnerHandle},
     ui,
     updates::updates,
 };
@@ -27,7 +27,6 @@ impl Default for RuntimeState {
         Self {
             input,
             runner: Runner {
-                events_tx,
                 handle: Some(handle),
             },
         }
@@ -40,6 +39,5 @@ pub struct Input {
 }
 
 pub struct Runner {
-    pub events_tx: EventsTx,
     pub handle: Option<RunnerHandle>,
 }
