@@ -33,7 +33,7 @@ async fn main_async() {
         state.game.program.clone()
     };
 
-    let (updates_tx, updates_rx) = crate::updates::updates(program.clone());
+    let (updates_tx, updates_rx) = crate::updates::updates(&program);
 
     let (events_tx, runner) = crate::runner::runner(program, updates_tx);
 
