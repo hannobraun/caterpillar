@@ -20,5 +20,3 @@ pub enum DisplayEffect {
     SubmitTiles { reply: mpsc::UnboundedSender<()> },
     ReadInput { reply: mpsc::UnboundedSender<i8> },
 }
-
-pub const TILES_PER_AXIS: usize = 32;

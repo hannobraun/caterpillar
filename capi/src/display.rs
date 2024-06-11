@@ -5,10 +5,10 @@ use raw_window_handle::{
 };
 
 use crate::{
-    effects::{DisplayEffect, TILES_PER_AXIS},
+    effects::DisplayEffect,
     runner::RunnerHandle,
     state::Input,
-    tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS},
+    tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS},
 };
 
 pub struct Display {
