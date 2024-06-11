@@ -12,7 +12,7 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    ffi,
+    ffi::{self, RuntimeState},
     runner::RunnerHandle,
 };
 
@@ -88,7 +88,7 @@ struct Display {
 }
 
 impl Display {
-    pub fn handle_effects(&mut self) {
+    pub fn handle_effects(&mut self, state: &mut RuntimeState) {
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
@@ -107,12 +107,6 @@ impl Display {
                     reply.send(()).unwrap();
                 }
                 DisplayEffect::ReadInput { reply } => {
-                    // This is temporary, while winit is being replaced. Once we
-                    // have full control over what runs when, the low-level FFI
-                    // code can just pass this kind of state as an argument.
-                    let mut state = ffi::STATE.inner.lock().unwrap();
-                    let state = state.get_or_insert_with(Default::default);
-
                     let input = state.input.pop_front().unwrap_or(0);
                     reply.send(input.try_into().unwrap()).unwrap();
                 }
@@ -172,7 +166,13 @@ impl ApplicationHandler for Display {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        self.handle_effects();
+        // This is temporary, while winit is being replaced. Once we have full
+        // control over what runs when, the low-level FFI code can just pass
+        // this kind of state as an argument.
+        let mut state = ffi::STATE.inner.lock().unwrap();
+        let state = state.get_or_insert_with(Default::default);
+
+        self.handle_effects(state);
         self.window.request_redraw();
     }
 }
