@@ -12,8 +12,9 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    ffi::{self, RuntimeState},
+    ffi,
     runner::RunnerHandle,
+    state::RuntimeState,
 };
 
 pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {

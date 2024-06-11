@@ -10,6 +10,7 @@ mod program;
 mod runner;
 mod runtime;
 mod source_map;
+mod state;
 mod syntax;
 mod ui;
 mod updates;

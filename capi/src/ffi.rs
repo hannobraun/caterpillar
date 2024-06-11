@@ -1,4 +1,6 @@
-use std::{collections::VecDeque, sync::Mutex};
+use std::sync::Mutex;
+
+use crate::state::RuntimeState;
 
 pub static STATE: StaticRuntimeState = StaticRuntimeState {
     inner: Mutex::new(None),
@@ -18,9 +20,4 @@ pub extern "C" fn on_frame() {
 
 pub struct StaticRuntimeState {
     pub inner: Mutex<Option<RuntimeState>>,
-}
-
-#[derive(Default)]
-pub struct RuntimeState {
-    pub input: VecDeque<u8>,
 }
