@@ -14,7 +14,7 @@ use crate::{
 pub fn runner(
     program: Program,
     updates: UpdatesTx,
-) -> (EventsTx, RunnerHandle, Runner) {
+) -> (EventsTx, RunnerHandle) {
     let (events_tx, events_rx) = mpsc::unbounded_channel();
     let (effects_tx, effects_rx) = mpsc::unbounded_channel();
 
@@ -28,7 +28,13 @@ pub fn runner(
 
     let handle = RunnerHandle { effects_rx };
 
-    (events_tx, handle, runner)
+    leptos::spawn_local(async move {
+        loop {
+            runner.step().await;
+        }
+    });
+
+    (events_tx, handle)
 }
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
