@@ -15,10 +15,11 @@ pub struct RuntimeState {
 
 impl Default for RuntimeState {
     fn default() -> Self {
-        let input = Input::default();
         let game = Game {
             program: games::build(snake),
         };
+
+        let input = Input::default();
         let updates = Updates::new(&game.program);
         let runner = Runner::new(game.program.clone(), updates.tx.clone());
 
