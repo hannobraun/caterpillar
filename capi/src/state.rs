@@ -11,7 +11,6 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub updates_tx: UpdatesTx,
     pub runner: Runner,
 }
 
@@ -26,11 +25,7 @@ impl Default for RuntimeState {
         let set_program = ui::start(runner.events_tx.clone());
         leptos::spawn_local(handle_updates(updates_rx, set_program));
 
-        Self {
-            input,
-            updates_tx,
-            runner,
-        }
+        Self { input, runner }
     }
 }
 
