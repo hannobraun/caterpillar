@@ -21,9 +21,17 @@ async fn watch_and_build(
     mut changes: DebouncedChanges,
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
+    println!();
+    println!("Starting initial build of Caterpillar...");
+    println!();
+
     build_once(&updates).await?;
 
     while changes.wait_for_change().await {
+        println!();
+        println!("Change detected. Rebuilding Caterpillar...");
+        println!();
+
         if !build_once(&updates).await? {
             break;
         }

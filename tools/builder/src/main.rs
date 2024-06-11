@@ -12,6 +12,8 @@ async fn main() -> anyhow::Result<()> {
 
     while let Ok(()) = updates.changed().await {
         println!();
+        println!("Caterpillar is ready:");
+        println!();
         println!("\t🚀 http://{address}/");
         println!();
     }
