@@ -7,7 +7,9 @@ fn main() -> anyhow::Result<()> {
     let path = format!("website/daily/{date}.md");
 
     File::create_new(&path)?;
-    println!("Created {path}");
+    println!();
+    println!("\t{path}");
+    println!();
 
     Ok(())
 }
