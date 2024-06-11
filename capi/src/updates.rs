@@ -15,6 +15,7 @@ pub fn updates(program: &Program) -> (UpdatesTx, UpdatesRx) {
 
 pub type UpdatesRx = watch::Receiver<Program>;
 
+#[derive(Clone)]
 pub struct UpdatesTx {
     inner: UpdatesTxInner,
     program_at_client: Option<Program>,
