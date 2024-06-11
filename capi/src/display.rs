@@ -109,6 +109,42 @@ impl Display {
             }
         }
     }
+
+    pub fn render(tiles: &[u8; NUM_TILES], pixels: &mut Pixels) {
+        for tile_y in 0..TILES_PER_AXIS {
+            for tile_x in 0..TILES_PER_AXIS {
+                let i = tile_y * TILES_PER_AXIS + tile_x;
+                let tile = tiles[i];
+
+                let color = if tile == 0 {
+                    [0, 0, 0, 0]
+                } else {
+                    [255, 255, 255, 255]
+                };
+
+                for offset_y in 0..PIXELS_PER_TILE_AXIS {
+                    for offset_x in 0..PIXELS_PER_TILE_AXIS {
+                        let num_channels = 4;
+
+                        let frame_x = (tile_x * PIXELS_PER_TILE_AXIS
+                            + offset_x)
+                            * num_channels;
+                        let frame_y = (tile_y * PIXELS_PER_TILE_AXIS
+                            + offset_y)
+                            * num_channels;
+
+                        let i = frame_y * PIXELS_PER_AXIS + frame_x;
+                        pixels.frame_mut()[i..i + num_channels]
+                            .copy_from_slice(&color);
+                    }
+                }
+            }
+        }
+
+        if let Err(err) = pixels.render() {
+            eprintln!("Render error: {err}");
+        }
+    }
 }
 
 impl ApplicationHandler for Display {
@@ -121,47 +157,13 @@ impl ApplicationHandler for Display {
         event: WindowEvent,
     ) {
         if let WindowEvent::RedrawRequested = event {
-            render(&self.tiles, &mut self.pixels);
+            Self::render(&self.tiles, &mut self.pixels);
         }
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
         self.handle_effects();
         self.window.request_redraw();
-    }
-}
-
-pub fn render(tiles: &[u8; NUM_TILES], pixels: &mut Pixels) {
-    for tile_y in 0..TILES_PER_AXIS {
-        for tile_x in 0..TILES_PER_AXIS {
-            let i = tile_y * TILES_PER_AXIS + tile_x;
-            let tile = tiles[i];
-
-            let color = if tile == 0 {
-                [0, 0, 0, 0]
-            } else {
-                [255, 255, 255, 255]
-            };
-
-            for offset_y in 0..PIXELS_PER_TILE_AXIS {
-                for offset_x in 0..PIXELS_PER_TILE_AXIS {
-                    let num_channels = 4;
-
-                    let frame_x = (tile_x * PIXELS_PER_TILE_AXIS + offset_x)
-                        * num_channels;
-                    let frame_y = (tile_y * PIXELS_PER_TILE_AXIS + offset_y)
-                        * num_channels;
-
-                    let i = frame_y * PIXELS_PER_AXIS + frame_x;
-                    pixels.frame_mut()[i..i + num_channels]
-                        .copy_from_slice(&color);
-                }
-            }
-        }
-    }
-
-    if let Err(err) = pixels.render() {
-        eprintln!("Render error: {err}");
     }
 }
 
