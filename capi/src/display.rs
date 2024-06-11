@@ -18,13 +18,6 @@ use crate::{
 };
 
 pub async fn run() -> anyhow::Result<()> {
-    let runner = {
-        let mut state = STATE.inner.lock().unwrap();
-        let state = state.get_or_insert_with(Default::default);
-
-        state.runner.take().unwrap()
-    };
-
     let event_loop = EventLoop::new()?;
 
     // Winit's new approach won't work for us in the browser, as `Pixels`
@@ -79,7 +72,6 @@ pub async fn run() -> anyhow::Result<()> {
     let mut state = State {
         window,
         display: Display {
-            runner,
             tiles: [0; NUM_TILES],
             pixels,
         },
@@ -116,20 +108,24 @@ impl ApplicationHandler for State {
         let mut state = ffi::STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        self.display.handle_effects(&mut state.input);
+        self.display
+            .handle_effects(&mut state.input, state.runner.as_mut().unwrap());
         self.window.request_redraw();
     }
 }
 
 struct Display {
-    runner: RunnerHandle,
     tiles: [u8; NUM_TILES],
     pixels: Pixels,
 }
 
 impl Display {
-    pub fn handle_effects(&mut self, input: &mut Input) {
-        for effect in self.runner.effects() {
+    pub fn handle_effects(
+        &mut self,
+        input: &mut Input,
+        runner: &mut RunnerHandle,
+    ) {
+        for effect in runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
                     let x_usize: usize = x.into();
