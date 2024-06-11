@@ -5,10 +5,18 @@ use crate::{
     program::Program,
 };
 
-#[derive(Default)]
 pub struct RuntimeState {
     pub input: Input,
     pub game: Game,
+}
+
+impl Default for RuntimeState {
+    fn default() -> Self {
+        let input = Input::default();
+        let game = Game::default();
+
+        Self { input, game }
+    }
 }
 
 #[derive(Default)]
