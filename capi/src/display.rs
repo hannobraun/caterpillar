@@ -12,12 +12,19 @@ use winit::{
 
 use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
-    ffi,
+    ffi::{self, STATE},
     runner::RunnerHandle,
     state::Input,
 };
 
-pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
+pub async fn run() -> anyhow::Result<()> {
+    let runner = {
+        let mut state = STATE.inner.lock().unwrap();
+        let state = state.get_or_insert_with(Default::default);
+
+        state.runner.take().unwrap()
+    };
+
     let event_loop = EventLoop::new()?;
 
     // Winit's new approach won't work for us in the browser, as `Pixels`

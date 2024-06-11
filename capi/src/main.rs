@@ -1,5 +1,3 @@
-use ffi::STATE;
-
 mod breakpoints;
 mod code;
 mod compiler;
@@ -26,14 +24,7 @@ fn main() {
 }
 
 async fn main_async() {
-    let runner = {
-        let mut state = STATE.inner.lock().unwrap();
-        let state = state.get_or_insert_with(Default::default);
-
-        state.runner.take().unwrap()
-    };
-
-    crate::display::run(runner).await.unwrap();
+    crate::display::run().await.unwrap();
 }
 
 async fn handle_updates(
