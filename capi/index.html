@@ -39,6 +39,13 @@
                 event.preventDefault();
             }
         });
+
+        window.requestAnimationFrame(mainLoop);
+
+        function mainLoop() {
+            wasm.on_frame();
+            requestAnimationFrame(mainLoop);
+        }
     </script>>
     <script type="module">
         fetch("/updates").then((response) => {
