@@ -9,7 +9,6 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub game: Game,
     pub updates: Updates,
     pub runner: Runner,
 }
@@ -25,7 +24,6 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            game,
             updates,
             runner,
         }
