@@ -96,7 +96,7 @@ impl ApplicationHandler for State {
         let state = state.get_or_insert_with(Default::default);
 
         self.display
-            .handle_effects(&mut state.input, state.runner.as_mut().unwrap());
+            .handle_effects(&mut state.input, &mut state.runner);
         self.window.request_redraw();
     }
 }
