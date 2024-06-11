@@ -29,13 +29,9 @@ pub async fn run() -> anyhow::Result<()> {
     // think winit is a bit too heavyweight anyway, for what I'm trying to do
     // here, and I plan to phase it out.
     #[allow(deprecated)]
-    let window = event_loop.create_window({
-        #[allow(unused_mut)]
-        let mut window_attributes =
-            Window::default_attributes().with_title("Caterpillar");
-
-        window_attributes
-    })?;
+    let window = event_loop.create_window(
+        Window::default_attributes().with_title("Caterpillar"),
+    )?;
 
     let mut state = State { window };
 
