@@ -28,11 +28,7 @@ async fn main_async() {
 
     let (updates_tx, updates_rx) = crate::updates::updates(program.clone());
 
-    let (events_tx, runner) = {
-        let (events_tx, handle) = crate::runner::runner(program, updates_tx);
-
-        (events_tx, handle)
-    };
+    let (events_tx, runner) = crate::runner::runner(program, updates_tx);
 
     let set_program = ui::start(events_tx);
     leptos::spawn_local(handle_updates(updates_rx, set_program));
