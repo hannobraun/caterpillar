@@ -26,17 +26,15 @@ fn main() {
 }
 
 async fn main_async() {
-    let (_, _, updates_rx, events_tx, runner) = {
+    let (updates_rx, events_tx, runner) = {
         let mut state = STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        let program = state.game.program.clone();
-        let updates_tx = state.updates.tx.clone();
         let updates_rx = state.updates.rx.clone();
         let events_tx = state.runner.events_tx.clone();
         let runner = state.runner.handle.take().unwrap();
 
-        (program, updates_tx, updates_rx, events_tx, runner)
+        (updates_rx, events_tx, runner)
     };
 
     let set_program = ui::start(events_tx);
