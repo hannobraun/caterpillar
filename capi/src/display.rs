@@ -29,6 +29,11 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         let mut window_attributes =
             Window::default_attributes().with_title("Caterpillar");
 
+        // This crate is _only_ compiled to WebAssembly, but it seems that Cargo
+        // and rust-analyzer know know how to handle workspaces with mixed
+        // targets, or at least don't handle them well.
+        //
+        // This at least prevents errors from constantly showing up in the IDE.
         #[cfg(target_arch = "wasm32")]
         {
             use web_sys::wasm_bindgen::JsCast;
