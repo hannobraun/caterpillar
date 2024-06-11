@@ -78,11 +78,8 @@ struct Display {
 }
 
 impl Display {
-    pub fn handle_effects(
-        runner: &mut RunnerHandle,
-        tiles: &mut [u8; NUM_TILES],
-    ) {
-        for effect in runner.effects() {
+    pub fn handle_effects(&mut self) {
+        for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
                     let x_usize: usize = x.into();
@@ -94,7 +91,7 @@ impl Display {
                     };
                     let index = index().unwrap();
 
-                    tiles[index] = value;
+                    self.tiles[index] = value;
                 }
                 DisplayEffect::SubmitTiles { reply } => {
                     reply.send(()).unwrap();
@@ -129,7 +126,7 @@ impl ApplicationHandler for Display {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        Self::handle_effects(&mut self.runner, &mut self.tiles);
+        self.handle_effects();
         self.window.request_redraw();
     }
 }
