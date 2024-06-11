@@ -1,6 +1,6 @@
 use std::{cell::UnsafeCell, sync::Mutex};
 
-use crate::{display::NUM_TILES, state::RuntimeState};
+use crate::{state::RuntimeState, tiles::NUM_TILES};
 
 pub static STATE: StaticRuntimeState = StaticRuntimeState {
     inner: Mutex::new(None),

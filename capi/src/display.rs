@@ -8,6 +8,7 @@ use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
     runner::RunnerHandle,
     state::Input,
+    tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS},
 };
 
 pub struct Display {
@@ -113,7 +114,3 @@ unsafe impl HasRawWindowHandle for CanvasWindow {
         RawWindowHandle::Web(window_handle)
     }
 }
-
-const PIXELS_PER_TILE_AXIS: usize = 8;
-const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
-pub const NUM_TILES: usize = TILES_PER_AXIS * TILES_PER_AXIS;
