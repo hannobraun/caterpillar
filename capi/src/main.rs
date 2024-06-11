@@ -34,8 +34,6 @@ async fn main_async() {
     };
 
     crate::display::run(runner).await.unwrap();
-
-    log::info!("Caterpillar initialized.");
 }
 
 async fn handle_updates(
