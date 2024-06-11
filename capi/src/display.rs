@@ -1,4 +1,8 @@
 use pixels::{Pixels, SurfaceTexture};
+use raw_window_handle::{
+    HasRawDisplayHandle, HasRawWindowHandle, RawDisplayHandle, RawWindowHandle,
+    WebDisplayHandle, WebWindowHandle,
+};
 use winit::{
     application::ApplicationHandler,
     event::WindowEvent,
@@ -59,7 +63,8 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
             .try_into()
             .expect("Expected `SIZE` to fit into `u32`");
 
-        let surface_texture = SurfaceTexture::new(size_u32, size_u32, &window);
+        let surface_texture =
+            SurfaceTexture::new(size_u32, size_u32, &CanvasWindow);
         Pixels::new_async(size_u32, size_u32, surface_texture).await?
     };
 
@@ -169,6 +174,23 @@ impl ApplicationHandler for Display {
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
         self.handle_effects();
         self.window.request_redraw();
+    }
+}
+
+struct CanvasWindow;
+
+unsafe impl HasRawDisplayHandle for CanvasWindow {
+    fn raw_display_handle(&self) -> RawDisplayHandle {
+        RawDisplayHandle::Web(WebDisplayHandle::empty())
+    }
+}
+
+unsafe impl HasRawWindowHandle for CanvasWindow {
+    fn raw_window_handle(&self) -> RawWindowHandle {
+        let mut window_handle = WebWindowHandle::empty();
+        window_handle.id = 1;
+
+        RawWindowHandle::Web(window_handle)
     }
 }
 
