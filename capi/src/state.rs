@@ -6,7 +6,7 @@ use crate::{
     program::Program,
     runner::{runner, EventsTx, RunnerHandle},
     ui,
-    updates::UpdatesTx,
+    updates::{updates, UpdatesTx},
 };
 
 pub struct RuntimeState {
@@ -20,7 +20,7 @@ impl Default for RuntimeState {
         let program = games::build(snake);
 
         let input = Input::default();
-        let (updates_tx, updates_rx) = crate::updates::updates(&program);
+        let (updates_tx, updates_rx) = updates(&program);
         let runner = Runner::new(program, updates_tx.clone());
 
         let set_program = ui::start(runner.events_tx.clone());
