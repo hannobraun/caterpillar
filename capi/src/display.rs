@@ -59,10 +59,7 @@ pub async fn run() -> anyhow::Result<()> {
         window_attributes
     })?;
 
-    let mut state = State {
-        window,
-        display: Display::new().await?,
-    };
+    let mut state = State { window };
 
     event_loop.run_app(&mut state)?;
 
@@ -71,7 +68,6 @@ pub async fn run() -> anyhow::Result<()> {
 
 struct State {
     window: Window,
-    display: Display,
 }
 
 impl ApplicationHandler for State {
@@ -84,7 +80,15 @@ impl ApplicationHandler for State {
         event: WindowEvent,
     ) {
         if let WindowEvent::RedrawRequested = event {
-            self.display.render();
+            let mut state = ffi::STATE.inner.lock().unwrap();
+            let state = state.get_or_insert_with(Default::default);
+
+            let Some(display) = state.display.as_mut() else {
+                // Display has not been initialized yet.
+                return;
+            };
+
+            display.render();
         }
     }
 
@@ -95,8 +99,12 @@ impl ApplicationHandler for State {
         let mut state = ffi::STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        self.display
-            .handle_effects(&mut state.input, &mut state.runner);
+        let Some(display) = state.display.as_mut() else {
+            // Display has not been initialized yet.
+            return;
+        };
+
+        display.handle_effects(&mut state.input, &mut state.runner);
         self.window.request_redraw();
     }
 }
