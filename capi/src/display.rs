@@ -34,28 +34,6 @@ pub async fn run() -> anyhow::Result<()> {
         let mut window_attributes =
             Window::default_attributes().with_title("Caterpillar");
 
-        // This crate is _only_ compiled to WebAssembly, but it seems that Cargo
-        // and rust-analyzer know know how to handle workspaces with mixed
-        // targets, or at least don't handle them well.
-        //
-        // This at least prevents errors from constantly showing up in the IDE.
-        #[cfg(target_arch = "wasm32")]
-        {
-            use web_sys::wasm_bindgen::JsCast;
-            use winit::platform::web::WindowAttributesExtWebSys;
-
-            let canvas = web_sys::window()
-                .unwrap()
-                .document()
-                .unwrap()
-                .get_element_by_id("capi")
-                .unwrap()
-                .dyn_into::<web_sys::HtmlCanvasElement>()
-                .unwrap();
-
-            window_attributes = window_attributes.with_canvas(Some(canvas));
-        }
-
         window_attributes
     })?;
 
