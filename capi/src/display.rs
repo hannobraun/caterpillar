@@ -14,7 +14,7 @@ use crate::{
     effects::{DisplayEffect, TILES_PER_AXIS},
     ffi,
     runner::RunnerHandle,
-    state::RuntimeState,
+    state::Input,
 };
 
 pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
@@ -89,7 +89,7 @@ struct Display {
 }
 
 impl Display {
-    pub fn handle_effects(&mut self, state: &mut RuntimeState) {
+    pub fn handle_effects(&mut self, input: &mut Input) {
         for effect in self.runner.effects() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
@@ -108,7 +108,7 @@ impl Display {
                     reply.send(()).unwrap();
                 }
                 DisplayEffect::ReadInput { reply } => {
-                    let input = state.input.buffer.pop_front().unwrap_or(0);
+                    let input = input.buffer.pop_front().unwrap_or(0);
                     reply.send(input.try_into().unwrap()).unwrap();
                 }
             }
@@ -173,7 +173,7 @@ impl ApplicationHandler for Display {
         let mut state = ffi::STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        self.handle_effects(state);
+        self.handle_effects(&mut state.input);
         self.window.request_redraw();
     }
 }
