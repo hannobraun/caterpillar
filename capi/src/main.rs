@@ -26,18 +26,18 @@ fn main() {
 }
 
 async fn main_async() {
-    let (program, updates_tx, updates_rx) = {
+    let (_, _, updates_rx, events_tx, runner) = {
         let mut state = STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
         let program = state.game.program.clone();
         let updates_tx = state.updates.tx.clone();
         let updates_rx = state.updates.rx.clone();
+        let events_tx = state.runner.events_tx.clone();
+        let runner = state.runner.handle.take().unwrap();
 
-        (program, updates_tx, updates_rx)
+        (program, updates_tx, updates_rx, events_tx, runner)
     };
-
-    let (events_tx, runner) = crate::runner::runner(program, updates_tx);
 
     let set_program = ui::start(events_tx);
     leptos::spawn_local(handle_updates(updates_rx, set_program));
