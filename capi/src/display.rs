@@ -110,10 +110,10 @@ impl Display {
                     // This is temporary, while winit is being replaced. Once we
                     // have full control over what runs when, the low-level FFI
                     // code can just pass this kind of state as an argument.
-                    let mut state = ffi::STATE.input.lock().unwrap();
+                    let mut state = ffi::STATE.inner.lock().unwrap();
                     let state = state.get_or_insert_with(Default::default);
 
-                    let input = state.pop_front().unwrap_or(0);
+                    let input = state.input.pop_front().unwrap_or(0);
                     reply.send(input.try_into().unwrap()).unwrap();
                 }
             }

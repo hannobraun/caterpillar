@@ -1,14 +1,14 @@
 use std::{collections::VecDeque, sync::Mutex};
 
 pub static STATE: StaticRuntimeState = StaticRuntimeState {
-    input: Mutex::new(None),
+    inner: Mutex::new(None),
 };
 
 #[no_mangle]
 pub extern "C" fn on_key(key_code: u8) {
-    let mut state = STATE.input.lock().unwrap();
+    let mut state = STATE.inner.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
-    state.push_back(key_code);
+    state.input.push_back(key_code);
 }
 
 #[no_mangle]
@@ -17,5 +17,10 @@ pub extern "C" fn on_frame() {
 }
 
 pub struct StaticRuntimeState {
-    pub input: Mutex<Option<VecDeque<u8>>>,
+    pub inner: Mutex<Option<RuntimeState>>,
+}
+
+#[derive(Default)]
+pub struct RuntimeState {
+    pub input: VecDeque<u8>,
 }
