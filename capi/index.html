@@ -16,10 +16,10 @@
     </canvas>
     <script type="module">
         import init from "/capi.js";
-        await init("capi_bg.wasm");
+        const wasm = await init("capi_bg.wasm");
 
         window.addEventListener("keydown", (event) => {
-            console.log(event);
+            wasm.on_key(event.keyCode);
         });
     </script>>
     <script type="module">
