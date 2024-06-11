@@ -18,7 +18,10 @@ impl Default for RuntimeState {
         let program = games::build(snake);
 
         let input = Input::default();
-        let updates = Updates::new(&program);
+        let updates = {
+            let (tx, rx) = crate::updates::updates(&program);
+            Updates { rx, tx }
+        };
         let runner = Runner::new(program, updates.tx.clone());
 
         Self {
@@ -37,13 +40,6 @@ pub struct Input {
 pub struct Updates {
     pub rx: UpdatesRx,
     pub tx: UpdatesTx,
-}
-
-impl Updates {
-    pub fn new(program: &Program) -> Self {
-        let (tx, rx) = crate::updates::updates(program);
-        Self { rx, tx }
-    }
 }
 
 pub struct Runner {
