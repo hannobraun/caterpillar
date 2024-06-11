@@ -19,23 +19,23 @@
         const wasm = await init("capi_bg.wasm");
 
         window.addEventListener("keydown", (event) => {
-            let code = null;
+            let keyCode = null;
 
             if (event.key == "ArrowUp" || event.key == "w") {
-                code = 1;
+                keyCode = 1;
             }
             if (event.key == "ArrowLeft" || event.key == "a") {
-                code = 2;
+                keyCode = 2;
             }
             if (event.key == "ArrowDown" || event.key == "s") {
-                code = 3;
+                keyCode = 3;
             }
             if (event.key == "ArrowRight" || event.key == "d") {
-                code = 4;
+                keyCode = 4;
             }
 
-            if (code != null) {
-                wasm.on_key(code);
+            if (keyCode != null) {
+                wasm.on_key(keyCode);
                 event.preventDefault();
             }
         });
