@@ -108,7 +108,7 @@ impl Display {
                     reply.send(()).unwrap();
                 }
                 DisplayEffect::ReadInput { reply } => {
-                    let input = state.input.pop_front().unwrap_or(0);
+                    let input = state.input.buffer.pop_front().unwrap_or(0);
                     reply.send(input.try_into().unwrap()).unwrap();
                 }
             }
