@@ -26,14 +26,16 @@ fn main() {
 }
 
 async fn main_async() {
-    let program = {
+    let (program, updates_tx, updates_rx) = {
         let mut state = STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        state.game.program.clone()
-    };
+        let program = state.game.program.clone();
+        let updates_tx = state.updates.tx.clone();
+        let updates_rx = state.updates.rx.clone();
 
-    let (updates_tx, updates_rx) = crate::updates::updates(&program);
+        (program, updates_tx, updates_rx)
+    };
 
     let (events_tx, runner) = crate::runner::runner(program, updates_tx);
 
