@@ -19,7 +19,7 @@ impl Default for RuntimeState {
 
         let input = Input::default();
         let updates = Updates::new(&program);
-        let runner = Runner::new(program.clone(), updates.tx.clone());
+        let runner = Runner::new(program, updates.tx.clone());
 
         Self {
             input,
