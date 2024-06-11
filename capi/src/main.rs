@@ -26,14 +26,11 @@ fn main() {
 }
 
 async fn main_async() {
-    let (_, runner) = {
+    let runner = {
         let mut state = STATE.inner.lock().unwrap();
         let state = state.get_or_insert_with(Default::default);
 
-        let events_tx = state.runner.events_tx.clone();
-        let runner = state.runner.handle.take().unwrap();
-
-        (events_tx, runner)
+        state.runner.handle.take().unwrap()
     };
 
     crate::display::run(runner).await.unwrap();
