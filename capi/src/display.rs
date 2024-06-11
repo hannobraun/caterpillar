@@ -60,7 +60,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 
     let mut state = State {
         runner,
-        tiles: [0; MEM_SIZE],
+        tiles: [0; NUM_TILES],
         window,
         pixels,
     };
@@ -72,7 +72,7 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
 
 struct State {
     runner: RunnerHandle,
-    tiles: [u8; MEM_SIZE],
+    tiles: [u8; NUM_TILES],
     window: Window,
     pixels: Pixels,
 }
@@ -128,7 +128,7 @@ impl ApplicationHandler for State {
     }
 }
 
-pub fn handle_effects(runner: &mut RunnerHandle, tiles: &mut [u8; MEM_SIZE]) {
+pub fn handle_effects(runner: &mut RunnerHandle, tiles: &mut [u8; NUM_TILES]) {
     for effect in runner.effects() {
         match effect {
             DisplayEffect::SetTile { x, y, value } => {
@@ -167,4 +167,4 @@ pub fn render(pixels: &Pixels) {
 
 const PIXELS_PER_TILE_AXIS: usize = 8;
 const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
-const MEM_SIZE: usize = TILES_PER_AXIS * TILES_PER_AXIS;
+const NUM_TILES: usize = TILES_PER_AXIS * TILES_PER_AXIS;
