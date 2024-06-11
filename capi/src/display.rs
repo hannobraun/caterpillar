@@ -69,16 +69,48 @@ pub async fn run(runner: RunnerHandle) -> anyhow::Result<()> {
         Pixels::new_async(size_u32, size_u32, surface_texture).await?
     };
 
-    let mut state = Display {
-        runner,
-        tiles: [0; NUM_TILES],
-        window,
-        pixels,
+    let mut state = State {
+        display: Display {
+            runner,
+            tiles: [0; NUM_TILES],
+            window,
+            pixels,
+        },
     };
 
     event_loop.run_app(&mut state)?;
 
     Ok(())
+}
+
+struct State {
+    display: Display,
+}
+
+impl ApplicationHandler for State {
+    fn resumed(&mut self, _: &ActiveEventLoop) {}
+
+    fn window_event(
+        &mut self,
+        _: &ActiveEventLoop,
+        _: winit::window::WindowId,
+        event: WindowEvent,
+    ) {
+        if let WindowEvent::RedrawRequested = event {
+            self.display.render();
+        }
+    }
+
+    fn about_to_wait(&mut self, _: &ActiveEventLoop) {
+        // This is temporary, while winit is being replaced. Once we have full
+        // control over what runs when, the low-level FFI code can just pass
+        // this kind of state as an argument.
+        let mut state = ffi::STATE.inner.lock().unwrap();
+        let state = state.get_or_insert_with(Default::default);
+
+        self.display.handle_effects(&mut state.input);
+        self.display.window.request_redraw();
+    }
 }
 
 struct Display {
@@ -149,32 +181,6 @@ impl Display {
         if let Err(err) = self.pixels.render() {
             eprintln!("Render error: {err}");
         }
-    }
-}
-
-impl ApplicationHandler for Display {
-    fn resumed(&mut self, _: &ActiveEventLoop) {}
-
-    fn window_event(
-        &mut self,
-        _: &ActiveEventLoop,
-        _: winit::window::WindowId,
-        event: WindowEvent,
-    ) {
-        if let WindowEvent::RedrawRequested = event {
-            self.render();
-        }
-    }
-
-    fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        // This is temporary, while winit is being replaced. Once we have full
-        // control over what runs when, the low-level FFI code can just pass
-        // this kind of state as an argument.
-        let mut state = ffi::STATE.inner.lock().unwrap();
-        let state = state.get_or_insert_with(Default::default);
-
-        self.handle_effects(&mut state.input);
-        self.window.request_redraw();
     }
 }
 
