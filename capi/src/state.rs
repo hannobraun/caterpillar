@@ -17,7 +17,9 @@ pub struct RuntimeState {
 impl Default for RuntimeState {
     fn default() -> Self {
         let input = Input::default();
-        let game = Game::default();
+        let game = Game {
+            program: games::build(snake),
+        };
         let updates = Updates::new(&game.program);
         let runner = Runner::new(game.program.clone(), updates.tx.clone());
 
@@ -37,14 +39,6 @@ pub struct Input {
 
 pub struct Game {
     pub program: Program,
-}
-
-impl Default for Game {
-    fn default() -> Self {
-        Self {
-            program: games::build(snake),
-        }
-    }
 }
 
 pub struct Updates {
