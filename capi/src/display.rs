@@ -92,35 +92,7 @@ impl ApplicationHandler for State {
     }
 
     fn about_to_wait(&mut self, _: &ActiveEventLoop) {
-        for effect in self.runner.effects() {
-            match effect {
-                DisplayEffect::SetTile { x, y, value } => {
-                    let x_usize: usize = x.into();
-                    let y_usize: usize = y.into();
-
-                    let index = || {
-                        x_usize
-                            .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
-                    };
-                    let index = index().unwrap();
-
-                    self.mem[index] = value;
-                }
-                DisplayEffect::SubmitTiles { reply } => {
-                    reply.send(()).unwrap();
-                }
-                DisplayEffect::ReadInput { reply } => {
-                    // This is temporary, while winit is being replaced. Once we
-                    // have full control over what runs when, the low-level FFI
-                    // code can just pass this kind of state as an argument.
-                    let mut input = ffi::STATE.lock().unwrap();
-                    let input = input.get_or_insert_with(Default::default);
-
-                    let input = input.pop_front().unwrap_or(0);
-                    reply.send(input.try_into().unwrap()).unwrap();
-                }
-            }
-        }
+        handle_effects(&mut self.runner, &mut self.mem);
 
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
@@ -153,6 +125,37 @@ impl ApplicationHandler for State {
         }
 
         self.window.request_redraw();
+    }
+}
+
+pub fn handle_effects(runner: &mut RunnerHandle, mem: &mut [u8; MEM_SIZE]) {
+    for effect in runner.effects() {
+        match effect {
+            DisplayEffect::SetTile { x, y, value } => {
+                let x_usize: usize = x.into();
+                let y_usize: usize = y.into();
+
+                let index = || {
+                    x_usize.checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
+                };
+                let index = index().unwrap();
+
+                mem[index] = value;
+            }
+            DisplayEffect::SubmitTiles { reply } => {
+                reply.send(()).unwrap();
+            }
+            DisplayEffect::ReadInput { reply } => {
+                // This is temporary, while winit is being replaced. Once we
+                // have full control over what runs when, the low-level FFI
+                // code can just pass this kind of state as an argument.
+                let mut input = ffi::STATE.lock().unwrap();
+                let input = input.get_or_insert_with(Default::default);
+
+                let input = input.pop_front().unwrap_or(0);
+                reply.send(input.try_into().unwrap()).unwrap();
+            }
+        }
     }
 }
 
