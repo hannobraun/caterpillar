@@ -41,8 +41,9 @@ pub struct Game {
 
 impl Default for Game {
     fn default() -> Self {
-        let program = games::build(snake);
-        Self { program }
+        Self {
+            program: games::build(snake),
+        }
     }
 }
 
