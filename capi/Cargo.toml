@@ -33,7 +33,3 @@ features = ["derive"]
 [dependencies.tokio]
 version = "*"
 features = ["sync"]
-
-[dependencies.winit]
-version = "*"
-features = ["rwh_05"]
