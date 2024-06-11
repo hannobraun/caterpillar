@@ -2,14 +2,15 @@ use std::collections::VecDeque;
 
 use crate::{
     games::{self, snake::snake},
+    handle_updates,
     program::Program,
     runner::{runner, EventsTx, RunnerHandle},
-    updates::{UpdatesRx, UpdatesTx},
+    ui,
+    updates::UpdatesTx,
 };
 
 pub struct RuntimeState {
     pub input: Input,
-    pub updates_rx: UpdatesRx,
     pub updates_tx: UpdatesTx,
     pub runner: Runner,
 }
@@ -22,9 +23,11 @@ impl Default for RuntimeState {
         let (updates_tx, updates_rx) = crate::updates::updates(&program);
         let runner = Runner::new(program, updates_tx.clone());
 
+        let set_program = ui::start(runner.events_tx.clone());
+        leptos::spawn_local(handle_updates(updates_rx, set_program));
+
         Self {
             input,
-            updates_rx,
             updates_tx,
             runner,
         }
