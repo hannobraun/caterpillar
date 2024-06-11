@@ -18,15 +18,15 @@ impl Default for RuntimeState {
         let program = games::build(snake);
 
         let input = Input::default();
-        let updates = {
-            let (tx, rx) = crate::updates::updates(&program);
-            Updates { rx, tx }
-        };
-        let runner = Runner::new(program, updates.tx.clone());
+        let (updates_tx, updates_rx) = crate::updates::updates(&program);
+        let runner = Runner::new(program, updates_tx.clone());
 
         Self {
             input,
-            updates,
+            updates: Updates {
+                rx: updates_rx,
+                tx: updates_tx,
+            },
             runner,
         }
     }
