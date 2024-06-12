@@ -5,6 +5,7 @@ use crate::{
     ffi,
     games::{self, snake::snake},
     runner::{runner, RunnerHandle},
+    tiles::NUM_TILES,
     ui::{self, handle_updates},
     updates::updates,
 };
@@ -12,6 +13,7 @@ use crate::{
 pub struct RuntimeState {
     pub input: Input,
     pub runner: RunnerHandle,
+    pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
 }
 
@@ -40,6 +42,7 @@ impl Default for RuntimeState {
         Self {
             input,
             runner,
+            tiles: [0; NUM_TILES],
             display: None,
         }
     }
