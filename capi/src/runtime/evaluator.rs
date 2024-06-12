@@ -8,42 +8,42 @@ use super::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     code: Code,
-    call_stack: Stack,
+    stack: Stack,
 }
 
 impl Evaluator {
     pub fn new(code: Code, entry: Function) -> Self {
         Self {
             code,
-            call_stack: Stack::new(entry),
+            stack: Stack::new(entry),
         }
     }
 
     pub fn next_instruction(&self) -> Location {
-        self.call_stack.next().unwrap()
+        self.stack.next().unwrap()
     }
 
     pub fn call_stack(&self) -> &Stack {
-        &self.call_stack
+        &self.stack
     }
 
     pub fn data_stack(&self) -> &DataStack {
-        &self.call_stack.top().unwrap().data_stack
+        &self.stack.top().unwrap().data_stack
     }
 
     pub fn reset(&mut self, entry: Function) {
-        self.call_stack = Stack::new(entry);
+        self.stack = Stack::new(entry);
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         for value in values {
-            self.call_stack.top_mut().unwrap().data_stack.push(value);
+            self.stack.top_mut().unwrap().data_stack.push(value);
         }
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
         let (mut frame, location, instruction) = loop {
-            let Some(mut frame) = self.call_stack.pop() else {
+            let Some(mut frame) = self.stack.pop() else {
                 return Ok(EvaluatorState::Finished);
             };
 
@@ -78,12 +78,12 @@ impl Evaluator {
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
         if frame.function.next_instruction().is_some() {
-            self.call_stack.push(frame).expect(
+            self.stack.push(frame).expect(
                 "Just popped a stack frame; pushing one can't overflow",
             );
         } else {
             for value in frame.data_stack.values() {
-                if let Some(stack_frame) = self.call_stack.top_mut() {
+                if let Some(stack_frame) = self.stack.top_mut() {
                     stack_frame.data_stack.push(value);
                 } else {
                     // If we end up here, one of the following happened:
@@ -109,7 +109,7 @@ impl Evaluator {
 
                     for argument in arguments.into_iter().rev() {
                         let value = self
-                            .call_stack
+                            .stack
                             .top_mut()
                             .unwrap()
                             .data_stack
@@ -121,7 +121,7 @@ impl Evaluator {
                         stack_frame.bindings.insert(argument.clone(), value);
                     }
 
-                    self.call_stack.push(stack_frame).map_err(|effect| {
+                    self.stack.push(stack_frame).map_err(|effect| {
                         EvaluatorEffect {
                             effect: effect.into(),
                             location: location.clone(),
@@ -129,9 +129,9 @@ impl Evaluator {
                     })?;
                 }
                 CallStackUpdate::Pop => {
-                    if let Some(stack_frame) = self.call_stack.pop() {
+                    if let Some(stack_frame) = self.stack.pop() {
                         for value in stack_frame.data_stack.values() {
-                            self.call_stack
+                            self.stack
                                 .top_mut()
                                 .unwrap()
                                 .data_stack
