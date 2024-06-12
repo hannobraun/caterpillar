@@ -3,11 +3,13 @@ use leptos::{component, create_memo, view, IntoView, ReadSignal, SignalGet};
 use crate::{
     debugger::ExecutionContext,
     program::Program,
-    runner::EventsTx,
-    ui::components::{
-        call_stack::CallStack, code_explorer::CodeExplorer,
-        control_panel::ControlPanel, execution_context::ExecutionContext,
-        memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
+    ui::{
+        components::{
+            call_stack::CallStack, code_explorer::CodeExplorer,
+            control_panel::ControlPanel, execution_context::ExecutionContext,
+            memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
+        },
+        EventsTx,
     },
 };
 

@@ -1,7 +1,8 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    program::Program, runner::EventsTx, ui::components::function::Function,
+    program::Program,
+    ui::{components::function::Function, EventsTx},
 };
 
 #[component]
