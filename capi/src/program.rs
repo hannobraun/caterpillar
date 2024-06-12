@@ -11,12 +11,12 @@ use crate::{
         EvaluatorState, Value,
     },
     source_map::SourceMap,
-    syntax::{self, Functions},
+    syntax,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Program {
-    pub functions: Functions,
+    pub functions: syntax::Functions,
     pub source_map: SourceMap,
     pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
