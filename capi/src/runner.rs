@@ -47,11 +47,3 @@ pub struct Runner {
     pub updates: UpdatesTx,
     pub effects_tx: EffectsTx,
 }
-
-impl Runner {
-    pub async fn step(&mut self) -> Option<DisplayEffect> {
-        self.updates.send_if_relevant_change(&self.program);
-
-        None
-    }
-}

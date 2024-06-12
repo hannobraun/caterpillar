@@ -133,7 +133,7 @@ impl Default for RuntimeState {
                     }
                 }
 
-                runner.step().await;
+                runner.updates.send_if_relevant_change(&runner.program);
             }
         });
 
