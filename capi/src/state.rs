@@ -135,7 +135,7 @@ impl Default for RuntimeState {
             }
         });
 
-        let set_program = ui::start(events_tx.clone());
+        let set_program = ui::start(events_tx);
         leptos::spawn_local(handle_updates(updates_rx, set_program));
 
         // While we're still using `pixels`, the `Display` constructor needs to
