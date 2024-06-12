@@ -29,12 +29,13 @@ impl Default for RuntimeState {
 
         let input = Input::default();
         let (updates_tx, updates_rx) = updates(&program);
-        let (events_tx, effects_rx, mut runner) = runner(program, updates_tx);
+        let (events_tx, mut events_rx) = mpsc::unbounded_channel();
+        let (effects_rx, mut runner) = runner(program, updates_tx);
 
         leptos::spawn_local(async move {
             loop {
                 loop {
-                    match runner.events.try_recv() {
+                    match events_rx.try_recv() {
                         Ok(event) => {
                             runner.program.process_event(event);
                         }
@@ -54,7 +55,7 @@ impl Default for RuntimeState {
                     // in busy-looping while nothing changes.
                     //
                     // Just wait until we receive an event from the client.
-                    let event = runner.events.recv().await.unwrap();
+                    let event = events_rx.recv().await.unwrap();
                     runner.program.process_event(event);
                 }
 
