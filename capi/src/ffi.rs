@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use crate::state::RuntimeState;
+use crate::{effects::DisplayEffect, state::RuntimeState};
 
 pub static STATE: StaticRuntimeState = StaticRuntimeState {
     inner: Mutex::new(None),
@@ -25,7 +25,18 @@ pub extern "C" fn on_frame() {
     };
 
     while let Ok(effect) = state.effects_rx.try_recv() {
-        display.handle_effect(effect, &mut state.input, &mut state.tiles);
+        match effect {
+            DisplayEffect::SetTile { x, y, value } => {
+                display.set_tile(x.into(), y.into(), value, &mut state.tiles);
+            }
+            DisplayEffect::SubmitTiles { reply } => {
+                reply.send(()).unwrap();
+            }
+            DisplayEffect::ReadInput { reply } => {
+                let input = display.read_input(&mut state.input);
+                reply.send(input).unwrap();
+            }
+        };
     }
     display.render(&state.tiles);
 }

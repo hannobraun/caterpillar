@@ -5,7 +5,6 @@ use raw_window_handle::{
 };
 
 use crate::{
-    effects::DisplayEffect,
     state::Input,
     tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS},
 };
@@ -27,26 +26,6 @@ impl Display {
         };
 
         Ok(Self { pixels })
-    }
-
-    pub fn handle_effect(
-        &mut self,
-        effect: DisplayEffect,
-        input: &mut Input,
-        tiles: &mut [u8],
-    ) {
-        match effect {
-            DisplayEffect::SetTile { x, y, value } => {
-                self.set_tile(x.into(), y.into(), value, tiles);
-            }
-            DisplayEffect::SubmitTiles { reply } => {
-                reply.send(()).unwrap();
-            }
-            DisplayEffect::ReadInput { reply } => {
-                let input = self.read_input(input);
-                reply.send(input).unwrap();
-            }
-        }
     }
 
     pub fn set_tile(
