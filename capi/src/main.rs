@@ -7,7 +7,6 @@ mod effects;
 mod ffi;
 mod games;
 mod program;
-mod runner;
 mod runtime;
 mod source_map;
 mod state;
