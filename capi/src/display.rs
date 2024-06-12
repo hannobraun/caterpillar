@@ -37,12 +37,11 @@ impl Display {
     ) {
         match effect {
             DisplayEffect::SetTile { x, y, value } => {
-                let x_usize: usize = x.into();
+                let x: usize = x.into();
                 let y_usize: usize = y.into();
 
-                let index = || {
-                    x_usize.checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
-                };
+                let index =
+                    || x.checked_add(y_usize.checked_mul(TILES_PER_AXIS)?);
                 let index = index().unwrap();
 
                 tiles[index] = value;
