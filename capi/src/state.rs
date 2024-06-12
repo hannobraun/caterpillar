@@ -9,7 +9,6 @@ use crate::{
     ffi,
     games::{self, snake::snake},
     program::{ProgramEffect, ProgramEffectKind},
-    runner::Runner,
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui::{self, handle_updates},
@@ -25,21 +24,20 @@ pub struct RuntimeState {
 
 impl Default for RuntimeState {
     fn default() -> Self {
-        let program = games::build(snake);
+        let mut program = games::build(snake);
 
         let input = Input::default();
         let (mut updates_tx, updates_rx) = updates(&program);
         let (events_tx, mut events_rx) = mpsc::unbounded_channel();
         let (effects_tx, effects_rx) = mpsc::unbounded_channel();
         let effects_tx = EffectsTx { inner: effects_tx };
-        let mut runner = Runner { program };
 
         leptos::spawn_local(async move {
             loop {
                 loop {
                     match events_rx.try_recv() {
                         Ok(event) => {
-                            runner.program.process_event(event);
+                            program.process_event(event);
                         }
                         Err(TryRecvError::Empty) => {
                             break;
@@ -52,16 +50,16 @@ impl Default for RuntimeState {
                     }
                 }
 
-                if !runner.program.can_step() {
+                if !program.can_step() {
                     // If the program won't step anyway, then there's no point
                     // in busy-looping while nothing changes.
                     //
                     // Just wait until we receive an event from the client.
                     let event = events_rx.recv().await.unwrap();
-                    runner.program.process_event(event);
+                    program.process_event(event);
                 }
 
-                runner.program.step();
+                program.step();
 
                 if let Some(ProgramEffect {
                     kind:
@@ -69,7 +67,7 @@ impl Default for RuntimeState {
                             effect,
                         )),
                     ..
-                }) = runner.program.effects.front()
+                }) = program.effects.front()
                 {
                     match effect {
                         BuiltinEffect::Error(_) => {
@@ -79,16 +77,16 @@ impl Default for RuntimeState {
                         }
                         BuiltinEffect::Load { address } => {
                             let address: usize = (*address).into();
-                            let value = runner.program.memory.inner[address];
-                            runner.program.push([value]);
+                            let value = program.memory.inner[address];
+                            program.push([value]);
 
-                            runner.program.effects.pop_front();
+                            program.effects.pop_front();
                         }
                         BuiltinEffect::Store { address, value } => {
                             let address: usize = (*address).into();
-                            runner.program.memory.inner[address] = *value;
+                            program.memory.inner[address] = *value;
 
-                            runner.program.effects.pop_front();
+                            program.effects.pop_front();
                         }
                         BuiltinEffect::SetTile { x, y, value } => {
                             let x = *x;
@@ -101,7 +99,7 @@ impl Default for RuntimeState {
                                 value,
                             });
 
-                            runner.program.effects.pop_front();
+                            program.effects.pop_front();
                         }
                         BuiltinEffect::SubmitFrame => {
                             // This effect serves as a synchronization point
@@ -114,7 +112,7 @@ impl Default for RuntimeState {
                                 .send(DisplayEffect::SubmitTiles { reply: tx });
                             let () = rx.recv().await.unwrap();
 
-                            runner.program.effects.pop_front();
+                            program.effects.pop_front();
                         }
                         BuiltinEffect::ReadInput => {
                             let (tx, mut rx) = mpsc::unbounded_channel();
@@ -123,17 +121,17 @@ impl Default for RuntimeState {
                                 .send(DisplayEffect::ReadInput { reply: tx });
                             let input = rx.recv().await.unwrap();
 
-                            runner.program.push([Value(input)]);
-                            runner.program.effects.pop_front();
+                            program.push([Value(input)]);
+                            program.effects.pop_front();
                         }
                         BuiltinEffect::ReadRandom => {
-                            runner.program.push([Value(random())]);
-                            runner.program.effects.pop_front();
+                            program.push([Value(random())]);
+                            program.effects.pop_front();
                         }
                     }
                 }
 
-                updates_tx.send_if_relevant_change(&runner.program);
+                updates_tx.send_if_relevant_change(&program);
             }
         });
 

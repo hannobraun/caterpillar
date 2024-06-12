@@ -1,9 +1,5 @@
 use tokio::sync::mpsc;
 
-use crate::{debugger::DebugEvent, program::Program};
+use crate::debugger::DebugEvent;
 
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
-
-pub struct Runner {
-    pub program: Program,
-}
