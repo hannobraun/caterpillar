@@ -45,8 +45,8 @@ impl Display {
                 reply.send(()).unwrap();
             }
             DisplayEffect::ReadInput { reply } => {
-                let input = input.buffer.pop_front().unwrap_or(0);
-                reply.send(input.try_into().unwrap()).unwrap();
+                let input = self.read_input(input);
+                reply.send(input).unwrap();
             }
         }
     }
@@ -62,6 +62,10 @@ impl Display {
         let index = index().unwrap();
 
         tiles[index] = value;
+    }
+
+    pub fn read_input(&mut self, input: &mut Input) -> i8 {
+        input.buffer.pop_front().unwrap_or(0).try_into().unwrap()
     }
 
     pub fn render(&mut self, tiles: &[u8]) {
