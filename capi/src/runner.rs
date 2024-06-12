@@ -8,7 +8,6 @@ use crate::{
     effects::{DisplayEffect, EffectsRx, EffectsTx},
     program::{Program, ProgramEffect, ProgramEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
-    tiles::TILES_PER_AXIS,
     updates::UpdatesTx,
 };
 
@@ -25,7 +24,7 @@ pub fn runner(
         updates,
         effects_tx: EffectsTx { inner: effects_tx },
     };
-    runner.program.push(ARGUMENTS);
+    runner.program.push(runner.program.arguments.clone());
 
     let handle = RunnerHandle { effects_rx };
 
@@ -74,7 +73,7 @@ impl Runner {
                 }
                 DebugEvent::Reset => {
                     self.program.reset();
-                    self.program.push(ARGUMENTS);
+                    self.program.push(self.program.arguments.clone());
                 }
                 DebugEvent::Step => {
                     if let Some(ProgramEffect {
@@ -172,7 +171,3 @@ impl Runner {
         None
     }
 }
-
-// I don't like the `as` here, but `.try_into().unwrap()` doesn't work in a
-// const context.
-const ARGUMENTS: [Value; 2] = [Value(TILES_PER_AXIS as i8); 2];

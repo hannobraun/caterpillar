@@ -2,9 +2,10 @@ use std::collections::BTreeSet;
 
 use crate::{
     program::Program,
-    runtime::{self, Instruction},
+    runtime::{self, Instruction, Value},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
+    tiles::TILES_PER_AXIS,
 };
 
 use super::{code::Code, syntax::ExpressionKind};
@@ -24,7 +25,13 @@ pub fn compile(script: Script, entry: &str) -> Program {
     }
 
     let entry = code.functions.get(entry).cloned().unwrap();
-    Program::new(script.functions, source_map, code, entry)
+    Program::new(
+        script.functions,
+        source_map,
+        code,
+        entry,
+        vec![Value(TILES_PER_AXIS as i8); 2],
+    )
 }
 
 struct Compiler<'r> {

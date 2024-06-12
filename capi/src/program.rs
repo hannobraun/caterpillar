@@ -21,6 +21,7 @@ pub struct Program {
     pub evaluator: Evaluator,
     pub state: ProgramState,
     pub entry: runtime::Function,
+    pub arguments: Vec<Value>,
 
     /// Effects that have not been handled yet
     pub effects: VecDeque<ProgramEffect>,
@@ -42,6 +43,7 @@ impl Program {
         source_map: SourceMap,
         code: Code,
         entry: runtime::Function,
+        arguments: Vec<Value>,
     ) -> Self {
         Self {
             functions,
@@ -50,6 +52,7 @@ impl Program {
             evaluator: Evaluator::new(code, entry.clone()),
             state: ProgramState::default(),
             entry,
+            arguments,
             effects: VecDeque::default(),
             previous_data_stack: DataStack::default(),
             memory: Memory::default(),
