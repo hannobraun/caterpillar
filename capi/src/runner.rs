@@ -1,7 +1,7 @@
 use std::iter;
 
 use rand::random;
-use tokio::sync::mpsc::{self, error::TryRecvError};
+use tokio::sync::mpsc;
 
 use crate::{
     debugger::DebugEvent,
@@ -53,22 +53,8 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn step(&mut self) {
+    pub async fn step(&mut self, mut events: Vec<DebugEvent>) {
         self.updates.send_if_relevant_change(&self.program);
-
-        let mut events = Vec::new();
-        loop {
-            match self.events.try_recv() {
-                Ok(event) => events.push(event),
-                Err(TryRecvError::Empty) => break,
-                Err(TryRecvError::Disconnected) => {
-                    // The other end has hung up, which happens during shutdown.
-                    // Nothing we can do about it, except wait until this task
-                    // is shut down too.
-                    return;
-                }
-            }
-        }
 
         if events.is_empty() && !self.program.can_step() {
             // If the program won't step anyway, then there's no point in

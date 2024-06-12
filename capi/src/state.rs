@@ -1,5 +1,7 @@
 use std::collections::VecDeque;
 
+use tokio::sync::mpsc::error::TryRecvError;
+
 use crate::{
     display::Display,
     ffi,
@@ -28,7 +30,21 @@ impl Default for RuntimeState {
 
         leptos::spawn_local(async move {
             loop {
-                runner.step().await;
+                let mut events = Vec::new();
+                loop {
+                    match runner.events.try_recv() {
+                        Ok(event) => events.push(event),
+                        Err(TryRecvError::Empty) => break,
+                        Err(TryRecvError::Disconnected) => {
+                            // The other end has hung up, which happens during
+                            // shutdown. Nothing we can do about it, except wait
+                            // until this task is shut down too.
+                            return;
+                        }
+                    }
+                }
+
+                runner.step(events).await;
             }
         });
 
