@@ -1,3 +1,5 @@
+use std::iter;
+
 use pixels::{Pixels, SurfaceTexture};
 use raw_window_handle::{
     HasRawDisplayHandle, HasRawWindowHandle, RawDisplayHandle, RawWindowHandle,
@@ -36,7 +38,8 @@ impl Display {
         runner: &mut RunnerHandle,
         tiles: &mut [u8],
     ) {
-        for effect in runner.effects() {
+        let effects = iter::from_fn(|| runner.effects_rx.try_recv().ok());
+        for effect in effects {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
                     let x_usize: usize = x.into();

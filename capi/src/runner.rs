@@ -1,10 +1,8 @@
-use std::iter;
-
 use tokio::sync::mpsc;
 
 use crate::{
     debugger::DebugEvent,
-    effects::{DisplayEffect, EffectsRx, EffectsTx},
+    effects::{EffectsRx, EffectsTx},
     program::Program,
     updates::UpdatesTx,
 };
@@ -33,12 +31,6 @@ pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub struct RunnerHandle {
     pub effects_rx: EffectsRx,
-}
-
-impl RunnerHandle {
-    pub fn effects(&mut self) -> impl Iterator<Item = DisplayEffect> + '_ {
-        iter::from_fn(|| self.effects_rx.try_recv().ok())
-    }
 }
 
 pub struct Runner {
