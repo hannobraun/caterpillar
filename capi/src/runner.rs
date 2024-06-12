@@ -71,8 +71,8 @@ impl Runner {
         }
 
         if events.is_empty() && !self.program.can_step() {
-            // If we're not running, the program won't step anyway, and there's
-            // no point in busy-looping while nothing changes.
+            // If the program won't step anyway, then there's no point in
+            // busy-looping while nothing changes.
             //
             // Just wait until we receive an event from the client.
             events.push(self.events.recv().await.unwrap());
