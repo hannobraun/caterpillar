@@ -29,8 +29,7 @@ impl Default for RuntimeState {
 
         let input = Input::default();
         let (updates_tx, updates_rx) = updates(&program);
-        let (events_tx, runner_handle, mut runner) =
-            runner(program, updates_tx);
+        let (events_tx, effects_rx, mut runner) = runner(program, updates_tx);
 
         leptos::spawn_local(async move {
             loop {
@@ -153,7 +152,7 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            effects: runner_handle.effects_rx,
+            effects: effects_rx,
             tiles: [0; NUM_TILES],
             display: None,
         }
