@@ -9,7 +9,7 @@ use crate::{
     ffi,
     games::{self, snake::snake},
     program::{ProgramEffect, ProgramEffectKind},
-    runner::runner,
+    runner::Runner,
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui::{self, handle_updates},
@@ -32,7 +32,10 @@ impl Default for RuntimeState {
         let (events_tx, mut events_rx) = mpsc::unbounded_channel();
         let (effects_tx, effects_rx) = mpsc::unbounded_channel();
         let effects_tx = EffectsTx { inner: effects_tx };
-        let mut runner = runner(program, updates_tx);
+        let mut runner = Runner {
+            program,
+            updates: updates_tx,
+        };
 
         leptos::spawn_local(async move {
             loop {
