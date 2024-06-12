@@ -38,8 +38,7 @@ impl Default for RuntimeState {
                         Err(TryRecvError::Empty) => break,
                         Err(TryRecvError::Disconnected) => {
                             // The other end has hung up, which happens during
-                            // shutdown. Nothing we can do about it, except wait
-                            // until this task is shut down too.
+                            // shutdown. Shut down this task, too.
                             return;
                         }
                     }
