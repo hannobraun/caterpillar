@@ -9,7 +9,7 @@ mod location;
 
 pub use self::{
     builtins::BuiltinEffect,
-    call_stack::{Bindings, CallStack, CallStackOverflow, StackFrame},
+    call_stack::{Bindings, Stack, CallStackOverflow, StackFrame},
     data_stack::{DataStack, StackUnderflow, Value},
     evaluator::{
         Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState,

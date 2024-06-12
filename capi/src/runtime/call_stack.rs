@@ -3,11 +3,11 @@ use std::collections::BTreeMap;
 use super::{DataStack, Function, Location, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct CallStack {
+pub struct Stack {
     frames: Vec<StackFrame>,
 }
 
-impl CallStack {
+impl Stack {
     pub fn new(next: Function) -> Self {
         let mut self_ = Self { frames: Vec::new() };
         self_

@@ -1,21 +1,21 @@
 use crate::code::Code;
 
 use super::{
-    builtins, Bindings, BuiltinEffect, CallStack, CallStackOverflow, DataStack,
-    Function, Instruction, Location, StackFrame, StackUnderflow, Value,
+    builtins, Bindings, BuiltinEffect, CallStackOverflow, DataStack, Function,
+    Instruction, Location, Stack, StackFrame, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Evaluator {
     code: Code,
-    call_stack: CallStack,
+    call_stack: Stack,
 }
 
 impl Evaluator {
     pub fn new(code: Code, entry: Function) -> Self {
         Self {
             code,
-            call_stack: CallStack::new(entry),
+            call_stack: Stack::new(entry),
         }
     }
 
@@ -23,7 +23,7 @@ impl Evaluator {
         self.call_stack.next().unwrap()
     }
 
-    pub fn call_stack(&self) -> &CallStack {
+    pub fn call_stack(&self) -> &Stack {
         &self.call_stack
     }
 
@@ -32,7 +32,7 @@ impl Evaluator {
     }
 
     pub fn reset(&mut self, entry: Function) {
-        self.call_stack = CallStack::new(entry);
+        self.call_stack = Stack::new(entry);
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
