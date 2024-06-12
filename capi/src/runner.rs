@@ -53,15 +53,7 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn step(&mut self, mut events: Vec<DebugEvent>) {
-        if events.is_empty() && !self.program.can_step() {
-            // If the program won't step anyway, then there's no point in
-            // busy-looping while nothing changes.
-            //
-            // Just wait until we receive an event from the client.
-            events.push(self.events.recv().await.unwrap());
-        }
-
+    pub async fn step(&mut self, events: Vec<DebugEvent>) {
         // We either already have an event available here, if the program wasn't
         // running and we waited for one, or we might not. Either way process
         // the event that might or might not be available, as well as all other

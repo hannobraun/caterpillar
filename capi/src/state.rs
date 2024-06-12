@@ -44,6 +44,14 @@ impl Default for RuntimeState {
                     }
                 }
 
+                if events.is_empty() && !runner.program.can_step() {
+                    // If the program won't step anyway, then there's no point in
+                    // busy-looping while nothing changes.
+                    //
+                    // Just wait until we receive an event from the client.
+                    events.push(runner.events.recv().await.unwrap());
+                }
+
                 runner.step(events).await;
             }
         });
