@@ -28,7 +28,7 @@ impl Evaluator {
     }
 
     pub fn data_stack(&self) -> &DataStack {
-        &self.stack.top_frame().unwrap().data_stack
+        &self.stack.top_frame().unwrap().data
     }
 
     pub fn reset(&mut self, entry: Function) {
@@ -37,7 +37,7 @@ impl Evaluator {
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         for value in values {
-            self.stack.top_frame_mut().unwrap().data_stack.push(value);
+            self.stack.top_frame_mut().unwrap().data.push(value);
         }
     }
 
@@ -60,7 +60,7 @@ impl Evaluator {
         let evaluate_result = evaluate_instruction(
             instruction,
             &self.code,
-            &mut frame.data_stack,
+            &mut frame.data,
             &mut frame.bindings,
         );
 
@@ -82,9 +82,9 @@ impl Evaluator {
                 "Just popped a stack frame; pushing one can't overflow",
             );
         } else {
-            for value in frame.data_stack.values() {
+            for value in frame.data.values() {
                 if let Some(stack_frame) = self.stack.top_frame_mut() {
-                    stack_frame.data_stack.push(value);
+                    stack_frame.data.push(value);
                 } else {
                     // If we end up here, one of the following happened:
                     //
@@ -112,7 +112,7 @@ impl Evaluator {
                             .stack
                             .top_frame_mut()
                             .unwrap()
-                            .data_stack
+                            .data
                             .pop()
                             .map_err(|effect| EvaluatorEffect {
                                 effect: effect.into(),
@@ -130,11 +130,11 @@ impl Evaluator {
                 }
                 CallStackUpdate::Pop => {
                     if let Some(stack_frame) = self.stack.pop() {
-                        for value in stack_frame.data_stack.values() {
+                        for value in stack_frame.data.values() {
                             self.stack
                                 .top_frame_mut()
                                 .unwrap()
-                                .data_stack
+                                .data
                                 .push(value);
                         }
                     }

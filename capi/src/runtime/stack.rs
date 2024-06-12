@@ -68,7 +68,7 @@ impl Stack {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct StackFrame {
     pub function: Function,
-    pub data_stack: DataStack,
+    pub data: DataStack,
     pub bindings: Bindings,
 }
 
@@ -76,7 +76,7 @@ impl StackFrame {
     pub fn new(function: Function) -> Self {
         Self {
             function,
-            data_stack: DataStack::new(),
+            data: DataStack::new(),
             bindings: Bindings::new(),
         }
     }
