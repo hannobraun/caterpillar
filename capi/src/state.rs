@@ -5,11 +5,11 @@ use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
     display::Display,
-    effects::DisplayEffect,
+    effects::{DisplayEffect, EffectsRx},
     ffi,
     games::{self, snake::snake},
     program::{ProgramEffect, ProgramEffectKind},
-    runner::{runner, RunnerHandle},
+    runner::runner,
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui::{self, handle_updates},
@@ -154,7 +154,7 @@ impl Default for RuntimeState {
         Self {
             input,
             runner: Runner {
-                handle: runner_handle,
+                effects: runner_handle.effects_rx,
             },
             tiles: [0; NUM_TILES],
             display: None,
@@ -168,5 +168,5 @@ pub struct Input {
 }
 
 pub struct Runner {
-    pub handle: RunnerHandle,
+    pub effects: EffectsRx,
 }

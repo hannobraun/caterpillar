@@ -26,7 +26,7 @@ pub extern "C" fn on_frame() {
 
     display.handle_effects(
         &mut state.input,
-        &mut state.runner.handle.effects_rx,
+        &mut state.runner.effects,
         &mut state.tiles,
     );
     display.render(&state.tiles);
