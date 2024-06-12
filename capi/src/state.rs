@@ -11,7 +11,7 @@ use crate::{
     program::{ProgramEffect, ProgramEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
-    ui::{self, handle_updates},
+    ui,
     updates::updates,
 };
 
@@ -135,8 +135,7 @@ impl Default for RuntimeState {
             }
         });
 
-        let set_program = ui::start(events_tx);
-        leptos::spawn_local(handle_updates(updates_rx, set_program));
+        ui::start(updates_rx, events_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to
         // be async. We need to do some acrobatics here to deal with that.

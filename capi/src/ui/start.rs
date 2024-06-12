@@ -1,10 +1,10 @@
-use leptos::{create_signal, WriteSignal};
+use leptos::create_signal;
 
-use crate::{program::Program, ui::components::debugger::Debugger};
+use crate::{ui::components::debugger::Debugger, updates::UpdatesRx};
 
-use super::EventsTx;
+use super::{handle_updates, EventsTx};
 
-pub fn start(events_tx: EventsTx) -> WriteSignal<Option<Program>> {
+pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
     let (program, set_program) = create_signal(None);
 
     leptos::mount_to_body(move || {
@@ -13,5 +13,5 @@ pub fn start(events_tx: EventsTx) -> WriteSignal<Option<Program>> {
         }
     });
 
-    set_program
+    leptos::spawn_local(handle_updates(updates_rx, set_program));
 }
