@@ -32,7 +32,7 @@ pub struct Program {
 
     /// Linear memory
     ///
-    /// This is accessed via effects handled by the platform, so logically, it
+    /// This is accessed via effects handled by the host, so logically, it
     /// shouldn't be part of `Program`. However, for the time being, having it
     /// here makes it easy to share this with the debugger.
     pub memory: Memory,
