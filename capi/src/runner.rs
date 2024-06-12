@@ -46,10 +46,10 @@ impl RunnerHandle {
 }
 
 pub struct Runner {
-    program: Program,
-    events: EventsRx,
-    updates: UpdatesTx,
-    effects_tx: EffectsTx,
+    pub program: Program,
+    pub events: EventsRx,
+    pub updates: UpdatesTx,
+    pub effects_tx: EffectsTx,
 }
 
 impl Runner {
