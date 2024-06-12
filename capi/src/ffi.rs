@@ -24,7 +24,7 @@ pub extern "C" fn on_frame() {
         return;
     };
 
-    while let Ok(effect) = state.effects.try_recv() {
+    while let Ok(effect) = state.effects_rx.try_recv() {
         display.handle_effect(effect, &mut state.input, &mut state.tiles);
     }
     display.render(&state.tiles);

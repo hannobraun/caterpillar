@@ -17,7 +17,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub effects: EffectsRx,
+    pub effects_rx: EffectsRx,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
 }
@@ -150,7 +150,7 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            effects: effects_rx,
+            effects_rx,
             tiles: [0; NUM_TILES],
             display: None,
         }
