@@ -72,7 +72,6 @@ impl Runner {
                 }
                 DebugEvent::Reset => {
                     self.program.reset();
-                    self.program.push(self.program.arguments.clone());
                 }
                 DebugEvent::Step => {
                     if let Some(ProgramEffect {

@@ -68,6 +68,8 @@ impl Program {
         self.effects.clear();
         self.previous_data_stack.clear();
         self.memory.zero();
+
+        self.push(self.arguments.clone());
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
