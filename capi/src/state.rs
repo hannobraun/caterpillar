@@ -22,8 +22,8 @@ pub struct RuntimeState {
     pub updates_tx: UpdatesTx,
 }
 
-impl Default for RuntimeState {
-    fn default() -> Self {
+impl RuntimeState {
+    pub fn new() -> Self {
         let program = games::build(snake);
 
         let input = Input::default();
@@ -51,6 +51,12 @@ impl Default for RuntimeState {
             events_rx,
             updates_tx,
         }
+    }
+}
+
+impl Default for RuntimeState {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
