@@ -5,7 +5,7 @@ use raw_window_handle::{
 };
 
 use crate::{
-    effects::{DisplayEffect, EffectsRx},
+    effects::DisplayEffect,
     state::Input,
     tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS},
 };
@@ -32,30 +32,27 @@ impl Display {
     pub fn handle_effects(
         &mut self,
         input: &mut Input,
-        effects: &mut EffectsRx,
+        effect: DisplayEffect,
         tiles: &mut [u8],
     ) {
-        while let Ok(effect) = effects.try_recv() {
-            match effect {
-                DisplayEffect::SetTile { x, y, value } => {
-                    let x_usize: usize = x.into();
-                    let y_usize: usize = y.into();
+        match effect {
+            DisplayEffect::SetTile { x, y, value } => {
+                let x_usize: usize = x.into();
+                let y_usize: usize = y.into();
 
-                    let index = || {
-                        x_usize
-                            .checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
-                    };
-                    let index = index().unwrap();
+                let index = || {
+                    x_usize.checked_add(y_usize.checked_mul(TILES_PER_AXIS)?)
+                };
+                let index = index().unwrap();
 
-                    tiles[index] = value;
-                }
-                DisplayEffect::SubmitTiles { reply } => {
-                    reply.send(()).unwrap();
-                }
-                DisplayEffect::ReadInput { reply } => {
-                    let input = input.buffer.pop_front().unwrap_or(0);
-                    reply.send(input.try_into().unwrap()).unwrap();
-                }
+                tiles[index] = value;
+            }
+            DisplayEffect::SubmitTiles { reply } => {
+                reply.send(()).unwrap();
+            }
+            DisplayEffect::ReadInput { reply } => {
+                let input = input.buffer.pop_front().unwrap_or(0);
+                reply.send(input.try_into().unwrap()).unwrap();
             }
         }
     }

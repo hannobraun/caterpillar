@@ -24,11 +24,9 @@ pub extern "C" fn on_frame() {
         return;
     };
 
-    display.handle_effects(
-        &mut state.input,
-        &mut state.effects,
-        &mut state.tiles,
-    );
+    while let Ok(effect) = state.effects.try_recv() {
+        display.handle_effects(&mut state.input, effect, &mut state.tiles);
+    }
     display.render(&state.tiles);
 }
 
