@@ -49,7 +49,8 @@ impl Default for RuntimeState {
                     // in busy-looping while nothing changes.
                     //
                     // Just wait until we receive an event from the client.
-                    events.push(runner.events.recv().await.unwrap());
+                    let event = runner.events.recv().await.unwrap();
+                    events.push(event);
                 }
 
                 for event in events.into_iter() {
