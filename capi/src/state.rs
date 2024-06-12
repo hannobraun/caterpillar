@@ -28,14 +28,11 @@ impl Default for RuntimeState {
         let program = games::build(snake);
 
         let input = Input::default();
-        let (updates_tx, updates_rx) = updates(&program);
+        let (mut updates_tx, updates_rx) = updates(&program);
         let (events_tx, mut events_rx) = mpsc::unbounded_channel();
         let (effects_tx, effects_rx) = mpsc::unbounded_channel();
         let effects_tx = EffectsTx { inner: effects_tx };
-        let mut runner = Runner {
-            program,
-            updates_tx,
-        };
+        let mut runner = Runner { program };
 
         leptos::spawn_local(async move {
             loop {
@@ -136,7 +133,7 @@ impl Default for RuntimeState {
                     }
                 }
 
-                runner.updates_tx.send_if_relevant_change(&runner.program);
+                updates_tx.send_if_relevant_change(&runner.program);
             }
         });
 
