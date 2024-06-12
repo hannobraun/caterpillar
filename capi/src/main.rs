@@ -3,7 +3,6 @@ mod code;
 mod compiler;
 mod debugger;
 mod display;
-mod effects;
 mod ffi;
 mod games;
 mod program;

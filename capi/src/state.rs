@@ -5,7 +5,6 @@ use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
     display::Display,
-    effects::EffectsRx,
     ffi,
     games::{self, snake::snake},
     program::{ProgramEffect, ProgramEffectKind},
@@ -18,7 +17,6 @@ use crate::{
 pub struct RuntimeState {
     pub input: Input,
     pub on_frame: mpsc::UnboundedSender<()>,
-    pub effects_rx: EffectsRx,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
 }
@@ -31,7 +29,6 @@ impl Default for RuntimeState {
         let (on_frame_tx, mut on_frame_rx) = mpsc::unbounded_channel();
         let (mut updates_tx, updates_rx) = updates(&program);
         let (events_tx, mut events_rx) = mpsc::unbounded_channel();
-        let (_, effects_rx) = mpsc::unbounded_channel();
 
         leptos::spawn_local(async move {
             loop {
@@ -165,7 +162,6 @@ impl Default for RuntimeState {
         Self {
             input,
             on_frame: on_frame_tx,
-            effects_rx,
             tiles: [0; NUM_TILES],
             display: None,
         }
