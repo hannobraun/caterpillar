@@ -1,7 +1,7 @@
 use std::iter;
 
 use rand::random;
-use tokio::sync::mpsc;
+use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
     debugger::DebugEvent,
@@ -56,23 +56,33 @@ impl Runner {
     pub async fn step(&mut self) {
         self.updates.send_if_relevant_change(&self.program);
 
-        let mut event = if self.program.can_step() {
-            None
-        } else {
+        let mut events = Vec::new();
+        loop {
+            match self.events.try_recv() {
+                Ok(event) => events.push(event),
+                Err(TryRecvError::Empty) => break,
+                Err(TryRecvError::Disconnected) => {
+                    // The other end has hung up, which happens during shutdown.
+                    // Nothing we can do about it, except wait until this task
+                    // is shut down too.
+                    return;
+                }
+            }
+        }
+
+        if events.is_empty() && !self.program.can_step() {
             // If we're not running, the program won't step anyway, and there's
             // no point in busy-looping while nothing changes.
             //
             // Just wait until we receive an event from the client.
-            Some(self.events.recv().await.unwrap())
-        };
+            events.push(self.events.recv().await.unwrap());
+        }
 
         // We either already have an event available here, if the program wasn't
         // running and we waited for one, or we might not. Either way process
         // the event that might or might not be available, as well as all other
         // events we can get our hands on.
-        while let Some(event) =
-            event.take().or_else(|| self.events.try_recv().ok())
-        {
+        for event in events.into_iter() {
             match event {
                 DebugEvent::Continue { and_stop_at } => {
                     if let Some(ProgramEffect {
