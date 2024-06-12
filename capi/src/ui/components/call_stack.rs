@@ -17,7 +17,7 @@ pub fn CallStack(
         let view = program
             .get()?
             .evaluator
-            .call_stack()
+            .stack()
             .iter()
             .filter_map(|runtime_location| {
                 let syntax_location = program

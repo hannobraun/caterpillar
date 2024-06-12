@@ -23,7 +23,7 @@ impl Evaluator {
         self.stack.next().unwrap()
     }
 
-    pub fn call_stack(&self) -> &Stack {
+    pub fn stack(&self) -> &Stack {
         &self.stack
     }
 
