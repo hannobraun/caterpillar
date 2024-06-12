@@ -115,11 +115,17 @@ impl Default for RuntimeState {
                             program.effects.pop_front();
                         }
                         BuiltinEffect::ReadInput => {
-                            let (tx, mut rx) = mpsc::unbounded_channel();
+                            let mut state = ffi::STATE.inner.lock().unwrap();
+                            let state =
+                                state.get_or_insert_with(Default::default);
 
-                            effects_tx
-                                .send(DisplayEffect::ReadInput { reply: tx });
-                            let input = rx.recv().await.unwrap();
+                            let input = state
+                                .input
+                                .buffer
+                                .pop_front()
+                                .unwrap_or(0)
+                                .try_into()
+                                .unwrap();
 
                             program.push([Value(input)]);
                             program.effects.pop_front();

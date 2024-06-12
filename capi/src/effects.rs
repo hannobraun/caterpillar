@@ -18,5 +18,4 @@ pub type EffectsRx = mpsc::UnboundedReceiver<DisplayEffect>;
 pub enum DisplayEffect {
     SetTile { x: u8, y: u8, value: u8 },
     SubmitTiles { reply: mpsc::UnboundedSender<()> },
-    ReadInput { reply: mpsc::UnboundedSender<i8> },
 }
