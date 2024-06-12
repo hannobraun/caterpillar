@@ -5,8 +5,7 @@ use raw_window_handle::{
 };
 
 use crate::{
-    effects::DisplayEffect,
-    runner::RunnerHandle,
+    effects::{DisplayEffect, EffectsRx},
     state::Input,
     tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS},
 };
@@ -33,10 +32,10 @@ impl Display {
     pub fn handle_effects(
         &mut self,
         input: &mut Input,
-        runner: &mut RunnerHandle,
+        effects: &mut EffectsRx,
         tiles: &mut [u8],
     ) {
-        while let Ok(effect) = runner.effects_rx.try_recv() {
+        while let Ok(effect) = effects.try_recv() {
             match effect {
                 DisplayEffect::SetTile { x, y, value } => {
                     let x_usize: usize = x.into();
