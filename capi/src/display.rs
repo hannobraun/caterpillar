@@ -40,6 +40,8 @@ impl Display {
                 self.set_tile(x.into(), y.into(), value, tiles);
             }
             DisplayEffect::SubmitTiles { reply } => {
+                // Once the process no longer runs in a separate task, this will
+                // no longer be needed.
                 reply.send(()).unwrap();
             }
             DisplayEffect::ReadInput { reply } => {
