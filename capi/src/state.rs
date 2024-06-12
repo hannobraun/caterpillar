@@ -23,7 +23,7 @@ impl Default for RuntimeState {
 
         let input = Input::default();
         let (updates_tx, updates_rx) = updates(&program);
-        let (events_tx, runner) = runner(program, updates_tx);
+        let (events_tx, runner_handle) = runner(program, updates_tx);
 
         let set_program = ui::start(events_tx.clone());
         leptos::spawn_local(handle_updates(updates_rx, set_program));
@@ -41,7 +41,9 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            runner: Runner { handle: runner },
+            runner: Runner {
+                handle: runner_handle,
+            },
             tiles: [0; NUM_TILES],
             display: None,
         }
