@@ -55,6 +55,8 @@ impl Default for RuntimeState {
                     runner.program.process_event(event);
                 }
 
+                runner.program.step();
+
                 runner.step().await;
             }
         });

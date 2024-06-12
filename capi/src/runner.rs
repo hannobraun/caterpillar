@@ -52,7 +52,6 @@ pub struct Runner {
 
 impl Runner {
     pub async fn step(&mut self) -> Option<DisplayEffect> {
-        self.program.step();
         if let Some(ProgramEffect {
             kind:
                 ProgramEffectKind::Evaluator(EvaluatorEffectKind::Builtin(effect)),
