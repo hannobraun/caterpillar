@@ -56,44 +56,7 @@ impl Runner {
         events: Vec<DebugEvent>,
     ) -> Option<DisplayEffect> {
         for event in events.into_iter() {
-            match event {
-                DebugEvent::Continue { and_stop_at } => {
-                    if let Some(ProgramEffect {
-                        kind: ProgramEffectKind::Paused,
-                        ..
-                    }) = self.program.effects.front()
-                    {
-                        if let Some(instruction) = and_stop_at {
-                            self.program.breakpoints.set_ephemeral(instruction);
-                        }
-
-                        self.program.effects.pop_front();
-                    }
-                }
-                DebugEvent::Reset => {
-                    self.program.reset();
-                }
-                DebugEvent::Step => {
-                    if let Some(ProgramEffect {
-                        kind: ProgramEffectKind::Paused,
-                        ..
-                    }) = self.program.effects.front()
-                    {
-                        self.program.breakpoints.set_ephemeral(
-                            self.program.evaluator.next_instruction(),
-                        );
-                        self.program.effects.pop_front();
-                    }
-                }
-                DebugEvent::Stop => {
-                    self.program.breakpoints.set_ephemeral(
-                        self.program.evaluator.next_instruction(),
-                    );
-                }
-                DebugEvent::ToggleBreakpoint { location } => {
-                    self.program.breakpoints.toggle_durable_at(location);
-                }
-            }
+            self.program.process_event(event);
         }
 
         self.program.step();
