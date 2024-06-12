@@ -23,7 +23,14 @@ impl Default for RuntimeState {
 
         let input = Input::default();
         let (updates_tx, updates_rx) = updates(&program);
-        let (events_tx, runner_handle) = runner(program, updates_tx);
+        let (events_tx, runner_handle, mut runner) =
+            runner(program, updates_tx);
+
+        leptos::spawn_local(async move {
+            loop {
+                runner.step().await;
+            }
+        });
 
         let set_program = ui::start(events_tx.clone());
         leptos::spawn_local(handle_updates(updates_rx, set_program));
