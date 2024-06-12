@@ -57,10 +57,6 @@ impl Runner {
         &mut self,
         events: Vec<DebugEvent>,
     ) -> Option<DisplayEffect> {
-        // We either already have an event available here, if the program wasn't
-        // running and we waited for one, or we might not. Either way process
-        // the event that might or might not be available, as well as all other
-        // events we can get our hands on.
         for event in events.into_iter() {
             match event {
                 DebugEvent::Continue { and_stop_at } => {
