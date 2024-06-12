@@ -39,7 +39,7 @@ impl RuntimeState {
         leptos::spawn_local(async {
             let display = Display::new().await.unwrap();
 
-            let mut state = ffi::STATE.inner.lock().unwrap();
+            let mut state = ffi::STATE.lock().unwrap();
             let state = state.get_or_insert_with(Default::default);
 
             state.display = Some(display);
