@@ -34,7 +34,7 @@ impl Default for RuntimeState {
         let effects_tx = EffectsTx { inner: effects_tx };
         let mut runner = Runner {
             program,
-            updates: updates_tx,
+            updates_tx,
         };
 
         leptos::spawn_local(async move {
@@ -136,7 +136,7 @@ impl Default for RuntimeState {
                     }
                 }
 
-                runner.updates.send_if_relevant_change(&runner.program);
+                runner.updates_tx.send_if_relevant_change(&runner.program);
             }
         });
 

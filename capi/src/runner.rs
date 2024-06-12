@@ -6,5 +6,5 @@ pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub struct Runner {
     pub program: Program,
-    pub updates: UpdatesTx,
+    pub updates_tx: UpdatesTx,
 }
