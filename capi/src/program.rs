@@ -45,7 +45,8 @@ impl Program {
         entry: runtime::Function,
         arguments: Vec<Value>,
     ) -> Self {
-        let evaluator = Evaluator::new(code, entry.clone());
+        let mut evaluator = Evaluator::new(code, entry.clone());
+        evaluator.push(arguments.clone());
 
         Self {
             functions,
