@@ -95,11 +95,21 @@ impl Default for RuntimeState {
 
                             program.effects.pop_front();
 
-                            effects_tx.send(DisplayEffect::SetTile {
-                                x,
-                                y,
+                            let mut state = ffi::STATE.inner.lock().unwrap();
+                            let state =
+                                state.get_or_insert_with(Default::default);
+
+                            let Some(display) = state.display.as_mut() else {
+                                // Display not initialized yet.
+                                continue;
+                            };
+
+                            display.set_tile(
+                                x.into(),
+                                y.into(),
                                 value,
-                            });
+                                &mut state.tiles,
+                            );
                         }
                         BuiltinEffect::SubmitFrame => {
                             // This effect serves as a synchronization point

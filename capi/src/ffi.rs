@@ -26,9 +26,6 @@ pub extern "C" fn on_frame() {
 
     while let Ok(effect) = state.effects_rx.try_recv() {
         match effect {
-            DisplayEffect::SetTile { x, y, value } => {
-                display.set_tile(x.into(), y.into(), value, &mut state.tiles);
-            }
             DisplayEffect::SubmitTiles { reply } => {
                 reply.send(()).unwrap();
             }
