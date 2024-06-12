@@ -30,10 +30,11 @@ impl Default for RuntimeState {
 
         leptos::spawn_local(async move {
             loop {
-                let mut events = Vec::new();
                 loop {
                     match runner.events.try_recv() {
-                        Ok(event) => events.push(event),
+                        Ok(event) => {
+                            runner.program.process_event(event);
+                        }
                         Err(TryRecvError::Empty) => break,
                         Err(TryRecvError::Disconnected) => {
                             // The other end has hung up, which happens during
@@ -44,16 +45,12 @@ impl Default for RuntimeState {
                     }
                 }
 
-                if events.is_empty() && !runner.program.can_step() {
+                if !runner.program.can_step() {
                     // If the program won't step anyway, then there's no point
                     // in busy-looping while nothing changes.
                     //
                     // Just wait until we receive an event from the client.
                     let event = runner.events.recv().await.unwrap();
-                    events.push(event);
-                }
-
-                for event in events.into_iter() {
                     runner.program.process_event(event);
                 }
 
