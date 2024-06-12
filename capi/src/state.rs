@@ -18,7 +18,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub input: Input,
-    pub runner: Runner,
+    pub effects: EffectsRx,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
 }
@@ -153,9 +153,7 @@ impl Default for RuntimeState {
 
         Self {
             input,
-            runner: Runner {
-                effects: runner_handle.effects_rx,
-            },
+            effects: runner_handle.effects_rx,
             tiles: [0; NUM_TILES],
             display: None,
         }
@@ -165,8 +163,4 @@ impl Default for RuntimeState {
 #[derive(Default)]
 pub struct Input {
     pub buffer: VecDeque<u8>,
-}
-
-pub struct Runner {
-    pub effects: EffectsRx,
 }
