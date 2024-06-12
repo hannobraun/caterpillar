@@ -16,7 +16,6 @@ use crate::{
 pub struct RuntimeState {
     pub program: Program,
     pub input: Input,
-    pub on_frame: mpsc::UnboundedSender<()>,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
     pub events_rx: mpsc::UnboundedReceiver<DebugEvent>,
@@ -28,7 +27,6 @@ impl Default for RuntimeState {
         let program = games::build(snake);
 
         let input = Input::default();
-        let (on_frame_tx, _) = mpsc::unbounded_channel();
         let (updates_tx, updates_rx) = updates(&program);
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
@@ -48,7 +46,6 @@ impl Default for RuntimeState {
         Self {
             program,
             input,
-            on_frame: on_frame_tx,
             tiles: [0; NUM_TILES],
             display: None,
             events_rx,
