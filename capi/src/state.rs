@@ -5,7 +5,7 @@ use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
     display::Display,
-    effects::{DisplayEffect, EffectsRx},
+    effects::{DisplayEffect, EffectsRx, EffectsTx},
     ffi,
     games::{self, snake::snake},
     program::{ProgramEffect, ProgramEffectKind},
@@ -30,7 +30,9 @@ impl Default for RuntimeState {
         let input = Input::default();
         let (updates_tx, updates_rx) = updates(&program);
         let (events_tx, mut events_rx) = mpsc::unbounded_channel();
-        let (effects_rx, mut runner) = runner(program, updates_tx);
+        let (effects_tx, effects_rx) = mpsc::unbounded_channel();
+        let effects_tx = EffectsTx { inner: effects_tx };
+        let mut runner = runner(program, updates_tx);
 
         leptos::spawn_local(async move {
             loop {
@@ -93,7 +95,7 @@ impl Default for RuntimeState {
                             let y = *y;
                             let value = *value;
 
-                            runner.effects_tx.send(DisplayEffect::SetTile {
+                            effects_tx.send(DisplayEffect::SetTile {
                                 x,
                                 y,
                                 value,
@@ -108,8 +110,7 @@ impl Default for RuntimeState {
                             // the display code has confirmed that we're ready
                             // to continue.
                             let (tx, mut rx) = mpsc::unbounded_channel();
-                            runner
-                                .effects_tx
+                            effects_tx
                                 .send(DisplayEffect::SubmitTiles { reply: tx });
                             let () = rx.recv().await.unwrap();
 
@@ -118,8 +119,7 @@ impl Default for RuntimeState {
                         BuiltinEffect::ReadInput => {
                             let (tx, mut rx) = mpsc::unbounded_channel();
 
-                            runner
-                                .effects_tx
+                            effects_tx
                                 .send(DisplayEffect::ReadInput { reply: tx });
                             let input = rx.recv().await.unwrap();
 
