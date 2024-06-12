@@ -1,15 +1,14 @@
 pub mod builtins;
 
-mod call_stack;
 mod data_stack;
 mod evaluator;
 mod function;
 mod instructions;
 mod location;
+mod stack;
 
 pub use self::{
     builtins::BuiltinEffect,
-    call_stack::{Bindings, Stack, CallStackOverflow, StackFrame},
     data_stack::{DataStack, StackUnderflow, Value},
     evaluator::{
         Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState,
@@ -17,4 +16,5 @@ pub use self::{
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
+    stack::{Bindings, CallStackOverflow, Stack, StackFrame},
 };
