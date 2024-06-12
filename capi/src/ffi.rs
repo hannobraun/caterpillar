@@ -33,7 +33,15 @@ pub extern "C" fn on_frame() {
                 reply.send(()).unwrap();
             }
             DisplayEffect::ReadInput { reply } => {
-                let input = display.read_input(&mut state.input);
+                let input = {
+                    state
+                        .input
+                        .buffer
+                        .pop_front()
+                        .unwrap_or(0)
+                        .try_into()
+                        .unwrap()
+                };
                 reply.send(input).unwrap();
             }
         };

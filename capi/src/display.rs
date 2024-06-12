@@ -4,10 +4,7 @@ use raw_window_handle::{
     WebDisplayHandle, WebWindowHandle,
 };
 
-use crate::{
-    state::Input,
-    tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS},
-};
+use crate::tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS};
 
 pub struct Display {
     pixels: Pixels,
@@ -39,10 +36,6 @@ impl Display {
         let index = index().unwrap();
 
         tiles[index] = value;
-    }
-
-    pub fn read_input(&mut self, input: &mut Input) -> i8 {
-        input.buffer.pop_front().unwrap_or(0).try_into().unwrap()
     }
 
     pub fn render(&mut self, tiles: &[u8]) {
