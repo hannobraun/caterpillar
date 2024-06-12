@@ -53,7 +53,10 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn step(&mut self, events: Vec<DebugEvent>) {
+    pub async fn step(
+        &mut self,
+        events: Vec<DebugEvent>,
+    ) -> Option<DisplayEffect> {
         // We either already have an event available here, if the program wasn't
         // running and we waited for one, or we might not. Either way process
         // the event that might or might not be available, as well as all other
@@ -169,6 +172,8 @@ impl Runner {
         }
 
         self.updates.send_if_relevant_change(&self.program);
+
+        None
     }
 }
 
