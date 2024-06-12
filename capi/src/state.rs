@@ -52,7 +52,11 @@ impl Default for RuntimeState {
                     events.push(runner.events.recv().await.unwrap());
                 }
 
-                runner.step(events).await;
+                for event in events.into_iter() {
+                    runner.program.process_event(event);
+                }
+
+                runner.step().await;
             }
         });
 

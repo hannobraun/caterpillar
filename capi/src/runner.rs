@@ -51,14 +51,7 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn step(
-        &mut self,
-        events: Vec<DebugEvent>,
-    ) -> Option<DisplayEffect> {
-        for event in events.into_iter() {
-            self.program.process_event(event);
-        }
-
+    pub async fn step(&mut self) -> Option<DisplayEffect> {
         self.program.step();
         if let Some(ProgramEffect {
             kind:
