@@ -71,11 +71,6 @@ impl Runner {
                         }
 
                         self.program.effects.pop_front();
-                    } else {
-                        println!(
-                            "Debugger tried to continue, but the program \
-                                isn't paused."
-                        );
                     }
                 }
                 DebugEvent::Reset => {
@@ -92,11 +87,6 @@ impl Runner {
                             self.program.evaluator.next_instruction(),
                         );
                         self.program.effects.pop_front();
-                    } else {
-                        println!(
-                            "Debugger tried to step, but the program isn't \
-                                paused."
-                        );
                     }
                 }
                 DebugEvent::Stop => {
