@@ -71,9 +71,9 @@ impl Default for RuntimeState {
                 {
                     match effect {
                         BuiltinEffect::Error(_) => {
-                            // Nothing needs to be done. With an unhandled effect, the
-                            // program won't continue running, and the debugger will see
-                            // the error and display it.
+                            // Nothing needs to be done. With an unhandled
+                            // effect, the program won't continue running, and
+                            // the debugger will see the error and display it.
                         }
                         BuiltinEffect::Load { address } => {
                             let address: usize = (*address).into();
