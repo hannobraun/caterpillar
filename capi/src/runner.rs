@@ -32,7 +32,7 @@ pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
 
 pub struct RunnerHandle {
-    effects_rx: EffectsRx,
+    pub effects_rx: EffectsRx,
 }
 
 impl RunnerHandle {
