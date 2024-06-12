@@ -1,12 +1,16 @@
 use std::collections::VecDeque;
 
-use tokio::sync::mpsc::error::TryRecvError;
+use rand::random;
+use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
     display::Display,
+    effects::DisplayEffect,
     ffi,
     games::{self, snake::snake},
+    program::{ProgramEffect, ProgramEffectKind},
     runner::{runner, RunnerHandle},
+    runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui::{self, handle_updates},
     updates::updates,
@@ -56,6 +60,78 @@ impl Default for RuntimeState {
                 }
 
                 runner.program.step();
+
+                if let Some(ProgramEffect {
+                    kind:
+                        ProgramEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
+                            effect,
+                        )),
+                    ..
+                }) = runner.program.effects.front()
+                {
+                    match effect {
+                        BuiltinEffect::Error(_) => {
+                            // Nothing needs to be done. With an unhandled effect, the
+                            // program won't continue running, and the debugger will see
+                            // the error and display it.
+                        }
+                        BuiltinEffect::Load { address } => {
+                            let address: usize = (*address).into();
+                            let value = runner.program.memory.inner[address];
+                            runner.program.push([value]);
+
+                            runner.program.effects.pop_front();
+                        }
+                        BuiltinEffect::Store { address, value } => {
+                            let address: usize = (*address).into();
+                            runner.program.memory.inner[address] = *value;
+
+                            runner.program.effects.pop_front();
+                        }
+                        BuiltinEffect::SetTile { x, y, value } => {
+                            let x = *x;
+                            let y = *y;
+                            let value = *value;
+
+                            runner.effects_tx.send(DisplayEffect::SetTile {
+                                x,
+                                y,
+                                value,
+                            });
+
+                            runner.program.effects.pop_front();
+                        }
+                        BuiltinEffect::SubmitFrame => {
+                            // This effect serves as a synchronization point
+                            // between the program and the display code. Before
+                            // we continue running, we need to wait here, until
+                            // the display code has confirmed that we're ready
+                            // to continue.
+                            let (tx, mut rx) = mpsc::unbounded_channel();
+                            runner
+                                .effects_tx
+                                .send(DisplayEffect::SubmitTiles { reply: tx });
+                            let () = rx.recv().await.unwrap();
+
+                            runner.program.effects.pop_front();
+                        }
+                        BuiltinEffect::ReadInput => {
+                            let (tx, mut rx) = mpsc::unbounded_channel();
+
+                            runner
+                                .effects_tx
+                                .send(DisplayEffect::ReadInput { reply: tx });
+                            let input = rx.recv().await.unwrap();
+
+                            runner.program.push([Value(input)]);
+                            runner.program.effects.pop_front();
+                        }
+                        BuiltinEffect::ReadRandom => {
+                            runner.program.push([Value(random())]);
+                            runner.program.effects.pop_front();
+                        }
+                    }
+                }
 
                 runner.step().await;
             }

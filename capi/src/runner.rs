@@ -1,13 +1,11 @@
 use std::iter;
 
-use rand::random;
 use tokio::sync::mpsc;
 
 use crate::{
     debugger::DebugEvent,
     effects::{DisplayEffect, EffectsRx, EffectsTx},
-    program::{Program, ProgramEffect, ProgramEffectKind},
-    runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
+    program::Program,
     updates::UpdatesTx,
 };
 
@@ -52,73 +50,6 @@ pub struct Runner {
 
 impl Runner {
     pub async fn step(&mut self) -> Option<DisplayEffect> {
-        if let Some(ProgramEffect {
-            kind:
-                ProgramEffectKind::Evaluator(EvaluatorEffectKind::Builtin(effect)),
-            ..
-        }) = self.program.effects.front()
-        {
-            match effect {
-                BuiltinEffect::Error(_) => {
-                    // Nothing needs to be done. With an unhandled effect, the
-                    // program won't continue running, and the debugger will see
-                    // the error and display it.
-                }
-                BuiltinEffect::Load { address } => {
-                    let address: usize = (*address).into();
-                    let value = self.program.memory.inner[address];
-                    self.program.push([value]);
-
-                    self.program.effects.pop_front();
-                }
-                BuiltinEffect::Store { address, value } => {
-                    let address: usize = (*address).into();
-                    self.program.memory.inner[address] = *value;
-
-                    self.program.effects.pop_front();
-                }
-                BuiltinEffect::SetTile { x, y, value } => {
-                    let x = *x;
-                    let y = *y;
-                    let value = *value;
-
-                    self.effects_tx.send(DisplayEffect::SetTile {
-                        x,
-                        y,
-                        value,
-                    });
-
-                    self.program.effects.pop_front();
-                }
-                BuiltinEffect::SubmitFrame => {
-                    // This effect serves as a synchronization point between the
-                    // program and the display code. Before we continue running,
-                    // we need to wait here, until the display code has
-                    // confirmed that we're ready to continue.
-                    let (tx, mut rx) = mpsc::unbounded_channel();
-                    self.effects_tx
-                        .send(DisplayEffect::SubmitTiles { reply: tx });
-                    let () = rx.recv().await.unwrap();
-
-                    self.program.effects.pop_front();
-                }
-                BuiltinEffect::ReadInput => {
-                    let (tx, mut rx) = mpsc::unbounded_channel();
-
-                    self.effects_tx
-                        .send(DisplayEffect::ReadInput { reply: tx });
-                    let input = rx.recv().await.unwrap();
-
-                    self.program.push([Value(input)]);
-                    self.program.effects.pop_front();
-                }
-                BuiltinEffect::ReadRandom => {
-                    self.program.push([Value(random())]);
-                    self.program.effects.pop_front();
-                }
-            }
-        }
-
         self.updates.send_if_relevant_change(&self.program);
 
         None
