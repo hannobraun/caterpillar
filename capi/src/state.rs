@@ -93,13 +93,13 @@ impl Default for RuntimeState {
                             let y = *y;
                             let value = *value;
 
+                            program.effects.pop_front();
+
                             effects_tx.send(DisplayEffect::SetTile {
                                 x,
                                 y,
                                 value,
                             });
-
-                            program.effects.pop_front();
                         }
                         BuiltinEffect::SubmitFrame => {
                             // This effect serves as a synchronization point
