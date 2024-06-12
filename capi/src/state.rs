@@ -35,7 +35,9 @@ impl Default for RuntimeState {
                         Ok(event) => {
                             runner.program.process_event(event);
                         }
-                        Err(TryRecvError::Empty) => break,
+                        Err(TryRecvError::Empty) => {
+                            break;
+                        }
                         Err(TryRecvError::Disconnected) => {
                             // The other end has hung up, which happens during
                             // shutdown. Shut down this task, too.
