@@ -31,8 +31,8 @@ impl Display {
 
     pub fn handle_effect(
         &mut self,
-        input: &mut Input,
         effect: DisplayEffect,
+        input: &mut Input,
         tiles: &mut [u8],
     ) {
         match effect {
