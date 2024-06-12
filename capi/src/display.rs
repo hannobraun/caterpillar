@@ -37,10 +37,7 @@ impl Display {
     ) {
         match effect {
             DisplayEffect::SetTile { x, y, value } => {
-                let x: usize = x.into();
-                let y: usize = y.into();
-
-                self.set_tile(x, y, value, tiles);
+                self.set_tile(x.into(), y.into(), value, tiles);
             }
             DisplayEffect::SubmitTiles { reply } => {
                 reply.send(()).unwrap();
