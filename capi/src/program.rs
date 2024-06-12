@@ -45,11 +45,13 @@ impl Program {
         entry: runtime::Function,
         arguments: Vec<Value>,
     ) -> Self {
+        let evaluator = Evaluator::new(code, entry.clone());
+
         Self {
             functions,
             source_map,
             breakpoints: Breakpoints::default(),
-            evaluator: Evaluator::new(code, entry.clone()),
+            evaluator,
             state: ProgramState::default(),
             entry,
             arguments,
