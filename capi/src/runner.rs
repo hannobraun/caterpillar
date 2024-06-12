@@ -54,8 +54,6 @@ pub struct Runner {
 
 impl Runner {
     pub async fn step(&mut self, mut events: Vec<DebugEvent>) {
-        self.updates.send_if_relevant_change(&self.program);
-
         if events.is_empty() && !self.program.can_step() {
             // If the program won't step anyway, then there's no point in
             // busy-looping while nothing changes.
@@ -187,6 +185,8 @@ impl Runner {
                 }
             }
         }
+
+        self.updates.send_if_relevant_change(&self.program);
     }
 }
 
