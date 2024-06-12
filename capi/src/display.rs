@@ -29,7 +29,7 @@ impl Display {
         Ok(Self { pixels })
     }
 
-    pub fn handle_effects(
+    pub fn handle_effect(
         &mut self,
         input: &mut Input,
         effect: DisplayEffect,
