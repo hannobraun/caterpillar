@@ -37,7 +37,7 @@ impl Evaluator {
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         for value in values {
-            self.stack.top_mut().unwrap().data_stack.push(value);
+            self.stack.top_frame_mut().unwrap().data_stack.push(value);
         }
     }
 
@@ -83,7 +83,7 @@ impl Evaluator {
             );
         } else {
             for value in frame.data_stack.values() {
-                if let Some(stack_frame) = self.stack.top_mut() {
+                if let Some(stack_frame) = self.stack.top_frame_mut() {
                     stack_frame.data_stack.push(value);
                 } else {
                     // If we end up here, one of the following happened:
@@ -110,7 +110,7 @@ impl Evaluator {
                     for argument in arguments.into_iter().rev() {
                         let value = self
                             .stack
-                            .top_mut()
+                            .top_frame_mut()
                             .unwrap()
                             .data_stack
                             .pop()
@@ -132,7 +132,7 @@ impl Evaluator {
                     if let Some(stack_frame) = self.stack.pop() {
                         for value in stack_frame.data_stack.values() {
                             self.stack
-                                .top_mut()
+                                .top_frame_mut()
                                 .unwrap()
                                 .data_stack
                                 .push(value);

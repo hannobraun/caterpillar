@@ -27,7 +27,7 @@ impl Stack {
         self.frames.last()
     }
 
-    pub fn top_mut(&mut self) -> Option<&mut StackFrame> {
+    pub fn top_frame_mut(&mut self) -> Option<&mut StackFrame> {
         self.frames.last_mut()
     }
 
