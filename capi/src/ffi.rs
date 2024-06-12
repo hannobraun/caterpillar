@@ -46,6 +46,7 @@ pub extern "C" fn on_frame() {
             }
         };
     }
+
     display.render(&state.tiles);
 }
 
