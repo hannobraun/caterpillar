@@ -23,7 +23,7 @@ impl Stack {
             .map(|(location, _instruction)| location)
     }
 
-    pub fn top(&self) -> Option<&StackFrame> {
+    pub fn top_frame(&self) -> Option<&StackFrame> {
         self.frames.last()
     }
 

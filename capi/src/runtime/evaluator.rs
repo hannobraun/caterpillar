@@ -28,7 +28,7 @@ impl Evaluator {
     }
 
     pub fn data_stack(&self) -> &DataStack {
-        &self.stack.top().unwrap().data_stack
+        &self.stack.top_frame().unwrap().data_stack
     }
 
     pub fn reset(&mut self, entry: Function) {
