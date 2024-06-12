@@ -40,10 +40,7 @@ impl Display {
                 let x: usize = x.into();
                 let y: usize = y.into();
 
-                let index = || x.checked_add(y.checked_mul(TILES_PER_AXIS)?);
-                let index = index().unwrap();
-
-                tiles[index] = value;
+                self.set_tile(x, y, value, tiles);
             }
             DisplayEffect::SubmitTiles { reply } => {
                 reply.send(()).unwrap();
@@ -53,6 +50,19 @@ impl Display {
                 reply.send(input.try_into().unwrap()).unwrap();
             }
         }
+    }
+
+    pub fn set_tile(
+        &mut self,
+        x: usize,
+        y: usize,
+        value: u8,
+        tiles: &mut [u8],
+    ) {
+        let index = || x.checked_add(y.checked_mul(TILES_PER_AXIS)?);
+        let index = index().unwrap();
+
+        tiles[index] = value;
     }
 
     pub fn render(&mut self, tiles: &[u8]) {
