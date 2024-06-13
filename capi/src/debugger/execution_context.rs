@@ -1,5 +1,5 @@
 use crate::{
-    process::{Process, ProgramState},
+    process::{Process, ProcessState},
     syntax::Function,
 };
 
@@ -32,13 +32,13 @@ impl ExecutionContext {
 
         let Some(effect) = process.effects.front() else {
             match &process.state {
-                ProgramState::Running => {
+                ProcessState::Running => {
                     return Self {
                         function,
                         message: Some("Program is running."),
                     };
                 }
-                ProgramState::Finished => {
+                ProcessState::Finished => {
                     return Self {
                         function,
                         message: Some("Program has finished running."),

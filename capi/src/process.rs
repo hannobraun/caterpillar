@@ -20,7 +20,7 @@ pub struct Process {
     pub source_map: SourceMap,
     pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
-    pub state: ProgramState,
+    pub state: ProcessState,
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
 
@@ -54,7 +54,7 @@ impl Process {
             source_map,
             breakpoints: Breakpoints::default(),
             evaluator,
-            state: ProgramState::default(),
+            state: ProcessState::default(),
             entry,
             arguments,
             effects: VecDeque::default(),
@@ -65,7 +65,7 @@ impl Process {
 
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
-        self.state = ProgramState::default();
+        self.state = ProcessState::default();
         self.effects.clear();
         self.previous_data_stack.clear();
         self.memory.zero();
@@ -128,7 +128,7 @@ impl Process {
         self.state = self.step_inner();
     }
 
-    pub fn step_inner(&mut self) -> ProgramState {
+    pub fn step_inner(&mut self) -> ProcessState {
         // This method is separate from the main `step` method, so we can just
         // return `ProgramState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
@@ -137,7 +137,7 @@ impl Process {
             self.evaluator.stack().top_frame().unwrap().data.clone();
         let just_executed = match self.evaluator.step() {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
-            Ok(EvaluatorState::Finished) => return ProgramState::Finished,
+            Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(EvaluatorEffect { effect, location }) => {
                 self.effects.push_back(ProgramEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
@@ -157,21 +157,21 @@ impl Process {
             });
         }
 
-        ProgramState::Running
+        ProcessState::Running
     }
 }
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub enum ProgramState {
+pub enum ProcessState {
     #[default]
     Running,
 
     Finished,
 }
 
-impl ProgramState {
+impl ProcessState {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
     }
