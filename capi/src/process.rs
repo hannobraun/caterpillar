@@ -33,7 +33,7 @@ pub struct Process {
     /// Linear memory
     ///
     /// This is accessed via effects handled by the host, so logically, it
-    /// shouldn't be part of `Program`. However, for the time being, having it
+    /// shouldn't be part of `Process`. However, for the time being, having it
     /// here makes it easy to share this with the debugger.
     pub memory: Memory,
 }
