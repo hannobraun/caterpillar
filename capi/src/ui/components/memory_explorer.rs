@@ -4,9 +4,9 @@ use crate::{program::Process, ui::components::panel::Panel};
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn MemoryExplorer(program: ReadSignal<Option<Process>>) -> impl IntoView {
+pub fn MemoryExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
     let memory = move || {
-        let program = program.get()?;
+        let program = process.get()?;
 
         let mut values = program.memory.inner.into_iter().peekable();
         let values = values.by_ref();

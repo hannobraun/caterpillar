@@ -35,7 +35,7 @@ pub fn Debugger(
         <StackExplorer
             process=process />
         <MemoryExplorer
-            program=process />
+            process=process />
         <CodeExplorer
             process=process
             events=events />
