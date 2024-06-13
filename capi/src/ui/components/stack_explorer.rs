@@ -6,9 +6,9 @@ use crate::{
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(program: ReadSignal<Option<Process>>) -> impl IntoView {
+pub fn StackExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
     let data_stack = move || {
-        let program = program.get()?;
+        let program = process.get()?;
 
         let previous = program.previous_data_stack;
         let current = program.evaluator.data_stack().clone();

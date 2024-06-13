@@ -33,7 +33,7 @@ pub fn Debugger(
             state=execution_context
             events=events.clone() />
         <StackExplorer
-            program=process />
+            process=process />
         <MemoryExplorer
             program=process />
         <CodeExplorer
