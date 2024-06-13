@@ -10,7 +10,7 @@ use crate::{
 
 use super::syntax::ExpressionKind;
 
-pub fn compile(script: Script, entry: &str) -> Process {
+pub fn compile(script: &Script, entry: &str) -> Process {
     let mut code = runtime::Code::default();
     let mut source_map = SourceMap::default();
 
@@ -26,7 +26,7 @@ pub fn compile(script: Script, entry: &str) -> Process {
 
     let entry = code.functions.get(entry).cloned().unwrap();
     Process::new(
-        script.functions,
+        script.functions.clone(),
         source_map,
         code,
         entry,
