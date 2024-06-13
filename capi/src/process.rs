@@ -4,11 +4,9 @@ use serde_big_array::BigArray;
 
 use crate::{
     breakpoints::Breakpoints,
-    code::Code,
     debugger::DebugEvent,
     runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
-        EvaluatorState, Value,
+        self, Code, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState, Value
     },
     source_map::SourceMap,
     syntax,

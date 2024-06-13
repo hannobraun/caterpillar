@@ -1,5 +1,4 @@
 mod breakpoints;
-mod code;
 mod compiler;
 mod debugger;
 mod display;

@@ -2,13 +2,13 @@ use std::collections::BTreeSet;
 
 use crate::{
     process::Process,
-    runtime::{self, Instruction, Value},
+    runtime::{self, Code, Instruction, Value},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
     tiles::TILES_PER_AXIS,
 };
 
-use super::{code::Code, syntax::ExpressionKind};
+use super::syntax::ExpressionKind;
 
 pub fn compile(script: Script, entry: &str) -> Process {
     let mut code = Code::default();

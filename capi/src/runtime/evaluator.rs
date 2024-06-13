@@ -1,8 +1,6 @@
-use crate::code::Code;
-
 use super::{
-    builtins, Bindings, BuiltinEffect, CallStackOverflow, DataStack, Function,
-    Instruction, Location, Stack, StackFrame, StackUnderflow, Value,
+    builtins, Bindings, BuiltinEffect, CallStackOverflow, Code, DataStack,
+    Function, Instruction, Location, Stack, StackFrame, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
