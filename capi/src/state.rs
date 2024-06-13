@@ -26,10 +26,10 @@ pub struct RuntimeState {
 
 impl RuntimeState {
     pub fn new() -> Self {
-        let program = games::build(snake);
+        let process = games::build(snake);
 
         let input = Input::default();
-        let (updates_tx, updates_rx) = updates(&program);
+        let (updates_tx, updates_rx) = updates(&process);
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         ui::start(updates_rx, events_tx);
@@ -46,7 +46,7 @@ impl RuntimeState {
         });
 
         Self {
-            process: program,
+            process,
             input,
             tiles: [0; NUM_TILES],
             display: None,
