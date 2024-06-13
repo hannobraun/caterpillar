@@ -6,9 +6,9 @@ use crate::{program::Process, ui::components::panel::Panel};
 #[component]
 pub fn MemoryExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
     let memory = move || {
-        let program = process.get()?;
+        let process = process.get()?;
 
-        let mut values = program.memory.inner.into_iter().peekable();
+        let mut values = process.memory.inner.into_iter().peekable();
         let values = values.by_ref();
 
         let mut lines = Vec::new();
