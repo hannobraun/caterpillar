@@ -26,7 +26,7 @@ pub fn Debugger(
         <ControlPanel
             events=events.clone() />
         <CallStack
-            program=program
+            process=program
             events=events.clone() />
         <ExecutionContext
             program=program

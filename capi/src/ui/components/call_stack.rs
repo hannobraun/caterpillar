@@ -10,21 +10,21 @@ use crate::{
 
 #[component]
 pub fn CallStack(
-    program: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
     let addresses = move || {
-        let view = program
+        let view = process
             .get()?
             .evaluator
             .stack()
             .iter()
             .filter_map(|runtime_location| {
-                let syntax_location = program
+                let syntax_location = process
                     .get()?
                     .source_map
                     .runtime_to_syntax(&runtime_location);
-                let function = program
+                let function = process
                     .get()?
                     .functions
                     .get_from_location(syntax_location)
@@ -32,7 +32,7 @@ pub fn CallStack(
 
                 Some(view! {
                     <Function
-                        program=program
+                        program=process
                         function=function
                         events=events.clone() />
                 })
