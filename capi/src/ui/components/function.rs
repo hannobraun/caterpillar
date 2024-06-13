@@ -52,10 +52,10 @@ pub fn Expression(
         // `Fn`, and that's no longer an a `leptos::IntoView`.
         let events = events.clone();
 
-        let program = process.get()?;
+        let process = process.get()?;
 
         let debugger_expression =
-            debugger::Expression::new(&expression, &program);
+            debugger::Expression::new(&expression, &process);
 
         let mut class_outer = String::from("py-1");
         if debugger_expression.has_durable_breakpoint {
