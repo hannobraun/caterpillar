@@ -130,7 +130,7 @@ impl Process {
 
     pub fn step_inner(&mut self) -> ProcessState {
         // This method is separate from the main `step` method, so we can just
-        // return `ProgramState`s here, and have `step` take care of saving them
+        // return `ProcessState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
         self.previous_data_stack =
