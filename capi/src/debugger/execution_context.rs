@@ -23,15 +23,15 @@ impl ExecutionContext {
     pub fn from_process(prev: Option<&Self>, process: Option<Process>) -> Self {
         let function = prev.and_then(|state: &Self| state.function.clone());
 
-        let Some(program) = process else {
+        let Some(process) = process else {
             return Self {
                 function,
                 message: Some("No program available."),
             };
         };
 
-        let Some(effect) = program.effects.front() else {
-            match &program.state {
+        let Some(effect) = process.effects.front() else {
+            match &process.state {
                 ProgramState::Running => {
                     return Self {
                         function,
@@ -47,9 +47,9 @@ impl ExecutionContext {
             };
         };
 
-        let location = program.source_map.runtime_to_syntax(&effect.location);
+        let location = process.source_map.runtime_to_syntax(&effect.location);
 
-        let function = program.functions.get_from_location(location).cloned();
+        let function = process.functions.get_from_location(location).cloned();
         let Some(function) = function else {
             return Self {
                 function,
