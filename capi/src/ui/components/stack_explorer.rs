@@ -8,10 +8,10 @@ use crate::{
 #[component]
 pub fn StackExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
     let data_stack = move || {
-        let program = process.get()?;
+        let process = process.get()?;
 
-        let previous = program.previous_data_stack;
-        let current = program.evaluator.data_stack().clone();
+        let previous = process.previous_data_stack;
+        let current = process.evaluator.data_stack().clone();
 
         let view = view! {
             <Panel class="h-32">
