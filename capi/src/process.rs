@@ -6,7 +6,8 @@ use crate::{
     breakpoints::Breakpoints,
     debugger::DebugEvent,
     runtime::{
-        self, Code, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState, Value
+        self, Code, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
+        EvaluatorState, Value,
     },
     source_map::SourceMap,
     syntax,
