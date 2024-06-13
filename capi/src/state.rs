@@ -16,7 +16,7 @@ use crate::{
 };
 
 pub struct RuntimeState {
-    pub program: Process,
+    pub process: Process,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
@@ -46,7 +46,7 @@ impl RuntimeState {
         });
 
         Self {
-            program,
+            process: program,
             input,
             tiles: [0; NUM_TILES],
             display: None,
@@ -64,7 +64,7 @@ impl RuntimeState {
         loop {
             match self.events_rx.try_recv() {
                 Ok(event) => {
-                    self.program.process_event(event);
+                    self.process.process_event(event);
                 }
                 Err(TryRecvError::Empty) => {
                     break;
@@ -77,8 +77,8 @@ impl RuntimeState {
             }
         }
 
-        while self.program.can_step() {
-            self.program.step();
+        while self.process.can_step() {
+            self.process.step();
 
             if let Some(ProgramEffect {
                 kind:
@@ -86,7 +86,7 @@ impl RuntimeState {
                         effect,
                     )),
                 ..
-            }) = self.program.effects.front()
+            }) = self.process.effects.front()
             {
                 match effect {
                     BuiltinEffect::Error(_) => {
@@ -96,23 +96,23 @@ impl RuntimeState {
                     }
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
-                        let value = self.program.memory.inner[address];
-                        self.program.push([value]);
+                        let value = self.process.memory.inner[address];
+                        self.process.push([value]);
 
-                        self.program.effects.pop_front();
+                        self.process.effects.pop_front();
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        self.program.memory.inner[address] = *value;
+                        self.process.memory.inner[address] = *value;
 
-                        self.program.effects.pop_front();
+                        self.process.effects.pop_front();
                     }
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
                         let value = *value;
 
-                        self.program.effects.pop_front();
+                        self.process.effects.pop_front();
 
                         display.set_tile(
                             x.into(),
@@ -125,7 +125,7 @@ impl RuntimeState {
                         // This effect means that the game is done rendering. Let's
                         // break out of this loop now, so we can do our part in that
                         // and return control to the host.
-                        self.program.effects.pop_front();
+                        self.process.effects.pop_front();
                         break;
                     }
                     BuiltinEffect::ReadInput => {
@@ -137,18 +137,18 @@ impl RuntimeState {
                             .try_into()
                             .unwrap();
 
-                        self.program.push([Value(input)]);
-                        self.program.effects.pop_front();
+                        self.process.push([Value(input)]);
+                        self.process.effects.pop_front();
                     }
                     BuiltinEffect::ReadRandom => {
-                        self.program.push([Value(random())]);
-                        self.program.effects.pop_front();
+                        self.process.push([Value(random())]);
+                        self.process.effects.pop_front();
                     }
                 }
             }
         }
 
-        self.updates_tx.send_if_relevant_change(&self.program);
+        self.updates_tx.send_if_relevant_change(&self.process);
 
         display.render(&self.tiles);
     }
