@@ -1,5 +1,5 @@
 use crate::{
-    process::{Process, ProgramEffect},
+    process::{Process, ProcessEffect},
     runtime,
     syntax::{self, ExpressionKind},
 };
@@ -9,7 +9,7 @@ pub struct Expression {
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
-    pub effect: Option<ProgramEffect>,
+    pub effect: Option<ProcessEffect>,
 }
 
 impl Expression {

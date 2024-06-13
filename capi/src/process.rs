@@ -25,7 +25,7 @@ pub struct Process {
     pub arguments: Vec<Value>,
 
     /// Effects that have not been handled yet
-    pub effects: VecDeque<ProgramEffect>,
+    pub effects: VecDeque<ProcessEffect>,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -80,7 +80,7 @@ impl Process {
     pub fn process_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::Continue { and_stop_at } => {
-                if let Some(ProgramEffect {
+                if let Some(ProcessEffect {
                     kind: ProgramEffectKind::Paused,
                     ..
                 }) = self.effects.front()
@@ -96,7 +96,7 @@ impl Process {
                 self.reset();
             }
             DebugEvent::Step => {
-                if let Some(ProgramEffect {
+                if let Some(ProcessEffect {
                     kind: ProgramEffectKind::Paused,
                     ..
                 }) = self.effects.front()
@@ -139,7 +139,7 @@ impl Process {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(EvaluatorEffect { effect, location }) => {
-                self.effects.push_back(ProgramEffect {
+                self.effects.push_back(ProcessEffect {
                     kind: ProgramEffectKind::Evaluator(effect),
                     location: location.clone(),
                 });
@@ -151,7 +151,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&just_executed)
         {
-            self.effects.push_back(ProgramEffect {
+            self.effects.push_back(ProcessEffect {
                 kind: ProgramEffectKind::Paused,
                 location: just_executed,
             });
@@ -178,7 +178,7 @@ impl ProcessState {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ProgramEffect {
+pub struct ProcessEffect {
     pub kind: ProgramEffectKind,
     pub location: runtime::Location,
 }
