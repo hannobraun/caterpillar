@@ -6,7 +6,7 @@ use crate::{
     breakpoints::Breakpoints,
     debugger::DebugEvent,
     runtime::{
-        self, Code, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
+        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
         EvaluatorState, Value,
     },
     source_map::SourceMap,
@@ -41,7 +41,7 @@ impl Process {
     pub fn new(
         functions: syntax::Functions,
         source_map: SourceMap,
-        code: Code,
+        code: runtime::Code,
         entry: runtime::Function,
         arguments: Vec<Value>,
     ) -> Self {
