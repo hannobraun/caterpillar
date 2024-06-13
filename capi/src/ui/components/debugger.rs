@@ -2,7 +2,7 @@ use leptos::{component, create_memo, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     debugger::ExecutionContext,
-    program::Process,
+    process::Process,
     ui::{
         components::{
             call_stack::CallStack, code_explorer::CodeExplorer,

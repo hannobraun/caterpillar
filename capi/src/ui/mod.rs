@@ -9,7 +9,7 @@ pub use self::{
 
 pub async fn handle_updates(
     mut updates: crate::updates::UpdatesRx,
-    set_process: leptos::WriteSignal<Option<crate::program::Process>>,
+    set_process: leptos::WriteSignal<Option<crate::process::Process>>,
 ) {
     use leptos::SignalSet;
 

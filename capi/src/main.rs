@@ -5,7 +5,7 @@ mod debugger;
 mod display;
 mod ffi;
 mod games;
-mod program;
+mod process;
 mod runtime;
 mod source_map;
 mod state;

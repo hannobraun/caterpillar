@@ -1,5 +1,5 @@
 use crate::{
-    program::{Process, ProgramState},
+    process::{Process, ProgramState},
     syntax::Function,
 };
 

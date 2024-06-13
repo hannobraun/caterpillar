@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    program::Process,
+    process::Process,
     runtime::{self, Instruction, Value},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},

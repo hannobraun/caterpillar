@@ -1,6 +1,6 @@
 use tokio::sync::watch;
 
-use crate::program::Process;
+use crate::process::Process;
 
 pub fn updates(process: &Process) -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = watch::channel(process.clone());

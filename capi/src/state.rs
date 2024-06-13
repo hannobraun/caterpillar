@@ -8,7 +8,7 @@ use crate::{
     display::Display,
     ffi,
     games::{self, snake::snake},
-    program::{Process, ProgramEffect, ProgramEffectKind},
+    process::{Process, ProgramEffect, ProgramEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui,

@@ -1,5 +1,5 @@
 use crate::{
-    program::{Process, ProgramEffect},
+    process::{Process, ProgramEffect},
     runtime,
     syntax::{self, ExpressionKind},
 };

@@ -1,7 +1,7 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    program::Process,
+    process::Process,
     ui::{
         components::{function::Function, panel::Panel},
         EventsTx,

@@ -3,7 +3,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{self, DebugEvent},
-    program::{Process, ProgramEffectKind},
+    process::{Process, ProgramEffectKind},
     syntax,
     ui::{send_event, EventsTx},
 };

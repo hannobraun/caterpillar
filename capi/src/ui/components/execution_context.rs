@@ -2,7 +2,7 @@ use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
     debugger::ExecutionContext,
-    program::Process,
+    process::Process,
     ui::{components::function::Function, EventsTx},
 };
 
