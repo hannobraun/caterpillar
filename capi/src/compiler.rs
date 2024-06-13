@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     process::Process,
-    runtime::{self, Code, Instruction, Value},
+    runtime::{self, Instruction, Value},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
     tiles::TILES_PER_AXIS,
@@ -11,7 +11,7 @@ use crate::{
 use super::syntax::ExpressionKind;
 
 pub fn compile(script: Script, entry: &str) -> Process {
-    let mut code = Code::default();
+    let mut code = runtime::Code::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
@@ -36,7 +36,7 @@ pub fn compile(script: Script, entry: &str) -> Process {
 
 struct Compiler<'r> {
     functions: &'r BTreeSet<String>,
-    code: &'r mut Code,
+    code: &'r mut runtime::Code,
     source_map: &'r mut SourceMap,
 }
 
