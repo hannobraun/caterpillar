@@ -1,16 +1,14 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    process::Process,
-    runtime::{self, Instruction, Value},
+    runtime::{self, Instruction},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
-    tiles::TILES_PER_AXIS,
 };
 
 use super::syntax::ExpressionKind;
 
-pub fn compile(script: &Script, entry: &str) -> Process {
+pub fn compile(script: &Script) -> (runtime::Code, SourceMap) {
     let mut code = runtime::Code::default();
     let mut source_map = SourceMap::default();
 
@@ -24,14 +22,7 @@ pub fn compile(script: &Script, entry: &str) -> Process {
         compiler.compile_function(name.clone(), args.clone(), syntax.clone());
     }
 
-    let entry = code.functions.get(entry).cloned().unwrap();
-    Process::new(
-        script.functions.clone(),
-        source_map,
-        code,
-        entry,
-        vec![Value(TILES_PER_AXIS as i8); 2],
-    )
+    (code, source_map)
 }
 
 struct Compiler<'r> {
