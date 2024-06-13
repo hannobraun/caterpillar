@@ -1,10 +1,10 @@
 use std::collections::BTreeMap;
 
-use crate::runtime;
+use super::Function;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
 )]
 pub struct Code {
-    pub functions: BTreeMap<String, runtime::Function>,
+    pub functions: BTreeMap<String, Function>,
 }
