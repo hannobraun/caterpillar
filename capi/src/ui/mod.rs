@@ -14,11 +14,11 @@ pub async fn handle_updates(
     use leptos::SignalSet;
 
     loop {
-        let program = match updates.changed().await {
+        let process = match updates.changed().await {
             Ok(()) => updates.borrow_and_update().clone(),
             Err(err) => panic!("{err}"),
         };
 
-        set_process.set(Some(program));
+        set_process.set(Some(process));
     }
 }
