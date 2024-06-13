@@ -21,7 +21,7 @@ pub fn Function(
             view! {
                 <li class="ml-8">
                     <Expression
-                        program=process
+                        process=process
                         expression=expression
                         events=events.clone() />
                 </li>
@@ -43,7 +43,7 @@ pub fn Function(
 
 #[component]
 pub fn Expression(
-    program: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Process>>,
     expression: syntax::Expression,
     events: EventsTx,
 ) -> impl IntoView {
@@ -52,7 +52,7 @@ pub fn Expression(
         // `Fn`, and that's no longer an a `leptos::IntoView`.
         let events = events.clone();
 
-        let program = program.get()?;
+        let program = process.get()?;
 
         let debugger_expression =
             debugger::Expression::new(&expression, &program);
