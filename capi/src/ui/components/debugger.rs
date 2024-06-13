@@ -37,7 +37,7 @@ pub fn Debugger(
         <MemoryExplorer
             program=program />
         <CodeExplorer
-            program=program
+            process=program
             events=events />
     }
 }

@@ -7,11 +7,11 @@ use crate::{
 
 #[component]
 pub fn CodeExplorer(
-    program: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
     let functions = move || {
-        let view = program
+        let view = process
             .get()?
             .functions
             .inner
@@ -19,7 +19,7 @@ pub fn CodeExplorer(
             .map(|f| {
                 view! {
                     <Function
-                        process=program
+                        process=process
                         function=f
                         events=events.clone() />
                 }
