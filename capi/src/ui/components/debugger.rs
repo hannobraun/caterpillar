@@ -19,7 +19,7 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     let execution_context = create_memo(move |prev| {
-        ExecutionContext::from_program(prev, program.get())
+        ExecutionContext::from_process(prev, program.get())
     });
 
     view! {
