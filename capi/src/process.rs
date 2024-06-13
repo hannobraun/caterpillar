@@ -81,7 +81,7 @@ impl Process {
         match event {
             DebugEvent::Continue { and_stop_at } => {
                 if let Some(ProcessEffect {
-                    kind: ProgramEffectKind::Paused,
+                    kind: ProcessEffectKind::Paused,
                     ..
                 }) = self.effects.front()
                 {
@@ -97,7 +97,7 @@ impl Process {
             }
             DebugEvent::Step => {
                 if let Some(ProcessEffect {
-                    kind: ProgramEffectKind::Paused,
+                    kind: ProcessEffectKind::Paused,
                     ..
                 }) = self.effects.front()
                 {
@@ -140,7 +140,7 @@ impl Process {
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(EvaluatorEffect { effect, location }) => {
                 self.effects.push_back(ProcessEffect {
-                    kind: ProgramEffectKind::Evaluator(effect),
+                    kind: ProcessEffectKind::Evaluator(effect),
                     location: location.clone(),
                 });
                 location
@@ -152,7 +152,7 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(&just_executed)
         {
             self.effects.push_back(ProcessEffect {
-                kind: ProgramEffectKind::Paused,
+                kind: ProcessEffectKind::Paused,
                 location: just_executed,
             });
         }
@@ -179,12 +179,12 @@ impl ProcessState {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProcessEffect {
-    pub kind: ProgramEffectKind,
+    pub kind: ProcessEffectKind,
     pub location: runtime::Location,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum ProgramEffectKind {
+pub enum ProcessEffectKind {
     Evaluator(EvaluatorEffectKind),
     Paused,
 }

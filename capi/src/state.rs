@@ -8,7 +8,7 @@ use crate::{
     display::Display,
     ffi,
     games::{self, snake::snake},
-    process::{Process, ProcessEffect, ProgramEffectKind},
+    process::{Process, ProcessEffect, ProcessEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui,
@@ -82,7 +82,7 @@ impl RuntimeState {
 
             if let Some(ProcessEffect {
                 kind:
-                    ProgramEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
+                    ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
                         effect,
                     )),
                 ..
