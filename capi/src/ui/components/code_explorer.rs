@@ -19,7 +19,7 @@ pub fn CodeExplorer(
             .map(|f| {
                 view! {
                     <Function
-                        program=program
+                        process=program
                         function=f
                         events=events.clone() />
                 }

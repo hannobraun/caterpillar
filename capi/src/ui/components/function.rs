@@ -10,7 +10,7 @@ use crate::{
 
 #[component]
 pub fn Function(
-    program: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Process>>,
     function: syntax::Function,
     events: EventsTx,
 ) -> impl IntoView {
@@ -21,7 +21,7 @@ pub fn Function(
             view! {
                 <li class="ml-8">
                     <Expression
-                        program=program
+                        program=process
                         expression=expression
                         events=events.clone() />
                 </li>

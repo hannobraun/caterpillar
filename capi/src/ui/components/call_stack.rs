@@ -32,7 +32,7 @@ pub fn CallStack(
 
                 Some(view! {
                     <Function
-                        program=process
+                        process=process
                         function=function
                         events=events.clone() />
                 })

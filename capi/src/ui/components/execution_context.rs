@@ -33,7 +33,7 @@ pub fn ExecutionContext(
             view! {
                 <div class=class>
                     <Function
-                        program=program
+                        process=program
                         function=function
                         events=events.clone() />
                 </div>
