@@ -13,12 +13,12 @@ pub struct Expression {
 }
 
 impl Expression {
-    pub fn new(expression: &syntax::Expression, program: &Process) -> Self {
+    pub fn new(expression: &syntax::Expression, process: &Process) -> Self {
         let location =
-            program.source_map.syntax_to_runtime(&expression.location);
+            process.source_map.syntax_to_runtime(&expression.location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
-            program.breakpoints.durable_breakpoint_at(location)
+            process.breakpoints.durable_breakpoint_at(location)
         } else {
             false
         };
@@ -26,9 +26,9 @@ impl Expression {
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
 
-        let effect = program.effects.front().and_then(|effect| {
+        let effect = process.effects.front().and_then(|effect| {
             let effect_location =
-                program.source_map.runtime_to_syntax(&effect.location);
+                process.source_map.runtime_to_syntax(&effect.location);
 
             if effect_location == expression.location {
                 Some(effect.clone())
@@ -38,7 +38,7 @@ impl Expression {
         });
 
         let is_on_call_stack = if let Some(location) = &location {
-            program.evaluator.stack().contains(location)
+            process.evaluator.stack().contains(location)
         } else {
             false
         };
