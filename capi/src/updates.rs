@@ -7,7 +7,7 @@ pub fn updates(process: &Process) -> (UpdatesTx, UpdatesRx) {
 
     let tx = UpdatesTx {
         inner: tx,
-        program_at_client: None,
+        process_at_client: None,
     };
 
     (tx, rx)
@@ -18,12 +18,12 @@ pub type UpdatesRx = watch::Receiver<Process>;
 #[derive(Clone)]
 pub struct UpdatesTx {
     inner: UpdatesTxInner,
-    program_at_client: Option<Process>,
+    process_at_client: Option<Process>,
 }
 
 impl UpdatesTx {
     pub fn send_if_relevant_change(&mut self, program: &Process) {
-        if let Some(program_at_client) = &self.program_at_client {
+        if let Some(program_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
@@ -43,12 +43,12 @@ impl UpdatesTx {
                 }
             }
         }
-        if self.program_at_client.as_ref() == Some(program) {
+        if self.process_at_client.as_ref() == Some(program) {
             // Client already has this program. Don't need to send it again.
             return;
         }
 
-        self.program_at_client = Some(program.clone());
+        self.process_at_client = Some(program.clone());
         self.inner.send(program.clone()).unwrap();
     }
 }
