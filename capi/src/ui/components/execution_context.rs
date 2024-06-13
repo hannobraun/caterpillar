@@ -10,7 +10,7 @@ use super::panel::Panel;
 
 #[component]
 pub fn ExecutionContext(
-    program: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Process>>,
     state: Memo<ExecutionContext>,
     events: EventsTx,
 ) -> impl IntoView {
@@ -33,7 +33,7 @@ pub fn ExecutionContext(
             view! {
                 <div class=class>
                     <Function
-                        process=program
+                        process=process
                         function=function
                         events=events.clone() />
                 </div>

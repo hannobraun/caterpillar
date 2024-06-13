@@ -29,7 +29,7 @@ pub fn Debugger(
             process=process
             events=events.clone() />
         <ExecutionContext
-            program=process
+            process=process
             state=execution_context
             events=events.clone() />
         <StackExplorer
