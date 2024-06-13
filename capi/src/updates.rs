@@ -1,8 +1,8 @@
 use tokio::sync::watch;
 
-use crate::program::Program;
+use crate::program::Process;
 
-pub fn updates(program: &Program) -> (UpdatesTx, UpdatesRx) {
+pub fn updates(program: &Process) -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = watch::channel(program.clone());
 
     let tx = UpdatesTx {
@@ -13,16 +13,16 @@ pub fn updates(program: &Program) -> (UpdatesTx, UpdatesRx) {
     (tx, rx)
 }
 
-pub type UpdatesRx = watch::Receiver<Program>;
+pub type UpdatesRx = watch::Receiver<Process>;
 
 #[derive(Clone)]
 pub struct UpdatesTx {
     inner: UpdatesTxInner,
-    program_at_client: Option<Program>,
+    program_at_client: Option<Process>,
 }
 
 impl UpdatesTx {
-    pub fn send_if_relevant_change(&mut self, program: &Program) {
+    pub fn send_if_relevant_change(&mut self, program: &Process) {
         if let Some(program_at_client) = &self.program_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
@@ -53,4 +53,4 @@ impl UpdatesTx {
     }
 }
 
-pub type UpdatesTxInner = watch::Sender<Program>;
+pub type UpdatesTxInner = watch::Sender<Process>;

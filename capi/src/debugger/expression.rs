@@ -1,5 +1,5 @@
 use crate::{
-    program::{Program, ProgramEffect},
+    program::{Process, ProgramEffect},
     runtime,
     syntax::{self, ExpressionKind},
 };
@@ -13,7 +13,7 @@ pub struct Expression {
 }
 
 impl Expression {
-    pub fn new(expression: &syntax::Expression, program: &Program) -> Self {
+    pub fn new(expression: &syntax::Expression, program: &Process) -> Self {
         let location =
             program.source_map.syntax_to_runtime(&expression.location);
 

@@ -2,7 +2,7 @@ use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
     debugger::ExecutionContext,
-    program::Program,
+    program::Process,
     ui::{components::function::Function, EventsTx},
 };
 
@@ -10,7 +10,7 @@ use super::panel::Panel;
 
 #[component]
 pub fn ExecutionContext(
-    program: ReadSignal<Option<Program>>,
+    program: ReadSignal<Option<Process>>,
     state: Memo<ExecutionContext>,
     events: EventsTx,
 ) -> impl IntoView {

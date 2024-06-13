@@ -1,12 +1,12 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    program::Program, runtime::DataStack, ui::components::panel::Panel,
+    program::Process, runtime::DataStack, ui::components::panel::Panel,
 };
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn StackExplorer(program: ReadSignal<Option<Process>>) -> impl IntoView {
     let data_stack = move || {
         let program = program.get()?;
 

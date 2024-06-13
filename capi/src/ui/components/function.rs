@@ -3,14 +3,14 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{self, DebugEvent},
-    program::{Program, ProgramEffectKind},
+    program::{Process, ProgramEffectKind},
     syntax,
     ui::{send_event, EventsTx},
 };
 
 #[component]
 pub fn Function(
-    program: ReadSignal<Option<Program>>,
+    program: ReadSignal<Option<Process>>,
     function: syntax::Function,
     events: EventsTx,
 ) -> impl IntoView {
@@ -43,7 +43,7 @@ pub fn Function(
 
 #[component]
 pub fn Expression(
-    program: ReadSignal<Option<Program>>,
+    program: ReadSignal<Option<Process>>,
     expression: syntax::Expression,
     events: EventsTx,
 ) -> impl IntoView {

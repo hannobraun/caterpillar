@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use crate::{
-    program::Program,
+    program::Process,
     runtime::{self, Instruction, Value},
     source_map::SourceMap,
     syntax::{self, Expression, Function, Script},
@@ -10,7 +10,7 @@ use crate::{
 
 use super::{code::Code, syntax::ExpressionKind};
 
-pub fn compile(script: Script, entry: &str) -> Program {
+pub fn compile(script: Script, entry: &str) -> Process {
     let mut code = Code::default();
     let mut source_map = SourceMap::default();
 
@@ -25,7 +25,7 @@ pub fn compile(script: Script, entry: &str) -> Program {
     }
 
     let entry = code.functions.get(entry).cloned().unwrap();
-    Program::new(
+    Process::new(
         script.functions,
         source_map,
         code,

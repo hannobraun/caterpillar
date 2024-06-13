@@ -1,10 +1,10 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
-use crate::{program::Program, ui::components::panel::Panel};
+use crate::{program::Process, ui::components::panel::Panel};
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn MemoryExplorer(program: ReadSignal<Option<Program>>) -> impl IntoView {
+pub fn MemoryExplorer(program: ReadSignal<Option<Process>>) -> impl IntoView {
     let memory = move || {
         let program = program.get()?;
 

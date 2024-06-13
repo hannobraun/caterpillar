@@ -1,7 +1,7 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    program::Program,
+    program::Process,
     ui::{
         components::{function::Function, panel::Panel},
         EventsTx,
@@ -10,7 +10,7 @@ use crate::{
 
 #[component]
 pub fn CallStack(
-    program: ReadSignal<Option<Program>>,
+    program: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
     let addresses = move || {

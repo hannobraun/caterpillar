@@ -15,7 +15,7 @@ use crate::{
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Program {
+pub struct Process {
     pub functions: syntax::Functions,
     pub source_map: SourceMap,
     pub breakpoints: Breakpoints,
@@ -38,7 +38,7 @@ pub struct Program {
     pub memory: Memory,
 }
 
-impl Program {
+impl Process {
     pub fn new(
         functions: syntax::Functions,
         source_map: SourceMap,

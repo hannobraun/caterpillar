@@ -2,7 +2,7 @@ use leptos::{component, create_memo, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     debugger::ExecutionContext,
-    program::Program,
+    program::Process,
     ui::{
         components::{
             call_stack::CallStack, code_explorer::CodeExplorer,
@@ -15,7 +15,7 @@ use crate::{
 
 #[component]
 pub fn Debugger(
-    program: ReadSignal<Option<Program>>,
+    program: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
     let execution_context = create_memo(move |prev| {

@@ -8,7 +8,7 @@ use crate::{
     display::Display,
     ffi,
     games::{self, snake::snake},
-    program::{Program, ProgramEffect, ProgramEffectKind},
+    program::{Process, ProgramEffect, ProgramEffectKind},
     runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui,
@@ -16,7 +16,7 @@ use crate::{
 };
 
 pub struct RuntimeState {
-    pub program: Program,
+    pub program: Process,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
