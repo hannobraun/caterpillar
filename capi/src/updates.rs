@@ -22,13 +22,13 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_if_relevant_change(&mut self, program: &Process) {
+    pub fn send_if_relevant_change(&mut self, process: &Process) {
         if let Some(program_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
             // determine, if we should send an update.
 
-            if program_at_client.can_step() && program.can_step() {
+            if program_at_client.can_step() && process.can_step() {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
                 //
@@ -36,20 +36,20 @@ impl UpdatesTx {
                 // sending an update for.
 
                 let breakpoints_unchanged =
-                    program_at_client.breakpoints == program.breakpoints;
+                    program_at_client.breakpoints == process.breakpoints;
 
                 if breakpoints_unchanged {
                     return;
                 }
             }
         }
-        if self.process_at_client.as_ref() == Some(program) {
+        if self.process_at_client.as_ref() == Some(process) {
             // Client already has this program. Don't need to send it again.
             return;
         }
 
-        self.process_at_client = Some(program.clone());
-        self.inner.send(program.clone()).unwrap();
+        self.process_at_client = Some(process.clone());
+        self.inner.send(process.clone()).unwrap();
     }
 }
 
