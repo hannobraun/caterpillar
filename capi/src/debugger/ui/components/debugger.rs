@@ -29,7 +29,7 @@ pub fn Debugger(
         let memory_explorer = process.get().map(|process| {
             view! {
                 <MemoryExplorer
-                    process=process />
+                    memory=process.memory />
             }
         });
 
