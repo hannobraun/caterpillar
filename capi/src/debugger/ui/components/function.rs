@@ -57,18 +57,18 @@ pub fn Expression(
 
         let process = process.get()?;
 
-        let debugger_expression = Expression::new(&expression, &process);
+        let expression = Expression::new(&expression, &process);
 
         let mut class_outer = String::from("py-1");
-        if debugger_expression.has_durable_breakpoint {
+        if expression.has_durable_breakpoint {
             class_outer.push_str(" bg-blue-300");
         }
 
         let mut class_inner = String::from("px-0.5");
-        if debugger_expression.is_comment {
+        if expression.is_comment {
             class_inner.push_str(" italic text-gray-500");
         }
-        if let Some(effect) = &debugger_expression.effect {
+        if let Some(effect) = &expression.effect {
             match effect.kind {
                 EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint) => {
                     class_inner.push_str(" bg-green-300")
@@ -76,17 +76,16 @@ pub fn Expression(
                 _ => class_inner.push_str(" bg-red-300"),
             }
         }
-        if debugger_expression.is_on_call_stack {
+        if expression.is_on_call_stack {
             class_inner.push_str(" font-bold");
         }
 
-        let data_location = debugger_expression
+        let data_location = expression
             .location
             .map(|location| ron::to_string(&location).unwrap());
 
-        let error = debugger_expression
-            .effect
-            .map(|effect| format!("{:?}", effect.kind));
+        let error =
+            expression.effect.map(|effect| format!("{:?}", effect.kind));
 
         let toggle_breakpoint = move |event: MouseEvent| {
             let event_target = event.target().unwrap();
@@ -104,7 +103,7 @@ pub fn Expression(
             ));
         };
 
-        let expression = format!("{}", debugger_expression.kind);
+        let expression = format!("{}", expression.kind);
 
         Some(view! {
             <span>
