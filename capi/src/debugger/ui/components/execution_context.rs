@@ -14,11 +14,9 @@ pub fn ExecutionContext(
 ) -> impl IntoView {
     let function = execution_context.function.map(|function| {
         view! {
-            <div>
-                <Function
-                    function=function
-                    events=events.clone() />
-            </div>
+            <Function
+                function=function
+                events=events.clone() />
         }
     });
     let message = execution_context.message.map(|message| {
