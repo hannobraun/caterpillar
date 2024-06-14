@@ -19,7 +19,7 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
     leptos::spawn_local(handle_updates(updates_rx, set_debugger));
 }
 
-pub async fn handle_updates(
+async fn handle_updates(
     mut updates: UpdatesRx,
     set_debugger: WriteSignal<Option<Debugger>>,
 ) {
