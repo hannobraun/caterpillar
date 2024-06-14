@@ -104,7 +104,7 @@ pub fn Expression(
             ));
         };
 
-        let expression = format!("{}", expression.kind);
+        let expression = format!("{}", debugger_expression.kind);
 
         Some(view! {
             <span>

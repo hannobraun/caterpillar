@@ -5,6 +5,7 @@ use crate::{
 };
 
 pub struct Expression {
+    pub kind: ExpressionKind,
     pub location: Option<runtime::Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
@@ -44,6 +45,7 @@ impl Expression {
         };
 
         Self {
+            kind: expression.kind.clone(),
             location,
             has_durable_breakpoint,
             is_comment,
