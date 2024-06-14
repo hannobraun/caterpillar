@@ -37,7 +37,6 @@ pub fn ActiveFunctions(
     view! {
         <Panel class="h-64">
             <div>
-                <h2>"Call stack:"</h2>
                 <ol>
                     {functions}
                 </ol>
