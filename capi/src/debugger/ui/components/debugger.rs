@@ -13,11 +13,11 @@ use crate::debugger::{
 
 #[component]
 pub fn Debugger(
-    debugger: ReadSignal<Option<Debugger>>,
+    debugger: ReadSignal<Debugger>,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let process = debugger.get().and_then(|debugger| debugger.process);
+        let process = debugger.get().process;
 
         let active_functions = ActiveFunctions::new(process.as_ref());
 
