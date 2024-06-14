@@ -83,13 +83,9 @@ pub fn Expression(
             .location
             .map(|location| ron::to_string(&location).unwrap());
 
-        let error = debugger_expression.effect.and_then(|effect| {
-            #[allow(irrefutable_let_patterns)] // will be removed in next commit
-            if let ProcessEffectKind::Evaluator(effect) = effect.kind {
-                Some(format!("{effect:?}"))
-            } else {
-                None
-            }
+        let error = debugger_expression.effect.map(|effect| {
+            let ProcessEffectKind::Evaluator(effect) = effect.kind;
+            format!("{effect:?}")
         });
 
         let toggle_breakpoint = move |event: MouseEvent| {
