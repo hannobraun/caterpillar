@@ -18,7 +18,7 @@ pub type Update = Process;
 
 #[derive(Clone)]
 pub struct UpdatesTx {
-    inner: UpdatesTxInner,
+    inner: watch::Sender<Update>,
     process_at_client: Option<Process>,
 }
 
@@ -53,5 +53,3 @@ impl UpdatesTx {
         self.inner.send(process.clone()).unwrap();
     }
 }
-
-pub type UpdatesTxInner = watch::Sender<Update>;
