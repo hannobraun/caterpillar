@@ -4,3 +4,9 @@ use crate::process::Process;
 pub struct Debugger {
     pub process: Option<Process>,
 }
+
+impl Debugger {
+    pub fn new() -> Self {
+        Self { process: None }
+    }
+}

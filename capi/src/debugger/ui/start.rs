@@ -8,7 +8,7 @@ use crate::{
 use super::EventsTx;
 
 pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
-    let mut debugger = Debugger { process: None };
+    let mut debugger = Debugger::new();
     let (debugger_read, debugger_write) = create_signal(debugger.clone());
 
     leptos::mount_to_body(move || {
