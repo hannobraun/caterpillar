@@ -1,4 +1,4 @@
-use leptos::{component, create_memo, view, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     debugger::{
@@ -21,8 +21,7 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let execution_context =
-            create_memo(move |_| ExecutionContext::from_process(process.get()));
+        let execution_context = ExecutionContext::from_process(process.get());
 
         view! {
             <div>

@@ -1,4 +1,4 @@
-use leptos::{component, view, IntoView, Memo, SignalGet};
+use leptos::{component, view, IntoView};
 
 use crate::debugger::{
     model::ExecutionContext,
@@ -9,7 +9,7 @@ use super::panel::Panel;
 
 #[component]
 pub fn ExecutionContext(
-    execution_context: Memo<ExecutionContext>,
+    execution_context: ExecutionContext,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
@@ -18,8 +18,7 @@ pub fn ExecutionContext(
         // some magic for the component with children here, and that's what's
         // causing it.
         let events = events.clone();
-
-        let execution_context = execution_context.get();
+        let execution_context = execution_context.clone();
 
         let function = execution_context.function.map(|function| {
             let class = if execution_context.message.is_some() {
