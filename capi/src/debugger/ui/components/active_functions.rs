@@ -22,7 +22,7 @@ pub fn ActiveFunctions(
         let active_functions = ActiveFunctions::new(&process);
 
         let view = active_functions
-            .inner
+            .functions
             .into_iter()
             .map(|function| {
                 view! {

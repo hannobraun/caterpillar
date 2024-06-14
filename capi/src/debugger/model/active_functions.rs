@@ -3,7 +3,7 @@ use crate::process::Process;
 use super::Function;
 
 pub struct ActiveFunctions {
-    pub inner: Vec<Function>,
+    pub functions: Vec<Function>,
 }
 
 impl ActiveFunctions {
@@ -24,6 +24,6 @@ impl ActiveFunctions {
             })
             .collect();
 
-        Self { inner }
+        Self { functions: inner }
     }
 }
