@@ -24,10 +24,10 @@ pub fn ExecutionContext(
         let events = events.clone();
 
         let process = process.get()?;
-        let state = execution_context.get();
+        let execution_context = execution_context.get();
 
-        let function = state.function.map(|function| {
-            let class = if state.message.is_some() {
+        let function = execution_context.function.map(|function| {
+            let class = if execution_context.message.is_some() {
                 "blur-sm"
             } else {
                 ""
@@ -43,7 +43,7 @@ pub fn ExecutionContext(
                 </div>
             }
         });
-        let message = state.message.map(|message| {
+        let message = execution_context.message.map(|message| {
             view! {
                 <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
                     {message}
