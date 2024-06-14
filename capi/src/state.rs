@@ -28,7 +28,7 @@ impl RuntimeState {
         let process = games::build(snake);
 
         let input = Input::default();
-        let (updates_tx, updates_rx) = updates(&process);
+        let (updates_tx, updates_rx) = updates();
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         ui::start(updates_rx, events_tx);

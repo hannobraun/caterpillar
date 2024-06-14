@@ -2,7 +2,7 @@ use tokio::sync::mpsc;
 
 use crate::process::Process;
 
-pub fn updates(_: &Process) -> (UpdatesTx, UpdatesRx) {
+pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
 
     let tx = UpdatesTx {
