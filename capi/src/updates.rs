@@ -14,7 +14,10 @@ pub fn updates() -> (UpdatesTx, UpdatesRx) {
 }
 
 pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
-pub type Update = Process;
+
+pub enum Update {
+    Process(Process),
+}
 
 #[derive(Clone)]
 pub struct UpdatesTx {
@@ -50,6 +53,6 @@ impl UpdatesTx {
         }
 
         self.process_at_client = Some(process.clone());
-        self.inner.send(process.clone()).unwrap();
+        self.inner.send(Update::Process(process.clone())).unwrap();
     }
 }

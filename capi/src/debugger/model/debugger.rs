@@ -19,7 +19,7 @@ impl Debugger {
     }
 
     pub fn on_update(&mut self, update: Update) {
-        let process = update;
+        let Update::Process(process) = update;
 
         self.active_functions = ActiveFunctions::new(Some(&process));
         self.data_stacks = Some([
