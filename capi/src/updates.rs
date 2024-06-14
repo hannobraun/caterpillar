@@ -13,7 +13,8 @@ pub fn updates(process: &Process) -> (UpdatesTx, UpdatesRx) {
     (tx, rx)
 }
 
-pub type UpdatesRx = watch::Receiver<Process>;
+pub type UpdatesRx = watch::Receiver<Update>;
+pub type Update = Process;
 
 #[derive(Clone)]
 pub struct UpdatesTx {
@@ -53,4 +54,4 @@ impl UpdatesTx {
     }
 }
 
-pub type UpdatesTxInner = watch::Sender<Process>;
+pub type UpdatesTxInner = watch::Sender<Update>;
