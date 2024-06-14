@@ -5,8 +5,8 @@ use crate::{
     process::Process,
     ui::{
         components::{
-            call_stack::CallStack, code_explorer::CodeExplorer,
-            control_panel::ControlPanel, execution_context::ExecutionContext,
+            call_stack::CallStack, control_panel::ControlPanel,
+            execution_context::ExecutionContext,
             memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
         },
         EventsTx,
@@ -36,8 +36,5 @@ pub fn Debugger(
             process=process />
         <MemoryExplorer
             process=process />
-        <CodeExplorer
-            process=process
-            events=events />
     }
 }
