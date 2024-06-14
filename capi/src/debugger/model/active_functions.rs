@@ -8,7 +8,7 @@ pub struct ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(process: &Process) -> Self {
-        let inner = process
+        let functions = process
             .evaluator
             .stack()
             .iter()
@@ -24,6 +24,6 @@ impl ActiveFunctions {
             })
             .collect();
 
-        Self { functions: inner }
+        Self { functions }
     }
 }
