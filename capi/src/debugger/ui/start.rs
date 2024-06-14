@@ -19,13 +19,10 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
 
     leptos::spawn_local(async move {
         loop {
-            let process = match updates_rx.recv().await {
-                Some(process) => process,
-                None => {
-                    // This means the other end has hung up. Nothing we can do,
-                    // except end this task too.
-                    break;
-                }
+            let Some(process) = updates_rx.recv().await else {
+                // This means the other end has hung up. Nothing we can do,
+                // except end this task too.
+                break;
             };
 
             debugger.update_from_process(process);
