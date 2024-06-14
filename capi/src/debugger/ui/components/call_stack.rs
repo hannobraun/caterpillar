@@ -19,7 +19,7 @@ pub fn CallStack(
     let functions = move || {
         let process = process.get()?;
 
-        let view = process
+        let functions = process
             .evaluator
             .stack()
             .iter()
@@ -30,13 +30,19 @@ pub fn CallStack(
                     .functions
                     .get_from_location(syntax_location)
                     .cloned()?;
-                let function = Function::new(function, &process);
 
-                Some(view! {
+                Some(Function::new(function, &process))
+            })
+            .collect::<Vec<_>>();
+
+        let view = functions
+            .into_iter()
+            .map(|function| {
+                view! {
                     <Function
                         function=function
                         events=events.clone() />
-                })
+                }
             })
             .collect_view();
 
