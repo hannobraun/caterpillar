@@ -13,7 +13,7 @@ use super::panel::Panel;
 #[component]
 pub fn ExecutionContext(
     process: ReadSignal<Option<Process>>,
-    state: Memo<ExecutionContext>,
+    execution_context: Memo<ExecutionContext>,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
@@ -24,7 +24,7 @@ pub fn ExecutionContext(
         let events = events.clone();
 
         let process = process.get()?;
-        let state = state.get();
+        let state = execution_context.get();
 
         let function = state.function.map(|function| {
             let class = if state.message.is_some() {
