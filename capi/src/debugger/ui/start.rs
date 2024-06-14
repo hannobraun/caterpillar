@@ -21,7 +21,11 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
         loop {
             let process = match updates_rx.changed().await {
                 Ok(()) => updates_rx.borrow_and_update().clone(),
-                Err(err) => panic!("{err}"),
+                Err(_) => {
+                    // This means the other end has hung up. Nothing we can do,
+                    // except end this task too.
+                    break;
+                }
             };
 
             debugger.update_from_process(process);
