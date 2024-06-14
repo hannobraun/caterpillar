@@ -23,18 +23,20 @@ pub fn Debugger(
     });
 
     view! {
-        <ControlPanel
-            events=events.clone() />
-        <CallStack
-            process=process
-            events=events.clone() />
-        <ExecutionContext
-            process=process
-            state=execution_context
-            events=events.clone() />
-        <StackExplorer
-            process=process />
-        <MemoryExplorer
-            process=process />
+        <div>
+            <ControlPanel
+                events=events.clone() />
+            <CallStack
+                process=process
+                events=events.clone() />
+            <ExecutionContext
+                process=process
+                state=execution_context
+                events=events.clone() />
+            <StackExplorer
+                process=process />
+            <MemoryExplorer
+                process=process />
+        </div>
     }
 }
