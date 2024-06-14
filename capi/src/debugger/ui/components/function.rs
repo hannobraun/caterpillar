@@ -25,7 +25,7 @@ pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
         })
         .collect_view();
 
-    Some(view! {
+    view! {
         <div class="m-2 mb-4">
             <div class="font-bold">
                 {function.name}:{'\n'}
@@ -34,7 +34,7 @@ pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
                 {expressions}
             </ol>
         </div>
-    })
+    }
 }
 
 #[component]
