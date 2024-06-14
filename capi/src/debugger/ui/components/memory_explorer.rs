@@ -1,12 +1,13 @@
-use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, CollectView, IntoView};
 
 use crate::{debugger::ui::components::panel::Panel, process::Process};
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn MemoryExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
+pub fn MemoryExplorer(process: Option<Process>) -> impl IntoView {
     let memory = move || {
-        let process = process.get()?;
+        let process = process.clone();
+        let process = process?;
 
         let mut values = process.memory.inner.into_iter().peekable();
         let values = values.by_ref();

@@ -28,7 +28,7 @@ pub fn Debugger(
         };
         let memory_explorer = view! {
             <MemoryExplorer
-                process=process />
+                process=process.get() />
         };
 
         view! {
