@@ -14,16 +14,25 @@ pub fn ActiveFunctions(
     events: EventsTx,
 ) -> impl IntoView {
     let functions = match active_functions {
-        ActiveFunctions::Functions { functions } => functions
-            .into_iter()
-            .map(|function| {
-                view! {
-                    <Function
-                        function=function
-                        events=events.clone() />
-                }
-            })
-            .collect_view(),
+        ActiveFunctions::Functions { functions } => {
+            let functions = functions
+                .into_iter()
+                .map(|function| {
+                    view! {
+                        <Function
+                            function=function
+                            events=events.clone() />
+                    }
+                })
+                .collect_view();
+
+            view! {
+                <ol>
+                    {functions}
+                </ol>
+            }
+            .into_view()
+        },
         ActiveFunctions::Message { message } => {
             view! {
                 <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
@@ -36,9 +45,7 @@ pub fn ActiveFunctions(
 
     view! {
         <Panel class="h-80">
-            <ol>
-                {functions}
-            </ol>
+            {functions}
         </Panel>
     }
 }
