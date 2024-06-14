@@ -1,9 +1,12 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    debugger::ui::{
-        components::{function::Function, panel::Panel},
-        EventsTx,
+    debugger::{
+        model::Function,
+        ui::{
+            components::{function::Function, panel::Panel},
+            EventsTx,
+        },
     },
     process::Process,
 };
@@ -29,10 +32,10 @@ pub fn CallStack(
                     .functions
                     .get_from_location(syntax_location)
                     .cloned()?;
+                let function = Function::new(function, &process.get()?);
 
                 Some(view! {
                     <Function
-                        process=process
                         function=function
                         events=events.clone() />
                 })

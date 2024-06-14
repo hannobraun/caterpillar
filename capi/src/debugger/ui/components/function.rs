@@ -1,4 +1,4 @@
-use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, CollectView, IntoView};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
@@ -6,23 +6,13 @@ use crate::{
         model::{DebugEvent, Expression, Function},
         ui::{send_event, EventsTx},
     },
-    process::Process,
     runtime::{BuiltinEffect, EvaluatorEffectKind},
-    syntax,
 };
 
 #[component]
-pub fn Function(
-    process: ReadSignal<Option<Process>>,
-    function: syntax::Function,
-    events: EventsTx,
-) -> impl IntoView {
+pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
     move || {
         let function = function.clone();
-
-        let process = process.get()?;
-
-        let function = Function::new(function, &process);
 
         let expressions = function
             .expressions

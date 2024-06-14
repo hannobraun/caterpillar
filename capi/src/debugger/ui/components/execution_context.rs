@@ -2,7 +2,7 @@ use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
     debugger::{
-        model::ExecutionContext,
+        model::{ExecutionContext, Function},
         ui::{components::function::Function, EventsTx},
     },
     process::Process,
@@ -23,6 +23,7 @@ pub fn ExecutionContext(
         // causing it.
         let events = events.clone();
 
+        let process = process.get()?;
         let state = state.get();
 
         let function = state.function.map(|function| {
@@ -32,10 +33,11 @@ pub fn ExecutionContext(
                 ""
             };
 
+            let function = Function::new(function, &process);
+
             view! {
                 <div class=class>
                     <Function
-                        process=process
                         function=function
                         events=events.clone() />
                 </div>
