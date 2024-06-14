@@ -13,7 +13,7 @@ pub fn ActiveFunctions(
     active_functions: ActiveFunctions,
     events: EventsTx,
 ) -> impl IntoView {
-    let functions = match active_functions {
+    let active_functions = match active_functions {
         ActiveFunctions::Functions { functions } => {
             let functions = functions
                 .into_iter()
@@ -45,7 +45,7 @@ pub fn ActiveFunctions(
 
     view! {
         <Panel class="h-80">
-            {functions}
+            {active_functions}
         </Panel>
     }
 }
