@@ -5,11 +5,11 @@ use crate::{debugger::ui::components::debugger::Debugger, updates::UpdatesRx};
 use super::{handle_updates, EventsTx};
 
 pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
-    let (process, set_debugger) = create_signal(None);
+    let (debugger, set_debugger) = create_signal(None);
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger process=process events=events_tx />
+            <Debugger process=debugger events=events_tx />
         }
     });
 
