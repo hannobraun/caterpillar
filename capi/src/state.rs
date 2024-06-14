@@ -149,7 +149,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.send_if_relevant_change(&self.process);
+        self.updates_tx.send_if_relevant(&self.process);
 
         display.render(&self.tiles);
     }

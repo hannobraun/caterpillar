@@ -26,7 +26,7 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_if_relevant_change(&mut self, process: &Process) {
+    pub fn send_if_relevant(&mut self, process: &Process) {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
