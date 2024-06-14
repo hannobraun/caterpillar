@@ -24,7 +24,7 @@ pub fn Debugger(
 
         let stack_explorer = view! {
             <StackExplorer
-                process=process />
+                process=process.get() />
         };
         let memory_explorer = process.get().map(|process| {
             view! {

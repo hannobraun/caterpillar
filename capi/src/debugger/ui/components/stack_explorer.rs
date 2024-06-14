@@ -1,4 +1,4 @@
-use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, CollectView, IntoView};
 
 use crate::{
     debugger::ui::components::panel::Panel, process::Process,
@@ -7,9 +7,9 @@ use crate::{
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(process: ReadSignal<Option<Process>>) -> impl IntoView {
+pub fn StackExplorer(process: Option<Process>) -> impl IntoView {
     let data_stack = move || {
-        let process = process.get()?;
+        let process = process.clone()?;
 
         let previous = process.previous_data_stack;
         let current = process.evaluator.data_stack().clone();
