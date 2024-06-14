@@ -1,4 +1,4 @@
-use leptos::{create_signal, SignalSet, WriteSignal};
+use leptos::{create_signal, SignalSet};
 
 use crate::{
     debugger::{model::Debugger, ui::components::debugger::Debugger},
@@ -17,24 +17,19 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
     });
 
     leptos::spawn_local(async move {
-        handle_updates(updates_rx, debugger_write).await
+        let mut updates = updates_rx;
+
+        let mut debugger = Debugger { process: None };
+
+        loop {
+            let process = match updates.changed().await {
+                Ok(()) => updates.borrow_and_update().clone(),
+                Err(err) => panic!("{err}"),
+            };
+
+            debugger.process = Some(process);
+
+            debugger_write.set(Some(debugger.clone()));
+        }
     });
-}
-
-async fn handle_updates(
-    mut updates: UpdatesRx,
-    debugger_write: WriteSignal<Option<Debugger>>,
-) {
-    let mut debugger = Debugger { process: None };
-
-    loop {
-        let process = match updates.changed().await {
-            Ok(()) => updates.borrow_and_update().clone(),
-            Err(err) => panic!("{err}"),
-        };
-
-        debugger.process = Some(process);
-
-        debugger_write.set(Some(debugger.clone()));
-    }
 }
