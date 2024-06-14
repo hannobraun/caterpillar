@@ -18,7 +18,9 @@ impl Debugger {
         }
     }
 
-    pub fn update_from_process(&mut self, process: Update) {
+    pub fn update_from_process(&mut self, update: Update) {
+        let process = update;
+
         self.active_functions = ActiveFunctions::new(Some(&process));
         self.data_stacks = Some([
             process.previous_data_stack,
