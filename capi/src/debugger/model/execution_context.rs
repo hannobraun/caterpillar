@@ -1,7 +1,6 @@
-use crate::{
-    process::{Process, ProcessState},
-    syntax::Function,
-};
+use crate::process::{Process, ProcessState};
+
+use super::Function;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct ExecutionContext {
@@ -49,7 +48,11 @@ impl ExecutionContext {
 
         let location = process.source_map.runtime_to_syntax(&effect.location);
 
-        let function = process.functions.get_from_location(location).cloned();
+        let function = process
+            .functions
+            .get_from_location(location)
+            .cloned()
+            .map(|function| Function::new(function, &process));
         let Some(function) = function else {
             return Self {
                 function,

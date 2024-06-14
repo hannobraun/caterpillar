@@ -32,7 +32,6 @@ pub fn Debugger(
                 process=process
                 events=events.clone() />
             <ExecutionContext
-                process=process
                 execution_context=execution_context
                 events=events.clone() />
             <StackExplorer

@@ -1,18 +1,14 @@
-use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
+use leptos::{component, view, IntoView, Memo, SignalGet};
 
-use crate::{
-    debugger::{
-        model::{ExecutionContext, Function},
-        ui::{components::function::Function, EventsTx},
-    },
-    process::Process,
+use crate::debugger::{
+    model::ExecutionContext,
+    ui::{components::function::Function, EventsTx},
 };
 
 use super::panel::Panel;
 
 #[component]
 pub fn ExecutionContext(
-    process: ReadSignal<Option<Process>>,
     execution_context: Memo<ExecutionContext>,
     events: EventsTx,
 ) -> impl IntoView {
@@ -23,7 +19,6 @@ pub fn ExecutionContext(
         // causing it.
         let events = events.clone();
 
-        let process = process.get()?;
         let execution_context = execution_context.get();
 
         let function = execution_context.function.map(|function| {
@@ -32,8 +27,6 @@ pub fn ExecutionContext(
             } else {
                 ""
             };
-
-            let function = Function::new(function, &process);
 
             view! {
                 <div class=class>
