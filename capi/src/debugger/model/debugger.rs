@@ -1,7 +1,4 @@
-use crate::{
-    process::{Memory, Process},
-    runtime::DataStack,
-};
+use crate::{process::Memory, runtime::DataStack, updates::Update};
 
 use super::ActiveFunctions;
 
@@ -21,7 +18,7 @@ impl Debugger {
         }
     }
 
-    pub fn update_from_process(&mut self, process: Process) {
+    pub fn update_from_process(&mut self, process: Update) {
         self.active_functions = ActiveFunctions::new(Some(&process));
         self.data_stacks = Some([
             process.previous_data_stack,
