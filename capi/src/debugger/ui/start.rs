@@ -8,11 +8,11 @@ use crate::{
 use super::EventsTx;
 
 pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
-    let (debugger, debugger_write) = create_signal(None);
+    let (debugger_read, debugger_write) = create_signal(None);
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger debugger=debugger events=events_tx />
+            <Debugger debugger=debugger_read events=events_tx />
         }
     });
 
