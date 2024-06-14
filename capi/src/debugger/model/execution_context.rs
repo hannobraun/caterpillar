@@ -20,7 +20,7 @@ pub struct ExecutionContext {
 
 impl ExecutionContext {
     pub fn from_process(prev: Option<&Self>, process: Option<Process>) -> Self {
-        let function = prev.and_then(|prev: &Self| prev.function.clone());
+        let function = prev.and_then(|prev| prev.function.clone());
 
         let Some(process) = process else {
             return Self {
