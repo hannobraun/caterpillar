@@ -18,7 +18,6 @@ pub fn Debugger(
 ) -> impl IntoView {
     move || {
         let debugger = debugger.get();
-        let process = debugger.process;
 
         let stack_explorer = debugger.data_stacks.map(|[previous, current]| {
             view! {
@@ -27,10 +26,10 @@ pub fn Debugger(
                     current=current />
             }
         });
-        let memory_explorer = process.map(|process| {
+        let memory_explorer = debugger.memory.map(|memory| {
             view! {
                 <MemoryExplorer
-                    memory=process.memory />
+                    memory=memory />
             }
         });
 
