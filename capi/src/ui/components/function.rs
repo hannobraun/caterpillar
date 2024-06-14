@@ -85,7 +85,7 @@ pub fn Expression(
 
         let error = debugger_expression.effect.map(|effect| {
             let effect = effect.kind;
-            format!("{effect:?}")
+            format!("{:?}", effect)
         });
 
         let toggle_breakpoint = move |event: MouseEvent| {
