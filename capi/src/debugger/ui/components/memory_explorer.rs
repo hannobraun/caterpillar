@@ -2,7 +2,6 @@ use leptos::{component, view, CollectView, IntoView};
 
 use crate::{debugger::ui::components::panel::Panel, process::Memory};
 
-#[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
 pub fn MemoryExplorer(memory: Memory) -> impl IntoView {
     let mut values = memory.inner.into_iter().peekable();
