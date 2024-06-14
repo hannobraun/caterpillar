@@ -20,15 +20,17 @@ pub fn Function(
     let expressions = function
         .syntax
         .into_iter()
-        .map(|expression| {
-            view! {
+        .filter_map(|expression| {
+            let process = process.get()?;
+            let expression = Expression::new(&expression, &process);
+
+            Some(view! {
                 <li class="ml-8">
                     <Expression
-                        process=process
                         expression=expression
                         events=events.clone() />
                 </li>
-            }
+            })
         })
         .collect_view();
 
@@ -45,19 +47,12 @@ pub fn Function(
 }
 
 #[component]
-pub fn Expression(
-    process: ReadSignal<Option<Process>>,
-    expression: syntax::Expression,
-    events: EventsTx,
-) -> impl IntoView {
+pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
     move || {
         // Without this line, this closure turns into an `FnOnce` instead of an
         // `Fn`, and that's no longer an a `leptos::IntoView`.
         let events = events.clone();
-
-        let process = process.get()?;
-
-        let expression = Expression::new(&expression, &process);
+        let expression = expression.clone();
 
         let mut class_outer = String::from("py-1");
         if expression.has_durable_breakpoint {
