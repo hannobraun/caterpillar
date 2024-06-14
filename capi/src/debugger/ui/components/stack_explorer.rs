@@ -14,7 +14,7 @@ pub fn StackExplorer(process: Process) -> impl IntoView {
         let previous = process.previous_data_stack;
         let current = process.evaluator.data_stack().clone();
 
-        let view = view! {
+        view! {
             <Panel class="h-32">
                 <div>
                     <p>
@@ -29,9 +29,7 @@ pub fn StackExplorer(process: Process) -> impl IntoView {
                     <DataStack data_stack=current />
                 </div>
             </Panel>
-        };
-
-        Some(view)
+        }
     };
 
     view! {
