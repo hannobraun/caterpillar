@@ -1,7 +1,6 @@
 pub mod active_functions;
 pub mod control_panel;
 pub mod debugger;
-pub mod execution_context;
 pub mod function;
 pub mod memory_explorer;
 pub mod panel;
