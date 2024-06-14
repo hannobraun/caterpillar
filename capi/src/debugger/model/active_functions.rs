@@ -4,10 +4,17 @@ use super::Function;
 
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
+    Message { message: &'static str },
 }
 
 impl ActiveFunctions {
-    pub fn new(process: &Process) -> Self {
+    pub fn new(process: Option<&Process>) -> Self {
+        let Some(process) = process else {
+            return Self::Message {
+                message: "No process available.",
+            };
+        };
+
         let functions = process
             .evaluator
             .stack()

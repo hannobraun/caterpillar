@@ -17,21 +17,28 @@ pub fn ActiveFunctions(
     events: EventsTx,
 ) -> impl IntoView {
     let functions = move || {
-        let process = process.get()?;
+        let process = process.get();
 
-        let ActiveFunctions::Functions { functions } =
-            ActiveFunctions::new(&process);
-
-        let view = functions
-            .into_iter()
-            .map(|function| {
+        let view = match ActiveFunctions::new(process.as_ref()) {
+            ActiveFunctions::Functions { functions } => functions
+                .into_iter()
+                .map(|function| {
+                    view! {
+                        <Function
+                            function=function
+                            events=events.clone() />
+                    }
+                })
+                .collect_view(),
+            ActiveFunctions::Message { message } => {
                 view! {
-                    <Function
-                        function=function
-                        events=events.clone() />
+                    <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
+                        {message}
+                    </p>
                 }
-            })
-            .collect_view();
+                .into_view()
+            }
+        };
 
         Some(view)
     };
