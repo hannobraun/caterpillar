@@ -46,7 +46,7 @@ impl Expression {
         };
 
         Self {
-            kind: expression.kind.clone(),
+            kind: expression.kind,
             location,
             has_durable_breakpoint,
             is_comment,
