@@ -3,7 +3,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{
-        model::{DebugEvent, Expression},
+        model::{DebugEvent, Expression, Function},
         ui::{send_event, EventsTx},
     },
     process::Process,
@@ -22,13 +22,17 @@ pub fn Function(
 
         let process = process.get()?;
 
-        let expressions = function
-            .syntax
-            .into_iter()
-            .map(|expression| Expression::new(expression, &process))
-            .collect::<Vec<_>>();
+        let function = Function {
+            name: function.name,
+            expressions: function
+                .syntax
+                .into_iter()
+                .map(|expression| Expression::new(expression, &process))
+                .collect::<Vec<_>>(),
+        };
 
-        let expressions = expressions
+        let expressions = function
+            .expressions
             .into_iter()
             .map(|expression| {
                 view! {
