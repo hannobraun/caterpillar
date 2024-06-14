@@ -19,9 +19,9 @@ pub fn CallStack(
     let functions = move || {
         let process = process.get()?;
 
-        let functions = ActiveFunctions::new(&process);
+        let active_functions = ActiveFunctions::new(&process);
 
-        let view = functions
+        let view = active_functions
             .inner
             .into_iter()
             .map(|function| {
