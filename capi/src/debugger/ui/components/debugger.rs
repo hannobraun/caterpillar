@@ -2,7 +2,7 @@ use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     debugger::{
-        model::ExecutionContext,
+        model::{ActiveFunctions, ExecutionContext},
         ui::{
             components::{
                 active_functions::ActiveFunctions, control_panel::ControlPanel,
@@ -22,13 +22,14 @@ pub fn Debugger(
 ) -> impl IntoView {
     move || {
         let execution_context = ExecutionContext::from_process(process.get());
+        let active_functions = ActiveFunctions::new(process.get().as_ref());
 
         view! {
             <div>
                 <ControlPanel
                     events=events.clone() />
                 <ActiveFunctions
-                    process=process
+                    active_functions=active_functions
                     events=events.clone() />
                 <ExecutionContext
                     execution_context=execution_context

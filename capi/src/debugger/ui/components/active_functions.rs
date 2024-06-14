@@ -1,25 +1,22 @@
-use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
+use leptos::{component, view, CollectView, IntoView};
 
-use crate::{
-    debugger::{
-        model::ActiveFunctions,
-        ui::{
-            components::{function::Function, panel::Panel},
-            EventsTx,
-        },
+use crate::debugger::{
+    model::ActiveFunctions,
+    ui::{
+        components::{function::Function, panel::Panel},
+        EventsTx,
     },
-    process::Process,
 };
 
 #[component]
 pub fn ActiveFunctions(
-    process: ReadSignal<Option<Process>>,
+    active_functions: ActiveFunctions,
     events: EventsTx,
 ) -> impl IntoView {
     let functions = move || {
-        let process = process.get();
+        let active_functions = active_functions.clone();
 
-        match ActiveFunctions::new(process.as_ref()) {
+        match active_functions {
             ActiveFunctions::Functions { functions } => functions
                 .into_iter()
                 .map(|function| {
