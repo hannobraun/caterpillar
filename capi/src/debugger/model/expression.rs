@@ -4,7 +4,7 @@ use crate::{
     syntax::{self, ExpressionKind},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
     pub kind: ExpressionKind,
     pub location: Option<runtime::Location>,
