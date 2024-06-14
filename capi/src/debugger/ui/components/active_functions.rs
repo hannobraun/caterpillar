@@ -19,7 +19,7 @@ pub fn ActiveFunctions(
     let functions = move || {
         let process = process.get();
 
-        let view = match ActiveFunctions::new(process.as_ref()) {
+        match ActiveFunctions::new(process.as_ref()) {
             ActiveFunctions::Functions { functions } => functions
                 .into_iter()
                 .map(|function| {
@@ -38,9 +38,7 @@ pub fn ActiveFunctions(
                 }
                 .into_view()
             }
-        };
-
-        Some(view)
+        }
     };
 
     view! {
