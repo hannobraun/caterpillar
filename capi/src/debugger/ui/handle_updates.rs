@@ -1,10 +1,10 @@
 use leptos::{SignalSet, WriteSignal};
 
-use crate::{process::Process, updates::UpdatesRx};
+use crate::{debugger::model::Debugger, updates::UpdatesRx};
 
 pub async fn handle_updates(
     mut updates: UpdatesRx,
-    set_process: WriteSignal<Option<Process>>,
+    set_process: WriteSignal<Option<Debugger>>,
 ) {
     loop {
         let process = match updates.changed().await {
@@ -12,6 +12,8 @@ pub async fn handle_updates(
             Err(err) => panic!("{err}"),
         };
 
-        set_process.set(Some(process));
+        let debugger = Debugger { process };
+
+        set_process.set(Some(debugger));
     }
 }

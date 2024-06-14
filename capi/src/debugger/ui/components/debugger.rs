@@ -1,26 +1,23 @@
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
-use crate::{
-    debugger::{
-        model::ActiveFunctions,
-        ui::{
-            components::{
-                active_functions::ActiveFunctions, control_panel::ControlPanel,
-                memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
-            },
-            EventsTx,
+use crate::debugger::{
+    model::{ActiveFunctions, Debugger},
+    ui::{
+        components::{
+            active_functions::ActiveFunctions, control_panel::ControlPanel,
+            memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
         },
+        EventsTx,
     },
-    process::Process,
 };
 
 #[component]
 pub fn Debugger(
-    process: ReadSignal<Option<Process>>,
+    process: ReadSignal<Option<Debugger>>,
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let process = process.get();
+        let process = process.get().map(|debugger| debugger.process);
 
         let active_functions = ActiveFunctions::new(process.as_ref());
 
