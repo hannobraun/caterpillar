@@ -2,7 +2,7 @@ use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
     debugger::{
-        model::Function,
+        model::{ActiveFunctions, Function},
         ui::{
             components::{function::Function, panel::Panel},
             EventsTx,
@@ -19,23 +19,26 @@ pub fn CallStack(
     let functions = move || {
         let process = process.get()?;
 
-        let functions = process
-            .evaluator
-            .stack()
-            .iter()
-            .filter_map(|runtime_location| {
-                let syntax_location =
-                    process.source_map.runtime_to_syntax(&runtime_location);
-                let function = process
-                    .functions
-                    .get_from_location(syntax_location)
-                    .cloned()?;
+        let functions = ActiveFunctions {
+            inner: process
+                .evaluator
+                .stack()
+                .iter()
+                .filter_map(|runtime_location| {
+                    let syntax_location =
+                        process.source_map.runtime_to_syntax(&runtime_location);
+                    let function = process
+                        .functions
+                        .get_from_location(syntax_location)
+                        .cloned()?;
 
-                Some(Function::new(function, &process))
-            })
-            .collect::<Vec<_>>();
+                    Some(Function::new(function, &process))
+                })
+                .collect::<Vec<_>>(),
+        };
 
         let view = functions
+            .inner
             .into_iter()
             .map(|function| {
                 view! {
