@@ -26,10 +26,12 @@ pub fn Debugger(
             <StackExplorer
                 process=process />
         };
-        let memory_explorer = view! {
-            <MemoryExplorer
-                process=process.get() />
-        };
+        let memory_explorer = process.get().map(|process| {
+            view! {
+                <MemoryExplorer
+                    process=process />
+            }
+        });
 
         view! {
             <div>
