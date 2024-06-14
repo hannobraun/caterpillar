@@ -113,7 +113,7 @@ impl Evaluator {
                             .data
                             .pop()
                             .map_err(|effect| EvaluatorEffect {
-                                effect: effect.into(),
+                                kind: effect.into(),
                                 location: location.clone(),
                             })?;
                         stack_frame.bindings.insert(argument.clone(), value);
@@ -121,7 +121,7 @@ impl Evaluator {
 
                     self.stack.push(stack_frame).map_err(|effect| {
                         EvaluatorEffect {
-                            effect: effect.into(),
+                            kind: effect.into(),
                             location: location.clone(),
                         }
                     })?;
@@ -140,7 +140,10 @@ impl Evaluator {
             },
             Ok(None) => {}
             Err(effect) => {
-                return Err(EvaluatorEffect { effect, location });
+                return Err(EvaluatorEffect {
+                    kind: effect,
+                    location,
+                });
             }
         }
 
@@ -159,7 +162,7 @@ pub enum EvaluatorState {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct EvaluatorEffect {
-    pub effect: EvaluatorEffectKind,
+    pub kind: EvaluatorEffectKind,
     pub location: Location,
 }
 
