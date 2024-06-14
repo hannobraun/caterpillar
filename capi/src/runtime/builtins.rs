@@ -27,6 +27,10 @@ pub fn add_wrap_unsigned(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
+pub fn brk() -> Result {
+    Ok(Some(BuiltinEffect::Breakpoint))
+}
+
 pub fn copy(data_stack: &mut DataStack) -> Result {
     let a = data_stack.pop()?;
 

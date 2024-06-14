@@ -208,6 +208,7 @@ fn evaluate_instruction(
             let result = match name.as_str() {
                 "add" => builtins::add(data_stack),
                 "add_wrap_unsigned" => builtins::add_wrap_unsigned(data_stack),
+                "brk" => builtins::brk(),
                 "copy" => builtins::copy(data_stack),
                 "div" => builtins::div(data_stack),
                 "drop" => builtins::drop(data_stack),
