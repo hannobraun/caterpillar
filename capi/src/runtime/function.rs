@@ -1,6 +1,6 @@
 use super::{Instruction, Instructions, Location};
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
     pub arguments: Vec<String>,

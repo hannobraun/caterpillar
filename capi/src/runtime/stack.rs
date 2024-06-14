@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use super::{DataStack, Function, Location, Value};
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
     frames: Vec<StackFrame>,
 }
@@ -65,7 +65,7 @@ impl Stack {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StackFrame {
     pub function: Function,
     pub data: DataStack,
@@ -84,15 +84,7 @@ impl StackFrame {
 
 pub type Bindings = BTreeMap<String, Value>;
 
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 #[error("Overflowed call stack")]
 pub struct CallStackOverflow;
 

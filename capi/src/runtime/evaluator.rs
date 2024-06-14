@@ -3,7 +3,7 @@ use super::{
     Function, Instruction, Location, Stack, StackFrame, StackUnderflow, Value,
 };
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Evaluator {
     code: Code,
     stack: Stack,
@@ -163,15 +163,7 @@ pub struct EvaluatorEffect {
     pub location: Location,
 }
 
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum EvaluatorEffectKind {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,

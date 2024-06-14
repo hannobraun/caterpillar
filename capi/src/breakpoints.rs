@@ -2,9 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::runtime;
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
     durable: BTreeSet<runtime::Location>,
     ephemeral: BTreeSet<runtime::Location>,

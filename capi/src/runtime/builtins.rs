@@ -176,7 +176,7 @@ pub fn write_tile(data_stack: &mut DataStack) -> Result {
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum BuiltinEffect {
     Breakpoint,
     Error(BuiltinError),
@@ -191,15 +191,7 @@ pub enum BuiltinEffect {
     ReadRandom,
 }
 
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum BuiltinError {
     #[error("Divide by zero")]
     DivideByZero,

@@ -1,7 +1,5 @@
 use std::collections::VecDeque;
 
-use serde_big_array::BigArray;
-
 use crate::{
     breakpoints::Breakpoints,
     debugger::DebugEvent,
@@ -13,7 +11,7 @@ use crate::{
     syntax,
 };
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
     pub functions: syntax::Functions,
     pub source_map: SourceMap,
@@ -164,9 +162,7 @@ impl Process {
     }
 }
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub enum ProcessState {
     #[default]
     Running,
@@ -180,15 +176,14 @@ impl ProcessState {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ProcessEffect {
     pub kind: EvaluatorEffectKind,
     pub location: runtime::Location,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Memory {
-    #[serde(with = "BigArray")]
     pub inner: [Value; 256],
 }
 

@@ -2,9 +2,7 @@ use std::{collections::VecDeque, fmt};
 
 use super::{Location, Value};
 
-#[derive(
-    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub struct Instructions {
     inner: InstructionsInner,
 }
@@ -67,7 +65,7 @@ impl InstructionIndex {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Instruction {
     BindingEvaluate { name: String },
     BindingsDefine { names: Vec<String> },

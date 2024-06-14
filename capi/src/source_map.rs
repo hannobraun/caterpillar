@@ -2,9 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{runtime, syntax};
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct SourceMap {
     runtime_to_syntax: BTreeMap<runtime::Location, syntax::Location>,
     syntax_to_runtime: BTreeMap<syntax::Location, runtime::Location>,

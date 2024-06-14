@@ -1,13 +1,4 @@
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    serde::Deserialize,
-    serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Location {
     function: String,
     index: u32,

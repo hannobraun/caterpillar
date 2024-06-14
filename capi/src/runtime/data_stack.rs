@@ -1,8 +1,6 @@
 use std::fmt;
 
-#[derive(
-    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub struct DataStack {
     values: Vec<Value>,
 }
@@ -33,16 +31,7 @@ impl DataStack {
     }
 }
 
-#[derive(
-    Copy,
-    Clone,
-    Debug,
-    Default,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-)]
+#[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
 pub struct Value(pub i8);
 
 impl From<i8> for Value {
@@ -57,14 +46,6 @@ impl fmt::Display for Value {
     }
 }
 
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 #[error("Tried to pop value from empty stack")]
 pub struct StackUnderflow;

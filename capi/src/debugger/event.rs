@@ -1,6 +1,6 @@
 use crate::runtime;
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug)]
 pub enum DebugEvent {
     Continue {
         and_stop_at: Option<runtime::Location>,

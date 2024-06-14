@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::{runtime::Value, syntax::Location};
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Expression {
     pub kind: ExpressionKind,
     pub location: Location,
@@ -14,7 +14,7 @@ impl Expression {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ExpressionKind {
     Binding { names: Vec<String> },
     Comment { text: String },
