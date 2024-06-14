@@ -6,8 +6,8 @@ use crate::{
     breakpoints::Breakpoints,
     debugger::DebugEvent,
     runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
-        EvaluatorState, Value,
+        self, BuiltinEffect, DataStack, Evaluator, EvaluatorEffect,
+        EvaluatorEffectKind, EvaluatorState, Value,
     },
     source_map::SourceMap,
     syntax,
@@ -80,7 +80,10 @@ impl Process {
         match event {
             DebugEvent::Continue { and_stop_at } => {
                 if let Some(ProcessEffect {
-                    kind: ProcessEffectKind::Paused,
+                    kind:
+                        ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
+                            BuiltinEffect::Breakpoint,
+                        )),
                     ..
                 }) = self.effects.front()
                 {
@@ -96,7 +99,10 @@ impl Process {
             }
             DebugEvent::Step => {
                 if let Some(ProcessEffect {
-                    kind: ProcessEffectKind::Paused,
+                    kind:
+                        ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
+                            BuiltinEffect::Breakpoint,
+                        )),
                     ..
                 }) = self.effects.front()
                 {
@@ -151,7 +157,11 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(&just_executed)
         {
             self.effects.push_back(ProcessEffect {
-                kind: ProcessEffectKind::Paused,
+                kind: ProcessEffectKind::Evaluator(
+                    EvaluatorEffectKind::Builtin(
+                        runtime::BuiltinEffect::Breakpoint,
+                    ),
+                ),
                 location: just_executed,
             });
         }
@@ -185,7 +195,6 @@ pub struct ProcessEffect {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum ProcessEffectKind {
     Evaluator(EvaluatorEffectKind),
-    Paused,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
