@@ -23,9 +23,13 @@ pub fn Debugger(
         let active_functions = ActiveFunctions::new(process.get().as_ref());
 
         let stack_explorer = process.get().map(|process| {
+            let previous = process.previous_data_stack;
+            let current = process.evaluator.data_stack().clone();
+
             view! {
                 <StackExplorer
-                    process=process />
+                    previous=previous
+                    current=current />
             }
         });
         let memory_explorer = process.get().map(|process| {
