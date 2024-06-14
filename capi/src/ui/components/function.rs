@@ -83,10 +83,9 @@ pub fn Expression(
             .location
             .map(|location| ron::to_string(&location).unwrap());
 
-        let error = debugger_expression.effect.map(|effect| {
-            let effect = effect.kind;
-            format!("{:?}", effect)
-        });
+        let error = debugger_expression
+            .effect
+            .map(|effect| format!("{:?}", effect.kind));
 
         let toggle_breakpoint = move |event: MouseEvent| {
             let event_target = event.target().unwrap();
