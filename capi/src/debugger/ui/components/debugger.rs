@@ -5,7 +5,7 @@ use crate::{
         model::ExecutionContext,
         ui::{
             components::{
-                call_stack::CallStack, control_panel::ControlPanel,
+                call_stack::ActiveFunctions, control_panel::ControlPanel,
                 execution_context::ExecutionContext,
                 memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
             },
@@ -27,7 +27,7 @@ pub fn Debugger(
             <div>
                 <ControlPanel
                     events=events.clone() />
-                <CallStack
+                <ActiveFunctions
                     process=process
                     events=events.clone() />
                 <ExecutionContext

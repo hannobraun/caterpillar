@@ -12,7 +12,7 @@ use crate::{
 };
 
 #[component]
-pub fn CallStack(
+pub fn ActiveFunctions(
     process: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
