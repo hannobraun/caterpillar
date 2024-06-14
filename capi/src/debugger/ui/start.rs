@@ -24,7 +24,7 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
                 Err(err) => panic!("{err}"),
             };
 
-            debugger.process = Some(process);
+            debugger.update_from_process(process);
 
             debugger_write.set(debugger.clone());
         }
