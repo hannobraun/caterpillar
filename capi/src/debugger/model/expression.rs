@@ -15,7 +15,7 @@ pub struct Expression {
 }
 
 impl Expression {
-    pub fn new(expression: &syntax::Expression, process: &Process) -> Self {
+    pub fn new(expression: syntax::Expression, process: &Process) -> Self {
         let location =
             process.source_map.syntax_to_runtime(&expression.location);
 

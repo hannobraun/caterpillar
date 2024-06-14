@@ -22,7 +22,7 @@ pub fn Function(
         .into_iter()
         .filter_map(|expression| {
             let process = process.get()?;
-            let expression = Expression::new(&expression, &process);
+            let expression = Expression::new(expression, &process);
 
             Some(view! {
                 <li class="ml-8">
