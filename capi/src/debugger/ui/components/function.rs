@@ -37,7 +37,7 @@ pub fn Function(
             })
             .collect_view();
 
-        view! {
+        Some(view! {
             <div class="m-2 mb-4">
                 <div class="font-bold">
                     {function.name}:{'\n'}
@@ -46,7 +46,7 @@ pub fn Function(
                     {expressions}
                 </ol>
             </div>
-        }
+        })
     }
 }
 
