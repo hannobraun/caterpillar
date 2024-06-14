@@ -13,14 +13,8 @@ pub fn ExecutionContext(
     events: EventsTx,
 ) -> impl IntoView {
     let function = execution_context.function.map(|function| {
-        let class = if execution_context.message.is_some() {
-            "blur-sm"
-        } else {
-            ""
-        };
-
         view! {
-            <div class=class>
+            <div>
                 <Function
                     function=function
                     events=events.clone() />
