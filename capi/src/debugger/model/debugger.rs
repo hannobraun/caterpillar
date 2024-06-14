@@ -18,7 +18,7 @@ impl Debugger {
         }
     }
 
-    pub fn update_from_process(&mut self, update: Update) {
+    pub fn on_update(&mut self, update: Update) {
         let process = update;
 
         self.active_functions = ActiveFunctions::new(Some(&process));

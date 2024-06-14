@@ -25,7 +25,7 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
                 break;
             };
 
-            debugger.update_from_process(update);
+            debugger.on_update(update);
 
             debugger_write.set(debugger.clone());
         }
