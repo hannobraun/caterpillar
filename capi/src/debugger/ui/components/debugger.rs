@@ -22,6 +22,11 @@ pub fn Debugger(
     move || {
         let active_functions = ActiveFunctions::new(process.get().as_ref());
 
+        let stack_explorer = view! {
+            <StackExplorer
+                process=process />
+        };
+
         view! {
             <div>
                 <ControlPanel
@@ -29,8 +34,7 @@ pub fn Debugger(
                 <ActiveFunctions
                     active_functions=active_functions
                     events=events.clone() />
-                <StackExplorer
-                    process=process />
+                {stack_explorer}
                 <MemoryExplorer
                     process=process />
             </div>
