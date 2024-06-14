@@ -21,7 +21,7 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
 
 async fn handle_updates(
     mut updates: UpdatesRx,
-    set_debugger: WriteSignal<Option<Debugger>>,
+    debugger_write: WriteSignal<Option<Debugger>>,
 ) {
     let mut debugger = Debugger { process: None };
 
@@ -33,6 +33,6 @@ async fn handle_updates(
 
         debugger.process = Some(process);
 
-        set_debugger.set(Some(debugger.clone()));
+        debugger_write.set(Some(debugger.clone()));
     }
 }
