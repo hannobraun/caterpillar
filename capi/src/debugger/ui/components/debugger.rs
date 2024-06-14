@@ -20,10 +20,12 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let active_functions = ActiveFunctions::new(process.get().as_ref());
+        let process = process.get();
 
-        let stack_explorer = process.get().map(|process| {
-            let previous = process.previous_data_stack;
+        let active_functions = ActiveFunctions::new(process.as_ref());
+
+        let stack_explorer = process.as_ref().map(|process| {
+            let previous = process.previous_data_stack.clone();
             let current = process.evaluator.data_stack().clone();
 
             view! {
@@ -32,7 +34,7 @@ pub fn Debugger(
                     current=current />
             }
         });
-        let memory_explorer = process.get().map(|process| {
+        let memory_explorer = process.map(|process| {
             view! {
                 <MemoryExplorer
                     memory=process.memory />
