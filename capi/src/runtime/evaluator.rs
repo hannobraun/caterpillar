@@ -50,9 +50,6 @@ impl Evaluator {
             {
                 break (frame, location, instruction);
             }
-
-            // If the function has no more instructions, we don't put it back,
-            // meaning it returns.
         };
 
         let evaluate_result = evaluate_instruction(
