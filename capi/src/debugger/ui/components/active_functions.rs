@@ -19,10 +19,10 @@ pub fn ActiveFunctions(
     let functions = move || {
         let process = process.get()?;
 
-        let active_functions = ActiveFunctions::new(&process);
+        let ActiveFunctions::Functions { functions } =
+            ActiveFunctions::new(&process);
 
-        let view = active_functions
-            .functions
+        let view = functions
             .into_iter()
             .map(|function| {
                 view! {

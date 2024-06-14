@@ -2,8 +2,8 @@ use crate::process::Process;
 
 use super::Function;
 
-pub struct ActiveFunctions {
-    pub functions: Vec<Function>,
+pub enum ActiveFunctions {
+    Functions { functions: Vec<Function> },
 }
 
 impl ActiveFunctions {
@@ -24,6 +24,6 @@ impl ActiveFunctions {
             })
             .collect();
 
-        Self { functions }
+        Self::Functions { functions }
     }
 }
