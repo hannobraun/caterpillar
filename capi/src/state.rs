@@ -89,6 +89,11 @@ impl RuntimeState {
             }) = self.process.effects.front()
             {
                 match effect {
+                    BuiltinEffect::Breakpoint => {
+                        // Nothing to do here. With an unhandled effect, the
+                        // program won't continue running. The debugger is in
+                        // control of what happens next.
+                    }
                     BuiltinEffect::Error(_) => {
                         // Nothing needs to be done. With an unhandled
                         // effect, the program won't continue running, and

@@ -178,6 +178,7 @@ pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum BuiltinEffect {
+    Breakpoint,
     Error(BuiltinError),
 
     Load { address: u8 },
