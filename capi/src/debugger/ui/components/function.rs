@@ -17,32 +17,36 @@ pub fn Function(
     function: syntax::Function,
     events: EventsTx,
 ) -> impl IntoView {
-    let expressions = function
-        .syntax
-        .into_iter()
-        .filter_map(|expression| {
-            let process = process.get()?;
-            let expression = Expression::new(expression, &process);
+    move || {
+        let function = function.clone();
 
-            Some(view! {
-                <li class="ml-8">
-                    <Expression
-                        expression=expression
-                        events=events.clone() />
-                </li>
+        let expressions = function
+            .syntax
+            .into_iter()
+            .filter_map(|expression| {
+                let process = process.get()?;
+                let expression = Expression::new(expression, &process);
+
+                Some(view! {
+                    <li class="ml-8">
+                        <Expression
+                            expression=expression
+                            events=events.clone() />
+                    </li>
+                })
             })
-        })
-        .collect_view();
+            .collect_view();
 
-    view! {
-        <div class="m-2 mb-4">
-            <div class="font-bold">
-                {function.name}:{'\n'}
+        view! {
+            <div class="m-2 mb-4">
+                <div class="font-bold">
+                    {function.name}:{'\n'}
+                </div>
+                <ol>
+                    {expressions}
+                </ol>
             </div>
-            <ol>
-                {expressions}
-            </ol>
-        </div>
+        }
     }
 }
 
