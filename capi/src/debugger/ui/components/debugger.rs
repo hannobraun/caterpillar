@@ -26,6 +26,10 @@ pub fn Debugger(
             <StackExplorer
                 process=process />
         };
+        let memory_explorer = view! {
+            <MemoryExplorer
+                process=process />
+        };
 
         view! {
             <div>
@@ -35,8 +39,7 @@ pub fn Debugger(
                     active_functions=active_functions
                     events=events.clone() />
                 {stack_explorer}
-                <MemoryExplorer
-                    process=process />
+                {memory_explorer}
             </div>
         }
     }
