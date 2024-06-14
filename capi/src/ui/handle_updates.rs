@@ -1,9 +1,11 @@
-pub async fn handle_updates(
-    mut updates: crate::updates::UpdatesRx,
-    set_process: leptos::WriteSignal<Option<crate::process::Process>>,
-) {
-    use leptos::SignalSet;
+use leptos::{SignalSet, WriteSignal};
 
+use crate::{process::Process, updates::UpdatesRx};
+
+pub async fn handle_updates(
+    mut updates: UpdatesRx,
+    set_process: WriteSignal<Option<Process>>,
+) {
     loop {
         let process = match updates.changed().await {
             Ok(()) => updates.borrow_and_update().clone(),
