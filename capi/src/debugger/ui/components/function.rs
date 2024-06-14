@@ -3,8 +3,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{
-        self,
-        model::DebugEvent,
+        model::{DebugEvent, Expression},
         ui::{send_event, EventsTx},
     },
     process::Process,
@@ -58,8 +57,7 @@ pub fn Expression(
 
         let process = process.get()?;
 
-        let debugger_expression =
-            debugger::model::Expression::new(&expression, &process);
+        let debugger_expression = Expression::new(&expression, &process);
 
         let mut class_outer = String::from("py-1");
         if debugger_expression.has_durable_breakpoint {
