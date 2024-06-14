@@ -97,7 +97,7 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
 
     let expression = format!("{}", expression.kind);
 
-    Some(view! {
+    view! {
         <span>
             <span class=class_outer>
                 <span
@@ -111,5 +111,5 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
                 {error}
             </span>
         </span>
-    })
+    }
 }
