@@ -10,7 +10,6 @@ pub struct Debugger {
     pub active_functions: ActiveFunctions,
     pub data_stacks: Option<[DataStack; 2]>,
     pub memory: Option<Memory>,
-    pub process: Option<Process>,
 }
 
 impl Debugger {
@@ -19,7 +18,6 @@ impl Debugger {
             active_functions: ActiveFunctions::new(None),
             data_stacks: None,
             memory: None,
-            process: None,
         }
     }
 
@@ -30,6 +28,5 @@ impl Debugger {
             process.evaluator.data_stack().clone(),
         ]);
         self.memory = Some(process.memory.clone());
-        self.process = Some(process);
     }
 }
