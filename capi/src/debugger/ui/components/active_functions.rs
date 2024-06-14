@@ -36,11 +36,9 @@ pub fn ActiveFunctions(
 
     view! {
         <Panel class="h-64">
-            <div>
-                <ol>
-                    {functions}
-                </ol>
-            </div>
+            <ol>
+                {functions}
+            </ol>
         </Panel>
     }
 }
