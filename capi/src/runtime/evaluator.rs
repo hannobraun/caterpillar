@@ -157,7 +157,7 @@ pub enum EvaluatorState {
     Finished,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct EvaluatorEffect {
     pub effect: EvaluatorEffectKind,
     pub location: Location,
