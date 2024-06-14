@@ -20,11 +20,9 @@ pub struct ExecutionContext {
 
 impl ExecutionContext {
     pub fn from_process(process: Option<Process>) -> Self {
-        let function = None;
-
         let Some(process) = process else {
             return Self {
-                function,
+                function: None,
                 message: Some("No program available."),
             };
         };
@@ -33,13 +31,13 @@ impl ExecutionContext {
             match &process.state {
                 ProcessState::Running => {
                     return Self {
-                        function,
+                        function: None,
                         message: Some("Program is running."),
                     };
                 }
                 ProcessState::Finished => {
                     return Self {
-                        function,
+                        function: None,
                         message: Some("Program has finished running."),
                     };
                 }
