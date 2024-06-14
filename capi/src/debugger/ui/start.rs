@@ -16,7 +16,9 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
         }
     });
 
-    leptos::spawn_local(handle_updates(updates_rx, debugger_write));
+    leptos::spawn_local(async move {
+        handle_updates(updates_rx, debugger_write).await
+    });
 }
 
 async fn handle_updates(
