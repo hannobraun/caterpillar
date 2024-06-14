@@ -34,7 +34,7 @@ pub fn CallStack(
 
                     Some(Function::new(function, &process))
                 })
-                .collect::<Vec<_>>(),
+                .collect(),
         };
 
         let view = functions
