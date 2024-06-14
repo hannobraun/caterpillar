@@ -32,15 +32,15 @@ pub fn ActiveFunctions(
                 </ol>
             }
             .into_view()
-        },
-        ActiveFunctions::Message { message } => {
-            view! {
-                <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
-                    {message}
-                </p>
-            }
-            .into_view()
         }
+        ActiveFunctions::Message { message } => view! {
+            <p
+                class="w-full h-full absolute inset-y-0 flex \
+                    justify-center items-center">
+                {message}
+            </p>
+        }
+        .into_view(),
     };
 
     view! {
