@@ -1,6 +1,5 @@
 mod components;
 mod events;
-mod handle_updates;
 mod start;
 
 pub use self::{
