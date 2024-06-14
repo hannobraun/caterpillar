@@ -1,7 +1,7 @@
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
 use crate::debugger::{
-    model::{ActiveFunctions, Debugger},
+    model::Debugger,
     ui::{
         components::{
             active_functions::ActiveFunctions, control_panel::ControlPanel,
@@ -19,8 +19,6 @@ pub fn Debugger(
     move || {
         let debugger = debugger.get();
         let process = debugger.process;
-
-        let active_functions = ActiveFunctions::new(process.as_ref());
 
         let stack_explorer = process.as_ref().map(|process| {
             let previous = process.previous_data_stack.clone();
@@ -44,7 +42,7 @@ pub fn Debugger(
                 <ControlPanel
                     events=events.clone() />
                 <ActiveFunctions
-                    active_functions=active_functions
+                    active_functions=debugger.active_functions
                     events=events.clone() />
                 {stack_explorer}
                 {memory_explorer}
