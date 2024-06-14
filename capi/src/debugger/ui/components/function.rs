@@ -25,9 +25,12 @@ pub fn Function(
         let expressions = function
             .syntax
             .into_iter()
-            .map(|expression| {
-                let expression = Expression::new(expression, &process);
+            .map(|expression| Expression::new(expression, &process))
+            .collect::<Vec<_>>();
 
+        let expressions = expressions
+            .into_iter()
+            .map(|expression| {
                 view! {
                     <li class="ml-8">
                         <Expression
