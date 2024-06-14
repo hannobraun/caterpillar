@@ -11,34 +11,30 @@ use crate::{
 
 #[component]
 pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
-    move || {
-        let function = function.clone();
-
-        let expressions = function
-            .expressions
-            .into_iter()
-            .map(|expression| {
-                view! {
-                    <li class="ml-8">
-                        <Expression
-                            expression=expression
-                            events=events.clone() />
-                    </li>
-                }
-            })
-            .collect_view();
-
-        Some(view! {
-            <div class="m-2 mb-4">
-                <div class="font-bold">
-                    {function.name}:{'\n'}
-                </div>
-                <ol>
-                    {expressions}
-                </ol>
-            </div>
+    let expressions = function
+        .expressions
+        .into_iter()
+        .map(|expression| {
+            view! {
+                <li class="ml-8">
+                    <Expression
+                        expression=expression
+                        events=events.clone() />
+                </li>
+            }
         })
-    }
+        .collect_view();
+
+    Some(view! {
+        <div class="m-2 mb-4">
+            <div class="font-bold">
+                {function.name}:{'\n'}
+            </div>
+            <ol>
+                {expressions}
+            </ol>
+        </div>
+    })
 }
 
 #[component]
