@@ -22,10 +22,12 @@ pub fn Debugger(
     move || {
         let active_functions = ActiveFunctions::new(process.get().as_ref());
 
-        let stack_explorer = view! {
-            <StackExplorer
-                process=process.get() />
-        };
+        let stack_explorer = process.get().map(|process| {
+            view! {
+                <StackExplorer
+                    process=process />
+            }
+        });
         let memory_explorer = process.get().map(|process| {
             view! {
                 <MemoryExplorer
