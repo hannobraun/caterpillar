@@ -4,13 +4,13 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
+    debugger::ui::{self, EventsRx},
     display::Display,
     ffi,
     games::{self, snake::snake},
     process::Process,
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
-    ui::{self, EventsRx},
     updates::{updates, UpdatesTx},
 };
 

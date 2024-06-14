@@ -1,9 +1,11 @@
 use leptos::{component, view, IntoView, Memo, ReadSignal, SignalGet};
 
 use crate::{
-    debugger::model::ExecutionContext,
+    debugger::{
+        model::ExecutionContext,
+        ui::{components::function::Function, EventsTx},
+    },
     process::Process,
-    ui::{components::function::Function, EventsTx},
 };
 
 use super::panel::Panel;

@@ -10,7 +10,6 @@ mod source_map;
 mod state;
 mod syntax;
 mod tiles;
-mod ui;
 mod updates;
 
 fn main() {

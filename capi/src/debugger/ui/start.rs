@@ -1,6 +1,6 @@
 use leptos::create_signal;
 
-use crate::{ui::components::debugger::Debugger, updates::UpdatesRx};
+use crate::{debugger::ui::components::debugger::Debugger, updates::UpdatesRx};
 
 use super::{handle_updates, EventsTx};
 

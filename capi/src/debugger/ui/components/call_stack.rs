@@ -1,11 +1,11 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    process::Process,
-    ui::{
+    debugger::ui::{
         components::{function::Function, panel::Panel},
         EventsTx,
     },
+    process::Process,
 };
 
 #[component]

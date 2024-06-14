@@ -1,7 +1,7 @@
 use leptos::{component, view, IntoView};
 
-use crate::{
-    debugger::model::DebugEvent,
+use crate::debugger::{
+    model::DebugEvent,
     ui::{components::panel::Panel, send_event, EventsTx},
 };
 

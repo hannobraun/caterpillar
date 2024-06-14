@@ -1,7 +1,8 @@
 use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 
 use crate::{
-    process::Process, runtime::DataStack, ui::components::panel::Panel,
+    debugger::ui::components::panel::Panel, process::Process,
+    runtime::DataStack,
 };
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro

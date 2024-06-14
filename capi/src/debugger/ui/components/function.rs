@@ -2,11 +2,14 @@ use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
-    debugger::{self, model::DebugEvent},
+    debugger::{
+        self,
+        model::DebugEvent,
+        ui::{send_event, EventsTx},
+    },
     process::Process,
     runtime::{BuiltinEffect, EvaluatorEffectKind},
     syntax,
-    ui::{send_event, EventsTx},
 };
 
 #[component]
