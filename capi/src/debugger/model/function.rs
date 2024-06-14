@@ -2,6 +2,7 @@ use crate::{process::Process, syntax};
 
 use super::Expression;
 
+#[derive(Clone)]
 pub struct Function {
     pub name: String,
     pub expressions: Vec<Expression>,
