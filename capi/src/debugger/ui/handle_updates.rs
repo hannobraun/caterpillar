@@ -4,7 +4,7 @@ use crate::{debugger::model::Debugger, updates::UpdatesRx};
 
 pub async fn handle_updates(
     mut updates: UpdatesRx,
-    set_process: WriteSignal<Option<Debugger>>,
+    set_debugger: WriteSignal<Option<Debugger>>,
 ) {
     loop {
         let process = match updates.changed().await {
@@ -14,6 +14,6 @@ pub async fn handle_updates(
 
         let debugger = Debugger { process };
 
-        set_process.set(Some(debugger));
+        set_debugger.set(Some(debugger));
     }
 }
