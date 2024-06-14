@@ -137,11 +137,9 @@ impl Process {
         let just_executed = match self.evaluator.step() {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
-            Err(EvaluatorEffect { kind, location }) => {
-                self.effects.push_back(EvaluatorEffect {
-                    kind,
-                    location: location.clone(),
-                });
+            Err(effect) => {
+                let location = effect.location.clone();
+                self.effects.push_back(effect);
                 location
             }
         };
