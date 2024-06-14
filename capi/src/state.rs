@@ -4,14 +4,13 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
-    debugger::DebugEvent,
     display::Display,
     ffi,
     games::{self, snake::snake},
     process::Process,
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
-    ui,
+    ui::{self, EventsRx},
     updates::{updates, UpdatesTx},
 };
 
@@ -20,7 +19,7 @@ pub struct RuntimeState {
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
-    pub events_rx: mpsc::UnboundedReceiver<DebugEvent>,
+    pub events_rx: EventsRx,
     pub updates_tx: UpdatesTx,
 }
 
