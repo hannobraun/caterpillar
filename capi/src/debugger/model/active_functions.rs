@@ -2,6 +2,7 @@ use crate::process::Process;
 
 use super::Function;
 
+#[derive(Clone)]
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
     Message { message: &'static str },
