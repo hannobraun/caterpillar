@@ -20,20 +20,21 @@ pub fn Function(
     move || {
         let function = function.clone();
 
+        let process = process.get()?;
+
         let expressions = function
             .syntax
             .into_iter()
-            .filter_map(|expression| {
-                let process = process.get()?;
+            .map(|expression| {
                 let expression = Expression::new(expression, &process);
 
-                Some(view! {
+                view! {
                     <li class="ml-8">
                         <Expression
                             expression=expression
                             events=events.clone() />
                     </li>
-                })
+                }
             })
             .collect_view();
 
