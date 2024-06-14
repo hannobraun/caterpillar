@@ -13,28 +13,24 @@ pub fn ActiveFunctions(
     active_functions: ActiveFunctions,
     events: EventsTx,
 ) -> impl IntoView {
-    let functions = move || {
-        let active_functions = active_functions.clone();
-
-        match active_functions {
-            ActiveFunctions::Functions { functions } => functions
-                .into_iter()
-                .map(|function| {
-                    view! {
-                        <Function
-                            function=function
-                            events=events.clone() />
-                    }
-                })
-                .collect_view(),
-            ActiveFunctions::Message { message } => {
+    let functions = match active_functions {
+        ActiveFunctions::Functions { functions } => functions
+            .into_iter()
+            .map(|function| {
                 view! {
-                    <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
-                        {message}
-                    </p>
+                    <Function
+                        function=function
+                        events=events.clone() />
                 }
-                .into_view()
+            })
+            .collect_view(),
+        ActiveFunctions::Message { message } => {
+            view! {
+                <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
+                    {message}
+                </p>
             }
+            .into_view()
         }
     };
 
