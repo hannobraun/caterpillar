@@ -16,7 +16,7 @@ pub fn CallStack(
     process: ReadSignal<Option<Process>>,
     events: EventsTx,
 ) -> impl IntoView {
-    let addresses = move || {
+    let functions = move || {
         let process = process.get()?;
 
         let view = process
@@ -48,7 +48,7 @@ pub fn CallStack(
             <div>
                 <h2>"Call stack:"</h2>
                 <ol>
-                    {addresses}
+                    {functions}
                 </ol>
             </div>
         </Panel>
