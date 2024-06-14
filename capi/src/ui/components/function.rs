@@ -3,7 +3,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{self, DebugEvent},
-    process::{Process, ProcessEffectKind},
+    process::Process,
     runtime::{BuiltinEffect, EvaluatorEffectKind},
     syntax,
     ui::{send_event, EventsTx},
@@ -69,9 +69,9 @@ pub fn Expression(
         }
         if let Some(effect) = &debugger_expression.effect {
             match effect.kind {
-                ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
-                    BuiltinEffect::Breakpoint,
-                )) => class_inner.push_str(" bg-green-300"),
+                EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint) => {
+                    class_inner.push_str(" bg-green-300")
+                }
                 _ => class_inner.push_str(" bg-red-300"),
             }
         }
@@ -84,7 +84,7 @@ pub fn Expression(
             .map(|location| ron::to_string(&location).unwrap());
 
         let error = debugger_expression.effect.map(|effect| {
-            let ProcessEffectKind::Evaluator(effect) = effect.kind;
+            let effect = effect.kind;
             format!("{effect:?}")
         });
 

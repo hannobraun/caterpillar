@@ -81,9 +81,7 @@ impl Process {
             DebugEvent::Continue { and_stop_at } => {
                 if let Some(ProcessEffect {
                     kind:
-                        ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
-                            BuiltinEffect::Breakpoint,
-                        )),
+                        EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
                     ..
                 }) = self.effects.front()
                 {
@@ -100,9 +98,7 @@ impl Process {
             DebugEvent::Step => {
                 if let Some(ProcessEffect {
                     kind:
-                        ProcessEffectKind::Evaluator(EvaluatorEffectKind::Builtin(
-                            BuiltinEffect::Breakpoint,
-                        )),
+                        EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
                     ..
                 }) = self.effects.front()
                 {
@@ -145,7 +141,7 @@ impl Process {
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(EvaluatorEffect { effect, location }) => {
                 self.effects.push_back(ProcessEffect {
-                    kind: ProcessEffectKind::Evaluator(effect),
+                    kind: effect,
                     location: location.clone(),
                 });
                 location
@@ -157,10 +153,8 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(&just_executed)
         {
             self.effects.push_back(ProcessEffect {
-                kind: ProcessEffectKind::Evaluator(
-                    EvaluatorEffectKind::Builtin(
-                        runtime::BuiltinEffect::Breakpoint,
-                    ),
+                kind: EvaluatorEffectKind::Builtin(
+                    runtime::BuiltinEffect::Breakpoint,
                 ),
                 location: just_executed,
             });
@@ -188,13 +182,8 @@ impl ProcessState {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProcessEffect {
-    pub kind: ProcessEffectKind,
+    pub kind: EvaluatorEffectKind,
     pub location: runtime::Location,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum ProcessEffectKind {
-    Evaluator(EvaluatorEffectKind),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
