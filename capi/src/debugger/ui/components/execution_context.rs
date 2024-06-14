@@ -35,10 +35,10 @@ pub fn ExecutionContext(
             }
         });
 
-    Some(view! {
+    view! {
         <Panel class="h-80">
             {function}
             {message}
         </Panel>
-    })
+    }
 }
