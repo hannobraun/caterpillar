@@ -1,4 +1,4 @@
-pub mod call_stack;
+pub mod active_functions;
 pub mod control_panel;
 pub mod debugger;
 pub mod execution_context;

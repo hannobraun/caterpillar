@@ -5,7 +5,7 @@ use crate::{
         model::ExecutionContext,
         ui::{
             components::{
-                call_stack::ActiveFunctions, control_panel::ControlPanel,
+                active_functions::ActiveFunctions, control_panel::ControlPanel,
                 execution_context::ExecutionContext,
                 memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
             },
