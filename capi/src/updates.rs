@@ -1,9 +1,9 @@
-use tokio::sync::watch;
+use tokio::sync::mpsc;
 
 use crate::process::Process;
 
-pub fn updates(process: &Process) -> (UpdatesTx, UpdatesRx) {
-    let (tx, rx) = watch::channel(process.clone());
+pub fn updates(_: &Process) -> (UpdatesTx, UpdatesRx) {
+    let (tx, rx) = mpsc::unbounded_channel();
 
     let tx = UpdatesTx {
         inner: tx,
@@ -13,12 +13,12 @@ pub fn updates(process: &Process) -> (UpdatesTx, UpdatesRx) {
     (tx, rx)
 }
 
-pub type UpdatesRx = watch::Receiver<Update>;
+pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 pub type Update = Process;
 
 #[derive(Clone)]
 pub struct UpdatesTx {
-    inner: watch::Sender<Update>,
+    inner: mpsc::UnboundedSender<Update>,
     process_at_client: Option<Process>,
 }
 

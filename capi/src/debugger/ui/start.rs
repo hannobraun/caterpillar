@@ -19,9 +19,9 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
 
     leptos::spawn_local(async move {
         loop {
-            let process = match updates_rx.changed().await {
-                Ok(()) => updates_rx.borrow_and_update().clone(),
-                Err(_) => {
+            let process = match updates_rx.recv().await {
+                Some(process) => process,
+                None => {
                     // This means the other end has hung up. Nothing we can do,
                     // except end this task too.
                     break;
