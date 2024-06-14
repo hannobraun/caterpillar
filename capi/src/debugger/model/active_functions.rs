@@ -16,6 +16,12 @@ impl ActiveFunctions {
             };
         };
 
+        if process.can_step() {
+            return Self::Message {
+                message: "Process is running.",
+            };
+        }
+
         let functions = process
             .evaluator
             .stack()
