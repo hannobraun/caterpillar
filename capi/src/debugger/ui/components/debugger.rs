@@ -20,10 +20,7 @@ pub fn Debugger(
         let debugger = debugger.get();
         let process = debugger.process;
 
-        let stack_explorer = process.as_ref().map(|process| {
-            let previous = process.previous_data_stack.clone();
-            let current = process.evaluator.data_stack().clone();
-
+        let stack_explorer = debugger.data_stacks.map(|[previous, current]| {
             view! {
                 <StackExplorer
                     previous=previous
