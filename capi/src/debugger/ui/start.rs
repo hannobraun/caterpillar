@@ -7,7 +7,7 @@ use crate::{
 
 use super::EventsTx;
 
-pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
+pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
     let (debugger_read, debugger_write) = create_signal(None);
 
     leptos::mount_to_body(move || {
@@ -17,13 +17,11 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
     });
 
     leptos::spawn_local(async move {
-        let mut updates = updates_rx;
-
         let mut debugger = Debugger { process: None };
 
         loop {
-            let process = match updates.changed().await {
-                Ok(()) => updates.borrow_and_update().clone(),
+            let process = match updates_rx.changed().await {
+                Ok(()) => updates_rx.borrow_and_update().clone(),
                 Err(err) => panic!("{err}"),
             };
 
