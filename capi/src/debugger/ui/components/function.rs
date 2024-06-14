@@ -22,14 +22,7 @@ pub fn Function(
 
         let process = process.get()?;
 
-        let function = Function {
-            name: function.name,
-            expressions: function
-                .syntax
-                .into_iter()
-                .map(|expression| Expression::new(expression, &process))
-                .collect::<Vec<_>>(),
-        };
+        let function = Function::new(function, &process);
 
         let expressions = function
             .expressions
