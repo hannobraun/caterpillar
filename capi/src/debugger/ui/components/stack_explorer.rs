@@ -8,32 +8,24 @@ use crate::{
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
 pub fn StackExplorer(process: Process) -> impl IntoView {
-    let data_stack = move || {
-        let process = process.clone();
-
-        let previous = process.previous_data_stack;
-        let current = process.evaluator.data_stack().clone();
-
-        view! {
-            <Panel class="h-32">
-                <div>
-                    <p>
-                        "Previous data stack:"
-                    </p>
-                    <DataStack data_stack=previous />
-                </div>
-                <div>
-                    <p>
-                        "Current data stack:"
-                    </p>
-                    <DataStack data_stack=current />
-                </div>
-            </Panel>
-        }
-    };
+    let previous = process.previous_data_stack;
+    let current = process.evaluator.data_stack().clone();
 
     view! {
-        {data_stack}
+        <Panel class="h-32">
+            <div>
+                <p>
+                    "Previous data stack:"
+                </p>
+                <DataStack data_stack=previous />
+            </div>
+            <div>
+                <p>
+                    "Current data stack:"
+                </p>
+                <DataStack data_stack=current />
+            </div>
+        </Panel>
     }
 }
 
