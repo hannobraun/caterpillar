@@ -1,6 +1,6 @@
 use tokio::sync::mpsc;
 
-use crate::debugger::DebugEvent;
+use crate::debugger::model::DebugEvent;
 
 pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
 pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;

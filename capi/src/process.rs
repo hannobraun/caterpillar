@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use crate::{
     breakpoints::Breakpoints,
-    debugger::DebugEvent,
+    debugger::model::DebugEvent,
     runtime::{
         self, BuiltinEffect, DataStack, Evaluator, EvaluatorEffect,
         EvaluatorEffectKind, EvaluatorState, Value,

@@ -2,7 +2,7 @@ use leptos::{component, view, CollectView, IntoView, ReadSignal, SignalGet};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
-    debugger::{self, DebugEvent},
+    debugger::{self, model::DebugEvent},
     process::Process,
     runtime::{BuiltinEffect, EvaluatorEffectKind},
     syntax,
@@ -56,7 +56,7 @@ pub fn Expression(
         let process = process.get()?;
 
         let debugger_expression =
-            debugger::Expression::new(&expression, &process);
+            debugger::model::Expression::new(&expression, &process);
 
         let mut class_outer = String::from("py-1");
         if debugger_expression.has_durable_breakpoint {
