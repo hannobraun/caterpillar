@@ -2,5 +2,5 @@ use crate::process::Process;
 
 #[derive(Clone)]
 pub struct Debugger {
-    pub process: Process,
+    pub process: Option<Process>,
 }

@@ -23,14 +23,16 @@ async fn handle_updates(
     mut updates: UpdatesRx,
     set_debugger: WriteSignal<Option<Debugger>>,
 ) {
+    let mut debugger = Debugger { process: None };
+
     loop {
         let process = match updates.changed().await {
             Ok(()) => updates.borrow_and_update().clone(),
             Err(err) => panic!("{err}"),
         };
 
-        let debugger = Debugger { process };
+        debugger.process = Some(process);
 
-        set_debugger.set(Some(debugger));
+        set_debugger.set(Some(debugger.clone()));
     }
 }

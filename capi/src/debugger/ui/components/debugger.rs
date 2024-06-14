@@ -17,7 +17,7 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let process = debugger.get().map(|debugger| debugger.process);
+        let process = debugger.get().and_then(|debugger| debugger.process);
 
         let active_functions = ActiveFunctions::new(process.as_ref());
 
