@@ -2,7 +2,7 @@ use leptos::create_signal;
 
 use crate::{debugger::ui::components::debugger::Debugger, updates::UpdatesRx};
 
-use super::{handle_updates, EventsTx};
+use super::{handle_updates::handle_updates, EventsTx};
 
 pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
     let (debugger, set_debugger) = create_signal(None);
