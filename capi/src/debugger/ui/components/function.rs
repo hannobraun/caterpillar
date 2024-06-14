@@ -28,7 +28,7 @@ pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <div class="font-bold">
-                {function.name}:{'\n'}
+                {function.name}:
             </div>
             <ol>
                 {expressions}
