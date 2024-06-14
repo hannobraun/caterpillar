@@ -28,12 +28,12 @@ pub fn ExecutionContext(
         }
     });
     let message = execution_context.message.map(|message| {
-            view! {
-                <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
-                    {message}
-                </p>
-            }
-        });
+        view! {
+            <p class="w-full h-full absolute inset-y-0 flex justify-center items-center">
+                {message}
+            </p>
+        }
+    });
 
     view! {
         <Panel class="h-80">
