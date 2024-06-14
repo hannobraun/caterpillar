@@ -19,8 +19,8 @@ pub struct ExecutionContext {
 }
 
 impl ExecutionContext {
-    pub fn from_process(prev: Option<&Self>, process: Option<Process>) -> Self {
-        let function = prev.and_then(|prev| prev.function.clone());
+    pub fn from_process(process: Option<Process>) -> Self {
+        let function = None;
 
         let Some(process) = process else {
             return Self {

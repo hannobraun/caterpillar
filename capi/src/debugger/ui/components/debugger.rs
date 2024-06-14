@@ -21,9 +21,8 @@ pub fn Debugger(
     events: EventsTx,
 ) -> impl IntoView {
     move || {
-        let execution_context = create_memo(move |prev| {
-            ExecutionContext::from_process(prev, process.get())
-        });
+        let execution_context =
+            create_memo(move |_| ExecutionContext::from_process(process.get()));
 
         view! {
             <div>
