@@ -9,7 +9,7 @@ pub fn start(updates_rx: UpdatesRx, events_tx: EventsTx) {
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger process=debugger events=events_tx />
+            <Debugger debugger=debugger events=events_tx />
         }
     });
 
