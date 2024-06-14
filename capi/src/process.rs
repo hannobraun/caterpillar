@@ -22,7 +22,7 @@ pub struct Process {
     pub arguments: Vec<Value>,
 
     /// Effects that have not been handled yet
-    pub effects: VecDeque<ProcessEffect>,
+    pub effects: VecDeque<EvaluatorEffect>,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -77,7 +77,7 @@ impl Process {
     pub fn process_event(&mut self, event: DebugEvent) {
         match event {
             DebugEvent::Continue { and_stop_at } => {
-                if let Some(ProcessEffect {
+                if let Some(EvaluatorEffect {
                     kind:
                         EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
                     ..
@@ -94,7 +94,7 @@ impl Process {
                 self.reset();
             }
             DebugEvent::Step => {
-                if let Some(ProcessEffect {
+                if let Some(EvaluatorEffect {
                     kind:
                         EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
                     ..
@@ -138,7 +138,7 @@ impl Process {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(EvaluatorEffect { kind, location }) => {
-                self.effects.push_back(ProcessEffect {
+                self.effects.push_back(EvaluatorEffect {
                     kind,
                     location: location.clone(),
                 });
@@ -150,7 +150,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&just_executed)
         {
-            self.effects.push_back(ProcessEffect {
+            self.effects.push_back(EvaluatorEffect {
                 kind: EvaluatorEffectKind::Builtin(
                     runtime::BuiltinEffect::Breakpoint,
                 ),
@@ -174,12 +174,6 @@ impl ProcessState {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
     }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ProcessEffect {
-    pub kind: EvaluatorEffectKind,
-    pub location: runtime::Location,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

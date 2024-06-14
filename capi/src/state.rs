@@ -8,8 +8,8 @@ use crate::{
     display::Display,
     ffi,
     games::{self, snake::snake},
-    process::{Process, ProcessEffect},
-    runtime::{BuiltinEffect, EvaluatorEffectKind, Value},
+    process::Process,
+    runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     ui,
     updates::{updates, UpdatesTx},
@@ -80,7 +80,7 @@ impl RuntimeState {
         while self.process.can_step() {
             self.process.step();
 
-            if let Some(ProcessEffect {
+            if let Some(EvaluatorEffect {
                 kind: EvaluatorEffectKind::Builtin(effect),
                 ..
             }) = self.process.effects.front()
