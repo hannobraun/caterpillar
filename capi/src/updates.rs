@@ -67,7 +67,7 @@ impl UpdatesTx {
                         memory: process.memory.clone(),
                     })
                     .unwrap();
-                self.inner.send(Update::Process(process.clone())).unwrap();
+                self.inner.send(Update::Process(process)).unwrap();
             }
         }
     }
