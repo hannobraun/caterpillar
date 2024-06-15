@@ -114,8 +114,6 @@ impl RuntimeState {
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-
-                        self.process.memory.inner[address] = *value;
                         self.memory.inner[address] = *value;
 
                         self.process.effects.pop_front();

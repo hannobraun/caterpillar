@@ -26,13 +26,6 @@ pub struct Process {
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
-
-    /// Linear memory
-    ///
-    /// This is accessed via effects handled by the host, so logically, it
-    /// shouldn't be part of `Process`. However, for the time being, having it
-    /// here makes it easy to share this with the debugger.
-    pub memory: Memory,
 }
 
 impl Process {
@@ -56,7 +49,6 @@ impl Process {
             arguments,
             effects: VecDeque::default(),
             previous_data_stack: DataStack::default(),
-            memory: Memory::default(),
         }
     }
 
@@ -65,7 +57,6 @@ impl Process {
         self.state = ProcessState::default();
         self.effects.clear();
         self.previous_data_stack.clear();
-        self.memory.zero();
 
         self.push(self.arguments.clone());
     }

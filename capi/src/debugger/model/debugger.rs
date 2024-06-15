@@ -29,7 +29,6 @@ impl Debugger {
                     process.previous_data_stack,
                     process.evaluator.data_stack().clone(),
                 ]);
-                self.memory = Some(process.memory);
             }
         }
     }
