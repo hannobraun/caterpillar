@@ -119,6 +119,10 @@ impl RuntimeState {
                         self.memory.inner[address] = *value;
 
                         self.process.effects.pop_front();
+
+                        self.updates_tx.queue(Update::Memory {
+                            memory: self.memory.clone(),
+                        });
                     }
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
