@@ -14,7 +14,7 @@ use crate::{
     process::{Memory, Process},
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
-    updates::{updates, UpdatesTx},
+    updates::{updates, Update, UpdatesTx},
 };
 
 pub struct RuntimeState {
@@ -161,7 +161,8 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.send_if_relevant(self.process.clone());
+        self.updates_tx
+            .send_if_relevant(Update::Process(self.process.clone()));
 
         display.render(&self.tiles);
     }
