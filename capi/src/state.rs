@@ -161,8 +161,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx
-            .send_if_relevant(Update::Process(self.process.clone()));
+        self.updates_tx.queue(Update::Process(self.process.clone()));
 
         display.render(&self.tiles);
     }
