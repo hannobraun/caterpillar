@@ -34,41 +34,41 @@ impl UpdatesTx {
                 todo!("Not expecting this argument yet.");
             }
             Update::Process(process) => {
-                if let Some(process_at_client) = &self.process_at_client {
-                    // The client has previously received a program. We don't
-                    // want to saturate the connection with useless updates, so
-                    // use that to determine, if we should send an update.
-
-                    if process_at_client.can_step() && process.can_step() {
-                        // While the program is running, sending updates on
-                        // every change would result in too many updates.
-                        //
-                        // Let's check if there's a change that we consider
-                        // worthy of sending an update for.
-
-                        let breakpoints_unchanged = process_at_client
-                            .breakpoints
-                            == process.breakpoints;
-
-                        if breakpoints_unchanged {
-                            return;
-                        }
-                    }
+                if self.should_flush(&process) {
+                    self.process_at_client = Some(process.clone());
+                    self.inner
+                        .send(Update::Memory {
+                            memory: process.memory.clone(),
+                        })
+                        .unwrap();
+                    self.inner.send(Update::Process(process)).unwrap();
                 }
-                if self.process_at_client.as_ref() == Some(&process) {
-                    // Client already has this program. Don't need to send it
-                    // again.
-                    return;
-                }
-
-                self.process_at_client = Some(process.clone());
-                self.inner
-                    .send(Update::Memory {
-                        memory: process.memory.clone(),
-                    })
-                    .unwrap();
-                self.inner.send(Update::Process(process)).unwrap();
             }
         }
+    }
+
+    fn should_flush(&self, process: &Process) -> bool {
+        if let Some(process_at_client) = &self.process_at_client {
+            // The client has previously received a program. We don't want to
+            // saturate the connection with useless updates, so use that to
+            // determine, if we should send an update.
+
+            if process_at_client.can_step() && process.can_step() {
+                // While the program is running, sending updates on every change
+                // would result in too many updates.
+                //
+                // Let's check if there's a change that we consider worthy of
+                // sending an update for.
+
+                let breakpoints_unchanged =
+                    process_at_client.breakpoints == process.breakpoints;
+
+                if breakpoints_unchanged {
+                    return false;
+                }
+            }
+        }
+
+        self.process_at_client.as_ref() != Some(process)
     }
 }
