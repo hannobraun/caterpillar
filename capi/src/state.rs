@@ -4,11 +4,14 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
-    debugger::ui::{self, EventsRx},
+    debugger::{
+        model::DebugEvent,
+        ui::{self, EventsRx},
+    },
     display::Display,
     ffi,
     games::{self, snake::snake},
-    process::Process,
+    process::{Memory, Process},
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::NUM_TILES,
     updates::{updates, UpdatesTx},
@@ -16,6 +19,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub process: Process,
+    pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
@@ -26,6 +30,7 @@ pub struct RuntimeState {
 impl RuntimeState {
     pub fn new() -> Self {
         let process = games::build(snake);
+        let memory = Memory::default();
 
         let input = Input::default();
         let (updates_tx, updates_rx) = updates();
@@ -46,6 +51,7 @@ impl RuntimeState {
 
         Self {
             process,
+            memory,
             input,
             tiles: [0; NUM_TILES],
             display: None,
@@ -63,6 +69,10 @@ impl RuntimeState {
         loop {
             match self.events_rx.try_recv() {
                 Ok(event) => {
+                    if let DebugEvent::Reset = event {
+                        self.memory.zero();
+                    }
+
                     self.process.process_event(event);
                 }
                 Err(TryRecvError::Empty) => {
@@ -104,7 +114,9 @@ impl RuntimeState {
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
+
                         self.process.memory.inner[address] = *value;
+                        self.memory.inner[address] = *value;
 
                         self.process.effects.pop_front();
                     }
