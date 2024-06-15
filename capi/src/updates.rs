@@ -38,10 +38,9 @@ impl UpdatesTx {
             Update::Process(process) => {
                 if self.should_flush(&process) {
                     self.process_at_client = Some(process.clone());
+                    self.inner.send(Update::Process(process)).unwrap();
 
                     self.flush();
-
-                    self.inner.send(Update::Process(process)).unwrap();
                 }
             }
         }
