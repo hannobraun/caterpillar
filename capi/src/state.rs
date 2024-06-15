@@ -161,7 +161,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.send_if_relevant(&self.process);
+        self.updates_tx.send_if_relevant(self.process.clone());
 
         display.render(&self.tiles);
     }

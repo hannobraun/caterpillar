@@ -26,7 +26,7 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_if_relevant(&mut self, process: &Process) {
+    pub fn send_if_relevant(&mut self, process: Process) {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
@@ -47,7 +47,7 @@ impl UpdatesTx {
                 }
             }
         }
-        if self.process_at_client.as_ref() == Some(process) {
+        if self.process_at_client.as_ref() == Some(&process) {
             // Client already has this program. Don't need to send it again.
             return;
         }
