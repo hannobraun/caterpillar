@@ -19,13 +19,18 @@ impl Debugger {
     }
 
     pub fn on_update(&mut self, update: Update) {
-        let Update::Process(process) = update;
-
-        self.active_functions = ActiveFunctions::new(Some(&process));
-        self.data_stacks = Some([
-            process.previous_data_stack,
-            process.evaluator.data_stack().clone(),
-        ]);
-        self.memory = Some(process.memory);
+        match update {
+            Update::Memory { memory } => {
+                self.memory = Some(memory);
+            }
+            Update::Process(process) => {
+                self.active_functions = ActiveFunctions::new(Some(&process));
+                self.data_stacks = Some([
+                    process.previous_data_stack,
+                    process.evaluator.data_stack().clone(),
+                ]);
+                self.memory = Some(process.memory);
+            }
+        }
     }
 }
