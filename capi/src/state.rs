@@ -107,7 +107,7 @@ impl RuntimeState {
                     }
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
-                        let value = self.process.memory.inner[address];
+                        let value = self.memory.inner[address];
                         self.process.push([value]);
 
                         self.process.effects.pop_front();
