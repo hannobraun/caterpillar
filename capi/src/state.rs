@@ -123,9 +123,9 @@ impl RuntimeState {
                         );
                     }
                     BuiltinEffect::SubmitFrame => {
-                        // This effect means that the game is done rendering. Let's
-                        // break out of this loop now, so we can do our part in that
-                        // and return control to the host.
+                        // This effect means that the game is done rendering.
+                        // Let's break out of this loop now, so we can do our
+                        // part in that and return control to the host.
                         self.process.effects.pop_front();
                         break;
                     }
