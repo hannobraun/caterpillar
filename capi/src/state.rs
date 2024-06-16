@@ -51,6 +51,7 @@ impl RuntimeState {
 
         updates_tx.queue(Update::SourceCode {
             functions: script.functions,
+            source_map: process.source_map.clone(),
         });
         ui::start(updates_rx, events_tx);
 

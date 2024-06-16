@@ -2,6 +2,7 @@ use tokio::sync::mpsc;
 
 use crate::{
     process::{Memory, Process},
+    source_map::SourceMap,
     syntax,
 };
 
@@ -21,9 +22,14 @@ pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 pub enum Update {
-    Memory { memory: Memory },
+    Memory {
+        memory: Memory,
+    },
     Process(Process),
-    SourceCode { functions: syntax::Functions },
+    SourceCode {
+        functions: syntax::Functions,
+        source_map: SourceMap,
+    },
 }
 
 #[derive(Clone)]
@@ -47,9 +53,17 @@ impl UpdatesTx {
                     self.flush();
                 }
             }
-            Update::SourceCode { functions } => {
+            Update::SourceCode {
+                functions,
+                source_map,
+            } => {
                 self.flush();
-                self.inner.send(Update::SourceCode { functions }).unwrap();
+                self.inner
+                    .send(Update::SourceCode {
+                        functions,
+                        source_map,
+                    })
+                    .unwrap();
             }
         }
     }

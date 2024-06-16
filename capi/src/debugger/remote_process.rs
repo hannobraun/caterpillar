@@ -29,8 +29,12 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::SourceCode { functions } => {
+            Update::SourceCode {
+                functions,
+                source_map,
+            } => {
                 self.functions = Some(functions);
+                let _ = source_map;
             }
         }
     }
