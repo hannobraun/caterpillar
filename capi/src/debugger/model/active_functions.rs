@@ -40,7 +40,7 @@ impl ActiveFunctions {
                 let function =
                     functions.get_from_location(syntax_location).cloned()?;
 
-                Some(Function::new(function, process))
+                Some(Function::new(function, &process.source_map, process))
             })
             .collect();
 

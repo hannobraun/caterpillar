@@ -1,4 +1,4 @@
-use crate::{process::Process, syntax};
+use crate::{process::Process, source_map::SourceMap, syntax};
 
 use super::Expression;
 
@@ -9,14 +9,18 @@ pub struct Function {
 }
 
 impl Function {
-    pub fn new(function: syntax::Function, process: &Process) -> Self {
+    pub fn new(
+        function: syntax::Function,
+        source_map: &SourceMap,
+        process: &Process,
+    ) -> Self {
         Self {
             name: function.name,
             expressions: function
                 .syntax
                 .into_iter()
                 .map(|expression| {
-                    Expression::new(expression, &process.source_map, process)
+                    Expression::new(expression, source_map, process)
                 })
                 .collect::<Vec<_>>(),
         }
