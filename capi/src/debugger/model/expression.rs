@@ -1,6 +1,7 @@
 use crate::{
     process::Process,
     runtime::{self, EvaluatorEffect},
+    source_map::SourceMap,
     syntax::{self, ExpressionKind},
 };
 
@@ -15,9 +16,12 @@ pub struct Expression {
 }
 
 impl Expression {
-    pub fn new(expression: syntax::Expression, process: &Process) -> Self {
-        let location =
-            process.source_map.syntax_to_runtime(&expression.location);
+    pub fn new(
+        expression: syntax::Expression,
+        source_map: &SourceMap,
+        process: &Process,
+    ) -> Self {
+        let location = source_map.syntax_to_runtime(&expression.location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
             process.breakpoints.durable_breakpoint_at(location)
@@ -30,7 +34,7 @@ impl Expression {
 
         let effect = process.effects.front().and_then(|effect| {
             let effect_location =
-                process.source_map.runtime_to_syntax(&effect.location);
+                source_map.runtime_to_syntax(&effect.location);
 
             if effect_location == expression.location {
                 Some(effect.clone())

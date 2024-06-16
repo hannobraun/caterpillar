@@ -15,7 +15,9 @@ impl Function {
             expressions: function
                 .syntax
                 .into_iter()
-                .map(|expression| Expression::new(expression, process))
+                .map(|expression| {
+                    Expression::new(expression, &process.source_map, process)
+                })
                 .collect::<Vec<_>>(),
         }
     }
