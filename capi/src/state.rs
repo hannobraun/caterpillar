@@ -36,12 +36,8 @@ impl RuntimeState {
         let (code, source_map) = compile(&script);
 
         let entry = code.functions.get("main").cloned().unwrap();
-        let process = Process::new(
-            source_map,
-            code,
-            entry,
-            vec![Value(TILES_PER_AXIS as i8); 2],
-        );
+        let process =
+            Process::new(code, entry, vec![Value(TILES_PER_AXIS as i8); 2]);
 
         let memory = Memory::default();
 
@@ -51,7 +47,7 @@ impl RuntimeState {
 
         updates_tx.queue(Update::SourceCode {
             functions: script.functions,
-            source_map: process.source_map.clone(),
+            source_map,
         });
         ui::start(updates_rx, events_tx);
 

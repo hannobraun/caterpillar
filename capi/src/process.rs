@@ -7,12 +7,10 @@ use crate::{
         self, BuiltinEffect, DataStack, Evaluator, EvaluatorEffect,
         EvaluatorEffectKind, EvaluatorState, Value,
     },
-    source_map::SourceMap,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
-    pub source_map: SourceMap,
     pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
     pub state: ProcessState,
@@ -28,7 +26,6 @@ pub struct Process {
 
 impl Process {
     pub fn new(
-        source_map: SourceMap,
         code: runtime::Code,
         entry: runtime::Function,
         arguments: Vec<Value>,
@@ -37,7 +34,6 @@ impl Process {
         evaluator.push(arguments.clone());
 
         Self {
-            source_map,
             breakpoints: Breakpoints::default(),
             evaluator,
             state: ProcessState::default(),
