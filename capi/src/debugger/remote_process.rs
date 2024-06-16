@@ -30,7 +30,10 @@ impl RemoteProcess {
     }
 
     pub fn to_debugger(&self) -> Debugger {
-        let active_functions = ActiveFunctions::new(self.process.as_ref());
+        let active_functions = ActiveFunctions::new(
+            self.process.as_ref().map(|process| &process.functions),
+            self.process.as_ref(),
+        );
         let data_stacks = self.process.as_ref().map(|process| {
             [
                 process.previous_data_stack.clone(),

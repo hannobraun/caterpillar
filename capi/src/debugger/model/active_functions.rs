@@ -1,4 +1,4 @@
-use crate::process::Process;
+use crate::{process::Process, syntax};
 
 use super::Function;
 
@@ -9,7 +9,15 @@ pub enum ActiveFunctions {
 }
 
 impl ActiveFunctions {
-    pub fn new(process: Option<&Process>) -> Self {
+    pub fn new(
+        functions: Option<&syntax::Functions>,
+        process: Option<&Process>,
+    ) -> Self {
+        let Some(functions) = functions else {
+            return Self::Message {
+                message: "No connection to Caterpillar process.",
+            };
+        };
         let Some(process) = process else {
             return Self::Message {
                 message: "No process available.",
@@ -29,10 +37,8 @@ impl ActiveFunctions {
             .filter_map(|runtime_location| {
                 let syntax_location =
                     process.source_map.runtime_to_syntax(&runtime_location);
-                let function = process
-                    .functions
-                    .get_from_location(syntax_location)
-                    .cloned()?;
+                let function =
+                    functions.get_from_location(syntax_location).cloned()?;
 
                 Some(Function::new(function, process))
             })
