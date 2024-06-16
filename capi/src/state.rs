@@ -4,16 +4,17 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
+    compiler::compile,
     debugger::{
         model::DebugEvent,
         ui::{self, EventsRx},
     },
     display::Display,
     ffi,
-    games::{self, snake::snake},
+    games::snake::snake,
     process::{Memory, Process},
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
-    tiles::NUM_TILES,
+    tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{updates, Update, UpdatesTx},
 };
 
@@ -29,7 +30,20 @@ pub struct RuntimeState {
 
 impl RuntimeState {
     pub fn new() -> Self {
-        let process = games::build(snake);
+        let mut script = crate::syntax::Script::default();
+        snake(&mut script);
+
+        let (code, source_map) = compile(&script);
+
+        let entry = code.functions.get("main").cloned().unwrap();
+        let process = Process::new(
+            script.functions,
+            source_map,
+            code,
+            entry,
+            vec![Value(TILES_PER_AXIS as i8); 2],
+        );
+
         let memory = Memory::default();
 
         let input = Input::default();
