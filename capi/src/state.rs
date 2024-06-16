@@ -37,7 +37,6 @@ impl RuntimeState {
 
         let entry = code.functions.get("main").cloned().unwrap();
         let process = Process::new(
-            script.functions,
             source_map,
             code,
             entry,
@@ -51,7 +50,7 @@ impl RuntimeState {
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         updates_tx.queue(Update::SourceCode {
-            functions: process.functions.clone(),
+            functions: script.functions,
         });
         ui::start(updates_rx, events_tx);
 

@@ -8,12 +8,10 @@ use crate::{
         EvaluatorEffectKind, EvaluatorState, Value,
     },
     source_map::SourceMap,
-    syntax,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
-    pub functions: syntax::Functions,
     pub source_map: SourceMap,
     pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
@@ -30,7 +28,6 @@ pub struct Process {
 
 impl Process {
     pub fn new(
-        functions: syntax::Functions,
         source_map: SourceMap,
         code: runtime::Code,
         entry: runtime::Function,
@@ -40,7 +37,6 @@ impl Process {
         evaluator.push(arguments.clone());
 
         Self {
-            functions,
             source_map,
             breakpoints: Breakpoints::default(),
             evaluator,
