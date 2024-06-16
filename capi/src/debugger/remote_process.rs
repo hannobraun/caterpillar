@@ -30,7 +30,7 @@ impl RemoteProcess {
                 self.process = Some(process);
             }
             Update::SourceCode { functions } => {
-                let _ = functions;
+                self.functions = Some(functions);
             }
         }
     }
