@@ -1,15 +1,18 @@
 use leptos::{create_signal, SignalSet};
 
 use crate::{
-    debugger::{model::Debugger, ui::components::debugger::Debugger},
+    debugger::{
+        remote_process::RemoteProcess, ui::components::debugger::Debugger,
+    },
     updates::UpdatesRx,
 };
 
 use super::EventsTx;
 
 pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
-    let mut debugger = Debugger::new();
-    let (debugger_read, debugger_write) = create_signal(debugger.clone());
+    let mut remote_process = RemoteProcess::new();
+    let (debugger_read, debugger_write) =
+        create_signal(remote_process.to_debugger());
 
     leptos::mount_to_body(move || {
         leptos::view! {
@@ -25,9 +28,9 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
                 break;
             };
 
-            debugger.on_update(update);
+            remote_process.on_update(update);
 
-            debugger_write.set(debugger.clone());
+            debugger_write.set(remote_process.to_debugger());
         }
     });
 }
