@@ -38,6 +38,7 @@ impl RemoteProcess {
     pub fn to_debugger(&self) -> Debugger {
         let active_functions = ActiveFunctions::new(
             self.functions.as_ref(),
+            self.process.as_ref().map(|process| &process.source_map),
             self.process.as_ref(),
         );
         let data_stacks = self.process.as_ref().map(|process| {
