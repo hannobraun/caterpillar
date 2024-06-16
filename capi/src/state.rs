@@ -33,9 +33,12 @@ impl RuntimeState {
         let memory = Memory::default();
 
         let input = Input::default();
-        let (updates_tx, updates_rx) = updates();
+        let (mut updates_tx, updates_rx) = updates();
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
+        updates_tx.queue(Update::SourceCode {
+            functions: process.functions.clone(),
+        });
         ui::start(updates_rx, events_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to

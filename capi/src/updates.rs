@@ -1,6 +1,9 @@
 use tokio::sync::mpsc;
 
-use crate::process::{Memory, Process};
+use crate::{
+    process::{Memory, Process},
+    syntax,
+};
 
 pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
@@ -20,6 +23,7 @@ pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 pub enum Update {
     Memory { memory: Memory },
     Process(Process),
+    SourceCode { functions: syntax::Functions },
 }
 
 #[derive(Clone)]
@@ -42,6 +46,10 @@ impl UpdatesTx {
 
                     self.flush();
                 }
+            }
+            Update::SourceCode { functions } => {
+                self.flush();
+                self.inner.send(Update::SourceCode { functions }).unwrap();
             }
         }
     }
