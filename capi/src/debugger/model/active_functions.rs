@@ -10,16 +10,10 @@ pub enum ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(
-        functions: Option<&syntax::Functions>,
-        source_map: Option<&SourceMap>,
+        source_code: Option<(&syntax::Functions, &SourceMap)>,
         process: Option<&Process>,
     ) -> Self {
-        let Some(functions) = functions else {
-            return Self::Message {
-                message: "No connection to Caterpillar process.",
-            };
-        };
-        let Some(source_map) = source_map else {
+        let Some((functions, source_map)) = source_code else {
             return Self::Message {
                 message: "No connection to Caterpillar process.",
             };
