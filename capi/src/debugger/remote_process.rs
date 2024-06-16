@@ -1,5 +1,6 @@
 use crate::{
     process::{Memory, Process},
+    source_map::SourceMap,
     syntax,
     updates::Update,
 };
@@ -7,7 +8,7 @@ use crate::{
 use super::model::{ActiveFunctions, Debugger};
 
 pub struct RemoteProcess {
-    pub source_code: Option<syntax::Functions>,
+    pub source_code: Option<(syntax::Functions, SourceMap)>,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
@@ -33,16 +34,15 @@ impl RemoteProcess {
                 functions,
                 source_map,
             } => {
-                self.source_code = Some(functions);
-                let _ = source_map;
+                self.source_code = Some((functions, source_map));
             }
         }
     }
 
     pub fn to_debugger(&self) -> Debugger {
         let active_functions = ActiveFunctions::new(
-            self.source_code.as_ref(),
-            self.process.as_ref().map(|process| &process.source_map),
+            self.source_code.as_ref().map(|(functions, _)| functions),
+            self.source_code.as_ref().map(|(_, source_map)| source_map),
             self.process.as_ref(),
         );
         let data_stacks = self.process.as_ref().map(|process| {
