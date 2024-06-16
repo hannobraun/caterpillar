@@ -7,7 +7,7 @@ use crate::{
 use super::model::{ActiveFunctions, Debugger};
 
 pub struct RemoteProcess {
-    pub functions: Option<syntax::Functions>,
+    pub source_code: Option<syntax::Functions>,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
@@ -15,7 +15,7 @@ pub struct RemoteProcess {
 impl RemoteProcess {
     pub fn new() -> Self {
         Self {
-            functions: None,
+            source_code: None,
             process: None,
             memory: None,
         }
@@ -33,7 +33,7 @@ impl RemoteProcess {
                 functions,
                 source_map,
             } => {
-                self.functions = Some(functions);
+                self.source_code = Some(functions);
                 let _ = source_map;
             }
         }
@@ -41,7 +41,7 @@ impl RemoteProcess {
 
     pub fn to_debugger(&self) -> Debugger {
         let active_functions = ActiveFunctions::new(
-            self.functions.as_ref(),
+            self.source_code.as_ref(),
             self.process.as_ref().map(|process| &process.source_map),
             self.process.as_ref(),
         );
