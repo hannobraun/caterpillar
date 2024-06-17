@@ -89,7 +89,7 @@ impl Process {
         self.previous_data_stack =
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
-            Ok(EvaluatorState::Running { .. }) => {}
+            Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(effect) => {
                 self.effects.push_back(effect);
