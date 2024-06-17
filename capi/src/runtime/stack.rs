@@ -52,7 +52,7 @@ impl Stack {
         frame: impl Into<StackFrame>,
     ) -> Result<(), PushError> {
         if self.frames.len() >= RECURSION_LIMIT {
-            return Err(PushError::CallStackOverflow);
+            return Err(PushError::Overflow);
         }
 
         let frame = frame.into();
@@ -109,7 +109,7 @@ pub enum NoNextInstruction {
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum PushError {
     #[error("Reached recursion limit")]
-    CallStackOverflow,
+    Overflow,
 }
 
 #[derive(Debug)]
