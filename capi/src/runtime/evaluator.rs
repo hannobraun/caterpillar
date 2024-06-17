@@ -1,6 +1,6 @@
 use super::{
     builtins,
-    stack::{NoNextInstruction, PushError},
+    stack::{self, NoNextInstruction},
     Bindings, BuiltinEffect, Code, DataStack, Function, Instruction, Location,
     Stack, StackFrame, StackUnderflow, Value,
 };
@@ -153,7 +153,7 @@ pub enum EvaluatorEffectKind {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    CallStack(#[from] PushError),
+    CallStack(#[from] stack::PushError),
 
     #[error(transparent)]
     StackError(#[from] StackUnderflow),
