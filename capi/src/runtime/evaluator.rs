@@ -77,25 +77,7 @@ impl Evaluator {
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
         if frame.function.next_instruction().is_none() {
-            let frame = frame.clone();
             self.stack.pop();
-            for value in frame.data.values() {
-                if let Some(stack_frame) = self.stack.top_frame_mut() {
-                    stack_frame.data.push(value);
-                } else {
-                    // If we end up here, one of the following happened:
-                    //
-                    // 1. We've returned from the top-level function.
-                    // 2. The top-level function has made a tail call.
-                    //
-                    // In case of 1, what we're doing here is irrelevant,
-                    // because the program is over.
-                    //
-                    // In case of 2, we might be leaving useless stuff on the
-                    // stack, I guess. Not critical right now, but longer-term,
-                    // we can clean that up.
-                }
-            }
         }
 
         match evaluate_result {
@@ -126,15 +108,7 @@ impl Evaluator {
                     })?;
                 }
                 CallStackUpdate::Pop => {
-                    if let Some(stack_frame) = self.stack.pop() {
-                        for value in stack_frame.data.values() {
-                            self.stack
-                                .top_frame_mut()
-                                .unwrap()
-                                .data
-                                .push(value);
-                        }
-                    }
+                    self.stack.pop();
                 }
             },
             Ok(None) => {}

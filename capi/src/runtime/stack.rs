@@ -59,8 +59,14 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop(&mut self) -> Option<StackFrame> {
-        self.frames.pop()
+    pub fn pop(&mut self) {
+        if let Some(old_top) = self.frames.pop() {
+            if let Some(new_top) = self.frames.last_mut() {
+                for value in old_top.data.values() {
+                    new_top.data.push(value);
+                }
+            }
+        }
     }
 
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
