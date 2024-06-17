@@ -75,16 +75,14 @@ impl Evaluator {
             }
         }
 
-        Ok(EvaluatorState::Running {
-            just_executed: location_tmp.unwrap(),
-        })
+        Ok(EvaluatorState::Running)
     }
 }
 
 #[derive(Debug)]
 #[must_use]
 pub enum EvaluatorState {
-    Running { just_executed: Location },
+    Running,
     Finished,
 }
 
