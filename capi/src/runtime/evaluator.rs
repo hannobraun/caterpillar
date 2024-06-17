@@ -56,7 +56,7 @@ impl Evaluator {
                     self.stack.push(function).map_err(|effect| {
                         EvaluatorEffect {
                             kind: effect.into(),
-                            location: location_tmp.clone().unwrap(),
+                            location: location_tmp.unwrap(),
                         }
                     })?;
                 }
