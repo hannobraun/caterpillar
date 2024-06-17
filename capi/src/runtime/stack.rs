@@ -93,7 +93,7 @@ impl Stack {
         &mut self,
         f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
     ) -> Option<R> {
-        let (frame, location, instruction) = loop {
+        let (frame, location, instruction, frame_is_empty) = loop {
             let frame = self.top_frame_mut()?;
 
             let Some((location, instruction)) =
@@ -104,7 +104,8 @@ impl Stack {
                 continue;
             };
 
-            break (frame, location, instruction);
+            let frame_is_empty = frame.function.next_instruction().is_none();
+            break (frame, location, instruction, frame_is_empty);
         };
 
         let result =
@@ -123,7 +124,7 @@ impl Stack {
         //    write.
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
-        if frame.function.next_instruction().is_none() {
+        if frame_is_empty {
             self.pop()
                 .expect("Just accessed a frame; expecting to pop it");
         }
