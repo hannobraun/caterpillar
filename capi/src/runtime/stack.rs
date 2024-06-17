@@ -11,7 +11,7 @@ impl Stack {
     pub fn new(next: Function) -> Self {
         let mut self_ = Self { frames: Vec::new() };
         self_
-            .push(StackFrame::new(next))
+            .push(next)
             .expect("Expected recursion limit to be more than zero.");
         self_
     }
@@ -47,10 +47,12 @@ impl Stack {
         })
     }
 
-    pub fn push(&mut self, mut frame: StackFrame) -> Result<(), PushError> {
+    pub fn push(&mut self, function: Function) -> Result<(), PushError> {
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushError::Overflow);
         }
+
+        let mut frame = StackFrame::new(function);
 
         if let Some(calling_frame) = self.top_frame_mut() {
             for argument in frame.function.arguments.iter().rev() {

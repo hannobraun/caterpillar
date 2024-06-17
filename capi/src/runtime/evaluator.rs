@@ -1,6 +1,6 @@
 use super::{
     builtins,
-    stack::{self, NoNextInstruction, StackFrame},
+    stack::{self, NoNextInstruction},
     Bindings, BuiltinEffect, Code, DataStack, Function, Instruction, Location,
     Stack, StackUnderflow, Value,
 };
@@ -88,9 +88,7 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    let frame = StackFrame::new(function);
-
-                    self.stack.push(frame).map_err(|effect| {
+                    self.stack.push(function).map_err(|effect| {
                         EvaluatorEffect {
                             kind: effect.into(),
                             location: location.clone(),
