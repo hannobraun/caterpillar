@@ -63,6 +63,10 @@ impl Stack {
                 let value = calling_frame.data.pop()?;
                 frame.bindings.insert(argument.clone(), value);
             }
+        } else {
+            // If there's no calling frame, then there's no place to take
+            // arguments from. Make sure that the function doesn't expect any.
+            assert_eq!(frame.function.arguments.len(), 0);
         }
 
         self.frames.push(frame);
