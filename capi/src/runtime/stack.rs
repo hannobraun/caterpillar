@@ -48,6 +48,7 @@ impl Stack {
     }
 
     pub fn push(&mut self, function: Function) -> Result<(), PushError> {
+        const RECURSION_LIMIT: usize = 8;
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushError::Overflow);
         }
@@ -120,5 +121,3 @@ pub enum PushError {
 
 #[derive(Debug)]
 pub struct StackIsEmpty;
-
-const RECURSION_LIMIT: usize = 8;
