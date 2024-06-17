@@ -16,10 +16,13 @@ impl Stack {
         self_
     }
 
-    pub fn next_instruction(&self) -> Option<Location> {
+    pub fn next_instruction(&self) -> Result<Location, NoNextInstruction> {
         self.frames
             .last()
-            .and_then(|frame| frame.function.next_instruction())
+            .ok_or(NoNextInstruction)
+            .and_then(|frame| {
+                frame.function.next_instruction().ok_or(NoNextInstruction)
+            })
             .map(|(location, _instruction)| location)
     }
 
@@ -83,6 +86,9 @@ impl StackFrame {
 }
 
 pub type Bindings = BTreeMap<String, Value>;
+
+#[derive(Debug)]
+pub struct NoNextInstruction;
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 #[error("Overflowed call stack")]
