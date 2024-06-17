@@ -1,6 +1,7 @@
 use super::{
-    builtins, Bindings, BuiltinEffect, CallStackOverflow, Code, DataStack,
-    Function, Instruction, Location, Stack, StackFrame, StackUnderflow, Value,
+    builtins, stack::NoNextInstruction, Bindings, BuiltinEffect,
+    CallStackOverflow, Code, DataStack, Function, Instruction, Location, Stack,
+    StackFrame, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -17,8 +18,8 @@ impl Evaluator {
         }
     }
 
-    pub fn next_instruction(&self) -> Location {
-        self.stack.next_instruction().unwrap()
+    pub fn next_instruction(&self) -> Result<Location, NoNextInstruction> {
+        self.stack.next_instruction()
     }
 
     pub fn stack(&self) -> &Stack {

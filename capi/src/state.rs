@@ -118,14 +118,20 @@ impl RuntimeState {
                             }) = self.process.effects.front()
                             {
                                 self.process.breakpoints.set_ephemeral(
-                                    self.process.evaluator.next_instruction(),
+                                    self.process
+                                        .evaluator
+                                        .next_instruction()
+                                        .unwrap(),
                                 );
                                 self.process.effects.pop_front();
                             }
                         }
                         DebugEvent::Stop => {
                             self.process.breakpoints.set_ephemeral(
-                                self.process.evaluator.next_instruction(),
+                                self.process
+                                    .evaluator
+                                    .next_instruction()
+                                    .unwrap(),
                             );
                         }
                         DebugEvent::ToggleBreakpoint { location } => {
