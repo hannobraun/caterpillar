@@ -1,7 +1,8 @@
 use super::{
-    builtins, stack::NoNextInstruction, Bindings, BuiltinEffect,
-    CallStackOverflow, Code, DataStack, Function, Instruction, Location, Stack,
-    StackFrame, StackUnderflow, Value,
+    builtins,
+    stack::{CallStackOverflow, NoNextInstruction},
+    Bindings, BuiltinEffect, Code, DataStack, Function, Instruction, Location,
+    Stack, StackFrame, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
