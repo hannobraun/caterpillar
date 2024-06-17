@@ -49,7 +49,9 @@ impl Evaluator {
             let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
             else {
-                self.stack.pop();
+                self.stack
+                    .pop()
+                    .expect("Just accessed a frame; expecting to pop it");
                 continue;
             };
 
@@ -77,7 +79,9 @@ impl Evaluator {
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
         if frame.function.next_instruction().is_none() {
-            self.stack.pop();
+            self.stack
+                .pop()
+                .expect("Just accessed a frame; expecting to pop it");
         }
 
         match evaluate_result {
@@ -106,7 +110,9 @@ impl Evaluator {
                     })?;
                 }
                 CallStackUpdate::Pop => {
-                    self.stack.pop();
+                    self.stack
+                        .pop()
+                        .expect("Currently executing; stack can't be empty");
                 }
             },
             Ok(None) => {}

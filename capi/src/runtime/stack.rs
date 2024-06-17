@@ -61,14 +61,16 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop(&mut self) {
-        if let Some(old_top) = self.frames.pop() {
-            if let Some(new_top) = self.frames.last_mut() {
-                for value in old_top.data.values() {
-                    new_top.data.push(value);
-                }
+    pub fn pop(&mut self) -> Result<(), StackIsEmpty> {
+        let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
+
+        if let Some(new_top) = self.frames.last_mut() {
+            for value in old_top.data.values() {
+                new_top.data.push(value);
             }
         }
+
+        Ok(())
     }
 
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
@@ -107,5 +109,8 @@ pub enum NoNextInstruction {
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 #[error("Overflowed call stack")]
 pub struct CallStackOverflow;
+
+#[derive(Debug)]
+pub struct StackIsEmpty;
 
 const RECURSION_LIMIT: usize = 8;
