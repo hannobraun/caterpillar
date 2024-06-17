@@ -83,10 +83,9 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    let mut stack_frame = StackFrame::new(function);
+                    let mut frame = StackFrame::new(function);
 
-                    for argument in stack_frame.function.arguments.iter().rev()
-                    {
+                    for argument in frame.function.arguments.iter().rev() {
                         let value = self
                             .stack
                             .top_frame_mut()
@@ -97,10 +96,10 @@ impl Evaluator {
                                 kind: effect.into(),
                                 location: location.clone(),
                             })?;
-                        stack_frame.bindings.insert(argument.clone(), value);
+                        frame.bindings.insert(argument.clone(), value);
                     }
 
-                    self.stack.push(stack_frame).map_err(|effect| {
+                    self.stack.push(frame).map_err(|effect| {
                         EvaluatorEffect {
                             kind: effect.into(),
                             location: location.clone(),
