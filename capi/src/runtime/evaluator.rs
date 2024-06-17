@@ -18,7 +18,7 @@ impl Evaluator {
     }
 
     pub fn next_instruction(&self) -> Option<Location> {
-        self.stack.next_instruction().ok()
+        self.stack.next_instruction()
     }
 
     pub fn stack(&self) -> &Stack {

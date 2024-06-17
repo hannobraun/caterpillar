@@ -18,14 +18,14 @@ impl Stack {
         self_
     }
 
-    pub fn next_instruction(&self) -> Result<Location, NoNextInstruction> {
+    pub fn next_instruction(&self) -> Option<Location> {
         for frame in self.frames.iter().rev() {
             if let Some((location, _)) = frame.function.next_instruction() {
-                return Ok(location);
+                return Some(location);
             }
         }
 
-        Err(NoNextInstruction::StackIsEmpty)
+        None
     }
 
     pub fn top_frame(&self) -> Option<&StackFrame> {
@@ -144,11 +144,6 @@ pub struct StackFrame {
 }
 
 pub type Bindings = BTreeMap<String, Value>;
-
-#[derive(Debug)]
-pub enum NoNextInstruction {
-    StackIsEmpty,
-}
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum PushError {
