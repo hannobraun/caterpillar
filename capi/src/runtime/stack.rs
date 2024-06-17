@@ -93,7 +93,7 @@ impl Stack {
         &mut self,
         f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
     ) -> Option<R> {
-        let (location, instruction, data, bindings, frame_is_empty) = loop {
+        let (result, frame_is_empty) = loop {
             let frame = self.top_frame_mut()?;
 
             let Some((location, instruction)) =
@@ -104,17 +104,11 @@ impl Stack {
                 continue;
             };
 
+            let result =
+                f(location, instruction, &mut frame.data, &mut frame.bindings);
             let frame_is_empty = frame.function.next_instruction().is_none();
-            break (
-                location,
-                instruction,
-                &mut frame.data,
-                &mut frame.bindings,
-                frame_is_empty,
-            );
+            break (result, frame_is_empty);
         };
-
-        let result = f(location, instruction, data, bindings);
 
         // Don't put the stack frame back, if it is empty. This is tail call
         // optimization.
