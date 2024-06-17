@@ -83,10 +83,10 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    let arguments = function.arguments.clone();
                     let mut stack_frame = StackFrame::new(function);
 
-                    for argument in arguments.into_iter().rev() {
+                    for argument in stack_frame.function.arguments.iter().rev()
+                    {
                         let value = self
                             .stack
                             .top_frame_mut()
