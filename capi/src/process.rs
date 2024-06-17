@@ -73,9 +73,22 @@ impl Process {
         // return `ProcessState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
+        let next_instruction = self.evaluator.next_instruction().unwrap();
+        if self
+            .breakpoints
+            .should_stop_at_and_clear_ephemeral(&next_instruction)
+        {
+            self.effects.push_back(EvaluatorEffect {
+                kind: EvaluatorEffectKind::Builtin(
+                    runtime::BuiltinEffect::Breakpoint,
+                ),
+                location: next_instruction,
+            });
+        }
+
         self.previous_data_stack =
             self.evaluator.stack().top_frame().unwrap().data.clone();
-        let just_executed = match self.evaluator.step() {
+        match self.evaluator.step() {
             Ok(EvaluatorState::Running { just_executed }) => just_executed,
             Ok(EvaluatorState::Finished) => return ProcessState::Finished,
             Err(effect) => {
@@ -84,18 +97,6 @@ impl Process {
                 location
             }
         };
-
-        if self
-            .breakpoints
-            .should_stop_at_and_clear_ephemeral(&just_executed)
-        {
-            self.effects.push_back(EvaluatorEffect {
-                kind: EvaluatorEffectKind::Builtin(
-                    runtime::BuiltinEffect::Breakpoint,
-                ),
-                location: just_executed,
-            });
-        }
 
         ProcessState::Running
     }
