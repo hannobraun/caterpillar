@@ -46,11 +46,13 @@ impl Evaluator {
                 return Ok(EvaluatorState::Finished);
             };
 
-            if let Some((location, instruction)) =
+            let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
-            {
-                break (frame, location, instruction);
-            }
+            else {
+                continue;
+            };
+
+            break (frame, location, instruction);
         };
 
         let evaluate_result = evaluate_instruction(
