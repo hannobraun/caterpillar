@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
-use super::{DataStack, Function, Location, StackUnderflow, Value};
+use super::{
+    DataStack, Function, Instruction, Location, StackUnderflow, Value,
+};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -85,6 +87,48 @@ impl Stack {
         }
 
         Ok(())
+    }
+
+    pub fn consume_next_instruction<R>(
+        &mut self,
+        f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
+    ) -> Option<R> {
+        let (frame, location, instruction) = loop {
+            let frame = self.top_frame_mut()?;
+
+            let Some((location, instruction)) =
+                frame.function.consume_next_instruction()
+            else {
+                self.pop()
+                    .expect("Just accessed a frame; expecting to pop it");
+                continue;
+            };
+
+            break (frame, location, instruction);
+        };
+
+        let result =
+            f(location, instruction, &mut frame.data, &mut frame.bindings);
+
+        // Don't put the stack frame back, if it is empty. This is tail call
+        // optimization.
+        //
+        // This will lead to trouble, if the last instruction in the function
+        // (the one we just executed) is an explicit return instruction. Those
+        // pop *another* stack frame, which is one too many.
+        //
+        // I've decided not to address that, for the moment:
+        //
+        // 1. That is a weird pattern anyway, and doesn't really make sense to
+        //    write.
+        // 2. Explicit return instructions are a stopgap anyway, until we have
+        //    more advanced control flow.
+        if frame.function.next_instruction().is_none() {
+            self.pop()
+                .expect("Just accessed a frame; expecting to pop it");
+        }
+
+        Some(result)
     }
 
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {

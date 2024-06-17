@@ -42,48 +42,15 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
-        let (frame, location, instruction) = loop {
-            let Some(frame) = self.stack.top_frame_mut() else {
-                return Ok(EvaluatorState::Finished);
-            };
-
-            let Some((location, instruction)) =
-                frame.function.consume_next_instruction()
-            else {
-                self.stack
-                    .pop()
-                    .expect("Just accessed a frame; expecting to pop it");
-                continue;
-            };
-
-            break (frame, location, instruction);
+        let mut location_tmp = None;
+        let Some(evaluate_result) = self.stack.consume_next_instruction(
+            |location, instruction, data, bindings| {
+                location_tmp = Some(location);
+                evaluate_instruction(instruction, &self.code, data, bindings)
+            },
+        ) else {
+            return Ok(EvaluatorState::Finished);
         };
-
-        let evaluate_result = evaluate_instruction(
-            instruction,
-            &self.code,
-            &mut frame.data,
-            &mut frame.bindings,
-        );
-
-        // Don't put the stack frame back, if it is empty. This is tail call
-        // optimization.
-        //
-        // This will lead to trouble, if the last instruction in the function
-        // (the one we just executed) is an explicit return instruction. Those
-        // pop *another* stack frame, which is one too many.
-        //
-        // I've decided not to address that, for the moment:
-        //
-        // 1. That is a weird pattern anyway, and doesn't really make sense to
-        //    write.
-        // 2. Explicit return instructions are a stopgap anyway, until we have
-        //    more advanced control flow.
-        if frame.function.next_instruction().is_none() {
-            self.stack
-                .pop()
-                .expect("Just accessed a frame; expecting to pop it");
-        }
 
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
@@ -91,7 +58,7 @@ impl Evaluator {
                     self.stack.push(function).map_err(|effect| {
                         EvaluatorEffect {
                             kind: effect.into(),
-                            location: location.clone(),
+                            location: location_tmp.clone().unwrap(),
                         }
                     })?;
                 }
@@ -105,13 +72,13 @@ impl Evaluator {
             Err(effect) => {
                 return Err(EvaluatorEffect {
                     kind: effect,
-                    location,
+                    location: location_tmp.unwrap(),
                 });
             }
         }
 
         Ok(EvaluatorState::Running {
-            just_executed: location,
+            just_executed: location_tmp.unwrap(),
         })
     }
 }
