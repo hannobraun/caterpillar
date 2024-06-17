@@ -19,16 +19,13 @@ impl Stack {
     }
 
     pub fn next_instruction(&self) -> Result<Location, NoNextInstruction> {
-        self.frames
-            .last()
-            .ok_or(NoNextInstruction::StackIsEmpty)
-            .and_then(|frame| {
-                frame
-                    .function
-                    .next_instruction()
-                    .ok_or(NoNextInstruction::CurrentFunctionIsDone)
-            })
-            .map(|(location, _instruction)| location)
+        for frame in self.frames.iter().rev() {
+            if let Some((location, _)) = frame.function.next_instruction() {
+                return Ok(location);
+            }
+        }
+
+        Err(NoNextInstruction::StackIsEmpty)
     }
 
     pub fn top_frame(&self) -> Option<&StackFrame> {
@@ -151,7 +148,6 @@ pub type Bindings = BTreeMap<String, Value>;
 #[derive(Debug)]
 pub enum NoNextInstruction {
     StackIsEmpty,
-    CurrentFunctionIsDone,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
