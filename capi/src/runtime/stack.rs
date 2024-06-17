@@ -16,7 +16,7 @@ impl Stack {
         self_
     }
 
-    pub fn next(&self) -> Option<Location> {
+    pub fn next_instruction(&self) -> Option<Location> {
         self.frames
             .last()
             .and_then(|frame| frame.function.next_instruction())

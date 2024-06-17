@@ -18,7 +18,7 @@ impl Evaluator {
     }
 
     pub fn next_instruction(&self) -> Location {
-        self.stack.next().unwrap()
+        self.stack.next_instruction().unwrap()
     }
 
     pub fn stack(&self) -> &Stack {
