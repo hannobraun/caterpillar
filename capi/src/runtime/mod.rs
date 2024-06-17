@@ -18,5 +18,5 @@ pub use self::{
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
-    stack::{Bindings, Stack, StackFrame},
+    stack::{Bindings, Stack},
 };
