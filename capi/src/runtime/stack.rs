@@ -108,7 +108,7 @@ pub enum NoNextInstruction {
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum PushError {
-    #[error("Overflowed call stack")]
+    #[error("Reached recursion limit")]
     CallStackOverflow,
 }
 
