@@ -93,7 +93,7 @@ impl Stack {
         &mut self,
         f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
     ) -> Option<R> {
-        let result = loop {
+        loop {
             let frame = self.top_frame_mut()?;
 
             let Some((location, instruction)) =
@@ -127,10 +127,8 @@ impl Stack {
                     .expect("Just accessed a frame; expecting to pop it");
             }
 
-            break result;
-        };
-
-        Some(result)
+            return Some(result);
+        }
     }
 
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
