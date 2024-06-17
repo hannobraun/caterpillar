@@ -52,24 +52,24 @@ impl Stack {
             return Err(PushError::Overflow);
         }
 
-        let mut frame = StackFrame {
-            function,
-            bindings: Bindings::new(),
-            data: DataStack::new(),
-        };
+        let mut bindings = Bindings::new();
 
         if let Some(calling_frame) = self.top_frame_mut() {
-            for argument in frame.function.arguments.iter().rev() {
+            for argument in function.arguments.iter().rev() {
                 let value = calling_frame.data.pop()?;
-                frame.bindings.insert(argument.clone(), value);
+                bindings.insert(argument.clone(), value);
             }
         } else {
             // If there's no calling frame, then there's no place to take
             // arguments from. Make sure that the function doesn't expect any.
-            assert_eq!(frame.function.arguments.len(), 0);
+            assert_eq!(function.arguments.len(), 0);
         }
 
-        self.frames.push(frame);
+        self.frames.push(StackFrame {
+            function,
+            bindings,
+            data: DataStack::new(),
+        });
         Ok(())
     }
 
