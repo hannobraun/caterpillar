@@ -70,6 +70,7 @@ impl Stack {
             bindings,
             data: DataStack::new(),
         });
+
         Ok(())
     }
 
