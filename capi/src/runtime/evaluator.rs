@@ -41,14 +41,15 @@ impl Evaluator {
     }
 
     pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
-        let (mut frame, location, instruction) = loop {
-            let Some(mut frame) = self.stack.pop() else {
+        let (frame, location, instruction) = loop {
+            let Some(frame) = self.stack.top_frame_mut() else {
                 return Ok(EvaluatorState::Finished);
             };
 
             let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
             else {
+                self.stack.pop();
                 continue;
             };
 
@@ -75,11 +76,9 @@ impl Evaluator {
         //    write.
         // 2. Explicit return instructions are a stopgap anyway, until we have
         //    more advanced control flow.
-        if frame.function.next_instruction().is_some() {
-            self.stack.push(frame).expect(
-                "Just popped a stack frame; pushing one can't overflow",
-            );
-        } else {
+        if frame.function.next_instruction().is_none() {
+            let frame = frame.clone();
+            self.stack.pop();
             for value in frame.data.values() {
                 if let Some(stack_frame) = self.stack.top_frame_mut() {
                     stack_frame.data.push(value);
