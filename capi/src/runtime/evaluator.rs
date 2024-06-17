@@ -1,8 +1,6 @@
 use super::{
-    builtins,
-    stack::{self, NoNextInstruction},
-    Bindings, BuiltinEffect, Code, DataStack, Function, Instruction, Location,
-    Stack, StackUnderflow, Value,
+    builtins, stack, Bindings, BuiltinEffect, Code, DataStack, Function,
+    Instruction, Location, Stack, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -19,8 +17,8 @@ impl Evaluator {
         }
     }
 
-    pub fn next_instruction(&self) -> Result<Location, NoNextInstruction> {
-        self.stack.next_instruction()
+    pub fn next_instruction(&self) -> Option<Location> {
+        self.stack.next_instruction().ok()
     }
 
     pub fn stack(&self) -> &Stack {
