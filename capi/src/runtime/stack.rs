@@ -52,7 +52,11 @@ impl Stack {
             return Err(PushError::Overflow);
         }
 
-        let mut frame = StackFrame::new(function);
+        let mut frame = StackFrame {
+            function,
+            data: DataStack::new(),
+            bindings: Bindings::new(),
+        };
 
         if let Some(calling_frame) = self.top_frame_mut() {
             for argument in frame.function.arguments.iter().rev() {
@@ -90,16 +94,6 @@ pub struct StackFrame {
     pub function: Function,
     pub data: DataStack,
     pub bindings: Bindings,
-}
-
-impl StackFrame {
-    pub fn new(function: Function) -> Self {
-        Self {
-            function,
-            data: DataStack::new(),
-            bindings: Bindings::new(),
-        }
-    }
 }
 
 pub type Bindings = BTreeMap<String, Value>;
