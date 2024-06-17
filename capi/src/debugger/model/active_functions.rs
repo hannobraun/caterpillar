@@ -29,6 +29,11 @@ impl ActiveFunctions {
                 message: "Process is running.",
             };
         }
+        if process.state.is_finished() {
+            return Self::Message {
+                message: "Process is finished.",
+            };
+        }
 
         let functions = process
             .evaluator
