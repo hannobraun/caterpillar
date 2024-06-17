@@ -54,8 +54,8 @@ impl Stack {
 
         let mut frame = StackFrame {
             function,
-            data: DataStack::new(),
             bindings: Bindings::new(),
+            data: DataStack::new(),
         };
 
         if let Some(calling_frame) = self.top_frame_mut() {
@@ -96,8 +96,8 @@ impl Stack {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StackFrame {
     pub function: Function,
-    pub data: DataStack,
     pub bindings: Bindings,
+    pub data: DataStack,
 }
 
 pub type Bindings = BTreeMap<String, Value>;
