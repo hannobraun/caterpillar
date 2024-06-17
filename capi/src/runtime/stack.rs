@@ -77,7 +77,7 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop(&mut self) -> Result<(), StackIsEmpty> {
+    pub fn pop(&mut self) -> Result<StackFrame, StackIsEmpty> {
         let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
 
         if let Some(new_top) = self.frames.last_mut() {
@@ -86,7 +86,7 @@ impl Stack {
             }
         }
 
-        Ok(())
+        Ok(old_top)
     }
 
     pub fn consume_next_instruction<R>(
