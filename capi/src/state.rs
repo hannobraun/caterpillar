@@ -12,7 +12,7 @@ use crate::{
     display::Display,
     ffi,
     games::snake::snake,
-    process::{Memory, Process},
+    process::Process,
     runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{updates, Update, UpdatesTx},
@@ -232,6 +232,25 @@ impl RuntimeState {
 impl Default for RuntimeState {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Memory {
+    pub inner: [Value; 256],
+}
+
+impl Memory {
+    pub fn zero(&mut self) {
+        *self = Self::default();
+    }
+}
+
+impl Default for Memory {
+    fn default() -> Self {
+        Self {
+            inner: [Value(0); 256],
+        }
     }
 }
 

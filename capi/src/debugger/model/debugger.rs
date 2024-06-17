@@ -1,4 +1,4 @@
-use crate::{process::Memory, runtime::DataStack};
+use crate::{runtime::DataStack, state::Memory};
 
 use super::ActiveFunctions;
 

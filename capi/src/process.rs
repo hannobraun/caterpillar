@@ -114,22 +114,3 @@ impl ProcessState {
         matches!(self, Self::Running)
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Memory {
-    pub inner: [Value; 256],
-}
-
-impl Memory {
-    pub fn zero(&mut self) {
-        *self = Self::default();
-    }
-}
-
-impl Default for Memory {
-    fn default() -> Self {
-        Self {
-            inner: [Value(0); 256],
-        }
-    }
-}

@@ -1,10 +1,6 @@
 use tokio::sync::mpsc;
 
-use crate::{
-    process::{Memory, Process},
-    source_map::SourceMap,
-    syntax,
-};
+use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
 pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();

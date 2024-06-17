@@ -1,7 +1,5 @@
 use crate::{
-    process::{Memory, Process},
-    source_map::SourceMap,
-    syntax,
+    process::Process, source_map::SourceMap, state::Memory, syntax,
     updates::Update,
 };
 

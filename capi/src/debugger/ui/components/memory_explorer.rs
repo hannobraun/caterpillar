@@ -1,6 +1,6 @@
 use leptos::{component, view, CollectView, IntoView};
 
-use crate::{debugger::ui::components::panel::Panel, process::Memory};
+use crate::{debugger::ui::components::panel::Panel, state::Memory};
 
 #[component]
 pub fn MemoryExplorer(memory: Memory) -> impl IntoView {
