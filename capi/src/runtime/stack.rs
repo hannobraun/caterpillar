@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{DataStack, Function, Location, Value};
+use super::{DataStack, Function, Location, StackUnderflow, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -55,7 +55,14 @@ impl Stack {
             return Err(PushError::Overflow);
         }
 
-        let frame = frame.into();
+        let mut frame = frame.into();
+
+        if let Some(calling_frame) = self.top_frame_mut() {
+            for argument in frame.function.arguments.iter().rev() {
+                let value = calling_frame.data.pop()?;
+                frame.bindings.insert(argument.clone(), value);
+            }
+        }
 
         self.frames.push(frame);
         Ok(())
@@ -110,6 +117,9 @@ pub enum NoNextInstruction {
 pub enum PushError {
     #[error("Reached recursion limit")]
     Overflow,
+
+    #[error("Expected function arguments on stack")]
+    MissingArgument(#[from] StackUnderflow),
 }
 
 #[derive(Debug)]
