@@ -47,15 +47,10 @@ impl Stack {
         })
     }
 
-    pub fn push(
-        &mut self,
-        frame: impl Into<StackFrame>,
-    ) -> Result<(), PushError> {
+    pub fn push(&mut self, mut frame: StackFrame) -> Result<(), PushError> {
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushError::Overflow);
         }
-
-        let mut frame = frame.into();
 
         if let Some(calling_frame) = self.top_frame_mut() {
             for argument in frame.function.arguments.iter().rev() {
