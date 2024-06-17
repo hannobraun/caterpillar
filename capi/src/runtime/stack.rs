@@ -93,7 +93,7 @@ impl Stack {
         &mut self,
         f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
     ) -> Option<R> {
-        let (result, frame_is_empty) = loop {
+        let result = loop {
             let frame = self.top_frame_mut()?;
 
             let Some((location, instruction)) =
@@ -106,27 +106,29 @@ impl Stack {
 
             let result =
                 f(location, instruction, &mut frame.data, &mut frame.bindings);
-            let frame_is_empty = frame.function.next_instruction().is_none();
-            break (result, frame_is_empty);
-        };
 
-        // Don't put the stack frame back, if it is empty. This is tail call
-        // optimization.
-        //
-        // This will lead to trouble, if the last instruction in the function
-        // (the one we just executed) is an explicit return instruction. Those
-        // pop *another* stack frame, which is one too many.
-        //
-        // I've decided not to address that, for the moment:
-        //
-        // 1. That is a weird pattern anyway, and doesn't really make sense to
-        //    write.
-        // 2. Explicit return instructions are a stopgap anyway, until we have
-        //    more advanced control flow.
-        if frame_is_empty {
-            self.pop()
-                .expect("Just accessed a frame; expecting to pop it");
-        }
+            // Don't put the stack frame back, if it is empty. This is tail call
+            // optimization.
+            //
+            // This will lead to trouble, if the last instruction in the
+            // function (the one we just executed) is an explicit return
+            // instruction. Those pop *another* stack frame, which is one too
+            // many.
+            //
+            // I've decided not to address that, for the moment:
+            //
+            // 1. That is a weird pattern anyway, and doesn't really make sense
+            //    to write.
+            // 2. Explicit return instructions are a stopgap anyway, until we
+            //    have more advanced control flow.
+            let frame_is_empty = frame.function.next_instruction().is_none();
+            if frame_is_empty {
+                self.pop()
+                    .expect("Just accessed a frame; expecting to pop it");
+            }
+
+            break result;
+        };
 
         Some(result)
     }
