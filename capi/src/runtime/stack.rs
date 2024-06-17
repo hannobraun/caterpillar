@@ -50,9 +50,9 @@ impl Stack {
     pub fn push(
         &mut self,
         frame: impl Into<StackFrame>,
-    ) -> Result<(), CallStackOverflow> {
+    ) -> Result<(), PushError> {
         if self.frames.len() >= RECURSION_LIMIT {
-            return Err(CallStackOverflow);
+            return Err(PushError::CallStackOverflow);
         }
 
         let frame = frame.into();
@@ -107,8 +107,10 @@ pub enum NoNextInstruction {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
-#[error("Overflowed call stack")]
-pub struct CallStackOverflow;
+pub enum PushError {
+    #[error("Overflowed call stack")]
+    CallStackOverflow,
+}
 
 #[derive(Debug)]
 pub struct StackIsEmpty;
