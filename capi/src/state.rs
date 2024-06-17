@@ -86,7 +86,54 @@ impl RuntimeState {
                         self.memory.zero();
                     }
 
-                    self.process.process_event(event);
+                    match event {
+                        DebugEvent::Continue { and_stop_at } => {
+                            if let Some(EvaluatorEffect {
+                                kind:
+                                    EvaluatorEffectKind::Builtin(
+                                        BuiltinEffect::Breakpoint,
+                                    ),
+                                ..
+                            }) = self.process.effects.front()
+                            {
+                                if let Some(instruction) = and_stop_at {
+                                    self.process
+                                        .breakpoints
+                                        .set_ephemeral(instruction);
+                                }
+
+                                self.process.effects.pop_front();
+                            }
+                        }
+                        DebugEvent::Reset => {
+                            self.process.reset();
+                        }
+                        DebugEvent::Step => {
+                            if let Some(EvaluatorEffect {
+                                kind:
+                                    EvaluatorEffectKind::Builtin(
+                                        BuiltinEffect::Breakpoint,
+                                    ),
+                                ..
+                            }) = self.process.effects.front()
+                            {
+                                self.process.breakpoints.set_ephemeral(
+                                    self.process.evaluator.next_instruction(),
+                                );
+                                self.process.effects.pop_front();
+                            }
+                        }
+                        DebugEvent::Stop => {
+                            self.process.breakpoints.set_ephemeral(
+                                self.process.evaluator.next_instruction(),
+                            );
+                        }
+                        DebugEvent::ToggleBreakpoint { location } => {
+                            self.process
+                                .breakpoints
+                                .toggle_durable_at(location);
+                        }
+                    }
                 }
                 Err(TryRecvError::Empty) => {
                     break;

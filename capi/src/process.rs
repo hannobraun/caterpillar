@@ -2,10 +2,9 @@ use std::collections::VecDeque;
 
 use crate::{
     breakpoints::Breakpoints,
-    debugger::model::DebugEvent,
     runtime::{
-        self, BuiltinEffect, DataStack, Evaluator, EvaluatorEffect,
-        EvaluatorEffectKind, EvaluatorState, Value,
+        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
+        EvaluatorState, Value,
     },
 };
 
@@ -55,47 +54,6 @@ impl Process {
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         self.evaluator.push(values);
-    }
-
-    pub fn process_event(&mut self, event: DebugEvent) {
-        match event {
-            DebugEvent::Continue { and_stop_at } => {
-                if let Some(EvaluatorEffect {
-                    kind:
-                        EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
-                    ..
-                }) = self.effects.front()
-                {
-                    if let Some(instruction) = and_stop_at {
-                        self.breakpoints.set_ephemeral(instruction);
-                    }
-
-                    self.effects.pop_front();
-                }
-            }
-            DebugEvent::Reset => {
-                self.reset();
-            }
-            DebugEvent::Step => {
-                if let Some(EvaluatorEffect {
-                    kind:
-                        EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint),
-                    ..
-                }) = self.effects.front()
-                {
-                    self.breakpoints
-                        .set_ephemeral(self.evaluator.next_instruction());
-                    self.effects.pop_front();
-                }
-            }
-            DebugEvent::Stop => {
-                self.breakpoints
-                    .set_ephemeral(self.evaluator.next_instruction());
-            }
-            DebugEvent::ToggleBreakpoint { location } => {
-                self.breakpoints.toggle_durable_at(location);
-            }
-        }
     }
 
     pub fn can_step(&self) -> bool {
