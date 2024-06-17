@@ -55,7 +55,9 @@ impl Stack {
             return Err(CallStackOverflow);
         }
 
-        self.frames.push(frame.into());
+        let frame = frame.into();
+
+        self.frames.push(frame);
         Ok(())
     }
 
