@@ -1,3 +1,4 @@
 mod decider;
+mod state;
 
-pub use self::decider::Process;
+pub use self::{decider::Process, state::ProcessState};
