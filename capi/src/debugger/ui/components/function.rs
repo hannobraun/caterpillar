@@ -63,6 +63,7 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
     let data_location = expression
         .location
         .map(|location| ron::to_string(&location).unwrap());
+    let data_breakpoint = expression.has_durable_breakpoint;
 
     let error = expression.effect.map(|effect| format!("{:?}", effect.kind));
 
@@ -90,6 +91,7 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
                 <span
                     class=class_inner
                     data-location=data_location
+                    data-breakpoint=data_breakpoint
                     on:click=toggle_breakpoint>
                     {expression}
                 </span>
