@@ -2,7 +2,7 @@ use super::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
-    pub has_finished: bool,
+    has_finished: bool,
 }
 
 impl State {
