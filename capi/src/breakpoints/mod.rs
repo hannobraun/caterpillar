@@ -31,7 +31,11 @@ impl Breakpoints {
         &mut self,
         location: &runtime::Location,
     ) -> bool {
-        let ephemeral = self.state.ephemeral.take(location).is_some();
+        let ephemeral = self.state.ephemeral.contains(location);
+        if ephemeral {
+            self.state.ephemeral.remove(location);
+        }
+
         ephemeral || self.durable_breakpoint_at(location)
     }
 }
