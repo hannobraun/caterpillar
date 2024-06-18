@@ -1,4 +1,4 @@
-use crate::{process::Process, source_map::SourceMap, syntax};
+use crate::{breakpoints, process::Process, source_map::SourceMap, syntax};
 
 use super::Expression;
 
@@ -12,6 +12,7 @@ impl Function {
     pub fn new(
         function: syntax::Function,
         source_map: &SourceMap,
+        breakpoints: &breakpoints::State,
         process: &Process,
     ) -> Self {
         Self {
@@ -20,7 +21,12 @@ impl Function {
                 .syntax
                 .into_iter()
                 .map(|expression| {
-                    Expression::new(expression, source_map, process)
+                    Expression::new(
+                        expression,
+                        source_map,
+                        breakpoints,
+                        process,
+                    )
                 })
                 .collect::<Vec<_>>(),
         }
