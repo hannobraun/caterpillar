@@ -44,6 +44,10 @@ impl Process {
         }
     }
 
+    pub fn state(&self) -> &State {
+        &self.state
+    }
+
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
         self.state = State::default();
