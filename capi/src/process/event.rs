@@ -1,6 +1,6 @@
 use crate::runtime;
 
 pub enum Event {
-    MostRecentStep { location: runtime::Location },
+    Step { location: runtime::Location },
     Finish,
 }

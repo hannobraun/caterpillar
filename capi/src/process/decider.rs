@@ -81,11 +81,9 @@ impl Process {
         self.previous_data_stack =
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
-            Ok(EvaluatorState::Running) => {
-                self.emit_event(Event::MostRecentStep {
-                    location: next_instruction,
-                })
-            }
+            Ok(EvaluatorState::Running) => self.emit_event(Event::Step {
+                location: next_instruction,
+            }),
             Ok(EvaluatorState::Finished) => {
                 self.emit_event(Event::Finish);
             }

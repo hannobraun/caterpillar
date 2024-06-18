@@ -23,7 +23,7 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::MostRecentStep { location } => {
+            Event::Step { location } => {
                 self.most_recent_step = Some(location);
             }
             Event::Finish => {
