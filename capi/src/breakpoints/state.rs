@@ -6,8 +6,8 @@ use super::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
-    pub durable: BTreeSet<runtime::Location>,
-    pub ephemeral: BTreeSet<runtime::Location>,
+    durable: BTreeSet<runtime::Location>,
+    ephemeral: BTreeSet<runtime::Location>,
 }
 
 impl State {
