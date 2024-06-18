@@ -8,7 +8,7 @@ impl State {
         !self.has_finished
     }
 
-    pub fn is_finished(&self) -> bool {
+    pub fn has_finished(&self) -> bool {
         self.has_finished
     }
 }
