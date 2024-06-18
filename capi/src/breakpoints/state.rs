@@ -22,6 +22,9 @@ impl State {
             Event::SetEphemeral { location } => {
                 self.ephemeral.insert(location);
             }
+            Event::ClearEphemeral { location } => {
+                self.ephemeral.remove(&location);
+            }
         }
     }
 

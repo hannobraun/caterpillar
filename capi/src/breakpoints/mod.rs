@@ -35,7 +35,7 @@ impl Breakpoints {
         let ephemeral_at_location = self.state.ephemeral_at(&location);
 
         if ephemeral_at_location {
-            self.state.ephemeral.remove(&location);
+            self.state.evolve(Event::ClearEphemeral { location });
         }
 
         ephemeral_at_location || durable_at_location
