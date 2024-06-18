@@ -17,7 +17,6 @@ pub struct Process {
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
 
-    /// Effects that have not been handled yet
     pub unhandled_effects: VecDeque<EvaluatorEffect>,
 
     /// The data stack, before the most recent instruction was executed
