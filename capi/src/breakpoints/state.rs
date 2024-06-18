@@ -11,6 +11,14 @@ pub struct State {
 }
 
 impl State {
+    pub fn durable_at(&self, location: &runtime::Location) -> bool {
+        self.durable.contains(location)
+    }
+
+    pub fn ephemeral_at(&self, location: &runtime::Location) -> bool {
+        self.ephemeral.contains(location)
+    }
+
     pub fn evolve(&mut self, event: Event) {
         match event {
             Event::SetDurable { location } => {
@@ -26,13 +34,5 @@ impl State {
                 self.ephemeral.remove(&location);
             }
         }
-    }
-
-    pub fn durable_at(&self, location: &runtime::Location) -> bool {
-        self.durable.contains(location)
-    }
-
-    pub fn ephemeral_at(&self, location: &runtime::Location) -> bool {
-        self.ephemeral.contains(location)
     }
 }
