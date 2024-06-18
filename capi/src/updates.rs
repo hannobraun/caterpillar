@@ -82,16 +82,7 @@ impl UpdatesTx {
             if process_at_client.can_step() && process.can_step() {
                 // While the program is running, sending updates on every change
                 // would result in too many updates.
-                //
-                // Let's check if there's a change that we consider worthy of
-                // sending an update for.
-
-                let breakpoints_unchanged =
-                    process_at_client.breakpoints == process.breakpoints;
-
-                if breakpoints_unchanged {
-                    return false;
-                }
+                return false;
             }
         }
 
