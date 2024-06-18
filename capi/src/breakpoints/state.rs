@@ -28,4 +28,8 @@ impl State {
     pub fn durable_at(&self, location: &runtime::Location) -> bool {
         self.durable.contains(location)
     }
+
+    pub fn ephemeral_at(&self, location: &runtime::Location) -> bool {
+        self.ephemeral.contains(location)
+    }
 }
