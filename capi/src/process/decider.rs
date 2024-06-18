@@ -8,12 +8,12 @@ use crate::{
     },
 };
 
-use super::ProcessState;
+use super::State;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
     pub evaluator: Evaluator,
-    pub state: ProcessState,
+    pub state: State,
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
 
@@ -35,7 +35,7 @@ impl Process {
 
         Self {
             evaluator,
-            state: ProcessState::default(),
+            state: State::default(),
             entry,
             arguments,
             effects: VecDeque::default(),
@@ -45,7 +45,7 @@ impl Process {
 
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
-        self.state = ProcessState::default();
+        self.state = State::default();
         self.effects.clear();
         self.previous_data_stack.clear();
 
@@ -68,10 +68,7 @@ impl Process {
         self.state = self.step_inner(breakpoints);
     }
 
-    pub fn step_inner(
-        &mut self,
-        breakpoints: &mut Breakpoints,
-    ) -> ProcessState {
+    pub fn step_inner(&mut self, breakpoints: &mut Breakpoints) -> State {
         // This method is separate from the main `step` method, so we can just
         // return `ProcessState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
@@ -92,12 +89,12 @@ impl Process {
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => {}
-            Ok(EvaluatorState::Finished) => return ProcessState::Finished,
+            Ok(EvaluatorState::Finished) => return State::Finished,
             Err(effect) => {
                 self.effects.push_back(effect);
             }
         };
 
-        ProcessState::Running
+        State::Running
     }
 }

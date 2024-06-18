@@ -1,12 +1,12 @@
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub enum ProcessState {
+pub enum State {
     #[default]
     Running,
 
     Finished,
 }
 
-impl ProcessState {
+impl State {
     pub fn is_running(&self) -> bool {
         matches!(self, Self::Running)
     }
