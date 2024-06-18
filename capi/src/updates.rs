@@ -2,7 +2,8 @@ use tokio::sync::mpsc;
 
 use crate::{
     breakpoints::{self, Breakpoints},
-    process::Process,
+    process::{self, Process},
+    runtime,
     source_map::SourceMap,
     state::Memory,
     syntax,
@@ -14,6 +15,7 @@ pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let tx = UpdatesTx {
         inner: tx,
         queued_memory: None,
+        queued_step: None,
         process_at_client: None,
     };
 
@@ -31,6 +33,9 @@ pub enum Update {
         memory: Memory,
     },
     Process(Process),
+    Process2 {
+        event: process::Event,
+    },
     SourceCode {
         functions: syntax::Functions,
         source_map: SourceMap,
@@ -41,6 +46,7 @@ pub enum Update {
 pub struct UpdatesTx {
     inner: mpsc::UnboundedSender<Update>,
     queued_memory: Option<Memory>,
+    queued_step: Option<runtime::Location>,
     process_at_client: Option<Process>,
 }
 
@@ -55,7 +61,27 @@ impl UpdatesTx {
             self.inner.send(Update::Breakpoints { event }).unwrap();
         }
 
-        for _ in process.take_events() {}
+        let process_can_step = process.state().can_step();
+        for event in process.take_events() {
+            if let process::Event::Step { location } = &event {
+                // We can't send every step, or we would overwhelm the
+                // connection. Let's queue this latest step in any case.
+                self.queued_step = Some(location.clone());
+
+                if process_can_step {
+                    // Looks like the process is still at it. Don't do
+                    // anything further, until something else happens.
+                    return;
+                }
+            }
+
+            // If we make it there, then either this is a step that we don't
+            // want to leave queued, or it's another process event, all of
+            // which we want to send immediately.
+
+            self.flush();
+            self.inner.send(Update::Process2 { event }).unwrap();
+        }
     }
 
     pub fn queue(&mut self, update: Update) {
@@ -73,6 +99,9 @@ impl UpdatesTx {
 
                     self.flush();
                 }
+            }
+            Update::Process2 { .. } => {
+                unreachable!();
             }
             Update::SourceCode {
                 functions,
@@ -110,6 +139,13 @@ impl UpdatesTx {
     fn flush(&mut self) {
         if let Some(memory) = self.queued_memory.take() {
             self.inner.send(Update::Memory { memory }).unwrap();
+        }
+        if let Some(location) = self.queued_step.take() {
+            self.inner
+                .send(Update::Process2 {
+                    event: process::Event::Step { location },
+                })
+                .unwrap();
         }
     }
 }
