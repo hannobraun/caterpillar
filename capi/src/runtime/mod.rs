@@ -12,9 +12,7 @@ pub use self::{
     builtins::BuiltinEffect,
     code::Code,
     data_stack::{DataStack, StackUnderflow, Value},
-    evaluator::{
-        Evaluator, EvaluatorEffect, EvaluatorEffectKind, EvaluatorState,
-    },
+    evaluator::{Evaluator, EvaluatorEffect, EvaluatorState},
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,

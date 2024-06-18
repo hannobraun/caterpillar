@@ -53,11 +53,7 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    self.stack.push(function).map_err(|effect| {
-                        EvaluatorEffect {
-                            kind: effect.into(),
-                        }
-                    })?;
+                    self.stack.push(function)?;
                 }
                 CallStackUpdate::Pop => {
                     self.stack
@@ -67,7 +63,7 @@ impl Evaluator {
             },
             Ok(None) => {}
             Err(effect) => {
-                return Err(EvaluatorEffect { kind: effect });
+                return Err(effect);
             }
         }
 
@@ -82,13 +78,8 @@ pub enum EvaluatorState {
     Finished,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct EvaluatorEffect {
-    pub kind: EvaluatorEffectKind,
-}
-
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
-pub enum EvaluatorEffectKind {
+pub enum EvaluatorEffect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -110,7 +101,7 @@ fn evaluate_instruction(
     code: &Code,
     data_stack: &mut DataStack,
     bindings: &mut Bindings,
-) -> Result<Option<CallStackUpdate>, EvaluatorEffectKind> {
+) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {
         Instruction::BindingEvaluate { name } => {
             let value = bindings.get(&name).copied().expect(
@@ -125,7 +116,7 @@ fn evaluate_instruction(
             }
 
             if !data_stack.is_empty() {
-                return Err(EvaluatorEffectKind::BindingLeftValuesOnStack);
+                return Err(EvaluatorEffect::BindingLeftValuesOnStack);
             }
         }
         Instruction::CallBuiltin { name } => {
@@ -148,7 +139,7 @@ fn evaluate_instruction(
                 "sub" => builtins::sub(data_stack),
                 "submit_frame" => builtins::submit_frame(),
                 "write_tile" => builtins::write_tile(data_stack),
-                _ => return Err(EvaluatorEffectKind::UnknownBuiltin { name }),
+                _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
             // This is a bit weird. An error is an effect, and effects can be
@@ -167,7 +158,7 @@ fn evaluate_instruction(
             };
 
             if let Some(effect) = effect {
-                return Err(EvaluatorEffectKind::Builtin(effect));
+                return Err(EvaluatorEffect::Builtin(effect));
             }
         }
         Instruction::CallFunction { name } => {

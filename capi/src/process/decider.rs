@@ -3,8 +3,7 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorEffectKind,
-        EvaluatorState, Value,
+        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Value,
     },
 };
 
@@ -74,11 +73,9 @@ impl Process {
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
-            self.effects.push_back(EvaluatorEffect {
-                kind: EvaluatorEffectKind::Builtin(
-                    runtime::BuiltinEffect::Breakpoint,
-                ),
-            });
+            self.effects.push_back(EvaluatorEffect::Builtin(
+                runtime::BuiltinEffect::Breakpoint,
+            ));
         }
 
         self.previous_data_stack =

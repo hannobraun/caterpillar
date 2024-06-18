@@ -14,7 +14,7 @@ use crate::{
     ffi,
     games::snake::snake,
     process::Process,
-    runtime::{BuiltinEffect, EvaluatorEffect, EvaluatorEffectKind, Value},
+    runtime::{BuiltinEffect, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{updates, Update, UpdatesTx},
 };
@@ -97,13 +97,9 @@ impl RuntimeState {
                             self.breakpoints.set_durable(location);
                         }
                         DebugEvent::Continue { and_stop_at } => {
-                            if let Some(EvaluatorEffect {
-                                kind:
-                                    EvaluatorEffectKind::Builtin(
-                                        BuiltinEffect::Breakpoint,
-                                    ),
-                                ..
-                            }) = self.process.effects.front()
+                            if let Some(EvaluatorEffect::Builtin(
+                                BuiltinEffect::Breakpoint,
+                            )) = self.process.effects.front()
                             {
                                 if let Some(instruction) = and_stop_at {
                                     self.breakpoints.set_ephemeral(instruction);
@@ -116,13 +112,9 @@ impl RuntimeState {
                             self.process.reset();
                         }
                         DebugEvent::Step => {
-                            if let Some(EvaluatorEffect {
-                                kind:
-                                    EvaluatorEffectKind::Builtin(
-                                        BuiltinEffect::Breakpoint,
-                                    ),
-                                ..
-                            }) = self.process.effects.front()
+                            if let Some(EvaluatorEffect::Builtin(
+                                BuiltinEffect::Breakpoint,
+                            )) = self.process.effects.front()
                             {
                                 self.breakpoints.set_ephemeral(
                                     self.process
@@ -157,10 +149,8 @@ impl RuntimeState {
         while self.process.can_step() {
             self.process.step(&mut self.breakpoints);
 
-            if let Some(EvaluatorEffect {
-                kind: EvaluatorEffectKind::Builtin(effect),
-                ..
-            }) = self.process.effects.front()
+            if let Some(EvaluatorEffect::Builtin(effect)) =
+                self.process.effects.front()
             {
                 match effect {
                     BuiltinEffect::Breakpoint => {

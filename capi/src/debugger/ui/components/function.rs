@@ -6,7 +6,7 @@ use crate::{
         model::{DebugEvent, Expression, Function},
         ui::{send_event, EventsTx},
     },
-    runtime::{BuiltinEffect, EvaluatorEffectKind},
+    runtime::{BuiltinEffect, EvaluatorEffect},
 };
 
 #[component]
@@ -49,8 +49,8 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         class_inner.push_str(" italic text-gray-500");
     }
     if let Some(effect) = &expression.effect {
-        match effect.kind {
-            EvaluatorEffectKind::Builtin(BuiltinEffect::Breakpoint) => {
+        match effect {
+            EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint) => {
                 class_inner.push_str(" bg-green-300")
             }
             _ => class_inner.push_str(" bg-red-300"),
@@ -65,7 +65,7 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         .map(|location| ron::to_string(&location).unwrap());
     let data_breakpoint = expression.has_durable_breakpoint;
 
-    let error = expression.effect.map(|effect| format!("{:?}", effect.kind));
+    let error = expression.effect.map(|effect| format!("{:?}", effect));
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
