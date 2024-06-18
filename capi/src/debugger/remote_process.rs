@@ -22,6 +22,9 @@ impl RemoteProcess {
 
     pub fn on_update(&mut self, update: Update) {
         match update {
+            Update::Breakpoints { event: _ } => {
+                // Not handled yet.
+            }
             Update::Memory { memory } => {
                 self.memory = Some(memory);
             }

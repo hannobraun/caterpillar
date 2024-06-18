@@ -230,6 +230,9 @@ impl RuntimeState {
             }
         }
 
+        for event in self.process.breakpoints.take_events() {
+            self.updates_tx.queue(Update::Breakpoints { event });
+        }
         self.updates_tx.queue(Update::Process(self.process.clone()));
 
         display.render(&self.tiles);

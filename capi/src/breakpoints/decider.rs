@@ -5,6 +5,7 @@ use super::{Event, State};
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
     state: State,
+    events: Vec<Event>,
 }
 
 impl Breakpoints {
@@ -38,7 +39,12 @@ impl Breakpoints {
         ephemeral_at_location || durable_at_location
     }
 
+    pub fn take_events(&mut self) -> impl Iterator<Item = Event> + '_ {
+        self.events.drain(..)
+    }
+
     fn emit_event(&mut self, event: Event) {
+        self.events.push(event.clone());
         self.state.evolve(event);
     }
 }
