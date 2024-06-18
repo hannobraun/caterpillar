@@ -77,10 +77,9 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         };
         let location = ron::from_str(&location).unwrap();
 
-        leptos::spawn_local(send_event(
-            DebugEvent::ToggleBreakpoint { location },
-            events.clone(),
-        ));
+        let event = DebugEvent::ToggleBreakpoint { location };
+
+        leptos::spawn_local(send_event(event, events.clone()));
     };
 
     let expression = format!("{}", expression.kind);
