@@ -10,7 +10,6 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
-    pub breakpoints: Breakpoints,
     pub evaluator: Evaluator,
     pub state: ProcessState,
     pub entry: runtime::Function,
@@ -33,7 +32,6 @@ impl Process {
         evaluator.push(arguments.clone());
 
         Self {
-            breakpoints: Breakpoints::default(),
             evaluator,
             state: ProcessState::default(),
             entry,
@@ -60,22 +58,24 @@ impl Process {
         self.state.is_running() && self.effects.is_empty()
     }
 
-    pub fn step(&mut self) {
+    pub fn step(&mut self, breakpoints: &mut Breakpoints) {
         if !self.can_step() {
             return;
         }
 
-        self.state = self.step_inner();
+        self.state = self.step_inner(breakpoints);
     }
 
-    pub fn step_inner(&mut self) -> ProcessState {
+    pub fn step_inner(
+        &mut self,
+        breakpoints: &mut Breakpoints,
+    ) -> ProcessState {
         // This method is separate from the main `step` method, so we can just
         // return `ProcessState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
 
         let next_instruction = self.evaluator.next_instruction().unwrap();
-        if self
-            .breakpoints
+        if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
             self.effects.push_back(EvaluatorEffect {

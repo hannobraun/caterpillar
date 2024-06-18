@@ -4,6 +4,7 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
+    breakpoints::Breakpoints,
     compiler::compile,
     debugger::{
         model::DebugEvent,
@@ -20,6 +21,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub process: Process,
+    pub breakpoints: Breakpoints,
     pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
@@ -64,6 +66,7 @@ impl RuntimeState {
 
         Self {
             process,
+            breakpoints: Breakpoints::default(),
             memory,
             input,
             tiles: [0; NUM_TILES],
@@ -88,10 +91,10 @@ impl RuntimeState {
 
                     match event {
                         DebugEvent::BreakpointClear { location } => {
-                            self.process.breakpoints.clear_durable(location);
+                            self.breakpoints.clear_durable(location);
                         }
                         DebugEvent::BreakpointSet { location } => {
-                            self.process.breakpoints.set_durable(location);
+                            self.breakpoints.set_durable(location);
                         }
                         DebugEvent::Continue { and_stop_at } => {
                             if let Some(EvaluatorEffect {
@@ -103,9 +106,7 @@ impl RuntimeState {
                             }) = self.process.effects.front()
                             {
                                 if let Some(instruction) = and_stop_at {
-                                    self.process
-                                        .breakpoints
-                                        .set_ephemeral(instruction);
+                                    self.breakpoints.set_ephemeral(instruction);
                                 }
 
                                 self.process.effects.pop_front();
@@ -123,7 +124,7 @@ impl RuntimeState {
                                 ..
                             }) = self.process.effects.front()
                             {
-                                self.process.breakpoints.set_ephemeral(
+                                self.breakpoints.set_ephemeral(
                                     self.process
                                         .evaluator
                                         .next_instruction()
@@ -133,7 +134,7 @@ impl RuntimeState {
                             }
                         }
                         DebugEvent::Stop => {
-                            self.process.breakpoints.set_ephemeral(
+                            self.breakpoints.set_ephemeral(
                                 self.process
                                     .evaluator
                                     .next_instruction()
@@ -154,7 +155,7 @@ impl RuntimeState {
         }
 
         while self.process.can_step() {
-            self.process.step();
+            self.process.step(&mut self.breakpoints);
 
             if let Some(EvaluatorEffect {
                 kind: EvaluatorEffectKind::Builtin(effect),
@@ -230,7 +231,7 @@ impl RuntimeState {
             }
         }
 
-        for event in self.process.breakpoints.take_events() {
+        for event in self.breakpoints.take_events() {
             self.updates_tx.queue(Update::Breakpoints { event });
         }
         self.updates_tx.queue(Update::Process(self.process.clone()));
