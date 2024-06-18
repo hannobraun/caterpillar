@@ -52,7 +52,13 @@ impl ActiveFunctions {
                 let function =
                     functions.get_from_location(syntax_location).cloned()?;
 
-                Some(Function::new(function, source_map, breakpoints, process))
+                Some(Function::new(
+                    function,
+                    source_map,
+                    breakpoints,
+                    process2,
+                    process,
+                ))
             })
             .collect();
 
