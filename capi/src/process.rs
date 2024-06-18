@@ -76,7 +76,7 @@ impl Process {
         let next_instruction = self.evaluator.next_instruction().unwrap();
         if self
             .breakpoints
-            .should_stop_at_and_clear_ephemeral(&next_instruction)
+            .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
             self.effects.push_back(EvaluatorEffect {
                 kind: EvaluatorEffectKind::Builtin(

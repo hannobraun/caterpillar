@@ -29,13 +29,13 @@ impl Breakpoints {
 
     pub fn should_stop_at_and_clear_ephemeral(
         &mut self,
-        location: &runtime::Location,
+        location: runtime::Location,
     ) -> bool {
-        let ephemeral = self.state.ephemeral_at(location);
+        let ephemeral = self.state.ephemeral_at(&location);
         if ephemeral {
-            self.state.ephemeral.remove(location);
+            self.state.ephemeral.remove(&location);
         }
 
-        ephemeral || self.durable_breakpoint_at(location)
+        ephemeral || self.durable_breakpoint_at(&location)
     }
 }
