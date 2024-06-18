@@ -31,11 +31,11 @@ impl Breakpoints {
         &mut self,
         location: runtime::Location,
     ) -> bool {
-        let ephemeral = self.state.ephemeral_at(&location);
-        if ephemeral {
+        let ephemeral_at_location = self.state.ephemeral_at(&location);
+        if ephemeral_at_location {
             self.state.ephemeral.remove(&location);
         }
 
-        ephemeral || self.durable_breakpoint_at(&location)
+        ephemeral_at_location || self.durable_breakpoint_at(&location)
     }
 }
