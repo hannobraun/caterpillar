@@ -12,7 +12,7 @@ use super::State;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
-    pub state: State,
+    state: State,
 
     pub evaluator: Evaluator,
     pub entry: runtime::Function,
