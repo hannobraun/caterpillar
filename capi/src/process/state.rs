@@ -7,7 +7,7 @@ use super::Event;
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
     most_recent_step: Option<runtime::Location>,
-    pub unhandled_effects: VecDeque<EvaluatorEffect>,
+    unhandled_effects: VecDeque<EvaluatorEffect>,
     has_finished: bool,
 }
 
