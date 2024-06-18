@@ -1,6 +1,7 @@
+mod event;
 mod state;
 
-pub use self::state::State;
+pub use self::{event::Event, state::State};
 
 use crate::runtime;
 
@@ -11,7 +12,7 @@ pub struct Breakpoints {
 
 impl Breakpoints {
     pub fn set_durable(&mut self, location: runtime::Location) {
-        self.state.durable.insert(location);
+        self.state.evolve(Event::SetDurable { location })
     }
 
     pub fn clear_durable(&mut self, location: &runtime::Location) {

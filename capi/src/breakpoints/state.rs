@@ -2,6 +2,8 @@ use std::collections::BTreeSet;
 
 use crate::runtime;
 
+use super::Event;
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
     pub durable: BTreeSet<runtime::Location>,
@@ -9,6 +11,14 @@ pub struct State {
 }
 
 impl State {
+    pub fn evolve(&mut self, event: Event) {
+        match event {
+            Event::SetDurable { location } => {
+                self.durable.insert(location);
+            }
+        }
+    }
+
     pub fn durable_at(&self, location: &runtime::Location) -> bool {
         self.durable.contains(location)
     }
