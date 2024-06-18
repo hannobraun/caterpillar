@@ -74,10 +74,6 @@ impl Process {
     }
 
     pub fn step_inner(&mut self, breakpoints: &mut Breakpoints) {
-        // This method is separate from the main `step` method, so we can just
-        // return `ProcessState`s here, and have `step` take care of saving them
-        // in `self.state` automatically.
-
         let next_instruction = self.evaluator.next_instruction().unwrap();
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
