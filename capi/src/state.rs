@@ -223,10 +223,8 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.handle_events(&mut self.process);
-        for event in self.breakpoints.take_events() {
-            self.updates_tx.queue(Update::Breakpoints { event });
-        }
+        self.updates_tx
+            .handle_events(&mut self.breakpoints, &mut self.process);
         self.updates_tx.queue(Update::Process(self.process.clone()));
 
         display.render(&self.tiles);
