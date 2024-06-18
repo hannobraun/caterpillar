@@ -58,7 +58,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        self.state.is_running() && self.state.unhandled_effects.is_empty()
+        self.state.can_step()
     }
 
     pub fn step(&mut self, breakpoints: &mut Breakpoints) {

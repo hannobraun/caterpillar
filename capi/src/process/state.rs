@@ -28,6 +28,10 @@ impl State {
         self.has_finished
     }
 
+    pub fn can_step(&self) -> bool {
+        self.is_running() && self.unhandled_effects.is_empty()
+    }
+
     pub fn evolve(&mut self, event: Event) {
         match event {
             Event::Step { location } => {
