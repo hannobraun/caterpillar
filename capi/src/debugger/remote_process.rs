@@ -57,6 +57,7 @@ impl RemoteProcess {
                 .as_ref()
                 .map(|(functions, source_map)| (functions, source_map)),
             &self.breakpoints,
+            &self.process2,
             self.process.as_ref(),
         );
         let data_stacks = self.process.as_ref().map(|process| {

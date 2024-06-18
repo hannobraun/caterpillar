@@ -1,4 +1,9 @@
-use crate::{breakpoints, process::Process, source_map::SourceMap, syntax};
+use crate::{
+    breakpoints,
+    process::{self, Process},
+    source_map::SourceMap,
+    syntax,
+};
 
 use super::Function;
 
@@ -12,6 +17,7 @@ impl ActiveFunctions {
     pub fn new(
         source_code: Option<(&syntax::Functions, &SourceMap)>,
         breakpoints: &breakpoints::State,
+        process2: &process::State,
         process: Option<&Process>,
     ) -> Self {
         let Some((functions, source_map)) = source_code else {
@@ -25,12 +31,12 @@ impl ActiveFunctions {
             };
         };
 
-        if process.state().can_step() {
+        if process2.can_step() {
             return Self::Message {
                 message: "Process is running.",
             };
         }
-        if process.state().has_finished() {
+        if process2.has_finished() {
             return Self::Message {
                 message: "Process is finished.",
             };
