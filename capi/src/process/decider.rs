@@ -87,11 +87,15 @@ impl Process {
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
-                self.state.evolve(Event::Finish);
+                self.emit_event(Event::Finish);
             }
             Err(effect) => {
                 self.effects.push_back(effect);
             }
         };
+    }
+
+    fn emit_event(&mut self, event: Event) {
+        self.state.evolve(event);
     }
 }
