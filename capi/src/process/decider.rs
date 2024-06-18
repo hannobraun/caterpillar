@@ -47,6 +47,10 @@ impl Process {
         &self.state
     }
 
+    pub fn handle_first_effect(&mut self) {
+        self.effects.pop_front();
+    }
+
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
         self.state = State::default();

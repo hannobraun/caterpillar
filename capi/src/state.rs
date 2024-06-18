@@ -105,7 +105,7 @@ impl RuntimeState {
                                     self.breakpoints.set_ephemeral(instruction);
                                 }
 
-                                self.process.effects.pop_front();
+                                self.process.handle_first_effect();
                             }
                         }
                         DebugEvent::Reset => {
@@ -122,7 +122,7 @@ impl RuntimeState {
                                         .next_instruction()
                                         .unwrap(),
                                 );
-                                self.process.effects.pop_front();
+                                self.process.handle_first_effect();
                             }
                         }
                         DebugEvent::Stop => {
@@ -168,13 +168,13 @@ impl RuntimeState {
                         let value = self.memory.inner[address];
                         self.process.push([value]);
 
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
                         self.memory.inner[address] = *value;
 
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
 
                         self.updates_tx.queue(Update::Memory {
                             memory: self.memory.clone(),
@@ -185,7 +185,7 @@ impl RuntimeState {
                         let y = *y;
                         let value = *value;
 
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
 
                         display.set_tile(
                             x.into(),
@@ -198,7 +198,7 @@ impl RuntimeState {
                         // This effect means that the game is done rendering.
                         // Let's break out of this loop now, so we can do our
                         // part in that and return control to the host.
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
                         break;
                     }
                     BuiltinEffect::ReadInput => {
@@ -211,11 +211,11 @@ impl RuntimeState {
                             .unwrap();
 
                         self.process.push([Value(input)]);
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
                     }
                     BuiltinEffect::ReadRandom => {
                         self.process.push([Value(random())]);
-                        self.process.effects.pop_front();
+                        self.process.handle_first_effect();
                     }
                 }
             }
