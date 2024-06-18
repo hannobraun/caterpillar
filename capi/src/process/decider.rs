@@ -70,10 +70,10 @@ impl Process {
             return;
         }
 
-        self.state = self.step_inner(breakpoints);
+        self.step_inner(breakpoints);
     }
 
-    pub fn step_inner(&mut self, breakpoints: &mut Breakpoints) -> State {
+    pub fn step_inner(&mut self, breakpoints: &mut Breakpoints) {
         // This method is separate from the main `step` method, so we can just
         // return `ProcessState`s here, and have `step` take care of saving them
         // in `self.state` automatically.
@@ -95,15 +95,11 @@ impl Process {
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
-                return State { has_finished: true }
+                self.state.has_finished = true;
             }
             Err(effect) => {
                 self.effects.push_back(effect);
             }
         };
-
-        State {
-            has_finished: false,
-        }
     }
 }
