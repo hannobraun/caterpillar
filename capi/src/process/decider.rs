@@ -12,8 +12,9 @@ use super::State;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
-    pub evaluator: Evaluator,
     pub state: State,
+
+    pub evaluator: Evaluator,
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
 
@@ -34,8 +35,8 @@ impl Process {
         evaluator.push(arguments.clone());
 
         Self {
-            evaluator,
             state: State::default(),
+            evaluator,
             entry,
             arguments,
             effects: VecDeque::default(),
