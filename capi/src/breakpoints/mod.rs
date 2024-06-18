@@ -20,7 +20,7 @@ impl Breakpoints {
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {
-        self.state.ephemeral.insert(location);
+        self.state.evolve(Event::SetEphemeral { location })
     }
 
     pub fn durable_breakpoint_at(&self, location: &runtime::Location) -> bool {

@@ -19,6 +19,9 @@ impl State {
             Event::ClearDurable { location } => {
                 self.durable.remove(&location);
             }
+            Event::SetEphemeral { location } => {
+                self.ephemeral.insert(location);
+            }
         }
     }
 
