@@ -57,12 +57,8 @@ impl Process {
         self.evaluator.push(values);
     }
 
-    pub fn can_step(&self) -> bool {
-        self.state.can_step()
-    }
-
     pub fn step(&mut self, breakpoints: &mut Breakpoints) {
-        if !self.can_step() {
+        if !self.state.can_step() {
             return;
         }
 

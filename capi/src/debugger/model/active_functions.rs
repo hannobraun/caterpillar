@@ -25,7 +25,7 @@ impl ActiveFunctions {
             };
         };
 
-        if process.can_step() {
+        if process.state().can_step() {
             return Self::Message {
                 message: "Process is running.",
             };

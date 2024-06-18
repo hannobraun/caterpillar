@@ -148,7 +148,7 @@ impl RuntimeState {
             }
         }
 
-        while self.process.can_step() {
+        while self.process.state().can_step() {
             self.process.step(&mut self.breakpoints);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
