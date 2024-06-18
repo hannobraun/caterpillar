@@ -78,7 +78,6 @@ impl Process {
                 kind: EvaluatorEffectKind::Builtin(
                     runtime::BuiltinEffect::Breakpoint,
                 ),
-                location: next_instruction.clone(),
             });
         }
 

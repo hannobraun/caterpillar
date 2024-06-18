@@ -56,7 +56,6 @@ impl Evaluator {
                     self.stack.push(function).map_err(|effect| {
                         EvaluatorEffect {
                             kind: effect.into(),
-                            location: location_tmp.unwrap(),
                         }
                     })?;
                 }
@@ -68,10 +67,7 @@ impl Evaluator {
             },
             Ok(None) => {}
             Err(effect) => {
-                return Err(EvaluatorEffect {
-                    kind: effect,
-                    location: location_tmp.unwrap(),
-                });
+                return Err(EvaluatorEffect { kind: effect });
             }
         }
 
@@ -89,7 +85,6 @@ pub enum EvaluatorState {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct EvaluatorEffect {
     pub kind: EvaluatorEffectKind,
-    pub location: Location,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
