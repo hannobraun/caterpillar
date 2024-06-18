@@ -78,14 +78,18 @@ impl Process {
                 kind: EvaluatorEffectKind::Builtin(
                     runtime::BuiltinEffect::Breakpoint,
                 ),
-                location: next_instruction,
+                location: next_instruction.clone(),
             });
         }
 
         self.previous_data_stack =
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
-            Ok(EvaluatorState::Running) => {}
+            Ok(EvaluatorState::Running) => {
+                self.emit_event(Event::MostRecentStep {
+                    location: next_instruction,
+                })
+            }
             Ok(EvaluatorState::Finished) => {
                 self.emit_event(Event::Finish);
             }
