@@ -16,6 +16,9 @@ impl State {
             Event::SetDurable { location } => {
                 self.durable.insert(location);
             }
+            Event::ClearDurable { location } => {
+                self.durable.remove(&location);
+            }
         }
     }
 

@@ -16,7 +16,7 @@ impl Breakpoints {
     }
 
     pub fn clear_durable(&mut self, location: runtime::Location) {
-        self.state.durable.remove(&location);
+        self.state.evolve(Event::ClearDurable { location })
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {
