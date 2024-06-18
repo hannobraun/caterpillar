@@ -21,7 +21,7 @@ impl Breakpoints {
     }
 
     pub fn durable_breakpoint_at(&self, location: &runtime::Location) -> bool {
-        self.state.durable.contains(location)
+        self.state.durable_at(location)
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
