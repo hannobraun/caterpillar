@@ -70,10 +70,6 @@ impl Process {
             return;
         }
 
-        self.step_inner(breakpoints);
-    }
-
-    pub fn step_inner(&mut self, breakpoints: &mut Breakpoints) {
         let next_instruction = self.evaluator.next_instruction().unwrap();
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
