@@ -13,15 +13,15 @@ impl Breakpoints {
     }
 
     pub fn set_durable(&mut self, location: runtime::Location) {
-        self.state.evolve(Event::SetDurable { location });
+        self.emit_event(Event::SetDurable { location });
     }
 
     pub fn clear_durable(&mut self, location: runtime::Location) {
-        self.state.evolve(Event::ClearDurable { location });
+        self.emit_event(Event::ClearDurable { location });
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {
-        self.state.evolve(Event::SetEphemeral { location });
+        self.emit_event(Event::SetEphemeral { location });
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
@@ -32,9 +32,13 @@ impl Breakpoints {
         let ephemeral_at_location = self.state.ephemeral_at(&location);
 
         if ephemeral_at_location {
-            self.state.evolve(Event::ClearEphemeral { location });
+            self.emit_event(Event::ClearEphemeral { location });
         }
 
         ephemeral_at_location || durable_at_location
+    }
+
+    fn emit_event(&mut self, event: Event) {
+        self.state.evolve(event);
     }
 }
