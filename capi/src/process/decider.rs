@@ -89,12 +89,16 @@ impl Process {
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => {}
-            Ok(EvaluatorState::Finished) => return State::Finished,
+            Ok(EvaluatorState::Finished) => {
+                return State { has_finished: true }
+            }
             Err(effect) => {
                 self.effects.push_back(effect);
             }
         };
 
-        State::Running
+        State {
+            has_finished: false,
+        }
     }
 }

@@ -1,17 +1,14 @@
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub enum State {
-    #[default]
-    Running,
-
-    Finished,
+pub struct State {
+    pub has_finished: bool,
 }
 
 impl State {
     pub fn is_running(&self) -> bool {
-        matches!(self, Self::Running)
+        !self.has_finished
     }
 
     pub fn is_finished(&self) -> bool {
-        matches!(self, Self::Finished)
+        self.has_finished
     }
 }
