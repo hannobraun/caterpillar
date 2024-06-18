@@ -33,6 +33,9 @@ impl State {
             Event::Step { location } => {
                 self.most_recent_step = Some(location);
             }
+            Event::TriggerEffect { effect } => {
+                self.unhandled_effects.push_back(effect);
+            }
             Event::Finish => {
                 self.has_finished = true;
             }

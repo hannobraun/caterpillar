@@ -70,11 +70,11 @@ impl Process {
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
-            self.state
-                .unhandled_effects
-                .push_back(EvaluatorEffect::Builtin(
+            self.emit_event(Event::TriggerEffect {
+                effect: EvaluatorEffect::Builtin(
                     runtime::BuiltinEffect::Breakpoint,
-                ));
+                ),
+            });
         }
 
         self.previous_data_stack =
@@ -87,7 +87,7 @@ impl Process {
                 self.emit_event(Event::Finish);
             }
             Err(effect) => {
-                self.state.unhandled_effects.push_back(effect);
+                self.emit_event(Event::TriggerEffect { effect });
             }
         };
     }
