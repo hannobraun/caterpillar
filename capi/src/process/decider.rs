@@ -42,7 +42,7 @@ impl Process {
     }
 
     pub fn handle_first_effect(&mut self) {
-        self.state.unhandled_effects.pop_front();
+        self.emit_event(Event::HandleEffect);
     }
 
     pub fn reset(&mut self) {

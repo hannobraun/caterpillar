@@ -36,6 +36,9 @@ impl State {
             Event::TriggerEffect { effect } => {
                 self.unhandled_effects.push_back(effect);
             }
+            Event::HandleEffect => {
+                self.unhandled_effects.pop_front();
+            }
             Event::Finish => {
                 self.has_finished = true;
             }
