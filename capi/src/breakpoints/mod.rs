@@ -10,10 +10,12 @@ pub struct Breakpoints {
 }
 
 impl Breakpoints {
-    pub fn toggle_durable_at(&mut self, location: runtime::Location) {
-        if self.state.durable.take(&location).is_none() {
-            self.state.durable.insert(location);
-        }
+    pub fn set_durable(&mut self, location: runtime::Location) {
+        self.state.durable.insert(location);
+    }
+
+    pub fn clear_durable(&mut self, location: &runtime::Location) {
+        self.state.durable.remove(location);
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {

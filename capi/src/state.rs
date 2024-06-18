@@ -135,9 +135,13 @@ impl RuntimeState {
                             );
                         }
                         DebugEvent::ToggleBreakpoint { location } => {
-                            self.process
-                                .breakpoints
-                                .toggle_durable_at(location);
+                            let breakpoints = &mut self.process.breakpoints;
+
+                            if breakpoints.durable_breakpoint_at(&location) {
+                                breakpoints.clear_durable(&location);
+                            } else {
+                                breakpoints.set_durable(location);
+                            }
                         }
                     }
                 }
