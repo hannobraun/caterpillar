@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-use super::State;
+use super::{Event, State};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Process {
@@ -87,7 +87,7 @@ impl Process {
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
-                self.state.has_finished = true;
+                self.state.evolve(Event::Finish);
             }
             Err(effect) => {
                 self.effects.push_back(effect);
