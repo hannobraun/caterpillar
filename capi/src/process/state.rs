@@ -9,6 +9,10 @@ pub struct State {
 }
 
 impl State {
+    pub fn most_recent_step(&self) -> Option<runtime::Location> {
+        self.most_recent_step.clone()
+    }
+
     pub fn is_running(&self) -> bool {
         !self.has_finished
     }
