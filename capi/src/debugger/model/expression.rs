@@ -35,21 +35,17 @@ impl Expression {
             matches!(expression.kind, ExpressionKind::Comment { .. });
 
         let effect =
-            process
-                .state()
-                .unhandled_effects
-                .front()
-                .and_then(|effect| {
-                    let effect_location = source_map.runtime_to_syntax(
-                        &process.state().most_recent_step().unwrap(),
-                    );
+            process.state().first_unhandled_effect().and_then(|effect| {
+                let effect_location = source_map.runtime_to_syntax(
+                    &process.state().most_recent_step().unwrap(),
+                );
 
-                    if effect_location == expression.location {
-                        Some(effect.clone())
-                    } else {
-                        None
-                    }
-                });
+                if effect_location == expression.location {
+                    Some(effect.clone())
+                } else {
+                    None
+                }
+            });
 
         let is_on_call_stack = if let Some(location) = &location {
             process.evaluator.stack().contains(location)

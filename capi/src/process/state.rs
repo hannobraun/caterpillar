@@ -16,6 +16,10 @@ impl State {
         self.most_recent_step.clone()
     }
 
+    pub fn first_unhandled_effect(&self) -> Option<&EvaluatorEffect> {
+        self.unhandled_effects.front()
+    }
+
     pub fn is_running(&self) -> bool {
         !self.has_finished
     }

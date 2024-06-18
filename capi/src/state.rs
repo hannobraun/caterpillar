@@ -100,7 +100,7 @@ impl RuntimeState {
                             if let Some(EvaluatorEffect::Builtin(
                                 BuiltinEffect::Breakpoint,
                             )) =
-                                self.process.state().unhandled_effects.front()
+                                self.process.state().first_unhandled_effect()
                             {
                                 if let Some(instruction) = and_stop_at {
                                     self.breakpoints.set_ephemeral(instruction);
@@ -116,7 +116,7 @@ impl RuntimeState {
                             if let Some(EvaluatorEffect::Builtin(
                                 BuiltinEffect::Breakpoint,
                             )) =
-                                self.process.state().unhandled_effects.front()
+                                self.process.state().first_unhandled_effect()
                             {
                                 self.breakpoints.set_ephemeral(
                                     self.process
@@ -152,7 +152,7 @@ impl RuntimeState {
             self.process.step(&mut self.breakpoints);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
-                self.process.state().unhandled_effects.front()
+                self.process.state().first_unhandled_effect()
             {
                 match effect {
                     BuiltinEffect::Breakpoint => {
