@@ -87,6 +87,12 @@ impl RuntimeState {
                     }
 
                     match event {
+                        DebugEvent::BreakpointClear { location } => {
+                            self.process.breakpoints.clear_durable(&location);
+                        }
+                        DebugEvent::BreakpointSet { location } => {
+                            self.process.breakpoints.set_durable(location);
+                        }
                         DebugEvent::Continue { and_stop_at } => {
                             if let Some(EvaluatorEffect {
                                 kind:
@@ -133,15 +139,6 @@ impl RuntimeState {
                                     .next_instruction()
                                     .unwrap(),
                             );
-                        }
-                        DebugEvent::ToggleBreakpoint { location } => {
-                            let breakpoints = &mut self.process.breakpoints;
-
-                            if breakpoints.durable_breakpoint_at(&location) {
-                                breakpoints.clear_durable(&location);
-                            } else {
-                                breakpoints.set_durable(location);
-                            }
                         }
                     }
                 }

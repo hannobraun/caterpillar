@@ -77,7 +77,11 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         };
         let location = ron::from_str(&location).unwrap();
 
-        let event = DebugEvent::ToggleBreakpoint { location };
+        let event = if element.has_attribute("data-breakpoint") {
+            DebugEvent::BreakpointClear { location }
+        } else {
+            DebugEvent::BreakpointSet { location }
+        };
 
         leptos::spawn_local(send_event(event, events.clone()));
     };
