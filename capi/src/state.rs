@@ -223,6 +223,7 @@ impl RuntimeState {
             }
         }
 
+        self.updates_tx.handle_events(&mut self.process);
         for event in self.breakpoints.take_events() {
             self.updates_tx.queue(Update::Breakpoints { event });
         }

@@ -41,6 +41,10 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
+    pub fn handle_events(&mut self, process: &mut Process) {
+        for _ in process.take_events() {}
+    }
+
     pub fn queue(&mut self, update: Update) {
         match update {
             Update::Breakpoints { event } => {
