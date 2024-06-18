@@ -18,7 +18,7 @@ pub struct Process {
     pub arguments: Vec<Value>,
 
     /// Effects that have not been handled yet
-    pub effects: VecDeque<EvaluatorEffect>,
+    pub unhandled_effects: VecDeque<EvaluatorEffect>,
 
     /// The data stack, before the most recent instruction was executed
     pub previous_data_stack: DataStack,
@@ -38,7 +38,7 @@ impl Process {
             evaluator,
             entry,
             arguments,
-            effects: VecDeque::default(),
+            unhandled_effects: VecDeque::default(),
             previous_data_stack: DataStack::default(),
         }
     }
@@ -48,13 +48,13 @@ impl Process {
     }
 
     pub fn handle_first_effect(&mut self) {
-        self.effects.pop_front();
+        self.unhandled_effects.pop_front();
     }
 
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
         self.state = State::default();
-        self.effects.clear();
+        self.unhandled_effects.clear();
         self.previous_data_stack.clear();
 
         self.push(self.arguments.clone());
@@ -65,7 +65,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        self.state.is_running() && self.effects.is_empty()
+        self.state.is_running() && self.unhandled_effects.is_empty()
     }
 
     pub fn step(&mut self, breakpoints: &mut Breakpoints) {
@@ -77,7 +77,7 @@ impl Process {
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
-            self.effects.push_back(EvaluatorEffect::Builtin(
+            self.unhandled_effects.push_back(EvaluatorEffect::Builtin(
                 runtime::BuiltinEffect::Breakpoint,
             ));
         }
@@ -92,7 +92,7 @@ impl Process {
                 self.emit_event(Event::Finish);
             }
             Err(effect) => {
-                self.effects.push_back(effect);
+                self.unhandled_effects.push_back(effect);
             }
         };
     }

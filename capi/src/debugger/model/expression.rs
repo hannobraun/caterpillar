@@ -34,7 +34,7 @@ impl Expression {
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
 
-        let effect = process.effects.front().and_then(|effect| {
+        let effect = process.unhandled_effects.front().and_then(|effect| {
             let effect_location = source_map.runtime_to_syntax(
                 &process.state().most_recent_step().unwrap(),
             );
