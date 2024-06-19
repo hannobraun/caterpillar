@@ -12,6 +12,15 @@ impl Stack {
         Self { frames: Vec::new() }
     }
 
+    pub fn next_instruction_in_current_function(&self) -> Option<Location> {
+        self.frames
+            .last()
+            .expect("Accessed frame earlier in loop; must still be available")
+            .function
+            .next_instruction()
+            .map(|(location, _)| location)
+    }
+
     pub fn next_instruction_overall(&self) -> Option<Location> {
         for frame in self.frames.iter().rev() {
             if let Some((location, _)) = frame.function.next_instruction() {
@@ -120,15 +129,8 @@ impl Stack {
             //    to write.
             // 2. Explicit return instructions are a stopgap anyway, until we
             //    have more advanced control flow.
-            let frame_is_empty = self
-                .frames
-                .last()
-                .expect(
-                    "Accessed frame earlier in loop; must still be available",
-                )
-                .function
-                .next_instruction()
-                .is_none();
+            let frame_is_empty =
+                self.next_instruction_in_current_function().is_none();
             if frame_is_empty {
                 self.pop_frame().expect(
                     "Accessed frame earlier in loop; must be able to pop it",
