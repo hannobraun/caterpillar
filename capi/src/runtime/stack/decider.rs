@@ -54,10 +54,17 @@ impl Stack {
             return Err(StackIsEmpty);
         }
 
-        let old_top = self.state.frames.pop().unwrap();
+        let return_values = self
+            .state()
+            .operands()
+            .expect("Just confirmed that stack is not empty")
+            .values()
+            .collect::<Vec<_>>();
+
+        self.state.frames.pop();
 
         if let Some(new_top) = self.state.frames.last_mut() {
-            for value in old_top.operands.values() {
+            for value in return_values {
                 new_top.operands.push(value);
             }
         };
