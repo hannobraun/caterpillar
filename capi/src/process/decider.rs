@@ -28,12 +28,16 @@ impl Process {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
-            stack: Stack::new(entry.clone()),
+            stack: Stack::new(),
             evaluator: Evaluator::new(code),
-            entry,
+            entry: entry.clone(),
             arguments: arguments.clone(),
         };
 
+        self_
+            .stack
+            .push(entry)
+            .expect("Expected recursion limit to be more than zero.");
         self_.push(arguments);
 
         self_
@@ -61,8 +65,11 @@ impl Process {
 
     pub fn reset(&mut self) {
         self.state = State::default();
-        self.stack = Stack::new(self.entry.clone());
+        self.stack = Stack::new();
 
+        self.stack
+            .push(self.entry.clone())
+            .expect("Expected recursion limit to be more than zero.");
         self.push(self.arguments.clone());
     }
 

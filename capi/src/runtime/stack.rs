@@ -10,12 +10,8 @@ pub struct Stack {
 }
 
 impl Stack {
-    pub fn new(next: Function) -> Self {
-        let mut self_ = Self { frames: Vec::new() };
-        self_
-            .push(next)
-            .expect("Expected recursion limit to be more than zero.");
-        self_
+    pub fn new() -> Self {
+        Self { frames: Vec::new() }
     }
 
     pub fn next_instruction(&self) -> Option<Location> {
