@@ -1,6 +1,6 @@
 use crate::runtime::{Function, Instruction, MissingOperand, Value};
 
-use super::{state::StackFrame, Bindings, Event, State};
+use super::{Bindings, Event, State};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -51,7 +51,13 @@ impl Stack {
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
         let old_top = self.state.frames.pop().ok_or(StackIsEmpty)?;
-        self.return_values(&old_top);
+
+        if let Some(new_top) = self.state.frames.last_mut() {
+            for value in old_top.operands.values() {
+                new_top.operands.push(value);
+            }
+        };
+
         Ok(())
     }
 
@@ -85,14 +91,6 @@ impl Stack {
             };
 
             return Some(instruction);
-        }
-    }
-
-    fn return_values(&mut self, frame: &StackFrame) {
-        if let Some(new_top) = self.state.frames.last_mut() {
-            for value in frame.operands.values() {
-                new_top.operands.push(value);
-            }
         }
     }
 
