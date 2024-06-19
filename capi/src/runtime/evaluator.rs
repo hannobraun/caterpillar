@@ -25,13 +25,7 @@ impl Evaluator {
             evaluate_instruction(instruction, &self.code, stack);
 
         match evaluate_result {
-            Ok(Some(call_stack_update)) => match call_stack_update {
-                CallStackUpdate::Pop => {
-                    stack
-                        .pop_frame()
-                        .expect("Currently executing; stack can't be empty");
-                }
-            },
+            Ok(Some(call_stack_update)) => match call_stack_update {},
             Ok(None) => {}
             Err(effect) => {
                 return Err(effect);
@@ -155,13 +149,17 @@ fn evaluate_instruction(
         Instruction::ReturnIfNonZero => {
             let value = stack.pop_operand()?;
             if value != Value(0) {
-                return Ok(Some(CallStackUpdate::Pop));
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
             }
         }
         Instruction::ReturnIfZero => {
             let value = stack.pop_operand()?;
             if value == Value(0) {
-                return Ok(Some(CallStackUpdate::Pop));
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
             }
         }
     }
@@ -169,6 +167,4 @@ fn evaluate_instruction(
     Ok(None)
 }
 
-enum CallStackUpdate {
-    Pop,
-}
+enum CallStackUpdate {}
