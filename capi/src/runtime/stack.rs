@@ -12,7 +12,7 @@ impl Stack {
         Self { frames: Vec::new() }
     }
 
-    pub fn next_instruction(&self) -> Option<Location> {
+    pub fn next_instruction_overall(&self) -> Option<Location> {
         for frame in self.frames.iter().rev() {
             if let Some((location, _)) = frame.function.next_instruction() {
                 return Some(location);

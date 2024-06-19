@@ -52,7 +52,7 @@ impl Process {
     }
 
     pub fn next_instruction(&self) -> Option<runtime::Location> {
-        self.stack.next_instruction()
+        self.stack.next_instruction_overall()
     }
 
     pub fn operands(&self) -> &Operands {
