@@ -87,7 +87,7 @@ fn evaluate_instruction(
         }
         Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
-                let value = stack.operands_mut().pop()?;
+                let value = stack.pop_operand()?;
                 stack.bindings_mut().insert(name, value);
             }
 
@@ -145,13 +145,13 @@ fn evaluate_instruction(
         }
         Instruction::Push { value } => stack.push_operand(value),
         Instruction::ReturnIfNonZero => {
-            let value = stack.operands_mut().pop()?;
+            let value = stack.pop_operand()?;
             if value != Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }
         }
         Instruction::ReturnIfZero => {
-            let value = stack.operands_mut().pop()?;
+            let value = stack.pop_operand()?;
             if value == Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }

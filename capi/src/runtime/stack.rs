@@ -86,6 +86,10 @@ impl Stack {
         self.frames.last_mut().unwrap().operands.push(operand);
     }
 
+    pub fn pop_operand(&mut self) -> Result<Value, StackUnderflow> {
+        self.frames.last_mut().unwrap().operands.pop()
+    }
+
     pub fn consume_next_instruction<R>(
         &mut self,
         f: impl FnOnce(Location, Instruction, &mut Self) -> R,
