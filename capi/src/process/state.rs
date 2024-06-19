@@ -40,7 +40,7 @@ impl State {
             Event::EffectTriggered { effect } => {
                 self.unhandled_effects.push_back(effect);
             }
-            Event::HandleEffect => {
+            Event::EffectHandled => {
                 self.unhandled_effects.pop_front();
             }
             Event::Finish => {

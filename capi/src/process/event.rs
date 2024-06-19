@@ -4,6 +4,6 @@ use crate::runtime::{self, EvaluatorEffect};
 pub enum Event {
     HasStepped { location: runtime::Location },
     EffectTriggered { effect: EvaluatorEffect },
-    HandleEffect,
+    EffectHandled,
     Finish,
 }

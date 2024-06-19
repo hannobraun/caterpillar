@@ -44,7 +44,7 @@ impl Process {
     }
 
     pub fn handle_first_effect(&mut self) {
-        self.emit_event(Event::HandleEffect);
+        self.emit_event(Event::EffectHandled);
     }
 
     pub fn reset(&mut self) {
