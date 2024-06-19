@@ -46,6 +46,15 @@ impl State {
                 == Some(location.clone().next())
         })
     }
+
+    pub fn all_next_instructions_in_frames(
+        &self,
+    ) -> impl Iterator<Item = Location> + '_ {
+        self.frames
+            .iter()
+            .filter_map(|frame| frame.function.next_instruction())
+            .map(|(location, _instruction)| location)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

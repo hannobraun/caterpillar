@@ -108,11 +108,7 @@ impl Stack {
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl Iterator<Item = Location> + '_ {
-        self.state
-            .frames
-            .iter()
-            .filter_map(|frame| frame.function.next_instruction())
-            .map(|(location, _instruction)| location)
+        self.state.all_next_instructions_in_frames()
     }
 
     fn return_values(&mut self, frame: &StackFrame) {
