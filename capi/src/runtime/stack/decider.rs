@@ -107,7 +107,7 @@ pub enum PushFrameError {
     Overflow,
 
     #[error("Expected function arguments on stack")]
-    MissingArgument(#[from] MissingOperand),
+    MissingOperand(#[from] MissingOperand),
 }
 
 #[derive(Debug)]
