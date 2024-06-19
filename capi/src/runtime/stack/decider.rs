@@ -32,7 +32,10 @@ impl Stack {
         self.state.operands()
     }
 
-    pub fn contains(&self, location: &Location) -> bool {
+    pub fn is_next_instruction_in_any_frame(
+        &self,
+        location: &Location,
+    ) -> bool {
         self.state.frames.iter().any(|frame| {
             frame
                 .function

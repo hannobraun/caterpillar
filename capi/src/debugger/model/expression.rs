@@ -47,7 +47,7 @@ impl Expression {
         });
 
         let is_on_call_stack = if let Some(location) = &location {
-            process.stack().contains(location)
+            process.stack().is_next_instruction_in_any_frame(location)
         } else {
             false
         };
