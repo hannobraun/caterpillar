@@ -30,18 +30,22 @@ impl Stack {
             assert_eq!(function.arguments.len(), 0);
         }
 
-        let mut bindings = Bindings::new();
+        let mut arguments = Bindings::new();
 
         for argument in function.arguments.iter().rev() {
             let value = self.pop_operand()?;
-            bindings.insert(argument.clone(), value);
+            arguments.insert(argument.clone(), value);
         }
 
         self.state.frames.push(StackFrame {
             function,
-            bindings,
+            bindings: Bindings::default(),
             operands: Operands::default(),
         });
+
+        for (name, value) in arguments {
+            self.define_binding(name, value);
+        }
 
         Ok(())
     }
