@@ -22,8 +22,8 @@ impl Stack {
         None
     }
 
-    pub fn top_frame(&self) -> Option<&StackFrame> {
-        self.frames.last()
+    pub fn operands(&self) -> Option<&Operands> {
+        self.frames.last().map(|frame| &frame.operands)
     }
 
     pub fn contains(&self, location: &Location) -> bool {

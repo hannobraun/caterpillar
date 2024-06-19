@@ -1,6 +1,6 @@
 use super::{
-    builtins, stack, Bindings, BuiltinEffect, Code, Operands, Function,
-    Instruction, Stack, StackUnderflow, Value,
+    builtins, stack, Bindings, BuiltinEffect, Code, Function, Instruction,
+    Operands, Stack, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
