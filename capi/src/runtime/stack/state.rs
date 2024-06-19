@@ -11,6 +11,10 @@ impl State {
     pub fn bindings(&self) -> Option<&Bindings> {
         self.frames.last().map(|frame| &frame.bindings)
     }
+
+    pub fn operands(&self) -> Option<&Operands> {
+        self.frames.last().map(|frame| &frame.operands)
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

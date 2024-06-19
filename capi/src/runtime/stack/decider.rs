@@ -40,7 +40,7 @@ impl Stack {
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.state.frames.last().map(|frame| &frame.operands)
+        self.state.operands()
     }
 
     pub fn contains(&self, location: &Location) -> bool {
