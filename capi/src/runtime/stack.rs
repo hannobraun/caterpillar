@@ -76,8 +76,8 @@ impl Stack {
         Ok(old_top)
     }
 
-    pub fn push_operand(&mut self, value: Value) {
-        self.frames.last_mut().unwrap().operands.push(value);
+    pub fn push_operand(&mut self, operand: Value) {
+        self.frames.last_mut().unwrap().operands.push(operand);
     }
 
     pub fn consume_next_instruction<R>(
