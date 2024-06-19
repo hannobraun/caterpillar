@@ -36,7 +36,7 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.state.frames.last().map(|frame| &frame.bindings)
+        self.state.bindings()
     }
 
     pub fn operands(&self) -> &Operands {

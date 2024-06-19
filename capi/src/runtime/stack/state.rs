@@ -7,6 +7,12 @@ pub struct State {
     pub frames: Vec<StackFrame>,
 }
 
+impl State {
+    pub fn bindings(&self) -> Option<&Bindings> {
+        self.frames.last().map(|frame| &frame.bindings)
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StackFrame {
     pub function: Function,
