@@ -55,7 +55,7 @@ impl Process {
         self.stack.next_instruction()
     }
 
-    pub fn data_stack(&self) -> &Operands {
+    pub fn operands(&self) -> &Operands {
         &self.stack.top_frame().unwrap().data
     }
 
