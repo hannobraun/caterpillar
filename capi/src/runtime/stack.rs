@@ -28,10 +28,6 @@ impl Stack {
         self.frames.last()
     }
 
-    pub fn top_frame_mut(&mut self) -> Option<&mut StackFrame> {
-        self.frames.last_mut()
-    }
-
     pub fn contains(&self, location: &Location) -> bool {
         self.frames.iter().any(|frame| {
             frame
@@ -68,6 +64,12 @@ impl Stack {
         });
 
         Ok(())
+    }
+
+    pub fn push_data(&mut self, values: impl IntoIterator<Item = Value>) {
+        for value in values {
+            self.frames.last_mut().unwrap().data.push(value);
+        }
     }
 
     pub fn pop(&mut self) -> Result<StackFrame, StackIsEmpty> {
