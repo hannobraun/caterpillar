@@ -39,8 +39,8 @@ impl Stack {
         self.state.bindings()
     }
 
-    pub fn operands(&self) -> &Operands {
-        &self.state.frames.last().unwrap().operands
+    pub fn operands(&self) -> Option<&Operands> {
+        self.state.frames.last().map(|frame| &frame.operands)
     }
 
     pub fn contains(&self, location: &Location) -> bool {

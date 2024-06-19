@@ -56,7 +56,7 @@ impl Process {
     }
 
     pub fn operands(&self) -> &Operands {
-        self.stack.operands()
+        self.stack.operands().unwrap()
     }
 
     pub fn handle_first_effect(&mut self) {
