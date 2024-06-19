@@ -43,6 +43,10 @@ impl Process {
         &self.state
     }
 
+    pub fn stack(&self) -> &runtime::Stack {
+        self.evaluator.stack()
+    }
+
     pub fn next_instruction(&self) -> Option<runtime::Location> {
         self.evaluator.next_instruction()
     }
@@ -80,7 +84,7 @@ impl Process {
         }
 
         self.previous_data_stack =
-            self.evaluator.stack().top_frame().unwrap().data.clone();
+            self.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,

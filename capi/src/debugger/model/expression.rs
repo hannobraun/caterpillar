@@ -47,7 +47,7 @@ impl Expression {
         });
 
         let is_on_call_stack = if let Some(location) = &location {
-            process.evaluator.stack().contains(location)
+            process.stack().contains(location)
         } else {
             false
         };

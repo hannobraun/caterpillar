@@ -43,7 +43,6 @@ impl ActiveFunctions {
         }
 
         let functions = process
-            .evaluator
             .stack()
             .iter()
             .filter_map(|runtime_location| {
