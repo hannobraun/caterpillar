@@ -60,17 +60,15 @@ impl RemoteProcess {
             &self.process2,
             self.process.as_ref(),
         );
-        let data_stacks = self.process.as_ref().map(|process| {
-            [
-                process.previous_data_stack.clone(),
-                process.evaluator.data_stack().clone(),
-            ]
-        });
+        let data_stack = self
+            .process
+            .as_ref()
+            .map(|process| process.evaluator.data_stack().clone());
         let memory = self.memory.clone();
 
         Debugger {
             active_functions,
-            data_stacks,
+            data_stack,
             memory,
         }
     }
