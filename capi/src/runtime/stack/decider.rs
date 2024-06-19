@@ -50,7 +50,11 @@ impl Stack {
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let old_top = self.state.frames.pop().ok_or(StackIsEmpty)?;
+        if self.state.num_frames() == 0 {
+            return Err(StackIsEmpty);
+        }
+
+        let old_top = self.state.frames.pop().unwrap();
 
         if let Some(new_top) = self.state.frames.last_mut() {
             for value in old_top.operands.values() {
