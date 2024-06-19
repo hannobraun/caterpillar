@@ -83,7 +83,7 @@ impl State {
                 );
                 frame.operands.push(value);
             }
-            Event::PopOperand { value } => {
+            Event::PopOperand { operand: value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::PopOperand` implies existence of stack frame",
                 );

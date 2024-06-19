@@ -12,6 +12,6 @@ pub enum Event<'r> {
         operand: Value,
     },
     PopOperand {
-        value: &'r mut Result<Value, MissingOperand>,
+        operand: &'r mut Result<Value, MissingOperand>,
     },
 }

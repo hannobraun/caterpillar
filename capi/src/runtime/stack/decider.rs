@@ -64,7 +64,9 @@ impl Stack {
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
         let mut value = Err(MissingOperand);
-        self.emit_event(Event::PopOperand { value: &mut value });
+        self.emit_event(Event::PopOperand {
+            operand: &mut value,
+        });
         value
     }
 
