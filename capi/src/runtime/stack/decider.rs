@@ -46,10 +46,10 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop_frame(&mut self) -> Result<StackFrame, StackIsEmpty> {
+    pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
         let old_top = self.state.frames.pop().ok_or(StackIsEmpty)?;
         self.return_values(&old_top);
-        Ok(old_top)
+        Ok(())
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
