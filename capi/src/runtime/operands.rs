@@ -18,8 +18,8 @@ impl Operands {
         self.values.push(value.into());
     }
 
-    pub fn pop(&mut self) -> Result<Value, StackUnderflow> {
-        self.values.pop().ok_or(StackUnderflow)
+    pub fn pop(&mut self) -> Result<Value, MissingOperand> {
+        self.values.pop().ok_or(MissingOperand)
     }
 
     pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
@@ -29,4 +29,4 @@ impl Operands {
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 #[error("Tried to pop value from empty stack")]
-pub struct StackUnderflow;
+pub struct MissingOperand;

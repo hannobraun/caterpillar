@@ -1,6 +1,6 @@
 use std::num::TryFromIntError;
 
-use super::{Stack, StackUnderflow, Value};
+use super::{MissingOperand, Stack, Value};
 
 pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
@@ -207,7 +207,7 @@ pub enum BuiltinError {
     IntegerOverflow,
 
     #[error(transparent)]
-    StackUnderflow(#[from] StackUnderflow),
+    StackUnderflow(#[from] MissingOperand),
 }
 
 // This conversion is implemented manually, because doing it automatically using

@@ -1,5 +1,5 @@
 use super::{
-    builtins, stack, BuiltinEffect, Code, Instruction, Stack, StackUnderflow,
+    builtins, stack, BuiltinEffect, Code, Instruction, MissingOperand, Stack,
     Value,
 };
 
@@ -144,7 +144,7 @@ pub enum EvaluatorEffect {
     CallStack(#[from] stack::PushError),
 
     #[error(transparent)]
-    StackError(#[from] StackUnderflow),
+    StackError(#[from] MissingOperand),
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },

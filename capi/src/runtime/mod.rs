@@ -16,7 +16,7 @@ pub use self::{
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
-    operands::{Operands, StackUnderflow},
+    operands::{Operands, MissingOperand},
     stack::Stack,
     value::Value,
 };

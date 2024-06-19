@@ -1,5 +1,5 @@
 use crate::runtime::{
-    Function, Instruction, Location, Operands, StackUnderflow, Value,
+    Function, Instruction, Location, MissingOperand, Operands, Value,
 };
 
 use super::{state::StackFrame, Bindings};
@@ -96,7 +96,7 @@ impl Stack {
         self.frames.last_mut().unwrap().operands.push(operand);
     }
 
-    pub fn pop_operand(&mut self) -> Result<Value, StackUnderflow> {
+    pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
         self.frames.last_mut().unwrap().operands.pop()
     }
 
@@ -137,7 +137,7 @@ pub enum PushError {
     Overflow,
 
     #[error("Expected function arguments on stack")]
-    MissingArgument(#[from] StackUnderflow),
+    MissingArgument(#[from] MissingOperand),
 }
 
 #[derive(Debug)]
