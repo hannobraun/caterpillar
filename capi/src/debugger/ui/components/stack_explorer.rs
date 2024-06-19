@@ -11,14 +11,14 @@ pub fn StackExplorer(current: Operands) -> impl IntoView {
                 <p>
                     "Current data stack:"
                 </p>
-                <DataStack data_stack=current />
+                <Operands data_stack=current />
             </div>
         </Panel>
     }
 }
 
 #[component]
-pub fn DataStack(data_stack: Operands) -> impl IntoView {
+pub fn Operands(data_stack: Operands) -> impl IntoView {
     let values = data_stack
         .values()
         .map(|value| {
