@@ -36,7 +36,7 @@ impl Process {
 
         self_
             .stack
-            .push(entry)
+            .push_frame(entry)
             .expect("Expected recursion limit to be more than zero.");
         self_.push(arguments);
 
@@ -68,7 +68,7 @@ impl Process {
         self.stack = Stack::new();
 
         self.stack
-            .push(self.entry.clone())
+            .push_frame(self.entry.clone())
             .expect("Expected recursion limit to be more than zero.");
         self.push(self.arguments.clone());
     }

@@ -30,7 +30,7 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    stack.push(function)?;
+                    stack.push_frame(function)?;
                 }
                 CallStackUpdate::Pop => {
                     stack
