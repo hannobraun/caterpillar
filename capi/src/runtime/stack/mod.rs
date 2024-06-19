@@ -3,7 +3,7 @@ mod event;
 mod state;
 
 pub use self::{
-    decider::{PushError, Stack},
+    decider::{PushFrameError, Stack},
     event::Event,
     state::{Bindings, State},
 };

@@ -18,10 +18,13 @@ impl Stack {
         &self.state
     }
 
-    pub fn push_frame(&mut self, function: Function) -> Result<(), PushError> {
+    pub fn push_frame(
+        &mut self,
+        function: Function,
+    ) -> Result<(), PushFrameError> {
         const RECURSION_LIMIT: usize = 8;
         if self.state.num_frames() >= RECURSION_LIMIT {
-            return Err(PushError::Overflow);
+            return Err(PushFrameError::Overflow);
         }
 
         if self.state.num_frames() == 0 {
@@ -99,7 +102,7 @@ impl Stack {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
-pub enum PushError {
+pub enum PushFrameError {
     #[error("Reached recursion limit")]
     Overflow,
 

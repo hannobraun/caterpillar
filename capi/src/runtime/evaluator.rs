@@ -156,7 +156,7 @@ pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    CallStack(#[from] stack::PushError),
+    CallStack(#[from] stack::PushFrameError),
 
     #[error(transparent)]
     MissingOperand(#[from] MissingOperand),
