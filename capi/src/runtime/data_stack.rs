@@ -10,10 +10,6 @@ impl DataStack {
         Self::default()
     }
 
-    pub fn clear(&mut self) {
-        self.values.clear();
-    }
-
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }

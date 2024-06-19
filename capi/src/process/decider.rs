@@ -1,8 +1,6 @@
 use crate::{
     breakpoints::Breakpoints,
-    runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Value,
-    },
+    runtime::{self, Evaluator, EvaluatorEffect, EvaluatorState, Value},
 };
 
 use super::{Event, State};
@@ -15,9 +13,6 @@ pub struct Process {
     pub evaluator: Evaluator,
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
-
-    /// The data stack, before the most recent instruction was executed
-    pub previous_data_stack: DataStack,
 }
 
 impl Process {
@@ -35,7 +30,6 @@ impl Process {
             evaluator,
             entry,
             arguments,
-            previous_data_stack: DataStack::default(),
         }
     }
 
@@ -58,7 +52,6 @@ impl Process {
     pub fn reset(&mut self) {
         self.evaluator.reset(self.entry.clone());
         self.state = State::default();
-        self.previous_data_stack.clear();
 
         self.push(self.arguments.clone());
     }
@@ -83,8 +76,6 @@ impl Process {
             });
         }
 
-        self.previous_data_stack =
-            self.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
