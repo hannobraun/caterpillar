@@ -21,15 +21,7 @@ impl Evaluator {
             return Ok(EvaluatorState::Finished);
         };
 
-        let evaluate_result =
-            evaluate_instruction(instruction, &self.code, stack);
-
-        match evaluate_result {
-            Ok(()) => {}
-            Err(effect) => {
-                return Err(effect);
-            }
-        }
+        evaluate_instruction(instruction, &self.code, stack)?;
 
         Ok(EvaluatorState::Running)
     }
