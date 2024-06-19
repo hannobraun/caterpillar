@@ -32,11 +32,9 @@ impl Stack {
 
         let mut bindings = Bindings::new();
 
-        if let Some(calling_frame) = self.state.frames.last_mut() {
-            for argument in function.arguments.iter().rev() {
-                let value = calling_frame.operands.pop()?;
-                bindings.insert(argument.clone(), value);
-            }
+        for argument in function.arguments.iter().rev() {
+            let value = self.pop_operand()?;
+            bindings.insert(argument.clone(), value);
         }
 
         self.state.frames.push(StackFrame {
