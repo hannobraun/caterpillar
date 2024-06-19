@@ -33,6 +33,20 @@ For more information on future design directions, please follow my
 [daily thoughts]. There's also a [design document](design.md), which I'd like to
 phase out, but that still provides some value.
 
+### Experimentation first; conservative decisions later, as necessary
+
+I want Caterpillar to be adopted. That could mean that I need to focus
+innovation where that provides the most benefit, and keep other aspects of the
+language conservative and familiar.
+
+Before that becomes necessary, I want to experiment though. At least give the
+language to chance to be more than an incremental improvement over the status
+quo.
+
+See the following daily thoughts for further information:
+[2024-06-18](https://capi.hannobraun.com/daily/2024-06-18) and
+[2024-06-19](https://capi.hannobraun.com/daily/2024-06-19).
+
 ### Continued evolution over backwards compatibility
 
 I'm not targeting a 1.0 release after which the language is expected to have few
