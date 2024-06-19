@@ -78,7 +78,7 @@ impl Stack {
         Ok(old_top)
     }
 
-    pub fn push_data(&mut self, value: Value) {
+    pub fn push_value(&mut self, value: Value) {
         self.frames.last_mut().unwrap().data.push(value);
     }
 

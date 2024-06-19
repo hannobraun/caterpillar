@@ -75,7 +75,7 @@ impl Process {
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
         for value in values {
-            self.stack.push_data(value);
+            self.stack.push_value(value);
         }
     }
 
