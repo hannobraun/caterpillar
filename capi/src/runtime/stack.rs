@@ -22,8 +22,20 @@ impl Stack {
         None
     }
 
+    pub fn bindings(&self) -> &Bindings {
+        &self.frames.last().unwrap().bindings
+    }
+
+    pub fn bindings_mut(&mut self) -> &mut Bindings {
+        &mut self.frames.last_mut().unwrap().bindings
+    }
+
     pub fn operands(&self) -> &Operands {
         &self.frames.last().unwrap().operands
+    }
+
+    pub fn operands_mut(&mut self) -> &mut Operands {
+        &mut self.frames.last_mut().unwrap().operands
     }
 
     pub fn contains(&self, location: &Location) -> bool {
@@ -76,7 +88,7 @@ impl Stack {
 
     pub fn consume_next_instruction<R>(
         &mut self,
-        f: impl FnOnce(Location, Instruction, &mut Operands, &mut Bindings) -> R,
+        f: impl FnOnce(Location, Instruction, &mut Self) -> R,
     ) -> Option<R> {
         loop {
             let mut frame = self.frames.pop()?;
@@ -88,12 +100,7 @@ impl Stack {
                 continue;
             };
 
-            let result = f(
-                location,
-                instruction,
-                &mut frame.operands,
-                &mut frame.bindings,
-            );
+            let result = f(location, instruction, self);
 
             // Don't put the stack frame back, if it is empty. This is tail call
             // optimization.

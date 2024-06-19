@@ -1,7 +1,5 @@
 use super::{
-    builtins,
-    stack::{self, Bindings},
-    BuiltinEffect, Code, Function, Instruction, Operands, Stack,
+    builtins, stack, BuiltinEffect, Code, Function, Instruction, Stack,
     StackUnderflow, Value,
 };
 
@@ -20,12 +18,12 @@ impl Evaluator {
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
         let mut location_tmp = None;
-        let Some(evaluate_result) = stack.consume_next_instruction(
-            |location, instruction, data, bindings| {
+        let Some(evaluate_result) =
+            stack.consume_next_instruction(|location, instruction, stack| {
                 location_tmp = Some(location);
-                evaluate_instruction(instruction, &self.code, data, bindings)
-            },
-        ) else {
+                evaluate_instruction(instruction, &self.code, stack)
+            })
+        else {
             return Ok(EvaluatorState::Finished);
         };
 
@@ -78,46 +76,47 @@ pub enum EvaluatorEffect {
 fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
-    operands: &mut Operands,
-    bindings: &mut Bindings,
+    stack: &mut Stack,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {
         Instruction::BindingEvaluate { name } => {
-            let value = bindings.get(&name).copied().expect(
+            let value = stack.bindings().get(&name).copied().expect(
                 "Binding instruction only generated for existing bindings",
             );
-            operands.push(value);
+            stack.operands_mut().push(value);
         }
         Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
-                let value = operands.pop()?;
-                bindings.insert(name, value);
+                let value = stack.operands_mut().pop()?;
+                stack.bindings_mut().insert(name, value);
             }
 
-            if !operands.is_empty() {
+            if !stack.operands().is_empty() {
                 return Err(EvaluatorEffect::BindingLeftValuesOnStack);
             }
         }
         Instruction::CallBuiltin { name } => {
             let result = match name.as_str() {
-                "add" => builtins::add(operands),
-                "add_wrap_unsigned" => builtins::add_wrap_unsigned(operands),
+                "add" => builtins::add(stack.operands_mut()),
+                "add_wrap_unsigned" => {
+                    builtins::add_wrap_unsigned(stack.operands_mut())
+                }
                 "brk" => builtins::brk(),
-                "copy" => builtins::copy(operands),
-                "div" => builtins::div(operands),
-                "drop" => builtins::drop(operands),
-                "eq" => builtins::eq(operands),
-                "greater" => builtins::greater(operands),
-                "load" => builtins::load(operands),
-                "mul" => builtins::mul(operands),
-                "neg" => builtins::neg(operands),
+                "copy" => builtins::copy(stack.operands_mut()),
+                "div" => builtins::div(stack.operands_mut()),
+                "drop" => builtins::drop(stack.operands_mut()),
+                "eq" => builtins::eq(stack.operands_mut()),
+                "greater" => builtins::greater(stack.operands_mut()),
+                "load" => builtins::load(stack.operands_mut()),
+                "mul" => builtins::mul(stack.operands_mut()),
+                "neg" => builtins::neg(stack.operands_mut()),
                 "read_input" => builtins::read_input(),
                 "read_random" => builtins::read_random(),
-                "remainder" => builtins::remainder(operands),
-                "store" => builtins::store(operands),
-                "sub" => builtins::sub(operands),
+                "remainder" => builtins::remainder(stack.operands_mut()),
+                "store" => builtins::store(stack.operands_mut()),
+                "sub" => builtins::sub(stack.operands_mut()),
                 "submit_frame" => builtins::submit_frame(),
-                "write_tile" => builtins::write_tile(operands),
+                "write_tile" => builtins::write_tile(stack.operands_mut()),
                 _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
@@ -144,15 +143,15 @@ fn evaluate_instruction(
             let function = code.functions.get(&name).cloned().unwrap();
             return Ok(Some(CallStackUpdate::Push(function)));
         }
-        Instruction::Push { value } => operands.push(value),
+        Instruction::Push { value } => stack.operands_mut().push(value),
         Instruction::ReturnIfNonZero => {
-            let value = operands.pop()?;
+            let value = stack.operands_mut().pop()?;
             if value != Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }
         }
         Instruction::ReturnIfZero => {
-            let value = operands.pop()?;
+            let value = stack.operands_mut().pop()?;
             if value == Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }
