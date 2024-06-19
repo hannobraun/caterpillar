@@ -43,7 +43,7 @@ impl State {
             Event::EffectHandled => {
                 self.unhandled_effects.pop_front();
             }
-            Event::Finish => {
+            Event::Finished => {
                 self.has_finished = true;
             }
         }

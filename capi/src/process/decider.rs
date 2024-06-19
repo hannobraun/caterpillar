@@ -82,7 +82,7 @@ impl Process {
                 location: next_instruction,
             }),
             Ok(EvaluatorState::Finished) => {
-                self.emit_event(Event::Finish);
+                self.emit_event(Event::Finished);
             }
             Err(effect) => {
                 self.emit_event(Event::EffectTriggered { effect });

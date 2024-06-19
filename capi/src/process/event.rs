@@ -5,5 +5,5 @@ pub enum Event {
     HasStepped { location: runtime::Location },
     EffectTriggered { effect: EvaluatorEffect },
     EffectHandled,
-    Finish,
+    Finished,
 }
