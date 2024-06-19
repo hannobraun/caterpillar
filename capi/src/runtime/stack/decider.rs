@@ -71,7 +71,7 @@ impl Stack {
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
         let mut value = Err(MissingOperand);
-        self.state.evolve(Event::PopOperand { value: &mut value });
+        self.emit_event(Event::PopOperand { value: &mut value });
         value
     }
 
@@ -96,6 +96,10 @@ impl Stack {
                 new_top.operands.push(value);
             }
         }
+    }
+
+    fn emit_event(&mut self, event: Event) {
+        self.state.evolve(event);
     }
 }
 
