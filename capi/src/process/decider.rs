@@ -23,16 +23,19 @@ impl Process {
         entry: runtime::Function,
         arguments: Vec<Value>,
     ) -> Self {
-        let mut evaluator = Evaluator::new(code, entry.clone());
-        evaluator.push(arguments.clone());
+        let evaluator = Evaluator::new(code, entry.clone());
 
-        Self {
+        let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
             evaluator,
             entry,
-            arguments,
-        }
+            arguments: arguments.clone(),
+        };
+
+        self_.push(arguments);
+
+        self_
     }
 
     pub fn state(&self) -> &State {
