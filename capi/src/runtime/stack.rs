@@ -26,10 +26,6 @@ impl Stack {
         &self.frames.last().unwrap().bindings
     }
 
-    pub fn bindings_mut(&mut self) -> &mut Bindings {
-        &mut self.frames.last_mut().unwrap().bindings
-    }
-
     pub fn operands(&self) -> &Operands {
         &self.frames.last().unwrap().operands
     }
@@ -79,7 +75,11 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        self.bindings_mut().insert(name, value.into());
+        self.frames
+            .last_mut()
+            .unwrap()
+            .bindings
+            .insert(name, value.into());
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
