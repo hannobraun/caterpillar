@@ -2,20 +2,23 @@ use crate::runtime::{
     Function, Instruction, Location, MissingOperand, Operands, Value,
 };
 
-use super::{state::StackFrame, Bindings};
+use super::{state::StackFrame, Bindings, State};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
-    frames: Vec<StackFrame>,
+    state: State,
 }
 
 impl Stack {
     pub fn new() -> Self {
-        Self { frames: Vec::new() }
+        Self {
+            state: State::default(),
+        }
     }
 
     pub fn next_instruction_in_current_function(&self) -> Option<Location> {
-        self.frames
+        self.state
+            .frames
             .last()?
             .function
             .next_instruction()
@@ -23,7 +26,7 @@ impl Stack {
     }
 
     pub fn next_instruction_overall(&self) -> Option<Location> {
-        for frame in self.frames.iter().rev() {
+        for frame in self.state.frames.iter().rev() {
             if let Some((location, _)) = frame.function.next_instruction() {
                 return Some(location);
             }
@@ -33,15 +36,15 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> &Bindings {
-        &self.frames.last().unwrap().bindings
+        &self.state.frames.last().unwrap().bindings
     }
 
     pub fn operands(&self) -> &Operands {
-        &self.frames.last().unwrap().operands
+        &self.state.frames.last().unwrap().operands
     }
 
     pub fn contains(&self, location: &Location) -> bool {
-        self.frames.iter().any(|frame| {
+        self.state.frames.iter().any(|frame| {
             frame
                 .function
                 .next_instruction()
@@ -52,13 +55,13 @@ impl Stack {
 
     pub fn push_frame(&mut self, function: Function) -> Result<(), PushError> {
         const RECURSION_LIMIT: usize = 8;
-        if self.frames.len() >= RECURSION_LIMIT {
+        if self.state.frames.len() >= RECURSION_LIMIT {
             return Err(PushError::Overflow);
         }
 
         let mut bindings = Bindings::new();
 
-        if let Some(calling_frame) = self.frames.last_mut() {
+        if let Some(calling_frame) = self.state.frames.last_mut() {
             for argument in function.arguments.iter().rev() {
                 let value = calling_frame.operands.pop()?;
                 bindings.insert(argument.clone(), value);
@@ -69,7 +72,7 @@ impl Stack {
             assert_eq!(function.arguments.len(), 0);
         }
 
-        self.frames.push(StackFrame {
+        self.state.frames.push(StackFrame {
             function,
             bindings,
             operands: Operands::new(),
@@ -79,13 +82,14 @@ impl Stack {
     }
 
     pub fn pop_frame(&mut self) -> Result<StackFrame, StackIsEmpty> {
-        let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
+        let old_top = self.state.frames.pop().ok_or(StackIsEmpty)?;
         self.return_values(&old_top);
         Ok(old_top)
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        self.frames
+        self.state
+            .frames
             .last_mut()
             .unwrap()
             .bindings
@@ -93,16 +97,16 @@ impl Stack {
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        self.frames.last_mut().unwrap().operands.push(operand);
+        self.state.frames.last_mut().unwrap().operands.push(operand);
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
-        self.frames.last_mut().unwrap().operands.pop()
+        self.state.frames.last_mut().unwrap().operands.pop()
     }
 
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
         loop {
-            let frame = self.frames.last_mut()?;
+            let frame = self.state.frames.last_mut()?;
 
             let Some(instruction) = frame.function.consume_next_instruction()
             else {
@@ -116,14 +120,15 @@ impl Stack {
     }
 
     pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
-        self.frames
+        self.state
+            .frames
             .iter()
             .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
     }
 
     fn return_values(&mut self, frame: &StackFrame) {
-        if let Some(new_top) = self.frames.last_mut() {
+        if let Some(new_top) = self.state.frames.last_mut() {
             for value in frame.operands.values() {
                 new_top.operands.push(value);
             }

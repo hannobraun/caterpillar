@@ -3,5 +3,5 @@ mod state;
 
 pub use self::{
     decider::{PushError, Stack},
-    state::Bindings,
+    state::{Bindings, State},
 };

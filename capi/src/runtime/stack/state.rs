@@ -2,6 +2,11 @@ use std::collections::BTreeMap;
 
 use crate::runtime::{Function, Operands, Value};
 
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct State {
+    pub frames: Vec<StackFrame>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StackFrame {
     pub function: Function,
