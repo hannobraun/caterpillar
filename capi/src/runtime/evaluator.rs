@@ -144,7 +144,7 @@ pub enum EvaluatorEffect {
     CallStack(#[from] stack::PushError),
 
     #[error(transparent)]
-    StackError(#[from] MissingOperand),
+    MissingOperand(#[from] MissingOperand),
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
