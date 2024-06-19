@@ -74,7 +74,9 @@ impl Process {
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
-        self.stack.push_data(values);
+        for value in values {
+            self.stack.push_data(value);
+        }
     }
 
     pub fn step(&mut self, breakpoints: &mut Breakpoints) {

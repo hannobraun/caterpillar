@@ -78,10 +78,8 @@ impl Stack {
         Ok(old_top)
     }
 
-    pub fn push_data(&mut self, values: impl IntoIterator<Item = Value>) {
-        for value in values {
-            self.frames.last_mut().unwrap().data.push(value);
-        }
+    pub fn push_data(&mut self, value: Value) {
+        self.frames.last_mut().unwrap().data.push(value);
     }
 
     pub fn consume_next_instruction<R>(
