@@ -28,5 +28,5 @@ impl Operands {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
-#[error("Tried to pop value from empty stack")]
+#[error("Missing operand")]
 pub struct MissingOperand;
