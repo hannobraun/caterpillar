@@ -25,8 +25,7 @@ impl Evaluator {
             evaluate_instruction(instruction, &self.code, stack);
 
         match evaluate_result {
-            Ok(Some(call_stack_update)) => match call_stack_update {},
-            Ok(None) => {}
+            Ok(()) => {}
             Err(effect) => {
                 return Err(effect);
             }
@@ -65,7 +64,7 @@ fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
     stack: &mut Stack,
-) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
+) -> Result<(), EvaluatorEffect> {
     match instruction {
         Instruction::BindingEvaluate { name } => {
             let Some(value) = stack.bindings().get(&name).copied() else {
@@ -164,7 +163,5 @@ fn evaluate_instruction(
         }
     }
 
-    Ok(None)
+    Ok(())
 }
-
-enum CallStackUpdate {}
