@@ -27,7 +27,7 @@ impl Evaluator {
             Instruction::BindingEvaluate { name } => {
                 let bindings = stack.bindings();
                 let Some(value) = bindings.get(&name).copied() else {
-                    panic!(
+                    unreachable!(
                         "Can't find binding `{name}`, but instruction that \
                         evaluates bindings should only be generated for \
                         bindings that exist.\n\
