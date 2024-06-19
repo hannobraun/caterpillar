@@ -8,6 +8,10 @@ pub struct State {
 }
 
 impl State {
+    pub fn num_frames(&self) -> usize {
+        self.frames.len()
+    }
+
     pub fn bindings(&self) -> Option<&Bindings> {
         self.frames.last().map(|frame| &frame.bindings)
     }

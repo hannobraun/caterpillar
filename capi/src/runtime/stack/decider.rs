@@ -20,7 +20,7 @@ impl Stack {
 
     pub fn push_frame(&mut self, function: Function) -> Result<(), PushError> {
         const RECURSION_LIMIT: usize = 8;
-        if self.state.frames.len() >= RECURSION_LIMIT {
+        if self.state.num_frames() >= RECURSION_LIMIT {
             return Err(PushError::Overflow);
         }
 
