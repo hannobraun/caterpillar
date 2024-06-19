@@ -23,6 +23,16 @@ impl State {
             .next_instruction()
             .map(|(location, _)| location)
     }
+
+    pub fn next_instruction_overall(&self) -> Option<Location> {
+        for frame in self.frames.iter().rev() {
+            if let Some((location, _)) = frame.function.next_instruction() {
+                return Some(location);
+            }
+        }
+
+        None
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
