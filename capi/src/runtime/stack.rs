@@ -72,7 +72,7 @@ impl Stack {
         }
     }
 
-    pub fn pop(&mut self) -> Result<StackFrame, StackIsEmpty> {
+    pub fn pop_frame(&mut self) -> Result<StackFrame, StackIsEmpty> {
         let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
 
         if let Some(new_top) = self.frames.last_mut() {
@@ -94,7 +94,7 @@ impl Stack {
             let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
             else {
-                self.pop()
+                self.pop_frame()
                     .expect("Just accessed a frame; expecting to pop it");
                 continue;
             };
@@ -118,7 +118,7 @@ impl Stack {
             //    have more advanced control flow.
             let frame_is_empty = frame.function.next_instruction().is_none();
             if frame_is_empty {
-                self.pop()
+                self.pop_frame()
                     .expect("Just accessed a frame; expecting to pop it");
             }
 

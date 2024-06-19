@@ -34,7 +34,7 @@ impl Evaluator {
                 }
                 CallStackUpdate::Pop => {
                     stack
-                        .pop()
+                        .pop_frame()
                         .expect("Currently executing; stack can't be empty");
                 }
             },
