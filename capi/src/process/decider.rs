@@ -1,9 +1,6 @@
 use crate::{
     breakpoints::Breakpoints,
-    runtime::{
-        self, Evaluator, EvaluatorEffect, EvaluatorState, Operands, Stack,
-        Value,
-    },
+    runtime::{self, Evaluator, EvaluatorEffect, EvaluatorState, Stack, Value},
 };
 
 use super::{Event, State};
@@ -49,10 +46,6 @@ impl Process {
 
     pub fn stack(&self) -> &runtime::Stack {
         &self.stack
-    }
-
-    pub fn operands(&self) -> Option<&Operands> {
-        self.stack.state().operands()
     }
 
     pub fn handle_first_effect(&mut self) {
