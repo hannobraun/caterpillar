@@ -1,6 +1,6 @@
 use crate::runtime::{Function, Instruction, MissingOperand, Operands, Value};
 
-use super::{state::StackFrame, Bindings, State};
+use super::{state::StackFrame, Bindings, Event, State};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -70,7 +70,9 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
-        self.state.frames.last_mut().unwrap().operands.pop()
+        let mut value = Err(MissingOperand);
+        self.state.evolve(Event::PopOperand { value: &mut value });
+        value
     }
 
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {

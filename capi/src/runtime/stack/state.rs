@@ -2,6 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::runtime::{Function, Location, Operands, Value};
 
+use super::Event;
+
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
     pub frames: Vec<StackFrame>,
@@ -58,6 +60,17 @@ impl State {
             .iter()
             .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
+    }
+
+    pub fn evolve(&mut self, event: Event) {
+        match event {
+            Event::PopOperand { value } => {
+                let frame = self.frames.last_mut().expect(
+                    "`Event::PopOperand` implies existence of stack frame",
+                );
+                *value = frame.operands.pop();
+            }
+        }
     }
 }
 
