@@ -26,17 +26,9 @@ impl Function {
         })
     }
 
-    pub fn consume_next_instruction(
-        &mut self,
-    ) -> Option<(Location, Instruction)> {
+    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
         self.instructions
             .consume_next()
-            .map(|(index, instruction)| {
-                let location = Location {
-                    function: self.name.clone(),
-                    index,
-                };
-                (location, instruction)
-            })
+            .map(|(_, instruction)| instruction)
     }
 }

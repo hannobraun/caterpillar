@@ -97,8 +97,7 @@ impl Stack {
         loop {
             let mut frame = self.frames.pop()?;
 
-            let Some((_, instruction)) =
-                frame.function.consume_next_instruction()
+            let Some(instruction) = frame.function.consume_next_instruction()
             else {
                 self.return_values(&frame);
                 continue;
