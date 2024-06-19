@@ -56,7 +56,7 @@ impl Process {
     }
 
     pub fn operands(&self) -> &Operands {
-        &self.stack.top_frame().unwrap().data
+        &self.stack.top_frame().unwrap().operands
     }
 
     pub fn handle_first_effect(&mut self) {

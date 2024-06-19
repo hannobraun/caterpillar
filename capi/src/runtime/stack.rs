@@ -46,7 +46,7 @@ impl Stack {
 
         if let Some(calling_frame) = self.frames.last_mut() {
             for argument in function.arguments.iter().rev() {
-                let value = calling_frame.data.pop()?;
+                let value = calling_frame.operands.pop()?;
                 bindings.insert(argument.clone(), value);
             }
         } else {
@@ -58,7 +58,7 @@ impl Stack {
         self.frames.push(StackFrame {
             function,
             bindings,
-            data: Operands::new(),
+            operands: Operands::new(),
         });
 
         Ok(())
@@ -68,8 +68,8 @@ impl Stack {
         let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
 
         if let Some(new_top) = self.frames.last_mut() {
-            for value in old_top.data.values() {
-                new_top.data.push(value);
+            for value in old_top.operands.values() {
+                new_top.operands.push(value);
             }
         }
 
@@ -77,7 +77,7 @@ impl Stack {
     }
 
     pub fn push_value(&mut self, value: Value) {
-        self.frames.last_mut().unwrap().data.push(value);
+        self.frames.last_mut().unwrap().operands.push(value);
     }
 
     pub fn consume_next_instruction<R>(
@@ -95,8 +95,12 @@ impl Stack {
                 continue;
             };
 
-            let result =
-                f(location, instruction, &mut frame.data, &mut frame.bindings);
+            let result = f(
+                location,
+                instruction,
+                &mut frame.operands,
+                &mut frame.bindings,
+            );
 
             // Don't put the stack frame back, if it is empty. This is tail call
             // optimization.
@@ -134,7 +138,7 @@ impl Stack {
 pub struct StackFrame {
     pub function: Function,
     pub bindings: Bindings,
-    pub data: Operands,
+    pub operands: Operands,
 }
 
 pub type Bindings = BTreeMap<String, Value>;
