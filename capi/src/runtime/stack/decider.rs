@@ -61,7 +61,7 @@ impl Stack {
             .values()
             .collect::<Vec<_>>();
 
-        self.state.frames.pop();
+        self.emit_event(Event::PopFrame);
 
         if self.state.num_frames() == 0 {
             // We just popped the last frame. The return values have nowhere to

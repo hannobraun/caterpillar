@@ -71,6 +71,9 @@ impl State {
                     operands: Operands::default(),
                 });
             }
+            Event::PopFrame => {
+                self.frames.pop();
+            }
             Event::DefineBinding { name, value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::DefineBinding` implies existence of stack frame",

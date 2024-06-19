@@ -4,6 +4,7 @@ pub enum Event<'r> {
     PushFrame {
         function: Function,
     },
+    PopFrame,
     DefineBinding {
         name: String,
         value: Value,
