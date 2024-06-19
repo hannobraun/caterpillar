@@ -78,9 +78,16 @@ fn evaluate_instruction(
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {
         Instruction::BindingEvaluate { name } => {
-            let value = stack.bindings().get(&name).copied().expect(
-                "Binding instruction only generated for existing bindings",
-            );
+            let Some(value) = stack.bindings().get(&name).copied() else {
+                panic!(
+                    "Can't find binding `{name}`, but instruction that \
+                    evaluates bindings should only be generated for bindings \
+                    that exist.\n\
+                    \n\
+                    Current stack:\n\
+                    {stack:#?}"
+                );
+            };
             stack.push_operand(value);
         }
         Instruction::BindingsDefine { names } => {
