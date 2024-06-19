@@ -63,7 +63,7 @@ impl UpdatesTx {
 
         let process_can_step = process.state().can_step();
         for event in process.take_events() {
-            if let process::Event::Step { location } = &event {
+            if let process::Event::HasStepped { location } = &event {
                 // We can't send every step, or we would overwhelm the
                 // connection. Let's queue this latest step in any case.
                 self.queued_step = Some(location.clone());
@@ -143,7 +143,7 @@ impl UpdatesTx {
         if let Some(location) = self.queued_step.take() {
             self.inner
                 .send(Update::Process2 {
-                    event: process::Event::Step { location },
+                    event: process::Event::HasStepped { location },
                 })
                 .unwrap();
         }

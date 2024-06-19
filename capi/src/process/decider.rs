@@ -78,7 +78,7 @@ impl Process {
         self.previous_data_stack =
             self.evaluator.stack().top_frame().unwrap().data.clone();
         match self.evaluator.step() {
-            Ok(EvaluatorState::Running) => self.emit_event(Event::Step {
+            Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),
             Ok(EvaluatorState::Finished) => {

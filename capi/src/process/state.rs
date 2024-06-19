@@ -34,7 +34,7 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::Step { location } => {
+            Event::HasStepped { location } => {
                 self.most_recent_step = Some(location);
             }
             Event::TriggerEffect { effect } => {
