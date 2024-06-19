@@ -25,7 +25,13 @@ impl Evaluator {
         let stack: &mut Stack = stack;
         match instruction {
             Instruction::BindingEvaluate { name } => {
-                let bindings = stack.bindings();
+                let Some(bindings) = stack.bindings() else {
+                    unreachable!(
+                        "Can't access bindings, but we're currently executing. \
+                        An active stack frame, and therefore bindings, must \
+                        exist."
+                    );
+                };
                 let Some(value) = bindings.get(&name).copied() else {
                     unreachable!(
                         "Can't find binding `{name}`, but instruction that \
