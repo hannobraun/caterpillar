@@ -79,13 +79,12 @@ impl Stack {
         f: impl FnOnce(Location, Instruction, &mut Operands, &mut Bindings) -> R,
     ) -> Option<R> {
         loop {
-            let frame = self.frames.last_mut()?;
+            let mut frame = self.frames.pop()?;
 
             let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
             else {
-                self.pop_frame()
-                    .expect("Just accessed a frame; expecting to pop it");
+                self.return_values(&frame);
                 continue;
             };
 
@@ -112,8 +111,9 @@ impl Stack {
             //    have more advanced control flow.
             let frame_is_empty = frame.function.next_instruction().is_none();
             if frame_is_empty {
-                self.pop_frame()
-                    .expect("Just accessed a frame; expecting to pop it");
+                self.return_values(&frame);
+            } else {
+                self.frames.push(frame);
             }
 
             return Some(result);
