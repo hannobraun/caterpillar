@@ -18,7 +18,7 @@ impl Evaluator {
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
         let Some(evaluate_result) =
-            stack.consume_next_instruction(|_, instruction, stack| {
+            stack.consume_next_instruction(|instruction, stack| {
                 evaluate_instruction(instruction, &self.code, stack)
             })
         else {

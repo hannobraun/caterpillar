@@ -92,19 +92,19 @@ impl Stack {
 
     pub fn consume_next_instruction<R>(
         &mut self,
-        f: impl FnOnce(Location, Instruction, &mut Self) -> R,
+        f: impl FnOnce(Instruction, &mut Self) -> R,
     ) -> Option<R> {
         loop {
             let mut frame = self.frames.pop()?;
 
-            let Some((location, instruction)) =
+            let Some((_, instruction)) =
                 frame.function.consume_next_instruction()
             else {
                 self.return_values(&frame);
                 continue;
             };
 
-            let result = f(location, instruction, self);
+            let result = f(instruction, self);
 
             // Don't put the stack frame back, if it is empty. This is tail call
             // optimization.
