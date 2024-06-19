@@ -1,6 +1,6 @@
 use super::{
-    builtins, stack, BuiltinEffect, Code, Function, Instruction, Stack,
-    StackUnderflow, Value,
+    builtins, stack, BuiltinEffect, Code, Instruction, Stack, StackUnderflow,
+    Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -26,17 +26,6 @@ impl Evaluator {
 
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
-                CallStackUpdate::Push(function) => {
-                    // If the current function is finished, pop its stack frame
-                    // before pushing the next one. This is tail call
-                    // optimization.
-                    if stack.next_instruction_in_current_function().is_none() {
-                        stack.pop_frame().expect(
-                            "Currently executing; stack can't be empty",
-                        );
-                    }
-                    stack.push_frame(function)?;
-                }
                 CallStackUpdate::Pop => {
                     stack
                         .pop_frame()
@@ -151,7 +140,16 @@ fn evaluate_instruction(
         }
         Instruction::CallFunction { name } => {
             let function = code.functions.get(&name).cloned().unwrap();
-            return Ok(Some(CallStackUpdate::Push(function)));
+
+            // If the current function is finished, pop its stack frame before
+            // pushing the next one. This is tail call optimization.
+            if stack.next_instruction_in_current_function().is_none() {
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
+            }
+
+            stack.push_frame(function)?;
         }
         Instruction::Push { value } => stack.push_operand(value),
         Instruction::ReturnIfNonZero => {
@@ -172,6 +170,5 @@ fn evaluate_instruction(
 }
 
 enum CallStackUpdate {
-    Push(Function),
     Pop,
 }
