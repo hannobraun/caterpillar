@@ -13,10 +13,10 @@ pub struct Process {
     state: State,
     events: Vec<Event>,
 
-    pub stack: Stack,
-    pub evaluator: Evaluator,
-    pub entry: runtime::Function,
-    pub arguments: Vec<Value>,
+    stack: Stack,
+    evaluator: Evaluator,
+    entry: runtime::Function,
+    arguments: Vec<Value>,
 }
 
 impl Process {
