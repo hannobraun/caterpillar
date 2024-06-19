@@ -115,28 +115,6 @@ impl Stack {
 
             let result = f(instruction, self);
 
-            // Don't put the stack frame back, if it is empty. This is tail call
-            // optimization.
-            //
-            // This will lead to trouble, if the last instruction in the
-            // function (the one we just executed) is an explicit return
-            // instruction. Those pop *another* stack frame, which is one too
-            // many.
-            //
-            // I've decided not to address that, for the moment:
-            //
-            // 1. That is a weird pattern anyway, and doesn't really make sense
-            //    to write.
-            // 2. Explicit return instructions are a stopgap anyway, until we
-            //    have more advanced control flow.
-            let frame_is_empty =
-                self.next_instruction_in_current_function().is_none();
-            if frame_is_empty {
-                self.pop_frame().expect(
-                    "Accessed frame earlier in loop; must be able to pop it",
-                );
-            }
-
             return Some(result);
         }
     }

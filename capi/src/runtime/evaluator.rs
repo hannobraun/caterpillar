@@ -28,6 +28,14 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
+                    // If the current function is finished, pop its stack frame
+                    // before pushing the next one. This is tail call
+                    // optimization.
+                    if stack.next_instruction_in_current_function().is_none() {
+                        stack.pop_frame().expect(
+                            "Currently executing; stack can't be empty",
+                        );
+                    }
                     stack.push_frame(function)?;
                 }
                 CallStackUpdate::Pop => {
