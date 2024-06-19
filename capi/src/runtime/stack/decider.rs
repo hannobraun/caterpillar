@@ -103,11 +103,11 @@ impl Stack {
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum PushFrameError {
-    #[error("Reached recursion limit")]
-    Overflow,
-
     #[error(transparent)]
     MissingOperand(#[from] MissingOperand),
+
+    #[error("Reached recursion limit")]
+    Overflow,
 }
 
 #[derive(Debug)]
