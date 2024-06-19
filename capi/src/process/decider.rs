@@ -29,7 +29,7 @@ impl Process {
             state: State::default(),
             events: Vec::new(),
             stack: Stack::new(entry.clone()),
-            evaluator: Evaluator::new(code, entry.clone()),
+            evaluator: Evaluator::new(code),
             entry,
             arguments: arguments.clone(),
         };

@@ -9,7 +9,7 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn new(code: Code, _: Function) -> Self {
+    pub fn new(code: Code) -> Self {
         Self { code }
     }
 
