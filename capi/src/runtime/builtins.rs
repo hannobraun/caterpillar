@@ -3,26 +3,26 @@ use std::num::TryFromIntError;
 use super::{Stack, StackUnderflow, Value};
 
 pub fn add(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let Some(c) = a.0.checked_add(b.0) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let c = a.0.wrapping_add(b.0);
     let c = if c >= 0 { c } else { c - i8::MIN };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
@@ -32,17 +32,17 @@ pub fn brk() -> Result {
 }
 
 pub fn copy(stack: &mut Stack) -> Result {
-    let a = stack.operands_mut().pop()?;
+    let a = stack.pop_operand()?;
 
-    stack.operands_mut().push(a);
-    stack.operands_mut().push(a);
+    stack.push_operand(a);
+    stack.push_operand(a);
 
     Ok(None)
 }
 
 pub fn div(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     if b.0 == 0 {
         return Err(BuiltinError::DivideByZero);
@@ -52,40 +52,40 @@ pub fn div(stack: &mut Stack) -> Result {
         return Err(BuiltinError::IntegerOverflow);
     };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn drop(stack: &mut Stack) -> Result {
-    stack.operands_mut().pop()?;
+    stack.pop_operand()?;
     Ok(None)
 }
 
 pub fn eq(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let c = if a.0 == b.0 { 1 } else { 0 };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn greater(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let c = if a.0 > b.0 { 1 } else { 0 };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn load(stack: &mut Stack) -> Result {
-    let address = stack.operands_mut().pop()?;
+    let address = stack.pop_operand()?;
 
     let address = address.0.try_into()?;
 
@@ -93,27 +93,27 @@ pub fn load(stack: &mut Stack) -> Result {
 }
 
 pub fn mul(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let Some(c) = a.0.checked_mul(b.0) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn neg(stack: &mut Stack) -> Result {
-    let a = stack.operands_mut().pop()?;
+    let a = stack.pop_operand()?;
 
     if a.0 == i8::MIN {
         return Err(BuiltinError::IntegerOverflow);
     }
     let b = -a.0;
 
-    stack.operands_mut().push(b);
+    stack.push_operand(b);
 
     Ok(None)
 }
@@ -127,22 +127,22 @@ pub fn read_random() -> Result {
 }
 
 pub fn remainder(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     if b.0 == 0 {
         return Err(BuiltinError::DivideByZero);
     }
     let c = a.0 % b.0;
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
 
 pub fn store(stack: &mut Stack) -> Result {
-    let address = stack.operands_mut().pop()?;
-    let value = stack.operands_mut().pop()?;
+    let address = stack.pop_operand()?;
+    let value = stack.pop_operand()?;
 
     let address = address.0.try_into()?;
 
@@ -150,14 +150,14 @@ pub fn store(stack: &mut Stack) -> Result {
 }
 
 pub fn sub(stack: &mut Stack) -> Result {
-    let b = stack.operands_mut().pop()?;
-    let a = stack.operands_mut().pop()?;
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
 
     let Some(c) = a.0.checked_sub(b.0) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 
-    stack.operands_mut().push(c);
+    stack.push_operand(c);
 
     Ok(None)
 }
@@ -167,9 +167,9 @@ pub fn submit_frame() -> Result {
 }
 
 pub fn write_tile(stack: &mut Stack) -> Result {
-    let value = stack.operands_mut().pop()?;
-    let y = stack.operands_mut().pop()?;
-    let x = stack.operands_mut().pop()?;
+    let value = stack.pop_operand()?;
+    let y = stack.pop_operand()?;
+    let x = stack.pop_operand()?;
 
     let x = x.0.try_into()?;
     let y = y.0.try_into()?;

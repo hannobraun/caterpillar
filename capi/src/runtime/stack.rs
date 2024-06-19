@@ -34,10 +34,6 @@ impl Stack {
         &self.frames.last().unwrap().operands
     }
 
-    pub fn operands_mut(&mut self) -> &mut Operands {
-        &mut self.frames.last_mut().unwrap().operands
-    }
-
     pub fn contains(&self, location: &Location) -> bool {
         self.frames.iter().any(|frame| {
             frame
