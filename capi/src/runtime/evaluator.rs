@@ -83,7 +83,7 @@ fn evaluate_instruction(
             let value = stack.bindings().get(&name).copied().expect(
                 "Binding instruction only generated for existing bindings",
             );
-            stack.operands_mut().push(value);
+            stack.push_operand(value);
         }
         Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
@@ -143,7 +143,7 @@ fn evaluate_instruction(
             let function = code.functions.get(&name).cloned().unwrap();
             return Ok(Some(CallStackUpdate::Push(function)));
         }
-        Instruction::Push { value } => stack.operands_mut().push(value),
+        Instruction::Push { value } => stack.push_operand(value),
         Instruction::ReturnIfNonZero => {
             let value = stack.operands_mut().pop()?;
             if value != Value(0) {
