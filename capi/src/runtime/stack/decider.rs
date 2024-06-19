@@ -106,7 +106,7 @@ pub enum PushFrameError {
     #[error("Reached recursion limit")]
     Overflow,
 
-    #[error("Expected function arguments on stack")]
+    #[error(transparent)]
     MissingOperand(#[from] MissingOperand),
 }
 
