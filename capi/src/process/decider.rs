@@ -1,7 +1,8 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Value,
+        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Stack,
+        Value,
     },
 };
 
@@ -12,6 +13,7 @@ pub struct Process {
     state: State,
     events: Vec<Event>,
 
+    pub stack: Stack,
     pub evaluator: Evaluator,
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
@@ -26,6 +28,7 @@ impl Process {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
+            stack: Stack::new(entry.clone()),
             evaluator: Evaluator::new(code, entry.clone()),
             entry,
             arguments: arguments.clone(),
@@ -41,15 +44,15 @@ impl Process {
     }
 
     pub fn stack(&self) -> &runtime::Stack {
-        self.evaluator.stack()
+        &self.stack
     }
 
     pub fn next_instruction(&self) -> Option<runtime::Location> {
-        self.evaluator.next_instruction()
+        self.stack.next_instruction()
     }
 
     pub fn data_stack(&self) -> &DataStack {
-        self.evaluator.data_stack()
+        &self.stack.top_frame().unwrap().data
     }
 
     pub fn handle_first_effect(&mut self) {
@@ -64,7 +67,9 @@ impl Process {
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
-        self.evaluator.push(values);
+        for value in values {
+            self.stack.top_frame_mut().unwrap().data.push(value);
+        }
     }
 
     pub fn step(&mut self, breakpoints: &mut Breakpoints) {
@@ -83,7 +88,7 @@ impl Process {
             });
         }
 
-        match self.evaluator.step() {
+        match self.evaluator.step(&mut self.stack) {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),

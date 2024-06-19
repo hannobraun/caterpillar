@@ -1,47 +1,26 @@
 use super::{
     builtins, stack, Bindings, BuiltinEffect, Code, DataStack, Function,
-    Instruction, Location, Stack, StackUnderflow, Value,
+    Instruction, Stack, StackUnderflow, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Evaluator {
     code: Code,
-    stack: Stack,
 }
 
 impl Evaluator {
-    pub fn new(code: Code, entry: Function) -> Self {
-        Self {
-            code,
-            stack: Stack::new(entry),
-        }
+    pub fn new(code: Code, _: Function) -> Self {
+        Self { code }
     }
 
-    pub fn next_instruction(&self) -> Option<Location> {
-        self.stack.next_instruction()
-    }
+    pub fn reset(&mut self, _: Function) {}
 
-    pub fn stack(&self) -> &Stack {
-        &self.stack
-    }
-
-    pub fn data_stack(&self) -> &DataStack {
-        &self.stack().top_frame().unwrap().data
-    }
-
-    pub fn reset(&mut self, entry: Function) {
-        self.stack = Stack::new(entry);
-    }
-
-    pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
-        for value in values {
-            self.stack.top_frame_mut().unwrap().data.push(value);
-        }
-    }
-
-    pub fn step(&mut self) -> Result<EvaluatorState, EvaluatorEffect> {
+    pub fn step(
+        &mut self,
+        stack: &mut Stack,
+    ) -> Result<EvaluatorState, EvaluatorEffect> {
         let mut location_tmp = None;
-        let Some(evaluate_result) = self.stack.consume_next_instruction(
+        let Some(evaluate_result) = stack.consume_next_instruction(
             |location, instruction, data, bindings| {
                 location_tmp = Some(location);
                 evaluate_instruction(instruction, &self.code, data, bindings)
@@ -53,10 +32,10 @@ impl Evaluator {
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {
                 CallStackUpdate::Push(function) => {
-                    self.stack.push(function)?;
+                    stack.push(function)?;
                 }
                 CallStackUpdate::Pop => {
-                    self.stack
+                    stack
                         .pop()
                         .expect("Currently executing; stack can't be empty");
                 }
