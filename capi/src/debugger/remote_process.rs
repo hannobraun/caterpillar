@@ -68,7 +68,7 @@ impl RemoteProcess {
 
         Debugger {
             active_functions,
-            data_stack,
+            operands: data_stack,
             memory,
         }
     }
