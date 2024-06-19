@@ -16,7 +16,7 @@ impl Stack {
         }
     }
 
-    pub fn next_instruction_in_current_function(&self) -> Option<Location> {
+    pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
         self.state
             .frames
             .last()?

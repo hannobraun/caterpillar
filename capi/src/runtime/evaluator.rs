@@ -109,7 +109,7 @@ impl Evaluator {
 
                 // If the current function is finished, pop its stack frame
                 // before pushing the next one. This is tail call optimization.
-                if stack.next_instruction_in_current_function().is_none() {
+                if stack.next_instruction_in_current_frame().is_none() {
                     stack
                         .pop_frame()
                         .expect("Currently executing; stack can't be empty");
