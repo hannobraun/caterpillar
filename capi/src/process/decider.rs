@@ -68,7 +68,7 @@ impl Process {
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
-            self.emit_event(Event::TriggerEffect {
+            self.emit_event(Event::EffectTriggered {
                 effect: EvaluatorEffect::Builtin(
                     runtime::BuiltinEffect::Breakpoint,
                 ),
@@ -85,7 +85,7 @@ impl Process {
                 self.emit_event(Event::Finish);
             }
             Err(effect) => {
-                self.emit_event(Event::TriggerEffect { effect });
+                self.emit_event(Event::EffectTriggered { effect });
             }
         };
     }

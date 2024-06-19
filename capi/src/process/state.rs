@@ -37,7 +37,7 @@ impl State {
             Event::HasStepped { location } => {
                 self.most_recent_step = Some(location);
             }
-            Event::TriggerEffect { effect } => {
+            Event::EffectTriggered { effect } => {
                 self.unhandled_effects.push_back(effect);
             }
             Event::HandleEffect => {
