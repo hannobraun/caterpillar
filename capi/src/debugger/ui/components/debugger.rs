@@ -19,10 +19,9 @@ pub fn Debugger(
     move || {
         let debugger = debugger.get();
 
-        let stack_explorer = debugger.data_stacks.map(|[previous, current]| {
+        let stack_explorer = debugger.data_stacks.map(|[_, current]| {
             view! {
                 <StackExplorer
-                    previous=previous
                     current=current />
             }
         });

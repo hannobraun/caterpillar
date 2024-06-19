@@ -4,15 +4,9 @@ use crate::{debugger::ui::components::panel::Panel, runtime::DataStack};
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(previous: DataStack, current: DataStack) -> impl IntoView {
+pub fn StackExplorer(current: DataStack) -> impl IntoView {
     view! {
         <Panel class="h-32">
-            <div>
-                <p>
-                    "Previous data stack:"
-                </p>
-                <DataStack data_stack=previous />
-            </div>
             <div>
                 <p>
                     "Current data stack:"
