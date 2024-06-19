@@ -78,6 +78,10 @@ impl Stack {
         Ok(old_top)
     }
 
+    pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
+        self.bindings_mut().insert(name, value.into());
+    }
+
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
         self.frames.last_mut().unwrap().operands.push(operand);
     }

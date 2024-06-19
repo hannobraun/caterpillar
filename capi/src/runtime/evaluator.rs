@@ -88,7 +88,7 @@ fn evaluate_instruction(
         Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
                 let value = stack.pop_operand()?;
-                stack.bindings_mut().insert(name, value);
+                stack.define_binding(name, value);
             }
 
             if !stack.operands().is_empty() {
