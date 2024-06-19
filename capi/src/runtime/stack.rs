@@ -95,11 +95,12 @@ impl Stack {
         f: impl FnOnce(Instruction, &mut Self) -> R,
     ) -> Option<R> {
         loop {
-            let mut frame = self.frames.pop()?;
+            let frame = self.frames.last_mut()?;
 
             let Some(instruction) = frame.function.consume_next_instruction()
             else {
-                self.return_values(&frame);
+                self.pop_frame()
+                    .expect("Just accessed frame; must be able to pop it");
                 continue;
             };
 
@@ -119,11 +120,19 @@ impl Stack {
             //    to write.
             // 2. Explicit return instructions are a stopgap anyway, until we
             //    have more advanced control flow.
-            let frame_is_empty = frame.function.next_instruction().is_none();
+            let frame_is_empty = self
+                .frames
+                .last()
+                .expect(
+                    "Accessed frame earlier in loop; must still be available",
+                )
+                .function
+                .next_instruction()
+                .is_none();
             if frame_is_empty {
-                self.return_values(&frame);
-            } else {
-                self.frames.push(frame);
+                self.pop_frame().expect(
+                    "Accessed frame earlier in loop; must be able to pop it",
+                );
             }
 
             return Some(result);
