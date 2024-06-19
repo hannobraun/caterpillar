@@ -76,7 +76,7 @@ pub enum EvaluatorEffect {
 fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
-    data_stack: &mut Operands,
+    operands: &mut Operands,
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {
@@ -84,38 +84,38 @@ fn evaluate_instruction(
             let value = bindings.get(&name).copied().expect(
                 "Binding instruction only generated for existing bindings",
             );
-            data_stack.push(value);
+            operands.push(value);
         }
         Instruction::BindingsDefine { names } => {
             for name in names.into_iter().rev() {
-                let value = data_stack.pop()?;
+                let value = operands.pop()?;
                 bindings.insert(name, value);
             }
 
-            if !data_stack.is_empty() {
+            if !operands.is_empty() {
                 return Err(EvaluatorEffect::BindingLeftValuesOnStack);
             }
         }
         Instruction::CallBuiltin { name } => {
             let result = match name.as_str() {
-                "add" => builtins::add(data_stack),
-                "add_wrap_unsigned" => builtins::add_wrap_unsigned(data_stack),
+                "add" => builtins::add(operands),
+                "add_wrap_unsigned" => builtins::add_wrap_unsigned(operands),
                 "brk" => builtins::brk(),
-                "copy" => builtins::copy(data_stack),
-                "div" => builtins::div(data_stack),
-                "drop" => builtins::drop(data_stack),
-                "eq" => builtins::eq(data_stack),
-                "greater" => builtins::greater(data_stack),
-                "load" => builtins::load(data_stack),
-                "mul" => builtins::mul(data_stack),
-                "neg" => builtins::neg(data_stack),
+                "copy" => builtins::copy(operands),
+                "div" => builtins::div(operands),
+                "drop" => builtins::drop(operands),
+                "eq" => builtins::eq(operands),
+                "greater" => builtins::greater(operands),
+                "load" => builtins::load(operands),
+                "mul" => builtins::mul(operands),
+                "neg" => builtins::neg(operands),
                 "read_input" => builtins::read_input(),
                 "read_random" => builtins::read_random(),
-                "remainder" => builtins::remainder(data_stack),
-                "store" => builtins::store(data_stack),
-                "sub" => builtins::sub(data_stack),
+                "remainder" => builtins::remainder(operands),
+                "store" => builtins::store(operands),
+                "sub" => builtins::sub(operands),
                 "submit_frame" => builtins::submit_frame(),
-                "write_tile" => builtins::write_tile(data_stack),
+                "write_tile" => builtins::write_tile(operands),
                 _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
@@ -142,15 +142,15 @@ fn evaluate_instruction(
             let function = code.functions.get(&name).cloned().unwrap();
             return Ok(Some(CallStackUpdate::Push(function)));
         }
-        Instruction::Push { value } => data_stack.push(value),
+        Instruction::Push { value } => operands.push(value),
         Instruction::ReturnIfNonZero => {
-            let value = data_stack.pop()?;
+            let value = operands.pop()?;
             if value != Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }
         }
         Instruction::ReturnIfZero => {
-            let value = data_stack.pop()?;
+            let value = operands.pop()?;
             if value == Value(0) {
                 return Ok(Some(CallStackUpdate::Pop));
             }
