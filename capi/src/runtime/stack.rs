@@ -82,7 +82,7 @@ impl Stack {
         Ok(old_top)
     }
 
-    pub fn push_operand(&mut self, operand: Value) {
+    pub fn push_operand(&mut self, operand: impl Into<Value>) {
         self.frames.last_mut().unwrap().operands.push(operand);
     }
 
