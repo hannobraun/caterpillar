@@ -6,10 +6,6 @@ pub struct Operands {
 }
 
 impl Operands {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn is_empty(&self) -> bool {
         self.values.is_empty()
     }

@@ -40,7 +40,7 @@ impl Stack {
         self.state.frames.push(StackFrame {
             function,
             bindings,
-            operands: Operands::new(),
+            operands: Operands::default(),
         });
 
         Ok(())
