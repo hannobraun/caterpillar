@@ -66,12 +66,6 @@ impl Stack {
         Ok(())
     }
 
-    pub fn push_data(&mut self, values: impl IntoIterator<Item = Value>) {
-        for value in values {
-            self.frames.last_mut().unwrap().data.push(value);
-        }
-    }
-
     pub fn pop_frame(&mut self) -> Result<StackFrame, StackIsEmpty> {
         let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
 
@@ -82,6 +76,12 @@ impl Stack {
         }
 
         Ok(old_top)
+    }
+
+    pub fn push_data(&mut self, values: impl IntoIterator<Item = Value>) {
+        for value in values {
+            self.frames.last_mut().unwrap().data.push(value);
+        }
     }
 
     pub fn consume_next_instruction<R>(
