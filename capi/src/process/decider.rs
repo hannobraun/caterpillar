@@ -51,10 +51,6 @@ impl Process {
         &self.stack
     }
 
-    pub fn next_instruction(&self) -> Option<runtime::Location> {
-        self.stack.state().next_instruction_overall()
-    }
-
     pub fn operands(&self) -> &Operands {
         self.stack.state().operands().unwrap()
     }
@@ -84,7 +80,8 @@ impl Process {
             return;
         }
 
-        let next_instruction = self.next_instruction().unwrap();
+        let next_instruction =
+            self.stack.state().next_instruction_overall().unwrap();
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
