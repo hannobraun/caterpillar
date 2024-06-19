@@ -17,13 +17,12 @@ impl Evaluator {
         &mut self,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
-        let Some(evaluate_result) =
-            stack.consume_next_instruction(|instruction, stack| {
-                evaluate_instruction(instruction, &self.code, stack)
-            })
-        else {
+        let Some(instruction) = stack.consume_next_instruction() else {
             return Ok(EvaluatorState::Finished);
         };
+
+        let evaluate_result =
+            evaluate_instruction(instruction, &self.code, stack);
 
         match evaluate_result {
             Ok(Some(call_stack_update)) => match call_stack_update {

@@ -99,10 +99,7 @@ impl Stack {
         self.frames.last_mut().unwrap().operands.pop()
     }
 
-    pub fn consume_next_instruction<R>(
-        &mut self,
-        f: impl FnOnce(Instruction, &mut Self) -> R,
-    ) -> Option<R> {
+    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
         loop {
             let frame = self.frames.last_mut()?;
 
@@ -113,9 +110,7 @@ impl Stack {
                 continue;
             };
 
-            let result = f(instruction, self);
-
-            return Some(result);
+            return Some(instruction);
         }
     }
 
