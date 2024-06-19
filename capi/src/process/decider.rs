@@ -61,6 +61,7 @@ impl Process {
 
     pub fn reset(&mut self) {
         self.state = State::default();
+        self.stack = Stack::new(self.entry.clone());
 
         self.push(self.arguments.clone());
     }
