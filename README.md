@@ -33,28 +33,6 @@ For more information on future design directions, please follow my
 [daily thoughts]. There's also a [design document](design.md), which I'd like to
 phase out, but that still provides some value.
 
-### Postfix operators
-
-The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
-opposed to prefix (`do_thing(arg1, arg2)`, `(+ 1 2)`) or infix (`1 + 2`)
-operators.
-
-To keep the language simple, I want to (at least initially) restrict it to one
-type of operator. I believe postfix operators are the best option under that
-constraint, due to their combination of simplicity, conciseness, and natural
-support for chaining operations. That comes at the cost of familiarity.
-
-See the following daily thoughts for further information:
-[2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
-[2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
-[2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
-[2024-05-06](https://capi.hannobraun.com/daily/2024-05-06),
-[2024-05-07](https://capi.hannobraun.com/daily/2024-05-07),
-[2024-05-08](https://capi.hannobraun.com/daily/2024-05-08),
-[2024-05-09](https://capi.hannobraun.com/daily/2024-05-09),
-[2024-05-10](https://capi.hannobraun.com/daily/2024-05-10), and
-[2024-05-11](https://capi.hannobraun.com/daily/2024-05-11).
-
 ### Continued evolution over backwards compatibility
 
 I'm not targeting a 1.0 release after which the language is expected to have few
@@ -76,6 +54,28 @@ See the following daily thoughts for further information:
 [2024-06-02](https://capi.hannobraun.com/daily/2024-06-02),
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
+
+### Postfix operators
+
+The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
+opposed to prefix (`do_thing(arg1, arg2)`, `(+ 1 2)`) or infix (`1 + 2`)
+operators.
+
+To keep the language simple, I want to (at least initially) restrict it to one
+type of operator. I believe postfix operators are the best option under that
+constraint, due to their combination of simplicity, conciseness, and natural
+support for chaining operations. That comes at the cost of familiarity.
+
+See the following daily thoughts for further information:
+[2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
+[2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
+[2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
+[2024-05-06](https://capi.hannobraun.com/daily/2024-05-06),
+[2024-05-07](https://capi.hannobraun.com/daily/2024-05-07),
+[2024-05-08](https://capi.hannobraun.com/daily/2024-05-08),
+[2024-05-09](https://capi.hannobraun.com/daily/2024-05-09),
+[2024-05-10](https://capi.hannobraun.com/daily/2024-05-10), and
+[2024-05-11](https://capi.hannobraun.com/daily/2024-05-11).
 
 ## Acknowledgements
 
