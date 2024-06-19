@@ -50,7 +50,9 @@ impl Evaluator {
                     stack.define_binding(name, value);
                 }
 
-                if !stack.operands().is_empty() {
+                let operands = stack.operands();
+
+                if !operands.is_empty() {
                     return Err(EvaluatorEffect::BindingLeftValuesOnStack);
                 }
             }
