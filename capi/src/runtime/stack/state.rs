@@ -64,6 +64,13 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
+            Event::PushFrame { function } => {
+                self.frames.push(StackFrame {
+                    function,
+                    bindings: Bindings::default(),
+                    operands: Operands::default(),
+                });
+            }
             Event::PopOperand { value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::PopOperand` implies existence of stack frame",

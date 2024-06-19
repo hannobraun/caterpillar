@@ -1,4 +1,4 @@
-use crate::runtime::{Function, Instruction, MissingOperand, Operands, Value};
+use crate::runtime::{Function, Instruction, MissingOperand, Value};
 
 use super::{state::StackFrame, Bindings, Event, State};
 
@@ -37,11 +37,7 @@ impl Stack {
             arguments.insert(argument.clone(), value);
         }
 
-        self.state.frames.push(StackFrame {
-            function,
-            bindings: Bindings::default(),
-            operands: Operands::default(),
-        });
+        self.emit_event(Event::PushFrame { function });
 
         for (name, value) in arguments {
             self.define_binding(name, value);
