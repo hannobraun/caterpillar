@@ -33,6 +33,19 @@ impl State {
 
         None
     }
+
+    pub fn is_next_instruction_in_any_frame(
+        &self,
+        location: &Location,
+    ) -> bool {
+        self.frames.iter().any(|frame| {
+            frame
+                .function
+                .next_instruction()
+                .map(|(location, _instruction)| location)
+                == Some(location.clone().next())
+        })
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

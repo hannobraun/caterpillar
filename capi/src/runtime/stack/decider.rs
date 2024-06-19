@@ -36,13 +36,7 @@ impl Stack {
         &self,
         location: &Location,
     ) -> bool {
-        self.state.frames.iter().any(|frame| {
-            frame
-                .function
-                .next_instruction()
-                .map(|(location, _instruction)| location)
-                == Some(location.clone().next())
-        })
+        self.state.is_next_instruction_in_any_frame(location)
     }
 
     pub fn push_frame(&mut self, function: Function) -> Result<(), PushError> {
