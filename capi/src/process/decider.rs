@@ -23,12 +23,10 @@ impl Process {
         entry: runtime::Function,
         arguments: Vec<Value>,
     ) -> Self {
-        let evaluator = Evaluator::new(code, entry.clone());
-
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
-            evaluator,
+            evaluator: Evaluator::new(code, entry.clone()),
             entry,
             arguments: arguments.clone(),
         };
