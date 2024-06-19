@@ -105,7 +105,9 @@ impl Stack {
         }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = Location> + '_ {
+    pub fn all_next_instructions_in_frames(
+        &self,
+    ) -> impl Iterator<Item = Location> + '_ {
         self.state
             .frames
             .iter()

@@ -44,7 +44,7 @@ impl ActiveFunctions {
 
         let functions = process
             .stack()
-            .iter()
+            .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
                 let syntax_location =
                     source_map.runtime_to_syntax(&runtime_location);
