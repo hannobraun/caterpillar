@@ -1,8 +1,8 @@
-use std::collections::BTreeMap;
-
 use crate::runtime::{
     Function, Instruction, Location, Operands, StackUnderflow, Value,
 };
+
+use super::{state::StackFrame, Bindings};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -130,15 +130,6 @@ impl Stack {
         }
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct StackFrame {
-    pub function: Function,
-    pub bindings: Bindings,
-    pub operands: Operands,
-}
-
-pub type Bindings = BTreeMap<String, Value>;
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum PushError {
