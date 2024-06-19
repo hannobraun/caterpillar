@@ -1,6 +1,8 @@
 use crate::{
     breakpoints::Breakpoints,
-    runtime::{self, Evaluator, EvaluatorEffect, EvaluatorState, Value},
+    runtime::{
+        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Value,
+    },
 };
 
 use super::{Event, State};
@@ -43,6 +45,10 @@ impl Process {
 
     pub fn next_instruction(&self) -> Option<runtime::Location> {
         self.evaluator.next_instruction()
+    }
+
+    pub fn data_stack(&self) -> &DataStack {
+        self.evaluator.data_stack()
     }
 
     pub fn handle_first_effect(&mut self) {
