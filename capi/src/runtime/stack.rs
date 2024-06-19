@@ -50,7 +50,7 @@ impl Stack {
 
         let mut bindings = Bindings::new();
 
-        if let Some(calling_frame) = self.top_frame_mut() {
+        if let Some(calling_frame) = self.frames.last_mut() {
             for argument in function.arguments.iter().rev() {
                 let value = calling_frame.data.pop()?;
                 bindings.insert(argument.clone(), value);
@@ -87,7 +87,7 @@ impl Stack {
         f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
     ) -> Option<R> {
         loop {
-            let frame = self.top_frame_mut()?;
+            let frame = self.frames.last_mut()?;
 
             let Some((location, instruction)) =
                 frame.function.consume_next_instruction()
