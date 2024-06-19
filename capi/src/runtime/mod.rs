@@ -7,6 +7,7 @@ mod instructions;
 mod location;
 mod operands;
 mod stack;
+mod value;
 
 pub use self::{
     builtins::BuiltinEffect,
@@ -15,6 +16,7 @@ pub use self::{
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
-    operands::{Operands, StackUnderflow, Value},
+    operands::{Operands, StackUnderflow},
     stack::Stack,
+    value::Value,
 };

@@ -1,4 +1,4 @@
-use std::fmt;
+use super::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub struct Operands {
@@ -24,21 +24,6 @@ impl Operands {
 
     pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
         self.values.iter().copied()
-    }
-}
-
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
-pub struct Value(pub i8);
-
-impl From<i8> for Value {
-    fn from(value: i8) -> Self {
-        Self(value)
-    }
-}
-
-impl fmt::Display for Value {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.0)
     }
 }
 
