@@ -1,6 +1,4 @@
-use crate::runtime::{
-    Function, Instruction, Location, MissingOperand, Operands, Value,
-};
+use crate::runtime::{Function, Instruction, MissingOperand, Operands, Value};
 
 use super::{state::StackFrame, Bindings, State};
 
@@ -16,27 +14,8 @@ impl Stack {
         }
     }
 
-    pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
-        self.state.next_instruction_in_current_frame()
-    }
-
-    pub fn next_instruction_overall(&self) -> Option<Location> {
-        self.state.next_instruction_overall()
-    }
-
-    pub fn bindings(&self) -> Option<&Bindings> {
-        self.state.bindings()
-    }
-
-    pub fn operands(&self) -> Option<&Operands> {
-        self.state.operands()
-    }
-
-    pub fn is_next_instruction_in_any_frame(
-        &self,
-        location: &Location,
-    ) -> bool {
-        self.state.is_next_instruction_in_any_frame(location)
+    pub fn state(&self) -> &State {
+        &self.state
     }
 
     pub fn push_frame(&mut self, function: Function) -> Result<(), PushError> {
@@ -103,12 +82,6 @@ impl Stack {
 
             return Some(instruction);
         }
-    }
-
-    pub fn all_next_instructions_in_frames(
-        &self,
-    ) -> impl Iterator<Item = Location> + '_ {
-        self.state.all_next_instructions_in_frames()
     }
 
     fn return_values(&mut self, frame: &StackFrame) {

@@ -52,11 +52,11 @@ impl Process {
     }
 
     pub fn next_instruction(&self) -> Option<runtime::Location> {
-        self.stack.next_instruction_overall()
+        self.stack.state().next_instruction_overall()
     }
 
     pub fn operands(&self) -> &Operands {
-        self.stack.operands().unwrap()
+        self.stack.state().operands().unwrap()
     }
 
     pub fn handle_first_effect(&mut self) {

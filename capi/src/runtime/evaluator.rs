@@ -25,7 +25,7 @@ impl Evaluator {
         let stack: &mut Stack = stack;
         match instruction {
             Instruction::BindingEvaluate { name } => {
-                let Some(bindings) = stack.bindings() else {
+                let Some(bindings) = stack.state().bindings() else {
                     unreachable!(
                         "Can't access bindings, but we're currently executing. \
                         An active stack frame, and therefore bindings, must \
@@ -50,7 +50,7 @@ impl Evaluator {
                     stack.define_binding(name, value);
                 }
 
-                let Some(operands) = stack.operands() else {
+                let Some(operands) = stack.state().operands() else {
                     unreachable!(
                         "Can't access operands, but we're currently executing. \
                         An active stack frame, and therefore operands, must \
@@ -109,7 +109,7 @@ impl Evaluator {
 
                 // If the current function is finished, pop its stack frame
                 // before pushing the next one. This is tail call optimization.
-                if stack.next_instruction_in_current_frame().is_none() {
+                if stack.state().next_instruction_in_current_frame().is_none() {
                     stack
                         .pop_frame()
                         .expect("Currently executing; stack can't be empty");
