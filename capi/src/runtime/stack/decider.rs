@@ -63,11 +63,11 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
-        let mut value = Err(MissingOperand);
+        let mut operand = Err(MissingOperand);
         self.emit_event(Event::PopOperand {
-            operand: &mut value,
+            operand: &mut operand,
         });
-        value
+        operand
     }
 
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
