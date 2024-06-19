@@ -14,8 +14,7 @@ impl Stack {
 
     pub fn next_instruction_in_current_function(&self) -> Option<Location> {
         self.frames
-            .last()
-            .expect("Accessed frame earlier in loop; must still be available")
+            .last()?
             .function
             .next_instruction()
             .map(|(location, _)| location)
