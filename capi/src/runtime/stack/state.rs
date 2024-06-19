@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::runtime::{Function, Operands, Value};
+use crate::runtime::{Function, Location, Operands, Value};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct State {
@@ -14,6 +14,14 @@ impl State {
 
     pub fn operands(&self) -> Option<&Operands> {
         self.frames.last().map(|frame| &frame.operands)
+    }
+
+    pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
+        self.frames
+            .last()?
+            .function
+            .next_instruction()
+            .map(|(location, _)| location)
     }
 }
 

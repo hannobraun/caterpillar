@@ -17,12 +17,7 @@ impl Stack {
     }
 
     pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
-        self.state
-            .frames
-            .last()?
-            .function
-            .next_instruction()
-            .map(|(location, _)| location)
+        self.state.next_instruction_in_current_frame()
     }
 
     pub fn next_instruction_overall(&self) -> Option<Location> {
