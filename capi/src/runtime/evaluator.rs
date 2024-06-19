@@ -25,7 +25,8 @@ impl Evaluator {
         let stack: &mut Stack = stack;
         match instruction {
             Instruction::BindingEvaluate { name } => {
-                let Some(value) = stack.bindings().get(&name).copied() else {
+                let bindings = stack.bindings();
+                let Some(value) = bindings.get(&name).copied() else {
                     panic!(
                         "Can't find binding `{name}`, but instruction that \
                         evaluates bindings should only be generated for \
