@@ -66,13 +66,7 @@ impl Stack {
 
     pub fn pop_frame(&mut self) -> Result<StackFrame, StackIsEmpty> {
         let old_top = self.frames.pop().ok_or(StackIsEmpty)?;
-
-        if let Some(new_top) = self.frames.last_mut() {
-            for value in old_top.operands.values() {
-                new_top.operands.push(value);
-            }
-        }
-
+        self.return_values(&old_top);
         Ok(old_top)
     }
 
@@ -131,6 +125,14 @@ impl Stack {
             .iter()
             .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
+    }
+
+    fn return_values(&mut self, frame: &StackFrame) {
+        if let Some(new_top) = self.frames.last_mut() {
+            for value in frame.operands.values() {
+                new_top.operands.push(value);
+            }
+        }
     }
 }
 
