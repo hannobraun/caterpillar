@@ -16,5 +16,5 @@ pub use self::{
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
-    stack::{Bindings, Stack},
+    stack::Stack,
 };
