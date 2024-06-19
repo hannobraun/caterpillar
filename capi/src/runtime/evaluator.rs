@@ -97,26 +97,24 @@ fn evaluate_instruction(
         }
         Instruction::CallBuiltin { name } => {
             let result = match name.as_str() {
-                "add" => builtins::add(stack.operands_mut()),
-                "add_wrap_unsigned" => {
-                    builtins::add_wrap_unsigned(stack.operands_mut())
-                }
+                "add" => builtins::add(stack),
+                "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack),
                 "brk" => builtins::brk(),
-                "copy" => builtins::copy(stack.operands_mut()),
-                "div" => builtins::div(stack.operands_mut()),
-                "drop" => builtins::drop(stack.operands_mut()),
-                "eq" => builtins::eq(stack.operands_mut()),
-                "greater" => builtins::greater(stack.operands_mut()),
-                "load" => builtins::load(stack.operands_mut()),
-                "mul" => builtins::mul(stack.operands_mut()),
-                "neg" => builtins::neg(stack.operands_mut()),
+                "copy" => builtins::copy(stack),
+                "div" => builtins::div(stack),
+                "drop" => builtins::drop(stack),
+                "eq" => builtins::eq(stack),
+                "greater" => builtins::greater(stack),
+                "load" => builtins::load(stack),
+                "mul" => builtins::mul(stack),
+                "neg" => builtins::neg(stack),
                 "read_input" => builtins::read_input(),
                 "read_random" => builtins::read_random(),
-                "remainder" => builtins::remainder(stack.operands_mut()),
-                "store" => builtins::store(stack.operands_mut()),
-                "sub" => builtins::sub(stack.operands_mut()),
+                "remainder" => builtins::remainder(stack),
+                "store" => builtins::store(stack),
+                "sub" => builtins::sub(stack),
                 "submit_frame" => builtins::submit_frame(),
-                "write_tile" => builtins::write_tile(stack.operands_mut()),
+                "write_tile" => builtins::write_tile(stack),
                 _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
