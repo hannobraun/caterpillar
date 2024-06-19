@@ -119,20 +119,14 @@ impl RuntimeState {
                                 self.process.state().first_unhandled_effect()
                             {
                                 self.breakpoints.set_ephemeral(
-                                    self.process
-                                        .evaluator
-                                        .next_instruction()
-                                        .unwrap(),
+                                    self.process.next_instruction().unwrap(),
                                 );
                                 self.process.handle_first_effect();
                             }
                         }
                         DebugEvent::Stop => {
                             self.breakpoints.set_ephemeral(
-                                self.process
-                                    .evaluator
-                                    .next_instruction()
-                                    .unwrap(),
+                                self.process.next_instruction().unwrap(),
                             );
                         }
                     }

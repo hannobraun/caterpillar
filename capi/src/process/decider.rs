@@ -43,6 +43,10 @@ impl Process {
         &self.state
     }
 
+    pub fn next_instruction(&self) -> Option<runtime::Location> {
+        self.evaluator.next_instruction()
+    }
+
     pub fn handle_first_effect(&mut self) {
         self.emit_event(Event::EffectHandled);
     }
@@ -64,7 +68,7 @@ impl Process {
             return;
         }
 
-        let next_instruction = self.evaluator.next_instruction().unwrap();
+        let next_instruction = self.next_instruction().unwrap();
         if breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
