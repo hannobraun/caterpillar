@@ -13,8 +13,6 @@ impl Evaluator {
         Self { code }
     }
 
-    pub fn reset(&mut self, _: Function) {}
-
     pub fn step(
         &mut self,
         stack: &mut Stack,

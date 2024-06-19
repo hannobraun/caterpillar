@@ -60,7 +60,6 @@ impl Process {
     }
 
     pub fn reset(&mut self) {
-        self.evaluator.reset(self.entry.clone());
         self.state = State::default();
 
         self.push(self.arguments.clone());
