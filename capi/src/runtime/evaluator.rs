@@ -17,10 +17,8 @@ impl Evaluator {
         &mut self,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
-        let mut location_tmp = None;
         let Some(evaluate_result) =
-            stack.consume_next_instruction(|location, instruction, stack| {
-                location_tmp = Some(location);
+            stack.consume_next_instruction(|_, instruction, stack| {
                 evaluate_instruction(instruction, &self.code, stack)
             })
         else {
