@@ -59,7 +59,7 @@ impl Stack {
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
         let operand = operand.into();
-        self.state.frames.last_mut().unwrap().operands.push(operand);
+        self.emit_event(Event::PushOperand { operand });
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {

@@ -77,6 +77,12 @@ impl State {
                 );
                 frame.bindings.insert(name, value);
             }
+            Event::PushOperand { operand: value } => {
+                let frame = self.frames.last_mut().expect(
+                    "`Event::PushOperand` implies existence of stack frame",
+                );
+                frame.operands.push(value);
+            }
             Event::PopOperand { value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::PopOperand` implies existence of stack frame",

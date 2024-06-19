@@ -8,6 +8,9 @@ pub enum Event<'r> {
         name: String,
         value: Value,
     },
+    PushOperand {
+        operand: Value,
+    },
     PopOperand {
         value: &'r mut Result<Value, MissingOperand>,
     },
