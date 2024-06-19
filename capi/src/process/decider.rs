@@ -1,7 +1,7 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, DataStack, Evaluator, EvaluatorEffect, EvaluatorState, Stack,
+        self, Evaluator, EvaluatorEffect, EvaluatorState, Operands, Stack,
         Value,
     },
 };
@@ -55,7 +55,7 @@ impl Process {
         self.stack.next_instruction()
     }
 
-    pub fn data_stack(&self) -> &DataStack {
+    pub fn data_stack(&self) -> &Operands {
         &self.stack.top_frame().unwrap().data
     }
 

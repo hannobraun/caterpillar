@@ -11,7 +11,7 @@ mod stack;
 pub use self::{
     builtins::BuiltinEffect,
     code::Code,
-    data_stack::{DataStack, StackUnderflow, Value},
+    data_stack::{Operands, StackUnderflow, Value},
     evaluator::{Evaluator, EvaluatorEffect, EvaluatorState},
     function::Function,
     instructions::{Instruction, Instructions},

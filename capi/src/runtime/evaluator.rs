@@ -1,5 +1,5 @@
 use super::{
-    builtins, stack, Bindings, BuiltinEffect, Code, DataStack, Function,
+    builtins, stack, Bindings, BuiltinEffect, Code, Operands, Function,
     Instruction, Stack, StackUnderflow, Value,
 };
 
@@ -76,7 +76,7 @@ pub enum EvaluatorEffect {
 fn evaluate_instruction(
     instruction: Instruction,
     code: &Code,
-    data_stack: &mut DataStack,
+    data_stack: &mut Operands,
     bindings: &mut Bindings,
 ) -> Result<Option<CallStackUpdate>, EvaluatorEffect> {
     match instruction {

@@ -1,11 +1,11 @@
 use std::fmt;
 
 #[derive(Clone, Debug, Eq, PartialEq, Default)]
-pub struct DataStack {
+pub struct Operands {
     values: Vec<Value>,
 }
 
-impl DataStack {
+impl Operands {
     pub fn new() -> Self {
         Self::default()
     }

@@ -1,10 +1,10 @@
 use leptos::{component, view, CollectView, IntoView};
 
-use crate::{debugger::ui::components::panel::Panel, runtime::DataStack};
+use crate::{debugger::ui::components::panel::Panel, runtime::Operands};
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(current: DataStack) -> impl IntoView {
+pub fn StackExplorer(current: Operands) -> impl IntoView {
     view! {
         <Panel class="h-32">
             <div>
@@ -18,7 +18,7 @@ pub fn StackExplorer(current: DataStack) -> impl IntoView {
 }
 
 #[component]
-pub fn DataStack(data_stack: DataStack) -> impl IntoView {
+pub fn DataStack(data_stack: Operands) -> impl IntoView {
     let values = data_stack
         .values()
         .map(|value| {

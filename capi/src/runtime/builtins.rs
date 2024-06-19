@@ -1,8 +1,8 @@
 use std::num::TryFromIntError;
 
-use super::{DataStack, StackUnderflow, Value};
+use super::{Operands, StackUnderflow, Value};
 
-pub fn add(data_stack: &mut DataStack) -> Result {
+pub fn add(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -15,7 +15,7 @@ pub fn add(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn add_wrap_unsigned(data_stack: &mut DataStack) -> Result {
+pub fn add_wrap_unsigned(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -31,7 +31,7 @@ pub fn brk() -> Result {
     Ok(Some(BuiltinEffect::Breakpoint))
 }
 
-pub fn copy(data_stack: &mut DataStack) -> Result {
+pub fn copy(data_stack: &mut Operands) -> Result {
     let a = data_stack.pop()?;
 
     data_stack.push(a);
@@ -40,7 +40,7 @@ pub fn copy(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn div(data_stack: &mut DataStack) -> Result {
+pub fn div(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -57,12 +57,12 @@ pub fn div(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn drop(data_stack: &mut DataStack) -> Result {
+pub fn drop(data_stack: &mut Operands) -> Result {
     data_stack.pop()?;
     Ok(None)
 }
 
-pub fn eq(data_stack: &mut DataStack) -> Result {
+pub fn eq(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -73,7 +73,7 @@ pub fn eq(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn greater(data_stack: &mut DataStack) -> Result {
+pub fn greater(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -84,7 +84,7 @@ pub fn greater(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn load(data_stack: &mut DataStack) -> Result {
+pub fn load(data_stack: &mut Operands) -> Result {
     let address = data_stack.pop()?;
 
     let address = address.0.try_into()?;
@@ -92,7 +92,7 @@ pub fn load(data_stack: &mut DataStack) -> Result {
     Ok(Some(BuiltinEffect::Load { address }))
 }
 
-pub fn mul(data_stack: &mut DataStack) -> Result {
+pub fn mul(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -105,7 +105,7 @@ pub fn mul(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn neg(data_stack: &mut DataStack) -> Result {
+pub fn neg(data_stack: &mut Operands) -> Result {
     let a = data_stack.pop()?;
 
     if a.0 == i8::MIN {
@@ -126,7 +126,7 @@ pub fn read_random() -> Result {
     Ok(Some(BuiltinEffect::ReadRandom))
 }
 
-pub fn remainder(data_stack: &mut DataStack) -> Result {
+pub fn remainder(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -140,7 +140,7 @@ pub fn remainder(data_stack: &mut DataStack) -> Result {
     Ok(None)
 }
 
-pub fn store(data_stack: &mut DataStack) -> Result {
+pub fn store(data_stack: &mut Operands) -> Result {
     let address = data_stack.pop()?;
     let value = data_stack.pop()?;
 
@@ -149,7 +149,7 @@ pub fn store(data_stack: &mut DataStack) -> Result {
     Ok(Some(BuiltinEffect::Store { address, value }))
 }
 
-pub fn sub(data_stack: &mut DataStack) -> Result {
+pub fn sub(data_stack: &mut Operands) -> Result {
     let b = data_stack.pop()?;
     let a = data_stack.pop()?;
 
@@ -166,7 +166,7 @@ pub fn submit_frame() -> Result {
     Ok(Some(BuiltinEffect::SubmitFrame))
 }
 
-pub fn write_tile(data_stack: &mut DataStack) -> Result {
+pub fn write_tile(data_stack: &mut Operands) -> Result {
     let value = data_stack.pop()?;
     let y = data_stack.pop()?;
     let x = data_stack.pop()?;

@@ -1,8 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::{
-    DataStack, Function, Instruction, Location, StackUnderflow, Value,
-};
+use super::{Function, Instruction, Location, Operands, StackUnderflow, Value};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Stack {
@@ -60,7 +58,7 @@ impl Stack {
         self.frames.push(StackFrame {
             function,
             bindings,
-            data: DataStack::new(),
+            data: Operands::new(),
         });
 
         Ok(())
@@ -84,7 +82,7 @@ impl Stack {
 
     pub fn consume_next_instruction<R>(
         &mut self,
-        f: impl FnOnce(Location, Instruction, &mut DataStack, &mut Bindings) -> R,
+        f: impl FnOnce(Location, Instruction, &mut Operands, &mut Bindings) -> R,
     ) -> Option<R> {
         loop {
             let frame = self.frames.last_mut()?;
@@ -136,7 +134,7 @@ impl Stack {
 pub struct StackFrame {
     pub function: Function,
     pub bindings: Bindings,
-    pub data: DataStack,
+    pub data: Operands,
 }
 
 pub type Bindings = BTreeMap<String, Value>;
