@@ -1,7 +1,8 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, evaluate, Code, EvaluatorEffect, EvaluatorState, Stack, Value,
+        self, evaluate, BuiltinEffect, Code, EvaluatorEffect, EvaluatorState,
+        Stack, Value,
     },
 };
 
@@ -53,6 +54,18 @@ impl Process {
 
     pub fn set_durable_breakpoint(&mut self, location: runtime::Location) {
         self.breakpoints.set_durable(location);
+    }
+
+    pub fn continue_(&mut self, and_stop_at: Option<runtime::Location>) {
+        if let Some(EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint)) =
+            self.state.first_unhandled_effect()
+        {
+            if let Some(instruction) = and_stop_at {
+                self.breakpoints.set_ephemeral(instruction);
+            }
+
+            self.handle_first_effect();
+        }
     }
 
     pub fn step(&mut self, code: &Code) {

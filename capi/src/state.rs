@@ -102,19 +102,7 @@ impl RuntimeState {
                             self.process.set_durable_breakpoint(location);
                         }
                         DebugEvent::Continue { and_stop_at } => {
-                            if let Some(EvaluatorEffect::Builtin(
-                                BuiltinEffect::Breakpoint,
-                            )) =
-                                self.process.state().first_unhandled_effect()
-                            {
-                                if let Some(instruction) = and_stop_at {
-                                    self.process
-                                        .breakpoints
-                                        .set_ephemeral(instruction);
-                                }
-
-                                self.process.handle_first_effect();
-                            }
+                            self.process.continue_(and_stop_at);
                         }
                         DebugEvent::Reset => {
                             self.process.reset(
