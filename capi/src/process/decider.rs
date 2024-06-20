@@ -95,9 +95,11 @@ impl Process {
         }
 
         match evaluate(code, &mut self.stack) {
-            Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
-                location: next_instruction,
-            }),
+            Ok(EvaluatorState::Running) => {
+                self.emit_event(Event::HasStepped {
+                    location: next_instruction,
+                });
+            }
             Ok(EvaluatorState::Finished) => {
                 self.emit_event(Event::Finished);
             }
