@@ -4,7 +4,7 @@ use crate::runtime::{
     Function, Instruction, Location, MissingOperand, Operands, Value,
 };
 
-use super::Event;
+use super::event::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
