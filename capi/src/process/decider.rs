@@ -20,21 +20,13 @@ pub struct Process {
 
 impl Process {
     pub fn new(entry: runtime::Function, arguments: Vec<Value>) -> Self {
-        let mut self_ = Self {
+        Self {
             state: State::default(),
             events: Vec::new(),
             stack: Stack::default(),
             entry: entry.clone(),
             arguments: arguments.clone(),
-        };
-
-        self_
-            .stack
-            .push_frame(entry)
-            .expect("Expected recursion limit to be more than zero.");
-        self_.push(arguments);
-
-        self_
+        }
     }
 
     pub fn state(&self) -> &State {
