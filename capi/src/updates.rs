@@ -71,7 +71,7 @@ impl UpdatesTx {
                 if process_can_step {
                     // Looks like the process is still at it. Don't do
                     // anything further, until something else happens.
-                    return;
+                    break;
                 }
             }
 
