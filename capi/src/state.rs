@@ -40,7 +40,9 @@ impl RuntimeState {
         let (code, source_map) = compile(&script);
 
         let entry = code.functions.get("main").cloned().unwrap();
-        let mut process = Process::new(vec![Value(TILES_PER_AXIS as i8); 2]);
+        let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
+
+        let mut process = Process::new(arguments);
         process.reset(entry.clone());
 
         let memory = Memory::default();
