@@ -48,11 +48,18 @@ impl UpdatesTx {
     pub fn send_update_if_necessary(
         &mut self,
         breakpoints: &mut Breakpoints,
-        _: &mut Process,
+        process: &mut Process,
     ) {
         for event in breakpoints.take_events() {
             self.flush();
             self.inner.send(Update::Breakpoints { event }).unwrap();
+        }
+
+        if self.should_flush(process) {
+            self.process_at_client = Some(process.clone());
+            self.inner.send(Update::Process(process.clone())).unwrap();
+
+            self.flush();
         }
     }
 
@@ -64,13 +71,8 @@ impl UpdatesTx {
             Update::Memory { memory } => {
                 self.queued_memory = Some(memory);
             }
-            Update::Process(process) => {
-                if self.should_flush(&process) {
-                    self.process_at_client = Some(process.clone());
-                    self.inner.send(Update::Process(process)).unwrap();
-
-                    self.flush();
-                }
+            Update::Process(_) => {
+                unreachable!();
             }
             Update::SourceCode {
                 functions,
