@@ -113,9 +113,8 @@ impl Stack {
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let operand = operand.into();
         let frame = self.frames.last_mut().unwrap();
-        frame.operands.push(operand);
+        frame.operands.push(operand.into());
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
