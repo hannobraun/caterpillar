@@ -71,12 +71,6 @@ impl Stack {
             return Err(PushFrameError::Overflow);
         }
 
-        if self.num_frames() == 0 {
-            // If there's no calling frame, then there's no place to take
-            // arguments from. Make sure that the function doesn't expect any.
-            assert_eq!(function.arguments.len(), 0);
-        }
-
         let mut arguments = Bindings::new();
 
         if let Some(calling_frame) = self.frames.last_mut() {
@@ -84,6 +78,10 @@ impl Stack {
                 let value = calling_frame.operands.pop()?;
                 arguments.insert(argument.clone(), value);
             }
+        } else {
+            // If there's no calling frame, then there's no place to take
+            // arguments from. Make sure that the function doesn't expect any.
+            assert_eq!(function.arguments.len(), 0);
         }
 
         self.frames.push(StackFrame {
