@@ -71,6 +71,16 @@ impl UpdatesTx {
                 if process_can_step {
                     // Looks like the process is still at it. Don't do
                     // anything further, until something else happens.
+                    //
+                    // By `break`ing here, we drop any events that come after
+                    // this step, which _must_ be a bug. It seems like this
+                    // really think this should be a `continue` instead, but
+                    // that causes the whole page to freeze, for reasons that
+                    // are unclear.
+                    //
+                    // Maybe this problem will resolve itself as part of the
+                    // ongoing (at the time of writing) cleanup. If not, this
+                    // requires deeper inspection.
                     break;
                 }
             }
