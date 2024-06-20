@@ -7,7 +7,7 @@ pub fn updates() -> (UpdatesTx, UpdatesRx) {
 
     let tx = UpdatesTx {
         inner: tx,
-        queued_memory: None,
+        latest_memory: None,
         process_at_client: None,
     };
 
@@ -31,7 +31,7 @@ pub enum Update {
 #[derive(Clone)]
 pub struct UpdatesTx {
     inner: mpsc::UnboundedSender<Update>,
-    queued_memory: Option<Memory>,
+    latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
 }
 
@@ -54,13 +54,13 @@ impl UpdatesTx {
         process: &Process,
         memory: &Memory,
     ) {
-        self.queued_memory = Some(memory.clone());
+        self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
             self.inner.send(Update::Process(process.clone())).unwrap();
 
-            if let Some(memory) = self.queued_memory.take() {
+            if let Some(memory) = self.latest_memory.take() {
                 self.inner.send(Update::Memory { memory }).unwrap();
             }
         }
