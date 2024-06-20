@@ -6,7 +6,7 @@ pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
 
     let tx = UpdatesTx {
-        inner: tx,
+        inner: Transport { channel: tx },
         latest_memory: None,
         process_at_client: None,
     };
@@ -29,7 +29,7 @@ pub enum Update {
 }
 
 pub struct UpdatesTx {
-    inner: mpsc::UnboundedSender<Update>,
+    inner: Transport,
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
 }
@@ -41,6 +41,7 @@ impl UpdatesTx {
         source_map: SourceMap,
     ) {
         self.inner
+            .channel
             .send(Update::SourceCode {
                 functions,
                 source_map,
@@ -57,10 +58,13 @@ impl UpdatesTx {
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
-            self.inner.send(Update::Process(process.clone())).unwrap();
+            self.inner
+                .channel
+                .send(Update::Process(process.clone()))
+                .unwrap();
 
             if let Some(memory) = self.latest_memory.take() {
-                self.inner.send(Update::Memory { memory }).unwrap();
+                self.inner.channel.send(Update::Memory { memory }).unwrap();
             }
         }
     }
@@ -82,4 +86,8 @@ impl UpdatesTx {
 
         self.process_at_client.as_ref() != Some(process)
     }
+}
+
+struct Transport {
+    channel: mpsc::UnboundedSender<Update>,
 }
