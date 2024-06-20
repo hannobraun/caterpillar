@@ -99,7 +99,7 @@ impl RuntimeState {
                             self.process.clear_durable_breakpoint(location);
                         }
                         DebugEvent::BreakpointSet { location } => {
-                            self.process.breakpoints.set_durable(location);
+                            self.process.set_durable_breakpoint(location);
                         }
                         DebugEvent::Continue { and_stop_at } => {
                             if let Some(EvaluatorEffect::Builtin(
