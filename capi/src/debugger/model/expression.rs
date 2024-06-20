@@ -20,13 +20,13 @@ impl Expression {
     pub fn new(
         expression: syntax::Expression,
         source_map: &SourceMap,
-        breakpoints: &breakpoints::State,
+        _: &breakpoints::State,
         process: &Process,
     ) -> Self {
         let location = source_map.syntax_to_runtime(&expression.location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
-            breakpoints.durable_at(location)
+            process.breakpoints.state().durable_at(location)
         } else {
             false
         };

@@ -9,6 +9,10 @@ pub struct Breakpoints {
 }
 
 impl Breakpoints {
+    pub fn state(&self) -> &State {
+        &self.state
+    }
+
     pub fn set_durable(&mut self, location: runtime::Location) {
         self.emit_event(Event::SetDurable { location });
     }
