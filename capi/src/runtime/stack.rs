@@ -71,18 +71,16 @@ impl Stack {
             return Err(PushFrameError::Overflow);
         }
 
-        let new_frame = StackFrame {
+        let mut new_frame = StackFrame {
             function,
             bindings: Bindings::default(),
             operands: Operands::default(),
         };
 
-        let mut arguments = Bindings::new();
-
         if let Some(calling_frame) = self.frames.last_mut() {
             for argument in new_frame.function.arguments.iter().rev() {
                 let value = calling_frame.operands.pop()?;
-                arguments.insert(argument.clone(), value);
+                new_frame.bindings.insert(argument.clone(), value);
             }
         } else {
             // If there's no calling frame, then there's no place to take
@@ -91,10 +89,6 @@ impl Stack {
         }
 
         self.frames.push(new_frame);
-
-        for (name, value) in arguments {
-            self.define_binding(name, value);
-        }
 
         Ok(())
     }
