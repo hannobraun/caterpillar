@@ -87,11 +87,9 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
-            self.emit_event(Event::EffectTriggered {
-                effect: EvaluatorEffect::Builtin(
-                    runtime::BuiltinEffect::Breakpoint,
-                ),
-            });
+            self.state.add_effect(EvaluatorEffect::Builtin(
+                runtime::BuiltinEffect::Breakpoint,
+            ));
         }
 
         match evaluate(code, &mut self.stack) {
@@ -102,7 +100,7 @@ impl Process {
                 self.emit_event(Event::Finished);
             }
             Err(effect) => {
-                self.emit_event(Event::EffectTriggered { effect });
+                self.state.add_effect(effect);
             }
         };
     }
@@ -146,9 +144,6 @@ impl ProcessState {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::EffectTriggered { effect } => {
-                self.add_effect(effect);
-            }
             Event::EffectHandled => {
                 self.unhandled_effects.pop_front();
             }
