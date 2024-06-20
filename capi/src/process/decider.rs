@@ -15,7 +15,6 @@ pub struct Process {
 
     code: Code,
     stack: Stack,
-    evaluator: Evaluator,
     entry: runtime::Function,
     arguments: Vec<Value>,
 }
@@ -31,7 +30,6 @@ impl Process {
             events: Vec::new(),
             code,
             stack: Stack::default(),
-            evaluator: Evaluator::new(),
             entry: entry.clone(),
             arguments: arguments.clone(),
         };

@@ -7,10 +7,6 @@ use super::{
 pub struct Evaluator {}
 
 impl Evaluator {
-    pub fn new() -> Self {
-        Self {}
-    }
-
     pub fn step(
         code: &Code,
         stack: &mut Stack,
