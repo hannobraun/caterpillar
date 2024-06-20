@@ -5,18 +5,6 @@ use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 pub type UpdatesTx = mpsc::UnboundedSender<Update>;
 
-#[allow(clippy::large_enum_variant)] // haven't optimized this yet
-pub enum Update {
-    Memory {
-        memory: Memory,
-    },
-    Process(Process),
-    SourceCode {
-        functions: syntax::Functions,
-        source_map: SourceMap,
-    },
-}
-
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
@@ -81,4 +69,16 @@ impl Updates {
     fn queue(&mut self, update: Update) {
         self.queue.push(update);
     }
+}
+
+#[allow(clippy::large_enum_variant)] // haven't optimized this yet
+pub enum Update {
+    Memory {
+        memory: Memory,
+    },
+    Process(Process),
+    SourceCode {
+        functions: syntax::Functions,
+        source_map: SourceMap,
+    },
 }
