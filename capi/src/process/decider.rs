@@ -1,8 +1,7 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, evaluate, stack, Code, EvaluatorEffect, EvaluatorState, Stack,
-        Value,
+        self, evaluate, Code, EvaluatorEffect, EvaluatorState, Stack, Value,
     },
 };
 
@@ -71,12 +70,6 @@ impl Process {
                 self.emit_event(Event::EffectTriggered { effect });
             }
         };
-    }
-
-    pub fn take_stack_events(
-        &mut self,
-    ) -> impl Iterator<Item = stack::Event> + '_ {
-        self.stack.take_events()
     }
 
     fn emit_event(&mut self, event: Event) {

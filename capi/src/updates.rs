@@ -48,15 +48,11 @@ impl UpdatesTx {
     pub fn send_update_if_necessary(
         &mut self,
         breakpoints: &mut Breakpoints,
-        process: &mut Process,
+        _: &mut Process,
     ) {
         for event in breakpoints.take_events() {
             self.flush();
             self.inner.send(Update::Breakpoints { event }).unwrap();
-        }
-
-        for _ in process.take_stack_events() {
-            // not handled yet
         }
     }
 
