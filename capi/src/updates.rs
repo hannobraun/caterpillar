@@ -39,7 +39,7 @@ impl Updates {
         functions: syntax::Functions,
         source_map: SourceMap,
     ) {
-        self.transport.send(Update::SourceCode {
+        self.transport.queue(Update::SourceCode {
             functions,
             source_map,
         });
@@ -54,10 +54,10 @@ impl Updates {
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
-            self.transport.send(Update::Process(process.clone()));
+            self.transport.queue(Update::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
-                self.transport.send(Update::Memory { memory });
+                self.transport.queue(Update::Memory { memory });
             }
         }
     }
@@ -90,7 +90,7 @@ struct Transport {
 }
 
 impl Transport {
-    pub fn send(&mut self, update: Update) {
+    pub fn queue(&mut self, update: Update) {
         self.updates.push(update);
     }
 }
