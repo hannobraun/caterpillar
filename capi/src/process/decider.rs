@@ -1,7 +1,7 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, stack, Code, Evaluator, EvaluatorEffect, EvaluatorState, Stack,
+        self, evaluate, stack, Code, EvaluatorEffect, EvaluatorState, Stack,
         Value,
     },
 };
@@ -88,7 +88,7 @@ impl Process {
             });
         }
 
-        match Evaluator::evaluate(&self.code, &mut self.stack) {
+        match evaluate(&self.code, &mut self.stack) {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),

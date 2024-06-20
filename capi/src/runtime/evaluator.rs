@@ -3,133 +3,126 @@ use super::{
     Value,
 };
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Evaluator {}
+pub fn evaluate(
+    code: &Code,
+    stack: &mut Stack,
+) -> Result<EvaluatorState, EvaluatorEffect> {
+    let Some(instruction) = stack.consume_next_instruction() else {
+        return Ok(EvaluatorState::Finished);
+    };
 
-impl Evaluator {
-    pub fn evaluate(
-        code: &Code,
-        stack: &mut Stack,
-    ) -> Result<EvaluatorState, EvaluatorEffect> {
-        let Some(instruction) = stack.consume_next_instruction() else {
-            return Ok(EvaluatorState::Finished);
-        };
-
-        match instruction {
-            Instruction::BindingEvaluate { name } => {
-                let Some(bindings) = stack.state().bindings() else {
-                    unreachable!(
-                        "Can't access bindings, but we're currently executing. \
-                        An active stack frame, and therefore bindings, must \
-                        exist."
-                    );
-                };
-                let Some(value) = bindings.get(&name).copied() else {
-                    unreachable!(
-                        "Can't find binding `{name}`, but instruction that \
-                        evaluates bindings should only be generated for \
-                        bindings that exist.\n\
-                        \n\
-                        Current stack:\n\
-                        {stack:#?}"
-                    );
-                };
-                stack.push_operand(value);
-            }
-            Instruction::BindingsDefine { names } => {
-                for name in names.into_iter().rev() {
-                    let value = stack.pop_operand()?;
-                    stack.define_binding(name, value);
-                }
-
-                let Some(operands) = stack.state().operands() else {
-                    unreachable!(
-                        "Can't access operands, but we're currently executing. \
-                        An active stack frame, and therefore operands, must \
-                        exist."
-                    );
-                };
-
-                if !operands.is_empty() {
-                    return Err(EvaluatorEffect::BindingLeftValuesOnStack);
-                }
-            }
-            Instruction::CallBuiltin { name } => {
-                let result = match name.as_str() {
-                    "add" => builtins::add(stack),
-                    "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack),
-                    "brk" => builtins::brk(),
-                    "copy" => builtins::copy(stack),
-                    "div" => builtins::div(stack),
-                    "drop" => builtins::drop(stack),
-                    "eq" => builtins::eq(stack),
-                    "greater" => builtins::greater(stack),
-                    "load" => builtins::load(stack),
-                    "mul" => builtins::mul(stack),
-                    "neg" => builtins::neg(stack),
-                    "read_input" => builtins::read_input(),
-                    "read_random" => builtins::read_random(),
-                    "remainder" => builtins::remainder(stack),
-                    "store" => builtins::store(stack),
-                    "sub" => builtins::sub(stack),
-                    "submit_frame" => builtins::submit_frame(),
-                    "write_tile" => builtins::write_tile(stack),
-                    _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
-                };
-
-                // This is a bit weird. An error is an effect, and effects can
-                // be returned as a `Result::Ok` by the builtins. But error by
-                // itself can also be returned as a `Result::Err`.
-                //
-                // This enables builtins to to stack operations using `?`
-                // internally, without requiring effects to always be returned
-                // as errors, which they aren't per se.
-                //
-                // Anyway, here we deal with this situation by unifying both
-                // variants.
-                let effect = match result {
-                    Ok(effect) => effect,
-                    Err(err) => Some(BuiltinEffect::Error(err)),
-                };
-
-                if let Some(effect) = effect {
-                    return Err(EvaluatorEffect::Builtin(effect));
-                }
-            }
-            Instruction::CallFunction { name } => {
-                let function = code.functions.get(&name).cloned().unwrap();
-
-                // If the current function is finished, pop its stack frame
-                // before pushing the next one. This is tail call optimization.
-                if stack.state().next_instruction_in_current_frame().is_none() {
-                    stack
-                        .pop_frame()
-                        .expect("Currently executing; stack can't be empty");
-                }
-
-                stack.push_frame(function)?;
-            }
-            Instruction::Push { value } => stack.push_operand(value),
-            Instruction::ReturnIfNonZero => {
+    match instruction {
+        Instruction::BindingEvaluate { name } => {
+            let Some(bindings) = stack.state().bindings() else {
+                unreachable!(
+                    "Can't access bindings, but we're currently executing. An \
+                    active stack frame, and therefore bindings, must exist."
+                );
+            };
+            let Some(value) = bindings.get(&name).copied() else {
+                unreachable!(
+                    "Can't find binding `{name}`, but instruction that \
+                    evaluates bindings should only be generated for bindings \
+                    that exist.\n\
+                    \n\
+                    Current stack:\n\
+                    {stack:#?}"
+                );
+            };
+            stack.push_operand(value);
+        }
+        Instruction::BindingsDefine { names } => {
+            for name in names.into_iter().rev() {
                 let value = stack.pop_operand()?;
-                if value != Value(0) {
-                    stack
-                        .pop_frame()
-                        .expect("Currently executing; stack can't be empty");
-                }
+                stack.define_binding(name, value);
             }
-            Instruction::ReturnIfZero => {
-                let value = stack.pop_operand()?;
-                if value == Value(0) {
-                    stack
-                        .pop_frame()
-                        .expect("Currently executing; stack can't be empty");
-                }
+
+            let Some(operands) = stack.state().operands() else {
+                unreachable!(
+                    "Can't access operands, but we're currently executing. An \
+                    active stack frame, and therefore operands, must exist."
+                );
+            };
+
+            if !operands.is_empty() {
+                return Err(EvaluatorEffect::BindingLeftValuesOnStack);
             }
         }
+        Instruction::CallBuiltin { name } => {
+            let result = match name.as_str() {
+                "add" => builtins::add(stack),
+                "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack),
+                "brk" => builtins::brk(),
+                "copy" => builtins::copy(stack),
+                "div" => builtins::div(stack),
+                "drop" => builtins::drop(stack),
+                "eq" => builtins::eq(stack),
+                "greater" => builtins::greater(stack),
+                "load" => builtins::load(stack),
+                "mul" => builtins::mul(stack),
+                "neg" => builtins::neg(stack),
+                "read_input" => builtins::read_input(),
+                "read_random" => builtins::read_random(),
+                "remainder" => builtins::remainder(stack),
+                "store" => builtins::store(stack),
+                "sub" => builtins::sub(stack),
+                "submit_frame" => builtins::submit_frame(),
+                "write_tile" => builtins::write_tile(stack),
+                _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
+            };
 
-        Ok(EvaluatorState::Running)
+            // This is a bit weird. An error is an effect, and effects can be
+            // returned as a `Result::Ok` by the builtins. But error by itself
+            // can also be returned as a `Result::Err`.
+            //
+            // This enables builtins to to stack operations using `?`
+            // internally, without requiring effects to always be returned as
+            // errors, which they aren't per se.
+            //
+            // Anyway, here we deal with this situation by unifying both
+            // variants.
+            let effect = match result {
+                Ok(effect) => effect,
+                Err(err) => Some(BuiltinEffect::Error(err)),
+            };
+
+            if let Some(effect) = effect {
+                return Err(EvaluatorEffect::Builtin(effect));
+            }
+        }
+        Instruction::CallFunction { name } => {
+            let function = code.functions.get(&name).cloned().unwrap();
+
+            // If the current function is finished, pop its stack frame before
+            // pushing the next one. This is tail call optimization.
+            if stack.state().next_instruction_in_current_frame().is_none() {
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
+            }
+
+            stack.push_frame(function)?;
+        }
+        Instruction::Push { value } => stack.push_operand(value),
+        Instruction::ReturnIfNonZero => {
+            let value = stack.pop_operand()?;
+            if value != Value(0) {
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
+            }
+        }
+        Instruction::ReturnIfZero => {
+            let value = stack.pop_operand()?;
+            if value == Value(0) {
+                stack
+                    .pop_frame()
+                    .expect("Currently executing; stack can't be empty");
+            }
+        }
     }
+
+    Ok(EvaluatorState::Running)
 }
 
 #[derive(Debug)]

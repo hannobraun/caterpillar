@@ -12,7 +12,7 @@ mod value;
 pub use self::{
     builtins::BuiltinEffect,
     code::Code,
-    evaluator::{Evaluator, EvaluatorEffect, EvaluatorState},
+    evaluator::{evaluate, EvaluatorEffect, EvaluatorState},
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
