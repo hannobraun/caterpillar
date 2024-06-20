@@ -20,7 +20,7 @@ impl Breakpoints {
     }
 
     pub fn set_durable(&mut self, location: runtime::Location) {
-        self.emit_event(Event::SetDurable { location });
+        self.durable.insert(location);
     }
 
     pub fn clear_durable(&mut self, location: runtime::Location) {
@@ -47,9 +47,6 @@ impl Breakpoints {
 
     fn emit_event(&mut self, event: Event) {
         match event {
-            Event::SetDurable { location } => {
-                self.durable.insert(location);
-            }
             Event::ClearDurable { location } => {
                 self.durable.remove(&location);
             }
