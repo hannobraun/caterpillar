@@ -21,7 +21,7 @@ impl Expression {
         expression: syntax::Expression,
         source_map: &SourceMap,
         breakpoints: &breakpoints::State,
-        process2: &process::State,
+        _: &process::State,
         process: &Process,
     ) -> Self {
         let location = source_map.syntax_to_runtime(&expression.location);
@@ -35,16 +35,18 @@ impl Expression {
         let is_comment =
             matches!(expression.kind, ExpressionKind::Comment { .. });
 
-        let effect = process2.first_unhandled_effect().and_then(|effect| {
-            let effect_location = source_map
-                .runtime_to_syntax(&process2.most_recent_step().unwrap());
+        let effect =
+            process.state().first_unhandled_effect().and_then(|effect| {
+                let effect_location = source_map.runtime_to_syntax(
+                    &process.state().most_recent_step().unwrap(),
+                );
 
-            if effect_location == expression.location {
-                Some(effect.clone())
-            } else {
-                None
-            }
-        });
+                if effect_location == expression.location {
+                    Some(effect.clone())
+                } else {
+                    None
+                }
+            });
 
         let is_on_call_stack = if let Some(location) = &location {
             process
