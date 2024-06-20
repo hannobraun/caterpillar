@@ -7,7 +7,7 @@ use super::{
 pub struct Evaluator {}
 
 impl Evaluator {
-    pub fn step(
+    pub fn evaluate(
         code: &Code,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
