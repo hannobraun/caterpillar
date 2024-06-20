@@ -1,6 +1,8 @@
-use crate::runtime::{Function, Instruction, MissingOperand, Value};
+use crate::runtime::{
+    stack::state::Bindings, Function, Instruction, MissingOperand, Value,
+};
 
-use super::{Bindings, Event, State};
+use super::{Event, State};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {

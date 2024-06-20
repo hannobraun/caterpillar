@@ -5,5 +5,5 @@ mod state;
 pub use self::{
     decider::{PushFrameError, Stack},
     event::Event,
-    state::{Bindings, State},
+    state::State,
 };
