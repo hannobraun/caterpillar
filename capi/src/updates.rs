@@ -5,11 +5,7 @@ use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 pub fn updates() -> (Updates, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
 
-    let tx = Updates {
-        latest_memory: None,
-        process_at_client: None,
-        transport: Transport { channel: tx },
-    };
+    let tx = Updates::new(tx);
 
     (tx, rx)
 }
@@ -36,6 +32,14 @@ pub struct Updates {
 }
 
 impl Updates {
+    pub fn new(channel: UpdatesTx) -> Self {
+        Self {
+            latest_memory: None,
+            process_at_client: None,
+            transport: Transport { channel },
+        }
+    }
+
     pub fn send_source_code(
         &mut self,
         functions: syntax::Functions,
