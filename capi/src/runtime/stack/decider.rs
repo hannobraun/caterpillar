@@ -2,16 +2,14 @@ use crate::runtime::{Function, Instruction, MissingOperand, Value};
 
 use super::{Bindings, Event, State};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
     state: State,
 }
 
 impl Stack {
     pub fn new() -> Self {
-        Self {
-            state: State::default(),
-        }
+        Self::default()
     }
 
     pub fn state(&self) -> &State {
