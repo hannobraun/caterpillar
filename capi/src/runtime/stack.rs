@@ -94,11 +94,11 @@ impl Stack {
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let Some(frame) = self.frames.pop() else {
+        let Some(popped_frame) = self.frames.pop() else {
             return Err(StackIsEmpty);
         };
 
-        let return_values = frame.operands.values().collect::<Vec<_>>();
+        let return_values = popped_frame.operands.values().collect::<Vec<_>>();
 
         if self.num_frames() == 0 {
             // We just popped the last frame. The return values have nowhere to
