@@ -31,7 +31,7 @@ impl Process {
             events: Vec::new(),
             code: code.clone(),
             stack: Stack::default(),
-            evaluator: Evaluator::new(code),
+            evaluator: Evaluator::new(),
             entry: entry.clone(),
             arguments: arguments.clone(),
         };

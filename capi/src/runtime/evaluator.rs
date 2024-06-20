@@ -7,7 +7,7 @@ use super::{
 pub struct Evaluator {}
 
 impl Evaluator {
-    pub fn new(_: Code) -> Self {
+    pub fn new() -> Self {
         Self {}
     }
 
