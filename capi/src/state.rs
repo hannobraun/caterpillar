@@ -116,14 +116,13 @@ impl RuntimeState {
                             )) =
                                 self.process.state().first_unhandled_effect()
                             {
-                                self.process.breakpoints.set_ephemeral(
-                                    self.process
-                                        .stack()
-                                        .state()
-                                        .next_instruction_overall()
-                                        .unwrap(),
-                                );
-                                self.process.handle_first_effect();
+                                let and_stop_at = self
+                                    .process
+                                    .stack()
+                                    .state()
+                                    .next_instruction_overall()
+                                    .unwrap();
+                                self.process.continue_(Some(and_stop_at))
                             }
                         }
                         DebugEvent::Stop => {
