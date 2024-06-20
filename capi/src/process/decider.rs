@@ -8,8 +8,6 @@ use crate::{
     },
 };
 
-use super::Event;
-
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Process {
     state: ProcessState,
@@ -97,16 +95,12 @@ impl Process {
                 self.state.most_recent_step = Some(next_instruction);
             }
             Ok(EvaluatorState::Finished) => {
-                self.emit_event(Event::Finished);
+                self.state.has_finished = true;
             }
             Err(effect) => {
                 self.state.add_effect(effect);
             }
         };
-    }
-
-    fn emit_event(&mut self, event: Event) {
-        self.state.evolve(event);
     }
 }
 
@@ -140,13 +134,5 @@ impl ProcessState {
 
     pub fn add_effect(&mut self, effect: EvaluatorEffect) {
         self.unhandled_effects.push_back(effect);
-    }
-
-    pub fn evolve(&mut self, event: Event) {
-        match event {
-            Event::Finished => {
-                self.has_finished = true;
-            }
-        }
     }
 }

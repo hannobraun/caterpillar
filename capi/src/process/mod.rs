@@ -1,4 +1,4 @@
 mod decider;
 mod event;
 
-pub use self::{decider::Process, event::Event};
+pub use self::decider::Process;
