@@ -23,6 +23,10 @@ impl Process {
         &self.stack
     }
 
+    pub fn breakpoints(&self) -> &Breakpoints {
+        &self.breakpoints
+    }
+
     pub fn handle_first_effect(&mut self) {
         self.emit_event(Event::EffectHandled);
     }
