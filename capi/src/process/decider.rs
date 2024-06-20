@@ -5,16 +5,16 @@ use crate::{
     },
 };
 
-use super::{Event, State};
+use super::{Event, ProcessState};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Process {
-    state: State,
+    state: ProcessState,
     stack: Stack,
 }
 
 impl Process {
-    pub fn state(&self) -> &State {
+    pub fn state(&self) -> &ProcessState {
         &self.state
     }
 
@@ -27,7 +27,7 @@ impl Process {
     }
 
     pub fn reset(&mut self, entry: runtime::Function, arguments: Vec<Value>) {
-        self.state = State::default();
+        self.state = ProcessState::default();
         self.stack = Stack::default();
 
         self.stack

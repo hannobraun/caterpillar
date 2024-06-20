@@ -5,13 +5,13 @@ use crate::runtime::{self, EvaluatorEffect};
 use super::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct State {
+pub struct ProcessState {
     most_recent_step: Option<runtime::Location>,
     unhandled_effects: VecDeque<EvaluatorEffect>,
     has_finished: bool,
 }
 
-impl State {
+impl ProcessState {
     pub fn most_recent_step(&self) -> Option<runtime::Location> {
         self.most_recent_step.clone()
     }
