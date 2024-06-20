@@ -1,5 +1,6 @@
 use crate::runtime::{Function, Value};
 
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Event {
     PushFrame { function: Function },
     PopFrame,
