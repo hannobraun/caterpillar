@@ -1,6 +1,6 @@
 use crate::runtime;
 
-use super::{Event, State};
+use super::{state::State, Event};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
