@@ -96,7 +96,7 @@ impl RuntimeState {
 
                     match event {
                         DebugEvent::BreakpointClear { location } => {
-                            self.process.breakpoints.clear_durable(location);
+                            self.process.clear_durable_breakpoint(location);
                         }
                         DebugEvent::BreakpointSet { location } => {
                             self.process.breakpoints.set_durable(location);

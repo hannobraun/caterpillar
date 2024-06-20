@@ -47,6 +47,10 @@ impl Process {
         }
     }
 
+    pub fn clear_durable_breakpoint(&mut self, location: runtime::Location) {
+        self.breakpoints.clear_durable(location);
+    }
+
     pub fn step(&mut self, code: &Code) {
         if !self.state.can_step() {
             return;
