@@ -22,6 +22,7 @@ use crate::{
 pub struct RuntimeState {
     pub code: Code,
     pub entry: runtime::Function,
+    pub arguments: Vec<Value>,
     pub process: Process,
     pub breakpoints: Breakpoints,
     pub memory: Memory,
@@ -42,8 +43,8 @@ impl RuntimeState {
         let entry = code.functions.get("main").cloned().unwrap();
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
 
-        let mut process = Process::new(arguments);
-        process.reset(entry.clone());
+        let mut process = Process::new();
+        process.reset(entry.clone(), arguments.clone());
 
         let memory = Memory::default();
 
@@ -71,6 +72,7 @@ impl RuntimeState {
         Self {
             code,
             entry,
+            arguments,
             process,
             breakpoints: Breakpoints::default(),
             memory,
@@ -116,7 +118,10 @@ impl RuntimeState {
                             }
                         }
                         DebugEvent::Reset => {
-                            self.process.reset(self.entry.clone());
+                            self.process.reset(
+                                self.entry.clone(),
+                                self.arguments.clone(),
+                            );
                         }
                         DebugEvent::Step => {
                             if let Some(EvaluatorEffect::Builtin(

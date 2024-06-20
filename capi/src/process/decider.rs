@@ -14,16 +14,14 @@ pub struct Process {
     events: Vec<Event>,
 
     stack: Stack,
-    arguments: Vec<Value>,
 }
 
 impl Process {
-    pub fn new(arguments: Vec<Value>) -> Self {
+    pub fn new() -> Self {
         Self {
             state: State::default(),
             events: Vec::new(),
             stack: Stack::default(),
-            arguments: arguments.clone(),
         }
     }
 
@@ -39,14 +37,14 @@ impl Process {
         self.emit_event(Event::EffectHandled);
     }
 
-    pub fn reset(&mut self, entry: runtime::Function) {
+    pub fn reset(&mut self, entry: runtime::Function, arguments: Vec<Value>) {
         self.state = State::default();
         self.stack = Stack::default();
 
         self.stack
             .push_frame(entry)
             .expect("Expected recursion limit to be more than zero.");
-        self.push(self.arguments.clone());
+        self.push(arguments);
     }
 
     pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
