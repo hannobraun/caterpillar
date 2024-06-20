@@ -1,8 +1,7 @@
-use crate::runtime::{self, EvaluatorEffect};
+use crate::runtime::EvaluatorEffect;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Event {
-    HasStepped { location: runtime::Location },
     EffectTriggered { effect: EvaluatorEffect },
     EffectHandled,
     Finished,

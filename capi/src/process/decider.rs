@@ -96,9 +96,7 @@ impl Process {
 
         match evaluate(code, &mut self.stack) {
             Ok(EvaluatorState::Running) => {
-                self.emit_event(Event::HasStepped {
-                    location: next_instruction,
-                });
+                self.state.most_recent_step = Some(next_instruction);
             }
             Ok(EvaluatorState::Finished) => {
                 self.emit_event(Event::Finished);
@@ -144,9 +142,6 @@ impl ProcessState {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::HasStepped { location } => {
-                self.most_recent_step = Some(location);
-            }
             Event::EffectTriggered { effect } => {
                 self.unhandled_effects.push_back(effect);
             }
