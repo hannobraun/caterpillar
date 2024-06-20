@@ -90,7 +90,7 @@ impl Process {
             });
         }
 
-        match self.evaluator.step(&self.code, &mut self.stack) {
+        match Evaluator::step(&self.code, &mut self.stack) {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),

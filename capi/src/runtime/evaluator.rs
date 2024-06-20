@@ -12,7 +12,6 @@ impl Evaluator {
     }
 
     pub fn step(
-        &mut self,
         code: &Code,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
