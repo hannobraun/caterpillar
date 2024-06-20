@@ -63,7 +63,7 @@ impl Stack {
             .values()
             .collect::<Vec<_>>();
 
-        self.emit_event(Event::PopFrame);
+        self.state.frames.pop();
 
         if self.state.num_frames() == 0 {
             // We just popped the last frame. The return values have nowhere to
@@ -189,9 +189,6 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::PopFrame => {
-                self.frames.pop();
-            }
             Event::DefineBinding { name, value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::DefineBinding` implies existence of stack frame",
