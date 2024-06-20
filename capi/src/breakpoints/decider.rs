@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::runtime;
 
-use super::Event;
+use super::event::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
