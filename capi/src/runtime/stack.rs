@@ -118,25 +118,8 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
-        // This is a big hack, first copying the current top operand, then
-        // telling `State` to pop it and throw away the result.
-        //
-        // Unfortunately, I can't come up with a design that meets the following
-        // requirements:
-        //
-        // - Events can have return values.
-        // - There's no duplication between the primary and the "event replay"
-        //   use cases.
-        // - There's no lifetime in `Event` that would prevent it from being
-        //   stored.
-        //
-        // I'll keep thinking. For now this should do, even though I don't like
-        // it.
-
-        let operand = self.operands().unwrap().values().last();
         let frame = self.frames.last_mut().unwrap();
-        frame.operands.pop().ok();
-        operand.ok_or(MissingOperand)
+        frame.operands.pop()
     }
 
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
