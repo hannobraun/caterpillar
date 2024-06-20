@@ -2,7 +2,7 @@ use crate::runtime::{
     stack::state::Bindings, Function, Instruction, MissingOperand, Value,
 };
 
-use super::{Event, State};
+use super::{state::State, Event};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
