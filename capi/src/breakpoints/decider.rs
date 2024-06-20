@@ -28,7 +28,7 @@ impl Breakpoints {
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {
-        self.emit_event(Event::SetEphemeral { location });
+        self.ephemeral.insert(location);
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
@@ -47,9 +47,6 @@ impl Breakpoints {
 
     fn emit_event(&mut self, event: Event) {
         match event {
-            Event::SetEphemeral { location } => {
-                self.ephemeral.insert(location);
-            }
             Event::ClearEphemeral { location } => {
                 self.ephemeral.remove(&location);
             }
