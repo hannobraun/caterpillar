@@ -14,13 +14,14 @@ use crate::{
     ffi,
     games::snake::snake,
     process::Process,
-    runtime::{BuiltinEffect, Code, EvaluatorEffect, Value},
+    runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{updates, Update, UpdatesTx},
 };
 
 pub struct RuntimeState {
     pub code: Code,
+    pub entry: runtime::Function,
     pub process: Process,
     pub breakpoints: Breakpoints,
     pub memory: Memory,
@@ -39,9 +40,8 @@ impl RuntimeState {
         let (code, source_map) = compile(&script);
 
         let entry = code.functions.get("main").cloned().unwrap();
-        let mut process =
-            Process::new(entry, vec![Value(TILES_PER_AXIS as i8); 2]);
-        process.reset();
+        let mut process = Process::new(vec![Value(TILES_PER_AXIS as i8); 2]);
+        process.reset(entry.clone());
 
         let memory = Memory::default();
 
@@ -68,6 +68,7 @@ impl RuntimeState {
 
         Self {
             code,
+            entry,
             process,
             breakpoints: Breakpoints::default(),
             memory,
@@ -113,7 +114,7 @@ impl RuntimeState {
                             }
                         }
                         DebugEvent::Reset => {
-                            self.process.reset();
+                            self.process.reset(self.entry.clone());
                         }
                         DebugEvent::Step => {
                             if let Some(EvaluatorEffect::Builtin(
