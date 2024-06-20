@@ -1,4 +1,2 @@
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Event {
-    PopOperand,
-}
+pub enum Event {}

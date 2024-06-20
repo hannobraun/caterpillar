@@ -4,8 +4,6 @@ use crate::runtime::{
     Function, Instruction, Location, MissingOperand, Operands, Value,
 };
 
-use super::event::Event;
-
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
     state: State,
@@ -107,7 +105,8 @@ impl Stack {
         // it.
 
         let operand = self.state.operands().unwrap().values().last();
-        self.emit_event(Event::PopOperand);
+        let frame = self.state.frames.last_mut().unwrap();
+        frame.operands.pop().ok();
         operand.ok_or(MissingOperand)
     }
 
@@ -124,10 +123,6 @@ impl Stack {
 
             return Some(instruction);
         }
-    }
-
-    fn emit_event(&mut self, event: Event) {
-        self.state.evolve(event);
     }
 }
 
@@ -187,17 +182,6 @@ impl State {
             .iter()
             .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
-    }
-
-    pub fn evolve(&mut self, event: Event) {
-        match event {
-            Event::PopOperand => {
-                let frame = self.frames.last_mut().expect(
-                    "`Event::PopOperand` implies existence of stack frame",
-                );
-                frame.operands.pop().ok();
-            }
-        }
     }
 }
 
