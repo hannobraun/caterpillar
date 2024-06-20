@@ -86,7 +86,8 @@ impl Stack {
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
         let operand = operand.into();
-        self.emit_event(Event::PushOperand { operand });
+        let frame = self.state.frames.last_mut().unwrap();
+        frame.operands.push(operand);
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
@@ -190,12 +191,6 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::PushOperand { operand } => {
-                let frame = self.frames.last_mut().expect(
-                    "`Event::PushOperand` implies existence of stack frame",
-                );
-                frame.operands.push(operand);
-            }
             Event::PopOperand => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::PopOperand` implies existence of stack frame",
