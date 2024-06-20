@@ -33,7 +33,6 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::Process2 { event: _ } => {}
             Update::SourceCode {
                 functions,
                 source_map,
