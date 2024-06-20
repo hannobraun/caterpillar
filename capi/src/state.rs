@@ -4,7 +4,6 @@ use rand::random;
 use tokio::sync::mpsc::{self, error::TryRecvError};
 
 use crate::{
-    breakpoints::Breakpoints,
     compiler::compile,
     debugger::{
         model::DebugEvent,
@@ -24,7 +23,6 @@ pub struct RuntimeState {
     pub entry: runtime::Function,
     pub arguments: Vec<Value>,
     pub process: Process,
-    pub breakpoints: Breakpoints,
     pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
@@ -74,7 +72,6 @@ impl RuntimeState {
             entry,
             arguments,
             process,
-            breakpoints: Breakpoints::default(),
             memory,
             input,
             tiles: [0; NUM_TILES],
@@ -99,10 +96,10 @@ impl RuntimeState {
 
                     match event {
                         DebugEvent::BreakpointClear { location } => {
-                            self.breakpoints.clear_durable(location);
+                            self.process.breakpoints.clear_durable(location);
                         }
                         DebugEvent::BreakpointSet { location } => {
-                            self.breakpoints.set_durable(location);
+                            self.process.breakpoints.set_durable(location);
                         }
                         DebugEvent::Continue { and_stop_at } => {
                             if let Some(EvaluatorEffect::Builtin(
@@ -111,7 +108,9 @@ impl RuntimeState {
                                 self.process.state().first_unhandled_effect()
                             {
                                 if let Some(instruction) = and_stop_at {
-                                    self.breakpoints.set_ephemeral(instruction);
+                                    self.process
+                                        .breakpoints
+                                        .set_ephemeral(instruction);
                                 }
 
                                 self.process.handle_first_effect();
@@ -129,7 +128,7 @@ impl RuntimeState {
                             )) =
                                 self.process.state().first_unhandled_effect()
                             {
-                                self.breakpoints.set_ephemeral(
+                                self.process.breakpoints.set_ephemeral(
                                     self.process
                                         .stack()
                                         .state()
@@ -140,7 +139,7 @@ impl RuntimeState {
                             }
                         }
                         DebugEvent::Stop => {
-                            self.breakpoints.set_ephemeral(
+                            self.process.breakpoints.set_ephemeral(
                                 self.process
                                     .stack()
                                     .state()
@@ -162,7 +161,7 @@ impl RuntimeState {
         }
 
         while self.process.state().can_step() {
-            self.process.step(&self.code, &mut self.breakpoints);
+            self.process.step(&self.code);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
                 self.process.state().first_unhandled_effect()
@@ -236,8 +235,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx
-            .send_update_if_necessary(&mut self.breakpoints, &mut self.process);
+        self.updates_tx.send_update_if_necessary(&mut self.process);
 
         display.render(&self.tiles);
     }

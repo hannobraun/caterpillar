@@ -1,11 +1,7 @@
 use tokio::sync::mpsc;
 
 use crate::{
-    breakpoints::{self, Breakpoints},
-    process::Process,
-    source_map::SourceMap,
-    state::Memory,
-    syntax,
+    breakpoints, process::Process, source_map::SourceMap, state::Memory, syntax,
 };
 
 pub fn updates() -> (UpdatesTx, UpdatesRx) {
@@ -45,12 +41,8 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_update_if_necessary(
-        &mut self,
-        breakpoints: &mut Breakpoints,
-        process: &mut Process,
-    ) {
-        for event in breakpoints.take_events() {
+    pub fn send_update_if_necessary(&mut self, process: &mut Process) {
+        for event in process.breakpoints.take_events() {
             self.flush();
             self.inner.send(Update::Breakpoints { event }).unwrap();
         }

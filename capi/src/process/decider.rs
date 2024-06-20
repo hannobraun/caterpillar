@@ -11,6 +11,7 @@ use super::{Event, ProcessState};
 pub struct Process {
     state: ProcessState,
     stack: Stack,
+    pub breakpoints: Breakpoints,
 }
 
 impl Process {
@@ -42,14 +43,15 @@ impl Process {
         }
     }
 
-    pub fn step(&mut self, code: &Code, breakpoints: &mut Breakpoints) {
+    pub fn step(&mut self, code: &Code) {
         if !self.state.can_step() {
             return;
         }
 
         let next_instruction =
             self.stack.state().next_instruction_overall().unwrap();
-        if breakpoints
+        if self
+            .breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
             self.emit_event(Event::EffectTriggered {
