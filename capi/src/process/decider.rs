@@ -13,22 +13,16 @@ pub struct Process {
     state: State,
     events: Vec<Event>,
 
-    code: Code,
     stack: Stack,
     entry: runtime::Function,
     arguments: Vec<Value>,
 }
 
 impl Process {
-    pub fn new(
-        code: runtime::Code,
-        entry: runtime::Function,
-        arguments: Vec<Value>,
-    ) -> Self {
+    pub fn new(entry: runtime::Function, arguments: Vec<Value>) -> Self {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
-            code,
             stack: Stack::default(),
             entry: entry.clone(),
             arguments: arguments.clone(),
@@ -71,7 +65,7 @@ impl Process {
         }
     }
 
-    pub fn step(&mut self, breakpoints: &mut Breakpoints) {
+    pub fn step(&mut self, code: &Code, breakpoints: &mut Breakpoints) {
         if !self.state.can_step() {
             return;
         }
@@ -88,7 +82,7 @@ impl Process {
             });
         }
 
-        match evaluate(&self.code, &mut self.stack) {
+        match evaluate(code, &mut self.stack) {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),

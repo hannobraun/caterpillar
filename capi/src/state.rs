@@ -14,12 +14,13 @@ use crate::{
     ffi,
     games::snake::snake,
     process::Process,
-    runtime::{BuiltinEffect, EvaluatorEffect, Value},
+    runtime::{BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{updates, Update, UpdatesTx},
 };
 
 pub struct RuntimeState {
+    pub code: Code,
     pub process: Process,
     pub breakpoints: Breakpoints,
     pub memory: Memory,
@@ -38,8 +39,7 @@ impl RuntimeState {
         let (code, source_map) = compile(&script);
 
         let entry = code.functions.get("main").cloned().unwrap();
-        let process =
-            Process::new(code, entry, vec![Value(TILES_PER_AXIS as i8); 2]);
+        let process = Process::new(entry, vec![Value(TILES_PER_AXIS as i8); 2]);
 
         let memory = Memory::default();
 
@@ -65,6 +65,7 @@ impl RuntimeState {
         });
 
         Self {
+            code,
             process,
             breakpoints: Breakpoints::default(),
             memory,
@@ -151,7 +152,7 @@ impl RuntimeState {
         }
 
         while self.process.state().can_step() {
-            self.process.step(&mut self.breakpoints);
+            self.process.step(&self.code, &mut self.breakpoints);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
                 self.process.state().first_unhandled_effect()
