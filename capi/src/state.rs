@@ -47,9 +47,10 @@ impl RuntimeState {
         let memory = Memory::default();
 
         let input = Input::default();
+        let (events_tx, events_rx) = mpsc::unbounded_channel();
+
         let (updates_tx, updates_rx) = updates();
         let mut updates_tx = Updates::new(updates_tx);
-        let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         updates_tx.send_source_code(script.functions, source_map);
         ui::start(updates_rx, events_tx);
