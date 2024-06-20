@@ -53,7 +53,7 @@ impl RuntimeState {
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
         let mut updates = Updates::new();
 
-        updates.send_source_code(script.functions, source_map);
+        updates.queue_source_code(script.functions, source_map);
         ui::start(updates_rx, events_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to

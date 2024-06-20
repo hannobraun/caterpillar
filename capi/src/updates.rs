@@ -32,7 +32,7 @@ impl Updates {
         }
     }
 
-    pub fn send_source_code(
+    pub fn queue_source_code(
         &mut self,
         functions: syntax::Functions,
         source_map: SourceMap,
