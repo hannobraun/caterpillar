@@ -1,6 +1,6 @@
 use crate::{
     breakpoints,
-    process::{self, Process},
+    process::Process,
     runtime::{self, EvaluatorEffect},
     source_map::SourceMap,
     syntax::{self, ExpressionKind},
@@ -21,7 +21,6 @@ impl Expression {
         expression: syntax::Expression,
         source_map: &SourceMap,
         breakpoints: &breakpoints::State,
-        _: &process::State,
         process: &Process,
     ) -> Self {
         let location = source_map.syntax_to_runtime(&expression.location);

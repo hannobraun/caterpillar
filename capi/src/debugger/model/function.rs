@@ -18,7 +18,7 @@ impl Function {
         function: syntax::Function,
         source_map: &SourceMap,
         breakpoints: &breakpoints::State,
-        process2: &process::State,
+        _: &process::State,
         process: &Process,
     ) -> Self {
         Self {
@@ -31,7 +31,6 @@ impl Function {
                         expression,
                         source_map,
                         breakpoints,
-                        process2,
                         process,
                     )
                 })
