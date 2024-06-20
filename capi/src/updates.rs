@@ -15,6 +15,7 @@ pub fn updates() -> (Updates, UpdatesRx) {
 }
 
 pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
+pub type UpdatesTx = mpsc::UnboundedSender<Update>;
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 pub enum Update {
@@ -83,7 +84,7 @@ impl Updates {
 }
 
 struct Transport {
-    channel: mpsc::UnboundedSender<Update>,
+    channel: UpdatesTx,
 }
 
 impl Transport {
