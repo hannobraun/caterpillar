@@ -108,9 +108,8 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        let value = value.into();
         let frame = self.frames.last_mut().unwrap();
-        frame.bindings.insert(name, value);
+        frame.bindings.insert(name, value.into());
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
