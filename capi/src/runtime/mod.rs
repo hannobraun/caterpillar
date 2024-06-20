@@ -1,4 +1,5 @@
 pub mod builtins;
+pub mod stack;
 
 mod code;
 mod evaluator;
@@ -6,7 +7,6 @@ mod function;
 mod instructions;
 mod location;
 mod operands;
-mod stack;
 mod value;
 
 pub use self::{
