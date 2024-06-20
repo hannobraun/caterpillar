@@ -50,9 +50,9 @@ impl RuntimeState {
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
-        let mut updates_tx = Updates::new(updates_tx);
+        let mut updates = Updates::new(updates_tx);
 
-        updates_tx.send_source_code(script.functions, source_map);
+        updates.send_source_code(script.functions, source_map);
         ui::start(updates_rx, events_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to
@@ -76,7 +76,7 @@ impl RuntimeState {
             tiles: [0; NUM_TILES],
             display: None,
             events_rx,
-            updates: updates_tx,
+            updates,
         }
     }
 
