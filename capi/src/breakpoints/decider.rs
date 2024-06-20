@@ -1,15 +1,22 @@
+use std::collections::BTreeSet;
+
 use crate::runtime;
 
-use super::{state::State, Event};
+use super::Event;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
-    state: State,
+    durable: BTreeSet<runtime::Location>,
+    ephemeral: BTreeSet<runtime::Location>,
 }
 
 impl Breakpoints {
-    pub fn state(&self) -> &State {
-        &self.state
+    pub fn durable_at(&self, location: &runtime::Location) -> bool {
+        self.durable.contains(location)
+    }
+
+    pub fn ephemeral_at(&self, location: &runtime::Location) -> bool {
+        self.ephemeral.contains(location)
     }
 
     pub fn set_durable(&mut self, location: runtime::Location) {
@@ -28,8 +35,8 @@ impl Breakpoints {
         &mut self,
         location: runtime::Location,
     ) -> bool {
-        let durable_at_location = self.state.durable_at(&location);
-        let ephemeral_at_location = self.state.ephemeral_at(&location);
+        let durable_at_location = self.durable_at(&location);
+        let ephemeral_at_location = self.ephemeral_at(&location);
 
         if ephemeral_at_location {
             self.emit_event(Event::ClearEphemeral { location });
@@ -39,6 +46,23 @@ impl Breakpoints {
     }
 
     fn emit_event(&mut self, event: Event) {
-        self.state.evolve(event);
+        self.evolve(event);
+    }
+
+    pub fn evolve(&mut self, event: Event) {
+        match event {
+            Event::SetDurable { location } => {
+                self.durable.insert(location);
+            }
+            Event::ClearDurable { location } => {
+                self.durable.remove(&location);
+            }
+            Event::SetEphemeral { location } => {
+                self.ephemeral.insert(location);
+            }
+            Event::ClearEphemeral { location } => {
+                self.ephemeral.remove(&location);
+            }
+        }
     }
 }

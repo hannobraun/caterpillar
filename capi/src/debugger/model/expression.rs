@@ -24,7 +24,7 @@ impl Expression {
         let location = source_map.syntax_to_runtime(&expression.location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
-            process.breakpoints().state().durable_at(location)
+            process.breakpoints().durable_at(location)
         } else {
             false
         };
