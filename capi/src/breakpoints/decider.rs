@@ -46,10 +46,6 @@ impl Breakpoints {
     }
 
     fn emit_event(&mut self, event: Event) {
-        self.evolve(event);
-    }
-
-    fn evolve(&mut self, event: Event) {
         match event {
             Event::SetDurable { location } => {
                 self.durable.insert(location);
