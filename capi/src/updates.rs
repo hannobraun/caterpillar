@@ -73,12 +73,12 @@ impl Updates {
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 pub enum Update {
-    Memory {
-        memory: Memory,
-    },
-    Process(Process),
     SourceCode {
         functions: syntax::Functions,
         source_map: SourceMap,
+    },
+    Process(Process),
+    Memory {
+        memory: Memory,
     },
 }
