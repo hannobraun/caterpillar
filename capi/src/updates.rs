@@ -40,13 +40,10 @@ impl UpdatesTx {
         functions: syntax::Functions,
         source_map: SourceMap,
     ) {
-        self.transport
-            .channel
-            .send(Update::SourceCode {
-                functions,
-                source_map,
-            })
-            .unwrap();
+        self.transport.send(Update::SourceCode {
+            functions,
+            source_map,
+        });
     }
 
     pub fn send_update_if_necessary(
@@ -58,16 +55,10 @@ impl UpdatesTx {
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
-            self.transport
-                .channel
-                .send(Update::Process(process.clone()))
-                .unwrap();
+            self.transport.send(Update::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
-                self.transport
-                    .channel
-                    .send(Update::Memory { memory })
-                    .unwrap();
+                self.transport.send(Update::Memory { memory });
             }
         }
     }
@@ -93,4 +84,10 @@ impl UpdatesTx {
 
 struct Transport {
     channel: mpsc::UnboundedSender<Update>,
+}
+
+impl Transport {
+    pub fn send(&mut self, update: Update) {
+        self.channel.send(update).unwrap();
+    }
 }
