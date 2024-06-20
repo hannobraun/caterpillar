@@ -140,10 +140,14 @@ impl ProcessState {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
+    pub fn add_effect(&mut self, effect: EvaluatorEffect) {
+        self.unhandled_effects.push_back(effect);
+    }
+
     pub fn evolve(&mut self, event: Event) {
         match event {
             Event::EffectTriggered { effect } => {
-                self.unhandled_effects.push_back(effect);
+                self.add_effect(effect);
             }
             Event::EffectHandled => {
                 self.unhandled_effects.pop_front();
