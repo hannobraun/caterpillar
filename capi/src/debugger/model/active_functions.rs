@@ -11,7 +11,7 @@ pub enum ActiveFunctions {
 impl ActiveFunctions {
     pub fn new(
         source_code: Option<(&syntax::Functions, &SourceMap)>,
-        breakpoints: &breakpoints::State,
+        _: &breakpoints::State,
         process: Option<&Process>,
     ) -> Self {
         let Some((functions, source_map)) = source_code else {
@@ -46,7 +46,7 @@ impl ActiveFunctions {
                 let function =
                     functions.get_from_location(syntax_location).cloned()?;
 
-                Some(Function::new(function, source_map, breakpoints, process))
+                Some(Function::new(function, source_map, process))
             })
             .collect();
 

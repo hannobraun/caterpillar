@@ -1,4 +1,4 @@
-use crate::{breakpoints, process::Process, source_map::SourceMap, syntax};
+use crate::{process::Process, source_map::SourceMap, syntax};
 
 use super::Expression;
 
@@ -12,7 +12,6 @@ impl Function {
     pub fn new(
         function: syntax::Function,
         source_map: &SourceMap,
-        _: &breakpoints::State,
         process: &Process,
     ) -> Self {
         Self {
