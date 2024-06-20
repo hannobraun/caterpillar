@@ -31,7 +31,7 @@ impl Process {
     }
 
     pub fn handle_first_effect(&mut self) {
-        self.emit_event(Event::EffectHandled);
+        self.state.unhandled_effects.pop_front();
     }
 
     pub fn reset(&mut self, entry: runtime::Function, arguments: Vec<Value>) {
@@ -144,9 +144,6 @@ impl ProcessState {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::EffectHandled => {
-                self.unhandled_effects.pop_front();
-            }
             Event::Finished => {
                 self.has_finished = true;
             }
