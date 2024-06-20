@@ -17,7 +17,7 @@ impl ActiveFunctions {
     pub fn new(
         source_code: Option<(&syntax::Functions, &SourceMap)>,
         breakpoints: &breakpoints::State,
-        process2: &process::State,
+        _: &process::State,
         process: Option<&Process>,
     ) -> Self {
         let Some((functions, source_map)) = source_code else {
@@ -31,12 +31,12 @@ impl ActiveFunctions {
             };
         };
 
-        if process2.can_step() {
+        if process.state().can_step() {
             return Self::Message {
                 message: "Process is running.",
             };
         }
-        if process2.has_finished() {
+        if process.state().has_finished() {
             return Self::Message {
                 message: "Process is finished.",
             };
