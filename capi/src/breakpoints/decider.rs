@@ -24,7 +24,7 @@ impl Breakpoints {
     }
 
     pub fn clear_durable(&mut self, location: runtime::Location) {
-        self.emit_event(Event::ClearDurable { location });
+        self.durable.remove(&location);
     }
 
     pub fn set_ephemeral(&mut self, location: runtime::Location) {
@@ -47,9 +47,6 @@ impl Breakpoints {
 
     fn emit_event(&mut self, event: Event) {
         match event {
-            Event::ClearDurable { location } => {
-                self.durable.remove(&location);
-            }
             Event::SetEphemeral { location } => {
                 self.ephemeral.insert(location);
             }
