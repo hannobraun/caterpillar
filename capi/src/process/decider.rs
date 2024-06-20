@@ -29,7 +29,7 @@ impl Process {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
-            code: code.clone(),
+            code,
             stack: Stack::default(),
             evaluator: Evaluator::new(),
             entry: entry.clone(),
