@@ -12,7 +12,7 @@ use super::{Event, ProcessState};
 pub struct Process {
     state: ProcessState,
     stack: Stack,
-    pub breakpoints: Breakpoints,
+    breakpoints: Breakpoints,
 }
 
 impl Process {
