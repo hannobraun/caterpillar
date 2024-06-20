@@ -60,7 +60,7 @@ impl Updates {
         }
     }
 
-    pub fn take_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
+    pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
         self.updates.drain(..)
     }
 
