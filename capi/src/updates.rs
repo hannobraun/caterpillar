@@ -41,7 +41,6 @@ impl UpdatesTx {
         functions: syntax::Functions,
         source_map: SourceMap,
     ) {
-        self.flush();
         self.inner
             .send(Update::SourceCode {
                 functions,
