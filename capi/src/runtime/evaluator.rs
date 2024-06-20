@@ -20,7 +20,6 @@ impl Evaluator {
             return Ok(EvaluatorState::Finished);
         };
 
-        let stack: &mut Stack = stack;
         match instruction {
             Instruction::BindingEvaluate { name } => {
                 let Some(bindings) = stack.state().bindings() else {
