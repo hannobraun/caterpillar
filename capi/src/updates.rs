@@ -6,9 +6,9 @@ pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
 
     let tx = UpdatesTx {
-        transport: Transport { channel: tx },
         latest_memory: None,
         process_at_client: None,
+        transport: Transport { channel: tx },
     };
 
     (tx, rx)
@@ -29,9 +29,9 @@ pub enum Update {
 }
 
 pub struct UpdatesTx {
-    transport: Transport,
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
+    transport: Transport,
 }
 
 impl UpdatesTx {
