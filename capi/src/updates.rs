@@ -1,8 +1,6 @@
 use tokio::sync::mpsc;
 
-use crate::{
-    breakpoints, process::Process, source_map::SourceMap, state::Memory, syntax,
-};
+use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
 pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
@@ -20,9 +18,6 @@ pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 pub enum Update {
-    Breakpoints {
-        event: breakpoints::Event,
-    },
     Memory {
         memory: Memory,
     },
@@ -42,10 +37,7 @@ pub struct UpdatesTx {
 
 impl UpdatesTx {
     pub fn send_update_if_necessary(&mut self, process: &mut Process) {
-        for event in process.breakpoints.take_events() {
-            self.flush();
-            self.inner.send(Update::Breakpoints { event }).unwrap();
-        }
+        for _ in process.breakpoints.take_events() {}
 
         if self.should_flush(process) {
             self.process_at_client = Some(process.clone());
@@ -57,9 +49,6 @@ impl UpdatesTx {
 
     pub fn queue(&mut self, update: Update) {
         match update {
-            Update::Breakpoints { .. } => {
-                unreachable!();
-            }
             Update::Memory { memory } => {
                 self.queued_memory = Some(memory);
             }
