@@ -2,10 +2,6 @@ use tokio::sync::mpsc;
 
 use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
-pub fn updates() -> (UpdatesTx, UpdatesRx) {
-    mpsc::unbounded_channel()
-}
-
 pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
 pub type UpdatesTx = mpsc::UnboundedSender<Update>;
 

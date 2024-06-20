@@ -15,7 +15,7 @@ use crate::{
     process::Process,
     runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::{updates, Updates},
+    updates::Updates,
 };
 
 pub struct RuntimeState {
@@ -49,7 +49,7 @@ impl RuntimeState {
         let input = Input::default();
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
-        let (updates_tx, updates_rx) = updates();
+        let (updates_tx, updates_rx) = mpsc::unbounded_channel();
         let mut updates_tx = Updates::new(updates_tx);
 
         updates_tx.send_source_code(script.functions, source_map);
