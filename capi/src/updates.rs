@@ -20,7 +20,7 @@ pub enum Update {
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
-    updates: Vec<Update>,
+    queue: Vec<Update>,
 }
 
 impl Updates {
@@ -28,7 +28,7 @@ impl Updates {
         Self {
             latest_memory: None,
             process_at_client: None,
-            updates: Vec::new(),
+            queue: Vec::new(),
         }
     }
 
@@ -61,7 +61,7 @@ impl Updates {
     }
 
     pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
-        self.updates.drain(..)
+        self.queue.drain(..)
     }
 
     fn update_is_necessary(&self, process: &Process) -> bool {
@@ -83,6 +83,6 @@ impl Updates {
     }
 
     fn queue(&mut self, update: Update) {
-        self.updates.push(update);
+        self.queue.push(update);
     }
 }
