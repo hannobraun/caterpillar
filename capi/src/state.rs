@@ -89,47 +89,39 @@ impl RuntimeState {
 
         loop {
             match self.events_rx.try_recv() {
-                Ok(event) => {
-                    if let DebugEvent::Reset = event {
+                Ok(event) => match event {
+                    DebugEvent::BreakpointClear { location } => {
+                        self.process.clear_durable_breakpoint(location);
+                    }
+                    DebugEvent::BreakpointSet { location } => {
+                        self.process.set_durable_breakpoint(location);
+                    }
+                    DebugEvent::Continue { and_stop_at } => {
+                        self.process.continue_(and_stop_at);
+                    }
+                    DebugEvent::Reset => {
+                        self.process
+                            .reset(self.entry.clone(), self.arguments.clone());
                         self.memory.zero();
                     }
-
-                    match event {
-                        DebugEvent::BreakpointClear { location } => {
-                            self.process.clear_durable_breakpoint(location);
-                        }
-                        DebugEvent::BreakpointSet { location } => {
-                            self.process.set_durable_breakpoint(location);
-                        }
-                        DebugEvent::Continue { and_stop_at } => {
-                            self.process.continue_(and_stop_at);
-                        }
-                        DebugEvent::Reset => {
-                            self.process.reset(
-                                self.entry.clone(),
-                                self.arguments.clone(),
-                            );
-                        }
-                        DebugEvent::Step => {
-                            if let Some(EvaluatorEffect::Builtin(
-                                BuiltinEffect::Breakpoint,
-                            )) =
-                                self.process.state().first_unhandled_effect()
-                            {
-                                let and_stop_at = self
-                                    .process
-                                    .stack()
-                                    .state()
-                                    .next_instruction_overall()
-                                    .unwrap();
-                                self.process.continue_(Some(and_stop_at))
-                            }
-                        }
-                        DebugEvent::Stop => {
-                            self.process.stop();
+                    DebugEvent::Step => {
+                        if let Some(EvaluatorEffect::Builtin(
+                            BuiltinEffect::Breakpoint,
+                        )) = self.process.state().first_unhandled_effect()
+                        {
+                            let and_stop_at = self
+                                .process
+                                .stack()
+                                .state()
+                                .next_instruction_overall()
+                                .unwrap();
+                            self.process.continue_(Some(and_stop_at))
                         }
                     }
-                }
+                    DebugEvent::Stop => {
+                        self.process.stop();
+                    }
+                },
                 Err(TryRecvError::Empty) => {
                     break;
                 }
