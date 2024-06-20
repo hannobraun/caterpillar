@@ -207,7 +207,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.send_update_if_necessary(&mut self.process);
+        self.updates_tx.send_update_if_necessary(&self.process);
 
         display.render(&self.tiles);
     }

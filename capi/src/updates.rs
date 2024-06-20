@@ -36,7 +36,7 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_update_if_necessary(&mut self, process: &mut Process) {
+    pub fn send_update_if_necessary(&mut self, process: &Process) {
         if self.should_flush(process) {
             self.process_at_client = Some(process.clone());
             self.inner.send(Update::Process(process.clone())).unwrap();
