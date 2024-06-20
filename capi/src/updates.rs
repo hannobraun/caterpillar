@@ -60,7 +60,9 @@ impl UpdatesTx {
             self.process_at_client = Some(process.clone());
             self.inner.send(Update::Process(process.clone())).unwrap();
 
-            self.flush();
+            if let Some(memory) = self.queued_memory.take() {
+                self.inner.send(Update::Memory { memory }).unwrap();
+            }
         }
     }
 
@@ -80,11 +82,5 @@ impl UpdatesTx {
         }
 
         self.process_at_client.as_ref() != Some(process)
-    }
-
-    fn flush(&mut self) {
-        if let Some(memory) = self.queued_memory.take() {
-            self.inner.send(Update::Memory { memory }).unwrap();
-        }
     }
 }
