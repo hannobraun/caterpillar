@@ -38,7 +38,11 @@ impl Stack {
             arguments.insert(argument.clone(), value);
         }
 
-        self.emit_event(Event::PushFrame { function });
+        self.state.frames.push(StackFrame {
+            function,
+            bindings: Bindings::default(),
+            operands: Operands::default(),
+        });
 
         for (name, value) in arguments {
             self.define_binding(name, value);
@@ -185,13 +189,6 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::PushFrame { function } => {
-                self.frames.push(StackFrame {
-                    function,
-                    bindings: Bindings::default(),
-                    operands: Operands::default(),
-                });
-            }
             Event::PopFrame => {
                 self.frames.pop();
             }
