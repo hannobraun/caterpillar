@@ -36,7 +36,13 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn send_update_if_necessary(&mut self, process: &Process) {
+    pub fn send_update_if_necessary(
+        &mut self,
+        process: &Process,
+        memory: &Memory,
+    ) {
+        self.queued_memory = Some(memory.clone());
+
         if self.should_flush(process) {
             self.process_at_client = Some(process.clone());
             self.inner.send(Update::Process(process.clone())).unwrap();
@@ -47,8 +53,8 @@ impl UpdatesTx {
 
     pub fn queue(&mut self, update: Update) {
         match update {
-            Update::Memory { memory } => {
-                self.queued_memory = Some(memory);
+            Update::Memory { .. } => {
+                unreachable!()
             }
             Update::Process(_) => {
                 unreachable!();

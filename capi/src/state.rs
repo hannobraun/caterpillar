@@ -161,10 +161,6 @@ impl RuntimeState {
                         self.memory.inner[address] = *value;
 
                         self.process.handle_first_effect();
-
-                        self.updates_tx.queue(Update::Memory {
-                            memory: self.memory.clone(),
-                        });
                     }
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
@@ -207,7 +203,8 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx.send_update_if_necessary(&self.process);
+        self.updates_tx
+            .send_update_if_necessary(&self.process, &self.memory);
 
         display.render(&self.tiles);
     }
