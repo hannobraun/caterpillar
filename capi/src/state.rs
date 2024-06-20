@@ -15,7 +15,7 @@ use crate::{
     process::Process,
     runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::{updates, Update, UpdatesTx},
+    updates::{updates, UpdatesTx},
 };
 
 pub struct RuntimeState {
@@ -50,10 +50,7 @@ impl RuntimeState {
         let (mut updates_tx, updates_rx) = updates();
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
-        updates_tx.queue(Update::SourceCode {
-            functions: script.functions,
-            source_map,
-        });
+        updates_tx.queue(script.functions, source_map);
         ui::start(updates_rx, events_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to

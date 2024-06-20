@@ -51,27 +51,18 @@ impl UpdatesTx {
         }
     }
 
-    pub fn queue(&mut self, update: Update) {
-        match update {
-            Update::Memory { .. } => {
-                unreachable!()
-            }
-            Update::Process(_) => {
-                unreachable!();
-            }
-            Update::SourceCode {
+    pub fn queue(
+        &mut self,
+        functions: syntax::Functions,
+        source_map: SourceMap,
+    ) {
+        self.flush();
+        self.inner
+            .send(Update::SourceCode {
                 functions,
                 source_map,
-            } => {
-                self.flush();
-                self.inner
-                    .send(Update::SourceCode {
-                        functions,
-                        source_map,
-                    })
-                    .unwrap();
-            }
-        }
+            })
+            .unwrap();
     }
 
     fn should_flush(&self, process: &Process) -> bool {
