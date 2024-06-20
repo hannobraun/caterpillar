@@ -8,7 +8,7 @@ use crate::{
 
 use super::{Event, State};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Process {
     state: State,
     events: Vec<Event>,
@@ -18,11 +18,7 @@ pub struct Process {
 
 impl Process {
     pub fn new() -> Self {
-        Self {
-            state: State::default(),
-            events: Vec::new(),
-            stack: Stack::default(),
-        }
+        Self::default()
     }
 
     pub fn state(&self) -> &State {
