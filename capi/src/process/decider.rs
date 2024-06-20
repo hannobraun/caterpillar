@@ -17,10 +17,6 @@ pub struct Process {
 }
 
 impl Process {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn state(&self) -> &State {
         &self.state
     }
