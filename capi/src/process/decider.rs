@@ -1,7 +1,8 @@
 use crate::{
     breakpoints::Breakpoints,
     runtime::{
-        self, stack, Evaluator, EvaluatorEffect, EvaluatorState, Stack, Value,
+        self, stack, Code, Evaluator, EvaluatorEffect, EvaluatorState, Stack,
+        Value,
     },
 };
 
@@ -12,6 +13,7 @@ pub struct Process {
     state: State,
     events: Vec<Event>,
 
+    code: Code,
     stack: Stack,
     evaluator: Evaluator,
     entry: runtime::Function,
@@ -27,6 +29,7 @@ impl Process {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
+            code: code.clone(),
             stack: Stack::default(),
             evaluator: Evaluator::new(code),
             entry: entry.clone(),
@@ -87,7 +90,7 @@ impl Process {
             });
         }
 
-        match self.evaluator.step(&mut self.stack) {
+        match self.evaluator.step(&self.code, &mut self.stack) {
             Ok(EvaluatorState::Running) => self.emit_event(Event::HasStepped {
                 location: next_instruction,
             }),

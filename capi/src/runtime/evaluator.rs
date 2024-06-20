@@ -4,24 +4,22 @@ use super::{
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Evaluator {
-    code: Code,
-}
+pub struct Evaluator {}
 
 impl Evaluator {
-    pub fn new(code: Code) -> Self {
-        Self { code }
+    pub fn new(_: Code) -> Self {
+        Self {}
     }
 
     pub fn step(
         &mut self,
+        code: &Code,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, EvaluatorEffect> {
         let Some(instruction) = stack.consume_next_instruction() else {
             return Ok(EvaluatorState::Finished);
         };
 
-        let code = &self.code;
         let stack: &mut Stack = stack;
         match instruction {
             Instruction::BindingEvaluate { name } => {
