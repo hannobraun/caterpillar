@@ -6,132 +6,10 @@ use crate::runtime::{
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
-    state: State,
+    frames: Vec<StackFrame>,
 }
 
 impl Stack {
-    pub fn state(&self) -> &State {
-        &self.state
-    }
-
-    pub fn push_frame(
-        &mut self,
-        function: Function,
-    ) -> Result<(), PushFrameError> {
-        const RECURSION_LIMIT: usize = 8;
-        if self.state.num_frames() >= RECURSION_LIMIT {
-            return Err(PushFrameError::Overflow);
-        }
-
-        if self.state.num_frames() == 0 {
-            // If there's no calling frame, then there's no place to take
-            // arguments from. Make sure that the function doesn't expect any.
-            assert_eq!(function.arguments.len(), 0);
-        }
-
-        let mut arguments = Bindings::new();
-
-        for argument in function.arguments.iter().rev() {
-            let value = self.pop_operand()?;
-            arguments.insert(argument.clone(), value);
-        }
-
-        self.state.frames.push(StackFrame {
-            function,
-            bindings: Bindings::default(),
-            operands: Operands::default(),
-        });
-
-        for (name, value) in arguments {
-            self.define_binding(name, value);
-        }
-
-        Ok(())
-    }
-
-    pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        if self.state.num_frames() == 0 {
-            return Err(StackIsEmpty);
-        }
-
-        let return_values = self
-            .state()
-            .operands()
-            .expect("Just confirmed that stack is not empty")
-            .values()
-            .collect::<Vec<_>>();
-
-        self.state.frames.pop();
-
-        if self.state.num_frames() == 0 {
-            // We just popped the last frame. The return values have nowhere to
-            // go.
-            return Ok(());
-        }
-
-        for value in return_values {
-            self.push_operand(value);
-        }
-
-        Ok(())
-    }
-
-    pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        let value = value.into();
-        let frame = self.state.frames.last_mut().unwrap();
-        frame.bindings.insert(name, value);
-    }
-
-    pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let operand = operand.into();
-        let frame = self.state.frames.last_mut().unwrap();
-        frame.operands.push(operand);
-    }
-
-    pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
-        // This is a big hack, first copying the current top operand, then
-        // telling `State` to pop it and throw away the result.
-        //
-        // Unfortunately, I can't come up with a design that meets the following
-        // requirements:
-        //
-        // - Events can have return values.
-        // - There's no duplication between the primary and the "event replay"
-        //   use cases.
-        // - There's no lifetime in `Event` that would prevent it from being
-        //   stored.
-        //
-        // I'll keep thinking. For now this should do, even though I don't like
-        // it.
-
-        let operand = self.state.operands().unwrap().values().last();
-        let frame = self.state.frames.last_mut().unwrap();
-        frame.operands.pop().ok();
-        operand.ok_or(MissingOperand)
-    }
-
-    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
-        loop {
-            let frame = self.state.frames.last_mut()?;
-
-            let Some(instruction) = frame.function.consume_next_instruction()
-            else {
-                self.pop_frame()
-                    .expect("Just accessed frame; must be able to pop it");
-                continue;
-            };
-
-            return Some(instruction);
-        }
-    }
-}
-
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct State {
-    pub frames: Vec<StackFrame>,
-}
-
-impl State {
     pub fn num_frames(&self) -> usize {
         self.frames.len()
     }
@@ -182,6 +60,116 @@ impl State {
             .iter()
             .filter_map(|frame| frame.function.next_instruction())
             .map(|(location, _instruction)| location)
+    }
+
+    pub fn push_frame(
+        &mut self,
+        function: Function,
+    ) -> Result<(), PushFrameError> {
+        const RECURSION_LIMIT: usize = 8;
+        if self.num_frames() >= RECURSION_LIMIT {
+            return Err(PushFrameError::Overflow);
+        }
+
+        if self.num_frames() == 0 {
+            // If there's no calling frame, then there's no place to take
+            // arguments from. Make sure that the function doesn't expect any.
+            assert_eq!(function.arguments.len(), 0);
+        }
+
+        let mut arguments = Bindings::new();
+
+        for argument in function.arguments.iter().rev() {
+            let value = self.pop_operand()?;
+            arguments.insert(argument.clone(), value);
+        }
+
+        self.frames.push(StackFrame {
+            function,
+            bindings: Bindings::default(),
+            operands: Operands::default(),
+        });
+
+        for (name, value) in arguments {
+            self.define_binding(name, value);
+        }
+
+        Ok(())
+    }
+
+    pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
+        if self.num_frames() == 0 {
+            return Err(StackIsEmpty);
+        }
+
+        let return_values = self
+            .operands()
+            .expect("Just confirmed that stack is not empty")
+            .values()
+            .collect::<Vec<_>>();
+
+        self.frames.pop();
+
+        if self.num_frames() == 0 {
+            // We just popped the last frame. The return values have nowhere to
+            // go.
+            return Ok(());
+        }
+
+        for value in return_values {
+            self.push_operand(value);
+        }
+
+        Ok(())
+    }
+
+    pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
+        let value = value.into();
+        let frame = self.frames.last_mut().unwrap();
+        frame.bindings.insert(name, value);
+    }
+
+    pub fn push_operand(&mut self, operand: impl Into<Value>) {
+        let operand = operand.into();
+        let frame = self.frames.last_mut().unwrap();
+        frame.operands.push(operand);
+    }
+
+    pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
+        // This is a big hack, first copying the current top operand, then
+        // telling `State` to pop it and throw away the result.
+        //
+        // Unfortunately, I can't come up with a design that meets the following
+        // requirements:
+        //
+        // - Events can have return values.
+        // - There's no duplication between the primary and the "event replay"
+        //   use cases.
+        // - There's no lifetime in `Event` that would prevent it from being
+        //   stored.
+        //
+        // I'll keep thinking. For now this should do, even though I don't like
+        // it.
+
+        let operand = self.operands().unwrap().values().last();
+        let frame = self.frames.last_mut().unwrap();
+        frame.operands.pop().ok();
+        operand.ok_or(MissingOperand)
+    }
+
+    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
+        loop {
+            let frame = self.frames.last_mut()?;
+
+            let Some(instruction) = frame.function.consume_next_instruction()
+            else {
+                self.pop_frame()
+                    .expect("Just accessed frame; must be able to pop it");
+                continue;
+            };
+
+            return Some(instruction);
+        }
     }
 }
 

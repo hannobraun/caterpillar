@@ -46,10 +46,7 @@ impl Expression {
             });
 
         let is_on_call_stack = if let Some(location) = &location {
-            process
-                .stack()
-                .state()
-                .is_next_instruction_in_any_frame(location)
+            process.stack().is_next_instruction_in_any_frame(location)
         } else {
             false
         };

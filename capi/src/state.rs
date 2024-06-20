@@ -112,7 +112,6 @@ impl RuntimeState {
                             let and_stop_at = self
                                 .process
                                 .stack()
-                                .state()
                                 .next_instruction_overall()
                                 .unwrap();
                             self.process.continue_(Some(and_stop_at))

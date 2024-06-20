@@ -69,8 +69,7 @@ impl Process {
     }
 
     pub fn stop(&mut self) {
-        let next_instruction =
-            self.stack().state().next_instruction_overall().unwrap();
+        let next_instruction = self.stack().next_instruction_overall().unwrap();
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
@@ -79,8 +78,7 @@ impl Process {
             return;
         }
 
-        let next_instruction =
-            self.stack.state().next_instruction_overall().unwrap();
+        let next_instruction = self.stack.next_instruction_overall().unwrap();
         if self
             .breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())

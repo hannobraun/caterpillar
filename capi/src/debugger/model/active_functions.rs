@@ -37,7 +37,6 @@ impl ActiveFunctions {
 
         let functions = process
             .stack()
-            .state()
             .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
                 let syntax_location =
