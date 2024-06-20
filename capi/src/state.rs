@@ -15,7 +15,7 @@ use crate::{
     process::Process,
     runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::{updates, UpdatesTx},
+    updates::{updates, Updates},
 };
 
 pub struct RuntimeState {
@@ -28,7 +28,7 @@ pub struct RuntimeState {
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
     pub events_rx: EventsRx,
-    pub updates_tx: UpdatesTx,
+    pub updates_tx: Updates,
 }
 
 impl RuntimeState {

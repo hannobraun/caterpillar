@@ -2,10 +2,10 @@ use tokio::sync::mpsc;
 
 use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
-pub fn updates() -> (UpdatesTx, UpdatesRx) {
+pub fn updates() -> (Updates, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
 
-    let tx = UpdatesTx {
+    let tx = Updates {
         latest_memory: None,
         process_at_client: None,
         transport: Transport { channel: tx },
@@ -28,13 +28,13 @@ pub enum Update {
     },
 }
 
-pub struct UpdatesTx {
+pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
     transport: Transport,
 }
 
-impl UpdatesTx {
+impl Updates {
     pub fn send_source_code(
         &mut self,
         functions: syntax::Functions,
