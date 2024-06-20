@@ -3,8 +3,7 @@ use tokio::sync::mpsc;
 use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
 pub fn updates() -> (UpdatesTx, UpdatesRx) {
-    let (tx, rx) = mpsc::unbounded_channel();
-    (tx, rx)
+    mpsc::unbounded_channel()
 }
 
 pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
