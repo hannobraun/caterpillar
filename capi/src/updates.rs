@@ -20,7 +20,7 @@ pub enum Update {
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
-    transport: Transport,
+    updates: Vec<Update>,
 }
 
 impl Updates {
@@ -28,9 +28,7 @@ impl Updates {
         Self {
             latest_memory: None,
             process_at_client: None,
-            transport: Transport {
-                updates: Vec::new(),
-            },
+            updates: Vec::new(),
         }
     }
 
@@ -39,7 +37,7 @@ impl Updates {
         functions: syntax::Functions,
         source_map: SourceMap,
     ) {
-        self.transport.queue(Update::SourceCode {
+        self.queue(Update::SourceCode {
             functions,
             source_map,
         });
@@ -54,16 +52,16 @@ impl Updates {
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
-            self.transport.queue(Update::Process(process.clone()));
+            self.queue(Update::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
-                self.transport.queue(Update::Memory { memory });
+                self.queue(Update::Memory { memory });
             }
         }
     }
 
     pub fn take_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
-        self.transport.updates.drain(..)
+        self.updates.drain(..)
     }
 
     fn update_is_necessary(&self, process: &Process) -> bool {
@@ -83,13 +81,7 @@ impl Updates {
 
         self.process_at_client.as_ref() != Some(process)
     }
-}
 
-struct Transport {
-    updates: Vec<Update>,
-}
-
-impl Transport {
     fn queue(&mut self, update: Update) {
         self.updates.push(update);
     }
