@@ -80,7 +80,8 @@ impl Stack {
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
         let value = value.into();
-        self.emit_event(Event::DefineBinding { name, value })
+        let frame = self.state.frames.last_mut().unwrap();
+        frame.bindings.insert(name, value);
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
@@ -189,12 +190,6 @@ impl State {
 
     pub fn evolve(&mut self, event: Event) {
         match event {
-            Event::DefineBinding { name, value } => {
-                let frame = self.frames.last_mut().expect(
-                    "`Event::DefineBinding` implies existence of stack frame",
-                );
-                frame.bindings.insert(name, value);
-            }
             Event::PushOperand { operand: value } => {
                 let frame = self.frames.last_mut().expect(
                     "`Event::PushOperand` implies existence of stack frame",
