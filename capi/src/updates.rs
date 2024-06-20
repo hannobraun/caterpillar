@@ -92,6 +92,10 @@ impl UpdatesTx {
             self.flush();
             self.inner.send(Update::Process2 { event }).unwrap();
         }
+
+        for _ in process.take_stack_events() {
+            // not handled yet
+        }
     }
 
     pub fn queue(&mut self, update: Update) {

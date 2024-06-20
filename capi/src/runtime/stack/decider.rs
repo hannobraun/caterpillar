@@ -5,6 +5,7 @@ use super::{Bindings, Event, State};
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Stack {
     state: State,
+    events: Vec<Event>,
 }
 
 impl Stack {
@@ -116,7 +117,12 @@ impl Stack {
         }
     }
 
+    pub fn take_events(&mut self) -> impl Iterator<Item = Event> + '_ {
+        self.events.drain(..)
+    }
+
     fn emit_event(&mut self, event: Event) {
+        self.events.push(event.clone());
         self.state.evolve(event);
     }
 }
