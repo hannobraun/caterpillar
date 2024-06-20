@@ -25,7 +25,7 @@ impl Process {
         let mut self_ = Self {
             state: State::default(),
             events: Vec::new(),
-            stack: Stack::new(),
+            stack: Stack::default(),
             evaluator: Evaluator::new(code),
             entry: entry.clone(),
             arguments: arguments.clone(),
@@ -54,7 +54,7 @@ impl Process {
 
     pub fn reset(&mut self) {
         self.state = State::default();
-        self.stack = Stack::new();
+        self.stack = Stack::default();
 
         self.stack
             .push_frame(self.entry.clone())

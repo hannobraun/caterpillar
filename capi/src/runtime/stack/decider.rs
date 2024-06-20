@@ -8,10 +8,6 @@ pub struct Stack {
 }
 
 impl Stack {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn state(&self) -> &State {
         &self.state
     }
