@@ -28,7 +28,6 @@ pub enum Update {
     },
 }
 
-#[derive(Clone)]
 pub struct UpdatesTx {
     inner: mpsc::UnboundedSender<Update>,
     latest_memory: Option<Memory>,
