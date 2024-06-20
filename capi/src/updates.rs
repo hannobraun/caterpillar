@@ -2,11 +2,8 @@ use tokio::sync::mpsc;
 
 use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
-pub fn updates() -> (Updates, UpdatesRx) {
+pub fn updates() -> (UpdatesTx, UpdatesRx) {
     let (tx, rx) = mpsc::unbounded_channel();
-
-    let tx = Updates::new(tx);
-
     (tx, rx)
 }
 
