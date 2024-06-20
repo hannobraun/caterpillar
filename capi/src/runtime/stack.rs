@@ -98,16 +98,10 @@ impl Stack {
             return Err(StackIsEmpty);
         };
 
-        let return_values = popped_frame.operands.values().collect::<Vec<_>>();
-
-        if self.num_frames() == 0 {
-            // We just popped the last frame. The return values have nowhere to
-            // go.
-            return Ok(());
-        }
-
-        for value in return_values {
-            self.push_operand(value);
+        if let Some(new_top_frame) = self.frames.last_mut() {
+            for value in popped_frame.operands.values() {
+                new_top_frame.operands.push(value);
+            }
         }
 
         Ok(())
