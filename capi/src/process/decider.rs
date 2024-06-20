@@ -6,7 +6,7 @@ use crate::{
     },
 };
 
-use super::{Event, ProcessState};
+use super::{state::ProcessState, Event};
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Process {
