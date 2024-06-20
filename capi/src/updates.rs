@@ -55,8 +55,6 @@ impl UpdatesTx {
             self.inner.send(Update::Breakpoints { event }).unwrap();
         }
 
-        for _ in process.take_events() {}
-
         for _ in process.take_stack_events() {
             // not handled yet
         }

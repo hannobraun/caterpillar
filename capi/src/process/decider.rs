@@ -11,8 +11,6 @@ use super::{Event, State};
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Process {
     state: State,
-    events: Vec<Event>,
-
     stack: Stack,
 }
 
@@ -75,10 +73,6 @@ impl Process {
         };
     }
 
-    pub fn take_events(&mut self) -> impl Iterator<Item = Event> + '_ {
-        self.events.drain(..)
-    }
-
     pub fn take_stack_events(
         &mut self,
     ) -> impl Iterator<Item = stack::Event> + '_ {
@@ -86,7 +80,6 @@ impl Process {
     }
 
     fn emit_event(&mut self, event: Event) {
-        self.events.push(event.clone());
         self.state.evolve(event);
     }
 }
