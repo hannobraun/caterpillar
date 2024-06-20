@@ -57,7 +57,7 @@ impl UpdatesTx {
     ) {
         self.queued_memory = Some(memory.clone());
 
-        if self.should_flush(process) {
+        if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
             self.inner.send(Update::Process(process.clone())).unwrap();
 
@@ -65,7 +65,7 @@ impl UpdatesTx {
         }
     }
 
-    fn should_flush(&self, process: &Process) -> bool {
+    fn update_is_necessary(&self, process: &Process) -> bool {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
