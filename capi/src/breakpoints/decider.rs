@@ -2,8 +2,6 @@ use std::collections::BTreeSet;
 
 use crate::runtime;
 
-use super::event::Event;
-
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct Breakpoints {
     durable: BTreeSet<runtime::Location>,
@@ -39,17 +37,9 @@ impl Breakpoints {
         let ephemeral_at_location = self.ephemeral_at(&location);
 
         if ephemeral_at_location {
-            self.emit_event(Event::ClearEphemeral { location });
+            self.ephemeral.remove(&location);
         }
 
         ephemeral_at_location || durable_at_location
-    }
-
-    fn emit_event(&mut self, event: Event) {
-        match event {
-            Event::ClearEphemeral { location } => {
-                self.ephemeral.remove(&location);
-            }
-        }
     }
 }
