@@ -43,11 +43,7 @@ impl Updates {
         });
     }
 
-    pub fn send_update_if_necessary(
-        &mut self,
-        process: &Process,
-        memory: &Memory,
-    ) {
+    pub fn queue_updates(&mut self, process: &Process, memory: &Memory) {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {

@@ -204,8 +204,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates
-            .send_update_if_necessary(&self.process, &self.memory);
+        self.updates.queue_updates(&self.process, &self.memory);
         for update in self.updates.take_queued_updates() {
             self.updates_tx.send(update).unwrap();
         }
