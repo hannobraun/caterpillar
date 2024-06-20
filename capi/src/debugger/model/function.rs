@@ -12,7 +12,7 @@ impl Function {
     pub fn new(
         function: syntax::Function,
         source_map: &SourceMap,
-        breakpoints: &breakpoints::State,
+        _: &breakpoints::State,
         process: &Process,
     ) -> Self {
         Self {
@@ -21,12 +21,7 @@ impl Function {
                 .syntax
                 .into_iter()
                 .map(|expression| {
-                    Expression::new(
-                        expression,
-                        source_map,
-                        breakpoints,
-                        process,
-                    )
+                    Expression::new(expression, source_map, process)
                 })
                 .collect::<Vec<_>>(),
         }
