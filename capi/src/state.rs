@@ -126,13 +126,7 @@ impl RuntimeState {
                             }
                         }
                         DebugEvent::Stop => {
-                            self.process.breakpoints.set_ephemeral(
-                                self.process
-                                    .stack()
-                                    .state()
-                                    .next_instruction_overall()
-                                    .unwrap(),
-                            );
+                            self.process.stop();
                         }
                     }
                 }

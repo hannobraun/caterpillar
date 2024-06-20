@@ -68,6 +68,12 @@ impl Process {
         }
     }
 
+    pub fn stop(&mut self) {
+        let next_instruction =
+            self.stack().state().next_instruction_overall().unwrap();
+        self.breakpoints.set_ephemeral(next_instruction);
+    }
+
     pub fn step(&mut self, code: &Code) {
         if !self.state.can_step() {
             return;
