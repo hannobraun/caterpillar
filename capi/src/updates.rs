@@ -36,6 +36,20 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
+    pub fn send_source_code(
+        &mut self,
+        functions: syntax::Functions,
+        source_map: SourceMap,
+    ) {
+        self.flush();
+        self.inner
+            .send(Update::SourceCode {
+                functions,
+                source_map,
+            })
+            .unwrap();
+    }
+
     pub fn send_update_if_necessary(
         &mut self,
         process: &Process,
@@ -49,20 +63,6 @@ impl UpdatesTx {
 
             self.flush();
         }
-    }
-
-    pub fn send_source_code(
-        &mut self,
-        functions: syntax::Functions,
-        source_map: SourceMap,
-    ) {
-        self.flush();
-        self.inner
-            .send(Update::SourceCode {
-                functions,
-                source_map,
-            })
-            .unwrap();
     }
 
     fn should_flush(&self, process: &Process) -> bool {
