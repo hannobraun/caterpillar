@@ -51,7 +51,7 @@ impl UpdatesTx {
         }
     }
 
-    pub fn queue(
+    pub fn send_source_code(
         &mut self,
         functions: syntax::Functions,
         source_map: SourceMap,
