@@ -1,17 +1,12 @@
 use crate::{
-    breakpoints,
-    process::{self, Process},
-    source_map::SourceMap,
-    state::Memory,
-    syntax,
-    updates::Update,
+    breakpoints, process::Process, source_map::SourceMap, state::Memory,
+    syntax, updates::Update,
 };
 
 use super::model::{ActiveFunctions, Debugger};
 
 pub struct RemoteProcess {
     pub breakpoints: breakpoints::State,
-    pub process2: process::State,
     pub source_code: Option<(syntax::Functions, SourceMap)>,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
@@ -21,7 +16,6 @@ impl RemoteProcess {
     pub fn new() -> Self {
         Self {
             breakpoints: breakpoints::State::default(),
-            process2: process::State::default(),
             source_code: None,
             process: None,
             memory: None,
@@ -39,9 +33,7 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::Process2 { event } => {
-                self.process2.evolve(event);
-            }
+            Update::Process2 { event: _ } => {}
             Update::SourceCode {
                 functions,
                 source_map,
