@@ -15,7 +15,7 @@ use crate::{
     process::Process,
     runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::Updates,
+    updates::{Updates, UpdatesTx},
 };
 
 pub struct RuntimeState {
@@ -28,6 +28,7 @@ pub struct RuntimeState {
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
     pub events_rx: EventsRx,
+    pub updates_tx: UpdatesTx,
     pub updates: Updates,
 }
 
@@ -50,7 +51,7 @@ impl RuntimeState {
         let (events_tx, events_rx) = mpsc::unbounded_channel();
 
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
-        let mut updates = Updates::new(updates_tx);
+        let mut updates = Updates::new();
 
         updates.send_source_code(script.functions, source_map);
         ui::start(updates_rx, events_tx);
@@ -76,6 +77,7 @@ impl RuntimeState {
             tiles: [0; NUM_TILES],
             display: None,
             events_rx,
+            updates_tx,
             updates,
         }
     }
@@ -204,6 +206,9 @@ impl RuntimeState {
 
         self.updates
             .send_update_if_necessary(&self.process, &self.memory);
+        for update in self.updates.take_updates() {
+            self.updates_tx.send(update).unwrap();
+        }
 
         display.render(&self.tiles);
     }

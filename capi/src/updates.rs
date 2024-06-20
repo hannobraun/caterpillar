@@ -24,11 +24,13 @@ pub struct Updates {
 }
 
 impl Updates {
-    pub fn new(channel: UpdatesTx) -> Self {
+    pub fn new() -> Self {
         Self {
             latest_memory: None,
             process_at_client: None,
-            transport: Transport { channel },
+            transport: Transport {
+                updates: Vec::new(),
+            },
         }
     }
 
@@ -60,6 +62,10 @@ impl Updates {
         }
     }
 
+    pub fn take_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
+        self.transport.updates.drain(..)
+    }
+
     fn update_is_necessary(&self, process: &Process) -> bool {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
@@ -80,11 +86,11 @@ impl Updates {
 }
 
 struct Transport {
-    channel: UpdatesTx,
+    updates: Vec<Update>,
 }
 
 impl Transport {
     pub fn send(&mut self, update: Update) {
-        self.channel.send(update).unwrap();
+        self.updates.push(update);
     }
 }
