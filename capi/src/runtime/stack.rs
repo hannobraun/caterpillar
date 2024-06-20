@@ -10,7 +10,7 @@ pub struct Stack {
 }
 
 impl Stack {
-    pub fn num_frames(&self) -> usize {
+    fn num_frames(&self) -> usize {
         self.frames.len()
     }
 
