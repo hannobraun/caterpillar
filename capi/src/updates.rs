@@ -90,7 +90,7 @@ struct Transport {
 }
 
 impl Transport {
-    pub fn queue(&mut self, update: Update) {
+    fn queue(&mut self, update: Update) {
         self.updates.push(update);
     }
 }
