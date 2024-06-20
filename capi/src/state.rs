@@ -28,7 +28,7 @@ pub struct RuntimeState {
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
     pub events_rx: EventsRx,
-    pub updates_tx: Updates,
+    pub updates: Updates,
 }
 
 impl RuntimeState {
@@ -76,7 +76,7 @@ impl RuntimeState {
             tiles: [0; NUM_TILES],
             display: None,
             events_rx,
-            updates_tx,
+            updates: updates_tx,
         }
     }
 
@@ -202,7 +202,7 @@ impl RuntimeState {
             }
         }
 
-        self.updates_tx
+        self.updates
             .send_update_if_necessary(&self.process, &self.memory);
 
         display.render(&self.tiles);
