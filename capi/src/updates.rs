@@ -51,7 +51,7 @@ pub struct UpdatesTx {
 }
 
 impl UpdatesTx {
-    pub fn handle_events(
+    pub fn send_update_if_necessary(
         &mut self,
         breakpoints: &mut Breakpoints,
         process: &mut Process,
