@@ -1,4 +1,4 @@
-use crate::{breakpoints, process::Process, source_map::SourceMap, syntax};
+use crate::{process::Process, source_map::SourceMap, syntax};
 
 use super::Function;
 
@@ -11,7 +11,6 @@ pub enum ActiveFunctions {
 impl ActiveFunctions {
     pub fn new(
         source_code: Option<(&syntax::Functions, &SourceMap)>,
-        _: &breakpoints::State,
         process: Option<&Process>,
     ) -> Self {
         let Some((functions, source_map)) = source_code else {
