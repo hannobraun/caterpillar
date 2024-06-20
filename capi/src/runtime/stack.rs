@@ -10,10 +10,6 @@ pub struct Stack {
 }
 
 impl Stack {
-    fn num_frames(&self) -> usize {
-        self.frames.len()
-    }
-
     pub fn bindings(&self) -> Option<&Bindings> {
         self.frames.last().map(|frame| &frame.bindings)
     }
@@ -67,7 +63,7 @@ impl Stack {
         function: Function,
     ) -> Result<(), PushFrameError> {
         const RECURSION_LIMIT: usize = 8;
-        if self.num_frames() >= RECURSION_LIMIT {
+        if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushFrameError::Overflow);
         }
 
