@@ -33,7 +33,7 @@ pub extern "C" fn on_frame() {
     for update in state.updates.take_queued_updates() {
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
-        let buffer = unsafe { UPDATES_TX.access_write() };
+        let buffer = unsafe { UPDATES_TX.access() };
         buffer.write_frame(&update);
 
         let update = buffer.read_frame().to_vec();
@@ -79,7 +79,7 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
     /// The caller must not call this method again, while the returned reference
     /// still exists.
     #[allow(clippy::mut_from_ref)] // function is `unsafe` and well-documented
-    pub unsafe fn access_write(&self) -> &mut FrameBuffer<SIZE> {
+    pub unsafe fn access(&self) -> &mut FrameBuffer<SIZE> {
         &mut *self.inner.get()
     }
 }
