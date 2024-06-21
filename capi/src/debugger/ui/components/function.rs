@@ -77,13 +77,13 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         };
         let location = ron::from_str(&location).unwrap();
 
-        let event = if element.has_attribute("data-breakpoint") {
+        let command = if element.has_attribute("data-breakpoint") {
             DebugCommand::BreakpointClear { location }
         } else {
             DebugCommand::BreakpointSet { location }
         };
 
-        leptos::spawn_local(send_event(event, events.clone()));
+        leptos::spawn_local(send_event(command, events.clone()));
     };
 
     let expression = format!("{}", expression.kind);
