@@ -48,7 +48,7 @@ impl RuntimeState {
         let memory = Memory::default();
 
         let input = Input::default();
-        let (commands_tx, events_rx) = mpsc::unbounded_channel();
+        let (commands_tx, commands_rx) = mpsc::unbounded_channel();
 
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
         let mut updates = Updates::new();
@@ -76,7 +76,7 @@ impl RuntimeState {
             input,
             tiles: [0; NUM_TILES],
             display: None,
-            commands_rx: events_rx,
+            commands_rx,
             updates_tx,
             updates,
         }
