@@ -90,7 +90,7 @@ impl RuntimeState {
 
         loop {
             match self.commands_rx.try_recv() {
-                Ok(event) => match event {
+                Ok(command) => match command {
                     DebugCommand::BreakpointClear { location } => {
                         self.process.clear_durable_breakpoint(location);
                     }
