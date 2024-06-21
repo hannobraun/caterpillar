@@ -2,7 +2,7 @@ use leptos::{component, view, IntoView};
 
 use crate::debugger::{
     model::DebugCommand,
-    ui::{components::panel::Panel, send_event, CommandsTx},
+    ui::{components::panel::Panel, send_command, CommandsTx},
 };
 
 #[component]
@@ -38,7 +38,7 @@ fn Button(
     commands: CommandsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(send_event(command.clone(), commands.clone()));
+        leptos::spawn_local(send_command(command.clone(), commands.clone()));
     };
 
     view! {

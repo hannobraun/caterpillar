@@ -4,7 +4,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 use crate::{
     debugger::{
         model::{DebugCommand, Expression, Function},
-        ui::{send_event, CommandsTx},
+        ui::{send_command, CommandsTx},
     },
     runtime::{BuiltinEffect, EvaluatorEffect},
 };
@@ -86,7 +86,7 @@ pub fn Expression(
             DebugCommand::BreakpointSet { location }
         };
 
-        leptos::spawn_local(send_event(command, commands.clone()));
+        leptos::spawn_local(send_command(command, commands.clone()));
     };
 
     let expression = format!("{}", expression.kind);

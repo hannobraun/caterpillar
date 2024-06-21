@@ -3,6 +3,6 @@ mod events;
 mod start;
 
 pub use self::{
-    events::{send_event, CommandsRx, CommandsTx},
+    events::{send_command, CommandsRx, CommandsTx},
     start::start,
 };
