@@ -219,8 +219,9 @@ impl Default for RuntimeState {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Memory {
+    #[serde(with = "serde_big_array::BigArray")]
     pub inner: [Value; 256],
 }
 

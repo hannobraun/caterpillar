@@ -1,6 +1,15 @@
 use std::fmt;
 
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
+#[derive(
+    Copy,
+    Clone,
+    Debug,
+    Default,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub struct Value(pub i8);
 
 impl From<i8> for Value {

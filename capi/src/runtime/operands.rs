@@ -1,6 +1,8 @@
 use super::Value;
 
-#[derive(Clone, Debug, Eq, PartialEq, Default)]
+#[derive(
+    Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
+)]
 pub struct Operands {
     values: Vec<Value>,
 }
@@ -23,6 +25,14 @@ impl Operands {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    thiserror::Error,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 #[error("Missing operand")]
 pub struct MissingOperand;

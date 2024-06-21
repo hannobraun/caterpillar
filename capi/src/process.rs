@@ -8,7 +8,9 @@ use crate::{
     },
 };
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Process {
     state: ProcessState,
     stack: Stack,
@@ -102,7 +104,9 @@ impl Process {
     }
 }
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct ProcessState {
     most_recent_step: Option<runtime::Location>,
     unhandled_effects: VecDeque<EvaluatorEffect>,

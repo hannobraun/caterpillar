@@ -4,7 +4,9 @@ use crate::runtime::{
     Function, Instruction, Location, MissingOperand, Operands, Value,
 };
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Stack {
     frames: Vec<StackFrame>,
 }
@@ -134,7 +136,7 @@ impl Stack {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct StackFrame {
     pub function: Function,
     pub bindings: Bindings,
@@ -143,7 +145,15 @@ pub struct StackFrame {
 
 pub type Bindings = BTreeMap<String, Value>;
 
-#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    thiserror::Error,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub enum PushFrameError {
     #[error(transparent)]
     MissingOperand(#[from] MissingOperand),

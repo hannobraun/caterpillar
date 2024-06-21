@@ -72,6 +72,7 @@ impl Updates {
 }
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
+#[derive(serde::Deserialize, serde::Serialize)]
 pub enum Update {
     SourceCode {
         functions: syntax::Functions,

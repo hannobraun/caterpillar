@@ -132,7 +132,15 @@ pub enum EvaluatorState {
     Finished,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    thiserror::Error,
+    serde::Deserialize,
+    serde::Serialize,
+)]
 pub enum EvaluatorEffect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,

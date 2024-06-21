@@ -2,7 +2,9 @@ use std::collections::BTreeSet;
 
 use super::{Expression, Location, SyntaxBuilder};
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Functions {
     pub names: BTreeSet<String>,
     pub inner: Vec<Function>,
@@ -37,7 +39,7 @@ impl Functions {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
