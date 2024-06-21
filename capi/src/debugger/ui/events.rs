@@ -7,6 +7,6 @@ pub type CommandsTx = mpsc::UnboundedSender<DebugCommand>;
 
 pub async fn send_event(command: DebugCommand, commands: CommandsTx) {
     if let Err(err) = commands.send(command) {
-        log::error!("Error sending event: {err}");
+        log::error!("Error sending command: {err}");
     }
 }
