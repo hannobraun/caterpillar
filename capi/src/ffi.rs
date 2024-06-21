@@ -4,12 +4,15 @@ use crate::state::RuntimeState;
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
-/// The buffer that is used to transfer updates to the host
+/// The size of the updates buffer
 ///
 /// This is a ridiculous 1 MiB large. It should be possible to make this much
 /// smaller, but for now, we're using a very space-inefficient serialization
 /// format.
-static UPDATES_TX: SharedFrameBuffer<{ 1024 * 1024 }> =
+const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
+
+/// The buffer that is used to transfer updates to the host
+static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
     SharedFrameBuffer::new();
 
 #[no_mangle]
