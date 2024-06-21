@@ -38,7 +38,7 @@ pub fn Debugger(
                     events=events.clone() />
                 <ActiveFunctions
                     active_functions=debugger.active_functions
-                    events=events.clone() />
+                    commands=events.clone() />
                 {stack_explorer}
                 {memory_explorer}
             </div>

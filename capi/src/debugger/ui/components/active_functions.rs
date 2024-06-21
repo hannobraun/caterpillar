@@ -11,7 +11,7 @@ use crate::debugger::{
 #[component]
 pub fn ActiveFunctions(
     active_functions: ActiveFunctions,
-    events: CommandsTx,
+    commands: CommandsTx,
 ) -> impl IntoView {
     let active_functions = match active_functions {
         ActiveFunctions::Functions { functions } => {
@@ -21,7 +21,7 @@ pub fn ActiveFunctions(
                     view! {
                         <Function
                             function=function
-                            events=events.clone() />
+                            events=commands.clone() />
                     }
                 })
                 .collect_view();
