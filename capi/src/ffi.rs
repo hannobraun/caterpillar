@@ -59,7 +59,7 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
         }
     }
 
-    /// # Gain write access to the shared buffer
+    /// # Gain access to the shared buffer
     ///
     /// ## `&self` argument
     ///
@@ -67,9 +67,9 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
     /// This is fine, as the method is `unsafe` and the requirements that derive
     /// from this are documented.
     ///
-    /// If this took `&mut self`, the `SharedBuffer` would need to live in a
-    /// `static mut`, which would have the same pitfalls and more. With the
-    /// current design, `SharedBuffer` can live in a non-`mut` `static`.
+    /// If this took `&mut self`, the `SharedFrameBuffer` would need to live in
+    /// a `static mut`, which would have the same pitfalls and more. With the
+    /// current design, `SharedFrameBuffer` can live in a non-`mut` `static`.
     ///
     /// ## Safety
     ///
