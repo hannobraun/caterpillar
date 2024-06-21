@@ -14,19 +14,19 @@ pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
             <Button
                 label="Reset"
                 command=DebugCommand::Reset
-                events=commands.clone() />
+                commands=commands.clone() />
             <Button
                 label="Stop"
                 command=DebugCommand::Stop
-                events=commands.clone() />
+                commands=commands.clone() />
             <Button
                 label="Continue"
                 command=event_continue
-                events=commands.clone() />
+                commands=commands.clone() />
             <Button
                 label="Step Into"
                 command=DebugCommand::Step
-                events=commands />
+                commands=commands />
         </Panel>
     }
 }
@@ -35,10 +35,10 @@ pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
 fn Button(
     label: &'static str,
     command: DebugCommand,
-    events: CommandsTx,
+    commands: CommandsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
-        leptos::spawn_local(send_event(command.clone(), events.clone()));
+        leptos::spawn_local(send_event(command.clone(), commands.clone()));
     };
 
     view! {
