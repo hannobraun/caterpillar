@@ -15,6 +15,10 @@ const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 static UPDATES_TX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
     SharedFramedBuffer::new();
 
+/// The buffer that is used to transfer updates _from_ the host
+static UPDATES_RX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
+    SharedFramedBuffer::new();
+
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
 /// about the flag being unstable, and `wasm-bindgen-cli-support` crashes on an
@@ -50,6 +54,32 @@ pub fn updates_read_ptr() -> usize {
 #[no_mangle]
 pub fn updates_read_len() -> usize {
     let (_, len) = LAST_UPDATE_READ.lock().unwrap().unwrap();
+    len
+}
+
+/// See comment on [`LAST_UPDATE_READ`]
+static LAST_UPDATE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
+
+#[no_mangle]
+pub fn updates_write(len: usize) {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { UPDATES_RX.access() };
+    let update = buffer.write_frame(len);
+
+    *LAST_UPDATE_WRITE.lock().unwrap() =
+        Some((update.as_ptr() as usize, update.len()));
+}
+
+#[no_mangle]
+pub fn updates_write_ptr() -> usize {
+    let (ptr, _) = LAST_UPDATE_WRITE.lock().unwrap().unwrap();
+    ptr
+}
+
+#[no_mangle]
+pub fn updates_write_len() -> usize {
+    let (_, len) = LAST_UPDATE_WRITE.lock().unwrap().unwrap();
     len
 }
 
