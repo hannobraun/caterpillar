@@ -2,13 +2,13 @@ use tokio::sync::mpsc;
 
 use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
 
-pub type UpdatesRx = mpsc::UnboundedReceiver<Update>;
-pub type UpdatesTx = mpsc::UnboundedSender<Update>;
+pub type UpdatesRx = mpsc::UnboundedReceiver<SerializedUpdate>;
+pub type UpdatesTx = mpsc::UnboundedSender<SerializedUpdate>;
 
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
-    queue: Vec<Update>,
+    queue: Vec<SerializedUpdate>,
 }
 
 impl Updates {
@@ -44,7 +44,9 @@ impl Updates {
         }
     }
 
-    pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
+    pub fn take_queued_updates(
+        &mut self,
+    ) -> impl Iterator<Item = SerializedUpdate> + '_ {
         self.queue.drain(..)
     }
 
@@ -67,6 +69,7 @@ impl Updates {
     }
 
     fn queue(&mut self, update: Update) {
+        let update = update.serialize();
         self.queue.push(update);
     }
 }
@@ -83,3 +86,16 @@ pub enum Update {
         memory: Memory,
     },
 }
+
+impl Update {
+    pub fn deserialize(serialized: SerializedUpdate) -> Self {
+        let s = std::str::from_utf8(&serialized).unwrap();
+        ron::from_str(s).unwrap()
+    }
+
+    pub fn serialize(&self) -> SerializedUpdate {
+        ron::to_string(self).unwrap().into_bytes()
+    }
+}
+
+pub type SerializedUpdate = Vec<u8>;

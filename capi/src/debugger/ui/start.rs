@@ -4,7 +4,7 @@ use crate::{
     debugger::{
         remote_process::RemoteProcess, ui::components::debugger::Debugger,
     },
-    updates::UpdatesRx,
+    updates::{Update, UpdatesRx},
 };
 
 use super::EventsTx;
@@ -28,6 +28,7 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
                 break;
             };
 
+            let update = Update::deserialize(update);
             remote_process.on_update(update);
 
             debugger_write.set(remote_process.to_debugger());
