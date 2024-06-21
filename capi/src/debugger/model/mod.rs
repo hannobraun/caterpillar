@@ -1,10 +1,10 @@
 mod active_functions;
+mod command;
 mod debugger;
-mod event;
 mod expression;
 mod function;
 
 pub use self::{
-    active_functions::ActiveFunctions, debugger::Debugger, event::DebugCommand,
-    expression::Expression, function::Function,
+    active_functions::ActiveFunctions, command::DebugCommand,
+    debugger::Debugger, expression::Expression, function::Function,
 };
