@@ -18,4 +18,8 @@ pub extern "C" fn on_frame() {
     let state = state.get_or_insert_with(Default::default);
 
     state.update();
+
+    for update in state.updates.take_queued_updates() {
+        state.updates_tx.send(update).unwrap();
+    }
 }

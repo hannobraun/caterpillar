@@ -205,9 +205,6 @@ impl RuntimeState {
         }
 
         self.updates.queue_updates(&self.process, &self.memory);
-        for update in self.updates.take_queued_updates() {
-            self.updates_tx.send(update).unwrap();
-        }
 
         display.render(&self.tiles);
     }
