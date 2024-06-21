@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use rand::random;
-use tokio::sync::mpsc::{self, error::TryRecvError};
+use tokio::sync::mpsc;
 
 use crate::{
     compiler::compile,
@@ -89,23 +89,6 @@ impl RuntimeState {
             // Display not initialized yet.
             return;
         };
-
-        loop {
-            match self.commands_rx.try_recv() {
-                Ok(command) => {
-                    let command = DebugCommand::deserialize(command);
-                    self.commands.push(command);
-                }
-                Err(TryRecvError::Empty) => {
-                    break;
-                }
-                Err(TryRecvError::Disconnected) => {
-                    // The other end has hung up, which happens during
-                    // shutdown. Shut down this task, too.
-                    return;
-                }
-            }
-        }
 
         for command in self.commands.drain(..) {
             match command {

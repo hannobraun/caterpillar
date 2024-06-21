@@ -1,6 +1,8 @@
 use std::{cell::UnsafeCell, collections::VecDeque, sync::Mutex};
 
-use crate::state::RuntimeState;
+use tokio::sync::mpsc::error::TryRecvError;
+
+use crate::{debugger::model::DebugCommand, state::RuntimeState};
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
@@ -95,6 +97,23 @@ pub fn on_key(key_code: u8) {
 pub fn on_frame() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
+
+    loop {
+        match state.commands_rx.try_recv() {
+            Ok(command) => {
+                let command = DebugCommand::deserialize(command);
+                state.commands.push(command);
+            }
+            Err(TryRecvError::Empty) => {
+                break;
+            }
+            Err(TryRecvError::Disconnected) => {
+                // The other end has hung up, which happens during
+                // shutdown. Shut down this task, too.
+                return;
+            }
+        }
+    }
 
     state.update();
 
