@@ -103,10 +103,20 @@ pub fn on_frame() {
         // again or we give back control to the host.
         let buffer = unsafe { UPDATES_TX.access() };
         buffer.write_frame(update.len()).copy_from_slice(&update);
-
-        let update = buffer.read_frame().to_vec();
-        state.updates_tx.send(update).unwrap();
     }
+}
+
+#[no_mangle]
+pub fn on_update() {
+    let mut state = STATE.lock().unwrap();
+    let state = state.get_or_insert_with(Default::default);
+
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { UPDATES_RX.access() };
+
+    let update = buffer.read_frame().to_vec();
+    state.updates_tx.send(update).unwrap();
 }
 
 /// # A buffer that is shared with the JavaScript host

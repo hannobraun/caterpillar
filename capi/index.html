@@ -61,7 +61,8 @@
                         wasm.updates_write_len(),
                     );
                     update_tx.set(update_rx);
-                    console.log(update_tx);
+
+                    wasm.on_update();
                 } else {
                     break;
                 }
