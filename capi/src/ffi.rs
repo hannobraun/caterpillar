@@ -16,7 +16,7 @@ static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
     SharedFrameBuffer::new();
 
 #[no_mangle]
-pub extern "C" fn on_key(key_code: u8) {
+pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
@@ -24,7 +24,7 @@ pub extern "C" fn on_key(key_code: u8) {
 }
 
 #[no_mangle]
-pub extern "C" fn on_frame() {
+pub fn on_frame() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
