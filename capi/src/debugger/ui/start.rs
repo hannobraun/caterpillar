@@ -16,7 +16,7 @@ pub fn start(mut updates_rx: UpdatesRx, events_tx: CommandsTx) {
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger debugger=debugger_read events=events_tx />
+            <Debugger debugger=debugger_read commands=events_tx />
         }
     });
 
