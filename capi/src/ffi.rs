@@ -99,11 +99,8 @@ pub fn on_frame() {
     let state = state.get_or_insert_with(Default::default);
 
     loop {
-        match state.commands_rx.try_recv() {
-            Ok(command) => {
-                let command = DebugCommand::deserialize(command);
-                state.commands.push(command);
-            }
+        let command = match state.commands_rx.try_recv() {
+            Ok(command) => command,
             Err(TryRecvError::Empty) => {
                 break;
             }
@@ -112,7 +109,10 @@ pub fn on_frame() {
                 // shutdown. Shut down this task, too.
                 return;
             }
-        }
+        };
+
+        let command = DebugCommand::deserialize(command);
+        state.commands.push(command);
     }
 
     state.update();
