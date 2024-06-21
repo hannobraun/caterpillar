@@ -87,13 +87,13 @@ pub fn on_frame() {
 /// use it in a multi-threaded context.
 #[repr(transparent)]
 pub struct SharedFrameBuffer<const SIZE: usize> {
-    inner: UnsafeCell<FrameBuffer<SIZE>>,
+    inner: UnsafeCell<FramedBuffer<SIZE>>,
 }
 
 impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
     pub const fn new() -> Self {
         Self {
-            inner: UnsafeCell::new(FrameBuffer::new()),
+            inner: UnsafeCell::new(FramedBuffer::new()),
         }
     }
 
@@ -117,7 +117,7 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
     /// The caller must not call this method again, while the returned reference
     /// still exists.
     #[allow(clippy::mut_from_ref)] // function is `unsafe` and well-documented
-    pub unsafe fn access(&self) -> &mut FrameBuffer<SIZE> {
+    pub unsafe fn access(&self) -> &mut FramedBuffer<SIZE> {
         &mut *self.inner.get()
     }
 }
@@ -126,12 +126,12 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
 // context.
 unsafe impl<const SIZE: usize> Sync for SharedFrameBuffer<SIZE> {}
 
-pub struct FrameBuffer<const SIZE: usize> {
+pub struct FramedBuffer<const SIZE: usize> {
     buffer: [u8; SIZE],
     frames: VecDeque<BufferFrame>,
 }
 
-impl<const SIZE: usize> FrameBuffer<SIZE> {
+impl<const SIZE: usize> FramedBuffer<SIZE> {
     pub const fn new() -> Self {
         Self {
             buffer: [0; SIZE],
