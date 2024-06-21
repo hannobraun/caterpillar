@@ -6,7 +6,7 @@ use crate::debugger::{
 };
 
 #[component]
-pub fn ControlPanel(events: CommandsTx) -> impl IntoView {
+pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {
     let event_continue = DebugCommand::Continue { and_stop_at: None };
 
     view! {
@@ -14,19 +14,19 @@ pub fn ControlPanel(events: CommandsTx) -> impl IntoView {
             <Button
                 label="Reset"
                 command=DebugCommand::Reset
-                events=events.clone() />
+                events=commands.clone() />
             <Button
                 label="Stop"
                 command=DebugCommand::Stop
-                events=events.clone() />
+                events=commands.clone() />
             <Button
                 label="Continue"
                 command=event_continue
-                events=events.clone() />
+                events=commands.clone() />
             <Button
                 label="Step Into"
                 command=DebugCommand::Step
-                events=events />
+                events=commands />
         </Panel>
     }
 }

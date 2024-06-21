@@ -35,7 +35,7 @@ pub fn Debugger(
         view! {
             <div>
                 <ControlPanel
-                    events=events.clone() />
+                    commands=events.clone() />
                 <ActiveFunctions
                     active_functions=debugger.active_functions
                     commands=events.clone() />
