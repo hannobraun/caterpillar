@@ -2,7 +2,7 @@ use std::{cell::UnsafeCell, collections::VecDeque, sync::Mutex};
 
 use tokio::sync::mpsc::error::TryRecvError;
 
-use crate::{debugger::model::DebugCommand, state::RuntimeState};
+use crate::state::RuntimeState;
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
@@ -111,7 +111,6 @@ pub fn on_frame() {
             }
         };
 
-        let command = DebugCommand::deserialize(command);
         state.commands.push(command);
     }
 

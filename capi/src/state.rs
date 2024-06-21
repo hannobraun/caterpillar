@@ -6,7 +6,7 @@ use tokio::sync::mpsc;
 use crate::{
     compiler::compile,
     debugger::{
-        model::DebugCommand,
+        model::{DebugCommand, SerializedCommand},
         ui::{self, CommandsRx},
     },
     display::Display,
@@ -29,7 +29,7 @@ pub struct RuntimeState {
     pub display: Option<Display>,
     pub commands_rx: CommandsRx,
     pub updates_tx: UpdatesTx,
-    pub commands: Vec<DebugCommand>,
+    pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }
 
@@ -91,6 +91,8 @@ impl RuntimeState {
         };
 
         for command in self.commands.drain(..) {
+            let command = DebugCommand::deserialize(command);
+
             match command {
                 DebugCommand::BreakpointClear { location } => {
                     self.process.clear_durable_breakpoint(location);
