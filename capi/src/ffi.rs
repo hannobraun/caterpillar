@@ -12,8 +12,8 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
 /// The buffer that is used to transfer updates _to_ the host
-static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
-    SharedFrameBuffer::new();
+static UPDATES_TX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
+    SharedFramedBuffer::new();
 
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
@@ -86,11 +86,11 @@ pub fn on_frame() {
 /// This data structure is designed for use in WebAssembly. It is _unsound_ to
 /// use it in a multi-threaded context.
 #[repr(transparent)]
-pub struct SharedFrameBuffer<const SIZE: usize> {
+pub struct SharedFramedBuffer<const SIZE: usize> {
     inner: UnsafeCell<FramedBuffer<SIZE>>,
 }
 
-impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
+impl<const SIZE: usize> SharedFramedBuffer<SIZE> {
     pub const fn new() -> Self {
         Self {
             inner: UnsafeCell::new(FramedBuffer::new()),
@@ -124,7 +124,7 @@ impl<const SIZE: usize> SharedFrameBuffer<SIZE> {
 
 // Safe to implement, since with WebAssembly, this lives in a single-threaded
 // context.
-unsafe impl<const SIZE: usize> Sync for SharedFrameBuffer<SIZE> {}
+unsafe impl<const SIZE: usize> Sync for SharedFramedBuffer<SIZE> {}
 
 pub struct FramedBuffer<const SIZE: usize> {
     buffer: [u8; SIZE],
