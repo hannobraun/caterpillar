@@ -15,6 +15,44 @@ const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
     SharedFrameBuffer::new();
 
+/// This is a workaround for not being able to return a tuple from
+/// `updates_read`. That should work in principle (see [1]), but Rust warns
+/// about the flag being unstable, and `wasm-bindgen-cli-support` crashes on an
+/// assertion. It seems to be possible to make `wasm-bindgen` work[2], but that
+/// doesn't seem worth the effort right now.
+///
+/// It might be worth revisiting this, once this crate no longer depends on
+/// `wasm-bindgen`. There's also discussion about enabling the required flag by
+/// default in LLVM[3], so long-term, this might take care of itself.
+///
+/// [1]: https://github.com/rust-lang/rust/issues/73755#issuecomment-1577586801
+/// [2]: https://github.com/rustwasm/wasm-bindgen/issues/3552
+/// [3]: https://github.com/WebAssembly/tool-conventions/issues/158
+static LAST_UPDATE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
+
+#[no_mangle]
+pub fn updates_read() {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { UPDATES_TX.access() };
+    let update = buffer.read_frame();
+
+    *LAST_UPDATE.lock().unwrap() =
+        Some((update.as_ptr() as usize, update.len()));
+}
+
+#[no_mangle]
+pub fn updates_read_ptr() -> usize {
+    let (ptr, _) = LAST_UPDATE.lock().unwrap().unwrap();
+    ptr
+}
+
+#[no_mangle]
+pub fn updates_read_len() -> usize {
+    let (_, len) = LAST_UPDATE.lock().unwrap().unwrap();
+    len
+}
+
 #[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();

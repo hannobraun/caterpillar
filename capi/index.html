@@ -44,6 +44,12 @@
 
         function mainLoop() {
             wasm.on_frame();
+
+            wasm.updates_read();
+            const update_ptr = wasm.updates_read_ptr();
+            const update_len = wasm.updates_read_len();
+            console.log(update_ptr, update_len);
+
             requestAnimationFrame(mainLoop);
         }
     </script>
