@@ -29,6 +29,7 @@ pub struct RuntimeState {
     pub display: Option<Display>,
     pub commands_rx: CommandsRx,
     pub updates_tx: UpdatesTx,
+    pub commands: Vec<DebugCommand>,
     pub updates: Updates,
 }
 
@@ -78,6 +79,7 @@ impl RuntimeState {
             display: None,
             commands_rx,
             updates_tx,
+            commands: Vec::new(),
             updates,
         }
     }
@@ -92,42 +94,7 @@ impl RuntimeState {
             match self.commands_rx.try_recv() {
                 Ok(command) => {
                     let command = DebugCommand::deserialize(command);
-
-                    match command {
-                        DebugCommand::BreakpointClear { location } => {
-                            self.process.clear_durable_breakpoint(location);
-                        }
-                        DebugCommand::BreakpointSet { location } => {
-                            self.process.set_durable_breakpoint(location);
-                        }
-                        DebugCommand::Continue { and_stop_at } => {
-                            self.process.continue_(and_stop_at);
-                        }
-                        DebugCommand::Reset => {
-                            self.process.reset(
-                                self.entry.clone(),
-                                self.arguments.clone(),
-                            );
-                            self.memory.zero();
-                        }
-                        DebugCommand::Step => {
-                            if let Some(EvaluatorEffect::Builtin(
-                                BuiltinEffect::Breakpoint,
-                            )) =
-                                self.process.state().first_unhandled_effect()
-                            {
-                                let and_stop_at = self
-                                    .process
-                                    .stack()
-                                    .next_instruction_overall()
-                                    .unwrap();
-                                self.process.continue_(Some(and_stop_at))
-                            }
-                        }
-                        DebugCommand::Stop => {
-                            self.process.stop();
-                        }
-                    }
+                    self.commands.push(command);
                 }
                 Err(TryRecvError::Empty) => {
                     break;
@@ -136,6 +103,41 @@ impl RuntimeState {
                     // The other end has hung up, which happens during
                     // shutdown. Shut down this task, too.
                     return;
+                }
+            }
+        }
+
+        for command in self.commands.drain(..) {
+            match command {
+                DebugCommand::BreakpointClear { location } => {
+                    self.process.clear_durable_breakpoint(location);
+                }
+                DebugCommand::BreakpointSet { location } => {
+                    self.process.set_durable_breakpoint(location);
+                }
+                DebugCommand::Continue { and_stop_at } => {
+                    self.process.continue_(and_stop_at);
+                }
+                DebugCommand::Reset => {
+                    self.process
+                        .reset(self.entry.clone(), self.arguments.clone());
+                    self.memory.zero();
+                }
+                DebugCommand::Step => {
+                    if let Some(EvaluatorEffect::Builtin(
+                        BuiltinEffect::Breakpoint,
+                    )) = self.process.state().first_unhandled_effect()
+                    {
+                        let and_stop_at = self
+                            .process
+                            .stack()
+                            .next_instruction_overall()
+                            .unwrap();
+                        self.process.continue_(Some(and_stop_at))
+                    }
+                }
+                DebugCommand::Stop => {
+                    self.process.stop();
                 }
             }
         }
