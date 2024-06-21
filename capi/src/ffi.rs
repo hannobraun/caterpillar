@@ -9,7 +9,8 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 /// This is a ridiculous 1 MiB large. It should be possible to make this much
 /// smaller, but for now, we're using a very space-inefficient serialization
 /// format.
-static UPDATES: SharedFrameBuffer<{ 1024 * 1024 }> = SharedFrameBuffer::new();
+static UPDATES_TX: SharedFrameBuffer<{ 1024 * 1024 }> =
+    SharedFrameBuffer::new();
 
 #[no_mangle]
 pub extern "C" fn on_key(key_code: u8) {
@@ -29,7 +30,7 @@ pub extern "C" fn on_frame() {
     for update in state.updates.take_queued_updates() {
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
-        let buffer = unsafe { UPDATES.access_write() };
+        let buffer = unsafe { UPDATES_TX.access_write() };
         buffer.write_frame(&update);
 
         let update = buffer.read_frame().to_vec();
