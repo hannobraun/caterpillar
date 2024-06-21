@@ -21,6 +21,8 @@ static UPDATES_TX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
 static UPDATES_RX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
     SharedFramedBuffer::new();
 
+static COMMANDS: SharedFramedBuffer<1024> = SharedFramedBuffer::new();
+
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
 /// about the flag being unstable, and `wasm-bindgen-cli-support` crashes on an
@@ -111,6 +113,12 @@ pub fn on_frame() {
             }
         };
 
+        // Sound, because the reference is dropped before we call the method
+        // again or we give back control to the host.
+        let buffer = unsafe { COMMANDS.access() };
+        buffer.write_frame(command.len()).copy_from_slice(&command);
+
+        let command = buffer.read_frame().to_vec();
         state.commands.push(command);
     }
 
