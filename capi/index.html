@@ -45,21 +45,27 @@
         function mainLoop() {
             wasm.on_frame();
 
-            wasm.updates_read();
-            const update_rx = new Uint8Array(
-                wasm.memory.buffer,
-                wasm.updates_read_ptr(),
-                wasm.updates_read_len(),
-            );
+            while (true) {
+                wasm.updates_read();
+                const update_rx = new Uint8Array(
+                    wasm.memory.buffer,
+                    wasm.updates_read_ptr(),
+                    wasm.updates_read_len(),
+                );
 
-            wasm.updates_write(update_rx.byteLength);
-            const update_tx = new Uint8Array(
-                wasm.memory.buffer,
-                wasm.updates_write_ptr(),
-                wasm.updates_write_len(),
-            );
-            update_tx.set(update_rx);
-            console.log(update_tx);
+                if (update_rx.byteLength > 0) {
+                    wasm.updates_write(update_rx.byteLength);
+                    const update_tx = new Uint8Array(
+                        wasm.memory.buffer,
+                        wasm.updates_write_ptr(),
+                        wasm.updates_write_len(),
+                    );
+                    update_tx.set(update_rx);
+                    console.log(update_tx);
+                } else {
+                    break;
+                }
+            }
 
             requestAnimationFrame(mainLoop);
         }
