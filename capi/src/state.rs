@@ -27,7 +27,7 @@ pub struct RuntimeState {
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
-    pub events_rx: CommandsRx,
+    pub commands_rx: CommandsRx,
     pub updates_tx: UpdatesTx,
     pub updates: Updates,
 }
@@ -76,7 +76,7 @@ impl RuntimeState {
             input,
             tiles: [0; NUM_TILES],
             display: None,
-            events_rx,
+            commands_rx: events_rx,
             updates_tx,
             updates,
         }
@@ -89,7 +89,7 @@ impl RuntimeState {
         };
 
         loop {
-            match self.events_rx.try_recv() {
+            match self.commands_rx.try_recv() {
                 Ok(event) => match event {
                     DebugCommand::BreakpointClear { location } => {
                         self.process.clear_durable_breakpoint(location);
