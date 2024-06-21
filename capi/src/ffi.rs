@@ -21,7 +21,10 @@ static UPDATES_TX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
 static UPDATES_RX: SharedFramedBuffer<UPDATES_BUFFER_SIZE> =
     SharedFramedBuffer::new();
 
-static COMMANDS_TX: SharedFramedBuffer<1024> = SharedFramedBuffer::new();
+const COMMANDS_BUFFER_SIZE: usize = 1024;
+
+static COMMANDS_TX: SharedFramedBuffer<COMMANDS_BUFFER_SIZE> =
+    SharedFramedBuffer::new();
 
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
