@@ -1,11 +1,11 @@
 use tokio::sync::mpsc;
 
-use crate::debugger::model::DebugEvent;
+use crate::debugger::model::DebugCommand;
 
-pub type EventsRx = mpsc::UnboundedReceiver<DebugEvent>;
-pub type EventsTx = mpsc::UnboundedSender<DebugEvent>;
+pub type EventsRx = mpsc::UnboundedReceiver<DebugCommand>;
+pub type EventsTx = mpsc::UnboundedSender<DebugCommand>;
 
-pub async fn send_event(event: DebugEvent, events: EventsTx) {
+pub async fn send_event(event: DebugCommand, events: EventsTx) {
     if let Err(err) = events.send(event) {
         log::error!("Error sending event: {err}");
     }

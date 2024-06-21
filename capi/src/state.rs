@@ -6,7 +6,7 @@ use tokio::sync::mpsc::{self, error::TryRecvError};
 use crate::{
     compiler::compile,
     debugger::{
-        model::DebugEvent,
+        model::DebugCommand,
         ui::{self, EventsRx},
     },
     display::Display,
@@ -91,21 +91,21 @@ impl RuntimeState {
         loop {
             match self.events_rx.try_recv() {
                 Ok(event) => match event {
-                    DebugEvent::BreakpointClear { location } => {
+                    DebugCommand::BreakpointClear { location } => {
                         self.process.clear_durable_breakpoint(location);
                     }
-                    DebugEvent::BreakpointSet { location } => {
+                    DebugCommand::BreakpointSet { location } => {
                         self.process.set_durable_breakpoint(location);
                     }
-                    DebugEvent::Continue { and_stop_at } => {
+                    DebugCommand::Continue { and_stop_at } => {
                         self.process.continue_(and_stop_at);
                     }
-                    DebugEvent::Reset => {
+                    DebugCommand::Reset => {
                         self.process
                             .reset(self.entry.clone(), self.arguments.clone());
                         self.memory.zero();
                     }
-                    DebugEvent::Step => {
+                    DebugCommand::Step => {
                         if let Some(EvaluatorEffect::Builtin(
                             BuiltinEffect::Breakpoint,
                         )) = self.process.state().first_unhandled_effect()
@@ -118,7 +118,7 @@ impl RuntimeState {
                             self.process.continue_(Some(and_stop_at))
                         }
                     }
-                    DebugEvent::Stop => {
+                    DebugCommand::Stop => {
                         self.process.stop();
                     }
                 },

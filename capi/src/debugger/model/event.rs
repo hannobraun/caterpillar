@@ -1,7 +1,7 @@
 use crate::runtime;
 
 #[derive(Clone, Debug)]
-pub enum DebugEvent {
+pub enum DebugCommand {
     BreakpointClear {
         location: runtime::Location,
     },

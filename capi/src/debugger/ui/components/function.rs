@@ -3,7 +3,7 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::{
     debugger::{
-        model::{DebugEvent, Expression, Function},
+        model::{DebugCommand, Expression, Function},
         ui::{send_event, EventsTx},
     },
     runtime::{BuiltinEffect, EvaluatorEffect},
@@ -78,9 +78,9 @@ pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
         let location = ron::from_str(&location).unwrap();
 
         let event = if element.has_attribute("data-breakpoint") {
-            DebugEvent::BreakpointClear { location }
+            DebugCommand::BreakpointClear { location }
         } else {
-            DebugEvent::BreakpointSet { location }
+            DebugCommand::BreakpointSet { location }
         };
 
         leptos::spawn_local(send_event(event, events.clone()));

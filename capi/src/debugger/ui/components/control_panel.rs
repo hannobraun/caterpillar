@@ -1,23 +1,23 @@
 use leptos::{component, view, IntoView};
 
 use crate::debugger::{
-    model::DebugEvent,
+    model::DebugCommand,
     ui::{components::panel::Panel, send_event, EventsTx},
 };
 
 #[component]
 pub fn ControlPanel(events: EventsTx) -> impl IntoView {
-    let event_continue = DebugEvent::Continue { and_stop_at: None };
+    let event_continue = DebugCommand::Continue { and_stop_at: None };
 
     view! {
         <Panel class="">
             <Button
                 label="Reset"
-                event=DebugEvent::Reset
+                event=DebugCommand::Reset
                 events=events.clone() />
             <Button
                 label="Stop"
-                event=DebugEvent::Stop
+                event=DebugCommand::Stop
                 events=events.clone() />
             <Button
                 label="Continue"
@@ -25,7 +25,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
                 events=events.clone() />
             <Button
                 label="Step Into"
-                event=DebugEvent::Step
+                event=DebugCommand::Step
                 events=events />
         </Panel>
     }
@@ -34,7 +34,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
 #[component]
 fn Button(
     label: &'static str,
-    event: DebugEvent,
+    event: DebugCommand,
     events: EventsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
