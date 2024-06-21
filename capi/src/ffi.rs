@@ -28,7 +28,7 @@ static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
 /// [1]: https://github.com/rust-lang/rust/issues/73755#issuecomment-1577586801
 /// [2]: https://github.com/rustwasm/wasm-bindgen/issues/3552
 /// [3]: https://github.com/WebAssembly/tool-conventions/issues/158
-static LAST_UPDATE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
+static LAST_UPDATE_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 
 #[no_mangle]
 pub fn updates_read() {
@@ -37,19 +37,19 @@ pub fn updates_read() {
     let buffer = unsafe { UPDATES_TX.access() };
     let update = buffer.read_frame();
 
-    *LAST_UPDATE.lock().unwrap() =
+    *LAST_UPDATE_READ.lock().unwrap() =
         Some((update.as_ptr() as usize, update.len()));
 }
 
 #[no_mangle]
 pub fn updates_read_ptr() -> usize {
-    let (ptr, _) = LAST_UPDATE.lock().unwrap().unwrap();
+    let (ptr, _) = LAST_UPDATE_READ.lock().unwrap().unwrap();
     ptr
 }
 
 #[no_mangle]
 pub fn updates_read_len() -> usize {
-    let (_, len) = LAST_UPDATE.lock().unwrap().unwrap();
+    let (_, len) = LAST_UPDATE_READ.lock().unwrap().unwrap();
     len
 }
 
