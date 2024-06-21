@@ -11,7 +11,7 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 /// format.
 const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
-/// The buffer that is used to transfer updates to the host
+/// The buffer that is used to transfer updates _to_ the host
 static UPDATES_TX: SharedFrameBuffer<UPDATES_BUFFER_SIZE> =
     SharedFrameBuffer::new();
 
