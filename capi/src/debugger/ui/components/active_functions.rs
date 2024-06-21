@@ -21,7 +21,7 @@ pub fn ActiveFunctions(
                     view! {
                         <Function
                             function=function
-                            events=commands.clone() />
+                            commands=commands.clone() />
                     }
                 })
                 .collect_view();

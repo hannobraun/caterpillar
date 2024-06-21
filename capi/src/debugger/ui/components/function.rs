@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[component]
-pub fn Function(function: Function, events: CommandsTx) -> impl IntoView {
+pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
     let expressions = function
         .expressions
         .into_iter()
@@ -19,7 +19,7 @@ pub fn Function(function: Function, events: CommandsTx) -> impl IntoView {
                 <li class="ml-8">
                     <Expression
                         expression=expression
-                        events=events.clone() />
+                        events=commands.clone() />
                 </li>
             }
         })
