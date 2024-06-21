@@ -1,6 +1,6 @@
 use crate::runtime;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugCommand {
     BreakpointClear {
         location: runtime::Location,
