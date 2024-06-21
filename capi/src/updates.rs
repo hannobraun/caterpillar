@@ -89,8 +89,8 @@ pub enum Update {
 
 impl Update {
     pub fn deserialize(serialized: SerializedUpdate) -> Self {
-        let s = std::str::from_utf8(&serialized).unwrap();
-        ron::from_str(s).unwrap()
+        let string = std::str::from_utf8(&serialized).unwrap();
+        ron::from_str(string).unwrap()
     }
 
     pub fn serialize(&self) -> SerializedUpdate {
