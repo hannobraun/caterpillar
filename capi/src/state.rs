@@ -7,7 +7,7 @@ use crate::{
     compiler::compile,
     debugger::{
         model::DebugCommand,
-        ui::{self, EventsRx},
+        ui::{self, CommandsRx},
     },
     display::Display,
     ffi,
@@ -27,7 +27,7 @@ pub struct RuntimeState {
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
-    pub events_rx: EventsRx,
+    pub events_rx: CommandsRx,
     pub updates_tx: UpdatesTx,
     pub updates: Updates,
 }
