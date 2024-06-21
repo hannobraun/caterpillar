@@ -19,7 +19,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
                 <li class="ml-8">
                     <Expression
                         expression=expression
-                        events=commands.clone() />
+                        commands=commands.clone() />
                 </li>
             }
         })
@@ -38,7 +38,10 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Expression(expression: Expression, events: CommandsTx) -> impl IntoView {
+pub fn Expression(
+    expression: Expression,
+    commands: CommandsTx,
+) -> impl IntoView {
     let mut class_outer = String::from("py-1");
     if expression.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
@@ -83,7 +86,7 @@ pub fn Expression(expression: Expression, events: CommandsTx) -> impl IntoView {
             DebugCommand::BreakpointSet { location }
         };
 
-        leptos::spawn_local(send_event(command, events.clone()));
+        leptos::spawn_local(send_event(command, commands.clone()));
     };
 
     let expression = format!("{}", expression.kind);
