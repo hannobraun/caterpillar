@@ -9,14 +9,14 @@ use crate::{
 
 use super::CommandsTx;
 
-pub fn start(mut updates_rx: UpdatesRx, events_tx: CommandsTx) {
+pub fn start(mut updates_rx: UpdatesRx, commands_tx: CommandsTx) {
     let mut remote_process = RemoteProcess::new();
     let (debugger_read, debugger_write) =
         create_signal(remote_process.to_debugger());
 
     leptos::mount_to_body(move || {
         leptos::view! {
-            <Debugger debugger=debugger_read commands=events_tx />
+            <Debugger debugger=debugger_read commands=commands_tx />
         }
     });
 
