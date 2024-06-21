@@ -48,13 +48,13 @@ impl RuntimeState {
         let memory = Memory::default();
 
         let input = Input::default();
-        let (events_tx, events_rx) = mpsc::unbounded_channel();
+        let (commands_tx, events_rx) = mpsc::unbounded_channel();
 
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
         let mut updates = Updates::new();
 
         updates.queue_source_code(script.functions, source_map);
-        ui::start(updates_rx, events_tx);
+        ui::start(updates_rx, commands_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to
         // be async. We need to do some acrobatics here to deal with that.
