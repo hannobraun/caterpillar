@@ -1,8 +1,8 @@
 mod components;
-mod events;
+mod commands;
 mod start;
 
 pub use self::{
-    events::{send_command, CommandsRx, CommandsTx},
+    commands::{send_command, CommandsRx, CommandsTx},
     start::start,
 };
