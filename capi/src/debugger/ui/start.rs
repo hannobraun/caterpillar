@@ -7,9 +7,9 @@ use crate::{
     updates::{Update, UpdatesRx},
 };
 
-use super::EventsTx;
+use super::CommandsTx;
 
-pub fn start(mut updates_rx: UpdatesRx, events_tx: EventsTx) {
+pub fn start(mut updates_rx: UpdatesRx, events_tx: CommandsTx) {
     let mut remote_process = RemoteProcess::new();
     let (debugger_read, debugger_write) =
         create_signal(remote_process.to_debugger());

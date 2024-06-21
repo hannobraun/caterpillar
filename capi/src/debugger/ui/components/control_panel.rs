@@ -2,11 +2,11 @@ use leptos::{component, view, IntoView};
 
 use crate::debugger::{
     model::DebugCommand,
-    ui::{components::panel::Panel, send_event, EventsTx},
+    ui::{components::panel::Panel, send_event, CommandsTx},
 };
 
 #[component]
-pub fn ControlPanel(events: EventsTx) -> impl IntoView {
+pub fn ControlPanel(events: CommandsTx) -> impl IntoView {
     let event_continue = DebugCommand::Continue { and_stop_at: None };
 
     view! {
@@ -35,7 +35,7 @@ pub fn ControlPanel(events: EventsTx) -> impl IntoView {
 fn Button(
     label: &'static str,
     command: DebugCommand,
-    events: EventsTx,
+    events: CommandsTx,
 ) -> impl IntoView {
     let on_click = move |_| {
         leptos::spawn_local(send_event(command.clone(), events.clone()));

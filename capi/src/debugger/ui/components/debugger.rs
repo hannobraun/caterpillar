@@ -7,14 +7,14 @@ use crate::debugger::{
             active_functions::ActiveFunctions, control_panel::ControlPanel,
             memory_explorer::MemoryExplorer, stack_explorer::StackExplorer,
         },
-        EventsTx,
+        CommandsTx,
     },
 };
 
 #[component]
 pub fn Debugger(
     debugger: ReadSignal<Debugger>,
-    events: EventsTx,
+    events: CommandsTx,
 ) -> impl IntoView {
     move || {
         let debugger = debugger.get();

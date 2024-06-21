@@ -4,13 +4,13 @@ use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 use crate::{
     debugger::{
         model::{DebugCommand, Expression, Function},
-        ui::{send_event, EventsTx},
+        ui::{send_event, CommandsTx},
     },
     runtime::{BuiltinEffect, EvaluatorEffect},
 };
 
 #[component]
-pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
+pub fn Function(function: Function, events: CommandsTx) -> impl IntoView {
     let expressions = function
         .expressions
         .into_iter()
@@ -38,7 +38,7 @@ pub fn Function(function: Function, events: EventsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Expression(expression: Expression, events: EventsTx) -> impl IntoView {
+pub fn Expression(expression: Expression, events: CommandsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
     if expression.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
