@@ -72,7 +72,7 @@ pub fn on_frame() {
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
         let buffer = unsafe { UPDATES_TX.access() };
-        buffer.write_frame(&update);
+        buffer.write_frame(update.len()).copy_from_slice(&update);
 
         let update = buffer.read_frame().to_vec();
         state.updates_tx.send(update).unwrap();
@@ -139,19 +139,17 @@ impl<const SIZE: usize> FrameBuffer<SIZE> {
         }
     }
 
-    pub fn write_frame(&mut self, data: &[u8]) {
+    pub fn write_frame(&mut self, len: usize) -> &mut [u8] {
         let next_free =
             self.frames.back().copied().unwrap_or_default().ends_before;
 
         let new_frame = BufferFrame {
             starts_at: next_free,
-            ends_before: next_free + data.len(),
+            ends_before: next_free + len,
         };
-
-        self.buffer[new_frame.starts_at..new_frame.ends_before]
-            .copy_from_slice(data);
-
         self.frames.push_back(new_frame);
+
+        &mut self.buffer[new_frame.starts_at..new_frame.ends_before]
     }
 
     pub fn read_frame(&mut self) -> &[u8] {
