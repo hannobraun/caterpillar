@@ -55,9 +55,9 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
     bindgen
         .input_path("target/wasm32-unknown-unknown/debug/capi.wasm")
         .web(true)?
-        .generate("capi/dist")?;
+        .generate("crates/capi/dist")?;
 
-    fs::copy("capi/index.html", "capi/dist/index.html").await?;
+    fs::copy("crates/capi/index.html", "crates/capi/dist/index.html").await?;
 
     if updates.send(()).is_err() {
         return Ok(false);

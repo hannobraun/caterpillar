@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["capi", "tools/builder", "tools/daily"]
+members = ["crates/capi", "tools/builder", "tools/daily"]
 default-members = ["tools/builder"]
 
 [profile.dev]
