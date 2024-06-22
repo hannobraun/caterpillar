@@ -2,4 +2,4 @@
 /target
 
 # Trunk
-/capi/dist
+/crates/capi/dist
