@@ -1,4 +1,4 @@
-use super::{
+use crate::runtime::{
     builtins, stack, BuiltinEffect, Code, Instruction, MissingOperand, Stack,
     Value,
 };

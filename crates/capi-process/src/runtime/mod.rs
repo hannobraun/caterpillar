@@ -2,7 +2,6 @@ pub mod builtins;
 pub mod stack;
 
 mod code;
-mod evaluator;
 mod function;
 mod instructions;
 mod location;
@@ -12,7 +11,6 @@ mod value;
 pub use self::{
     builtins::BuiltinEffect,
     code::Code,
-    evaluator::{evaluate, EvaluatorEffect, EvaluatorState},
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
@@ -20,3 +18,5 @@ pub use self::{
     stack::Stack,
     value::Value,
 };
+
+pub use super::evaluator::{evaluate, EvaluatorEffect, EvaluatorState};
