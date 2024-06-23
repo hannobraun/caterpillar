@@ -85,7 +85,7 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
         {
             self.state.add_effect(EvaluatorEffect::Builtin(
-                runtime::BuiltinEffect::Breakpoint,
+                BuiltinEffect::Breakpoint,
             ));
         }
 
