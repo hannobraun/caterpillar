@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::runtime::Location;
+use crate::Location;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,

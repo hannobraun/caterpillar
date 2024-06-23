@@ -1,6 +1,8 @@
 use std::{collections::VecDeque, fmt};
 
-use super::{Location, Value};
+use crate::Location;
+
+use super::Value;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,

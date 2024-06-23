@@ -4,8 +4,8 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
     function::Function,
-    runtime::{Location, Value},
-    BuiltinEffect, Code, EvaluatorEffect, Stack,
+    runtime::Value,
+    BuiltinEffect, Code, EvaluatorEffect, Location, Stack,
 };
 
 #[derive(

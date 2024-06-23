@@ -6,5 +6,3 @@ pub use self::{
     instructions::{Instruction, Instructions},
     value::Value,
 };
-
-pub use super::location::Location;

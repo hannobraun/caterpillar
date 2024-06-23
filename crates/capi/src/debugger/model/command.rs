@@ -1,4 +1,4 @@
-use capi_process::runtime::Location;
+use capi_process::Location;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugCommand {

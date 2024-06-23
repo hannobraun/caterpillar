@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::runtime::Location as RuntimeLocation;
+use capi_process::Location as RuntimeLocation;
 
 use crate::syntax;
 

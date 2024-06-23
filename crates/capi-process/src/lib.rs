@@ -16,6 +16,7 @@ pub use self::{
     code::Code,
     evaluator::EvaluatorEffect,
     function::Function,
+    location::Location,
     operands::Operands,
     process::{Process, ProcessState},
     stack::Stack,

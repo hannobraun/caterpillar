@@ -1,9 +1,6 @@
 use std::collections::BTreeSet;
 
-use capi_process::{
-    runtime::{Instruction, Location},
-    Code, Function,
-};
+use capi_process::{runtime::Instruction, Code, Function, Location};
 
 use crate::{
     source_map::SourceMap,
