@@ -7,6 +7,7 @@ mod process;
 
 pub use self::{
     breakpoints::Breakpoints,
+    code::Code,
     evaluator::EvaluatorEffect,
     process::{Process, ProcessState},
 };

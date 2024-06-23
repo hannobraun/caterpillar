@@ -1,6 +1,9 @@
-use crate::runtime::{
-    builtins, stack, BuiltinEffect, Code, Instruction, MissingOperand, Stack,
-    Value,
+use crate::{
+    runtime::{
+        builtins, stack, BuiltinEffect, Instruction, MissingOperand, Stack,
+        Value,
+    },
+    Code,
 };
 
 pub fn evaluate(

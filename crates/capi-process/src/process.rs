@@ -3,8 +3,8 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
-    runtime::{self, BuiltinEffect, Code, Stack, Value},
-    EvaluatorEffect,
+    runtime::{self, BuiltinEffect, Stack, Value},
+    Code, EvaluatorEffect,
 };
 
 #[derive(
