@@ -1,16 +1,10 @@
-use capi_process::runtime;
+use capi_process::runtime::Location;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugCommand {
-    BreakpointClear {
-        location: runtime::Location,
-    },
-    BreakpointSet {
-        location: runtime::Location,
-    },
-    Continue {
-        and_stop_at: Option<runtime::Location>,
-    },
+    BreakpointClear { location: Location },
+    BreakpointSet { location: Location },
+    Continue { and_stop_at: Option<Location> },
     Reset,
     Step,
     Stop,
