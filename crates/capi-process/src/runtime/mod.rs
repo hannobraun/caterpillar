@@ -19,4 +19,4 @@ pub use self::{
     value::Value,
 };
 
-pub use super::evaluator::{evaluate, EvaluatorEffect, EvaluatorState};
+pub use super::evaluator::{EvaluatorEffect, EvaluatorState};

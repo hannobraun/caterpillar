@@ -2,9 +2,10 @@ use std::collections::VecDeque;
 
 use crate::{
     breakpoints::Breakpoints,
+    evaluator::evaluate,
     runtime::{
-        self, evaluate, BuiltinEffect, Code, EvaluatorEffect, EvaluatorState,
-        Stack, Value,
+        self, BuiltinEffect, Code, EvaluatorEffect, EvaluatorState, Stack,
+        Value,
     },
 };
 
