@@ -1,4 +1,5 @@
-mod instructions;
+pub mod instructions;
+
 mod location;
 mod value;
 
