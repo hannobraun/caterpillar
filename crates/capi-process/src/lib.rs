@@ -1,4 +1,3 @@
-pub mod instructions;
 pub mod runtime;
 
 mod breakpoints;
@@ -6,6 +5,7 @@ mod builtins;
 mod code;
 mod evaluator;
 mod function;
+mod instructions;
 mod location;
 mod operands;
 mod process;
