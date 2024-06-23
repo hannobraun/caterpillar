@@ -63,10 +63,10 @@ impl Stack {
     pub fn push_frame(
         &mut self,
         function: Function,
-    ) -> Result<(), PushFrameError> {
+    ) -> Result<(), PushStackFrameError> {
         const RECURSION_LIMIT: usize = 8;
         if self.frames.len() >= RECURSION_LIMIT {
-            return Err(PushFrameError::Overflow);
+            return Err(PushStackFrameError::Overflow);
         }
 
         let mut new_frame = StackFrame {
@@ -154,7 +154,7 @@ pub type Bindings = BTreeMap<String, Value>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub enum PushFrameError {
+pub enum PushStackFrameError {
     #[error(transparent)]
     MissingOperand(#[from] MissingOperand),
 
