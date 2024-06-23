@@ -1,6 +1,6 @@
 use capi_process::{
-    process::Process,
     runtime::{self, EvaluatorEffect},
+    Process,
 };
 
 use crate::{

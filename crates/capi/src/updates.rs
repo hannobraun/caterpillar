@@ -1,4 +1,4 @@
-use capi_process::process::Process;
+use capi_process::Process;
 use tokio::sync::mpsc;
 
 use crate::{source_map::SourceMap, state::Memory, syntax};

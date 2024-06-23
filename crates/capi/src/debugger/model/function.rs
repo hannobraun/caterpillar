@@ -1,4 +1,4 @@
-use capi_process::process::Process;
+use capi_process::Process;
 
 use crate::{source_map::SourceMap, syntax};
 
