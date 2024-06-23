@@ -1,6 +1,6 @@
 use std::fmt;
 
-use capi_process::runtime::Value;
+use capi_process::Value;
 
 use crate::syntax::Location;
 

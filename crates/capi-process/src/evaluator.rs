@@ -1,6 +1,6 @@
 use crate::{
-    builtins, operands::MissingOperand, runtime::Value,
-    stack::PushStackFrameError, BuiltinEffect, Code, Instruction, Stack,
+    builtins, operands::MissingOperand, stack::PushStackFrameError,
+    BuiltinEffect, Code, Instruction, Stack, Value,
 };
 
 pub fn evaluate(

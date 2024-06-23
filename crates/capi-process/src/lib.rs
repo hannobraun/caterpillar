@@ -1,5 +1,3 @@
-pub mod runtime;
-
 mod breakpoints;
 mod builtins;
 mod code;
@@ -23,4 +21,5 @@ pub use self::{
     operands::Operands,
     process::{Process, ProcessState},
     stack::Stack,
+    value::Value,
 };
