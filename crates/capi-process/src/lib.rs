@@ -1,7 +1,7 @@
-pub mod builtins;
 pub mod runtime;
 
 mod breakpoints;
+mod builtins;
 mod code;
 mod evaluator;
 mod process;
