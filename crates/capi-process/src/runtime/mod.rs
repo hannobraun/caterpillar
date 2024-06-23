@@ -14,5 +14,3 @@ pub use self::{
     stack::Stack,
     value::Value,
 };
-
-pub use super::builtins::BuiltinEffect;
