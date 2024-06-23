@@ -1,3 +1,4 @@
+pub mod instructions;
 pub mod runtime;
 
 mod breakpoints;

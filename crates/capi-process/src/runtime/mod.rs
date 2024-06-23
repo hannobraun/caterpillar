@@ -1,8 +1,5 @@
-pub mod instructions;
-
 mod value;
 
-pub use self::{
-    instructions::{Instruction, Instructions},
-    value::Value,
-};
+pub use self::value::Value;
+
+pub use super::instructions::{Instruction, Instructions};

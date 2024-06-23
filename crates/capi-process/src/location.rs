@@ -1,4 +1,4 @@
-use crate::runtime::instructions::InstructionIndex;
+use crate::instructions::InstructionIndex;
 
 #[derive(
     Clone,
