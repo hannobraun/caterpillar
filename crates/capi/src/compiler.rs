@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use capi_process::{
-    runtime::{self, Instruction},
+    runtime::{Instruction, Location},
     Code, Function,
 };
 
@@ -97,7 +97,7 @@ impl Compiler<'_> {
     ) {
         let index = output.instructions.push(instruction);
 
-        let runtime_location = runtime::Location {
+        let runtime_location = Location {
             function: output.name.clone(),
             index,
         };
