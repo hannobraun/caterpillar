@@ -8,4 +8,4 @@ pub use self::{
     value::Value,
 };
 
-pub use super::operands::{MissingOperand, Operands};
+pub use super::operands::Operands;

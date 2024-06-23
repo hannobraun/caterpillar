@@ -1,6 +1,7 @@
 use crate::{
     builtins,
-    runtime::{Instruction, MissingOperand, Value},
+    operands::MissingOperand,
+    runtime::{Instruction, Value},
     stack::PushStackFrameError,
     BuiltinEffect, Code, Stack,
 };
