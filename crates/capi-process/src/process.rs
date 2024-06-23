@@ -21,7 +21,7 @@ impl Process {
         &self.state
     }
 
-    pub fn stack(&self) -> &runtime::Stack {
+    pub fn stack(&self) -> &Stack {
         &self.stack
     }
 
