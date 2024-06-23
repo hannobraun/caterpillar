@@ -137,7 +137,7 @@ impl Stack {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct StackFrame {
+struct StackFrame {
     pub function: Function,
     pub bindings: Bindings,
     pub operands: Operands,
