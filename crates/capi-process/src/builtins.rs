@@ -1,6 +1,6 @@
 use std::num::TryFromIntError;
 
-use super::{MissingOperand, Stack, Value};
+use crate::runtime::{MissingOperand, Stack, Value};
 
 pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;

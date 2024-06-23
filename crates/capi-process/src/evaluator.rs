@@ -1,7 +1,7 @@
 use crate::{
+    builtins,
     runtime::{
-        builtins, stack, BuiltinEffect, Instruction, MissingOperand, Stack,
-        Value,
+        stack, BuiltinEffect, Instruction, MissingOperand, Stack, Value,
     },
     Code,
 };

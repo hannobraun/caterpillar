@@ -1,3 +1,4 @@
+pub mod builtins;
 pub mod runtime;
 
 mod breakpoints;

@@ -1,4 +1,3 @@
-pub mod builtins;
 pub mod stack;
 
 mod function;
@@ -8,7 +7,6 @@ mod operands;
 mod value;
 
 pub use self::{
-    builtins::BuiltinEffect,
     function::Function,
     instructions::{Instruction, Instructions},
     location::Location,
@@ -16,3 +14,5 @@ pub use self::{
     stack::Stack,
     value::Value,
 };
+
+pub use super::builtins::BuiltinEffect;
