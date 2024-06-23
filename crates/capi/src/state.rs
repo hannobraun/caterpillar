@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use capi_process::{
-    runtime::{self, Value},
+    runtime::{Function, Value},
     BuiltinEffect, Code, EvaluatorEffect, Process,
 };
 use rand::random;
@@ -22,7 +22,7 @@ use crate::{
 
 pub struct RuntimeState {
     pub code: Code,
-    pub entry: runtime::Function,
+    pub entry: Function,
     pub arguments: Vec<Value>,
     pub process: Process,
     pub memory: Memory,
