@@ -1,4 +1,4 @@
-use capi_process::runtime::Operands;
+use capi_process::Operands;
 
 use crate::state::Memory;
 

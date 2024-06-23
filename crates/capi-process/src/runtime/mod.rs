@@ -7,5 +7,3 @@ pub use self::{
     location::Location,
     value::Value,
 };
-
-pub use super::operands::Operands;

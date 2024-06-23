@@ -1,4 +1,4 @@
-use capi_process::runtime::Operands;
+use capi_process::Operands;
 use leptos::{component, view, CollectView, IntoView};
 
 use crate::debugger::ui::components::panel::Panel;
