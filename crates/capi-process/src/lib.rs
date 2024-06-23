@@ -5,6 +5,7 @@ mod builtins;
 mod code;
 mod evaluator;
 mod function;
+mod operands;
 mod process;
 mod stack;
 
