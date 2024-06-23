@@ -1,6 +1,6 @@
-pub mod breakpoints;
 pub mod runtime;
 
+mod breakpoints;
 mod process;
 
 pub use self::{
