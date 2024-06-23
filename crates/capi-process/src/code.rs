@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use super::Function;
+use crate::runtime::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, Default)]
 pub struct Code {

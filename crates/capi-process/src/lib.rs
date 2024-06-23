@@ -1,6 +1,7 @@
 pub mod runtime;
 
 mod breakpoints;
+mod code;
 mod evaluator;
 mod process;
 
