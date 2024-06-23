@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
     function::Function,
-    runtime::{self, Value},
+    runtime::{Location, Value},
     BuiltinEffect, Code, EvaluatorEffect, Stack,
 };
 
@@ -50,15 +50,15 @@ impl Process {
         }
     }
 
-    pub fn clear_durable_breakpoint(&mut self, location: runtime::Location) {
+    pub fn clear_durable_breakpoint(&mut self, location: Location) {
         self.breakpoints.clear_durable(location);
     }
 
-    pub fn set_durable_breakpoint(&mut self, location: runtime::Location) {
+    pub fn set_durable_breakpoint(&mut self, location: Location) {
         self.breakpoints.set_durable(location);
     }
 
-    pub fn continue_(&mut self, and_stop_at: Option<runtime::Location>) {
+    pub fn continue_(&mut self, and_stop_at: Option<Location>) {
         if let Some(EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint)) =
             self.state.first_unhandled_effect()
         {
@@ -108,13 +108,13 @@ impl Process {
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct ProcessState {
-    most_recent_step: Option<runtime::Location>,
+    most_recent_step: Option<Location>,
     unhandled_effects: VecDeque<EvaluatorEffect>,
     has_finished: bool,
 }
 
 impl ProcessState {
-    pub fn most_recent_step(&self) -> Option<runtime::Location> {
+    pub fn most_recent_step(&self) -> Option<Location> {
         self.most_recent_step.clone()
     }
 
