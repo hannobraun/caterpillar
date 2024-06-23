@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::runtime;
+use capi_process::runtime::Location as RuntimeLocation;
 
 use crate::syntax;
 
@@ -8,14 +8,14 @@ use crate::syntax;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    runtime_to_syntax: BTreeMap<runtime::Location, syntax::Location>,
-    syntax_to_runtime: BTreeMap<syntax::Location, runtime::Location>,
+    runtime_to_syntax: BTreeMap<RuntimeLocation, syntax::Location>,
+    syntax_to_runtime: BTreeMap<syntax::Location, RuntimeLocation>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        runtime: runtime::Location,
+        runtime: RuntimeLocation,
         syntax: syntax::Location,
     ) {
         self.runtime_to_syntax
@@ -25,7 +25,7 @@ impl SourceMap {
 
     pub fn runtime_to_syntax(
         &self,
-        runtime: &runtime::Location,
+        runtime: &RuntimeLocation,
     ) -> syntax::Location {
         self.runtime_to_syntax
             .get(runtime)
@@ -39,7 +39,7 @@ impl SourceMap {
     pub fn syntax_to_runtime(
         &self,
         syntax: &syntax::Location,
-    ) -> Option<runtime::Location> {
+    ) -> Option<RuntimeLocation> {
         self.syntax_to_runtime.get(syntax).cloned()
     }
 }
