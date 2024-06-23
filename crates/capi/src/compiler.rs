@@ -7,7 +7,7 @@ use capi_process::{
 
 use crate::{
     source_map::SourceMap,
-    syntax::{self, Expression, Function, Script},
+    syntax::{self, Expression, Script},
 };
 
 use super::syntax::ExpressionKind;
@@ -22,7 +22,7 @@ pub fn compile(script: &Script) -> (Code, SourceMap) {
         source_map: &mut source_map,
     };
 
-    for Function { name, args, syntax } in &script.functions.inner {
+    for syntax::Function { name, args, syntax } in &script.functions.inner {
         compiler.compile_function(name.clone(), args.clone(), syntax.clone());
     }
 
