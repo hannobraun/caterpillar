@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use capi_process::runtime::{self, Instruction};
+use capi_process::runtime::{self, Code, Instruction};
 
 use crate::{
     source_map::SourceMap,
@@ -9,8 +9,8 @@ use crate::{
 
 use super::syntax::ExpressionKind;
 
-pub fn compile(script: &Script) -> (runtime::Code, SourceMap) {
-    let mut code = runtime::Code::default();
+pub fn compile(script: &Script) -> (Code, SourceMap) {
+    let mut code = Code::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
@@ -28,7 +28,7 @@ pub fn compile(script: &Script) -> (runtime::Code, SourceMap) {
 
 struct Compiler<'r> {
     functions: &'r BTreeSet<String>,
-    code: &'r mut runtime::Code,
+    code: &'r mut Code,
     source_map: &'r mut SourceMap,
 }
 
