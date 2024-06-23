@@ -1,12 +1,10 @@
+use capi_process::runtime::{BuiltinEffect, EvaluatorEffect};
 use leptos::{component, view, CollectView, IntoView};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
-use crate::{
-    debugger::{
-        model::{DebugCommand, Expression, Function},
-        ui::{send_command, CommandsTx},
-    },
-    runtime::{BuiltinEffect, EvaluatorEffect},
+use crate::debugger::{
+    model::{DebugCommand, Expression, Function},
+    ui::{send_command, CommandsTx},
 };
 
 #[component]

@@ -308,6 +308,7 @@ name = "capi"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "capi-process",
  "console_error_panic_hook",
  "console_log",
  "futures",
@@ -320,10 +321,17 @@ dependencies = [
  "ron",
  "serde",
  "serde-big-array",
- "thiserror",
  "tokio",
  "wasm-bindgen",
  "web-sys",
+]
+
+[[package]]
+name = "capi-process"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "thiserror",
 ]
 
 [[package]]

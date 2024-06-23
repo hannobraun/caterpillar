@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
-use crate::{runtime, syntax};
+use capi_process::runtime;
+
+use crate::syntax;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,

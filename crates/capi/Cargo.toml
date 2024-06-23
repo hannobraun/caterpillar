@@ -14,9 +14,11 @@ rand = "*"
 raw-window-handle = "0.5"
 ron = "*"
 serde-big-array = "*"
-thiserror = "*"
 wasm-bindgen = "*"
 web-sys = "*"
+
+[dependencies.capi-process]
+path = "../capi-process"
 
 [dependencies.console_log]
 version = "*"

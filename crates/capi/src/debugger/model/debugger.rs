@@ -1,4 +1,6 @@
-use crate::{runtime::Operands, state::Memory};
+use capi_process::runtime::Operands;
+
+use crate::state::Memory;
 
 use super::ActiveFunctions;
 

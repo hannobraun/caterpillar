@@ -1,4 +1,6 @@
-use crate::{process::Process, source_map::SourceMap, syntax};
+use capi_process::process::Process;
+
+use crate::{source_map::SourceMap, syntax};
 
 use super::Function;
 

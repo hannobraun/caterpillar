@@ -1,4 +1,4 @@
-use crate::runtime;
+use capi_process::runtime;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum DebugCommand {

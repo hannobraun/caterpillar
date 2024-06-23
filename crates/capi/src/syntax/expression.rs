@@ -1,6 +1,8 @@
 use std::fmt;
 
-use crate::{runtime::Value, syntax::Location};
+use capi_process::runtime::Value;
+
+use crate::syntax::Location;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {

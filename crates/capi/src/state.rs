@@ -1,5 +1,9 @@
 use std::collections::VecDeque;
 
+use capi_process::{
+    process::Process,
+    runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
+};
 use rand::random;
 use tokio::sync::mpsc;
 
@@ -12,8 +16,6 @@ use crate::{
     display::Display,
     ffi,
     games::snake::snake,
-    process::Process,
-    runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{Updates, UpdatesTx},
 };

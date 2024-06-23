@@ -1,0 +1,11 @@
+[package]
+name = "capi-process"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = "*"
+
+[dependencies.serde]
+version = "*"
+features = ["derive"]

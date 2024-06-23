@@ -1,6 +1,7 @@
+use capi_process::process::Process;
 use tokio::sync::mpsc;
 
-use crate::{process::Process, source_map::SourceMap, state::Memory, syntax};
+use crate::{source_map::SourceMap, state::Memory, syntax};
 
 pub type UpdatesRx = mpsc::UnboundedReceiver<SerializedUpdate>;
 pub type UpdatesTx = mpsc::UnboundedSender<SerializedUpdate>;

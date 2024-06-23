@@ -1,7 +1,6 @@
-use crate::{
-    process::Process, source_map::SourceMap, state::Memory, syntax,
-    updates::Update,
-};
+use capi_process::process::Process;
+
+use crate::{source_map::SourceMap, state::Memory, syntax, updates::Update};
 
 use super::model::{ActiveFunctions, Debugger};
 
