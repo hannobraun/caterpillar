@@ -4,6 +4,7 @@ mod breakpoints;
 mod builtins;
 mod code;
 mod evaluator;
+mod function;
 mod process;
 mod stack;
 
