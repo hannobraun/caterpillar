@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
-use crate::runtime::{
-    Function, Instruction, Location, MissingOperand, Operands, Value,
+use crate::{
+    runtime::{Instruction, Location, MissingOperand, Operands, Value},
+    Function,
 };
 
 #[derive(

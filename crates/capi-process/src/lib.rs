@@ -13,6 +13,7 @@ pub use self::{
     builtins::BuiltinEffect,
     code::Code,
     evaluator::EvaluatorEffect,
+    function::Function,
     process::{Process, ProcessState},
     stack::Stack,
 };

@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 
 use capi_process::{
-    runtime::{self, Function, Instruction},
-    Code,
+    runtime::{self, Instruction},
+    Code, Function,
 };
 
 use crate::{
