@@ -10,6 +10,7 @@ mod location;
 mod operands;
 mod process;
 mod stack;
+mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
