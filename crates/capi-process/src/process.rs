@@ -3,6 +3,7 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
+    function::Function,
     runtime::{self, Value},
     BuiltinEffect, Code, EvaluatorEffect, Stack,
 };
@@ -33,7 +34,7 @@ impl Process {
         self.state.unhandled_effects.pop_front();
     }
 
-    pub fn reset(&mut self, entry: runtime::Function, arguments: Vec<Value>) {
+    pub fn reset(&mut self, entry: Function, arguments: Vec<Value>) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
