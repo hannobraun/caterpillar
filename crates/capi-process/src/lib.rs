@@ -1,4 +1,5 @@
 pub mod runtime;
+pub mod stack;
 
 mod breakpoints;
 mod builtins;

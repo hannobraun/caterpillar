@@ -1,5 +1,3 @@
-pub mod stack;
-
 mod function;
 mod instructions;
 mod location;
@@ -11,6 +9,7 @@ pub use self::{
     instructions::{Instruction, Instructions},
     location::Location,
     operands::{MissingOperand, Operands},
-    stack::Stack,
     value::Value,
 };
+
+pub use super::stack::Stack;
