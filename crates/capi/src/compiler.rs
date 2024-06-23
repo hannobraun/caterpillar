@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 
 use capi_process::{
-    runtime::{self, Instruction},
+    runtime::{self, Function, Instruction},
     Code,
 };
 
@@ -43,7 +43,7 @@ impl Compiler<'_> {
         syntax: Vec<Expression>,
     ) {
         let mut bindings = args.iter().cloned().collect();
-        let mut output = runtime::Function::new(name.clone(), args);
+        let mut output = Function::new(name.clone(), args);
 
         for expression in syntax {
             self.compile_expression(expression, &mut bindings, &mut output);
@@ -56,7 +56,7 @@ impl Compiler<'_> {
         &mut self,
         expression: Expression,
         bindings: &mut BTreeSet<String>,
-        output: &mut runtime::Function,
+        output: &mut Function,
     ) {
         match expression.kind {
             ExpressionKind::Binding { names } => {
@@ -93,7 +93,7 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         syntax_location: syntax::Location,
-        output: &mut runtime::Function,
+        output: &mut Function,
     ) {
         let index = output.instructions.push(instruction);
 
