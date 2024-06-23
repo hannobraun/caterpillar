@@ -1,4 +1,4 @@
-use capi_process::{runtime, EvaluatorEffect, Process};
+use capi_process::{runtime::Location, EvaluatorEffect, Process};
 
 use crate::{
     source_map::SourceMap,
@@ -8,7 +8,7 @@ use crate::{
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
     pub kind: ExpressionKind,
-    pub location: Option<runtime::Location>,
+    pub location: Option<Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
