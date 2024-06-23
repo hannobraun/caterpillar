@@ -3,4 +3,7 @@ pub mod runtime;
 
 mod process;
 
-pub use self::process::{Process, ProcessState};
+pub use self::{
+    breakpoints::Breakpoints,
+    process::{Process, ProcessState},
+};
