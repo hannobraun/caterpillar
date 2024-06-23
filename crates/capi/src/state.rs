@@ -1,8 +1,8 @@
 use std::collections::VecDeque;
 
 use capi_process::{
-    runtime::{self, BuiltinEffect, Code, EvaluatorEffect, Value},
-    Process,
+    runtime::{self, BuiltinEffect, Code, Value},
+    EvaluatorEffect, Process,
 };
 use rand::random;
 use tokio::sync::mpsc;

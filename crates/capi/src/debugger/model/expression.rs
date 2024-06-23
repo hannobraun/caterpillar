@@ -1,7 +1,4 @@
-use capi_process::{
-    runtime::{self, EvaluatorEffect},
-    Process,
-};
+use capi_process::{runtime, EvaluatorEffect, Process};
 
 use crate::{
     source_map::SourceMap,

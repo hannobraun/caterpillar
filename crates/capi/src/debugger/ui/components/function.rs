@@ -1,4 +1,4 @@
-use capi_process::runtime::{BuiltinEffect, EvaluatorEffect};
+use capi_process::{runtime::BuiltinEffect, EvaluatorEffect};
 use leptos::{component, view, CollectView, IntoView};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
