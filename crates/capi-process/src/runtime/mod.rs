@@ -11,5 +11,3 @@ pub use self::{
     operands::{MissingOperand, Operands},
     value::Value,
 };
-
-pub use super::stack::Stack;

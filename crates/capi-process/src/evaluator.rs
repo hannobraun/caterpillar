@@ -1,8 +1,8 @@
 use crate::{
     builtins,
-    runtime::{Instruction, MissingOperand, Stack, Value},
+    runtime::{Instruction, MissingOperand, Value},
     stack::PushStackFrameError,
-    BuiltinEffect, Code,
+    BuiltinEffect, Code, Stack,
 };
 
 pub fn evaluate(
