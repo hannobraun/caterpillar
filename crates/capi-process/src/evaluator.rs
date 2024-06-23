@@ -152,10 +152,10 @@ pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    Stack(#[from] PushStackFrameError),
+    MissingOperand(#[from] MissingOperand),
 
     #[error(transparent)]
-    MissingOperand(#[from] MissingOperand),
+    Stack(#[from] PushStackFrameError),
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
