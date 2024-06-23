@@ -1,4 +1,4 @@
-use crate::{runtime::Instructions, Instruction, Location};
+use crate::{instructions::Instructions, Instruction, Location};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
