@@ -1,7 +1,7 @@
 use capi_process::{BuiltinEffect, EvaluatorEffect};
 use capi_protocol::command::Command;
-use leptos::{component, view, CollectView, IntoView};
-use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
+use leptos::{component, ev::MouseEvent, view, CollectView, IntoView};
+use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement};
 
 use crate::debugger::{
     model::{Expression, Function},
