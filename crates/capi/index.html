@@ -52,7 +52,15 @@
                 );
 
                 if (command_rx.byteLength > 0) {
-                    console.log(command_rx);
+                    wasm.commands_write(command_rx.byteLength);
+                    const command_tx = new Uint8Array(
+                        wasm.memory.buffer,
+                        wasm.commands_write_ptr(),
+                        wasm.commands_write_len(),
+                    );
+                    command_tx.set(command_rx);
+
+                    wasm.on_command();
                 }
                 else {
                     break;

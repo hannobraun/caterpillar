@@ -25,6 +25,8 @@ const COMMANDS_BUFFER_SIZE: usize = 1024;
 
 static COMMANDS_TX: SharedFramedBuffer<COMMANDS_BUFFER_SIZE> =
     SharedFramedBuffer::new();
+static COMMANDS_RX: SharedFramedBuffer<COMMANDS_BUFFER_SIZE> =
+    SharedFramedBuffer::new();
 
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
@@ -115,12 +117,50 @@ pub fn commands_read_len() -> usize {
     len
 }
 
+static LAST_COMMAND_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
+
+#[no_mangle]
+pub fn commands_write(len: usize) {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { COMMANDS_RX.access() };
+    let command = buffer.write_frame(len);
+
+    *LAST_COMMAND_WRITE.lock().unwrap() =
+        Some((command.as_ptr() as usize, command.len()));
+}
+
+#[no_mangle]
+pub fn commands_write_ptr() -> usize {
+    let (ptr, _) = LAST_COMMAND_WRITE.lock().unwrap().unwrap();
+    ptr
+}
+
+#[no_mangle]
+pub fn commands_write_len() -> usize {
+    let (_, len) = LAST_COMMAND_WRITE.lock().unwrap().unwrap();
+    len
+}
+
 #[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
     state.input.buffer.push_back(key_code);
+}
+
+#[no_mangle]
+pub fn on_command() {
+    let mut state = STATE.lock().unwrap();
+    let state = state.get_or_insert_with(Default::default);
+
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { COMMANDS_RX.access() };
+
+    let command = buffer.read_frame().to_vec();
+    state.commands.push(command);
 }
 
 #[no_mangle]
@@ -145,9 +185,6 @@ pub fn on_frame() {
         // again or we give back control to the host.
         let buffer = unsafe { COMMANDS_TX.access() };
         buffer.write_frame(command.len()).copy_from_slice(&command);
-
-        let command = buffer.read_frame().to_vec();
-        state.commands.push(command);
     }
 
     state.update();
