@@ -12,7 +12,7 @@ pub fn start(
     mut updates_rx: mpsc::UnboundedReceiver<SerializedUpdate>,
     commands_tx: CommandsTx,
 ) {
-    let mut remote_process = RemoteProcess::new();
+    let mut remote_process = RemoteProcess::default();
     let (debugger_read, debugger_write) =
         create_signal(remote_process.to_debugger());
 

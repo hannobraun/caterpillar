@@ -12,10 +12,6 @@ pub struct RemoteProcess {
 }
 
 impl RemoteProcess {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn on_update(&mut self, update: Update) {
         match update {
             Update::Memory { memory } => {
