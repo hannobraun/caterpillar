@@ -65,7 +65,7 @@ fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
         .canonicalize()
         .context("Canonicalize current directory")?;
 
-    let mut ignore_all = true;
+    let mut ignore = true;
     for path in paths {
         let path = match path.canonicalize() {
             Ok(path) => path,
@@ -78,9 +78,9 @@ fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
         };
 
         if let Ok(path) = path.strip_prefix(&current_dir) {
-            ignore_all &= path.starts_with("capi/runtime/dist");
+            ignore &= path.starts_with("capi/runtime/dist");
         }
     }
 
-    Ok(ignore_all)
+    Ok(ignore)
 }
