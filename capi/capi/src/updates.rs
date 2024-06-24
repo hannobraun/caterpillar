@@ -6,7 +6,6 @@ use capi_protocol::{
 };
 use tokio::sync::mpsc;
 
-pub type UpdatesRx = mpsc::UnboundedReceiver<SerializedUpdate>;
 pub type UpdatesTx = mpsc::UnboundedSender<SerializedUpdate>;
 
 pub struct Updates {

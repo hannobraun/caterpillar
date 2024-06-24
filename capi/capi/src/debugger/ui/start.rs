@@ -1,16 +1,17 @@
-use capi_protocol::update::Update;
+use capi_protocol::update::{SerializedUpdate, Update};
 use leptos::{create_signal, SignalSet};
+use tokio::sync::mpsc;
 
-use crate::{
-    debugger::{
-        remote_process::RemoteProcess, ui::components::debugger::Debugger,
-    },
-    updates::UpdatesRx,
+use crate::debugger::{
+    remote_process::RemoteProcess, ui::components::debugger::Debugger,
 };
 
 use super::CommandsTx;
 
-pub fn start(mut updates_rx: UpdatesRx, commands_tx: CommandsTx) {
+pub fn start(
+    mut updates_rx: mpsc::UnboundedReceiver<SerializedUpdate>,
+    commands_tx: CommandsTx,
+) {
     let mut remote_process = RemoteProcess::new();
     let (debugger_read, debugger_write) =
         create_signal(remote_process.to_debugger());
