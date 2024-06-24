@@ -19,7 +19,6 @@ impl Watcher {
     pub fn new(path: &Path, exclude: PathBuf) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
-        let ignore_path = exclude;
         let mut watcher = notify::recommended_watcher(move |event| {
             let event: notify::Event = match event {
                 Ok(event) => event,
@@ -29,7 +28,7 @@ impl Watcher {
                 }
             };
 
-            match ignore_event(event.paths, &ignore_path) {
+            match ignore_event(event.paths, &exclude) {
                 Ok(ignore) => {
                     if ignore {
                         return;
