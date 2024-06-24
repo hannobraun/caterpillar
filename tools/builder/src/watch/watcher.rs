@@ -28,7 +28,7 @@ impl Watcher {
                 }
             };
 
-            match ignore_event(event.paths) {
+            match ignore_event(event.paths, "capi/runtime/dist") {
                 Ok(ignore) => {
                     if ignore {
                         return;
@@ -60,7 +60,11 @@ impl Watcher {
     }
 }
 
-fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
+fn ignore_event(
+    paths: Vec<PathBuf>,
+    ignore_path: impl AsRef<Path>,
+) -> anyhow::Result<bool> {
+    let ignore_path = ignore_path.as_ref();
     let current_dir = env::current_dir()?
         .canonicalize()
         .context("Canonicalize current directory")?;
@@ -78,7 +82,7 @@ fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
         };
 
         if let Ok(path) = path.strip_prefix(&current_dir) {
-            ignore &= path.starts_with("capi/runtime/dist");
+            ignore &= path.starts_with(ignore_path);
         }
     }
 
