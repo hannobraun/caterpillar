@@ -10,7 +10,7 @@ use tokio::sync::mpsc;
 
 use crate::{
     debugger::{
-        model::{DebugCommand, SerializedCommand},
+        model::{Command, SerializedCommand},
         ui::{self, CommandsRx},
     },
     display::Display,
@@ -92,24 +92,24 @@ impl RuntimeState {
         };
 
         for command in self.commands.drain(..) {
-            let command = DebugCommand::deserialize(command);
+            let command = Command::deserialize(command);
 
             match command {
-                DebugCommand::BreakpointClear { location } => {
+                Command::BreakpointClear { location } => {
                     self.process.clear_durable_breakpoint(location);
                 }
-                DebugCommand::BreakpointSet { location } => {
+                Command::BreakpointSet { location } => {
                     self.process.set_durable_breakpoint(location);
                 }
-                DebugCommand::Continue { and_stop_at } => {
+                Command::Continue { and_stop_at } => {
                     self.process.continue_(and_stop_at);
                 }
-                DebugCommand::Reset => {
+                Command::Reset => {
                     self.process
                         .reset(self.entry.clone(), self.arguments.clone());
                     self.memory = Memory::default();
                 }
-                DebugCommand::Step => {
+                Command::Step => {
                     if let Some(EvaluatorEffect::Builtin(
                         BuiltinEffect::Breakpoint,
                     )) = self.process.state().first_unhandled_effect()
@@ -122,7 +122,7 @@ impl RuntimeState {
                         self.process.continue_(Some(and_stop_at))
                     }
                 }
-                DebugCommand::Stop => {
+                Command::Stop => {
                     self.process.stop();
                 }
             }

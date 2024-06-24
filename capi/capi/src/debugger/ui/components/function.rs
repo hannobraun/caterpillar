@@ -3,7 +3,7 @@ use leptos::{component, view, CollectView, IntoView};
 use web_sys::{wasm_bindgen::JsCast, HtmlSpanElement, MouseEvent};
 
 use crate::debugger::{
-    model::{DebugCommand, Expression, Function},
+    model::{Command, Expression, Function},
     ui::{send_command, CommandsTx},
 };
 
@@ -79,9 +79,9 @@ pub fn Expression(
         let location = ron::from_str(&location).unwrap();
 
         let command = if element.has_attribute("data-breakpoint") {
-            DebugCommand::BreakpointClear { location }
+            Command::BreakpointClear { location }
         } else {
-            DebugCommand::BreakpointSet { location }
+            Command::BreakpointSet { location }
         };
 
         leptos::spawn_local(send_command(command, commands.clone()));

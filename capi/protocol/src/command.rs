@@ -1,7 +1,7 @@
 use capi_process::Location;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum DebugCommand {
+pub enum Command {
     BreakpointClear { location: Location },
     BreakpointSet { location: Location },
     Continue { and_stop_at: Option<Location> },
@@ -10,7 +10,7 @@ pub enum DebugCommand {
     Stop,
 }
 
-impl DebugCommand {
+impl Command {
     pub fn deserialize(bytes: SerializedCommand) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
