@@ -1,10 +1,11 @@
+use capi_protocol::update::Update;
 use leptos::{create_signal, SignalSet};
 
 use crate::{
     debugger::{
         remote_process::RemoteProcess, ui::components::debugger::Debugger,
     },
-    updates::{Update, UpdatesRx},
+    updates::UpdatesRx,
 };
 
 use super::CommandsTx;

@@ -1,8 +1,6 @@
 use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
-use capi_protocol::memory::Memory;
-
-use crate::updates::Update;
+use capi_protocol::{memory::Memory, update::Update};
 
 use super::model::{ActiveFunctions, Debugger};
 

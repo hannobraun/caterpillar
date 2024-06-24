@@ -347,7 +347,9 @@ dependencies = [
 name = "capi-protocol"
 version = "0.1.0"
 dependencies = [
+ "capi-compiler",
  "capi-process",
+ "ron",
  "serde",
  "serde-big-array",
 ]

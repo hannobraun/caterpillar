@@ -4,7 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ron = "*"
 serde-big-array = "*"
+
+[dependencies.capi-compiler]
+path = "../compiler"
 
 [dependencies.capi-process]
 path = "../process"
