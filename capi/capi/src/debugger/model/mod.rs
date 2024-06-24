@@ -8,4 +8,4 @@ pub use self::{
     expression::Expression, function::Function,
 };
 
-pub use capi_protocol::command::{Command, SerializedCommand};
+pub use capi_protocol::command::Command;
