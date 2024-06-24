@@ -15,6 +15,7 @@ use crate::{
     display::Display,
     ffi,
     games::snake::snake,
+    syntax::Script,
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{Updates, UpdatesTx},
 };
@@ -36,7 +37,7 @@ pub struct RuntimeState {
 
 impl RuntimeState {
     pub fn new() -> Self {
-        let mut script = crate::syntax::Script::default();
+        let mut script = Script::default();
         snake(&mut script);
 
         let (code, source_map) = compile(&script);
