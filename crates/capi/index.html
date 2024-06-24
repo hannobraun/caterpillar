@@ -43,6 +43,22 @@
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop() {
+            while (true) {
+                wasm.commands_read();
+                const command_rx = new Uint8Array(
+                    wasm.memory.buffer,
+                    wasm.commands_read_ptr(),
+                    wasm.commands_read_len(),
+                );
+
+                if (command_rx.byteLength > 0) {
+                    console.log(command_rx);
+                }
+                else {
+                    break;
+                }
+            }
+
             wasm.on_frame();
 
             while (true) {

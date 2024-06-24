@@ -90,6 +90,31 @@ pub fn updates_write_len() -> usize {
     len
 }
 
+static LAST_COMMAND_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
+
+#[no_mangle]
+pub fn commands_read() {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let buffer = unsafe { COMMANDS_TX.access() };
+    let command = buffer.read_frame();
+
+    *LAST_COMMAND_READ.lock().unwrap() =
+        Some((command.as_ptr() as usize, command.len()));
+}
+
+#[no_mangle]
+pub fn commands_read_ptr() -> usize {
+    let (ptr, _) = LAST_COMMAND_READ.lock().unwrap().unwrap();
+    ptr
+}
+
+#[no_mangle]
+pub fn commands_read_len() -> usize {
+    let (_, len) = LAST_COMMAND_READ.lock().unwrap().unwrap();
+    len
+}
+
 #[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
