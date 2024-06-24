@@ -51,7 +51,7 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
         return Ok(true);
     }
 
-    let crate_to_serve = Path::new("crates/capi");
+    let crate_to_serve = Path::new("capi/capi");
     let dir_to_serve = crate_to_serve.join("dist");
 
     let mut bindgen = Bindgen::new();
