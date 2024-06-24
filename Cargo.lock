@@ -335,6 +335,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-ffi"
+version = "0.1.0"
+
+[[package]]
 name = "capi-process"
 version = "0.1.0"
 dependencies = [

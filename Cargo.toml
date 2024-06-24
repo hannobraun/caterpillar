@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "capi/capi",
-    "capi/compiler",
+    "capi/compiler", "capi/ffi",
     "capi/process",
     "capi/protocol",
     "tools/builder",
