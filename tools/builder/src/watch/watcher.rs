@@ -16,10 +16,10 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(path: &Path) -> anyhow::Result<Self> {
+    pub fn new(path: &Path, exclude: impl AsRef<Path>) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
-        let ignore_path = path.join("dist").to_path_buf();
+        let ignore_path = path.join(exclude).to_path_buf();
         let mut watcher = notify::recommended_watcher(move |event| {
             let event: notify::Event = match event {
                 Ok(event) => event,
