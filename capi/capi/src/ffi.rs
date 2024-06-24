@@ -15,18 +15,18 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
 /// The buffer that is used to transfer updates _to_ the host
-static UPDATES_TX: Shared<UPDATES_BUFFER_SIZE> =
+static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 /// The buffer that is used to transfer updates _from_ the host
-static UPDATES_RX: Shared<UPDATES_BUFFER_SIZE> =
+static UPDATES_RX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 const COMMANDS_BUFFER_SIZE: usize = 1024;
 
-static COMMANDS_TX: Shared<COMMANDS_BUFFER_SIZE> =
+static COMMANDS_TX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
-static COMMANDS_RX: Shared<COMMANDS_BUFFER_SIZE> =
+static COMMANDS_RX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 /// This is a workaround for not being able to return a tuple from
@@ -218,12 +218,12 @@ pub fn on_update() {
 /// This data structure is designed for use in WebAssembly. It is _unsound_ to
 /// use it in a multi-threaded context.
 #[repr(transparent)]
-pub struct Shared<const SIZE: usize> {
-    inner: UnsafeCell<FramedBuffer<SIZE>>,
+pub struct Shared<T> {
+    inner: UnsafeCell<T>,
 }
 
-impl<const SIZE: usize> Shared<SIZE> {
-    pub const fn new(inner: FramedBuffer<SIZE>) -> Self {
+impl<T> Shared<T> {
+    pub const fn new(inner: T) -> Self {
         Self {
             inner: UnsafeCell::new(inner),
         }
@@ -249,11 +249,11 @@ impl<const SIZE: usize> Shared<SIZE> {
     /// The caller must not call this method again, while the returned reference
     /// still exists.
     #[allow(clippy::mut_from_ref)] // function is `unsafe` and well-documented
-    pub unsafe fn access(&self) -> &mut FramedBuffer<SIZE> {
+    pub unsafe fn access(&self) -> &mut T {
         &mut *self.inner.get()
     }
 }
 
 // Safe to implement, since with WebAssembly, this lives in a single-threaded
 // context.
-unsafe impl<const SIZE: usize> Sync for Shared<SIZE> {}
+unsafe impl<T> Sync for Shared<T> {}
