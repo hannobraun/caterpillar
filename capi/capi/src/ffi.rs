@@ -211,12 +211,15 @@ pub fn on_update() {
     state.updates_tx.send(update).unwrap();
 }
 
-/// # A buffer that is shared with the JavaScript host
+/// # Data that is shared with the JavaScript host
+///
+/// This type is designed to be used in a `static`, so the use of `static mut`
+/// can be avoided.
 ///
 /// ## Safety
 ///
-/// This data structure is designed for use in WebAssembly. It is _unsound_ to
-/// use it in a multi-threaded context.
+/// This type is designed for use in WebAssembly. It is _unsound_ to use it in a
+/// multi-threaded context.
 #[repr(transparent)]
 pub struct Shared<T> {
     inner: UnsafeCell<T>,
@@ -229,7 +232,7 @@ impl<T> Shared<T> {
         }
     }
 
-    /// # Gain access to the shared buffer
+    /// # Gain access to the shared data
     ///
     /// ## `&self` argument
     ///
@@ -237,9 +240,9 @@ impl<T> Shared<T> {
     /// This is fine, as the method is `unsafe` and the requirements that derive
     /// from this are documented.
     ///
-    /// If this took `&mut self`, the `SharedFrameBuffer` would need to live in
-    /// a `static mut`, which would have the same pitfalls and more. With the
-    /// current design, `SharedFrameBuffer` can live in a non-`mut` `static`.
+    /// If this took `&mut self`, then `Shared` would need to live in a
+    /// `static mut`, which would have the same pitfalls, and more. With the
+    /// current design, `Shared` can live in a non-`mut` `static`.
     ///
     /// ## Safety
     ///
@@ -254,6 +257,5 @@ impl<T> Shared<T> {
     }
 }
 
-// Safe to implement, since with WebAssembly, this lives in a single-threaded
-// context.
+// Safe to implement, since WebAssembly code runs in a single-threaded context.
 unsafe impl<T> Sync for Shared<T> {}
