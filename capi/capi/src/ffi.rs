@@ -289,6 +289,12 @@ impl<const SIZE: usize> FramedBuffer<SIZE> {
     }
 }
 
+impl<const SIZE: usize> Default for FramedBuffer<SIZE> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(Clone, Copy, Default)]
 struct BufferFrame {
     starts_at: usize,
