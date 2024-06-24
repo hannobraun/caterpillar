@@ -15,15 +15,19 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
 /// The buffer that is used to transfer updates _to_ the host
-static UPDATES_TX: Shared<UPDATES_BUFFER_SIZE> = Shared::new();
+static UPDATES_TX: Shared<UPDATES_BUFFER_SIZE> =
+    Shared::new(FramedBuffer::new());
 
 /// The buffer that is used to transfer updates _from_ the host
-static UPDATES_RX: Shared<UPDATES_BUFFER_SIZE> = Shared::new();
+static UPDATES_RX: Shared<UPDATES_BUFFER_SIZE> =
+    Shared::new(FramedBuffer::new());
 
 const COMMANDS_BUFFER_SIZE: usize = 1024;
 
-static COMMANDS_TX: Shared<COMMANDS_BUFFER_SIZE> = Shared::new();
-static COMMANDS_RX: Shared<COMMANDS_BUFFER_SIZE> = Shared::new();
+static COMMANDS_TX: Shared<COMMANDS_BUFFER_SIZE> =
+    Shared::new(FramedBuffer::new());
+static COMMANDS_RX: Shared<COMMANDS_BUFFER_SIZE> =
+    Shared::new(FramedBuffer::new());
 
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
@@ -219,9 +223,9 @@ pub struct Shared<const SIZE: usize> {
 }
 
 impl<const SIZE: usize> Shared<SIZE> {
-    pub const fn new() -> Self {
+    pub const fn new(inner: FramedBuffer<SIZE>) -> Self {
         Self {
-            inner: UnsafeCell::new(FramedBuffer::new()),
+            inner: UnsafeCell::new(inner),
         }
     }
 
