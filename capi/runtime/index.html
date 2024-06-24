@@ -16,7 +16,7 @@
     </canvas>
     <script type="module">
         import init from "/capi.js";
-        const wasm = await init("capi_bg.wasm");
+        const runtime = await init("capi_bg.wasm");
 
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
@@ -35,7 +35,7 @@
             }
 
             if (keyCode != null) {
-                wasm.on_key(keyCode);
+                runtime.on_key(keyCode);
                 event.preventDefault();
             }
         });
@@ -44,49 +44,49 @@
 
         function mainLoop() {
             while (true) {
-                wasm.commands_read();
+                runtime.commands_read();
                 const command_rx = new Uint8Array(
-                    wasm.memory.buffer,
-                    wasm.commands_read_ptr(),
-                    wasm.commands_read_len(),
+                    runtime.memory.buffer,
+                    runtime.commands_read_ptr(),
+                    runtime.commands_read_len(),
                 );
 
                 if (command_rx.byteLength > 0) {
-                    wasm.commands_write(command_rx.byteLength);
+                    runtime.commands_write(command_rx.byteLength);
                     const command_tx = new Uint8Array(
-                        wasm.memory.buffer,
-                        wasm.commands_write_ptr(),
-                        wasm.commands_write_len(),
+                        runtime.memory.buffer,
+                        runtime.commands_write_ptr(),
+                        runtime.commands_write_len(),
                     );
                     command_tx.set(command_rx);
 
-                    wasm.on_command();
+                    runtime.on_command();
                 }
                 else {
                     break;
                 }
             }
 
-            wasm.on_frame();
+            runtime.on_frame();
 
             while (true) {
-                wasm.updates_read();
+                runtime.updates_read();
                 const update_rx = new Uint8Array(
-                    wasm.memory.buffer,
-                    wasm.updates_read_ptr(),
-                    wasm.updates_read_len(),
+                    runtime.memory.buffer,
+                    runtime.updates_read_ptr(),
+                    runtime.updates_read_len(),
                 );
 
                 if (update_rx.byteLength > 0) {
-                    wasm.updates_write(update_rx.byteLength);
+                    runtime.updates_write(update_rx.byteLength);
                     const update_tx = new Uint8Array(
-                        wasm.memory.buffer,
-                        wasm.updates_write_ptr(),
-                        wasm.updates_write_len(),
+                        runtime.memory.buffer,
+                        runtime.updates_write_ptr(),
+                        runtime.updates_write_len(),
                     );
                     update_tx.set(update_rx);
 
-                    wasm.on_update();
+                    runtime.on_update();
                 } else {
                     break;
                 }
