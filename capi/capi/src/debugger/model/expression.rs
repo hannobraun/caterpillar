@@ -1,9 +1,8 @@
-use capi_process::{EvaluatorEffect, Location, Process};
-
-use crate::{
+use capi_compiler::{
     source_map::SourceMap,
     syntax::{self, ExpressionKind},
 };
+use capi_process::{EvaluatorEffect, Location, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {

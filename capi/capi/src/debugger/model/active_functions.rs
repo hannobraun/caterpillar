@@ -1,6 +1,5 @@
+use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
-
-use crate::{source_map::SourceMap, syntax};
 
 use super::Function;
 

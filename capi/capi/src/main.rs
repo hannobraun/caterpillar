@@ -1,11 +1,7 @@
-mod compiler;
 mod debugger;
 mod display;
 mod ffi;
-mod games;
-mod source_map;
 mod state;
-mod syntax;
 mod tiles;
 mod updates;
 

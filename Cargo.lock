@@ -308,6 +308,7 @@ name = "capi"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "capi-compiler",
  "capi-process",
  "console_error_panic_hook",
  "console_log",
@@ -329,6 +330,10 @@ dependencies = [
 [[package]]
 name = "capi-compiler"
 version = "0.1.0"
+dependencies = [
+ "capi-process",
+ "serde",
+]
 
 [[package]]
 name = "capi-process"

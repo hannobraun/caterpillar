@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
@@ -7,15 +8,12 @@ use rand::random;
 use tokio::sync::mpsc;
 
 use crate::{
-    compiler::compile,
     debugger::{
         model::{DebugCommand, SerializedCommand},
         ui::{self, CommandsRx},
     },
     display::Display,
     ffi,
-    games::snake::snake,
-    syntax::Script,
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::{Updates, UpdatesTx},
 };

@@ -2,3 +2,10 @@
 name = "capi-compiler"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies.capi-process]
+path = "../process"
+
+[dependencies.serde]
+version = "*"
+features = ["derive"]
