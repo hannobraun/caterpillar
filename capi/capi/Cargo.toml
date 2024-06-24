@@ -18,7 +18,7 @@ wasm-bindgen = "*"
 web-sys = "*"
 
 [dependencies.capi-process]
-path = "../capi-process"
+path = "../process"
 
 [dependencies.console_log]
 version = "*"
