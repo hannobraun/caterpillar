@@ -6,15 +6,11 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 console_error_panic_hook = "*"
-futures = "*"
-gloo = "*"
 log = "*"
 pixels = "*"
 rand = "*"
 raw-window-handle = "0.5"
 ron = "*"
-wasm-bindgen = "*"
-web-sys = "*"
 
 [dependencies.capi-compiler]
 path = "../compiler"
