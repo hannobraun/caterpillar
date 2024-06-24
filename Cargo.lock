@@ -300,6 +300,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "capi-compiler",
+ "capi-debugger",
  "capi-ffi",
  "capi-process",
  "capi-protocol",
@@ -310,7 +311,6 @@ dependencies = [
  "pixels",
  "rand",
  "raw-window-handle",
- "ron",
  "tokio",
 ]
 
@@ -325,6 +325,15 @@ dependencies = [
 [[package]]
 name = "capi-debugger"
 version = "0.1.0"
+dependencies = [
+ "capi-compiler",
+ "capi-process",
+ "capi-protocol",
+ "leptos",
+ "log",
+ "ron",
+ "tokio",
+]
 
 [[package]]
 name = "capi-ffi"

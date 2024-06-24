@@ -10,10 +10,12 @@ log = "*"
 pixels = "*"
 rand = "*"
 raw-window-handle = "0.5"
-ron = "*"
 
 [dependencies.capi-compiler]
 path = "../compiler"
+
+[dependencies.capi-debugger]
+path = "../debugger"
 
 [dependencies.capi-ffi]
 path = "../ffi"

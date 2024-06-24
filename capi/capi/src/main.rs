@@ -1,4 +1,3 @@
-mod debugger;
 mod display;
 mod ffi;
 mod state;

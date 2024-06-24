@@ -2,3 +2,24 @@
 name = "capi-debugger"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+log = "*"
+ron = "*"
+
+[dependencies.capi-compiler]
+path = "../compiler"
+
+[dependencies.capi-process]
+path = "../process"
+
+[dependencies.capi-protocol]
+path = "../protocol"
+
+[dependencies.leptos]
+version = "*"
+features = ["csr"]
+
+[dependencies.tokio]
+version = "*"
+features = ["sync"]
