@@ -43,7 +43,7 @@ async fn watch_and_build(
 async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
     let cargo_build = Command::new("cargo")
         .arg("build")
-        .args(["--package", "capi"])
+        .args(["--package", "capi-runtime"])
         .args(["--target", "wasm32-unknown-unknown"])
         .status()
         .await?;

@@ -295,26 +295,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0ec6b951b160caa93cc0c7b209e5a3bff7aae9062213451ac99493cd844c239"
 
 [[package]]
-name = "capi"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "capi-compiler",
- "capi-debugger",
- "capi-ffi",
- "capi-process",
- "capi-protocol",
- "console_error_panic_hook",
- "console_log",
- "leptos",
- "log",
- "pixels",
- "rand",
- "raw-window-handle",
- "tokio",
-]
-
-[[package]]
 name = "capi-compiler"
 version = "0.1.0"
 dependencies = [
@@ -356,6 +336,26 @@ dependencies = [
  "ron",
  "serde",
  "serde-big-array",
+]
+
+[[package]]
+name = "capi-runtime"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "capi-compiler",
+ "capi-debugger",
+ "capi-ffi",
+ "capi-process",
+ "capi-protocol",
+ "console_error_panic_hook",
+ "console_log",
+ "leptos",
+ "log",
+ "pixels",
+ "rand",
+ "raw-window-handle",
+ "tokio",
 ]
 
 [[package]]
