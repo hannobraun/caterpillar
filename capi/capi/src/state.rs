@@ -7,6 +7,7 @@ use capi_process::{
 use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
+    update::SerializedUpdate,
 };
 use rand::random;
 use tokio::sync::mpsc;
@@ -16,7 +17,7 @@ use crate::{
     display::Display,
     ffi,
     tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::{Updates, UpdatesTx},
+    updates::Updates,
 };
 
 pub struct RuntimeState {
@@ -29,7 +30,7 @@ pub struct RuntimeState {
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
     pub commands_rx: CommandsRx,
-    pub updates_tx: UpdatesTx,
+    pub updates_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }

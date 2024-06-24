@@ -4,9 +4,6 @@ use capi_protocol::{
     memory::Memory,
     update::{SerializedUpdate, Update},
 };
-use tokio::sync::mpsc;
-
-pub type UpdatesTx = mpsc::UnboundedSender<SerializedUpdate>;
 
 pub struct Updates {
     latest_memory: Option<Memory>,
