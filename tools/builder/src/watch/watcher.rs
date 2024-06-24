@@ -45,7 +45,7 @@ impl Watcher {
                 // thread this is running on will probably also end soon.
             }
         })?;
-        watcher.watch(Path::new("capi/capi"), RecursiveMode::Recursive)?;
+        watcher.watch(Path::new("capi/runtime"), RecursiveMode::Recursive)?;
 
         let changes = DebouncedChanges::new(rx);
 
@@ -78,7 +78,7 @@ fn ignore_event(paths: Vec<PathBuf>) -> anyhow::Result<bool> {
         };
 
         if let Ok(path) = path.strip_prefix(&current_dir) {
-            ignore_all &= path.starts_with("capi/capi/dist");
+            ignore_all &= path.starts_with("capi/runtime/dist");
         }
     }
 
