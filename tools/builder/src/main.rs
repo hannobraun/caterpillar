@@ -1,4 +1,5 @@
 mod build;
+mod pipelines;
 mod serve;
 mod watch;
 
@@ -6,17 +7,7 @@ mod watch;
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
-    let watcher = watch::Watcher::new()?;
-    let mut updates = build::start(watcher.changes());
-    let address = serve::start(updates.clone()).await?;
-
-    while let Ok(()) = updates.changed().await {
-        println!();
-        println!("Caterpillar is ready:");
-        println!();
-        println!("\t🚀 http://{address}/");
-        println!();
-    }
+    pipelines::runtime().await?;
 
     Ok(())
 }
