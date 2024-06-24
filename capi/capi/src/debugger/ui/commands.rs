@@ -1,7 +1,5 @@
-use capi_protocol::command::SerializedCommand;
+use capi_protocol::command::{Command, SerializedCommand};
 use tokio::sync::mpsc;
-
-use crate::debugger::model::Command;
 
 pub type CommandsRx = mpsc::UnboundedReceiver<SerializedCommand>;
 pub type CommandsTx = mpsc::UnboundedSender<SerializedCommand>;

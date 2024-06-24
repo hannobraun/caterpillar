@@ -4,15 +4,15 @@ use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
-use capi_protocol::{command::SerializedCommand, memory::Memory};
+use capi_protocol::{
+    command::{Command, SerializedCommand},
+    memory::Memory,
+};
 use rand::random;
 use tokio::sync::mpsc;
 
 use crate::{
-    debugger::{
-        model::Command,
-        ui::{self, CommandsRx},
-    },
+    debugger::ui::{self, CommandsRx},
     display::Display,
     ffi,
     tiles::{NUM_TILES, TILES_PER_AXIS},
