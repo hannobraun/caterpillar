@@ -106,7 +106,7 @@ impl RuntimeState {
                 DebugCommand::Reset => {
                     self.process
                         .reset(self.entry.clone(), self.arguments.clone());
-                    self.memory.zero();
+                    self.memory = Memory::default();
                 }
                 DebugCommand::Step => {
                     if let Some(EvaluatorEffect::Builtin(
@@ -214,12 +214,6 @@ impl Default for RuntimeState {
 pub struct Memory {
     #[serde(with = "serde_big_array::BigArray")]
     pub inner: [Value; 256],
-}
-
-impl Memory {
-    pub fn zero(&mut self) {
-        *self = Self::default();
-    }
 }
 
 impl Default for Memory {
