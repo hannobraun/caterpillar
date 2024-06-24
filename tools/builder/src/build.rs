@@ -56,7 +56,7 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
 
     let mut bindgen = Bindgen::new();
     bindgen
-        .input_path("target/wasm32-unknown-unknown/debug/capi.wasm")
+        .input_path("target/wasm32-unknown-unknown/debug/capi-runtime.wasm")
         .web(true)?
         .generate(&dir_to_serve)?;
 
