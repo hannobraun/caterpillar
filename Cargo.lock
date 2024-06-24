@@ -336,6 +336,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-debugger"
+version = "0.1.0"
+
+[[package]]
 name = "capi-ffi"
 version = "0.1.0"
 
