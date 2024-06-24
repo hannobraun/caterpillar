@@ -1,6 +1,5 @@
 use capi_process::Operands;
-
-use crate::state::Memory;
+use capi_protocol::memory::Memory;
 
 use super::ActiveFunctions;
 

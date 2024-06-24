@@ -1,8 +1,7 @@
 use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
+use capi_protocol::memory::Memory;
 use tokio::sync::mpsc;
-
-use crate::state::Memory;
 
 pub type UpdatesRx = mpsc::UnboundedReceiver<SerializedUpdate>;
 pub type UpdatesTx = mpsc::UnboundedSender<SerializedUpdate>;

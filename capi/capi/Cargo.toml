@@ -13,7 +13,6 @@ pixels = "*"
 rand = "*"
 raw-window-handle = "0.5"
 ron = "*"
-serde-big-array = "*"
 wasm-bindgen = "*"
 web-sys = "*"
 
@@ -22,6 +21,9 @@ path = "../compiler"
 
 [dependencies.capi-process]
 path = "../process"
+
+[dependencies.capi-protocol]
+path = "../protocol"
 
 [dependencies.console_log]
 version = "*"

@@ -4,6 +4,7 @@ use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
+use capi_protocol::memory::Memory;
 use rand::random;
 use tokio::sync::mpsc;
 
@@ -207,20 +208,6 @@ impl RuntimeState {
 impl Default for RuntimeState {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Memory {
-    #[serde(with = "serde_big_array::BigArray")]
-    pub inner: [Value; 256],
-}
-
-impl Default for Memory {
-    fn default() -> Self {
-        Self {
-            inner: [Value(0); 256],
-        }
     }
 }
 

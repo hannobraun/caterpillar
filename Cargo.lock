@@ -310,6 +310,7 @@ dependencies = [
  "anyhow",
  "capi-compiler",
  "capi-process",
+ "capi-protocol",
  "console_error_panic_hook",
  "console_log",
  "futures",
@@ -321,7 +322,6 @@ dependencies = [
  "raw-window-handle",
  "ron",
  "serde",
- "serde-big-array",
  "tokio",
  "wasm-bindgen",
  "web-sys",
@@ -346,6 +346,11 @@ dependencies = [
 [[package]]
 name = "capi-protocol"
 version = "0.1.0"
+dependencies = [
+ "capi-process",
+ "serde",
+ "serde-big-array",
+]
 
 [[package]]
 name = "cc"

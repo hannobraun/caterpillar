@@ -2,3 +2,13 @@
 name = "capi-protocol"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+serde-big-array = "*"
+
+[dependencies.capi-process]
+path = "../process"
+
+[dependencies.serde]
+version = "*"
+features = ["derive"]

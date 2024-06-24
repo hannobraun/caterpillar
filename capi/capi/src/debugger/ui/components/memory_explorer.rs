@@ -1,6 +1,7 @@
+use capi_protocol::memory::Memory;
 use leptos::{component, view, CollectView, IntoView};
 
-use crate::{debugger::ui::components::panel::Panel, state::Memory};
+use crate::debugger::ui::components::panel::Panel;
 
 #[component]
 pub fn MemoryExplorer(memory: Memory) -> impl IntoView {
