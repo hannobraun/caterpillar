@@ -1,4 +1,4 @@
-use std::process;
+use std::{path::Path, process};
 
 use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
@@ -51,13 +51,20 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
         return Ok(true);
     }
 
+    let crate_to_serve = Path::new("crates/capi");
+    let dir_to_serve = crate_to_serve.join("dist");
+
     let mut bindgen = Bindgen::new();
     bindgen
         .input_path("target/wasm32-unknown-unknown/debug/capi.wasm")
         .web(true)?
-        .generate("crates/capi/dist")?;
+        .generate(&dir_to_serve)?;
 
-    fs::copy("crates/capi/index.html", "crates/capi/dist/index.html").await?;
+    fs::copy(
+        crate_to_serve.join("index.html"),
+        dir_to_serve.join("index.html"),
+    )
+    .await?;
 
     if updates.send(()).is_err() {
         return Ok(false);
