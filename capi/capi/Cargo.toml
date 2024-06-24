@@ -33,10 +33,6 @@ features = ["color"]
 version = "*"
 features = ["csr"]
 
-[dependencies.serde]
-version = "*"
-features = ["derive"]
-
 [dependencies.tokio]
 version = "*"
 features = ["sync"]

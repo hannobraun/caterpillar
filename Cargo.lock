@@ -321,7 +321,6 @@ dependencies = [
  "rand",
  "raw-window-handle",
  "ron",
- "serde",
  "tokio",
  "wasm-bindgen",
  "web-sys",
