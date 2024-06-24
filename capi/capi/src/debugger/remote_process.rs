@@ -4,6 +4,7 @@ use capi_protocol::{memory::Memory, update::Update};
 
 use super::model::{ActiveFunctions, Debugger};
 
+#[derive(Default)]
 pub struct RemoteProcess {
     pub source_code: Option<(syntax::Functions, SourceMap)>,
     pub process: Option<Process>,
@@ -12,11 +13,7 @@ pub struct RemoteProcess {
 
 impl RemoteProcess {
     pub fn new() -> Self {
-        Self {
-            source_code: None,
-            process: None,
-            memory: None,
-        }
+        Self::default()
     }
 
     pub fn on_update(&mut self, update: Update) {
