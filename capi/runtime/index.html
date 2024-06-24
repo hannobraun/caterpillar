@@ -15,8 +15,8 @@
         Display for a game written in Caterpillar.
     </canvas>
     <script type="module">
-        import init from "/capi.js";
-        const runtime = await init("capi_bg.wasm");
+        import init from "/capi-runtime.js";
+        const runtime = await init("capi-runtime_bg.wasm");
 
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
