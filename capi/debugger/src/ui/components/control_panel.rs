@@ -1,7 +1,7 @@
 use capi_protocol::command::Command;
 use leptos::{component, view, IntoView};
 
-use crate::debugger::ui::{components::panel::Panel, send_command, CommandsTx};
+use crate::ui::{components::panel::Panel, send_command, CommandsTx};
 
 #[component]
 pub fn ControlPanel(commands: CommandsTx) -> impl IntoView {

@@ -1,7 +1,7 @@
 use capi_process::Operands;
 use leptos::{component, view, CollectView, IntoView};
 
-use crate::debugger::ui::components::panel::Panel;
+use crate::ui::components::panel::Panel;
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]

@@ -2,7 +2,7 @@ use capi_protocol::update::{SerializedUpdate, Update};
 use leptos::{create_signal, SignalSet};
 use tokio::sync::mpsc;
 
-use crate::debugger::{
+use crate::{
     remote_process::RemoteProcess, ui::components::debugger::Debugger,
 };
 

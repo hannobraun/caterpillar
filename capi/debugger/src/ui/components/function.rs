@@ -5,7 +5,7 @@ use leptos::{
     web_sys::HtmlSpanElement, CollectView, IntoView,
 };
 
-use crate::debugger::{
+use crate::{
     model::{Expression, Function},
     ui::{send_command, CommandsTx},
 };

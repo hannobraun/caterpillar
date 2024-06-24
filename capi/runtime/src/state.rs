@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
-use capi_debugger::debugger::ui::{self, CommandsRx};
+use capi_debugger::ui::{self, CommandsRx};
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };

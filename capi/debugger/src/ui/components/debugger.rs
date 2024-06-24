@@ -1,6 +1,6 @@
 use leptos::{component, view, IntoView, ReadSignal, SignalGet};
 
-use crate::debugger::{
+use crate::{
     model::Debugger,
     ui::{
         components::{

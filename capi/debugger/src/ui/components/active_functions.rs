@@ -1,6 +1,6 @@
 use leptos::{component, view, CollectView, IntoView};
 
-use crate::debugger::{
+use crate::{
     model::ActiveFunctions,
     ui::{
         components::{function::Function, panel::Panel},
