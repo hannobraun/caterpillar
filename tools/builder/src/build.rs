@@ -52,19 +52,23 @@ async fn build_once(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
-    let cargo_build = Command::new("cargo")
-        .arg("build")
-        .args(["--package", "capi-runtime"])
-        .args(["--target", "wasm32-unknown-unknown"])
-        .status()
-        .await?;
-    if !cargo_build.success() {
-        // The build failed, and since the rest of this function is dependent on
-        // its success, we're done here.
-        //
-        // But that doesn't mean that the builder overall should be done. Next
-        // time we detect a change, we should try again.
-        return Ok(ShouldContinue::YesWhyNot);
+    let packages = ["capi-runtime", "capi-debugger"];
+
+    for package in &packages {
+        let cargo_build = Command::new("cargo")
+            .arg("build")
+            .args(["--package", package])
+            .args(["--target", "wasm32-unknown-unknown"])
+            .status()
+            .await?;
+        if !cargo_build.success() {
+            // The build failed, and since the rest of this function is
+            // dependent on its success, we're done here.
+            //
+            // But that doesn't mean that the builder overall should be done.
+            // Next time we detect a change, we should try again.
+            return Ok(ShouldContinue::YesWhyNot);
+        }
     }
 
     let new_output_dir = tempdir()?;
