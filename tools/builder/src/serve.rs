@@ -43,16 +43,21 @@ async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
     }
 }
 
-async fn serve_index() -> impl IntoResponse {
-    file_response(PathBuf::from("index.html")).await
+async fn serve_index(State(updates): State<UpdatesRx>) -> impl IntoResponse {
+    file_response(PathBuf::from("index.html"), updates).await
 }
 
-async fn serve_static(Path(path): Path<PathBuf>) -> impl IntoResponse {
-    file_response(path).await
+async fn serve_static(
+    Path(path): Path<PathBuf>,
+    State(updates): State<UpdatesRx>,
+) -> impl IntoResponse {
+    file_response(path, updates).await
 }
 
-async fn file_response(path: PathBuf) -> Response {
-    let serve_dir = PathBuf::from("capi/runtime/dist");
+async fn file_response(path: PathBuf, updates: UpdatesRx) -> Response {
+    let Some(serve_dir) = updates.borrow().clone() else {
+        return StatusCode::NOT_FOUND.into_response();
+    };
     let path = serve_dir.join(path);
 
     let content_type = match path.extension() {
