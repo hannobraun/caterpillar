@@ -48,6 +48,11 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
         .status()
         .await?;
     if !cargo_build.success() {
+        // The build failed, and since the rest of this function is dependent on
+        // its success, we're done here.
+        //
+        // But that doesn't mean that the builder overall should be done. Next
+        // time we detect a change, we should try again.
         return Ok(ShouldContinue::YesWhyNot);
     }
 
