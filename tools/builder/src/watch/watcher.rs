@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use notify::{RecursiveMode, Watcher as _};
-use tokio::sync::watch;
+use tokio::sync::mpsc;
 use tracing::error;
 
 use super::debounce::DebouncedChanges;
@@ -13,7 +13,7 @@ pub struct Watcher {
 
 impl Watcher {
     pub fn new(path: impl AsRef<Path>) -> anyhow::Result<Self> {
-        let (tx, rx) = watch::channel(());
+        let (tx, rx) = mpsc::unbounded_channel();
 
         let mut watcher = notify::recommended_watcher(move |event| {
             if let Err(err) = event {
