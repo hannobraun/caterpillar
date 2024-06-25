@@ -76,8 +76,8 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
 
     if updates.send(Some(dir_to_serve)).is_err() {
         // If the send failed, the other end has hung up. That means either
-        // we're currently shutting down, or something went wrong and we
-        // _should_ be shutting down.
+        // we're currently shutting down, or something went wrong over there and
+        // we _should_ be shutting down.
         return Ok(ShouldContinue::NoBecauseShutdown);
     }
 
