@@ -52,7 +52,8 @@ async fn serve_static(Path(path): Path<PathBuf>) -> impl IntoResponse {
 }
 
 async fn file_response(path: PathBuf) -> Response {
-    let path = PathBuf::from("capi/runtime/dist").join(path);
+    let serve_dir = PathBuf::from("capi/runtime/dist");
+    let path = serve_dir.join(path);
 
     let content_type = match path.extension() {
         Some(os_str) => match os_str.to_str() {
