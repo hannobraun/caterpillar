@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use notify::{RecursiveMode, Watcher as _};
-use tokio::sync::mpsc;
+use tokio::sync::watch;
 use tracing::error;
 
 use super::debounce::DebouncedChanges;
@@ -15,10 +15,10 @@ pub struct Watcher {
 
 impl Watcher {
     pub fn new(crates_dir: PathBuf) -> anyhow::Result<Self> {
-        let (tx, rx) = mpsc::unbounded_channel();
+        let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {
-            let event = match event {
+            let _event = match event {
                 Ok(event) => event,
                 Err(err) => {
                     error!("Error watching for changes: {err}");
@@ -26,14 +26,14 @@ impl Watcher {
                 }
             };
 
-            if tx.send(event).is_err() {
+            if tx.send(()).is_err() {
                 // The other end has hung up. Not much we can do about that. The
                 // thread this is running on will probably also end soon.
             }
         })?;
         watcher.watch(&crates_dir, RecursiveMode::Recursive)?;
 
-        let changes = DebouncedChanges::new(crates_dir, rx);
+        let changes = DebouncedChanges::new(rx);
 
         Ok(Self {
             _watcher: watcher,
