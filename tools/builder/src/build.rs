@@ -71,22 +71,22 @@ async fn build_once(
     }
 
     let crate_to_serve = Path::new("capi/runtime");
-    let new_serve_dir = tempdir()?;
+    let new_output_dir = tempdir()?;
 
     let mut bindgen = Bindgen::new();
     bindgen
         .input_path("target/wasm32-unknown-unknown/debug/capi-runtime.wasm")
         .web(true)?
-        .generate(&new_serve_dir)?;
+        .generate(&new_output_dir)?;
 
     fs::copy(
         crate_to_serve.join("index.html"),
-        new_serve_dir.path().join("index.html"),
+        new_output_dir.path().join("index.html"),
     )
     .await?;
 
     if updates
-        .send(Some(new_serve_dir.path().to_path_buf()))
+        .send(Some(new_output_dir.path().to_path_buf()))
         .is_err()
     {
         // If the send failed, the other end has hung up. That means either
@@ -95,7 +95,7 @@ async fn build_once(
         return Ok(ShouldContinue::NoBecauseShutdown);
     }
 
-    *output_dir = Some(new_serve_dir);
+    *output_dir = Some(new_output_dir);
 
     Ok(ShouldContinue::YesWhyNot)
 }
