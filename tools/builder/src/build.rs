@@ -32,7 +32,7 @@ async fn watch_and_build(
         println!("Change detected. Rebuilding Caterpillar...");
         println!();
 
-        if !build_once(&updates).await? {
+        if let ShouldContinue::NoBecauseShutdown = build_once(&updates).await? {
             break;
         }
     }
@@ -40,7 +40,7 @@ async fn watch_and_build(
     Ok(())
 }
 
-async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
+async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
     let cargo_build = Command::new("cargo")
         .arg("build")
         .args(["--package", "capi-runtime"])
@@ -48,7 +48,7 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
         .status()
         .await?;
     if !cargo_build.success() {
-        return Ok(true);
+        return Ok(ShouldContinue::YesWhyNot);
     }
 
     let crate_to_serve = Path::new("capi/runtime");
@@ -67,10 +67,15 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<bool> {
     .await?;
 
     if updates.send(()).is_err() {
-        return Ok(false);
+        return Ok(ShouldContinue::NoBecauseShutdown);
     }
 
-    Ok(true)
+    Ok(ShouldContinue::YesWhyNot)
+}
+
+enum ShouldContinue {
+    YesWhyNot,
+    NoBecauseShutdown,
 }
 
 pub type UpdatesRx = watch::Receiver<Update>;
