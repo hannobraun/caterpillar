@@ -31,7 +31,7 @@ impl Watcher {
                 // thread this is running on will probably also end soon.
             }
         })?;
-        watcher.watch(crates_dir.as_ref(), RecursiveMode::Recursive)?;
+        watcher.watch(&crates_dir, RecursiveMode::Recursive)?;
 
         let changes = DebouncedChanges::new(rx);
 
