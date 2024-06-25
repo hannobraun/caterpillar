@@ -11,7 +11,7 @@ pub struct DebouncedChanges {
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<()>) -> Self {
+    pub fn new(changes: mpsc::UnboundedReceiver<notify::Event>) -> Self {
         let (tx, rx) = watch::channel(());
         tokio::spawn(debounce(changes, tx));
 
@@ -23,7 +23,10 @@ impl DebouncedChanges {
     }
 }
 
-async fn debounce(mut rx: mpsc::UnboundedReceiver<()>, tx: watch::Sender<()>) {
+async fn debounce(
+    mut rx: mpsc::UnboundedReceiver<notify::Event>,
+    tx: watch::Sender<()>,
+) {
     loop {
         if rx.recv().await.is_none() {
             // The other end has hung up. This means we're done here too.

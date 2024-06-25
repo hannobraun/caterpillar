@@ -16,7 +16,7 @@ impl Watcher {
         let (tx, rx) = mpsc::unbounded_channel();
 
         let mut watcher = notify::recommended_watcher(move |event| {
-            let _event = match event {
+            let event = match event {
                 Ok(event) => event,
                 Err(err) => {
                     error!("Error watching for changes: {err}");
@@ -24,7 +24,7 @@ impl Watcher {
                 }
             };
 
-            if tx.send(()).is_err() {
+            if tx.send(event).is_err() {
                 // The other end has hung up. Not much we can do about that. The
                 // thread this is running on will probably also end soon.
             }
