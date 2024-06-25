@@ -1,4 +1,7 @@
-use std::{path::Path, process};
+use std::{
+    path::{Path, PathBuf},
+    process,
+};
 
 use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
@@ -7,7 +10,7 @@ use wasm_bindgen_cli_support::Bindgen;
 use crate::watch::DebouncedChanges;
 
 pub fn start(changes: DebouncedChanges) -> UpdatesRx {
-    let (tx, rx) = watch::channel(());
+    let (tx, rx) = watch::channel(None);
     task::spawn(async {
         if let Err(err) = watch_and_build(changes, tx).await {
             error!("Build error: {err}");
@@ -71,7 +74,7 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
     )
     .await?;
 
-    if updates.send(()).is_err() {
+    if updates.send(Some(dir_to_serve)).is_err() {
         // If the send failed, the other end has hung up. That means either
         // we're currently shutting down, or something went wrong and we
         // _should_ be shutting down.
@@ -89,4 +92,4 @@ enum ShouldContinue {
 pub type UpdatesRx = watch::Receiver<Update>;
 pub type UpdatesTx = watch::Sender<Update>;
 
-pub type Update = ();
+pub type Update = Option<PathBuf>;
