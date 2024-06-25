@@ -6,7 +6,7 @@ pub async fn runtime() -> anyhow::Result<()> {
     let crates_dir = PathBuf::from("capi").canonicalize()?;
 
     let watcher = watch::Watcher::new(crates_dir)?;
-    let mut updates = build::start(watcher.changes());
+    let mut updates = build::start(watcher.changes);
     let address = serve::start(updates.clone()).await?;
 
     while let Ok(()) = updates.changed().await {

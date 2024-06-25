@@ -40,8 +40,4 @@ impl Watcher {
             changes,
         })
     }
-
-    pub fn changes(&self) -> DebouncedChanges {
-        self.changes.clone()
-    }
 }
