@@ -1,5 +1,2 @@
 # Cargo
 /target
-
-# Trunk
-/capi/runtime/dist
