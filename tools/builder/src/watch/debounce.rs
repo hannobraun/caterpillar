@@ -1,6 +1,7 @@
 use std::{
     collections::VecDeque,
     future::{self, Future},
+    path::{self, PathBuf},
     pin::{pin, Pin},
     task::{Context, Poll},
     time::Duration,
@@ -18,9 +19,12 @@ pub struct DebouncedChanges {
 }
 
 impl DebouncedChanges {
-    pub fn new(changes: mpsc::UnboundedReceiver<notify::Event>) -> Self {
+    pub fn new(
+        crates_dir: PathBuf,
+        changes: mpsc::UnboundedReceiver<notify::Event>,
+    ) -> Self {
         let (tx, rx) = watch::channel(());
-        tokio::spawn(debounce(changes, tx));
+        tokio::spawn(debounce(crates_dir, changes, tx));
 
         Self { changes: rx }
     }
@@ -31,6 +35,7 @@ impl DebouncedChanges {
 }
 
 async fn debounce(
+    crates_dir: PathBuf,
     mut rx: mpsc::UnboundedReceiver<notify::Event>,
     tx: watch::Sender<()>,
 ) {
@@ -39,17 +44,40 @@ async fn debounce(
     loop {
         select! {
             event = rx.recv() => {
-                let Some(_event) = event else {
+                let Some(event) = event else {
                     // The other end has hung up. This means we're done here
                     // too.
                     break;
                 };
 
-                // We have a change! Wait for a bit, before passing it on.
-                let timer = sleep(Duration::from_millis(20));
-                timers.push_back(Box::pin(timer));
+                for path in event.paths {
+                    let path_within_crates_dir = path
+                        .strip_prefix(&crates_dir)
+                        .expect("Expected path within `crates/` directory");
+                    let changed_crate = path_within_crates_dir
+                        .components()
+                        .next();
+
+                    let Some(path::Component::Normal(changed_crate)) =
+                        changed_crate
+                    else {
+                        // Whatever this is, it isn't a change to anything we're
+                        // watching. I don't want to panic here though, because
+                        // I expect that we might get weird paths like that, for
+                        // example if we're moving something into or out of the
+                        // watched directory.
+                        continue;
+                    };
+
+                    // We have a change! Wait for a bit, before passing it on.
+                    let timer = sleep(Duration::from_millis(20));
+                    timers.push_back((
+                        changed_crate.to_os_string(),
+                        Box::pin(timer)
+                    ));
+                }
             }
-            _ = SleepOption(timers.front_mut()) => {
+            _ = SleepOption(timers.front_mut().map(|(_, timer)| timer)) => {
                 timers.pop_front();
 
                 if tx.send(()).is_err() {

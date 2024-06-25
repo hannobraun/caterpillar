@@ -33,7 +33,7 @@ impl Watcher {
         })?;
         watcher.watch(&crates_dir, RecursiveMode::Recursive)?;
 
-        let changes = DebouncedChanges::new(rx);
+        let changes = DebouncedChanges::new(crates_dir, rx);
 
         Ok(Self {
             _watcher: watcher,
