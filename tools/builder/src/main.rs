@@ -1,5 +1,5 @@
 mod build;
-mod pipelines;
+mod pipeline;
 mod serve;
 mod watch;
 
@@ -7,7 +7,7 @@ mod watch;
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
-    pipelines::pipeline().await?;
+    pipeline::pipeline().await?;
 
     Ok(())
 }
