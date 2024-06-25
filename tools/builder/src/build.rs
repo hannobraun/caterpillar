@@ -73,13 +73,16 @@ async fn build_once(
 
     let new_output_dir = tempdir()?;
 
-    let wasm_module = "target/wasm32-unknown-unknown/debug/capi-runtime.wasm";
+    for package in &packages {
+        let wasm_module =
+            format!("target/wasm32-unknown-unknown/debug/{package}.wasm");
 
-    let mut bindgen = Bindgen::new();
-    bindgen
-        .input_path(wasm_module)
-        .web(true)?
-        .generate(&new_output_dir)?;
+        let mut bindgen = Bindgen::new();
+        bindgen
+            .input_path(wasm_module)
+            .web(true)?
+            .generate(&new_output_dir)?;
+    }
 
     fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
         .await?;
