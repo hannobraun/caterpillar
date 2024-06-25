@@ -3,6 +3,7 @@ use std::{
     process,
 };
 
+use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
 use wasm_bindgen_cli_support::Bindgen;
@@ -28,14 +29,20 @@ async fn watch_and_build(
     println!("Starting initial build of Caterpillar...");
     println!();
 
-    build_once(&updates).await?;
+    // We're not really doing anything with this variable, but it needs to
+    // exist. It keeps the `TempDir` instances from being dropped before we're
+    // done with it. Dropping it prematurely would delete the temporary
+    // directory we serve files out of.
+    let mut serve_dir = None;
+
+    build_once(&updates, &mut serve_dir).await?;
 
     while changes.wait_for_change().await {
         println!();
         println!("Change detected. Rebuilding Caterpillar...");
         println!();
 
-        let should_continue = build_once(&updates).await?;
+        let should_continue = build_once(&updates, &mut serve_dir).await?;
         if let ShouldContinue::NoBecauseShutdown = should_continue {
             break;
         }
@@ -44,7 +51,10 @@ async fn watch_and_build(
     Ok(())
 }
 
-async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
+async fn build_once(
+    updates: &UpdatesTx,
+    serve_dir: &mut Option<TempDir>,
+) -> anyhow::Result<ShouldContinue> {
     let cargo_build = Command::new("cargo")
         .arg("build")
         .args(["--package", "capi-runtime"])
@@ -61,26 +71,31 @@ async fn build_once(updates: &UpdatesTx) -> anyhow::Result<ShouldContinue> {
     }
 
     let crate_to_serve = Path::new("capi/runtime");
-    let dir_to_serve = crate_to_serve.join("dist");
+    let new_serve_dir = tempdir()?;
 
     let mut bindgen = Bindgen::new();
     bindgen
         .input_path("target/wasm32-unknown-unknown/debug/capi-runtime.wasm")
         .web(true)?
-        .generate(&dir_to_serve)?;
+        .generate(&new_serve_dir)?;
 
     fs::copy(
         crate_to_serve.join("index.html"),
-        dir_to_serve.join("index.html"),
+        new_serve_dir.path().join("index.html"),
     )
     .await?;
 
-    if updates.send(Some(dir_to_serve)).is_err() {
+    if updates
+        .send(Some(new_serve_dir.path().to_path_buf()))
+        .is_err()
+    {
         // If the send failed, the other end has hung up. That means either
         // we're currently shutting down, or something went wrong over there and
         // we _should_ be shutting down.
         return Ok(ShouldContinue::NoBecauseShutdown);
     }
+
+    *serve_dir = Some(new_serve_dir);
 
     Ok(ShouldContinue::YesWhyNot)
 }
