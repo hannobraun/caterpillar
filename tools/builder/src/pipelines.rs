@@ -1,7 +1,9 @@
 use crate::{build, serve, watch};
 
 pub async fn runtime() -> anyhow::Result<()> {
-    let watcher = watch::Watcher::new("capi")?;
+    let crates_dir = "capi";
+
+    let watcher = watch::Watcher::new(crates_dir)?;
     let mut updates = build::start(watcher.changes());
     let address = serve::start(updates.clone()).await?;
 
