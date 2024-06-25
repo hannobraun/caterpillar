@@ -69,9 +69,11 @@ async fn build_once(
 
     let new_output_dir = tempdir()?;
 
+    let wasm_module = "target/wasm32-unknown-unknown/debug/capi-runtime.wasm";
+
     let mut bindgen = Bindgen::new();
     bindgen
-        .input_path("target/wasm32-unknown-unknown/debug/capi-runtime.wasm")
+        .input_path(wasm_module)
         .web(true)?
         .generate(&new_output_dir)?;
 
