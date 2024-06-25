@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::watch;
@@ -12,7 +12,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(path: &Path, _: PathBuf) -> anyhow::Result<Self> {
+    pub fn new(path: &Path) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {

@@ -4,9 +4,8 @@ use crate::{build, serve, watch};
 
 pub async fn runtime() -> anyhow::Result<()> {
     let runtime_path = Path::new("capi/runtime");
-    let output_path = runtime_path.join("dist");
 
-    let watcher = watch::Watcher::new(runtime_path, output_path.to_path_buf())?;
+    let watcher = watch::Watcher::new(runtime_path)?;
     let mut updates = build::start(watcher.changes());
     let address = serve::start(updates.clone()).await?;
 
