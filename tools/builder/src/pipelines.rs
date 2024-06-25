@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{build, serve, watch};
 
 pub async fn runtime() -> anyhow::Result<()> {
-    let crates_dir = PathBuf::from("capi");
+    let crates_dir = PathBuf::from("capi").canonicalize()?;
 
     let watcher = watch::Watcher::new(crates_dir)?;
     let mut updates = build::start(watcher.changes());
