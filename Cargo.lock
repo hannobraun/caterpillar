@@ -309,6 +309,7 @@ dependencies = [
  "capi-compiler",
  "capi-process",
  "capi-protocol",
+ "console_error_panic_hook",
  "leptos",
  "log",
  "ron",
