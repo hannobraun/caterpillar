@@ -7,7 +7,7 @@ mod watch;
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
-    pipelines::runtime().await?;
+    pipelines::pipeline().await?;
 
     Ok(())
 }
