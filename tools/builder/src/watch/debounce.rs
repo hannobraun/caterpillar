@@ -1,5 +1,6 @@
 use std::{
     collections::VecDeque,
+    ffi::OsString,
     future::{self, Future},
     path::{self, PathBuf},
     pin::{pin, Pin},
@@ -14,7 +15,7 @@ use tokio::{
 };
 
 pub struct DebouncedChanges {
-    changes: mpsc::UnboundedReceiver<()>,
+    changes: mpsc::UnboundedReceiver<OsString>,
 }
 
 impl DebouncedChanges {
@@ -36,7 +37,7 @@ impl DebouncedChanges {
 async fn debounce(
     crates_dir: PathBuf,
     mut rx: mpsc::UnboundedReceiver<notify::Event>,
-    tx: mpsc::UnboundedSender<()>,
+    tx: mpsc::UnboundedSender<OsString>,
 ) {
     let mut timers = VecDeque::new();
 
@@ -85,7 +86,7 @@ async fn debounce(
                 // debounced anything.
                 timers.retain(|(c, _)| c != &changed_crate);
 
-                if tx.send(()).is_err() {
+                if tx.send(changed_crate).is_err() {
                     // The other end has hung up. This means we're done here
                     // too.
                     break;
