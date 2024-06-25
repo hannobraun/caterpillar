@@ -7,6 +7,8 @@ use tracing::error;
 use super::debounce::DebouncedChanges;
 
 pub struct Watcher {
+    // This field is not used, but we need to keep it around. If we drop the
+    // `notify` watcher, it stops watching.
     _watcher: notify::RecommendedWatcher,
     changes: DebouncedChanges,
 }
