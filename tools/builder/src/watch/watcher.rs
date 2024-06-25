@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::path::PathBuf;
 
 use notify::{RecursiveMode, Watcher as _};
 use tokio::sync::mpsc;
@@ -14,7 +14,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(crates_dir: impl AsRef<Path>) -> anyhow::Result<Self> {
+    pub fn new(crates_dir: PathBuf) -> anyhow::Result<Self> {
         let (tx, rx) = mpsc::unbounded_channel();
 
         let mut watcher = notify::recommended_watcher(move |event| {
