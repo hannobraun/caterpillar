@@ -35,7 +35,8 @@ async fn watch_and_build(
         println!("Change detected. Rebuilding Caterpillar...");
         println!();
 
-        if let ShouldContinue::NoBecauseShutdown = build_once(&updates).await? {
+        let should_continue = build_once(&updates).await?;
+        if let ShouldContinue::NoBecauseShutdown = should_continue {
             break;
         }
     }
