@@ -12,7 +12,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(path: impl AsRef<Path>) -> anyhow::Result<Self> {
+    pub fn new(crates_dir: impl AsRef<Path>) -> anyhow::Result<Self> {
         let (tx, rx) = mpsc::unbounded_channel();
 
         let mut watcher = notify::recommended_watcher(move |event| {
@@ -29,7 +29,7 @@ impl Watcher {
                 // thread this is running on will probably also end soon.
             }
         })?;
-        watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
+        watcher.watch(crates_dir.as_ref(), RecursiveMode::Recursive)?;
 
         let changes = DebouncedChanges::new(rx);
 
