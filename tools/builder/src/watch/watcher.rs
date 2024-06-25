@@ -12,7 +12,7 @@ pub struct Watcher {
 }
 
 impl Watcher {
-    pub fn new(path: &Path) -> anyhow::Result<Self> {
+    pub fn new(path: impl AsRef<Path>) -> anyhow::Result<Self> {
         let (tx, rx) = watch::channel(());
 
         let mut watcher = notify::recommended_watcher(move |event| {
@@ -26,7 +26,7 @@ impl Watcher {
                 // thread this is running on will probably also end soon.
             }
         })?;
-        watcher.watch(path, RecursiveMode::Recursive)?;
+        watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
 
         let changes = DebouncedChanges::new(rx);
 
