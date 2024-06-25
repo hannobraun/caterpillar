@@ -33,16 +33,16 @@ async fn watch_and_build(
     // exist. It keeps the `TempDir` instances from being dropped before we're
     // done with it. Dropping it prematurely would delete the temporary
     // directory we serve files out of.
-    let mut serve_dir = None;
+    let mut output_dir = None;
 
-    build_once(&updates, &mut serve_dir).await?;
+    build_once(&updates, &mut output_dir).await?;
 
     while changes.wait_for_change().await {
         println!();
         println!("Change detected. Rebuilding Caterpillar...");
         println!();
 
-        let should_continue = build_once(&updates, &mut serve_dir).await?;
+        let should_continue = build_once(&updates, &mut output_dir).await?;
         if let ShouldContinue::NoBecauseShutdown = should_continue {
             break;
         }
