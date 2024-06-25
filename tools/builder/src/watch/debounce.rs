@@ -78,7 +78,8 @@ async fn debounce(
                 }
             }
             _ = SleepOption(timers.front_mut().map(|(_, timer)| timer)) => {
-                timers.pop_front();
+                let (changed_crate, _) = timers.pop_front()
+                    .expect("Future was ready; must be `Some`");
 
                 if tx.send(()).is_err() {
                     // The other end has hung up. This means we're done here
@@ -89,7 +90,7 @@ async fn debounce(
                 // We also need to throw away any changes that might or might
                 // not have arrived in the meantime, or we haven't actually
                 // debounced anything.
-                timers.clear();
+                timers.retain(|(c, _)| c != &changed_crate);
             }
         }
     }
