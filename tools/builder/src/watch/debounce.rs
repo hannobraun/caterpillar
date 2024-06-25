@@ -13,7 +13,6 @@ use tokio::{
     time::{sleep, Sleep},
 };
 
-#[derive(Clone)]
 pub struct DebouncedChanges {
     changes: watch::Receiver<()>,
 }
