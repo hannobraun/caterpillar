@@ -81,16 +81,16 @@ async fn debounce(
                 let (changed_crate, _) = timers.pop_front()
                     .expect("Future was ready; must be `Some`");
 
+                // We also need to throw away any changes that might or might
+                // not have arrived in the meantime, or we haven't actually
+                // debounced anything.
+                timers.retain(|(c, _)| c != &changed_crate);
+
                 if tx.send(()).is_err() {
                     // The other end has hung up. This means we're done here
                     // too.
                     break;
                 }
-
-                // We also need to throw away any changes that might or might
-                // not have arrived in the meantime, or we haven't actually
-                // debounced anything.
-                timers.retain(|(c, _)| c != &changed_crate);
             }
         }
     }
