@@ -3,9 +3,7 @@ use std::path::Path;
 use crate::{build, serve, watch};
 
 pub async fn runtime() -> anyhow::Result<()> {
-    let runtime_path = Path::new("capi");
-
-    let watcher = watch::Watcher::new(runtime_path)?;
+    let watcher = watch::Watcher::new(Path::new("capi"))?;
     let mut updates = build::start(watcher.changes());
     let address = serve::start(updates.clone()).await?;
 
