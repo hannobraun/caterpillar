@@ -1,7 +1,4 @@
-use std::{
-    path::{Path, PathBuf},
-    process,
-};
+use std::{path::PathBuf, process};
 
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
@@ -72,19 +69,14 @@ async fn build_once(
 
     let new_output_dir = tempdir()?;
 
-    let crate_to_serve = Path::new("capi/runtime");
-
     let mut bindgen = Bindgen::new();
     bindgen
         .input_path("target/wasm32-unknown-unknown/debug/capi-runtime.wasm")
         .web(true)?
         .generate(&new_output_dir)?;
 
-    fs::copy(
-        crate_to_serve.join("index.html"),
-        new_output_dir.path().join("index.html"),
-    )
-    .await?;
+    fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
+        .await?;
 
     if updates
         .send(Some(new_output_dir.path().to_path_buf()))
