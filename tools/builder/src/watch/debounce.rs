@@ -9,12 +9,12 @@ use std::{
 
 use tokio::{
     select,
-    sync::{mpsc, watch},
+    sync::mpsc,
     time::{sleep, Sleep},
 };
 
 pub struct DebouncedChanges {
-    changes: watch::Receiver<()>,
+    changes: mpsc::UnboundedReceiver<()>,
 }
 
 impl DebouncedChanges {
@@ -22,21 +22,21 @@ impl DebouncedChanges {
         crates_dir: PathBuf,
         changes: mpsc::UnboundedReceiver<notify::Event>,
     ) -> Self {
-        let (tx, rx) = watch::channel(());
+        let (tx, rx) = mpsc::unbounded_channel();
         tokio::spawn(debounce(crates_dir, changes, tx));
 
         Self { changes: rx }
     }
 
     pub async fn wait_for_change(&mut self) -> bool {
-        self.changes.changed().await.is_ok()
+        self.changes.recv().await.is_some()
     }
 }
 
 async fn debounce(
     crates_dir: PathBuf,
     mut rx: mpsc::UnboundedReceiver<notify::Event>,
-    tx: watch::Sender<()>,
+    tx: mpsc::UnboundedSender<()>,
 ) {
     let mut timers = VecDeque::new();
 
