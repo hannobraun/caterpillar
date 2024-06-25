@@ -43,7 +43,7 @@ Before that becomes necessary, I want to experiment though. At least give the
 language to chance to be more than an incremental improvement over the status
 quo.
 
-See the following daily thoughts for further information:
+The following daily thoughts provide more context:
 [2024-06-18](https://capi.hannobraun.com/daily/2024-06-18) and
 [2024-06-19](https://capi.hannobraun.com/daily/2024-06-19).
 
@@ -60,7 +60,7 @@ upgrade easy. But each release might introduce changes that require updates to
 Caterpillar code. Where possible, users will be given ample time to make those
 changes, or they will be automated outright.
 
-See the following daily thoughts for further information:
+The following daily thoughts provide more context:
 [2024-05-28](https://capi.hannobraun.com/daily/2024-05-28),
 [2024-05-29](https://capi.hannobraun.com/daily/2024-05-29),
 [2024-05-31](https://capi.hannobraun.com/daily/2024-05-31),
@@ -80,7 +80,7 @@ type of operator. I believe postfix operators are the best option under that
 constraint, due to their combination of simplicity, conciseness, and natural
 support for chaining operations. That comes at the cost of familiarity.
 
-See the following daily thoughts for further information:
+The following daily thoughts provide more context:
 [2024-05-03](https://capi.hannobraun.com/daily/2024-05-03),
 [2024-05-04](https://capi.hannobraun.com/daily/2024-05-04),
 [2024-05-05](https://capi.hannobraun.com/daily/2024-05-05),
