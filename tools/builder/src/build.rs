@@ -70,8 +70,9 @@ async fn build_once(
         return Ok(ShouldContinue::YesWhyNot);
     }
 
-    let crate_to_serve = Path::new("capi/runtime");
     let new_output_dir = tempdir()?;
+
+    let crate_to_serve = Path::new("capi/runtime");
 
     let mut bindgen = Bindgen::new();
     bindgen
