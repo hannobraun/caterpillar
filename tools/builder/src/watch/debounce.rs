@@ -39,11 +39,11 @@ async fn debounce(
     loop {
         select! {
             event = rx.recv() => {
-                if event.is_none() {
+                let Some(_event) = event else {
                     // The other end has hung up. This means we're done here
                     // too.
                     break;
-                }
+                };
 
                 // We have a change! Wait for a bit, before passing it on.
                 let timer = sleep(Duration::from_millis(20));
