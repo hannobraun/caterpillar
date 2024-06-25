@@ -53,7 +53,7 @@ async fn watch_and_build(
 
 async fn build_once(
     updates: &UpdatesTx,
-    serve_dir: &mut Option<TempDir>,
+    output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
     let cargo_build = Command::new("cargo")
         .arg("build")
@@ -95,7 +95,7 @@ async fn build_once(
         return Ok(ShouldContinue::NoBecauseShutdown);
     }
 
-    *serve_dir = Some(new_serve_dir);
+    *output_dir = Some(new_serve_dir);
 
     Ok(ShouldContinue::YesWhyNot)
 }
