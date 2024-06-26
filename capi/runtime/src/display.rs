@@ -3,13 +3,7 @@ use crate::tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS};
 pub struct Display {}
 
 impl Display {
-    pub fn set_tile(
-        &mut self,
-        x: usize,
-        y: usize,
-        value: u8,
-        tiles: &mut [u8],
-    ) {
+    pub fn set_tile(x: usize, y: usize, value: u8, tiles: &mut [u8]) {
         let index = || x.checked_add(y.checked_mul(TILES_PER_AXIS)?);
         let index = index().unwrap();
 

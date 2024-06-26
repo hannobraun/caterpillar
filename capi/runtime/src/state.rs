@@ -152,7 +152,7 @@ impl RuntimeState {
 
                         self.process.handle_first_effect();
 
-                        self.display.set_tile(
+                        Display::set_tile(
                             x.into(),
                             y.into(),
                             value,
