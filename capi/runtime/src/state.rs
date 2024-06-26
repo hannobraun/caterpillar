@@ -176,7 +176,8 @@ impl RuntimeState {
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::ReadRandom => {
-                        self.process.push([Value(random())]);
+                        let random = random();
+                        self.process.push([Value(random)]);
                         self.process.handle_first_effect();
                     }
                 }
