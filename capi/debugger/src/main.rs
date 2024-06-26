@@ -1,4 +1,8 @@
-pub use capi_debugger::ffi;
+pub mod ffi;
+pub mod model;
+pub mod remote_process;
+pub mod state;
+pub mod ui;
 
 fn main() {
     console_error_panic_hook::set_once();
