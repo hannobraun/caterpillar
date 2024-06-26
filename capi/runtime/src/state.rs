@@ -188,7 +188,7 @@ impl RuntimeState {
 
         self.updates.queue_updates(&self.process, &self.memory);
 
-        self.display.render(&self.tiles, pixels);
+        Display::render(&self.tiles, pixels);
     }
 }
 

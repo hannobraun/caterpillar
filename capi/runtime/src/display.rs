@@ -16,7 +16,7 @@ impl Display {
         tiles[index] = value;
     }
 
-    pub fn render(&mut self, tiles: &[u8], pixels: &mut [u8]) {
+    pub fn render(tiles: &[u8], pixels: &mut [u8]) {
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
                 let i = tile_y * TILES_PER_AXIS + tile_x;
