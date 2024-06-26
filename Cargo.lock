@@ -351,9 +351,7 @@ dependencies = [
  "capi-process",
  "capi-protocol",
  "console_error_panic_hook",
- "console_log",
  "leptos",
- "log",
  "pixels",
  "rand",
  "raw-window-handle",
@@ -466,7 +464,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be8aed40e4edbf4d3b4431ab260b63fdc40f5780a4766824329ea0f1eefe3c0f"
 dependencies = [
  "log",
- "wasm-bindgen",
  "web-sys",
 ]
 
