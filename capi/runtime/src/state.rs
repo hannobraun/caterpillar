@@ -25,7 +25,6 @@ pub struct RuntimeState {
     pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
-    pub display: Display,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }
@@ -71,7 +70,6 @@ impl RuntimeState {
             memory,
             input,
             tiles: [0; NUM_TILES],
-            display: Display {},
             commands: Vec::new(),
             updates,
         }
