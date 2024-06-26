@@ -24,6 +24,7 @@ pub struct RuntimeState {
     pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
+    pub random: VecDeque<i8>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }
@@ -70,6 +71,7 @@ impl RuntimeState {
             input,
             tiles: [0; NUM_TILES],
             commands: Vec::new(),
+            random: VecDeque::new(),
             updates,
         }
     }
@@ -176,7 +178,12 @@ impl RuntimeState {
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::ReadRandom => {
-                        let random = random();
+                        while self.random.len() < 1024 {
+                            self.random.push_back(random());
+                        }
+
+                        let random = self.random.pop_front().unwrap();
+
                         self.process.push([Value(random)]);
                         self.process.handle_first_effect();
                     }
