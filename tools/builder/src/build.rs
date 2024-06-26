@@ -55,7 +55,7 @@ async fn build_once(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
-    for package in &["capi-runtime", "capi-debugger"] {
+    for package in ["capi-runtime", "capi-debugger"] {
         let cargo_build = Command::new("cargo")
             .arg("build")
             .args(["--package", package])
