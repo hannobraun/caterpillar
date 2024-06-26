@@ -8,7 +8,7 @@ use crate::state::DebuggerState;
 
 pub static STATE: Mutex<Option<DebuggerState>> = Mutex::new(None);
 
-static UPDATES_RX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
+static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static COMMANDS_TX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
@@ -20,7 +20,7 @@ static LAST_UPDATE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 pub fn updates_write(len: usize) {
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { UPDATES_RX.access() };
+    let buffer = unsafe { UPDATES.access() };
     let update = buffer.write_frame(len);
 
     *LAST_UPDATE_WRITE.lock().unwrap() =
@@ -93,7 +93,7 @@ pub fn on_update() {
 
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { UPDATES_RX.access() };
+    let buffer = unsafe { UPDATES.access() };
 
     let update = buffer.read_frame().to_vec();
     state.updates_tx.send(update).unwrap();
