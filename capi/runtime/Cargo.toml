@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-console_error_panic_hook = "*"
 pixels = "*"
 rand = "*"
 raw-window-handle = "0.5"
