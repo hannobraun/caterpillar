@@ -11,8 +11,7 @@ use capi_protocol::{
 use rand::random;
 
 use crate::{
-    display::Display,
-    ffi,
+    display, ffi,
     tiles::{NUM_TILES, TILES_PER_AXIS},
     updates::Updates,
 };
@@ -150,7 +149,7 @@ impl RuntimeState {
 
                         self.process.handle_first_effect();
 
-                        Display::set_tile(
+                        display::set_tile(
                             x.into(),
                             y.into(),
                             value,
@@ -186,7 +185,7 @@ impl RuntimeState {
 
         self.updates.queue_updates(&self.process, &self.memory);
 
-        Display::render(&self.tiles, pixels);
+        display::render(&self.tiles, pixels);
     }
 }
 
