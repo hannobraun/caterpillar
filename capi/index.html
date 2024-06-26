@@ -21,8 +21,6 @@
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
         const runtime = await initRuntime("capi-runtime_bg.wasm");
 
-        console.log(debugger_);
-
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
 
