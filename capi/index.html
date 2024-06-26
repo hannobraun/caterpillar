@@ -70,7 +70,7 @@
                 }
             }
 
-            const should_continue = runtime.on_frame();
+            runtime.on_frame();
 
             while (true) {
                 runtime.updates_read();
@@ -95,9 +95,7 @@
                 }
             }
 
-            if (should_continue) {
-                requestAnimationFrame(mainLoop);
-            }
+            requestAnimationFrame(mainLoop);
         }
     </script>
     <script type="module">
