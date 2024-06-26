@@ -70,7 +70,12 @@
                 }
             }
 
-            runtime.on_frame();
+            try {
+                runtime.on_frame();
+            }
+            catch {
+                // Panics are handled below.
+            }
 
             while (true) {
                 runtime.updates_read();
@@ -95,7 +100,18 @@
                 }
             }
 
-            requestAnimationFrame(mainLoop);
+            if (runtime.panic_ptr() == 0) {
+                requestAnimationFrame(mainLoop);
+            }
+            else {
+                const panic_array = new Uint8Array(
+                    runtime.memory.buffer,
+                    runtime.panic_ptr(),
+                    runtime.panic_len(),
+                );
+                const panic_string = new TextDecoder().decode(panic_array);
+                console.log(panic_string);
+            }
         }
     </script>
     <script type="module">
