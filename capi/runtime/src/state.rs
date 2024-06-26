@@ -1,14 +1,13 @@
 use std::collections::VecDeque;
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
-use capi_debugger::ui::{self, CommandsRx};
+use capi_debugger::{state::DebuggerState, ui};
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
 use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
-    update::SerializedUpdate,
 };
 use rand::random;
 use tokio::sync::mpsc;
@@ -29,10 +28,9 @@ pub struct RuntimeState {
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
     pub display: Option<Display>,
-    pub commands_rx: CommandsRx,
-    pub updates_tx: mpsc::UnboundedSender<SerializedUpdate>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
+    pub debugger: DebuggerState,
 }
 
 impl RuntimeState {
@@ -79,10 +77,12 @@ impl RuntimeState {
             input,
             tiles: [0; NUM_TILES],
             display: None,
-            commands_rx,
-            updates_tx,
             commands: Vec::new(),
             updates,
+            debugger: DebuggerState {
+                updates_tx,
+                commands_rx,
+            },
         }
     }
 

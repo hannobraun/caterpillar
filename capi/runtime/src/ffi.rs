@@ -162,7 +162,7 @@ pub fn on_frame() {
     let state = state.get_or_insert_with(Default::default);
 
     loop {
-        let command = match state.commands_rx.try_recv() {
+        let command = match state.debugger.commands_rx.try_recv() {
             Ok(command) => command,
             Err(TryRecvError::Empty) => {
                 break;
@@ -200,5 +200,5 @@ pub fn on_update() {
     let buffer = unsafe { UPDATES_RX.access() };
 
     let update = buffer.read_frame().to_vec();
-    state.updates_tx.send(update).unwrap();
+    state.debugger.updates_tx.send(update).unwrap();
 }
