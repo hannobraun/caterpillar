@@ -71,11 +71,11 @@ async fn build_once(
         }
     }
 
+    let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
 
     for package in &packages {
-        let wasm_module =
-            format!("target/wasm32-unknown-unknown/debug/{package}.wasm");
+        let wasm_module = format!("{target}/{package}.wasm");
 
         let mut bindgen = Bindgen::new();
         bindgen
