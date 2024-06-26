@@ -15,11 +15,13 @@
         Display for a game written in Caterpillar.
     </canvas>
     <script type="module">
+        const module = fetch("/capi-runtime.wasm");
+        const { instance } = await WebAssembly.instantiateStreaming(module, {});
+        const runtime = instance.exports;
+
         import initDebugger from "/capi-debugger.js";
-        import initRuntime from "/capi-runtime.js";
 
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
-        const runtime = await initRuntime("capi-runtime_bg.wasm");
 
         window.addEventListener("keydown", (event) => {
             let keyCode = null;

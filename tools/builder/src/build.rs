@@ -1,4 +1,7 @@
-use std::{path::PathBuf, process};
+use std::{
+    path::{Path, PathBuf},
+    process,
+};
 
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
@@ -74,15 +77,19 @@ async fn build_once(
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
 
-    for package in &packages {
-        let wasm_module = format!("{target}/{package}.wasm");
+    fs::copy(
+        Path::new(target).join("capi-runtime.wasm"),
+        new_output_dir.path().join("capi-runtime.wasm"),
+    )
+    .await?;
 
-        let mut bindgen = Bindgen::new();
-        bindgen
-            .input_path(wasm_module)
-            .web(true)?
-            .generate(&new_output_dir)?;
-    }
+    let wasm_module = format!("{target}/capi-debugger.wasm");
+
+    let mut bindgen = Bindgen::new();
+    bindgen
+        .input_path(wasm_module)
+        .web(true)?
+        .generate(&new_output_dir)?;
 
     fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
         .await?;
