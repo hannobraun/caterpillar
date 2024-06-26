@@ -1,18 +1,12 @@
 use std::sync::Mutex;
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
+use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 use tokio::sync::mpsc::error::TryRecvError;
 
 use crate::state::RuntimeState;
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
-
-/// The size of the updates buffer
-///
-/// This is a ridiculous 1 MiB large. It should be possible to make this much
-/// smaller, but for now, we're using a very space-inefficient serialization
-/// format.
-const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
 /// The buffer that is used to transfer updates _to_ the host
 static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
@@ -21,8 +15,6 @@ static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
 /// The buffer that is used to transfer updates _from_ the host
 static UPDATES_RX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
-
-const COMMANDS_BUFFER_SIZE: usize = 1024;
 
 static COMMANDS_TX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
