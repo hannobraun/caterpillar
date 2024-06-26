@@ -2,7 +2,8 @@
 
 ## Vision
 
-**Caterpillar is a programming language** with a dual goal:
+Caterpillar aims to create a better way to develop software. It is a
+**programming language** with a dual goal:
 
 - Create an **immediate connection to the code you're writing**, to give you an
   intuitive understanding of what it's doing.
