@@ -110,5 +110,5 @@ pub fn on_frame() -> bool {
         buffer.write_frame(update.len()).copy_from_slice(&update);
     }
 
-    true
+    state.panic.is_none()
 }

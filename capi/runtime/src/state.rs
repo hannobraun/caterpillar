@@ -28,6 +28,7 @@ pub struct RuntimeState {
     pub display: Option<Display>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
+    pub panic: Option<String>,
 }
 
 impl RuntimeState {
@@ -73,6 +74,7 @@ impl RuntimeState {
             display: None,
             commands: Vec::new(),
             updates,
+            panic: None,
         }
     }
 
