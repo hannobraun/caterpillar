@@ -78,8 +78,6 @@ impl RuntimeState {
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let display = &mut self.display;
-
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
 
@@ -154,7 +152,7 @@ impl RuntimeState {
 
                         self.process.handle_first_effect();
 
-                        display.set_tile(
+                        self.display.set_tile(
                             x.into(),
                             y.into(),
                             value,
@@ -190,7 +188,7 @@ impl RuntimeState {
 
         self.updates.queue_updates(&self.process, &self.memory);
 
-        display.render(&self.tiles, pixels);
+        self.display.render(&self.tiles, pixels);
     }
 }
 
