@@ -29,7 +29,7 @@ development updates.
 Caterpillar draws inspiration from many sources. The following is an
 **incomplete** list:
 
-- [Inventing on Principle](https://vimeo.com/906418692) by Bret Victor
+- [Inventing on Principle](https://vimeo.com/906418692)
 - [Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)
 - [Stop Writing Dead Programs](https://jackrusher.com/strange-loop-2022/)
 
