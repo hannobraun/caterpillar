@@ -45,7 +45,7 @@ impl Display {
                 let tile = tiles[i];
 
                 let color = if tile == 0 {
-                    [0, 0, 0, 0]
+                    [0, 0, 0, 255]
                 } else {
                     [255, 255, 255, 255]
                 };
