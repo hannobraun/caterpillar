@@ -24,6 +24,15 @@ solution for one use case (game development) on one platform (browsers).
 You can keep up with the project by reading my [daily thoughts], which include
 development updates.
 
+## Inspiration
+
+Caterpillar draws inspiration from many sources. The following is an
+**incomplete** list:
+
+- [Inventing on Principle](https://vimeo.com/906418692) by Bret Victor
+- [Tomorrow Corporation Tech Demo](https://www.youtube.com/watch?v=72y2EC5fkcE)
+- [Stop Writing Dead Programs](https://jackrusher.com/strange-loop-2022/)
+
 ## Design
 
 This section aims to document the decisions that have gone into the language
