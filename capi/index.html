@@ -49,11 +49,11 @@
 
         function mainLoop() {
             while (true) {
-                runtime.commands_read();
+                debugger_.commands_read();
                 const command_rx = new Uint8Array(
-                    runtime.memory.buffer,
-                    runtime.commands_read_ptr(),
-                    runtime.commands_read_len(),
+                    debugger_.memory.buffer,
+                    debugger_.commands_read_ptr(),
+                    debugger_.commands_read_len(),
                 );
 
                 if (command_rx.byteLength > 0) {
@@ -83,15 +83,15 @@
                 );
 
                 if (update_rx.byteLength > 0) {
-                    runtime.updates_write(update_rx.byteLength);
+                    debugger_.updates_write(update_rx.byteLength);
                     const update_tx = new Uint8Array(
-                        runtime.memory.buffer,
-                        runtime.updates_write_ptr(),
-                        runtime.updates_write_len(),
+                        debugger_.memory.buffer,
+                        debugger_.updates_write_ptr(),
+                        debugger_.updates_write_len(),
                     );
                     update_tx.set(update_rx);
 
-                    runtime.on_update();
+                    debugger_.on_update();
                 } else {
                     break;
                 }

@@ -347,7 +347,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "capi-compiler",
- "capi-debugger",
  "capi-ffi",
  "capi-process",
  "capi-protocol",

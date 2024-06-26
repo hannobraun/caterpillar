@@ -14,9 +14,6 @@ raw-window-handle = "0.5"
 [dependencies.capi-compiler]
 path = "../compiler"
 
-[dependencies.capi-debugger]
-path = "../debugger"
-
 [dependencies.capi-ffi]
 path = "../ffi"
 

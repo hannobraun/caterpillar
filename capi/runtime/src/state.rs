@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
-use capi_debugger::state::DebuggerState;
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
@@ -29,7 +28,6 @@ pub struct RuntimeState {
     pub display: Option<Display>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
-    pub debugger: DebuggerState,
 }
 
 impl RuntimeState {
@@ -75,7 +73,6 @@ impl RuntimeState {
             display: None,
             commands: Vec::new(),
             updates,
-            debugger: DebuggerState::new(),
         }
     }
 
