@@ -5,9 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-pixels = "*"
 rand = "*"
-raw-window-handle = "0.5"
 
 [dependencies.capi-compiler]
 path = "../compiler"
