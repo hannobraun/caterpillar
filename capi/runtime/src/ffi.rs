@@ -97,7 +97,7 @@ pub fn on_command() {
 }
 
 #[no_mangle]
-pub fn on_frame() {
+pub fn on_frame() -> bool {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
@@ -109,4 +109,6 @@ pub fn on_frame() {
         let buffer = unsafe { UPDATES.access() };
         buffer.write_frame(update.len()).copy_from_slice(&update);
     }
+
+    true
 }
