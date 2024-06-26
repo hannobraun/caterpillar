@@ -66,7 +66,7 @@ impl RuntimeState {
         // While we're still using `pixels`, the `Display` constructor needs to
         // be async. We need to do some acrobatics here to deal with that.
         leptos::spawn_local(async {
-            let display = Display::new().await.unwrap();
+            let display = Display {};
 
             let mut state = ffi::STATE.lock().unwrap();
             let state = state.get_or_insert_with(Default::default);

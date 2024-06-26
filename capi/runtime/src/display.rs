@@ -3,10 +3,6 @@ use crate::tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS};
 pub struct Display {}
 
 impl Display {
-    pub async fn new() -> anyhow::Result<Self> {
-        Ok(Self {})
-    }
-
     pub fn set_tile(
         &mut self,
         x: usize,
