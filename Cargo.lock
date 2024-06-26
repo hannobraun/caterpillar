@@ -290,6 +290,7 @@ dependencies = [
  "capi-ffi",
  "capi-process",
  "capi-protocol",
+ "getrandom",
  "leptos",
  "rand",
 ]
