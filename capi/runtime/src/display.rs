@@ -1,28 +1,10 @@
-use pixels::{Pixels, SurfaceTexture};
-use raw_window_handle::{
-    HasRawDisplayHandle, HasRawWindowHandle, RawDisplayHandle, RawWindowHandle,
-    WebDisplayHandle, WebWindowHandle,
-};
-
 use crate::tiles::{PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS};
 
-pub struct Display {
-    pixels: Pixels,
-}
+pub struct Display {}
 
 impl Display {
     pub async fn new() -> anyhow::Result<Self> {
-        let pixels = {
-            let size_u32: u32 = PIXELS_PER_AXIS
-                .try_into()
-                .expect("Expected `SIZE` to fit into `u32`");
-
-            let surface_texture =
-                SurfaceTexture::new(size_u32, size_u32, &CanvasWindow);
-            Pixels::new_async(size_u32, size_u32, surface_texture).await?
-        };
-
-        Ok(Self { pixels })
+        Ok(Self {})
     }
 
     pub fn set_tile(
@@ -38,7 +20,7 @@ impl Display {
         tiles[index] = value;
     }
 
-    pub fn render(&mut self, tiles: &[u8]) {
+    pub fn render(&mut self, tiles: &[u8], pixels: &mut [u8]) {
         for tile_y in 0..TILES_PER_AXIS {
             for tile_x in 0..TILES_PER_AXIS {
                 let i = tile_y * TILES_PER_AXIS + tile_x;
@@ -62,32 +44,10 @@ impl Display {
                             * num_channels;
 
                         let i = frame_y * PIXELS_PER_AXIS + frame_x;
-                        self.pixels.frame_mut()[i..i + num_channels]
-                            .copy_from_slice(&color);
+                        pixels[i..i + num_channels].copy_from_slice(&color);
                     }
                 }
             }
         }
-
-        if let Err(err) = self.pixels.render() {
-            eprintln!("Render error: {err}");
-        }
-    }
-}
-
-struct CanvasWindow;
-
-unsafe impl HasRawDisplayHandle for CanvasWindow {
-    fn raw_display_handle(&self) -> RawDisplayHandle {
-        RawDisplayHandle::Web(WebDisplayHandle::empty())
-    }
-}
-
-unsafe impl HasRawWindowHandle for CanvasWindow {
-    fn raw_window_handle(&self) -> RawWindowHandle {
-        let mut window_handle = WebWindowHandle::empty();
-        window_handle.id = 1;
-
-        RawWindowHandle::Web(window_handle)
     }
 }

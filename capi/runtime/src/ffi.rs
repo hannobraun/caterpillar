@@ -3,7 +3,7 @@ use std::sync::Mutex;
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 
-use crate::state::RuntimeState;
+use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
 
 pub static PANIC: Shared<Option<String>> = Shared::new(None);
 
@@ -13,6 +13,8 @@ static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
+static PIXELS: Shared<[u8; NUM_PIXEL_BYTES]> =
+    Shared::new([0; NUM_PIXEL_BYTES]);
 
 #[no_mangle]
 pub fn panic_ptr() -> usize {
@@ -106,6 +108,16 @@ pub fn commands_write_len() -> usize {
 }
 
 #[no_mangle]
+pub fn pixels_ptr() -> usize {
+    &PIXELS as *const _ as usize
+}
+
+#[no_mangle]
+pub fn pixels_len() -> usize {
+    NUM_PIXEL_BYTES
+}
+
+#[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
@@ -131,7 +143,11 @@ pub fn on_frame() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
-    state.update();
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let pixels = unsafe { PIXELS.access() };
+
+    state.update(pixels);
 
     for update in state.updates.take_queued_updates() {
         // Sound, because the reference is dropped before we call the method

@@ -88,7 +88,7 @@ impl RuntimeState {
         }
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self, pixels: &mut [u8]) {
         let Some(display) = self.display.as_mut() else {
             // Display not initialized yet.
             return;
@@ -204,7 +204,7 @@ impl RuntimeState {
 
         self.updates.queue_updates(&self.process, &self.memory);
 
-        display.render(&self.tiles);
+        display.render(&self.tiles, pixels);
     }
 }
 

@@ -43,6 +43,9 @@
             }
         });
 
+        const canvas = document.querySelector("canvas");
+        const context = canvas.getContext("2d");
+
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop() {
@@ -76,6 +79,20 @@
             catch {
                 // Panics are handled below.
             }
+
+            const pixels = new Uint8ClampedArray(
+                runtime.memory.buffer,
+                runtime.pixels_ptr(),
+                runtime.pixels_len(),
+            );
+
+            const imageData = new ImageData(
+                pixels,
+                canvas.width,
+                canvas.height
+            );
+
+            context.putImageData(imageData, 0, 0);
 
             while (true) {
                 runtime.updates_read();
