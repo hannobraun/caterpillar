@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, panic};
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_process::{
@@ -32,6 +32,18 @@ pub struct RuntimeState {
 
 impl RuntimeState {
     pub fn new() -> Self {
+        panic::set_hook(Box::new(|panic_info| {
+            // This _should_ be sound, because there _should_ be no other
+            // reference to `ffi::PANIC` in existence right now, and we're
+            // dropping this one before returning control to the host.
+            //
+            // Unless the code in `ffi` that handles panics is panicking, in
+            // which case I don't think a little bit of unsoundness makes a
+            // difference.
+            let panic = unsafe { ffi::PANIC.access() };
+            *panic = Some(panic_info.to_string());
+        }));
+
         let mut script = Script::default();
         snake(&mut script);
 
