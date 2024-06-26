@@ -24,7 +24,3 @@ path = "../protocol"
 [dependencies.getrandom]
 version = "*"
 features = ["js"]
-
-[dependencies.leptos]
-version = "*"
-features = ["csr"]
