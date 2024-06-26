@@ -63,17 +63,6 @@ impl RuntimeState {
 
         updates.queue_source_code(script.functions, source_map);
 
-        // While we're still using `pixels`, the `Display` constructor needs to
-        // be async. We need to do some acrobatics here to deal with that.
-        leptos::spawn_local(async {
-            let display = Display {};
-
-            let mut state = ffi::STATE.lock().unwrap();
-            let state = state.get_or_insert_with(Default::default);
-
-            state.display = Some(display);
-        });
-
         Self {
             code,
             entry,
@@ -82,7 +71,7 @@ impl RuntimeState {
             memory,
             input,
             tiles: [0; NUM_TILES],
-            display: None,
+            display: Some(Display {}),
             commands: Vec::new(),
             updates,
         }
