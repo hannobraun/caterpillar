@@ -9,7 +9,7 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
-static COMMANDS_RX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
+static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 /// This is a workaround for not being able to return a tuple from
@@ -56,7 +56,7 @@ static LAST_COMMAND_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 pub fn commands_write(len: usize) {
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { COMMANDS_RX.access() };
+    let buffer = unsafe { COMMANDS.access() };
     let command = buffer.write_frame(len);
 
     *LAST_COMMAND_WRITE.lock().unwrap() =
@@ -90,7 +90,7 @@ pub fn on_command() {
 
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { COMMANDS_RX.access() };
+    let buffer = unsafe { COMMANDS.access() };
 
     let command = buffer.read_frame().to_vec();
     state.commands.push(command);
