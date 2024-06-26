@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-rand = "*"
 
 [dependencies.capi-compiler]
 path = "../compiler"
@@ -18,9 +17,3 @@ path = "../process"
 
 [dependencies.capi-protocol]
 path = "../protocol"
-
-# We don't depend on this directly, but we need to enable the `js` feature for
-# `rand` to work.
-[dependencies.getrandom]
-version = "*"
-features = ["js"]
