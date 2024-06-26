@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
-use capi_debugger::{state::DebuggerState, ui};
+use capi_debugger::state::DebuggerState;
 use capi_process::{
     BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
 };
@@ -10,7 +10,6 @@ use capi_protocol::{
     memory::Memory,
 };
 use rand::random;
-use tokio::sync::mpsc;
 
 use crate::{
     display::Display,
@@ -49,13 +48,10 @@ impl RuntimeState {
         let memory = Memory::default();
 
         let input = Input::default();
-        let (commands_tx, commands_rx) = mpsc::unbounded_channel();
 
-        let (updates_tx, updates_rx) = mpsc::unbounded_channel();
         let mut updates = Updates::new();
 
         updates.queue_source_code(script.functions, source_map);
-        ui::start(updates_rx, commands_tx);
 
         // While we're still using `pixels`, the `Display` constructor needs to
         // be async. We need to do some acrobatics here to deal with that.
@@ -79,10 +75,7 @@ impl RuntimeState {
             display: None,
             commands: Vec::new(),
             updates,
-            debugger: DebuggerState {
-                updates_tx,
-                commands_rx,
-            },
+            debugger: DebuggerState::new(),
         }
     }
 
