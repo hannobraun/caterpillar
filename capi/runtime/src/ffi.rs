@@ -7,7 +7,7 @@ use crate::state::RuntimeState;
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
-static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
+static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static COMMANDS_RX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
@@ -31,7 +31,7 @@ static LAST_UPDATE_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 pub fn updates_read() {
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { UPDATES_TX.access() };
+    let buffer = unsafe { UPDATES.access() };
     let update = buffer.read_frame();
 
     *LAST_UPDATE_READ.lock().unwrap() =
@@ -106,7 +106,7 @@ pub fn on_frame() {
     for update in state.updates.take_queued_updates() {
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
-        let buffer = unsafe { UPDATES_TX.access() };
+        let buffer = unsafe { UPDATES.access() };
         buffer.write_frame(update.len()).copy_from_slice(&update);
     }
 }
