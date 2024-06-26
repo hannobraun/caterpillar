@@ -9,7 +9,6 @@ pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
 static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
-
 static COMMANDS_RX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
