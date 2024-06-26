@@ -49,6 +49,8 @@
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop() {
+            while (runtime.push_random(Math.random())) { }
+
             while (true) {
                 debugger_.commands_read();
                 const command_rx = new Uint8Array(

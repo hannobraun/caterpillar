@@ -8,7 +8,6 @@ use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
 };
-use rand::random;
 
 use crate::{
     display, ffi,
@@ -178,10 +177,6 @@ impl RuntimeState {
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::ReadRandom => {
-                        while self.random.len() < 1024 {
-                            self.random.push_back(random());
-                        }
-
                         let random = self.random.pop_front().unwrap();
 
                         self.process.push([Value(random)]);
