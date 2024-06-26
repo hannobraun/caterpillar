@@ -24,7 +24,3 @@ path = "../protocol"
 [dependencies.leptos]
 version = "*"
 features = ["csr"]
-
-[dependencies.tokio]
-version = "*"
-features = ["sync"]

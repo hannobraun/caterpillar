@@ -354,7 +354,6 @@ dependencies = [
  "pixels",
  "rand",
  "raw-window-handle",
- "tokio",
 ]
 
 [[package]]
