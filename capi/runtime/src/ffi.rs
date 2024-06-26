@@ -5,6 +5,8 @@ use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 
 use crate::state::RuntimeState;
 
+pub static PANIC: Shared<Option<String>> = Shared::new(None);
+
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
@@ -110,5 +112,8 @@ pub fn on_frame() -> bool {
         buffer.write_frame(update.len()).copy_from_slice(&update);
     }
 
-    state.panic.is_none()
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let panic = unsafe { PANIC.access() };
+    panic.is_none()
 }
