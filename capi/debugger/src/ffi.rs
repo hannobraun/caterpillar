@@ -10,7 +10,7 @@ pub static STATE: Mutex<Option<DebuggerState>> = Mutex::new(None);
 
 static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
-static COMMANDS_TX: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
+static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 /// See comment on `capi_runtime::ffi::LAST_UPDATE_READ`
@@ -61,13 +61,13 @@ pub fn commands_read() {
 
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
-        let buffer = unsafe { COMMANDS_TX.access() };
+        let buffer = unsafe { COMMANDS.access() };
         buffer.write_frame(command.len()).copy_from_slice(&command);
     }
 
     // Sound, because the reference is dropped before we give back control to
     // the host.
-    let buffer = unsafe { COMMANDS_TX.access() };
+    let buffer = unsafe { COMMANDS.access() };
     let command = buffer.read_frame();
 
     *LAST_COMMAND_READ.lock().unwrap() =
