@@ -25,7 +25,7 @@ pub struct RuntimeState {
     pub memory: Memory,
     pub input: Input,
     pub tiles: [u8; NUM_TILES],
-    pub display: Option<Display>,
+    pub display: Display,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }
@@ -71,17 +71,14 @@ impl RuntimeState {
             memory,
             input,
             tiles: [0; NUM_TILES],
-            display: Some(Display {}),
+            display: Display {},
             commands: Vec::new(),
             updates,
         }
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let Some(display) = self.display.as_mut() else {
-            // Display not initialized yet.
-            return;
-        };
+        let display = &mut self.display;
 
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
