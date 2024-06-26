@@ -7,7 +7,6 @@ use crate::state::RuntimeState;
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
-/// The buffer that is used to transfer updates _to_ the host
 static UPDATES_TX: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
