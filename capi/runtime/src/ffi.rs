@@ -14,6 +14,34 @@ static UPDATES: Shared<FramedBuffer<UPDATES_BUFFER_SIZE>> =
 static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
+#[no_mangle]
+pub fn panic_ptr() -> usize {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let panic = unsafe { PANIC.access() };
+
+    panic
+        .as_ref()
+        .map(|panic| panic.as_ptr() as usize)
+        .unwrap_or(0)
+}
+
+#[no_mangle]
+pub fn panic_len() -> usize {
+    // Sound, because the reference is dropped before we give back control to
+    // the host.
+    let panic = unsafe { PANIC.access() };
+
+    panic
+        .as_ref()
+        .map(|panic| {
+            // `len` is correct here, despite this being a `String`, as the host
+            // is interested in the length in bytes.
+            panic.len()
+        })
+        .unwrap_or(0)
+}
+
 /// This is a workaround for not being able to return a tuple from
 /// `updates_read`. That should work in principle (see [1]), but Rust warns
 /// about the flag being unstable, and `wasm-bindgen-cli-support` crashes on an
