@@ -307,6 +307,7 @@ name = "capi-debugger"
 version = "0.1.0"
 dependencies = [
  "capi-compiler",
+ "capi-ffi",
  "capi-process",
  "capi-protocol",
  "console_error_panic_hook",

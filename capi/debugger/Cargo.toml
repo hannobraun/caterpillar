@@ -12,6 +12,9 @@ ron = "*"
 [dependencies.capi-compiler]
 path = "../compiler"
 
+[dependencies.capi-ffi]
+path = "../ffi"
+
 [dependencies.capi-process]
 path = "../process"
 
