@@ -140,11 +140,16 @@ impl RuntimeState {
                     BuiltinEffect::SetTile { x, y, value } => {
                         let x = *x;
                         let y = *y;
-                        let value = *value;
+
+                        let color = if *value == 0 {
+                            [0, 0, 0, 255]
+                        } else {
+                            [255, 255, 255, 255]
+                        };
 
                         self.process.handle_first_effect();
 
-                        display::set_tile(x.into(), y.into(), value, pixels);
+                        display::set_tile(x.into(), y.into(), color, pixels);
                     }
                     BuiltinEffect::SubmitFrame => {
                         // This effect means that the game is done rendering.

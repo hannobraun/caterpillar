@@ -1,12 +1,11 @@
 use crate::tiles::{NUM_CHANNELS, PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS};
 
-pub fn set_tile(tile_x: usize, tile_y: usize, value: u8, pixels: &mut [u8]) {
-    let color = if value == 0 {
-        [0, 0, 0, 255]
-    } else {
-        [255, 255, 255, 255]
-    };
-
+pub fn set_tile(
+    tile_x: usize,
+    tile_y: usize,
+    color: [u8; 4],
+    pixels: &mut [u8],
+) {
     for offset_y in 0..PIXELS_PER_TILE_AXIS {
         for offset_x in 0..PIXELS_PER_TILE_AXIS {
             let pixel_x =
