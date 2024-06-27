@@ -45,6 +45,7 @@ async fn start_server(
     updates: UpdatesRx,
 ) -> anyhow::Result<JoinHandle<()>> {
     let router = Router::new()
+        .route("/is-alive", get(serve_is_alive))
         .route("/updates", get(serve_updates))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
@@ -59,6 +60,10 @@ async fn start_server(
     });
 
     Ok(handle)
+}
+
+async fn serve_is_alive() -> StatusCode {
+    StatusCode::OK
 }
 
 async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
