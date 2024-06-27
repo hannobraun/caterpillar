@@ -66,7 +66,9 @@ async fn serve_is_alive() -> StatusCode {
     StatusCode::OK
 }
 
-async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
+async fn serve_updates(
+    State(mut updates): State<UpdatesRx>,
+) -> impl IntoResponse {
     updates.mark_unchanged();
     match updates.changed().await {
         Ok(()) => StatusCode::OK,
