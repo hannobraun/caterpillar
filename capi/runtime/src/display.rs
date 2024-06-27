@@ -23,12 +23,12 @@ pub fn render(tiles: &[u8], pixels: &mut [u8]) {
 
             for offset_y in 0..PIXELS_PER_TILE_AXIS {
                 for offset_x in 0..PIXELS_PER_TILE_AXIS {
-                    let frame_x = (tile_x * PIXELS_PER_TILE_AXIS + offset_x)
+                    let pixel_x = (tile_x * PIXELS_PER_TILE_AXIS + offset_x)
                         * NUM_CHANNELS;
                     let frame_y = (tile_y * PIXELS_PER_TILE_AXIS + offset_y)
                         * NUM_CHANNELS;
 
-                    let i = frame_y * PIXELS_PER_AXIS + frame_x;
+                    let i = frame_y * PIXELS_PER_AXIS + pixel_x;
                     pixels[i..i + NUM_CHANNELS].copy_from_slice(&color);
                 }
             }
