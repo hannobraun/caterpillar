@@ -136,14 +136,24 @@
         }
     </script>
     <script type="module">
-        const response = await fetch("/updates");
-
-        if (response.ok) {
-            window.location.reload();
+        try {
+            const response = await fetch("/updates");
+            reloadOnceServerIsReady();
         }
-        else {
-            console.error("`/updates` returned error:");
-            console.error(response);
+        catch {
+            // Disconnected from server, which could mean it has been restarted
+            // and we have new code to run.
+            reloadOnceServerIsReady();
+        }
+
+        function reloadOnceServerIsReady() {
+            const response = fetch("/is-alive")
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch(() => {
+                    setTimeout(reloadOnceServerIsReady, 50);
+                });
         }
     </script>
 </body>
