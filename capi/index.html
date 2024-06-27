@@ -136,6 +136,9 @@
         }
     </script>
     <script type="module">
+        // Let's choose a nice and short delay, to make sure we never have to
+        // wait long for any updates. As of this writing, this code is only used
+        // for local development, where the resulting traffic doesn't matter.
         const delayMs = 50;
 
         const socket = new WebSocket("/updates");
