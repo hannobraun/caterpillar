@@ -143,6 +143,11 @@
 
         const socket = new WebSocket("/updates");
 
+        socket.onopen = () => {
+            // We need to send something to the server. Otherwise, we'll not get
+            // an error if it disconnects.
+            sendHeartbeat();
+        };
         socket.onmessage = () => {
             reloadOnceServerIsReady();
         };
@@ -151,6 +156,11 @@
             // and we have new code to run.
             reloadOnceServerIsReady();
         };
+
+        function sendHeartbeat() {
+            socket.send("");
+            setTimeout(sendHeartbeat, delayMs);
+        }
 
         function reloadOnceServerIsReady() {
             fetch("/is-alive")
