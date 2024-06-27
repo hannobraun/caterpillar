@@ -136,15 +136,15 @@
         }
     </script>
     <script type="module">
-        try {
-            const response = await fetch("/updates");
+        const socket = new WebSocket("/updates");
+        socket.onmessage = () => {
             reloadOnceServerIsReady();
-        }
-        catch {
+        };
+        socket.onerror = () => {
             // Disconnected from server, which could mean it has been restarted
             // and we have new code to run.
             reloadOnceServerIsReady();
-        }
+        };
 
         function reloadOnceServerIsReady() {
             const response = fetch("/is-alive")

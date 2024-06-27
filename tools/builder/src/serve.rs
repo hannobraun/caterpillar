@@ -1,7 +1,10 @@
 use std::{io, path::PathBuf, process};
 
 use axum::{
-    extract::{Path, State},
+    extract::{
+        ws::{Message, WebSocket},
+        Path, State, WebSocketUpgrade,
+    },
     http::{header, StatusCode},
     response::{IntoResponse, Response},
     routing::get,
@@ -67,14 +70,27 @@ async fn serve_is_alive() -> StatusCode {
 }
 
 async fn serve_updates(
-    State(mut updates): State<UpdatesRx>,
+    ws: WebSocketUpgrade,
+    State(updates): State<UpdatesRx>,
 ) -> impl IntoResponse {
+    ws.on_upgrade(|socket| serve_updates_handle_socket(socket, updates))
+}
+
+async fn serve_updates_handle_socket(
+    mut socket: WebSocket,
+    mut updates: UpdatesRx,
+) {
     updates.mark_unchanged();
     match updates.changed().await {
-        Ok(()) => StatusCode::OK,
+        Ok(()) => {
+            if let Err(err) = socket.send(Message::Text("".to_string())).await {
+                error!("Error sending to socket: {err}");
+                let _ = socket.close().await;
+            }
+        }
         Err(_) => {
             error!("Waiting for updates, but updates no longer available.");
-            StatusCode::INTERNAL_SERVER_ERROR
+            let _ = socket.close().await;
         }
     }
 }
