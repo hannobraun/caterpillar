@@ -136,15 +136,15 @@
         }
     </script>
     <script type="module">
-        fetch("/updates").then((response) => {
-            if (response.ok) {
-                window.location.reload();
-            }
-            else {
-                console.error("`/updates` returned error:");
-                console.error(response);
-            }
-        });
+        const response = await fetch("/updates");
+
+        if (response.ok) {
+            window.location.reload();
+        }
+        else {
+            console.error("`/updates` returned error:");
+            console.error(response);
+        }
     </script>
 </body>
 
