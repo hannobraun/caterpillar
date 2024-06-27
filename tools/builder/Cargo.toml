@@ -5,11 +5,13 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
-axum = "*"
 tempfile = "*"
 tracing = "*"
 tracing-subscriber = "*"
 wasm-bindgen-cli-support = "*"
+
+[dependencies.axum]
+version = "*"
 
 [dependencies.notify]
 version = "*"
