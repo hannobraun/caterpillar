@@ -24,7 +24,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     while let Ok(()) = updates.changed().await {
         println!();
-        println!("Caterpillar is ready:");
+        println!("Build is ready:");
         println!();
         println!("\t🚀 http://{address}/");
         println!();
