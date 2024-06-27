@@ -3,8 +3,8 @@ use crate::tiles::{
 };
 
 pub fn set_tile(tile_x: usize, tile_y: usize, value: u8, tiles: &mut [u8]) {
-    let index = || tile_x.checked_add(tile_y.checked_mul(TILES_PER_AXIS)?);
-    let index = index().unwrap();
+    let tile_index = || tile_x.checked_add(tile_y.checked_mul(TILES_PER_AXIS)?);
+    let index = tile_index().unwrap();
 
     tiles[index] = value;
 }
