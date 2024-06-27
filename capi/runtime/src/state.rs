@@ -9,11 +9,7 @@ use capi_protocol::{
     memory::Memory,
 };
 
-use crate::{
-    display, ffi,
-    tiles::{NUM_TILES, TILES_PER_AXIS},
-    updates::Updates,
-};
+use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 
 pub struct RuntimeState {
     pub code: Code,
@@ -22,7 +18,6 @@ pub struct RuntimeState {
     pub process: Process,
     pub memory: Memory,
     pub input: Input,
-    pub tiles: [u8; NUM_TILES],
     pub random: VecDeque<i8>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
@@ -68,7 +63,6 @@ impl RuntimeState {
             process,
             memory,
             input,
-            tiles: [0; NUM_TILES],
             commands: Vec::new(),
             random: VecDeque::new(),
             updates,
