@@ -12,6 +12,7 @@ wasm-bindgen-cli-support = "*"
 
 [dependencies.axum]
 version = "*"
+features = ["ws"]
 
 [dependencies.notify]
 version = "*"
