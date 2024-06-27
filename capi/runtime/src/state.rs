@@ -150,12 +150,7 @@ impl RuntimeState {
 
                         self.process.handle_first_effect();
 
-                        display::set_tile(
-                            x.into(),
-                            y.into(),
-                            value,
-                            &mut self.tiles,
-                        );
+                        display::set_tile(x.into(), y.into(), value, pixels);
                     }
                     BuiltinEffect::SubmitFrame => {
                         // This effect means that the game is done rendering.
@@ -197,8 +192,6 @@ impl RuntimeState {
         }
 
         self.updates.queue_updates(&self.process, &self.memory);
-
-        display::render(&self.tiles, pixels);
     }
 }
 
