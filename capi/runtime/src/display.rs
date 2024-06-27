@@ -2,8 +2,8 @@ use crate::tiles::{
     NUM_CHANNELS, PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS, TILES_PER_AXIS,
 };
 
-pub fn set_tile(tile_x: usize, y: usize, value: u8, tiles: &mut [u8]) {
-    let index = || tile_x.checked_add(y.checked_mul(TILES_PER_AXIS)?);
+pub fn set_tile(tile_x: usize, tile_y: usize, value: u8, tiles: &mut [u8]) {
+    let index = || tile_x.checked_add(tile_y.checked_mul(TILES_PER_AXIS)?);
     let index = index().unwrap();
 
     tiles[index] = value;
