@@ -136,6 +136,8 @@
         }
     </script>
     <script type="module">
+        const delayMs = 50;
+
         const socket = new WebSocket("/updates");
 
         socket.onmessage = () => {
@@ -153,7 +155,7 @@
                     window.location.reload();
                 })
                 .catch(() => {
-                    setTimeout(reloadOnceServerIsReady, 50);
+                    setTimeout(reloadOnceServerIsReady, delayMs);
                 });
         }
     </script>
