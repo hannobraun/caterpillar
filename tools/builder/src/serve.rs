@@ -12,7 +12,7 @@ use tracing::error;
 
 use crate::build::UpdatesRx;
 
-pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<&'static str> {
+pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
     let router = Router::new()
@@ -37,7 +37,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<&'static str> {
         println!();
     }
 
-    Ok(address)
+    Ok(())
 }
 
 async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
