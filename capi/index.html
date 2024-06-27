@@ -137,6 +137,7 @@
     </script>
     <script type="module">
         const socket = new WebSocket("/updates");
+
         socket.onmessage = () => {
             reloadOnceServerIsReady();
         };
