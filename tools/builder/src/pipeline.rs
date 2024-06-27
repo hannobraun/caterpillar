@@ -7,7 +7,7 @@ pub async fn pipeline() -> anyhow::Result<()> {
 
     let watcher = watch::Watcher::new(crates_dir)?;
     let updates = build::start(watcher.changes);
-    serve::start(updates.clone()).await?;
+    serve::start(updates).await?;
 
     Ok(())
 }
