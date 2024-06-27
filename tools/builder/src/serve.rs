@@ -11,7 +11,7 @@ use tokio::{
     fs::File,
     io::AsyncReadExt,
     net::TcpListener,
-    task::{self},
+    task::{self, JoinHandle},
 };
 use tracing::error;
 
@@ -36,7 +36,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 async fn start_server(
     address: &'static str,
     updates: UpdatesRx,
-) -> anyhow::Result<()> {
+) -> anyhow::Result<JoinHandle<()>> {
     let router = Router::new()
         .route("/updates", get(serve_updates))
         .route("/", get(serve_index))
@@ -44,14 +44,14 @@ async fn start_server(
         .with_state(updates.clone());
     let listener = TcpListener::bind(address).await?;
 
-    task::spawn(async {
+    let handle = task::spawn(async {
         if let Err(err) = axum::serve(listener, router).await {
             error!("Error serving HTTP endpoints: {err}");
             process::exit(1);
         }
     });
 
-    Ok(())
+    Ok(handle)
 }
 
 async fn serve_updates(State(mut updates): State<UpdatesRx>) -> StatusCode {
