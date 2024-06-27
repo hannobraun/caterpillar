@@ -4,9 +4,9 @@ use crate::tiles::{
 
 pub fn set_tile(tile_x: usize, tile_y: usize, value: u8, tiles: &mut [u8]) {
     let tile_index = || tile_x.checked_add(tile_y.checked_mul(TILES_PER_AXIS)?);
-    let index = tile_index().unwrap();
+    let tile_index = tile_index().unwrap();
 
-    tiles[index] = value;
+    tiles[tile_index] = value;
 }
 
 pub fn render(tiles: &[u8], pixels: &mut [u8]) {
