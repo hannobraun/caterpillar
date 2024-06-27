@@ -7,7 +7,12 @@ use axum::{
     routing::get,
     Router,
 };
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, task};
+use tokio::{
+    fs::File,
+    io::AsyncReadExt,
+    net::TcpListener,
+    task::{self},
+};
 use tracing::error;
 
 use crate::build::UpdatesRx;
@@ -15,6 +20,23 @@ use crate::build::UpdatesRx;
 pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
+    start_server(address, updates.clone()).await?;
+
+    while let Ok(()) = updates.changed().await {
+        println!();
+        println!("Caterpillar is ready:");
+        println!();
+        println!("\t🚀 http://{address}/");
+        println!();
+    }
+
+    Ok(())
+}
+
+async fn start_server(
+    address: &'static str,
+    updates: UpdatesRx,
+) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/updates", get(serve_updates))
         .route("/", get(serve_index))
@@ -28,14 +50,6 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             process::exit(1);
         }
     });
-
-    while let Ok(()) = updates.changed().await {
-        println!();
-        println!("Caterpillar is ready:");
-        println!();
-        println!("\t🚀 http://{address}/");
-        println!();
-    }
 
     Ok(())
 }
