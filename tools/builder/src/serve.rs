@@ -41,7 +41,7 @@ async fn start_server(
         .route("/updates", get(serve_updates))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(updates.clone());
+        .with_state(updates);
     let listener = TcpListener::bind(address).await?;
 
     let handle = task::spawn(async {
