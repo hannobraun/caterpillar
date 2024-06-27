@@ -13,9 +13,9 @@ pub fn render(tiles: &[u8], pixels: &mut [u8]) {
     for tile_y in 0..TILES_PER_AXIS {
         for tile_x in 0..TILES_PER_AXIS {
             let i = tile_y * TILES_PER_AXIS + tile_x;
-            let tile = tiles[i];
+            let value = tiles[i];
 
-            let color = if tile == 0 {
+            let color = if value == 0 {
                 [0, 0, 0, 255]
             } else {
                 [255, 255, 255, 255]
