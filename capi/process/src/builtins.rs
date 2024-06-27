@@ -173,9 +173,14 @@ pub fn write_tile(stack: &mut Stack) -> Result {
 
     let x = x.0.try_into()?;
     let y = y.0.try_into()?;
-    let value = value.0.try_into()?;
 
-    Ok(Some(BuiltinEffect::SetTile { x, y, value }))
+    let color = if value.0 == 0 {
+        [0, 0, 0, 255]
+    } else {
+        [255, 255, 255, 255]
+    };
+
+    Ok(Some(BuiltinEffect::SetTile { x, y, color }))
 }
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
@@ -188,7 +193,7 @@ pub enum BuiltinEffect {
     Load { address: u8 },
     Store { address: u8, value: Value },
 
-    SetTile { x: u8, y: u8, value: u8 },
+    SetTile { x: u8, y: u8, color: [u8; 4] },
     SubmitFrame,
 
     ReadInput,

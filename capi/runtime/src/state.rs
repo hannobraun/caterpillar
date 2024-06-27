@@ -137,15 +137,10 @@ impl RuntimeState {
 
                         self.process.handle_first_effect();
                     }
-                    BuiltinEffect::SetTile { x, y, value } => {
+                    BuiltinEffect::SetTile { x, y, color } => {
                         let x = *x;
                         let y = *y;
-
-                        let color = if *value == 0 {
-                            [0, 0, 0, 255]
-                        } else {
-                            [255, 255, 255, 255]
-                        };
+                        let color = *color;
 
                         self.process.handle_first_effect();
 
