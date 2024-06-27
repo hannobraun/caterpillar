@@ -20,9 +20,16 @@ use crate::build::UpdatesRx;
 pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
-    start_server(address, updates.clone()).await?;
+    let mut server: Option<JoinHandle<_>> = None;
 
+    updates.mark_unchanged(); // make sure we enter the loop body immediately
     while let Ok(()) = updates.changed().await {
+        if let Some(server) = server.take() {
+            server.abort();
+        }
+
+        server = Some(start_server(address, updates.clone()).await?);
+
         println!();
         println!("Build is ready:");
         println!();
