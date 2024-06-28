@@ -27,9 +27,8 @@ async fn main() -> anyhow::Result<()> {
         source_map,
     };
     dbg!(bytecode);
-    dbg!(source_code);
 
-    start_server(args.address, args.serve_dir).await?;
+    start_server(args.address, args.serve_dir, source_code).await?;
 
     info!("`capi-server` shutting down.");
     Ok(())
@@ -50,13 +49,18 @@ pub struct Args {
 async fn start_server(
     address: String,
     serve_dir: PathBuf,
+    source_code: SourceCode,
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
+        .route("/source-code", get(serve_source_code))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(ServerState { serve_dir });
+        .with_state(ServerState {
+            serve_dir,
+            source_code,
+        });
 
     let listener = TcpListener::bind(address).await?;
     axum::serve(listener, router).await?;
@@ -67,6 +71,7 @@ async fn start_server(
 #[derive(Clone)]
 pub struct ServerState {
     serve_dir: PathBuf,
+    source_code: SourceCode,
 }
 
 async fn serve_is_alive() -> StatusCode {
@@ -79,6 +84,15 @@ async fn serve_wait_while_alive(ws: WebSocketUpgrade) -> impl IntoResponse {
 
 async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
+}
+
+async fn serve_source_code(
+    State(state): State<ServerState>,
+) -> impl IntoResponse {
+    ron::to_string(&state.source_code)
+        .unwrap()
+        .as_bytes()
+        .to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
