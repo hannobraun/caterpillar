@@ -12,6 +12,9 @@ tracing-subscriber = "*"
 version = "*"
 features = ["ws"]
 
+[dependencies.capi-compiler]
+path = "../compiler"
+
 [dependencies.clap]
 version = "*"
 features = ["derive"]
