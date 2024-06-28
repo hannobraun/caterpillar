@@ -8,6 +8,7 @@ use axum::{
     Router,
 };
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
+use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
 use clap::Parser;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
@@ -26,9 +27,8 @@ async fn main() -> anyhow::Result<()> {
         functions: script.functions,
         source_map,
     };
-    dbg!(bytecode);
 
-    start_server(args.address, args.serve_dir, source_code).await?;
+    start_server(args.address, args.serve_dir, source_code, bytecode).await?;
 
     info!("`capi-server` shutting down.");
     Ok(())
@@ -50,16 +50,19 @@ async fn start_server(
     address: String,
     serve_dir: PathBuf,
     source_code: SourceCode,
+    bytecode: Bytecode,
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/source-code", get(serve_source_code))
+        .route("/bytecode", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(ServerState {
             serve_dir,
             source_code,
+            bytecode,
         });
 
     let listener = TcpListener::bind(address).await?;
@@ -72,6 +75,7 @@ async fn start_server(
 pub struct ServerState {
     serve_dir: PathBuf,
     source_code: SourceCode,
+    bytecode: Bytecode,
 }
 
 async fn serve_is_alive() -> StatusCode {
@@ -93,6 +97,10 @@ async fn serve_source_code(
         .unwrap()
         .as_bytes()
         .to_vec()
+}
+
+async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
+    ron::to_string(&state.bytecode).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
