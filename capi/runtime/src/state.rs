@@ -63,6 +63,8 @@ impl RuntimeState {
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
+        let code = &self.code;
+
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
 
@@ -77,7 +79,7 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(&self.code, self.arguments.clone());
+                    self.process.reset(code, self.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {
@@ -100,7 +102,7 @@ impl RuntimeState {
         }
 
         while self.process.state().can_step() {
-            self.process.step(&self.code);
+            self.process.step(code);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
                 self.process.state().first_unhandled_effect()
