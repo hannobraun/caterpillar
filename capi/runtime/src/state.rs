@@ -41,9 +41,8 @@ impl RuntimeState {
 
         let (code, source_map) = compile(&script);
 
-        let entry = code.entry().unwrap();
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
-        process.reset(entry.clone(), arguments.clone());
+        process.reset(&code, arguments.clone());
 
         let memory = Memory::default();
 
@@ -80,10 +79,7 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(
-                        self.code.entry().unwrap(),
-                        self.arguments.clone(),
-                    );
+                    self.process.reset(&self.code, self.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {

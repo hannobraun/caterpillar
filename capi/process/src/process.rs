@@ -3,7 +3,6 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
-    function::Function,
     BuiltinEffect, Code, EvaluatorEffect, Location, Stack, Value,
 };
 
@@ -33,12 +32,12 @@ impl Process {
         self.state.unhandled_effects.pop_front();
     }
 
-    pub fn reset(&mut self, entry: Function, arguments: Vec<Value>) {
+    pub fn reset(&mut self, code: &Code, arguments: Vec<Value>) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
         self.stack
-            .push_frame(entry)
+            .push_frame(code.entry().unwrap())
             .expect("Expected recursion limit to be more than zero.");
         self.push(arguments);
     }
