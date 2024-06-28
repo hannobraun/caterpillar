@@ -317,6 +317,8 @@ dependencies = [
  "anyhow",
  "axum",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
