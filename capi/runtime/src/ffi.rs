@@ -142,6 +142,29 @@ pub fn push_random(random: f64) -> bool {
 }
 
 #[no_mangle]
+pub fn compile_code() {
+    let mut state = STATE.lock().unwrap();
+    let state = state.get_or_insert_with(Default::default);
+
+    let mut script = Script::default();
+    snake(&mut script);
+
+    let (code, source_map) = compile(&script);
+
+    state
+        .updates
+        .queue_source_code(script.functions, source_map);
+
+    let code = ron::to_string(&code).unwrap();
+    let code = code.as_bytes();
+
+    // Sound, as the reference is dropped before we give back control to the
+    // host.
+    let buffer = unsafe { CODE.access() };
+    buffer.write_frame(code.len()).copy_from_slice(code);
+}
+
+#[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
@@ -168,22 +191,9 @@ pub fn on_frame() {
     let state = state.get_or_insert_with(Default::default);
 
     if state.code.is_none() {
-        let mut script = Script::default();
-        snake(&mut script);
-
-        let (code, source_map) = compile(&script);
-
-        state
-            .updates
-            .queue_source_code(script.functions, source_map);
-
-        let code = ron::to_string(&code).unwrap();
-        let code = code.as_bytes();
-
         // Sound, as the reference is dropped before we give back control to the
         // host.
         let buffer = unsafe { CODE.access() };
-        buffer.write_frame(code.len()).copy_from_slice(code);
 
         let code = buffer.read_frame();
         let code = str::from_utf8(code).unwrap();

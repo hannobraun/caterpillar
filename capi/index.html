@@ -48,6 +48,8 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
+        runtime.compile_code();
+
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop() {
