@@ -48,21 +48,21 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        runtime.compile_code();
-        runtime.code_read();
-        const code_rx = new Uint8Array(
-            runtime.memory.buffer,
-            runtime.code_read_ptr(),
-            runtime.code_read_len(),
-        );
+        const bytecode = await fetch("/bytecode")
+            .then((response) => {
+                return response.arrayBuffer();
+            })
+            .then((arrayBuffer) => {
+                return new Uint8Array(arrayBuffer);
+            });
 
-        runtime.code_write(code_rx.byteLength);
+        runtime.code_write(bytecode.byteLength);
         const code_tx = new Uint8Array(
             runtime.memory.buffer,
             runtime.code_write_ptr(),
             runtime.code_write_len(),
         );
-        code_tx.set(code_rx);
+        code_tx.set(bytecode);
         runtime.on_new_bytecode();
 
         window.requestAnimationFrame(mainLoop);
