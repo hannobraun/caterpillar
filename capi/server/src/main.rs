@@ -20,8 +20,8 @@ async fn main() -> anyhow::Result<()> {
 
     let mut script = Script::default();
     snake(&mut script);
-    let (code, source_map) = compile(&script);
-    dbg!(code);
+    let (bytecode, source_map) = compile(&script);
+    dbg!(bytecode);
     dbg!(source_map);
 
     start_server(args.address, args.serve_dir).await?;
