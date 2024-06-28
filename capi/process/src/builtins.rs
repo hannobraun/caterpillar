@@ -220,7 +220,7 @@ pub enum BuiltinError {
     IntegerOverflow,
 
     #[error(transparent)]
-    MissingOperand(#[from] PopOperandError),
+    PopOperand(#[from] PopOperandError),
 }
 
 // This conversion is implemented manually, because doing it automatically using
