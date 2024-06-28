@@ -318,6 +318,7 @@ dependencies = [
  "capi-protocol",
  "console_error_panic_hook",
  "console_log",
+ "gloo-net",
  "leptos",
  "log",
  "ron",
