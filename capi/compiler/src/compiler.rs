@@ -15,7 +15,7 @@ pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
 
     let mut compiler = Compiler {
         functions: &script.functions.names,
-        code: &mut bytecode,
+        bytecode: &mut bytecode,
         source_map: &mut source_map,
     };
 
@@ -28,7 +28,7 @@ pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
 
 struct Compiler<'r> {
     functions: &'r BTreeSet<String>,
-    code: &'r mut Bytecode,
+    bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
 }
 
@@ -46,7 +46,7 @@ impl Compiler<'_> {
             self.compile_expression(expression, &mut bindings, &mut output);
         }
 
-        self.code.functions.insert(name, output);
+        self.bytecode.functions.insert(name, output);
     }
 
     fn compile_expression(
