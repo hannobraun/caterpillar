@@ -1,6 +1,5 @@
 use std::{collections::VecDeque, panic};
 
-use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_process::{BuiltinEffect, Code, EvaluatorEffect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
@@ -52,15 +51,8 @@ impl RuntimeState {
         }
     }
 
-    pub fn on_code(&mut self) {
-        let mut script = Script::default();
-        snake(&mut script);
-
-        let (code, source_map) = compile(&script);
+    pub fn on_code(&mut self, code: Code) {
         self.process.reset(&code, self.arguments.clone());
-
-        self.updates.queue_source_code(script.functions, source_map);
-
         self.code = Some(code);
     }
 

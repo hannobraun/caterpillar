@@ -1,5 +1,6 @@
 use std::sync::Mutex;
 
+use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 
@@ -165,7 +166,16 @@ pub fn on_frame() {
     let state = state.get_or_insert_with(Default::default);
 
     if state.code.is_none() {
-        state.on_code();
+        let mut script = Script::default();
+        snake(&mut script);
+
+        let (code, source_map) = compile(&script);
+
+        state
+            .updates
+            .queue_source_code(script.functions, source_map);
+
+        state.on_code(code);
     }
 
     // Sound, because the reference is dropped before we give back control to
