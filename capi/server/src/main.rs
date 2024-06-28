@@ -21,8 +21,6 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
-    println!("Address: {}", args.address);
-    println!("Directory to serve: {}", args.serve_dir.display());
 
     let server = start_server(args.address, args.serve_dir).await?;
     server.await?;
