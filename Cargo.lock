@@ -356,6 +356,7 @@ dependencies = [
  "capi-ffi",
  "capi-process",
  "capi-protocol",
+ "ron",
 ]
 
 [[package]]
