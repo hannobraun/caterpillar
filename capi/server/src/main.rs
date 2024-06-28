@@ -64,19 +64,17 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
 }
 
 async fn serve_index(State(serve_dir): State<PathBuf>) -> impl IntoResponse {
-    file_response(PathBuf::from("index.html"), serve_dir).await
+    file_response(serve_dir.join("index.html")).await
 }
 
 async fn serve_static(
     Path(path): Path<PathBuf>,
     State(serve_dir): State<PathBuf>,
 ) -> impl IntoResponse {
-    file_response(path, serve_dir).await
+    file_response(serve_dir.join(path)).await
 }
 
-async fn file_response(path: PathBuf, serve_dir: PathBuf) -> Response {
-    let path = serve_dir.join(path);
-
+async fn file_response(path: PathBuf) -> Response {
     let content_type = match path.extension() {
         Some(os_str) => match os_str.to_str() {
             Some("html") => "text/html",
