@@ -15,6 +15,9 @@ features = ["ws"]
 [dependencies.capi-compiler]
 path = "../compiler"
 
+[dependencies.capi-protocol]
+path = "../protocol"
+
 [dependencies.clap]
 version = "*"
 features = ["derive"]

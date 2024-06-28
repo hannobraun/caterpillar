@@ -366,6 +366,7 @@ dependencies = [
  "anyhow",
  "axum",
  "capi-compiler",
+ "capi-protocol",
  "clap",
  "tokio",
  "tracing",
