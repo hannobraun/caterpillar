@@ -4,7 +4,7 @@ use crate::{
 };
 
 pub fn evaluate(
-    code: &Bytecode,
+    bytecode: &Bytecode,
     stack: &mut Stack,
 ) -> Result<EvaluatorState, EvaluatorEffect> {
     let Some(instruction) = stack.consume_next_instruction() else {
@@ -91,7 +91,7 @@ pub fn evaluate(
             }
         }
         Instruction::CallFunction { name } => {
-            let function = code.functions.get(&name).cloned().unwrap();
+            let function = bytecode.functions.get(&name).cloned().unwrap();
 
             // If the current function is finished, pop its stack frame before
             // pushing the next one. This is tail call optimization.
