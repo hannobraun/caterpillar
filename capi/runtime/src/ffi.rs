@@ -228,8 +228,8 @@ pub fn on_new_bytecode() {
     let buffer = unsafe { CODE.access() };
 
     let code = buffer.read_frame();
-    let code = str::from_utf8(code).unwrap();
-    let bytecode = ron::from_str(code).unwrap();
+    let bytecode = str::from_utf8(code).unwrap();
+    let bytecode = ron::from_str(bytecode).unwrap();
 
     state.on_new_bytecode(bytecode);
 }
