@@ -10,10 +10,6 @@ tracing = "*"
 tracing-subscriber = "*"
 wasm-bindgen-cli-support = "*"
 
-[dependencies.axum]
-version = "*"
-features = ["ws"]
-
 [dependencies.notify]
 version = "*"
 default-features = false
