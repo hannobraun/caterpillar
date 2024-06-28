@@ -229,9 +229,9 @@ pub fn on_code() {
 
     let code = buffer.read_frame();
     let code = str::from_utf8(code).unwrap();
-    let code = ron::from_str(code).unwrap();
+    let bytecode = ron::from_str(code).unwrap();
 
-    state.on_new_bytecode(code);
+    state.on_new_bytecode(bytecode);
 }
 
 #[no_mangle]
