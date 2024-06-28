@@ -44,7 +44,7 @@ impl RuntimeState {
 
         let (code, source_map) = compile(&script);
 
-        let entry = code.functions.get("main").cloned().unwrap();
+        let entry = code.entry().unwrap();
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
         process.reset(entry.clone(), arguments.clone());
 

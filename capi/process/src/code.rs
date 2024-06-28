@@ -8,3 +8,9 @@ use crate::Function;
 pub struct Code {
     pub functions: BTreeMap<String, Function>,
 }
+
+impl Code {
+    pub fn entry(&self) -> Option<Function> {
+        self.functions.get("main").cloned()
+    }
+}
