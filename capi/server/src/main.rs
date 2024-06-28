@@ -44,8 +44,8 @@ async fn start_server(
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(serve_dir);
-    let listener = TcpListener::bind(address).await?;
 
+    let listener = TcpListener::bind(address).await?;
     axum::serve(listener, router).await?;
 
     Ok(())
