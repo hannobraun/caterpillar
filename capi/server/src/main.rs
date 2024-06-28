@@ -16,11 +16,9 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
-
     start_server(args.address, args.serve_dir).await?;
 
     info!("`capi-server` shutting down.");
-
     Ok(())
 }
 
