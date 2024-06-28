@@ -8,6 +8,7 @@ use axum::{
     Router,
 };
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
+use capi_protocol::update::SourceCode;
 use clap::Parser;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tracing::info;
@@ -21,8 +22,12 @@ async fn main() -> anyhow::Result<()> {
     let mut script = Script::default();
     snake(&mut script);
     let (bytecode, source_map) = compile(&script);
+    let source_code = SourceCode {
+        functions: script.functions,
+        source_map,
+    };
     dbg!(bytecode);
-    dbg!(source_map);
+    dbg!(source_code);
 
     start_server(args.address, args.serve_dir).await?;
 
