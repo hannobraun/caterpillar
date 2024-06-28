@@ -56,12 +56,17 @@ async fn start_server(
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(serve_dir);
+        .with_state(ServerState { serve_dir });
 
     let listener = TcpListener::bind(address).await?;
     axum::serve(listener, router).await?;
 
     Ok(())
+}
+
+#[derive(Clone)]
+pub struct ServerState {
+    serve_dir: PathBuf,
 }
 
 async fn serve_is_alive() -> StatusCode {
@@ -76,15 +81,15 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
 }
 
-async fn serve_index(State(serve_dir): State<PathBuf>) -> impl IntoResponse {
-    make_file_response(serve_dir.join("index.html")).await
+async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
+    make_file_response(state.serve_dir.join("index.html")).await
 }
 
 async fn serve_static(
     Path(path): Path<PathBuf>,
-    State(serve_dir): State<PathBuf>,
+    State(state): State<ServerState>,
 ) -> impl IntoResponse {
-    make_file_response(serve_dir.join(path)).await
+    make_file_response(state.serve_dir.join(path)).await
 }
 
 async fn make_file_response(path: PathBuf) -> Response {
