@@ -37,6 +37,8 @@ impl RuntimeState {
             *panic = Some(panic_info.to_string());
         }));
 
+        let mut process = Process::default();
+
         let mut script = Script::default();
         snake(&mut script);
 
@@ -44,8 +46,6 @@ impl RuntimeState {
 
         let entry = code.functions.get("main").cloned().unwrap();
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
-
-        let mut process = Process::default();
         process.reset(entry.clone(), arguments.clone());
 
         let memory = Memory::default();
