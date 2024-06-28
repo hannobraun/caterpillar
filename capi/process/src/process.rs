@@ -32,12 +32,12 @@ impl Process {
         self.state.unhandled_effects.pop_front();
     }
 
-    pub fn reset(&mut self, code: &Bytecode, arguments: Vec<Value>) {
+    pub fn reset(&mut self, bytecode: &Bytecode, arguments: Vec<Value>) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
         self.stack
-            .push_frame(code.entry().unwrap())
+            .push_frame(bytecode.entry().unwrap())
             .expect("Expected recursion limit to be more than zero.");
         self.push(arguments);
     }
