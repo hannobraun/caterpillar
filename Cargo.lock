@@ -353,7 +353,6 @@ name = "capi-runtime"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "capi-compiler",
  "capi-ffi",
  "capi-process",
  "capi-protocol",
