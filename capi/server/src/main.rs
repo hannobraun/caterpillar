@@ -1,4 +1,4 @@
-use std::{future, io, path::PathBuf, process};
+use std::{future, io, path::PathBuf};
 
 use axum::{
     extract::{ws::WebSocket, Path, State, WebSocketUpgrade},
@@ -9,7 +9,7 @@ use axum::{
 };
 use clap::Parser;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
-use tracing::{error, info};
+use tracing::info;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -46,10 +46,7 @@ async fn start_server(
         .with_state(serve_dir);
     let listener = TcpListener::bind(address).await?;
 
-    if let Err(err) = axum::serve(listener, router).await {
-        error!("Error serving HTTP endpoints: {err}");
-        process::exit(1);
-    }
+    axum::serve(listener, router).await?;
 
     Ok(())
 }
