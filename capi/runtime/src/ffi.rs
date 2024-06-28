@@ -2,12 +2,14 @@ use std::{str, sync::Mutex};
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
-use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
+use capi_protocol::{
+    CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
+};
 
 use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
 
 pub static PANIC: Shared<Option<String>> = Shared::new(None);
-pub static CODE: Shared<FramedBuffer<{ 1024 * 1024 }>> =
+pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
