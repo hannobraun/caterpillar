@@ -1,9 +1,7 @@
 use std::{collections::VecDeque, panic};
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
-use capi_process::{
-    BuiltinEffect, Code, EvaluatorEffect, Function, Process, Value,
-};
+use capi_process::{BuiltinEffect, Code, EvaluatorEffect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
@@ -13,7 +11,6 @@ use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 
 pub struct RuntimeState {
     pub code: Code,
-    pub entry: Function,
     pub arguments: Vec<Value>,
     pub process: Process,
     pub memory: Memory,
@@ -58,7 +55,6 @@ impl RuntimeState {
 
         Self {
             code,
-            entry,
             arguments,
             process,
             memory,
@@ -84,8 +80,10 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process
-                        .reset(self.entry.clone(), self.arguments.clone());
+                    self.process.reset(
+                        self.code.entry().unwrap(),
+                        self.arguments.clone(),
+                    );
                     self.memory = Memory::default();
                 }
                 Command::Step => {
