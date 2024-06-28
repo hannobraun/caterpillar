@@ -1,6 +1,5 @@
 use std::{str, sync::Mutex};
 
-use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
 use capi_protocol::{
     CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
@@ -10,8 +9,6 @@ use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
 
 pub static PANIC: Shared<Option<String>> = Shared::new(None);
 pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
-    Shared::new(FramedBuffer::new());
-pub static CODE_TX: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
@@ -49,31 +46,6 @@ pub fn panic_len() -> usize {
             panic.len()
         })
         .unwrap_or(0)
-}
-
-static LAST_CODE_READ: Mutex<Option<(usize, usize)>> = Mutex::new(None);
-
-#[no_mangle]
-pub fn code_read() {
-    // Sound, because the reference is dropped before we give back control to
-    // the host.
-    let buffer = unsafe { CODE_TX.access() };
-    let code = buffer.read_frame();
-
-    *LAST_CODE_READ.lock().unwrap() =
-        Some((code.as_ptr() as usize, code.len()));
-}
-
-#[no_mangle]
-pub fn code_read_ptr() -> usize {
-    let (ptr, _) = LAST_CODE_READ.lock().unwrap().unwrap();
-    ptr
-}
-
-#[no_mangle]
-pub fn code_read_len() -> usize {
-    let (_, len) = LAST_CODE_READ.lock().unwrap().unwrap();
-    len
 }
 
 static LAST_CODE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
@@ -193,22 +165,6 @@ pub fn push_random(random: f64) -> bool {
     state.random.push_back(random);
 
     true
-}
-
-#[no_mangle]
-pub fn compile_code() {
-    let mut script = Script::default();
-    snake(&mut script);
-
-    let (code, _) = compile(&script);
-
-    let code = ron::to_string(&code).unwrap();
-    let code = code.as_bytes();
-
-    // Sound, as the reference is dropped before we give back control to the
-    // host.
-    let buffer = unsafe { CODE_TX.access() };
-    buffer.write_frame(code.len()).copy_from_slice(code);
 }
 
 #[no_mangle]
