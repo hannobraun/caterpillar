@@ -51,7 +51,7 @@ impl RuntimeState {
         }
     }
 
-    pub fn on_code(&mut self, bytecode: Bytecode) {
+    pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
         self.process.reset(&bytecode, self.arguments.clone());
         self.bytecode = Some(bytecode);
     }
