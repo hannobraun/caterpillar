@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::MissingOperand, Function, Instruction, Location, Operands, Value,
+    operands::PopOperandError, Function, Instruction, Location, Operands, Value,
 };
 
 #[derive(
@@ -115,7 +115,7 @@ impl Stack {
         frame.operands.push(operand.into());
     }
 
-    pub fn pop_operand(&mut self) -> Result<Value, MissingOperand> {
+    pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
         let frame = self.frames.last_mut().unwrap();
         frame.operands.pop()
     }
@@ -156,7 +156,7 @@ pub type Bindings = BTreeMap<String, Value>;
 )]
 pub enum PushStackFrameError {
     #[error(transparent)]
-    MissingOperand(#[from] MissingOperand),
+    MissingOperand(#[from] PopOperandError),
 
     #[error("Reached recursion limit")]
     Overflow,

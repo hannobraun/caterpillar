@@ -1,5 +1,5 @@
 use crate::{
-    builtins, operands::MissingOperand, stack::PushStackFrameError,
+    builtins, operands::PopOperandError, stack::PushStackFrameError,
     BuiltinEffect, Code, Instruction, Stack, Value,
 };
 
@@ -149,7 +149,7 @@ pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    MissingOperand(#[from] MissingOperand),
+    MissingOperand(#[from] PopOperandError),
 
     #[error(transparent)]
     Stack(#[from] PushStackFrameError),

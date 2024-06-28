@@ -16,8 +16,8 @@ impl Operands {
         self.values.push(value.into());
     }
 
-    pub fn pop(&mut self) -> Result<Value, MissingOperand> {
-        self.values.pop().ok_or(MissingOperand)
+    pub fn pop(&mut self) -> Result<Value, PopOperandError> {
+        self.values.pop().ok_or(PopOperandError::MissingOperand)
     }
 
     pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
@@ -35,4 +35,6 @@ impl Operands {
     serde::Serialize,
 )]
 #[error("Missing operand")]
-pub struct MissingOperand;
+pub enum PopOperandError {
+    MissingOperand,
+}
