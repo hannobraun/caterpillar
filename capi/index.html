@@ -49,6 +49,20 @@
         const context = canvas.getContext("2d");
 
         runtime.compile_code();
+        runtime.code_read();
+        const code_rx = new Uint8Array(
+            runtime.memory.buffer,
+            runtime.code_read_ptr(),
+            runtime.code_read_len(),
+        );
+
+        runtime.code_write(code_rx.byteLength);
+        const code_tx = new Uint8Array(
+            runtime.memory.buffer,
+            runtime.code_write_ptr(),
+            runtime.code_write_len(),
+        );
+        code_tx.set(code_rx);
         runtime.on_code();
 
         window.requestAnimationFrame(mainLoop);
