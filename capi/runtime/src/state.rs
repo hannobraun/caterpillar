@@ -34,8 +34,8 @@ impl RuntimeState {
             *panic = Some(panic_info.to_string());
         }));
 
-        let process = Process::default();
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
+        let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
         let updates = Updates::new();
