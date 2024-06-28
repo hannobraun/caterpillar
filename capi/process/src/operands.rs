@@ -16,7 +16,7 @@ impl Operands {
         self.values.push(value.into());
     }
 
-    pub fn pop(&mut self) -> Result<Value, PopOperandError> {
+    pub fn pop_any(&mut self) -> Result<Value, PopOperandError> {
         let value = self.values.pop().ok_or(PopOperandError::MissingOperand)?;
         Ok(value)
     }

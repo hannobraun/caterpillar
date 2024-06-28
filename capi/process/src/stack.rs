@@ -77,7 +77,7 @@ impl Stack {
 
         if let Some(calling_frame) = self.frames.last_mut() {
             for argument in new_frame.function.arguments.iter().rev() {
-                let value = calling_frame.operands.pop()?;
+                let value = calling_frame.operands.pop_any()?;
                 new_frame.bindings.insert(argument.clone(), value);
             }
         } else {
@@ -117,7 +117,7 @@ impl Stack {
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
         let frame = self.frames.last_mut().unwrap();
-        frame.operands.pop()
+        frame.operands.pop_any()
     }
 
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
