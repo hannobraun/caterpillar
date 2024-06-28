@@ -10,12 +10,12 @@ use crate::{
 use super::syntax::ExpressionKind;
 
 pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
-    let mut code = Bytecode::default();
+    let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
         functions: &script.functions.names,
-        code: &mut code,
+        code: &mut bytecode,
         source_map: &mut source_map,
     };
 
@@ -23,7 +23,7 @@ pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
         compiler.compile_function(name.clone(), args.clone(), syntax.clone());
     }
 
-    (code, source_map)
+    (bytecode, source_map)
 }
 
 struct Compiler<'r> {
