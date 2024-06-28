@@ -164,6 +164,10 @@ pub fn on_frame() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
+    if state.code.is_none() {
+        state.on_code();
+    }
+
     // Sound, because the reference is dropped before we give back control to
     // the host.
     let pixels = unsafe { PIXELS.access() };

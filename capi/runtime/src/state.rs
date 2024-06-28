@@ -34,24 +34,17 @@ impl RuntimeState {
             *panic = Some(panic_info.to_string());
         }));
 
-        let mut process = Process::default();
-
-        let mut script = Script::default();
-        snake(&mut script);
-
-        let (code, source_map) = compile(&script);
+        let process = Process::default();
 
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
-        process.reset(&code, arguments.clone());
 
         let memory = Memory::default();
         let input = Input::default();
-        let mut updates = Updates::new();
 
-        updates.queue_source_code(script.functions, source_map);
+        let updates = Updates::new();
 
         Self {
-            code: Some(code),
+            code: None,
             arguments,
             process,
             memory,
@@ -60,6 +53,18 @@ impl RuntimeState {
             random: VecDeque::new(),
             updates,
         }
+    }
+
+    pub fn on_code(&mut self) {
+        let mut script = Script::default();
+        snake(&mut script);
+
+        let (code, source_map) = compile(&script);
+        self.process.reset(&code, self.arguments.clone());
+
+        self.updates.queue_source_code(script.functions, source_map);
+
+        self.code = Some(code);
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
