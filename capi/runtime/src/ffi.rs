@@ -1,4 +1,4 @@
-use std::sync::Mutex;
+use std::{str, sync::Mutex};
 
 use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
@@ -7,6 +7,8 @@ use capi_protocol::{COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE};
 use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
 
 pub static PANIC: Shared<Option<String>> = Shared::new(None);
+pub static CODE: Shared<FramedBuffer<{ 1024 * 1024 }>> =
+    Shared::new(FramedBuffer::new());
 
 pub static STATE: Mutex<Option<RuntimeState>> = Mutex::new(None);
 
@@ -171,9 +173,21 @@ pub fn on_frame() {
 
         let (code, source_map) = compile(&script);
 
+        let code = ron::to_string(&code).unwrap();
+        let code = code.as_bytes();
+
         state
             .updates
             .queue_source_code(script.functions, source_map);
+
+        // Sound, as the reference is dropped before we give back control to the
+        // host.
+        let buffer = unsafe { CODE.access() };
+        buffer.write_frame(code.len()).copy_from_slice(code);
+
+        let code = buffer.read_frame();
+        let code = str::from_utf8(code).unwrap();
+        let code = ron::from_str(code).unwrap();
 
         state.on_code(code);
     }
