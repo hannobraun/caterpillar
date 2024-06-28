@@ -40,7 +40,7 @@ async fn start_server(
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
-        .route("/updates", get(serve_updates))
+        .route("/wait-while-alive", get(serve_updates))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(serve_dir);

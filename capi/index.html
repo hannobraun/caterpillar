@@ -141,7 +141,7 @@
         // for local development, where the resulting traffic doesn't matter.
         const delayMs = 50;
 
-        const socket = new WebSocket("/updates");
+        const socket = new WebSocket("/wait-while-alive");
 
         socket.onopen = () => {
             // We need to send something to the server. Otherwise, we'll not get
