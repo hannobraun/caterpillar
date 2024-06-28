@@ -219,7 +219,7 @@ pub fn compile_code() {
 }
 
 #[no_mangle]
-pub fn on_code() {
+pub fn on_new_bytecode() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 

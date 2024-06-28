@@ -63,7 +63,7 @@
             runtime.code_write_len(),
         );
         code_tx.set(code_rx);
-        runtime.on_code();
+        runtime.on_new_bytecode();
 
         window.requestAnimationFrame(mainLoop);
 
