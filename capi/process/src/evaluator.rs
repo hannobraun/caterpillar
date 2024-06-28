@@ -149,7 +149,7 @@ pub enum EvaluatorEffect {
     Builtin(BuiltinEffect),
 
     #[error(transparent)]
-    MissingOperand(#[from] PopOperandError),
+    PopOperand(#[from] PopOperandError),
 
     #[error(transparent)]
     Stack(#[from] PushStackFrameError),
