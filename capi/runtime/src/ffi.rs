@@ -173,12 +173,12 @@ pub fn on_frame() {
 
         let (code, source_map) = compile(&script);
 
-        let code = ron::to_string(&code).unwrap();
-        let code = code.as_bytes();
-
         state
             .updates
             .queue_source_code(script.functions, source_map);
+
+        let code = ron::to_string(&code).unwrap();
+        let code = code.as_bytes();
 
         // Sound, as the reference is dropped before we give back control to the
         // host.
