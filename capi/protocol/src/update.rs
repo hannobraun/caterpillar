@@ -22,7 +22,7 @@ impl Update {
     }
 }
 
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct SourceCode {
     pub functions: syntax::Functions,
     pub source_map: SourceMap,
