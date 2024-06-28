@@ -1,4 +1,3 @@
-use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
 use capi_protocol::{
     memory::Memory,
@@ -9,7 +8,7 @@ use super::model::{ActiveFunctions, Debugger};
 
 #[derive(Default)]
 pub struct RemoteProcess {
-    pub source_code: Option<(syntax::Functions, SourceMap)>,
+    pub source_code: Option<SourceCode>,
     pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
@@ -23,20 +22,20 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::SourceCode(SourceCode {
-                functions,
-                source_map,
-            }) => {
-                self.source_code = Some((functions, source_map));
+            Update::SourceCode(source_code) => {
+                self.source_code = Some(source_code);
             }
         }
     }
 
     pub fn to_debugger(&self) -> Debugger {
         let active_functions = ActiveFunctions::new(
-            self.source_code
-                .as_ref()
-                .map(|(functions, source_map)| (functions, source_map)),
+            self.source_code.as_ref().map(
+                |SourceCode {
+                     functions,
+                     source_map,
+                 }| (functions, source_map),
+            ),
             self.process.as_ref(),
         );
         let operands = self
