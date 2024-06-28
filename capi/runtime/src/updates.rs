@@ -1,8 +1,7 @@
-use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
 use capi_protocol::{
     memory::Memory,
-    update::{SerializedUpdate, SourceCode, Update},
+    update::{SerializedUpdate, Update},
 };
 
 pub struct Updates {
@@ -18,17 +17,6 @@ impl Updates {
             process_at_client: None,
             queue: Vec::new(),
         }
-    }
-
-    pub fn queue_source_code(
-        &mut self,
-        functions: syntax::Functions,
-        source_map: SourceMap,
-    ) {
-        self.queue(Update::SourceCode(SourceCode {
-            functions,
-            source_map,
-        }));
     }
 
     pub fn queue_updates(&mut self, process: &Process, memory: &Memory) {
