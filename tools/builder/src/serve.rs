@@ -31,7 +31,8 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             server.abort();
         }
 
-        server = Some(start_server(address, updates.clone()).await?);
+        server =
+            Some(start_server(address.to_string(), updates.clone()).await?);
 
         println!();
         println!("✅ Build is ready:");
@@ -46,7 +47,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 }
 
 async fn start_server(
-    address: &'static str,
+    address: String,
     updates: UpdatesRx,
 ) -> anyhow::Result<JoinHandle<()>> {
     let router = Router::new()
