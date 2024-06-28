@@ -30,12 +30,7 @@ impl RemoteProcess {
 
     pub fn to_debugger(&self) -> Debugger {
         let active_functions = ActiveFunctions::new(
-            self.source_code.as_ref().map(
-                |SourceCode {
-                     functions,
-                     source_map,
-                 }| (functions, source_map),
-            ),
+            self.source_code.as_ref(),
             self.process.as_ref(),
         );
         let operands = self

@@ -1,5 +1,5 @@
-use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
+use capi_protocol::update::SourceCode;
 
 use super::Function;
 
@@ -11,10 +11,14 @@ pub enum ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(
-        source_code: Option<(&syntax::Functions, &SourceMap)>,
+        source_code: Option<&SourceCode>,
         process: Option<&Process>,
     ) -> Self {
-        let Some((functions, source_map)) = source_code else {
+        let Some(SourceCode {
+            functions,
+            source_map,
+        }) = source_code
+        else {
             return Self::Message {
                 message: "No connection to Caterpillar process.",
             };
