@@ -45,9 +45,7 @@ impl RuntimeState {
         process.reset(&code, arguments.clone());
 
         let memory = Memory::default();
-
         let input = Input::default();
-
         let mut updates = Updates::new();
 
         updates.queue_source_code(script.functions, source_map);
