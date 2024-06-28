@@ -14,11 +14,7 @@ impl ActiveFunctions {
         source_code: Option<&SourceCode>,
         process: Option<&Process>,
     ) -> Self {
-        let Some(SourceCode {
-            functions,
-            source_map,
-        }) = source_code
-        else {
+        let Some(source_code) = source_code else {
             return Self::Message {
                 message: "No connection to Caterpillar process.",
             };
@@ -45,11 +41,13 @@ impl ActiveFunctions {
             .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
                 let syntax_location =
-                    source_map.runtime_to_syntax(&runtime_location);
-                let function =
-                    functions.get_from_location(syntax_location).cloned()?;
+                    source_code.source_map.runtime_to_syntax(&runtime_location);
+                let function = source_code
+                    .functions
+                    .get_from_location(syntax_location)
+                    .cloned()?;
 
-                Some(Function::new(function, source_map, process))
+                Some(Function::new(function, &source_code.source_map, process))
             })
             .collect();
 
