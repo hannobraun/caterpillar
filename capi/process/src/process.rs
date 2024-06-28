@@ -73,7 +73,7 @@ impl Process {
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
-    pub fn step(&mut self, code: &Bytecode) {
+    pub fn step(&mut self, bytecode: &Bytecode) {
         if !self.state.can_step() {
             return;
         }
@@ -88,7 +88,7 @@ impl Process {
             ));
         }
 
-        match evaluate(code, &mut self.stack) {
+        match evaluate(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {
                 self.state.most_recent_step = Some(next_instruction);
             }
