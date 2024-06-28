@@ -7,6 +7,7 @@ use axum::{
     routing::get,
     Router,
 };
+use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
 use clap::Parser;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tracing::info;
@@ -16,6 +17,13 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = Args::parse();
+
+    let mut script = Script::default();
+    snake(&mut script);
+    let (code, source_map) = compile(&script);
+    dbg!(code);
+    dbg!(source_map);
+
     start_server(args.address, args.serve_dir).await?;
 
     info!("`capi-server` shutting down.");
