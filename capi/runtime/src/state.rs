@@ -10,7 +10,7 @@ use capi_protocol::{
 use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 
 pub struct RuntimeState {
-    pub code: Code,
+    pub code: Option<Code>,
     pub arguments: Vec<Value>,
     pub process: Process,
     pub memory: Memory,
@@ -51,7 +51,7 @@ impl RuntimeState {
         updates.queue_source_code(script.functions, source_map);
 
         Self {
-            code,
+            code: Some(code),
             arguments,
             process,
             memory,
@@ -63,7 +63,9 @@ impl RuntimeState {
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let code = &self.code;
+        let Some(code) = &self.code else {
+            return;
+        };
 
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
