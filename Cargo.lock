@@ -368,6 +368,7 @@ dependencies = [
  "capi-compiler",
  "capi-protocol",
  "clap",
+ "ron",
  "tokio",
  "tracing",
  "tracing-subscriber",
