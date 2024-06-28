@@ -1,6 +1,9 @@
 use capi_compiler::{source_map::SourceMap, syntax};
 use capi_process::Process;
-use capi_protocol::{memory::Memory, update::Update};
+use capi_protocol::{
+    memory::Memory,
+    update::{SourceCode, Update},
+};
 
 use super::model::{ActiveFunctions, Debugger};
 
@@ -20,10 +23,10 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::SourceCode {
+            Update::SourceCode(SourceCode {
                 functions,
                 source_map,
-            } => {
+            }) => {
                 self.source_code = Some((functions, source_map));
             }
         }

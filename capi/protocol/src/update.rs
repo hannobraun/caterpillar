@@ -6,14 +6,9 @@ use crate::memory::Memory;
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(serde::Deserialize, serde::Serialize)]
 pub enum Update {
-    SourceCode {
-        functions: syntax::Functions,
-        source_map: SourceMap,
-    },
+    SourceCode(SourceCode),
     Process(Process),
-    Memory {
-        memory: Memory,
-    },
+    Memory { memory: Memory },
 }
 
 impl Update {
@@ -25,6 +20,12 @@ impl Update {
     pub fn serialize(&self) -> SerializedUpdate {
         ron::to_string(self).unwrap().into_bytes()
     }
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+pub struct SourceCode {
+    pub functions: syntax::Functions,
+    pub source_map: SourceMap,
 }
 
 pub type SerializedUpdate = Vec<u8>;
