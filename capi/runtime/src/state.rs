@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, panic};
 
-use capi_process::{BuiltinEffect, Code, EvaluatorEffect, Process, Value};
+use capi_process::{BuiltinEffect, Bytecode, EvaluatorEffect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
@@ -9,7 +9,7 @@ use capi_protocol::{
 use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 
 pub struct RuntimeState {
-    pub code: Option<Code>,
+    pub code: Option<Bytecode>,
     pub arguments: Vec<Value>,
     pub process: Process,
     pub memory: Memory,
@@ -51,7 +51,7 @@ impl RuntimeState {
         }
     }
 
-    pub fn on_code(&mut self, code: Code) {
+    pub fn on_code(&mut self, code: Bytecode) {
         self.process.reset(&code, self.arguments.clone());
         self.code = Some(code);
     }

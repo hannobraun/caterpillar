@@ -1,10 +1,10 @@
 use crate::{
     builtins, operands::PopOperandError, stack::PushStackFrameError,
-    BuiltinEffect, Code, Instruction, Stack, Value,
+    BuiltinEffect, Bytecode, Instruction, Stack, Value,
 };
 
 pub fn evaluate(
-    code: &Code,
+    code: &Bytecode,
     stack: &mut Stack,
 ) -> Result<EvaluatorState, EvaluatorEffect> {
     let Some(instruction) = stack.consume_next_instruction() else {

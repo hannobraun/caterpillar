@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
-    BuiltinEffect, Code, EvaluatorEffect, Location, Stack, Value,
+    BuiltinEffect, Bytecode, EvaluatorEffect, Location, Stack, Value,
 };
 
 #[derive(
@@ -32,7 +32,7 @@ impl Process {
         self.state.unhandled_effects.pop_front();
     }
 
-    pub fn reset(&mut self, code: &Code, arguments: Vec<Value>) {
+    pub fn reset(&mut self, code: &Bytecode, arguments: Vec<Value>) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
@@ -73,7 +73,7 @@ impl Process {
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
-    pub fn step(&mut self, code: &Code) {
+    pub fn step(&mut self, code: &Bytecode) {
         if !self.state.can_step() {
             return;
         }
