@@ -40,7 +40,7 @@ async fn start_server(
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
-        .route("/wait-while-alive", get(serve_updates))
+        .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(serve_dir);
@@ -55,7 +55,7 @@ async fn serve_is_alive() -> StatusCode {
     StatusCode::OK
 }
 
-async fn serve_updates(ws: WebSocketUpgrade) -> impl IntoResponse {
+async fn serve_wait_while_alive(ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(serve_updates_handle_socket)
 }
 
