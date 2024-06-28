@@ -35,12 +35,9 @@ impl RuntimeState {
         }));
 
         let process = Process::default();
-
         let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
-
         let memory = Memory::default();
         let input = Input::default();
-
         let updates = Updates::new();
 
         Self {
