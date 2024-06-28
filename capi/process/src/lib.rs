@@ -1,6 +1,6 @@
 mod breakpoints;
 mod builtins;
-mod code;
+mod bytecode;
 mod evaluator;
 mod function;
 mod instructions;
@@ -13,7 +13,7 @@ mod value;
 pub use self::{
     breakpoints::Breakpoints,
     builtins::BuiltinEffect,
-    code::Bytecode,
+    bytecode::Bytecode,
     evaluator::EvaluatorEffect,
     function::Function,
     instructions::Instruction,
