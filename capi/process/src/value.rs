@@ -1,14 +1,7 @@
 use std::fmt;
 
 #[derive(
-    Copy,
-    Clone,
-    Debug,
-    Default,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
+    Copy, Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Value(pub i8);
 
