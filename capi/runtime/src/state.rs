@@ -9,7 +9,7 @@ use capi_protocol::{
 use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 
 pub struct RuntimeState {
-    pub code: Option<Bytecode>,
+    pub bytecode: Option<Bytecode>,
     pub arguments: Vec<Value>,
     pub process: Process,
     pub memory: Memory,
@@ -40,7 +40,7 @@ impl RuntimeState {
         let updates = Updates::new();
 
         Self {
-            code: None,
+            bytecode: None,
             arguments,
             process,
             memory,
@@ -53,11 +53,11 @@ impl RuntimeState {
 
     pub fn on_code(&mut self, code: Bytecode) {
         self.process.reset(&code, self.arguments.clone());
-        self.code = Some(code);
+        self.bytecode = Some(code);
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let Some(code) = &self.code else {
+        let Some(code) = &self.bytecode else {
             return;
         };
 
