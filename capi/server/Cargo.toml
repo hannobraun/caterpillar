@@ -16,6 +16,9 @@ features = ["ws"]
 [dependencies.capi-compiler]
 path = "../compiler"
 
+[dependencies.capi-process]
+path = "../process"
+
 [dependencies.capi-protocol]
 path = "../protocol"
 
