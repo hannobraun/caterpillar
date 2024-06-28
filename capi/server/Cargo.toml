@@ -6,6 +6,10 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 
+[dependencies.axum]
+version = "*"
+features = ["ws"]
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
