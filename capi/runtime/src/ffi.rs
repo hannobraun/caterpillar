@@ -165,6 +165,22 @@ pub fn compile_code() {
 }
 
 #[no_mangle]
+pub fn on_code() {
+    let mut state = STATE.lock().unwrap();
+    let state = state.get_or_insert_with(Default::default);
+
+    // Sound, as the reference is dropped before we give back control to the
+    // host.
+    let buffer = unsafe { CODE.access() };
+
+    let code = buffer.read_frame();
+    let code = str::from_utf8(code).unwrap();
+    let code = ron::from_str(code).unwrap();
+
+    state.on_code(code);
+}
+
+#[no_mangle]
 pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
@@ -189,18 +205,6 @@ pub fn on_command() {
 pub fn on_frame() {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
-
-    if state.code.is_none() {
-        // Sound, as the reference is dropped before we give back control to the
-        // host.
-        let buffer = unsafe { CODE.access() };
-
-        let code = buffer.read_frame();
-        let code = str::from_utf8(code).unwrap();
-        let code = ron::from_str(code).unwrap();
-
-        state.on_code(code);
-    }
 
     // Sound, because the reference is dropped before we give back control to
     // the host.

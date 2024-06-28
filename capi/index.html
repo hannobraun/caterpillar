@@ -49,6 +49,7 @@
         const context = canvas.getContext("2d");
 
         runtime.compile_code();
+        runtime.on_code();
 
         window.requestAnimationFrame(mainLoop);
 
