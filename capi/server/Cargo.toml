@@ -12,6 +12,10 @@ tracing-subscriber = "*"
 version = "*"
 features = ["ws"]
 
+[dependencies.clap]
+version = "*"
+features = ["derive"]
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
