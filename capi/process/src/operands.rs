@@ -35,7 +35,7 @@ impl Operands {
     serde::Deserialize,
     serde::Serialize,
 )]
-#[error("Missing operand")]
 pub enum PopOperandError {
+    #[error("Missing operand")]
     MissingOperand,
 }
