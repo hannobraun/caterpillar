@@ -17,7 +17,8 @@ impl Operands {
     }
 
     pub fn pop(&mut self) -> Result<Value, PopOperandError> {
-        self.values.pop().ok_or(PopOperandError::MissingOperand)
+        let value = self.values.pop().ok_or(PopOperandError::MissingOperand)?;
+        Ok(value)
     }
 
     pub fn values(&self) -> impl Iterator<Item = Value> + '_ {
