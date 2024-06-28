@@ -34,9 +34,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
         server = Some(start_server(address, updates.clone()).await?);
 
         println!();
-        println!("Build is ready:");
+        println!("✅ Build is ready:");
         println!();
         println!("\t🚀 http://{address}/");
+        println!();
+        println!("------------------------------------------------");
         println!();
     }
 

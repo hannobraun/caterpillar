@@ -26,7 +26,7 @@ async fn watch_and_build(
     updates: UpdatesTx,
 ) -> anyhow::Result<()> {
     println!();
-    println!("Starting initial build of Caterpillar...");
+    println!("⏳ Starting initial build of Caterpillar...");
     println!();
 
     // We're not really doing anything with this variable, but it needs to
@@ -39,7 +39,8 @@ async fn watch_and_build(
 
     while changes.wait_for_change().await {
         println!();
-        println!("Change detected. Rebuilding Caterpillar...");
+        println!("🔄 Change detected.");
+        println!("⏳ Rebuilding Caterpillar...");
         println!();
 
         let should_continue = build_once(&updates, &mut output_dir).await?;
