@@ -57,7 +57,7 @@ impl RuntimeState {
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let Some(code) = &self.bytecode else {
+        let Some(bytecode) = &self.bytecode else {
             return;
         };
 
@@ -75,7 +75,7 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(code, self.arguments.clone());
+                    self.process.reset(bytecode, self.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {
@@ -98,7 +98,7 @@ impl RuntimeState {
         }
 
         while self.process.state().can_step() {
-            self.process.step(code);
+            self.process.step(bytecode);
 
             if let Some(EvaluatorEffect::Builtin(effect)) =
                 self.process.state().first_unhandled_effect()
