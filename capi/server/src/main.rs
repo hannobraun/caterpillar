@@ -56,10 +56,10 @@ async fn serve_is_alive() -> StatusCode {
 }
 
 async fn serve_wait_while_alive(ws: WebSocketUpgrade) -> impl IntoResponse {
-    ws.on_upgrade(serve_updates_handle_socket)
+    ws.on_upgrade(do_nothing_while_server_is_alive)
 }
 
-async fn serve_updates_handle_socket(_: WebSocket) {
+async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
 }
 
