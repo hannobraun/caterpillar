@@ -8,12 +8,7 @@ use axum::{
     Router,
 };
 use clap::Parser;
-use tokio::{
-    fs::File,
-    io::AsyncReadExt,
-    net::TcpListener,
-    task::{self, JoinHandle},
-};
+use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tracing::{error, info};
 
 #[tokio::main]
@@ -22,8 +17,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    let server = start_server(args.address, args.serve_dir).await?;
-    server.await?;
+    start_server(args.address, args.serve_dir).await?;
 
     info!("`capi-server` shutting down.");
 
@@ -45,7 +39,7 @@ pub struct Args {
 async fn start_server(
     address: String,
     serve_dir: PathBuf,
-) -> anyhow::Result<JoinHandle<()>> {
+) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/updates", get(serve_updates))
@@ -54,14 +48,12 @@ async fn start_server(
         .with_state(serve_dir);
     let listener = TcpListener::bind(address).await?;
 
-    let handle = task::spawn(async {
-        if let Err(err) = axum::serve(listener, router).await {
-            error!("Error serving HTTP endpoints: {err}");
-            process::exit(1);
-        }
-    });
+    if let Err(err) = axum::serve(listener, router).await {
+        error!("Error serving HTTP endpoints: {err}");
+        process::exit(1);
+    }
 
-    Ok(handle)
+    Ok(())
 }
 
 async fn serve_is_alive() -> StatusCode {
