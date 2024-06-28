@@ -1,4 +1,5 @@
-use capi_protocol::update::SerializedUpdate;
+use capi_protocol::update::{SerializedUpdate, Update};
+use gloo_net::http::Request;
 use tokio::sync::mpsc;
 
 use crate::ui::{self, CommandsRx};
@@ -12,6 +13,19 @@ impl DebuggerState {
     pub fn new() -> Self {
         let (commands_tx, commands_rx) = mpsc::unbounded_channel();
         let (updates_tx, updates_rx) = mpsc::unbounded_channel();
+
+        let source_code_tx = updates_tx.clone();
+        leptos::spawn_local(async move {
+            let source_code =
+                Request::get("/source-code").send().await.unwrap();
+            let source_code = source_code.text().await.unwrap();
+            let source_code = ron::from_str(&source_code).unwrap();
+
+            let update = Update::SourceCode(source_code);
+            let update = ron::to_string(&update).unwrap().as_bytes().to_vec();
+
+            source_code_tx.send(update).unwrap();
+        });
 
         ui::start(updates_rx, commands_tx);
 
