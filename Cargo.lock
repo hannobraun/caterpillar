@@ -313,6 +313,9 @@ dependencies = [
 [[package]]
 name = "capi-server"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+]
 
 [[package]]
 name = "cc"
