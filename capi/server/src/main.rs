@@ -14,7 +14,7 @@ use tokio::{
     net::TcpListener,
     task::{self, JoinHandle},
 };
-use tracing::error;
+use tracing::{error, info};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -24,6 +24,8 @@ async fn main() -> anyhow::Result<()> {
 
     let server = start_server(args.address, args.serve_dir).await?;
     server.await?;
+
+    info!("`capi-server` shutting down.");
 
     Ok(())
 }
