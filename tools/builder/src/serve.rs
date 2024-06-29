@@ -53,7 +53,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
         println!();
         println!("\t🚀 http://{address}/");
         println!();
-        println!("------------------------------------------------");
+        println!("================================================");
         println!();
     }
 
