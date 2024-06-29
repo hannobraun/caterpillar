@@ -66,6 +66,7 @@ async fn start_server(
         });
 
     let listener = TcpListener::bind(address).await?;
+    println!("builder: ready"); // signal the builder we're ready
     axum::serve(listener, router).await?;
 
     Ok(())

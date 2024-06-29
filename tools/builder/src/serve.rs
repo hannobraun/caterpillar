@@ -1,4 +1,9 @@
-use tokio::process::{Child, Command};
+use std::process::Stdio;
+
+use tokio::{
+    io::{AsyncBufReadExt, BufReader},
+    process::{Child, Command},
+};
 
 use crate::build::UpdatesRx;
 
@@ -17,14 +22,25 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             server.kill().await?;
         }
 
-        let new_server = Command::new("cargo")
+        let mut new_server = Command::new("cargo")
             .arg("run")
             .args(["--package", "capi-server"])
             .arg("--")
             .args(["--address", address])
             .args(["--serve-dir", &serve_dir.display().to_string()])
             .kill_on_drop(true)
+            .stdout(Stdio::piped())
             .spawn()?;
+
+        let stdout = new_server.stdout.take().expect(
+            "Expect stdio to be captured, according to configuration above",
+        );
+        let mut stdout = BufReader::new(stdout);
+
+        let mut line = String::new();
+        while !line.starts_with("builder: ready") {
+            stdout.read_line(&mut line).await?;
+        }
 
         current_server = Some(new_server);
 
