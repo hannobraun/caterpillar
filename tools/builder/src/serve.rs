@@ -17,15 +17,15 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             server.kill().await?;
         }
 
-        current_server = Some(
-            Command::new("cargo")
-                .arg("run")
-                .args(["--package", "capi-server"])
-                .arg("--")
-                .args(["--address", address])
-                .args(["--serve-dir", &serve_dir.display().to_string()])
-                .spawn()?,
-        );
+        let new_server = Command::new("cargo")
+            .arg("run")
+            .args(["--package", "capi-server"])
+            .arg("--")
+            .args(["--address", address])
+            .args(["--serve-dir", &serve_dir.display().to_string()])
+            .spawn()?;
+
+        current_server = Some(new_server);
 
         println!();
         println!("✅ Build is ready:");
