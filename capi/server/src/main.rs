@@ -1,4 +1,4 @@
-use std::{future, io, path::PathBuf};
+use std::{future, io, path::PathBuf, str};
 
 use axum::{
     extract::{ws::WebSocket, Path, State, WebSocketUpgrade},
@@ -21,6 +21,9 @@ async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let script = snake::main();
+    let script = str::from_utf8(&script).unwrap();
+    let script = ron::from_str(script).unwrap();
+
     let (bytecode, source_map) = compile(&script);
     let source_code = SourceCode {
         functions: script.functions,
