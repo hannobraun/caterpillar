@@ -5,7 +5,7 @@ use crate::build::UpdatesRx;
 pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     let address = "localhost:34480";
 
-    let mut server: Option<Child> = None;
+    let mut current_server: Option<Child> = None;
 
     updates.mark_unchanged(); // make sure we enter the loop body immediately
     while let Ok(()) = updates.changed().await {
@@ -13,11 +13,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             continue;
         };
 
-        if let Some(mut server) = server.take() {
+        if let Some(mut server) = current_server.take() {
             server.kill().await?;
         }
 
-        server = Some(
+        current_server = Some(
             Command::new("cargo")
                 .arg("run")
                 .args(["--package", "capi-server"])
