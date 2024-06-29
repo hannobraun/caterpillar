@@ -3,5 +3,8 @@ name = "snake"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies]
+ron = "*"
+
 [dependencies.capi-compiler]
 path = "../compiler"

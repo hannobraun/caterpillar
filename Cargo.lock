@@ -2037,6 +2037,7 @@ name = "snake"
 version = "0.1.0"
 dependencies = [
  "capi-compiler",
+ "ron",
 ]
 
 [[package]]
