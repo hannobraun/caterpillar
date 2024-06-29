@@ -6,7 +6,7 @@ pub fn main() -> Script {
     script
 }
 
-pub fn snake(script: &mut Script) {
+fn snake(script: &mut Script) {
     // Main loop
     script.function("main", [], |s| {
         s.w("tile_field_size")
