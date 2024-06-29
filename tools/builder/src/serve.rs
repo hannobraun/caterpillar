@@ -22,6 +22,10 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             server.kill().await?;
         }
 
+        println!();
+        println!("⏳ Starting Caterpillar server...");
+        println!();
+
         let mut new_server = Command::new("cargo")
             .arg("run")
             .args(["--package", "capi-server"])
