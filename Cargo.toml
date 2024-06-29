@@ -8,6 +8,7 @@ members = [
     "capi/protocol",
     "capi/runtime",
     "capi/server",
+    "capi/snake",
     "tools/builder",
     "tools/daily",
 ]
