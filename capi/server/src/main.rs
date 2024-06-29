@@ -7,10 +7,11 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_compiler::{compiler::compile, games::snake::snake, syntax::Script};
+use capi_compiler::{compiler::compile, syntax::Script};
 use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
 use clap::Parser;
+use snake::snake;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tracing::info;
 

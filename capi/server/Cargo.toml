@@ -26,6 +26,9 @@ path = "../protocol"
 version = "*"
 features = ["derive"]
 
+[dependencies.snake]
+path = "../snake"
+
 [dependencies.tokio]
 version = "*"
 features = ["full"]
