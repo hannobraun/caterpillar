@@ -23,6 +23,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             .arg("--")
             .args(["--address", address])
             .args(["--serve-dir", &serve_dir.display().to_string()])
+            .kill_on_drop(true)
             .spawn()?;
 
         current_server = Some(new_server);
