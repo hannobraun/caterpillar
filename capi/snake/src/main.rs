@@ -1,10 +1,11 @@
 use capi_compiler::syntax::Script;
 
-pub fn main() -> Vec<u8> {
+pub fn main() {
     let mut script = Script::default();
     snake(&mut script);
 
-    ron::to_string(&script).unwrap().as_bytes().to_vec()
+    let script = ron::to_string(&script).unwrap();
+    println!("{script}");
 }
 
 fn snake(script: &mut Script) {

@@ -11,7 +11,7 @@ use capi_compiler::compiler::compile;
 use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
 use clap::Parser;
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
+use tokio::{fs::File, io::AsyncReadExt, net::TcpListener, process::Command};
 use tracing::info;
 
 #[tokio::main]
@@ -20,7 +20,12 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    let script = snake::main();
+    let script = Command::new("cargo")
+        .arg("run")
+        .args(["--package", "snake"])
+        .output()
+        .await?
+        .stdout;
     let script = str::from_utf8(&script).unwrap();
     let script = ron::from_str(script).unwrap();
 

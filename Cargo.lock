@@ -370,7 +370,6 @@ dependencies = [
  "capi-protocol",
  "clap",
  "ron",
- "snake",
  "tokio",
  "tracing",
  "tracing-subscriber",
