@@ -1,5 +1,11 @@
 use capi_compiler::syntax::Script;
 
+pub fn main() -> Script {
+    let mut script = Script::default();
+    snake(&mut script);
+    script
+}
+
 pub fn snake(script: &mut Script) {
     // Main loop
     script.function("main", [], |s| {

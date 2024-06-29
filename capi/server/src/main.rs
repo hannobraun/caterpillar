@@ -7,11 +7,10 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_compiler::{compiler::compile, syntax::Script};
+use capi_compiler::compiler::compile;
 use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
 use clap::Parser;
-use snake::snake;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tracing::info;
 
@@ -21,8 +20,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args = Args::parse();
 
-    let mut script = Script::default();
-    snake(&mut script);
+    let script = snake::main();
     let (bytecode, source_map) = compile(&script);
     let source_code = SourceCode {
         functions: script.functions,
