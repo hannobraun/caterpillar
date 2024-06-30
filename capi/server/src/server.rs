@@ -7,15 +7,14 @@ use axum::{
     routing::get,
     Router,
 };
-use capi_process::Bytecode;
-use capi_protocol::update::SourceCode;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
+
+use crate::build::Game;
 
 pub async fn start(
     address: String,
     serve_dir: PathBuf,
-    source_code: SourceCode,
-    bytecode: Bytecode,
+    game: Game,
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
@@ -24,11 +23,7 @@ pub async fn start(
         .route("/bytecode", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(ServerState {
-            serve_dir,
-            source_code,
-            bytecode,
-        });
+        .with_state(ServerState { serve_dir, game });
 
     let listener = TcpListener::bind(address).await?;
     println!("builder: ready"); // signal the builder we're ready
@@ -40,8 +35,7 @@ pub async fn start(
 #[derive(Clone)]
 pub struct ServerState {
     serve_dir: PathBuf,
-    source_code: SourceCode,
-    bytecode: Bytecode,
+    game: Game,
 }
 
 async fn serve_is_alive() -> StatusCode {
@@ -59,14 +53,13 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
 async fn serve_source_code(
     State(state): State<ServerState>,
 ) -> impl IntoResponse {
-    ron::to_string(&state.source_code)
-        .unwrap()
-        .as_bytes()
-        .to_vec()
+    let (source_code, _) = &*state.game.borrow();
+    ron::to_string(source_code).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
-    ron::to_string(&state.bytecode).unwrap().as_bytes().to_vec()
+    let (_, bytecode) = &*state.game.borrow();
+    ron::to_string(bytecode).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {

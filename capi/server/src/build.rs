@@ -3,7 +3,9 @@ use std::str;
 use capi_compiler::compiler::compile;
 use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
-use tokio::process::Command;
+use tokio::{process::Command, sync::watch};
+
+pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
 pub async fn build_snake() -> anyhow::Result<(SourceCode, Bytecode)> {
     let script = Command::new("cargo")
