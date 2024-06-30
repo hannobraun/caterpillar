@@ -3,12 +3,11 @@ use std::{
     process,
 };
 
+use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
 use tracing::error;
 use wasm_bindgen_cli_support::Bindgen;
-
-use crate::watch::DebouncedChanges;
 
 pub fn start(changes: DebouncedChanges) -> UpdatesRx {
     let (tx, rx) = watch::channel(None);

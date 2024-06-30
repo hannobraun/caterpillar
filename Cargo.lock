@@ -268,7 +268,7 @@ name = "builder"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "notify",
+ "capi-watch",
  "tempfile",
  "tokio",
  "tracing",
@@ -373,6 +373,16 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "capi-watch"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "notify",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]

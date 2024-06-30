@@ -1,0 +1,16 @@
+[package]
+name = "capi-watch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+tracing = "*"
+
+[dependencies.notify]
+version = "*"
+default-features = false
+
+[dependencies.tokio]
+version = "*"
+features = ["sync"]

@@ -10,9 +10,8 @@ tracing = "*"
 tracing-subscriber = "*"
 wasm-bindgen-cli-support = "*"
 
-[dependencies.notify]
-version = "*"
-default-features = false
+[dependencies.capi-watch]
+path = "../../capi/watch"
 
 [dependencies.tokio]
 version = "*"
