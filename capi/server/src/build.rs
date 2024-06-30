@@ -9,6 +9,15 @@ pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
 pub async fn build_snake(
 ) -> anyhow::Result<(watch::Sender<(SourceCode, Bytecode)>, Game)> {
+    let (source_code, bytecode) = build_once().await?;
+
+    let (game_tx, game_rx) =
+        tokio::sync::watch::channel((source_code, bytecode));
+
+    Ok((game_tx, game_rx))
+}
+
+async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let script = Command::new("cargo")
         .arg("run")
         .args(["--package", "snake"])
@@ -24,8 +33,5 @@ pub async fn build_snake(
         source_map,
     };
 
-    let (game_tx, game_rx) =
-        tokio::sync::watch::channel((source_code, bytecode));
-
-    Ok((game_tx, game_rx))
+    Ok((source_code, bytecode))
 }
