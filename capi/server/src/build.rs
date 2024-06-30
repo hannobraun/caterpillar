@@ -8,7 +8,7 @@ use tokio::{process::Command, sync::watch, task};
 
 pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
-pub async fn build_snake(
+pub async fn build_and_watch(
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<Game> {
     let (source_code, bytecode) = build_once().await?;

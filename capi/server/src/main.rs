@@ -10,7 +10,7 @@ async fn main() -> anyhow::Result<()> {
 
     let args = args::Args::parse();
     let watcher = Watcher::new(std::path::PathBuf::from("games"))?;
-    let game_rx = build::build_snake(watcher.changes).await?;
+    let game_rx = build::build_and_watch(watcher.changes).await?;
     server::start(args.address, args.serve_dir, game_rx).await?;
 
     tracing::info!("`capi-server` shutting down.");
