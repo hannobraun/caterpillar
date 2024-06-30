@@ -10,7 +10,7 @@ pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
 pub async fn build_snake(
     mut changes: DebouncedChanges,
-) -> anyhow::Result<(watch::Sender<(SourceCode, Bytecode)>, Game)> {
+) -> anyhow::Result<Game> {
     let (source_code, bytecode) = build_once().await?;
 
     let (game_tx, game_rx) =
@@ -19,10 +19,12 @@ pub async fn build_snake(
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
+            let (source_code, bytecode) = build_once().await.unwrap();
+            game_tx.send((source_code, bytecode)).unwrap();
         }
     });
 
-    Ok((game_tx, game_rx))
+    Ok(game_rx)
 }
 
 async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
