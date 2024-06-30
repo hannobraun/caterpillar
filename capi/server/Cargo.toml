@@ -22,6 +22,9 @@ path = "../process"
 [dependencies.capi-protocol]
 path = "../protocol"
 
+[dependencies.capi-watch]
+path = "../watch"
+
 [dependencies.clap]
 version = "*"
 features = ["derive"]

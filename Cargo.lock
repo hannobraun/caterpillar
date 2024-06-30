@@ -368,6 +368,7 @@ dependencies = [
  "capi-compiler",
  "capi-process",
  "capi-protocol",
+ "capi-watch",
  "clap",
  "ron",
  "tokio",
