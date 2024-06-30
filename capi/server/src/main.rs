@@ -1,6 +1,7 @@
+mod args;
 mod server;
 
-use std::{path::PathBuf, str};
+use std::str;
 
 use capi_compiler::compiler::compile;
 use capi_protocol::update::SourceCode;
@@ -12,7 +13,7 @@ use tracing::info;
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
-    let args = Args::parse();
+    let args = args::Args::parse();
 
     let script = Command::new("cargo")
         .arg("run")
@@ -33,16 +34,4 @@ async fn main() -> anyhow::Result<()> {
 
     info!("`capi-server` shutting down.");
     Ok(())
-}
-
-/// Caterpillar server
-#[derive(clap::Parser)]
-pub struct Args {
-    /// Address to serve at
-    #[arg(short, long)]
-    pub address: String,
-
-    /// Directory to serve from
-    #[arg(short, long)]
-    pub serve_dir: PathBuf,
 }
