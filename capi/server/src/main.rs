@@ -1,3 +1,5 @@
+use capi_watch::Watcher;
+
 mod args;
 mod build;
 mod server;
@@ -7,7 +9,8 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
 
     let args = args::Args::parse();
-    let (_game_tx, game_rx) = build::build_snake().await?;
+    let watcher = Watcher::new(std::path::PathBuf::from("games"))?;
+    let (_game_tx, game_rx) = build::build_snake(watcher.changes).await?;
     server::start(args.address, args.serve_dir, game_rx).await?;
 
     tracing::info!("`capi-server` shutting down.");

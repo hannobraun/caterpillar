@@ -3,16 +3,24 @@ use std::str;
 use capi_compiler::compiler::compile;
 use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
-use tokio::{process::Command, sync::watch};
+use capi_watch::DebouncedChanges;
+use tokio::{process::Command, sync::watch, task};
 
 pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
 pub async fn build_snake(
+    mut changes: DebouncedChanges,
 ) -> anyhow::Result<(watch::Sender<(SourceCode, Bytecode)>, Game)> {
     let (source_code, bytecode) = build_once().await?;
 
     let (game_tx, game_rx) =
         tokio::sync::watch::channel((source_code, bytecode));
+
+    task::spawn(async move {
+        while changes.wait_for_change().await {
+            dbg!("Change detected.");
+        }
+    });
 
     Ok((game_tx, game_rx))
 }
