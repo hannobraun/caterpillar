@@ -7,4 +7,4 @@ edition = "2021"
 ron = "*"
 
 [dependencies.capi-compiler]
-path = "../compiler"
+path = "../../capi/compiler"
