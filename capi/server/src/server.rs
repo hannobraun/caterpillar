@@ -11,7 +11,7 @@ use capi_process::Bytecode;
 use capi_protocol::update::SourceCode;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 
-pub async fn start_server(
+pub async fn start(
     address: String,
     serve_dir: PathBuf,
     source_code: SourceCode,

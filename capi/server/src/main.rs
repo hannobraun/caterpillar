@@ -29,8 +29,7 @@ async fn main() -> anyhow::Result<()> {
         source_map,
     };
 
-    server::start_server(args.address, args.serve_dir, source_code, bytecode)
-        .await?;
+    server::start(args.address, args.serve_dir, source_code, bytecode).await?;
 
     info!("`capi-server` shutting down.");
     Ok(())
