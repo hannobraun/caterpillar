@@ -2,8 +2,6 @@ mod args;
 mod build;
 mod server;
 
-use tracing::info;
-
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
@@ -14,6 +12,6 @@ async fn main() -> anyhow::Result<()> {
 
     server::start(args.address, args.serve_dir, source_code, bytecode).await?;
 
-    info!("`capi-server` shutting down.");
+    tracing::info!("`capi-server` shutting down.");
     Ok(())
 }
