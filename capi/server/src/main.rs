@@ -5,7 +5,6 @@ use std::str;
 
 use capi_compiler::compiler::compile;
 use capi_protocol::update::SourceCode;
-use clap::Parser;
 use tokio::process::Command;
 use tracing::info;
 

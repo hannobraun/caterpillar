@@ -11,3 +11,9 @@ pub struct Args {
     #[arg(short, long)]
     pub serve_dir: PathBuf,
 }
+
+impl Args {
+    pub fn parse() -> Self {
+        <Self as clap::Parser>::parse()
+    }
+}
