@@ -7,7 +7,8 @@ use tokio::{process::Command, sync::watch};
 
 pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
 
-pub async fn build_snake() -> anyhow::Result<(SourceCode, Bytecode)> {
+pub async fn build_snake(
+) -> anyhow::Result<(watch::Sender<(SourceCode, Bytecode)>, Game)> {
     let script = Command::new("cargo")
         .arg("run")
         .args(["--package", "snake"])
@@ -23,5 +24,8 @@ pub async fn build_snake() -> anyhow::Result<(SourceCode, Bytecode)> {
         source_map,
     };
 
-    Ok((source_code, bytecode))
+    let (game_tx, game_rx) =
+        tokio::sync::watch::channel((source_code, bytecode));
+
+    Ok((game_tx, game_rx))
 }
