@@ -155,11 +155,10 @@ pub fn push_random(random: f64) -> bool {
         return false;
     }
 
-    let min: i16 = i8::MIN.into();
-    let max: i16 = i8::MAX.into();
+    let min: f64 = i8::MIN.into();
+    let max: f64 = i8::MAX.into();
 
-    let range: f64 = (max - min).into();
-    let random = random * range;
+    let random = random * (max - min);
 
     let random: i8 = random.floor() as i8;
     state.random.push_back(random);
