@@ -160,8 +160,7 @@ pub fn push_random(random: f64) -> bool {
 
     let random = random * (max - min);
 
-    let random: i8 = random.floor() as i8;
-    state.random.push_back(random);
+    state.random.push_back(random.floor() as i8);
 
     true
 }
