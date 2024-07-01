@@ -155,8 +155,8 @@ pub fn push_random(random: f64) -> bool {
         return false;
     }
 
-    let min: f64 = i8::MIN.into();
-    let max: f64 = i8::MAX.into();
+    let min: f64 = i32::MIN.into();
+    let max: f64 = i32::MAX.into();
 
     let random = random * (max - min);
 
