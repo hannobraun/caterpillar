@@ -79,6 +79,8 @@ impl Process {
         }
 
         let next_instruction = self.stack.next_instruction_overall().unwrap();
+        self.state.most_recent_step = Some(next_instruction.clone());
+
         if self
             .breakpoints
             .should_stop_at_and_clear_ephemeral(next_instruction.clone())
@@ -89,9 +91,7 @@ impl Process {
         }
 
         match evaluate(bytecode, &mut self.stack) {
-            Ok(EvaluatorState::Running) => {
-                self.state.most_recent_step = Some(next_instruction);
-            }
+            Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
             }
