@@ -79,7 +79,6 @@ impl Process {
         }
 
         let next_instruction = self.stack.next_instruction_overall().unwrap();
-        self.state.most_recent_step = Some(next_instruction.clone());
 
         match evaluate(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
@@ -90,6 +89,8 @@ impl Process {
                 self.state.add_effect(effect);
             }
         };
+
+        self.state.most_recent_step = Some(next_instruction.clone());
 
         if self
             .breakpoints
