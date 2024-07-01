@@ -33,7 +33,7 @@ impl RuntimeState {
             *panic = Some(panic_info.to_string());
         }));
 
-        let arguments = vec![Value(TILES_PER_AXIS as i8); 2];
+        let arguments = vec![Value(TILES_PER_AXIS as i32); 2];
         let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
@@ -144,13 +144,8 @@ impl RuntimeState {
                         break;
                     }
                     BuiltinEffect::ReadInput => {
-                        let input = self
-                            .input
-                            .buffer
-                            .pop_front()
-                            .unwrap_or(0)
-                            .try_into()
-                            .unwrap();
+                        let input =
+                            self.input.buffer.pop_front().unwrap_or(0).into();
 
                         self.process.push([Value(input)]);
                         self.process.handle_first_effect();
@@ -168,7 +163,7 @@ impl RuntimeState {
                         // randomness from the host.
                         let random = self.random.pop_front().unwrap();
 
-                        self.process.push([Value(random)]);
+                        self.process.push([Value(random.into())]);
                         self.process.handle_first_effect();
                     }
                 }

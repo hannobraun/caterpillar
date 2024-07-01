@@ -20,7 +20,7 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     let c = a.0.wrapping_add(b.0);
-    let c = if c >= 0 { c } else { c - i8::MIN };
+    let c = if c >= 0 { c } else { c - i32::MIN };
 
     stack.push_operand(c);
 
@@ -108,7 +108,7 @@ pub fn mul(stack: &mut Stack) -> Result {
 pub fn neg(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
-    if a.0 == i8::MIN {
+    if a.0 == i32::MIN {
         return Err(BuiltinError::IntegerOverflow);
     }
     let b = -a.0;

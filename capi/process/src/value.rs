@@ -3,10 +3,10 @@ use std::fmt;
 #[derive(
     Copy, Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct Value(pub i8);
+pub struct Value(pub i32);
 
-impl From<i8> for Value {
-    fn from(value: i8) -> Self {
+impl From<i32> for Value {
+    fn from(value: i32) -> Self {
         Self(value)
     }
 }
