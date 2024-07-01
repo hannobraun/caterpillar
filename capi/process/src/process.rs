@@ -81,15 +81,6 @@ impl Process {
         let next_instruction = self.stack.next_instruction_overall().unwrap();
         self.state.most_recent_step = Some(next_instruction.clone());
 
-        if self
-            .breakpoints
-            .should_stop_at_and_clear_ephemeral(next_instruction)
-        {
-            self.state.add_effect(EvaluatorEffect::Builtin(
-                BuiltinEffect::Breakpoint,
-            ));
-        }
-
         match evaluate(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
@@ -99,6 +90,15 @@ impl Process {
                 self.state.add_effect(effect);
             }
         };
+
+        if self
+            .breakpoints
+            .should_stop_at_and_clear_ephemeral(next_instruction)
+        {
+            self.state.add_effect(EvaluatorEffect::Builtin(
+                BuiltinEffect::Breakpoint,
+            ));
+        }
     }
 }
 
