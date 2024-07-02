@@ -158,7 +158,7 @@ pub fn push_random(random: f64) -> bool {
     let min: f64 = i32::MIN.into();
     let max: f64 = i32::MAX.into();
 
-    let random = random * (max - min);
+    let random = min + random * (max - min);
 
     state.random.push_back(random.floor() as _);
 
