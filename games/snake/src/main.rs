@@ -696,7 +696,6 @@ fn snake(script: &mut Script) {
             .c("  within the buffer.")
             .c("- `offset`, which is the offset of the desired address from")
             .c("  `base`.")
-            .c("that it can ")
             .w("base")
             .w("offset")
             .w("add_wrap_unsigned")
