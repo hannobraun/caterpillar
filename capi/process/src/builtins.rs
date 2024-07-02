@@ -231,3 +231,5 @@ impl From<TryFromIntError> for BuiltinError {
         Self::ExpectedPositiveValue
     }
 }
+
+pub const TILES_PER_AXIS: usize = 32;

@@ -13,6 +13,7 @@ mod value;
 pub use self::{
     breakpoints::Breakpoints,
     builtins::BuiltinEffect,
+    builtins::TILES_PER_AXIS,
     bytecode::Bytecode,
     evaluator::EvaluatorEffect,
     function::Function,
