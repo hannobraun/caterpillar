@@ -734,7 +734,7 @@ fn snake(script: &mut Script) {
         s.c("Negating -128 would result in an integer overflow.")
             .w("read_random")
             .w("copy")
-            .v(-128)
+            .w("word_min")
             .w("eq")
             .w("return_if_zero")
             .w("drop")
@@ -748,5 +748,10 @@ fn snake(script: &mut Script) {
             .w("greater")
             .w("return_if_non_zero")
             .w("neg");
+    });
+
+    // Utilities - Words
+    script.function("word_min", [], |s| {
+        s.v(i32::MIN);
     });
 }
