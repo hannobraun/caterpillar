@@ -731,14 +731,14 @@ fn snake(script: &mut Script) {
 
     // Utilities - Miscellaneous
     script.function("negatable_random", [], |s| {
-        s.c("Negating -128 would result in an integer overflow.")
+        s.c("Negating the minimum number would result in an integer overflow.")
             .w("read_random")
             .w("copy")
             .w("word_min")
             .w("eq")
             .w("return_if_zero")
             .w("drop")
-            .c("Looks like we ran into -128. Try again!")
+            .c("Looks like we ran into the minimum. Try again!")
             .w("negatable_random");
     });
     script.function("abs", ["v"], |s| {
