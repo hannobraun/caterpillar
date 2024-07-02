@@ -14,7 +14,7 @@ pub struct RuntimeState {
     pub process: Process,
     pub memory: Memory,
     pub input: Input,
-    pub random: VecDeque<i8>,
+    pub random: VecDeque<i32>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates,
 }
@@ -163,7 +163,7 @@ impl RuntimeState {
                         // randomness from the host.
                         let random = self.random.pop_front().unwrap();
 
-                        self.process.push([Value(random.into())]);
+                        self.process.push([Value(random)]);
                         self.process.handle_first_effect();
                     }
                 }
