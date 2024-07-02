@@ -171,6 +171,19 @@ pub fn write_tile(stack: &mut Stack) -> Result {
     let y = stack.pop_operand()?;
     let x = stack.pop_operand()?;
 
+    if x.0 < 0 {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if y.0 < 0 {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if x.0 >= TILES_PER_AXIS_I32 {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if y.0 >= TILES_PER_AXIS_I32 {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+
     let x = x.0.try_into()?;
     let y = y.0.try_into()?;
 
@@ -219,6 +232,9 @@ pub enum BuiltinError {
     #[error("Integer overflow")]
     IntegerOverflow,
 
+    #[error("Operand is out of bounds")]
+    OperandOutOfBounds,
+
     #[error(transparent)]
     PopOperand(#[from] PopOperandError),
 }
@@ -233,3 +249,7 @@ impl From<TryFromIntError> for BuiltinError {
 }
 
 pub const TILES_PER_AXIS: usize = 32;
+
+// The value is within the bounds of an `i32`. The `as` here should never
+// truncate.
+const TILES_PER_AXIS_I32: i32 = TILES_PER_AXIS as i32;
