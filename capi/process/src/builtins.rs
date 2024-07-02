@@ -184,8 +184,12 @@ pub fn write_tile(stack: &mut Stack) -> Result {
         return Err(BuiltinError::OperandOutOfBounds);
     }
 
-    let x = x.0.try_into()?;
-    let y = y.0.try_into()?;
+    let x =
+        x.0.try_into()
+            .expect("Just checked that `x` is within bounds");
+    let y =
+        y.0.try_into()
+            .expect("Just checked that `y` is within bounds");
 
     let color = if value.0 == 0 {
         [0, 0, 0, 255]
