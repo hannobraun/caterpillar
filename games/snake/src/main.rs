@@ -58,8 +58,8 @@ fn snake(script: &mut Script) {
         s.w("food_position")
             .w("vec_load")
             .v(255)
-            .v(255)
-            .v(255)
+            .v(0)
+            .v(0)
             .v(255)
             .w("set_pixel");
     });
