@@ -166,7 +166,7 @@ pub fn submit_frame() -> Result {
     Ok(Some(BuiltinEffect::SubmitFrame))
 }
 
-pub fn write_tile(stack: &mut Stack) -> Result {
+pub fn set_pixel(stack: &mut Stack) -> Result {
     let value = stack.pop_operand()?;
     let y = stack.pop_operand()?;
     let x = stack.pop_operand()?;
