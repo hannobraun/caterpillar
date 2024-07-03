@@ -23,7 +23,7 @@ fn snake(script: &mut Script) {
 
     // Draw
     script.function("draw", [], |s| {
-        s.w("write_all_tiles")
+        s.w("clear_pixels")
             .w("draw_snake")
             .w("draw_food")
             .c("This blocks until the display system is ready to process the")
@@ -56,7 +56,7 @@ fn snake(script: &mut Script) {
     });
 
     // Draw - write tiles
-    script.function("write_all_tiles", [], |s| {
+    script.function("clear_pixels", [], |s| {
         s.w("init_tile_index")
             .v(0)
             .w("write_all_tiles_inner")
