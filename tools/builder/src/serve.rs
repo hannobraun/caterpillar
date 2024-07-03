@@ -18,11 +18,13 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             continue;
         };
 
+        println!();
+
         if let Some(mut server) = current_server.take() {
+            println!("⏳ Killing previous instance of Caterpillar server...");
             server.kill().await?;
         }
 
-        println!();
         println!("⏳ Starting Caterpillar server...");
         println!();
 
