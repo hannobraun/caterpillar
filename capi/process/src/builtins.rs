@@ -141,7 +141,10 @@ pub fn remainder(stack: &mut Stack) -> Result {
 }
 
 pub fn set_pixel(stack: &mut Stack) -> Result {
-    let value = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+    let b = stack.pop_operand()?;
+    let g = stack.pop_operand()?;
+    let r = stack.pop_operand()?;
     let y = stack.pop_operand()?;
     let x = stack.pop_operand()?;
 
@@ -158,18 +161,46 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
         return Err(BuiltinError::OperandOutOfBounds);
     }
 
+    let color_channel_min: i32 = u8::MIN.into();
+    let color_channel_max: i32 = u8::MAX.into();
+
+    if r.0 < color_channel_min {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if g.0 < color_channel_min {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if b.0 < color_channel_min {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if a.0 < color_channel_min {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if r.0 > color_channel_max {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if r.0 > color_channel_max {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if r.0 > color_channel_max {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+    if r.0 > color_channel_max {
+        return Err(BuiltinError::OperandOutOfBounds);
+    }
+
     let [x, y] = [x, y].map(|coord| {
         coord
             .0
             .try_into()
             .expect("Just checked that coordinates are within bounds")
     });
-
-    let color = if value.0 == 0 {
-        [0, 0, 0, 255]
-    } else {
-        [255, 255, 255, 255]
-    };
+    let color = [r, g, b, a].map(|channel| {
+        channel
+            .0
+            .try_into()
+            .expect("Just checked that color channels are within bounds")
+    });
 
     Ok(Some(BuiltinEffect::SetTile { x, y, color }))
 }

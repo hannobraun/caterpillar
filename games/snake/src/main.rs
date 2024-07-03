@@ -37,7 +37,10 @@ fn snake(script: &mut Script) {
         s.w("positions")
             .w("index")
             .w("vec_buf_get")
-            .v(1)
+            .v(255)
+            .v(255)
+            .v(255)
+            .v(255)
             .w("set_pixel")
             .w("positions")
             .w("vec_buf_len")
@@ -52,7 +55,13 @@ fn snake(script: &mut Script) {
             .w("draw_snake_inner");
     });
     script.function("draw_food", [], |s| {
-        s.w("food_position").w("vec_load").v(1).w("set_pixel");
+        s.w("food_position")
+            .w("vec_load")
+            .v(255)
+            .v(255)
+            .v(255)
+            .v(255)
+            .w("set_pixel");
     });
 
     // Draw - clear pixels
@@ -72,6 +81,9 @@ fn snake(script: &mut Script) {
             .c("Apparently we're not done yet.")
             .w("vec_copy")
             .v(0)
+            .v(0)
+            .v(0)
+            .v(255)
             .w("set_pixel")
             .w("increment_tile_index")
             .w("clear_pixels_inner");
