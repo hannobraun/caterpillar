@@ -55,7 +55,7 @@ fn snake(script: &mut Script) {
         s.w("food_position").w("vec_load").v(1).w("set_pixel");
     });
 
-    // Draw - write tiles
+    // Draw - clear pixels
     script.function("clear_pixels", [], |s| {
         s.w("init_tile_index")
             .v(0)
