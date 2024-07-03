@@ -64,10 +64,10 @@ pub fn evaluate(
                 "read_input" => builtins::read_input(),
                 "read_random" => builtins::read_random(),
                 "remainder" => builtins::remainder(stack),
+                "set_pixel" => builtins::set_pixel(stack),
                 "store" => builtins::store(stack),
                 "sub" => builtins::sub(stack),
                 "submit_frame" => builtins::submit_frame(),
-                "set_pixel" => builtins::set_pixel(stack),
                 _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
