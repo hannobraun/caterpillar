@@ -59,11 +59,11 @@ fn snake(script: &mut Script) {
     script.function("clear_pixels", [], |s| {
         s.w("init_tile_index")
             .v(0)
-            .w("write_all_tiles_inner")
+            .w("clear_pixels_inner")
             .w("vec_drop");
     });
     script.function(
-        "write_all_tiles_inner",
+        "clear_pixels_inner",
         ["tile_x", "tile_y", "tile_value"],
         |s| {
             s
@@ -81,7 +81,7 @@ fn snake(script: &mut Script) {
             .w("set_pixel")
             .w("increment_tile_index")
             .w("tile_value")
-            .w("write_all_tiles_inner");
+            .w("clear_pixels_inner");
         },
     );
 
