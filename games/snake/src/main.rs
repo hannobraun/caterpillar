@@ -23,15 +23,12 @@ fn snake(script: &mut Script) {
 
     // Draw
     script.function("draw", [], |s| {
-        s.w("clear_all_tiles")
+        s.w("write_all_tiles")
             .w("draw_snake")
             .w("draw_food")
             .c("This blocks until the display system is ready to process the")
             .c("next frame.")
             .w("submit_frame");
-    });
-    script.function("clear_all_tiles", [], |s| {
-        s.v(0).w("write_all_tiles");
     });
     script.function("draw_snake", [], |s| {
         s.v(0).w("draw_snake_inner");
@@ -59,9 +56,9 @@ fn snake(script: &mut Script) {
     });
 
     // Draw - write tiles
-    script.function("write_all_tiles", ["tile_value"], |s| {
+    script.function("write_all_tiles", [], |s| {
         s.w("init_tile_index")
-            .w("tile_value")
+            .v(0)
             .w("write_all_tiles_inner")
             .w("vec_drop");
     });
