@@ -140,32 +140,6 @@ pub fn remainder(stack: &mut Stack) -> Result {
     Ok(None)
 }
 
-pub fn store(stack: &mut Stack) -> Result {
-    let address = stack.pop_operand()?;
-    let value = stack.pop_operand()?;
-
-    let address = address.0.try_into()?;
-
-    Ok(Some(BuiltinEffect::Store { address, value }))
-}
-
-pub fn sub(stack: &mut Stack) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let Some(c) = a.0.checked_sub(b.0) else {
-        return Err(BuiltinError::IntegerOverflow);
-    };
-
-    stack.push_operand(c);
-
-    Ok(None)
-}
-
-pub fn submit_frame() -> Result {
-    Ok(Some(BuiltinEffect::SubmitFrame))
-}
-
 pub fn set_pixel(stack: &mut Stack) -> Result {
     let value = stack.pop_operand()?;
     let y = stack.pop_operand()?;
@@ -198,6 +172,32 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     };
 
     Ok(Some(BuiltinEffect::SetTile { x, y, color }))
+}
+
+pub fn store(stack: &mut Stack) -> Result {
+    let address = stack.pop_operand()?;
+    let value = stack.pop_operand()?;
+
+    let address = address.0.try_into()?;
+
+    Ok(Some(BuiltinEffect::Store { address, value }))
+}
+
+pub fn sub(stack: &mut Stack) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let Some(c) = a.0.checked_sub(b.0) else {
+        return Err(BuiltinError::IntegerOverflow);
+    };
+
+    stack.push_operand(c);
+
+    Ok(None)
+}
+
+pub fn submit_frame() -> Result {
+    Ok(Some(BuiltinEffect::SubmitFrame))
 }
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
