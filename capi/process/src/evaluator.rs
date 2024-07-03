@@ -67,7 +67,7 @@ pub fn evaluate(
                 "store" => builtins::store(stack),
                 "sub" => builtins::sub(stack),
                 "submit_frame" => builtins::submit_frame(),
-                "write_tile" => builtins::set_pixel(stack),
+                "set_pixel" => builtins::set_pixel(stack),
                 _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
             };
 
