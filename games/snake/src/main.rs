@@ -57,16 +57,10 @@ fn snake(script: &mut Script) {
 
     // Draw - clear pixels
     script.function("clear_pixels", [], |s| {
-        s.w("init_tile_index")
-            .v(0)
-            .w("clear_pixels_inner")
-            .w("vec_drop");
+        s.w("init_tile_index").w("clear_pixels_inner").w("vec_drop");
     });
-    script.function(
-        "clear_pixels_inner",
-        ["tile_x", "tile_y", "tile_value"],
-        |s| {
-            s
+    script.function("clear_pixels_inner", ["tile_x", "tile_y"], |s| {
+        s
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
@@ -77,13 +71,11 @@ fn snake(script: &mut Script) {
             .w("return_if_zero")
             .c("Apparently we're not done yet.")
             .w("vec_copy")
-            .w("tile_value")
+            .v(0)
             .w("set_pixel")
             .w("increment_tile_index")
-            .w("tile_value")
             .w("clear_pixels_inner");
-        },
-    );
+    });
 
     // Draw - write tiles - tile index
     script.function("init_tile_index", [], |s| {
