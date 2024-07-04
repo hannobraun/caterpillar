@@ -7,21 +7,32 @@ use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
 pub type GameRx = watch::Receiver<Game>;
-pub type Game = (SourceCode, Bytecode);
+
+pub struct Game {
+    pub source_code: SourceCode,
+    pub bytecode: Bytecode,
+}
 
 pub async fn build_and_watch(
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<GameRx> {
     let (source_code, bytecode) = build_once().await?;
 
-    let (game_tx, game_rx) =
-        tokio::sync::watch::channel((source_code, bytecode));
+    let (game_tx, game_rx) = tokio::sync::watch::channel(Game {
+        source_code,
+        bytecode,
+    });
 
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
             let (source_code, bytecode) = build_once().await.unwrap();
-            game_tx.send((source_code, bytecode)).unwrap();
+            game_tx
+                .send(Game {
+                    source_code,
+                    bytecode,
+                })
+                .unwrap();
         }
     });
 

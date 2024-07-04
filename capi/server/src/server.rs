@@ -53,13 +53,16 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
 async fn serve_source_code(
     State(state): State<ServerState>,
 ) -> impl IntoResponse {
-    let (source_code, _) = &*state.game.borrow();
-    ron::to_string(source_code).unwrap().as_bytes().to_vec()
+    let game = &*state.game.borrow();
+    ron::to_string(&game.source_code)
+        .unwrap()
+        .as_bytes()
+        .to_vec()
 }
 
 async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
-    let (_, bytecode) = &*state.game.borrow();
-    ron::to_string(bytecode).unwrap().as_bytes().to_vec()
+    let game = &*state.game.borrow();
+    ron::to_string(&game.bytecode).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
