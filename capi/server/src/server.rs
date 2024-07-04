@@ -20,7 +20,7 @@ pub async fn start(
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/source-code", get(serve_source_code))
-        .route("/bytecode", get(serve_bytecode))
+        .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(ServerState { serve_dir, game });

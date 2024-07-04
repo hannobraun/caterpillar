@@ -48,7 +48,7 @@
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
 
-        const bytecode = await fetch("/bytecode")
+        const bytecode = await fetch("/bytecode/0")
             .then((response) => {
                 return response.arrayBuffer();
             })
