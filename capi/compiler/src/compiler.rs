@@ -22,10 +22,14 @@ pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
     for syntax::Function {
         name,
         args,
-        expressions: syntax,
+        expressions,
     } in &script.functions.inner
     {
-        compiler.compile_function(name.clone(), args.clone(), syntax.clone());
+        compiler.compile_function(
+            name.clone(),
+            args.clone(),
+            expressions.clone(),
+        );
     }
 
     (bytecode, source_map)
