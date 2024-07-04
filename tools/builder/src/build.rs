@@ -102,6 +102,8 @@ async fn build_once(
     fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
         .await?;
 
+    debug!("Building output path...");
+
     let output_path = new_output_dir.path().to_path_buf();
 
     debug!("Sending update...");
