@@ -64,10 +64,8 @@ async fn serve_source_code(
 
 async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
     let game = &*state.game.borrow();
-    ron::to_string(&game.inner.bytecode)
-        .unwrap()
-        .as_bytes()
-        .to_vec()
+    let bytecode = &game.inner.bytecode;
+    ron::to_string(bytecode).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
