@@ -46,12 +46,12 @@ impl Compiler<'_> {
         &mut self,
         name: String,
         args: Vec<String>,
-        syntax: Vec<Expression>,
+        expressions: Vec<Expression>,
     ) {
         let mut bindings = args.iter().cloned().collect();
         let mut output = Function::new(name.clone(), args);
 
-        for expression in syntax {
+        for expression in expressions {
             self.compile_expression(expression, &mut bindings, &mut output);
         }
 
