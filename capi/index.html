@@ -64,7 +64,8 @@
             runtime.code_write_len(),
         );
         code_tx.set(bytecode);
-        runtime.on_new_bytecode();
+        bytecode_version = runtime.on_new_bytecode();
+        console.log(bytecode_version);
 
         window.requestAnimationFrame(mainLoop);
 
