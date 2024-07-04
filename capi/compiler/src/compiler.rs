@@ -19,7 +19,12 @@ pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
         source_map: &mut source_map,
     };
 
-    for syntax::Function { name, args, syntax } in &script.functions.inner {
+    for syntax::Function {
+        name,
+        args,
+        expressions: syntax,
+    } in &script.functions.inner
+    {
         compiler.compile_function(name.clone(), args.clone(), syntax.clone());
     }
 

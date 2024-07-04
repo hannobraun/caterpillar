@@ -31,7 +31,7 @@ impl Functions {
         self.inner.push(Function {
             name: name.to_string(),
             args: args.into_iter().map(String::from).collect(),
-            syntax: expressions,
+            expressions,
         });
     }
 
@@ -46,5 +46,5 @@ impl Functions {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub syntax: Vec<Expression>,
+    pub expressions: Vec<Expression>,
 }

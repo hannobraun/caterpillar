@@ -18,7 +18,7 @@ impl Function {
         Self {
             name: function.name,
             expressions: function
-                .syntax
+                .expressions
                 .into_iter()
                 .map(|expression| {
                     Expression::new(expression, source_map, process)
