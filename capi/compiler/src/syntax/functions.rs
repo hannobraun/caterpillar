@@ -21,17 +21,17 @@ impl Functions {
             panic!("Can't re-define existing function `{name}`.");
         }
 
-        let mut syntax = Vec::new();
+        let mut expressions = Vec::new();
         f(&mut SyntaxBuilder::new(
             Location::first_in_function(name.to_string()),
-            &mut syntax,
+            &mut expressions,
         ));
 
         self.names.insert(name.to_string());
         self.inner.push(Function {
             name: name.to_string(),
             args: args.into_iter().map(String::from).collect(),
-            syntax,
+            syntax: expressions,
         });
     }
 
