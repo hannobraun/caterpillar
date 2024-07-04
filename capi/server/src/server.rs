@@ -7,6 +7,7 @@ use axum::{
     routing::get,
     Router,
 };
+use capi_protocol::Versioned;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 
 use crate::build::GameRx;
@@ -54,8 +55,11 @@ async fn serve_source_code(
     State(state): State<ServerState>,
 ) -> impl IntoResponse {
     let game = &*state.game.borrow();
-    let source_code = &game.inner.source_code;
-    ron::to_string(source_code).unwrap().as_bytes().to_vec()
+    let source_code = Versioned {
+        version: game.version,
+        inner: &game.inner.source_code,
+    };
+    ron::to_string(&source_code).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
