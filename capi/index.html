@@ -23,6 +23,14 @@
 
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
+        const bytecode = await fetch("/bytecode/0")
+            .then((response) => {
+                return response.arrayBuffer();
+            })
+            .then((arrayBuffer) => {
+                return new Uint8Array(arrayBuffer);
+            });
+
         window.addEventListener("keydown", (event) => {
             let keyCode = null;
 
@@ -47,14 +55,6 @@
 
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
-
-        const bytecode = await fetch("/bytecode/0")
-            .then((response) => {
-                return response.arrayBuffer();
-            })
-            .then((arrayBuffer) => {
-                return new Uint8Array(arrayBuffer);
-            });
 
         runtime.code_write(bytecode.byteLength);
         const code_tx = new Uint8Array(
