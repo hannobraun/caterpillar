@@ -6,11 +6,11 @@ use capi_protocol::update::SourceCode;
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
-pub type Game = watch::Receiver<(SourceCode, Bytecode)>;
+pub type GameRx = watch::Receiver<(SourceCode, Bytecode)>;
 
 pub async fn build_and_watch(
     mut changes: DebouncedChanges,
-) -> anyhow::Result<Game> {
+) -> anyhow::Result<GameRx> {
     let (source_code, bytecode) = build_once().await?;
 
     let (game_tx, game_rx) =
