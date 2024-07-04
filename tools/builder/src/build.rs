@@ -108,6 +108,8 @@ async fn build_once(
         .send(Some(new_output_dir.path().to_path_buf()))
         .is_err()
     {
+        debug!("Sending update failed.");
+
         // If the send failed, the other end has hung up. That means either
         // we're currently shutting down, or something went wrong over there and
         // we _should_ be shutting down.
