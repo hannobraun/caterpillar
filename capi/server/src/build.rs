@@ -2,11 +2,11 @@ use std::str;
 
 use capi_compiler::compiler::compile;
 use capi_process::Bytecode;
-use capi_protocol::update::SourceCode;
+use capi_protocol::{update::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
-pub type GameRx = watch::Receiver<Game>;
+pub type GameRx = watch::Receiver<Versioned<Game>>;
 
 pub struct Game {
     pub source_code: SourceCode,
@@ -16,23 +16,34 @@ pub struct Game {
 pub async fn build_and_watch(
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<GameRx> {
+    let mut build_number = 0;
+
     let (source_code, bytecode) = build_once().await?;
 
-    let (game_tx, game_rx) = tokio::sync::watch::channel(Game {
-        source_code,
-        bytecode,
+    let (game_tx, game_rx) = tokio::sync::watch::channel(Versioned {
+        version: build_number,
+        inner: Game {
+            source_code,
+            bytecode,
+        },
     });
+    build_number += 1;
 
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
             let (source_code, bytecode) = build_once().await.unwrap();
             game_tx
-                .send(Game {
-                    source_code,
-                    bytecode,
+                .send(Versioned {
+                    version: build_number,
+                    inner: Game {
+                        source_code,
+                        bytecode,
+                    },
                 })
                 .unwrap();
+
+            build_number += 1;
         }
     });
 
