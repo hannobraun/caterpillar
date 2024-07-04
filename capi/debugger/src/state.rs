@@ -17,7 +17,7 @@ impl DebuggerState {
         let source_code_tx = updates_tx.clone();
         leptos::spawn_local(async move {
             let source_code =
-                Request::get("/source-code").send().await.unwrap();
+                Request::get("/source-code/0").send().await.unwrap();
             let source_code = source_code.text().await.unwrap();
             let source_code = ron::from_str(&source_code).unwrap();
 
