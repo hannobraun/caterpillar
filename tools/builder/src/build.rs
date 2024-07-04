@@ -6,7 +6,7 @@ use std::{
 use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
-use tracing::error;
+use tracing::{debug, error};
 use wasm_bindgen_cli_support::Bindgen;
 
 pub fn start(changes: DebouncedChanges) -> UpdatesRx {
@@ -56,6 +56,8 @@ async fn build_once(
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
     for package in ["capi-runtime", "capi-debugger"] {
+        debug!("Building {package}...");
+
         let cargo_build = Command::new("cargo")
             .arg("build")
             .args(["--package", package])
@@ -72,14 +74,20 @@ async fn build_once(
         }
     }
 
+    debug!("Creating output directory...");
+
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
+
+    debug!("Copying WebAssembly module...");
 
     fs::copy(
         Path::new(target).join("capi-runtime.wasm"),
         new_output_dir.path().join("capi-runtime.wasm"),
     )
     .await?;
+
+    debug!("Running `wasm-bindgen`...");
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
 
@@ -89,8 +97,12 @@ async fn build_once(
         .web(true)?
         .generate(&new_output_dir)?;
 
+    debug!("Copying `index.html`...");
+
     fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
         .await?;
+
+    debug!("Sending update...");
 
     if updates
         .send(Some(new_output_dir.path().to_path_buf()))
@@ -102,7 +114,11 @@ async fn build_once(
         return Ok(ShouldContinue::NoBecauseShutdown);
     }
 
+    debug!("Cleaning up old output directory...");
+
     *output_dir = Some(new_output_dir);
+
+    debug!("Build finished.");
 
     Ok(ShouldContinue::YesWhyNot)
 }
