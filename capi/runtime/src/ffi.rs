@@ -1,8 +1,9 @@
 use std::{str, sync::Mutex};
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
+use capi_process::Bytecode;
 use capi_protocol::{
-    CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
+    Versioned, CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE, UPDATES_BUFFER_SIZE,
 };
 
 use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
@@ -176,9 +177,9 @@ pub fn on_new_bytecode() {
 
     let bytecode = buffer.read_frame();
     let bytecode = str::from_utf8(bytecode).unwrap();
-    let bytecode = ron::from_str(bytecode).unwrap();
+    let bytecode: Versioned<Bytecode> = ron::from_str(bytecode).unwrap();
 
-    state.on_new_bytecode(bytecode);
+    state.on_new_bytecode(bytecode.inner);
 }
 
 #[no_mangle]
