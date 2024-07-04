@@ -24,7 +24,7 @@
         const debugger_ = await initDebugger("capi-debugger_bg.wasm");
 
         let bytecode_version = 0;
-        const bytecode = await fetch(`/bytecode/{bytecode_version}`)
+        const bytecode = await fetch(`/bytecode/${bytecode_version}`)
             .then((response) => {
                 return response.arrayBuffer();
             })
