@@ -18,3 +18,4 @@ features = ["full"]
 
 [dependencies.tracing-subscriber]
 version = "*"
+features = ["env-filter"]
