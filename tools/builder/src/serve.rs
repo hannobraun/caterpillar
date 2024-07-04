@@ -4,6 +4,7 @@ use tokio::{
     io::{AsyncBufReadExt, BufReader},
     process::{Child, Command},
 };
+use tracing::debug;
 
 use crate::build::UpdatesRx;
 
@@ -14,9 +15,13 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     updates.mark_unchanged(); // make sure we enter the loop body immediately
     while let Ok(()) = updates.changed().await {
+        debug!("Reading update...");
         let Some(serve_dir) = &*updates.borrow() else {
+            dbg!("No update available.");
             continue;
         };
+
+        debug!("Update available.");
 
         println!();
 
