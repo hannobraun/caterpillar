@@ -7,7 +7,6 @@ edition = "2021"
 anyhow = "*"
 tempfile = "*"
 tracing = "*"
-tracing-subscriber = "*"
 wasm-bindgen-cli-support = "*"
 
 [dependencies.capi-watch]
@@ -16,3 +15,6 @@ path = "../../capi/watch"
 [dependencies.tokio]
 version = "*"
 features = ["full"]
+
+[dependencies.tracing-subscriber]
+version = "*"
