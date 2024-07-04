@@ -16,7 +16,7 @@ impl<'r> SyntaxBuilder<'r> {
         }
     }
 
-    pub fn b(
+    pub fn bind(
         &mut self,
         names: impl IntoIterator<Item = impl Into<String>>,
     ) -> &mut Self {
