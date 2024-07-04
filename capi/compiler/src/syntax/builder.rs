@@ -9,9 +9,12 @@ pub struct SyntaxBuilder<'r> {
 }
 
 impl<'r> SyntaxBuilder<'r> {
-    pub fn new(function: String, expressions: &'r mut Vec<Expression>) -> Self {
+    pub fn new(
+        next_location: Location,
+        expressions: &'r mut Vec<Expression>,
+    ) -> Self {
         Self {
-            next_location: Location::first_in_function(function),
+            next_location,
             expressions,
         }
     }

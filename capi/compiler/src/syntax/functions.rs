@@ -22,7 +22,10 @@ impl Functions {
         }
 
         let mut syntax = Vec::new();
-        f(&mut SyntaxBuilder::new(name.to_string(), &mut syntax));
+        f(&mut SyntaxBuilder::new(
+            Location::first_in_function(name.to_string()),
+            &mut syntax,
+        ));
 
         self.names.insert(name.to_string());
         self.inner.push(Function {
