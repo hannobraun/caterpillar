@@ -12,3 +12,8 @@ pub const CODE_BUFFER_SIZE: usize = 1024 * 1024;
 pub const UPDATES_BUFFER_SIZE: usize = 1024 * 1024;
 
 pub const COMMANDS_BUFFER_SIZE: usize = 1024;
+
+pub struct Versioned<T> {
+    pub version: u64,
+    pub inner: T,
+}
