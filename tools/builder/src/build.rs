@@ -102,12 +102,11 @@ async fn build_once(
     fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
         .await?;
 
+    let output_path = new_output_dir.path().to_path_buf();
+
     debug!("Sending update...");
 
-    if updates
-        .send(Some(new_output_dir.path().to_path_buf()))
-        .is_err()
-    {
+    if updates.send(Some(output_path)).is_err() {
         debug!("Sending update failed.");
 
         // If the send failed, the other end has hung up. That means either
