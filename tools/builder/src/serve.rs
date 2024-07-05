@@ -5,7 +5,6 @@ use tokio::{
     process::{Child, Command},
     select,
 };
-use tracing::debug;
 
 use crate::build::UpdatesRx;
 
@@ -16,13 +15,9 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
     updates.mark_unchanged(); // make sure we enter the loop body immediately
     'updates: while let Ok(()) = updates.changed().await {
-        debug!("Reading update...");
         let Some(serve_dir) = updates.borrow().clone() else {
-            dbg!("No update available.");
             continue;
         };
-
-        debug!("Update available.");
 
         println!();
 
