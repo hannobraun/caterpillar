@@ -1,6 +1,6 @@
 use super::{Functions, SyntaxBuilder};
 
-#[derive(Default, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
     pub functions: Functions,
 }
