@@ -1,3 +1,3 @@
-pub mod compiler;
+pub mod pipeline;
 pub mod source_map;
 pub mod syntax;

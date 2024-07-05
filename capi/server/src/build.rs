@@ -1,6 +1,6 @@
 use std::str;
 
-use capi_compiler::compiler::compile;
+use capi_compiler::pipeline::compile;
 use capi_process::Bytecode;
 use capi_protocol::{update::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
