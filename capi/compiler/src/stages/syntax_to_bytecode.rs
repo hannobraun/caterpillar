@@ -7,7 +7,7 @@ use crate::{
     syntax::{self, Expression, ExpressionKind, Script},
 };
 
-pub fn compile(script: &Script) -> (Bytecode, SourceMap) {
+pub fn syntax_to_bytecode(script: &Script) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 

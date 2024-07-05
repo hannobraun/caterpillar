@@ -8,5 +8,5 @@ pub fn compile(
     let fragments = stages::syntax_to_fragments(script.clone());
     dbg!(fragments);
 
-    stages::compile(script)
+    stages::syntax_to_bytecode(script)
 }
