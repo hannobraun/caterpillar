@@ -1,6 +1,6 @@
 use std::str;
 
-use capi_compiler::pipeline;
+use capi_compiler::run;
 use capi_process::Bytecode;
 use capi_protocol::{update::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
@@ -60,7 +60,7 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let script = str::from_utf8(&script).unwrap();
     let script = ron::from_str(script).unwrap();
 
-    let (bytecode, source_map) = pipeline::run(&script);
+    let (bytecode, source_map) = run(&script);
     let source_code = SourceCode {
         functions: script.functions,
         source_map,
