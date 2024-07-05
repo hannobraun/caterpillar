@@ -3,6 +3,7 @@ use std::process::Stdio;
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
     process::{Child, Command},
+    select,
 };
 use tracing::debug;
 
@@ -50,7 +51,11 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
 
         let mut line = String::new();
         while !line.starts_with("builder: ready") {
-            stdout.read_line(&mut line).await?;
+            select! {
+                result = stdout.read_line(&mut line) => {
+                    result?;
+                }
+            }
         }
 
         current_server = Some(new_server);
