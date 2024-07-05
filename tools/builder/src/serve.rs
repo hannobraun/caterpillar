@@ -15,7 +15,7 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
     let mut current_server: Option<Child> = None;
 
     updates.mark_unchanged(); // make sure we enter the loop body immediately
-    while let Ok(()) = updates.changed().await {
+    'updates: while let Ok(()) = updates.changed().await {
         debug!("Reading update...");
         let Some(serve_dir) = updates.borrow().clone() else {
             dbg!("No update available.");
@@ -54,6 +54,10 @@ pub async fn start(mut updates: UpdatesRx) -> anyhow::Result<()> {
             select! {
                 result = stdout.read_line(&mut line) => {
                     result?;
+                }
+                _ = updates.changed() => {
+                    updates.mark_changed();
+                    continue 'updates;
                 }
             }
         }
