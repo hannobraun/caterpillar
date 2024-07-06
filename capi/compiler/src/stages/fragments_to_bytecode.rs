@@ -21,9 +21,9 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     for function in fragments.by_function {
         compiler.compile_function(
-            function.name.clone(),
-            function.args.clone(),
-            function.expressions.clone(),
+            function.name,
+            function.args,
+            function.expressions,
         );
     }
 
