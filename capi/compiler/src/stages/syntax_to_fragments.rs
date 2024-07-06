@@ -9,8 +9,10 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         let mut fragments = Vec::new();
 
         for expression in function.expressions {
+            let payload = expression.kind;
+
             fragments.push(Fragment {
-                kind: expression.kind,
+                kind: payload,
                 location: expression.location,
             });
         }
