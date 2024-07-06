@@ -1,15 +1,24 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::{Expression, ExpressionKind, Location, Script};
+use crate::syntax::{ExpressionKind, Location, Script};
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
+        let mut fragments = Vec::new();
+
+        for expression in function.expressions {
+            fragments.push(Fragment {
+                kind: expression.kind,
+                location: expression.location,
+            });
+        }
+
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            expressions: function.expressions,
+            expressions: fragments,
         });
     }
 
@@ -29,7 +38,7 @@ pub struct Fragments {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub expressions: Vec<Expression>,
+    pub expressions: Vec<Fragment>,
 }
 
 #[derive(Debug)]

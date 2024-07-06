@@ -4,7 +4,7 @@ use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
     source_map::SourceMap,
-    syntax::{self, Expression, ExpressionKind},
+    syntax::{self, ExpressionKind},
 };
 
 use super::syntax_to_fragments::{Fragment, Fragments};
@@ -41,7 +41,7 @@ impl Compiler<'_> {
         &mut self,
         name: String,
         args: Vec<String>,
-        expressions: Vec<Expression>,
+        expressions: Vec<Fragment>,
     ) {
         let mut bindings = args.iter().cloned().collect();
         let mut output = Function::new(name.clone(), args);
