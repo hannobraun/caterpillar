@@ -15,7 +15,12 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         fragments.insert(function.name, function_fragments);
     }
 
-    fragments
+    Fragments {
+        by_function: fragments,
+    }
 }
 
-pub type Fragments = BTreeMap<String, Vec<Expression>>;
+#[derive(Debug)]
+pub struct Fragments {
+    pub by_function: BTreeMap<String, Vec<Expression>>,
+}
