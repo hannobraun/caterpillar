@@ -6,5 +6,5 @@ pub fn compile(
     script: &crate::syntax::Script,
 ) -> (capi_process::Bytecode, crate::source_map::SourceMap) {
     let fragments = stages::syntax_to_fragments(script.clone());
-    stages::syntax_to_bytecode(fragments)
+    stages::fragments_to_bytecode(fragments)
 }

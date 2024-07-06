@@ -9,7 +9,7 @@ use crate::{
 
 use super::syntax_to_fragments::Fragments;
 
-pub fn syntax_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
