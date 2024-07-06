@@ -51,13 +51,13 @@ impl Compiler<'_> {
                 kind: expression.kind,
                 location: expression.location,
             };
-            self.compile_expression(fragment, &mut bindings, &mut output);
+            self.compile_fragment(fragment, &mut bindings, &mut output);
         }
 
         self.bytecode.functions.insert(name, output);
     }
 
-    fn compile_expression(
+    fn compile_fragment(
         &mut self,
         fragment: Fragment,
         bindings: &mut BTreeSet<String>,
