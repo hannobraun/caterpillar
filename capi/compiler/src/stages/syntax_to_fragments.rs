@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::syntax::{Expression, Script};
+use crate::syntax::{Expression, ExpressionKind, Location, Script};
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut fragments = Vec::new();
@@ -30,4 +30,10 @@ pub struct Function {
     pub name: String,
     pub args: Vec<String>,
     pub expressions: Vec<Expression>,
+}
+
+#[derive(Debug)]
+pub struct Fragment {
+    pub kind: ExpressionKind,
+    pub location: Location,
 }

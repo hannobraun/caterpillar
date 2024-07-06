@@ -7,7 +7,7 @@ use crate::{
     syntax::{self, Expression, ExpressionKind},
 };
 
-use super::syntax_to_fragments::Fragments;
+use super::syntax_to_fragments::{Fragment, Fragments};
 
 pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
@@ -47,7 +47,11 @@ impl Compiler<'_> {
         let mut output = Function::new(name.clone(), args);
 
         for expression in expressions {
-            self.compile_expression(expression, &mut bindings, &mut output);
+            let fragment = Fragment {
+                kind: expression.kind,
+                location: expression.location,
+            };
+            self.compile_expression(fragment, &mut bindings, &mut output);
         }
 
         self.bytecode.functions.insert(name, output);
@@ -55,7 +59,7 @@ impl Compiler<'_> {
 
     fn compile_expression(
         &mut self,
-        expression: Expression,
+        expression: Fragment,
         bindings: &mut BTreeSet<String>,
         output: &mut Function,
     ) {
