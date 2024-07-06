@@ -1,18 +1,12 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
-use crate::syntax::{Expression, Script};
+use crate::syntax::{Function, Script};
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
-    let mut fragments = BTreeMap::new();
+    let mut fragments = Vec::new();
 
     for function in script.functions.inner {
-        let mut function_fragments = Vec::new();
-
-        for expression in function.expressions {
-            function_fragments.push(expression);
-        }
-
-        fragments.insert(function.name, function_fragments);
+        fragments.push(function);
     }
 
     Fragments {
@@ -24,5 +18,5 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
 #[derive(Debug)]
 pub struct Fragments {
     pub functions: BTreeSet<String>,
-    pub by_function: BTreeMap<String, Vec<Expression>>,
+    pub by_function: Vec<Function>,
 }
