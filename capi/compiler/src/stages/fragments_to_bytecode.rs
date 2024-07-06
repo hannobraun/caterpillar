@@ -46,10 +46,10 @@ impl Compiler<'_> {
         let mut bindings = args.iter().cloned().collect();
         let mut output = Function::new(name.clone(), args);
 
-        for expression in fragments {
+        for fragment in fragments {
             let fragment = Fragment {
-                kind: expression.kind,
-                location: expression.location,
+                kind: fragment.kind,
+                location: fragment.location,
             };
             self.compile_fragment(fragment, &mut bindings, &mut output);
         }
