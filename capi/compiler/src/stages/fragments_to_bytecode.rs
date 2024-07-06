@@ -44,6 +44,7 @@ impl Compiler<'_> {
         let mut output = Function::new(name.clone(), args);
 
         for fragment in fragments {
+            dbg!(fragment.id());
             self.compile_fragment(fragment, &mut bindings, &mut output);
         }
 
