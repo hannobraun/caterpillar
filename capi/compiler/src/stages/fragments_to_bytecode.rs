@@ -23,7 +23,7 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         compiler.compile_function(
             function.name,
             function.args,
-            function.expressions,
+            function.fragments,
         );
     }
 

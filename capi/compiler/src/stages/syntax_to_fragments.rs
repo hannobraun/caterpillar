@@ -18,7 +18,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            expressions: fragments,
+            fragments,
         });
     }
 
@@ -38,7 +38,7 @@ pub struct Fragments {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub expressions: Vec<Fragment>,
+    pub fragments: Vec<Fragment>,
 }
 
 #[derive(Debug)]
