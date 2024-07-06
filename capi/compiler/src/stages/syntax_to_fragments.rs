@@ -61,11 +61,18 @@ pub struct Fragment {
 }
 
 impl Fragment {
-    pub fn id(&self) -> blake3::Hash {
+    pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
         self.payload.hash(&mut hasher);
-        hasher.finalize()
+        let hash = hasher.finalize();
+
+        FragmentId { hash }
     }
+}
+
+#[derive(Debug)]
+pub struct FragmentId {
+    pub hash: blake3::Hash,
 }
 
 #[derive(Debug)]
