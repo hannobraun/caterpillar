@@ -56,7 +56,7 @@ impl Compiler<'_> {
         bindings: &mut BTreeSet<String>,
         output: &mut Function,
     ) {
-        match fragment.kind {
+        match fragment.payload {
             FragmentPayload::Binding { names } => {
                 for name in names.iter().cloned().rev() {
                     // Inserting bindings unconditionally like that does mean

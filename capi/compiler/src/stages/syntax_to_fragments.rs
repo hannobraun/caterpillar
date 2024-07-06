@@ -23,7 +23,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
             };
 
             fragments.push(Fragment {
-                kind: payload,
+                payload,
                 location: expression.location,
             });
         }
@@ -56,7 +56,7 @@ pub struct Function {
 
 #[derive(Debug)]
 pub struct Fragment {
-    pub kind: FragmentPayload,
+    pub payload: FragmentPayload,
     pub location: Location,
 }
 
