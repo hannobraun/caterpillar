@@ -19,16 +19,11 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         source_map: &mut source_map,
     };
 
-    for syntax::Function {
-        name,
-        args,
-        expressions,
-    } in &fragments.by_function
-    {
+    for function in &fragments.by_function {
         compiler.compile_function(
-            name.clone(),
-            args.clone(),
-            expressions.clone(),
+            function.name.clone(),
+            function.args.clone(),
+            function.expressions.clone(),
         );
     }
 
