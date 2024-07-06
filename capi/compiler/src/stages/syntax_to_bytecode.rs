@@ -4,15 +4,17 @@ use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
     source_map::SourceMap,
-    syntax::{self, Expression, ExpressionKind, Script},
+    syntax::{self, Expression, ExpressionKind},
 };
 
-pub fn syntax_to_bytecode(script: &Script) -> (Bytecode, SourceMap) {
+use super::syntax_to_fragments::Fragments;
+
+pub fn syntax_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
-        functions: &script.functions.names,
+        functions: &fragments.functions,
         bytecode: &mut bytecode,
         source_map: &mut source_map,
     };
@@ -21,7 +23,7 @@ pub fn syntax_to_bytecode(script: &Script) -> (Bytecode, SourceMap) {
         name,
         args,
         expressions,
-    } in &script.functions.inner
+    } in &fragments.by_function
     {
         compiler.compile_function(
             name.clone(),
