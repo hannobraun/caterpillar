@@ -2,12 +2,9 @@ use std::collections::BTreeSet;
 
 use capi_process::{Bytecode, Function, Instruction, Location};
 
-use crate::{
-    source_map::SourceMap,
-    syntax::{self, ExpressionKind},
-};
+use crate::{source_map::SourceMap, syntax};
 
-use super::syntax_to_fragments::{Fragment, Fragments};
+use super::syntax_to_fragments::{Fragment, FragmentPayload, Fragments};
 
 pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
@@ -60,7 +57,7 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         match fragment.kind {
-            ExpressionKind::Binding { names } => {
+            FragmentPayload::Binding { names } => {
                 for name in names.iter().cloned().rev() {
                     // Inserting bindings unconditionally like that does mean
                     // that bindings can overwrite previously defined bindings.
@@ -74,15 +71,15 @@ impl Compiler<'_> {
                     output,
                 );
             }
-            ExpressionKind::Comment { .. } => {}
-            ExpressionKind::Value(value) => {
+            FragmentPayload::Comment { .. } => {}
+            FragmentPayload::Value(value) => {
                 self.generate(
                     Instruction::Push { value },
                     fragment.location,
                     output,
                 );
             }
-            ExpressionKind::Word { name } => {
+            FragmentPayload::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
                 self.generate(instruction, fragment.location, output);
