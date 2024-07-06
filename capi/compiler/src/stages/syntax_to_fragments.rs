@@ -3,10 +3,10 @@ use std::collections::BTreeSet;
 use crate::syntax::{Expression, ExpressionKind, Location, Script};
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
-    let mut fragments = Vec::new();
+    let mut by_function = Vec::new();
 
     for function in script.functions.inner {
-        fragments.push(Function {
+        by_function.push(Function {
             name: function.name,
             args: function.args,
             expressions: function.expressions,
@@ -15,7 +15,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
 
     Fragments {
         functions: script.functions.names,
-        by_function: fragments,
+        by_function,
     }
 }
 
