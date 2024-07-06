@@ -47,10 +47,6 @@ impl Compiler<'_> {
         let mut output = Function::new(name.clone(), args);
 
         for fragment in fragments {
-            let fragment = Fragment {
-                kind: fragment.kind,
-                location: fragment.location,
-            };
             self.compile_fragment(fragment, &mut bindings, &mut output);
         }
 
