@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::syntax::{Expression, Script};
 
@@ -16,11 +16,13 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     }
 
     Fragments {
+        functions: script.functions.names,
         by_function: fragments,
     }
 }
 
 #[derive(Debug)]
 pub struct Fragments {
+    pub functions: BTreeSet<String>,
     pub by_function: BTreeMap<String, Vec<Expression>>,
 }
