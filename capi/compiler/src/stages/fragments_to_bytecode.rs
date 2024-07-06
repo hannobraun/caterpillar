@@ -59,11 +59,11 @@ impl Compiler<'_> {
 
     fn compile_expression(
         &mut self,
-        expression: Fragment,
+        fragment: Fragment,
         bindings: &mut BTreeSet<String>,
         output: &mut Function,
     ) {
-        match expression.kind {
+        match fragment.kind {
             ExpressionKind::Binding { names } => {
                 for name in names.iter().cloned().rev() {
                     // Inserting bindings unconditionally like that does mean
@@ -74,7 +74,7 @@ impl Compiler<'_> {
 
                 self.generate(
                     Instruction::BindingsDefine { names },
-                    expression.location,
+                    fragment.location,
                     output,
                 );
             }
@@ -82,14 +82,14 @@ impl Compiler<'_> {
             ExpressionKind::Value(value) => {
                 self.generate(
                     Instruction::Push { value },
-                    expression.location,
+                    fragment.location,
                     output,
                 );
             }
             ExpressionKind::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, expression.location, output);
+                self.generate(instruction, fragment.location, output);
             }
         };
     }
