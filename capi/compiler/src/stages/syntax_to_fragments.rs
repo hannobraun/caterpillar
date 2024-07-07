@@ -1,4 +1,4 @@
-use std::collections::{vec_deque, BTreeSet, VecDeque};
+use std::collections::{BTreeSet, VecDeque};
 
 use capi_process::Value;
 
@@ -65,10 +65,22 @@ pub struct FunctionFragments {
 
 impl IntoIterator for FunctionFragments {
     type Item = Fragment;
-    type IntoIter = vec_deque::IntoIter<Fragment>;
+    type IntoIter = FragmentsIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        self.inner.into_iter()
+        FragmentsIter { fragments: self }
+    }
+}
+
+pub struct FragmentsIter {
+    fragments: FunctionFragments,
+}
+
+impl Iterator for FragmentsIter {
+    type Item = Fragment;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.fragments.inner.pop_front()
     }
 }
 
