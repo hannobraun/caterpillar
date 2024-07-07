@@ -9,6 +9,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
 
     for function in script.functions.inner {
         let mut fragments = VecDeque::new();
+        let mut next_fragment = None;
 
         for expression in function.expressions.into_iter().rev() {
             let payload = match expression.kind {
@@ -23,9 +24,11 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
             };
 
             let fragment = Fragment {
+                next: next_fragment.take(),
                 payload,
                 location: expression.location,
             };
+            next_fragment = Some(fragment.id());
             fragments.push_front(fragment);
         }
 
@@ -57,6 +60,7 @@ pub struct Function {
 
 #[derive(Debug)]
 pub struct Fragment {
+    pub next: Option<FragmentId>,
     pub payload: FragmentPayload,
     pub location: Location,
 }
