@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeSet, VecDeque};
 
 use capi_process::Value;
 
@@ -8,7 +8,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
-        let mut fragments = Vec::new();
+        let mut fragments = VecDeque::new();
 
         for expression in function.expressions {
             let payload = match expression.kind {
@@ -22,7 +22,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
                 ExpressionKind::Word { name } => FragmentPayload::Word { name },
             };
 
-            fragments.push(Fragment {
+            fragments.push_back(Fragment {
                 payload,
                 location: expression.location,
             });
@@ -31,7 +31,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments,
+            fragments: fragments.into(),
         });
     }
 
