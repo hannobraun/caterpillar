@@ -43,7 +43,7 @@ impl FunctionFragments {
             .remove(&first)
             .expect("`self.first` must be present in `self.inner`");
 
-        self.first = first.next;
+        self.first = first.address.next;
 
         Some(first)
     }
@@ -61,7 +61,7 @@ type FunctionFragmentsInner = BTreeMap<FragmentId, Fragment>;
 
 #[derive(Debug)]
 pub struct Fragment {
-    pub next: Option<FragmentId>,
+    pub address: FragmentAddress,
     pub payload: FragmentPayload,
     pub location: Location,
 }
@@ -74,6 +74,11 @@ impl Fragment {
 
         FragmentId { hash }
     }
+}
+
+#[derive(Debug)]
+pub struct FragmentAddress {
+    pub next: Option<FragmentId>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

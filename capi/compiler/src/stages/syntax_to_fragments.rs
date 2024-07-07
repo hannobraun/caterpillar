@@ -2,7 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentPayload, Fragments, Function, FunctionFragments,
+        Fragment, FragmentAddress, FragmentPayload, Fragments, Function,
+        FunctionFragments,
     },
     syntax::{ExpressionKind, Script},
 };
@@ -27,7 +28,9 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
             };
 
             let fragment = Fragment {
-                next: next_fragment.take(),
+                address: FragmentAddress {
+                    next: next_fragment.take(),
+                },
                 payload,
                 location: expression.location,
             };
