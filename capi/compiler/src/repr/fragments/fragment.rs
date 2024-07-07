@@ -1,12 +1,9 @@
-use crate::repr::syntax::Location;
-
 use super::{FragmentAddress, FragmentId, FragmentPayload};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
     pub address: FragmentAddress,
     pub payload: FragmentPayload,
-    pub location: Location,
 }
 
 impl Fragment {

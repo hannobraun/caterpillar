@@ -33,7 +33,6 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
                     next: next_fragment.take(),
                 },
                 payload,
-                location: expression.location,
             };
             next_fragment = Some(fragment.id());
             fragments.insert(fragment.id(), fragment);
