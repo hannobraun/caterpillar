@@ -38,10 +38,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments: FunctionFragments {
-                first: next_fragment,
-                inner: fragments,
-            },
+            fragments: FunctionFragments::new(next_fragment, fragments),
         });
     }
 
@@ -68,6 +65,15 @@ pub struct Function {
 pub struct FunctionFragments {
     first: Option<FragmentId>,
     inner: FunctionFragmentsInner,
+}
+
+impl FunctionFragments {
+    pub fn new(
+        first: Option<FragmentId>,
+        inner: FunctionFragmentsInner,
+    ) -> Self {
+        Self { first, inner }
+    }
 }
 
 impl FunctionFragments {
