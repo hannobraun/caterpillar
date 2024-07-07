@@ -70,10 +70,8 @@ pub struct FunctionFragments {
     inner: BTreeMap<FragmentId, Fragment>,
 }
 
-impl Iterator for FunctionFragments {
-    type Item = Fragment;
-
-    fn next(&mut self) -> Option<Self::Item> {
+impl FunctionFragments {
+    pub fn remove_first(&mut self) -> Option<Fragment> {
         let next_id = self.first.take()?;
         let next = self
             .inner
@@ -83,6 +81,14 @@ impl Iterator for FunctionFragments {
         self.first = next.next;
 
         Some(next)
+    }
+}
+
+impl Iterator for FunctionFragments {
+    type Item = Fragment;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.remove_first()
     }
 }
 
