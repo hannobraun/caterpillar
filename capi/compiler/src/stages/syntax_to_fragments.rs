@@ -75,6 +75,7 @@ impl IntoIterator for FunctionFragments {
     }
 }
 
+#[derive(Debug)]
 pub struct FragmentsIter {
     fragments: FunctionFragments,
 }
