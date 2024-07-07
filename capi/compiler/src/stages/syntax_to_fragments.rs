@@ -154,3 +154,42 @@ impl FragmentPayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use capi_process::Value;
+
+    use crate::{stages::syntax_to_fragments::FragmentPayload, syntax::Script};
+
+    use super::syntax_to_fragments;
+
+    #[test]
+    fn basic() {
+        let mut script = Script::default();
+        script.function("inc", ["x"], |s| {
+            s.w("x").v(1).w("add");
+        });
+
+        let mut fragments = syntax_to_fragments(script);
+
+        let fragments = fragments
+            .by_function
+            .remove(0)
+            .fragments
+            .into_iter()
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            fragments,
+            vec![
+                FragmentPayload::Word {
+                    name: String::from("x")
+                },
+                FragmentPayload::Value(Value(1)),
+                FragmentPayload::Word {
+                    name: String::from("add")
+                }
+            ]
+        );
+    }
+}
