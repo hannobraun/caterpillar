@@ -73,14 +73,14 @@ pub struct FunctionFragments {
 impl FunctionFragments {
     pub fn remove_first(&mut self) -> Option<Fragment> {
         let first = self.first.take()?;
-        let next = self
+        let first = self
             .inner
             .remove(&first)
             .expect("`self.first` must be present in `self.inner`");
 
-        self.first = next.next;
+        self.first = first.next;
 
-        Some(next)
+        Some(first)
     }
 }
 
