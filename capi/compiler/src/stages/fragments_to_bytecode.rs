@@ -4,7 +4,9 @@ use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{source_map::SourceMap, syntax};
 
-use super::syntax_to_fragments::{Fragment, FragmentPayload, Fragments};
+use super::syntax_to_fragments::{
+    Fragment, FragmentPayload, Fragments, FunctionFragments,
+};
 
 pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
@@ -38,7 +40,7 @@ impl Compiler<'_> {
         &mut self,
         name: String,
         args: Vec<String>,
-        fragments: Vec<Fragment>,
+        fragments: FunctionFragments,
     ) {
         let mut bindings = args.iter().cloned().collect();
         let mut output = Function::new(name.clone(), args);

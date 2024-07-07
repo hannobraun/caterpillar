@@ -55,8 +55,10 @@ pub struct Fragments {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub fragments: Vec<Fragment>,
+    pub fragments: FunctionFragments,
 }
+
+pub type FunctionFragments = Vec<Fragment>;
 
 #[derive(Debug)]
 pub struct Fragment {
