@@ -10,7 +10,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     for function in script.functions.inner {
         let mut fragments = VecDeque::new();
 
-        for expression in function.expressions {
+        for expression in function.expressions.into_iter().rev() {
             let payload = match expression.kind {
                 ExpressionKind::Binding { names } => {
                     FragmentPayload::Binding { names }
@@ -22,7 +22,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
                 ExpressionKind::Word { name } => FragmentPayload::Word { name },
             };
 
-            fragments.push_back(Fragment {
+            fragments.push_front(Fragment {
                 payload,
                 location: expression.location,
             });
