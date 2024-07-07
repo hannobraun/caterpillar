@@ -67,7 +67,7 @@ pub struct Function {
 #[derive(Debug)]
 pub struct FunctionFragments {
     first: Option<FragmentId>,
-    inner: BTreeMap<FragmentId, Fragment>,
+    inner: FunctionFragmentsInner,
 }
 
 impl FunctionFragments {
@@ -91,6 +91,8 @@ impl Iterator for FunctionFragments {
         self.remove_first()
     }
 }
+
+type FunctionFragmentsInner = BTreeMap<FragmentId, Fragment>;
 
 #[derive(Debug)]
 pub struct Fragment {
