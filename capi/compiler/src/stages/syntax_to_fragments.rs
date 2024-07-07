@@ -22,10 +22,11 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
                 ExpressionKind::Word { name } => FragmentPayload::Word { name },
             };
 
-            fragments.push_front(Fragment {
+            let fragment = Fragment {
                 payload,
                 location: expression.location,
-            });
+            };
+            fragments.push_front(fragment);
         }
 
         by_function.push(Function {
