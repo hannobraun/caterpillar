@@ -1,7 +1,4 @@
-use std::{
-    collections::{BTreeSet, VecDeque},
-    vec,
-};
+use std::collections::{vec_deque, BTreeSet, VecDeque};
 
 use capi_process::Value;
 
@@ -38,9 +35,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments: FunctionFragments {
-                inner: fragments.into(),
-            },
+            fragments: FunctionFragments { inner: fragments },
         });
     }
 
@@ -65,12 +60,12 @@ pub struct Function {
 
 #[derive(Debug)]
 pub struct FunctionFragments {
-    inner: Vec<Fragment>,
+    inner: VecDeque<Fragment>,
 }
 
 impl IntoIterator for FunctionFragments {
     type Item = Fragment;
-    type IntoIter = vec::IntoIter<Fragment>;
+    type IntoIter = vec_deque::IntoIter<Fragment>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.inner.into_iter()
