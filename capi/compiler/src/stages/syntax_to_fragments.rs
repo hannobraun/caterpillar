@@ -65,7 +65,7 @@ pub struct Function {
 
 #[derive(Debug)]
 pub struct FunctionFragments {
-    pub inner: Vec<Fragment>,
+    inner: Vec<Fragment>,
 }
 
 impl IntoIterator for FunctionFragments {
