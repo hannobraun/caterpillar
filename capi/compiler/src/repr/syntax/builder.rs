@@ -1,6 +1,6 @@
 use capi_process::Value;
 
-use crate::syntax::{Expression, ExpressionKind, Location};
+use crate::repr::syntax::{Expression, ExpressionKind, Location};
 
 #[derive(Debug)]
 pub struct SyntaxBuilder<'r> {

@@ -1,4 +1,4 @@
-use capi_compiler::{source_map::SourceMap, syntax};
+use capi_compiler::{repr::syntax, source_map::SourceMap};
 use capi_process::Process;
 
 use super::Expression;

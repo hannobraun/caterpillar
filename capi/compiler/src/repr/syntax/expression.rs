@@ -2,7 +2,7 @@ use std::fmt;
 
 use capi_process::Value;
 
-use crate::syntax::Location;
+use crate::repr::syntax::Location;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {

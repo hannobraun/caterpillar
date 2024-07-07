@@ -1,6 +1,6 @@
 use capi_compiler::{
+    repr::syntax::{self, ExpressionKind},
     source_map::SourceMap,
-    syntax::{self, ExpressionKind},
 };
 use capi_process::{EvaluatorEffect, Location, Process};
 

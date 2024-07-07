@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use capi_process::{Bytecode, Function, Instruction, Location};
 
-use crate::{source_map::SourceMap, syntax};
+use crate::{repr::syntax, source_map::SourceMap};
 
 use super::syntax_to_fragments::{
     Fragment, FragmentPayload, Fragments, FunctionFragments,

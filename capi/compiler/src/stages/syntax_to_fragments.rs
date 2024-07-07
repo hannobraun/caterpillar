@@ -5,7 +5,7 @@ use std::{
 
 use capi_process::Value;
 
-use crate::syntax::{ExpressionKind, Location, Script};
+use crate::repr::syntax::{ExpressionKind, Location, Script};
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
@@ -164,7 +164,9 @@ impl FragmentPayload {
 mod tests {
     use capi_process::Value;
 
-    use crate::{stages::syntax_to_fragments::FragmentPayload, syntax::Script};
+    use crate::{
+        repr::syntax::Script, stages::syntax_to_fragments::FragmentPayload,
+    };
 
     use super::syntax_to_fragments;
 

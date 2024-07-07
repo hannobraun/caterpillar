@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_process::Location as RuntimeLocation;
 
-use crate::syntax;
+use crate::repr::syntax;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
