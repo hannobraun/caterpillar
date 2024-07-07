@@ -35,7 +35,9 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments: fragments.into(),
+            fragments: FunctionFragments {
+                inner: fragments.into(),
+            },
         });
     }
 
@@ -58,7 +60,10 @@ pub struct Function {
     pub fragments: FunctionFragments,
 }
 
-pub type FunctionFragments = Vec<Fragment>;
+#[derive(Debug)]
+pub struct FunctionFragments {
+    pub inner: Vec<Fragment>,
+}
 
 #[derive(Debug)]
 pub struct Fragment {
