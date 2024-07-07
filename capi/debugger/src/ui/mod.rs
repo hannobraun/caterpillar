@@ -1,5 +1,5 @@
-mod components;
 mod commands;
+mod components;
 mod start;
 
 pub use self::{

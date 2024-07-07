@@ -49,8 +49,6 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     }
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use capi_process::Value;
