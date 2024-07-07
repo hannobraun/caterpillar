@@ -64,7 +64,7 @@ pub struct FunctionFragments {
 }
 
 impl IntoIterator for FunctionFragments {
-    type Item = Fragment;
+    type Item = <FragmentsIter as Iterator>::Item;
     type IntoIter = FragmentsIter;
 
     fn into_iter(self) -> Self::IntoIter {
