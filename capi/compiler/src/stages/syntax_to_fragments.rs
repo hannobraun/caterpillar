@@ -121,7 +121,7 @@ impl PartialOrd for FragmentId {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum FragmentPayload {
     Binding { names: Vec<String> },
     Comment { text: String },
