@@ -78,7 +78,7 @@ impl Iterator for FunctionFragments {
         let next = self
             .inner
             .remove(&next_id)
-            .expect("Invalid iterator: `self.next_id` must be present");
+            .expect("`self.first` must be present in `self.inner`");
 
         self.first = next.next;
 
