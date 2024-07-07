@@ -78,6 +78,7 @@ impl Fragment {
 
 #[derive(Debug)]
 pub struct FragmentAddress {
+    pub function: String,
     pub next: Option<FragmentId>,
 }
 

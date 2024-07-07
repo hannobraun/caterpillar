@@ -29,6 +29,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
 
             let fragment = Fragment {
                 address: FragmentAddress {
+                    function: expression.location.function().to_owned(),
                     next: next_fragment.take(),
                 },
                 payload,
