@@ -2,10 +2,12 @@ use std::collections::BTreeSet;
 
 use capi_process::{Bytecode, Function, Instruction, Location};
 
-use crate::{repr::syntax, source_map::SourceMap};
-
-use super::syntax_to_fragments::{
-    Fragment, FragmentPayload, Fragments, FunctionFragments,
+use crate::{
+    repr::{
+        fragments::{Fragment, FragmentPayload, Fragments, FunctionFragments},
+        syntax,
+    },
+    source_map::SourceMap,
 };
 
 pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
