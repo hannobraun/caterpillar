@@ -104,7 +104,7 @@ impl Fragment {
     }
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct FragmentId {
     pub hash: blake3::Hash,
 }
