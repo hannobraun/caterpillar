@@ -70,36 +70,17 @@ pub struct FunctionFragments {
     inner: BTreeMap<FragmentId, Fragment>,
 }
 
-impl IntoIterator for FunctionFragments {
-    type Item = <FragmentsIter as Iterator>::Item;
-    type IntoIter = FragmentsIter;
-
-    fn into_iter(self) -> Self::IntoIter {
-        FragmentsIter {
-            next: self.first,
-            fragments: self,
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct FragmentsIter {
-    next: Option<FragmentId>,
-    fragments: FunctionFragments,
-}
-
-impl Iterator for FragmentsIter {
+impl Iterator for FunctionFragments {
     type Item = Fragment;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let next_id = self.next.take()?;
+        let next_id = self.first.take()?;
         let next = self
-            .fragments
             .inner
             .remove(&next_id)
             .expect("Invalid iterator: `self.next_id` must be present");
 
-        self.next = next.next;
+        self.first = next.next;
 
         Some(next)
     }
@@ -194,7 +175,6 @@ mod tests {
             .by_function
             .remove(0)
             .fragments
-            .into_iter()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>();
         assert_eq!(
