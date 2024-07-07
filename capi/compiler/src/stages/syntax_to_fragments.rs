@@ -1,6 +1,6 @@
 use std::{
     cmp::Ordering,
-    collections::{BTreeSet, VecDeque},
+    collections::{BTreeMap, BTreeSet},
 };
 
 use capi_process::Value;
@@ -11,7 +11,7 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
-        let mut fragments = VecDeque::new();
+        let mut fragments = BTreeMap::new();
         let mut next_fragment = None;
 
         for expression in function.expressions.into_iter().rev() {
@@ -32,13 +32,16 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
                 location: expression.location,
             };
             next_fragment = Some(fragment.id());
-            fragments.push_front(fragment);
+            fragments.insert(fragment.id(), fragment);
         }
 
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments: FunctionFragments { inner: fragments },
+            fragments: FunctionFragments {
+                first: next_fragment,
+                inner: fragments,
+            },
         });
     }
 
@@ -63,7 +66,8 @@ pub struct Function {
 
 #[derive(Debug)]
 pub struct FunctionFragments {
-    inner: VecDeque<Fragment>,
+    first: Option<FragmentId>,
+    inner: BTreeMap<FragmentId, Fragment>,
 }
 
 impl IntoIterator for FunctionFragments {
@@ -71,12 +75,16 @@ impl IntoIterator for FunctionFragments {
     type IntoIter = FragmentsIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        FragmentsIter { fragments: self }
+        FragmentsIter {
+            next: self.first,
+            fragments: self,
+        }
     }
 }
 
 #[derive(Debug)]
 pub struct FragmentsIter {
+    next: Option<FragmentId>,
     fragments: FunctionFragments,
 }
 
@@ -84,7 +92,16 @@ impl Iterator for FragmentsIter {
     type Item = Fragment;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.fragments.inner.pop_front()
+        let next_id = self.next.take()?;
+        let next = self
+            .fragments
+            .inner
+            .remove(&next_id)
+            .expect("Invalid iterator: `self.next_id` must be present");
+
+        self.next = next.next;
+
+        Some(next)
     }
 }
 
