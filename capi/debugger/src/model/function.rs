@@ -1,4 +1,10 @@
-use capi_compiler::{repr::syntax, source_map::SourceMap};
+use capi_compiler::{
+    repr::{
+        fragments::FragmentPayload,
+        syntax::{self, ExpressionKind},
+    },
+    source_map::SourceMap,
+};
 use capi_process::Process;
 
 use super::Expression;
@@ -19,9 +25,24 @@ impl Function {
             .expressions
             .into_iter()
             .map(|expression| {
+                let payload = match expression.kind {
+                    ExpressionKind::Binding { names } => {
+                        FragmentPayload::Binding { names }
+                    }
+                    ExpressionKind::Comment { text } => {
+                        FragmentPayload::Comment { text }
+                    }
+                    ExpressionKind::Value(value) => {
+                        FragmentPayload::Value(value)
+                    }
+                    ExpressionKind::Word { name } => {
+                        FragmentPayload::Word { name }
+                    }
+                };
+
                 Expression::new(
                     expression.location,
-                    expression.kind,
+                    payload,
                     source_map,
                     process,
                 )

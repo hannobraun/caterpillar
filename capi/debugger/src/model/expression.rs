@@ -1,12 +1,12 @@
 use capi_compiler::{
-    repr::syntax::{self, ExpressionKind},
+    repr::{fragments::FragmentPayload, syntax},
     source_map::SourceMap,
 };
 use capi_process::{EvaluatorEffect, Location, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
-    pub kind: ExpressionKind,
+    pub kind: FragmentPayload,
     pub location: Option<Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
@@ -17,7 +17,7 @@ pub struct Expression {
 impl Expression {
     pub fn new(
         syntax_location: syntax::Location,
-        kind: ExpressionKind,
+        kind: FragmentPayload,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
@@ -29,7 +29,7 @@ impl Expression {
             false
         };
 
-        let is_comment = matches!(kind, ExpressionKind::Comment { .. });
+        let is_comment = matches!(kind, FragmentPayload::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
