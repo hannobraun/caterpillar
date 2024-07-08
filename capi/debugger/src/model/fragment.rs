@@ -34,11 +34,11 @@ impl FragmentModel {
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
-                let effect_location = source_map.instruction_to_fragment(
+                let effect_fragment = source_map.instruction_to_fragment(
                     &process.state().most_recent_step().unwrap(),
                 );
 
-                if effect_location == fragment.id() {
+                if effect_fragment == fragment.id() {
                     Some(effect.clone())
                 } else {
                     None
