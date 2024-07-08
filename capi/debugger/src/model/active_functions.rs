@@ -41,11 +41,11 @@ impl ActiveFunctions {
             .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
                 let syntax_location = source_code
-                    .source_map_2
-                    .runtime_to_syntax(&runtime_location);
+                    .source_map
+                    .instruction_to_fragment(&runtime_location);
                 let function = source_code
-                    .functions
-                    .get_from_location(syntax_location)
+                    .fragments
+                    .find_function(&syntax_location)
                     .cloned()?;
 
                 Some(Function::new(

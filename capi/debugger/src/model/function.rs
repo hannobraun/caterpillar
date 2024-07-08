@@ -1,10 +1,4 @@
-use capi_compiler::{
-    repr::{
-        fragments::FragmentPayload,
-        syntax::{self, ExpressionKind},
-    },
-    source_map::SourceMap2,
-};
+use capi_compiler::{repr::fragments, source_map::SourceMap2};
 use capi_process::Process;
 
 use super::Fragment;
@@ -17,30 +11,19 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        function: syntax::Function,
+        function: fragments::Function,
         source_map: &SourceMap2,
         process: &Process,
     ) -> Self {
         let fragments = function
-            .expressions
-            .into_iter()
+            .fragments
             .map(|expression| {
-                let payload = match expression.kind {
-                    ExpressionKind::Binding { names } => {
-                        FragmentPayload::Binding { names }
-                    }
-                    ExpressionKind::Comment { text } => {
-                        FragmentPayload::Comment { text }
-                    }
-                    ExpressionKind::Value(value) => {
-                        FragmentPayload::Value(value)
-                    }
-                    ExpressionKind::Word { name } => {
-                        FragmentPayload::Word { name }
-                    }
-                };
-
-                Fragment::new(expression.location, payload, source_map, process)
+                Fragment::new(
+                    expression.location,
+                    expression.payload,
+                    source_map,
+                    process,
+                )
             })
             .collect();
 
