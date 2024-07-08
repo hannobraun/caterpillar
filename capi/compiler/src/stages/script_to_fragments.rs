@@ -5,7 +5,7 @@ use crate::repr::{
         Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
         Function, FunctionFragments,
     },
-    syntax::{self, Expression, Script},
+    syntax::{Expression, Script},
 };
 
 pub fn script_to_fragments(script: Script) -> Fragments {
@@ -22,7 +22,11 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let fragments = compile_function(function.clone(), &functions);
+        let fragments = compile_function(
+            function.name.clone(),
+            function.expressions,
+            &functions,
+        );
         by_function.push(Function {
             name: function.name,
             args: function.args,
@@ -34,11 +38,10 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 }
 
 fn compile_function(
-    function: syntax::Function,
+    function_name: String,
+    expressions: Vec<Expression>,
     functions: &BTreeSet<String>,
 ) -> FunctionFragments {
-    let expressions = function.expressions;
-
     let mut fragments = BTreeMap::new();
     let mut next_fragment = None;
 
@@ -46,7 +49,7 @@ fn compile_function(
         let fragment = compile_expression(
             expression,
             next_fragment.take(),
-            function.name.clone(),
+            function_name.clone(),
             functions,
         );
         next_fragment = Some(fragment.id());
