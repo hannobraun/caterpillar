@@ -44,7 +44,18 @@ fn compile_function(
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
 ) -> FunctionFragments {
-    let mut bindings = args.iter().cloned().collect();
+    let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
+
+    for expression in &body {
+        if let Expression::Binding { names } = expression {
+            for name in names.iter().cloned().rev() {
+                // Inserting bindings unconditionally like this does mean that
+                // bindings can overwrite previously defined bindings. This is
+                // undesirable, but it'll do for now.
+                bindings.insert(name);
+            }
+        }
+    }
 
     let mut fragments = BTreeMap::new();
     let mut next_fragment = None;
@@ -74,13 +85,6 @@ fn compile_expression(
 ) -> Fragment {
     let payload = match expression {
         Expression::Binding { names } => {
-            for name in names.iter().cloned().rev() {
-                // Inserting bindings unconditionally like this does mean that
-                // bindings can overwrite previously defined bindings. This is
-                // undesirable, but it'll do for now.
-                bindings.insert(name);
-            }
-
             FragmentPayload::BindingDefinitions { names }
         }
         Expression::Comment { text } => FragmentPayload::Comment { text },
@@ -141,6 +145,32 @@ mod tests {
                     name: String::from("add")
                 }
             ]
+        );
+    }
+
+    #[test]
+    fn binding_eval() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.v(0).bind(["b"]).w("b");
+        });
+
+        let mut fragments = script_to_fragments(script);
+
+        let fragment = fragments
+            .by_function
+            .remove(0)
+            .fragments
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>()
+            .last()
+            .cloned()
+            .unwrap();
+        assert_eq!(
+            fragment,
+            FragmentPayload::BindingEvaluation {
+                name: String::from("b")
+            }
         );
     }
 
