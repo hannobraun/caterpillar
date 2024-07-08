@@ -23,7 +23,10 @@ impl SourceMap {
         self.fragment_to_instruction.insert(fragment, runtime);
     }
 
-    pub fn runtime_to_syntax(&self, runtime: &RuntimeLocation) -> FragmentId {
+    pub fn instruction_to_fragment(
+        &self,
+        runtime: &RuntimeLocation,
+    ) -> FragmentId {
         self.instruction_to_fragment
             .get(runtime)
             .cloned()
