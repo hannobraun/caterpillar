@@ -36,7 +36,13 @@ pub fn script_to_fragments(script: Script) -> Fragments {
                     FragmentPayload::Comment { text }
                 }
                 Expression::Value(value) => FragmentPayload::Value(value),
-                Expression::Word { name } => FragmentPayload::Word { name },
+                Expression::Word { name } => {
+                    if functions.contains(&name) {
+                        FragmentPayload::FunctionCall { name }
+                    } else {
+                        FragmentPayload::Word { name }
+                    }
+                }
             };
 
             let fragment = Fragment {
