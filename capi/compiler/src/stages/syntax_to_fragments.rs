@@ -39,10 +39,12 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         }
 
         let first_fragment = next_fragment;
+        let fragments = FunctionFragments::new(first_fragment, fragments);
+
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            fragments: FunctionFragments::new(first_fragment, fragments),
+            fragments,
         });
     }
 
