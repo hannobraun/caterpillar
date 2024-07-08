@@ -1,14 +1,15 @@
 mod address;
+mod fragment;
 mod payload;
 
-pub use self::{address::FragmentAddress, payload::FragmentPayload};
+pub use self::{
+    address::FragmentAddress, fragment::Fragment, payload::FragmentPayload,
+};
 
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
 };
-
-use super::syntax::Location;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -78,25 +79,5 @@ impl Ord for FragmentId {
 impl PartialOrd for FragmentId {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
-    }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct Fragment {
-    pub address: FragmentAddress,
-    pub payload: FragmentPayload,
-    pub location: Location,
-}
-
-impl Fragment {
-    pub fn id(&self) -> FragmentId {
-        let mut hasher = blake3::Hasher::new();
-
-        self.address.hash(&mut hasher);
-        self.payload.hash(&mut hasher);
-
-        FragmentId {
-            hash: hasher.finalize(),
-        }
     }
 }
