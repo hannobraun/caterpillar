@@ -40,12 +40,12 @@ impl ActiveFunctions {
             .stack()
             .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
-                let syntax_location = source_code
+                let fragment_id = source_code
                     .source_map
                     .instruction_to_fragment(&runtime_location);
                 let function = source_code
                     .fragments
-                    .find_function(&syntax_location)
+                    .find_function(&fragment_id)
                     .cloned()?;
 
                 Some(Function::new(
