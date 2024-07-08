@@ -18,7 +18,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
         .map(|fragment| {
             view! {
                 <li class="ml-8">
-                    <Expression
+                    <Fragment
                         fragment=fragment
                         commands=commands.clone() />
                 </li>
@@ -39,7 +39,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Expression(fragment: Fragment, commands: CommandsTx) -> impl IntoView {
+pub fn Fragment(fragment: Fragment, commands: CommandsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
     if fragment.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
