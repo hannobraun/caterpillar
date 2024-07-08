@@ -107,7 +107,7 @@ fn word_to_instruction(word: String) -> Instruction {
     // conflict with any user-defined functions.
     //
     // I think it's fine for now. This seems like a temporary hack anyway, while
-    // the language is not powerful enough to support an actual `if`.
+    // the language is not powerful enough to support real conditionals.
     if word == "return_if_non_zero" {
         return Instruction::ReturnIfNonZero;
     }
