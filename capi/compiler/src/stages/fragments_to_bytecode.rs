@@ -61,13 +61,6 @@ impl Compiler<'_> {
 
         match fragment.payload {
             FragmentPayload::BindingDefinitions { names } => {
-                for name in names.iter().cloned().rev() {
-                    // Inserting bindings unconditionally like that does mean
-                    // that bindings can overwrite previously defined bindings.
-                    // This is undesirable, but it'll do for now.
-                    bindings.insert(name);
-                }
-
                 self.generate(
                     Instruction::BindingsDefine { names },
                     fragment_id,
@@ -116,10 +109,7 @@ impl Compiler<'_> {
     }
 }
 
-fn word_to_instruction(
-    word: String,
-    bindings: &BTreeSet<String>,
-) -> Instruction {
+fn word_to_instruction(word: String, _: &BTreeSet<String>) -> Instruction {
     // Here we check for special built-in functions that are implemented
     // differently, without making sure anywhere, that its name doesn't conflict
     // with any user-defined functions.
@@ -131,15 +121,6 @@ fn word_to_instruction(
     }
     if word == "return_if_zero" {
         return Instruction::ReturnIfZero;
-    }
-
-    // The code here would allow bindings to shadow both user-defined and
-    // builtin functions. This seems undesirable, without further handling to
-    // prevent mistakes.
-    //
-    // It's better to catch this when defining bindings, though.
-    if bindings.contains(&word) {
-        return Instruction::BindingEvaluate { name: word };
     }
 
     // This doesn't check whether the built-in function exists, and given how
