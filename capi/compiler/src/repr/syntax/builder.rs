@@ -1,6 +1,6 @@
 use capi_process::Value;
 
-use crate::repr::syntax::{Expression, ExpressionKind};
+use crate::repr::syntax::Expression;
 
 #[derive(Debug)]
 pub struct SyntaxBuilder<'r> {
@@ -16,25 +16,25 @@ impl<'r> SyntaxBuilder<'r> {
         &mut self,
         names: impl IntoIterator<Item = impl Into<String>>,
     ) -> &mut Self {
-        self.push_expression(ExpressionKind::Binding {
+        self.push_expression(Expression::Binding {
             names: names.into_iter().map(Into::into).collect(),
         })
     }
 
     pub fn c(&mut self, text: &str) -> &mut Self {
-        self.push_expression(ExpressionKind::Comment { text: text.into() })
+        self.push_expression(Expression::Comment { text: text.into() })
     }
 
     pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
-        self.push_expression(ExpressionKind::Value(value.into()))
+        self.push_expression(Expression::Value(value.into()))
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.push_expression(ExpressionKind::Word { name: name.into() })
+        self.push_expression(Expression::Word { name: name.into() })
     }
 
-    fn push_expression(&mut self, kind: ExpressionKind) -> &mut Self {
-        self.expressions.push(Expression::new(kind));
+    fn push_expression(&mut self, kind: Expression) -> &mut Self {
+        self.expressions.push(kind);
         self
     }
 }

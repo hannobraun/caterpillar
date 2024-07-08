@@ -5,7 +5,7 @@ mod script;
 
 pub use self::{
     builder::SyntaxBuilder,
-    expression::{Expression, ExpressionKind},
+    expression::Expression,
     functions::{Function, Functions},
     script::Script,
 };

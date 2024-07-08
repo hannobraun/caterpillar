@@ -5,7 +5,7 @@ use crate::repr::{
         Fragment, FragmentAddress, FragmentPayload, Fragments, Function,
         FunctionFragments,
     },
-    syntax::{ExpressionKind, Script},
+    syntax::{Expression, Script},
 };
 
 pub fn syntax_to_fragments(script: Script) -> Fragments {
@@ -16,15 +16,15 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
         let mut next_fragment = None;
 
         for expression in function.expressions.into_iter().rev() {
-            let payload = match expression.kind {
-                ExpressionKind::Binding { names } => {
+            let payload = match expression {
+                Expression::Binding { names } => {
                     FragmentPayload::Binding { names }
                 }
-                ExpressionKind::Comment { text } => {
+                Expression::Comment { text } => {
                     FragmentPayload::Comment { text }
                 }
-                ExpressionKind::Value(value) => FragmentPayload::Value(value),
-                ExpressionKind::Word { name } => FragmentPayload::Word { name },
+                Expression::Value(value) => FragmentPayload::Value(value),
+                Expression::Word { name } => FragmentPayload::Word { name },
             };
 
             let fragment = Fragment {
