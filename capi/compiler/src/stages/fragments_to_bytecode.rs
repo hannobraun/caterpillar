@@ -81,9 +81,6 @@ impl Compiler<'_> {
                     } else if name == "return_if_zero" {
                         Instruction::ReturnIfZero
                     } else {
-                        // This doesn't check whether the built-in function
-                        // exists, and given how built-in functions are
-                        // currently defined, it's not practical to implement.
                         Instruction::CallBuiltin { name }
                     }
                 };
