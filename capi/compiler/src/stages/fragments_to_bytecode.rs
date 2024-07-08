@@ -54,7 +54,7 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: Fragment,
-        bindings: &mut BTreeSet<String>,
+        _: &mut BTreeSet<String>,
         output: &mut Function,
     ) {
         let fragment_id = fragment.id();
@@ -86,7 +86,7 @@ impl Compiler<'_> {
                 self.generate(Instruction::Push { value }, fragment_id, output);
             }
             FragmentPayload::Word { name } => {
-                let instruction = word_to_instruction(name, bindings);
+                let instruction = word_to_instruction(name);
                 self.generate(instruction, fragment_id, output);
             }
         };
@@ -109,7 +109,7 @@ impl Compiler<'_> {
     }
 }
 
-fn word_to_instruction(word: String, _: &BTreeSet<String>) -> Instruction {
+fn word_to_instruction(word: String) -> Instruction {
     // Here we check for special built-in functions that are implemented
     // differently, without making sure anywhere, that its name doesn't conflict
     // with any user-defined functions.
