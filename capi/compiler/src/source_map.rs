@@ -8,7 +8,7 @@ use crate::repr::{fragments::FragmentId, syntax};
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    runtime_to_syntax: BTreeMap<RuntimeLocation, FragmentId>,
+    instruction_to_fragment: BTreeMap<RuntimeLocation, FragmentId>,
     syntax_to_runtime: BTreeMap<FragmentId, RuntimeLocation>,
 }
 
@@ -18,12 +18,12 @@ impl SourceMap {
         runtime: RuntimeLocation,
         syntax: FragmentId,
     ) {
-        self.runtime_to_syntax.insert(runtime.clone(), syntax);
+        self.instruction_to_fragment.insert(runtime.clone(), syntax);
         self.syntax_to_runtime.insert(syntax, runtime);
     }
 
     pub fn runtime_to_syntax(&self, runtime: &RuntimeLocation) -> FragmentId {
-        self.runtime_to_syntax
+        self.instruction_to_fragment
             .get(runtime)
             .cloned()
             .expect("Expect every runtime location to map to a syntax location")
