@@ -21,7 +21,7 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let expressions = function
+        let fragments = function
             .expressions
             .into_iter()
             .map(|expression| {
@@ -46,7 +46,7 @@ impl Function {
 
         Self {
             name: function.name,
-            fragments: expressions,
+            fragments,
         }
     }
 }
