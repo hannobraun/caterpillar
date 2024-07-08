@@ -95,7 +95,7 @@ fn compile_expression(
             } else if bindings.contains(&name) {
                 FragmentPayload::BindingEvaluation { name }
             } else {
-                FragmentPayload::Word { name }
+                FragmentPayload::BuiltinCall { name }
             }
         }
     };
