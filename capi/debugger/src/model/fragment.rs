@@ -17,7 +17,7 @@ pub struct FragmentModel {
 impl FragmentModel {
     pub fn new(
         fragment: Fragment,
-        _: &SourceMap,
+        source_map: &SourceMap,
         source_map_2: &SourceMap2,
         process: &Process,
     ) -> Self {
@@ -34,11 +34,11 @@ impl FragmentModel {
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
-                let effect_location = source_map_2.runtime_to_syntax(
+                let effect_location = source_map.instruction_to_fragment(
                     &process.state().most_recent_step().unwrap(),
                 );
 
-                if effect_location == fragment.location {
+                if effect_location == fragment.id() {
                     Some(effect.clone())
                 } else {
                     None
