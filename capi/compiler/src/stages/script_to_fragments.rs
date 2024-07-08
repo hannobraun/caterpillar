@@ -145,6 +145,30 @@ mod tests {
     }
 
     #[test]
+    fn function_call() {
+        let mut script = Script::default();
+        script.function("f", [], |_| {});
+        script.function("g", [], |s| {
+            s.w("f");
+        });
+
+        let mut fragments = script_to_fragments(script);
+
+        let fragments = fragments
+            .by_function
+            .remove(1)
+            .fragments
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            fragments,
+            vec![FragmentPayload::FunctionCall {
+                name: String::from("f")
+            }]
+        );
+    }
+
+    #[test]
     fn duplicate_payload() {
         let mut script = Script::default();
         script.function("f", [], |s| {
