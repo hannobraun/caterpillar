@@ -1,6 +1,6 @@
 use capi_process::Value;
 
-use crate::repr::syntax::{Expression, ExpressionKind, Location};
+use crate::repr::syntax::{Expression, ExpressionKind};
 
 #[derive(Debug)]
 pub struct SyntaxBuilder<'r> {
@@ -8,7 +8,7 @@ pub struct SyntaxBuilder<'r> {
 }
 
 impl<'r> SyntaxBuilder<'r> {
-    pub fn new(_: Location, expressions: &'r mut Vec<Expression>) -> Self {
+    pub fn new(expressions: &'r mut Vec<Expression>) -> Self {
         Self { expressions }
     }
 
