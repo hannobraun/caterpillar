@@ -1,14 +1,12 @@
 use capi_process::Value;
 
-use crate::repr::syntax::Location;
-
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
 }
 
 impl Expression {
-    pub fn new(kind: ExpressionKind, _: Location) -> Self {
+    pub fn new(kind: ExpressionKind) -> Self {
         Self { kind }
     }
 }

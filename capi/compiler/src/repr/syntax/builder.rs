@@ -41,8 +41,8 @@ impl<'r> SyntaxBuilder<'r> {
     }
 
     fn push_expression(&mut self, kind: ExpressionKind) -> &mut Self {
-        let location = self.next_location.increment();
-        self.expressions.push(Expression::new(kind, location));
+        let _ = self.next_location.increment();
+        self.expressions.push(Expression::new(kind));
         self
     }
 }
