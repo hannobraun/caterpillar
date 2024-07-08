@@ -147,8 +147,8 @@ mod tests {
     #[test]
     fn duplicate_payload() {
         let mut script = Script::default();
-        script.function("two", [], |s| {
-            s.v(1).v(1).w("add");
+        script.function("f", [], |s| {
+            s.v(1).v(1);
         });
 
         let mut fragments = script_to_fragments(script);
@@ -164,9 +164,6 @@ mod tests {
             vec![
                 FragmentPayload::Value(Value(1)),
                 FragmentPayload::Value(Value(1)),
-                FragmentPayload::Word {
-                    name: String::from("add")
-                }
             ]
         );
     }
