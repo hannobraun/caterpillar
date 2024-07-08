@@ -4,19 +4,12 @@ use crate::repr::syntax::{Expression, ExpressionKind, Location};
 
 #[derive(Debug)]
 pub struct SyntaxBuilder<'r> {
-    next_location: Location,
     expressions: &'r mut Vec<Expression>,
 }
 
 impl<'r> SyntaxBuilder<'r> {
-    pub fn new(
-        next_location: Location,
-        expressions: &'r mut Vec<Expression>,
-    ) -> Self {
-        Self {
-            next_location,
-            expressions,
-        }
+    pub fn new(_: Location, expressions: &'r mut Vec<Expression>) -> Self {
+        Self { expressions }
     }
 
     pub fn bind(
@@ -41,7 +34,6 @@ impl<'r> SyntaxBuilder<'r> {
     }
 
     fn push_expression(&mut self, kind: ExpressionKind) -> &mut Self {
-        let _ = self.next_location.increment();
         self.expressions.push(Expression::new(kind));
         self
     }
