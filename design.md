@@ -51,35 +51,6 @@ The aspect that interests me most, is that the effects that a piece of code can
 have are local, and thus visible when you look at it. This can obviously help
 you understand what the code does.
 
-Languages like [Haskell] (to my understanding; not an expert) model I/O by
-having the functional code only describe operations, while the runtime then
-executes that description. I want to model I/O in Caterpillar differently, using
-opaque values that represent the thing outside of Caterpillar that the I/O has
-an effect on.
-
-These values could represent a file, a UI, hardware peripherals, or memory. I
-hope that this approach is simpler to understand and easier to implement with
-zero overhead.
-
-[Haskell]: https://www.haskell.org/
-
-### Sandboxed
-
-Code written in Caterpillar will be sandboxed. It won't be able to have any
-effect on the world, except through the facilities that are provided to it. This
-should mesh well with representing resources outside of the Caterpillar runtime
-with values, as described above.
-
-As this holds true also for top-level code as well, all applications are run by
-a platform, which injects the platform-specific resources into Caterpillar,
-providing the I/O primitives that the Caterpillar code can use.
-
-I believe I mostly came up with this concept myself (inspired by decades of
-prior art in research and practice, of course), but reading about [Roc] really
-helped clarify my thinking, and I've adopted their nomenclature.
-
-[Roc]: https://www.roc-lang.org/
-
 ### Single language
 
 Many programming languages are actually at least two languages in one package.
