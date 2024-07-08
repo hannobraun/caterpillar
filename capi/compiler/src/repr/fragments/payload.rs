@@ -4,7 +4,7 @@ use capi_process::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
-    Binding { names: Vec<String> },
+    BindingDefinitions { names: Vec<String> },
     Comment { text: String },
     FunctionCall { name: String },
     Value(Value),
@@ -14,7 +14,7 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Binding { names } => {
+            Self::BindingDefinitions { names } => {
                 hasher.update(b"binding");
 
                 for name in names {
@@ -44,7 +44,7 @@ impl FragmentPayload {
 impl fmt::Display for FragmentPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Self::Binding { names } => {
+            Self::BindingDefinitions { names } => {
                 write!(f, "=>")?;
                 for name in names {
                     write!(f, " {name}")?;

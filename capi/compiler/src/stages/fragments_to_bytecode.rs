@@ -60,7 +60,7 @@ impl Compiler<'_> {
         let fragment_id = fragment.id();
 
         match fragment.payload {
-            FragmentPayload::Binding { names } => {
+            FragmentPayload::BindingDefinitions { names } => {
                 for name in names.iter().cloned().rev() {
                     // Inserting bindings unconditionally like that does mean
                     // that bindings can overwrite previously defined bindings.

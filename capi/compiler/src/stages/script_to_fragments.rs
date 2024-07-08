@@ -30,7 +30,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         for expression in expressions.into_iter().rev() {
             let payload = match expression {
                 Expression::Binding { names } => {
-                    FragmentPayload::Binding { names }
+                    FragmentPayload::BindingDefinitions { names }
                 }
                 Expression::Comment { text } => {
                     FragmentPayload::Comment { text }
