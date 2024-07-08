@@ -73,9 +73,9 @@ impl Fragment {
         self.address.hash(&mut hasher);
         self.payload.hash(&mut hasher);
 
-        let hash = hasher.finalize();
-
-        FragmentId { hash }
+        FragmentId {
+            hash: hasher.finalize(),
+        }
     }
 }
 
