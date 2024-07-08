@@ -3,7 +3,7 @@ pub mod source_map;
 pub mod stages;
 
 pub fn compile(
-    script: &crate::repr::syntax::Script,
+    script: crate::repr::syntax::Script,
 ) -> (
     crate::repr::fragments::Fragments,
     capi_process::Bytecode,
