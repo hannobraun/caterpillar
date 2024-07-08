@@ -137,7 +137,7 @@ mod tests {
         assert_eq!(
             fragments,
             vec![
-                FragmentPayload::Word {
+                FragmentPayload::BindingEvaluation {
                     name: String::from("x")
                 },
                 FragmentPayload::Value(Value(1)),
