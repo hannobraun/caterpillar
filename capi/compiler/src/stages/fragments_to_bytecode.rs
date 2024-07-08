@@ -12,9 +12,7 @@ use crate::{
     source_map::{SourceMap, SourceMap2},
 };
 
-pub fn fragments_to_bytecode(
-    fragments: Fragments,
-) -> (Bytecode, SourceMap, SourceMap2) {
+pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
     let mut source_map_2 = SourceMap2::default();
@@ -34,7 +32,7 @@ pub fn fragments_to_bytecode(
         );
     }
 
-    (bytecode, source_map, source_map_2)
+    (bytecode, source_map)
 }
 
 struct Compiler<'r> {
