@@ -9,7 +9,7 @@ use crate::repr::{fragments::FragmentId, syntax};
 )]
 pub struct SourceMap {
     instruction_to_fragment: BTreeMap<RuntimeLocation, FragmentId>,
-    syntax_to_runtime: BTreeMap<FragmentId, RuntimeLocation>,
+    fragment_to_instruction: BTreeMap<FragmentId, RuntimeLocation>,
 }
 
 impl SourceMap {
@@ -19,7 +19,7 @@ impl SourceMap {
         syntax: FragmentId,
     ) {
         self.instruction_to_fragment.insert(runtime.clone(), syntax);
-        self.syntax_to_runtime.insert(syntax, runtime);
+        self.fragment_to_instruction.insert(syntax, runtime);
     }
 
     pub fn runtime_to_syntax(&self, runtime: &RuntimeLocation) -> FragmentId {
@@ -36,7 +36,7 @@ impl SourceMap {
         &self,
         syntax: &FragmentId,
     ) -> Option<RuntimeLocation> {
-        self.syntax_to_runtime.get(syntax).cloned()
+        self.fragment_to_instruction.get(syntax).cloned()
     }
 }
 
