@@ -6,6 +6,7 @@ use capi_process::Value;
 pub enum FragmentPayload {
     BindingDefinitions { names: Vec<String> },
     BindingEvaluation { name: String },
+    BuiltinCall { name: String },
     Comment { text: String },
     FunctionCall { name: String },
     Value(Value),
@@ -24,6 +25,10 @@ impl FragmentPayload {
             }
             Self::BindingEvaluation { name } => {
                 hasher.update(b"binding evaluation");
+                hasher.update(name.as_bytes());
+            }
+            Self::BuiltinCall { name } => {
+                hasher.update(b"builtin call");
                 hasher.update(name.as_bytes());
             }
             Self::Comment { text } => {
@@ -57,6 +62,7 @@ impl fmt::Display for FragmentPayload {
                 writeln!(f, " .")
             }
             Self::BindingEvaluation { name } => writeln!(f, "{name}"),
+            Self::BuiltinCall { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::FunctionCall { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
