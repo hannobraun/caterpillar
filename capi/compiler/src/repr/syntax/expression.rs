@@ -1,5 +1,3 @@
-use std::fmt;
-
 use capi_process::Value;
 
 use crate::repr::syntax::Location;
@@ -22,21 +20,4 @@ pub enum ExpressionKind {
     Comment { text: String },
     Value(Value),
     Word { name: String },
-}
-
-impl fmt::Display for ExpressionKind {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            ExpressionKind::Binding { names } => {
-                write!(f, "=>")?;
-                for name in names {
-                    write!(f, " {name}")?;
-                }
-                writeln!(f, " .")
-            }
-            ExpressionKind::Comment { text } => writeln!(f, "# {text}"),
-            ExpressionKind::Value(value) => write!(f, "{value}"),
-            ExpressionKind::Word { name } => write!(f, "{name}"),
-        }
-    }
 }
