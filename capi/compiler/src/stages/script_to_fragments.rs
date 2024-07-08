@@ -61,7 +61,7 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        repr::syntax::Script, stages::syntax_to_fragments::FragmentPayload,
+        repr::syntax::Script, stages::script_to_fragments::FragmentPayload,
     };
 
     use super::script_to_fragments;
