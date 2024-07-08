@@ -1,6 +1,6 @@
 use capi_compiler::{
     repr::fragments::{Fragment, FragmentPayload},
-    source_map::{SourceMap, SourceMap2},
+    source_map::SourceMap,
 };
 use capi_process::{EvaluatorEffect, Location, Process};
 
@@ -18,7 +18,6 @@ impl FragmentModel {
     pub fn new(
         fragment: Fragment,
         source_map: &SourceMap,
-        _: &SourceMap2,
         process: &Process,
     ) -> Self {
         let location = source_map.fragment_to_instruction(&fragment.id());

@@ -16,14 +16,12 @@ impl Function {
     pub fn new(
         function: fragments::Function,
         source_map: &SourceMap,
-        source_map_2: &SourceMap2,
+        _: &SourceMap2,
         process: &Process,
     ) -> Self {
         let fragments = function
             .fragments
-            .map(|fragment| {
-                FragmentModel::new(fragment, source_map, source_map_2, process)
-            })
+            .map(|fragment| FragmentModel::new(fragment, source_map, process))
             .collect();
 
         Self {
