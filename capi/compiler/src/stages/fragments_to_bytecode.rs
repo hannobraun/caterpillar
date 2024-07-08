@@ -115,7 +115,7 @@ impl Compiler<'_> {
 fn word_to_instruction(
     word: String,
     bindings: &BTreeSet<String>,
-    functions: &BTreeSet<String>,
+    _: &BTreeSet<String>,
 ) -> Instruction {
     // Here we check for special built-in functions that are implemented
     // differently, without making sure anywhere, that its name doesn't conflict
@@ -137,15 +137,6 @@ fn word_to_instruction(
     // It's better to catch this when defining bindings, though.
     if bindings.contains(&word) {
         return Instruction::BindingEvaluate { name: word };
-    }
-
-    // The code here would allow user-defined functions to shadow built-in
-    // functions, which seems undesirable. It's better to catch this when
-    // defining the function though, and while it would be nice to have a
-    // fallback assertion here, that's not practical, given the way built-in
-    // function resolution is implemented right now.
-    if functions.contains(&word) {
-        return Instruction::CallFunction { name: word };
     }
 
     // This doesn't check whether the built-in function exists, and given how
