@@ -40,8 +40,9 @@ impl ActiveFunctions {
             .stack()
             .all_next_instructions_in_frames()
             .filter_map(|runtime_location| {
-                let syntax_location =
-                    source_code.source_map.runtime_to_syntax(&runtime_location);
+                let syntax_location = source_code
+                    .source_map_2
+                    .runtime_to_syntax(&runtime_location);
                 let function = source_code
                     .functions
                     .get_from_location(syntax_location)
