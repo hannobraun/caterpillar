@@ -120,7 +120,7 @@ mod tests {
     use super::script_to_fragments;
 
     #[test]
-    fn basic() {
+    fn arg_eval() {
         let mut script = Script::default();
         script.function("f", ["a"], |s| {
             s.w("a");
