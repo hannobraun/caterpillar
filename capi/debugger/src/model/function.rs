@@ -22,13 +22,7 @@ impl Function {
         let fragments = function
             .fragments
             .map(|fragment| {
-                FragmentModel::new(
-                    fragment.location,
-                    fragment.payload,
-                    source_map,
-                    source_map_2,
-                    process,
-                )
+                FragmentModel::new(fragment, source_map, source_map_2, process)
             })
             .collect();
 

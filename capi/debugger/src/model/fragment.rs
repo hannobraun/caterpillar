@@ -1,5 +1,5 @@
 use capi_compiler::{
-    repr::{fragments::FragmentPayload, syntax},
+    repr::fragments::{Fragment, FragmentPayload},
     source_map::{SourceMap, SourceMap2},
 };
 use capi_process::{EvaluatorEffect, Location, Process};
@@ -16,13 +16,12 @@ pub struct FragmentModel {
 
 impl FragmentModel {
     pub fn new(
-        syntax_location: syntax::Location,
-        payload: FragmentPayload,
+        fragment: Fragment,
         _: &SourceMap,
         source_map_2: &SourceMap2,
         process: &Process,
     ) -> Self {
-        let location = source_map_2.syntax_to_runtime(&syntax_location);
+        let location = source_map_2.syntax_to_runtime(&fragment.location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
             process.breakpoints().durable_at(location)
@@ -30,7 +29,8 @@ impl FragmentModel {
             false
         };
 
-        let is_comment = matches!(payload, FragmentPayload::Comment { .. });
+        let is_comment =
+            matches!(fragment.payload, FragmentPayload::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
@@ -38,7 +38,7 @@ impl FragmentModel {
                     &process.state().most_recent_step().unwrap(),
                 );
 
-                if effect_location == syntax_location {
+                if effect_location == fragment.location {
                     Some(effect.clone())
                 } else {
                     None
@@ -52,7 +52,7 @@ impl FragmentModel {
         };
 
         Self {
-            payload,
+            payload: fragment.payload,
             location,
             has_durable_breakpoint,
             is_comment,
