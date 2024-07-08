@@ -110,7 +110,7 @@ impl Compiler<'_> {
     fn generate(
         &mut self,
         instruction: Instruction,
-        _: FragmentId,
+        fragment_id: FragmentId,
         syntax_location: syntax::Location,
         output: &mut Function,
     ) {
@@ -121,7 +121,7 @@ impl Compiler<'_> {
             index,
         };
         self.source_map
-            .define_mapping(runtime_location.clone(), syntax_location.clone());
+            .define_mapping(runtime_location.clone(), fragment_id);
         self.source_map_2
             .define_mapping(runtime_location, syntax_location);
     }
