@@ -11,7 +11,7 @@ use crate::repr::{
 pub fn script_to_fragments(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
 
-    for function in &script.functions.inner {
+    for function in &script.functions {
         if functions.contains(&function.name) {
             panic!("Can't re-define existing function `{}`.", function.name);
         }
@@ -21,7 +21,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
     let mut by_function = Vec::new();
 
-    for function in script.functions.inner {
+    for function in script.functions {
         let expressions = function.expressions;
 
         let mut fragments = BTreeMap::new();

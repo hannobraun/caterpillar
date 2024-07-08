@@ -1,8 +1,8 @@
-use super::{Function, Functions, SyntaxBuilder};
+use super::{Function, SyntaxBuilder};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
-    pub functions: Functions,
+    pub functions: Vec<Function>,
 }
 
 impl Script {
@@ -15,7 +15,7 @@ impl Script {
         let mut expressions = Vec::new();
         f(&mut SyntaxBuilder::new(&mut expressions));
 
-        self.functions.inner.push(Function {
+        self.functions.push(Function {
             name: name.to_string(),
             args: args.into_iter().map(String::from).collect(),
             expressions,

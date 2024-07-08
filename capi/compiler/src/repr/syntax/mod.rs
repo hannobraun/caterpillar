@@ -4,8 +4,6 @@ mod functions;
 mod script;
 
 pub use self::{
-    builder::SyntaxBuilder,
-    expression::Expression,
-    functions::{Function, Functions},
+    builder::SyntaxBuilder, expression::Expression, functions::Function,
     script::Script,
 };
