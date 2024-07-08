@@ -18,10 +18,10 @@ impl FragmentModel {
     pub fn new(
         fragment: Fragment,
         source_map: &SourceMap,
-        source_map_2: &SourceMap2,
+        _: &SourceMap2,
         process: &Process,
     ) -> Self {
-        let location = source_map_2.syntax_to_runtime(&fragment.location);
+        let location = source_map.fragment_to_instruction(&fragment.id());
 
         let has_durable_breakpoint = if let Some(location) = &location {
             process.breakpoints().durable_at(location)
