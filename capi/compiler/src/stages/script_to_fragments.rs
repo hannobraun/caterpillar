@@ -12,6 +12,10 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
 
     for function in &script.functions.inner {
+        if functions.contains(&function.name) {
+            panic!("Can't re-define existing function `{}`.", function.name);
+        }
+
         functions.insert(function.name.clone());
     }
 

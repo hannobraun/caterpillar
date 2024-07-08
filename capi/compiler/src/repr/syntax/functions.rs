@@ -17,10 +17,6 @@ impl Functions {
         args: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
     ) {
-        if self.names.contains(name) {
-            panic!("Can't re-define existing function `{name}`.");
-        }
-
         let mut expressions = Vec::new();
         f(&mut SyntaxBuilder::new(&mut expressions));
 
