@@ -12,7 +12,7 @@ use super::Fragment;
 #[derive(Clone, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
-    pub expressions: Vec<Fragment>,
+    pub fragments: Vec<Fragment>,
 }
 
 impl Function {
@@ -46,7 +46,7 @@ impl Function {
 
         Self {
             name: function.name,
-            expressions,
+            fragments: expressions,
         }
     }
 }
