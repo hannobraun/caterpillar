@@ -1,4 +1,7 @@
-use capi_compiler::{repr::syntax, source_map::SourceMap};
+use capi_compiler::{
+    repr::{fragments::Fragments, syntax},
+    source_map::SourceMap,
+};
 use capi_process::Process;
 
 use crate::memory::Memory;
@@ -24,6 +27,7 @@ impl Update {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct SourceCode {
+    pub fragments: Fragments,
     pub functions: syntax::Functions,
     pub source_map: SourceMap,
 }
