@@ -94,7 +94,7 @@ fn compile_expression(
             // while user-defined functions shadow anything else.
             //
             // This isn't desirable. There should at least be a warning, if such
-            // shadowing isn't forbidden outright. It'll do for now.
+            // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
                 FragmentPayload::FunctionCall { name }
             } else if bindings.contains(&name) {
