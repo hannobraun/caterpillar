@@ -15,7 +15,7 @@ impl FragmentPayload {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             Self::BindingDefinitions { names } => {
-                hasher.update(b"binding");
+                hasher.update(b"binding definition");
 
                 for name in names {
                     hasher.update(name.as_bytes());
