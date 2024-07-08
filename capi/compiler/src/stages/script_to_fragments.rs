@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
     fragments::{
@@ -9,6 +9,12 @@ use crate::repr::{
 };
 
 pub fn script_to_fragments(script: Script) -> Fragments {
+    let mut functions = BTreeSet::new();
+
+    for function in &script.functions.inner {
+        functions.insert(function.name.clone());
+    }
+
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
@@ -51,7 +57,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     }
 
     Fragments {
-        functions: script.functions.names,
+        functions,
         by_function,
     }
 }
