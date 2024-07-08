@@ -1,3 +1,5 @@
+use std::fmt;
+
 use capi_process::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -30,6 +32,23 @@ impl FragmentPayload {
                 hasher.update(b"word");
                 hasher.update(name.as_bytes());
             }
+        }
+    }
+}
+
+impl fmt::Display for FragmentPayload {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::Binding { names } => {
+                write!(f, "=>")?;
+                for name in names {
+                    write!(f, " {name}")?;
+                }
+                writeln!(f, " .")
+            }
+            Self::Comment { text } => writeln!(f, "# {text}"),
+            Self::Value(value) => write!(f, "{value}"),
+            Self::Word { name } => write!(f, "{name}"),
         }
     }
 }
