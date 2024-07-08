@@ -33,8 +33,8 @@ impl<'r> SyntaxBuilder<'r> {
         self.push_expression(Expression::Word { name: name.into() })
     }
 
-    fn push_expression(&mut self, kind: Expression) -> &mut Self {
-        self.expressions.push(kind);
+    fn push_expression(&mut self, expression: Expression) -> &mut Self {
+        self.expressions.push(expression);
         self
     }
 }
