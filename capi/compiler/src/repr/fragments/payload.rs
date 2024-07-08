@@ -13,22 +13,22 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            FragmentPayload::Binding { names } => {
+            Self::Binding { names } => {
                 hasher.update(b"binding");
 
                 for name in names {
                     hasher.update(name.as_bytes());
                 }
             }
-            FragmentPayload::Comment { text } => {
+            Self::Comment { text } => {
                 hasher.update(b"comment");
                 hasher.update(text.as_bytes());
             }
-            FragmentPayload::Value(value) => {
+            Self::Value(value) => {
                 hasher.update(b"value");
                 hasher.update(&value.0.to_le_bytes());
             }
-            FragmentPayload::Word { name } => {
+            Self::Word { name } => {
                 hasher.update(b"word");
                 hasher.update(name.as_bytes());
             }
