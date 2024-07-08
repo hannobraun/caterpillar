@@ -122,7 +122,7 @@ mod tests {
     #[test]
     fn basic() {
         let mut script = Script::default();
-        script.function("inc", ["a"], |s| {
+        script.function("f", ["a"], |s| {
             s.w("a").v(1).w("add");
         });
 
