@@ -122,8 +122,8 @@ mod tests {
     #[test]
     fn basic() {
         let mut script = Script::default();
-        script.function("inc", ["x"], |s| {
-            s.w("x").v(1).w("add");
+        script.function("inc", ["a"], |s| {
+            s.w("a").v(1).w("add");
         });
 
         let mut fragments = script_to_fragments(script);
@@ -138,7 +138,7 @@ mod tests {
             fragments,
             vec![
                 FragmentPayload::BindingEvaluation {
-                    name: String::from("x")
+                    name: String::from("a")
                 },
                 FragmentPayload::Value(Value(1)),
                 FragmentPayload::Word {
