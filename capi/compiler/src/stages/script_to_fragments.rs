@@ -5,7 +5,7 @@ use crate::repr::{
         Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
         Function, FunctionFragments,
     },
-    syntax::{Expression, Script},
+    syntax::{self, Expression, Script},
 };
 
 pub fn script_to_fragments(script: Script) -> Fragments {
@@ -22,25 +22,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let expressions = function.expressions;
-
-        let mut fragments = BTreeMap::new();
-        let mut next_fragment = None;
-
-        for expression in expressions.into_iter().rev() {
-            let fragment = compile_expression(
-                expression,
-                next_fragment.take(),
-                function.name.clone(),
-                &functions,
-            );
-            next_fragment = Some(fragment.id());
-            fragments.insert(fragment.id(), fragment);
-        }
-
-        let first_fragment = next_fragment;
-        let fragments = FunctionFragments::new(first_fragment, fragments);
-
+        let fragments = compile_function(function.clone(), &functions);
         by_function.push(Function {
             name: function.name,
             args: function.args,
@@ -49,6 +31,30 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     }
 
     Fragments { by_function }
+}
+
+fn compile_function(
+    function: syntax::Function,
+    functions: &BTreeSet<String>,
+) -> FunctionFragments {
+    let expressions = function.expressions;
+
+    let mut fragments = BTreeMap::new();
+    let mut next_fragment = None;
+
+    for expression in expressions.into_iter().rev() {
+        let fragment = compile_expression(
+            expression,
+            next_fragment.take(),
+            function.name.clone(),
+            functions,
+        );
+        next_fragment = Some(fragment.id());
+        fragments.insert(fragment.id(), fragment);
+    }
+
+    let first_fragment = next_fragment;
+    FunctionFragments::new(first_fragment, fragments)
 }
 
 fn compile_expression(
