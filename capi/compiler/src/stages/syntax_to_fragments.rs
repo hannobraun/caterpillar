@@ -8,7 +8,7 @@ use crate::repr::{
     syntax::{Expression, Script},
 };
 
-pub fn syntax_to_fragments(script: Script) -> Fragments {
+pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
@@ -64,7 +64,7 @@ mod tests {
         repr::syntax::Script, stages::syntax_to_fragments::FragmentPayload,
     };
 
-    use super::syntax_to_fragments;
+    use super::script_to_fragments;
 
     #[test]
     fn basic() {
@@ -73,7 +73,7 @@ mod tests {
             s.w("x").v(1).w("add");
         });
 
-        let mut fragments = syntax_to_fragments(script);
+        let mut fragments = script_to_fragments(script);
 
         let fragments = fragments
             .by_function
@@ -102,7 +102,7 @@ mod tests {
             s.v(1).v(1).w("add");
         });
 
-        let mut fragments = syntax_to_fragments(script);
+        let mut fragments = script_to_fragments(script);
 
         let fragments = fragments
             .by_function

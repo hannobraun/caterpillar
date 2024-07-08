@@ -9,7 +9,7 @@ pub fn compile(
     capi_process::Bytecode,
     crate::source_map::SourceMap,
 ) {
-    let fragments = stages::syntax_to_fragments(script);
+    let fragments = stages::script_to_fragments(script);
     let (bytecode, source_map) =
         stages::fragments_to_bytecode(fragments.clone());
 
