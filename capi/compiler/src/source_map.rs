@@ -36,7 +36,7 @@ impl SourceMap {
     /// Get the runtime location that a given syntax location is mapped to
     ///
     /// Can return `None`, as comments have no mapping to runtime locations.
-    pub fn syntax_to_runtime(
+    pub fn fragment_to_instruction(
         &self,
         syntax: &FragmentId,
     ) -> Option<RuntimeLocation> {
