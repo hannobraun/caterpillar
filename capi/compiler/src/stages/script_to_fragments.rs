@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentAddress, FragmentPayload, Fragments, Function,
-        FunctionFragments,
+        Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
+        Function, FunctionFragments,
     },
     syntax::{Expression, Script},
 };
@@ -28,30 +28,12 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         let mut next_fragment = None;
 
         for expression in expressions.into_iter().rev() {
-            let payload = match expression {
-                Expression::Binding { names } => {
-                    FragmentPayload::BindingDefinitions { names }
-                }
-                Expression::Comment { text } => {
-                    FragmentPayload::Comment { text }
-                }
-                Expression::Value(value) => FragmentPayload::Value(value),
-                Expression::Word { name } => {
-                    if functions.contains(&name) {
-                        FragmentPayload::FunctionCall { name }
-                    } else {
-                        FragmentPayload::Word { name }
-                    }
-                }
-            };
-
-            let fragment = Fragment {
-                address: FragmentAddress {
-                    function: function.name.clone(),
-                    next: next_fragment.take(),
-                },
-                payload,
-            };
+            let fragment = compile_expression(
+                expression,
+                next_fragment.take(),
+                function.name.clone(),
+                &functions,
+            );
             next_fragment = Some(fragment.id());
             fragments.insert(fragment.id(), fragment);
         }
@@ -67,6 +49,36 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     }
 
     Fragments { by_function }
+}
+
+fn compile_expression(
+    expression: Expression,
+    next_fragment: Option<FragmentId>,
+    function_name: String,
+    functions: &BTreeSet<String>,
+) -> Fragment {
+    let payload = match expression {
+        Expression::Binding { names } => {
+            FragmentPayload::BindingDefinitions { names }
+        }
+        Expression::Comment { text } => FragmentPayload::Comment { text },
+        Expression::Value(value) => FragmentPayload::Value(value),
+        Expression::Word { name } => {
+            if functions.contains(&name) {
+                FragmentPayload::FunctionCall { name }
+            } else {
+                FragmentPayload::Word { name }
+            }
+        }
+    };
+
+    Fragment {
+        address: FragmentAddress {
+            function: function_name,
+            next: next_fragment,
+        },
+        payload,
+    }
 }
 
 #[cfg(test)]
