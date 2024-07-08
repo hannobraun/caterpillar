@@ -66,10 +66,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         });
     }
 
-    Fragments {
-        functions,
-        by_function,
-    }
+    Fragments { by_function }
 }
 
 #[cfg(test)]
