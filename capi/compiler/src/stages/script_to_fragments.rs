@@ -24,6 +24,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     for function in script.functions {
         let fragments = compile_function(
             function.name.clone(),
+            &function.args,
             function.expressions,
             &functions,
         );
@@ -39,9 +40,12 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
 fn compile_function(
     name: String,
+    args: &[String],
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
 ) -> FunctionFragments {
+    let mut bindings = args.iter().cloned().collect();
+
     let mut fragments = BTreeMap::new();
     let mut next_fragment = None;
 
@@ -50,6 +54,7 @@ fn compile_function(
             expression,
             next_fragment.take(),
             name.clone(),
+            &mut bindings,
             functions,
         );
         next_fragment = Some(fragment.id());
@@ -64,10 +69,18 @@ fn compile_expression(
     expression: Expression,
     next_fragment: Option<FragmentId>,
     function_name: String,
+    bindings: &mut BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
     let payload = match expression {
         Expression::Binding { names } => {
+            for name in names.iter().cloned().rev() {
+                // Inserting bindings unconditionally like this does mean that
+                // bindings can overwrite previously defined bindings. This is
+                // undesirable, but it'll do for now.
+                bindings.insert(name);
+            }
+
             FragmentPayload::BindingDefinitions { names }
         }
         Expression::Comment { text } => FragmentPayload::Comment { text },
@@ -75,6 +88,8 @@ fn compile_expression(
         Expression::Word { name } => {
             if functions.contains(&name) {
                 FragmentPayload::FunctionCall { name }
+            } else if bindings.contains(&name) {
+                FragmentPayload::BindingEvaluation { name }
             } else {
                 FragmentPayload::Word { name }
             }
