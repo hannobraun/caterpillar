@@ -90,6 +90,11 @@ fn compile_expression(
         Expression::Comment { text } => FragmentPayload::Comment { text },
         Expression::Value(value) => FragmentPayload::Value(value),
         Expression::Word { name } => {
+            // The way this is written, bindings shadow built-in functions,
+            // while user-defined functions shadow anything else.
+            //
+            // This isn't desirable. There should at least be a warning, if such
+            // shadowing isn't forbidden outright. It'll do for now.
             if functions.contains(&name) {
                 FragmentPayload::FunctionCall { name }
             } else if bindings.contains(&name) {
