@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use super::{Expression, Location, SyntaxBuilder};
+use super::{Expression, SyntaxBuilder};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -30,12 +30,6 @@ impl Functions {
             args: args.into_iter().map(String::from).collect(),
             expressions,
         });
-    }
-
-    pub fn get_from_location(&self, location: Location) -> Option<&Function> {
-        self.inner
-            .iter()
-            .find(|function| function.name == location.function())
     }
 }
 
