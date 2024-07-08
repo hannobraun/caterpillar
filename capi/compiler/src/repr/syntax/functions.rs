@@ -1,28 +1,10 @@
-use super::{Expression, SyntaxBuilder};
+use super::Expression;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Functions {
     pub inner: Vec<Function>,
-}
-
-impl Functions {
-    pub fn define<'r>(
-        &mut self,
-        name: &str,
-        args: impl IntoIterator<Item = &'r str>,
-        f: impl FnOnce(&mut SyntaxBuilder),
-    ) {
-        let mut expressions = Vec::new();
-        f(&mut SyntaxBuilder::new(&mut expressions));
-
-        self.inner.push(Function {
-            name: name.to_string(),
-            args: args.into_iter().map(String::from).collect(),
-            expressions,
-        });
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

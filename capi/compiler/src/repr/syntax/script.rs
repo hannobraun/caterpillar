@@ -1,4 +1,4 @@
-use super::{Functions, SyntaxBuilder};
+use super::{Function, Functions, SyntaxBuilder};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
@@ -12,6 +12,13 @@ impl Script {
         args: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
     ) {
-        self.functions.define(name, args, f)
+        let mut expressions = Vec::new();
+        f(&mut SyntaxBuilder::new(&mut expressions));
+
+        self.functions.inner.push(Function {
+            name: name.to_string(),
+            args: args.into_iter().map(String::from).collect(),
+            expressions,
+        });
     }
 }
