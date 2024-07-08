@@ -1,6 +1,6 @@
 use capi_compiler::{
     repr::{fragments::FragmentPayload, syntax},
-    source_map::SourceMap2,
+    source_map::{SourceMap, SourceMap2},
 };
 use capi_process::{EvaluatorEffect, Location, Process};
 
@@ -18,6 +18,7 @@ impl Fragment {
     pub fn new(
         syntax_location: syntax::Location,
         payload: FragmentPayload,
+        _: &SourceMap,
         source_map_2: &SourceMap2,
         process: &Process,
     ) -> Self {

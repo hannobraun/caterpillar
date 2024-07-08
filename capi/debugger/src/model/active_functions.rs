@@ -50,6 +50,7 @@ impl ActiveFunctions {
 
                 Some(Function::new(
                     function,
+                    &source_code.source_map,
                     &source_code.source_map_2,
                     process,
                 ))

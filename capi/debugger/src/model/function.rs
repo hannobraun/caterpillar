@@ -1,4 +1,7 @@
-use capi_compiler::{repr::fragments, source_map::SourceMap2};
+use capi_compiler::{
+    repr::fragments,
+    source_map::{SourceMap, SourceMap2},
+};
 use capi_process::Process;
 
 use super::Fragment;
@@ -12,6 +15,7 @@ pub struct Function {
 impl Function {
     pub fn new(
         function: fragments::Function,
+        source_map: &SourceMap,
         source_map_2: &SourceMap2,
         process: &Process,
     ) -> Self {
@@ -21,6 +25,7 @@ impl Function {
                 Fragment::new(
                     fragment.location,
                     fragment.payload,
+                    source_map,
                     source_map_2,
                     process,
                 )
