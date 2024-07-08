@@ -17,7 +17,7 @@ pub struct Expression {
 impl Expression {
     pub fn new(
         syntax_location: syntax::Location,
-        kind: FragmentPayload,
+        payload: FragmentPayload,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
@@ -29,7 +29,7 @@ impl Expression {
             false
         };
 
-        let is_comment = matches!(kind, FragmentPayload::Comment { .. });
+        let is_comment = matches!(payload, FragmentPayload::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
@@ -51,7 +51,7 @@ impl Expression {
         };
 
         Self {
-            payload: kind,
+            payload,
             location,
             has_durable_breakpoint,
             is_comment,
