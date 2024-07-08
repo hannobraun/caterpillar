@@ -10,7 +10,6 @@ pub enum FragmentPayload {
     Comment { text: String },
     FunctionCall { name: String },
     Value(Value),
-    Word { name: String },
 }
 
 impl FragmentPayload {
@@ -43,10 +42,6 @@ impl FragmentPayload {
                 hasher.update(b"value");
                 hasher.update(&value.0.to_le_bytes());
             }
-            Self::Word { name } => {
-                hasher.update(b"word");
-                hasher.update(name.as_bytes());
-            }
         }
     }
 }
@@ -66,7 +61,6 @@ impl fmt::Display for FragmentPayload {
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::FunctionCall { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
-            Self::Word { name } => write!(f, "{name}"),
         }
     }
 }
