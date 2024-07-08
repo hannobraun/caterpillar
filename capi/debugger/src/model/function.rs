@@ -15,15 +15,15 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
+        let expressions = function
+            .expressions
+            .into_iter()
+            .map(|expression| Expression::new(expression, source_map, process))
+            .collect();
+
         Self {
             name: function.name,
-            expressions: function
-                .expressions
-                .into_iter()
-                .map(|expression| {
-                    Expression::new(expression, source_map, process)
-                })
-                .collect(),
+            expressions,
         }
     }
 }
