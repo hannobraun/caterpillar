@@ -7,17 +7,21 @@ use crate::{
         fragments::{Fragment, FragmentPayload, Fragments, FunctionFragments},
         syntax,
     },
-    source_map::SourceMap,
+    source_map::{SourceMap, SourceMap2},
 };
 
-pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+pub fn fragments_to_bytecode(
+    fragments: Fragments,
+) -> (Bytecode, SourceMap, SourceMap2) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
+    let mut source_map_2 = SourceMap2::default();
 
     let mut compiler = Compiler {
         functions: &fragments.functions,
         bytecode: &mut bytecode,
         source_map: &mut source_map,
+        source_map_2: &mut source_map_2,
     };
 
     for function in fragments.by_function {
@@ -28,13 +32,14 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    (bytecode, source_map)
+    (bytecode, source_map, source_map_2)
 }
 
 struct Compiler<'r> {
     functions: &'r BTreeSet<String>,
     bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
+    source_map_2: &'r mut SourceMap2,
 }
 
 impl Compiler<'_> {
@@ -104,6 +109,8 @@ impl Compiler<'_> {
             index,
         };
         self.source_map
+            .define_mapping(runtime_location.clone(), syntax_location.clone());
+        self.source_map_2
             .define_mapping(runtime_location, syntax_location);
     }
 }
