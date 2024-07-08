@@ -3,11 +3,8 @@ use std::collections::BTreeSet;
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
-    repr::{
-        fragments::{
-            Fragment, FragmentId, FragmentPayload, Fragments, FunctionFragments,
-        },
-        syntax,
+    repr::fragments::{
+        Fragment, FragmentId, FragmentPayload, Fragments, FunctionFragments,
     },
     source_map::SourceMap,
 };
@@ -76,28 +73,17 @@ impl Compiler<'_> {
                 self.generate(
                     Instruction::BindingsDefine { names },
                     fragment_id,
-                    fragment.location,
                     output,
                 );
             }
             FragmentPayload::Comment { .. } => {}
             FragmentPayload::Value(value) => {
-                self.generate(
-                    Instruction::Push { value },
-                    fragment_id,
-                    fragment.location,
-                    output,
-                );
+                self.generate(Instruction::Push { value }, fragment_id, output);
             }
             FragmentPayload::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(
-                    instruction,
-                    fragment_id,
-                    fragment.location,
-                    output,
-                );
+                self.generate(instruction, fragment_id, output);
             }
         };
     }
@@ -106,7 +92,6 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
-        _: syntax::Location,
         output: &mut Function,
     ) {
         let index = output.instructions.push(instruction);
