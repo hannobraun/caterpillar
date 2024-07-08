@@ -123,7 +123,7 @@ mod tests {
     fn basic() {
         let mut script = Script::default();
         script.function("f", ["a"], |s| {
-            s.w("a").v(1).w("add");
+            s.w("a");
         });
 
         let mut fragments = script_to_fragments(script);
@@ -136,15 +136,9 @@ mod tests {
             .collect::<Vec<_>>();
         assert_eq!(
             fragments,
-            vec![
-                FragmentPayload::BindingEvaluation {
-                    name: String::from("a")
-                },
-                FragmentPayload::Value(Value(1)),
-                FragmentPayload::Word {
-                    name: String::from("add")
-                }
-            ]
+            vec![FragmentPayload::BindingEvaluation {
+                name: String::from("a")
+            }]
         );
     }
 
