@@ -23,7 +23,7 @@ impl Function {
                 .map(|expression| {
                     Expression::new(expression, source_map, process)
                 })
-                .collect::<Vec<_>>(),
+                .collect(),
         }
     }
 }
