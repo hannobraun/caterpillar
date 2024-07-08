@@ -1,15 +1,14 @@
 mod address;
 mod fragment;
+mod id;
 mod payload;
 
 pub use self::{
-    address::FragmentAddress, fragment::Fragment, payload::FragmentPayload,
+    address::FragmentAddress, fragment::Fragment, id::FragmentId,
+    payload::FragmentPayload,
 };
 
-use std::{
-    cmp::Ordering,
-    collections::{BTreeMap, BTreeSet},
-};
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -62,22 +61,3 @@ impl Iterator for FunctionFragments {
 }
 
 type FunctionFragmentsInner = BTreeMap<FragmentId, Fragment>;
-
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct FragmentId {
-    pub hash: blake3::Hash,
-}
-
-impl Ord for FragmentId {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.hash.as_bytes().cmp(other.hash.as_bytes())
-    }
-}
-
-impl PartialOrd for FragmentId {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
