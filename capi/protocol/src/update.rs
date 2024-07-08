@@ -1,6 +1,6 @@
 use capi_compiler::{
     repr::{fragments::Fragments, syntax},
-    source_map::SourceMap,
+    source_map::{SourceMap, SourceMap2},
 };
 use capi_process::Process;
 
@@ -30,6 +30,7 @@ pub struct SourceCode {
     pub fragments: Fragments,
     pub functions: syntax::Functions,
     pub source_map: SourceMap,
+    pub source_map_2: SourceMap2,
 }
 
 pub type SerializedUpdate = Vec<u8>;
