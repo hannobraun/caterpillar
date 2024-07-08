@@ -15,11 +15,11 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
     let fragments = function
         .fragments
         .into_iter()
-        .map(|expression| {
+        .map(|fragment| {
             view! {
                 <li class="ml-8">
                     <Expression
-                        fragment=expression
+                        fragment=fragment
                         commands=commands.clone() />
                 </li>
             }
