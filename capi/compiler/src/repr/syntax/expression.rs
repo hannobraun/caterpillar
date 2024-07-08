@@ -5,12 +5,11 @@ use crate::repr::syntax::Location;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Expression {
     pub kind: ExpressionKind,
-    pub location: Location,
 }
 
 impl Expression {
-    pub fn new(kind: ExpressionKind, location: Location) -> Self {
-        Self { kind, location }
+    pub fn new(kind: ExpressionKind, _: Location) -> Self {
+        Self { kind }
     }
 }
 
