@@ -12,10 +12,12 @@ pub fn syntax_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions.inner {
+        let expressions = function.expressions;
+
         let mut fragments = BTreeMap::new();
         let mut next_fragment = None;
 
-        for expression in function.expressions.into_iter().rev() {
+        for expression in expressions.into_iter().rev() {
             let payload = match expression {
                 Expression::Binding { names } => {
                     FragmentPayload::Binding { names }
