@@ -39,13 +39,13 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
 fn compile_function(
     name: String,
-    expressions: Vec<Expression>,
+    body: Vec<Expression>,
     functions: &BTreeSet<String>,
 ) -> FunctionFragments {
     let mut fragments = BTreeMap::new();
     let mut next_fragment = None;
 
-    for expression in expressions.into_iter().rev() {
+    for expression in body.into_iter().rev() {
         let fragment = compile_expression(
             expression,
             next_fragment.take(),
