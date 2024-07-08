@@ -4,12 +4,12 @@ use capi_compiler::{
 };
 use capi_process::Process;
 
-use super::Fragment;
+use super::FragmentModel;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
-    pub fragments: Vec<Fragment>,
+    pub fragments: Vec<FragmentModel>,
 }
 
 impl Function {
@@ -22,7 +22,7 @@ impl Function {
         let fragments = function
             .fragments
             .map(|fragment| {
-                Fragment::new(
+                FragmentModel::new(
                     fragment.location,
                     fragment.payload,
                     source_map,
