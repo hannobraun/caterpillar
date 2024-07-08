@@ -19,7 +19,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
             view! {
                 <li class="ml-8">
                     <Expression
-                        expression=expression
+                        fragment=expression
                         commands=commands.clone() />
                 </li>
             }
@@ -39,17 +39,17 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Expression(expression: Fragment, commands: CommandsTx) -> impl IntoView {
+pub fn Expression(fragment: Fragment, commands: CommandsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
-    if expression.has_durable_breakpoint {
+    if fragment.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
 
     let mut class_inner = String::from("px-0.5");
-    if expression.is_comment {
+    if fragment.is_comment {
         class_inner.push_str(" italic text-gray-500");
     }
-    if let Some(effect) = &expression.effect {
+    if let Some(effect) = &fragment.effect {
         match effect {
             EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint) => {
                 class_inner.push_str(" bg-green-300")
@@ -57,16 +57,16 @@ pub fn Expression(expression: Fragment, commands: CommandsTx) -> impl IntoView {
             _ => class_inner.push_str(" bg-red-300"),
         }
     }
-    if expression.is_on_call_stack {
+    if fragment.is_on_call_stack {
         class_inner.push_str(" font-bold");
     }
 
-    let data_location = expression
+    let data_location = fragment
         .location
         .map(|location| ron::to_string(&location).unwrap());
-    let data_breakpoint = expression.has_durable_breakpoint;
+    let data_breakpoint = fragment.has_durable_breakpoint;
 
-    let error = expression.effect.map(|effect| format!("{:?}", effect));
+    let error = fragment.effect.map(|effect| format!("{:?}", effect));
 
     let toggle_breakpoint = move |event: MouseEvent| {
         let event_target = event.target().unwrap();
@@ -87,7 +87,7 @@ pub fn Expression(expression: Fragment, commands: CommandsTx) -> impl IntoView {
         leptos::spawn_local(send_command(command, commands.clone()));
     };
 
-    let expression = format!("{}", expression.payload);
+    let expression = format!("{}", fragment.payload);
 
     view! {
         <span>
