@@ -65,7 +65,7 @@ fn compile_function(
             expression,
             next_fragment.take(),
             name.clone(),
-            &mut bindings,
+            &bindings,
             functions,
         );
         next_fragment = Some(fragment.id());
@@ -80,7 +80,7 @@ fn compile_expression(
     expression: Expression,
     next_fragment: Option<FragmentId>,
     function_name: String,
-    bindings: &mut BTreeSet<String>,
+    bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
     let payload = match expression {
