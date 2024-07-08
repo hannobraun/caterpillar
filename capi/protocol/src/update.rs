@@ -1,5 +1,5 @@
 use capi_compiler::{
-    repr::{fragments::Fragments, syntax},
+    repr::fragments::Fragments,
     source_map::{SourceMap, SourceMap2},
 };
 use capi_process::Process;
@@ -28,7 +28,6 @@ impl Update {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct SourceCode {
     pub fragments: Fragments,
-    pub functions: syntax::Functions,
     pub source_map: SourceMap,
     pub source_map_2: SourceMap2,
 }

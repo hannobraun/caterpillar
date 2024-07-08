@@ -63,7 +63,6 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let (fragments, bytecode, source_map, source_map_2) = compile(&script);
     let source_code = SourceCode {
         fragments,
-        functions: script.functions,
         source_map,
         source_map_2,
     };
