@@ -4,7 +4,9 @@ use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
     repr::{
-        fragments::{Fragment, FragmentPayload, Fragments, FunctionFragments},
+        fragments::{
+            Fragment, FragmentId, FragmentPayload, Fragments, FunctionFragments,
+        },
         syntax,
     },
     source_map::{SourceMap, SourceMap2},
@@ -65,6 +67,8 @@ impl Compiler<'_> {
         bindings: &mut BTreeSet<String>,
         output: &mut Function,
     ) {
+        let fragment_id = fragment.id();
+
         match fragment.payload {
             FragmentPayload::Binding { names } => {
                 for name in names.iter().cloned().rev() {
@@ -76,6 +80,7 @@ impl Compiler<'_> {
 
                 self.generate(
                     Instruction::BindingsDefine { names },
+                    fragment_id,
                     fragment.location,
                     output,
                 );
@@ -84,6 +89,7 @@ impl Compiler<'_> {
             FragmentPayload::Value(value) => {
                 self.generate(
                     Instruction::Push { value },
+                    fragment_id,
                     fragment.location,
                     output,
                 );
@@ -91,7 +97,12 @@ impl Compiler<'_> {
             FragmentPayload::Word { name } => {
                 let instruction =
                     word_to_instruction(name, bindings, self.functions);
-                self.generate(instruction, fragment.location, output);
+                self.generate(
+                    instruction,
+                    fragment_id,
+                    fragment.location,
+                    output,
+                );
             }
         };
     }
@@ -99,6 +110,7 @@ impl Compiler<'_> {
     fn generate(
         &mut self,
         instruction: Instruction,
+        _: FragmentId,
         syntax_location: syntax::Location,
         output: &mut Function,
     ) {
