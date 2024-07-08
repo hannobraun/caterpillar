@@ -12,7 +12,7 @@ pub struct Function {
 impl Function {
     pub fn new(
         function: fragments::Function,
-        source_map: &SourceMap2,
+        source_map_2: &SourceMap2,
         process: &Process,
     ) -> Self {
         let fragments = function
@@ -21,7 +21,7 @@ impl Function {
                 Fragment::new(
                     fragment.location,
                     fragment.payload,
-                    source_map,
+                    source_map_2,
                     process,
                 )
             })
