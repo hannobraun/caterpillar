@@ -79,6 +79,31 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
+### Caterpillar code is embedded into a host
+
+Caterpillar code does not execute I/O operations directly. Whenever it needs to
+do something that affects the outside world, it triggers an effect. That effect
+is executed by a platform-specific piece of code called the "host", which then
+passes the result back to Caterpillar.
+
+At this point, this is just an implementation detail, but I hope to use this
+concept to realize a number of benefits in the future: Mainly to represent all
+I/O resources as values provided by the host, making Caterpillar code sandboxed
+by default, and allowing side effects to be tracked through those values, making
+all functions pure.
+
+A lot of this is inspired by the "platform" concept in [Roc].
+
+The following daily thoughts provide more context:
+[2024-07-02](https://capi.hannobraun.com/daily/2024-07-02),
+[2024-07-03](https://capi.hannobraun.com/daily/2024-07-03),
+[2024-07-04](https://capi.hannobraun.com/daily/2024-07-04),
+[2024-07-05](https://capi.hannobraun.com/daily/2024-07-05),
+[2024-07-06](https://capi.hannobraun.com/daily/2024-07-06),
+[2024-07-07](https://capi.hannobraun.com/daily/2024-07-07)
+
+[Roc]: https://www.roc-lang.org/
+
 ### Postfix operators
 
 The language uses postfix operators, like `arg1 arg2 do_thing` or `1 2 +`, as
