@@ -177,6 +177,29 @@ mod tests {
     }
 
     #[test]
+    fn builtin_call() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.w("builtin");
+        });
+
+        let mut fragments = script_to_fragments(script);
+
+        let fragments = fragments
+            .by_function
+            .remove(0)
+            .fragments
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            fragments,
+            vec![FragmentPayload::BuiltinCall {
+                name: String::from("builtin")
+            }]
+        );
+    }
+
+    #[test]
     fn function_call() {
         let mut script = Script::default();
         script.function("f", [], |_| {});
