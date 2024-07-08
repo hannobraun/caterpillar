@@ -77,6 +77,13 @@ impl Compiler<'_> {
                 );
             }
             FragmentPayload::Comment { .. } => {}
+            FragmentPayload::FunctionCall { name } => {
+                self.generate(
+                    Instruction::CallFunction { name },
+                    fragment_id,
+                    output,
+                );
+            }
             FragmentPayload::Value(value) => {
                 self.generate(Instruction::Push { value }, fragment_id, output);
             }

@@ -6,6 +6,7 @@ use capi_process::Value;
 pub enum FragmentPayload {
     Binding { names: Vec<String> },
     Comment { text: String },
+    FunctionCall { name: String },
     Value(Value),
     Word { name: String },
 }
@@ -23,6 +24,10 @@ impl FragmentPayload {
             Self::Comment { text } => {
                 hasher.update(b"comment");
                 hasher.update(text.as_bytes());
+            }
+            Self::FunctionCall { name } => {
+                hasher.update(b"function call");
+                hasher.update(name.as_bytes());
             }
             Self::Value(value) => {
                 hasher.update(b"value");
@@ -47,6 +52,7 @@ impl fmt::Display for FragmentPayload {
                 writeln!(f, " .")
             }
             Self::Comment { text } => writeln!(f, "# {text}"),
+            Self::FunctionCall { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
             Self::Word { name } => write!(f, "{name}"),
         }
