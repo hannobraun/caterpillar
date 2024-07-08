@@ -8,6 +8,20 @@ pub struct Fragments {
     pub by_function: Vec<Function>,
 }
 
+impl Fragments {
+    pub fn find_function(&self, fragment_id: &FragmentId) -> Option<&Function> {
+        for function in &self.by_function {
+            for fragment in function.fragments.clone() {
+                if &fragment.id() == fragment_id {
+                    return Some(function);
+                }
+            }
+        }
+
+        None
+    }
+}
+
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
