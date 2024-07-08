@@ -94,29 +94,11 @@ impl FragmentAddress {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct FragmentId {
     pub hash: blake3::Hash,
-}
-
-impl<'de> serde::Deserialize<'de> for FragmentId {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let bytes = <[u8; 32]>::deserialize(deserializer)?;
-        let hash = blake3::Hash::from_bytes(bytes);
-        Ok(Self { hash })
-    }
-}
-
-impl serde::Serialize for FragmentId {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        self.hash.as_bytes().serialize(serializer)
-    }
 }
 
 impl Ord for FragmentId {
