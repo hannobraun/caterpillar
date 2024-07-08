@@ -8,11 +8,10 @@ pub fn compile(
     crate::repr::fragments::Fragments,
     capi_process::Bytecode,
     crate::source_map::SourceMap,
-    crate::source_map::SourceMap2,
 ) {
     let fragments = stages::syntax_to_fragments(script);
-    let (bytecode, source_map, source_map_2) =
+    let (bytecode, source_map, _) =
         stages::fragments_to_bytecode(fragments.clone());
 
-    (fragments, bytecode, source_map, source_map_2)
+    (fragments, bytecode, source_map)
 }
