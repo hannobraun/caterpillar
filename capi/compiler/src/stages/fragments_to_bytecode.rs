@@ -74,6 +74,13 @@ impl Compiler<'_> {
                     output,
                 );
             }
+            FragmentPayload::BindingEvaluation { name } => {
+                self.generate(
+                    Instruction::BindingEvaluate { name },
+                    fragment_id,
+                    output,
+                );
+            }
             FragmentPayload::Comment { .. } => {}
             FragmentPayload::FunctionCall { name } => {
                 self.generate(

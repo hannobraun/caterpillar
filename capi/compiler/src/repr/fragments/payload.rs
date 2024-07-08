@@ -5,6 +5,7 @@ use capi_process::Value;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
     BindingDefinitions { names: Vec<String> },
+    BindingEvaluation { name: String },
     Comment { text: String },
     FunctionCall { name: String },
     Value(Value),
@@ -20,6 +21,10 @@ impl FragmentPayload {
                 for name in names {
                     hasher.update(name.as_bytes());
                 }
+            }
+            Self::BindingEvaluation { name } => {
+                hasher.update(b"binding evaluation");
+                hasher.update(name.as_bytes());
             }
             Self::Comment { text } => {
                 hasher.update(b"comment");
@@ -51,6 +56,7 @@ impl fmt::Display for FragmentPayload {
                 }
                 writeln!(f, " .")
             }
+            Self::BindingEvaluation { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::FunctionCall { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
