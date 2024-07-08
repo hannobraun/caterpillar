@@ -1,9 +1,9 @@
 mod builder;
 mod expression;
-mod functions;
+mod function;
 mod script;
 
 pub use self::{
-    builder::SyntaxBuilder, expression::Expression, functions::Function,
+    builder::SyntaxBuilder, expression::Expression, function::Function,
     script::Script,
 };
