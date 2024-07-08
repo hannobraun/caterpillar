@@ -7,20 +7,20 @@ use capi_process::Value;
 
 use super::syntax::Location;
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     pub functions: BTreeSet<String>,
     pub by_function: Vec<Function>,
 }
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
     pub fragments: FunctionFragments,
 }
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FunctionFragments {
     first: Option<FragmentId>,
     inner: FunctionFragmentsInner,
@@ -78,7 +78,7 @@ impl PartialOrd for FragmentId {
     }
 }
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
     pub address: FragmentAddress,
     pub payload: FragmentPayload,
@@ -98,7 +98,7 @@ impl Fragment {
     }
 }
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FragmentAddress {
     pub function: String,
     pub next: Option<FragmentId>,
@@ -113,7 +113,7 @@ impl FragmentAddress {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
     Binding { names: Vec<String> },
     Comment { text: String },
