@@ -103,8 +103,8 @@ impl Compiler<'_> {
 
 fn word_to_instruction(word: String) -> Instruction {
     // Here we check for special built-in functions that are implemented
-    // differently, without making sure anywhere, that its name doesn't conflict
-    // with any user-defined functions.
+    // differently, without making sure anywhere, that their name doesn't
+    // conflict with any user-defined functions.
     //
     // I think it's fine for now. This seems like a temporary hack anyway, while
     // the language is not powerful enough to support an actual `if`.
