@@ -5,7 +5,7 @@ use capi_compiler::{
 use capi_process::{EvaluatorEffect, Location, Process};
 
 #[derive(Clone, Eq, PartialEq)]
-pub struct Expression {
+pub struct Fragment {
     pub payload: FragmentPayload,
     pub location: Option<Location>,
     pub has_durable_breakpoint: bool,
@@ -14,7 +14,7 @@ pub struct Expression {
     pub effect: Option<EvaluatorEffect>,
 }
 
-impl Expression {
+impl Fragment {
     pub fn new(
         syntax_location: syntax::Location,
         payload: FragmentPayload,

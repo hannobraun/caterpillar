@@ -7,12 +7,12 @@ use capi_compiler::{
 };
 use capi_process::Process;
 
-use super::Expression;
+use super::Fragment;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
-    pub expressions: Vec<Expression>,
+    pub expressions: Vec<Fragment>,
 }
 
 impl Function {
@@ -40,12 +40,7 @@ impl Function {
                     }
                 };
 
-                Expression::new(
-                    expression.location,
-                    payload,
-                    source_map,
-                    process,
-                )
+                Fragment::new(expression.location, payload, source_map, process)
             })
             .collect();
 

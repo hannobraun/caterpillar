@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    model::{Expression, Function},
+    model::{Fragment, Function},
     ui::{send_command, CommandsTx},
 };
 
@@ -39,10 +39,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
 }
 
 #[component]
-pub fn Expression(
-    expression: Expression,
-    commands: CommandsTx,
-) -> impl IntoView {
+pub fn Expression(expression: Fragment, commands: CommandsTx) -> impl IntoView {
     let mut class_outer = String::from("py-1");
     if expression.has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
