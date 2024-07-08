@@ -12,7 +12,7 @@ use crate::{
 
 #[component]
 pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
-    let expressions = function
+    let fragments = function
         .fragments
         .into_iter()
         .map(|expression| {
@@ -32,7 +32,7 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
                 {function.name}:
             </div>
             <ol>
-                {expressions}
+                {fragments}
             </ol>
         </div>
     }
