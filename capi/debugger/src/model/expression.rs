@@ -16,11 +16,12 @@ pub struct Expression {
 
 impl Expression {
     pub fn new(
-        expression: syntax::Expression,
+        syntax_location: syntax::Location,
+        kind: ExpressionKind,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let location = source_map.syntax_to_runtime(&expression.location);
+        let location = source_map.syntax_to_runtime(&syntax_location);
 
         let has_durable_breakpoint = if let Some(location) = &location {
             process.breakpoints().durable_at(location)
@@ -28,8 +29,7 @@ impl Expression {
             false
         };
 
-        let is_comment =
-            matches!(expression.kind, ExpressionKind::Comment { .. });
+        let is_comment = matches!(kind, ExpressionKind::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
@@ -37,7 +37,7 @@ impl Expression {
                     &process.state().most_recent_step().unwrap(),
                 );
 
-                if effect_location == expression.location {
+                if effect_location == syntax_location {
                     Some(effect.clone())
                 } else {
                     None
@@ -51,7 +51,7 @@ impl Expression {
         };
 
         Self {
-            kind: expression.kind,
+            kind,
             location,
             has_durable_breakpoint,
             is_comment,

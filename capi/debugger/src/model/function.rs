@@ -18,7 +18,14 @@ impl Function {
         let expressions = function
             .expressions
             .into_iter()
-            .map(|expression| Expression::new(expression, source_map, process))
+            .map(|expression| {
+                Expression::new(
+                    expression.location,
+                    expression.kind,
+                    source_map,
+                    process,
+                )
+            })
             .collect();
 
         Self {
