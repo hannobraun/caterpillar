@@ -1,5 +1,3 @@
-use std::collections::BTreeSet;
-
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
@@ -41,22 +39,16 @@ impl Compiler<'_> {
         args: Vec<String>,
         fragments: FunctionFragments,
     ) {
-        let mut bindings = args.iter().cloned().collect();
         let mut output = Function::new(name.clone(), args);
 
         for fragment in fragments {
-            self.compile_fragment(fragment, &mut bindings, &mut output);
+            self.compile_fragment(fragment, &mut output);
         }
 
         self.bytecode.functions.insert(name, output);
     }
 
-    fn compile_fragment(
-        &mut self,
-        fragment: Fragment,
-        _: &mut BTreeSet<String>,
-        output: &mut Function,
-    ) {
+    fn compile_fragment(&mut self, fragment: Fragment, output: &mut Function) {
         let fragment_id = fragment.id();
 
         match fragment.payload {
