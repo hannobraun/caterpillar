@@ -60,11 +60,10 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let script = str::from_utf8(&script).unwrap();
     let script = ron::from_str(script).unwrap();
 
-    let (fragments, bytecode, source_map, source_map_2) = compile(script);
+    let (fragments, bytecode, source_map, _) = compile(script);
     let source_code = SourceCode {
         fragments,
         source_map,
-        source_map_2,
     };
 
     Ok((source_code, bytecode))

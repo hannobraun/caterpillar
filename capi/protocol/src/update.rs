@@ -1,7 +1,4 @@
-use capi_compiler::{
-    repr::fragments::Fragments,
-    source_map::{SourceMap, SourceMap2},
-};
+use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
 use capi_process::Process;
 
 use crate::memory::Memory;
@@ -29,7 +26,6 @@ impl Update {
 pub struct SourceCode {
     pub fragments: Fragments,
     pub source_map: SourceMap,
-    pub source_map_2: SourceMap2,
 }
 
 pub type SerializedUpdate = Vec<u8>;
