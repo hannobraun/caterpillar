@@ -96,8 +96,8 @@ fn compile_expression(
                 FragmentPayload::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
-                // given how built-in functions are currently defined, it's not
-                // practical to implement.
+                // given how built-in functions are currently defined, that's
+                // not practical to implement.
                 FragmentPayload::BuiltinCall { name }
             }
         }
