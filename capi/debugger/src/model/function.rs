@@ -17,10 +17,10 @@ impl Function {
     ) -> Self {
         let fragments = function
             .fragments
-            .map(|expression| {
+            .map(|fragment| {
                 Fragment::new(
-                    expression.location,
-                    expression.payload,
+                    fragment.location,
+                    fragment.payload,
                     source_map,
                     process,
                 )
