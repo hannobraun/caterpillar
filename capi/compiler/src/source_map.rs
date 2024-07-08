@@ -38,9 +38,9 @@ impl SourceMap {
     /// Can return `None`, as comments have no mapping to runtime locations.
     pub fn fragment_to_instruction(
         &self,
-        syntax: &FragmentId,
+        fragment: &FragmentId,
     ) -> Option<RuntimeLocation> {
-        self.fragment_to_instruction.get(syntax).cloned()
+        self.fragment_to_instruction.get(fragment).cloned()
     }
 }
 
