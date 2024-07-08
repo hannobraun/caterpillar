@@ -91,4 +91,31 @@ mod tests {
             ]
         );
     }
+
+    #[test]
+    fn duplicate_payload() {
+        let mut script = Script::default();
+        script.function("two", [], |s| {
+            s.v(1).v(1).w("add");
+        });
+
+        let mut fragments = syntax_to_fragments(script);
+
+        let fragments = fragments
+            .by_function
+            .remove(0)
+            .fragments
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            fragments,
+            vec![
+                FragmentPayload::Value(Value(1)),
+                FragmentPayload::Value(Value(1)),
+                FragmentPayload::Word {
+                    name: String::from("add")
+                }
+            ]
+        );
+    }
 }

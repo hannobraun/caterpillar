@@ -69,7 +69,10 @@ pub struct Fragment {
 impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
+
+        self.address.hash(&mut hasher);
         self.payload.hash(&mut hasher);
+
         let hash = hasher.finalize();
 
         FragmentId { hash }
@@ -80,6 +83,15 @@ impl Fragment {
 pub struct FragmentAddress {
     pub function: String,
     pub next: Option<FragmentId>,
+}
+
+impl FragmentAddress {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(self.function.as_bytes());
+        if let Some(next) = self.next {
+            hasher.update(next.hash.as_bytes());
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
