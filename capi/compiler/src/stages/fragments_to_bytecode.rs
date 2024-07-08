@@ -78,7 +78,26 @@ impl Compiler<'_> {
                 self.generate(Instruction::Push { value }, fragment_id, output);
             }
             FragmentPayload::Word { name } => {
-                let instruction = word_to_instruction(name);
+                let instruction = {
+                    // Here we check for special built-in functions that are
+                    // implemented differently, without making sure anywhere,
+                    // that their name doesn't conflict with any user-defined
+                    // functions.
+                    //
+                    // I think it's fine for now. This seems like a temporary
+                    // hack anyway, while the language is not powerful enough
+                    // to support real conditionals.
+                    if name == "return_if_non_zero" {
+                        Instruction::ReturnIfNonZero
+                    } else if name == "return_if_zero" {
+                        Instruction::ReturnIfZero
+                    } else {
+                        // This doesn't check whether the built-in function
+                        // exists, and given how built-in functions are
+                        // currently defined, it's not practical to implement.
+                        Instruction::CallBuiltin { name }
+                    }
+                };
                 self.generate(instruction, fragment_id, output);
             }
         };
@@ -99,24 +118,4 @@ impl Compiler<'_> {
         self.source_map
             .define_mapping(runtime_location.clone(), fragment_id);
     }
-}
-
-fn word_to_instruction(word: String) -> Instruction {
-    // Here we check for special built-in functions that are implemented
-    // differently, without making sure anywhere, that their name doesn't
-    // conflict with any user-defined functions.
-    //
-    // I think it's fine for now. This seems like a temporary hack anyway, while
-    // the language is not powerful enough to support real conditionals.
-    if word == "return_if_non_zero" {
-        return Instruction::ReturnIfNonZero;
-    }
-    if word == "return_if_zero" {
-        return Instruction::ReturnIfZero;
-    }
-
-    // This doesn't check whether the built-in function exists, and given how
-    // built-in functions are currently defined, it's not practical to
-    // implement.
-    Instruction::CallBuiltin { name: word }
 }
