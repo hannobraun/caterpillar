@@ -4,7 +4,14 @@ pub mod stages;
 
 pub fn compile(
     script: &crate::repr::syntax::Script,
-) -> (capi_process::Bytecode, crate::source_map::SourceMap) {
+) -> (
+    crate::repr::fragments::Fragments,
+    capi_process::Bytecode,
+    crate::source_map::SourceMap,
+) {
     let fragments = stages::syntax_to_fragments(script.clone());
-    stages::fragments_to_bytecode(fragments)
+    let (bytecode, source_map) =
+        stages::fragments_to_bytecode(fragments.clone());
+
+    (fragments, bytecode, source_map)
 }
