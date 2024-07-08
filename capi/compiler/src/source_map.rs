@@ -16,10 +16,11 @@ impl SourceMap {
     pub fn define_mapping(
         &mut self,
         runtime: RuntimeLocation,
-        syntax: FragmentId,
+        fragment: FragmentId,
     ) {
-        self.instruction_to_fragment.insert(runtime.clone(), syntax);
-        self.fragment_to_instruction.insert(syntax, runtime);
+        self.instruction_to_fragment
+            .insert(runtime.clone(), fragment);
+        self.fragment_to_instruction.insert(fragment, runtime);
     }
 
     pub fn runtime_to_syntax(&self, runtime: &RuntimeLocation) -> FragmentId {
