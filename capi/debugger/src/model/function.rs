@@ -3,7 +3,7 @@ use capi_compiler::{
         fragments::FragmentPayload,
         syntax::{self, ExpressionKind},
     },
-    source_map::SourceMap,
+    source_map::SourceMap2,
 };
 use capi_process::Process;
 
@@ -18,7 +18,7 @@ pub struct Function {
 impl Function {
     pub fn new(
         function: syntax::Function,
-        source_map: &SourceMap,
+        source_map: &SourceMap2,
         process: &Process,
     ) -> Self {
         let fragments = function

@@ -48,7 +48,11 @@ impl ActiveFunctions {
                     .get_from_location(syntax_location)
                     .cloned()?;
 
-                Some(Function::new(function, &source_code.source_map, process))
+                Some(Function::new(
+                    function,
+                    &source_code.source_map_2,
+                    process,
+                ))
             })
             .collect();
 
