@@ -90,7 +90,7 @@ pub fn Expression(
         leptos::spawn_local(send_command(command, commands.clone()));
     };
 
-    let expression = format!("{}", expression.kind);
+    let expression = format!("{}", expression.payload);
 
     view! {
         <span>
