@@ -38,7 +38,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 }
 
 fn compile_function(
-    function_name: String,
+    name: String,
     expressions: Vec<Expression>,
     functions: &BTreeSet<String>,
 ) -> FunctionFragments {
@@ -49,7 +49,7 @@ fn compile_function(
         let fragment = compile_expression(
             expression,
             next_fragment.take(),
-            function_name.clone(),
+            name.clone(),
             functions,
         );
         next_fragment = Some(fragment.id());
