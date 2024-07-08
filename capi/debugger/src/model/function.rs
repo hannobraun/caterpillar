@@ -1,7 +1,4 @@
-use capi_compiler::{
-    repr::fragments,
-    source_map::{SourceMap, SourceMap2},
-};
+use capi_compiler::{repr::fragments, source_map::SourceMap};
 use capi_process::Process;
 
 use super::FragmentModel;
@@ -16,7 +13,6 @@ impl Function {
     pub fn new(
         function: fragments::Function,
         source_map: &SourceMap,
-        _: &SourceMap2,
         process: &Process,
     ) -> Self {
         let fragments = function
