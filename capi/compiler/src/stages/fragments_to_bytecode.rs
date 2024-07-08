@@ -14,7 +14,6 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
-        functions: &fragments.functions,
         bytecode: &mut bytecode,
         source_map: &mut source_map,
     };
@@ -31,7 +30,6 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 }
 
 struct Compiler<'r> {
-    functions: &'r BTreeSet<String>,
     bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
 }
@@ -88,8 +86,7 @@ impl Compiler<'_> {
                 self.generate(Instruction::Push { value }, fragment_id, output);
             }
             FragmentPayload::Word { name } => {
-                let instruction =
-                    word_to_instruction(name, bindings, self.functions);
+                let instruction = word_to_instruction(name, bindings);
                 self.generate(instruction, fragment_id, output);
             }
         };
@@ -115,7 +112,6 @@ impl Compiler<'_> {
 fn word_to_instruction(
     word: String,
     bindings: &BTreeSet<String>,
-    _: &BTreeSet<String>,
 ) -> Instruction {
     // Here we check for special built-in functions that are implemented
     // differently, without making sure anywhere, that its name doesn't conflict
