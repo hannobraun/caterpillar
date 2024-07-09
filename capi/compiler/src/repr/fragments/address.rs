@@ -2,13 +2,13 @@ use super::FragmentId;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FragmentAddress {
-    pub function: FragmentAddressParent,
+    pub parent: FragmentAddressParent,
     pub next: Option<FragmentId>,
 }
 
 impl FragmentAddress {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
-        let FragmentAddressParent::Function { name } = &self.function;
+        let FragmentAddressParent::Function { name } = &self.parent;
         hasher.update(name.as_bytes());
         if let Some(next) = self.next {
             hasher.update(next.hash.as_bytes());

@@ -110,7 +110,7 @@ fn compile_expression(
 
     Fragment {
         address: FragmentAddress {
-            function: FragmentAddressParent::Function {
+            parent: FragmentAddressParent::Function {
                 name: function_name,
             },
             next: next_fragment,
