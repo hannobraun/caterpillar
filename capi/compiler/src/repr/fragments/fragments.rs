@@ -22,6 +22,8 @@ impl Fragments {
     }
 }
 
+type FragmentMap = BTreeMap<FragmentId, Fragment>;
+
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
@@ -62,5 +64,3 @@ impl Iterator for FunctionFragments {
         self.remove_first()
     }
 }
-
-type FragmentMap = BTreeMap<FragmentId, Fragment>;
