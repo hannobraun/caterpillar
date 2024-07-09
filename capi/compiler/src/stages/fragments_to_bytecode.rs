@@ -1,9 +1,7 @@
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
-    repr::fragments::{
-        Fragment, FragmentId, FragmentPayload, Fragments, FunctionFragments,
-    },
+    repr::fragments::{Fragment, FragmentId, FragmentPayload, Fragments},
     source_map::SourceMap,
 };
 
@@ -16,11 +14,11 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         source_map: &mut source_map,
     };
 
-    for function in fragments.by_function {
+    for mut function in fragments.by_function {
         compiler.compile_function(
             function.name,
             function.args,
-            function.fragments,
+            function.fragments.drain(),
         );
     }
 
@@ -37,11 +35,11 @@ impl Compiler<'_> {
         &mut self,
         name: String,
         args: Vec<String>,
-        mut fragments: FunctionFragments,
+        fragments: impl IntoIterator<Item = Fragment>,
     ) {
         let mut output = Function::new(name.clone(), args);
 
-        for fragment in fragments.drain() {
+        for fragment in fragments {
             self.compile_fragment(fragment, &mut output);
         }
 
