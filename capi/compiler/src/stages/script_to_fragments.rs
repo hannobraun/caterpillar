@@ -19,7 +19,9 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         functions.insert(function.name.clone());
     }
 
-    let mut fragments = BTreeMap::new();
+    let mut fragments = FragmentMap {
+        inner: BTreeMap::new(),
+    };
     let mut by_function = Vec::new();
 
     for function in script.functions {
@@ -63,7 +65,9 @@ fn compile_function(
         }
     }
 
-    let mut function_fragments = BTreeMap::new();
+    let mut function_fragments = FragmentMap {
+        inner: BTreeMap::new(),
+    };
     let mut next_fragment = None;
 
     for expression in body.into_iter().rev() {
@@ -75,8 +79,10 @@ fn compile_function(
             functions,
         );
         next_fragment = Some(fragment.id());
-        function_fragments.insert(fragment.id(), fragment.clone());
-        fragments.insert(fragment.id(), fragment);
+        function_fragments
+            .inner
+            .insert(fragment.id(), fragment.clone());
+        fragments.inner.insert(fragment.id(), fragment);
     }
 
     let first_fragment = next_fragment;
