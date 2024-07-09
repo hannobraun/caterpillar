@@ -57,7 +57,7 @@ fn compile_function(
         }
     }
 
-    let mut fragments = BTreeMap::new();
+    let mut function_fragments = BTreeMap::new();
     let mut next_fragment = None;
 
     for expression in body.into_iter().rev() {
@@ -69,11 +69,11 @@ fn compile_function(
             functions,
         );
         next_fragment = Some(fragment.id());
-        fragments.insert(fragment.id(), fragment);
+        function_fragments.insert(fragment.id(), fragment);
     }
 
     let first_fragment = next_fragment;
-    FunctionFragments::new(first_fragment, fragments)
+    FunctionFragments::new(first_fragment, function_fragments)
 }
 
 fn compile_expression(
