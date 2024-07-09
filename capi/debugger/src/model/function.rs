@@ -11,7 +11,7 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        function: fragments::Function,
+        mut function: fragments::Function,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {

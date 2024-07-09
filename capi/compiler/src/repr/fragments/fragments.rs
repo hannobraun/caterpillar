@@ -65,7 +65,7 @@ impl FunctionFragments {
         Some(first)
     }
 
-    pub fn drain(mut self) -> impl Iterator<Item = Fragment> {
+    pub fn drain(&mut self) -> impl Iterator<Item = Fragment> + '_ {
         iter::from_fn(move || self.remove_first())
     }
 }

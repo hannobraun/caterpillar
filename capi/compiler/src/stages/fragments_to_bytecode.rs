@@ -37,7 +37,7 @@ impl Compiler<'_> {
         &mut self,
         name: String,
         args: Vec<String>,
-        fragments: FunctionFragments,
+        mut fragments: FunctionFragments,
     ) {
         let mut output = Function::new(name.clone(), args);
 
