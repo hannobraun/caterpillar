@@ -127,6 +127,13 @@ address {
     padding: 0.125rem;
 }
 
+/* Applies to code blocks created with ```. */
+.prose pre:has(> code) {
+    /* Tailwind's `bg-neutral-200` */
+    background-color: rgb(229, 229, 229);
+    padding: 0.25rem;
+}
+
 .prose img {
     max-width: 100%;
 }
