@@ -31,6 +31,22 @@ impl FragmentMap {
     pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
         self.inner.remove(id)
     }
+
+    pub fn drain_from(
+        &mut self,
+        id: FragmentId,
+    ) -> impl Iterator<Item = Fragment> + '_ {
+        let mut next = Some(id);
+
+        iter::from_fn(move || {
+            let id = next.take()?;
+            let fragment = self.remove(&id)?;
+
+            next = fragment.address.next;
+
+            Some(fragment)
+        })
+    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -53,19 +69,12 @@ impl FunctionFragments {
 }
 
 impl FunctionFragments {
-    pub fn remove_first(&mut self) -> Option<Fragment> {
-        let first = self.first.take()?;
-        let first = self
-            .inner
-            .remove(&first)
-            .expect("`self.first` must be present in `self.inner`");
-
-        self.first = first.address.next;
-
-        Some(first)
-    }
-
-    pub fn drain(&mut self) -> impl Iterator<Item = Fragment> + '_ {
-        iter::from_fn(move || self.remove_first())
+    pub fn drain(&mut self) -> Box<dyn Iterator<Item = Fragment> + '_> {
+        self.first
+            .map(|id| {
+                Box::new(self.inner.drain_from(id))
+                    as Box<dyn Iterator<Item = Fragment>>
+            })
+            .unwrap_or_else(|| Box::new(iter::empty()))
     }
 }
