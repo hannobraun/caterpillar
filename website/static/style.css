@@ -120,7 +120,8 @@ address {
     text-decoration-line: underline;
 }
 
-.prose code {
+/* Applies to code produced by `code`, but not whole code block. */
+.prose p>code {
     /* Tailwind's `bg-neutral-200` */
     background-color: rgb(229, 229, 229);
     padding: 0.125rem;
