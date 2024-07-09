@@ -4,7 +4,7 @@ use super::{Fragment, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
-    pub inner: BTreeMap<FragmentId, Fragment>,
+    pub inner: FragmentMap,
     pub by_function: Vec<Function>,
 }
 
@@ -22,7 +22,7 @@ impl Fragments {
     }
 }
 
-type FragmentMap = BTreeMap<FragmentId, Fragment>;
+pub type FragmentMap = BTreeMap<FragmentId, Fragment>;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {

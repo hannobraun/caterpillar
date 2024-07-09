@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::repr::{
     fragments::{
         Fragment, FragmentAddress, FragmentAddressParent, FragmentId,
-        FragmentPayload, Fragments, Function, FunctionFragments,
+        FragmentMap, FragmentPayload, Fragments, Function, FunctionFragments,
     },
     syntax::{Expression, Script},
 };
@@ -48,7 +48,7 @@ fn compile_function(
     args: &[String],
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
-    fragments: &mut BTreeMap<FragmentId, Fragment>,
+    fragments: &mut FragmentMap,
 ) -> FunctionFragments {
     let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
 
