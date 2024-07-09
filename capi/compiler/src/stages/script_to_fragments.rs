@@ -19,6 +19,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         functions.insert(function.name.clone());
     }
 
+    let mut fragments = BTreeMap::new();
     let mut by_function = Vec::new();
 
     for function in script.functions {
@@ -27,6 +28,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
             &function.args,
             function.expressions,
             &functions,
+            &mut fragments,
         );
         by_function.push(Function {
             name: function.name,
@@ -35,7 +37,10 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         });
     }
 
-    Fragments { by_function }
+    Fragments {
+        inner: fragments,
+        by_function,
+    }
 }
 
 fn compile_function(
@@ -43,6 +48,7 @@ fn compile_function(
     args: &[String],
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
+    fragments: &mut BTreeMap<FragmentId, Fragment>,
 ) -> FunctionFragments {
     let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
 
@@ -69,7 +75,8 @@ fn compile_function(
             functions,
         );
         next_fragment = Some(fragment.id());
-        function_fragments.insert(fragment.id(), fragment);
+        function_fragments.insert(fragment.id(), fragment.clone());
+        fragments.insert(fragment.id(), fragment);
     }
 
     let first_fragment = next_fragment;
