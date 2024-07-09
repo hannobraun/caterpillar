@@ -2,8 +2,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentAddress, FragmentId, FragmentPayload, Fragments,
-        Function, FunctionFragments,
+        Fragment, FragmentAddress, FragmentAddressParent, FragmentId,
+        FragmentPayload, Fragments, Function, FunctionFragments,
     },
     syntax::{Expression, Script},
 };
@@ -110,7 +110,9 @@ fn compile_expression(
 
     Fragment {
         address: FragmentAddress {
-            function: function_name,
+            function: FragmentAddressParent::Function {
+                name: function_name,
+            },
             next: next_fragment,
         },
         payload,
