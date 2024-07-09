@@ -155,6 +155,7 @@ mod tests {
             .by_function
             .remove(0)
             .fragments
+            .drain()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>();
         assert_eq!(
@@ -178,6 +179,7 @@ mod tests {
             .by_function
             .remove(0)
             .fragments
+            .drain()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>()
             .last()
@@ -204,6 +206,7 @@ mod tests {
             .by_function
             .remove(0)
             .fragments
+            .drain()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>();
         assert_eq!(
@@ -228,6 +231,7 @@ mod tests {
             .by_function
             .remove(1)
             .fragments
+            .drain()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>();
         assert_eq!(
@@ -251,6 +255,7 @@ mod tests {
             .by_function
             .remove(0)
             .fragments
+            .drain()
             .map(|fragment| fragment.payload)
             .collect::<Vec<_>>();
         assert_eq!(

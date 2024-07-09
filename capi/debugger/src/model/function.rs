@@ -17,6 +17,7 @@ impl Function {
     ) -> Self {
         let fragments = function
             .fragments
+            .drain()
             .map(|fragment| FragmentModel::new(fragment, source_map, process))
             .collect();
 

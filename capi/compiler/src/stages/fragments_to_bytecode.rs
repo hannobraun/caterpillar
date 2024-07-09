@@ -41,7 +41,7 @@ impl Compiler<'_> {
     ) {
         let mut output = Function::new(name.clone(), args);
 
-        for fragment in fragments {
+        for fragment in fragments.drain() {
             self.compile_fragment(fragment, &mut output);
         }
 

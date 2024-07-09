@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, iter};
 
 use super::{Fragment, FragmentId};
 
@@ -11,7 +11,7 @@ pub struct Fragments {
 impl Fragments {
     pub fn find_function(&self, fragment_id: &FragmentId) -> Option<&Function> {
         for function in &self.by_function {
-            for fragment in function.fragments.clone() {
+            for fragment in function.fragments.clone().drain() {
                 if &fragment.id() == fragment_id {
                     return Some(function);
                 }
@@ -64,12 +64,8 @@ impl FunctionFragments {
 
         Some(first)
     }
-}
 
-impl Iterator for FunctionFragments {
-    type Item = Fragment;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.remove_first()
+    pub fn drain(mut self) -> impl Iterator<Item = Fragment> {
+        iter::from_fn(move || self.remove_first())
     }
 }
