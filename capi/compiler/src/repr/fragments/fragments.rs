@@ -32,14 +32,11 @@ pub struct Function {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct FunctionFragments {
     first: Option<FragmentId>,
-    inner: FunctionFragmentsInner,
+    inner: FragmentMap,
 }
 
 impl FunctionFragments {
-    pub fn new(
-        first: Option<FragmentId>,
-        inner: FunctionFragmentsInner,
-    ) -> Self {
+    pub fn new(first: Option<FragmentId>, inner: FragmentMap) -> Self {
         Self { first, inner }
     }
 }
@@ -66,4 +63,4 @@ impl Iterator for FunctionFragments {
     }
 }
 
-type FunctionFragmentsInner = BTreeMap<FragmentId, Fragment>;
+type FragmentMap = BTreeMap<FragmentId, Fragment>;
