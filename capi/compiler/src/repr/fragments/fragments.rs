@@ -27,6 +27,12 @@ pub struct FragmentMap {
     pub inner: BTreeMap<FragmentId, Fragment>,
 }
 
+impl FragmentMap {
+    pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
+        self.inner.remove(id)
+    }
+}
+
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
@@ -50,7 +56,6 @@ impl FunctionFragments {
     pub fn remove_first(&mut self) -> Option<Fragment> {
         let first = self.first.take()?;
         let first = self
-            .inner
             .inner
             .remove(&first)
             .expect("`self.first` must be present in `self.inner`");
