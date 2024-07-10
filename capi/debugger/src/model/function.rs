@@ -15,9 +15,9 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let mut fragments = Vec::new();
+        let mut fragment_models = Vec::new();
 
-        fragments.extend(
+        fragment_models.extend(
             function.fragments.drain().map(|fragment| {
                 FragmentModel::new(fragment, source_map, process)
             }),
@@ -25,7 +25,7 @@ impl Function {
 
         Self {
             name: function.name,
-            fragments,
+            fragments: fragment_models,
         }
     }
 }
