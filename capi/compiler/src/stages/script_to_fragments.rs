@@ -242,14 +242,14 @@ mod tests {
     fn body(mut fragments: Fragments) -> Vec<FragmentPayload> {
         let mut body = Vec::new();
 
-        body.extend(
-            fragments
-                .by_function
-                .remove(0)
-                .fragments
-                .drain()
-                .map(|fragment| fragment.payload),
-        );
+        if let Some(start) = fragments.by_function.remove(0).start {
+            body.extend(
+                fragments
+                    .inner
+                    .drain_from(start)
+                    .map(|fragment| fragment.payload),
+            )
+        }
 
         body
     }
