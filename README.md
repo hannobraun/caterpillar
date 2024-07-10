@@ -1,19 +1,15 @@
 # Caterpillar
 
-## Vision
+Caterpillar is a **programming language** with a dual goal:
 
-Caterpillar aims to create a better way to develop software. It is a
-**programming language** with a dual goal:
-
-- Create an **immediate connection to the code you're writing**, to give you an
-  intuitive understanding of what it's doing.
-- Bring this experience to many places: browsers, servers, desktops, phones,
+- To create an **immediate connection to the code** you're writing with
+  **interactive programming**.
+- To bring this experience to many places: browsers, servers, desktops, phones,
   watches, microcontrollers; CPUs and GPUs.
 
-Caterpillar aims to achieve this via **interactive programming**; the practice
-of directly manipulating your running program, instead of going through an
-extended loop of re-compiling, re-starting, then navigating to where you can
-test your change.
+Interactive programming is the practice of directly manipulating your running
+program, instead of going through an extended loop of re-compiling, re-starting,
+then navigating to where you can test your change.
 
 ## Status
 
