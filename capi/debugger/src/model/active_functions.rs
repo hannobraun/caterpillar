@@ -48,7 +48,12 @@ impl ActiveFunctions {
                     .find_function(&fragment_id)
                     .cloned()?;
 
-                Some(Function::new(function, &source_code.source_map, process))
+                Some(Function::new(
+                    function,
+                    &source_code.fragments,
+                    &source_code.source_map,
+                    process,
+                ))
             })
             .collect();
 

@@ -1,4 +1,7 @@
-use capi_compiler::{repr::fragments, source_map::SourceMap};
+use capi_compiler::{
+    repr::fragments::{self, Fragments},
+    source_map::SourceMap,
+};
 use capi_process::Process;
 
 use super::FragmentModel;
@@ -11,17 +14,20 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        mut function: fragments::Function,
+        function: fragments::Function,
+        fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
         let mut fragment_models = Vec::new();
 
-        fragment_models.extend(
-            function.fragments.drain().map(|fragment| {
-                FragmentModel::new(fragment, source_map, process)
-            }),
-        );
+        if let Some(start) = function.start {
+            fragment_models.extend(
+                fragments.inner.iter_from(start).cloned().map(|fragment| {
+                    FragmentModel::new(fragment, source_map, process)
+                }),
+            );
+        }
 
         Self {
             name: function.name,
