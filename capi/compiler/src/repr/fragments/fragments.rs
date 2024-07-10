@@ -49,6 +49,19 @@ impl FragmentMap {
             Some(fragment)
         })
     }
+
+    pub fn iter_from(&self, id: FragmentId) -> impl Iterator<Item = &Fragment> {
+        let mut next = Some(id);
+
+        iter::from_fn(move || {
+            let id = next.take()?;
+            let fragment = self.inner.get(&id)?;
+
+            next = fragment.address.next;
+
+            Some(fragment)
+        })
+    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
