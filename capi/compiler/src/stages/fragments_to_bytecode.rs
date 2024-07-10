@@ -1,3 +1,5 @@
+use std::iter;
+
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
@@ -5,7 +7,9 @@ use crate::{
     source_map::SourceMap,
 };
 
-pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+pub fn fragments_to_bytecode(
+    mut fragments: Fragments,
+) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
@@ -14,12 +18,20 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         source_map: &mut source_map,
     };
 
-    for mut function in fragments.by_function {
-        compiler.compile_function(
-            function.name,
-            function.args,
-            function.fragments.drain(),
-        );
+    for function in fragments.by_function {
+        if let Some(start) = function.start {
+            compiler.compile_function(
+                function.name,
+                function.args,
+                fragments.inner.drain_from(start),
+            );
+        } else {
+            compiler.compile_function(
+                function.name,
+                function.args,
+                iter::empty(),
+            );
+        }
     }
 
     (bytecode, source_map)
