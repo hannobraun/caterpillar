@@ -85,10 +85,9 @@ fn compile_function(
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    let first_fragment = next_fragment;
     (
-        first_fragment,
-        FunctionFragments::new(first_fragment, function_fragments),
+        next_fragment,
+        FunctionFragments::new(next_fragment, function_fragments),
     )
 }
 
