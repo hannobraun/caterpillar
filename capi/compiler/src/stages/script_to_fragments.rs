@@ -152,9 +152,9 @@ mod tests {
 
         let fragments = script_to_fragments(script);
 
-        let fragments = body(fragments);
+        let body = body(fragments);
         assert_eq!(
-            fragments,
+            body,
             vec![FragmentPayload::BindingEvaluation {
                 name: String::from("a")
             }]
@@ -188,9 +188,9 @@ mod tests {
 
         let fragments = script_to_fragments(script);
 
-        let fragments = body(fragments);
+        let body = body(fragments);
         assert_eq!(
-            fragments,
+            body,
             vec![FragmentPayload::BuiltinCall {
                 name: String::from("builtin")
             }]
@@ -207,9 +207,9 @@ mod tests {
 
         let fragments = script_to_fragments(script);
 
-        let fragments = body(fragments);
+        let body = body(fragments);
         assert_eq!(
-            fragments,
+            body,
             vec![FragmentPayload::FunctionCall {
                 name: String::from("g")
             }]
@@ -225,9 +225,9 @@ mod tests {
 
         let fragments = script_to_fragments(script);
 
-        let fragments = body(fragments);
+        let body = body(fragments);
         assert_eq!(
-            fragments,
+            body,
             vec![
                 FragmentPayload::Value(Value(1)),
                 FragmentPayload::Value(Value(1)),
