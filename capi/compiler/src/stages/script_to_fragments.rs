@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::repr::{
     fragments::{
         Fragment, FragmentAddress, FragmentAddressParent, FragmentId,
-        FragmentMap, FragmentPayload, Fragments, Function, FunctionFragments,
+        FragmentMap, FragmentPayload, Fragments, Function,
     },
     syntax::{Expression, Script},
 };
@@ -25,7 +25,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let (start, _) = compile_function(
+        let start = compile_function(
             function.name.clone(),
             &function.args,
             function.expressions,
@@ -51,7 +51,7 @@ fn compile_function(
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
-) -> (Option<FragmentId>, FunctionFragments) {
+) -> Option<FragmentId> {
     let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
 
     for expression in &body {
@@ -85,10 +85,7 @@ fn compile_function(
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    (
-        next_fragment,
-        FunctionFragments::new(next_fragment, function_fragments),
-    )
+    next_fragment
 }
 
 fn compile_expression(
