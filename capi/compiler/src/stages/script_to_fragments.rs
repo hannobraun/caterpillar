@@ -220,16 +220,16 @@ mod tests {
     #[test]
     fn function_call() {
         let mut script = Script::default();
-        script.function("f", [], |_| {});
-        script.function("g", [], |s| {
-            s.w("f");
+        script.function("f", [], |s| {
+            s.w("g");
         });
+        script.function("g", [], |_| {});
 
         let mut fragments = script_to_fragments(script);
 
         let fragments = fragments
             .by_function
-            .remove(1)
+            .remove(0)
             .fragments
             .drain()
             .map(|fragment| fragment.payload)
@@ -237,7 +237,7 @@ mod tests {
         assert_eq!(
             fragments,
             vec![FragmentPayload::FunctionCall {
-                name: String::from("f")
+                name: String::from("g")
             }]
         );
     }
