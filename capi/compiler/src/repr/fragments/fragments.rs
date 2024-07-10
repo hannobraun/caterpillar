@@ -70,26 +70,3 @@ pub struct Function {
     pub args: Vec<String>,
     pub start: Option<FragmentId>,
 }
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct FunctionFragments {
-    first: Option<FragmentId>,
-    inner: FragmentMap,
-}
-
-impl FunctionFragments {
-    pub fn new(first: Option<FragmentId>, inner: FragmentMap) -> Self {
-        Self { first, inner }
-    }
-}
-
-impl FunctionFragments {
-    pub fn drain(&mut self) -> Box<dyn Iterator<Item = Fragment> + '_> {
-        self.first
-            .map(|id| {
-                Box::new(self.inner.drain_from(id))
-                    as Box<dyn Iterator<Item = Fragment>>
-            })
-            .unwrap_or_else(|| Box::new(iter::empty()))
-    }
-}

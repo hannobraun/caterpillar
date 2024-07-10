@@ -9,7 +9,7 @@ mod payload;
 pub use self::{
     address::{FragmentAddress, FragmentAddressParent},
     fragment::Fragment,
-    fragments::{FragmentMap, Fragments, Function, FunctionFragments},
+    fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
     payload::FragmentPayload,
 };
