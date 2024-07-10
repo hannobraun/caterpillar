@@ -15,11 +15,13 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let fragments = function
-            .fragments
-            .drain()
-            .map(|fragment| FragmentModel::new(fragment, source_map, process))
-            .collect();
+        let mut fragments = Vec::new();
+
+        fragments.extend(
+            function.fragments.drain().map(|fragment| {
+                FragmentModel::new(fragment, source_map, process)
+            }),
+        );
 
         Self {
             name: function.name,
