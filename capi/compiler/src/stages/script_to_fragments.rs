@@ -137,7 +137,8 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        repr::syntax::Script, stages::script_to_fragments::FragmentPayload,
+        repr::{fragments::Fragments, syntax::Script},
+        stages::script_to_fragments::FragmentPayload,
     };
 
     use super::script_to_fragments;
@@ -149,15 +150,9 @@ mod tests {
             s.w("a");
         });
 
-        let mut fragments = script_to_fragments(script);
+        let fragments = script_to_fragments(script);
 
-        let fragments = fragments
-            .by_function
-            .remove(0)
-            .fragments
-            .drain()
-            .map(|fragment| fragment.payload)
-            .collect::<Vec<_>>();
+        let fragments = body(fragments);
         assert_eq!(
             fragments,
             vec![FragmentPayload::BindingEvaluation {
@@ -173,18 +168,9 @@ mod tests {
             s.v(0).bind(["b"]).w("b");
         });
 
-        let mut fragments = script_to_fragments(script);
+        let fragments = script_to_fragments(script);
 
-        let fragment = fragments
-            .by_function
-            .remove(0)
-            .fragments
-            .drain()
-            .map(|fragment| fragment.payload)
-            .collect::<Vec<_>>()
-            .last()
-            .cloned()
-            .unwrap();
+        let fragment = body(fragments).last().cloned().unwrap();
         assert_eq!(
             fragment,
             FragmentPayload::BindingEvaluation {
@@ -200,15 +186,9 @@ mod tests {
             s.w("builtin");
         });
 
-        let mut fragments = script_to_fragments(script);
+        let fragments = script_to_fragments(script);
 
-        let fragments = fragments
-            .by_function
-            .remove(0)
-            .fragments
-            .drain()
-            .map(|fragment| fragment.payload)
-            .collect::<Vec<_>>();
+        let fragments = body(fragments);
         assert_eq!(
             fragments,
             vec![FragmentPayload::BuiltinCall {
@@ -225,15 +205,9 @@ mod tests {
         });
         script.function("g", [], |_| {});
 
-        let mut fragments = script_to_fragments(script);
+        let fragments = script_to_fragments(script);
 
-        let fragments = fragments
-            .by_function
-            .remove(0)
-            .fragments
-            .drain()
-            .map(|fragment| fragment.payload)
-            .collect::<Vec<_>>();
+        let fragments = body(fragments);
         assert_eq!(
             fragments,
             vec![FragmentPayload::FunctionCall {
@@ -249,15 +223,9 @@ mod tests {
             s.v(1).v(1);
         });
 
-        let mut fragments = script_to_fragments(script);
+        let fragments = script_to_fragments(script);
 
-        let fragments = fragments
-            .by_function
-            .remove(0)
-            .fragments
-            .drain()
-            .map(|fragment| fragment.payload)
-            .collect::<Vec<_>>();
+        let fragments = body(fragments);
         assert_eq!(
             fragments,
             vec![
@@ -265,5 +233,15 @@ mod tests {
                 FragmentPayload::Value(Value(1)),
             ]
         );
+    }
+
+    fn body(mut fragments: Fragments) -> Vec<FragmentPayload> {
+        fragments
+            .by_function
+            .remove(0)
+            .fragments
+            .drain()
+            .map(|fragment| fragment.payload)
+            .collect::<Vec<_>>()
     }
 }
