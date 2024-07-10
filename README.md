@@ -2,7 +2,7 @@
 
 Caterpillar is a **programming language** with a dual goal:
 
-- Create an **immediate connection to the code** you're writing with
+- Create an **immediate connection to the code** you're writing, using
   **interactive programming**.
 - Bring this experience to many places: browsers, servers, desktops, phones,
   watches, microcontrollers; CPUs and GPUs.
