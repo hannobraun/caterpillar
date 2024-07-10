@@ -170,9 +170,9 @@ mod tests {
 
         let fragments = script_to_fragments(script);
 
-        let fragment = body(fragments).last().cloned().unwrap();
+        let last = body(fragments).last().cloned().unwrap();
         assert_eq!(
-            fragment,
+            last,
             FragmentPayload::BindingEvaluation {
                 name: String::from("b")
             }
