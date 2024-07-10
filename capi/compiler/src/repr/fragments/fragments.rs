@@ -53,6 +53,7 @@ impl FragmentMap {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
+    pub start: Option<FragmentId>,
     pub fragments: FunctionFragments,
 }
 

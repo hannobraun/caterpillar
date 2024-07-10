@@ -25,7 +25,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let fragments = compile_function(
+        let (start, fragments) = compile_function(
             function.name.clone(),
             &function.args,
             function.expressions,
@@ -35,6 +35,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
+            start,
             fragments,
         });
     }
@@ -51,7 +52,7 @@ fn compile_function(
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
-) -> FunctionFragments {
+) -> (Option<FragmentId>, FunctionFragments) {
     let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
 
     for expression in &body {
@@ -86,7 +87,10 @@ fn compile_function(
     }
 
     let first_fragment = next_fragment;
-    FunctionFragments::new(first_fragment, function_fragments)
+    (
+        first_fragment,
+        FunctionFragments::new(first_fragment, function_fragments),
+    )
 }
 
 fn compile_expression(
