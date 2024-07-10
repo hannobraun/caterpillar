@@ -25,7 +25,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let (start, fragments) = compile_function(
+        let (start, _) = compile_function(
             function.name.clone(),
             &function.args,
             function.expressions,
@@ -36,7 +36,6 @@ pub fn script_to_fragments(script: Script) -> Fragments {
             name: function.name,
             args: function.args,
             start,
-            fragments,
         });
     }
 

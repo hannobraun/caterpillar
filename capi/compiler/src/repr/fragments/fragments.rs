@@ -69,7 +69,6 @@ pub struct Function {
     pub name: String,
     pub args: Vec<String>,
     pub start: Option<FragmentId>,
-    pub fragments: FunctionFragments,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
