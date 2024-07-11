@@ -66,7 +66,7 @@ fn compile_function(
     }
 
     let parent = FragmentParent::Function { name: name.clone() };
-    let expressions = body.into_iter().rev();
+    let expressions = body;
 
     let mut next = {
         let terminator = Fragment {
@@ -80,7 +80,7 @@ fn compile_function(
         terminator_id
     };
 
-    for expression in expressions {
+    for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(
             expression,
             parent.clone(),
