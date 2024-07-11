@@ -41,7 +41,7 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            FragmentPayload::Expression(expression) => {
+            Self::Expression(expression) => {
                 hasher.update(b"expression");
                 expression.hash(hasher);
             }
