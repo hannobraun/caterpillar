@@ -78,7 +78,9 @@ fn compile_function(
             &bindings,
             functions,
         );
+
         next_fragment = Some(fragment.id());
+
         function_fragments
             .inner
             .insert(fragment.id(), fragment.clone());
