@@ -42,6 +42,7 @@ impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             FragmentPayload::Expression(expression) => {
+                hasher.update(b"expression");
                 expression.hash(hasher);
             }
         }
