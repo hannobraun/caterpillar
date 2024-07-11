@@ -19,6 +19,10 @@ impl Fragment {
 
         FragmentId::new(hasher.finalize())
     }
+
+    pub fn next(&self) -> Option<FragmentId> {
+        self.next
+    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]

@@ -42,7 +42,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.remove(&id)?;
 
-            next = fragment.next;
+            next = fragment.next();
 
             Some(fragment)
         })
@@ -55,7 +55,7 @@ impl FragmentMap {
             let id = next.take()?;
             let fragment = self.inner.get(&id)?;
 
-            next = fragment.next;
+            next = fragment.next();
 
             Some(fragment)
         })
