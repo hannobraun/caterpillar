@@ -65,12 +65,14 @@ fn compile_function(
         }
     }
 
+    let parent = FragmentParent::Function { name: name.clone() };
+
     let mut next_fragment = None;
 
     for expression in body.into_iter().rev() {
         let fragment = compile_expression(
             expression,
-            FragmentParent::Function { name: name.clone() },
+            parent.clone(),
             next_fragment.take(),
             &bindings,
             functions,
