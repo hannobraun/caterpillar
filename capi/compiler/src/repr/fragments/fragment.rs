@@ -13,7 +13,7 @@ impl Fragment {
 
         self.parent.hash(&mut hasher);
         if let Some(next) = self.next {
-            hasher.update(next.hash.as_bytes());
+            next.hash(&mut hasher);
         };
         self.payload.hash(&mut hasher);
 
