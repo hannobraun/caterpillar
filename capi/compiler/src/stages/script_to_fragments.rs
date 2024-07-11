@@ -56,16 +56,7 @@ fn compile_function(
         inner: args.iter().cloned().collect(),
     };
 
-    for expression in &body {
-        if let Expression::Binding { names } = expression {
-            for name in names.iter().cloned().rev() {
-                // Inserting bindings unconditionally like this does mean that
-                // bindings can overwrite previously defined bindings. This is
-                // undesirable, but it'll do for now.
-                bindings.inner.insert(name);
-            }
-        }
-    }
+    bindings.process_block(&body);
 
     let parent = FragmentParent::Function { name: name.clone() };
     let expressions = body;
@@ -149,6 +140,21 @@ fn compile_expression(
 
 pub struct Bindings {
     inner: BTreeSet<String>,
+}
+
+impl Bindings {
+    fn process_block(&mut self, block: &[Expression]) {
+        for expression in block {
+            if let Expression::Binding { names } = expression {
+                for name in names.iter().cloned().rev() {
+                    // Inserting bindings unconditionally like this does mean
+                    // that bindings can overwrite previously defined bindings.
+                    // This is undesirable, but it'll do for now.
+                    self.inner.insert(name);
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
