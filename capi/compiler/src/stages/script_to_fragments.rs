@@ -76,24 +76,24 @@ fn compile_function(
 
         fragments.inner.insert(terminator_id, terminator);
 
-        Some(terminator_id)
+        terminator_id
     };
 
     for expression in body.into_iter().rev() {
         let fragment = compile_expression(
             expression,
             parent.clone(),
-            next.take(),
+            Some(next),
             &bindings,
             functions,
         );
 
-        next = Some(fragment.id());
+        next = fragment.id();
 
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    next
+    Some(next)
 }
 
 fn compile_expression(
