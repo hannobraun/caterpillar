@@ -35,7 +35,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            start: Some(start),
+            start,
         });
     }
 
@@ -248,7 +248,7 @@ mod tests {
 
         let mut fragments = script_to_fragments(script);
 
-        let start = fragments.by_function.remove(0).start.unwrap();
+        let start = fragments.by_function.remove(0).start;
         let last_fragment = fragments.inner.drain_from(start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
@@ -256,14 +256,14 @@ mod tests {
     fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
         let mut body = Vec::new();
 
-        if let Some(start) = fragments.by_function.remove(0).start {
-            body.extend(fragments.inner.drain_from(start).filter_map(
-                |fragment| match fragment.payload {
-                    FragmentPayload::Expression(expression) => Some(expression),
-                    FragmentPayload::Terminator => None,
-                },
-            ))
-        }
+        let start = fragments.by_function.remove(0).start;
+
+        body.extend(fragments.inner.drain_from(start).filter_map(|fragment| {
+            match fragment.payload {
+                FragmentPayload::Expression(expression) => Some(expression),
+                FragmentPayload::Terminator => None,
+            }
+        }));
 
         body
     }

@@ -11,11 +11,11 @@ pub struct Fragments {
 impl Fragments {
     pub fn find_function(&self, fragment_id: &FragmentId) -> Option<&Function> {
         for function in &self.by_function {
-            if let Some(start) = function.start {
-                for fragment in self.inner.clone().drain_from(start) {
-                    if &fragment.id() == fragment_id {
-                        return Some(function);
-                    }
+            let start = function.start;
+
+            for fragment in self.inner.clone().drain_from(start) {
+                if &fragment.id() == fragment_id {
+                    return Some(function);
                 }
             }
         }
@@ -68,5 +68,5 @@ impl FragmentMap {
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub start: Option<FragmentId>,
+    pub start: FragmentId,
 }

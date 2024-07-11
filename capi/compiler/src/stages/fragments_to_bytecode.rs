@@ -1,5 +1,3 @@
-use std::iter;
-
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
@@ -21,19 +19,13 @@ pub fn fragments_to_bytecode(
     };
 
     for function in fragments.by_function {
-        if let Some(start) = function.start {
-            compiler.compile_function(
-                function.name,
-                function.args,
-                fragments.inner.drain_from(start),
-            );
-        } else {
-            compiler.compile_function(
-                function.name,
-                function.args,
-                iter::empty(),
-            );
-        }
+        let start = function.start;
+
+        compiler.compile_function(
+            function.name,
+            function.args,
+            fragments.inner.drain_from(start),
+        );
     }
 
     (bytecode, source_map)
