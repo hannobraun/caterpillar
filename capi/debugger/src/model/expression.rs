@@ -19,7 +19,7 @@ impl Expression {
         fragment: Fragment,
         source_map: &SourceMap,
         process: &Process,
-    ) -> Self {
+    ) -> Option<Self> {
         let fragment_id = fragment.id();
         let FragmentPayload::Expression(expression) = fragment.payload;
 
@@ -53,13 +53,13 @@ impl Expression {
             false
         };
 
-        Self {
+        Some(Self {
             expression,
             location,
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,
             effect,
-        }
+        })
     }
 }
