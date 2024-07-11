@@ -5,5 +5,5 @@ mod function;
 
 pub use self::{
     active_functions::ActiveFunctions, debugger::Debugger,
-    fragment::FragmentModel, function::Function,
+    fragment::Expression, function::Function,
 };

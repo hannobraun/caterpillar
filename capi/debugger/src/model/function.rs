@@ -4,12 +4,12 @@ use capi_compiler::{
 };
 use capi_process::Process;
 
-use super::FragmentModel;
+use super::Expression;
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
-    pub fragments: Vec<FragmentModel>,
+    pub fragments: Vec<Expression>,
 }
 
 impl Function {
@@ -24,7 +24,7 @@ impl Function {
         if let Some(start) = function.start {
             fragment_models.extend(
                 fragments.inner.iter_from(start).cloned().map(|fragment| {
-                    FragmentModel::new(fragment, source_map, process)
+                    Expression::new(fragment, source_map, process)
                 }),
             );
         }
