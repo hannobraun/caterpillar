@@ -95,7 +95,7 @@ fn compile_expression(
     bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
-    let payload = match expression {
+    let expression = match expression {
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
@@ -125,7 +125,7 @@ fn compile_expression(
             name: function_name,
         },
         next: next_fragment,
-        payload,
+        payload: expression,
     }
 }
 
