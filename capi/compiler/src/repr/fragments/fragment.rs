@@ -33,6 +33,7 @@ impl FragmentParent {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             FragmentParent::Function { name } => {
+                hasher.update(b"function");
                 hasher.update(name.as_bytes());
             }
         }
