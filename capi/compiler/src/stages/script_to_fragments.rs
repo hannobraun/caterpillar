@@ -52,7 +52,9 @@ fn compile_function(
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
-    let mut bindings: Bindings = args.iter().cloned().collect();
+    let mut bindings = Bindings {
+        inner: args.iter().cloned().collect(),
+    };
 
     for expression in &body {
         if let Expression::Binding { names } = expression {
@@ -60,7 +62,7 @@ fn compile_function(
                 // Inserting bindings unconditionally like this does mean that
                 // bindings can overwrite previously defined bindings. This is
                 // undesirable, but it'll do for now.
-                bindings.insert(name);
+                bindings.inner.insert(name);
             }
         }
     }
@@ -128,7 +130,7 @@ fn compile_expression(
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
                 FragmentExpression::FunctionCall { name }
-            } else if bindings.contains(&name) {
+            } else if bindings.inner.contains(&name) {
                 FragmentExpression::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
@@ -145,7 +147,9 @@ fn compile_expression(
     }
 }
 
-pub type Bindings = BTreeSet<String>;
+pub struct Bindings {
+    inner: BTreeSet<String>,
+}
 
 #[cfg(test)]
 mod tests {
