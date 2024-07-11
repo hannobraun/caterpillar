@@ -66,7 +66,7 @@ fn compile_function(
     }
 
     let parent = FragmentParent::Function { name: name.clone() };
-    let mut next_fragment = {
+    let mut next = {
         let terminator = Fragment {
             parent: parent.clone(),
             next: None,
@@ -83,17 +83,17 @@ fn compile_function(
         let fragment = compile_expression(
             expression,
             parent.clone(),
-            next_fragment.take(),
+            next.take(),
             &bindings,
             functions,
         );
 
-        next_fragment = Some(fragment.id());
+        next = Some(fragment.id());
 
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    next_fragment
+    next
 }
 
 fn compile_expression(
