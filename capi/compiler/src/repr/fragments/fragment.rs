@@ -31,8 +31,11 @@ pub enum FragmentParent {
 
 impl FragmentParent {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        let FragmentParent::Function { name } = self;
-        hasher.update(name.as_bytes());
+        match self {
+            FragmentParent::Function { name } => {
+                hasher.update(name.as_bytes());
+            }
+        }
     }
 }
 
