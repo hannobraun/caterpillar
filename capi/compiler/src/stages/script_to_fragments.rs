@@ -131,7 +131,7 @@ fn compile_expression(
     Fragment {
         parent,
         next: Some(next),
-        payload: FragmentPayload::Expression { expression },
+        payload: FragmentPayload::Expression { expression, next },
     }
 }
 
