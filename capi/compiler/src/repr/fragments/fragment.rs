@@ -10,7 +10,10 @@ impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
 
-        self.address.hash(&mut hasher);
+        self.address.parent.hash(&mut hasher);
+        if let Some(next) = self.address.next {
+            hasher.update(next.hash.as_bytes());
+        };
         self.payload.hash(&mut hasher);
 
         FragmentId {
@@ -23,15 +26,6 @@ impl Fragment {
 pub struct FragmentAddress {
     pub parent: FragmentAddressParent,
     pub next: Option<FragmentId>,
-}
-
-impl FragmentAddress {
-    pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
-        self.parent.hash(hasher);
-        if let Some(next) = self.next {
-            hasher.update(next.hash.as_bytes());
-        }
-    }
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
