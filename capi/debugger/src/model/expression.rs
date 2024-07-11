@@ -20,7 +20,9 @@ impl Expression {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let location = source_map.fragment_to_instruction(&fragment.id());
+        let fragment_id = fragment.id();
+
+        let location = source_map.fragment_to_instruction(&fragment_id);
 
         let has_durable_breakpoint = if let Some(location) = &location {
             process.breakpoints().durable_at(location)
@@ -39,7 +41,7 @@ impl Expression {
                     &process.state().most_recent_step().unwrap(),
                 );
 
-                if effect_fragment == fragment.id() {
+                if effect_fragment == fragment_id {
                     Some(effect.clone())
                 } else {
                     None
