@@ -26,6 +26,7 @@ impl Fragment {
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum FragmentParent {
+    Fragment { id: FragmentId },
     Function { name: String },
 }
 
@@ -35,6 +36,10 @@ impl FragmentParent {
             FragmentParent::Function { name } => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
+            }
+            FragmentParent::Fragment { id } => {
+                hasher.update(b"fragment");
+                id.hash(hasher);
             }
         }
     }
