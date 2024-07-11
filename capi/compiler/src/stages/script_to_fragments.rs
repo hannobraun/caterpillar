@@ -52,7 +52,7 @@ fn compile_function(
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
-    let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
+    let mut bindings: Bindings = args.iter().cloned().collect();
 
     for expression in &body {
         if let Expression::Binding { names } = expression {
@@ -74,7 +74,7 @@ fn compile_function(
 fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
-    bindings: &BTreeSet<String>,
+    bindings: &Bindings,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
@@ -111,7 +111,7 @@ fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    bindings: &BTreeSet<String>,
+    bindings: &Bindings,
     functions: &BTreeSet<String>,
 ) -> Fragment {
     let expression = match expression {
@@ -144,6 +144,8 @@ fn compile_expression(
         payload: FragmentPayload::Expression { expression, next },
     }
 }
+
+pub type Bindings = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
