@@ -68,6 +68,16 @@ fn compile_function(
     let parent = FragmentParent::Function { name: name.clone() };
     let expressions = body;
 
+    compile_block(expressions, parent, &bindings, functions, fragments)
+}
+
+fn compile_block(
+    expressions: Vec<Expression>,
+    parent: FragmentParent,
+    bindings: &BTreeSet<String>,
+    functions: &BTreeSet<String>,
+    fragments: &mut FragmentMap,
+) -> FragmentId {
     let mut next = {
         let terminator = Fragment {
             parent: parent.clone(),
@@ -85,7 +95,7 @@ fn compile_function(
             expression,
             parent.clone(),
             next,
-            &bindings,
+            bindings,
             functions,
         );
 
