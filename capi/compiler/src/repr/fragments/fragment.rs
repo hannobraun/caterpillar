@@ -12,9 +12,6 @@ impl Fragment {
         let mut hasher = blake3::Hasher::new();
 
         self.parent.hash(&mut hasher);
-        if let Some(next) = self.next {
-            next.hash(&mut hasher);
-        };
         self.payload.hash(&mut hasher);
 
         FragmentId::new(hasher.finalize())
