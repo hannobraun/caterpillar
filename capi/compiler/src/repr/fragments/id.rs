@@ -8,6 +8,10 @@ pub struct FragmentId {
 }
 
 impl FragmentId {
+    pub(super) fn new(hash: blake3::Hash) -> Self {
+        Self { hash }
+    }
+
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         hasher.update(self.hash.as_bytes());
     }

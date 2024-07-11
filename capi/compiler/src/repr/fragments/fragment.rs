@@ -17,9 +17,7 @@ impl Fragment {
         };
         self.payload.hash(&mut hasher);
 
-        FragmentId {
-            hash: hasher.finalize(),
-        }
+        FragmentId::new(hasher.finalize())
     }
 }
 
