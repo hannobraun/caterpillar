@@ -1,14 +1,12 @@
 #![allow(clippy::module_inception)]
 
-mod address;
 mod fragment;
 mod fragments;
 mod id;
 mod payload;
 
 pub use self::{
-    address::{FragmentAddress, FragmentAddressParent},
-    fragment::Fragment,
+    fragment::{Fragment, FragmentAddress, FragmentAddressParent},
     fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
     payload::FragmentPayload,
