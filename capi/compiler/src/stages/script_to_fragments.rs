@@ -99,7 +99,7 @@ fn compile_function(
 fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
-    next_fragment: Option<FragmentId>,
+    next: Option<FragmentId>,
     bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
@@ -130,7 +130,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        next: next_fragment,
+        next,
         payload: FragmentPayload::Expression(expression),
     }
 }
