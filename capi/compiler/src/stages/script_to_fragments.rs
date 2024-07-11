@@ -155,7 +155,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentExpression::BindingEvaluation {
+            [FragmentExpression::BindingEvaluation {
                 name: String::from("a")
             }]
         );
@@ -191,7 +191,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentExpression::BuiltinCall {
+            [FragmentExpression::BuiltinCall {
                 name: String::from("builtin")
             }]
         );
@@ -210,7 +210,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentExpression::FunctionCall {
+            [FragmentExpression::FunctionCall {
                 name: String::from("g")
             }]
         );
@@ -228,7 +228,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![
+            [
                 FragmentExpression::Value(Value(1)),
                 FragmentExpression::Value(Value(1)),
             ]
