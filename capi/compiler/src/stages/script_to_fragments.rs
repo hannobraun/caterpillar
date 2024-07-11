@@ -65,9 +65,6 @@ fn compile_function(
         }
     }
 
-    let mut function_fragments = FragmentMap {
-        inner: BTreeMap::new(),
-    };
     let mut next_fragment = None;
 
     for expression in body.into_iter().rev() {
@@ -81,9 +78,6 @@ fn compile_function(
 
         next_fragment = Some(fragment.id());
 
-        function_fragments
-            .inner
-            .insert(fragment.id(), fragment.clone());
         fragments.inner.insert(fragment.id(), fragment);
     }
 
