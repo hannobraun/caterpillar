@@ -50,8 +50,10 @@ impl FragmentModel {
             false
         };
 
+        let expression = fragment.payload;
+
         Self {
-            payload: fragment.payload,
+            payload: expression,
             location,
             has_durable_breakpoint,
             is_comment,
