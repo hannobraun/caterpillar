@@ -6,7 +6,7 @@ mod id;
 mod payload;
 
 pub use self::{
-    fragment::{Fragment, FragmentAddress, FragmentAddressParent},
+    fragment::{Fragment, FragmentAddressParent},
     fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
     payload::FragmentPayload,

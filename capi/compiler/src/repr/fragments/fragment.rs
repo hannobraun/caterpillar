@@ -2,7 +2,8 @@ use super::{FragmentId, FragmentPayload};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
-    pub address: FragmentAddress,
+    pub parent: FragmentAddressParent,
+    pub next: Option<FragmentId>,
     pub payload: FragmentPayload,
 }
 
@@ -10,8 +11,8 @@ impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
 
-        self.address.parent.hash(&mut hasher);
-        if let Some(next) = self.address.next {
+        self.parent.hash(&mut hasher);
+        if let Some(next) = self.next {
             hasher.update(next.hash.as_bytes());
         };
         self.payload.hash(&mut hasher);
@@ -20,12 +21,6 @@ impl Fragment {
             hash: hasher.finalize(),
         }
     }
-}
-
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub struct FragmentAddress {
-    pub parent: FragmentAddressParent,
-    pub next: Option<FragmentId>,
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
