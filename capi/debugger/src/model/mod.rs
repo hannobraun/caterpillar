@@ -1,9 +1,9 @@
 mod active_functions;
 mod debugger;
-mod fragment;
+mod expression;
 mod function;
 
 pub use self::{
     active_functions::ActiveFunctions, debugger::Debugger,
-    fragment::Expression, function::Function,
+    expression::Expression, function::Function,
 };
