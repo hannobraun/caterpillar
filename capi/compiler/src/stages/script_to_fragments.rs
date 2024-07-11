@@ -83,7 +83,7 @@ fn compile_function(
         let fragment = compile_expression(
             expression,
             parent.clone(),
-            Some(next),
+            next,
             &bindings,
             functions,
         );
@@ -99,7 +99,7 @@ fn compile_function(
 fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
-    next: Option<FragmentId>,
+    next: FragmentId,
     bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
@@ -130,7 +130,7 @@ fn compile_expression(
 
     Fragment {
         parent,
-        next,
+        next: Some(next),
         payload: FragmentPayload::Expression(expression),
     }
 }
