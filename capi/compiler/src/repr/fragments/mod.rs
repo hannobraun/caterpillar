@@ -1,13 +1,13 @@
 #![allow(clippy::module_inception)]
 
+mod expression;
 mod fragment;
 mod fragments;
 mod id;
-mod payload;
 
 pub use self::{
+    expression::FragmentExpression,
     fragment::{Fragment, FragmentParent},
     fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
-    payload::FragmentExpression,
 };
