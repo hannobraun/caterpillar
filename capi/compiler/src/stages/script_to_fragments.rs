@@ -35,7 +35,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         by_function.push(Function {
             name: function.name,
             args: function.args,
-            start,
+            start: Some(start),
         });
     }
 
@@ -51,7 +51,7 @@ fn compile_function(
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
-) -> Option<FragmentId> {
+) -> FragmentId {
     let mut bindings: BTreeSet<_> = args.iter().cloned().collect();
 
     for expression in &body {
@@ -93,7 +93,7 @@ fn compile_function(
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    Some(next)
+    next
 }
 
 fn compile_expression(
