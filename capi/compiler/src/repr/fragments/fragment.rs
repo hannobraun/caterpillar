@@ -36,6 +36,7 @@ impl FragmentParent {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
     Expression(FragmentExpression),
+    Terminator,
 }
 
 impl FragmentPayload {
@@ -44,6 +45,9 @@ impl FragmentPayload {
             Self::Expression(expression) => {
                 hasher.update(b"expression");
                 expression.hash(hasher);
+            }
+            Self::Terminator => {
+                hasher.update(b"terminator");
             }
         }
     }

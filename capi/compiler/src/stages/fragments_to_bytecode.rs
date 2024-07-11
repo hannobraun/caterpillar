@@ -63,7 +63,14 @@ impl Compiler<'_> {
     fn compile_fragment(&mut self, fragment: Fragment, output: &mut Function) {
         let fragment_id = fragment.id();
 
-        let FragmentPayload::Expression(expression) = fragment.payload;
+        let expression = match fragment.payload {
+            FragmentPayload::Expression(expression) => expression,
+            FragmentPayload::Terminator => {
+                // A terminator only has meaning in the source code
+                // representation, but doesn't do anything at runtime.
+                return;
+            }
+        };
 
         match expression {
             FragmentExpression::BindingDefinitions { names } => {

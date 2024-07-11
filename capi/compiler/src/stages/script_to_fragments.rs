@@ -239,10 +239,12 @@ mod tests {
         let mut body = Vec::new();
 
         if let Some(start) = fragments.by_function.remove(0).start {
-            body.extend(fragments.inner.drain_from(start).map(|fragment| {
-                let FragmentPayload::Expression(expression) = fragment.payload;
-                expression
-            }))
+            body.extend(fragments.inner.drain_from(start).filter_map(
+                |fragment| match fragment.payload {
+                    FragmentPayload::Expression(expression) => Some(expression),
+                    FragmentPayload::Terminator => None,
+                },
+            ))
         }
 
         body

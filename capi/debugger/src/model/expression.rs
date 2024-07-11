@@ -21,7 +21,9 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
-        let FragmentPayload::Expression(expression) = fragment.payload;
+        let FragmentPayload::Expression(expression) = fragment.payload else {
+            return None;
+        };
 
         let location = source_map.fragment_to_instruction(&fragment_id);
 
