@@ -61,7 +61,9 @@ impl Compiler<'_> {
     fn compile_fragment(&mut self, fragment: Fragment, output: &mut Function) {
         let fragment_id = fragment.id();
 
-        match fragment.payload {
+        let expression = fragment.payload;
+
+        match expression {
             FragmentExpression::BindingDefinitions { names } => {
                 self.generate(
                     Instruction::BindingsDefine { names },
