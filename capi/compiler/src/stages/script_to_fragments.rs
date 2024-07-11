@@ -70,8 +70,8 @@ fn compile_function(
     for expression in body.into_iter().rev() {
         let fragment = compile_expression(
             expression,
+            FragmentParent::Function { name: name.clone() },
             next_fragment.take(),
-            name.clone(),
             &bindings,
             functions,
         );
@@ -86,8 +86,8 @@ fn compile_function(
 
 fn compile_expression(
     expression: Expression,
+    parent: FragmentParent,
     next_fragment: Option<FragmentId>,
-    function_name: String,
     bindings: &BTreeSet<String>,
     functions: &BTreeSet<String>,
 ) -> Fragment {
@@ -117,9 +117,7 @@ fn compile_expression(
     };
 
     Fragment {
-        parent: FragmentParent::Function {
-            name: function_name,
-        },
+        parent,
         next: next_fragment,
         payload: FragmentPayload::Expression(expression),
     }
