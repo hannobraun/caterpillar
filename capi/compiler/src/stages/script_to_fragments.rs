@@ -69,7 +69,6 @@ fn compile_function(
     let mut next = {
         let terminator = Fragment {
             parent: parent.clone(),
-            next: None,
             payload: FragmentPayload::Terminator,
         };
         let terminator_id = terminator.id();
@@ -130,7 +129,6 @@ fn compile_expression(
 
     Fragment {
         parent,
-        next: Some(next),
         payload: FragmentPayload::Expression { expression, next },
     }
 }

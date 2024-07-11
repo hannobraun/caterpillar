@@ -3,7 +3,6 @@ use super::{FragmentExpression, FragmentId};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
     pub parent: FragmentParent,
-    pub next: Option<FragmentId>,
     pub payload: FragmentPayload,
 }
 
