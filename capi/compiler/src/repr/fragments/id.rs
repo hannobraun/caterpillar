@@ -4,7 +4,7 @@ use std::cmp::Ordering;
     Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct FragmentId {
-    pub hash: blake3::Hash,
+    hash: blake3::Hash,
 }
 
 impl FragmentId {
