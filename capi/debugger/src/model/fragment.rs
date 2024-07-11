@@ -1,5 +1,5 @@
 use capi_compiler::{
-    repr::fragments::{Fragment, FragmentExpression},
+    repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
 use capi_process::{EvaluatorEffect, Location, Process};
@@ -28,8 +28,10 @@ impl FragmentModel {
             false
         };
 
-        let is_comment =
-            matches!(fragment.payload, FragmentExpression::Comment { .. });
+        let is_comment = matches!(
+            fragment.payload,
+            FragmentPayload::Expression(FragmentExpression::Comment { .. })
+        );
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
@@ -50,7 +52,7 @@ impl FragmentModel {
             false
         };
 
-        let expression = fragment.payload;
+        let FragmentPayload::Expression(expression) = fragment.payload;
 
         Self {
             payload: expression,

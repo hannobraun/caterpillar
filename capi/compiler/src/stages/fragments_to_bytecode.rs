@@ -3,7 +3,9 @@ use std::iter;
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
-    repr::fragments::{Fragment, FragmentExpression, FragmentId, Fragments},
+    repr::fragments::{
+        Fragment, FragmentExpression, FragmentId, FragmentPayload, Fragments,
+    },
     source_map::SourceMap,
 };
 
@@ -61,7 +63,7 @@ impl Compiler<'_> {
     fn compile_fragment(&mut self, fragment: Fragment, output: &mut Function) {
         let fragment_id = fragment.id();
 
-        let expression = fragment.payload;
+        let FragmentPayload::Expression(expression) = fragment.payload;
 
         match expression {
             FragmentExpression::BindingDefinitions { names } => {

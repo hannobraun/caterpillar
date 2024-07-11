@@ -4,7 +4,7 @@ use super::{FragmentExpression, FragmentId};
 pub struct Fragment {
     pub parent: FragmentParent,
     pub next: Option<FragmentId>,
-    pub payload: FragmentExpression,
+    pub payload: FragmentPayload,
 }
 
 impl Fragment {
@@ -15,7 +15,10 @@ impl Fragment {
         if let Some(next) = self.next {
             next.hash(&mut hasher);
         };
-        self.payload.hash(&mut hasher);
+        {
+            let FragmentPayload::Expression(expression) = &self.payload;
+            expression.hash(&mut hasher);
+        }
 
         FragmentId::new(hasher.finalize())
     }
@@ -31,4 +34,9 @@ impl FragmentParent {
         let FragmentParent::Function { name } = self;
         hasher.update(name.as_bytes());
     }
+}
+
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+pub enum FragmentPayload {
+    Expression(FragmentExpression),
 }

@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::repr::{
     fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
-        Fragments, Function,
+        FragmentPayload, Fragments, Function,
     },
     syntax::{Expression, Script},
 };
@@ -125,7 +125,7 @@ fn compile_expression(
             name: function_name,
         },
         next: next_fragment,
-        payload: expression,
+        payload: FragmentPayload::Expression(expression),
     }
 }
 
@@ -134,7 +134,10 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        repr::{fragments::Fragments, syntax::Script},
+        repr::{
+            fragments::{FragmentPayload, Fragments},
+            syntax::Script,
+        },
         stages::script_to_fragments::FragmentExpression,
     };
 
@@ -236,12 +239,10 @@ mod tests {
         let mut body = Vec::new();
 
         if let Some(start) = fragments.by_function.remove(0).start {
-            body.extend(
-                fragments
-                    .inner
-                    .drain_from(start)
-                    .map(|fragment| fragment.payload),
-            )
+            body.extend(fragments.inner.drain_from(start).map(|fragment| {
+                let FragmentPayload::Expression(expression) = fragment.payload;
+                expression
+            }))
         }
 
         body

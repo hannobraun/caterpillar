@@ -7,7 +7,7 @@ mod id;
 
 pub use self::{
     expression::FragmentExpression,
-    fragment::{Fragment, FragmentParent},
+    fragment::{Fragment, FragmentParent, FragmentPayload},
     fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
 };
