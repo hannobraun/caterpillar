@@ -66,8 +66,18 @@ fn compile_function(
     }
 
     let parent = FragmentParent::Function { name: name.clone() };
+    let mut next_fragment = {
+        let terminator = Fragment {
+            parent: parent.clone(),
+            next: None,
+            payload: FragmentPayload::Terminator,
+        };
+        let terminator_id = terminator.id();
 
-    let mut next_fragment = None;
+        fragments.inner.insert(terminator_id, terminator);
+
+        Some(terminator_id)
+    };
 
     for expression in body.into_iter().rev() {
         let fragment = compile_expression(
@@ -229,6 +239,18 @@ mod tests {
                 FragmentExpression::Value(Value(1)),
             ]
         );
+    }
+
+    #[test]
+    fn terminator() {
+        let mut script = Script::default();
+        script.function("f", [], |_| {});
+
+        let mut fragments = script_to_fragments(script);
+
+        let start = fragments.by_function.remove(0).start.unwrap();
+        let last_fragment = fragments.inner.drain_from(start).last().unwrap();
+        assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
 
     fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
