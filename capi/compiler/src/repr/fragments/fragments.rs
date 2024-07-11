@@ -11,9 +11,7 @@ pub struct Fragments {
 impl Fragments {
     pub fn find_function(&self, fragment_id: &FragmentId) -> Option<&Function> {
         for function in &self.by_function {
-            let start = function.start;
-
-            for fragment in self.inner.clone().drain_from(start) {
+            for fragment in self.inner.clone().drain_from(function.start) {
                 if &fragment.id() == fragment_id {
                     return Some(function);
                 }

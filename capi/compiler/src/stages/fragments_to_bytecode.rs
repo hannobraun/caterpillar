@@ -19,12 +19,10 @@ pub fn fragments_to_bytecode(
     };
 
     for function in fragments.by_function {
-        let start = function.start;
-
         compiler.compile_function(
             function.name,
             function.args,
-            fragments.inner.drain_from(start),
+            fragments.inner.drain_from(function.start),
         );
     }
 
