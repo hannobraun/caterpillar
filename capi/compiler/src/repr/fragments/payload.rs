@@ -3,7 +3,7 @@ use std::fmt;
 use capi_process::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FragmentPayload {
+pub enum FragmentExpression {
     BindingDefinitions { names: Vec<String> },
     BindingEvaluation { name: String },
     BuiltinCall { name: String },
@@ -12,7 +12,7 @@ pub enum FragmentPayload {
     Value(Value),
 }
 
-impl FragmentPayload {
+impl FragmentExpression {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             Self::BindingDefinitions { names } => {
@@ -46,7 +46,7 @@ impl FragmentPayload {
     }
 }
 
-impl fmt::Display for FragmentPayload {
+impl fmt::Display for FragmentExpression {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::BindingDefinitions { names } => {

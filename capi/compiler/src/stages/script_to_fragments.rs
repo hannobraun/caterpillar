@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentId, FragmentMap, FragmentParent, FragmentPayload,
+        Fragment, FragmentId, FragmentMap, FragmentParent, FragmentExpression,
         Fragments, Function,
     },
     syntax::{Expression, Script},
@@ -97,10 +97,10 @@ fn compile_expression(
 ) -> Fragment {
     let payload = match expression {
         Expression::Binding { names } => {
-            FragmentPayload::BindingDefinitions { names }
+            FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Comment { text } => FragmentPayload::Comment { text },
-        Expression::Value(value) => FragmentPayload::Value(value),
+        Expression::Comment { text } => FragmentExpression::Comment { text },
+        Expression::Value(value) => FragmentExpression::Value(value),
         Expression::Word { name } => {
             // The way this is written, bindings shadow built-in functions,
             // while user-defined functions shadow anything else.
@@ -108,14 +108,14 @@ fn compile_expression(
             // This isn't desirable. There should at least be a warning, if such
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
-                FragmentPayload::FunctionCall { name }
+                FragmentExpression::FunctionCall { name }
             } else if bindings.contains(&name) {
-                FragmentPayload::BindingEvaluation { name }
+                FragmentExpression::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
                 // given how built-in functions are currently defined, that's
                 // not practical to implement.
-                FragmentPayload::BuiltinCall { name }
+                FragmentExpression::BuiltinCall { name }
             }
         }
     };
@@ -135,7 +135,7 @@ mod tests {
 
     use crate::{
         repr::{fragments::Fragments, syntax::Script},
-        stages::script_to_fragments::FragmentPayload,
+        stages::script_to_fragments::FragmentExpression,
     };
 
     use super::script_to_fragments;
@@ -152,7 +152,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentPayload::BindingEvaluation {
+            vec![FragmentExpression::BindingEvaluation {
                 name: String::from("a")
             }]
         );
@@ -170,7 +170,7 @@ mod tests {
         let last = body(fragments).last().cloned().unwrap();
         assert_eq!(
             last,
-            FragmentPayload::BindingEvaluation {
+            FragmentExpression::BindingEvaluation {
                 name: String::from("b")
             }
         );
@@ -188,7 +188,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentPayload::BuiltinCall {
+            vec![FragmentExpression::BuiltinCall {
                 name: String::from("builtin")
             }]
         );
@@ -207,7 +207,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            vec![FragmentPayload::FunctionCall {
+            vec![FragmentExpression::FunctionCall {
                 name: String::from("g")
             }]
         );
@@ -226,13 +226,13 @@ mod tests {
         assert_eq!(
             body,
             vec![
-                FragmentPayload::Value(Value(1)),
-                FragmentPayload::Value(Value(1)),
+                FragmentExpression::Value(Value(1)),
+                FragmentExpression::Value(Value(1)),
             ]
         );
     }
 
-    fn body(mut fragments: Fragments) -> Vec<FragmentPayload> {
+    fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
         let mut body = Vec::new();
 
         if let Some(start) = fragments.by_function.remove(0).start {

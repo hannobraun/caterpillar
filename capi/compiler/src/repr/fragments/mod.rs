@@ -9,5 +9,5 @@ pub use self::{
     fragment::{Fragment, FragmentParent},
     fragments::{FragmentMap, Fragments, Function},
     id::FragmentId,
-    payload::FragmentPayload,
+    payload::FragmentExpression,
 };

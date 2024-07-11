@@ -1,12 +1,12 @@
 use capi_compiler::{
-    repr::fragments::{Fragment, FragmentPayload},
+    repr::fragments::{Fragment, FragmentExpression},
     source_map::SourceMap,
 };
 use capi_process::{EvaluatorEffect, Location, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct FragmentModel {
-    pub payload: FragmentPayload,
+    pub payload: FragmentExpression,
     pub location: Option<Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
@@ -29,7 +29,7 @@ impl FragmentModel {
         };
 
         let is_comment =
-            matches!(fragment.payload, FragmentPayload::Comment { .. });
+            matches!(fragment.payload, FragmentExpression::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {

@@ -3,7 +3,7 @@ use std::iter;
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
-    repr::fragments::{Fragment, FragmentId, FragmentPayload, Fragments},
+    repr::fragments::{Fragment, FragmentId, FragmentExpression, Fragments},
     source_map::SourceMap,
 };
 
@@ -62,21 +62,21 @@ impl Compiler<'_> {
         let fragment_id = fragment.id();
 
         match fragment.payload {
-            FragmentPayload::BindingDefinitions { names } => {
+            FragmentExpression::BindingDefinitions { names } => {
                 self.generate(
                     Instruction::BindingsDefine { names },
                     fragment_id,
                     output,
                 );
             }
-            FragmentPayload::BindingEvaluation { name } => {
+            FragmentExpression::BindingEvaluation { name } => {
                 self.generate(
                     Instruction::BindingEvaluate { name },
                     fragment_id,
                     output,
                 );
             }
-            FragmentPayload::BuiltinCall { name } => {
+            FragmentExpression::BuiltinCall { name } => {
                 let instruction = {
                     // Here we check for special built-in functions that are
                     // implemented differently, without making sure anywhere,
@@ -96,15 +96,15 @@ impl Compiler<'_> {
                 };
                 self.generate(instruction, fragment_id, output);
             }
-            FragmentPayload::Comment { .. } => {}
-            FragmentPayload::FunctionCall { name } => {
+            FragmentExpression::Comment { .. } => {}
+            FragmentExpression::FunctionCall { name } => {
                 self.generate(
                     Instruction::CallFunction { name },
                     fragment_id,
                     output,
                 );
             }
-            FragmentPayload::Value(value) => {
+            FragmentExpression::Value(value) => {
                 self.generate(Instruction::Push { value }, fragment_id, output);
             }
         };
