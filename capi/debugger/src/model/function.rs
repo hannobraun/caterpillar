@@ -9,7 +9,7 @@ use super::Expression;
 #[derive(Clone, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
-    pub fragments: Vec<Expression>,
+    pub body: Vec<Expression>,
 }
 
 impl Function {
@@ -31,7 +31,7 @@ impl Function {
 
         Self {
             name: function.name,
-            fragments: fragment_models,
+            body: fragment_models,
         }
     }
 }

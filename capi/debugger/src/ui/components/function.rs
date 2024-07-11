@@ -13,7 +13,7 @@ use crate::{
 #[component]
 pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
     let fragments = function
-        .fragments
+        .body
         .into_iter()
         .map(|fragment| {
             view! {
