@@ -15,10 +15,7 @@ impl Fragment {
         if let Some(next) = self.next {
             next.hash(&mut hasher);
         };
-        {
-            let FragmentPayload::Expression(expression) = &self.payload;
-            expression.hash(&mut hasher);
-        }
+        self.payload.hash(&mut hasher);
 
         FragmentId::new(hasher.finalize())
     }
@@ -39,4 +36,11 @@ impl FragmentParent {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
     Expression(FragmentExpression),
+}
+
+impl FragmentPayload {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        let FragmentPayload::Expression(expression) = &self;
+        expression.hash(hasher);
+    }
 }
