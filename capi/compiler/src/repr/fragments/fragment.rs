@@ -2,7 +2,7 @@ use super::{FragmentId, FragmentPayload};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
-    pub parent: FragmentAddressParent,
+    pub parent: FragmentParent,
     pub next: Option<FragmentId>,
     pub payload: FragmentPayload,
 }
@@ -24,13 +24,13 @@ impl Fragment {
 }
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum FragmentAddressParent {
+pub enum FragmentParent {
     Function { name: String },
 }
 
-impl FragmentAddressParent {
+impl FragmentParent {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        let FragmentAddressParent::Function { name } = self;
+        let FragmentParent::Function { name } = self;
         hasher.update(name.as_bytes());
     }
 }
