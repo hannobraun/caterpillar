@@ -6,7 +6,7 @@ use capi_process::{EvaluatorEffect, Location, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct FragmentModel {
-    pub payload: FragmentExpression,
+    pub expression: FragmentExpression,
     pub location: Option<Location>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
@@ -55,7 +55,7 @@ impl FragmentModel {
         let FragmentPayload::Expression(expression) = fragment.payload;
 
         Self {
-            payload: expression,
+            expression,
             location,
             has_durable_breakpoint,
             is_comment,

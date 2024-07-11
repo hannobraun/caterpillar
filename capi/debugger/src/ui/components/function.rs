@@ -90,7 +90,7 @@ pub fn Fragment(
         leptos::spawn_local(send_command(command, commands.clone()));
     };
 
-    let expression = format!("{}", fragment.payload);
+    let expression = format!("{}", fragment.expression);
 
     view! {
         <span>
