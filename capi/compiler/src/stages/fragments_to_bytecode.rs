@@ -3,7 +3,7 @@ use std::iter;
 use capi_process::{Bytecode, Function, Instruction, Location};
 
 use crate::{
-    repr::fragments::{Fragment, FragmentId, FragmentExpression, Fragments},
+    repr::fragments::{Fragment, FragmentExpression, FragmentId, Fragments},
     source_map::SourceMap,
 };
 

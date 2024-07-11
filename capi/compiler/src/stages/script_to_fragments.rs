@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentId, FragmentMap, FragmentParent, FragmentExpression,
+        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
         Fragments, Function,
     },
     syntax::{Expression, Script},
