@@ -21,11 +21,15 @@ impl Function {
     ) -> Self {
         let mut body = Vec::new();
 
-        let start = function.start;
-
-        body.extend(fragments.inner.iter_from(start).cloned().filter_map(
-            |fragment| Expression::new(fragment, source_map, process),
-        ));
+        body.extend(
+            fragments
+                .inner
+                .iter_from(function.start)
+                .cloned()
+                .filter_map(|fragment| {
+                    Expression::new(fragment, source_map, process)
+                }),
+        );
 
         Self {
             name: function.name,
