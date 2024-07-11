@@ -19,19 +19,17 @@ impl Function {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
-        let mut fragment_models = Vec::new();
+        let mut body = Vec::new();
 
         if let Some(start) = function.start {
-            fragment_models.extend(
-                fragments.inner.iter_from(start).cloned().map(|fragment| {
-                    Expression::new(fragment, source_map, process)
-                }),
-            );
+            body.extend(fragments.inner.iter_from(start).cloned().map(
+                |fragment| Expression::new(fragment, source_map, process),
+            ));
         }
 
         Self {
             name: function.name,
-            body: fragment_models,
+            body,
         }
     }
 }
