@@ -260,7 +260,9 @@ mod tests {
 
         body.extend(fragments.inner.drain_from(start).filter_map(|fragment| {
             match fragment.payload {
-                FragmentPayload::Expression { expression } => Some(expression),
+                FragmentPayload::Expression { expression, .. } => {
+                    Some(expression)
+                }
                 FragmentPayload::Terminator => None,
             }
         }));
