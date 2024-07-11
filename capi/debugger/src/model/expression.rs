@@ -21,6 +21,7 @@ impl Expression {
         process: &Process,
     ) -> Self {
         let fragment_id = fragment.id();
+        let FragmentPayload::Expression(expression) = fragment.payload;
 
         let location = source_map.fragment_to_instruction(&fragment_id);
 
@@ -30,10 +31,8 @@ impl Expression {
             false
         };
 
-        let is_comment = matches!(
-            fragment.payload,
-            FragmentPayload::Expression(FragmentExpression::Comment { .. })
-        );
+        let is_comment =
+            matches!(expression, FragmentExpression::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
@@ -53,8 +52,6 @@ impl Expression {
         } else {
             false
         };
-
-        let FragmentPayload::Expression(expression) = fragment.payload;
 
         Self {
             expression,
