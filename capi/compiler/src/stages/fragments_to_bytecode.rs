@@ -54,7 +54,7 @@ impl Compiler<'_> {
         let fragment_id = fragment.id();
 
         let expression = match fragment.payload {
-            FragmentPayload::Expression(expression) => expression,
+            FragmentPayload::Expression { expression } => expression,
             FragmentPayload::Terminator => {
                 // A terminator only has meaning in the source code
                 // representation, but doesn't do anything at runtime.

@@ -21,7 +21,8 @@ impl Expression {
         process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
-        let FragmentPayload::Expression(expression) = fragment.payload else {
+        let FragmentPayload::Expression { expression } = fragment.payload
+        else {
             return None;
         };
 

@@ -39,14 +39,14 @@ impl FragmentParent {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
-    Expression(FragmentExpression),
+    Expression { expression: FragmentExpression },
     Terminator,
 }
 
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Expression(expression) => {
+            Self::Expression { expression } => {
                 hasher.update(b"expression");
                 expression.hash(hasher);
             }

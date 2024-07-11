@@ -131,7 +131,7 @@ fn compile_expression(
     Fragment {
         parent,
         next: Some(next),
-        payload: FragmentPayload::Expression(expression),
+        payload: FragmentPayload::Expression { expression },
     }
 }
 
@@ -260,7 +260,7 @@ mod tests {
 
         body.extend(fragments.inner.drain_from(start).filter_map(|fragment| {
             match fragment.payload {
-                FragmentPayload::Expression(expression) => Some(expression),
+                FragmentPayload::Expression { expression } => Some(expression),
                 FragmentPayload::Terminator => None,
             }
         }));
