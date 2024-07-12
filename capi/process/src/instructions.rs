@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
-use crate::{Location, Value};
+use crate::Value;
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -24,10 +24,9 @@ impl Instructions {
         self.inner.pop_front()
     }
 
-    pub fn get(&self, location: &Location) -> &Instruction {
-        let (stored_index, instruction) =
-            &self.inner[location.index.to_usize()];
-        assert_eq!(&location.index, stored_index);
+    pub fn get(&self, location: &InstructionIndex) -> &Instruction {
+        let (stored_index, instruction) = &self.inner[location.to_usize()];
+        assert_eq!(location, stored_index);
         instruction
     }
 }
