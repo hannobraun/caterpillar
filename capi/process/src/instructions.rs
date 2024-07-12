@@ -24,9 +24,9 @@ impl Instructions {
         self.inner.pop_front()
     }
 
-    pub fn get(&self, location: &InstructionIndex) -> &Instruction {
-        let (stored_index, instruction) = &self.inner[location.to_usize()];
-        assert_eq!(location, stored_index);
+    pub fn get(&self, index: &InstructionIndex) -> &Instruction {
+        let (stored_index, instruction) = &self.inner[index.to_usize()];
+        assert_eq!(index, stored_index);
         instruction
     }
 }
