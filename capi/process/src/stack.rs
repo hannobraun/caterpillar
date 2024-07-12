@@ -124,8 +124,7 @@ impl Stack {
         loop {
             let frame = self.frames.last_mut()?;
 
-            let Some(instruction) = frame.function.consume_next_instruction()
-            else {
+            let Some(instruction) = frame.consume_next_instruction() else {
                 self.pop_frame()
                     .expect("Just accessed frame; must be able to pop it");
                 continue;
@@ -141,6 +140,12 @@ struct StackFrame {
     pub function: Function,
     pub bindings: Bindings,
     pub operands: Operands,
+}
+
+impl StackFrame {
+    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
+        self.function.consume_next_instruction()
+    }
 }
 
 pub type Bindings = BTreeMap<String, Value>;
