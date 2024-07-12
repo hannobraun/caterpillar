@@ -141,11 +141,11 @@ struct StackFrame {
 }
 
 impl StackFrame {
-    pub fn next_instruction(&self) -> Option<(Location, Instruction)> {
+    fn next_instruction(&self) -> Option<(Location, Instruction)> {
         self.function.next_instruction()
     }
 
-    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
+    fn consume_next_instruction(&mut self) -> Option<Instruction> {
         self.function
             .instructions
             .consume_next()
