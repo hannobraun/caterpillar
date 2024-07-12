@@ -21,15 +21,12 @@ impl Stack {
     }
 
     pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
-        self.frames
-            .last()?
-            .next_instruction()
-            .map(|(location, _)| location)
+        self.frames.last()?.next_instruction()
     }
 
     pub fn next_instruction_overall(&self) -> Option<Location> {
         for frame in self.frames.iter().rev() {
-            if let Some((location, _)) = frame.next_instruction() {
+            if let Some(location) = frame.next_instruction() {
                 return Some(location);
             }
         }
@@ -42,10 +39,7 @@ impl Stack {
         location: &Location,
     ) -> bool {
         self.frames.iter().any(|frame| {
-            frame
-                .next_instruction()
-                .map(|(location, _instruction)| location)
-                == Some(location.clone().next())
+            frame.next_instruction() == Some(location.clone().next())
         })
     }
 
@@ -55,7 +49,6 @@ impl Stack {
         self.frames
             .iter()
             .filter_map(|frame| frame.next_instruction())
-            .map(|(location, _instruction)| location)
     }
 
     pub fn push_frame(
@@ -141,16 +134,13 @@ struct StackFrame {
 }
 
 impl StackFrame {
-    fn next_instruction(&self) -> Option<(Location, Instruction)> {
+    fn next_instruction(&self) -> Option<Location> {
         self.function
             .instructions
             .next()
-            .map(|(index, instruction)| {
-                let location = Location {
-                    function: self.function.name.clone(),
-                    index,
-                };
-                (location, instruction)
+            .map(|(index, _)| Location {
+                function: self.function.name.clone(),
+                index,
             })
     }
 
