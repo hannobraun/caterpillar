@@ -144,7 +144,10 @@ struct StackFrame {
 
 impl StackFrame {
     pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
-        self.function.consume_next_instruction()
+        self.function
+            .instructions
+            .consume_next()
+            .map(|(_, instruction)| instruction)
     }
 }
 

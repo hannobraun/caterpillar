@@ -25,10 +25,4 @@ impl Function {
             (location, instruction)
         })
     }
-
-    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
-        self.instructions
-            .consume_next()
-            .map(|(_, instruction)| instruction)
-    }
 }
