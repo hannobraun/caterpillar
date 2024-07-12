@@ -142,7 +142,16 @@ struct StackFrame {
 
 impl StackFrame {
     fn next_instruction(&self) -> Option<(Location, Instruction)> {
-        self.function.next_instruction()
+        self.function
+            .instructions
+            .next()
+            .map(|(index, instruction)| {
+                let location = Location {
+                    function: self.function.name.clone(),
+                    index,
+                };
+                (location, instruction)
+            })
     }
 
     fn consume_next_instruction(&mut self) -> Option<Instruction> {

@@ -1,4 +1,4 @@
-use crate::{instructions::Instructions, Instruction, Location};
+use crate::instructions::Instructions;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
@@ -14,15 +14,5 @@ impl Function {
             arguments,
             instructions: Instructions::default(),
         }
-    }
-
-    pub fn next_instruction(&self) -> Option<(Location, Instruction)> {
-        self.instructions.next().map(|(index, instruction)| {
-            let location = Location {
-                function: self.name.clone(),
-                index,
-            };
-            (location, instruction)
-        })
     }
 }
