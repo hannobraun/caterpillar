@@ -60,11 +60,7 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
-        let mut new_frame = StackFrame {
-            function,
-            bindings: Bindings::default(),
-            operands: Operands::default(),
-        };
+        let mut new_frame = StackFrame::new(function);
 
         if let Some(calling_frame) = self.frames.last_mut() {
             for argument in new_frame.function.arguments.iter().rev() {
@@ -134,6 +130,14 @@ struct StackFrame {
 }
 
 impl StackFrame {
+    fn new(function: Function) -> Self {
+        Self {
+            function,
+            bindings: Bindings::default(),
+            operands: Operands::default(),
+        }
+    }
+
     fn next_instruction(&self) -> Option<Location> {
         self.function
             .instructions
