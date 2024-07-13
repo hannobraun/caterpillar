@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::Function;
+use crate::{Function, Instructions};
 
 /// Code that is executed by the interpreter
 ///
@@ -14,6 +14,7 @@ use crate::Function;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Bytecode {
+    pub instructions: Instructions,
     pub functions: BTreeMap<String, Function>,
 }
 

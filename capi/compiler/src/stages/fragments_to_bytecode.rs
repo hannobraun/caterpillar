@@ -26,6 +26,8 @@ pub fn fragments_to_bytecode(
         );
     }
 
+    dbg!(&bytecode.instructions);
+
     (bytecode, source_map)
 }
 
@@ -117,6 +119,7 @@ impl Compiler<'_> {
         fragment_id: FragmentId,
         output: &mut Function,
     ) {
+        self.bytecode.instructions.push(instruction.clone());
         let index = output.instructions.push(instruction);
 
         let runtime_location = Location {
