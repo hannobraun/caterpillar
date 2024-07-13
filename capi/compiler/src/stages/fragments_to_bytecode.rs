@@ -1,4 +1,4 @@
-use capi_process::{Bytecode, Function, Instruction, Location};
+use capi_process::{Bytecode, Function, Instruction, Instructions, Location};
 
 use crate::{
     repr::fragments::{
@@ -43,7 +43,11 @@ impl Compiler<'_> {
         args: Vec<String>,
         fragments: impl IntoIterator<Item = Fragment>,
     ) {
-        let mut output = Function::new(name.clone(), args);
+        let mut output = Function {
+            name: name.clone(),
+            arguments: args,
+            instructions: Instructions::default(),
+        };
 
         for fragment in fragments {
             self.compile_fragment(fragment, &mut output);
