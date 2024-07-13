@@ -47,6 +47,7 @@ impl Compiler<'_> {
             name: name.clone(),
             arguments: args,
             first_instruction: None,
+            num_instructions: 0,
             instructions: Instructions::default(),
         };
 
@@ -126,6 +127,7 @@ impl Compiler<'_> {
     ) {
         let index = self.bytecode.instructions.push(instruction.clone());
         output.first_instruction = output.first_instruction.or(Some(index));
+        output.num_instructions += 1;
 
         let index = output.instructions.push(instruction);
 
