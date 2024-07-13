@@ -46,6 +46,7 @@ impl Compiler<'_> {
         let mut output = Function {
             name: name.clone(),
             arguments: args,
+            first_instruction: None,
             instructions: Instructions::default(),
         };
 
@@ -123,7 +124,9 @@ impl Compiler<'_> {
         fragment_id: FragmentId,
         output: &mut Function,
     ) {
-        self.bytecode.instructions.push(instruction.clone());
+        let index = self.bytecode.instructions.push(instruction.clone());
+        output.first_instruction = output.first_instruction.or(Some(index));
+
         let index = output.instructions.push(instruction);
 
         let runtime_location = Location {
