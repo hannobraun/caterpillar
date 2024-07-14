@@ -94,7 +94,7 @@ impl Process {
 
         if self
             .breakpoints
-            .should_stop_at_and_clear_ephemeral(next_instruction)
+            .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
             self.state.add_effect(EvaluatorEffect::Builtin(
                 BuiltinEffect::Breakpoint,
