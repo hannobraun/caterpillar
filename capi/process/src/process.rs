@@ -57,12 +57,12 @@ impl Process {
         self.breakpoints.set_durable(index);
     }
 
-    pub fn continue_(&mut self, and_stop_at: Option<Location>) {
+    pub fn continue_(&mut self, and_stop_at: Option<InstructionIndex>) {
         if let Some(EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint)) =
             self.state.first_unhandled_effect()
         {
             if let Some(instruction) = and_stop_at {
-                self.breakpoints.set_ephemeral(instruction.index);
+                self.breakpoints.set_ephemeral(instruction);
             }
 
             self.handle_first_effect();

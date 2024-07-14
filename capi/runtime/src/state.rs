@@ -72,7 +72,8 @@ impl RuntimeState {
                     self.process.set_durable_breakpoint(location.index);
                 }
                 Command::Continue { and_stop_at } => {
-                    self.process.continue_(and_stop_at);
+                    self.process
+                        .continue_(and_stop_at.map(|location| location.index));
                 }
                 Command::Reset => {
                     self.process.reset(bytecode, self.arguments.clone());
@@ -87,6 +88,7 @@ impl RuntimeState {
                             .process
                             .stack()
                             .next_instruction_overall()
+                            .map(|location| location.index)
                             .unwrap();
                         self.process.continue_(Some(and_stop_at))
                     }
