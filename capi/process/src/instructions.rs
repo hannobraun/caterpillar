@@ -16,14 +16,6 @@ impl Instructions {
         index
     }
 
-    pub fn next(&self) -> Option<(InstructionIndex, Instruction)> {
-        self.inner.front().cloned()
-    }
-
-    pub fn consume_next(&mut self) -> Option<(InstructionIndex, Instruction)> {
-        self.inner.pop_front()
-    }
-
     pub fn get(&self, index: &InstructionIndex) -> Option<&Instruction> {
         let (stored_index, instruction) = self.inner.get(index.to_usize())?;
         assert_eq!(index, stored_index);
