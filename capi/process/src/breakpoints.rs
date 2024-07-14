@@ -15,8 +15,8 @@ impl Breakpoints {
         self.durable.contains(index)
     }
 
-    pub fn ephemeral_at(&self, location: &Location) -> bool {
-        self.ephemeral.contains(&location.index)
+    pub fn ephemeral_at(&self, index: &InstructionIndex) -> bool {
+        self.ephemeral.contains(index)
     }
 
     pub fn set_durable(&mut self, index: InstructionIndex) {
@@ -36,7 +36,7 @@ impl Breakpoints {
         location: &Location,
     ) -> bool {
         let durable_at_location = self.durable_at(&location.index);
-        let ephemeral_at_location = self.ephemeral_at(location);
+        let ephemeral_at_location = self.ephemeral_at(&location.index);
 
         if ephemeral_at_location {
             self.ephemeral.remove(&location.index);
