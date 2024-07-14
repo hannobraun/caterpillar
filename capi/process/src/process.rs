@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
     instructions::InstructionIndex,
-    BuiltinEffect, Bytecode, EvaluatorEffect, Location, Stack, Value,
+    BuiltinEffect, Bytecode, EvaluatorEffect, Stack, Value,
 };
 
 #[derive(
@@ -91,7 +91,7 @@ impl Process {
             }
         };
 
-        self.state.most_recent_step = Some(next_instruction.clone());
+        self.state.most_recent_step = Some(next_instruction.index);
 
         if self
             .breakpoints
@@ -108,16 +108,14 @@ impl Process {
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct ProcessState {
-    most_recent_step: Option<Location>,
+    most_recent_step: Option<InstructionIndex>,
     unhandled_effects: VecDeque<EvaluatorEffect>,
     has_finished: bool,
 }
 
 impl ProcessState {
     pub fn most_recent_step(&self) -> Option<InstructionIndex> {
-        self.most_recent_step
-            .as_ref()
-            .map(|location| location.index)
+        self.most_recent_step.as_ref().copied()
     }
 
     pub fn first_unhandled_effect(&self) -> Option<&EvaluatorEffect> {
