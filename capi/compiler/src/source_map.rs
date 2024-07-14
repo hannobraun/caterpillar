@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::{InstructionIndex, Location as RuntimeLocation};
+use capi_process::InstructionIndex;
 
 use crate::repr::fragments::FragmentId;
 
@@ -15,11 +15,11 @@ pub struct SourceMap {
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        runtime: RuntimeLocation,
+        runtime: InstructionIndex,
         fragment: FragmentId,
     ) {
-        self.instruction_to_fragment.insert(runtime.index, fragment);
-        self.fragment_to_instruction.insert(fragment, runtime.index);
+        self.instruction_to_fragment.insert(runtime, fragment);
+        self.fragment_to_instruction.insert(fragment, runtime);
     }
 
     pub fn instruction_to_fragment(

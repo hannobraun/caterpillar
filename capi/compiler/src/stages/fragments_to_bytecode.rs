@@ -139,6 +139,6 @@ impl Compiler<'_> {
 
         let runtime_location = Location { index };
         self.source_map
-            .define_mapping(runtime_location.clone(), fragment_id);
+            .define_mapping(runtime_location.index, fragment_id);
     }
 }
