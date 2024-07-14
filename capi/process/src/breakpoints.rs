@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use crate::{instructions::InstructionIndex, Location};
+use crate::instructions::InstructionIndex;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
@@ -33,13 +33,13 @@ impl Breakpoints {
 
     pub fn should_stop_at_and_clear_ephemeral(
         &mut self,
-        location: &Location,
+        index: &InstructionIndex,
     ) -> bool {
-        let durable_at_location = self.durable_at(&location.index);
-        let ephemeral_at_location = self.ephemeral_at(&location.index);
+        let durable_at_location = self.durable_at(index);
+        let ephemeral_at_location = self.ephemeral_at(index);
 
         if ephemeral_at_location {
-            self.ephemeral.remove(&location.index);
+            self.ephemeral.remove(index);
         }
 
         ephemeral_at_location || durable_at_location
