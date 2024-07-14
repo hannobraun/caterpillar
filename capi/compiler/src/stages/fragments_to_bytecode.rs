@@ -1,5 +1,5 @@
 use capi_process::{
-    Bytecode, Function, Instruction, InstructionSlice, Instructions, Location,
+    Bytecode, Function, Instruction, InstructionSlice, Location,
 };
 
 use crate::{
@@ -49,7 +49,6 @@ impl Compiler<'_> {
             name: name.clone(),
             arguments: args,
             first_instruction: None,
-            instructions: Instructions::default(),
         };
 
         for fragment in fragments {
@@ -137,8 +136,6 @@ impl Compiler<'_> {
                 len: 1,
             }),
         };
-
-        output.instructions.push(instruction);
 
         let runtime_location = Location {
             function: output.name.clone(),
