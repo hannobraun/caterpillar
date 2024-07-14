@@ -48,7 +48,7 @@ impl Compiler<'_> {
         let mut output = Function {
             name: name.clone(),
             arguments: args,
-            first_instruction: None,
+            instructions: None,
         };
 
         for fragment in fragments {
@@ -126,7 +126,7 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let index = self.bytecode.instructions.push(instruction.clone());
-        output.first_instruction = match output.first_instruction {
+        output.instructions = match output.instructions {
             Some(mut slice) => {
                 slice.len += 1;
                 Some(slice)

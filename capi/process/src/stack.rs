@@ -145,7 +145,7 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<Location> {
-        self.function.first_instruction.map(|slice| Location {
+        self.function.instructions.map(|slice| Location {
             function: self.function.name.clone(),
             index: slice.first,
         })
@@ -155,13 +155,13 @@ impl StackFrame {
         &mut self,
         instructions: &Instructions,
     ) -> Option<Instruction> {
-        let mut slice = self.function.first_instruction?;
+        let mut slice = self.function.instructions?;
         let instruction = instructions.get(&slice.first).cloned();
 
         slice.first.increment();
         slice.len -= 1;
 
-        self.function.first_instruction =
+        self.function.instructions =
             if slice.len == 0 { None } else { Some(slice) };
 
         instruction

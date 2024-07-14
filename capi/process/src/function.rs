@@ -4,7 +4,7 @@ use crate::instructions::InstructionIndex;
 pub struct Function {
     pub name: String,
     pub arguments: Vec<String>,
-    pub first_instruction: Option<InstructionSlice>,
+    pub instructions: Option<InstructionSlice>,
 }
 
 #[derive(
