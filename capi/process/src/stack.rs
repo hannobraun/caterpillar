@@ -55,10 +55,10 @@ impl Stack {
 
     pub fn all_next_instructions_in_frames(
         &self,
-    ) -> impl Iterator<Item = Location> + '_ {
-        self.frames
-            .iter()
-            .filter_map(|frame| frame.next_instruction())
+    ) -> impl Iterator<Item = InstructionIndex> + '_ {
+        self.frames.iter().filter_map(|frame| {
+            frame.next_instruction().map(|location| location.index)
+        })
     }
 
     pub fn push_frame(
