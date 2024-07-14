@@ -12,7 +12,6 @@ use crate::instructions::InstructionIndex;
     serde::Serialize,
 )]
 pub struct Location {
-    pub function: String,
     pub index: InstructionIndex,
 }
 

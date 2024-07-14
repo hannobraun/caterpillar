@@ -137,10 +137,7 @@ impl Compiler<'_> {
             }),
         };
 
-        let runtime_location = Location {
-            function: output.name.clone(),
-            index,
-        };
+        let runtime_location = Location { index };
         self.source_map
             .define_mapping(runtime_location.clone(), fragment_id);
     }

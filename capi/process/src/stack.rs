@@ -145,10 +145,9 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<Location> {
-        self.function.instructions.map(|slice| Location {
-            function: self.function.name.clone(),
-            index: slice.first,
-        })
+        self.function
+            .instructions
+            .map(|slice| Location { index: slice.first })
     }
 
     fn consume_next_instruction(
