@@ -27,8 +27,8 @@ impl Breakpoints {
         self.durable.remove(index);
     }
 
-    pub fn set_ephemeral(&mut self, location: Location) {
-        self.ephemeral.insert(location.index);
+    pub fn set_ephemeral(&mut self, index: InstructionIndex) {
+        self.ephemeral.insert(index);
     }
 
     pub fn should_stop_at_and_clear_ephemeral(

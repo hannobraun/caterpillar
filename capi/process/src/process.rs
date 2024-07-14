@@ -61,7 +61,7 @@ impl Process {
             self.state.first_unhandled_effect()
         {
             if let Some(instruction) = and_stop_at {
-                self.breakpoints.set_ephemeral(instruction);
+                self.breakpoints.set_ephemeral(instruction.index);
             }
 
             self.handle_first_effect();
@@ -70,7 +70,7 @@ impl Process {
 
     pub fn stop(&mut self) {
         let next_instruction = self.stack().next_instruction_overall().unwrap();
-        self.breakpoints.set_ephemeral(next_instruction);
+        self.breakpoints.set_ephemeral(next_instruction.index);
     }
 
     pub fn step(&mut self, bytecode: &Bytecode) {
