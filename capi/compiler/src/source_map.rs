@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::Location as RuntimeLocation;
+use capi_process::{InstructionIndex, Location as RuntimeLocation};
 
 use crate::repr::fragments::FragmentId;
 
@@ -8,7 +8,7 @@ use crate::repr::fragments::FragmentId;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<RuntimeLocation, FragmentId>,
+    instruction_to_fragment: BTreeMap<InstructionIndex, FragmentId>,
     fragment_to_instruction: BTreeMap<FragmentId, RuntimeLocation>,
 }
 
@@ -18,8 +18,7 @@ impl SourceMap {
         runtime: RuntimeLocation,
         fragment: FragmentId,
     ) {
-        self.instruction_to_fragment
-            .insert(runtime.clone(), fragment);
+        self.instruction_to_fragment.insert(runtime.index, fragment);
         self.fragment_to_instruction.insert(fragment, runtime);
     }
 
@@ -28,7 +27,7 @@ impl SourceMap {
         runtime: &RuntimeLocation,
     ) -> FragmentId {
         self.instruction_to_fragment
-            .get(runtime)
+            .get(&runtime.index)
             .cloned()
             .expect("Expect every runtime location to map to a syntax location")
     }
