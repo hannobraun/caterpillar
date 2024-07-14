@@ -40,7 +40,7 @@ impl Expression {
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
                 let effect_fragment = source_map.instruction_to_fragment(
-                    &process.state().most_recent_step().unwrap().index,
+                    &process.state().most_recent_step().unwrap(),
                 );
 
                 if effect_fragment == fragment_id {

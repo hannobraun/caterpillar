@@ -114,8 +114,10 @@ pub struct ProcessState {
 }
 
 impl ProcessState {
-    pub fn most_recent_step(&self) -> Option<Location> {
-        self.most_recent_step.clone()
+    pub fn most_recent_step(&self) -> Option<InstructionIndex> {
+        self.most_recent_step
+            .as_ref()
+            .map(|location| location.index)
     }
 
     pub fn first_unhandled_effect(&self) -> Option<&EvaluatorEffect> {
