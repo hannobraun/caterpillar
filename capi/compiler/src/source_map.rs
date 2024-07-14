@@ -24,10 +24,10 @@ impl SourceMap {
 
     pub fn instruction_to_fragment(
         &self,
-        runtime: &RuntimeLocation,
+        index: &InstructionIndex,
     ) -> FragmentId {
         self.instruction_to_fragment
-            .get(&runtime.index)
+            .get(index)
             .cloned()
             .expect("Expect every runtime location to map to a syntax location")
     }

@@ -42,7 +42,7 @@ impl ActiveFunctions {
             .filter_map(|runtime_location| {
                 let fragment_id = source_code
                     .source_map
-                    .instruction_to_fragment(&runtime_location);
+                    .instruction_to_fragment(&runtime_location.index);
                 let function = source_code
                     .fragments
                     .find_function(&fragment_id)
