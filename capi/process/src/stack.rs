@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, Location, Operands, Value,
+    operands::PopOperandError, Function, Instruction, Instructions, Location,
+    Operands, Value,
 };
 
 #[derive(
@@ -107,11 +108,16 @@ impl Stack {
         frame.operands.pop_any()
     }
 
-    pub fn consume_next_instruction(&mut self) -> Option<Instruction> {
+    pub fn consume_next_instruction(
+        &mut self,
+        instructions: &Instructions,
+    ) -> Option<Instruction> {
         loop {
             let frame = self.frames.last_mut()?;
 
-            let Some(instruction) = frame.consume_next_instruction() else {
+            let Some(instruction) =
+                frame.consume_next_instruction(instructions)
+            else {
                 self.pop_frame()
                     .expect("Just accessed frame; must be able to pop it");
                 continue;
@@ -148,7 +154,10 @@ impl StackFrame {
             })
     }
 
-    fn consume_next_instruction(&mut self) -> Option<Instruction> {
+    fn consume_next_instruction(
+        &mut self,
+        _: &Instructions,
+    ) -> Option<Instruction> {
         self.function
             .instructions
             .consume_next()

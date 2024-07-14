@@ -7,7 +7,9 @@ pub fn evaluate(
     bytecode: &Bytecode,
     stack: &mut Stack,
 ) -> Result<EvaluatorState, EvaluatorEffect> {
-    let Some(instruction) = stack.consume_next_instruction() else {
+    let Some(instruction) =
+        stack.consume_next_instruction(&bytecode.instructions)
+    else {
         return Ok(EvaluatorState::Finished);
     };
 
