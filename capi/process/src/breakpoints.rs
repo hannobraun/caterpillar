@@ -1,18 +1,18 @@
 use std::collections::BTreeSet;
 
-use crate::Location;
+use crate::{instructions::InstructionIndex, Location};
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Breakpoints {
-    durable: BTreeSet<Location>,
+    durable: BTreeSet<InstructionIndex>,
     ephemeral: BTreeSet<Location>,
 }
 
 impl Breakpoints {
     pub fn durable_at(&self, location: &Location) -> bool {
-        self.durable.contains(location)
+        self.durable.contains(&location.index)
     }
 
     pub fn ephemeral_at(&self, location: &Location) -> bool {
@@ -20,11 +20,11 @@ impl Breakpoints {
     }
 
     pub fn set_durable(&mut self, location: Location) {
-        self.durable.insert(location);
+        self.durable.insert(location.index);
     }
 
     pub fn clear_durable(&mut self, location: Location) {
-        self.durable.remove(&location);
+        self.durable.remove(&location.index);
     }
 
     pub fn set_ephemeral(&mut self, location: Location) {
