@@ -19,8 +19,8 @@ impl Breakpoints {
         self.ephemeral.contains(location)
     }
 
-    pub fn set_durable(&mut self, location: Location) {
-        self.durable.insert(location.index);
+    pub fn set_durable(&mut self, index: InstructionIndex) {
+        self.durable.insert(index);
     }
 
     pub fn clear_durable(&mut self, location: Location) {
