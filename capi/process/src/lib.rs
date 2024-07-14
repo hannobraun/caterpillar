@@ -17,7 +17,7 @@ pub use self::{
     bytecode::Bytecode,
     evaluator::EvaluatorEffect,
     function::{Function, InstructionSlice},
-    instructions::{Instruction, Instructions},
+    instructions::{Instruction, InstructionIndex, Instructions},
     location::Location,
     operands::Operands,
     process::{Process, ProcessState},
