@@ -49,7 +49,6 @@ impl Compiler<'_> {
             name: name.clone(),
             arguments: args,
             first_instruction: None,
-            num_instructions: 0,
             instructions: Instructions::default(),
         };
 
@@ -129,10 +128,15 @@ impl Compiler<'_> {
     ) {
         let index = self.bytecode.instructions.push(instruction.clone());
         output.first_instruction = match output.first_instruction {
-            Some(slice) => Some(slice),
-            None => Some(InstructionSlice { first: index }),
+            Some(mut slice) => {
+                slice.len += 1;
+                Some(slice)
+            }
+            None => Some(InstructionSlice {
+                first: index,
+                len: 1,
+            }),
         };
-        output.num_instructions += 1;
 
         let index = output.instructions.push(instruction);
 

@@ -5,7 +5,6 @@ pub struct Function {
     pub name: String,
     pub arguments: Vec<String>,
     pub first_instruction: Option<InstructionSlice>,
-    pub num_instructions: u32,
     pub instructions: Instructions,
 }
 
@@ -14,4 +13,5 @@ pub struct Function {
 )]
 pub struct InstructionSlice {
     pub first: InstructionIndex,
+    pub len: u32,
 }
