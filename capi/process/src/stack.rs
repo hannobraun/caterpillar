@@ -145,23 +145,26 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<Location> {
-        self.function
-            .instructions
-            .next()
-            .map(|(index, _)| Location {
-                function: self.function.name.clone(),
-                index,
-            })
+        self.function.first_instruction.map(|slice| Location {
+            function: self.function.name.clone(),
+            index: slice.first,
+        })
     }
 
     fn consume_next_instruction(
         &mut self,
-        _: &Instructions,
+        instructions: &Instructions,
     ) -> Option<Instruction> {
-        self.function
-            .instructions
-            .consume_next()
-            .map(|(_, instruction)| instruction)
+        let mut slice = self.function.first_instruction?;
+        let instruction = instructions.get(&slice.first).cloned();
+
+        slice.first.increment();
+        slice.len -= 1;
+
+        self.function.first_instruction =
+            if slice.len == 0 { None } else { Some(slice) };
+
+        instruction
     }
 }
 
