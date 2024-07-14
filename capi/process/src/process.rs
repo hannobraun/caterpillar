@@ -49,7 +49,7 @@ impl Process {
     }
 
     pub fn clear_durable_breakpoint(&mut self, location: Location) {
-        self.breakpoints.clear_durable(location);
+        self.breakpoints.clear_durable(&location);
     }
 
     pub fn set_durable_breakpoint(&mut self, location: Location) {

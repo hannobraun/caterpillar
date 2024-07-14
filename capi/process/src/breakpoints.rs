@@ -23,7 +23,7 @@ impl Breakpoints {
         self.durable.insert(index);
     }
 
-    pub fn clear_durable(&mut self, location: Location) {
+    pub fn clear_durable(&mut self, location: &Location) {
         self.durable.remove(&location.index);
     }
 
