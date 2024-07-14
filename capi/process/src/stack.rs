@@ -21,8 +21,13 @@ impl Stack {
         self.frames.last().map(|frame| &frame.operands)
     }
 
-    pub fn next_instruction_in_current_frame(&self) -> Option<Location> {
-        self.frames.last()?.next_instruction()
+    pub fn next_instruction_in_current_frame(
+        &self,
+    ) -> Option<InstructionIndex> {
+        self.frames
+            .last()?
+            .next_instruction()
+            .map(|location| location.index)
     }
 
     pub fn next_instruction_overall(&self) -> Option<Location> {
