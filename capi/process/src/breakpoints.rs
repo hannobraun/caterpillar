@@ -7,7 +7,7 @@ use crate::{instructions::InstructionIndex, Location};
 )]
 pub struct Breakpoints {
     durable: BTreeSet<InstructionIndex>,
-    ephemeral: BTreeSet<Location>,
+    ephemeral: BTreeSet<InstructionIndex>,
 }
 
 impl Breakpoints {
@@ -16,7 +16,7 @@ impl Breakpoints {
     }
 
     pub fn ephemeral_at(&self, location: &Location) -> bool {
-        self.ephemeral.contains(location)
+        self.ephemeral.contains(&location.index)
     }
 
     pub fn set_durable(&mut self, index: InstructionIndex) {
@@ -28,7 +28,7 @@ impl Breakpoints {
     }
 
     pub fn set_ephemeral(&mut self, location: Location) {
-        self.ephemeral.insert(location);
+        self.ephemeral.insert(location.index);
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
@@ -39,7 +39,7 @@ impl Breakpoints {
         let ephemeral_at_location = self.ephemeral_at(location);
 
         if ephemeral_at_location {
-            self.ephemeral.remove(location);
+            self.ephemeral.remove(&location.index);
         }
 
         ephemeral_at_location || durable_at_location
