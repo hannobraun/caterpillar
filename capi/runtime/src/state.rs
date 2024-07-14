@@ -69,7 +69,7 @@ impl RuntimeState {
                     self.process.clear_durable_breakpoint(&location.index);
                 }
                 Command::BreakpointSet { location } => {
-                    self.process.set_durable_breakpoint(location);
+                    self.process.set_durable_breakpoint(location.index);
                 }
                 Command::Continue { and_stop_at } => {
                     self.process.continue_(and_stop_at);

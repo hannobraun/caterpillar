@@ -53,8 +53,8 @@ impl Process {
         self.breakpoints.clear_durable(index);
     }
 
-    pub fn set_durable_breakpoint(&mut self, location: Location) {
-        self.breakpoints.set_durable(location.index);
+    pub fn set_durable_breakpoint(&mut self, index: InstructionIndex) {
+        self.breakpoints.set_durable(index);
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<Location>) {
