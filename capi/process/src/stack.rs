@@ -30,10 +30,10 @@ impl Stack {
             .map(|location| location.index)
     }
 
-    pub fn next_instruction_overall(&self) -> Option<Location> {
+    pub fn next_instruction_overall(&self) -> Option<InstructionIndex> {
         for frame in self.frames.iter().rev() {
             if let Some(location) = frame.next_instruction() {
-                return Some(location);
+                return Some(location.index);
             }
         }
 

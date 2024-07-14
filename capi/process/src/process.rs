@@ -71,7 +71,7 @@ impl Process {
 
     pub fn stop(&mut self) {
         let next_instruction = self.stack().next_instruction_overall().unwrap();
-        self.breakpoints.set_ephemeral(next_instruction.index);
+        self.breakpoints.set_ephemeral(next_instruction);
     }
 
     pub fn step(&mut self, bytecode: &Bytecode) {
@@ -91,11 +91,11 @@ impl Process {
             }
         };
 
-        self.state.most_recent_step = Some(next_instruction.index);
+        self.state.most_recent_step = Some(next_instruction);
 
         if self
             .breakpoints
-            .should_stop_at_and_clear_ephemeral(&next_instruction.index)
+            .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
             self.state.add_effect(EvaluatorEffect::Builtin(
                 BuiltinEffect::Breakpoint,

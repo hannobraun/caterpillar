@@ -88,7 +88,6 @@ impl RuntimeState {
                             .process
                             .stack()
                             .next_instruction_overall()
-                            .map(|location| location.index)
                             .unwrap();
                         self.process.continue_(Some(and_stop_at))
                     }
