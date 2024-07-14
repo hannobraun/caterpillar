@@ -1,4 +1,6 @@
-use capi_process::{Bytecode, Function, Instruction, Instructions, Location};
+use capi_process::{
+    Bytecode, Function, Instruction, InstructionSlice, Instructions, Location,
+};
 
 use crate::{
     repr::fragments::{
@@ -126,7 +128,9 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let index = self.bytecode.instructions.push(instruction.clone());
-        output.first_instruction = output.first_instruction.or(Some(index));
+        output.first_instruction = output
+            .first_instruction
+            .or(Some(InstructionSlice { first: index }));
         output.num_instructions += 1;
 
         let index = output.instructions.push(instruction);

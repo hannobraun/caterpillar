@@ -16,7 +16,7 @@ pub use self::{
     builtins::TILES_PER_AXIS,
     bytecode::Bytecode,
     evaluator::EvaluatorEffect,
-    function::Function,
+    function::{Function, InstructionSlice},
     instructions::{Instruction, Instructions},
     location::Location,
     operands::Operands,
