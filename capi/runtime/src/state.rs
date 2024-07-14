@@ -66,7 +66,7 @@ impl RuntimeState {
 
             match command {
                 Command::BreakpointClear { location } => {
-                    self.process.clear_durable_breakpoint(location);
+                    self.process.clear_durable_breakpoint(location.index);
                 }
                 Command::BreakpointSet { location } => {
                     self.process.set_durable_breakpoint(location);
