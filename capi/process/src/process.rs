@@ -49,8 +49,8 @@ impl Process {
         }
     }
 
-    pub fn clear_durable_breakpoint(&mut self, index: InstructionIndex) {
-        self.breakpoints.clear_durable(&index);
+    pub fn clear_durable_breakpoint(&mut self, index: &InstructionIndex) {
+        self.breakpoints.clear_durable(index);
     }
 
     pub fn set_durable_breakpoint(&mut self, location: Location) {
