@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, Instructions, Location,
-    Operands, Value,
+    operands::PopOperandError, Function, Instruction, InstructionIndex,
+    Instructions, Location, Operands, Value,
 };
 
 #[derive(
@@ -37,10 +37,14 @@ impl Stack {
 
     pub fn is_next_instruction_in_any_frame(
         &self,
-        location: &Location,
+        index: &InstructionIndex,
     ) -> bool {
+        let mut index = *index;
+        index.increment();
+
         self.frames.iter().any(|frame| {
-            frame.next_instruction() == Some(location.clone().next())
+            frame.next_instruction().map(|location| location.index)
+                == Some(index)
         })
     }
 
