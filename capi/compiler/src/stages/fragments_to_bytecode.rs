@@ -128,9 +128,10 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let index = self.bytecode.instructions.push(instruction.clone());
-        output.first_instruction = output
-            .first_instruction
-            .or(Some(InstructionSlice { first: index }));
+        output.first_instruction = match output.first_instruction {
+            Some(slice) => Some(slice),
+            None => Some(InstructionSlice { first: index }),
+        };
         output.num_instructions += 1;
 
         let index = output.instructions.push(instruction);
