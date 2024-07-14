@@ -11,8 +11,8 @@ pub struct Breakpoints {
 }
 
 impl Breakpoints {
-    pub fn durable_at(&self, location: &Location) -> bool {
-        self.durable.contains(&location.index)
+    pub fn durable_at(&self, index: &InstructionIndex) -> bool {
+        self.durable.contains(index)
     }
 
     pub fn ephemeral_at(&self, location: &Location) -> bool {
@@ -35,7 +35,7 @@ impl Breakpoints {
         &mut self,
         location: Location,
     ) -> bool {
-        let durable_at_location = self.durable_at(&location);
+        let durable_at_location = self.durable_at(&location.index);
         let ephemeral_at_location = self.ephemeral_at(&location);
 
         if ephemeral_at_location {
