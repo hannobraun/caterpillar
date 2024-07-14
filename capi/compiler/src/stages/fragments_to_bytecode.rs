@@ -138,7 +138,7 @@ impl Compiler<'_> {
             }),
         };
 
-        let index = output.instructions.push(instruction);
+        output.instructions.push(instruction);
 
         let runtime_location = Location {
             function: output.name.clone(),
