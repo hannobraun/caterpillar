@@ -2,12 +2,12 @@ use capi_compiler::{
     repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
-use capi_process::{EvaluatorEffect, Location, Process};
+use capi_process::{EvaluatorEffect, InstructionIndex, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
     pub expression: FragmentExpression,
-    pub location: Option<Location>,
+    pub location: Option<InstructionIndex>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
@@ -60,7 +60,7 @@ impl Expression {
 
         Some(Self {
             expression,
-            location,
+            location: location.map(|location| location.index),
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,
