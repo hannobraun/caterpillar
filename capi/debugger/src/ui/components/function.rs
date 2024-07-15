@@ -1,4 +1,4 @@
-use capi_process::{BuiltinEffect, EvaluatorEffect};
+use capi_process::{BuiltinEffect, EvaluatorEffect, InstructionIndex};
 use capi_protocol::command::Command;
 use leptos::{
     component, ev::MouseEvent, view, wasm_bindgen::JsCast,
@@ -64,9 +64,8 @@ pub fn Expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_instruction = expression
-        .instruction
-        .map(|instruction| ron::to_string(&instruction).unwrap());
+    let data_instruction =
+        expression.instruction.map(|instruction| instruction.0);
     let data_breakpoint = expression.has_durable_breakpoint;
 
     let error = expression.effect.map(|effect| format!("{:?}", effect));
@@ -80,7 +79,8 @@ pub fn Expression(
             // This happens, if the user clicks on a comment.
             return;
         };
-        let instruction = ron::from_str(&instruction).unwrap();
+        let instruction = instruction.parse::<u32>().unwrap();
+        let instruction = InstructionIndex(instruction);
 
         let command = if element.has_attribute("data-breakpoint") {
             Command::BreakpointClear { instruction }
