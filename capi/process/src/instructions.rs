@@ -54,7 +54,9 @@ impl InstructionIndex {
     }
 
     fn to_usize(self) -> usize {
-        self.0.try_into().unwrap()
+        self.0
+            .try_into()
+            .expect("Expected `usize` to cover full range of `u32`")
     }
 }
 
