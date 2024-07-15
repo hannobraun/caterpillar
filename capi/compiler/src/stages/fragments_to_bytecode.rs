@@ -43,18 +43,20 @@ impl Compiler<'_> {
         args: Vec<String>,
         fragments: impl IntoIterator<Item = Fragment>,
     ) {
-        let mut function = Function {
-            name: name.clone(),
-            arguments: args,
-            instructions: FunctionInstructions {
-                first: None,
-                count: 0,
-            },
+        let mut instructions = FunctionInstructions {
+            first: None,
+            count: 0,
         };
 
         for fragment in fragments {
-            self.compile_fragment(fragment, &mut function.instructions);
+            self.compile_fragment(fragment, &mut instructions);
         }
+
+        let function = Function {
+            name: name.clone(),
+            arguments: args,
+            instructions,
+        };
 
         self.bytecode.functions.insert(name, function);
     }
