@@ -11,7 +11,9 @@ pub struct Instructions {
 
 impl Instructions {
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddr {
-        let addr = InstructionAddr(self.inner.len().try_into().unwrap());
+        let addr = InstructionAddr {
+            index: self.inner.len().try_into().unwrap(),
+        };
         self.inner.push_back((addr, instruction));
         addr
     }
@@ -46,15 +48,17 @@ type InstructionsInner = VecDeque<(InstructionAddr, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionAddr(pub u32);
+pub struct InstructionAddr {
+    pub index: u32,
+}
 
 impl InstructionAddr {
     pub fn increment(&mut self) {
-        self.0 += 1;
+        self.index += 1;
     }
 
     fn to_usize(self) -> usize {
-        self.0
+        self.index
             .try_into()
             .expect("Expected `usize` to cover full range of `u32`")
     }

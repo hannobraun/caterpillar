@@ -65,7 +65,7 @@ pub fn Expression(
     }
 
     let data_instruction =
-        expression.instruction.map(|instruction| instruction.0);
+        expression.instruction.map(|instruction| instruction.index);
     let data_breakpoint = expression.has_durable_breakpoint;
 
     let error = expression.effect.map(|effect| format!("{:?}", effect));
@@ -80,7 +80,7 @@ pub fn Expression(
             return;
         };
         let instruction = instruction.parse::<u32>().unwrap();
-        let instruction = InstructionAddr(instruction);
+        let instruction = InstructionAddr { index: instruction };
 
         let command = if element.has_attribute("data-breakpoint") {
             Command::BreakpointClear { instruction }
