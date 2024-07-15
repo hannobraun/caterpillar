@@ -37,9 +37,9 @@ impl Stack {
 
     pub fn is_next_instruction_in_any_frame(
         &self,
-        index: &InstructionAddr,
+        instruction: &InstructionAddr,
     ) -> bool {
-        let mut index = *index;
+        let mut index = *instruction;
         index.increment();
 
         self.frames
