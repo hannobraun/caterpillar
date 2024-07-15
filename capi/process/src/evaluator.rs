@@ -11,7 +11,11 @@ pub fn evaluate(
         return Ok(EvaluatorState::Finished);
     };
 
-    let instruction = bytecode.instructions.get(&addr).unwrap().clone();
+    let instruction = bytecode
+        .instructions
+        .get(&addr)
+        .expect("Expected instruction referenced by stack to exist")
+        .clone();
 
     match instruction {
         Instruction::BindingEvaluate { name } => {
