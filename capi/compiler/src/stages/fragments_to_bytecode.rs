@@ -53,13 +53,17 @@ impl Compiler<'_> {
         };
 
         for fragment in fragments {
-            self.compile_fragment(fragment, &mut output);
+            self.compile_fragment(fragment, &mut output.instructions);
         }
 
         self.bytecode.functions.insert(name, output);
     }
 
-    fn compile_fragment(&mut self, fragment: Fragment, output: &mut Function) {
+    fn compile_fragment(
+        &mut self,
+        fragment: Fragment,
+        instructions: &mut FunctionInstructions,
+    ) {
         let fragment_id = fragment.id();
 
         let expression = match fragment.payload {
@@ -76,14 +80,14 @@ impl Compiler<'_> {
                 self.generate(
                     Instruction::BindingsDefine { names },
                     fragment_id,
-                    &mut output.instructions,
+                    instructions,
                 );
             }
             FragmentExpression::BindingEvaluation { name } => {
                 self.generate(
                     Instruction::BindingEvaluate { name },
                     fragment_id,
-                    &mut output.instructions,
+                    instructions,
                 );
             }
             FragmentExpression::BuiltinCall { name } => {
@@ -104,25 +108,21 @@ impl Compiler<'_> {
                         Instruction::CallBuiltin { name }
                     }
                 };
-                self.generate(
-                    instruction,
-                    fragment_id,
-                    &mut output.instructions,
-                );
+                self.generate(instruction, fragment_id, instructions);
             }
             FragmentExpression::Comment { .. } => {}
             FragmentExpression::FunctionCall { name } => {
                 self.generate(
                     Instruction::CallFunction { name },
                     fragment_id,
-                    &mut output.instructions,
+                    instructions,
                 );
             }
             FragmentExpression::Value(value) => {
                 self.generate(
                     Instruction::Push { value },
                     fragment_id,
-                    &mut output.instructions,
+                    instructions,
                 );
             }
         };
