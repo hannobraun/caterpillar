@@ -37,11 +37,12 @@ impl Breakpoints {
     ) -> bool {
         let durable_at_location = self.durable_at(instruction);
         let ephemeral_at_location = self.ephemeral_at(instruction);
+        let should_stop = ephemeral_at_location || durable_at_location;
 
         if ephemeral_at_location {
             self.ephemeral.remove(instruction);
         }
 
-        ephemeral_at_location || durable_at_location
+        should_stop
     }
 }
