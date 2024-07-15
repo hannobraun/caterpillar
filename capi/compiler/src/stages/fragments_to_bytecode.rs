@@ -52,13 +52,14 @@ impl Compiler<'_> {
             self.compile_fragment(fragment, &mut instructions);
         }
 
-        let function = Function {
-            name: name.clone(),
-            arguments: args,
-            instructions,
-        };
-
-        self.bytecode.functions.insert(name, function);
+        self.bytecode.functions.insert(
+            name.clone(),
+            Function {
+                name,
+                arguments: args,
+                instructions,
+            },
+        );
     }
 
     fn compile_fragment(
