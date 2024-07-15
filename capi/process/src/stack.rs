@@ -154,10 +154,10 @@ impl StackFrame {
         instructions.first.increment();
         instructions.count -= 1;
 
-        self.function.instructions = if instructions.count == 0 {
-            None
-        } else {
+        self.function.instructions = if instructions.count > 0 {
             Some(instructions)
+        } else {
+            None
         };
 
         Some(instruction)
