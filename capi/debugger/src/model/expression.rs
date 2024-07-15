@@ -50,8 +50,10 @@ impl Expression {
                 }
             });
 
-        let is_on_call_stack = if let Some(location) = &instruction {
-            process.stack().is_next_instruction_in_any_frame(location)
+        let is_on_call_stack = if let Some(instruction) = &instruction {
+            process
+                .stack()
+                .is_next_instruction_in_any_frame(instruction)
         } else {
             false
         };
