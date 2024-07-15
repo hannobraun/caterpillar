@@ -65,7 +65,7 @@ pub fn Expression(
     }
 
     let data_location = expression
-        .location
+        .instruction
         .map(|location| ron::to_string(&location).unwrap());
     let data_breakpoint = expression.has_durable_breakpoint;
 
