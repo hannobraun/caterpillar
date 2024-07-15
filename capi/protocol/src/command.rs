@@ -3,7 +3,7 @@ use capi_process::{InstructionIndex, Location};
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {
     BreakpointClear { instruction: InstructionIndex },
-    BreakpointSet { location: InstructionIndex },
+    BreakpointSet { instruction: InstructionIndex },
     Continue { and_stop_at: Option<Location> },
     Reset,
     Step,

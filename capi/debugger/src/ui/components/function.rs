@@ -87,7 +87,9 @@ pub fn Expression(
                 instruction: location,
             }
         } else {
-            Command::BreakpointSet { location }
+            Command::BreakpointSet {
+                instruction: location,
+            }
         };
 
         leptos::spawn_local(send_command(command, commands.clone()));
