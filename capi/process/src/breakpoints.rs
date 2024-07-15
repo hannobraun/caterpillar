@@ -23,8 +23,8 @@ impl Breakpoints {
         self.durable.insert(instruction);
     }
 
-    pub fn clear_durable(&mut self, index: &InstructionAddr) {
-        self.durable.remove(index);
+    pub fn clear_durable(&mut self, instruction: &InstructionAddr) {
+        self.durable.remove(instruction);
     }
 
     pub fn set_ephemeral(&mut self, index: InstructionAddr) {
