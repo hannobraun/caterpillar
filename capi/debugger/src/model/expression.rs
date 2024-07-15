@@ -2,12 +2,12 @@ use capi_compiler::{
     repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
-use capi_process::{EvaluatorEffect, InstructionIndex, Process};
+use capi_process::{EvaluatorEffect, InstructionAddr, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
     pub expression: FragmentExpression,
-    pub instruction: Option<InstructionIndex>,
+    pub instruction: Option<InstructionAddr>,
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,

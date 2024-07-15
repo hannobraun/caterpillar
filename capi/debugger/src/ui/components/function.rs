@@ -1,4 +1,4 @@
-use capi_process::{BuiltinEffect, EvaluatorEffect, InstructionIndex};
+use capi_process::{BuiltinEffect, EvaluatorEffect, InstructionAddr};
 use capi_protocol::command::Command;
 use leptos::{
     component, ev::MouseEvent, view, wasm_bindgen::JsCast,
@@ -80,7 +80,7 @@ pub fn Expression(
             return;
         };
         let instruction = instruction.parse::<u32>().unwrap();
-        let instruction = InstructionIndex(instruction);
+        let instruction = InstructionAddr(instruction);
 
         let command = if element.has_attribute("data-breakpoint") {
             Command::BreakpointClear { instruction }

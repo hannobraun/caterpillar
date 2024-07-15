@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, InstructionIndex,
+    operands::PopOperandError, Function, Instruction, InstructionAddr,
     Instructions, Operands, Value,
 };
 
@@ -21,13 +21,11 @@ impl Stack {
         self.frames.last().map(|frame| &frame.operands)
     }
 
-    pub fn next_instruction_in_current_frame(
-        &self,
-    ) -> Option<InstructionIndex> {
+    pub fn next_instruction_in_current_frame(&self) -> Option<InstructionAddr> {
         self.frames.last()?.next_instruction()
     }
 
-    pub fn next_instruction_overall(&self) -> Option<InstructionIndex> {
+    pub fn next_instruction_overall(&self) -> Option<InstructionAddr> {
         for frame in self.frames.iter().rev() {
             if let Some(instruction) = frame.next_instruction() {
                 return Some(instruction);
@@ -39,7 +37,7 @@ impl Stack {
 
     pub fn is_next_instruction_in_any_frame(
         &self,
-        index: &InstructionIndex,
+        index: &InstructionAddr,
     ) -> bool {
         let mut index = *index;
         index.increment();
@@ -51,7 +49,7 @@ impl Stack {
 
     pub fn all_next_instructions_in_frames(
         &self,
-    ) -> impl Iterator<Item = InstructionIndex> + '_ {
+    ) -> impl Iterator<Item = InstructionAddr> + '_ {
         self.frames
             .iter()
             .filter_map(|frame| frame.next_instruction())
@@ -149,7 +147,7 @@ impl StackFrame {
         }
     }
 
-    fn next_instruction(&self) -> Option<InstructionIndex> {
+    fn next_instruction(&self) -> Option<InstructionAddr> {
         self.function.instructions.map(|slice| slice.first)
     }
 

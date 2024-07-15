@@ -1,4 +1,4 @@
-use crate::instructions::InstructionIndex;
+use crate::instructions::InstructionAddr;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
@@ -11,6 +11,6 @@ pub struct Function {
     Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct InstructionSlice {
-    pub first: InstructionIndex,
+    pub first: InstructionAddr,
     pub len: u32,
 }

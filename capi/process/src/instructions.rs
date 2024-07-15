@@ -10,13 +10,13 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn push(&mut self, instruction: Instruction) -> InstructionIndex {
-        let index = InstructionIndex(self.inner.len().try_into().unwrap());
+    pub fn push(&mut self, instruction: Instruction) -> InstructionAddr {
+        let index = InstructionAddr(self.inner.len().try_into().unwrap());
         self.inner.push_back((index, instruction));
         index
     }
 
-    pub fn get(&self, index: &InstructionIndex) -> Option<&Instruction> {
+    pub fn get(&self, index: &InstructionAddr) -> Option<&Instruction> {
         let (stored_index, instruction) = self.inner.get(index.to_usize())?;
         assert_eq!(index, stored_index);
         Some(instruction)
@@ -32,7 +32,7 @@ impl<'r> IntoIterator for &'r Instructions {
     }
 }
 
-type InstructionsInner = VecDeque<(InstructionIndex, Instruction)>;
+type InstructionsInner = VecDeque<(InstructionAddr, Instruction)>;
 
 #[derive(
     Copy,
@@ -46,9 +46,9 @@ type InstructionsInner = VecDeque<(InstructionIndex, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionIndex(pub u32);
+pub struct InstructionAddr(pub u32);
 
-impl InstructionIndex {
+impl InstructionAddr {
     pub fn increment(&mut self) {
         self.0 += 1;
     }
