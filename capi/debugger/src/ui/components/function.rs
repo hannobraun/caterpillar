@@ -80,7 +80,7 @@ pub fn Expression(
             return;
         };
         let instruction = InstructionAddr {
-            index: instruction.parse::<u32>().unwrap(),
+            index: instruction.parse().unwrap(),
         };
 
         let command = if element.has_attribute("data-breakpoint") {
