@@ -142,25 +142,22 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<InstructionAddr> {
-        self.function
-            .instructions
-            .map(|instructions| instructions.first)
+        self.function.instructions.first
     }
 
     fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
-        let mut instructions = self.function.instructions?;
-        let instruction = instructions.first;
+        let first = self.function.instructions.first.as_mut()?;
+        let next = *first;
 
-        instructions.first.increment();
-        instructions.count -= 1;
+        self.function.instructions.count -= 1;
 
-        self.function.instructions = if instructions.count > 0 {
-            Some(instructions)
+        if self.function.instructions.count > 0 {
+            first.increment();
         } else {
-            None
-        };
+            self.function.instructions.first = None;
+        }
 
-        Some(instruction)
+        Some(next)
     }
 }
 

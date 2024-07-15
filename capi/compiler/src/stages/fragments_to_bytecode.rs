@@ -46,7 +46,10 @@ impl Compiler<'_> {
         let mut output = Function {
             name: name.clone(),
             arguments: args,
-            instructions: None,
+            instructions: FunctionInstructions {
+                first: None,
+                count: 0,
+            },
         };
 
         for fragment in fragments {
@@ -124,16 +127,11 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let instruction = self.bytecode.instructions.push(instruction.clone());
-        output.instructions = match output.instructions {
-            Some(mut instructions) => {
-                instructions.count += 1;
-                Some(instructions)
-            }
-            None => Some(FunctionInstructions {
-                first: instruction,
-                count: 1,
-            }),
+        output.instructions.first = match output.instructions.first {
+            Some(instruction) => Some(instruction),
+            None => Some(instruction),
         };
+        output.instructions.count += 1;
 
         self.source_map.define_mapping(instruction, fragment_id);
     }
