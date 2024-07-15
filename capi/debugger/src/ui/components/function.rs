@@ -79,8 +79,9 @@ pub fn Expression(
             // This happens, if the user clicks on a comment.
             return;
         };
-        let instruction = instruction.parse::<u32>().unwrap();
-        let instruction = InstructionAddr { index: instruction };
+        let instruction = InstructionAddr {
+            index: instruction.parse::<u32>().unwrap(),
+        };
 
         let command = if element.has_attribute("data-breakpoint") {
             Command::BreakpointClear { instruction }
