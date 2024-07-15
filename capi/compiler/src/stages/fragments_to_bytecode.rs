@@ -127,6 +127,7 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let instruction = self.bytecode.instructions.push(instruction.clone());
+
         output.instructions.first =
             output.instructions.first.or(Some(instruction));
         output.instructions.count += 1;
