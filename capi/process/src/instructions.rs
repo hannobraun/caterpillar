@@ -16,9 +16,9 @@ impl Instructions {
         address
     }
 
-    pub fn get(&self, index: &InstructionAddr) -> Option<&Instruction> {
-        let (stored_index, instruction) = self.inner.get(index.to_usize())?;
-        assert_eq!(index, stored_index);
+    pub fn get(&self, address: &InstructionAddr) -> Option<&Instruction> {
+        let (stored_index, instruction) = self.inner.get(address.to_usize())?;
+        assert_eq!(address, stored_index);
         Some(instruction)
     }
 }
