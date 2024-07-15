@@ -66,10 +66,10 @@ impl RuntimeState {
 
             match command {
                 Command::BreakpointClear { location } => {
-                    self.process.clear_durable_breakpoint(&location.index);
+                    self.process.clear_durable_breakpoint(&location);
                 }
                 Command::BreakpointSet { location } => {
-                    self.process.set_durable_breakpoint(location.index);
+                    self.process.set_durable_breakpoint(location);
                 }
                 Command::Continue { and_stop_at } => {
                     self.process

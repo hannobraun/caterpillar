@@ -1,9 +1,9 @@
-use capi_process::Location;
+use capi_process::{InstructionIndex, Location};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {
-    BreakpointClear { location: Location },
-    BreakpointSet { location: Location },
+    BreakpointClear { location: InstructionIndex },
+    BreakpointSet { location: InstructionIndex },
     Continue { and_stop_at: Option<Location> },
     Reset,
     Step,
