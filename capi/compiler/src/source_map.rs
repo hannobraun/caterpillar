@@ -38,7 +38,10 @@ impl SourceMap {
     pub fn fragment_to_instruction(
         &self,
         fragment: &FragmentId,
-    ) -> Option<RuntimeLocation> {
-        self.fragment_to_instruction.get(fragment).cloned()
+    ) -> Option<InstructionIndex> {
+        self.fragment_to_instruction
+            .get(fragment)
+            .cloned()
+            .map(|location| location.index)
     }
 }

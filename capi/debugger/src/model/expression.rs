@@ -29,7 +29,7 @@ impl Expression {
         let location = source_map.fragment_to_instruction(&fragment_id);
 
         let has_durable_breakpoint = if let Some(location) = &location {
-            process.breakpoints().durable_at(&location.index)
+            process.breakpoints().durable_at(location)
         } else {
             false
         };
@@ -51,16 +51,14 @@ impl Expression {
             });
 
         let is_on_call_stack = if let Some(location) = &location {
-            process
-                .stack()
-                .is_next_instruction_in_any_frame(&location.index)
+            process.stack().is_next_instruction_in_any_frame(location)
         } else {
             false
         };
 
         Some(Self {
             expression,
-            instruction: location.map(|location| location.index),
+            instruction: location,
             has_durable_breakpoint,
             is_comment,
             is_on_call_stack,
