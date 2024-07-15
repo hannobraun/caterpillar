@@ -126,6 +126,8 @@ impl Stack {
                 continue;
             };
 
+            let instruction = instructions.get(&instruction).cloned()?;
+
             return Some(instruction);
         }
     }
@@ -155,10 +157,10 @@ impl StackFrame {
 
     fn consume_next_instruction(
         &mut self,
-        instructions: &Instructions,
-    ) -> Option<Instruction> {
+        _: &Instructions,
+    ) -> Option<InstructionAddr> {
         let mut slice = self.function.instructions?;
-        let instruction = instructions.get(&slice.first).cloned();
+        let instruction = slice.first;
 
         slice.first.increment();
         slice.count -= 1;
@@ -166,7 +168,7 @@ impl StackFrame {
         self.function.instructions =
             if slice.count == 0 { None } else { Some(slice) };
 
-        instruction
+        Some(instruction)
     }
 }
 
