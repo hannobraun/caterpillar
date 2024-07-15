@@ -15,8 +15,8 @@ impl Breakpoints {
         self.durable.contains(instruction)
     }
 
-    pub fn ephemeral_at(&self, index: &InstructionAddr) -> bool {
-        self.ephemeral.contains(index)
+    pub fn ephemeral_at(&self, instruction: &InstructionAddr) -> bool {
+        self.ephemeral.contains(instruction)
     }
 
     pub fn set_durable(&mut self, index: InstructionAddr) {
