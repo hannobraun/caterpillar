@@ -46,14 +46,7 @@ impl Compiler<'_> {
         start: FragmentId,
         fragments: &mut FragmentMap,
     ) {
-        let mut instructions = FunctionInstructions {
-            first: None,
-            count: 0,
-        };
-
-        for fragment in fragments.drain_from(start) {
-            self.compile_fragment(fragment, &mut instructions);
-        }
+        let instructions = self.compile_block(start, fragments);
 
         self.bytecode.functions.insert(
             name.clone(),
@@ -63,6 +56,23 @@ impl Compiler<'_> {
                 instructions,
             },
         );
+    }
+
+    fn compile_block(
+        &mut self,
+        start: FragmentId,
+        fragments: &mut FragmentMap,
+    ) -> FunctionInstructions {
+        let mut instructions = FunctionInstructions {
+            first: None,
+            count: 0,
+        };
+
+        for fragment in fragments.drain_from(start) {
+            self.compile_fragment(fragment, &mut instructions);
+        }
+
+        instructions
     }
 
     fn compile_fragment(
