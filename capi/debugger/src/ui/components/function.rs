@@ -80,7 +80,9 @@ pub fn Expression(
             return;
         };
         let instruction = InstructionAddr {
-            index: instruction.parse().unwrap(),
+            index: instruction
+                .parse()
+                .expect("Expected `data-instruction` attribute to be a number"),
         };
 
         let command = if element.has_attribute("data-breakpoint") {
