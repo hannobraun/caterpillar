@@ -80,16 +80,12 @@ pub fn Expression(
             // This happens, if the user clicks on a comment.
             return;
         };
-        let location = ron::from_str(&instruction).unwrap();
+        let instruction = ron::from_str(&instruction).unwrap();
 
         let command = if element.has_attribute("data-breakpoint") {
-            Command::BreakpointClear {
-                instruction: location,
-            }
+            Command::BreakpointClear { instruction }
         } else {
-            Command::BreakpointSet {
-                instruction: location,
-            }
+            Command::BreakpointSet { instruction }
         };
 
         leptos::spawn_local(send_command(command, commands.clone()));
