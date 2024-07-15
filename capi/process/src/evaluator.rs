@@ -14,8 +14,7 @@ pub fn evaluate(
     let instruction = bytecode
         .instructions
         .get(&addr)
-        .expect("Expected instruction referenced by stack to exist")
-        .clone();
+        .expect("Expected instruction referenced by stack to exist");
 
     match instruction {
         Instruction::BindingEvaluate { name } => {
@@ -25,7 +24,7 @@ pub fn evaluate(
                     active stack frame, and therefore bindings, must exist."
                 );
             };
-            let Some(value) = bindings.get(&name).copied() else {
+            let Some(value) = bindings.get(name).copied() else {
                 unreachable!(
                     "Can't find binding `{name}`, but instruction that \
                     evaluates bindings should only be generated for bindings \
@@ -38,9 +37,9 @@ pub fn evaluate(
             stack.push_operand(value);
         }
         Instruction::BindingsDefine { names } => {
-            for name in names.into_iter().rev() {
+            for name in names.iter().rev() {
                 let value = stack.pop_operand()?;
-                stack.define_binding(name, value);
+                stack.define_binding(name.clone(), value);
             }
 
             let Some(operands) = stack.operands() else {
@@ -74,7 +73,11 @@ pub fn evaluate(
                 "store" => builtins::store(stack),
                 "sub" => builtins::sub(stack),
                 "submit_frame" => builtins::submit_frame(),
-                _ => return Err(EvaluatorEffect::UnknownBuiltin { name }),
+                _ => {
+                    return Err(EvaluatorEffect::UnknownBuiltin {
+                        name: name.clone(),
+                    })
+                }
             };
 
             // This is a bit weird. An error is an effect, and effects can be
@@ -97,7 +100,7 @@ pub fn evaluate(
             }
         }
         Instruction::CallFunction { name } => {
-            let function = bytecode.functions.get(&name).cloned().unwrap();
+            let function = bytecode.functions.get(name).cloned().unwrap();
 
             // If the current function is finished, pop its stack frame before
             // pushing the next one. This is tail call optimization.
@@ -109,7 +112,7 @@ pub fn evaluate(
 
             stack.push_frame(function)?;
         }
-        Instruction::Push { value } => stack.push_operand(value),
+        Instruction::Push { value } => stack.push_operand(*value),
         Instruction::ReturnIfNonZero => {
             let value = stack.pop_operand()?;
             if value != Value(0) {
