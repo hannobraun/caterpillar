@@ -46,7 +46,7 @@ type InstructionsInner = VecDeque<(InstructionIndex, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionIndex(u32);
+pub struct InstructionIndex(pub u32);
 
 impl InstructionIndex {
     pub fn increment(&mut self) {
