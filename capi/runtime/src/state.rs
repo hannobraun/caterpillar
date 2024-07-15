@@ -68,10 +68,8 @@ impl RuntimeState {
                 Command::BreakpointClear { instruction } => {
                     self.process.clear_durable_breakpoint(&instruction);
                 }
-                Command::BreakpointSet {
-                    instruction: location,
-                } => {
-                    self.process.set_durable_breakpoint(location);
+                Command::BreakpointSet { instruction } => {
+                    self.process.set_durable_breakpoint(instruction);
                 }
                 Command::Continue { and_stop_at } => {
                     self.process
