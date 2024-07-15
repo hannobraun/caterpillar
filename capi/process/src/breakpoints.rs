@@ -27,8 +27,8 @@ impl Breakpoints {
         self.durable.remove(instruction);
     }
 
-    pub fn set_ephemeral(&mut self, index: InstructionAddr) {
-        self.ephemeral.insert(index);
+    pub fn set_ephemeral(&mut self, instruction: InstructionAddr) {
+        self.ephemeral.insert(instruction);
     }
 
     pub fn should_stop_at_and_clear_ephemeral(
