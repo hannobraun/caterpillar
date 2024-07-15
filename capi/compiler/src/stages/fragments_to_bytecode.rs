@@ -127,10 +127,8 @@ impl Compiler<'_> {
         output: &mut Function,
     ) {
         let instruction = self.bytecode.instructions.push(instruction.clone());
-        output.instructions.first = match output.instructions.first {
-            Some(instruction) => Some(instruction),
-            None => Some(instruction),
-        };
+        output.instructions.first =
+            output.instructions.first.or(Some(instruction));
         output.instructions.count += 1;
 
         self.source_map.define_mapping(instruction, fragment_id);
