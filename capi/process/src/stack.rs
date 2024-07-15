@@ -118,9 +118,7 @@ impl Stack {
         loop {
             let frame = self.frames.last_mut()?;
 
-            let Some(instruction) =
-                frame.consume_next_instruction(instructions)
-            else {
+            let Some(instruction) = frame.consume_next_instruction() else {
                 self.pop_frame()
                     .expect("Just accessed frame; must be able to pop it");
                 continue;
@@ -155,10 +153,7 @@ impl StackFrame {
             .map(|instructions| instructions.first)
     }
 
-    fn consume_next_instruction(
-        &mut self,
-        _: &Instructions,
-    ) -> Option<InstructionAddr> {
+    fn consume_next_instruction(&mut self) -> Option<InstructionAddr> {
         let mut slice = self.function.instructions?;
         let instruction = slice.first;
 
