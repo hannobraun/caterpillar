@@ -12,6 +12,8 @@ pub fn evaluate(
         return Ok(EvaluatorState::Finished);
     };
 
+    let instruction = bytecode.instructions.get(&instruction).unwrap().clone();
+
     match instruction {
         Instruction::BindingEvaluate { name } => {
             let Some(bindings) = stack.bindings() else {

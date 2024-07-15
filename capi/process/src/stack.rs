@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, InstructionAddr,
-    Instructions, Operands, Value,
+    operands::PopOperandError, Function, InstructionAddr, Instructions,
+    Operands, Value,
 };
 
 #[derive(
@@ -113,8 +113,8 @@ impl Stack {
 
     pub fn take_next_instruction(
         &mut self,
-        instructions: &Instructions,
-    ) -> Option<Instruction> {
+        _: &Instructions,
+    ) -> Option<InstructionAddr> {
         loop {
             let frame = self.frames.last_mut()?;
 
@@ -123,8 +123,6 @@ impl Stack {
                     .expect("Just accessed frame; must be able to pop it");
                 continue;
             };
-
-            let instruction = instructions.get(&instruction).cloned()?;
 
             return Some(instruction);
         }
