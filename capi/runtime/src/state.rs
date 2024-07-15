@@ -65,7 +65,9 @@ impl RuntimeState {
             let command = Command::deserialize(command);
 
             match command {
-                Command::BreakpointClear { location } => {
+                Command::BreakpointClear {
+                    instruction: location,
+                } => {
                     self.process.clear_durable_breakpoint(&location);
                 }
                 Command::BreakpointSet { location } => {

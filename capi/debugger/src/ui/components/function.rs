@@ -83,7 +83,9 @@ pub fn Expression(
         let location = ron::from_str(&instruction).unwrap();
 
         let command = if element.has_attribute("data-breakpoint") {
-            Command::BreakpointClear { location }
+            Command::BreakpointClear {
+                instruction: location,
+            }
         } else {
             Command::BreakpointSet { location }
         };
