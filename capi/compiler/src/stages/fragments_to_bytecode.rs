@@ -76,14 +76,14 @@ impl Compiler<'_> {
                 self.generate(
                     Instruction::BindingsDefine { names },
                     fragment_id,
-                    output,
+                    &mut output.instructions,
                 );
             }
             FragmentExpression::BindingEvaluation { name } => {
                 self.generate(
                     Instruction::BindingEvaluate { name },
                     fragment_id,
-                    output,
+                    &mut output.instructions,
                 );
             }
             FragmentExpression::BuiltinCall { name } => {
@@ -104,18 +104,26 @@ impl Compiler<'_> {
                         Instruction::CallBuiltin { name }
                     }
                 };
-                self.generate(instruction, fragment_id, output);
+                self.generate(
+                    instruction,
+                    fragment_id,
+                    &mut output.instructions,
+                );
             }
             FragmentExpression::Comment { .. } => {}
             FragmentExpression::FunctionCall { name } => {
                 self.generate(
                     Instruction::CallFunction { name },
                     fragment_id,
-                    output,
+                    &mut output.instructions,
                 );
             }
             FragmentExpression::Value(value) => {
-                self.generate(Instruction::Push { value }, fragment_id, output);
+                self.generate(
+                    Instruction::Push { value },
+                    fragment_id,
+                    &mut output.instructions,
+                );
             }
         };
     }
@@ -124,13 +132,12 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
-        output: &mut Function,
+        instructions: &mut FunctionInstructions,
     ) {
         let instruction = self.bytecode.instructions.push(instruction.clone());
 
-        output.instructions.first =
-            output.instructions.first.or(Some(instruction));
-        output.instructions.count += 1;
+        instructions.first = instructions.first.or(Some(instruction));
+        instructions.count += 1;
 
         self.source_map.define_mapping(instruction, fragment_id);
     }
