@@ -35,9 +35,8 @@ impl Breakpoints {
         &mut self,
         instruction: &InstructionAddr,
     ) -> bool {
-        let durable_at_location = self.durable_at(instruction);
         let ephemeral_at_location = self.ephemeral_at(instruction);
-        let should_stop = ephemeral_at_location || durable_at_location;
+        let should_stop = ephemeral_at_location || self.durable_at(instruction);
 
         if ephemeral_at_location {
             self.ephemeral.remove(instruction);
