@@ -148,7 +148,9 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<InstructionAddr> {
-        self.function.instructions.map(|slice| slice.first)
+        self.function
+            .instructions
+            .map(|instructions| instructions.first)
     }
 
     fn consume_next_instruction(
