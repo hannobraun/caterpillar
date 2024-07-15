@@ -39,12 +39,12 @@ impl Stack {
         &self,
         instruction: &InstructionAddr,
     ) -> bool {
-        let mut index = *instruction;
-        index.increment();
+        let mut instruction = *instruction;
+        instruction.increment();
 
         self.frames
             .iter()
-            .any(|frame| frame.next_instruction() == Some(index))
+            .any(|frame| frame.next_instruction() == Some(instruction))
     }
 
     pub fn all_next_instructions_in_frames(
