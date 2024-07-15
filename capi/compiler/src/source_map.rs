@@ -15,11 +15,11 @@ pub struct SourceMap {
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        runtime: InstructionIndex,
+        instruction: InstructionIndex,
         fragment: FragmentId,
     ) {
-        self.instruction_to_fragment.insert(runtime, fragment);
-        self.fragment_to_instruction.insert(fragment, runtime);
+        self.instruction_to_fragment.insert(instruction, fragment);
+        self.fragment_to_instruction.insert(fragment, instruction);
     }
 
     pub fn instruction_to_fragment(
