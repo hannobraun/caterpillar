@@ -75,11 +75,12 @@ pub fn Expression(
         let event_target = event.target().unwrap();
         let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let Some(location) = element.get_attribute("data-instruction") else {
+        let Some(instruction) = element.get_attribute("data-instruction")
+        else {
             // This happens, if the user clicks on a comment.
             return;
         };
-        let location = ron::from_str(&location).unwrap();
+        let location = ron::from_str(&instruction).unwrap();
 
         let command = if element.has_attribute("data-breakpoint") {
             Command::BreakpointClear { location }
