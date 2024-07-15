@@ -111,7 +111,7 @@ impl Stack {
         frame.operands.pop_any()
     }
 
-    pub fn consume_next_instruction(
+    pub fn take_next_instruction(
         &mut self,
         instructions: &Instructions,
     ) -> Option<Instruction> {
