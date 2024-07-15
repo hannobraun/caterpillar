@@ -28,8 +28,8 @@ impl Expression {
 
         let instruction = source_map.fragment_to_instruction(&fragment_id);
 
-        let has_durable_breakpoint = if let Some(location) = &instruction {
-            process.breakpoints().durable_at(location)
+        let has_durable_breakpoint = if let Some(instruction) = &instruction {
+            process.breakpoints().durable_at(instruction)
         } else {
             false
         };
