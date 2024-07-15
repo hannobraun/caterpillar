@@ -7,11 +7,11 @@ pub fn evaluate(
     bytecode: &Bytecode,
     stack: &mut Stack,
 ) -> Result<EvaluatorState, EvaluatorEffect> {
-    let Some(instruction) = stack.take_next_instruction() else {
+    let Some(addr) = stack.take_next_instruction() else {
         return Ok(EvaluatorState::Finished);
     };
 
-    let instruction = bytecode.instructions.get(&instruction).unwrap().clone();
+    let instruction = bytecode.instructions.get(&addr).unwrap().clone();
 
     match instruction {
         Instruction::BindingEvaluate { name } => {
