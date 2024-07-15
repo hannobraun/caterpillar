@@ -159,10 +159,10 @@ impl StackFrame {
         let instruction = instructions.get(&slice.first).cloned();
 
         slice.first.increment();
-        slice.len -= 1;
+        slice.count -= 1;
 
         self.function.instructions =
-            if slice.len == 0 { None } else { Some(slice) };
+            if slice.count == 0 { None } else { Some(slice) };
 
         instruction
     }

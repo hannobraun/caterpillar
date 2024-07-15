@@ -12,5 +12,5 @@ pub struct Function {
 )]
 pub struct FunctionInstructions {
     pub first: InstructionAddr,
-    pub len: u32,
+    pub count: u32,
 }

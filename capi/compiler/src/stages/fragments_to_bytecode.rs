@@ -126,12 +126,12 @@ impl Compiler<'_> {
         let index = self.bytecode.instructions.push(instruction.clone());
         output.instructions = match output.instructions {
             Some(mut slice) => {
-                slice.len += 1;
+                slice.count += 1;
                 Some(slice)
             }
             None => Some(FunctionInstructions {
                 first: index,
-                len: 1,
+                count: 1,
             }),
         };
 
