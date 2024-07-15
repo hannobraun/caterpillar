@@ -125,9 +125,9 @@ impl Compiler<'_> {
     ) {
         let instruction = self.bytecode.instructions.push(instruction.clone());
         output.instructions = match output.instructions {
-            Some(mut slice) => {
-                slice.count += 1;
-                Some(slice)
+            Some(mut instructions) => {
+                instructions.count += 1;
+                Some(instructions)
             }
             None => Some(FunctionInstructions {
                 first: instruction,
