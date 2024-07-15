@@ -1,4 +1,4 @@
-use capi_process::{Bytecode, Function, Instruction, InstructionSlice};
+use capi_process::{Bytecode, Function, FunctionInstructions, Instruction};
 
 use crate::{
     repr::fragments::{
@@ -129,7 +129,7 @@ impl Compiler<'_> {
                 slice.len += 1;
                 Some(slice)
             }
-            None => Some(InstructionSlice {
+            None => Some(FunctionInstructions {
                 first: index,
                 len: 1,
             }),
