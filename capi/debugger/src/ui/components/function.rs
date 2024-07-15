@@ -64,7 +64,7 @@ pub fn Expression(
         class_inner.push_str(" font-bold");
     }
 
-    let data_location = expression
+    let data_instruction = expression
         .instruction
         .map(|instruction| ron::to_string(&instruction).unwrap());
     let data_breakpoint = expression.has_durable_breakpoint;
@@ -97,7 +97,7 @@ pub fn Expression(
             <span class=class_outer>
                 <span
                     class=class_inner
-                    data-location=data_location
+                    data-location=data_instruction
                     data-breakpoint=data_breakpoint
                     on:click=toggle_breakpoint>
                     {expression}
