@@ -123,18 +123,18 @@ impl Compiler<'_> {
         fragment_id: FragmentId,
         output: &mut Function,
     ) {
-        let index = self.bytecode.instructions.push(instruction.clone());
+        let instruction = self.bytecode.instructions.push(instruction.clone());
         output.instructions = match output.instructions {
             Some(mut slice) => {
                 slice.count += 1;
                 Some(slice)
             }
             None => Some(FunctionInstructions {
-                first: index,
+                first: instruction,
                 count: 1,
             }),
         };
 
-        self.source_map.define_mapping(index, fragment_id);
+        self.source_map.define_mapping(instruction, fragment_id);
     }
 }
