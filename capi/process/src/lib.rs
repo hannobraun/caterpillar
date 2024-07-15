@@ -4,7 +4,6 @@ mod bytecode;
 mod evaluator;
 mod function;
 mod instructions;
-mod location;
 mod operands;
 mod process;
 mod stack;
@@ -18,7 +17,6 @@ pub use self::{
     evaluator::EvaluatorEffect,
     function::{Function, InstructionSlice},
     instructions::{Instruction, InstructionIndex, Instructions},
-    location::Location,
     operands::Operands,
     process::{Process, ProcessState},
     stack::Stack,
