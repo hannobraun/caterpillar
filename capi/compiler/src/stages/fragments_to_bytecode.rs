@@ -40,7 +40,7 @@ impl Compiler<'_> {
     fn compile_function(
         &mut self,
         name: String,
-        args: Vec<String>,
+        arguments: Vec<String>,
         fragments: impl IntoIterator<Item = Fragment>,
     ) {
         let mut instructions = FunctionInstructions {
@@ -56,7 +56,7 @@ impl Compiler<'_> {
             name.clone(),
             Function {
                 name,
-                arguments: args,
+                arguments,
                 instructions,
             },
         );
