@@ -92,6 +92,10 @@ impl Compiler<'_> {
                     FragmentExpression::BindingEvaluation { name } => {
                         Instruction::BindingEvaluate { name: name.clone() }
                     }
+                    FragmentExpression::Block { start } => {
+                        let _ = start;
+                        todo!("Block expressions are not supported yet.")
+                    }
                     FragmentExpression::BuiltinCall { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure

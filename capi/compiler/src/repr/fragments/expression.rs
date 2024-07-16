@@ -2,10 +2,13 @@ use std::fmt;
 
 use capi_process::Value;
 
+use super::FragmentId;
+
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentExpression {
     BindingDefinitions { names: Vec<String> },
     BindingEvaluation { name: String },
+    Block { start: FragmentId },
     BuiltinCall { name: String },
     Comment { text: String },
     FunctionCall { name: String },
@@ -25,6 +28,10 @@ impl FragmentExpression {
             Self::BindingEvaluation { name } => {
                 hasher.update(b"binding evaluation");
                 hasher.update(name.as_bytes());
+            }
+            Self::Block { start } => {
+                hasher.update(b"block");
+                start.hash(hasher);
             }
             Self::BuiltinCall { name } => {
                 hasher.update(b"builtin call");
@@ -57,6 +64,7 @@ impl fmt::Display for FragmentExpression {
                 writeln!(f, " .")
             }
             Self::BindingEvaluation { name } => writeln!(f, "{name}"),
+            Self::Block { start } => writeln!(f, "block@{start}"),
             Self::BuiltinCall { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::FunctionCall { name } => write!(f, "{name}"),
