@@ -1,6 +1,4 @@
-use capi_process::{
-    Bytecode, Function, FunctionInstructions, Instruction, InstructionAddr,
-};
+use capi_process::{Bytecode, Function, Instruction, InstructionAddr};
 
 use crate::{
     repr::fragments::{
@@ -51,9 +49,7 @@ impl Compiler<'_> {
             Function {
                 name,
                 arguments,
-                instructions: FunctionInstructions {
-                    first: first_instruction,
-                },
+                first_instruction,
             },
         );
     }

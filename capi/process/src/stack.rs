@@ -132,12 +132,12 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> InstructionAddr {
-        self.function.instructions.first
+        self.function.first_instruction
     }
 
     fn take_next_instruction(&mut self) -> InstructionAddr {
-        let next = self.function.instructions.first;
-        self.function.instructions.first.increment();
+        let next = self.function.first_instruction;
+        self.function.first_instruction.increment();
         next
     }
 }

@@ -4,12 +4,5 @@ use crate::instructions::InstructionAddr;
 pub struct Function {
     pub name: String,
     pub arguments: Vec<String>,
-    pub instructions: FunctionInstructions,
-}
-
-#[derive(
-    Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct FunctionInstructions {
-    pub first: InstructionAddr,
+    pub first_instruction: InstructionAddr,
 }
