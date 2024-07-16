@@ -86,10 +86,8 @@ impl Compiler<'_> {
                     }
                     FragmentExpression::Block { start } => {
                         let start = self.compile_block(*start);
-
-                        Instruction::Push {
-                            value: Value(start.index.to_le_bytes()),
-                        }
+                        let value = Value(start.index.to_le_bytes());
+                        Instruction::Push { value }
                     }
                     FragmentExpression::BuiltinCall { name } => {
                         // Here we check for special built-in functions that are
