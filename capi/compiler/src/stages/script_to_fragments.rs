@@ -271,7 +271,7 @@ mod tests {
         let mut fragments = script_to_fragments(script);
 
         let start = fragments.by_function.remove(0).start;
-        let last_fragment = fragments.inner.drain_from(start).last().unwrap();
+        let last_fragment = fragments.inner.iter_from(start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
 
