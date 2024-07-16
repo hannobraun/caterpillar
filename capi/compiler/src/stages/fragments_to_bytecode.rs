@@ -115,11 +115,7 @@ impl Compiler<'_> {
                     }
                 }
             }
-            FragmentPayload::Terminator => {
-                // A terminator only has meaning in the source code
-                // representation, but doesn't do anything at runtime.
-                Instruction::Return
-            }
+            FragmentPayload::Terminator => Instruction::Return,
         };
 
         self.generate(instruction, fragment.id(), instructions);
