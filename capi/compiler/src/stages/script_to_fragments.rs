@@ -280,10 +280,10 @@ mod tests {
 
         let start = fragments.by_function.remove(0).start;
 
-        body.extend(fragments.inner.drain_from(start).filter_map(|fragment| {
-            match fragment.payload {
+        body.extend(fragments.inner.iter_from(start).filter_map(|fragment| {
+            match &fragment.payload {
                 FragmentPayload::Expression { expression, .. } => {
-                    Some(expression)
+                    Some(expression.clone())
                 }
                 FragmentPayload::Terminator => None,
             }
