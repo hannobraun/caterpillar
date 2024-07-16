@@ -107,17 +107,11 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
-        loop {
-            let frame = self.frames.last_mut()?;
+        let frame = self.frames.last_mut()?;
 
-            let Some(instruction) = frame.take_next_instruction() else {
-                self.pop_frame()
-                    .expect("Just accessed frame; must be able to pop it");
-                continue;
-            };
+        let instruction = frame.take_next_instruction();
 
-            return Some(instruction);
-        }
+        Some(instruction)
     }
 }
 
@@ -141,10 +135,10 @@ impl StackFrame {
         self.function.instructions.first
     }
 
-    fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
+    fn take_next_instruction(&mut self) -> InstructionAddr {
         let next = self.function.instructions.first;
         self.function.instructions.first.increment();
-        Some(next)
+        next
     }
 }
 
