@@ -142,11 +142,11 @@ impl StackFrame {
     }
 
     fn next_instruction(&self) -> Option<InstructionAddr> {
-        self.function.instructions.first
+        Some(self.function.instructions.first)
     }
 
     fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
-        let first = self.function.instructions.first.as_mut()?;
+        let first = &mut self.function.instructions.first;
         let next = *first;
         first.increment();
 

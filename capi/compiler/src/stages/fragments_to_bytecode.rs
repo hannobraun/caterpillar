@@ -77,7 +77,7 @@ impl Compiler<'_> {
         };
 
         FunctionInstructions {
-            first: Some(first_instruction),
+            first: first_instruction,
         }
     }
 

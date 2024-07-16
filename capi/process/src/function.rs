@@ -11,5 +11,5 @@ pub struct Function {
     Clone, Copy, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct FunctionInstructions {
-    pub first: Option<InstructionAddr>,
+    pub first: InstructionAddr,
 }
