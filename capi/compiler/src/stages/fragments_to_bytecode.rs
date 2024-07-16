@@ -59,7 +59,7 @@ impl Compiler<'_> {
     fn compile_block(
         &mut self,
         start: FragmentId,
-        fragments: &mut FragmentMap,
+        fragments: &FragmentMap,
     ) -> FunctionInstructions {
         let mut instructions = FunctionInstructions {
             first: None,
