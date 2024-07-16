@@ -74,7 +74,7 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: &Fragment,
-        instructions: &mut FunctionInstructions,
+        _: &mut FunctionInstructions,
     ) -> Option<InstructionAddr> {
         let instruction = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
@@ -118,7 +118,7 @@ impl Compiler<'_> {
             FragmentPayload::Terminator => Instruction::Return,
         };
 
-        let addr = self.generate(instruction, fragment.id(), instructions);
+        let addr = self.generate(instruction, fragment.id());
         Some(addr)
     }
 
@@ -126,7 +126,6 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
-        _: &mut FunctionInstructions,
     ) -> InstructionAddr {
         let addr = self.bytecode.instructions.push(instruction.clone());
 
