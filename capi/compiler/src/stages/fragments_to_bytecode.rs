@@ -140,7 +140,7 @@ impl Compiler<'_> {
         instruction: Instruction,
         fragment_id: FragmentId,
     ) -> InstructionAddr {
-        let addr = self.bytecode.instructions.push(instruction.clone());
+        let addr = self.bytecode.instructions.push(instruction);
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
