@@ -1,4 +1,4 @@
-use capi_process::{Bytecode, Function, Instruction, InstructionAddr};
+use capi_process::{Bytecode, Function, Instruction, InstructionAddr, Value};
 
 use crate::{
     repr::fragments::{
@@ -62,7 +62,7 @@ impl Compiler<'_> {
         let mut first_instruction = None;
 
         for fragment in fragments.iter_from(start) {
-            let addr = self.compile_fragment(fragment);
+            let addr = self.compile_fragment(fragment, fragments);
             first_instruction = first_instruction.or(addr);
         }
 
@@ -80,6 +80,7 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: &Fragment,
+        fragments: &FragmentMap,
     ) -> Option<InstructionAddr> {
         let instruction = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
@@ -93,8 +94,11 @@ impl Compiler<'_> {
                         Instruction::BindingEvaluate { name: name.clone() }
                     }
                     FragmentExpression::Block { start } => {
-                        let _ = start;
-                        todo!("Block expressions are not supported yet.")
+                        let start = self.compile_block(*start, fragments);
+
+                        Instruction::Push {
+                            value: Value(start.index.to_le_bytes()),
+                        }
                     }
                     FragmentExpression::BuiltinCall { name } => {
                         // Here we check for special built-in functions that are
