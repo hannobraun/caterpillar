@@ -74,7 +74,7 @@ impl Compiler<'_> {
         &mut self,
         fragment: &Fragment,
         instructions: &mut FunctionInstructions,
-    ) {
+    ) -> Option<InstructionAddr> {
         let instruction = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
@@ -104,7 +104,7 @@ impl Compiler<'_> {
                         }
                     }
                     FragmentExpression::Comment { .. } => {
-                        return;
+                        return None;
                     }
                     FragmentExpression::FunctionCall { name } => {
                         Instruction::CallFunction { name: name.clone() }
@@ -117,7 +117,8 @@ impl Compiler<'_> {
             FragmentPayload::Terminator => Instruction::Return,
         };
 
-        self.generate(instruction, fragment.id(), instructions);
+        let addr = self.generate(instruction, fragment.id(), instructions);
+        Some(addr)
     }
 
     fn generate(
