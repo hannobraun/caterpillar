@@ -102,16 +102,17 @@ pub fn evaluate(
         Instruction::CallFunction { name } => {
             let function = bytecode.functions.get(name).cloned().unwrap();
 
-            let next_instruction =
-                stack.next_instruction_in_current_frame().map(|addr| {
-                    bytecode.instructions.get(&addr).expect(
-                        "Expected instruction referenced on stack to exist",
-                    )
-                });
+            let next_addr = stack
+                .next_instruction_in_current_frame()
+                .expect("Current instruction isn't return; must not be last");
+            let next_instruction = bytecode
+                .instructions
+                .get(&next_addr)
+                .expect("Expected instruction referenced on stack to exist");
 
             // If the current function is finished, pop its stack frame before
             // pushing the next one. This is tail call optimization.
-            if let Some(Instruction::Return) = next_instruction {
+            if let Instruction::Return = next_instruction {
                 stack
                     .pop_frame()
                     .expect("Currently executing; stack can't be empty");
