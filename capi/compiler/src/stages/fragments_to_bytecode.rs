@@ -59,10 +59,7 @@ impl Compiler<'_> {
         start: FragmentId,
         fragments: &FragmentMap,
     ) -> FunctionInstructions {
-        let mut instructions = FunctionInstructions {
-            first: None,
-            count: 0,
-        };
+        let mut instructions = FunctionInstructions { first: None };
 
         for fragment in fragments.iter_from(start) {
             self.compile_fragment(fragment, &mut instructions);
@@ -130,7 +127,6 @@ impl Compiler<'_> {
         let instruction = self.bytecode.instructions.push(instruction.clone());
 
         instructions.first = instructions.first.or(Some(instruction));
-        instructions.count += 1;
 
         self.source_map.define_mapping(instruction, fragment_id);
     }

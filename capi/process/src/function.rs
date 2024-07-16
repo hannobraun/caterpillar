@@ -12,5 +12,4 @@ pub struct Function {
 )]
 pub struct FunctionInstructions {
     pub first: Option<InstructionAddr>,
-    pub count: u32,
 }
