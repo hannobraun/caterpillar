@@ -32,22 +32,6 @@ impl FragmentMap {
         self.inner.remove(id)
     }
 
-    pub fn drain_from(
-        &mut self,
-        id: FragmentId,
-    ) -> impl Iterator<Item = Fragment> + '_ {
-        let mut next = Some(id);
-
-        iter::from_fn(move || {
-            let id = next.take()?;
-            let fragment = self.remove(&id)?;
-
-            next = fragment.next();
-
-            Some(fragment)
-        })
-    }
-
     pub fn iter_from(&self, id: FragmentId) -> impl Iterator<Item = &Fragment> {
         let mut next = Some(id);
 
