@@ -28,8 +28,6 @@ pub fn fragments_to_bytecode(
         );
     }
 
-    dbg!(&bytecode);
-
     (bytecode, source_map)
 }
 
