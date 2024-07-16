@@ -66,8 +66,8 @@ impl Compiler<'_> {
             count: 0,
         };
 
-        for fragment in fragments.drain_from(start) {
-            self.compile_fragment(&fragment, &mut instructions);
+        for fragment in fragments.iter_from(start) {
+            self.compile_fragment(fragment, &mut instructions);
         }
 
         instructions
