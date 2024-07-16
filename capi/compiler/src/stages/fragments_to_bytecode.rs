@@ -124,10 +124,10 @@ impl Compiler<'_> {
         fragment_id: FragmentId,
         instructions: &mut FunctionInstructions,
     ) {
-        let instruction = self.bytecode.instructions.push(instruction.clone());
+        let addr = self.bytecode.instructions.push(instruction.clone());
 
-        instructions.first = instructions.first.or(Some(instruction));
+        instructions.first = instructions.first.or(Some(addr));
 
-        self.source_map.define_mapping(instruction, fragment_id);
+        self.source_map.define_mapping(addr, fragment_id);
     }
 }
