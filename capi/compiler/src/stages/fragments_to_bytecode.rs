@@ -78,8 +78,6 @@ impl Compiler<'_> {
         fragment: &Fragment,
         instructions: &mut FunctionInstructions,
     ) {
-        let fragment_id = fragment.id();
-
         let expression = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => expression,
             FragmentPayload::Terminator => {
@@ -95,14 +93,14 @@ impl Compiler<'_> {
                     Instruction::BindingsDefine {
                         names: names.clone(),
                     },
-                    fragment_id,
+                    fragment.id(),
                     instructions,
                 );
             }
             FragmentExpression::BindingEvaluation { name } => {
                 self.generate(
                     Instruction::BindingEvaluate { name: name.clone() },
-                    fragment_id,
+                    fragment.id(),
                     instructions,
                 );
             }
@@ -124,20 +122,20 @@ impl Compiler<'_> {
                         Instruction::CallBuiltin { name: name.clone() }
                     }
                 };
-                self.generate(instruction, fragment_id, instructions);
+                self.generate(instruction, fragment.id(), instructions);
             }
             FragmentExpression::Comment { .. } => {}
             FragmentExpression::FunctionCall { name } => {
                 self.generate(
                     Instruction::CallFunction { name: name.clone() },
-                    fragment_id,
+                    fragment.id(),
                     instructions,
                 );
             }
             FragmentExpression::Value(value) => {
                 self.generate(
                     Instruction::Push { value: *value },
-                    fragment_id,
+                    fragment.id(),
                     instructions,
                 );
             }
