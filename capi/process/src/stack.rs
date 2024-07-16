@@ -108,7 +108,6 @@ impl Stack {
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
         let frame = self.frames.last_mut()?;
-
         Some(frame.take_next_instruction())
     }
 }
