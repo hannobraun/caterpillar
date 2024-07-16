@@ -90,6 +90,7 @@ fn compile_block(
             next,
             bindings,
             functions,
+            fragments,
         );
 
         next = fragment.id();
@@ -106,14 +107,21 @@ fn compile_expression(
     next: FragmentId,
     bindings: &Bindings,
     functions: &BTreeSet<String>,
+    fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { expressions } => {
-            let _ = expressions;
-            todo!("Block expressions are not supported yet.")
+            let start = compile_block(
+                expressions,
+                parent.clone(),
+                bindings,
+                functions,
+                fragments,
+            );
+            FragmentExpression::Block { start }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),
@@ -156,6 +164,9 @@ impl Bindings {
                     // This is undesirable, but it'll do for now.
                     self.inner.insert(name);
                 }
+            }
+            if let Expression::Block { expressions } = expression {
+                self.process_block(expressions);
             }
         }
     }
