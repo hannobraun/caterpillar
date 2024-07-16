@@ -12,6 +12,13 @@ impl<'r> SyntaxBuilder<'r> {
         Self { expressions }
     }
 
+    pub fn block(&mut self, f: impl FnOnce(&mut SyntaxBuilder)) -> &mut Self {
+        let mut expressions = Vec::new();
+        f(&mut SyntaxBuilder::new(&mut expressions));
+
+        self.push_expression(Expression::Block { expressions })
+    }
+
     pub fn bind(
         &mut self,
         names: impl IntoIterator<Item = impl Into<String>>,
