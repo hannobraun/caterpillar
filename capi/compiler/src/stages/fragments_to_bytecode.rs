@@ -67,7 +67,7 @@ impl Compiler<'_> {
         };
 
         for fragment in fragments.drain_from(start) {
-            self.compile_fragment(fragment, &mut instructions);
+            self.compile_fragment(&fragment, &mut instructions);
         }
 
         instructions
@@ -75,12 +75,12 @@ impl Compiler<'_> {
 
     fn compile_fragment(
         &mut self,
-        fragment: Fragment,
+        fragment: &Fragment,
         instructions: &mut FunctionInstructions,
     ) {
         let fragment_id = fragment.id();
 
-        let expression = match fragment.payload {
+        let expression = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => expression,
             FragmentPayload::Terminator => {
                 // A terminator only has meaning in the source code
@@ -92,14 +92,16 @@ impl Compiler<'_> {
         match expression {
             FragmentExpression::BindingDefinitions { names } => {
                 self.generate(
-                    Instruction::BindingsDefine { names },
+                    Instruction::BindingsDefine {
+                        names: names.clone(),
+                    },
                     fragment_id,
                     instructions,
                 );
             }
             FragmentExpression::BindingEvaluation { name } => {
                 self.generate(
-                    Instruction::BindingEvaluate { name },
+                    Instruction::BindingEvaluate { name: name.clone() },
                     fragment_id,
                     instructions,
                 );
@@ -119,7 +121,7 @@ impl Compiler<'_> {
                     } else if name == "return_if_zero" {
                         Instruction::ReturnIfZero
                     } else {
-                        Instruction::CallBuiltin { name }
+                        Instruction::CallBuiltin { name: name.clone() }
                     }
                 };
                 self.generate(instruction, fragment_id, instructions);
@@ -127,14 +129,14 @@ impl Compiler<'_> {
             FragmentExpression::Comment { .. } => {}
             FragmentExpression::FunctionCall { name } => {
                 self.generate(
-                    Instruction::CallFunction { name },
+                    Instruction::CallFunction { name: name.clone() },
                     fragment_id,
                     instructions,
                 );
             }
             FragmentExpression::Value(value) => {
                 self.generate(
-                    Instruction::Push { value },
+                    Instruction::Push { value: *value },
                     fragment_id,
                     instructions,
                 );
