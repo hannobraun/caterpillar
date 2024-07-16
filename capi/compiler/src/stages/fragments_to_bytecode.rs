@@ -1,4 +1,6 @@
-use capi_process::{Bytecode, Function, FunctionInstructions, Instruction};
+use capi_process::{
+    Bytecode, Function, FunctionInstructions, Instruction, InstructionAddr,
+};
 
 use crate::{
     repr::fragments::{
@@ -123,11 +125,13 @@ impl Compiler<'_> {
         instruction: Instruction,
         fragment_id: FragmentId,
         instructions: &mut FunctionInstructions,
-    ) {
+    ) -> InstructionAddr {
         let addr = self.bytecode.instructions.push(instruction.clone());
 
         instructions.first = instructions.first.or(Some(addr));
 
         self.source_map.define_mapping(addr, fragment_id);
+
+        addr
     }
 }
