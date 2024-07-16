@@ -8,9 +8,7 @@ use crate::{
     source_map::SourceMap,
 };
 
-pub fn fragments_to_bytecode(
-    mut fragments: Fragments,
-) -> (Bytecode, SourceMap) {
+pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
@@ -24,7 +22,7 @@ pub fn fragments_to_bytecode(
             function.name,
             function.args,
             function.start,
-            &mut fragments.inner,
+            &fragments.inner,
         );
     }
 
@@ -42,7 +40,7 @@ impl Compiler<'_> {
         name: String,
         arguments: Vec<String>,
         start: FragmentId,
-        fragments: &mut FragmentMap,
+        fragments: &FragmentMap,
     ) {
         let instructions = self.compile_block(start, fragments);
 
