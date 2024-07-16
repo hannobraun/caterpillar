@@ -76,66 +76,65 @@ impl Compiler<'_> {
         fragment: &Fragment,
         instructions: &mut FunctionInstructions,
     ) {
-        let expression = match &fragment.payload {
-            FragmentPayload::Expression { expression, .. } => expression,
+        match &fragment.payload {
+            FragmentPayload::Expression { expression, .. } => {
+                match expression {
+                    FragmentExpression::BindingDefinitions { names } => {
+                        self.generate(
+                            Instruction::BindingsDefine {
+                                names: names.clone(),
+                            },
+                            fragment.id(),
+                            instructions,
+                        );
+                    }
+                    FragmentExpression::BindingEvaluation { name } => {
+                        self.generate(
+                            Instruction::BindingEvaluate { name: name.clone() },
+                            fragment.id(),
+                            instructions,
+                        );
+                    }
+                    FragmentExpression::BuiltinCall { name } => {
+                        let instruction = {
+                            // Here we check for special built-in functions that
+                            // are implemented differently, without making sure
+                            // anywhere, that their name doesn't conflict with
+                            // any user-defined functions.
+                            //
+                            // I think it's fine for now. This seems like a
+                            // temporary hack anyway, while the language is not
+                            // powerful enough to support real conditionals.
+                            if name == "return_if_non_zero" {
+                                Instruction::ReturnIfNonZero
+                            } else if name == "return_if_zero" {
+                                Instruction::ReturnIfZero
+                            } else {
+                                Instruction::CallBuiltin { name: name.clone() }
+                            }
+                        };
+                        self.generate(instruction, fragment.id(), instructions);
+                    }
+                    FragmentExpression::Comment { .. } => {}
+                    FragmentExpression::FunctionCall { name } => {
+                        self.generate(
+                            Instruction::CallFunction { name: name.clone() },
+                            fragment.id(),
+                            instructions,
+                        );
+                    }
+                    FragmentExpression::Value(value) => {
+                        self.generate(
+                            Instruction::Push { value: *value },
+                            fragment.id(),
+                            instructions,
+                        );
+                    }
+                }
+            }
             FragmentPayload::Terminator => {
                 // A terminator only has meaning in the source code
                 // representation, but doesn't do anything at runtime.
-                return;
-            }
-        };
-
-        match expression {
-            FragmentExpression::BindingDefinitions { names } => {
-                self.generate(
-                    Instruction::BindingsDefine {
-                        names: names.clone(),
-                    },
-                    fragment.id(),
-                    instructions,
-                );
-            }
-            FragmentExpression::BindingEvaluation { name } => {
-                self.generate(
-                    Instruction::BindingEvaluate { name: name.clone() },
-                    fragment.id(),
-                    instructions,
-                );
-            }
-            FragmentExpression::BuiltinCall { name } => {
-                let instruction = {
-                    // Here we check for special built-in functions that are
-                    // implemented differently, without making sure anywhere,
-                    // that their name doesn't conflict with any user-defined
-                    // functions.
-                    //
-                    // I think it's fine for now. This seems like a temporary
-                    // hack anyway, while the language is not powerful enough
-                    // to support real conditionals.
-                    if name == "return_if_non_zero" {
-                        Instruction::ReturnIfNonZero
-                    } else if name == "return_if_zero" {
-                        Instruction::ReturnIfZero
-                    } else {
-                        Instruction::CallBuiltin { name: name.clone() }
-                    }
-                };
-                self.generate(instruction, fragment.id(), instructions);
-            }
-            FragmentExpression::Comment { .. } => {}
-            FragmentExpression::FunctionCall { name } => {
-                self.generate(
-                    Instruction::CallFunction { name: name.clone() },
-                    fragment.id(),
-                    instructions,
-                );
-            }
-            FragmentExpression::Value(value) => {
-                self.generate(
-                    Instruction::Push { value: *value },
-                    fragment.id(),
-                    instructions,
-                );
             }
         };
     }
