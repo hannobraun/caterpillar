@@ -6,7 +6,10 @@ pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let Some(c) = a.0.checked_add(b.0) else {
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    let Some(c) = a.checked_add(b) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 
@@ -19,7 +22,10 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let c = a.0.wrapping_add(b.0);
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    let c = a.wrapping_add(b);
     let c = if c >= 0 { c } else { c - i32::MIN };
 
     stack.push_operand(c);
@@ -44,10 +50,13 @@ pub fn div(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    if b.0 == 0 {
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    if b == 0 {
         return Err(BuiltinError::DivideByZero);
     }
-    let Some(c) = a.0.checked_div(b.0) else {
+    let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
         return Err(BuiltinError::IntegerOverflow);
     };
@@ -77,7 +86,10 @@ pub fn greater(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let c = if a.0 > b.0 { 1 } else { 0 };
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    let c = if a > b { 1 } else { 0 };
 
     stack.push_operand(c);
 
@@ -87,7 +99,8 @@ pub fn greater(stack: &mut Stack) -> Result {
 pub fn load(stack: &mut Stack) -> Result {
     let address = stack.pop_operand()?;
 
-    let address = address.0.try_into()?;
+    let address = i32::from_le_bytes(address.0);
+    let address = address.try_into()?;
 
     Ok(Some(BuiltinEffect::Load { address }))
 }
@@ -96,7 +109,10 @@ pub fn mul(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let Some(c) = a.0.checked_mul(b.0) else {
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    let Some(c) = a.checked_mul(b) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 
@@ -108,10 +124,12 @@ pub fn mul(stack: &mut Stack) -> Result {
 pub fn neg(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
-    if a.0 == i32::MIN {
+    let a = i32::from_le_bytes(a.0);
+
+    if a == i32::MIN {
         return Err(BuiltinError::IntegerOverflow);
     }
-    let b = -a.0;
+    let b = -a;
 
     stack.push_operand(b);
 
@@ -130,10 +148,13 @@ pub fn remainder(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    if b.0 == 0 {
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    if b == 0 {
         return Err(BuiltinError::DivideByZero);
     }
-    let c = a.0 % b.0;
+    let c = a % b;
 
     stack.push_operand(c);
 
@@ -148,56 +169,61 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     let y = stack.pop_operand()?;
     let x = stack.pop_operand()?;
 
-    if x.0 < 0 {
+    let x = i32::from_le_bytes(x.0);
+    let y = i32::from_le_bytes(y.0);
+    let r = i32::from_le_bytes(r.0);
+    let g = i32::from_le_bytes(g.0);
+    let b = i32::from_le_bytes(b.0);
+    let a = i32::from_le_bytes(a.0);
+
+    if x < 0 {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if y.0 < 0 {
+    if y < 0 {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if x.0 >= TILES_PER_AXIS_I32 {
+    if x >= TILES_PER_AXIS_I32 {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if y.0 >= TILES_PER_AXIS_I32 {
+    if y >= TILES_PER_AXIS_I32 {
         return Err(BuiltinError::OperandOutOfBounds);
     }
 
     let color_channel_min: i32 = u8::MIN.into();
     let color_channel_max: i32 = u8::MAX.into();
 
-    if r.0 < color_channel_min {
+    if r < color_channel_min {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if g.0 < color_channel_min {
+    if g < color_channel_min {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if b.0 < color_channel_min {
+    if b < color_channel_min {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if a.0 < color_channel_min {
+    if a < color_channel_min {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if r.0 > color_channel_max {
+    if r > color_channel_max {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if r.0 > color_channel_max {
+    if r > color_channel_max {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if r.0 > color_channel_max {
+    if r > color_channel_max {
         return Err(BuiltinError::OperandOutOfBounds);
     }
-    if r.0 > color_channel_max {
+    if r > color_channel_max {
         return Err(BuiltinError::OperandOutOfBounds);
     }
 
     let [x, y] = [x, y].map(|coord| {
         coord
-            .0
             .try_into()
             .expect("Just checked that coordinates are within bounds")
     });
     let color = [r, g, b, a].map(|channel| {
         channel
-            .0
             .try_into()
             .expect("Just checked that color channels are within bounds")
     });
@@ -209,7 +235,8 @@ pub fn store(stack: &mut Stack) -> Result {
     let address = stack.pop_operand()?;
     let value = stack.pop_operand()?;
 
-    let address = address.0.try_into()?;
+    let address = i32::from_le_bytes(address.0);
+    let address = address.try_into()?;
 
     Ok(Some(BuiltinEffect::Store { address, value }))
 }
@@ -218,7 +245,10 @@ pub fn sub(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let Some(c) = a.0.checked_sub(b.0) else {
+    let a = i32::from_le_bytes(a.0);
+    let b = i32::from_le_bytes(b.0);
+
+    let Some(c) = a.checked_sub(b) else {
         return Err(BuiltinError::IntegerOverflow);
     };
 

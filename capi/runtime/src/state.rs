@@ -33,7 +33,7 @@ impl RuntimeState {
             *panic = Some(panic_info.to_string());
         }));
 
-        let arguments = vec![Value(TILES_PER_AXIS as i32); 2];
+        let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
         let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
@@ -117,13 +117,15 @@ impl RuntimeState {
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
-                        self.process.push([Value(value.into())]);
+                        let value: i32 = value.into();
+                        self.process.push([Value(value.to_le_bytes())]);
 
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        let value: u8 = value.0.try_into().unwrap();
+                        let value = i32::from_le_bytes(value.0);
+                        let value: u8 = value.try_into().unwrap();
                         self.memory.inner[address] = value;
 
                         self.process.handle_first_effect();
@@ -145,10 +147,10 @@ impl RuntimeState {
                         break;
                     }
                     BuiltinEffect::ReadInput => {
-                        let input =
+                        let input: i32 =
                             self.input.buffer.pop_front().unwrap_or(0).into();
 
-                        self.process.push([Value(input)]);
+                        self.process.push([Value(input.to_le_bytes())]);
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::ReadRandom => {
@@ -164,7 +166,7 @@ impl RuntimeState {
                         // randomness from the host.
                         let random = self.random.pop_front().unwrap();
 
-                        self.process.push([Value(random)]);
+                        self.process.push([Value(random.to_le_bytes())]);
                         self.process.handle_first_effect();
                     }
                 }

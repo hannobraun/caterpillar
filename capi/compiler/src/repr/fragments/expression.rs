@@ -40,7 +40,7 @@ impl FragmentExpression {
             }
             Self::Value(value) => {
                 hasher.update(b"value");
-                hasher.update(&value.0.to_le_bytes());
+                hasher.update(&value.0);
             }
         }
     }

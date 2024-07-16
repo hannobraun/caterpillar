@@ -257,8 +257,8 @@ mod tests {
         assert_eq!(
             body,
             [
-                FragmentExpression::Value(Value(1)),
-                FragmentExpression::Value(Value(1)),
+                FragmentExpression::Value(Value(1i32.to_le_bytes())),
+                FragmentExpression::Value(Value(1i32.to_le_bytes())),
             ]
         );
     }

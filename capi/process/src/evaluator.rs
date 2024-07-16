@@ -128,7 +128,7 @@ pub fn evaluate(
         }
         Instruction::ReturnIfNonZero => {
             let value = stack.pop_operand()?;
-            if value != Value(0) {
+            if value != Value([0, 0, 0, 0]) {
                 stack
                     .pop_frame()
                     .expect("Currently executing; stack can't be empty");
@@ -136,7 +136,7 @@ pub fn evaluate(
         }
         Instruction::ReturnIfZero => {
             let value = stack.pop_operand()?;
-            if value == Value(0) {
+            if value == Value([0, 0, 0, 0]) {
                 stack
                     .pop_frame()
                     .expect("Currently executing; stack can't be empty");
