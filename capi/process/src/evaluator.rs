@@ -14,7 +14,7 @@ pub fn evaluate(
     let instruction = bytecode
         .instructions
         .get(&addr)
-        .expect("Expected instruction referenced by stack to exist");
+        .expect("Expected instruction referenced on stack to exist");
 
     match instruction {
         Instruction::BindingEvaluate { name } => {
