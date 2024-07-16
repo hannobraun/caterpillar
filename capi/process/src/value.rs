@@ -13,10 +13,8 @@ impl From<i32> for Value {
 
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let bytes = self.0;
-
         write!(f, "0x")?;
-        for b in bytes.into_iter().rev() {
+        for b in self.0.into_iter().rev() {
             write!(f, "{b:02x}")?;
         }
 
