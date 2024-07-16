@@ -44,7 +44,7 @@ impl Compiler<'_> {
         start: FragmentId,
         fragments: &FragmentMap,
     ) {
-        let instructions = self.compile_block(start, fragments);
+        let first_instruction = self.compile_block(start, fragments);
 
         self.bytecode.functions.insert(
             name.clone(),
@@ -52,7 +52,7 @@ impl Compiler<'_> {
                 name,
                 arguments,
                 instructions: FunctionInstructions {
-                    first: instructions,
+                    first: first_instruction,
                 },
             },
         );
