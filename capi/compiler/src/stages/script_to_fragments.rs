@@ -111,6 +111,10 @@ fn compile_expression(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
+        Expression::Block { expressions } => {
+            let _ = expressions;
+            todo!("Block expressions are not supported yet.")
+        }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),
         Expression::Word { name } => {
