@@ -71,6 +71,7 @@ pub enum Instruction {
     CallBuiltin { name: String },
     CallFunction { name: String },
     Push { value: Value },
+    Return,
     ReturnIfNonZero,
     ReturnIfZero,
 }

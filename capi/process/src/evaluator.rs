@@ -113,6 +113,11 @@ pub fn evaluate(
             stack.push_frame(function)?;
         }
         Instruction::Push { value } => stack.push_operand(*value),
+        Instruction::Return => {
+            stack
+                .pop_frame()
+                .expect("Currently executing; stack can't be empty");
+        }
         Instruction::ReturnIfNonZero => {
             let value = stack.pop_operand()?;
             if value != Value(0) {
