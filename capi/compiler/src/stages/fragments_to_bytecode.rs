@@ -51,7 +51,9 @@ impl Compiler<'_> {
             Function {
                 name,
                 arguments,
-                instructions,
+                instructions: FunctionInstructions {
+                    first: instructions,
+                },
             },
         );
     }
@@ -60,7 +62,7 @@ impl Compiler<'_> {
         &mut self,
         start: FragmentId,
         fragments: &FragmentMap,
-    ) -> FunctionInstructions {
+    ) -> InstructionAddr {
         let mut first_instruction = None;
 
         for fragment in fragments.iter_from(start) {
@@ -76,9 +78,7 @@ impl Compiler<'_> {
             );
         };
 
-        FunctionInstructions {
-            first: first_instruction,
-        }
+        first_instruction
     }
 
     fn compile_fragment(
