@@ -68,8 +68,16 @@ impl Compiler<'_> {
             first_instruction = first_instruction.or(addr);
         }
 
+        let Some(first_instruction) = first_instruction else {
+            unreachable!(
+                "Must have generated at least one instruction for the block: \
+                the return instruction. If this has not happened, the \
+                fragments have somehow been missing a terminator."
+            );
+        };
+
         FunctionInstructions {
-            first: first_instruction,
+            first: Some(first_instruction),
         }
     }
 
