@@ -61,14 +61,16 @@ impl Compiler<'_> {
         start: FragmentId,
         fragments: &FragmentMap,
     ) -> FunctionInstructions {
-        let mut instructions = FunctionInstructions { first: None };
+        let mut first_instruction = None;
 
         for fragment in fragments.iter_from(start) {
             let addr = self.compile_fragment(fragment);
-            instructions.first = instructions.first.or(addr);
+            first_instruction = first_instruction.or(addr);
         }
 
-        instructions
+        FunctionInstructions {
+            first: first_instruction,
+        }
     }
 
     fn compile_fragment(
