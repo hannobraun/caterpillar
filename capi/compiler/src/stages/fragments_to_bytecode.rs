@@ -64,7 +64,7 @@ impl Compiler<'_> {
         let mut instructions = FunctionInstructions { first: None };
 
         for fragment in fragments.iter_from(start) {
-            let addr = self.compile_fragment(fragment, &mut instructions);
+            let addr = self.compile_fragment(fragment);
             instructions.first = instructions.first.or(addr);
         }
 
@@ -74,7 +74,6 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: &Fragment,
-        _: &mut FunctionInstructions,
     ) -> Option<InstructionAddr> {
         let instruction = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
