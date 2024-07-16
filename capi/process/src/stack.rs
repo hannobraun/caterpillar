@@ -148,14 +148,7 @@ impl StackFrame {
     fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
         let first = self.function.instructions.first.as_mut()?;
         let next = *first;
-
-        self.function.instructions.count -= 1;
-
-        if self.function.instructions.count > 0 {
-            first.increment();
-        } else {
-            self.function.instructions.first = None;
-        }
+        first.increment();
 
         Some(next)
     }
