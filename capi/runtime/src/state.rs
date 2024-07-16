@@ -117,13 +117,14 @@ impl RuntimeState {
                     BuiltinEffect::Load { address } => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
-                        self.process.push([value]);
+                        self.process.push([Value(value.into())]);
 
                         self.process.handle_first_effect();
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        self.memory.inner[address] = *value;
+                        let value: u8 = value.0.try_into().unwrap();
+                        self.memory.inner[address] = value;
 
                         self.process.handle_first_effect();
                     }

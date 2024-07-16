@@ -35,7 +35,7 @@ pub fn MemoryExplorer(memory: Memory) -> impl IntoView {
 }
 
 #[component]
-fn Line(line: Vec<capi_process::Value>) -> impl IntoView {
+fn Line(line: Vec<u8>) -> impl IntoView {
     let values = line
         .into_iter()
         .map(|value| {
@@ -53,7 +53,7 @@ fn Line(line: Vec<capi_process::Value>) -> impl IntoView {
 }
 
 #[component]
-fn Value(value: capi_process::Value) -> impl IntoView {
+fn Value(value: u8) -> impl IntoView {
     view! {
         <li class="inline-block w-6 mr-2 text-right">{value.to_string()}</li>
     }
