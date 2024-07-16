@@ -64,7 +64,8 @@ impl Compiler<'_> {
         let mut instructions = FunctionInstructions { first: None };
 
         for fragment in fragments.iter_from(start) {
-            self.compile_fragment(fragment, &mut instructions);
+            let addr = self.compile_fragment(fragment, &mut instructions);
+            instructions.first = instructions.first.or(addr);
         }
 
         instructions
@@ -125,11 +126,9 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
-        instructions: &mut FunctionInstructions,
+        _: &mut FunctionInstructions,
     ) -> InstructionAddr {
         let addr = self.bytecode.instructions.push(instruction.clone());
-
-        instructions.first = instructions.first.or(Some(addr));
 
         self.source_map.define_mapping(addr, fragment_id);
 
