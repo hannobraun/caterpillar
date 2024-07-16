@@ -21,14 +21,12 @@ impl Stack {
     }
 
     pub fn next_instruction_in_current_frame(&self) -> Option<InstructionAddr> {
-        self.frames.last()?.next_instruction()
+        Some(self.frames.last()?.next_instruction())
     }
 
     pub fn next_instruction_overall(&self) -> Option<InstructionAddr> {
-        for frame in self.frames.iter().rev() {
-            if let Some(instruction) = frame.next_instruction() {
-                return Some(instruction);
-            }
+        if let Some(frame) = self.frames.last() {
+            return Some(frame.next_instruction());
         }
 
         None
@@ -43,15 +41,13 @@ impl Stack {
 
         self.frames
             .iter()
-            .any(|frame| frame.next_instruction() == Some(instruction))
+            .any(|frame| frame.next_instruction() == instruction)
     }
 
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl Iterator<Item = InstructionAddr> + '_ {
-        self.frames
-            .iter()
-            .filter_map(|frame| frame.next_instruction())
+        self.frames.iter().map(|frame| frame.next_instruction())
     }
 
     pub fn push_frame(
@@ -141,8 +137,8 @@ impl StackFrame {
         }
     }
 
-    fn next_instruction(&self) -> Option<InstructionAddr> {
-        Some(self.function.instructions.first)
+    fn next_instruction(&self) -> InstructionAddr {
+        self.function.instructions.first
     }
 
     fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
