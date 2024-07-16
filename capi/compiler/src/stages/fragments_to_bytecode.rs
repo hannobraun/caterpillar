@@ -15,15 +15,11 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         bytecode: &mut bytecode,
         source_map: &mut source_map,
+        fragments: &fragments.inner,
     };
 
     for function in fragments.by_function {
-        compiler.compile_function(
-            function.name,
-            function.args,
-            function.start,
-            &fragments.inner,
-        );
+        compiler.compile_function(function.name, function.args, function.start);
     }
 
     (bytecode, source_map)
@@ -32,6 +28,7 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
+    fragments: &'r FragmentMap,
 }
 
 impl Compiler<'_> {
@@ -40,9 +37,8 @@ impl Compiler<'_> {
         name: String,
         arguments: Vec<String>,
         start: FragmentId,
-        fragments: &FragmentMap,
     ) {
-        let first_instruction = self.compile_block(start, fragments);
+        let first_instruction = self.compile_block(start);
 
         self.bytecode.functions.insert(
             name.clone(),
@@ -54,15 +50,11 @@ impl Compiler<'_> {
         );
     }
 
-    fn compile_block(
-        &mut self,
-        start: FragmentId,
-        fragments: &FragmentMap,
-    ) -> InstructionAddr {
+    fn compile_block(&mut self, start: FragmentId) -> InstructionAddr {
         let mut first_instruction = None;
 
-        for fragment in fragments.iter_from(start) {
-            let addr = self.compile_fragment(fragment, fragments);
+        for fragment in self.fragments.iter_from(start) {
+            let addr = self.compile_fragment(fragment);
             first_instruction = first_instruction.or(addr);
         }
 
@@ -80,7 +72,6 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: &Fragment,
-        fragments: &FragmentMap,
     ) -> Option<InstructionAddr> {
         let instruction = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
@@ -94,7 +85,7 @@ impl Compiler<'_> {
                         Instruction::BindingEvaluate { name: name.clone() }
                     }
                     FragmentExpression::Block { start } => {
-                        let start = self.compile_block(*start, fragments);
+                        let start = self.compile_block(*start);
 
                         Instruction::Push {
                             value: Value(start.index.to_le_bytes()),
