@@ -312,7 +312,7 @@ pub enum BuiltinError {
 // doesn't implement `serde::Deserialize`.
 impl From<TryFromIntError> for BuiltinError {
     fn from(_: TryFromIntError) -> Self {
-        Self::ExpectedPositiveValue
+        Self::OperandOutOfBounds
     }
 }
 
