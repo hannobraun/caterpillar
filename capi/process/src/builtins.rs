@@ -1,6 +1,6 @@
 use std::num::TryFromIntError;
 
-use crate::{operands::PopOperandError, Stack, Value};
+use crate::{operands::PopOperandError, Stack};
 
 pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
@@ -238,6 +238,9 @@ pub fn store(stack: &mut Stack) -> Result {
     let address = i32::from_le_bytes(address.0);
     let address = address.try_into()?;
 
+    let value = i32::from_le_bytes(value.0);
+    let value = value.try_into().unwrap();
+
     Ok(Some(BuiltinEffect::Store { address, value }))
 }
 
@@ -269,7 +272,7 @@ pub enum BuiltinEffect {
     Error(BuiltinError),
 
     Load { address: u8 },
-    Store { address: u8, value: Value },
+    Store { address: u8, value: u8 },
 
     SetTile { x: u8, y: u8, color: [u8; 4] },
     SubmitFrame,

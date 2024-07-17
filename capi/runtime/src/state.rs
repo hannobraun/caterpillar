@@ -124,9 +124,7 @@ impl RuntimeState {
                     }
                     BuiltinEffect::Store { address, value } => {
                         let address: usize = (*address).into();
-                        let value = i32::from_le_bytes(value.0);
-                        let value: u8 = value.try_into().unwrap();
-                        self.memory.inner[address] = value;
+                        self.memory.inner[address] = *value;
 
                         self.process.handle_first_effect();
                     }
