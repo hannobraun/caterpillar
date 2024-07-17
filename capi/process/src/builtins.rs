@@ -294,9 +294,6 @@ pub enum BuiltinError {
     #[error("Divide by zero")]
     DivideByZero,
 
-    #[error("Expected positive value")]
-    ExpectedPositiveValue,
-
     #[error("Integer overflow")]
     IntegerOverflow,
 
