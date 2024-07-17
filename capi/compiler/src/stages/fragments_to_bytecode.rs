@@ -41,7 +41,7 @@ impl Compiler<'_> {
         let first_instruction = self.compile_block(start);
 
         self.bytecode.functions.insert(
-            name.clone(),
+            name,
             Function {
                 arguments,
                 first_instruction,
