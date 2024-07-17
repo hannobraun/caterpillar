@@ -43,7 +43,6 @@ impl Compiler<'_> {
         self.bytecode.functions.insert(
             name.clone(),
             Function {
-                name,
                 arguments,
                 first_instruction,
             },
