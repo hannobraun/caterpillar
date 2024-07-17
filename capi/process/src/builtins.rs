@@ -239,7 +239,7 @@ pub fn store(stack: &mut Stack) -> Result {
     let address = address.try_into()?;
 
     let value = i32::from_le_bytes(value.0);
-    let value = value.try_into().unwrap();
+    let value = value.try_into()?;
 
     Ok(Some(BuiltinEffect::Store { address, value }))
 }
