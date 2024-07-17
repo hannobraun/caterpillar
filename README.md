@@ -75,7 +75,7 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
-### Untyped now, dynamically typed soon, statically types later
+### Untyped now, dynamically typed soon, statically typed later
 
 Caterpillar is currently untyped, meaning there is only a single data type,
 32-bit words, and all values are represented using those. This isn't a final
