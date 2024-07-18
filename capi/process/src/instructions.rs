@@ -74,4 +74,5 @@ pub enum Instruction {
     Return,
     ReturnIfNonZero,
     ReturnIfZero,
+    Unreachable,
 }

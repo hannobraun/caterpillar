@@ -142,6 +142,7 @@ pub fn evaluate(
                     .expect("Currently executing; stack can't be empty");
             }
         }
+        Instruction::Unreachable => return Err(EvaluatorEffect::Unreachable),
     }
 
     Ok(EvaluatorState::Running)
