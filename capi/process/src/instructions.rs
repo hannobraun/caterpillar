@@ -23,6 +23,13 @@ impl Instructions {
         assert_eq!(addr, stored_addr);
         Some(instruction)
     }
+
+    pub fn replace(&mut self, addr: InstructionAddr, instruction: Instruction) {
+        let (stored_addr, stored_instruction) =
+            self.inner.get_mut(addr.to_usize()).unwrap();
+        assert_eq!(addr, *stored_addr);
+        *stored_instruction = instruction;
+    }
 }
 
 impl<'r> IntoIterator for &'r Instructions {
