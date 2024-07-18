@@ -1,6 +1,9 @@
 use std::num::TryFromIntError;
 
-use crate::{operands::PopOperandError, stack::PushStackFrameError, Stack};
+use crate::{
+    operands::PopOperandError, stack::PushStackFrameError, Function,
+    InstructionAddr, Stack,
+};
 
 pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
@@ -92,6 +95,27 @@ pub fn greater(stack: &mut Stack) -> Result {
     let c = if a > b { 1 } else { 0 };
 
     stack.push_operand(c);
+
+    Ok(None)
+}
+
+pub fn if_(stack: &mut Stack) -> Result {
+    let else_ = stack.pop_operand()?;
+    let then = stack.pop_operand()?;
+    let condition = stack.pop_operand()?;
+
+    let block = if condition.0 == [0, 0, 0, 0] {
+        else_
+    } else {
+        then
+    };
+
+    stack.push_frame(Function {
+        arguments: Vec::new(),
+        first_instruction: InstructionAddr {
+            index: u32::from_le_bytes(block.0),
+        },
+    })?;
 
     Ok(None)
 }

@@ -63,6 +63,7 @@ pub fn evaluate(
                 "drop" => builtins::drop(stack),
                 "eq" => builtins::eq(stack),
                 "greater" => builtins::greater(stack),
+                "if" => builtins::if_(stack),
                 "load" => builtins::load(stack),
                 "mul" => builtins::mul(stack),
                 "neg" => builtins::neg(stack),
