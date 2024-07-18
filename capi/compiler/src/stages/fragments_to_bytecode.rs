@@ -38,8 +38,8 @@ struct Compiler<'r> {
 
 impl Compiler<'_> {
     fn compile(&mut self) {
-        while let Some(function) = self.queue.pop_front() {
-            match function {
+        while let Some(unit) = self.queue.pop_front() {
+            match unit {
                 CompileUnit::Function(function) => {
                     self.compile_function(
                         function.name,
