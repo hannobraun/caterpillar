@@ -91,21 +91,29 @@ impl Compiler<'_> {
         &mut self,
         fragment: &Fragment,
     ) -> Option<InstructionAddr> {
-        let instruction = match &fragment.payload {
+        let addr = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
-                    FragmentExpression::BindingDefinitions { names } => {
-                        Instruction::BindingsDefine {
-                            names: names.clone(),
-                        }
-                    }
-                    FragmentExpression::BindingEvaluation { name } => {
-                        Instruction::BindingEvaluate { name: name.clone() }
-                    }
+                    FragmentExpression::BindingDefinitions { names } => self
+                        .generate(
+                            Instruction::BindingsDefine {
+                                names: names.clone(),
+                            },
+                            fragment.id(),
+                        ),
+                    FragmentExpression::BindingEvaluation { name } => self
+                        .generate(
+                            Instruction::BindingEvaluate { name: name.clone() },
+                            fragment.id(),
+                        ),
                     FragmentExpression::Block { start } => {
                         let start = self.compile_block(*start);
                         let value = Value(start.index.to_le_bytes());
-                        Instruction::Push { value }
+
+                        self.generate(
+                            Instruction::Push { value },
+                            fragment.id(),
+                        )
                     }
                     FragmentExpression::BuiltinCall { name } => {
                         // Here we check for special built-in functions that are
@@ -117,28 +125,40 @@ impl Compiler<'_> {
                         // temporary hack anyway, while the language is not
                         // powerful enough to support real conditionals.
                         if name == "return_if_non_zero" {
-                            Instruction::ReturnIfNonZero
+                            self.generate(
+                                Instruction::ReturnIfNonZero,
+                                fragment.id(),
+                            )
                         } else if name == "return_if_zero" {
-                            Instruction::ReturnIfZero
+                            self.generate(
+                                Instruction::ReturnIfZero,
+                                fragment.id(),
+                            )
                         } else {
-                            Instruction::CallBuiltin { name: name.clone() }
+                            self.generate(
+                                Instruction::CallBuiltin { name: name.clone() },
+                                fragment.id(),
+                            )
                         }
                     }
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
-                    FragmentExpression::FunctionCall { name } => {
-                        Instruction::CallFunction { name: name.clone() }
-                    }
-                    FragmentExpression::Value(value) => {
-                        Instruction::Push { value: *value }
-                    }
+                    FragmentExpression::FunctionCall { name } => self.generate(
+                        Instruction::CallFunction { name: name.clone() },
+                        fragment.id(),
+                    ),
+                    FragmentExpression::Value(value) => self.generate(
+                        Instruction::Push { value: *value },
+                        fragment.id(),
+                    ),
                 }
             }
-            FragmentPayload::Terminator => Instruction::Return,
+            FragmentPayload::Terminator => {
+                self.generate(Instruction::Return, fragment.id())
+            }
         };
 
-        let addr = self.generate(instruction, fragment.id());
         Some(addr)
     }
 
