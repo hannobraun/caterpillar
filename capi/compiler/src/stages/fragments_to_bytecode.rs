@@ -1,9 +1,11 @@
+use std::collections::VecDeque;
+
 use capi_process::{Bytecode, Function, Instruction, InstructionAddr, Value};
 
 use crate::{
     repr::fragments::{
-        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
-        Fragments,
+        self, Fragment, FragmentExpression, FragmentId, FragmentMap,
+        FragmentPayload, Fragments,
     },
     source_map::SourceMap,
 };
@@ -13,12 +15,15 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
+        queue: VecDeque::new(),
         bytecode: &mut bytecode,
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
 
-    for function in fragments.by_function {
+    compiler.queue.extend(fragments.by_function);
+
+    while let Some(function) = compiler.queue.pop_front() {
         compiler.compile_function(function.name, function.args, function.start);
     }
 
@@ -26,6 +31,7 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 }
 
 struct Compiler<'r> {
+    queue: VecDeque<fragments::Function>,
     bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
