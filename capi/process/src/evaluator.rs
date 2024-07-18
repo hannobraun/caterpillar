@@ -178,4 +178,7 @@ pub enum EvaluatorEffect {
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
+
+    #[error("Executed unreachable instruction")]
+    Unreachable,
 }
