@@ -22,10 +22,7 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     };
 
     compiler.queue.extend(fragments.by_function);
-
-    while let Some(function) = compiler.queue.pop_front() {
-        compiler.compile_function(function.name, function.args, function.start);
-    }
+    compiler.compile();
 
     (bytecode, source_map)
 }
@@ -38,6 +35,12 @@ struct Compiler<'r> {
 }
 
 impl Compiler<'_> {
+    fn compile(&mut self) {
+        while let Some(function) = self.queue.pop_front() {
+            self.compile_function(function.name, function.args, function.start);
+        }
+    }
+
     fn compile_function(
         &mut self,
         name: String,
