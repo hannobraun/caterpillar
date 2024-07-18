@@ -40,6 +40,14 @@ impl Compiler<'_> {
     fn compile(&mut self) {
         while let Some(unit) = self.queue.pop_front() {
             match unit {
+                CompileUnit::Block { start, addr } => {
+                    let start = self.compile_block(start);
+                    let value = Value(start.index.to_le_bytes());
+
+                    self.bytecode
+                        .instructions
+                        .replace(addr, Instruction::Push { value });
+                }
                 CompileUnit::Function(function) => {
                     self.compile_function(
                         function.name,
@@ -107,13 +115,15 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::Block { start } => {
-                        let start = self.compile_block(*start);
-                        let value = Value(start.index.to_le_bytes());
+                        let addr = self
+                            .generate(Instruction::Unreachable, fragment.id());
 
-                        self.generate(
-                            Instruction::Push { value },
-                            fragment.id(),
-                        )
+                        self.queue.push_front(CompileUnit::Block {
+                            start: *start,
+                            addr,
+                        });
+
+                        addr
                     }
                     FragmentExpression::BuiltinCall { name } => {
                         // Here we check for special built-in functions that are
@@ -167,5 +177,9 @@ impl Compiler<'_> {
 }
 
 enum CompileUnit {
+    Block {
+        start: FragmentId,
+        addr: InstructionAddr,
+    },
     Function(fragments::Function),
 }
