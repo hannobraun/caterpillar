@@ -21,14 +21,16 @@ pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         fragments: &fragments.inner,
     };
 
-    compiler.queue.extend(fragments.by_function);
+    compiler
+        .queue
+        .extend(fragments.by_function.into_iter().map(CompileUnit::Function));
     compiler.compile();
 
     (bytecode, source_map)
 }
 
 struct Compiler<'r> {
-    queue: VecDeque<fragments::Function>,
+    queue: VecDeque<CompileUnit>,
     bytecode: &'r mut Bytecode,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
@@ -37,7 +39,15 @@ struct Compiler<'r> {
 impl Compiler<'_> {
     fn compile(&mut self) {
         while let Some(function) = self.queue.pop_front() {
-            self.compile_function(function.name, function.args, function.start);
+            match function {
+                CompileUnit::Function(function) => {
+                    self.compile_function(
+                        function.name,
+                        function.args,
+                        function.start,
+                    );
+                }
+            }
         }
     }
 
@@ -141,4 +151,8 @@ impl Compiler<'_> {
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
+}
+
+enum CompileUnit {
+    Function(fragments::Function),
 }
