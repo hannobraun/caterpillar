@@ -124,22 +124,15 @@ impl Compiler<'_> {
                         // I think it's fine for now. This seems like a
                         // temporary hack anyway, while the language is not
                         // powerful enough to support real conditionals.
-                        if name == "return_if_non_zero" {
-                            self.generate(
-                                Instruction::ReturnIfNonZero,
-                                fragment.id(),
-                            )
+                        let instruction = if name == "return_if_non_zero" {
+                            Instruction::ReturnIfNonZero
                         } else if name == "return_if_zero" {
-                            self.generate(
-                                Instruction::ReturnIfZero,
-                                fragment.id(),
-                            )
+                            Instruction::ReturnIfZero
                         } else {
-                            self.generate(
-                                Instruction::CallBuiltin { name: name.clone() },
-                                fragment.id(),
-                            )
-                        }
+                            Instruction::CallBuiltin { name: name.clone() }
+                        };
+
+                        self.generate(instruction, fragment.id())
                     }
                     FragmentExpression::Comment { .. } => {
                         return None;
