@@ -1,6 +1,6 @@
 use std::num::TryFromIntError;
 
-use crate::{operands::PopOperandError, Stack};
+use crate::{operands::PopOperandError, stack::PushStackFrameError, Stack};
 
 pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
@@ -302,6 +302,9 @@ pub enum BuiltinError {
 
     #[error(transparent)]
     PopOperand(#[from] PopOperandError),
+
+    #[error(transparent)]
+    PushStackFrame(#[from] PushStackFrameError),
 }
 
 // This conversion is implemented manually, because doing it automatically using
