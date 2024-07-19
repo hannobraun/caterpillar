@@ -38,7 +38,7 @@ impl Process {
         self.stack = Stack::default();
 
         self.stack
-            .push_frame(bytecode.entry().unwrap())
+            .push_frame(bytecode.entry().unwrap(), &bytecode.instructions)
             .expect("Expected recursion limit to be more than zero.");
         self.push(arguments);
     }

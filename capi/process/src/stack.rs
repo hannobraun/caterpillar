@@ -1,7 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, InstructionAddr, Operands, Value,
+    operands::PopOperandError, Function, Instruction, InstructionAddr,
+    Instructions, Operands, Value,
 };
 
 #[derive(
@@ -53,7 +54,21 @@ impl Stack {
     pub fn push_frame(
         &mut self,
         function: Function,
+        instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
+        if let Some(next_addr) = self.next_instruction_in_current_frame() {
+            let next_instruction = instructions
+                .get(&next_addr)
+                .expect("Expected instruction referenced on stack to exist");
+
+            // If the current function is finished, pop its stack frame before
+            // pushing the next one. This is tail call optimization.
+            if let Instruction::Return = next_instruction {
+                self.pop_frame()
+                    .expect("Currently executing; stack can't be empty");
+            }
+        }
+
         const RECURSION_LIMIT: usize = 8;
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
