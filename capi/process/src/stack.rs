@@ -60,17 +60,7 @@ impl Stack {
         }
 
         let mut new_frame = StackFrame::new(function);
-
-        if let Some(calling_frame) = self.frames.last_mut() {
-            for argument in new_frame.function.arguments.iter().rev() {
-                let value = calling_frame.operands.pop_any()?;
-                new_frame.bindings.insert(argument.clone(), value);
-            }
-        } else {
-            // If there's no calling frame, then there's no place to take
-            // arguments from. Make sure that the function doesn't expect any.
-            assert_eq!(new_frame.function.arguments.len(), 0);
-        }
+        new_frame.take_arguments(self.frames.last_mut())?;
 
         self.frames.push(new_frame);
 
@@ -126,6 +116,24 @@ impl StackFrame {
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
+    }
+
+    fn take_arguments(
+        &mut self,
+        caller: Option<&mut StackFrame>,
+    ) -> Result<(), PushStackFrameError> {
+        if let Some(calling_frame) = caller {
+            for argument in self.function.arguments.iter().rev() {
+                let value = calling_frame.operands.pop_any()?;
+                self.bindings.insert(argument.clone(), value);
+            }
+        } else {
+            // If there's no calling frame, then there's no place to take
+            // arguments from. Make sure that the function doesn't expect any.
+            assert_eq!(self.function.arguments.len(), 0);
+        }
+
+        Ok(())
     }
 
     fn next_instruction(&self) -> InstructionAddr {
