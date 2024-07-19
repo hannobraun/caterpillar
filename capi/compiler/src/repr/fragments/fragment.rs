@@ -24,7 +24,7 @@ impl Fragment {
     }
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentParent {
     Fragment { id: FragmentId },
     Function { name: String },
