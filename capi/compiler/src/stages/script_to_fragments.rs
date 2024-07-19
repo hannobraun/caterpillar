@@ -116,7 +116,7 @@ fn compile_expression(
         Expression::Block { expressions } => {
             let start = compile_block(
                 expressions,
-                parent.clone(),
+                FragmentParent::Fragment { id: next },
                 bindings,
                 functions,
                 fragments,
@@ -178,7 +178,7 @@ mod tests {
 
     use crate::{
         repr::{
-            fragments::{FragmentPayload, Fragments},
+            fragments::{Fragment, FragmentParent, FragmentPayload, Fragments},
             syntax::Script,
         },
         stages::script_to_fragments::FragmentExpression,
@@ -288,6 +288,48 @@ mod tests {
         let start = fragments.by_function.remove(0).start;
         let last_fragment = fragments.inner.iter_from(start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
+    }
+
+    #[test]
+    fn block_parent() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.block(|_| {});
+        });
+
+        let mut fragments = script_to_fragments(script);
+
+        let start = fragments.by_function.remove(0).start;
+        let function_fragments =
+            fragments.inner.iter_from(start).collect::<Vec<_>>();
+        let block_fragments = {
+            let Fragment {
+                payload:
+                    FragmentPayload::Expression {
+                        expression: FragmentExpression::Block { start },
+                        ..
+                    },
+                ..
+            } = function_fragments[0]
+            else {
+                panic!("Expected block")
+            };
+
+            fragments.inner.iter_from(*start).collect::<Vec<_>>()
+        };
+
+        assert_eq!(
+            function_fragments[0].parent,
+            FragmentParent::Function {
+                name: String::from("f")
+            },
+        );
+        assert_eq!(
+            block_fragments[0].parent,
+            FragmentParent::Fragment {
+                id: function_fragments[1].id()
+            },
+        );
     }
 
     fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
