@@ -122,9 +122,9 @@ impl StackFrame {
         &mut self,
         caller: Option<&mut StackFrame>,
     ) -> Result<(), PushStackFrameError> {
-        if let Some(calling_frame) = caller {
+        if let Some(caller) = caller {
             for argument in self.function.arguments.iter().rev() {
-                let value = calling_frame.operands.pop_any()?;
+                let value = caller.operands.pop_any()?;
                 self.bindings.insert(argument.clone(), value);
             }
         } else {
