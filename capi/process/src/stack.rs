@@ -128,8 +128,8 @@ impl StackFrame {
                 self.bindings.insert(argument.clone(), value);
             }
         } else {
-            // If there's no calling frame, then there's no place to take
-            // arguments from. Make sure that the function doesn't expect any.
+            // If there's no caller, then there's no place to take arguments
+            // from. Make sure that the function doesn't expect any.
             assert_eq!(self.function.arguments.len(), 0);
         }
 
