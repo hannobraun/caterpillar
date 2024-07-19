@@ -176,7 +176,7 @@ pub enum EvaluatorEffect {
     PopOperand(#[from] PopOperandError),
 
     #[error(transparent)]
-    Stack(#[from] PushStackFrameError),
+    PushStackFrame(#[from] PushStackFrameError),
 
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
