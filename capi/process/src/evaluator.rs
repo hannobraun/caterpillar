@@ -81,22 +81,7 @@ pub fn evaluate(
                 }
             };
 
-            // This is a bit weird. An error is an effect, and effects can be
-            // returned as a `Result::Ok` by the builtins. But error by itself
-            // can also be returned as a `Result::Err`.
-            //
-            // This enables builtins to to stack operations using `?`
-            // internally, without requiring effects to always be returned as
-            // errors, which they aren't per se.
-            //
-            // Anyway, here we deal with this situation by unifying both
-            // variants.
-            let effect = match result {
-                Ok(()) => None,
-                Err(err) => Some(err),
-            };
-
-            if let Some(effect) = effect {
+            if let Err(effect) = result {
                 return Err(EvaluatorEffect::Builtin(effect));
             }
         }
