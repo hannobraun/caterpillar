@@ -58,9 +58,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddr>) {
-        if let Some(Effect::Breakpoint) =
-            self.state.first_unhandled_effect()
-        {
+        if let Some(Effect::Breakpoint) = self.state.first_unhandled_effect() {
             if let Some(instruction) = and_stop_at {
                 self.breakpoints.set_ephemeral(instruction);
             }

@@ -71,11 +71,7 @@ pub fn evaluate(
                 "store" => builtins::store(stack)?,
                 "sub" => builtins::sub(stack)?,
                 "submit_frame" => builtins::submit_frame()?,
-                _ => {
-                    return Err(Effect::UnknownBuiltin {
-                        name: name.clone(),
-                    })
-                }
+                _ => return Err(Effect::UnknownBuiltin { name: name.clone() }),
             };
         }
         Instruction::CallFunction { name } => {
