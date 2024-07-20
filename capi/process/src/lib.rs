@@ -1,6 +1,7 @@
 mod breakpoints;
 mod builtins;
 mod bytecode;
+mod effects;
 mod evaluator;
 mod function;
 mod instructions;
@@ -11,9 +12,9 @@ mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
-    builtins::{BuiltinEffect, HostEffect, TILES_PER_AXIS},
+    builtins::TILES_PER_AXIS,
     bytecode::Bytecode,
-    evaluator::EvaluatorEffect,
+    effects::{BuiltinEffect, EvaluatorEffect, HostEffect},
     function::Function,
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,

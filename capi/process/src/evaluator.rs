@@ -1,7 +1,4 @@
-use crate::{
-    builtins, operands::PopOperandError, stack::PushStackFrameError,
-    BuiltinEffect, Bytecode, Instruction, Stack, Value,
-};
+use crate::{builtins, Bytecode, EvaluatorEffect, Instruction, Stack, Value};
 
 pub fn evaluate(
     bytecode: &Bytecode,
@@ -122,33 +119,4 @@ pub fn evaluate(
 pub enum EvaluatorState {
     Running,
     Finished,
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    thiserror::Error,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub enum EvaluatorEffect {
-    #[error("Binding expression left values on stack")]
-    BindingLeftValuesOnStack,
-
-    #[error("Builtin effect: {self:?}")]
-    Builtin(BuiltinEffect),
-
-    #[error(transparent)]
-    PopOperand(#[from] PopOperandError),
-
-    #[error(transparent)]
-    PushStackFrame(#[from] PushStackFrameError),
-
-    #[error("Unknown builtin: {name}")]
-    UnknownBuiltin { name: String },
-
-    #[error("Executed unreachable instruction")]
-    Unreachable,
 }
