@@ -37,7 +37,7 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
 }
 
 pub fn brk() -> Result {
-    Ok(Some(BuiltinEffect::Breakpoint))
+    Err(BuiltinEffect::Breakpoint)
 }
 
 pub fn copy(stack: &mut Stack) -> Result {
@@ -129,7 +129,7 @@ pub fn load(stack: &mut Stack) -> Result {
     let address = i32::from_le_bytes(address.0);
     let address = address.try_into()?;
 
-    Ok(Some(BuiltinEffect::Host(HostEffect::Load { address })))
+    Err(BuiltinEffect::Host(HostEffect::Load { address }))
 }
 
 pub fn mul(stack: &mut Stack) -> Result {
@@ -164,11 +164,11 @@ pub fn neg(stack: &mut Stack) -> Result {
 }
 
 pub fn read_input() -> Result {
-    Ok(Some(BuiltinEffect::Host(HostEffect::ReadInput)))
+    Err(BuiltinEffect::Host(HostEffect::ReadInput))
 }
 
 pub fn read_random() -> Result {
-    Ok(Some(BuiltinEffect::Host(HostEffect::ReadRandom)))
+    Err(BuiltinEffect::Host(HostEffect::ReadRandom))
 }
 
 pub fn remainder(stack: &mut Stack) -> Result {
@@ -255,11 +255,7 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
             .expect("Just checked that color channels are within bounds")
     });
 
-    Ok(Some(BuiltinEffect::Host(HostEffect::SetTile {
-        x,
-        y,
-        color,
-    })))
+    Err(BuiltinEffect::Host(HostEffect::SetTile { x, y, color }))
 }
 
 pub fn store(stack: &mut Stack) -> Result {
@@ -272,10 +268,7 @@ pub fn store(stack: &mut Stack) -> Result {
     let value = i32::from_le_bytes(value.0);
     let value = value.try_into()?;
 
-    Ok(Some(BuiltinEffect::Host(HostEffect::Store {
-        address,
-        value,
-    })))
+    Err(BuiltinEffect::Host(HostEffect::Store { address, value }))
 }
 
 pub fn sub(stack: &mut Stack) -> Result {
@@ -295,7 +288,7 @@ pub fn sub(stack: &mut Stack) -> Result {
 }
 
 pub fn submit_frame() -> Result {
-    Ok(Some(BuiltinEffect::Host(HostEffect::SubmitFrame)))
+    Err(BuiltinEffect::Host(HostEffect::SubmitFrame))
 }
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinEffect>;
