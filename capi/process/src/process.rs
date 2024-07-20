@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
     instructions::InstructionAddr,
-    Bytecode, EvaluatorEffect, Stack, Value,
+    Bytecode, Effect, Stack, Value,
 };
 
 #[derive(
@@ -58,7 +58,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddr>) {
-        if let Some(EvaluatorEffect::Breakpoint) =
+        if let Some(Effect::Breakpoint) =
             self.state.first_unhandled_effect()
         {
             if let Some(instruction) = and_stop_at {
@@ -97,7 +97,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.state.add_effect(EvaluatorEffect::Breakpoint);
+            self.state.add_effect(Effect::Breakpoint);
         }
     }
 }
@@ -107,7 +107,7 @@ impl Process {
 )]
 pub struct ProcessState {
     most_recent_step: Option<InstructionAddr>,
-    unhandled_effects: VecDeque<EvaluatorEffect>,
+    unhandled_effects: VecDeque<Effect>,
     has_finished: bool,
 }
 
@@ -116,7 +116,7 @@ impl ProcessState {
         self.most_recent_step.as_ref().copied()
     }
 
-    pub fn first_unhandled_effect(&self) -> Option<&EvaluatorEffect> {
+    pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
     }
 
@@ -132,7 +132,7 @@ impl ProcessState {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
-    pub fn add_effect(&mut self, effect: EvaluatorEffect) {
+    pub fn add_effect(&mut self, effect: Effect) {
         self.unhandled_effects.push_back(effect);
     }
 }

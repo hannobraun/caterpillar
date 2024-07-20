@@ -1,9 +1,9 @@
-use crate::{builtins, Bytecode, EvaluatorEffect, Instruction, Stack, Value};
+use crate::{builtins, Bytecode, Effect, Instruction, Stack, Value};
 
 pub fn evaluate(
     bytecode: &Bytecode,
     stack: &mut Stack,
-) -> Result<EvaluatorState, EvaluatorEffect> {
+) -> Result<EvaluatorState, Effect> {
     let Some(addr) = stack.take_next_instruction() else {
         return Ok(EvaluatorState::Finished);
     };
@@ -47,7 +47,7 @@ pub fn evaluate(
             };
 
             if !operands.is_empty() {
-                return Err(EvaluatorEffect::BindingLeftValuesOnStack);
+                return Err(Effect::BindingLeftValuesOnStack);
             }
         }
         Instruction::CallBuiltin { name } => {
@@ -72,7 +72,7 @@ pub fn evaluate(
                 "sub" => builtins::sub(stack)?,
                 "submit_frame" => builtins::submit_frame()?,
                 _ => {
-                    return Err(EvaluatorEffect::UnknownBuiltin {
+                    return Err(Effect::UnknownBuiltin {
                         name: name.clone(),
                     })
                 }
@@ -104,7 +104,7 @@ pub fn evaluate(
                     .expect("Currently executing; stack can't be empty");
             }
         }
-        Instruction::Unreachable => return Err(EvaluatorEffect::Unreachable),
+        Instruction::Unreachable => return Err(Effect::Unreachable),
     }
 
     Ok(EvaluatorState::Running)

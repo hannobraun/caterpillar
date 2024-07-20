@@ -11,7 +11,7 @@ use crate::{operands::PopOperandError, stack::PushStackFrameError};
     serde::Deserialize,
     serde::Serialize,
 )]
-pub enum EvaluatorEffect {
+pub enum Effect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -46,7 +46,7 @@ pub enum EvaluatorEffect {
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for EvaluatorEffect {
+impl From<TryFromIntError> for Effect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }
