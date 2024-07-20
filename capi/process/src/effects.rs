@@ -11,7 +11,7 @@ use crate::{operands::PopOperandError, stack::PushStackFrameError};
     serde::Deserialize,
     serde::Serialize,
 )]
-pub enum Effect {
+pub enum Effect<H: Eq> {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -40,13 +40,13 @@ pub enum Effect {
     Unreachable,
 
     #[error("Host-specific effect")]
-    Host(HostEffect),
+    Host(H),
 }
 
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for Effect {
+impl From<TryFromIntError> for Effect<HostEffect> {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }

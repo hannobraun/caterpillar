@@ -288,7 +288,7 @@ pub fn submit_frame() -> Result {
     Err(Effect::Host(HostEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<(), Effect>;
+pub type Result = std::result::Result<(), Effect<HostEffect>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
