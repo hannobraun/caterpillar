@@ -71,35 +71,6 @@ I can't credit this idea to a single source of inspiration. It just came to me
 while working on Caterpillar. But I'm certain I haven't invented it. Lisp
 probably works like that.
 
-### Memory safe
-
-As I stated above, my frame of reference for programming languages is mostly
-Rust these days, which provides memory safety without runtime overhead. I think
-Caterpillar can do the same, with significantly less complexity.
-
-As the basis of that, I want to have [linear types] (which is one step beyond
-Rust's affine types, but essentially very similar).
-
-Here are the specific simplifications I think are possible to achieve over Rust:
-
-- Without mutability, we don't need mutable references.
-- Values that can't be copied don't need to be referenced either. A read-only
-  reference and a copy are the same, semantically.
-- Values that can't be copied can be moved into and out of functions instead,
-  which is syntactically very light in a stack-based language.
-- No references means no lifetimes, means no borrows, means no borrow checker.
-  The compiler only needs to track if values have been moved.
-
-What Rust can do that isn't covered in this model, is storing references in
-structs and keeping them around indefinitely. I don't know whether this will be
-important, and if so, what to do about it. Since the potential upside is so
-significant, I'm willing to try.
-
-Besides Rust, all of this is heavily inspired by [HVM].
-
-[linear types]: https://en.wikipedia.org/wiki/Substructural_type_system#Linear_type_systems
-[HVM]: https://github.com/HigherOrderCO/HVM
-
 ### Content-addressed definitions
 
 Definitions in Caterpillar, functions, types, etc, will be content-addressed,
