@@ -4,6 +4,7 @@ mod bytecode;
 mod effects;
 mod evaluator;
 mod function;
+mod host;
 mod instructions;
 mod operands;
 mod process;
@@ -16,6 +17,7 @@ pub use self::{
     bytecode::Bytecode,
     effects::{Effect, HostEffect},
     function::Function,
+    host::{DefaultHost, Host},
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,
     process::{Process, ProcessState},

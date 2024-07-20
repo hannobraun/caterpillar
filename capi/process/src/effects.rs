@@ -1,6 +1,10 @@
 use std::num::TryFromIntError;
 
-use crate::{operands::PopOperandError, stack::PushStackFrameError};
+use crate::{
+    host::{DefaultHost, Host},
+    operands::PopOperandError,
+    stack::PushStackFrameError,
+};
 
 #[derive(
     Clone,
@@ -11,7 +15,7 @@ use crate::{operands::PopOperandError, stack::PushStackFrameError};
     serde::Deserialize,
     serde::Serialize,
 )]
-pub enum Effect<H: Eq> {
+pub enum Effect<H: Host> {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -40,13 +44,13 @@ pub enum Effect<H: Eq> {
     Unreachable,
 
     #[error("Host-specific effect")]
-    Host(H),
+    Host(H::Effect),
 }
 
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for Effect<HostEffect> {
+impl From<TryFromIntError> for Effect<DefaultHost> {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }

@@ -1,5 +1,6 @@
 use crate::{
-    Effect, Function, HostEffect, InstructionAddr, Instructions, Stack,
+    host::DefaultHost, Effect, Function, HostEffect, InstructionAddr,
+    Instructions, Stack,
 };
 
 pub fn add(stack: &mut Stack) -> Result {
@@ -288,7 +289,7 @@ pub fn submit_frame() -> Result {
     Err(Effect::Host(HostEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<(), Effect<HostEffect>>;
+pub type Result = std::result::Result<(), Effect<DefaultHost>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 

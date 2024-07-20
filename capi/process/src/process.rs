@@ -3,8 +3,9 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
+    host::DefaultHost,
     instructions::InstructionAddr,
-    Bytecode, Effect, HostEffect, Stack, Value,
+    Bytecode, Effect, Stack, Value,
 };
 
 #[derive(
@@ -105,7 +106,7 @@ impl Process {
 )]
 pub struct ProcessState {
     most_recent_step: Option<InstructionAddr>,
-    unhandled_effects: VecDeque<Effect<HostEffect>>,
+    unhandled_effects: VecDeque<Effect<DefaultHost>>,
     has_finished: bool,
 }
 
@@ -114,7 +115,7 @@ impl ProcessState {
         self.most_recent_step.as_ref().copied()
     }
 
-    pub fn first_unhandled_effect(&self) -> Option<&Effect<HostEffect>> {
+    pub fn first_unhandled_effect(&self) -> Option<&Effect<DefaultHost>> {
         self.unhandled_effects.front()
     }
 
@@ -130,7 +131,7 @@ impl ProcessState {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
-    pub fn add_effect(&mut self, effect: Effect<HostEffect>) {
+    pub fn add_effect(&mut self, effect: Effect<DefaultHost>) {
         self.unhandled_effects.push_back(effect);
     }
 }
