@@ -93,7 +93,7 @@ pub fn evaluate(
             // variants.
             let effect = match result {
                 Ok(effect) => effect,
-                Err(err) => Some(BuiltinEffect::Error(err)),
+                Err(err) => Some(err),
             };
 
             if let Some(effect) = effect {

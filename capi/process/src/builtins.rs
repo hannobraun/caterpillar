@@ -13,7 +13,7 @@ pub fn add(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_add(b) else {
-        return Err(BuiltinError::IntegerOverflow);
+        return Err(BuiltinEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -57,11 +57,11 @@ pub fn div(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(BuiltinError::DivideByZero);
+        return Err(BuiltinEffect::DivideByZero);
     }
     let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
-        return Err(BuiltinError::IntegerOverflow);
+        return Err(BuiltinEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -140,7 +140,7 @@ pub fn mul(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_mul(b) else {
-        return Err(BuiltinError::IntegerOverflow);
+        return Err(BuiltinEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -154,7 +154,7 @@ pub fn neg(stack: &mut Stack) -> Result {
     let a = i32::from_le_bytes(a.0);
 
     if a == i32::MIN {
-        return Err(BuiltinError::IntegerOverflow);
+        return Err(BuiltinEffect::IntegerOverflow);
     }
     let b = -a;
 
@@ -179,7 +179,7 @@ pub fn remainder(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(BuiltinError::DivideByZero);
+        return Err(BuiltinEffect::DivideByZero);
     }
     let c = a % b;
 
@@ -204,44 +204,44 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     let a = i32::from_le_bytes(a.0);
 
     if x < 0 {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if y < 0 {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if x >= TILES_PER_AXIS_I32 {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if y >= TILES_PER_AXIS_I32 {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
 
     let color_channel_min: i32 = u8::MIN.into();
     let color_channel_max: i32 = u8::MAX.into();
 
     if r < color_channel_min {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if g < color_channel_min {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if b < color_channel_min {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if a < color_channel_min {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinError::OperandOutOfBounds);
+        return Err(BuiltinEffect::OperandOutOfBounds);
     }
 
     let [x, y] = [x, y].map(|coord| {
@@ -286,7 +286,7 @@ pub fn sub(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_sub(b) else {
-        return Err(BuiltinError::IntegerOverflow);
+        return Err(BuiltinEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -298,7 +298,7 @@ pub fn submit_frame() -> Result {
     Ok(Some(BuiltinEffect::Host(HostEffect::SubmitFrame)))
 }
 
-pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
+pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinEffect>;
 
 #[derive(
     Clone,
@@ -313,23 +313,6 @@ pub enum BuiltinEffect {
     #[error("Breakpoint")]
     Breakpoint,
 
-    #[error(transparent)]
-    Error(BuiltinError),
-
-    #[error("Host-specific effect")]
-    Host(HostEffect),
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    thiserror::Error,
-    serde::Deserialize,
-    serde::Serialize,
-)]
-pub enum BuiltinError {
     #[error("Divide by zero")]
     DivideByZero,
 
@@ -344,12 +327,15 @@ pub enum BuiltinError {
 
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
+
+    #[error("Host-specific effect")]
+    Host(HostEffect),
 }
 
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for BuiltinError {
+impl From<TryFromIntError> for BuiltinEffect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }
