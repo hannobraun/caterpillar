@@ -2,6 +2,9 @@ pub mod repr;
 pub mod source_map;
 pub mod stages;
 
+#[cfg(test)]
+mod tests;
+
 pub fn compile(
     script: crate::repr::syntax::Script,
 ) -> (
