@@ -14,7 +14,7 @@ pub use self::{
     breakpoints::Breakpoints,
     builtins::TILES_PER_AXIS,
     bytecode::Bytecode,
-    effects::{BuiltinEffect, EvaluatorEffect, HostEffect},
+    effects::{EvaluatorEffect, HostEffect},
     function::Function,
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,

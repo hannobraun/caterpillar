@@ -1,4 +1,4 @@
-use capi_process::{BuiltinEffect, EvaluatorEffect, InstructionAddr};
+use capi_process::{EvaluatorEffect, InstructionAddr};
 use capi_protocol::command::Command;
 use leptos::{
     component, ev::MouseEvent, view, wasm_bindgen::JsCast,
@@ -54,7 +54,7 @@ pub fn Expression(
     }
     if let Some(effect) = &expression.effect {
         match effect {
-            EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint) => {
+            EvaluatorEffect::Breakpoint => {
                 class_inner.push_str(" bg-green-300")
             }
             _ => class_inner.push_str(" bg-red-300"),

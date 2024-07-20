@@ -1,5 +1,5 @@
 use crate::{
-    BuiltinEffect, Function, HostEffect, InstructionAddr, Instructions, Stack,
+    EvaluatorEffect, Function, HostEffect, InstructionAddr, Instructions, Stack,
 };
 
 pub fn add(stack: &mut Stack) -> Result {
@@ -10,7 +10,7 @@ pub fn add(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_add(b) else {
-        return Err(BuiltinEffect::IntegerOverflow);
+        return Err(EvaluatorEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -34,7 +34,7 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
 }
 
 pub fn brk() -> Result {
-    Err(BuiltinEffect::Breakpoint)
+    Err(EvaluatorEffect::Breakpoint)
 }
 
 pub fn copy(stack: &mut Stack) -> Result {
@@ -54,11 +54,11 @@ pub fn div(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(BuiltinEffect::DivideByZero);
+        return Err(EvaluatorEffect::DivideByZero);
     }
     let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
-        return Err(BuiltinEffect::IntegerOverflow);
+        return Err(EvaluatorEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -126,7 +126,7 @@ pub fn load(stack: &mut Stack) -> Result {
     let address = i32::from_le_bytes(address.0);
     let address = address.try_into()?;
 
-    Err(BuiltinEffect::Host(HostEffect::Load { address }))
+    Err(EvaluatorEffect::Host(HostEffect::Load { address }))
 }
 
 pub fn mul(stack: &mut Stack) -> Result {
@@ -137,7 +137,7 @@ pub fn mul(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_mul(b) else {
-        return Err(BuiltinEffect::IntegerOverflow);
+        return Err(EvaluatorEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -151,7 +151,7 @@ pub fn neg(stack: &mut Stack) -> Result {
     let a = i32::from_le_bytes(a.0);
 
     if a == i32::MIN {
-        return Err(BuiltinEffect::IntegerOverflow);
+        return Err(EvaluatorEffect::IntegerOverflow);
     }
     let b = -a;
 
@@ -161,11 +161,11 @@ pub fn neg(stack: &mut Stack) -> Result {
 }
 
 pub fn read_input() -> Result {
-    Err(BuiltinEffect::Host(HostEffect::ReadInput))
+    Err(EvaluatorEffect::Host(HostEffect::ReadInput))
 }
 
 pub fn read_random() -> Result {
-    Err(BuiltinEffect::Host(HostEffect::ReadRandom))
+    Err(EvaluatorEffect::Host(HostEffect::ReadRandom))
 }
 
 pub fn remainder(stack: &mut Stack) -> Result {
@@ -176,7 +176,7 @@ pub fn remainder(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(BuiltinEffect::DivideByZero);
+        return Err(EvaluatorEffect::DivideByZero);
     }
     let c = a % b;
 
@@ -201,44 +201,44 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     let a = i32::from_le_bytes(a.0);
 
     if x < 0 {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if y < 0 {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if x >= TILES_PER_AXIS_I32 {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if y >= TILES_PER_AXIS_I32 {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
 
     let color_channel_min: i32 = u8::MIN.into();
     let color_channel_max: i32 = u8::MAX.into();
 
     if r < color_channel_min {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if g < color_channel_min {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if b < color_channel_min {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if a < color_channel_min {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
     if r > color_channel_max {
-        return Err(BuiltinEffect::OperandOutOfBounds);
+        return Err(EvaluatorEffect::OperandOutOfBounds);
     }
 
     let [x, y] = [x, y].map(|coord| {
@@ -252,7 +252,7 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
             .expect("Just checked that color channels are within bounds")
     });
 
-    Err(BuiltinEffect::Host(HostEffect::SetTile { x, y, color }))
+    Err(EvaluatorEffect::Host(HostEffect::SetTile { x, y, color }))
 }
 
 pub fn store(stack: &mut Stack) -> Result {
@@ -265,7 +265,7 @@ pub fn store(stack: &mut Stack) -> Result {
     let value = i32::from_le_bytes(value.0);
     let value = value.try_into()?;
 
-    Err(BuiltinEffect::Host(HostEffect::Store { address, value }))
+    Err(EvaluatorEffect::Host(HostEffect::Store { address, value }))
 }
 
 pub fn sub(stack: &mut Stack) -> Result {
@@ -276,7 +276,7 @@ pub fn sub(stack: &mut Stack) -> Result {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_sub(b) else {
-        return Err(BuiltinEffect::IntegerOverflow);
+        return Err(EvaluatorEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -285,10 +285,10 @@ pub fn sub(stack: &mut Stack) -> Result {
 }
 
 pub fn submit_frame() -> Result {
-    Err(BuiltinEffect::Host(HostEffect::SubmitFrame))
+    Err(EvaluatorEffect::Host(HostEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<(), BuiltinEffect>;
+pub type Result = std::result::Result<(), EvaluatorEffect>;
 
 pub const TILES_PER_AXIS: usize = 32;
 

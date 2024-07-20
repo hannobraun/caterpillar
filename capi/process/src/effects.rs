@@ -15,32 +15,6 @@ pub enum EvaluatorEffect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
-    #[error("Builtin effect: {self:?}")]
-    Builtin(BuiltinEffect),
-
-    #[error(transparent)]
-    PopOperand(#[from] PopOperandError),
-
-    #[error(transparent)]
-    PushStackFrame(#[from] PushStackFrameError),
-
-    #[error("Unknown builtin: {name}")]
-    UnknownBuiltin { name: String },
-
-    #[error("Executed unreachable instruction")]
-    Unreachable,
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
-pub enum BuiltinEffect {
     #[error("Breakpoint")]
     Breakpoint,
 
@@ -59,6 +33,12 @@ pub enum BuiltinEffect {
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
 
+    #[error("Unknown builtin: {name}")]
+    UnknownBuiltin { name: String },
+
+    #[error("Executed unreachable instruction")]
+    Unreachable,
+
     #[error("Host-specific effect")]
     Host(HostEffect),
 }
@@ -66,7 +46,7 @@ pub enum BuiltinEffect {
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for BuiltinEffect {
+impl From<TryFromIntError> for EvaluatorEffect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }

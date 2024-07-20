@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
     instructions::InstructionAddr,
-    BuiltinEffect, Bytecode, EvaluatorEffect, Stack, Value,
+    Bytecode, EvaluatorEffect, Stack, Value,
 };
 
 #[derive(
@@ -58,7 +58,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddr>) {
-        if let Some(EvaluatorEffect::Builtin(BuiltinEffect::Breakpoint)) =
+        if let Some(EvaluatorEffect::Breakpoint) =
             self.state.first_unhandled_effect()
         {
             if let Some(instruction) = and_stop_at {
@@ -97,9 +97,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.state.add_effect(EvaluatorEffect::Builtin(
-                BuiltinEffect::Breakpoint,
-            ));
+            self.state.add_effect(EvaluatorEffect::Breakpoint);
         }
     }
 }

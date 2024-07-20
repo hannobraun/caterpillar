@@ -78,9 +78,7 @@ pub fn evaluate(
                 }
             };
 
-            if let Err(effect) = result {
-                return Err(EvaluatorEffect::Builtin(effect));
-            }
+            result?
         }
         Instruction::CallFunction { name } => {
             let function = bytecode.functions.get(name).cloned().unwrap();
