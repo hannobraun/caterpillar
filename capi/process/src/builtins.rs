@@ -300,10 +300,23 @@ pub fn submit_frame() -> Result {
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
 pub enum BuiltinEffect {
+    #[error("Breakpoint")]
     Breakpoint,
+
+    #[error(transparent)]
     Error(BuiltinError),
+
+    #[error("Host-specific effect")]
     Host(HostEffect),
 }
 
