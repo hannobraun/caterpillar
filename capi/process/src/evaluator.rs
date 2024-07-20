@@ -51,34 +51,32 @@ pub fn evaluate(
             }
         }
         Instruction::CallBuiltin { name } => {
-            let result = match name.as_str() {
-                "add" => builtins::add(stack),
-                "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack),
-                "brk" => builtins::brk(),
-                "copy" => builtins::copy(stack),
-                "div" => builtins::div(stack),
-                "drop" => builtins::drop(stack),
-                "eq" => builtins::eq(stack),
-                "greater" => builtins::greater(stack),
-                "if" => builtins::if_(stack, &bytecode.instructions),
-                "load" => builtins::load(stack),
-                "mul" => builtins::mul(stack),
-                "neg" => builtins::neg(stack),
-                "read_input" => builtins::read_input(),
-                "read_random" => builtins::read_random(),
-                "remainder" => builtins::remainder(stack),
-                "set_pixel" => builtins::set_pixel(stack),
-                "store" => builtins::store(stack),
-                "sub" => builtins::sub(stack),
-                "submit_frame" => builtins::submit_frame(),
+            match name.as_str() {
+                "add" => builtins::add(stack)?,
+                "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack)?,
+                "brk" => builtins::brk()?,
+                "copy" => builtins::copy(stack)?,
+                "div" => builtins::div(stack)?,
+                "drop" => builtins::drop(stack)?,
+                "eq" => builtins::eq(stack)?,
+                "greater" => builtins::greater(stack)?,
+                "if" => builtins::if_(stack, &bytecode.instructions)?,
+                "load" => builtins::load(stack)?,
+                "mul" => builtins::mul(stack)?,
+                "neg" => builtins::neg(stack)?,
+                "read_input" => builtins::read_input()?,
+                "read_random" => builtins::read_random()?,
+                "remainder" => builtins::remainder(stack)?,
+                "set_pixel" => builtins::set_pixel(stack)?,
+                "store" => builtins::store(stack)?,
+                "sub" => builtins::sub(stack)?,
+                "submit_frame" => builtins::submit_frame()?,
                 _ => {
                     return Err(EvaluatorEffect::UnknownBuiltin {
                         name: name.clone(),
                     })
                 }
             };
-
-            result?
         }
         Instruction::CallFunction { name } => {
             let function = bytecode.functions.get(name).cloned().unwrap();
