@@ -111,11 +111,6 @@ impl RuntimeState {
                         // program won't continue running. The debugger is in
                         // control of what happens next.
                     }
-                    BuiltinEffect::Error(_) => {
-                        // Nothing needs to be done. With an unhandled
-                        // effect, the program won't continue running, and
-                        // the debugger will see the error and display it.
-                    }
                     BuiltinEffect::Host(HostEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
@@ -175,6 +170,11 @@ impl RuntimeState {
 
                         self.process.push([Value(random.to_le_bytes())]);
                         self.process.handle_first_effect();
+                    }
+                    _ => {
+                        // Nothing needs to be done. With an unhandled
+                        // effect, the program won't continue running, and
+                        // the debugger will see the error and display it.
                     }
                 }
             }
