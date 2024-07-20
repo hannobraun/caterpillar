@@ -18,7 +18,7 @@ pub fn add(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
@@ -33,7 +33,7 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn brk() -> Result {
@@ -46,7 +46,7 @@ pub fn copy(stack: &mut Stack) -> Result {
     stack.push_operand(a);
     stack.push_operand(a);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn div(stack: &mut Stack) -> Result {
@@ -66,12 +66,12 @@ pub fn div(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn drop(stack: &mut Stack) -> Result {
     stack.pop_operand()?;
-    Ok(None)
+    Ok(())
 }
 
 pub fn eq(stack: &mut Stack) -> Result {
@@ -82,7 +82,7 @@ pub fn eq(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn greater(stack: &mut Stack) -> Result {
@@ -96,7 +96,7 @@ pub fn greater(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
@@ -120,7 +120,7 @@ pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
         instructions,
     )?;
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn load(stack: &mut Stack) -> Result {
@@ -145,7 +145,7 @@ pub fn mul(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn neg(stack: &mut Stack) -> Result {
@@ -160,7 +160,7 @@ pub fn neg(stack: &mut Stack) -> Result {
 
     stack.push_operand(b);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn read_input() -> Result {
@@ -185,7 +185,7 @@ pub fn remainder(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn set_pixel(stack: &mut Stack) -> Result {
@@ -284,14 +284,14 @@ pub fn sub(stack: &mut Stack) -> Result {
 
     stack.push_operand(c);
 
-    Ok(None)
+    Ok(())
 }
 
 pub fn submit_frame() -> Result {
     Err(BuiltinEffect::Host(HostEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinEffect>;
+pub type Result = std::result::Result<(), BuiltinEffect>;
 
 #[derive(
     Clone,

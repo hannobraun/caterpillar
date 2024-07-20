@@ -92,7 +92,7 @@ pub fn evaluate(
             // Anyway, here we deal with this situation by unifying both
             // variants.
             let effect = match result {
-                Ok(effect) => effect,
+                Ok(()) => None,
                 Err(err) => Some(err),
             };
 
