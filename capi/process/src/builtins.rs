@@ -129,7 +129,7 @@ pub fn load(stack: &mut Stack) -> Result {
     let address = i32::from_le_bytes(address.0);
     let address = address.try_into()?;
 
-    Ok(Some(BuiltinEffect::Load { address }))
+    Ok(Some(BuiltinEffect::Host(HostEffect::Load { address })))
 }
 
 pub fn mul(stack: &mut Stack) -> Result {
@@ -164,11 +164,11 @@ pub fn neg(stack: &mut Stack) -> Result {
 }
 
 pub fn read_input() -> Result {
-    Ok(Some(BuiltinEffect::ReadInput))
+    Ok(Some(BuiltinEffect::Host(HostEffect::ReadInput)))
 }
 
 pub fn read_random() -> Result {
-    Ok(Some(BuiltinEffect::ReadRandom))
+    Ok(Some(BuiltinEffect::Host(HostEffect::ReadRandom)))
 }
 
 pub fn remainder(stack: &mut Stack) -> Result {
@@ -255,7 +255,11 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
             .expect("Just checked that color channels are within bounds")
     });
 
-    Ok(Some(BuiltinEffect::SetTile { x, y, color }))
+    Ok(Some(BuiltinEffect::Host(HostEffect::SetTile {
+        x,
+        y,
+        color,
+    })))
 }
 
 pub fn store(stack: &mut Stack) -> Result {
@@ -268,7 +272,10 @@ pub fn store(stack: &mut Stack) -> Result {
     let value = i32::from_le_bytes(value.0);
     let value = value.try_into()?;
 
-    Ok(Some(BuiltinEffect::Store { address, value }))
+    Ok(Some(BuiltinEffect::Host(HostEffect::Store {
+        address,
+        value,
+    })))
 }
 
 pub fn sub(stack: &mut Stack) -> Result {
@@ -288,7 +295,7 @@ pub fn sub(stack: &mut Stack) -> Result {
 }
 
 pub fn submit_frame() -> Result {
-    Ok(Some(BuiltinEffect::SubmitFrame))
+    Ok(Some(BuiltinEffect::Host(HostEffect::SubmitFrame)))
 }
 
 pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
@@ -297,7 +304,11 @@ pub type Result = std::result::Result<Option<BuiltinEffect>, BuiltinError>;
 pub enum BuiltinEffect {
     Breakpoint,
     Error(BuiltinError),
+    Host(HostEffect),
+}
 
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum HostEffect {
     Load { address: u8 },
     Store { address: u8, value: u8 },
 
