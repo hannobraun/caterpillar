@@ -55,15 +55,3 @@ impl From<TryFromIntError> for Effect<DefaultHost> {
         Self::OperandOutOfBounds
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum HostEffect {
-    Load { address: u8 },
-    Store { address: u8, value: u8 },
-
-    SetTile { x: u8, y: u8, color: [u8; 4] },
-    SubmitFrame,
-
-    ReadInput,
-    ReadRandom,
-}

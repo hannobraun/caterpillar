@@ -1,7 +1,5 @@
 use std::fmt::Debug;
 
-use crate::HostEffect;
-
 pub trait Host: Clone + Debug + Eq {
     type Effect;
 }
@@ -11,4 +9,16 @@ pub struct DefaultHost;
 
 impl Host for DefaultHost {
     type Effect = HostEffect;
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum HostEffect {
+    Load { address: u8 },
+    Store { address: u8, value: u8 },
+
+    SetTile { x: u8, y: u8, color: [u8; 4] },
+    SubmitFrame,
+
+    ReadInput,
+    ReadRandom,
 }
