@@ -1,5 +1,7 @@
 use crate::{
-    builtins, host::GameEngineHost, Bytecode, Effect, Instruction, Stack, Value,
+    builtins,
+    host::{self, GameEngineHost},
+    Bytecode, Effect, Instruction, Stack, Value,
 };
 
 pub fn evaluate(
@@ -63,16 +65,16 @@ pub fn evaluate(
                 "eq" => builtins::eq(stack)?,
                 "greater" => builtins::greater(stack)?,
                 "if" => builtins::if_(stack, &bytecode.instructions)?,
-                "load" => builtins::load(stack)?,
+                "load" => host::load(stack)?,
                 "mul" => builtins::mul(stack)?,
                 "neg" => builtins::neg(stack)?,
-                "read_input" => builtins::read_input()?,
-                "read_random" => builtins::read_random()?,
+                "read_input" => host::read_input()?,
+                "read_random" => host::read_random()?,
                 "remainder" => builtins::remainder(stack)?,
-                "set_pixel" => builtins::set_pixel(stack)?,
-                "store" => builtins::store(stack)?,
+                "set_pixel" => host::set_pixel(stack)?,
+                "store" => host::store(stack)?,
                 "sub" => builtins::sub(stack)?,
-                "submit_frame" => builtins::submit_frame()?,
+                "submit_frame" => host::submit_frame()?,
                 _ => return Err(Effect::UnknownBuiltin { name: name.clone() }),
             };
         }
