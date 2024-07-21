@@ -4,6 +4,8 @@ use crate::{CoreEffect, Effect, Stack};
 
 pub trait Host: Clone + Debug + Eq {
     type Effect;
+
+    fn function(name: &str) -> Option<fn(&mut Stack) -> Result>;
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -11,6 +13,18 @@ pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
+
+    fn function(name: &str) -> Option<fn(&mut Stack) -> Result> {
+        match name {
+            "load" => Some(load),
+            "read_input" => Some(read_input),
+            "read_random" => Some(read_random),
+            "set_pixel" => Some(set_pixel),
+            "store" => Some(store),
+            "submit_frame" => Some(submit_frame),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

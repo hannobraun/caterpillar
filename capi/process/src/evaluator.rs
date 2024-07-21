@@ -1,7 +1,6 @@
 use crate::{
-    builtins,
-    host::{self, GameEngineHost},
-    Bytecode, CoreEffect, Effect, Instruction, Stack, Value,
+    builtins, host::GameEngineHost, Bytecode, CoreEffect, Effect, Host,
+    Instruction, Stack, Value,
 };
 
 pub fn evaluate(
@@ -55,34 +54,31 @@ pub fn evaluate(
             }
         }
         Instruction::CallBuiltin { name } => {
-            match name.as_str() {
-                "add" => builtins::add(stack)?,
-                "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack)?,
-                "brk" => builtins::brk()?,
-                "copy" => builtins::copy(stack)?,
-                "div" => builtins::div(stack)?,
-                "drop" => builtins::drop(stack)?,
-                "eq" => builtins::eq(stack)?,
-                "greater" => builtins::greater(stack)?,
-                "if" => builtins::if_(stack, &bytecode.instructions)?,
-                "mul" => builtins::mul(stack)?,
-                "neg" => builtins::neg(stack)?,
-                "remainder" => builtins::remainder(stack)?,
-                "sub" => builtins::sub(stack)?,
+            if let Some(f) = GameEngineHost::function(name) {
+                f(stack)?
+            } else {
+                match name.as_str() {
+                    "add" => builtins::add(stack)?,
+                    "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack)?,
+                    "brk" => builtins::brk()?,
+                    "copy" => builtins::copy(stack)?,
+                    "div" => builtins::div(stack)?,
+                    "drop" => builtins::drop(stack)?,
+                    "eq" => builtins::eq(stack)?,
+                    "greater" => builtins::greater(stack)?,
+                    "if" => builtins::if_(stack, &bytecode.instructions)?,
+                    "mul" => builtins::mul(stack)?,
+                    "neg" => builtins::neg(stack)?,
+                    "remainder" => builtins::remainder(stack)?,
+                    "sub" => builtins::sub(stack)?,
 
-                "load" => host::load(stack)?,
-                "read_input" => host::read_input(stack)?,
-                "read_random" => host::read_random(stack)?,
-                "set_pixel" => host::set_pixel(stack)?,
-                "store" => host::store(stack)?,
-                "submit_frame" => host::submit_frame(stack)?,
-
-                _ => {
-                    return Err(Effect::Core(CoreEffect::UnknownBuiltin {
-                        name: name.clone(),
-                    }))
-                }
-            };
+                    _ => {
+                        return Err(Effect::Core(CoreEffect::UnknownBuiltin {
+                            name: name.clone(),
+                        }))
+                    }
+                };
+            }
         }
         Instruction::CallFunction { name } => {
             let function = bytecode.functions.get(name).cloned().unwrap();
