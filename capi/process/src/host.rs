@@ -8,11 +8,11 @@ pub trait Host: Clone + Debug + Eq {
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
-    type Effect = HostEffect;
+    type Effect = GameEngineEffect;
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum HostEffect {
+pub enum GameEngineEffect {
     Load { address: u8 },
     Store { address: u8, value: u8 },
 

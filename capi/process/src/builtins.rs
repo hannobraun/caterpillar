@@ -1,5 +1,5 @@
 use crate::{
-    host::GameEngineHost, Effect, Function, HostEffect, InstructionAddr,
+    host::GameEngineHost, Effect, Function, GameEngineEffect, InstructionAddr,
     Instructions, Stack,
 };
 
@@ -127,7 +127,7 @@ pub fn load(stack: &mut Stack) -> Result {
     let address = i32::from_le_bytes(address.0);
     let address = address.try_into()?;
 
-    Err(Effect::Host(HostEffect::Load { address }))
+    Err(Effect::Host(GameEngineEffect::Load { address }))
 }
 
 pub fn mul(stack: &mut Stack) -> Result {
@@ -162,11 +162,11 @@ pub fn neg(stack: &mut Stack) -> Result {
 }
 
 pub fn read_input() -> Result {
-    Err(Effect::Host(HostEffect::ReadInput))
+    Err(Effect::Host(GameEngineEffect::ReadInput))
 }
 
 pub fn read_random() -> Result {
-    Err(Effect::Host(HostEffect::ReadRandom))
+    Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
 pub fn remainder(stack: &mut Stack) -> Result {
@@ -253,7 +253,7 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
             .expect("Just checked that color channels are within bounds")
     });
 
-    Err(Effect::Host(HostEffect::SetTile { x, y, color }))
+    Err(Effect::Host(GameEngineEffect::SetTile { x, y, color }))
 }
 
 pub fn store(stack: &mut Stack) -> Result {
@@ -266,7 +266,7 @@ pub fn store(stack: &mut Stack) -> Result {
     let value = i32::from_le_bytes(value.0);
     let value = value.try_into()?;
 
-    Err(Effect::Host(HostEffect::Store { address, value }))
+    Err(Effect::Host(GameEngineEffect::Store { address, value }))
 }
 
 pub fn sub(stack: &mut Stack) -> Result {
@@ -286,7 +286,7 @@ pub fn sub(stack: &mut Stack) -> Result {
 }
 
 pub fn submit_frame() -> Result {
-    Err(Effect::Host(HostEffect::SubmitFrame))
+    Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
 pub type Result = std::result::Result<(), Effect<GameEngineHost>>;
