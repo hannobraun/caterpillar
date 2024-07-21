@@ -9,9 +9,9 @@ use crate::{
     Debug,
     Eq,
     PartialEq,
-    thiserror::Error,
     serde::Deserialize,
     serde::Serialize,
+    thiserror::Error,
 )]
 pub enum Effect<H: Host> {
     #[error(transparent)]
