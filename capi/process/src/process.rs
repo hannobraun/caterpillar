@@ -5,20 +5,20 @@ use crate::{
     evaluator::{evaluate, EvaluatorState},
     host::GameEngineHost,
     instructions::InstructionAddr,
-    Bytecode, CoreEffect, Effect, GameEngineEffect, Stack, Value,
+    Bytecode, CoreEffect, Effect, Host, Stack, Value,
 };
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Process {
-    state: ProcessState,
+    state: ProcessState<GameEngineHost>,
     stack: Stack,
     breakpoints: Breakpoints,
 }
 
 impl Process {
-    pub fn state(&self) -> &ProcessState {
+    pub fn state(&self) -> &ProcessState<GameEngineHost> {
         &self.state
     }
 
@@ -103,21 +103,19 @@ impl Process {
     }
 }
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct ProcessState {
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ProcessState<H: Host> {
     most_recent_step: Option<InstructionAddr>,
-    unhandled_effects: VecDeque<Effect<GameEngineEffect>>,
+    unhandled_effects: VecDeque<Effect<H::Effect>>,
     has_finished: bool,
 }
 
-impl ProcessState {
+impl<H: Host> ProcessState<H> {
     pub fn most_recent_step(&self) -> Option<InstructionAddr> {
         self.most_recent_step.as_ref().copied()
     }
 
-    pub fn first_unhandled_effect(&self) -> Option<&Effect<GameEngineEffect>> {
+    pub fn first_unhandled_effect(&self) -> Option<&Effect<H::Effect>> {
         self.unhandled_effects.front()
     }
 
@@ -133,7 +131,17 @@ impl ProcessState {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
-    pub fn add_effect(&mut self, effect: Effect<GameEngineEffect>) {
+    pub fn add_effect(&mut self, effect: Effect<H::Effect>) {
         self.unhandled_effects.push_back(effect);
+    }
+}
+
+impl<H: Host> Default for ProcessState<H> {
+    fn default() -> Self {
+        Self {
+            most_recent_step: Default::default(),
+            unhandled_effects: Default::default(),
+            has_finished: Default::default(),
+        }
     }
 }
