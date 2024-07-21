@@ -34,11 +34,11 @@ pub fn load(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Load { address }))
 }
 
-pub fn read_input() -> Result {
+pub fn read_input(_: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::ReadInput))
 }
 
-pub fn read_random() -> Result {
+pub fn read_random(_: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
@@ -125,7 +125,7 @@ pub fn store(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Store { address, value }))
 }
 
-pub fn submit_frame() -> Result {
+pub fn submit_frame(_: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 

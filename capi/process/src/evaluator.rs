@@ -71,11 +71,11 @@ pub fn evaluate(
                 "sub" => builtins::sub(stack)?,
 
                 "load" => host::load(stack)?,
-                "read_input" => host::read_input()?,
-                "read_random" => host::read_random()?,
+                "read_input" => host::read_input(stack)?,
+                "read_random" => host::read_random(stack)?,
                 "set_pixel" => host::set_pixel(stack)?,
                 "store" => host::store(stack)?,
-                "submit_frame" => host::submit_frame()?,
+                "submit_frame" => host::submit_frame(stack)?,
 
                 _ => {
                     return Err(Effect::Core(CoreEffect::UnknownBuiltin {
