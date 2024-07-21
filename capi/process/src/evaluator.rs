@@ -65,16 +65,18 @@ pub fn evaluate(
                 "eq" => builtins::eq(stack)?,
                 "greater" => builtins::greater(stack)?,
                 "if" => builtins::if_(stack, &bytecode.instructions)?,
-                "load" => host::load(stack)?,
                 "mul" => builtins::mul(stack)?,
                 "neg" => builtins::neg(stack)?,
+                "remainder" => builtins::remainder(stack)?,
+                "sub" => builtins::sub(stack)?,
+
+                "load" => host::load(stack)?,
                 "read_input" => host::read_input()?,
                 "read_random" => host::read_random()?,
-                "remainder" => builtins::remainder(stack)?,
                 "set_pixel" => host::set_pixel(stack)?,
                 "store" => host::store(stack)?,
-                "sub" => builtins::sub(stack)?,
                 "submit_frame" => host::submit_frame()?,
+
                 _ => return Err(Effect::UnknownBuiltin { name: name.clone() }),
             };
         }
