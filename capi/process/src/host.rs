@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{builtins, Effect, Stack};
+use crate::{Effect, Stack};
 
 pub trait Host: Clone + Debug + Eq {
     type Effect;
@@ -129,7 +129,7 @@ pub fn submit_frame() -> Result {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
-type Result = builtins::Result<GameEngineHost>;
+type Result = std::result::Result<(), Effect<GameEngineHost>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
