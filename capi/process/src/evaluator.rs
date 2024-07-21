@@ -1,11 +1,11 @@
 use crate::{
-    builtins, host::DefaultHost, Bytecode, Effect, Instruction, Stack, Value,
+    builtins, host::GameEngineHost, Bytecode, Effect, Instruction, Stack, Value,
 };
 
 pub fn evaluate(
     bytecode: &Bytecode,
     stack: &mut Stack,
-) -> Result<EvaluatorState, Effect<DefaultHost>> {
+) -> Result<EvaluatorState, Effect<GameEngineHost>> {
     let Some(addr) = stack.take_next_instruction() else {
         return Ok(EvaluatorState::Finished);
     };

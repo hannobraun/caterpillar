@@ -5,9 +5,9 @@ pub trait Host: Clone + Debug + Eq {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DefaultHost;
+pub struct GameEngineHost;
 
-impl Host for DefaultHost {
+impl Host for GameEngineHost {
     type Effect = HostEffect;
 }
 

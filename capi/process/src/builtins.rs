@@ -1,5 +1,5 @@
 use crate::{
-    host::DefaultHost, Effect, Function, HostEffect, InstructionAddr,
+    host::GameEngineHost, Effect, Function, HostEffect, InstructionAddr,
     Instructions, Stack,
 };
 
@@ -289,7 +289,7 @@ pub fn submit_frame() -> Result {
     Err(Effect::Host(HostEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<(), Effect<DefaultHost>>;
+pub type Result = std::result::Result<(), Effect<GameEngineHost>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 

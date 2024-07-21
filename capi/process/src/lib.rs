@@ -17,7 +17,7 @@ pub use self::{
     bytecode::Bytecode,
     effects::Effect,
     function::Function,
-    host::{DefaultHost, Host, HostEffect},
+    host::{GameEngineHost, Host, HostEffect},
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,
     process::{Process, ProcessState},

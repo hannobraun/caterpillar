@@ -1,7 +1,7 @@
 use std::num::TryFromIntError;
 
 use crate::{
-    host::{DefaultHost, Host},
+    host::{GameEngineHost, Host},
     operands::PopOperandError,
     stack::PushStackFrameError,
 };
@@ -50,7 +50,7 @@ pub enum Effect<H: Host> {
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for Effect<DefaultHost> {
+impl From<TryFromIntError> for Effect<GameEngineHost> {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }
