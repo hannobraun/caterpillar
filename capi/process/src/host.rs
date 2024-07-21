@@ -2,9 +2,7 @@ use std::fmt::Debug;
 
 use crate::{CoreEffect, Effect, Stack};
 
-pub trait Host:
-    Clone + Debug + Eq + for<'de> serde::Deserialize<'de> + serde::Serialize
-{
+pub trait Host {
     type Effect: Clone
         + Debug
         + Eq
