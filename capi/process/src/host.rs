@@ -8,7 +8,7 @@ pub trait Host: Clone + Debug + Eq {
     fn function(name: &str) -> Option<HostFunction>;
 }
 
-pub type HostFunction = fn(&mut Stack) -> GameEngineResult;
+pub type HostFunction = fn(&mut Stack) -> Result<(), Effect<GameEngineHost>>;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GameEngineHost;
