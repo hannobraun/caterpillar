@@ -6,7 +6,7 @@ pub trait Host: Clone + Debug + Eq {
     type Effect: Clone
         + Debug
         + Eq
-        + for<'r> serde::Deserialize<'r>
+        + for<'de> serde::Deserialize<'de>
         + serde::Serialize;
 
     fn function(name: &str) -> Option<HostFunction<Self::Effect>>;
