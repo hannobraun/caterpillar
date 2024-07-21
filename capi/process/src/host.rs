@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{builtins, Effect, Stack, TILES_PER_AXIS};
+use crate::{builtins, Effect, Stack};
 
 pub trait Host: Clone + Debug + Eq {
     type Effect;
@@ -128,6 +128,8 @@ pub fn store(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
 pub fn submit_frame() -> builtins::Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
+
+pub const TILES_PER_AXIS: usize = 32;
 
 // The value is within the bounds of an `i32`. The `as` here should never
 // truncate.

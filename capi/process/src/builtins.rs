@@ -189,5 +189,3 @@ pub fn sub(stack: &mut Stack) -> Result<GameEngineHost> {
 }
 
 pub type Result<H> = std::result::Result<(), Effect<H>>;
-
-pub const TILES_PER_AXIS: usize = 32;

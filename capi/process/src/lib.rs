@@ -13,11 +13,10 @@ mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
-    builtins::TILES_PER_AXIS,
     bytecode::Bytecode,
     effects::Effect,
     function::Function,
-    host::{GameEngineEffect, GameEngineHost, Host},
+    host::{GameEngineEffect, GameEngineHost, Host, TILES_PER_AXIS},
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,
     process::{Process, ProcessState},
