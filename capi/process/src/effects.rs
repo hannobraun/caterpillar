@@ -69,8 +69,8 @@ pub enum CoreEffect {
 }
 
 // This conversion is implemented manually, because doing it automatically using
-// `thiserror`'s from would add an instance of the error into the type, and it
-// doesn't implement `serde::Deserialize`.
+// `thiserror`'s `#[from]` would add an instance of the error into the type, and
+// it doesn't implement `serde::Deserialize`.
 impl From<TryFromIntError> for CoreEffect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
