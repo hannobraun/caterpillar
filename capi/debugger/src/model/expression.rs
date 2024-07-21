@@ -2,7 +2,7 @@ use capi_compiler::{
     repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
-use capi_process::{Effect, GameEngineHost, InstructionAddr, Process};
+use capi_process::{Effect, GameEngineEffect, InstructionAddr, Process};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
@@ -11,7 +11,7 @@ pub struct Expression {
     pub has_durable_breakpoint: bool,
     pub is_comment: bool,
     pub is_on_call_stack: bool,
-    pub effect: Option<Effect<GameEngineHost>>,
+    pub effect: Option<Effect<GameEngineEffect>>,
 }
 
 impl Expression {

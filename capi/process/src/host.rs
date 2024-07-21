@@ -5,7 +5,7 @@ use crate::{CoreEffect, Effect, Stack};
 pub trait Host: Clone + Debug + Eq {
     type Effect;
 
-    fn function(name: &str) -> Option<HostFunction<Self>>;
+    fn function(name: &str) -> Option<HostFunction<Self::Effect>>;
 }
 
 pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
@@ -16,7 +16,7 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
-    fn function(name: &str) -> Option<HostFunction<Self>> {
+    fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
         match name {
             "load" => Some(load),
             "read_input" => Some(read_input),
@@ -145,7 +145,7 @@ pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
-type GameEngineResult = Result<(), Effect<GameEngineHost>>;
+type GameEngineResult = Result<(), Effect<GameEngineEffect>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 

@@ -5,7 +5,7 @@ use crate::{
 pub fn evaluate<H: Host>(
     bytecode: &Bytecode,
     stack: &mut Stack,
-) -> Result<EvaluatorState, Effect<H>> {
+) -> Result<EvaluatorState, Effect<H::Effect>> {
     let Some(addr) = stack.take_next_instruction() else {
         return Ok(EvaluatorState::Finished);
     };

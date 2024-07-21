@@ -1,8 +1,6 @@
 use std::num::TryFromIntError;
 
-use crate::{
-    host::Host, operands::PopOperandError, stack::PushStackFrameError,
-};
+use crate::{operands::PopOperandError, stack::PushStackFrameError};
 
 #[derive(
     Clone,
@@ -13,15 +11,15 @@ use crate::{
     serde::Serialize,
     thiserror::Error,
 )]
-pub enum Effect<H: Host> {
+pub enum Effect<H> {
     #[error(transparent)]
     Core(CoreEffect),
 
     #[error("Host-specific effect")]
-    Host(H::Effect),
+    Host(H),
 }
 
-impl<T, H: Host> From<T> for Effect<H>
+impl<T, H> From<T> for Effect<H>
 where
     T: Into<CoreEffect>,
 {

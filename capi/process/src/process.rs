@@ -5,7 +5,7 @@ use crate::{
     evaluator::{evaluate, EvaluatorState},
     host::GameEngineHost,
     instructions::InstructionAddr,
-    Bytecode, CoreEffect, Effect, Stack, Value,
+    Bytecode, CoreEffect, Effect, GameEngineEffect, Stack, Value,
 };
 
 #[derive(
@@ -82,7 +82,7 @@ impl Process {
 
         let next_instruction = self.stack.next_instruction_overall().unwrap();
 
-        match evaluate(bytecode, &mut self.stack) {
+        match evaluate::<GameEngineHost>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
@@ -108,7 +108,7 @@ impl Process {
 )]
 pub struct ProcessState {
     most_recent_step: Option<InstructionAddr>,
-    unhandled_effects: VecDeque<Effect<GameEngineHost>>,
+    unhandled_effects: VecDeque<Effect<GameEngineEffect>>,
     has_finished: bool,
 }
 
@@ -117,7 +117,7 @@ impl ProcessState {
         self.most_recent_step.as_ref().copied()
     }
 
-    pub fn first_unhandled_effect(&self) -> Option<&Effect<GameEngineHost>> {
+    pub fn first_unhandled_effect(&self) -> Option<&Effect<GameEngineEffect>> {
         self.unhandled_effects.front()
     }
 
@@ -133,7 +133,7 @@ impl ProcessState {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
-    pub fn add_effect(&mut self, effect: Effect<GameEngineHost>) {
+    pub fn add_effect(&mut self, effect: Effect<GameEngineEffect>) {
         self.unhandled_effects.push_back(effect);
     }
 }
