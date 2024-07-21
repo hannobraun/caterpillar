@@ -1,12 +1,11 @@
 use crate::{
-    builtins, host::GameEngineHost, Bytecode, CoreEffect, Effect, Host,
-    Instruction, Stack, Value,
+    builtins, Bytecode, CoreEffect, Effect, Host, Instruction, Stack, Value,
 };
 
-pub fn evaluate(
+pub fn evaluate<H: Host>(
     bytecode: &Bytecode,
     stack: &mut Stack,
-) -> Result<EvaluatorState, Effect<GameEngineHost>> {
+) -> Result<EvaluatorState, Effect<H>> {
     let Some(addr) = stack.take_next_instruction() else {
         return Ok(EvaluatorState::Finished);
     };
@@ -54,7 +53,7 @@ pub fn evaluate(
             }
         }
         Instruction::CallBuiltin { name } => {
-            if let Some(f) = GameEngineHost::function(name) {
+            if let Some(f) = H::function(name) {
                 f(stack)?
             } else {
                 match name.as_str() {
