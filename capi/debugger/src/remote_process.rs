@@ -1,5 +1,6 @@
-use capi_process::{GameEngineHost, Process};
+use capi_process::Process;
 use capi_protocol::{
+    host::GameEngineHost,
     memory::Memory,
     update::{SourceCode, Update},
 };

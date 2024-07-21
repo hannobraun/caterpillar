@@ -1,15 +1,13 @@
 use std::{collections::VecDeque, panic};
 
-use capi_process::{
-    Bytecode, CoreEffect, Effect, GameEngineEffect, GameEngineHost, Process,
-    Value,
-};
+use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
+    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     memory::Memory,
 };
 
-use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
+use crate::{display, ffi, updates::Updates};
 
 pub struct RuntimeState {
     pub bytecode: Option<Bytecode>,

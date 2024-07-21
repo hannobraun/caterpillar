@@ -16,9 +16,7 @@ pub use self::{
     bytecode::Bytecode,
     effects::{CoreEffect, Effect},
     function::Function,
-    host::{
-        GameEngineEffect, GameEngineHost, Host, HostFunction, TILES_PER_AXIS,
-    },
+    host::{Host, HostFunction},
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,
     process::{Process, ProcessState},

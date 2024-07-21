@@ -1,4 +1,4 @@
-pub use capi_process::TILES_PER_AXIS;
+use capi_protocol::host::TILES_PER_AXIS;
 
 pub const PIXELS_PER_TILE_AXIS: usize = 8;
 pub const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;

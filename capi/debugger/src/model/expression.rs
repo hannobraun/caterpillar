@@ -2,9 +2,8 @@ use capi_compiler::{
     repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
-use capi_process::{
-    Effect, GameEngineEffect, GameEngineHost, InstructionAddr, Process,
-};
+use capi_process::{Effect, InstructionAddr, Process};
+use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {

@@ -1,7 +1,7 @@
 use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
-use capi_process::{GameEngineHost, Process};
+use capi_process::Process;
 
-use crate::memory::Memory;
+use crate::{host::GameEngineHost, memory::Memory};
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(serde::Deserialize, serde::Serialize)]
