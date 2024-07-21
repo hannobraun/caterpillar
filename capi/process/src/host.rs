@@ -145,7 +145,7 @@ pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
-type GameEngineResult = std::result::Result<(), Effect<GameEngineHost>>;
+type GameEngineResult = Result<(), Effect<GameEngineHost>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
