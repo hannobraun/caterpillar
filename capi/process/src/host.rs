@@ -5,10 +5,10 @@ use crate::{CoreEffect, Effect, Stack};
 pub trait Host: Clone + Debug + Eq {
     type Effect;
 
-    fn function(name: &str) -> Option<HostFunction>;
+    fn function(name: &str) -> Option<HostFunction<Self>>;
 }
 
-pub type HostFunction = fn(&mut Stack) -> Result<(), Effect<GameEngineHost>>;
+pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GameEngineHost;
@@ -16,7 +16,7 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
-    fn function(name: &str) -> Option<HostFunction> {
+    fn function(name: &str) -> Option<HostFunction<Self>> {
         match name {
             "load" => Some(load),
             "read_input" => Some(read_input),
