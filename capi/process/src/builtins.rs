@@ -3,7 +3,7 @@ use crate::{
     Instructions, Stack,
 };
 
-pub fn add(stack: &mut Stack) -> Result {
+pub fn add(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -19,7 +19,7 @@ pub fn add(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
+pub fn add_wrap_unsigned(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -34,11 +34,11 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn brk() -> Result {
+pub fn brk() -> Result<GameEngineHost> {
     Err(Effect::Breakpoint)
 }
 
-pub fn copy(stack: &mut Stack) -> Result {
+pub fn copy(stack: &mut Stack) -> Result<GameEngineHost> {
     let a = stack.pop_operand()?;
 
     stack.push_operand(a);
@@ -47,7 +47,7 @@ pub fn copy(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn div(stack: &mut Stack) -> Result {
+pub fn div(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -67,12 +67,12 @@ pub fn div(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn drop(stack: &mut Stack) -> Result {
+pub fn drop(stack: &mut Stack) -> Result<GameEngineHost> {
     stack.pop_operand()?;
     Ok(())
 }
 
-pub fn eq(stack: &mut Stack) -> Result {
+pub fn eq(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -83,7 +83,7 @@ pub fn eq(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn greater(stack: &mut Stack) -> Result {
+pub fn greater(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -97,7 +97,10 @@ pub fn greater(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
+pub fn if_(
+    stack: &mut Stack,
+    instructions: &Instructions,
+) -> Result<GameEngineHost> {
     let else_ = stack.pop_operand()?;
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
@@ -121,7 +124,7 @@ pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn load(stack: &mut Stack) -> Result {
+pub fn load(stack: &mut Stack) -> Result<GameEngineHost> {
     let address = stack.pop_operand()?;
 
     let address = i32::from_le_bytes(address.0);
@@ -130,7 +133,7 @@ pub fn load(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Load { address }))
 }
 
-pub fn mul(stack: &mut Stack) -> Result {
+pub fn mul(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -146,7 +149,7 @@ pub fn mul(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn neg(stack: &mut Stack) -> Result {
+pub fn neg(stack: &mut Stack) -> Result<GameEngineHost> {
     let a = stack.pop_operand()?;
 
     let a = i32::from_le_bytes(a.0);
@@ -161,15 +164,15 @@ pub fn neg(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn read_input() -> Result {
+pub fn read_input() -> Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::ReadInput))
 }
 
-pub fn read_random() -> Result {
+pub fn read_random() -> Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
-pub fn remainder(stack: &mut Stack) -> Result {
+pub fn remainder(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -186,7 +189,7 @@ pub fn remainder(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn set_pixel(stack: &mut Stack) -> Result {
+pub fn set_pixel(stack: &mut Stack) -> Result<GameEngineHost> {
     let a = stack.pop_operand()?;
     let b = stack.pop_operand()?;
     let g = stack.pop_operand()?;
@@ -256,7 +259,7 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::SetTile { x, y, color }))
 }
 
-pub fn store(stack: &mut Stack) -> Result {
+pub fn store(stack: &mut Stack) -> Result<GameEngineHost> {
     let address = stack.pop_operand()?;
     let value = stack.pop_operand()?;
 
@@ -269,7 +272,7 @@ pub fn store(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Store { address, value }))
 }
 
-pub fn sub(stack: &mut Stack) -> Result {
+pub fn sub(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -285,11 +288,11 @@ pub fn sub(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn submit_frame() -> Result {
+pub fn submit_frame() -> Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
-pub type Result = std::result::Result<(), Effect<GameEngineHost>>;
+pub type Result<H> = std::result::Result<(), Effect<H>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
