@@ -8,7 +8,7 @@ pub trait Host: Clone + Debug + Eq {
     fn function(name: &str) -> Option<HostFunction>;
 }
 
-pub type HostFunction = fn(&mut Stack) -> Result;
+pub type HostFunction = fn(&mut Stack) -> GameEngineResult;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct GameEngineHost;
@@ -16,7 +16,7 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
-    fn function(name: &str) -> Option<fn(&mut Stack) -> Result> {
+    fn function(name: &str) -> Option<fn(&mut Stack) -> GameEngineResult> {
         match name {
             "load" => Some(load),
             "read_input" => Some(read_input),
@@ -41,7 +41,7 @@ pub enum GameEngineEffect {
     ReadRandom,
 }
 
-pub fn load(stack: &mut Stack) -> Result {
+pub fn load(stack: &mut Stack) -> GameEngineResult {
     let address = stack.pop_operand()?;
 
     let address = i32::from_le_bytes(address.0);
@@ -50,15 +50,15 @@ pub fn load(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Load { address }))
 }
 
-pub fn read_input(_: &mut Stack) -> Result {
+pub fn read_input(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::ReadInput))
 }
 
-pub fn read_random(_: &mut Stack) -> Result {
+pub fn read_random(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
-pub fn set_pixel(stack: &mut Stack) -> Result {
+pub fn set_pixel(stack: &mut Stack) -> GameEngineResult {
     let a = stack.pop_operand()?;
     let b = stack.pop_operand()?;
     let g = stack.pop_operand()?;
@@ -128,7 +128,7 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::SetTile { x, y, color }))
 }
 
-pub fn store(stack: &mut Stack) -> Result {
+pub fn store(stack: &mut Stack) -> GameEngineResult {
     let address = stack.pop_operand()?;
     let value = stack.pop_operand()?;
 
@@ -141,11 +141,11 @@ pub fn store(stack: &mut Stack) -> Result {
     Err(Effect::Host(GameEngineEffect::Store { address, value }))
 }
 
-pub fn submit_frame(_: &mut Stack) -> Result {
+pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
 
-type Result = std::result::Result<(), Effect<GameEngineHost>>;
+type GameEngineResult = std::result::Result<(), Effect<GameEngineHost>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
