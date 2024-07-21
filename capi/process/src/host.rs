@@ -2,7 +2,9 @@ use std::fmt::Debug;
 
 use crate::{CoreEffect, Effect, Stack};
 
-pub trait Host: Clone + Debug + Eq {
+pub trait Host:
+    Clone + Debug + Eq + for<'de> serde::Deserialize<'de> + serde::Serialize
+{
     type Effect: Clone
         + Debug
         + Eq
@@ -14,7 +16,7 @@ pub trait Host: Clone + Debug + Eq {
 
 pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
