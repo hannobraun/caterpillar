@@ -2,7 +2,9 @@ use capi_compiler::{
     repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
     source_map::SourceMap,
 };
-use capi_process::{Effect, GameEngineEffect, InstructionAddr, Process};
+use capi_process::{
+    Effect, GameEngineEffect, GameEngineHost, InstructionAddr, Process,
+};
 
 #[derive(Clone, Eq, PartialEq)]
 pub struct Expression {
@@ -18,7 +20,7 @@ impl Expression {
     pub fn new(
         fragment: Fragment,
         source_map: &SourceMap,
-        process: &Process,
+        process: &Process<GameEngineHost>,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
         let FragmentPayload::Expression { expression, .. } = fragment.payload

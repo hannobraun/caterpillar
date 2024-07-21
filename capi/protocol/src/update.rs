@@ -1,5 +1,5 @@
 use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
-use capi_process::Process;
+use capi_process::{GameEngineHost, Process};
 
 use crate::memory::Memory;
 
@@ -7,7 +7,7 @@ use crate::memory::Memory;
 #[derive(serde::Deserialize, serde::Serialize)]
 pub enum Update {
     SourceCode(SourceCode),
-    Process(Process),
+    Process(Process<GameEngineHost>),
     Memory { memory: Memory },
 }
 

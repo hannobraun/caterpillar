@@ -2,7 +2,7 @@ use capi_compiler::{
     repr::fragments::{self, Fragments},
     source_map::SourceMap,
 };
-use capi_process::Process;
+use capi_process::{GameEngineHost, Process};
 
 use super::Expression;
 
@@ -17,7 +17,7 @@ impl Function {
         function: fragments::Function,
         fragments: &Fragments,
         source_map: &SourceMap,
-        process: &Process,
+        process: &Process<GameEngineHost>,
     ) -> Self {
         let mut body = Vec::new();
 

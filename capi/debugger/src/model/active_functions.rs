@@ -1,4 +1,4 @@
-use capi_process::Process;
+use capi_process::{GameEngineHost, Process};
 use capi_protocol::update::SourceCode;
 
 use super::Function;
@@ -12,7 +12,7 @@ pub enum ActiveFunctions {
 impl ActiveFunctions {
     pub fn new(
         source_code: Option<&SourceCode>,
-        process: Option<&Process>,
+        process: Option<&Process<GameEngineHost>>,
     ) -> Self {
         let Some(source_code) = source_code else {
             return Self::Message {

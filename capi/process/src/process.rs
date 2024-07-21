@@ -3,22 +3,19 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
-    host::GameEngineHost,
     instructions::InstructionAddr,
     Bytecode, CoreEffect, Effect, Host, Stack, Value,
 };
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct Process {
-    state: ProcessState<GameEngineHost>,
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Process<H: Host> {
+    state: ProcessState<H>,
     stack: Stack,
     breakpoints: Breakpoints,
 }
 
-impl Process {
-    pub fn state(&self) -> &ProcessState<GameEngineHost> {
+impl<H: Host> Process<H> {
+    pub fn state(&self) -> &ProcessState<H> {
         &self.state
     }
 
@@ -82,7 +79,7 @@ impl Process {
 
         let next_instruction = self.stack.next_instruction_overall().unwrap();
 
-        match evaluate::<GameEngineHost>(bytecode, &mut self.stack) {
+        match evaluate::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
@@ -99,6 +96,16 @@ impl Process {
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
             self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
+        }
+    }
+}
+
+impl<H: Host> Default for Process<H> {
+    fn default() -> Self {
+        Self {
+            state: Default::default(),
+            stack: Default::default(),
+            breakpoints: Default::default(),
         }
     }
 }

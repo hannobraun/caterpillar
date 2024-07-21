@@ -1,4 +1,4 @@
-use capi_process::Process;
+use capi_process::{GameEngineHost, Process};
 use capi_protocol::{
     memory::Memory,
     update::{SerializedUpdate, Update},
@@ -6,7 +6,7 @@ use capi_protocol::{
 
 pub struct Updates {
     latest_memory: Option<Memory>,
-    process_at_client: Option<Process>,
+    process_at_client: Option<Process<GameEngineHost>>,
     queue: Vec<SerializedUpdate>,
 }
 
@@ -19,7 +19,11 @@ impl Updates {
         }
     }
 
-    pub fn queue_updates(&mut self, process: &Process, memory: &Memory) {
+    pub fn queue_updates(
+        &mut self,
+        process: &Process<GameEngineHost>,
+        memory: &Memory,
+    ) {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
@@ -38,7 +42,7 @@ impl Updates {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Process) -> bool {
+    fn update_is_necessary(&self, process: &Process<GameEngineHost>) -> bool {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to

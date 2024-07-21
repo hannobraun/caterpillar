@@ -1,4 +1,4 @@
-use capi_process::Process;
+use capi_process::{GameEngineHost, Process};
 use capi_protocol::{
     memory::Memory,
     update::{SourceCode, Update},
@@ -9,7 +9,7 @@ use super::model::{ActiveFunctions, Debugger};
 #[derive(Default)]
 pub struct RemoteProcess {
     pub source_code: Option<SourceCode>,
-    pub process: Option<Process>,
+    pub process: Option<Process<GameEngineHost>>,
     pub memory: Option<Memory>,
 }
 

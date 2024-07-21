@@ -1,7 +1,8 @@
 use std::{collections::VecDeque, panic};
 
 use capi_process::{
-    Bytecode, CoreEffect, Effect, GameEngineEffect, Process, Value,
+    Bytecode, CoreEffect, Effect, GameEngineEffect, GameEngineHost, Process,
+    Value,
 };
 use capi_protocol::{
     command::{Command, SerializedCommand},
@@ -13,7 +14,7 @@ use crate::{display, ffi, tiles::TILES_PER_AXIS, updates::Updates};
 pub struct RuntimeState {
     pub bytecode: Option<Bytecode>,
     pub arguments: Vec<Value>,
-    pub process: Process,
+    pub process: Process<GameEngineHost>,
     pub memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
