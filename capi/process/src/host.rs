@@ -25,7 +25,7 @@ pub enum GameEngineEffect {
     ReadRandom,
 }
 
-pub fn load(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
+pub fn load(stack: &mut Stack) -> Result {
     let address = stack.pop_operand()?;
 
     let address = i32::from_le_bytes(address.0);
@@ -34,15 +34,15 @@ pub fn load(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::Load { address }))
 }
 
-pub fn read_input() -> builtins::Result<GameEngineHost> {
+pub fn read_input() -> Result {
     Err(Effect::Host(GameEngineEffect::ReadInput))
 }
 
-pub fn read_random() -> builtins::Result<GameEngineHost> {
+pub fn read_random() -> Result {
     Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
-pub fn set_pixel(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
+pub fn set_pixel(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
     let b = stack.pop_operand()?;
     let g = stack.pop_operand()?;
@@ -112,7 +112,7 @@ pub fn set_pixel(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::SetTile { x, y, color }))
 }
 
-pub fn store(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
+pub fn store(stack: &mut Stack) -> Result {
     let address = stack.pop_operand()?;
     let value = stack.pop_operand()?;
 
@@ -125,9 +125,11 @@ pub fn store(stack: &mut Stack) -> builtins::Result<GameEngineHost> {
     Err(Effect::Host(GameEngineEffect::Store { address, value }))
 }
 
-pub fn submit_frame() -> builtins::Result<GameEngineHost> {
+pub fn submit_frame() -> Result {
     Err(Effect::Host(GameEngineEffect::SubmitFrame))
 }
+
+type Result = builtins::Result<GameEngineHost>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
