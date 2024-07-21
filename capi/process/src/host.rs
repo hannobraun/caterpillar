@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use crate::{CoreEffect, Effect, Stack};
 
 pub trait Host: Clone + Debug + Eq {
-    type Effect;
+    type Effect: for<'r> serde::Deserialize<'r> + serde::Serialize;
 
     fn function(name: &str) -> Option<HostFunction<Self::Effect>>;
 }
