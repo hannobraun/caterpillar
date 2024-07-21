@@ -1,9 +1,7 @@
 use std::num::TryFromIntError;
 
 use crate::{
-    host::{GameEngineHost, Host},
-    operands::PopOperandError,
-    stack::PushStackFrameError,
+    host::Host, operands::PopOperandError, stack::PushStackFrameError,
 };
 
 #[derive(
@@ -16,6 +14,32 @@ use crate::{
     serde::Serialize,
 )]
 pub enum Effect<H: Host> {
+    #[error(transparent)]
+    Core(CoreEffect),
+
+    #[error("Host-specific effect")]
+    Host(H::Effect),
+}
+
+impl<T, H: Host> From<T> for Effect<H>
+where
+    T: Into<CoreEffect>,
+{
+    fn from(value: T) -> Self {
+        Self::Core(value.into())
+    }
+}
+
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
+pub enum CoreEffect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -42,15 +66,12 @@ pub enum Effect<H: Host> {
 
     #[error("Executed unreachable instruction")]
     Unreachable,
-
-    #[error("Host-specific effect")]
-    Host(H::Effect),
 }
 
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s from would add an instance of the error into the type, and it
 // doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for Effect<GameEngineHost> {
+impl From<TryFromIntError> for CoreEffect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }

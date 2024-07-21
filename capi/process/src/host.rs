@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{Effect, Stack};
+use crate::{CoreEffect, Effect, Stack};
 
 pub trait Host: Clone + Debug + Eq {
     type Effect;
@@ -58,44 +58,44 @@ pub fn set_pixel(stack: &mut Stack) -> Result {
     let a = i32::from_le_bytes(a.0);
 
     if x < 0 {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if y < 0 {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if x >= TILES_PER_AXIS_I32 {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if y >= TILES_PER_AXIS_I32 {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
 
     let color_channel_min: i32 = u8::MIN.into();
     let color_channel_max: i32 = u8::MAX.into();
 
     if r < color_channel_min {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if g < color_channel_min {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if b < color_channel_min {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if a < color_channel_min {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if r > color_channel_max {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if r > color_channel_max {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if r > color_channel_max {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
     if r > color_channel_max {
-        return Err(Effect::OperandOutOfBounds);
+        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
     }
 
     let [x, y] = [x, y].map(|coord| {

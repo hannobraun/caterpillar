@@ -1,9 +1,6 @@
-use crate::{
-    host::GameEngineHost, Effect, Function, InstructionAddr, Instructions,
-    Stack,
-};
+use crate::{CoreEffect, Function, InstructionAddr, Instructions, Stack};
 
-pub fn add(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn add(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -11,7 +8,7 @@ pub fn add(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_add(b) else {
-        return Err(Effect::IntegerOverflow);
+        return Err(CoreEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -19,7 +16,7 @@ pub fn add(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn add_wrap_unsigned(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -34,11 +31,11 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn brk() -> Result<GameEngineHost> {
-    Err(Effect::Breakpoint)
+pub fn brk() -> Result {
+    Err(CoreEffect::Breakpoint)
 }
 
-pub fn copy(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn copy(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     stack.push_operand(a);
@@ -47,7 +44,7 @@ pub fn copy(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn div(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn div(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -55,11 +52,11 @@ pub fn div(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(Effect::DivideByZero);
+        return Err(CoreEffect::DivideByZero);
     }
     let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
-        return Err(Effect::IntegerOverflow);
+        return Err(CoreEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -67,12 +64,12 @@ pub fn div(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn drop(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn drop(stack: &mut Stack) -> Result {
     stack.pop_operand()?;
     Ok(())
 }
 
-pub fn eq(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn eq(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -83,7 +80,7 @@ pub fn eq(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn greater(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn greater(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -97,10 +94,7 @@ pub fn greater(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn if_(
-    stack: &mut Stack,
-    instructions: &Instructions,
-) -> Result<GameEngineHost> {
+pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let else_ = stack.pop_operand()?;
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
@@ -124,7 +118,7 @@ pub fn if_(
     Ok(())
 }
 
-pub fn mul(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn mul(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -132,7 +126,7 @@ pub fn mul(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_mul(b) else {
-        return Err(Effect::IntegerOverflow);
+        return Err(CoreEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -140,13 +134,13 @@ pub fn mul(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn neg(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn neg(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     let a = i32::from_le_bytes(a.0);
 
     if a == i32::MIN {
-        return Err(Effect::IntegerOverflow);
+        return Err(CoreEffect::IntegerOverflow);
     }
     let b = -a;
 
@@ -155,7 +149,7 @@ pub fn neg(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn remainder(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn remainder(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -163,7 +157,7 @@ pub fn remainder(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = i32::from_le_bytes(b.0);
 
     if b == 0 {
-        return Err(Effect::DivideByZero);
+        return Err(CoreEffect::DivideByZero);
     }
     let c = a % b;
 
@@ -172,7 +166,7 @@ pub fn remainder(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub fn sub(stack: &mut Stack) -> Result<GameEngineHost> {
+pub fn sub(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -180,7 +174,7 @@ pub fn sub(stack: &mut Stack) -> Result<GameEngineHost> {
     let b = i32::from_le_bytes(b.0);
 
     let Some(c) = a.checked_sub(b) else {
-        return Err(Effect::IntegerOverflow);
+        return Err(CoreEffect::IntegerOverflow);
     };
 
     stack.push_operand(c);
@@ -188,4 +182,4 @@ pub fn sub(stack: &mut Stack) -> Result<GameEngineHost> {
     Ok(())
 }
 
-pub type Result<H> = std::result::Result<(), Effect<H>>;
+pub type Result = std::result::Result<(), CoreEffect>;

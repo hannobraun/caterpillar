@@ -1,7 +1,7 @@
 use crate::{
     builtins,
     host::{self, GameEngineHost},
-    Bytecode, Effect, Instruction, Stack, Value,
+    Bytecode, CoreEffect, Effect, Instruction, Stack, Value,
 };
 
 pub fn evaluate(
@@ -51,7 +51,7 @@ pub fn evaluate(
             };
 
             if !operands.is_empty() {
-                return Err(Effect::BindingLeftValuesOnStack);
+                return Err(Effect::Core(CoreEffect::BindingLeftValuesOnStack));
             }
         }
         Instruction::CallBuiltin { name } => {
@@ -77,7 +77,11 @@ pub fn evaluate(
                 "store" => host::store(stack)?,
                 "submit_frame" => host::submit_frame()?,
 
-                _ => return Err(Effect::UnknownBuiltin { name: name.clone() }),
+                _ => {
+                    return Err(Effect::Core(CoreEffect::UnknownBuiltin {
+                        name: name.clone(),
+                    }))
+                }
             };
         }
         Instruction::CallFunction { name } => {
@@ -106,7 +110,9 @@ pub fn evaluate(
                     .expect("Currently executing; stack can't be empty");
             }
         }
-        Instruction::Unreachable => return Err(Effect::Unreachable),
+        Instruction::Unreachable => {
+            return Err(Effect::Core(CoreEffect::Unreachable))
+        }
     }
 
     Ok(EvaluatorState::Running)

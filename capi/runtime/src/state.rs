@@ -1,6 +1,8 @@
 use std::{collections::VecDeque, panic};
 
-use capi_process::{Bytecode, Effect, GameEngineEffect, Process, Value};
+use capi_process::{
+    Bytecode, CoreEffect, Effect, GameEngineEffect, Process, Value,
+};
 use capi_protocol::{
     command::{Command, SerializedCommand},
     memory::Memory,
@@ -79,7 +81,7 @@ impl RuntimeState {
                     self.memory = Memory::default();
                 }
                 Command::Step => {
-                    if let Some(Effect::Breakpoint) =
+                    if let Some(Effect::Core(CoreEffect::Breakpoint)) =
                         self.process.state().first_unhandled_effect()
                     {
                         let and_stop_at = self
@@ -102,7 +104,7 @@ impl RuntimeState {
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {
                 match effect {
-                    Effect::Breakpoint => {
+                    Effect::Core(CoreEffect::Breakpoint) => {
                         // Nothing to do here. With an unhandled effect, the
                         // program won't continue running. The debugger is in
                         // control of what happens next.

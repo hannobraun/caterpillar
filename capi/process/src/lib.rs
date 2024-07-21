@@ -14,7 +14,7 @@ mod value;
 pub use self::{
     breakpoints::Breakpoints,
     bytecode::Bytecode,
-    effects::Effect,
+    effects::{CoreEffect, Effect},
     function::Function,
     host::{GameEngineEffect, GameEngineHost, Host, TILES_PER_AXIS},
     instructions::{Instruction, InstructionAddr, Instructions},
