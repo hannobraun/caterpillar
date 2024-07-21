@@ -16,7 +16,7 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
-    fn function(name: &str) -> Option<fn(&mut Stack) -> GameEngineResult> {
+    fn function(name: &str) -> Option<HostFunction> {
         match name {
             "load" => Some(load),
             "read_input" => Some(read_input),
