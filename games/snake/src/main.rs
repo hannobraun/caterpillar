@@ -419,8 +419,8 @@ fn snake(script: &mut Script) {
             .w("snake_length")
             .w("store");
     });
-    script.function("check_body_collision", [], |s| {
-        s.v(0).w("check_body_collision_inner");
+    script.function("check_body_collision", ["x", "y"], |s| {
+        s.w("x").w("y").v(0).w("check_body_collision_inner");
     });
     script.function("check_body_collision_inner", ["x", "y", "index"], |s| {
         s.w("positions")
