@@ -38,7 +38,7 @@ pub struct Scopes {
 }
 
 impl Scopes {
-    pub fn binding_resolves(&self, name: &str) -> bool {
+    pub fn resolve_binding(&self, name: &str) -> bool {
         for scope in self.stack.iter().rev() {
             if scope.inner.contains(name) {
                 return true;
