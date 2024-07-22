@@ -32,8 +32,8 @@ pub fn script_to_fragments(script: Script) -> Fragments {
             FragmentParent::Function {
                 name: function.name.clone(),
             },
-            &scopes,
             &functions,
+            &scopes,
             &mut fragments,
         );
 

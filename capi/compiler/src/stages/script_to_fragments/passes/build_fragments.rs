@@ -13,8 +13,8 @@ use super::build_scopes::{BindingResolved, Scopes};
 pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
-    scopes: &Scopes,
     functions: &BTreeSet<String>,
+    scopes: &Scopes,
     fragments: &mut FragmentMap,
 ) -> (FragmentId, BTreeSet<String>) {
     let mut next = {
@@ -66,8 +66,8 @@ pub fn compile_expression(
             let (start, environment) = compile_block(
                 expressions,
                 FragmentParent::Fragment { id: next },
-                scopes,
                 functions,
+                scopes,
                 fragments,
             );
             FragmentExpression::Block { start, environment }
