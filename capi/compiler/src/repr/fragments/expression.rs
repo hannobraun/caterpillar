@@ -84,12 +84,12 @@ impl fmt::Display for FragmentExpression {
                 for name in names {
                     write!(f, " {name}")?;
                 }
-                writeln!(f, " .")
+                write!(f, " .")
             }
-            Self::Block { start, .. } => writeln!(f, "block@{start}"),
-            Self::Comment { text } => writeln!(f, "# {text}"),
-            Self::ResolvedBinding { name } => writeln!(f, "{name}"),
-            Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),
+            Self::Block { start, .. } => write!(f, "block@{start}"),
+            Self::Comment { text } => write!(f, "# {text}"),
+            Self::ResolvedBinding { name } => write!(f, "{name}"),
+            Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
