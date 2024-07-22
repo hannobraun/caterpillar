@@ -84,6 +84,10 @@ pub fn evaluate<H: Host>(
             let function = bytecode.functions.get(name).cloned().unwrap();
             stack.push_frame(function, &bytecode.instructions)?;
         }
+        Instruction::MakeClosure { addr, environment } => {
+            dbg!(addr, environment);
+            todo!("Instruction::MakeClosure is not supported yet.");
+        }
         Instruction::Push { value } => stack.push_operand(*value),
         Instruction::Return => {
             stack

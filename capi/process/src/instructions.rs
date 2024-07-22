@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{BTreeSet, VecDeque};
 
 use crate::Value;
 
@@ -73,11 +73,25 @@ impl InstructionAddr {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
-    BindingEvaluate { name: String },
-    BindingsDefine { names: Vec<String> },
-    CallBuiltin { name: String },
-    CallFunction { name: String },
-    Push { value: Value },
+    BindingEvaluate {
+        name: String,
+    },
+    BindingsDefine {
+        names: Vec<String>,
+    },
+    CallBuiltin {
+        name: String,
+    },
+    CallFunction {
+        name: String,
+    },
+    MakeClosure {
+        addr: InstructionAddr,
+        environment: BTreeSet<String>,
+    },
+    Push {
+        value: Value,
+    },
     Return,
     ReturnIfNonZero,
     ReturnIfZero,
