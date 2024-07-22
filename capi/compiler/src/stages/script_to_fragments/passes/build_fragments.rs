@@ -35,9 +35,9 @@ pub fn compile_block(
             expression,
             parent.clone(),
             next,
-            scopes,
             functions,
             &mut environment,
+            scopes,
             fragments,
         );
 
@@ -53,9 +53,9 @@ pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    scopes: &Scopes,
     functions: &BTreeSet<String>,
     environment: &mut BTreeSet<String>,
+    scopes: &Scopes,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
