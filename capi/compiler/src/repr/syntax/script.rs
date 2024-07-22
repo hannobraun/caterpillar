@@ -12,13 +12,13 @@ impl Script {
         args: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
     ) {
-        let mut expressions = Vec::new();
-        f(&mut SyntaxBuilder::new(&mut expressions));
+        let mut body = Vec::new();
+        f(&mut SyntaxBuilder::new(&mut body));
 
         self.functions.push(Function {
             name: name.to_string(),
             args: args.into_iter().map(String::from).collect(),
-            body: expressions,
+            body,
         });
     }
 }
