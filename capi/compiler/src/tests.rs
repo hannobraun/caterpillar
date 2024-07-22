@@ -17,7 +17,6 @@ use capi_process::{Effect, Host, Process, Stack};
 use crate::{compile, repr::syntax::Script};
 
 #[test]
-#[ignore]
 fn closure_in_function() {
     let mut script = Script::default();
     script.function("main", [], |s| {
