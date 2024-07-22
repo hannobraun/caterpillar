@@ -39,7 +39,10 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
         assert!(
             environment.is_empty(),
-            "Functions have no environment that they could access."
+            "Functions have no environment that they could access. \n\
+            - Function: {}\n\
+            - Environment: {environment:#?}",
+            function.name,
         );
 
         by_function.push(Function {
