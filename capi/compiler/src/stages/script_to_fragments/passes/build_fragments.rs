@@ -77,8 +77,8 @@ pub fn compile_expression<H: Host>(
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),
         Expression::Word { name } => {
-            // The way this is written, bindings shadow built-in functions,
-            // while user-defined functions shadow anything else.
+            // The way this is written, the different types of definitions
+            // shadow each other in a defined order.
             //
             // This isn't desirable. There should at least be a warning, if such
             // shadowing isn't forbidden outright. It'll do for now though.
