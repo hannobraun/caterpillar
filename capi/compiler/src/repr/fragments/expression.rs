@@ -9,15 +9,15 @@ pub enum FragmentExpression {
     BindingDefinitions {
         names: Vec<String>,
     },
-    ResolvedBinding {
-        name: String,
-    },
     Block {
         start: FragmentId,
         environment: BTreeSet<String>,
     },
     Comment {
         text: String,
+    },
+    ResolvedBinding {
+        name: String,
     },
     ResolvedBuiltinFunction {
         name: String,
@@ -38,10 +38,6 @@ impl FragmentExpression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::ResolvedBinding { name } => {
-                hasher.update(b"binding evaluation");
-                hasher.update(name.as_bytes());
-            }
             Self::Block { start, environment } => {
                 hasher.update(b"block");
                 start.hash(hasher);
@@ -52,6 +48,10 @@ impl FragmentExpression {
             Self::Comment { text } => {
                 hasher.update(b"comment");
                 hasher.update(text.as_bytes());
+            }
+            Self::ResolvedBinding { name } => {
+                hasher.update(b"binding evaluation");
+                hasher.update(name.as_bytes());
             }
             Self::ResolvedBuiltinFunction { name } => {
                 hasher.update(b"builtin call");
@@ -79,9 +79,9 @@ impl fmt::Display for FragmentExpression {
                 }
                 writeln!(f, " .")
             }
-            Self::ResolvedBinding { name } => writeln!(f, "{name}"),
             Self::Block { start, .. } => writeln!(f, "block@{start}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
+            Self::ResolvedBinding { name } => writeln!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),

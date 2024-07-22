@@ -116,11 +116,6 @@ impl Compiler<'_> {
                             },
                             fragment.id(),
                         ),
-                    FragmentExpression::ResolvedBinding { name } => self
-                        .generate(
-                            Instruction::BindingEvaluate { name: name.clone() },
-                            fragment.id(),
-                        ),
                     FragmentExpression::Block { start, environment } => {
                         let addr = self
                             .generate(Instruction::Unreachable, fragment.id());
@@ -136,6 +131,11 @@ impl Compiler<'_> {
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
+                    FragmentExpression::ResolvedBinding { name } => self
+                        .generate(
+                            Instruction::BindingEvaluate { name: name.clone() },
+                            fragment.id(),
+                        ),
                     FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
