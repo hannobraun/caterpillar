@@ -31,7 +31,11 @@ impl<H: Host> Process<H> {
         self.state.unhandled_effects.pop_front();
     }
 
-    pub fn reset(&mut self, bytecode: &Bytecode, arguments: Vec<Value>) {
+    pub fn reset(
+        &mut self,
+        bytecode: &Bytecode,
+        arguments: impl IntoIterator<Item = Value>,
+    ) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
