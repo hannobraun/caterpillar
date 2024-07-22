@@ -50,15 +50,15 @@ impl FragmentExpression {
                 hasher.update(text.as_bytes());
             }
             Self::ResolvedBinding { name } => {
-                hasher.update(b"binding evaluation");
+                hasher.update(b"resolved binding");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedBuiltinFunction { name } => {
-                hasher.update(b"builtin call");
+                hasher.update(b"resolved built-in function");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedUserFunction { name } => {
-                hasher.update(b"function call");
+                hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
             }
             Self::Value(value) => {
