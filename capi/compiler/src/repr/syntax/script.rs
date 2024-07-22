@@ -18,7 +18,7 @@ impl Script {
         self.functions.push(Function {
             name: name.to_string(),
             args: args.into_iter().map(String::from).collect(),
-            expressions,
+            body: expressions,
         });
     }
 }

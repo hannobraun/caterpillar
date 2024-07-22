@@ -4,5 +4,5 @@ use super::Expression;
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
-    pub expressions: Vec<Expression>,
+    pub body: Vec<Expression>,
 }

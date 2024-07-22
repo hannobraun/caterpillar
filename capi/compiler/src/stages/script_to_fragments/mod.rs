@@ -34,7 +34,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         let start = compile_function(
             function.name.clone(),
             function.args.clone(),
-            function.expressions,
+            function.body,
             &functions,
             &mut fragments,
         );
