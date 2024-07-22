@@ -8,12 +8,12 @@ use crate::repr::{
     syntax::Expression,
 };
 
-use super::build_scopes::Bindings;
+use super::build_scopes::Scopes;
 
 pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
-    bindings: &Bindings,
+    scopes: &Scopes,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
@@ -34,7 +34,7 @@ pub fn compile_block(
             expression,
             parent.clone(),
             next,
-            bindings,
+            scopes,
             functions,
             fragments,
         );
@@ -51,7 +51,7 @@ pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    bindings: &Bindings,
+    scopes: &Scopes,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -63,7 +63,7 @@ pub fn compile_expression(
             let start = compile_block(
                 expressions,
                 FragmentParent::Fragment { id: next },
-                bindings,
+                scopes,
                 functions,
                 fragments,
             );
@@ -79,7 +79,7 @@ pub fn compile_expression(
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
                 FragmentExpression::FunctionCall { name }
-            } else if bindings.inner.contains(&name) {
+            } else if scopes.inner.inner.contains(&name) {
                 FragmentExpression::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
