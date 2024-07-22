@@ -31,10 +31,13 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let start = compile_function(
-            function.name.clone(),
-            function.args.clone(),
+        let bindings = build_scopes(function.args.clone(), &function.body);
+        let start = compile_block(
             function.body,
+            FragmentParent::Function {
+                name: function.name.clone(),
+            },
+            &bindings,
             &functions,
             &mut fragments,
         );
@@ -49,24 +52,6 @@ pub fn script_to_fragments(script: Script) -> Fragments {
         inner: fragments,
         by_function,
     }
-}
-
-fn compile_function(
-    name: String,
-    args: Vec<String>,
-    body: Vec<Expression>,
-    functions: &BTreeSet<String>,
-    fragments: &mut FragmentMap,
-) -> FragmentId {
-    let bindings = build_scopes(args, &body);
-
-    compile_block(
-        body,
-        FragmentParent::Function { name },
-        &bindings,
-        functions,
-        fragments,
-    )
 }
 
 fn compile_block(
