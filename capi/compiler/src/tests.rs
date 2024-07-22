@@ -9,3 +9,66 @@
 //! in the future, when we can do hot code reloading, we'll need tests for that
 //! too. It's not clear to me whether those should then go somewhere else, or if
 //! we then need a central place for all of them.
+
+use std::collections::BTreeMap;
+
+use capi_process::{Effect, Host, Process};
+
+use crate::{compile, repr::syntax::Script};
+
+#[test]
+#[ignore]
+fn closure_in_function() {
+    let mut script = Script::default();
+    script.function("main", [], |s| {
+        s.v(0)
+            .bind(["channel"])
+            .block(|s| {
+                s.w("channel").w("send");
+            })
+            .w("eval");
+    });
+
+    let (_, bytecode, _) = compile(script);
+
+    let mut signals = BTreeMap::new();
+
+    let mut process = Process::<TestHost>::default();
+    process.reset(&bytecode, []);
+
+    while process.state().can_step() {
+        process.step(&bytecode);
+
+        while let Some(effect) = process.state().first_unhandled_effect() {
+            match effect {
+                Effect::Host(TestEffect { channel }) => {
+                    *signals.entry(*channel).or_default() += 1;
+                    process.handle_first_effect();
+                }
+                effect => {
+                    panic!("Unexpected effect: {effect}");
+                }
+            }
+        }
+    }
+
+    assert_eq!(signals.remove(&0), Some(1));
+    assert!(signals.is_empty());
+}
+
+struct TestHost {}
+
+impl Host for TestHost {
+    type Effect = TestEffect;
+
+    fn function(
+        _name: &str,
+    ) -> Option<capi_process::HostFunction<Self::Effect>> {
+        None
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+struct TestEffect {
+    channel: u32,
+}
