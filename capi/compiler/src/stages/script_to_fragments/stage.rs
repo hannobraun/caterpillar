@@ -27,7 +27,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
     for function in script.functions {
         let scopes = process_function(function.args.clone(), &function.body);
-        let start = compile_block(
+        let (start, environment) = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
@@ -36,6 +36,12 @@ pub fn script_to_fragments(script: Script) -> Fragments {
             &functions,
             &mut fragments,
         );
+
+        assert!(
+            environment.is_empty(),
+            "Functions have no environment that they could access."
+        );
+
         by_function.push(Function {
             name: function.name,
             args: function.args,

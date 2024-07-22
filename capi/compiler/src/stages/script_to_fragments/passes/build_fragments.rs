@@ -16,7 +16,7 @@ pub fn compile_block(
     scopes: &Scopes,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
-) -> FragmentId {
+) -> (FragmentId, BTreeSet<String>) {
     let mut next = {
         let terminator = Fragment {
             parent: parent.clone(),
@@ -46,9 +46,7 @@ pub fn compile_block(
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    dbg!(environment);
-
-    next
+    (next, environment)
 }
 
 pub fn compile_expression(
@@ -65,17 +63,14 @@ pub fn compile_expression(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { expressions } => {
-            let start = compile_block(
+            let (start, environment) = compile_block(
                 expressions,
                 FragmentParent::Fragment { id: next },
                 scopes,
                 functions,
                 fragments,
             );
-            FragmentExpression::Block {
-                start,
-                environment: BTreeSet::new(),
-            }
+            FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),
