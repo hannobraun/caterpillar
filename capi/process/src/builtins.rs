@@ -1,5 +1,7 @@
 use crate::{CoreEffect, Function, InstructionAddr, Instructions, Stack};
 
+pub type Builtin = fn(&mut Stack, &Instructions) -> Result;
+
 pub fn add(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;

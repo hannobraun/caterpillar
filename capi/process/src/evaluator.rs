@@ -1,5 +1,6 @@
 use crate::{
-    builtins, Bytecode, CoreEffect, Effect, Host, Instruction, Stack, Value,
+    builtins::{self, Builtin},
+    Bytecode, CoreEffect, Effect, Host, Instruction, Stack, Value,
 };
 
 pub fn evaluate<H: Host>(
@@ -56,35 +57,37 @@ pub fn evaluate<H: Host>(
             if let Some(f) = H::function(name) {
                 f(stack)?
             } else {
-                match name.as_str() {
-                    "add" => builtins::add(stack, &bytecode.instructions)?,
-                    "add_wrap_unsigned" => builtins::add_wrap_unsigned(
-                        stack,
-                        &bytecode.instructions,
-                    )?,
-                    "brk" => builtins::brk(stack, &bytecode.instructions)?,
-                    "copy" => builtins::copy(stack, &bytecode.instructions)?,
-                    "div" => builtins::div(stack, &bytecode.instructions)?,
-                    "drop" => builtins::drop(stack, &bytecode.instructions)?,
-                    "eq" => builtins::eq(stack, &bytecode.instructions)?,
-                    "eval" => builtins::eval(stack, &bytecode.instructions)?,
-                    "greater" => {
-                        builtins::greater(stack, &bytecode.instructions)?
+                let builtin = match name.as_str() {
+                    "add" => Some(builtins::add as Builtin),
+                    "add_wrap_unsigned" => {
+                        Some(builtins::add_wrap_unsigned as _)
                     }
-                    "if" => builtins::if_(stack, &bytecode.instructions)?,
-                    "mul" => builtins::mul(stack, &bytecode.instructions)?,
-                    "neg" => builtins::neg(stack, &bytecode.instructions)?,
-                    "remainder" => {
-                        builtins::remainder(stack, &bytecode.instructions)?
-                    }
-                    "sub" => builtins::sub(stack, &bytecode.instructions)?,
+                    "brk" => Some(builtins::brk as _),
+                    "copy" => Some(builtins::copy as _),
+                    "div" => Some(builtins::div as _),
+                    "drop" => Some(builtins::drop as _),
+                    "eq" => Some(builtins::eq as _),
+                    "eval" => Some(builtins::eval as _),
+                    "greater" => Some(builtins::greater as _),
+                    "if" => Some(builtins::if_ as _),
+                    "mul" => Some(builtins::mul as _),
+                    "neg" => Some(builtins::neg as _),
+                    "remainder" => Some(builtins::remainder as _),
+                    "sub" => Some(builtins::sub as _),
 
-                    _ => {
+                    _ => None,
+                };
+
+                match builtin {
+                    Some(builtin) => {
+                        builtin(stack, &bytecode.instructions)?;
+                    }
+                    None => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
                             name: name.clone(),
-                        }))
+                        }));
                     }
-                };
+                }
             }
         }
         Instruction::CallFunction { name } => {
