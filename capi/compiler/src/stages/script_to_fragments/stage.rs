@@ -71,8 +71,6 @@ mod tests {
         syntax::Script,
     };
 
-    use super::script_to_fragments;
-
     #[test]
     fn arg_eval() {
         let mut script = Script::default();
@@ -234,5 +232,9 @@ mod tests {
         }));
 
         body
+    }
+
+    fn script_to_fragments(script: Script) -> Fragments {
+        super::script_to_fragments(script)
     }
 }
