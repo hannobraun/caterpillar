@@ -133,6 +133,9 @@ impl Compiler<'_> {
 
                         addr
                     }
+                    FragmentExpression::Comment { .. } => {
+                        return None;
+                    }
                     FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
@@ -151,9 +154,6 @@ impl Compiler<'_> {
                         };
 
                         self.generate(instruction, fragment.id())
-                    }
-                    FragmentExpression::Comment { .. } => {
-                        return None;
                     }
                     FragmentExpression::ResolvedUserFunction { name } => self
                         .generate(
