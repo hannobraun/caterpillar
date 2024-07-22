@@ -60,7 +60,7 @@ fn compile_function(
 ) -> FragmentId {
     let bindings = build_scopes(args, &body);
 
-    let parent = FragmentParent::Function { name: name.clone() };
+    let parent = FragmentParent::Function { name };
     let expressions = body;
 
     compile_block(expressions, parent, &bindings, functions, fragments)
