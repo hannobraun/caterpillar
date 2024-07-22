@@ -62,7 +62,7 @@ pub enum CoreEffect {
     #[error("Unknown builtin: {name}")]
     UnknownBuiltin { name: String },
 
-    #[error("Executed unreachable instruction")]
+    #[error("Panic")]
     Panic,
 }
 
