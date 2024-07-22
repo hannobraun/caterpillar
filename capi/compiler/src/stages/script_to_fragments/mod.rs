@@ -2,6 +2,8 @@ mod passes;
 
 use std::collections::{BTreeMap, BTreeSet};
 
+use passes::build_scopes::build_scopes;
+
 use crate::repr::{
     fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
@@ -56,11 +58,7 @@ fn compile_function(
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
-    let mut bindings = Bindings {
-        inner: args.into_iter().collect(),
-    };
-
-    bindings.process_block(&body);
+    let bindings = build_scopes(args, &body);
 
     let parent = FragmentParent::Function { name: name.clone() };
     let expressions = body;

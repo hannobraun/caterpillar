@@ -2,6 +2,16 @@ use std::collections::BTreeSet;
 
 use crate::repr::syntax::Expression;
 
+pub fn build_scopes(args: Vec<String>, body: &[Expression]) -> Bindings {
+    let mut bindings = Bindings {
+        inner: args.into_iter().collect(),
+    };
+
+    bindings.process_block(body);
+
+    bindings
+}
+
 pub struct Bindings {
     pub inner: BTreeSet<String>,
 }
