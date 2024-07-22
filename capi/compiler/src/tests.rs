@@ -12,7 +12,7 @@
 
 use std::collections::BTreeMap;
 
-use capi_process::{Effect, Host, Process};
+use capi_process::{Effect, Host, Process, Stack};
 
 use crate::{compile, repr::syntax::Script};
 
@@ -67,10 +67,20 @@ impl Host for TestHost {
     type Effect = TestEffect;
 
     fn function(
-        _name: &str,
+        name: &str,
     ) -> Option<capi_process::HostFunction<Self::Effect>> {
-        None
+        match name {
+            "send" => Some(send),
+            _ => None,
+        }
     }
+}
+
+fn send(stack: &mut Stack) -> Result<(), Effect<TestEffect>> {
+    let channel = stack.pop_operand()?;
+    let channel: u32 = u32::from_le_bytes(channel.0);
+
+    Err(Effect::Host(TestEffect { channel }))
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
