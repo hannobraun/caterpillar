@@ -2,7 +2,7 @@ use std::str;
 
 use capi_compiler::compile;
 use capi_process::Bytecode;
-use capi_protocol::{update::SourceCode, Versioned};
+use capi_protocol::{host::GameEngineHost, update::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
@@ -60,7 +60,7 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let script = str::from_utf8(&script).unwrap();
     let script = ron::from_str(script).unwrap();
 
-    let (fragments, bytecode, source_map) = compile(script);
+    let (fragments, bytecode, source_map) = compile::<GameEngineHost>(script);
     let source_code = SourceCode {
         fragments,
         source_map,

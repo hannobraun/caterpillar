@@ -28,7 +28,7 @@ fn closure_in_function() {
             .w("eval");
     });
 
-    let (_, bytecode, _) = compile(script);
+    let (_, bytecode, _) = compile::<TestHost>(script);
 
     let mut signals = BTreeMap::new();
 

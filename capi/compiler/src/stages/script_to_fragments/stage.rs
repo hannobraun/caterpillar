@@ -1,5 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
+use capi_process::Host;
+
 use crate::repr::{
     fragments::{FragmentMap, FragmentParent, Fragments, Function},
     syntax::Script,
@@ -9,7 +11,7 @@ use super::passes::{
     build_fragments::compile_block, build_scopes::process_function,
 };
 
-pub fn script_to_fragments(script: Script) -> Fragments {
+pub fn script_to_fragments<H: Host>(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
 
     for function in &script.functions {
@@ -28,7 +30,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     for function in script.functions {
         let mut scopes =
             process_function(function.args.clone(), &function.body);
-        let (start, environment) = compile_block(
+        let (start, environment) = compile_block::<H>(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
@@ -61,7 +63,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
 #[cfg(test)]
 mod tests {
-    use capi_process::Value;
+    use capi_process::{NoHost, Value};
 
     use crate::repr::{
         fragments::{
@@ -235,6 +237,6 @@ mod tests {
     }
 
     fn script_to_fragments(script: Script) -> Fragments {
-        super::script_to_fragments(script)
+        super::script_to_fragments::<NoHost>(script)
     }
 }

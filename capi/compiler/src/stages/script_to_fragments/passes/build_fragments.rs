@@ -1,5 +1,7 @@
 use std::collections::BTreeSet;
 
+use capi_process::Host;
+
 use crate::repr::{
     fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
@@ -10,7 +12,7 @@ use crate::repr::{
 
 use super::build_scopes::{BindingResolved, Scopes};
 
-pub fn compile_block(
+pub fn compile_block<H: Host>(
     expressions: Vec<Expression>,
     parent: FragmentParent,
     functions: &BTreeSet<String>,
@@ -31,7 +33,7 @@ pub fn compile_block(
     let mut environment = BTreeSet::new();
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(
+        let fragment = compile_expression::<H>(
             expression,
             parent.clone(),
             next,
@@ -49,7 +51,7 @@ pub fn compile_block(
     (next, environment)
 }
 
-pub fn compile_expression(
+pub fn compile_expression<H: Host>(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
@@ -63,7 +65,7 @@ pub fn compile_expression(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { expressions } => {
-            let (start, environment) = compile_block(
+            let (start, environment) = compile_block::<H>(
                 expressions,
                 FragmentParent::Fragment { id: next },
                 functions,
