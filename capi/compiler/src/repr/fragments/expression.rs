@@ -22,6 +22,9 @@ pub enum FragmentExpression {
     ResolvedBuiltinFunction {
         name: String,
     },
+    ResolvedHostFunction {
+        name: String,
+    },
     ResolvedUserFunction {
         name: String,
     },
@@ -57,6 +60,10 @@ impl FragmentExpression {
                 hasher.update(b"resolved built-in function");
                 hasher.update(name.as_bytes());
             }
+            Self::ResolvedHostFunction { name } => {
+                hasher.update(b"resolved host function");
+                hasher.update(name.as_bytes());
+            }
             Self::ResolvedUserFunction { name } => {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
@@ -83,6 +90,7 @@ impl fmt::Display for FragmentExpression {
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::ResolvedBinding { name } => writeln!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),
+            Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }

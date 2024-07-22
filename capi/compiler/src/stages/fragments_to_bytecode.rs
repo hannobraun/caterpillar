@@ -155,6 +155,11 @@ impl Compiler<'_> {
 
                         self.generate(instruction, fragment.id())
                     }
+                    FragmentExpression::ResolvedHostFunction { name } => self
+                        .generate(
+                            Instruction::CallBuiltin { name: name.clone() },
+                            fragment.id(),
+                        ),
                     FragmentExpression::ResolvedUserFunction { name } => self
                         .generate(
                             Instruction::CallFunction { name: name.clone() },
