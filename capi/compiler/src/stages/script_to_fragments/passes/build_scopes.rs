@@ -13,7 +13,7 @@ pub fn build_scopes(args: Vec<String>, body: &[Expression]) -> Scopes {
 }
 
 pub struct Scopes {
-    pub inner: Bindings,
+    inner: Bindings,
 }
 
 impl Scopes {
@@ -22,8 +22,8 @@ impl Scopes {
     }
 }
 
-pub struct Bindings {
-    pub inner: BTreeSet<String>,
+struct Bindings {
+    inner: BTreeSet<String>,
 }
 
 impl Bindings {
