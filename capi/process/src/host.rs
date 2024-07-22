@@ -13,3 +13,13 @@ pub trait Host {
 }
 
 pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
+
+pub struct NoHost {}
+
+impl Host for NoHost {
+    type Effect = ();
+
+    fn function(_name: &str) -> Option<HostFunction<Self::Effect>> {
+        None
+    }
+}

@@ -16,7 +16,7 @@ pub use self::{
     bytecode::Bytecode,
     effects::{CoreEffect, Effect},
     function::Function,
-    host::{Host, HostFunction},
+    host::{Host, HostFunction, NoHost},
     instructions::{Instruction, InstructionAddr, Instructions},
     operands::Operands,
     process::{Process, ProcessState},
