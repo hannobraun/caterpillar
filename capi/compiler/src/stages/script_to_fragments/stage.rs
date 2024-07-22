@@ -26,13 +26,13 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let bindings = build_scopes(function.args.clone(), &function.body);
+        let scopes = build_scopes(function.args.clone(), &function.body);
         let start = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
             },
-            &bindings.inner,
+            &scopes.inner,
             &functions,
             &mut fragments,
         );
