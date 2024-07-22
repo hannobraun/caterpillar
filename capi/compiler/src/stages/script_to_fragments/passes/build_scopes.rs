@@ -33,6 +33,7 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
     }
 }
 
+#[derive(Debug)]
 pub struct Scopes {
     stack: Vec<Bindings>,
 }
@@ -62,6 +63,7 @@ pub enum BindingResolved {
     InEnvironment,
 }
 
+#[derive(Debug)]
 struct Bindings {
     inner: BTreeSet<String>,
 }
