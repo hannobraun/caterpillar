@@ -4,7 +4,7 @@ use crate::repr::syntax::Expression;
 
 pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
     let mut scopes = Scopes {
-        inner: vec![Bindings {
+        stack: vec![Bindings {
             inner: args.into_iter().collect(),
         }],
     };
@@ -21,7 +21,7 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
                 // Inserting bindings unconditionally like this does mean
                 // that bindings can overwrite previously defined bindings.
                 // This is undesirable, but it'll do for now.
-                scopes.inner.last_mut().unwrap().inner.insert(name);
+                scopes.stack.last_mut().unwrap().inner.insert(name);
             }
         }
         if let Expression::Block { expressions } = expression {
@@ -31,12 +31,12 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
 }
 
 pub struct Scopes {
-    inner: Vec<Bindings>,
+    stack: Vec<Bindings>,
 }
 
 impl Scopes {
     pub fn binding_resolves(&self, name: &str) -> bool {
-        self.inner.last().unwrap().inner.contains(name)
+        self.stack.last().unwrap().inner.contains(name)
     }
 }
 
