@@ -64,6 +64,7 @@ pub fn evaluate<H: Host>(
                     "div" => builtins::div(stack)?,
                     "drop" => builtins::drop(stack)?,
                     "eq" => builtins::eq(stack)?,
+                    "eval" => builtins::eval(stack, &bytecode.instructions)?,
                     "greater" => builtins::greater(stack)?,
                     "if" => builtins::if_(stack, &bytecode.instructions)?,
                     "mul" => builtins::mul(stack)?,

@@ -80,6 +80,22 @@ pub fn eq(stack: &mut Stack) -> Result {
     Ok(())
 }
 
+pub fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
+    let block = stack.pop_operand()?;
+
+    stack.push_frame(
+        Function {
+            arguments: Vec::new(),
+            first_instruction: InstructionAddr {
+                index: u32::from_le_bytes(block.0),
+            },
+        },
+        instructions,
+    )?;
+
+    Ok(())
+}
+
 pub fn greater(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
