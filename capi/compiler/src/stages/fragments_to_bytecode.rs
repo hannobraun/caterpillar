@@ -165,6 +165,9 @@ impl Compiler<'_> {
                             Instruction::CallFunction { name: name.clone() },
                             fragment.id(),
                         ),
+                    FragmentExpression::UnresolvedWord { name: _ } => {
+                        self.generate(Instruction::Unreachable, fragment.id())
+                    }
                     FragmentExpression::Value(value) => self.generate(
                         Instruction::Push { value: *value },
                         fragment.id(),
