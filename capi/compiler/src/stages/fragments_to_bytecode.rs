@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{BTreeSet, VecDeque};
 
 use capi_process::{Bytecode, Function, Instruction, InstructionAddr, Value};
 
@@ -40,7 +40,13 @@ impl Compiler<'_> {
     fn compile(&mut self) {
         while let Some(unit) = self.queue.pop_front() {
             match unit {
-                CompileUnit::Block { start, addr } => {
+                CompileUnit::Block {
+                    start,
+                    environment,
+                    addr,
+                } => {
+                    dbg!(environment);
+
                     let start = self.compile_block(start);
                     let value = Value(start.index.to_le_bytes());
 
@@ -114,15 +120,13 @@ impl Compiler<'_> {
                             Instruction::BindingEvaluate { name: name.clone() },
                             fragment.id(),
                         ),
-                    FragmentExpression::Block {
-                        start,
-                        environment: _,
-                    } => {
+                    FragmentExpression::Block { start, environment } => {
                         let addr = self
                             .generate(Instruction::Unreachable, fragment.id());
 
                         self.queue.push_front(CompileUnit::Block {
                             start: *start,
+                            environment: environment.clone(),
                             addr,
                         });
 
@@ -182,6 +186,7 @@ impl Compiler<'_> {
 enum CompileUnit {
     Block {
         start: FragmentId,
+        environment: BTreeSet<String>,
         addr: InstructionAddr,
     },
     Function(fragments::Function),
