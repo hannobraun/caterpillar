@@ -38,15 +38,28 @@ pub struct Scopes {
 }
 
 impl Scopes {
-    pub fn resolve_binding(&self, name: &str) -> Option<()> {
-        for scope in self.stack.iter().rev() {
+    pub fn resolve_binding(&self, name: &str) -> Option<BindingResolved> {
+        let mut scopes = self.stack.iter().rev();
+
+        if let Some(scope) = scopes.next() {
             if scope.inner.contains(name) {
-                return Some(());
+                return Some(BindingResolved::InScope);
+            }
+        }
+
+        for scope in scopes {
+            if scope.inner.contains(name) {
+                return Some(BindingResolved::InEnvironment);
             }
         }
 
         None
     }
+}
+
+pub enum BindingResolved {
+    InScope,
+    InEnvironment,
 }
 
 struct Bindings {
