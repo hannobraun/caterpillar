@@ -2,14 +2,18 @@ use std::collections::BTreeSet;
 
 use crate::repr::syntax::Expression;
 
-pub fn build_scopes(args: Vec<String>, body: &[Expression]) -> Bindings {
+pub fn build_scopes(args: Vec<String>, body: &[Expression]) -> Scopes {
     let mut bindings = Bindings {
         inner: args.into_iter().collect(),
     };
 
     bindings.process_block(body);
 
-    bindings
+    Scopes { inner: bindings }
+}
+
+pub struct Scopes {
+    pub inner: Bindings,
 }
 
 pub struct Bindings {
