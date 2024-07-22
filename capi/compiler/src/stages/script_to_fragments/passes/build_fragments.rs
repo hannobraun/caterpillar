@@ -67,7 +67,10 @@ pub fn compile_expression(
                 functions,
                 fragments,
             );
-            FragmentExpression::Block { start }
+            FragmentExpression::Block {
+                start,
+                environment: BTreeSet::new(),
+            }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),

@@ -114,7 +114,10 @@ impl Compiler<'_> {
                             Instruction::BindingEvaluate { name: name.clone() },
                             fragment.id(),
                         ),
-                    FragmentExpression::Block { start } => {
+                    FragmentExpression::Block {
+                        start,
+                        environment: _,
+                    } => {
                         let addr = self
                             .generate(Instruction::Unreachable, fragment.id());
 

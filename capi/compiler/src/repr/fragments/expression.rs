@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::BTreeSet, fmt};
 
 use capi_process::Value;
 
@@ -6,12 +6,25 @@ use super::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentExpression {
-    BindingDefinitions { names: Vec<String> },
-    BindingEvaluation { name: String },
-    Block { start: FragmentId },
-    BuiltinCall { name: String },
-    Comment { text: String },
-    FunctionCall { name: String },
+    BindingDefinitions {
+        names: Vec<String>,
+    },
+    BindingEvaluation {
+        name: String,
+    },
+    Block {
+        start: FragmentId,
+        environment: BTreeSet<String>,
+    },
+    BuiltinCall {
+        name: String,
+    },
+    Comment {
+        text: String,
+    },
+    FunctionCall {
+        name: String,
+    },
     Value(Value),
 }
 
@@ -29,9 +42,12 @@ impl FragmentExpression {
                 hasher.update(b"binding evaluation");
                 hasher.update(name.as_bytes());
             }
-            Self::Block { start } => {
+            Self::Block { start, environment } => {
                 hasher.update(b"block");
                 start.hash(hasher);
+                for binding in environment {
+                    hasher.update(binding.as_bytes());
+                }
             }
             Self::BuiltinCall { name } => {
                 hasher.update(b"builtin call");
@@ -64,7 +80,7 @@ impl fmt::Display for FragmentExpression {
                 writeln!(f, " .")
             }
             Self::BindingEvaluation { name } => writeln!(f, "{name}"),
-            Self::Block { start } => writeln!(f, "block@{start}"),
+            Self::Block { start, .. } => writeln!(f, "block@{start}"),
             Self::BuiltinCall { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::FunctionCall { name } => write!(f, "{name}"),

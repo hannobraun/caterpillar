@@ -183,7 +183,7 @@ mod tests {
             let Fragment {
                 payload:
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Block { start },
+                        expression: FragmentExpression::Block { start, .. },
                         ..
                     },
                 ..
