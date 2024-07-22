@@ -57,9 +57,7 @@ pub fn evaluate<H: Host>(
             if let Some(f) = H::function(name) {
                 f(stack)?
             } else {
-                let builtin = builtin(name);
-
-                match builtin {
+                match builtin(name) {
                     Some(builtin) => {
                         builtin(stack, &bytecode.instructions)?;
                     }
