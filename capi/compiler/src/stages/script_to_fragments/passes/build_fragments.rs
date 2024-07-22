@@ -89,6 +89,8 @@ pub fn compile_expression<H: Host>(
                     environment.insert(name.clone());
                 }
                 FragmentExpression::ResolvedBinding { name }
+            } else if H::function(&name).is_some() {
+                FragmentExpression::ResolvedHostFunction { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
                 // given how built-in functions are currently defined, that's
