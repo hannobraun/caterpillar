@@ -13,6 +13,7 @@ mod value;
 
 pub use self::{
     breakpoints::Breakpoints,
+    builtins::builtin,
     bytecode::Bytecode,
     effects::{CoreEffect, Effect},
     function::Function,
