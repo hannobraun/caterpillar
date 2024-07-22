@@ -1,3 +1,5 @@
+mod passes;
+
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::repr::{
@@ -7,6 +9,8 @@ use crate::repr::{
     },
     syntax::{Expression, Script},
 };
+
+use self::passes::build_scopes::Bindings;
 
 pub fn script_to_fragments(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
@@ -147,28 +151,6 @@ fn compile_expression(
     Fragment {
         parent,
         payload: FragmentPayload::Expression { expression, next },
-    }
-}
-
-pub struct Bindings {
-    inner: BTreeSet<String>,
-}
-
-impl Bindings {
-    fn process_block(&mut self, block: &[Expression]) {
-        for expression in block {
-            if let Expression::Binding { names } = expression {
-                for name in names.iter().cloned().rev() {
-                    // Inserting bindings unconditionally like this does mean
-                    // that bindings can overwrite previously defined bindings.
-                    // This is undesirable, but it'll do for now.
-                    self.inner.insert(name);
-                }
-            }
-            if let Expression::Block { expressions } = expression {
-                self.process_block(expressions);
-            }
-        }
     }
 }
 
