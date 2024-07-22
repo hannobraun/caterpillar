@@ -1,6 +1,6 @@
 use crate::{CoreEffect, Function, InstructionAddr, Instructions, Stack};
 
-pub fn add(stack: &mut Stack) -> Result {
+pub fn add(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -16,7 +16,7 @@ pub fn add(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
+pub fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -31,11 +31,11 @@ pub fn add_wrap_unsigned(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn brk() -> Result {
+pub fn brk(_: &mut Stack, _: &Instructions) -> Result {
     Err(CoreEffect::Breakpoint)
 }
 
-pub fn copy(stack: &mut Stack) -> Result {
+pub fn copy(stack: &mut Stack, _: &Instructions) -> Result {
     let a = stack.pop_operand()?;
 
     stack.push_operand(a);
@@ -44,7 +44,7 @@ pub fn copy(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn div(stack: &mut Stack) -> Result {
+pub fn div(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -64,12 +64,12 @@ pub fn div(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn drop(stack: &mut Stack) -> Result {
+pub fn drop(stack: &mut Stack, _: &Instructions) -> Result {
     stack.pop_operand()?;
     Ok(())
 }
 
-pub fn eq(stack: &mut Stack) -> Result {
+pub fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -103,7 +103,7 @@ pub fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn greater(stack: &mut Stack) -> Result {
+pub fn greater(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -141,7 +141,7 @@ pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn mul(stack: &mut Stack) -> Result {
+pub fn mul(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -157,7 +157,7 @@ pub fn mul(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn neg(stack: &mut Stack) -> Result {
+pub fn neg(stack: &mut Stack, _: &Instructions) -> Result {
     let a = stack.pop_operand()?;
 
     let a = i32::from_le_bytes(a.0);
@@ -172,7 +172,7 @@ pub fn neg(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn remainder(stack: &mut Stack) -> Result {
+pub fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -189,7 +189,7 @@ pub fn remainder(stack: &mut Stack) -> Result {
     Ok(())
 }
 
-pub fn sub(stack: &mut Stack) -> Result {
+pub fn sub(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 

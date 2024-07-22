@@ -57,20 +57,27 @@ pub fn evaluate<H: Host>(
                 f(stack)?
             } else {
                 match name.as_str() {
-                    "add" => builtins::add(stack)?,
-                    "add_wrap_unsigned" => builtins::add_wrap_unsigned(stack)?,
-                    "brk" => builtins::brk()?,
-                    "copy" => builtins::copy(stack)?,
-                    "div" => builtins::div(stack)?,
-                    "drop" => builtins::drop(stack)?,
-                    "eq" => builtins::eq(stack)?,
+                    "add" => builtins::add(stack, &bytecode.instructions)?,
+                    "add_wrap_unsigned" => builtins::add_wrap_unsigned(
+                        stack,
+                        &bytecode.instructions,
+                    )?,
+                    "brk" => builtins::brk(stack, &bytecode.instructions)?,
+                    "copy" => builtins::copy(stack, &bytecode.instructions)?,
+                    "div" => builtins::div(stack, &bytecode.instructions)?,
+                    "drop" => builtins::drop(stack, &bytecode.instructions)?,
+                    "eq" => builtins::eq(stack, &bytecode.instructions)?,
                     "eval" => builtins::eval(stack, &bytecode.instructions)?,
-                    "greater" => builtins::greater(stack)?,
+                    "greater" => {
+                        builtins::greater(stack, &bytecode.instructions)?
+                    }
                     "if" => builtins::if_(stack, &bytecode.instructions)?,
-                    "mul" => builtins::mul(stack)?,
-                    "neg" => builtins::neg(stack)?,
-                    "remainder" => builtins::remainder(stack)?,
-                    "sub" => builtins::sub(stack)?,
+                    "mul" => builtins::mul(stack, &bytecode.instructions)?,
+                    "neg" => builtins::neg(stack, &bytecode.instructions)?,
+                    "remainder" => {
+                        builtins::remainder(stack, &bytecode.instructions)?
+                    }
+                    "sub" => builtins::sub(stack, &bytecode.instructions)?,
 
                     _ => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
