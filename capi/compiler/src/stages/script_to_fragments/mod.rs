@@ -144,12 +144,12 @@ fn compile_expression(
 mod tests {
     use capi_process::Value;
 
-    use crate::{
-        repr::{
-            fragments::{Fragment, FragmentParent, FragmentPayload, Fragments},
-            syntax::Script,
+    use crate::repr::{
+        fragments::{
+            Fragment, FragmentExpression, FragmentParent, FragmentPayload,
+            Fragments,
         },
-        stages::script_to_fragments::FragmentExpression,
+        syntax::Script,
     };
 
     use super::script_to_fragments;
