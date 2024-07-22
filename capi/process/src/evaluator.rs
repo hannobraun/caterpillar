@@ -138,7 +138,7 @@ pub fn evaluate<H: Host>(
                     .expect("Currently executing; stack can't be empty");
             }
         }
-        Instruction::Unreachable => {
+        Instruction::Panic => {
             return Err(Effect::Core(CoreEffect::Unreachable))
         }
     }

@@ -117,8 +117,8 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::Block { start, environment } => {
-                        let addr = self
-                            .generate(Instruction::Unreachable, fragment.id());
+                        let addr =
+                            self.generate(Instruction::Panic, fragment.id());
 
                         self.queue.push_front(CompileUnit::Block {
                             start: *start,
@@ -166,7 +166,7 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::UnresolvedWord { name: _ } => {
-                        self.generate(Instruction::Unreachable, fragment.id())
+                        self.generate(Instruction::Panic, fragment.id())
                     }
                     FragmentExpression::Value(value) => self.generate(
                         Instruction::Push { value: *value },
