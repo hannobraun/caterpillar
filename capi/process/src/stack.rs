@@ -10,6 +10,18 @@ use crate::{
 )]
 pub struct Stack {
     frames: Vec<StackFrame>,
+
+    /// # Special heap for closures
+    ///
+    /// ## Implementation Note
+    ///
+    /// This doesn't belong here. It just was a convenient place to put it, as
+    /// all code that needs to deal with closures has access to `Stack`.
+    ///
+    /// The eventual plan is to put closures on the regular stack, but that is
+    /// likely to be impractical while the language is untyped.
+    pub closures: BTreeMap<u32, (InstructionAddr, BTreeMap<String, Value>)>,
+    pub next_closure: u32,
 }
 
 impl Stack {

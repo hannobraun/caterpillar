@@ -85,8 +85,36 @@ pub fn evaluate<H: Host>(
             stack.push_frame(function, &bytecode.instructions)?;
         }
         Instruction::MakeClosure { addr, environment } => {
-            dbg!(addr, environment);
-            todo!("Instruction::MakeClosure is not supported yet.");
+            let Some(bindings) = stack.bindings() else {
+                unreachable!(
+                    "We're currently executing. A stack frame, and thus \
+                    bindings, must exist."
+                );
+            };
+
+            let environment = environment
+                .iter()
+                .cloned()
+                .map(|name| {
+                    let Some(value) = bindings.get(&name).cloned() else {
+                        unreachable!(
+                            "Binding that is specified in block environment \
+                            must exist."
+                        );
+                    };
+
+                    (name, value)
+                })
+                .collect();
+
+            let index = {
+                let next_closure = stack.next_closure;
+                stack.next_closure += 1;
+                next_closure
+            };
+            stack.closures.insert(index, (*addr, environment));
+
+            stack.push_operand(Value(index.to_le_bytes()));
         }
         Instruction::Push { value } => stack.push_operand(*value),
         Instruction::Return => {
