@@ -9,9 +9,13 @@ pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
         },
     };
 
-    scopes.inner.process_block(body);
+    process_block(body, &mut scopes);
 
     scopes
+}
+
+fn process_block(body: &[Expression], scopes: &mut Scopes) {
+    scopes.inner.process_block(body);
 }
 
 pub struct Scopes {
