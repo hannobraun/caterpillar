@@ -26,14 +26,15 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let scopes = process_function(function.args.clone(), &function.body);
+        let mut scopes =
+            process_function(function.args.clone(), &function.body);
         let (start, environment) = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
             },
             &functions,
-            &scopes,
+            &mut scopes,
             &mut fragments,
         );
 

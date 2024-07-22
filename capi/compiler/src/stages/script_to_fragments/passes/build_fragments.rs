@@ -14,7 +14,7 @@ pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
     functions: &BTreeSet<String>,
-    scopes: &Scopes,
+    scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> (FragmentId, BTreeSet<String>) {
     let mut next = {
@@ -55,7 +55,7 @@ pub fn compile_expression(
     next: FragmentId,
     functions: &BTreeSet<String>,
     environment: &mut BTreeSet<String>,
-    scopes: &Scopes,
+    scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
