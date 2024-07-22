@@ -81,7 +81,7 @@ impl<H: Host> Process<H> {
             return;
         }
 
-        let next_instruction = self.stack.next_instruction_overall().unwrap();
+        let next_instruction = self.stack.next_instruction_overall();
 
         match evaluate::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
@@ -93,13 +93,15 @@ impl<H: Host> Process<H> {
             }
         };
 
-        self.state.most_recent_step = Some(next_instruction);
+        if let Some(next_instruction) = next_instruction {
+            self.state.most_recent_step = Some(next_instruction);
 
-        if self
-            .breakpoints
-            .should_stop_at_and_clear_ephemeral(&next_instruction)
-        {
-            self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
+            if self
+                .breakpoints
+                .should_stop_at_and_clear_ephemeral(&next_instruction)
+            {
+                self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
+            }
         }
     }
 }
