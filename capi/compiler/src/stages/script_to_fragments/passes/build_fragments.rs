@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use capi_process::Host;
+use capi_process::{builtin, Host};
 
 use crate::repr::{
     fragments::{
@@ -91,11 +91,13 @@ pub fn compile_expression<H: Host>(
                 FragmentExpression::ResolvedBinding { name }
             } else if H::function(&name).is_some() {
                 FragmentExpression::ResolvedHostFunction { name }
-            } else {
-                // This doesn't check whether the built-in function exists, and
-                // given how built-in functions are currently defined, that's
-                // not practical to implement.
+            } else if builtin(&name).is_some()
+                || name == "return_if_non_zero"
+                || name == "return_if_zero"
+            {
                 FragmentExpression::ResolvedBuiltinFunction { name }
+            } else {
+                FragmentExpression::UnresolvedWord { name }
             }
         }
     };
