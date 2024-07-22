@@ -16,6 +16,12 @@ pub struct Scopes {
     pub inner: Bindings,
 }
 
+impl Scopes {
+    pub fn binding_resolves(&self, name: &str) -> bool {
+        self.inner.inner.contains(name)
+    }
+}
+
 pub struct Bindings {
     pub inner: BTreeSet<String>,
 }
