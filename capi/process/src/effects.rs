@@ -63,7 +63,7 @@ pub enum CoreEffect {
     UnknownBuiltin { name: String },
 
     #[error("Executed unreachable instruction")]
-    Unreachable,
+    Panic,
 }
 
 // This conversion is implemented manually, because doing it automatically using
