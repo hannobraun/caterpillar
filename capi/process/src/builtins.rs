@@ -27,7 +27,7 @@ pub fn builtin(name: &str) -> Option<Builtin> {
 
 pub type Builtin = fn(&mut Stack, &Instructions) -> Result;
 
-pub fn add(stack: &mut Stack, _: &Instructions) -> Result {
+fn add(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -43,7 +43,7 @@ pub fn add(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
+fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -58,11 +58,11 @@ pub fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn brk(_: &mut Stack, _: &Instructions) -> Result {
+fn brk(_: &mut Stack, _: &Instructions) -> Result {
     Err(CoreEffect::Breakpoint)
 }
 
-pub fn copy(stack: &mut Stack, _: &Instructions) -> Result {
+fn copy(stack: &mut Stack, _: &Instructions) -> Result {
     let a = stack.pop_operand()?;
 
     stack.push_operand(a);
@@ -71,7 +71,7 @@ pub fn copy(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn div(stack: &mut Stack, _: &Instructions) -> Result {
+fn div(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -91,12 +91,12 @@ pub fn div(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn drop(stack: &mut Stack, _: &Instructions) -> Result {
+fn drop(stack: &mut Stack, _: &Instructions) -> Result {
     stack.pop_operand()?;
     Ok(())
 }
 
-pub fn eq(stack: &mut Stack, _: &Instructions) -> Result {
+fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -107,7 +107,7 @@ pub fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
+fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     let closure = stack.pop_operand()?;
     let closure = u32::from_le_bytes(closure.0);
 
@@ -130,7 +130,7 @@ pub fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn greater(stack: &mut Stack, _: &Instructions) -> Result {
+fn greater(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -144,7 +144,7 @@ pub fn greater(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
+fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let else_ = stack.pop_operand()?;
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
@@ -168,7 +168,7 @@ pub fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn mul(stack: &mut Stack, _: &Instructions) -> Result {
+fn mul(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -184,7 +184,7 @@ pub fn mul(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn neg(stack: &mut Stack, _: &Instructions) -> Result {
+fn neg(stack: &mut Stack, _: &Instructions) -> Result {
     let a = stack.pop_operand()?;
 
     let a = i32::from_le_bytes(a.0);
@@ -199,7 +199,7 @@ pub fn neg(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
+fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -216,7 +216,7 @@ pub fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub fn sub(stack: &mut Stack, _: &Instructions) -> Result {
+fn sub(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
