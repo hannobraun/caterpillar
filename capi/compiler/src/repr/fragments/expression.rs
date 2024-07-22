@@ -16,11 +16,11 @@ pub enum FragmentExpression {
         start: FragmentId,
         environment: BTreeSet<String>,
     },
-    ResolvedBuiltinFunction {
-        name: String,
-    },
     Comment {
         text: String,
+    },
+    ResolvedBuiltinFunction {
+        name: String,
     },
     ResolvedUserFunction {
         name: String,
@@ -49,13 +49,13 @@ impl FragmentExpression {
                     hasher.update(binding.as_bytes());
                 }
             }
-            Self::ResolvedBuiltinFunction { name } => {
-                hasher.update(b"builtin call");
-                hasher.update(name.as_bytes());
-            }
             Self::Comment { text } => {
                 hasher.update(b"comment");
                 hasher.update(text.as_bytes());
+            }
+            Self::ResolvedBuiltinFunction { name } => {
+                hasher.update(b"builtin call");
+                hasher.update(name.as_bytes());
             }
             Self::ResolvedUserFunction { name } => {
                 hasher.update(b"function call");
@@ -81,8 +81,8 @@ impl fmt::Display for FragmentExpression {
             }
             Self::BindingEvaluation { name } => writeln!(f, "{name}"),
             Self::Block { start, .. } => writeln!(f, "block@{start}"),
-            Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
+            Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
