@@ -121,7 +121,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            [FragmentExpression::BuiltinCall {
+            [FragmentExpression::ResolvedBuiltinFunction {
                 name: String::from("builtin")
             }]
         );

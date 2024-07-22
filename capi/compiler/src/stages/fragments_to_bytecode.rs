@@ -133,7 +133,7 @@ impl Compiler<'_> {
 
                         addr
                     }
-                    FragmentExpression::BuiltinCall { name } => {
+                    FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
                         // anywhere, that their name doesn't conflict with any

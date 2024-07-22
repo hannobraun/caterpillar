@@ -91,7 +91,7 @@ pub fn compile_expression(
                 // This doesn't check whether the built-in function exists, and
                 // given how built-in functions are currently defined, that's
                 // not practical to implement.
-                FragmentExpression::BuiltinCall { name }
+                FragmentExpression::ResolvedBuiltinFunction { name }
             }
         }
     };
