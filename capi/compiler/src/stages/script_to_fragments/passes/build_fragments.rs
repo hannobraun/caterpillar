@@ -86,7 +86,7 @@ pub fn compile_expression(
                 if let BindingResolved::InEnvironment = resolved {
                     environment.insert(name.clone());
                 }
-                FragmentExpression::BindingEvaluation { name }
+                FragmentExpression::ResolvedBinding { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
                 // given how built-in functions are currently defined, that's

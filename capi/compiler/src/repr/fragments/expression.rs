@@ -9,7 +9,7 @@ pub enum FragmentExpression {
     BindingDefinitions {
         names: Vec<String>,
     },
-    BindingEvaluation {
+    ResolvedBinding {
         name: String,
     },
     Block {
@@ -38,7 +38,7 @@ impl FragmentExpression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::BindingEvaluation { name } => {
+            Self::ResolvedBinding { name } => {
                 hasher.update(b"binding evaluation");
                 hasher.update(name.as_bytes());
             }
@@ -79,7 +79,7 @@ impl fmt::Display for FragmentExpression {
                 }
                 writeln!(f, " .")
             }
-            Self::BindingEvaluation { name } => writeln!(f, "{name}"),
+            Self::ResolvedBinding { name } => writeln!(f, "{name}"),
             Self::Block { start, .. } => writeln!(f, "block@{start}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
             Self::ResolvedBuiltinFunction { name } => writeln!(f, "{name}"),

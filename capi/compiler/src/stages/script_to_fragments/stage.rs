@@ -85,7 +85,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            [FragmentExpression::BindingEvaluation {
+            [FragmentExpression::ResolvedBinding {
                 name: String::from("a")
             }]
         );
@@ -103,7 +103,7 @@ mod tests {
         let last = body(fragments).last().cloned().unwrap();
         assert_eq!(
             last,
-            FragmentExpression::BindingEvaluation {
+            FragmentExpression::ResolvedBinding {
                 name: String::from("b")
             }
         );

@@ -116,7 +116,7 @@ impl Compiler<'_> {
                             },
                             fragment.id(),
                         ),
-                    FragmentExpression::BindingEvaluation { name } => self
+                    FragmentExpression::ResolvedBinding { name } => self
                         .generate(
                             Instruction::BindingEvaluate { name: name.clone() },
                             fragment.id(),
