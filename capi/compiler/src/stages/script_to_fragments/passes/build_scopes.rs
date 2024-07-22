@@ -3,13 +3,15 @@ use std::collections::BTreeSet;
 use crate::repr::syntax::Expression;
 
 pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
-    let mut bindings = Bindings {
-        inner: args.into_iter().collect(),
+    let mut scopes = Scopes {
+        inner: Bindings {
+            inner: args.into_iter().collect(),
+        },
     };
 
-    bindings.process_block(body);
+    scopes.inner.process_block(body);
 
-    Scopes { inner: bindings }
+    scopes
 }
 
 pub struct Scopes {
