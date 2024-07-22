@@ -140,7 +140,7 @@ mod tests {
         let body = body(fragments);
         assert_eq!(
             body,
-            [FragmentExpression::FunctionCall {
+            [FragmentExpression::ResolvedUserFunction {
                 name: String::from("g")
             }]
         );

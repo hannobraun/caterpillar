@@ -81,7 +81,7 @@ pub fn compile_expression(
             // This isn't desirable. There should at least be a warning, if such
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
-                FragmentExpression::FunctionCall { name }
+                FragmentExpression::ResolvedUserFunction { name }
             } else if let Some(resolved) = scopes.resolve_binding(&name) {
                 if let BindingResolved::InEnvironment = resolved {
                     environment.insert(name.clone());

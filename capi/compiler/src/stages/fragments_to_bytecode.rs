@@ -155,10 +155,11 @@ impl Compiler<'_> {
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
-                    FragmentExpression::FunctionCall { name } => self.generate(
-                        Instruction::CallFunction { name: name.clone() },
-                        fragment.id(),
-                    ),
+                    FragmentExpression::ResolvedUserFunction { name } => self
+                        .generate(
+                            Instruction::CallFunction { name: name.clone() },
+                            fragment.id(),
+                        ),
                     FragmentExpression::Value(value) => self.generate(
                         Instruction::Push { value: *value },
                         fragment.id(),

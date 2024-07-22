@@ -22,7 +22,7 @@ pub enum FragmentExpression {
     Comment {
         text: String,
     },
-    FunctionCall {
+    ResolvedUserFunction {
         name: String,
     },
     Value(Value),
@@ -57,7 +57,7 @@ impl FragmentExpression {
                 hasher.update(b"comment");
                 hasher.update(text.as_bytes());
             }
-            Self::FunctionCall { name } => {
+            Self::ResolvedUserFunction { name } => {
                 hasher.update(b"function call");
                 hasher.update(name.as_bytes());
             }
@@ -83,7 +83,7 @@ impl fmt::Display for FragmentExpression {
             Self::Block { start, .. } => writeln!(f, "block@{start}"),
             Self::BuiltinCall { name } => writeln!(f, "{name}"),
             Self::Comment { text } => writeln!(f, "# {text}"),
-            Self::FunctionCall { name } => write!(f, "{name}"),
+            Self::ResolvedUserFunction { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
     }
