@@ -8,7 +8,7 @@ use crate::repr::{
     syntax::Expression,
 };
 
-use super::build_scopes::Scopes;
+use super::build_scopes::{BindingResolved, Scopes};
 
 pub fn compile_block(
     expressions: Vec<Expression>,
@@ -28,6 +28,7 @@ pub fn compile_block(
 
         terminator_id
     };
+    let mut environment = BTreeSet::new();
 
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(
@@ -36,6 +37,7 @@ pub fn compile_block(
             next,
             scopes,
             functions,
+            &mut environment,
             fragments,
         );
 
@@ -43,6 +45,8 @@ pub fn compile_block(
 
         fragments.inner.insert(fragment.id(), fragment);
     }
+
+    dbg!(environment);
 
     next
 }
@@ -53,6 +57,7 @@ pub fn compile_expression(
     next: FragmentId,
     scopes: &Scopes,
     functions: &BTreeSet<String>,
+    environment: &mut BTreeSet<String>,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
@@ -82,7 +87,10 @@ pub fn compile_expression(
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
                 FragmentExpression::FunctionCall { name }
-            } else if scopes.resolve_binding(&name).is_some() {
+            } else if let Some(resolved) = scopes.resolve_binding(&name) {
+                if let BindingResolved::InEnvironment = resolved {
+                    environment.insert(name.clone());
+                }
                 FragmentExpression::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
