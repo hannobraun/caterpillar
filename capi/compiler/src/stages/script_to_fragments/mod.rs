@@ -57,7 +57,7 @@ fn compile_function(
     fragments: &mut FragmentMap,
 ) -> FragmentId {
     let mut bindings = Bindings {
-        inner: args.iter().cloned().collect(),
+        inner: args.into_iter().collect(),
     };
 
     bindings.process_block(&body);
