@@ -1,6 +1,6 @@
 use crate::{
-    builtins::{self, Builtin},
-    Bytecode, CoreEffect, Effect, Host, Instruction, Stack, Value,
+    builtins::builtin, Bytecode, CoreEffect, Effect, Host, Instruction, Stack,
+    Value,
 };
 
 pub fn evaluate<H: Host>(
@@ -57,26 +57,7 @@ pub fn evaluate<H: Host>(
             if let Some(f) = H::function(name) {
                 f(stack)?
             } else {
-                let builtin = match name.as_str() {
-                    "add" => Some(builtins::add as Builtin),
-                    "add_wrap_unsigned" => {
-                        Some(builtins::add_wrap_unsigned as _)
-                    }
-                    "brk" => Some(builtins::brk as _),
-                    "copy" => Some(builtins::copy as _),
-                    "div" => Some(builtins::div as _),
-                    "drop" => Some(builtins::drop as _),
-                    "eq" => Some(builtins::eq as _),
-                    "eval" => Some(builtins::eval as _),
-                    "greater" => Some(builtins::greater as _),
-                    "if" => Some(builtins::if_ as _),
-                    "mul" => Some(builtins::mul as _),
-                    "neg" => Some(builtins::neg as _),
-                    "remainder" => Some(builtins::remainder as _),
-                    "sub" => Some(builtins::sub as _),
-
-                    _ => None,
-                };
+                let builtin = builtin(name);
 
                 match builtin {
                     Some(builtin) => {

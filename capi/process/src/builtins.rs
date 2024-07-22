@@ -1,5 +1,30 @@
 use crate::{CoreEffect, Function, InstructionAddr, Instructions, Stack};
 
+pub fn builtin(name: &str) -> Option<Builtin> {
+    let builtin = match name {
+        "add" => add,
+        "add_wrap_unsigned" => add_wrap_unsigned,
+        "brk" => brk,
+        "copy" => copy,
+        "div" => div,
+        "drop" => drop,
+        "eq" => eq,
+        "eval" => eval,
+        "greater" => greater,
+        "if" => if_,
+        "mul" => mul,
+        "neg" => neg,
+        "remainder" => remainder,
+        "sub" => sub,
+
+        _ => {
+            return None;
+        }
+    };
+
+    Some(builtin)
+}
+
 pub type Builtin = fn(&mut Stack, &Instructions) -> Result;
 
 pub fn add(stack: &mut Stack, _: &Instructions) -> Result {
