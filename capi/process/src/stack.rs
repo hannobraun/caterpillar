@@ -56,6 +56,13 @@ impl Stack {
         function: Function,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
+        // We must create the new stack frame before we do tail call
+        // optimization. Otherwise, we might drop the current frame, and if the
+        // current frame is the top-level frame, then any potential arguments
+        // for the new frame have nowhere to go.
+        let mut new_frame = StackFrame::new(function);
+        new_frame.take_arguments(self.frames.last_mut())?;
+
         if let Some(next_addr) = self.next_instruction_in_current_frame() {
             let next_instruction = instructions
                 .get(&next_addr)
@@ -73,9 +80,6 @@ impl Stack {
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
-
-        let mut new_frame = StackFrame::new(function);
-        new_frame.take_arguments(self.frames.last_mut())?;
 
         self.frames.push(new_frame);
 
