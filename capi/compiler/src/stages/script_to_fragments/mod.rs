@@ -60,10 +60,15 @@ fn compile_function(
 ) -> FragmentId {
     let bindings = build_scopes(args, &body);
 
-    let parent = FragmentParent::Function { name };
     let expressions = body;
 
-    compile_block(expressions, parent, &bindings, functions, fragments)
+    compile_block(
+        expressions,
+        FragmentParent::Function { name },
+        &bindings,
+        functions,
+        fragments,
+    )
 }
 
 fn compile_block(
