@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use crate::repr::syntax::Expression;
 
-pub fn build_scopes(args: Vec<String>, body: &[Expression]) -> Scopes {
+pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
     let mut bindings = Bindings {
         inner: args.into_iter().collect(),
     };

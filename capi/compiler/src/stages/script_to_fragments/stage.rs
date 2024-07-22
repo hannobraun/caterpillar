@@ -6,7 +6,7 @@ use crate::repr::{
 };
 
 use super::passes::{
-    build_fragments::compile_block, build_scopes::build_scopes,
+    build_fragments::compile_block, build_scopes::process_function,
 };
 
 pub fn script_to_fragments(script: Script) -> Fragments {
@@ -26,7 +26,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let scopes = build_scopes(function.args.clone(), &function.body);
+        let scopes = process_function(function.args.clone(), &function.body);
         let start = compile_block(
             function.body,
             FragmentParent::Function {
