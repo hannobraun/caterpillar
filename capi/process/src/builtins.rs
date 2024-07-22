@@ -81,14 +81,21 @@ pub fn eq(stack: &mut Stack) -> Result {
 }
 
 pub fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
-    let block = stack.pop_operand()?;
+    let closure = stack.pop_operand()?;
+    let closure = u32::from_le_bytes(closure.0);
+
+    let (address, environment) = stack.closures.remove(&closure).unwrap();
+
+    let mut arguments = Vec::new();
+    for (name, value) in environment {
+        arguments.push(name);
+        stack.push_operand(value);
+    }
 
     stack.push_frame(
         Function {
-            arguments: Vec::new(),
-            first_instruction: InstructionAddr {
-                index: u32::from_le_bytes(block.0),
-            },
+            arguments,
+            first_instruction: address,
         },
         instructions,
     )?;
