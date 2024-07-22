@@ -31,7 +31,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
     for function in script.functions {
         let start = compile_function(
             function.name.clone(),
-            &function.args,
+            function.args.clone(),
             function.expressions,
             &functions,
             &mut fragments,
@@ -51,7 +51,7 @@ pub fn script_to_fragments(script: Script) -> Fragments {
 
 fn compile_function(
     name: String,
-    args: &[String],
+    args: Vec<String>,
     body: Vec<Expression>,
     functions: &BTreeSet<String>,
     fragments: &mut FragmentMap,
