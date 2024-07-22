@@ -1,6 +1,6 @@
 use std::collections::{BTreeSet, VecDeque};
 
-use capi_process::{Bytecode, Function, Instruction, InstructionAddr, Value};
+use capi_process::{Bytecode, Function, Instruction, InstructionAddr};
 
 use crate::{
     repr::fragments::{
@@ -45,14 +45,15 @@ impl Compiler<'_> {
                     environment,
                     addr,
                 } => {
-                    dbg!(environment);
-
                     let start = self.compile_block(start);
-                    let value = Value(start.index.to_le_bytes());
 
-                    self.bytecode
-                        .instructions
-                        .replace(addr, Instruction::Push { value });
+                    self.bytecode.instructions.replace(
+                        addr,
+                        Instruction::MakeClosure {
+                            addr: start,
+                            environment,
+                        },
+                    );
                 }
                 CompileUnit::Function(function) => {
                     self.compile_function(
