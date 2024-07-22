@@ -38,14 +38,14 @@ pub struct Scopes {
 }
 
 impl Scopes {
-    pub fn resolve_binding(&self, name: &str) -> bool {
+    pub fn resolve_binding(&self, name: &str) -> Option<()> {
         for scope in self.stack.iter().rev() {
             if scope.inner.contains(name) {
-                return true;
+                return Some(());
             }
         }
 
-        false
+        None
     }
 }
 

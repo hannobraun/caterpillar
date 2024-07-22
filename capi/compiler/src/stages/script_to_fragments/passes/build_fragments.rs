@@ -79,7 +79,7 @@ pub fn compile_expression(
             // shadowing isn't forbidden outright. It'll do for now though.
             if functions.contains(&name) {
                 FragmentExpression::FunctionCall { name }
-            } else if scopes.resolve_binding(&name) {
+            } else if scopes.resolve_binding(&name).is_some() {
                 FragmentExpression::BindingEvaluation { name }
             } else {
                 // This doesn't check whether the built-in function exists, and
