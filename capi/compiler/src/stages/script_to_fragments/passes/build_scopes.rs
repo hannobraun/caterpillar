@@ -25,6 +25,9 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
             }
         }
         if let Expression::Block { expressions } = expression {
+            scopes.stack.push(Bindings {
+                inner: BTreeSet::new(),
+            });
             process_block(expressions, scopes);
         }
     }
