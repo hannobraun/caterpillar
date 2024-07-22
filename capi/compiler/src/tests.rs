@@ -46,7 +46,11 @@ fn closure_in_function() {
                     process.handle_first_effect();
                 }
                 effect => {
-                    panic!("Unexpected effect: {effect}");
+                    panic!(
+                        "Unexpected effect: {effect}\n\
+                        Process: {process:#?}\n\
+                        Bytecode: {bytecode:#?}"
+                    );
                 }
             }
         }
@@ -56,6 +60,7 @@ fn closure_in_function() {
     assert!(signals.is_empty());
 }
 
+#[derive(Debug)]
 struct TestHost {}
 
 impl Host for TestHost {
