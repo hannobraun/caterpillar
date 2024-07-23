@@ -60,6 +60,168 @@ pub fn script_to_fragments<H: Host>(script: Script) -> Fragments {
     }
 }
 
+pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
+    let mut scopes = Scopes {
+        stack: vec![Bindings {
+            inner: args.into_iter().collect(),
+        }],
+    };
+
+    process_block(body, &mut scopes);
+
+    scopes
+}
+
+fn process_block(body: &[Expression], scopes: &mut Scopes) {
+    for expression in body {
+        if let Expression::Binding { names } = expression {
+            for name in names.iter().cloned().rev() {
+                // Inserting bindings unconditionally like this does mean
+                // that bindings can overwrite previously defined bindings.
+                // This is undesirable, but it'll do for now.
+                scopes.stack.last_mut().unwrap().inner.insert(name);
+            }
+        }
+        if let Expression::Block { expressions } = expression {
+            scopes.stack.push(Bindings {
+                inner: BTreeSet::new(),
+            });
+            process_block(expressions, scopes);
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Scopes {
+    stack: Vec<Bindings>,
+}
+
+impl Scopes {
+    pub fn resolve_binding(&self, name: &str) -> Option<BindingResolved> {
+        let mut scopes = self.stack.iter().rev();
+
+        if let Some(scope) = scopes.next() {
+            if scope.inner.contains(name) {
+                return Some(BindingResolved::InScope);
+            }
+        }
+
+        for scope in scopes {
+            if scope.inner.contains(name) {
+                return Some(BindingResolved::InEnvironment);
+            }
+        }
+
+        None
+    }
+}
+
+pub enum BindingResolved {
+    InScope,
+    InEnvironment,
+}
+
+#[derive(Debug)]
+struct Bindings {
+    inner: BTreeSet<String>,
+}
+
+pub fn compile_block<H: Host>(
+    expressions: Vec<Expression>,
+    parent: FragmentParent,
+    functions: &BTreeSet<String>,
+    scopes: &mut Scopes,
+    fragments: &mut FragmentMap,
+) -> (FragmentId, BTreeSet<String>) {
+    let mut next = {
+        let terminator = Fragment {
+            parent: parent.clone(),
+            payload: FragmentPayload::Terminator,
+        };
+        let terminator_id = terminator.id();
+
+        fragments.inner.insert(terminator_id, terminator);
+
+        terminator_id
+    };
+    let mut environment = BTreeSet::new();
+
+    for expression in expressions.into_iter().rev() {
+        let fragment = compile_expression::<H>(
+            expression,
+            parent.clone(),
+            next,
+            functions,
+            &mut environment,
+            scopes,
+            fragments,
+        );
+
+        next = fragment.id();
+
+        fragments.inner.insert(fragment.id(), fragment);
+    }
+
+    (next, environment)
+}
+
+pub fn compile_expression<H: Host>(
+    expression: Expression,
+    parent: FragmentParent,
+    next: FragmentId,
+    functions: &BTreeSet<String>,
+    environment: &mut BTreeSet<String>,
+    scopes: &mut Scopes,
+    fragments: &mut FragmentMap,
+) -> Fragment {
+    let expression = match expression {
+        Expression::Binding { names } => {
+            FragmentExpression::BindingDefinitions { names }
+        }
+        Expression::Block { expressions } => {
+            let (start, environment) = compile_block::<H>(
+                expressions,
+                FragmentParent::Fragment { id: next },
+                functions,
+                scopes,
+                fragments,
+            );
+            FragmentExpression::Block { start, environment }
+        }
+        Expression::Comment { text } => FragmentExpression::Comment { text },
+        Expression::Value(value) => FragmentExpression::Value(value),
+        Expression::Word { name } => {
+            // The way this is written, the different types of definitions
+            // shadow each other in a defined order.
+            //
+            // This isn't desirable. There should at least be a warning, if such
+            // shadowing isn't forbidden outright. It'll do for now though.
+            if functions.contains(&name) {
+                FragmentExpression::ResolvedUserFunction { name }
+            } else if let Some(resolved) = scopes.resolve_binding(&name) {
+                if let BindingResolved::InEnvironment = resolved {
+                    environment.insert(name.clone());
+                }
+                FragmentExpression::ResolvedBinding { name }
+            } else if H::function(&name).is_some() {
+                FragmentExpression::ResolvedHostFunction { name }
+            } else if builtin(&name).is_some()
+                || name == "return_if_non_zero"
+                || name == "return_if_zero"
+            {
+                FragmentExpression::ResolvedBuiltinFunction { name }
+            } else {
+                FragmentExpression::UnresolvedWord { name }
+            }
+        }
+    };
+
+    Fragment {
+        parent,
+        payload: FragmentPayload::Expression { expression, next },
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack, Value};
@@ -272,167 +434,5 @@ mod tests {
 
     fn host(_: &mut Stack) -> Result<(), Effect<()>> {
         Ok(())
-    }
-}
-
-pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
-    let mut scopes = Scopes {
-        stack: vec![Bindings {
-            inner: args.into_iter().collect(),
-        }],
-    };
-
-    process_block(body, &mut scopes);
-
-    scopes
-}
-
-fn process_block(body: &[Expression], scopes: &mut Scopes) {
-    for expression in body {
-        if let Expression::Binding { names } = expression {
-            for name in names.iter().cloned().rev() {
-                // Inserting bindings unconditionally like this does mean
-                // that bindings can overwrite previously defined bindings.
-                // This is undesirable, but it'll do for now.
-                scopes.stack.last_mut().unwrap().inner.insert(name);
-            }
-        }
-        if let Expression::Block { expressions } = expression {
-            scopes.stack.push(Bindings {
-                inner: BTreeSet::new(),
-            });
-            process_block(expressions, scopes);
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct Scopes {
-    stack: Vec<Bindings>,
-}
-
-impl Scopes {
-    pub fn resolve_binding(&self, name: &str) -> Option<BindingResolved> {
-        let mut scopes = self.stack.iter().rev();
-
-        if let Some(scope) = scopes.next() {
-            if scope.inner.contains(name) {
-                return Some(BindingResolved::InScope);
-            }
-        }
-
-        for scope in scopes {
-            if scope.inner.contains(name) {
-                return Some(BindingResolved::InEnvironment);
-            }
-        }
-
-        None
-    }
-}
-
-pub enum BindingResolved {
-    InScope,
-    InEnvironment,
-}
-
-#[derive(Debug)]
-struct Bindings {
-    inner: BTreeSet<String>,
-}
-
-pub fn compile_block<H: Host>(
-    expressions: Vec<Expression>,
-    parent: FragmentParent,
-    functions: &BTreeSet<String>,
-    scopes: &mut Scopes,
-    fragments: &mut FragmentMap,
-) -> (FragmentId, BTreeSet<String>) {
-    let mut next = {
-        let terminator = Fragment {
-            parent: parent.clone(),
-            payload: FragmentPayload::Terminator,
-        };
-        let terminator_id = terminator.id();
-
-        fragments.inner.insert(terminator_id, terminator);
-
-        terminator_id
-    };
-    let mut environment = BTreeSet::new();
-
-    for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression::<H>(
-            expression,
-            parent.clone(),
-            next,
-            functions,
-            &mut environment,
-            scopes,
-            fragments,
-        );
-
-        next = fragment.id();
-
-        fragments.inner.insert(fragment.id(), fragment);
-    }
-
-    (next, environment)
-}
-
-pub fn compile_expression<H: Host>(
-    expression: Expression,
-    parent: FragmentParent,
-    next: FragmentId,
-    functions: &BTreeSet<String>,
-    environment: &mut BTreeSet<String>,
-    scopes: &mut Scopes,
-    fragments: &mut FragmentMap,
-) -> Fragment {
-    let expression = match expression {
-        Expression::Binding { names } => {
-            FragmentExpression::BindingDefinitions { names }
-        }
-        Expression::Block { expressions } => {
-            let (start, environment) = compile_block::<H>(
-                expressions,
-                FragmentParent::Fragment { id: next },
-                functions,
-                scopes,
-                fragments,
-            );
-            FragmentExpression::Block { start, environment }
-        }
-        Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Value(value) => FragmentExpression::Value(value),
-        Expression::Word { name } => {
-            // The way this is written, the different types of definitions
-            // shadow each other in a defined order.
-            //
-            // This isn't desirable. There should at least be a warning, if such
-            // shadowing isn't forbidden outright. It'll do for now though.
-            if functions.contains(&name) {
-                FragmentExpression::ResolvedUserFunction { name }
-            } else if let Some(resolved) = scopes.resolve_binding(&name) {
-                if let BindingResolved::InEnvironment = resolved {
-                    environment.insert(name.clone());
-                }
-                FragmentExpression::ResolvedBinding { name }
-            } else if H::function(&name).is_some() {
-                FragmentExpression::ResolvedHostFunction { name }
-            } else if builtin(&name).is_some()
-                || name == "return_if_non_zero"
-                || name == "return_if_zero"
-            {
-                FragmentExpression::ResolvedBuiltinFunction { name }
-            } else {
-                FragmentExpression::UnresolvedWord { name }
-            }
-        }
-    };
-
-    Fragment {
-        parent,
-        payload: FragmentPayload::Expression { expression, next },
     }
 }
