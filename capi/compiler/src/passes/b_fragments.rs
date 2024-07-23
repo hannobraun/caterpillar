@@ -190,7 +190,7 @@ pub fn compile_expression<H: Host>(
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Value(value) => FragmentExpression::Value(value),
-        Expression::Word { name } => {
+        Expression::Word { name, .. } => {
             // The way this is written, the different types of definitions
             // shadow each other in a defined order.
             //
