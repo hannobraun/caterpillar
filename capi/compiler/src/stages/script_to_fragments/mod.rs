@@ -1,5 +1,3 @@
-mod passes;
-
 use std::collections::{BTreeMap, BTreeSet};
 
 use capi_process::{builtin, Host};
