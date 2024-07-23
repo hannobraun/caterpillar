@@ -6,12 +6,13 @@ pub mod source_map;
 mod tests;
 
 pub fn compile<H: capi_process::Host>(
-    script: crate::repr::syntax::Script,
+    mut script: crate::repr::syntax::Script,
 ) -> (
     crate::repr::fragments::Fragments,
     capi_process::Bytecode,
     crate::source_map::SourceMap,
 ) {
+    passes::resolve_references(&mut script);
     let fragments = passes::generate_fragments::<H>(script);
     let (bytecode, source_map) = passes::generate_bytecode(fragments.clone());
 
