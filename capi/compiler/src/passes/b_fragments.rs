@@ -173,6 +173,14 @@ pub fn compile_expression(
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Reference { name, kind } => match kind {
+            Some(ReferenceKind::Binding) => {
+                if let Some(BindingResolved::InEnvironment) =
+                    scopes.resolve_binding(&name)
+                {
+                    environment.insert(name.clone());
+                }
+                FragmentExpression::ResolvedBinding { name }
+            }
             Some(ReferenceKind::BuiltinFunction) => {
                 FragmentExpression::ResolvedBuiltinFunction { name }
             }
@@ -182,16 +190,7 @@ pub fn compile_expression(
             Some(ReferenceKind::UserFunction) => {
                 FragmentExpression::ResolvedUserFunction { name }
             }
-            _ => {
-                if let Some(resolved) = scopes.resolve_binding(&name) {
-                    if let BindingResolved::InEnvironment = resolved {
-                        environment.insert(name.clone());
-                    }
-                    FragmentExpression::ResolvedBinding { name }
-                } else {
-                    FragmentExpression::UnresolvedWord { name }
-                }
-            }
+            _ => FragmentExpression::UnresolvedWord { name },
         },
         Expression::Value(value) => FragmentExpression::Value(value),
     };
@@ -216,42 +215,6 @@ mod tests {
             syntax::Script,
         },
     };
-
-    #[test]
-    fn arg_eval() {
-        let mut script = Script::default();
-        script.function("f", ["a"], |s| {
-            s.r("a");
-        });
-
-        let fragments = generate_fragments(script);
-
-        let body = body(fragments);
-        assert_eq!(
-            body,
-            [FragmentExpression::ResolvedBinding {
-                name: String::from("a")
-            }]
-        );
-    }
-
-    #[test]
-    fn binding_eval() {
-        let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.v(0).bind(["b"]).r("b");
-        });
-
-        let fragments = generate_fragments(script);
-
-        let last = body(fragments).last().cloned().unwrap();
-        assert_eq!(
-            last,
-            FragmentExpression::ResolvedBinding {
-                name: String::from("b")
-            }
-        );
-    }
 
     #[test]
     fn duplicate_payload() {
