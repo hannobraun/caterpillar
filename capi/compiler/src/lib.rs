@@ -12,7 +12,7 @@ pub fn compile<H: capi_process::Host>(
     capi_process::Bytecode,
     crate::source_map::SourceMap,
 ) {
-    let fragments = passes::script_to_fragments::<H>(script);
+    let fragments = passes::generate_fragments::<H>(script);
     let (bytecode, source_map) =
         passes::fragments_to_bytecode(fragments.clone());
 

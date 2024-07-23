@@ -10,7 +10,7 @@ use crate::repr::{
     syntax::{Expression, Script},
 };
 
-pub fn script_to_fragments<H: Host>(script: Script) -> Fragments {
+pub fn generate_fragments<H: Host>(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
 
     for function in &script.functions {
@@ -416,7 +416,7 @@ mod tests {
     }
 
     fn script_to_fragments(script: Script) -> Fragments {
-        super::script_to_fragments::<TestHost>(script)
+        super::generate_fragments::<TestHost>(script)
     }
 
     struct TestHost {}
