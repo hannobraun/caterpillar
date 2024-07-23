@@ -13,6 +13,11 @@ fn resolve_block<H: Host>(body: &mut [Expression]) {
         match expression {
             Expression::Block { body } => resolve_block::<H>(body),
             Expression::Reference { name, kind } => {
+                // The way this is written, definitions can silently shadow each
+                // other in a defined order. This is undesirable.
+                //
+                // There should at least be a warning, if such shadowing
+                // shouldn't be forbidden outright.
                 if builtin(name).is_some()
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
