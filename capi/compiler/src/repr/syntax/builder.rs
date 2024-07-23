@@ -37,7 +37,10 @@ impl<'r> SyntaxBuilder<'r> {
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.push_expression(Expression::Word { name: name.into() })
+        self.push_expression(Expression::Word {
+            name: name.into(),
+            kind: None,
+        })
     }
 
     fn push_expression(&mut self, expression: Expression) -> &mut Self {
