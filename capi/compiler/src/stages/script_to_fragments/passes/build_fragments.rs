@@ -10,7 +10,7 @@ use crate::repr::{
     syntax::Expression,
 };
 
-use super::build_scopes::{BindingResolved, Scopes};
+use super::super::{BindingResolved, Scopes};
 
 pub fn compile_block<H: Host>(
     expressions: Vec<Expression>,
