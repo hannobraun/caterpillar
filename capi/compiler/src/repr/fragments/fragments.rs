@@ -28,10 +28,6 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
-    pub fn remove(&mut self, id: &FragmentId) -> Option<Fragment> {
-        self.inner.remove(id)
-    }
-
     pub fn iter_from(&self, id: FragmentId) -> impl Iterator<Item = &Fragment> {
         let mut next = Some(id);
 
