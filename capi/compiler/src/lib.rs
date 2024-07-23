@@ -12,7 +12,7 @@ pub fn compile<H: capi_process::Host>(
     capi_process::Bytecode,
     crate::source_map::SourceMap,
 ) {
-    passes::resolve_references(&mut script);
+    passes::resolve_references::<H>(&mut script);
     let fragments = passes::generate_fragments::<H>(script);
     let (bytecode, source_map) = passes::generate_bytecode(fragments.clone());
 

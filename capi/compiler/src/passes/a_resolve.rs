@@ -1,8 +1,8 @@
-use capi_process::builtin;
+use capi_process::{builtin, Host};
 
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
-pub fn resolve_references(script: &mut Script) {
+pub fn resolve_references<H: Host>(script: &mut Script) {
     for function in &mut script.functions {
         for expression in &mut function.body {
             if let Expression::Reference { name, kind } = expression {
@@ -19,6 +19,8 @@ pub fn resolve_references(script: &mut Script) {
 
 #[cfg(test)]
 mod tests {
+    use capi_process::NoHost;
+
     use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
     #[test]
@@ -64,6 +66,6 @@ mod tests {
     }
 
     fn resolve_references(script: &mut Script) {
-        super::resolve_references(script)
+        super::resolve_references::<NoHost>(script)
     }
 }
