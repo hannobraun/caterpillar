@@ -11,82 +11,82 @@ pub fn main() {
 fn snake(script: &mut Script) {
     // Main loop
     script.function("main", [], |s| {
-        s.w("tile_field_size")
-            .w("vec_store")
-            .w("init_frame_count")
-            .w("init")
-            .w("main_inner");
+        s.r("tile_field_size")
+            .r("vec_store")
+            .r("init_frame_count")
+            .r("init")
+            .r("main_inner");
     });
     script.function("main_inner", [], |s| {
-        s.w("draw").w("count_frame").w("update").w("main_inner");
+        s.r("draw").r("count_frame").r("update").r("main_inner");
     });
 
     // Draw
     script.function("draw", [], |s| {
-        s.w("clear_pixels")
-            .w("draw_snake")
-            .w("draw_food")
+        s.r("clear_pixels")
+            .r("draw_snake")
+            .r("draw_food")
             .c("This blocks until the display system is ready to process the")
             .c("next frame.")
-            .w("submit_frame");
+            .r("submit_frame");
     });
     script.function("draw_snake", [], |s| {
-        s.v(0).w("draw_snake_inner");
+        s.v(0).r("draw_snake_inner");
     });
     script.function("draw_snake_inner", ["index"], |s| {
-        s.w("positions")
-            .w("index")
-            .w("vec_buf_get")
+        s.r("positions")
+            .r("index")
+            .r("vec_buf_get")
             .v(0)
             .v(255)
             .v(0)
             .v(255)
-            .w("set_pixel")
-            .w("positions")
-            .w("vec_buf_len")
-            .w("index")
+            .r("set_pixel")
+            .r("positions")
+            .r("vec_buf_len")
+            .r("index")
             .v(1)
-            .w("add")
-            .w("sub")
-            .w("return_if_zero")
-            .w("index")
+            .r("add")
+            .r("sub")
+            .r("return_if_zero")
+            .r("index")
             .v(1)
-            .w("add")
-            .w("draw_snake_inner");
+            .r("add")
+            .r("draw_snake_inner");
     });
     script.function("draw_food", [], |s| {
-        s.w("food_position")
-            .w("vec_load")
+        s.r("food_position")
+            .r("vec_load")
             .v(255)
             .v(0)
             .v(0)
             .v(255)
-            .w("set_pixel");
+            .r("set_pixel");
     });
 
     // Draw - clear pixels
     script.function("clear_pixels", [], |s| {
-        s.w("init_tile_index").w("clear_pixels_inner").w("vec_drop");
+        s.r("init_tile_index").r("clear_pixels_inner").r("vec_drop");
     });
     script.function("clear_pixels_inner", ["tile_x", "tile_y"], |s| {
         s
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
-            .w("tile_x")
-            .w("tile_y")
-            .w("copy")
-            .w("check_tile_index")
-            .w("return_if_zero")
+            .r("tile_x")
+            .r("tile_y")
+            .r("copy")
+            .r("check_tile_index")
+            .r("return_if_zero")
             .c("Apparently we're not done yet.")
-            .w("vec_copy")
+            .r("vec_copy")
             .v(0)
             .v(0)
             .v(0)
             .v(255)
-            .w("set_pixel")
-            .w("increment_tile_index")
-            .w("clear_pixels_inner");
+            .r("set_pixel")
+            .r("increment_tile_index")
+            .r("clear_pixels_inner");
     });
 
     // Draw - write tiles - tile index
@@ -94,85 +94,85 @@ fn snake(script: &mut Script) {
         s.v(0).v(0);
     });
     script.function("check_tile_index", ["tile_y"], |s| {
-        s.w("tile_field_size")
-            .w("vec_load")
-            .w("vec_y")
-            .w("tile_y")
+        s.r("tile_field_size")
+            .r("vec_load")
+            .r("vec_y")
+            .r("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
-            .w("sub");
+            .r("sub");
     });
     script.function("increment_tile_index", ["tile_x", "tile_y"], |s| {
         s.c("Increment the x-coordinate.")
-            .w("tile_x")
+            .r("tile_x")
             .v(1)
-            .w("add")
+            .r("add")
             .bind(["tile_x_new"])
             .c("Check if the x coordinate has advanced beyond the width.")
-            .w("tile_field_size")
-            .w("vec_load")
-            .w("vec_x")
-            .w("tile_x_new")
-            .w("sub")
+            .r("tile_field_size")
+            .r("vec_load")
+            .r("vec_x")
+            .r("tile_x_new")
+            .r("sub")
             .bind(["zero_if_x_overflowed"])
             .c("Unless the x-coordinate has advanced beyond the width, we're")
             .c("done here.")
-            .w("tile_x_new")
-            .w("tile_y")
-            .w("zero_if_x_overflowed")
-            .w("return_if_non_zero")
+            .r("tile_x_new")
+            .r("tile_y")
+            .r("zero_if_x_overflowed")
+            .r("return_if_non_zero")
             .c("Looks like we're not done!")
             .bind(["tile_x_new", "tile_y"])
             .c("Increment y-coordinate.")
-            .w("tile_y")
+            .r("tile_y")
             .v(1)
-            .w("add")
+            .r("add")
             .bind(["tile_y_new"])
             .c("Return updated coordinates")
             .v(0)
-            .w("tile_y_new");
+            .r("tile_y_new");
     });
 
     // Tile field size
     script.function("is_out_of_bounds", ["x", "y"], |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
-            .w("x")
-            .w("greater")
-            .w("copy")
-            .w("return_if_non_zero")
-            .w("drop")
+            .r("x")
+            .r("greater")
+            .r("copy")
+            .r("return_if_non_zero")
+            .r("drop")
             .c("Compare y coordinate against lower bound.")
             .v(0)
-            .w("y")
-            .w("greater")
-            .w("copy")
-            .w("return_if_non_zero")
-            .w("drop")
+            .r("y")
+            .r("greater")
+            .r("copy")
+            .r("return_if_non_zero")
+            .r("drop")
             .c("Compare x coordinate against upper bound")
-            .w("x")
-            .w("tile_field_size")
-            .w("vec_load")
-            .w("vec_x")
+            .r("x")
+            .r("tile_field_size")
+            .r("vec_load")
+            .r("vec_x")
             .v(1)
-            .w("sub")
-            .w("greater")
-            .w("copy")
-            .w("return_if_non_zero")
-            .w("drop")
+            .r("sub")
+            .r("greater")
+            .r("copy")
+            .r("return_if_non_zero")
+            .r("drop")
             .c("Compare y coordinate against upper bound")
-            .w("y")
-            .w("tile_field_size")
-            .w("vec_load")
-            .w("vec_y")
+            .r("y")
+            .r("tile_field_size")
+            .r("vec_load")
+            .r("vec_y")
             .v(1)
-            .w("sub")
-            .w("greater");
+            .r("sub")
+            .r("greater");
     });
 
     // Frame count
     script.function("init_frame_count", [], |s| {
-        s.v(1).w("frame_count").w("store");
+        s.v(1).r("frame_count").r("store");
     });
     script.function("count_frame", [], |s| {
         s
@@ -187,279 +187,279 @@ fn snake(script: &mut Script) {
             .c("prepare the number to compare to for later use.")
             .v(121)
             .c("Grab the current frame count.")
-            .w("frame_count")
-            .w("load")
+            .r("frame_count")
+            .r("load")
             .c("Increment the frame count.")
             .v(1)
-            .w("add")
+            .r("add")
             .c("Place a copy of the new frame count back where it came from.")
-            .w("copy")
-            .w("frame_count")
-            .w("store")
+            .r("copy")
+            .r("frame_count")
+            .r("store")
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
             .c("not, we're done.")
-            .w("sub")
-            .w("return_if_non_zero")
+            .r("sub")
+            .r("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
-            .w("init_frame_count");
+            .r("init_frame_count");
     });
 
     // Game state
     script.function("init", [], |s| {
-        s.w("init_should_game_run")
-            .w("snake_init")
-            .w("init_velocity")
-            .w("init_next_position")
-            .w("food_init");
+        s.r("init_should_game_run")
+            .r("snake_init")
+            .r("init_velocity")
+            .r("init_next_position")
+            .r("food_init");
     });
     script.function("update", [], |s| {
         s.c("The update logic does not run every frame.")
-            .w("frame_count")
-            .w("load")
+            .r("frame_count")
+            .r("load")
             .v(5)
-            .w("remainder")
-            .w("return_if_non_zero")
+            .r("remainder")
+            .r("return_if_non_zero")
             .c("Looks like it's time to run updates!")
-            .w("should_game_run")
-            .w("load")
-            .w("return_if_zero")
-            .w("handle_input")
-            .w("drop")
-            .w("update_positions")
-            .w("food_eat");
+            .r("should_game_run")
+            .r("load")
+            .r("return_if_zero")
+            .r("handle_input")
+            .r("drop")
+            .r("update_positions")
+            .r("food_eat");
     });
 
     // Game state - should game run
     script.function("init_should_game_run", [], |s| {
-        s.v(1).w("should_game_run").w("store");
+        s.v(1).r("should_game_run").r("store");
     });
 
     // Game state - velocity
     script.function("init_velocity", [], |s| {
-        s.v(1).v(0).w("velocity").w("vec_store");
+        s.v(1).v(0).r("velocity").r("vec_store");
     });
 
     // Game state - next position
     script.function("init_next_position", [], |s| {
-        s.w("positions")
+        s.r("positions")
             .v(0)
-            .w("vec_buf_get")
-            .w("next_position")
-            .w("vec_store");
+            .r("vec_buf_get")
+            .r("next_position")
+            .r("vec_store");
     });
     script.function("update_next_position", [], |s| {
-        s.w("snake_head")
-            .w("vec_x")
-            .w("velocity")
-            .w("vec_load")
-            .w("vec_x")
-            .w("add")
-            .w("snake_head")
-            .w("vec_y")
-            .w("velocity")
-            .w("vec_load")
-            .w("vec_y")
-            .w("add")
-            .w("next_position")
-            .w("vec_store")
-            .w("next_position")
-            .w("vec_load")
-            .w("is_out_of_bounds")
-            .w("return_if_zero")
-            .w("next_position")
-            .w("vec_load")
+        s.r("snake_head")
+            .r("vec_x")
+            .r("velocity")
+            .r("vec_load")
+            .r("vec_x")
+            .r("add")
+            .r("snake_head")
+            .r("vec_y")
+            .r("velocity")
+            .r("vec_load")
+            .r("vec_y")
+            .r("add")
+            .r("next_position")
+            .r("vec_store")
+            .r("next_position")
+            .r("vec_load")
+            .r("is_out_of_bounds")
+            .r("return_if_zero")
+            .r("next_position")
+            .r("vec_load")
             .bind(["next_x", "next_y"])
-            .w("tile_field_size")
-            .w("vec_load")
+            .r("tile_field_size")
+            .r("vec_load")
             .bind(["limit_x", "limit_y"])
-            .w("next_x")
-            .w("limit_x")
-            .w("handle_coordinate_smaller_than_zero")
+            .r("next_x")
+            .r("limit_x")
+            .r("handle_coordinate_smaller_than_zero")
             .bind(["next_x"])
-            .w("next_y")
-            .w("limit_y")
-            .w("handle_coordinate_smaller_than_zero")
+            .r("next_y")
+            .r("limit_y")
+            .r("handle_coordinate_smaller_than_zero")
             .bind(["next_y"])
-            .w("next_x")
-            .w("limit_x")
-            .w("handle_coordinate_larger_than_limit")
+            .r("next_x")
+            .r("limit_x")
+            .r("handle_coordinate_larger_than_limit")
             .bind(["next_x"])
-            .w("next_y")
-            .w("limit_y")
-            .w("handle_coordinate_larger_than_limit")
+            .r("next_y")
+            .r("limit_y")
+            .r("handle_coordinate_larger_than_limit")
             .bind(["next_y"])
-            .w("next_x")
-            .w("next_y")
-            .w("next_position")
-            .w("vec_store");
+            .r("next_x")
+            .r("next_y")
+            .r("next_position")
+            .r("vec_store");
     });
     script.function(
         "handle_coordinate_smaller_than_zero",
         ["coord", "limit"],
         |s| {
             s.v(0)
-                .w("coord")
-                .w("greater")
+                .r("coord")
+                .r("greater")
                 .bind(["coord_smaller_than_zero"])
-                .w("coord")
-                .w("coord_smaller_than_zero")
-                .w("return_if_zero")
-                .w("limit")
-                .w("add");
+                .r("coord")
+                .r("coord_smaller_than_zero")
+                .r("return_if_zero")
+                .r("limit")
+                .r("add");
         },
     );
     script.function(
         "handle_coordinate_larger_than_limit",
         ["coord", "limit"],
         |s| {
-            s.w("limit")
-                .w("coord")
-                .w("greater")
+            s.r("limit")
+                .r("coord")
+                .r("greater")
                 .bind(["limit_greater_than_coord"])
-                .w("coord")
-                .w("limit_greater_than_coord")
-                .w("return_if_non_zero")
-                .w("limit")
-                .w("sub");
+                .r("coord")
+                .r("limit_greater_than_coord")
+                .r("return_if_non_zero")
+                .r("limit")
+                .r("sub");
         },
     );
 
     // Game state - food
     script.function("food_init", [], |s| {
-        s.w("negatable_random")
-            .w("abs")
-            .w("tile_field_size")
-            .w("vec_load")
-            .w("vec_x")
-            .w("remainder")
-            .w("negatable_random")
-            .w("abs")
-            .w("tile_field_size")
-            .w("vec_load")
-            .w("vec_y")
-            .w("remainder")
-            .w("food_position")
-            .w("vec_store");
+        s.r("negatable_random")
+            .r("abs")
+            .r("tile_field_size")
+            .r("vec_load")
+            .r("vec_x")
+            .r("remainder")
+            .r("negatable_random")
+            .r("abs")
+            .r("tile_field_size")
+            .r("vec_load")
+            .r("vec_y")
+            .r("remainder")
+            .r("food_position")
+            .r("vec_store");
     });
     script.function("food_eat", [], |s| {
-        s.w("_food_collides_with_snake")
-            .w("return_if_zero")
+        s.r("_food_collides_with_snake")
+            .r("return_if_zero")
             .c("The snake's head and the food are at the same position.")
-            .w("food_init")
-            .w("grow_snake");
+            .r("food_init")
+            .r("grow_snake");
     });
     script.function("_food_collides_with_snake", [], |s| {
-        s.w("snake_head")
-            .w("food_position")
-            .w("vec_load")
-            .w("vec_eq")
+        s.r("snake_head")
+            .r("food_position")
+            .r("vec_load")
+            .r("vec_eq")
             .bind(["head_collides"])
-            .w("food_position")
-            .w("vec_load")
-            .w("check_body_collision")
+            .r("food_position")
+            .r("vec_load")
+            .r("check_body_collision")
             .bind(["body_collides"])
-            .w("head_collides")
-            .w("body_collides")
-            .w("add")
+            .r("head_collides")
+            .r("body_collides")
+            .r("add")
             .v(0)
-            .w("greater");
+            .r("greater");
     });
 
     // Game state - snake
     script.function("snake_init", [], |s| {
         s.v(3)
-            .w("snake_length")
-            .w("store")
-            .w("positions")
-            .w("vec_buf_init")
-            .w("positions")
+            .r("snake_length")
+            .r("store")
+            .r("positions")
+            .r("vec_buf_init")
+            .r("positions")
             .v(15)
             .v(15)
-            .w("vec_buf_push");
+            .r("vec_buf_push");
     });
     script.function("snake_head", [], |s| {
-        s.w("positions").w("vec_buf_last");
+        s.r("positions").r("vec_buf_last");
     });
     script.function("update_positions", [], |s| {
-        s.w("update_next_position")
-            .w("snake_head")
-            .w("check_body_collision")
-            .w("return_if_non_zero")
-            .w("positions")
-            .w("next_position")
-            .w("vec_load")
-            .w("vec_buf_push")
-            .w("pop_positions");
+        s.r("update_next_position")
+            .r("snake_head")
+            .r("check_body_collision")
+            .r("return_if_non_zero")
+            .r("positions")
+            .r("next_position")
+            .r("vec_load")
+            .r("vec_buf_push")
+            .r("pop_positions");
     });
     script.function("pop_positions", [], |s| {
-        s.w("positions")
-            .w("vec_buf_len")
-            .w("snake_length")
-            .w("load")
-            .w("greater")
-            .w("return_if_zero")
-            .w("positions")
-            .w("vec_buf_pop")
-            .w("pop_positions");
+        s.r("positions")
+            .r("vec_buf_len")
+            .r("snake_length")
+            .r("load")
+            .r("greater")
+            .r("return_if_zero")
+            .r("positions")
+            .r("vec_buf_pop")
+            .r("pop_positions");
     });
     script.function("grow_snake", [], |s| {
-        s.w("snake_length")
-            .w("load")
+        s.r("snake_length")
+            .r("load")
             .v(1)
-            .w("add")
+            .r("add")
             .bind(["snake_length_plus_growth"])
-            .w("snake_length_plus_growth")
-            .w("positions")
-            .w("vec_buf_capacity")
-            .w("greater")
-            .w("return_if_non_zero")
-            .w("snake_length_plus_growth")
-            .w("snake_length")
-            .w("store");
+            .r("snake_length_plus_growth")
+            .r("positions")
+            .r("vec_buf_capacity")
+            .r("greater")
+            .r("return_if_non_zero")
+            .r("snake_length_plus_growth")
+            .r("snake_length")
+            .r("store");
     });
     script.function("check_body_collision", ["x", "y"], |s| {
-        s.w("x").w("y").v(0).w("check_body_collision_inner");
+        s.r("x").r("y").v(0).r("check_body_collision_inner");
     });
     script.function("check_body_collision_inner", ["x", "y", "index"], |s| {
-        s.w("positions")
-            .w("vec_buf_len")
+        s.r("positions")
+            .r("vec_buf_len")
             .v(1)
-            .w("sub")
-            .w("index")
-            .w("greater")
-            .w("copy")
-            .w("return_if_zero")
-            .w("drop")
-            .w("positions")
-            .w("index")
-            .w("vec_buf_get")
-            .w("vec_x")
-            .w("x")
-            .w("eq")
+            .r("sub")
+            .r("index")
+            .r("greater")
+            .r("copy")
+            .r("return_if_zero")
+            .r("drop")
+            .r("positions")
+            .r("index")
+            .r("vec_buf_get")
+            .r("vec_x")
+            .r("x")
+            .r("eq")
             .bind(["x_matches"])
-            .w("positions")
-            .w("index")
-            .w("vec_buf_get")
-            .w("vec_y")
-            .w("y")
-            .w("eq")
+            .r("positions")
+            .r("index")
+            .r("vec_buf_get")
+            .r("vec_y")
+            .r("y")
+            .r("eq")
             .bind(["y_matches"])
-            .w("x_matches")
-            .w("y_matches")
-            .w("add")
+            .r("x_matches")
+            .r("y_matches")
+            .r("add")
             .v(2)
-            .w("eq")
-            .w("copy")
-            .w("return_if_non_zero")
-            .w("drop")
-            .w("x")
-            .w("y")
-            .w("index")
+            .r("eq")
+            .r("copy")
+            .r("return_if_non_zero")
+            .r("drop")
+            .r("x")
+            .r("y")
+            .r("index")
             .v(1)
-            .w("add")
-            .w("check_body_collision_inner");
+            .r("add")
+            .r("check_body_collision_inner");
     });
 
     // Input
@@ -476,46 +476,46 @@ fn snake(script: &mut Script) {
             .c("- 2: left")
             .c("- 3: down")
             .c("- 4: right")
-            .w("read_input")
+            .r("read_input")
             .c("Return, if no input is available.")
-            .w("copy")
-            .w("return_if_zero")
+            .r("copy")
+            .r("return_if_zero")
             .c("Assume result was `1`, and apply an `up` event.")
             .v(0)
             .v(-1)
-            .w("velocity")
-            .w("vec_store")
+            .r("velocity")
+            .r("vec_store")
             .c("Now check if it actually was an `up` event, and if so, return.")
             .v(1)
-            .w("sub")
-            .w("copy")
-            .w("return_if_zero")
+            .r("sub")
+            .r("copy")
+            .r("return_if_zero")
             .c("Seems it wasn't `up`. Try again for `left`.")
             .v(-1)
             .v(0)
-            .w("velocity")
-            .w("vec_store")
+            .r("velocity")
+            .r("vec_store")
             .v(1)
-            .w("sub")
-            .w("copy")
-            .w("return_if_zero")
+            .r("sub")
+            .r("copy")
+            .r("return_if_zero")
             .c("It wasn't `left` either. Re-try for `down`.")
             .v(0)
             .v(1)
-            .w("velocity")
-            .w("vec_store")
+            .r("velocity")
+            .r("vec_store")
             .v(1)
-            .w("sub")
-            .w("copy")
-            .w("return_if_zero")
+            .r("sub")
+            .r("copy")
+            .r("return_if_zero")
             .c("Guessed wrong again. One more try for `right`.")
             .v(1)
             .v(0)
-            .w("velocity")
-            .w("vec_store")
+            .r("velocity")
+            .r("vec_store")
             .v(1)
-            .w("sub")
-            .w("copy")
+            .r("sub")
+            .r("copy")
             .c("If it wasn't `right` either, this would be a good place to")
             .c("trigger a panic. But the language doesn't support that yet.");
     });
@@ -548,46 +548,46 @@ fn snake(script: &mut Script) {
 
     // Utilities - Vector
     script.function("vec_x", ["x", "_"], |s| {
-        s.w("x");
+        s.r("x");
     });
     script.function("vec_y", ["_", "y"], |s| {
-        s.w("y");
+        s.r("y");
     });
     script.function("vec_load", ["address"], |s| {
-        s.w("address")
-            .w("load")
-            .w("address")
+        s.r("address")
+            .r("load")
+            .r("address")
             .v(1)
-            .w("add")
-            .w("load");
+            .r("add")
+            .r("load");
     });
     script.function("vec_store", ["x", "y", "address"], |s| {
-        s.w("x")
-            .w("address")
-            .w("store")
-            .w("y")
-            .w("address")
+        s.r("x")
+            .r("address")
+            .r("store")
+            .r("y")
+            .r("address")
             .v(1)
-            .w("add")
-            .w("store");
+            .r("add")
+            .r("store");
     });
     script.function("vec_copy", ["vx", "vy"], |s| {
-        s.w("vx").w("vy").w("vx").w("vy");
+        s.r("vx").r("vy").r("vx").r("vy");
     });
     script.function("vec_drop", ["_", "_"], |_| {});
     script.function("vec_eq", ["ax", "ay", "bx", "by"], |s| {
-        s.w("ax")
-            .w("bx")
-            .w("eq")
-            .w("copy")
-            .w("return_if_zero")
-            .w("drop")
-            .w("ay")
-            .w("by")
-            .w("eq")
-            .w("copy")
-            .w("return_if_zero")
-            .w("drop")
+        s.r("ax")
+            .r("bx")
+            .r("eq")
+            .r("copy")
+            .r("return_if_zero")
+            .r("drop")
+            .r("ay")
+            .r("by")
+            .r("eq")
+            .r("copy")
+            .r("return_if_zero")
+            .r("drop")
             .c("Vectors are equal!")
             .v(1);
     });
@@ -595,96 +595,96 @@ fn snake(script: &mut Script) {
     // Utilities - Vector Buffer
     script.function("vec_buf_init", ["vec_buf"], |s| {
         s.v(0)
-            .w("vec_buf")
-            .w("_vec_buf_first")
-            .w("store")
+            .r("vec_buf")
+            .r("_vec_buf_first")
+            .r("store")
             .v(0)
-            .w("vec_buf")
-            .w("_vec_buf_next")
-            .w("store")
+            .r("vec_buf")
+            .r("_vec_buf_next")
+            .r("store")
             .v(64)
-            .w("vec_buf")
-            .w("_vec_buf_capacity")
-            .w("store");
+            .r("vec_buf")
+            .r("_vec_buf_capacity")
+            .r("store");
     });
     script.function("vec_buf_get", ["vec_buf", "index"], |s| {
-        s.w("index")
+        s.r("index")
             .v(2)
-            .w("mul")
+            .r("mul")
             .bind(["offset"])
-            .w("vec_buf")
-            .w("_vec_buf_first")
-            .w("load")
+            .r("vec_buf")
+            .r("_vec_buf_first")
+            .r("load")
             .bind(["base"])
-            .w("vec_buf")
-            .w("base")
-            .w("offset")
-            .w("_vec_buf_address")
-            .w("vec_load");
+            .r("vec_buf")
+            .r("base")
+            .r("offset")
+            .r("_vec_buf_address")
+            .r("vec_load");
     });
     script.function("vec_buf_last", ["vec_buf"], |s| {
-        s.w("vec_buf")
-            .w("vec_buf_len")
+        s.r("vec_buf")
+            .r("vec_buf_len")
             .v(1)
-            .w("sub")
+            .r("sub")
             .bind(["index"])
-            .w("vec_buf")
-            .w("index")
-            .w("vec_buf_get");
+            .r("vec_buf")
+            .r("index")
+            .r("vec_buf_get");
     });
     script.function("vec_buf_push", ["vec_buf", "x", "y"], |s| {
-        s.w("vec_buf")
-            .w("_vec_buf_next")
+        s.r("vec_buf")
+            .r("_vec_buf_next")
             .bind(["next_addr"])
-            .w("vec_buf")
-            .w("next_addr")
-            .w("load")
+            .r("vec_buf")
+            .r("next_addr")
+            .r("load")
             .v(0)
-            .w("_vec_buf_address")
+            .r("_vec_buf_address")
             .bind(["address"])
-            .w("x")
-            .w("y")
-            .w("address")
-            .w("vec_store")
-            .w("next_addr")
-            .w("_vec_buf_inc_index");
+            .r("x")
+            .r("y")
+            .r("address")
+            .r("vec_store")
+            .r("next_addr")
+            .r("_vec_buf_inc_index");
     });
     script.function("vec_buf_pop", ["vec_buf"], |s| {
-        s.w("vec_buf").w("_vec_buf_first").w("_vec_buf_inc_index");
+        s.r("vec_buf").r("_vec_buf_first").r("_vec_buf_inc_index");
     });
     script.function("vec_buf_len", ["vec_buf"], |s| {
-        s.w("vec_buf")
-            .w("_vec_buf_first")
-            .w("load")
+        s.r("vec_buf")
+            .r("_vec_buf_first")
+            .r("load")
             .bind(["first"])
-            .w("vec_buf")
-            .w("_vec_buf_next")
-            .w("load")
+            .r("vec_buf")
+            .r("_vec_buf_next")
+            .r("load")
             .bind(["next"])
-            .w("next")
-            .w("first")
-            .w("sub")
+            .r("next")
+            .r("first")
+            .r("sub")
             .v(2)
-            .w("div")
+            .r("div")
             .bind(["difference"])
-            .w("difference")
-            .w("difference")
-            .w("return_if_zero")
+            .r("difference")
+            .r("difference")
+            .r("return_if_zero")
             .v(0)
-            .w("difference")
-            .w("greater")
-            .w("return_if_zero")
-            .w("vec_buf")
-            .w("_vec_buf_capacity")
-            .w("load")
-            .w("add");
+            .r("difference")
+            .r("greater")
+            .r("return_if_zero")
+            .r("vec_buf")
+            .r("_vec_buf_capacity")
+            .r("load")
+            .r("add");
     });
     script.function("vec_buf_capacity", ["vec_buf"], |s| {
-        s.w("vec_buf")
-            .w("_vec_buf_capacity")
-            .w("load")
+        s.r("vec_buf")
+            .r("_vec_buf_capacity")
+            .r("load")
             .v(2)
-            .w("div");
+            .r("div");
     });
     script.function("_vec_buf_address", ["vec_buf", "base", "offset"], |s| {
         s.c("Compute the memory address of a location within the vector")
@@ -697,57 +697,57 @@ fn snake(script: &mut Script) {
             .c("  within the buffer.")
             .c("- `offset`, which is the offset of the desired address from")
             .c("  `base`.")
-            .w("base")
-            .w("offset")
-            .w("add_wrap_unsigned")
-            .w("vec_buf")
-            .w("_vec_buf_capacity")
-            .w("load")
-            .w("remainder")
-            .w("vec_buf")
-            .w("_vec_buf_buffer")
-            .w("add_wrap_unsigned");
+            .r("base")
+            .r("offset")
+            .r("add_wrap_unsigned")
+            .r("vec_buf")
+            .r("_vec_buf_capacity")
+            .r("load")
+            .r("remainder")
+            .r("vec_buf")
+            .r("_vec_buf_buffer")
+            .r("add_wrap_unsigned");
     });
     script.function("_vec_buf_inc_index", ["index_addr"], |s| {
-        s.w("index_addr")
-            .w("load")
+        s.r("index_addr")
+            .r("load")
             .v(2)
-            .w("add_wrap_unsigned")
-            .w("index_addr")
-            .w("store");
+            .r("add_wrap_unsigned")
+            .r("index_addr")
+            .r("store");
     });
     script.function("_vec_buf_first", ["vec_buf"], |s| {
-        s.w("vec_buf").v(0).w("add");
+        s.r("vec_buf").v(0).r("add");
     });
     script.function("_vec_buf_next", ["vec_buf"], |s| {
-        s.w("vec_buf").v(1).w("add");
+        s.r("vec_buf").v(1).r("add");
     });
     script.function("_vec_buf_capacity", ["vec_buf"], |s| {
-        s.w("vec_buf").v(2).w("add");
+        s.r("vec_buf").v(2).r("add");
     });
     script.function("_vec_buf_buffer", ["vec_buf"], |s| {
-        s.w("vec_buf").v(3).w("add");
+        s.r("vec_buf").v(3).r("add");
     });
 
     // Utilities - Miscellaneous
     script.function("negatable_random", [], |s| {
         s.c("Negating the minimum number would result in an integer overflow.")
-            .w("read_random")
-            .w("copy")
-            .w("word_min")
-            .w("eq")
-            .w("return_if_zero")
-            .w("drop")
+            .r("read_random")
+            .r("copy")
+            .r("word_min")
+            .r("eq")
+            .r("return_if_zero")
+            .r("drop")
             .c("Looks like we ran into the minimum. Try again!")
-            .w("negatable_random");
+            .r("negatable_random");
     });
     script.function("abs", ["v"], |s| {
-        s.w("v")
-            .w("v")
+        s.r("v")
+            .r("v")
             .v(-1)
-            .w("greater")
-            .w("return_if_non_zero")
-            .w("neg");
+            .r("greater")
+            .r("return_if_non_zero")
+            .r("neg");
     });
 
     // Utilities - Words

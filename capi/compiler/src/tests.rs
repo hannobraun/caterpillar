@@ -23,9 +23,9 @@ fn closure_in_function() {
         s.v(0)
             .bind(["channel"])
             .block(|s| {
-                s.w("channel").w("send");
+                s.r("channel").r("send");
             })
-            .w("eval");
+            .r("eval");
     });
 
     let (_, bytecode, _) = compile::<TestHost>(script);

@@ -238,7 +238,7 @@ mod tests {
     fn arg_eval() {
         let mut script = Script::default();
         script.function("f", ["a"], |s| {
-            s.w("a");
+            s.r("a");
         });
 
         let fragments = script_to_fragments(script);
@@ -256,7 +256,7 @@ mod tests {
     fn binding_eval() {
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.v(0).bind(["b"]).w("b");
+            s.v(0).bind(["b"]).r("b");
         });
 
         let fragments = script_to_fragments(script);
@@ -274,7 +274,7 @@ mod tests {
     fn builtin_call() {
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.w("brk");
+            s.r("brk");
         });
 
         let fragments = script_to_fragments(script);
@@ -292,7 +292,7 @@ mod tests {
     fn host_call() {
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.w("host");
+            s.r("host");
         });
 
         let fragments = script_to_fragments(script);
@@ -310,7 +310,7 @@ mod tests {
     fn function_call() {
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.w("g");
+            s.r("g");
         });
         script.function("g", [], |_| {});
 
