@@ -12,7 +12,7 @@ pub enum Expression {
         text: String,
     },
     Value(Value),
-    Word {
+    Reference {
         name: String,
         kind: Option<WordKind>,
     },

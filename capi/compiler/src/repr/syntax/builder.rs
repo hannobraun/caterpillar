@@ -37,7 +37,7 @@ impl<'r> SyntaxBuilder<'r> {
     }
 
     pub fn w(&mut self, name: &str) -> &mut Self {
-        self.push_expression(Expression::Word {
+        self.push_expression(Expression::Reference {
             name: name.into(),
             kind: None,
         })
