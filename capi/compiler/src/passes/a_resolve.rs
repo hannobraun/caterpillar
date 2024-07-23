@@ -45,7 +45,7 @@ mod tests {
     }
 
     #[test]
-    fn resolve_builtin_functions() {
+    fn resolve_builtin_function() {
         // Builtin functions are statically known, so any reference to one can
         // be determined without doubt.
 
