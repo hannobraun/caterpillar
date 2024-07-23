@@ -41,7 +41,7 @@ pub fn script_to_fragments<H: Host>(script: Script) -> Fragments {
 
         assert!(
             environment.is_empty(),
-            "Functions have no environment that they could access. \n\
+            "Functions have no environment that they could access.\n\
             - Function: {}\n\
             - Environment: {environment:#?}",
             function.name,
