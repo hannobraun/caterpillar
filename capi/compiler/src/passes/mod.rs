@@ -1,7 +1,7 @@
+mod a_script_to_fragments;
 mod fragments_to_bytecode;
-mod script_to_fragments;
 
 pub use {
+    a_script_to_fragments::script_to_fragments,
     fragments_to_bytecode::fragments_to_bytecode,
-    script_to_fragments::script_to_fragments,
 };
