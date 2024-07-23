@@ -63,7 +63,7 @@ pub fn script_to_fragments<H: Host>(script: Script) -> Fragments {
 
 #[cfg(test)]
 mod tests {
-    use capi_process::{NoHost, Value};
+    use capi_process::{Effect, Host, HostFunction, Stack, Value};
 
     use crate::repr::{
         fragments::{
@@ -123,6 +123,24 @@ mod tests {
             body,
             [FragmentExpression::ResolvedBuiltinFunction {
                 name: String::from("brk")
+            }]
+        );
+    }
+
+    #[test]
+    fn host_call() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.w("host");
+        });
+
+        let fragments = script_to_fragments(script);
+
+        let body = body(fragments);
+        assert_eq!(
+            body,
+            [FragmentExpression::ResolvedHostFunction {
+                name: String::from("host")
             }]
         );
     }
@@ -237,6 +255,23 @@ mod tests {
     }
 
     fn script_to_fragments(script: Script) -> Fragments {
-        super::script_to_fragments::<NoHost>(script)
+        super::script_to_fragments::<TestHost>(script)
+    }
+
+    struct TestHost {}
+
+    impl Host for TestHost {
+        type Effect = ();
+
+        fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
+            match name {
+                "host" => Some(host),
+                _ => None,
+            }
+        }
+    }
+
+    fn host(_: &mut Stack) -> Result<(), Effect<()>> {
+        Ok(())
     }
 }
