@@ -197,6 +197,9 @@ pub fn compile_expression<H: Host>(
                 Some(ReferenceKind::HostFunction) => {
                     FragmentExpression::ResolvedHostFunction { name }
                 }
+                Some(ReferenceKind::UserFunction) => {
+                    FragmentExpression::ResolvedUserFunction { name }
+                }
                 _ => {
                     // The way this is written, the different types of
                     // definitions shadow each other in a defined order.
@@ -204,10 +207,7 @@ pub fn compile_expression<H: Host>(
                     // This isn't desirable. There should at least be a
                     // warning, if such shadowing isn't forbidden outright.
                     // It'll do for now though.
-                    if functions.contains(&name) {
-                        FragmentExpression::ResolvedUserFunction { name }
-                    } else if let Some(resolved) = scopes.resolve_binding(&name)
-                    {
+                    if let Some(resolved) = scopes.resolve_binding(&name) {
                         if let BindingResolved::InEnvironment = resolved {
                             environment.insert(name.clone());
                         }
@@ -272,25 +272,6 @@ mod tests {
             FragmentExpression::ResolvedBinding {
                 name: String::from("b")
             }
-        );
-    }
-
-    #[test]
-    fn function_call() {
-        let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.r("g");
-        });
-        script.function("g", [], |_| {});
-
-        let fragments = script_to_fragments(script);
-
-        let body = body(fragments);
-        assert_eq!(
-            body,
-            [FragmentExpression::ResolvedUserFunction {
-                name: String::from("g")
-            }]
         );
     }
 
