@@ -194,6 +194,9 @@ pub fn compile_expression<H: Host>(
                 Some(ReferenceKind::BuiltinFunction) => {
                     FragmentExpression::ResolvedBuiltinFunction { name }
                 }
+                Some(ReferenceKind::HostFunction) => {
+                    FragmentExpression::ResolvedHostFunction { name }
+                }
                 _ => {
                     // The way this is written, the different types of
                     // definitions shadow each other in a defined order.
@@ -209,8 +212,6 @@ pub fn compile_expression<H: Host>(
                             environment.insert(name.clone());
                         }
                         FragmentExpression::ResolvedBinding { name }
-                    } else if H::function(&name).is_some() {
-                        FragmentExpression::ResolvedHostFunction { name }
                     } else {
                         FragmentExpression::UnresolvedWord { name }
                     }
@@ -271,24 +272,6 @@ mod tests {
             FragmentExpression::ResolvedBinding {
                 name: String::from("b")
             }
-        );
-    }
-
-    #[test]
-    fn host_call() {
-        let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.r("host");
-        });
-
-        let fragments = script_to_fragments(script);
-
-        let body = body(fragments);
-        assert_eq!(
-            body,
-            [FragmentExpression::ResolvedHostFunction {
-                name: String::from("host")
-            }]
         );
     }
 
