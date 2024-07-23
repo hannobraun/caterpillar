@@ -16,7 +16,7 @@ impl<'r> SyntaxBuilder<'r> {
         let mut expressions = Vec::new();
         f(&mut SyntaxBuilder::new(&mut expressions));
 
-        self.push_expression(Expression::Block { expressions })
+        self.push_expression(Expression::Block { body: expressions })
     }
 
     pub fn bind(

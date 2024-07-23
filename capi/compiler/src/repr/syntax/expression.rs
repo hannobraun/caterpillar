@@ -6,7 +6,7 @@ pub enum Expression {
         names: Vec<String>,
     },
     Block {
-        expressions: Vec<Expression>,
+        body: Vec<Expression>,
     },
     Comment {
         text: String,
