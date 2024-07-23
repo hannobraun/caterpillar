@@ -10,7 +10,7 @@ use crate::{
     source_map::SourceMap,
 };
 
-pub fn fragments_to_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
