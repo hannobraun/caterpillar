@@ -32,15 +32,15 @@ impl<'r> SyntaxBuilder<'r> {
         self.push_expression(Expression::Comment { text: text.into() })
     }
 
-    pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
-        self.push_expression(Expression::Value(value.into()))
-    }
-
     pub fn r(&mut self, name: &str) -> &mut Self {
         self.push_expression(Expression::Reference {
             name: name.into(),
             kind: None,
         })
+    }
+
+    pub fn v(&mut self, value: impl Into<Value>) -> &mut Self {
+        self.push_expression(Expression::Value(value.into()))
     }
 
     fn push_expression(&mut self, expression: Expression) -> &mut Self {
