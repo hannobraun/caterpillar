@@ -10,15 +10,19 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
 
 fn resolve_block<H: Host>(body: &mut [Expression]) {
     for expression in body {
-        if let Expression::Reference { name, kind } = expression {
-            if builtin(name).is_some()
-                || name == "return_if_non_zero"
-                || name == "return_if_zero"
-            {
-                *kind = Some(ReferenceKind::BuiltinFunction);
-            } else if H::function(name).is_some() {
-                *kind = Some(ReferenceKind::HostFunction);
+        match expression {
+            Expression::Block { body } => resolve_block::<H>(body),
+            Expression::Reference { name, kind } => {
+                if builtin(name).is_some()
+                    || name == "return_if_non_zero"
+                    || name == "return_if_zero"
+                {
+                    *kind = Some(ReferenceKind::BuiltinFunction);
+                } else if H::function(name).is_some() {
+                    *kind = Some(ReferenceKind::HostFunction);
+                }
             }
+            _ => {}
         }
     }
 }
