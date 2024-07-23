@@ -82,11 +82,11 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
                 scopes.stack.last_mut().unwrap().inner.insert(name);
             }
         }
-        if let Expression::Block { body: expressions } = expression {
+        if let Expression::Block { body } = expression {
             scopes.stack.push(Bindings {
                 inner: BTreeSet::new(),
             });
-            process_block(expressions, scopes);
+            process_block(body, scopes);
         }
     }
 }
