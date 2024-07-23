@@ -13,13 +13,13 @@ pub enum Expression {
     },
     Reference {
         name: String,
-        kind: Option<WordKind>,
+        kind: Option<ReferenceKind>,
     },
     Value(Value),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum WordKind {
+pub enum ReferenceKind {
     Binding,
     BuiltinFunction,
     HostFunction,
