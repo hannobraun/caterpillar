@@ -113,7 +113,7 @@ mod tests {
     fn builtin_call() {
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.w("builtin");
+            s.w("brk");
         });
 
         let fragments = script_to_fragments(script);
@@ -122,7 +122,7 @@ mod tests {
         assert_eq!(
             body,
             [FragmentExpression::ResolvedBuiltinFunction {
-                name: String::from("builtin")
+                name: String::from("brk")
             }]
         );
     }
