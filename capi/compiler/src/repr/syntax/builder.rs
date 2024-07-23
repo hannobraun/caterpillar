@@ -13,10 +13,10 @@ impl<'r> SyntaxBuilder<'r> {
     }
 
     pub fn block(&mut self, f: impl FnOnce(&mut SyntaxBuilder)) -> &mut Self {
-        let mut expressions = Vec::new();
-        f(&mut SyntaxBuilder::new(&mut expressions));
+        let mut body = Vec::new();
+        f(&mut SyntaxBuilder::new(&mut body));
 
-        self.push_expression(Expression::Block { body: expressions })
+        self.push_expression(Expression::Block { body })
     }
 
     pub fn bind(
