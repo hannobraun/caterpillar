@@ -178,9 +178,9 @@ pub fn compile_expression<H: Host>(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Block { body: expressions } => {
+        Expression::Block { body } => {
             let (start, environment) = compile_block::<H>(
-                expressions,
+                body,
                 FragmentParent::Fragment { id: next },
                 functions,
                 scopes,
