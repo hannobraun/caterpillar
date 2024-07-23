@@ -189,7 +189,6 @@ pub fn compile_expression<H: Host>(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Value(value) => FragmentExpression::Value(value),
         Expression::Reference { name, .. } => {
             // The way this is written, the different types of definitions
             // shadow each other in a defined order.
@@ -214,6 +213,7 @@ pub fn compile_expression<H: Host>(
                 FragmentExpression::UnresolvedWord { name }
             }
         }
+        Expression::Value(value) => FragmentExpression::Value(value),
     };
 
     Fragment {

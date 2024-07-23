@@ -11,11 +11,11 @@ pub enum Expression {
     Comment {
         text: String,
     },
-    Value(Value),
     Reference {
         name: String,
         kind: Option<WordKind>,
     },
+    Value(Value),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
