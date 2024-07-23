@@ -1,13 +1,13 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use capi_process::{builtin, Host};
+use capi_process::Host;
 
 use crate::repr::{
     fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
         FragmentPayload, Fragments, Function,
     },
-    syntax::{Expression, Script},
+    syntax::{Expression, ReferenceKind, Script},
 };
 
 pub fn generate_fragments<H: Host>(script: Script) -> Fragments {
@@ -189,28 +189,32 @@ pub fn compile_expression<H: Host>(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Reference { name, .. } => {
-            // The way this is written, the different types of definitions
-            // shadow each other in a defined order.
-            //
-            // This isn't desirable. There should at least be a warning, if such
-            // shadowing isn't forbidden outright. It'll do for now though.
-            if functions.contains(&name) {
-                FragmentExpression::ResolvedUserFunction { name }
-            } else if let Some(resolved) = scopes.resolve_binding(&name) {
-                if let BindingResolved::InEnvironment = resolved {
-                    environment.insert(name.clone());
+        Expression::Reference { name, kind } => {
+            match kind {
+                Some(ReferenceKind::BuiltinFunction) => {
+                    FragmentExpression::ResolvedBuiltinFunction { name }
                 }
-                FragmentExpression::ResolvedBinding { name }
-            } else if H::function(&name).is_some() {
-                FragmentExpression::ResolvedHostFunction { name }
-            } else if builtin(&name).is_some()
-                || name == "return_if_non_zero"
-                || name == "return_if_zero"
-            {
-                FragmentExpression::ResolvedBuiltinFunction { name }
-            } else {
-                FragmentExpression::UnresolvedWord { name }
+                _ => {
+                    // The way this is written, the different types of
+                    // definitions shadow each other in a defined order.
+                    //
+                    // This isn't desirable. There should at least be a
+                    // warning, if such shadowing isn't forbidden outright.
+                    // It'll do for now though.
+                    if functions.contains(&name) {
+                        FragmentExpression::ResolvedUserFunction { name }
+                    } else if let Some(resolved) = scopes.resolve_binding(&name)
+                    {
+                        if let BindingResolved::InEnvironment = resolved {
+                            environment.insert(name.clone());
+                        }
+                        FragmentExpression::ResolvedBinding { name }
+                    } else if H::function(&name).is_some() {
+                        FragmentExpression::ResolvedHostFunction { name }
+                    } else {
+                        FragmentExpression::UnresolvedWord { name }
+                    }
+                }
             }
         }
         Expression::Value(value) => FragmentExpression::Value(value),
@@ -267,24 +271,6 @@ mod tests {
             FragmentExpression::ResolvedBinding {
                 name: String::from("b")
             }
-        );
-    }
-
-    #[test]
-    fn builtin_call() {
-        let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.r("brk");
-        });
-
-        let fragments = script_to_fragments(script);
-
-        let body = body(fragments);
-        assert_eq!(
-            body,
-            [FragmentExpression::ResolvedBuiltinFunction {
-                name: String::from("brk")
-            }]
         );
     }
 
