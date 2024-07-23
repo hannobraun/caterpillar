@@ -4,16 +4,20 @@ use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
     for function in &mut script.functions {
-        for expression in &mut function.body {
-            if let Expression::Reference { name, kind } = expression {
-                if builtin(name).is_some()
-                    || name == "return_if_non_zero"
-                    || name == "return_if_zero"
-                {
-                    *kind = Some(ReferenceKind::BuiltinFunction);
-                } else if H::function(name).is_some() {
-                    *kind = Some(ReferenceKind::HostFunction);
-                }
+        resolve_block::<H>(&mut function.body);
+    }
+}
+
+fn resolve_block<H: Host>(body: &mut [Expression]) {
+    for expression in body {
+        if let Expression::Reference { name, kind } = expression {
+            if builtin(name).is_some()
+                || name == "return_if_non_zero"
+                || name == "return_if_zero"
+            {
+                *kind = Some(ReferenceKind::BuiltinFunction);
+            } else if H::function(name).is_some() {
+                *kind = Some(ReferenceKind::HostFunction);
             }
         }
     }
