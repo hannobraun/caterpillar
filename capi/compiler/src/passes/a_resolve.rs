@@ -21,8 +21,6 @@ pub fn resolve_references(script: &mut Script) {
 mod tests {
     use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
-    use super::resolve_references;
-
     #[test]
     fn resolve_binding() {
         // Bindings can not be resolved yet by this pass, as it lacks the
@@ -63,5 +61,9 @@ mod tests {
                 kind: Some(ReferenceKind::BuiltinFunction),
             })
         );
+    }
+
+    fn resolve_references(script: &mut Script) {
+        super::resolve_references(script)
     }
 }
