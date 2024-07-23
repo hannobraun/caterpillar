@@ -1,17 +1,30 @@
+use std::collections::BTreeSet;
+
 use capi_process::{builtin, Host};
 
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
+    let user_functions = script
+        .functions
+        .iter()
+        .map(|function| function.name.clone())
+        .collect();
+
     for function in &mut script.functions {
-        resolve_block::<H>(&mut function.body);
+        resolve_block::<H>(&mut function.body, &user_functions);
     }
 }
 
-fn resolve_block<H: Host>(body: &mut [Expression]) {
+fn resolve_block<H: Host>(
+    body: &mut [Expression],
+    user_functions: &BTreeSet<String>,
+) {
     for expression in body {
         match expression {
-            Expression::Block { body } => resolve_block::<H>(body),
+            Expression::Block { body } => {
+                resolve_block::<H>(body, user_functions)
+            }
             Expression::Reference { name, kind } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
@@ -25,6 +38,8 @@ fn resolve_block<H: Host>(body: &mut [Expression]) {
                     *kind = Some(ReferenceKind::BuiltinFunction);
                 } else if H::function(name).is_some() {
                     *kind = Some(ReferenceKind::HostFunction);
+                } else if user_functions.contains(name) {
+                    *kind = Some(ReferenceKind::UserFunction);
                 }
             }
             _ => {}
@@ -98,6 +113,28 @@ mod tests {
             Some(&Expression::Reference {
                 name: String::from("host_fn"),
                 kind: Some(ReferenceKind::HostFunction),
+            })
+        );
+    }
+
+    #[test]
+    fn resolve_user_function() {
+        // User-defined functions can be resolved by checking for the existence
+        // of a matching function in the code.
+
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.r("user_fn");
+        });
+        script.function("user_fn", [], |_| {});
+
+        resolve_references(&mut script);
+
+        assert_eq!(
+            script.functions.remove(0).body.last(),
+            Some(&Expression::Reference {
+                name: String::from("user_fn"),
+                kind: Some(ReferenceKind::UserFunction),
             })
         );
     }
