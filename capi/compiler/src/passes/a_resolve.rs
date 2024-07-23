@@ -19,7 +19,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
 
 #[cfg(test)]
 mod tests {
-    use capi_process::NoHost;
+    use capi_process::{Effect, Host, HostFunction, Stack};
 
     use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
@@ -66,6 +66,23 @@ mod tests {
     }
 
     fn resolve_references(script: &mut Script) {
-        super::resolve_references::<NoHost>(script)
+        super::resolve_references::<TestHost>(script)
+    }
+
+    struct TestHost {}
+
+    impl Host for TestHost {
+        type Effect = ();
+
+        fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
+            match name {
+                "host_fn" => Some(host_fn),
+                _ => None,
+            }
+        }
+    }
+
+    fn host_fn(_: &mut Stack) -> Result<(), Effect<()>> {
+        Ok(())
     }
 }
