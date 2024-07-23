@@ -11,6 +11,8 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
                     || name == "return_if_zero"
                 {
                     *kind = Some(ReferenceKind::BuiltinFunction);
+                } else if H::function(name).is_some() {
+                    *kind = Some(ReferenceKind::HostFunction);
                 }
             }
         }
@@ -61,6 +63,28 @@ mod tests {
             Some(&Expression::Reference {
                 name: String::from("brk"),
                 kind: Some(ReferenceKind::BuiltinFunction),
+            })
+        );
+    }
+
+    #[test]
+    fn resolve_host_function() {
+        // The host can be queried to determine the existence of host functions.
+        // We set up a special test host below, that provides the function that
+        // is referenced here.
+
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.r("host_fn");
+        });
+
+        resolve_references(&mut script);
+
+        assert_eq!(
+            script.functions.remove(0).body.last(),
+            Some(&Expression::Reference {
+                name: String::from("host_fn"),
+                kind: Some(ReferenceKind::HostFunction),
             })
         );
     }
