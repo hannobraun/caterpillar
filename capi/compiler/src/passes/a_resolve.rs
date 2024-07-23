@@ -26,7 +26,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Reference {
                 name: String::from("value"),
-                kind: None
+                kind: None,
             })
         );
     }
