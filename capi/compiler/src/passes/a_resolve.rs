@@ -38,7 +38,9 @@ fn resolve_block<H: Host>(
                 //
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
-                if builtin(name).is_some()
+                if bindings.contains(name) {
+                    *kind = Some(ReferenceKind::Binding);
+                } else if builtin(name).is_some()
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
                 {
@@ -62,8 +64,7 @@ mod tests {
 
     #[test]
     fn resolve_binding() {
-        // Bindings can not be resolved yet by this pass, as it lacks the
-        // information to do so. This is currently done by the fragment pass.
+        // Bindings should be resolved from the same scope.
 
         let mut script = Script::default();
         script.function("f", [], |s| {
@@ -76,7 +77,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Reference {
                 name: String::from("value"),
-                kind: None,
+                kind: Some(ReferenceKind::Binding),
             })
         );
     }
