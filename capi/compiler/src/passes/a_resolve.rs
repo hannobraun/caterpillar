@@ -5,6 +5,7 @@ use capi_process::{builtin, Host};
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
+    let mut bindings = BTreeSet::new();
     let user_functions = script
         .functions
         .iter()
@@ -12,18 +13,24 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
-        resolve_block::<H>(&mut function.body, &user_functions);
+        resolve_block::<H>(&mut function.body, &mut bindings, &user_functions);
     }
 }
 
 fn resolve_block<H: Host>(
     body: &mut [Expression],
+    bindings: &mut BTreeSet<String>,
     user_functions: &BTreeSet<String>,
 ) {
     for expression in body {
         match expression {
+            Expression::Binding { names } => {
+                for name in names {
+                    bindings.insert(name.clone());
+                }
+            }
             Expression::Block { body } => {
-                resolve_block::<H>(body, user_functions)
+                resolve_block::<H>(body, bindings, user_functions)
             }
             Expression::Reference { name, kind } => {
                 // The way this is written, definitions can silently shadow each
