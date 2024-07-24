@@ -69,7 +69,7 @@ fn process_block(body: &[Expression], scopes: &mut Scopes) {
                 scopes.stack.last_mut().unwrap().inner.insert(name);
             }
         }
-        if let Expression::Block { body } = expression {
+        if let Expression::Block { body, .. } = expression {
             scopes.stack.push(Bindings {
                 inner: BTreeSet::new(),
             });
@@ -162,7 +162,7 @@ pub fn compile_expression(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Block { body } => {
+        Expression::Block { body, .. } => {
             let (start, environment) = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },

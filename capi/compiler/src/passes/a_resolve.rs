@@ -32,7 +32,7 @@ fn resolve_block<H: Host>(
                     }
                 }
             }
-            Expression::Block { body } => {
+            Expression::Block { body, .. } => {
                 scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, user_functions)
             }
@@ -129,7 +129,7 @@ mod tests {
         resolve_references(&mut script);
 
         let function = script.functions.remove(0);
-        let Some(Expression::Block { body }) = function.body.last() else {
+        let Some(Expression::Block { body, .. }) = function.body.last() else {
             panic!("Last expression in the function is a block.");
         };
 
