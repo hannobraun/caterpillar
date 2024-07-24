@@ -415,10 +415,11 @@ fn snake(script: &mut Script) {
             .r("snake_length")
             .r("load")
             .r("greater")
-            .r("return_if_zero")
-            .r("positions")
-            .r("vec_buf_pop")
-            .r("pop_positions");
+            .block(|s| {
+                s.r("positions").r("vec_buf_pop").r("pop_positions");
+            })
+            .block(|_| {})
+            .r("if");
     });
     script.function("grow_snake", [], |s| {
         s.r("snake_length")
