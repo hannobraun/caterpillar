@@ -227,7 +227,7 @@ pub fn compile_expression(
 
 #[cfg(test)]
 mod tests {
-    use capi_process::{Effect, Host, HostFunction, Stack, Value};
+    use capi_process::Value;
 
     use crate::repr::{
         fragments::{
@@ -365,22 +365,5 @@ mod tests {
 
     fn script_to_fragments(script: Script) -> Fragments {
         super::generate_fragments(script)
-    }
-
-    struct TestHost {}
-
-    impl Host for TestHost {
-        type Effect = ();
-
-        fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
-            match name {
-                "host" => Some(host),
-                _ => None,
-            }
-        }
-    }
-
-    fn host(_: &mut Stack) -> Result<(), Effect<()>> {
-        Ok(())
     }
 }
