@@ -13,7 +13,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
-        scopes.push(Bindings::new());
+        scopes.push(function.args.clone().into_iter().collect());
         resolve_block::<H>(&mut function.body, &mut scopes, &user_functions);
     }
 }
@@ -73,6 +73,26 @@ mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack};
 
     use crate::repr::syntax::{Expression, ReferenceKind, Script};
+
+    #[test]
+    fn resolve_argument() {
+        // Function arguments should be resolved within the function.
+
+        let mut script = Script::default();
+        script.function("f", ["argument"], |s| {
+            s.r("argument");
+        });
+
+        resolve_references(&mut script);
+
+        assert_eq!(
+            script.functions.remove(0).body.last(),
+            Some(&Expression::Reference {
+                name: String::from("argument"),
+                kind: Some(ReferenceKind::Binding),
+            })
+        );
+    }
 
     #[test]
     fn resolve_binding_from_same_scope() {
