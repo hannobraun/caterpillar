@@ -5,9 +5,13 @@ pub enum Expression {
     Binding {
         names: Vec<String>,
     },
+
+    /// A block of code
     Block {
+        /// The body of the block
         body: Vec<Expression>,
     },
+
     Comment {
         text: String,
     },
