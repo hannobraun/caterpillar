@@ -9,16 +9,6 @@ use crate::repr::{
 };
 
 pub fn generate_fragments(script: Script) -> Fragments {
-    let mut functions = BTreeSet::new();
-
-    for function in &script.functions {
-        if functions.contains(&function.name) {
-            panic!("Can't re-define existing function `{}`.", function.name);
-        }
-
-        functions.insert(function.name.clone());
-    }
-
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
