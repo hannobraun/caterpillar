@@ -40,14 +40,17 @@ fn resolve_block<H: Host>(
                 // shouldn't be forbidden outright.
                 if bindings.contains(name) {
                     *kind = Some(ReferenceKind::Binding);
-                } else if builtin(name).is_some()
+                }
+                if builtin(name).is_some()
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
                 {
                     *kind = Some(ReferenceKind::BuiltinFunction);
-                } else if H::function(name).is_some() {
+                }
+                if H::function(name).is_some() {
                     *kind = Some(ReferenceKind::HostFunction);
-                } else if user_functions.contains(name) {
+                }
+                if user_functions.contains(name) {
                     *kind = Some(ReferenceKind::UserFunction);
                 }
             }
