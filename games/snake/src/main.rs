@@ -66,25 +66,26 @@ fn snake(script: &mut Script) {
 
     // Draw - clear pixels
     script.function("clear_pixels", [], |s| {
-        s.r("init_tile_index").r("clear_pixels_inner").r("vec_drop");
+        s.r("init_tile_index").r("clear_pixels_inner");
     });
     script.function("clear_pixels_inner", ["tile_x", "tile_y"], |s| {
         s
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
-            .r("tile_x")
             .r("tile_y")
-            .r("copy")
             .r("check_tile_index")
             .r("return_if_zero")
             .c("Apparently we're not done yet.")
-            .r("vec_copy")
+            .r("tile_x")
+            .r("tile_y")
             .v(0)
             .v(0)
             .v(0)
             .v(255)
             .r("set_pixel")
+            .r("tile_x")
+            .r("tile_y")
             .r("increment_tile_index")
             .r("clear_pixels_inner");
     });
