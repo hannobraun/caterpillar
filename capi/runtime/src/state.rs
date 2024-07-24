@@ -7,7 +7,7 @@ use capi_protocol::{
     memory::Memory,
 };
 
-use crate::{display, ffi, updates::Updates};
+use crate::{display, updates::Updates};
 
 pub struct RuntimeState {
     pub bytecode: Option<Bytecode>,
@@ -23,15 +23,12 @@ pub struct RuntimeState {
 impl RuntimeState {
     pub fn new() -> Self {
         panic::set_hook(Box::new(|panic_info| {
-            // This _should_ be sound, because there _should_ be no other
-            // reference to `ffi::PANIC` in existence right now, and we're
-            // dropping this one before returning control to the host.
-            //
-            // Unless the code in `ffi` that handles panics is panicking, in
-            // which case I don't think a little bit of unsoundness makes a
-            // difference.
-            let panic = unsafe { ffi::PANIC.access() };
-            *panic = Some(panic_info.to_string());
+            extern "C" {
+                fn on_panic(ptr: *const u8, len: usize);
+            }
+
+            let panic_message = panic_info.to_string();
+            unsafe { on_panic(panic_message.as_ptr(), panic_message.len()) };
         }));
 
         let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];

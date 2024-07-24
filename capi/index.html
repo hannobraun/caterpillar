@@ -15,8 +15,27 @@
         Display for a game written in Caterpillar.
     </canvas>
     <script type="module">
+        let panicHappened = false;
+
         const module = fetch("/capi-runtime.wasm");
-        const { instance } = await WebAssembly.instantiateStreaming(module, {});
+        const { instance } = await WebAssembly.instantiateStreaming(module, {
+            env: {
+                on_panic: (ptr, len) => {
+                    panicHappened = true;
+
+                    const array = new Uint8Array(
+                        instance.exports.memory.buffer,
+                        ptr,
+                        len
+                    );
+                    const message = new TextDecoder().decode(array);
+
+                    const error = new Error();
+
+                    console.error(`${message}\n\n${error.stack}`);
+                }
+            }
+        });
         const runtime = instance.exports;
 
         import initDebugger from "/capi-debugger.js";
@@ -151,7 +170,9 @@
 
             console.assert(runtime.panic_ptr() == 0, "Unhandled panic");
 
-            requestAnimationFrame(mainLoop);
+            if (!panicHappened) {
+                requestAnimationFrame(mainLoop);
+            }
         }
     </script>
     <script type="module">
