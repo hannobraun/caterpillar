@@ -1,7 +1,5 @@
 use std::collections::{BTreeMap, BTreeSet};
 
-use capi_process::Host;
-
 use crate::repr::{
     fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
@@ -10,7 +8,7 @@ use crate::repr::{
     syntax::{Expression, ReferenceKind, Script},
 };
 
-pub fn generate_fragments<H: Host>(script: Script) -> Fragments {
+pub fn generate_fragments(script: Script) -> Fragments {
     let mut functions = BTreeSet::new();
 
     for function in &script.functions {
@@ -29,7 +27,7 @@ pub fn generate_fragments<H: Host>(script: Script) -> Fragments {
     for function in script.functions {
         let mut scopes =
             process_function(function.args.clone(), &function.body);
-        let (start, environment) = compile_block::<H>(
+        let (start, environment) = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
@@ -126,7 +124,7 @@ struct Bindings {
     inner: BTreeSet<String>,
 }
 
-pub fn compile_block<H: Host>(
+pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
     functions: &BTreeSet<String>,
@@ -147,7 +145,7 @@ pub fn compile_block<H: Host>(
     let mut environment = BTreeSet::new();
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression::<H>(
+        let fragment = compile_expression(
             expression,
             parent.clone(),
             next,
@@ -165,7 +163,7 @@ pub fn compile_block<H: Host>(
     (next, environment)
 }
 
-pub fn compile_expression<H: Host>(
+pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
@@ -179,7 +177,7 @@ pub fn compile_expression<H: Host>(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { body } => {
-            let (start, environment) = compile_block::<H>(
+            let (start, environment) = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },
                 functions,
@@ -366,7 +364,7 @@ mod tests {
     }
 
     fn script_to_fragments(script: Script) -> Fragments {
-        super::generate_fragments::<TestHost>(script)
+        super::generate_fragments(script)
     }
 
     struct TestHost {}
