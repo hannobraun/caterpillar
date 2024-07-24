@@ -75,31 +75,6 @@ pub struct Scopes {
     stack: Vec<Bindings>,
 }
 
-impl Scopes {
-    pub fn resolve_binding(&self, name: &str) -> Option<BindingResolved> {
-        let mut scopes = self.stack.iter().rev();
-
-        if let Some(scope) = scopes.next() {
-            if scope.inner.contains(name) {
-                return Some(BindingResolved::InScope);
-            }
-        }
-
-        for scope in scopes {
-            if scope.inner.contains(name) {
-                return Some(BindingResolved::InEnvironment);
-            }
-        }
-
-        None
-    }
-}
-
-pub enum BindingResolved {
-    InScope,
-    InEnvironment,
-}
-
 #[derive(Debug)]
 struct Bindings {
     inner: BTreeSet<String>,
@@ -163,9 +138,6 @@ pub fn compile_expression(
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Reference { name, kind } => match kind {
             Some(ReferenceKind::Binding) => {
-                if let Some(BindingResolved::InEnvironment) =
-                    scopes.resolve_binding(&name)
-                {}
                 FragmentExpression::ResolvedBinding { name }
             }
             Some(ReferenceKind::BuiltinFunction) => {
