@@ -13,6 +13,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
+        scopes.push(Bindings::new());
         resolve_block::<H>(&mut function.body, &mut scopes, &user_functions);
     }
 }
@@ -22,8 +23,6 @@ fn resolve_block<H: Host>(
     scopes: &mut Scopes,
     user_functions: &BTreeSet<String>,
 ) {
-    scopes.push(Bindings::new());
-
     for expression in body {
         match expression {
             Expression::Binding { names } => {
@@ -34,6 +33,7 @@ fn resolve_block<H: Host>(
                 }
             }
             Expression::Block { body } => {
+                scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, user_functions)
             }
             Expression::Reference { name, kind } => {
