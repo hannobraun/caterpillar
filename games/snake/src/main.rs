@@ -358,10 +358,13 @@ fn snake(script: &mut Script) {
     });
     script.function("food_eat", [], |s| {
         s.r("_food_collides_with_snake")
-            .r("return_if_zero")
-            .c("The snake's head and the food are at the same position.")
-            .r("food_init")
-            .r("grow_snake");
+            .block(|s| {
+                s.c("The snake's head and the food are at the same position.")
+                    .r("food_init")
+                    .r("grow_snake");
+            })
+            .block(|_| {})
+            .r("if");
     });
     script.function("_food_collides_with_snake", [], |s| {
         s.r("snake_head")
