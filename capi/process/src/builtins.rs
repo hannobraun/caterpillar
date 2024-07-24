@@ -1,4 +1,4 @@
-use crate::{CoreEffect, Function, InstructionAddr, Instructions, Stack};
+use crate::{CoreEffect, Function, Instructions, Stack};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -154,18 +154,9 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     } else {
         then
     };
+    stack.push_operand(closure);
 
-    stack.push_frame(
-        Function {
-            arguments: Vec::new(),
-            first_instruction: InstructionAddr {
-                index: u32::from_le_bytes(closure.0),
-            },
-        },
-        instructions,
-    )?;
-
-    Ok(())
+    eval(stack, instructions)
 }
 
 fn mul(stack: &mut Stack, _: &Instructions) -> Result {
