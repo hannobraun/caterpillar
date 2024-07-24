@@ -172,29 +172,27 @@ pub fn compile_expression(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Reference { name, kind } => {
-            match kind {
-                Some(ReferenceKind::BuiltinFunction) => {
-                    FragmentExpression::ResolvedBuiltinFunction { name }
-                }
-                Some(ReferenceKind::HostFunction) => {
-                    FragmentExpression::ResolvedHostFunction { name }
-                }
-                Some(ReferenceKind::UserFunction) => {
-                    FragmentExpression::ResolvedUserFunction { name }
-                }
-                _ => {
-                    if let Some(resolved) = scopes.resolve_binding(&name) {
-                        if let BindingResolved::InEnvironment = resolved {
-                            environment.insert(name.clone());
-                        }
-                        FragmentExpression::ResolvedBinding { name }
-                    } else {
-                        FragmentExpression::UnresolvedWord { name }
+        Expression::Reference { name, kind } => match kind {
+            Some(ReferenceKind::BuiltinFunction) => {
+                FragmentExpression::ResolvedBuiltinFunction { name }
+            }
+            Some(ReferenceKind::HostFunction) => {
+                FragmentExpression::ResolvedHostFunction { name }
+            }
+            Some(ReferenceKind::UserFunction) => {
+                FragmentExpression::ResolvedUserFunction { name }
+            }
+            _ => {
+                if let Some(resolved) = scopes.resolve_binding(&name) {
+                    if let BindingResolved::InEnvironment = resolved {
+                        environment.insert(name.clone());
                     }
+                    FragmentExpression::ResolvedBinding { name }
+                } else {
+                    FragmentExpression::UnresolvedWord { name }
                 }
             }
-        }
+        },
         Expression::Value(value) => FragmentExpression::Value(value),
     };
 
