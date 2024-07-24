@@ -5,7 +5,7 @@ use capi_process::{builtin, Host};
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
-    let mut bindings = vec![Bindings::new()];
+    let mut bindings = Vec::new();
     let user_functions = script
         .functions
         .iter()
@@ -22,6 +22,8 @@ fn resolve_block<H: Host>(
     scopes: &mut Vec<Bindings>,
     user_functions: &BTreeSet<String>,
 ) {
+    scopes.push(Bindings::new());
+
     for expression in body {
         match expression {
             Expression::Binding { names } => {
