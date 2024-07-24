@@ -75,19 +75,23 @@ fn snake(script: &mut Script) {
             .c("beyond the last tile, which would let us know that we're done.")
             .r("tile_y")
             .r("check_tile_index")
-            .r("return_if_zero")
-            .c("Apparently we're not done yet.")
-            .r("tile_x")
-            .r("tile_y")
-            .v(0)
-            .v(0)
-            .v(0)
-            .v(255)
-            .r("set_pixel")
-            .r("tile_x")
-            .r("tile_y")
-            .r("increment_tile_index")
-            .r("clear_pixels_inner");
+            .block(|s| {
+                s
+                    .c("Apparently we're not done yet.")
+                    .r("tile_x")
+                    .r("tile_y")
+                    .v(0)
+                    .v(0)
+                    .v(0)
+                    .v(255)
+                    .r("set_pixel")
+                    .r("tile_x")
+                    .r("tile_y")
+                    .r("increment_tile_index")
+                    .r("clear_pixels_inner");
+            })
+            .block(|_| {})
+            .r("if");
     });
 
     // Draw - write tiles - tile index
