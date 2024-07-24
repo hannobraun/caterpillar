@@ -122,14 +122,12 @@ pub fn compile_block(
 
         terminator_id
     };
-    let mut environment = BTreeSet::new();
 
     for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(
             expression,
             parent.clone(),
             next,
-            &mut environment,
             scopes,
             fragments,
         );
@@ -146,7 +144,6 @@ pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    environment: &mut BTreeSet<String>,
     scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -168,9 +165,7 @@ pub fn compile_expression(
             Some(ReferenceKind::Binding) => {
                 if let Some(BindingResolved::InEnvironment) =
                     scopes.resolve_binding(&name)
-                {
-                    environment.insert(name.clone());
-                }
+                {}
                 FragmentExpression::ResolvedBinding { name }
             }
             Some(ReferenceKind::BuiltinFunction) => {
