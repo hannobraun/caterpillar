@@ -5,6 +5,12 @@ use std::fmt;
 )]
 pub struct Value(pub [u8; 4]);
 
+impl From<u32> for Value {
+    fn from(value: u32) -> Self {
+        Self(value.to_le_bytes())
+    }
+}
+
 impl From<i32> for Value {
     fn from(value: i32) -> Self {
         Self(value.to_le_bytes())
