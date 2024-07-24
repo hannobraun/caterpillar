@@ -34,7 +34,7 @@ fn resolve_block<H: Host>(
             }
             Expression::Block { body, .. } => {
                 scopes.push(Bindings::new());
-                resolve_block::<H>(body, scopes, user_functions)
+                resolve_block::<H>(body, scopes, user_functions);
             }
             Expression::Reference { name, kind } => {
                 // The way this is written, definitions can silently shadow each
