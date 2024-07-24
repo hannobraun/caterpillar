@@ -149,7 +149,7 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
 
-    let block = if condition.0 == [0, 0, 0, 0] {
+    let closure = if condition.0 == [0, 0, 0, 0] {
         else_
     } else {
         then
@@ -159,7 +159,7 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
         Function {
             arguments: Vec::new(),
             first_instruction: InstructionAddr {
-                index: u32::from_le_bytes(block.0),
+                index: u32::from_le_bytes(closure.0),
             },
         },
         instructions,
