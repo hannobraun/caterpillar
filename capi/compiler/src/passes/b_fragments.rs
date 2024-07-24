@@ -36,7 +36,7 @@ pub fn generate_fragments(script: Script) -> Fragments {
     }
 }
 
-pub fn compile_block(
+fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
     fragments: &mut FragmentMap,
@@ -65,7 +65,7 @@ pub fn compile_block(
     next
 }
 
-pub fn compile_expression(
+fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
