@@ -75,7 +75,7 @@ mod tests {
 
     #[test]
     fn resolve_binding_from_same_scope() {
-        // Bindings should be resolved from the same scope.
+        // Bindings defined in the current scope should be resolved.
 
         let mut script = Script::default();
         script.function("f", [], |s| {
