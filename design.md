@@ -41,36 +41,6 @@ or later.
 
 ---
 
-### Functional
-
-Caterpillar will be purely functional, without mutable state. I won't justify
-this much, as there lots of material about the advantages of functional
-programming already exists.
-
-The aspect that interests me most, is that the effects that a piece of code can
-have are local, and thus visible when you look at it. This can obviously help
-you understand what the code does.
-
-### Single language
-
-Many programming languages are actually at least two languages in one package.
-One language for defining what's happening at runtime, concerning itself with
-data and effects. The other for compile-time, concerning itself with functions
-and types. (Even if a language is interpreted, this distinction is still
-relevant. It's just not so clearly divided in a temporal sense.)
-
-For Caterpillar, I want to use a single language everywhere. This means that
-functions and types are just values that can be manipulated using Caterpillar's
-normal facilities.
-
-It turns out that the platform concept described above helps a lot with this, as
-that makes it easy to provide different I/O primitives (like "define a function"
-vs "create a file") in different contexts.
-
-I can't credit this idea to a single source of inspiration. It just came to me
-while working on Caterpillar. But I'm certain I haven't invented it. Lisp
-probably works like that.
-
 ### Content-addressed definitions
 
 Definitions in Caterpillar, functions, types, etc, will be content-addressed,
