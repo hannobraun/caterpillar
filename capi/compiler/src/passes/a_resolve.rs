@@ -42,10 +42,8 @@ fn resolve_block<H: Host>(
                 //
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
-                if let Some(bindings) = scopes.last_mut() {
-                    if bindings.contains(name) {
-                        *kind = Some(ReferenceKind::Binding);
-                    }
+                if scopes.iter().any(|bindings| bindings.contains(name)) {
+                    *kind = Some(ReferenceKind::Binding);
                 }
                 if builtin(name).is_some()
                     || name == "return_if_non_zero"
@@ -89,6 +87,34 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
+            Some(&Expression::Reference {
+                name: String::from("value"),
+                kind: Some(ReferenceKind::Binding),
+            })
+        );
+    }
+
+    #[test]
+    fn resolve_binding_from_parent_scope() {
+        // Bindings defined in the lexical parent scope should be resolved in
+        // the current scope.
+
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.v(0).bind(["value"]).block(|s| {
+                s.r("value");
+            });
+        });
+
+        resolve_references(&mut script);
+
+        let function = script.functions.remove(0);
+        let Some(Expression::Block { body }) = function.body.last() else {
+            panic!("Last expression in the function is a block.");
+        };
+
+        assert_eq!(
+            body.last(),
             Some(&Expression::Reference {
                 name: String::from("value"),
                 kind: Some(ReferenceKind::Binding),
