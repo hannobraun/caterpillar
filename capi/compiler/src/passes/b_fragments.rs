@@ -15,14 +15,12 @@ pub fn generate_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        let mut scopes =
-            process_function(function.args.clone(), &function.body);
+        process_function(function.args.clone(), &function.body);
         let start = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
             },
-            &mut scopes,
             &mut fragments,
         );
 
@@ -83,7 +81,6 @@ struct Bindings {
 pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
-    scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
     let mut next = {
@@ -99,13 +96,8 @@ pub fn compile_block(
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(
-            expression,
-            parent.clone(),
-            next,
-            scopes,
-            fragments,
-        );
+        let fragment =
+            compile_expression(expression, parent.clone(), next, fragments);
 
         next = fragment.id();
 
@@ -119,7 +111,6 @@ pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
@@ -130,7 +121,6 @@ pub fn compile_expression(
             let start = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },
-                scopes,
                 fragments,
             );
             FragmentExpression::Block { start, environment }
