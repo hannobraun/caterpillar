@@ -446,8 +446,6 @@ fn snake(script: &mut Script) {
             .r("sub")
             .r("index")
             .r("greater")
-            .bind(["index_within_bounds"])
-            .r("index_within_bounds")
             .block(|s| {
                 s.r("positions")
                     .r("index")
