@@ -5,7 +5,7 @@ use capi_process::{builtin, Host};
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
-    let mut bindings = BTreeSet::new();
+    let mut bindings = Bindings::new();
     let user_functions = script
         .functions
         .iter()
@@ -19,7 +19,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
 
 fn resolve_block<H: Host>(
     body: &mut [Expression],
-    bindings: &mut BTreeSet<String>,
+    bindings: &mut Bindings,
     user_functions: &BTreeSet<String>,
 ) {
     for expression in body {
@@ -55,6 +55,8 @@ fn resolve_block<H: Host>(
         }
     }
 }
+
+type Bindings = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
