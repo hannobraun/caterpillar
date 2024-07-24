@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use capi_process::Value;
 
 use crate::repr::syntax::Expression;
@@ -16,7 +18,10 @@ impl<'r> SyntaxBuilder<'r> {
         let mut body = Vec::new();
         f(&mut SyntaxBuilder::new(&mut body));
 
-        self.push_expression(Expression::Block { body })
+        self.push_expression(Expression::Block {
+            body,
+            environment: BTreeSet::new(),
+        })
     }
 
     pub fn bind(

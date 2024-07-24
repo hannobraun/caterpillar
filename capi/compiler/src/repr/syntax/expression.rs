@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use capi_process::Value;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -10,6 +12,15 @@ pub enum Expression {
     Block {
         /// The body of the block
         body: Vec<Expression>,
+
+        /// The block's environment
+        ///
+        /// These are the bindings defined in parent blocks that are referenced
+        /// from the block's body.
+        ///
+        /// The environment is empty on construction, until it is filled in
+        /// during the resolve pass.
+        environment: BTreeSet<String>,
     },
 
     Comment {
