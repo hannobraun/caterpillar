@@ -316,9 +316,11 @@ fn snake(script: &mut Script) {
                 .bind(["coord_smaller_than_zero"])
                 .r("coord")
                 .r("coord_smaller_than_zero")
-                .r("return_if_zero")
-                .r("limit")
-                .r("add");
+                .block(|s| {
+                    s.r("limit").r("add");
+                })
+                .block(|_| {})
+                .r("if");
         },
     );
     script.function(
