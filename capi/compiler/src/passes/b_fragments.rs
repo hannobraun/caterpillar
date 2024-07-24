@@ -184,12 +184,6 @@ pub fn compile_expression(
                     FragmentExpression::ResolvedUserFunction { name }
                 }
                 _ => {
-                    // The way this is written, the different types of
-                    // definitions shadow each other in a defined order.
-                    //
-                    // This isn't desirable. There should at least be a
-                    // warning, if such shadowing isn't forbidden outright.
-                    // It'll do for now though.
                     if let Some(resolved) = scopes.resolve_binding(&name) {
                         if let BindingResolved::InEnvironment = resolved {
                             environment.insert(name.clone());
