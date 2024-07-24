@@ -162,8 +162,8 @@ pub fn compile_expression(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Block { body, .. } => {
-            let (start, environment) = compile_block(
+        Expression::Block { body, environment } => {
+            let (start, _) = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },
                 scopes,
