@@ -17,21 +17,13 @@ pub fn generate_fragments(script: Script) -> Fragments {
     for function in script.functions {
         let mut scopes =
             process_function(function.args.clone(), &function.body);
-        let (start, environment) = compile_block(
+        let start = compile_block(
             function.body,
             FragmentParent::Function {
                 name: function.name.clone(),
             },
             &mut scopes,
             &mut fragments,
-        );
-
-        assert!(
-            environment.is_empty(),
-            "Functions have no environment that they could access.\n\
-            - Function: {}\n\
-            - Environment: {environment:#?}",
-            function.name,
         );
 
         by_function.push(Function {
@@ -118,7 +110,7 @@ pub fn compile_block(
     parent: FragmentParent,
     scopes: &mut Scopes,
     fragments: &mut FragmentMap,
-) -> (FragmentId, BTreeSet<String>) {
+) -> FragmentId {
     let mut next = {
         let terminator = Fragment {
             parent: parent.clone(),
@@ -147,7 +139,7 @@ pub fn compile_block(
         fragments.inner.insert(fragment.id(), fragment);
     }
 
-    (next, environment)
+    next
 }
 
 pub fn compile_expression(
@@ -163,7 +155,7 @@ pub fn compile_expression(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { body, environment } => {
-            let (start, _) = compile_block(
+            let start = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },
                 scopes,
