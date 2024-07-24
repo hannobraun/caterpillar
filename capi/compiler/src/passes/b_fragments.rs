@@ -32,7 +32,6 @@ pub fn generate_fragments(script: Script) -> Fragments {
             FragmentParent::Function {
                 name: function.name.clone(),
             },
-            &functions,
             &mut scopes,
             &mut fragments,
         );
@@ -127,7 +126,6 @@ struct Bindings {
 pub fn compile_block(
     expressions: Vec<Expression>,
     parent: FragmentParent,
-    functions: &BTreeSet<String>,
     scopes: &mut Scopes,
     fragments: &mut FragmentMap,
 ) -> (FragmentId, BTreeSet<String>) {
@@ -149,7 +147,6 @@ pub fn compile_block(
             expression,
             parent.clone(),
             next,
-            functions,
             &mut environment,
             scopes,
             fragments,
@@ -167,7 +164,6 @@ pub fn compile_expression(
     expression: Expression,
     parent: FragmentParent,
     next: FragmentId,
-    functions: &BTreeSet<String>,
     environment: &mut BTreeSet<String>,
     scopes: &mut Scopes,
     fragments: &mut FragmentMap,
@@ -180,7 +176,6 @@ pub fn compile_expression(
             let (start, environment) = compile_block(
                 body,
                 FragmentParent::Fragment { id: next },
-                functions,
                 scopes,
                 fragments,
             );
