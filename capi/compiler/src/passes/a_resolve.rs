@@ -5,7 +5,7 @@ use capi_process::{builtin, Host};
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
-    let mut bindings = Bindings::new();
+    let mut bindings = vec![Bindings::new()];
     let user_functions = script
         .functions
         .iter()
@@ -19,18 +19,20 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
 
 fn resolve_block<H: Host>(
     body: &mut [Expression],
-    bindings: &mut Bindings,
+    scopes: &mut Vec<Bindings>,
     user_functions: &BTreeSet<String>,
 ) {
     for expression in body {
         match expression {
             Expression::Binding { names } => {
-                for name in names {
-                    bindings.insert(name.clone());
+                if let Some(bindings) = scopes.last_mut() {
+                    for name in names {
+                        bindings.insert(name.clone());
+                    }
                 }
             }
             Expression::Block { body } => {
-                resolve_block::<H>(body, bindings, user_functions)
+                resolve_block::<H>(body, scopes, user_functions)
             }
             Expression::Reference { name, kind } => {
                 // The way this is written, definitions can silently shadow each
@@ -38,8 +40,10 @@ fn resolve_block<H: Host>(
                 //
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
-                if bindings.contains(name) {
-                    *kind = Some(ReferenceKind::Binding);
+                if let Some(bindings) = scopes.last_mut() {
+                    if bindings.contains(name) {
+                        *kind = Some(ReferenceKind::Binding);
+                    }
                 }
                 if builtin(name).is_some()
                     || name == "return_if_non_zero"
@@ -57,6 +61,8 @@ fn resolve_block<H: Host>(
             _ => {}
         }
     }
+
+    scopes.pop();
 }
 
 type Bindings = BTreeSet<String>;
@@ -83,6 +89,30 @@ mod tests {
             Some(&Expression::Reference {
                 name: String::from("value"),
                 kind: Some(ReferenceKind::Binding),
+            })
+        );
+    }
+
+    #[test]
+    fn do_not_resolve_binding_from_child_scope() {
+        // Bindings that are defined in a scope that is a lexical child of the
+        // current scope, should not be resolved.
+
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.block(|s| {
+                s.v(0).bind(["value"]);
+            })
+            .r("value");
+        });
+
+        resolve_references(&mut script);
+
+        assert_eq!(
+            script.functions.remove(0).body.last(),
+            Some(&Expression::Reference {
+                name: String::from("value"),
+                kind: None,
             })
         );
     }
