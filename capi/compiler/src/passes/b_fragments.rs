@@ -190,7 +190,7 @@ pub fn compile_expression(
             Some(ReferenceKind::UserFunction) => {
                 FragmentExpression::ResolvedUserFunction { name }
             }
-            _ => FragmentExpression::UnresolvedWord { name },
+            None => FragmentExpression::UnresolvedWord { name },
         },
         Expression::Value(value) => FragmentExpression::Value(value),
     };
