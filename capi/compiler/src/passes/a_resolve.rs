@@ -128,8 +128,9 @@ mod tests {
 
         resolve_references(&mut script);
 
-        let function = script.functions.remove(0);
-        let Some(Expression::Block { body, .. }) = function.body.last() else {
+        let mut function = script.functions.remove(0);
+        let Some(Expression::Block { body, .. }) = function.body.last_mut()
+        else {
             panic!("Last expression in the function is a block.");
         };
 
