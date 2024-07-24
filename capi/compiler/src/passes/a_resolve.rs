@@ -74,7 +74,7 @@ mod tests {
     use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
     #[test]
-    fn resolve_binding_in_same_scope() {
+    fn resolve_binding_from_same_scope() {
         // Bindings should be resolved from the same scope.
 
         let mut script = Script::default();
