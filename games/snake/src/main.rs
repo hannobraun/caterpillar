@@ -48,11 +48,11 @@ fn snake(script: &mut Script) {
             .v(1)
             .r("add")
             .r("sub")
-            .r("return_if_zero")
-            .r("index")
-            .v(1)
-            .r("add")
-            .r("draw_snake_inner");
+            .block(|s| {
+                s.r("index").v(1).r("add").r("draw_snake_inner");
+            })
+            .block(|_| {})
+            .r("if");
     });
     script.function("draw_food", [], |s| {
         s.r("food_position")
