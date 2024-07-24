@@ -5,7 +5,7 @@ use capi_process::{builtin, Host};
 use crate::repr::syntax::{Expression, ReferenceKind, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
-    let mut bindings = Scopes::new();
+    let mut scopes = Scopes::new();
     let user_functions = script
         .functions
         .iter()
@@ -13,7 +13,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
-        resolve_block::<H>(&mut function.body, &mut bindings, &user_functions);
+        resolve_block::<H>(&mut function.body, &mut scopes, &user_functions);
     }
 }
 
