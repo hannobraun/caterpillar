@@ -206,12 +206,15 @@ pub fn compile_expression(
 mod tests {
     use capi_process::Value;
 
-    use crate::repr::{
-        fragments::{
-            Fragment, FragmentExpression, FragmentParent, FragmentPayload,
-            Fragments,
+    use crate::{
+        passes::generate_fragments,
+        repr::{
+            fragments::{
+                Fragment, FragmentExpression, FragmentParent, FragmentPayload,
+                Fragments,
+            },
+            syntax::Script,
         },
-        syntax::Script,
     };
 
     #[test]
@@ -338,9 +341,5 @@ mod tests {
         }));
 
         body
-    }
-
-    fn generate_fragments(script: Script) -> Fragments {
-        super::generate_fragments(script)
     }
 }
