@@ -229,11 +229,14 @@ fn snake(script: &mut Script) {
             .c("Looks like it's time to run updates!")
             .r("should_game_run")
             .r("load")
-            .r("return_if_zero")
-            .r("handle_input")
-            .r("drop")
-            .r("update_positions")
-            .r("food_eat");
+            .block(|s| {
+                s.r("handle_input")
+                    .r("drop")
+                    .r("update_positions")
+                    .r("food_eat");
+            })
+            .block(|_| {})
+            .r("if");
     });
 
     // Game state - should game run
