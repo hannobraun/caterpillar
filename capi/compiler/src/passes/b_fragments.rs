@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use crate::repr::{
     fragments::{
@@ -15,7 +15,6 @@ pub fn generate_fragments(script: Script) -> Fragments {
     let mut by_function = Vec::new();
 
     for function in script.functions {
-        process_function(function.args.clone(), &function.body);
         let start = compile_block(
             function.body,
             FragmentParent::Function {
@@ -35,47 +34,6 @@ pub fn generate_fragments(script: Script) -> Fragments {
         inner: fragments,
         by_function,
     }
-}
-
-pub fn process_function(args: Vec<String>, body: &[Expression]) -> Scopes {
-    let mut scopes = Scopes {
-        stack: vec![Bindings {
-            inner: args.into_iter().collect(),
-        }],
-    };
-
-    process_block(body, &mut scopes);
-
-    scopes
-}
-
-fn process_block(body: &[Expression], scopes: &mut Scopes) {
-    for expression in body {
-        if let Expression::Binding { names } = expression {
-            for name in names.iter().cloned().rev() {
-                // Inserting bindings unconditionally like this does mean
-                // that bindings can overwrite previously defined bindings.
-                // This is undesirable, but it'll do for now.
-                scopes.stack.last_mut().unwrap().inner.insert(name);
-            }
-        }
-        if let Expression::Block { body, .. } = expression {
-            scopes.stack.push(Bindings {
-                inner: BTreeSet::new(),
-            });
-            process_block(body, scopes);
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct Scopes {
-    stack: Vec<Bindings>,
-}
-
-#[derive(Debug)]
-struct Bindings {
-    inner: BTreeSet<String>,
 }
 
 pub fn compile_block(
