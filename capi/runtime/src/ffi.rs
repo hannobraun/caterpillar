@@ -8,7 +8,6 @@ use capi_protocol::{
 
 use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
 
-pub static PANIC: Shared<Option<String>> = Shared::new(None);
 pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 
@@ -20,34 +19,6 @@ static COMMANDS: Shared<FramedBuffer<COMMANDS_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
 static PIXELS: Shared<[u8; NUM_PIXEL_BYTES]> =
     Shared::new([0; NUM_PIXEL_BYTES]);
-
-#[no_mangle]
-pub fn panic_ptr() -> usize {
-    // Sound, because the reference is dropped before we give back control to
-    // the host.
-    let panic = unsafe { PANIC.access() };
-
-    panic
-        .as_ref()
-        .map(|panic| panic.as_ptr() as usize)
-        .unwrap_or(0)
-}
-
-#[no_mangle]
-pub fn panic_len() -> usize {
-    // Sound, because the reference is dropped before we give back control to
-    // the host.
-    let panic = unsafe { PANIC.access() };
-
-    panic
-        .as_ref()
-        .map(|panic| {
-            // `len` is correct here, despite this being a `String`, as the host
-            // is interested in the length in bytes.
-            panic.len()
-        })
-        .unwrap_or(0)
-}
 
 static LAST_CODE_WRITE: Mutex<Option<(usize, usize)>> = Mutex::new(None);
 

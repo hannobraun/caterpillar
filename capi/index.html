@@ -89,86 +89,72 @@
         window.requestAnimationFrame(mainLoop);
 
         function mainLoop() {
-            try {
-                while (runtime.push_random(Math.random())) { }
+            while (runtime.push_random(Math.random())) { }
 
-                while (true) {
-                    debugger_.commands_read();
-                    const command_rx = new Uint8Array(
-                        debugger_.memory.buffer,
-                        debugger_.commands_read_ptr(),
-                        debugger_.commands_read_len(),
-                    );
-
-                    if (command_rx.byteLength > 0) {
-                        runtime.commands_write(command_rx.byteLength);
-                        const command_tx = new Uint8Array(
-                            runtime.memory.buffer,
-                            runtime.commands_write_ptr(),
-                            runtime.commands_write_len(),
-                        );
-                        command_tx.set(command_rx);
-
-                        runtime.on_command();
-                    }
-                    else {
-                        break;
-                    }
-                }
-
-                runtime.on_frame();
-
-
-                const pixels = new Uint8ClampedArray(
-                    runtime.memory.buffer,
-                    runtime.pixels_ptr(),
-                    runtime.pixels_len(),
+            while (true) {
+                debugger_.commands_read();
+                const command_rx = new Uint8Array(
+                    debugger_.memory.buffer,
+                    debugger_.commands_read_ptr(),
+                    debugger_.commands_read_len(),
                 );
 
-                const imageData = new ImageData(
-                    pixels,
-                    canvas.width,
-                    canvas.height
-                );
-
-                context.putImageData(imageData, 0, 0);
-
-                while (true) {
-                    runtime.updates_read();
-                    const update_rx = new Uint8Array(
+                if (command_rx.byteLength > 0) {
+                    runtime.commands_write(command_rx.byteLength);
+                    const command_tx = new Uint8Array(
                         runtime.memory.buffer,
-                        runtime.updates_read_ptr(),
-                        runtime.updates_read_len(),
+                        runtime.commands_write_ptr(),
+                        runtime.commands_write_len(),
                     );
+                    command_tx.set(command_rx);
 
-                    if (update_rx.byteLength > 0) {
-                        debugger_.updates_write(update_rx.byteLength);
-                        const update_tx = new Uint8Array(
-                            debugger_.memory.buffer,
-                            debugger_.updates_write_ptr(),
-                            debugger_.updates_write_len(),
-                        );
-                        update_tx.set(update_rx);
-
-                        debugger_.on_update();
-                    } else {
-                        break;
-                    }
+                    runtime.on_command();
+                }
+                else {
+                    break;
                 }
             }
-            catch {
-                const panic_array = new Uint8Array(
-                    runtime.memory.buffer,
-                    runtime.panic_ptr(),
-                    runtime.panic_len(),
-                );
-                const panic_string = new TextDecoder().decode(panic_array);
-                console.log(panic_string);
 
-                return;
+            runtime.on_frame();
+
+
+            const pixels = new Uint8ClampedArray(
+                runtime.memory.buffer,
+                runtime.pixels_ptr(),
+                runtime.pixels_len(),
+            );
+
+            const imageData = new ImageData(
+                pixels,
+                canvas.width,
+                canvas.height
+            );
+
+            context.putImageData(imageData, 0, 0);
+
+            while (true) {
+                runtime.updates_read();
+                const update_rx = new Uint8Array(
+                    runtime.memory.buffer,
+                    runtime.updates_read_ptr(),
+                    runtime.updates_read_len(),
+                );
+
+                if (update_rx.byteLength > 0) {
+                    debugger_.updates_write(update_rx.byteLength);
+                    const update_tx = new Uint8Array(
+                        debugger_.memory.buffer,
+                        debugger_.updates_write_ptr(),
+                        debugger_.updates_write_len(),
+                    );
+                    update_tx.set(update_rx);
+
+                    debugger_.on_update();
+                } else {
+                    break;
+                }
             }
 
-            console.assert(runtime.panic_ptr() == 0, "Unhandled panic");
 
             if (!panicHappened) {
                 requestAnimationFrame(mainLoop);
