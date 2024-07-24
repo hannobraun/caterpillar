@@ -447,7 +447,7 @@ fn snake(script: &mut Script) {
             .r("index")
             .r("greater")
             .bind(["index_within_bounds"])
-            .r("index_within_bounds")
+            .v(0)
             .r("index_within_bounds")
             .r("return_if_zero")
             .r("drop")
