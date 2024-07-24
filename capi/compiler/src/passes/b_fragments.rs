@@ -221,7 +221,7 @@ mod tests {
             s.r("a");
         });
 
-        let fragments = script_to_fragments(script);
+        let fragments = generate_fragments(script);
 
         let body = body(fragments);
         assert_eq!(
@@ -239,7 +239,7 @@ mod tests {
             s.v(0).bind(["b"]).r("b");
         });
 
-        let fragments = script_to_fragments(script);
+        let fragments = generate_fragments(script);
 
         let last = body(fragments).last().cloned().unwrap();
         assert_eq!(
@@ -257,7 +257,7 @@ mod tests {
             s.v(1).v(1);
         });
 
-        let fragments = script_to_fragments(script);
+        let fragments = generate_fragments(script);
 
         let body = body(fragments);
         assert_eq!(
@@ -274,7 +274,7 @@ mod tests {
         let mut script = Script::default();
         script.function("f", [], |_| {});
 
-        let mut fragments = script_to_fragments(script);
+        let mut fragments = generate_fragments(script);
 
         let start = fragments.by_function.remove(0).start;
         let last_fragment = fragments.inner.iter_from(start).last().unwrap();
@@ -288,7 +288,7 @@ mod tests {
             s.block(|_| {});
         });
 
-        let mut fragments = script_to_fragments(script);
+        let mut fragments = generate_fragments(script);
 
         let start = fragments.by_function.remove(0).start;
         let function_fragments =
@@ -340,7 +340,7 @@ mod tests {
         body
     }
 
-    fn script_to_fragments(script: Script) -> Fragments {
+    fn generate_fragments(script: Script) -> Fragments {
         super::generate_fragments(script)
     }
 }
