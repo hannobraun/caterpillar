@@ -1,5 +1,5 @@
 mod display;
-mod ffi;
+mod ffi_in;
 mod state;
 mod tiles;
 mod updates;
