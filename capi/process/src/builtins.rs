@@ -149,13 +149,13 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
 
-    let closure = if condition.0 == [0, 0, 0, 0] {
+    let evaluate = if condition.0 == [0, 0, 0, 0] {
         else_
     } else {
         then
     };
 
-    stack.push_operand(closure);
+    stack.push_operand(evaluate);
     eval(stack, instructions)
 }
 
