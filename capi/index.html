@@ -34,6 +34,17 @@
 
                     console.error(`${message}\n\n${error.stack}`);
                 },
+
+                print: (ptr, len) => {
+                    const array = new Uint8Array(
+                        instance.exports.memory.buffer,
+                        ptr,
+                        len
+                    );
+                    const message = new TextDecoder().decode(array);
+
+                    console.log(message);
+                },
             }
         });
         const runtime = instance.exports;
