@@ -92,7 +92,7 @@ The following daily thought provides more context:
 
 Caterpillar is currently untyped, meaning there is only a single data type,
 32-bit words, and all values are represented using those. This isn't a final
-decision. It just was the easiest place to start.
+decision. It's just the easiest place to start at.
 
 Hopefully soon, the language will become dynamically typed. Over time, I expect
 that types can be inferred in more and more situations, until the language is
