@@ -75,6 +75,19 @@ The following daily thoughts provide more context:
 [2024-06-03](https://capi.hannobraun.com/daily/2024-06-03), and
 [2024-06-05](https://capi.hannobraun.com/daily/2024-06-05).
 
+### Minimalist syntax over readable syntax, for now
+
+For the time being, the syntax is kept minimal. Most concepts, including control
+flow, are represented as simple function calls, and require no special syntax.
+
+This might not always be the most readable, but it keeps complexity low. I
+expect that this will get re-evaluated at a later point. And then, it will be
+clearer where special syntax is actually a benefit, and where the simple
+solution will do.
+
+The following daily thought provides more context:
+[2024-07-24](https://capi.hannobraun.com/daily/2024-07-24)
+
 ### Untyped now, dynamically typed soon, statically typed later
 
 Caterpillar is currently untyped, meaning there is only a single data type,
