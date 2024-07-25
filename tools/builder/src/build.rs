@@ -110,6 +110,7 @@ async fn copy(
     let target_dir = target_dir.as_ref();
 
     fs::copy(source_dir.join(file), target_dir.join(file)).await?;
+
     Ok(())
 }
 
