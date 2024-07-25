@@ -23,8 +23,8 @@ pub struct RuntimeState {
 impl RuntimeState {
     pub fn new() -> Self {
         panic::set_hook(Box::new(|panic_info| {
-            let panic_message = panic_info.to_string();
-            unsafe { on_panic(panic_message.as_ptr(), panic_message.len()) };
+            let message = panic_info.to_string();
+            unsafe { on_panic(message.as_ptr(), message.len()) };
         }));
 
         let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
