@@ -74,12 +74,7 @@ async fn build_once(
 
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
-
-    fs::copy(
-        Path::new(target).join("capi-runtime.wasm"),
-        new_output_dir.path().join("capi-runtime.wasm"),
-    )
-    .await?;
+    copy(target, new_output_dir.path(), "capi-runtime.wasm").await?;
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
 
@@ -89,8 +84,7 @@ async fn build_once(
         .web(true)?
         .generate(&new_output_dir)?;
 
-    fs::copy("capi/index.html", new_output_dir.path().join("index.html"))
-        .await?;
+    copy("capi", new_output_dir.path(), "index.html").await?;
 
     let output_path = new_output_dir.path().to_path_buf();
 
@@ -104,6 +98,21 @@ async fn build_once(
     *output_dir = Some(new_output_dir);
 
     Ok(ShouldContinue::YesWhyNot)
+}
+
+async fn copy(
+    source_dir: impl AsRef<Path>,
+    target_dir: impl AsRef<Path>,
+    file: impl AsRef<Path>,
+) -> anyhow::Result<()> {
+    let file = file.as_ref();
+
+    fs::copy(
+        source_dir.as_ref().join(file),
+        target_dir.as_ref().join(file),
+    )
+    .await?;
+    Ok(())
 }
 
 enum ShouldContinue {
