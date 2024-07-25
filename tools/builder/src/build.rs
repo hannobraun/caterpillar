@@ -56,14 +56,19 @@ async fn build_once(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
-    let packages = ["capi-runtime", "capi-debugger"];
+    let packages = [("capi-runtime", Some("cdylib")), ("capi-debugger", None)];
 
-    for package in packages {
+    for (package, crate_type) in packages {
         let mut command = Command::new("cargo");
+
         command
             .arg("rustc")
             .args(["--package", package])
             .args(["--target", "wasm32-unknown-unknown"]);
+
+        if let Some(crate_type) = crate_type {
+            command.args(["--crate-type", crate_type]);
+        }
 
         let exit_status = command.status().await?;
         if !exit_status.success() {
@@ -78,7 +83,7 @@ async fn build_once(
 
     let target = "target/wasm32-unknown-unknown/debug";
     let new_output_dir = tempdir()?;
-    copy(target, new_output_dir.path(), "capi-runtime.wasm").await?;
+    copy(target, new_output_dir.path(), "capi_runtime.wasm").await?;
 
     let wasm_module = format!("{target}/capi-debugger.wasm");
 
