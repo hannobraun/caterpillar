@@ -154,8 +154,8 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     } else {
         then
     };
-    stack.push_operand(closure);
 
+    stack.push_operand(closure);
     eval(stack, instructions)
 }
 
