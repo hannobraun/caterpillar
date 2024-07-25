@@ -1,5 +1,5 @@
+mod debugger;
 mod ffi;
-mod model;
 mod remote_process;
 mod state;
 mod ui;

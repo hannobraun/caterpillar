@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    model::{Expression, Function},
+    debugger::{Expression, Function},
     ui::{send_command, CommandsTx},
 };
 
