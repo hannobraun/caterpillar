@@ -57,12 +57,13 @@ async fn build_once(
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
     for package in ["capi-runtime", "capi-debugger"] {
-        let exit_status = Command::new("cargo")
+        let mut command = Command::new("cargo");
+        command
             .arg("rustc")
             .args(["--package", package])
-            .args(["--target", "wasm32-unknown-unknown"])
-            .status()
-            .await?;
+            .args(["--target", "wasm32-unknown-unknown"]);
+
+        let exit_status = command.status().await?;
         if !exit_status.success() {
             // The build failed, and since the rest of this function is
             // dependent on its success, we're done here.
