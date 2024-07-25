@@ -56,7 +56,9 @@ async fn build_once(
     updates: &UpdatesTx,
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
-    for package in ["capi-runtime", "capi-debugger"] {
+    let packages = ["capi-runtime", "capi-debugger"];
+
+    for package in packages {
         let mut command = Command::new("cargo");
         command
             .arg("rustc")
