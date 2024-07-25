@@ -13,7 +13,7 @@ pub fn start(changes: DebouncedChanges) -> UpdatesRx {
     let (tx, rx) = watch::channel(None);
     task::spawn(async {
         if let Err(err) = watch_and_build(changes, tx).await {
-            error!("Build error: {err}");
+            error!("Build error: {err:?}");
             process::exit(1);
         }
     });
