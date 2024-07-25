@@ -57,13 +57,13 @@ async fn build_once(
     output_dir: &mut Option<TempDir>,
 ) -> anyhow::Result<ShouldContinue> {
     for package in ["capi-runtime", "capi-debugger"] {
-        let cargo_build = Command::new("cargo")
+        let exit_status = Command::new("cargo")
             .arg("build")
             .args(["--package", package])
             .args(["--target", "wasm32-unknown-unknown"])
             .status()
             .await?;
-        if !cargo_build.success() {
+        if !exit_status.success() {
             // The build failed, and since the rest of this function is
             // dependent on its success, we're done here.
             //
