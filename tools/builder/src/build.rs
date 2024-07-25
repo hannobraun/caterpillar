@@ -3,6 +3,7 @@ use std::{
     process,
 };
 
+use anyhow::Context;
 use capi_watch::DebouncedChanges;
 use tempfile::{tempdir, TempDir};
 use tokio::{fs, process::Command, sync::watch, task};
@@ -109,7 +110,16 @@ async fn copy(
     let source_dir = source_dir.as_ref();
     let target_dir = target_dir.as_ref();
 
-    fs::copy(source_dir.join(file), target_dir.join(file)).await?;
+    fs::copy(source_dir.join(file), target_dir.join(file))
+        .await
+        .with_context(|| {
+            format!(
+                "Copying file `{}` from `{}` to `{}`",
+                file.display(),
+                source_dir.display(),
+                target_dir.display()
+            )
+        })?;
 
     Ok(())
 }
