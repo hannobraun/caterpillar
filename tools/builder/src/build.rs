@@ -58,7 +58,7 @@ async fn build_once(
 ) -> anyhow::Result<ShouldContinue> {
     for package in ["capi-runtime", "capi-debugger"] {
         let exit_status = Command::new("cargo")
-            .arg("build")
+            .arg("rustc")
             .args(["--package", package])
             .args(["--target", "wasm32-unknown-unknown"])
             .status()
