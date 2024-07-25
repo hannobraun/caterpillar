@@ -106,12 +106,10 @@ async fn copy(
     file: impl AsRef<Path>,
 ) -> anyhow::Result<()> {
     let file = file.as_ref();
+    let source_dir = source_dir.as_ref();
+    let target_dir = target_dir.as_ref();
 
-    fs::copy(
-        source_dir.as_ref().join(file),
-        target_dir.as_ref().join(file),
-    )
-    .await?;
+    fs::copy(source_dir.join(file), target_dir.join(file)).await?;
     Ok(())
 }
 
