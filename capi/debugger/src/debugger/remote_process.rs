@@ -5,7 +5,7 @@ use capi_protocol::{
     update::{SourceCode, Update},
 };
 
-use super::debugger::{ActiveFunctions, Debugger};
+use super::{ActiveFunctions, Debugger};
 
 #[derive(Default)]
 pub struct RemoteProcess {
