@@ -149,11 +149,16 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let then = stack.pop_operand()?;
     let condition = stack.pop_operand()?;
 
-    let evaluate = if condition.0 == [0, 0, 0, 0] {
-        else_
+    let (evaluate, discard) = if condition.0 == [0, 0, 0, 0] {
+        (else_, then)
     } else {
-        then
+        (then, else_)
     };
+
+    // `eval` consumes the closure we evaluate, but we have to discard the other
+    // one here, to no leak memory.
+    let discard = u32::from_le_bytes(discard.0);
+    stack.closures.remove(&discard);
 
     stack.push_operand(evaluate);
     eval(stack, instructions)
