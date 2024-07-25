@@ -1,5 +1,7 @@
-pub unsafe fn on_panic(message: &str) {
-    ffi::on_panic(message.as_ptr(), message.len());
+pub fn on_panic(message: &str) {
+    unsafe {
+        ffi::on_panic(message.as_ptr(), message.len());
+    }
 }
 
 mod ffi {
