@@ -7,7 +7,7 @@ use capi_protocol::{
     memory::Memory,
 };
 
-use crate::{display, updates::Updates};
+use crate::{display, ffi_out::on_panic, updates::Updates};
 
 pub struct RuntimeState {
     pub bytecode: Option<Bytecode>,
@@ -23,10 +23,6 @@ pub struct RuntimeState {
 impl RuntimeState {
     pub fn new() -> Self {
         panic::set_hook(Box::new(|panic_info| {
-            extern "C" {
-                fn on_panic(ptr: *const u8, len: usize);
-            }
-
             let panic_message = panic_info.to_string();
             unsafe { on_panic(panic_message.as_ptr(), panic_message.len()) };
         }));
