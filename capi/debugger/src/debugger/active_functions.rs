@@ -47,7 +47,7 @@ impl ActiveFunctions {
                     .instruction_to_fragment(&runtime_location);
                 let function = source_code
                     .fragments
-                    .find_function(&fragment_id)
+                    .find_function_by_fragment(&fragment_id)
                     .cloned()?;
 
                 Some(Function::new(

@@ -9,7 +9,10 @@ pub struct Fragments {
 }
 
 impl Fragments {
-    pub fn find_function(&self, fragment_id: &FragmentId) -> Option<&Function> {
+    pub fn find_function_by_fragment(
+        &self,
+        fragment_id: &FragmentId,
+    ) -> Option<&Function> {
         for function in &self.by_function {
             for fragment in self.inner.iter_from(function.start) {
                 if &fragment.id() == fragment_id {
