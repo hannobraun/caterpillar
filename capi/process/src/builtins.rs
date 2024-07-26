@@ -2,6 +2,7 @@ use crate::{CoreEffect, Function, Instructions, Stack};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
+        "add_i8" => add_i8,
         "add_i32" => add_i32,
         "add_wrap_unsigned" => add_wrap_unsigned,
         "brk" => brk,
@@ -27,6 +28,22 @@ pub fn builtin(name: &str) -> Option<Builtin> {
 }
 
 pub type Builtin = fn(&mut Stack, &Instructions) -> Result;
+
+fn add_i8(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_i8();
+    let b = b.to_i8();
+
+    let Some(c) = a.checked_add(b) else {
+        return Err(CoreEffect::IntegerOverflow);
+    };
+
+    stack.push_operand(c);
+
+    Ok(())
+}
 
 fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
