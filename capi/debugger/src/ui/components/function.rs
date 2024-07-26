@@ -56,11 +56,13 @@ pub fn Expression(
     let (expression, error) = match expression {
         Expression::Block { expressions } => (
             view! {
-                "{"
-                <Block
-                    expressions=expressions
-                    commands=commands />
-                "}"
+                <span>
+                    "{"
+                    <Block
+                        expressions=expressions
+                        commands=commands />
+                    "}"
+                </span>
             }
             .into_view(),
             None,
