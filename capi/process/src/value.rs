@@ -9,6 +9,10 @@ impl Value {
     pub fn to_i32(&self) -> i32 {
         i32::from_le_bytes(self.0)
     }
+
+    pub fn to_u32(&self) -> u32 {
+        u32::from_le_bytes(self.0)
+    }
 }
 
 impl From<u8> for Value {

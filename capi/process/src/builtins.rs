@@ -110,7 +110,7 @@ fn eq(stack: &mut Stack, _: &Instructions) -> Result {
 
 fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     let closure = stack.pop_operand()?;
-    let closure = u32::from_le_bytes(closure.0);
+    let closure = closure.to_u32();
 
     let (address, environment) = stack.closures.remove(&closure).unwrap();
 
@@ -169,7 +169,7 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
 
     // `eval` consumes the closure we evaluate, but we have to discard the other
     // one here, to no leak memory.
-    let discard = u32::from_le_bytes(discard.0);
+    let discard = discard.to_u32();
     stack.closures.remove(&discard);
 
     stack.push_operand(evaluate);
