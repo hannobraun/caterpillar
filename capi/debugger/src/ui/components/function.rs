@@ -59,7 +59,6 @@ pub fn Expression(
         expression,
         instruction,
         has_durable_breakpoint,
-        is_comment,
         is_on_call_stack,
         effect,
     ) = match expression {
@@ -78,14 +77,12 @@ pub fn Expression(
             expression,
             instruction,
             has_durable_breakpoint,
-            is_comment,
             is_on_call_stack,
             effect,
         } => (
             expression,
             instruction,
             has_durable_breakpoint,
-            is_comment,
             is_on_call_stack,
             effect,
         ),
@@ -95,9 +92,6 @@ pub fn Expression(
         class_outer.push_str(" bg-blue-300");
     }
 
-    if is_comment {
-        class_inner.push_str(" italic text-gray-500");
-    }
     if let Some(effect) = &effect {
         match effect {
             Effect::Core(CoreEffect::Breakpoint) => {

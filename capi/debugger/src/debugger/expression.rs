@@ -14,7 +14,6 @@ pub enum Expression {
         expression: FragmentExpression,
         instruction: Option<InstructionAddr>,
         has_durable_breakpoint: bool,
-        is_comment: bool,
         is_on_call_stack: bool,
         effect: Option<Effect<GameEngineEffect>>,
     },
@@ -35,9 +34,6 @@ impl Expression {
         if let FragmentExpression::Comment { .. } = expression {
             return Some(Self::Comment { expression });
         }
-
-        let is_comment =
-            matches!(expression, FragmentExpression::Comment { .. });
 
         let instruction = source_map.fragment_to_instruction(&fragment_id);
 
@@ -72,7 +68,6 @@ impl Expression {
             expression,
             instruction,
             has_durable_breakpoint,
-            is_comment,
             is_on_call_stack,
             effect,
         })
