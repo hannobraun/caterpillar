@@ -53,28 +53,34 @@ pub fn Expression(
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let expression = match expression {
-        Expression::Block { expressions } => view! {
-            <span class=class_outer>
-                "{"
-                <Block
-                    expressions=expressions
-                    commands=commands />
-                "}"
-            </span>
-        }
-        .into_view(),
+    let (expression, error) = match expression {
+        Expression::Block { expressions } => (
+            view! {
+                <span class=class_outer>
+                    "{"
+                    <Block
+                        expressions=expressions
+                        commands=commands />
+                    "}"
+                </span>
+            }
+            .into_view(),
+            None,
+        ),
         Expression::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
-            view! {
-                <span class=class_outer>
-                    <span class=class_inner>
-                        {text}
+            (
+                view! {
+                    <span class=class_outer>
+                        <span class=class_inner>
+                            {text}
+                        </span>
                     </span>
-                </span>
-            }
-            .into_view()
+                }
+                .into_view(),
+                None,
+            )
         }
         Expression::Other {
             expression,
@@ -134,27 +140,33 @@ pub fn Expression(
 
             let expression = format!("{expression}");
 
-            view! {
-                <span class=class_outer>
-                    <span
-                        class=class_inner
-                        data-instruction=data_instruction
-                        data-breakpoint=data_breakpoint
-                        on:click=toggle_breakpoint>
-                        {expression}
+            (
+                view! {
+                    <span class=class_outer>
+                        <span
+                            class=class_inner
+                            data-instruction=data_instruction
+                            data-breakpoint=data_breakpoint
+                            on:click=toggle_breakpoint>
+                            {expression}
+                        </span>
                     </span>
-                </span>
-                <span class="mx-2 font-bold text-red-800">
-                    {error}
-                </span>
-            }
-            .into_view()
+
+                }
+                .into_view(),
+                Some(view! {
+                    <span class="mx-2 font-bold text-red-800">
+                        {error}
+                    </span>
+                }),
+            )
         }
     };
 
     view! {
         <span>
             {expression}
+            {error}
         </span>
     }
 }
