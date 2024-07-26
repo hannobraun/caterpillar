@@ -1,4 +1,4 @@
-use crate::{CoreEffect, Function, Instructions, Stack, Value};
+use crate::{CoreEffect, Function, Instructions, Stack};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -150,8 +150,6 @@ fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
 
     let v = i32::from_le_bytes(v.0);
     let v: i8 = v.try_into()?;
-    let [v] = v.to_le_bytes();
-    let v = Value([v, 0, 0, 0]);
 
     stack.push_operand(v);
 
