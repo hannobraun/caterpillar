@@ -12,8 +12,21 @@ use crate::{
 
 #[component]
 pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
-    let expressions = function
-        .body
+    view! {
+        <div class="m-2 mb-4">
+            <div class="font-bold">
+                {function.name}:
+            </div>
+            <Block
+                block=function.body
+                commands=commands />
+        </div>
+    }
+}
+
+#[component]
+fn Block(block: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
+    let expressions = block
         .into_iter()
         .map(|fragment| {
             view! {
@@ -27,14 +40,9 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
         .collect_view();
 
     view! {
-        <div class="m-2 mb-4">
-            <div class="font-bold">
-                {function.name}:
-            </div>
-            <ol>
-                {expressions}
-            </ol>
-        </div>
+        <ol>
+            {expressions}
+        </ol>
     }
 }
 
