@@ -37,25 +37,22 @@ impl Expression {
             return None;
         };
 
-        match expression {
-            FragmentExpression::Block { start, .. } => {
-                let expressions = fragments
-                    .inner
-                    .iter_from(start)
-                    .cloned()
-                    .filter_map(|fragment| {
-                        Self::new(fragment, fragments, source_map, process)
-                    })
-                    .collect();
+        if let FragmentExpression::Block { start, .. } = expression {
+            let expressions = fragments
+                .inner
+                .iter_from(start)
+                .cloned()
+                .filter_map(|fragment| {
+                    Self::new(fragment, fragments, source_map, process)
+                })
+                .collect();
 
-                return Some(Self::Block { expressions });
-            }
-            FragmentExpression::Comment { text } => {
-                return Some(Self::Comment {
-                    text: format!("# {text}"),
-                });
-            }
-            _ => {}
+            return Some(Self::Block { expressions });
+        }
+        if let FragmentExpression::Comment { text } = expression {
+            return Some(Self::Comment {
+                text: format!("# {text}"),
+            });
         }
 
         let instruction = source_map.fragment_to_instruction(&fragment_id);
