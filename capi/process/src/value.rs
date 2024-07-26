@@ -17,6 +17,13 @@ impl Value {
         i32::from_le_bytes(self.0)
     }
 
+    pub fn to_u8(&self) -> Result<u8, IntegerOverflow> {
+        let [v, 0, 0, 0] = self.0 else {
+            return Err(IntegerOverflow);
+        };
+        Ok(u8::from_le_bytes([v]))
+    }
+
     pub fn to_u32(&self) -> u32 {
         u32::from_le_bytes(self.0)
     }
