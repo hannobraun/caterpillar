@@ -6,13 +6,15 @@ use capi_process::{Effect, InstructionAddr, Process};
 use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Expression {
-    pub expression: FragmentExpression,
-    pub instruction: Option<InstructionAddr>,
-    pub has_durable_breakpoint: bool,
-    pub is_comment: bool,
-    pub is_on_call_stack: bool,
-    pub effect: Option<Effect<GameEngineEffect>>,
+pub enum Expression {
+    Other {
+        expression: FragmentExpression,
+        instruction: Option<InstructionAddr>,
+        has_durable_breakpoint: bool,
+        is_comment: bool,
+        is_on_call_stack: bool,
+        effect: Option<Effect<GameEngineEffect>>,
+    },
 }
 
 impl Expression {
@@ -59,7 +61,7 @@ impl Expression {
             false
         };
 
-        Some(Self {
+        Some(Self::Other {
             expression,
             instruction,
             has_durable_breakpoint,

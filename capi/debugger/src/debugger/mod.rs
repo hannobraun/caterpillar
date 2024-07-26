@@ -26,7 +26,7 @@ mod tests {
     };
 
     use crate::debugger::{
-        active_functions::ActiveFunctionsMessage, ActiveFunctions,
+        active_functions::ActiveFunctionsMessage, ActiveFunctions, Expression,
         RemoteProcess,
     };
 
@@ -122,7 +122,8 @@ mod tests {
         };
         let mut function = functions.remove(0);
         let block = function.body.remove(0);
-        let FragmentExpression::Block { start, .. } = block.expression else {
+        let Expression::Other { expression, .. } = block;
+        let FragmentExpression::Block { start, .. } = expression else {
             panic!("Expected block");
         };
         let fragment = fragments.inner.inner.get(&start).unwrap();
