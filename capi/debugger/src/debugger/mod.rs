@@ -13,10 +13,7 @@ pub use self::{
 mod tests {
     use capi_compiler::{
         compile,
-        repr::{
-            fragments::{FragmentExpression, FragmentPayload},
-            syntax::Script,
-        },
+        repr::{fragments::FragmentExpression, syntax::Script},
     };
     use capi_process::Process;
     use capi_protocol::{
@@ -122,16 +119,11 @@ mod tests {
         };
         let mut function = functions.remove(0);
         let block = function.body.remove(0);
-        let Expression::Other { expression, .. } = block else {
+        let Expression::Block { mut expressions } = block else {
             panic!("Expected block");
         };
-        let FragmentExpression::Block { start, .. } = expression else {
-            panic!("Expected block");
-        };
-        let fragment = fragments.inner.inner.get(&start).unwrap();
-        let FragmentPayload::Expression { expression, .. } = &fragment.payload
-        else {
-            panic!("Expected expression");
+        let Expression::Other { expression, .. } = expressions.remove(0) else {
+            panic!("Expected builtin");
         };
         let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
             expression
