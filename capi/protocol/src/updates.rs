@@ -54,9 +54,25 @@ impl Updates {
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(serde::Deserialize, serde::Serialize)]
 pub enum Update {
+    /// # The source code has been updated
+    ///
+    /// ## Implementation Note
+    ///
+    /// This variant doesn't fit here very well, as it is not handled by
+    /// `Updates`, which only concerns itself with runtime updates. Source code
+    /// on the other hand, is fetched by the debugger from the server.
+    ///
+    /// For now, it's convenient to keep it this way, as on the receiving side,
+    /// it all needs to be handled. And having everything in the same enum,
+    /// allows the debugger to send all over the same channel.
+    ///
+    /// None the less, this is weird, and should be cleaned up at some point.
     SourceCode(SourceCode),
+
     Process(Process<GameEngineHost>),
-    Memory { memory: Memory },
+    Memory {
+        memory: Memory,
+    },
 }
 
 impl Update {
