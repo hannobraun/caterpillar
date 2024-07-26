@@ -7,7 +7,7 @@ use capi_protocol::{
 
 use super::{ActiveFunctions, Debugger};
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct RemoteProcess {
     pub source_code: Option<SourceCode>,
     pub process: Option<Process<GameEngineHost>>,
