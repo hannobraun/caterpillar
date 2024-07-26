@@ -52,6 +52,9 @@ pub fn Expression(
     expression: Expression,
     commands: CommandsTx,
 ) -> impl IntoView {
+    let mut class_outer = String::from("py-1");
+    let mut class_inner = String::from("px-0.5");
+
     let Expression::Other {
         expression,
         instruction,
@@ -61,12 +64,10 @@ pub fn Expression(
         effect,
     } = expression;
 
-    let mut class_outer = String::from("py-1");
     if has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");
     }
 
-    let mut class_inner = String::from("px-0.5");
     if is_comment {
         class_inner.push_str(" italic text-gray-500");
     }
