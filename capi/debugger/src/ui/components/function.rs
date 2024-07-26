@@ -1,3 +1,4 @@
+use capi_compiler::repr::fragments::FragmentExpression;
 use capi_process::{CoreEffect, Effect, InstructionAddr};
 use capi_protocol::command::Command;
 use leptos::{
@@ -102,22 +103,31 @@ pub fn Expression(
         leptos::spawn_local(send_command(command, commands.clone()));
     };
 
-    let expression = format!("{}", expression.expression);
+    match expression.expression {
+        FragmentExpression::Block { .. } => {
+            view! {
+                <span>"Placeholder for a block"</span>
+            }
+        }
+        expression => {
+            let expression = format!("{}", expression);
 
-    view! {
-        <span>
-            <span class=class_outer>
-                <span
-                    class=class_inner
-                    data-instruction=data_instruction
-                    data-breakpoint=data_breakpoint
-                    on:click=toggle_breakpoint>
-                    {expression}
+            view! {
+                <span>
+                    <span class=class_outer>
+                        <span
+                            class=class_inner
+                            data-instruction=data_instruction
+                            data-breakpoint=data_breakpoint
+                            on:click=toggle_breakpoint>
+                            {expression}
+                        </span>
+                    </span>
+                    <span class="mx-2 font-bold text-red-800">
+                        {error}
+                    </span>
                 </span>
-            </span>
-            <span class="mx-2 font-bold text-red-800">
-                {error}
-            </span>
-        </span>
+            }
+        }
     }
 }
