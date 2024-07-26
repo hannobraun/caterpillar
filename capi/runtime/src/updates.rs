@@ -1,6 +1,7 @@
 use capi_process::Process;
 use capi_protocol::{host::GameEngineHost, memory::Memory, update::Update};
 
+#[derive(Default)]
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process<GameEngineHost>>,
@@ -9,11 +10,7 @@ pub struct Updates {
 
 impl Updates {
     pub fn new() -> Self {
-        Self {
-            latest_memory: None,
-            process_at_client: None,
-            queue: Vec::new(),
-        }
+        Self::default()
     }
 
     pub fn queue_updates(
