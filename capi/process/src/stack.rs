@@ -59,7 +59,7 @@ impl Stack {
 
     pub fn all_next_instructions_in_frames(
         &self,
-    ) -> impl Iterator<Item = InstructionAddr> + '_ {
+    ) -> impl DoubleEndedIterator<Item = InstructionAddr> + '_ {
         self.frames.iter().map(|frame| frame.next_instruction())
     }
 
