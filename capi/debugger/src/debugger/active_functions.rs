@@ -1,3 +1,5 @@
+use std::fmt;
+
 use capi_process::Process;
 use capi_protocol::{host::GameEngineHost, updates::SourceCode};
 
@@ -6,7 +8,7 @@ use super::Function;
 #[derive(Clone, Debug)]
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
-    Message { message: &'static str },
+    Message { message: Message },
 }
 
 impl ActiveFunctions {
@@ -16,23 +18,23 @@ impl ActiveFunctions {
     ) -> Self {
         let Some(source_code) = source_code else {
             return Self::Message {
-                message: "No connection to Caterpillar process.",
+                message: Message::NoServer,
             };
         };
         let Some(process) = process else {
             return Self::Message {
-                message: "No process available.",
+                message: Message::NoProcess,
             };
         };
 
         if process.state().can_step() {
             return Self::Message {
-                message: "Process is running.",
+                message: Message::ProcessRunning,
             };
         }
         if process.state().has_finished() {
             return Self::Message {
-                message: "Process is finished.",
+                message: Message::ProcessFinished,
             };
         }
 
@@ -58,5 +60,34 @@ impl ActiveFunctions {
             .collect();
 
         Self::Functions { functions }
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum Message {
+    NoServer,
+    NoProcess,
+    ProcessRunning,
+    ProcessFinished,
+}
+
+impl fmt::Display for Message {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Self::NoServer => {
+                write!(f, "No connection to Caterpillar process.")?;
+            }
+            Self::NoProcess => {
+                write!(f, "No process available.")?;
+            }
+            Self::ProcessRunning => {
+                write!(f, "Process is running.")?;
+            }
+            Self::ProcessFinished => {
+                write!(f, "Process is finished.")?;
+            }
+        }
+
+        Ok(())
     }
 }
