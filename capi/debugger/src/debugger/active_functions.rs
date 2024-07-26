@@ -8,7 +8,7 @@ use super::Function;
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
-    Message { message: Message },
+    Message { message: ActiveFunctionsMessage },
 }
 
 impl ActiveFunctions {
@@ -18,23 +18,23 @@ impl ActiveFunctions {
     ) -> Self {
         let Some(source_code) = source_code else {
             return Self::Message {
-                message: Message::NoServer,
+                message: ActiveFunctionsMessage::NoServer,
             };
         };
         let Some(process) = process else {
             return Self::Message {
-                message: Message::NoProcess,
+                message: ActiveFunctionsMessage::NoProcess,
             };
         };
 
         if process.state().can_step() {
             return Self::Message {
-                message: Message::ProcessRunning,
+                message: ActiveFunctionsMessage::ProcessRunning,
             };
         }
         if process.state().has_finished() {
             return Self::Message {
-                message: Message::ProcessFinished,
+                message: ActiveFunctionsMessage::ProcessFinished,
             };
         }
 
@@ -64,14 +64,14 @@ impl ActiveFunctions {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Message {
+pub enum ActiveFunctionsMessage {
     NoServer,
     NoProcess,
     ProcessRunning,
     ProcessFinished,
 }
 
-impl fmt::Display for Message {
+impl fmt::Display for ActiveFunctionsMessage {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::NoServer => {
