@@ -56,3 +56,15 @@ impl fmt::Display for Value {
         Ok(())
     }
 }
+
+#[derive(
+    Clone,
+    Debug,
+    Eq,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    thiserror::Error,
+)]
+#[error("Integer overflow")]
+pub struct IntegerOverflow;
