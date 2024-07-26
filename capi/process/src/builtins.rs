@@ -2,7 +2,7 @@ use crate::{CoreEffect, Function, Instructions, Stack, Value};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
-        "add" => add,
+        "add_i32" => add,
         "add_wrap_unsigned" => add_wrap_unsigned,
         "brk" => brk,
         "copy" => copy,

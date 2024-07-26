@@ -46,10 +46,10 @@ fn snake(script: &mut Script) {
             .r("vec_buf_len")
             .r("index")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .r("sub")
             .block(|s| {
-                s.r("index").v(1).r("add").r("draw_snake_inner");
+                s.r("index").v(1).r("add_i32").r("draw_snake_inner");
             })
             .block(|_| {})
             .r("if");
@@ -111,7 +111,7 @@ fn snake(script: &mut Script) {
         s.c("Increment the x-coordinate.")
             .r("tile_x")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .bind(["tile_x_new"])
             .c("Check if the x coordinate has advanced beyond the width.")
             .r("tile_field_size")
@@ -131,7 +131,7 @@ fn snake(script: &mut Script) {
             .c("Increment y-coordinate.")
             .r("tile_y")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .bind(["tile_y_new"])
             .c("Return updated coordinates")
             .v(0)
@@ -196,7 +196,7 @@ fn snake(script: &mut Script) {
             .r("load")
             .c("Increment the frame count.")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .c("Place a copy of the new frame count back where it came from.")
             .r("copy")
             .r("frame_count")
@@ -263,13 +263,13 @@ fn snake(script: &mut Script) {
             .r("velocity")
             .r("vec_load")
             .r("vec_x")
-            .r("add")
+            .r("add_i32")
             .r("snake_head")
             .r("vec_y")
             .r("velocity")
             .r("vec_load")
             .r("vec_y")
-            .r("add")
+            .r("add_i32")
             .r("next_position")
             .r("vec_store")
             .r("next_position")
@@ -317,7 +317,7 @@ fn snake(script: &mut Script) {
                 .r("coord")
                 .r("coord_smaller_than_zero")
                 .block(|s| {
-                    s.r("limit").r("add");
+                    s.r("limit").r("add_i32");
                 })
                 .block(|_| {})
                 .r("if");
@@ -378,7 +378,7 @@ fn snake(script: &mut Script) {
             .bind(["body_collides"])
             .r("head_collides")
             .r("body_collides")
-            .r("add")
+            .r("add_i32")
             .v(0)
             .r("greater");
     });
@@ -425,7 +425,7 @@ fn snake(script: &mut Script) {
         s.r("snake_length")
             .r("load")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .bind(["snake_length_plus_growth"])
             .r("snake_length_plus_growth")
             .r("positions")
@@ -463,7 +463,7 @@ fn snake(script: &mut Script) {
                     .bind(["y_matches"])
                     .r("x_matches")
                     .r("y_matches")
-                    .r("add")
+                    .r("add_i32")
                     .v(2)
                     .r("eq")
                     .r("copy")
@@ -473,7 +473,7 @@ fn snake(script: &mut Script) {
                     .r("y")
                     .r("index")
                     .v(1)
-                    .r("add")
+                    .r("add_i32")
                     .r("check_body_collision_inner");
             })
             .block(|s| {
@@ -579,7 +579,7 @@ fn snake(script: &mut Script) {
             .r("load")
             .r("address")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .r("load");
     });
     script.function("vec_store", ["x", "y", "address"], |s| {
@@ -589,7 +589,7 @@ fn snake(script: &mut Script) {
             .r("y")
             .r("address")
             .v(1)
-            .r("add")
+            .r("add_i32")
             .r("store");
     });
     script.function("vec_copy", ["vx", "vy"], |s| {
@@ -698,7 +698,7 @@ fn snake(script: &mut Script) {
             .r("vec_buf")
             .r("_vec_buf_capacity")
             .r("load")
-            .r("add");
+            .r("add_i32");
     });
     script.function("vec_buf_capacity", ["vec_buf"], |s| {
         s.r("vec_buf")
@@ -738,16 +738,16 @@ fn snake(script: &mut Script) {
             .r("store");
     });
     script.function("_vec_buf_first", ["vec_buf"], |s| {
-        s.r("vec_buf").v(0).r("add");
+        s.r("vec_buf").v(0).r("add_i32");
     });
     script.function("_vec_buf_next", ["vec_buf"], |s| {
-        s.r("vec_buf").v(1).r("add");
+        s.r("vec_buf").v(1).r("add_i32");
     });
     script.function("_vec_buf_capacity", ["vec_buf"], |s| {
-        s.r("vec_buf").v(2).r("add");
+        s.r("vec_buf").v(2).r("add_i32");
     });
     script.function("_vec_buf_buffer", ["vec_buf"], |s| {
-        s.r("vec_buf").v(3).r("add");
+        s.r("vec_buf").v(3).r("add_i32");
     });
 
     // Utilities - Miscellaneous
