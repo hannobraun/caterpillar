@@ -35,8 +35,8 @@ fn add_i8(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = a.to_i8();
-    let b = b.to_i8();
+    let a = a.to_i8()?;
+    let b = b.to_i8()?;
 
     let Some(c) = a.checked_add(b) else {
         return Err(IntegerOverflow.into());
