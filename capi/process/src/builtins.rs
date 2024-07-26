@@ -1,4 +1,4 @@
-use crate::{CoreEffect, Function, Instructions, Stack};
+use crate::{CoreEffect, Function, Instructions, Stack, Value};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -11,6 +11,7 @@ pub fn builtin(name: &str) -> Option<Builtin> {
         "eq" => eq,
         "eval" => eval,
         "greater" => greater,
+        "i32_to_i8" => i32_to_i8,
         "if" => if_,
         "mul" => mul,
         "neg" => neg,
@@ -140,6 +141,19 @@ fn greater(stack: &mut Stack, _: &Instructions) -> Result {
     let c = if a > b { 1 } else { 0 };
 
     stack.push_operand(c);
+
+    Ok(())
+}
+
+fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
+    let v = stack.pop_operand()?;
+
+    let v = i32::from_le_bytes(v.0);
+    let v: i8 = v.try_into()?;
+    let [v] = v.to_le_bytes();
+    let v = Value([v, 0, 0, 0]);
+
+    stack.push_operand(v);
 
     Ok(())
 }
