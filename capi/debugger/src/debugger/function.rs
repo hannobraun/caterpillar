@@ -28,7 +28,7 @@ impl Function {
                 .iter_from(function.start)
                 .cloned()
                 .filter_map(|fragment| {
-                    Expression::new(fragment, source_map, process)
+                    Expression::new(fragment, fragments, source_map, process)
                 }),
         );
 

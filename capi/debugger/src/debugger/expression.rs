@@ -1,5 +1,7 @@
 use capi_compiler::{
-    repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
+    repr::fragments::{
+        Fragment, FragmentExpression, FragmentPayload, Fragments,
+    },
     source_map::SourceMap,
 };
 use capi_process::{Effect, InstructionAddr, Process};
@@ -22,6 +24,7 @@ pub enum Expression {
 impl Expression {
     pub fn new(
         fragment: Fragment,
+        _: &Fragments,
         source_map: &SourceMap,
         process: &Process<GameEngineHost>,
     ) -> Option<Self> {
