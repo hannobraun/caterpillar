@@ -725,20 +725,20 @@ fn snake(script: &mut Script) {
             .c("  `base`.")
             .r("base")
             .r("offset")
-            .r("add_wrap_unsigned")
+            .r("add_u8_wrap")
             .r("vec_buf")
             .r("_vec_buf_capacity")
             .r("load")
             .r("remainder")
             .r("vec_buf")
             .r("_vec_buf_buffer")
-            .r("add_wrap_unsigned");
+            .r("add_u8_wrap");
     });
     script.function("_vec_buf_inc_index", ["index_addr"], |s| {
         s.r("index_addr")
             .r("load")
             .v(2)
-            .r("add_wrap_unsigned")
+            .r("add_u8_wrap")
             .r("index_addr")
             .r("store");
     });
