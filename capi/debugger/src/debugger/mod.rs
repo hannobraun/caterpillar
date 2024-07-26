@@ -11,8 +11,16 @@ pub use self::{
 
 #[cfg(test)]
 mod tests {
+    use capi_compiler::{
+        compile,
+        repr::{
+            fragments::{FragmentExpression, FragmentPayload},
+            syntax::Script,
+        },
+    };
     use capi_process::Process;
     use capi_protocol::{
+        host::GameEngineHost,
         memory::Memory,
         updates::{SourceCode, Update, Updates},
     };
@@ -72,5 +80,61 @@ mod tests {
         );
         assert!(debugger.operands.is_none());
         assert_eq!(debugger.memory, Some(Memory::default()));
+    }
+
+    #[test]
+    fn code_within_block() {
+        let mut script = Script::default();
+        script.function("main", [], |s| {
+            s.block(|s| {
+                s.r("brk");
+            })
+            .r("eval");
+        });
+        let (fragments, bytecode, source_map) =
+            compile::<GameEngineHost>(script);
+
+        let mut remote_process = RemoteProcess::default();
+        remote_process.on_update(Update::SourceCode(SourceCode {
+            fragments: fragments.clone(),
+            source_map,
+        }));
+
+        let mut process = Process::default();
+        process.reset(&bytecode, []);
+        while process.state().can_step() {
+            process.step(&bytecode);
+        }
+
+        let memory = Memory::default();
+        let mut updates = Updates::default();
+
+        updates.queue_updates(&process, &memory);
+        for update in updates.take_queued_updates() {
+            remote_process.on_update(update);
+        }
+
+        let debugger = remote_process.to_debugger();
+        let ActiveFunctions::Functions { mut functions } =
+            debugger.active_functions
+        else {
+            panic!("Expected active functions to be displayed");
+        };
+        let mut function = functions.remove(0);
+        let block = function.body.remove(0);
+        let FragmentExpression::Block { start, .. } = block.expression else {
+            panic!("Expected block");
+        };
+        let fragment = fragments.inner.inner.get(&start).unwrap();
+        let FragmentPayload::Expression { expression, .. } = &fragment.payload
+        else {
+            panic!("Expected expression");
+        };
+        let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
+            expression
+        else {
+            panic!("Expected builtin");
+        };
+        assert_eq!(builtin, "brk");
     }
 }
