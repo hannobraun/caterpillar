@@ -12,6 +12,13 @@ impl From<u8> for Value {
     }
 }
 
+impl From<i8> for Value {
+    fn from(value: i8) -> Self {
+        let value: i32 = value.into();
+        value.into()
+    }
+}
+
 impl From<u32> for Value {
     fn from(value: u32) -> Self {
         Self(value.to_le_bytes())
