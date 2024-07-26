@@ -6,6 +6,11 @@ use std::fmt;
 pub struct Value(pub [u8; 4]);
 
 impl Value {
+    pub fn to_i8(&self) -> i8 {
+        let [v, _, _, _] = self.0;
+        i8::from_le_bytes([v])
+    }
+
     pub fn to_i32(&self) -> i32 {
         i32::from_le_bytes(self.0)
     }
