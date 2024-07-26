@@ -8,7 +8,7 @@ use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     Comment {
-        expression: FragmentExpression,
+        text: String,
     },
     Other {
         expression: FragmentExpression,
@@ -32,7 +32,9 @@ impl Expression {
         };
 
         if let FragmentExpression::Comment { .. } = expression {
-            return Some(Self::Comment { expression });
+            return Some(Self::Comment {
+                text: expression.to_string(),
+            });
         }
 
         let instruction = source_map.fragment_to_instruction(&fragment_id);

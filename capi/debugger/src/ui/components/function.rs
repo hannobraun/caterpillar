@@ -62,13 +62,13 @@ pub fn Expression(
         is_on_call_stack,
         effect,
     ) = match expression {
-        Expression::Comment { expression } => {
+        Expression::Comment { text } => {
             class_inner.push_str(" italic text-gray-500");
 
             return view! {
                 <span class=class_outer>
                     <span class=class_inner>
-                        {expression.to_string()}
+                        {text}
                     </span>
                 </span>
             };
