@@ -29,6 +29,9 @@ impl Expression {
             return None;
         };
 
+        let is_comment =
+            matches!(expression, FragmentExpression::Comment { .. });
+
         let instruction = source_map.fragment_to_instruction(&fragment_id);
 
         let has_durable_breakpoint = if let Some(instruction) = &instruction {
@@ -36,9 +39,6 @@ impl Expression {
         } else {
             false
         };
-
-        let is_comment =
-            matches!(expression, FragmentExpression::Comment { .. });
 
         let effect =
             process.state().first_unhandled_effect().and_then(|effect| {
