@@ -536,8 +536,9 @@ fn snake(script: &mut Script) {
             .v(1)
             .r("sub")
             .r("copy")
-            .c("If it wasn't `right` either, this would be a good place to")
-            .c("trigger a panic. But the language doesn't support that yet.");
+            .c("It wasn't `right` either, which means `read_input` returned")
+            .c("an unexpected value.")
+            .r("brk");
     });
 
     // Memory map
