@@ -538,6 +538,7 @@ fn snake(script: &mut Script) {
             .v(1)
             .r("sub")
             .r("copy")
+            .r("return_if_zero")
             .c("It wasn't `right` either, which means `read_input` returned")
             .c("an unexpected value.")
             .r("brk");
