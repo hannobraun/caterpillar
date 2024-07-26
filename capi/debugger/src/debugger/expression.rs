@@ -9,6 +9,9 @@ use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
+    Block {
+        expressions: Vec<Self>,
+    },
     Comment {
         text: String,
     },
@@ -24,7 +27,7 @@ pub enum Expression {
 impl Expression {
     pub fn new(
         fragment: Fragment,
-        _: &Fragments,
+        fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process<GameEngineHost>,
     ) -> Option<Self> {
@@ -34,6 +37,18 @@ impl Expression {
             return None;
         };
 
+        if let FragmentExpression::Block { start, .. } = expression {
+            let expressions = fragments
+                .inner
+                .iter_from(start)
+                .cloned()
+                .filter_map(|fragment| {
+                    Self::new(fragment, fragments, source_map, process)
+                })
+                .collect();
+
+            return Some(Self::Block { expressions });
+        }
         if let FragmentExpression::Comment { .. } = expression {
             return Some(Self::Comment {
                 text: expression.to_string(),

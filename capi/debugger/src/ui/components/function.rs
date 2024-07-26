@@ -61,6 +61,17 @@ pub fn Expression(
         is_on_call_stack,
         effect,
     ) = match expression {
+        Expression::Block { expressions } => {
+            return view! {
+                <span class=class_outer>
+                    "{"
+                    <Block
+                        expressions=expressions
+                        commands=commands />
+                    "}"
+                </span>
+            };
+        }
         Expression::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
