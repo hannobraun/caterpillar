@@ -6,6 +6,7 @@ pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "add_i8" => add_i8,
         "add_i32" => add_i32,
+        "add_u8_wrap" => add_u8_wrap,
         "add_wrap_unsigned" => add_wrap_unsigned,
         "brk" => brk,
         "copy" => copy,
@@ -58,6 +59,19 @@ fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
         return Err(IntegerOverflow.into());
     };
 
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
+
+    let c = a.wrapping_add(b);
     stack.push_operand(c);
 
     Ok(())
