@@ -25,10 +25,10 @@ impl Updates {
 
         if self.update_is_necessary(process) {
             self.process_at_client = Some(process.clone());
-            self.queue(Update::Process(process.clone()));
+            self.queue.push(Update::Process(process.clone()));
 
             if let Some(memory) = self.latest_memory.take() {
-                self.queue(Update::Memory { memory });
+                self.queue.push(Update::Memory { memory });
             }
         }
     }
@@ -53,9 +53,5 @@ impl Updates {
         }
 
         self.process_at_client.as_ref() != Some(process)
-    }
-
-    fn queue(&mut self, update: Update) {
-        self.queue.push(update);
     }
 }
