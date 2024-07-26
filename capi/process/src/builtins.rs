@@ -16,7 +16,7 @@ pub fn builtin(name: &str) -> Option<Builtin> {
         "greater" => greater,
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
-        "mul_i32" => mul,
+        "mul_i32" => mul_i32,
         "neg" => neg,
         "remainder" => remainder,
         "sub" => sub,
@@ -193,7 +193,7 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     eval(stack, instructions)
 }
 
-fn mul(stack: &mut Stack, _: &Instructions) -> Result {
+fn mul_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
