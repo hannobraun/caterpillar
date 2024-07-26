@@ -9,6 +9,12 @@ pub struct Fragments {
 }
 
 impl Fragments {
+    pub fn find_function_by_name(&self, name: &str) -> Option<&Function> {
+        self.by_function
+            .iter()
+            .find(|function| function.name == name)
+    }
+
     pub fn find_function_by_fragment(
         &self,
         fragment_id: &FragmentId,
