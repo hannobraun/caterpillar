@@ -53,7 +53,6 @@ pub fn Expression(
     commands: CommandsTx,
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
-    let mut class_inner = String::from("px-0.5");
 
     let (
         expression,
@@ -92,6 +91,7 @@ pub fn Expression(
         class_outer.push_str(" bg-blue-300");
     }
 
+    let mut class_inner = String::from("px-0.5");
     if let Some(effect) = &effect {
         match effect {
             Effect::Core(CoreEffect::Breakpoint) => {
