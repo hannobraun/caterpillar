@@ -55,14 +55,41 @@ pub fn Expression(
     let mut class_outer = String::from("py-1");
     let mut class_inner = String::from("px-0.5");
 
-    let Expression::Other {
+    let (
         expression,
         instruction,
         has_durable_breakpoint,
         is_comment,
         is_on_call_stack,
         effect,
-    } = expression;
+    ) = match expression {
+        Expression::Comment { expression } => {
+            class_inner.push_str(" italic text-gray-500");
+
+            return view! {
+                <span class=class_outer>
+                    <span class=class_inner>
+                        {expression.to_string()}
+                    </span>
+                </span>
+            };
+        }
+        Expression::Other {
+            expression,
+            instruction,
+            has_durable_breakpoint,
+            is_comment,
+            is_on_call_stack,
+            effect,
+        } => (
+            expression,
+            instruction,
+            has_durable_breakpoint,
+            is_comment,
+            is_on_call_stack,
+            effect,
+        ),
+    };
 
     if has_durable_breakpoint {
         class_outer.push_str(" bg-blue-300");

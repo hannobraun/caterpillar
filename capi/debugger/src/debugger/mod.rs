@@ -122,7 +122,9 @@ mod tests {
         };
         let mut function = functions.remove(0);
         let block = function.body.remove(0);
-        let Expression::Other { expression, .. } = block;
+        let Expression::Other { expression, .. } = block else {
+            panic!("Expected block");
+        };
         let FragmentExpression::Block { start, .. } = expression else {
             panic!("Expected block");
         };

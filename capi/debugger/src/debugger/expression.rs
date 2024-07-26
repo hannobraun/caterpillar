@@ -7,6 +7,9 @@ use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
+    Comment {
+        expression: FragmentExpression,
+    },
     Other {
         expression: FragmentExpression,
         instruction: Option<InstructionAddr>,
@@ -28,6 +31,10 @@ impl Expression {
         else {
             return None;
         };
+
+        if let FragmentExpression::Comment { .. } = expression {
+            return Some(Self::Comment { expression });
+        }
 
         let is_comment =
             matches!(expression, FragmentExpression::Comment { .. });
