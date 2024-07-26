@@ -3,7 +3,7 @@ use capi_protocol::{host::GameEngineHost, updates::SourceCode};
 
 use super::Function;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
     Message { message: &'static str },

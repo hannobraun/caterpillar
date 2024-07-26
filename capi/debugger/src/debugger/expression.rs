@@ -5,7 +5,7 @@ use capi_compiler::{
 use capi_process::{Effect, InstructionAddr, Process};
 use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Expression {
     pub expression: FragmentExpression,
     pub instruction: Option<InstructionAddr>,

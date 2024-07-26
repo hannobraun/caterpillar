@@ -7,7 +7,7 @@ use capi_protocol::host::GameEngineHost;
 
 use super::Expression;
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Function {
     pub name: String,
     pub body: Vec<Expression>,
