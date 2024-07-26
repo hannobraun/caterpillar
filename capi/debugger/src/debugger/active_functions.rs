@@ -41,6 +41,7 @@ impl ActiveFunctions {
         let functions = process
             .stack()
             .all_next_instructions_in_frames()
+            .rev()
             .filter_map(|runtime_location| {
                 let fragment_id = source_code
                     .source_map
