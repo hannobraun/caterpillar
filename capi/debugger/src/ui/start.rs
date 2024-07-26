@@ -1,4 +1,4 @@
-use capi_protocol::update::{SerializedUpdate, Update};
+use capi_protocol::updates::{SerializedUpdate, Update};
 use leptos::{create_signal, SignalSet};
 use tokio::sync::mpsc;
 

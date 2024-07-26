@@ -1,5 +1,5 @@
 use capi_process::Process;
-use capi_protocol::{host::GameEngineHost, update::SourceCode};
+use capi_protocol::{host::GameEngineHost, updates::SourceCode};
 
 use super::Function;
 

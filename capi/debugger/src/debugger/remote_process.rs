@@ -2,7 +2,7 @@ use capi_process::Process;
 use capi_protocol::{
     host::GameEngineHost,
     memory::Memory,
-    update::{SourceCode, Update},
+    updates::{SourceCode, Update},
 };
 
 use super::{ActiveFunctions, Debugger};

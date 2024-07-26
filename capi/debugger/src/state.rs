@@ -1,5 +1,5 @@
 use capi_protocol::{
-    update::{SerializedUpdate, SourceCode, Update},
+    updates::{SerializedUpdate, SourceCode, Update},
     Versioned,
 };
 use gloo_net::http::Request;

@@ -1,7 +1,7 @@
 pub mod command;
 pub mod host;
 pub mod memory;
-pub mod update;
+pub mod updates;
 
 pub const CODE_BUFFER_SIZE: usize = 1024 * 1024;
 

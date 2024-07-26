@@ -5,7 +5,7 @@ use capi_protocol::{
     command::{Command, SerializedCommand},
     host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     memory::Memory,
-    update::Updates,
+    updates::Updates,
 };
 
 use crate::{display, ffi_out::on_panic};

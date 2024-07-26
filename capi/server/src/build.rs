@@ -2,7 +2,7 @@ use std::str;
 
 use capi_compiler::compile;
 use capi_process::Bytecode;
-use capi_protocol::{host::GameEngineHost, update::SourceCode, Versioned};
+use capi_protocol::{host::GameEngineHost, updates::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
