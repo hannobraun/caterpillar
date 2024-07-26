@@ -1,14 +1,10 @@
 use capi_process::Process;
-use capi_protocol::{
-    host::GameEngineHost,
-    memory::Memory,
-    update::{SerializedUpdate, Update},
-};
+use capi_protocol::{host::GameEngineHost, memory::Memory, update::Update};
 
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process<GameEngineHost>>,
-    queue: Vec<SerializedUpdate>,
+    queue: Vec<Update>,
 }
 
 impl Updates {
@@ -37,9 +33,7 @@ impl Updates {
         }
     }
 
-    pub fn take_queued_updates(
-        &mut self,
-    ) -> impl Iterator<Item = SerializedUpdate> + '_ {
+    pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
         self.queue.drain(..)
     }
 
@@ -62,7 +56,6 @@ impl Updates {
     }
 
     fn queue(&mut self, update: Update) {
-        let update = update.serialize();
         self.queue.push(update);
     }
 }

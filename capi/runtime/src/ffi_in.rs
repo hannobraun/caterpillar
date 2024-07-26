@@ -188,6 +188,8 @@ pub fn on_frame() {
     state.update(pixels);
 
     for update in state.updates.take_queued_updates() {
+        let update = update.serialize();
+
         // Sound, because the reference is dropped before we call the method
         // again or we give back control to the host.
         let buffer = unsafe { UPDATES.access() };
