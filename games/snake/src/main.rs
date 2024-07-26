@@ -636,7 +636,7 @@ fn snake(script: &mut Script) {
     script.function("vec_buf_get", ["vec_buf", "index"], |s| {
         s.r("index")
             .v(2)
-            .r("mul")
+            .r("mul_i32")
             .bind(["offset"])
             .r("vec_buf")
             .r("_vec_buf_first")

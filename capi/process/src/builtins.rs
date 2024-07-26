@@ -16,7 +16,7 @@ pub fn builtin(name: &str) -> Option<Builtin> {
         "greater" => greater,
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
-        "mul" => mul,
+        "mul_i32" => mul,
         "neg" => neg,
         "remainder" => remainder,
         "sub" => sub,
