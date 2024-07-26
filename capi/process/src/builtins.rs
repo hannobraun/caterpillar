@@ -7,7 +7,6 @@ pub fn builtin(name: &str) -> Option<Builtin> {
         "add_i8" => add_i8,
         "add_i32" => add_i32,
         "add_u8_wrap" => add_u8_wrap,
-        "add_wrap_unsigned" => add_wrap_unsigned,
         "brk" => brk,
         "copy" => copy,
         "div" => div,
@@ -72,21 +71,6 @@ fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_u8()?;
 
     let c = a.wrapping_add(b);
-    stack.push_operand(c);
-
-    Ok(())
-}
-
-fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
-    let b = stack.pop_operand()?;
-    let a = stack.pop_operand()?;
-
-    let a = a.to_i32();
-    let b = b.to_i32();
-
-    let c = a.wrapping_add(b);
-    let c = if c >= 0 { c } else { c - i32::MIN };
-
     stack.push_operand(c);
 
     Ok(())
