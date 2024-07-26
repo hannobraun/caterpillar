@@ -63,7 +63,7 @@ pub fn Expression(
         effect,
     ) = match expression {
         Expression::Comment { text } => {
-            class_inner.push_str(" italic text-gray-500");
+            let class_inner = String::from("italic text-gray-500");
 
             return view! {
                 <span class=class_outer>
