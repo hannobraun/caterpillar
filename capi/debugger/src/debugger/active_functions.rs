@@ -5,7 +5,7 @@ use capi_protocol::{host::GameEngineHost, updates::SourceCode};
 
 use super::Function;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
     Functions { functions: Vec<Function> },
     Message { message: Message },
@@ -63,7 +63,7 @@ impl ActiveFunctions {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Message {
     NoServer,
     NoProcess,
