@@ -75,10 +75,10 @@ impl fmt::Display for Message {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::NoServer => {
-                write!(f, "No connection to Caterpillar process.")?;
+                write!(f, "No connection to server.")?;
             }
             Self::NoProcess => {
-                write!(f, "No process available.")?;
+                write!(f, "No connection to process.")?;
             }
             Self::ProcessRunning => {
                 write!(f, "Process is running.")?;
