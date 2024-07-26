@@ -14,8 +14,8 @@ impl From<u8> for Value {
 
 impl From<i8> for Value {
     fn from(value: i8) -> Self {
-        let value: i32 = value.into();
-        value.into()
+        let [v] = value.to_le_bytes();
+        Value([v, 0, 0, 0])
     }
 }
 
