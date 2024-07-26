@@ -32,8 +32,8 @@ fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     let Some(c) = a.checked_add(b) else {
         return Err(CoreEffect::IntegerOverflow);
@@ -48,8 +48,8 @@ fn add_wrap_unsigned(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     let c = a.wrapping_add(b);
     let c = if c >= 0 { c } else { c - i32::MIN };
@@ -76,8 +76,8 @@ fn div(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     if b == 0 {
         return Err(CoreEffect::DivideByZero);
@@ -135,8 +135,8 @@ fn greater(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     let c = if a > b { 1 } else { 0 };
 
@@ -148,7 +148,7 @@ fn greater(stack: &mut Stack, _: &Instructions) -> Result {
 fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
     let v = stack.pop_operand()?;
 
-    let v = i32::from_le_bytes(v.0);
+    let v = v.to_i32();
     let v: i8 = v.try_into()?;
 
     stack.push_operand(v);
@@ -180,8 +180,8 @@ fn mul(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     let Some(c) = a.checked_mul(b) else {
         return Err(CoreEffect::IntegerOverflow);
@@ -195,7 +195,7 @@ fn mul(stack: &mut Stack, _: &Instructions) -> Result {
 fn neg(stack: &mut Stack, _: &Instructions) -> Result {
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
+    let a = a.to_i32();
 
     if a == i32::MIN {
         return Err(CoreEffect::IntegerOverflow);
@@ -211,8 +211,8 @@ fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     if b == 0 {
         return Err(CoreEffect::DivideByZero);
@@ -228,8 +228,8 @@ fn sub(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
-    let a = i32::from_le_bytes(a.0);
-    let b = i32::from_le_bytes(b.0);
+    let a = a.to_i32();
+    let b = b.to_i32();
 
     let Some(c) = a.checked_sub(b) else {
         return Err(CoreEffect::IntegerOverflow);
