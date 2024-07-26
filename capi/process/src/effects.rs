@@ -1,6 +1,9 @@
 use std::num::TryFromIntError;
 
-use crate::{operands::PopOperandError, stack::PushStackFrameError};
+use crate::{
+    operands::PopOperandError, stack::PushStackFrameError,
+    value::IntegerOverflow,
+};
 
 #[derive(
     Clone,
@@ -47,8 +50,8 @@ pub enum CoreEffect {
     #[error("Divide by zero")]
     DivideByZero,
 
-    #[error("Integer overflow")]
-    IntegerOverflow,
+    #[error(transparent)]
+    IntegerOverflow(#[from] IntegerOverflow),
 
     #[error("Operand is out of bounds")]
     OperandOutOfBounds,

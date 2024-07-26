@@ -1,4 +1,6 @@
-use crate::{CoreEffect, Function, Instructions, Stack};
+use crate::{
+    value::IntegerOverflow, CoreEffect, Function, Instructions, Stack,
+};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -37,7 +39,7 @@ fn add_i8(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i8();
 
     let Some(c) = a.checked_add(b) else {
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     };
 
     stack.push_operand(c);
@@ -53,7 +55,7 @@ fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i32();
 
     let Some(c) = a.checked_add(b) else {
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     };
 
     stack.push_operand(c);
@@ -101,7 +103,7 @@ fn div(stack: &mut Stack, _: &Instructions) -> Result {
     }
     let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     };
 
     stack.push_operand(c);
@@ -201,7 +203,7 @@ fn mul(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i32();
 
     let Some(c) = a.checked_mul(b) else {
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     };
 
     stack.push_operand(c);
@@ -215,7 +217,7 @@ fn neg(stack: &mut Stack, _: &Instructions) -> Result {
     let a = a.to_i32();
 
     if a == i32::MIN {
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     }
     let b = -a;
 
@@ -249,7 +251,7 @@ fn sub(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i32();
 
     let Some(c) = a.checked_sub(b) else {
-        return Err(CoreEffect::IntegerOverflow);
+        return Err(IntegerOverflow.into());
     };
 
     stack.push_operand(c);
