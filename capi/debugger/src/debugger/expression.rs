@@ -50,9 +50,9 @@ impl Expression {
 
                 return Some(Self::Block { expressions });
             }
-            FragmentExpression::Comment { .. } => {
+            FragmentExpression::Comment { text } => {
                 return Some(Self::Comment {
-                    text: expression.to_string(),
+                    text: format!("# {text}"),
                 });
             }
             _ => {}
