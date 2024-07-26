@@ -19,15 +19,15 @@ pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
                 {function.name}:
             </div>
             <Block
-                block=function.body
+                expressions=function.body
                 commands=commands />
         </div>
     }
 }
 
 #[component]
-fn Block(block: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
-    let expressions = block
+fn Block(expressions: Vec<Expression>, commands: CommandsTx) -> impl IntoView {
+    let expressions = expressions
         .into_iter()
         .map(|fragment| {
             view! {
