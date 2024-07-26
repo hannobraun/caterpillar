@@ -110,7 +110,7 @@ pub fn Expression(
             }
         }
         expression => {
-            let expression = format!("{}", expression);
+            let expression = format!("{expression}");
 
             view! {
                 <span>
