@@ -37,7 +37,7 @@ pub fn ActiveFunctions(
             <p
                 class="w-full h-full absolute inset-y-0 flex \
                     justify-center items-center">
-                {message}
+                {message.to_string()}
             </p>
         }
         .into_view(),
