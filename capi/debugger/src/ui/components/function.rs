@@ -53,15 +53,9 @@ pub fn Expression(
 ) -> impl IntoView {
     let mut class_outer = String::from("py-1");
 
-    let (
-        expression,
-        instruction,
-        has_durable_breakpoint,
-        is_on_call_stack,
-        effect,
-    ) = match expression {
+    match expression {
         Expression::Block { expressions } => {
-            return view! {
+            view! {
                 <span class=class_outer>
                     "{"
                     <Block
@@ -69,18 +63,18 @@ pub fn Expression(
                         commands=commands />
                     "}"
                 </span>
-            };
+            }
         }
         Expression::Comment { text } => {
             let class_inner = String::from("italic text-gray-500");
 
-            return view! {
+            view! {
                 <span class=class_outer>
                     <span class=class_inner>
                         {text}
                     </span>
                 </span>
-            };
+            }
         }
         Expression::Other {
             expression,
@@ -88,77 +82,74 @@ pub fn Expression(
             has_durable_breakpoint,
             is_on_call_stack,
             effect,
-        } => (
-            expression,
-            instruction,
-            has_durable_breakpoint,
-            is_on_call_stack,
-            effect,
-        ),
-    };
-
-    if has_durable_breakpoint {
-        class_outer.push_str(" bg-blue-300");
-    }
-
-    let mut class_inner = String::from("px-0.5");
-    if let Some(effect) = &effect {
-        match effect {
-            Effect::Core(CoreEffect::Breakpoint) => {
-                class_inner.push_str(" bg-green-300")
+        } => {
+            if has_durable_breakpoint {
+                class_outer.push_str(" bg-blue-300");
             }
-            _ => class_inner.push_str(" bg-red-300"),
-        }
-    }
-    if is_on_call_stack {
-        class_inner.push_str(" font-bold");
-    }
 
-    let data_instruction = instruction.map(|instruction| instruction.index);
-    let data_breakpoint = has_durable_breakpoint;
+            let mut class_inner = String::from("px-0.5");
+            if let Some(effect) = &effect {
+                match effect {
+                    Effect::Core(CoreEffect::Breakpoint) => {
+                        class_inner.push_str(" bg-green-300")
+                    }
+                    _ => class_inner.push_str(" bg-red-300"),
+                }
+            }
+            if is_on_call_stack {
+                class_inner.push_str(" font-bold");
+            }
 
-    let error = effect.map(|effect| format!("{:?}", effect));
+            let data_instruction =
+                instruction.map(|instruction| instruction.index);
+            let data_breakpoint = has_durable_breakpoint;
 
-    let toggle_breakpoint = move |event: MouseEvent| {
-        let event_target = event.target().unwrap();
-        let element = event_target.dyn_ref::<HtmlSpanElement>().unwrap();
+            let error = effect.map(|effect| format!("{:?}", effect));
 
-        let Some(instruction) = element.get_attribute("data-instruction")
-        else {
-            // This happens, if the user clicks on a comment.
-            return;
-        };
-        let instruction = InstructionAddr {
-            index: instruction
-                .parse()
-                .expect("Expected `data-instruction` attribute to be a number"),
-        };
+            let toggle_breakpoint = move |event: MouseEvent| {
+                let event_target = event.target().unwrap();
+                let element =
+                    event_target.dyn_ref::<HtmlSpanElement>().unwrap();
 
-        let command = if element.has_attribute("data-breakpoint") {
-            Command::BreakpointClear { instruction }
-        } else {
-            Command::BreakpointSet { instruction }
-        };
+                let Some(instruction) =
+                    element.get_attribute("data-instruction")
+                else {
+                    // This happens, if the user clicks on a comment.
+                    return;
+                };
+                let instruction = InstructionAddr {
+                    index: instruction.parse().expect(
+                        "Expected `data-instruction` attribute to be a number",
+                    ),
+                };
 
-        leptos::spawn_local(send_command(command, commands.clone()));
-    };
+                let command = if element.has_attribute("data-breakpoint") {
+                    Command::BreakpointClear { instruction }
+                } else {
+                    Command::BreakpointSet { instruction }
+                };
 
-    let expression = format!("{expression}");
+                leptos::spawn_local(send_command(command, commands.clone()));
+            };
 
-    view! {
-        <span>
-            <span class=class_outer>
-                <span
-                    class=class_inner
-                    data-instruction=data_instruction
-                    data-breakpoint=data_breakpoint
-                    on:click=toggle_breakpoint>
-                    {expression}
+            let expression = format!("{expression}");
+
+            view! {
+                <span>
+                    <span class=class_outer>
+                        <span
+                            class=class_inner
+                            data-instruction=data_instruction
+                            data-breakpoint=data_breakpoint
+                            on:click=toggle_breakpoint>
+                            {expression}
+                        </span>
+                    </span>
+                    <span class="mx-2 font-bold text-red-800">
+                        {error}
+                    </span>
                 </span>
-            </span>
-            <span class="mx-2 font-bold text-red-800">
-                {error}
-            </span>
-        </span>
+            }
+        }
     }
 }
