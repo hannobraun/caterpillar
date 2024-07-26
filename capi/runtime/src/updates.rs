@@ -9,10 +9,6 @@ pub struct Updates {
 }
 
 impl Updates {
-    pub fn new() -> Self {
-        Self::default()
-    }
-
     pub fn queue_updates(
         &mut self,
         process: &Process<GameEngineHost>,

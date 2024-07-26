@@ -30,7 +30,7 @@ impl RuntimeState {
         let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
-        let updates = Updates::new();
+        let updates = Updates::default();
 
         Self {
             bytecode: None,
