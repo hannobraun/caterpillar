@@ -56,13 +56,11 @@ pub fn Expression(
     let (expression, error) = match expression {
         Expression::Block { expressions } => (
             view! {
-                <span class=class_outer>
-                    "{"
-                    <Block
-                        expressions=expressions
-                        commands=commands />
-                    "}"
-                </span>
+                "{"
+                <Block
+                    expressions=expressions
+                    commands=commands />
+                "}"
             }
             .into_view(),
             None,
@@ -72,10 +70,8 @@ pub fn Expression(
 
             (
                 view! {
-                    <span class=class_outer>
-                        <span class=class_inner>
-                            {text}
-                        </span>
+                    <span class=class_inner>
+                        {text}
                     </span>
                 }
                 .into_view(),
@@ -142,14 +138,12 @@ pub fn Expression(
 
             (
                 view! {
-                    <span class=class_outer>
-                        <span
-                            class=class_inner
-                            data-instruction=data_instruction
-                            data-breakpoint=data_breakpoint
-                            on:click=toggle_breakpoint>
-                            {expression}
-                        </span>
+                    <span
+                        class=class_inner
+                        data-instruction=data_instruction
+                        data-breakpoint=data_breakpoint
+                        on:click=toggle_breakpoint>
+                        {expression}
                     </span>
                 }
                 .into_view(),
@@ -164,7 +158,9 @@ pub fn Expression(
 
     view! {
         <span>
-            {expression}
+            <span class=class_outer>
+                {expression}
+            </span>
             {error}
         </span>
     }
