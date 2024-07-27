@@ -96,9 +96,12 @@ mod tests {
             });
         });
 
-        let mut function =
-            debugger.active_functions.expect_functions().remove(0);
-        let block = function.body.remove(0);
+        let block = debugger
+            .active_functions
+            .expect_functions()
+            .remove(0)
+            .body
+            .remove(0);
         let Expression::Block { mut expressions } = block else {
             panic!("Expected block");
         };
