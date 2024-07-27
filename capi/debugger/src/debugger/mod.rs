@@ -110,7 +110,7 @@ mod tests {
             .expect_other();
         assert_eq!(other.effect, Some(Effect::Core(CoreEffect::Breakpoint)));
 
-        let builtin = other.expression.expect_builtin();
+        let builtin = other.expression.expect_builtin_function();
         assert_eq!(builtin, "brk");
     }
 
@@ -182,11 +182,11 @@ mod tests {
     }
 
     trait FragmentExpressionExt {
-        fn expect_builtin(self) -> String;
+        fn expect_builtin_function(self) -> String;
     }
 
     impl FragmentExpressionExt for FragmentExpression {
-        fn expect_builtin(self) -> String {
+        fn expect_builtin_function(self) -> String {
             let FragmentExpression::ResolvedBuiltinFunction { name } = self
             else {
                 panic!("Expected builtin");
