@@ -96,8 +96,8 @@ mod tests {
             });
         });
 
-        let mut functions = debugger.active_functions.expect_functions();
-        let mut function = functions.remove(0);
+        let mut function =
+            debugger.active_functions.expect_functions().remove(0);
         let block = function.body.remove(0);
         let Expression::Block { mut expressions } = block else {
             panic!("Expected block");
