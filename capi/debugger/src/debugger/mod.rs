@@ -189,7 +189,7 @@ mod tests {
         fn expect_builtin_function(self) -> String {
             let FragmentExpression::ResolvedBuiltinFunction { name } = self
             else {
-                panic!("Expected builtin");
+                panic!("Expected builtin function");
             };
 
             name
