@@ -30,7 +30,7 @@ mod tests {
         RemoteProcess,
     };
 
-    use super::{Debugger, Function};
+    use super::{Debugger, Function, OtherExpression};
 
     #[test]
     fn source_code() {
@@ -99,17 +99,15 @@ mod tests {
             });
         });
 
-        let expression = debugger
+        let other = debugger
             .active_functions
             .expect_functions()
             .remove(0)
             .body
             .remove(0)
             .expect_block()
-            .remove(0);
-        let Expression::Other(other) = expression else {
-            panic!("Expected other expression");
-        };
+            .remove(0)
+            .expect_other();
 
         assert_eq!(other.effect, Some(Effect::Core(CoreEffect::Breakpoint)));
 
@@ -167,6 +165,7 @@ mod tests {
 
     trait ExpressionExt {
         fn expect_block(self) -> Vec<Expression>;
+        fn expect_other(self) -> OtherExpression;
     }
 
     impl ExpressionExt for Expression {
@@ -176,6 +175,14 @@ mod tests {
             };
 
             expressions
+        }
+
+        fn expect_other(self) -> OtherExpression {
+            let Expression::Other(other) = self else {
+                panic!("Expected other expression");
+            };
+
+            other
         }
     }
 }
