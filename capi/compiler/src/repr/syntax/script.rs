@@ -11,7 +11,7 @@ impl Script {
         name: &str,
         args: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
-    ) {
+    ) -> &mut Self {
         let mut body = Vec::new();
         f(&mut SyntaxBuilder::new(&mut body));
 
@@ -20,5 +20,7 @@ impl Script {
             args: args.into_iter().map(String::from).collect(),
             body,
         });
+
+        self
     }
 }
