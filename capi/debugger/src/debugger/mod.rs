@@ -187,13 +187,12 @@ mod tests {
 
     impl FragmentExpressionExt for FragmentExpression {
         fn expect_builtin(self) -> String {
-            let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
-                self
+            let FragmentExpression::ResolvedBuiltinFunction { name } = self
             else {
                 panic!("Expected builtin");
             };
 
-            builtin
+            name
         }
     }
 }
