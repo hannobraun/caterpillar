@@ -27,7 +27,7 @@ mod tests {
         RemoteProcess,
     };
 
-    use super::Debugger;
+    use super::{Debugger, Function};
 
     #[test]
     fn source_code() {
@@ -96,11 +96,7 @@ mod tests {
             });
         });
 
-        let ActiveFunctions::Functions { mut functions } =
-            debugger.active_functions
-        else {
-            panic!("Expected active functions to be displayed");
-        };
+        let mut functions = debugger.active_functions.expect_functions();
         let mut function = functions.remove(0);
         let block = function.body.remove(0);
         let Expression::Block { mut expressions } = block else {
@@ -150,5 +146,19 @@ mod tests {
         }
 
         remote_process.to_debugger()
+    }
+
+    trait ActiveFunctionsExt {
+        fn expect_functions(self) -> Vec<Function>;
+    }
+
+    impl ActiveFunctionsExt for ActiveFunctions {
+        fn expect_functions(self) -> Vec<Function> {
+            let ActiveFunctions::Functions { functions } = self else {
+                panic!("Expected active functions to be displayed");
+            };
+
+            functions
+        }
     }
 }
