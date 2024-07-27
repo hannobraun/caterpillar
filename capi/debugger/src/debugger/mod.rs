@@ -27,6 +27,8 @@ mod tests {
         RemoteProcess,
     };
 
+    use super::Debugger;
+
     #[test]
     fn source_code() {
         let mut remote_process = RemoteProcess::default();
@@ -85,7 +87,7 @@ mod tests {
         // that block should appear as an active function, and the current
         // instruction should be visible.
 
-        let remote_process = setup(|script| {
+        let debugger = setup(|script| {
             script.function("main", [], |s| {
                 s.block(|s| {
                     s.r("brk");
@@ -94,7 +96,6 @@ mod tests {
             });
         });
 
-        let debugger = remote_process.to_debugger();
         let ActiveFunctions::Functions { mut functions } =
             debugger.active_functions
         else {
@@ -121,7 +122,7 @@ mod tests {
         assert_eq!(builtin, "brk");
     }
 
-    fn setup(f: impl FnOnce(&mut Script)) -> RemoteProcess {
+    fn setup(f: impl FnOnce(&mut Script)) -> Debugger {
         let mut script = Script::default();
         f(&mut script);
 
@@ -148,6 +149,6 @@ mod tests {
             remote_process.on_update(update);
         }
 
-        remote_process
+        remote_process.to_debugger()
     }
 }
