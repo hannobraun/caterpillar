@@ -96,15 +96,13 @@ mod tests {
             });
         });
 
-        let block = debugger
+        let mut expressions = debugger
             .active_functions
             .expect_functions()
             .remove(0)
             .body
-            .remove(0);
-        let Expression::Block { mut expressions } = block else {
-            panic!("Expected block");
-        };
+            .remove(0)
+            .expect_block();
         let Expression::Other {
             expression,
             effect: Some(Effect::Core(CoreEffect::Breakpoint)),
@@ -162,6 +160,20 @@ mod tests {
             };
 
             functions
+        }
+    }
+
+    trait ExpressionExt {
+        fn expect_block(self) -> Vec<Expression>;
+    }
+
+    impl ExpressionExt for Expression {
+        fn expect_block(self) -> Vec<Expression> {
+            let Expression::Block { expressions } = self else {
+                panic!("Expected block");
+            };
+
+            expressions
         }
     }
 }
