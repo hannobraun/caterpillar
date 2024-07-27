@@ -15,7 +15,7 @@ mod tests {
         compile,
         repr::{fragments::FragmentExpression, syntax::Script},
     };
-    use capi_process::Process;
+    use capi_process::{CoreEffect, Effect, Process};
     use capi_protocol::{
         host::GameEngineHost,
         memory::Memory,
@@ -105,7 +105,12 @@ mod tests {
         let Expression::Block { mut expressions } = block else {
             panic!("Expected block");
         };
-        let Expression::Other { expression, .. } = expressions.remove(0) else {
+        let Expression::Other {
+            expression,
+            effect: Some(Effect::Core(CoreEffect::Breakpoint)),
+            ..
+        } = expressions.remove(0)
+        else {
             panic!("Expected builtin");
         };
         let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
