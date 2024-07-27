@@ -5,8 +5,11 @@ mod function;
 mod remote_process;
 
 pub use self::{
-    active_functions::ActiveFunctions, debugger::Debugger,
-    expression::Expression, function::Function, remote_process::RemoteProcess,
+    active_functions::ActiveFunctions,
+    debugger::Debugger,
+    expression::{Expression, OtherExpression},
+    function::Function,
+    remote_process::RemoteProcess,
 };
 
 #[cfg(test)]
@@ -23,8 +26,8 @@ mod tests {
     };
 
     use crate::debugger::{
-        active_functions::ActiveFunctionsMessage, ActiveFunctions, Expression,
-        RemoteProcess,
+        active_functions::ActiveFunctionsMessage, expression::OtherExpression,
+        ActiveFunctions, Expression, RemoteProcess,
     };
 
     use super::{Debugger, Function};
@@ -103,11 +106,11 @@ mod tests {
             .body
             .remove(0)
             .expect_block();
-        let Expression::Other {
+        let Expression::Other(OtherExpression {
             expression,
             effect: Some(Effect::Core(CoreEffect::Breakpoint)),
             ..
-        } = expressions.remove(0)
+        }) = expressions.remove(0)
         else {
             panic!("Expected builtin");
         };

@@ -6,7 +6,7 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Expression, Function},
+    debugger::{Expression, Function, OtherExpression},
     ui::{send_command, CommandsTx},
 };
 
@@ -78,13 +78,13 @@ pub fn Expression(
                 None,
             )
         }
-        Expression::Other {
+        Expression::Other(OtherExpression {
             expression,
             instruction,
             has_durable_breakpoint,
             is_on_call_stack,
             effect,
-        } => {
+        }) => {
             if has_durable_breakpoint {
                 class_outer.push_str(" bg-blue-300");
             }

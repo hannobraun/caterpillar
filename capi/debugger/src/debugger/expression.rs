@@ -9,19 +9,9 @@ use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
-    Block {
-        expressions: Vec<Self>,
-    },
-    Comment {
-        text: String,
-    },
-    Other {
-        expression: FragmentExpression,
-        instruction: Option<InstructionAddr>,
-        has_durable_breakpoint: bool,
-        is_on_call_stack: bool,
-        effect: Option<Effect<GameEngineEffect>>,
-    },
+    Block { expressions: Vec<Self> },
+    Comment { text: String },
+    Other(OtherExpression),
 }
 
 impl Expression {
@@ -84,12 +74,21 @@ impl Expression {
             false
         };
 
-        Some(Self::Other {
+        Some(Self::Other(OtherExpression {
             expression,
             instruction,
             has_durable_breakpoint,
             is_on_call_stack,
             effect,
-        })
+        }))
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct OtherExpression {
+    pub expression: FragmentExpression,
+    pub instruction: Option<InstructionAddr>,
+    pub has_durable_breakpoint: bool,
+    pub is_on_call_stack: bool,
+    pub effect: Option<Effect<GameEngineEffect>>,
 }
