@@ -99,14 +99,15 @@ mod tests {
             });
         });
 
-        let mut expressions = debugger
+        let expression = debugger
             .active_functions
             .expect_functions()
             .remove(0)
             .body
             .remove(0)
-            .expect_block();
-        let Expression::Other(other) = expressions.remove(0) else {
+            .expect_block()
+            .remove(0);
+        let Expression::Other(other) = expression else {
             panic!("Expected builtin");
         };
 
