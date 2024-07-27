@@ -81,13 +81,41 @@ mod tests {
 
     #[test]
     fn code_within_block() {
-        let mut script = Script::default();
-        script.function("main", [], |s| {
-            s.block(|s| {
-                s.r("brk");
-            })
-            .r("eval");
+        let remote_process = setup(|script| {
+            script.function("main", [], |s| {
+                s.block(|s| {
+                    s.r("brk");
+                })
+                .r("eval");
+            });
         });
+
+        let debugger = remote_process.to_debugger();
+        let ActiveFunctions::Functions { mut functions } =
+            debugger.active_functions
+        else {
+            panic!("Expected active functions to be displayed");
+        };
+        let mut function = functions.remove(0);
+        let block = function.body.remove(0);
+        let Expression::Block { mut expressions } = block else {
+            panic!("Expected block");
+        };
+        let Expression::Other { expression, .. } = expressions.remove(0) else {
+            panic!("Expected builtin");
+        };
+        let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
+            expression
+        else {
+            panic!("Expected builtin");
+        };
+        assert_eq!(builtin, "brk");
+    }
+
+    fn setup(f: impl FnOnce(&mut Script)) -> RemoteProcess {
+        let mut script = Script::default();
+        f(&mut script);
+
         let (fragments, bytecode, source_map) =
             compile::<GameEngineHost>(script);
 
@@ -111,25 +139,6 @@ mod tests {
             remote_process.on_update(update);
         }
 
-        let debugger = remote_process.to_debugger();
-        let ActiveFunctions::Functions { mut functions } =
-            debugger.active_functions
-        else {
-            panic!("Expected active functions to be displayed");
-        };
-        let mut function = functions.remove(0);
-        let block = function.body.remove(0);
-        let Expression::Block { mut expressions } = block else {
-            panic!("Expected block");
-        };
-        let Expression::Other { expression, .. } = expressions.remove(0) else {
-            panic!("Expected builtin");
-        };
-        let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
-            expression
-        else {
-            panic!("Expected builtin");
-        };
-        assert_eq!(builtin, "brk");
+        remote_process
     }
 }
