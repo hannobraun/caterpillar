@@ -108,7 +108,7 @@ mod tests {
             .expect_block()
             .remove(0);
         let Expression::Other(other) = expression else {
-            panic!("Expected builtin");
+            panic!("Expected other expression");
         };
 
         assert_eq!(other.effect, Some(Effect::Core(CoreEffect::Breakpoint)));
