@@ -26,8 +26,8 @@ mod tests {
     };
 
     use crate::debugger::{
-        active_functions::ActiveFunctionsMessage, expression::OtherExpression,
-        ActiveFunctions, Expression, RemoteProcess,
+        active_functions::ActiveFunctionsMessage, ActiveFunctions, Expression,
+        RemoteProcess,
     };
 
     use super::{Debugger, Function};
@@ -106,16 +106,14 @@ mod tests {
             .body
             .remove(0)
             .expect_block();
-        let Expression::Other(OtherExpression {
-            expression,
-            effect: Some(Effect::Core(CoreEffect::Breakpoint)),
-            ..
-        }) = expressions.remove(0)
-        else {
+        let Expression::Other(other) = expressions.remove(0) else {
             panic!("Expected builtin");
         };
+
+        assert_eq!(other.effect, Some(Effect::Core(CoreEffect::Breakpoint)));
+
         let FragmentExpression::ResolvedBuiltinFunction { name: builtin } =
-            expression
+            other.expression
         else {
             panic!("Expected builtin");
         };
