@@ -81,6 +81,10 @@ mod tests {
 
     #[test]
     fn code_within_block() {
+        // If execution is stopped within a block, the function that contains
+        // that block should appear as an active function, and the current
+        // instruction should be visible.
+
         let remote_process = setup(|script| {
             script.function("main", [], |s| {
                 s.block(|s| {
