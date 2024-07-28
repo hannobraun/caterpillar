@@ -114,6 +114,56 @@ mod tests {
         assert_eq!(builtin, "brk");
     }
 
+    #[test]
+    #[ignore]
+    fn active_function_has_been_tail_call_optimized() {
+        // When a function calls another function, and that call is the last
+        // expression in the calling function, the stack frame for the calling
+        // function is removed from the call stack. This is called tail call
+        // optimization, and it enables unlimited recursion.
+        //
+        // Optimizing away those stack frames has no effect on the running
+        // process (except for limiting the memory use), because the stack frame
+        // would have been removed anyway, after the called function returns.
+        // However, if execution stops, and the removed stack frames lead to
+        // gaps in the "active functions" view in the debugger, this is
+        // confusing to the developer, who no longer gets the full picture of
+        // what's happening.
+        //
+        // Fortunately, it's possible recognize these gaps, and since the
+        // debugger has access to the source code, it can figure out what was
+        // missing and fill that in.
+
+        let debugger = setup(|script| {
+            script
+                .function("main", [], |s| {
+                    s.r("f")
+                        // This is never triggered. It's just here, so the
+                        // function call is not the last expression, because I
+                        // don't want this function to be optimized away too.
+                        .r("brk");
+                })
+                .function("f", [], |s| {
+                    s.r("g");
+                })
+                .function("g", [], |s| {
+                    s.r("brk");
+                });
+        });
+
+        let mut function =
+            debugger.active_functions.expect_functions().remove(1);
+        assert_eq!(function.name, "f");
+
+        let call_of_g = function
+            .body
+            .remove(0)
+            .expect_other()
+            .expression
+            .expect_user_function();
+        assert_eq!(call_of_g, "g");
+    }
+
     fn setup(f: impl FnOnce(&mut Script)) -> Debugger {
         let mut script = Script::default();
         f(&mut script);
@@ -183,6 +233,7 @@ mod tests {
 
     trait FragmentExpressionExt {
         fn expect_builtin_function(self) -> String;
+        fn expect_user_function(self) -> String;
     }
 
     impl FragmentExpressionExt for FragmentExpression {
@@ -190,6 +241,14 @@ mod tests {
             let FragmentExpression::ResolvedBuiltinFunction { name } = self
             else {
                 panic!("Expected builtin function");
+            };
+
+            name
+        }
+
+        fn expect_user_function(self) -> String {
+            let FragmentExpression::ResolvedUserFunction { name } = self else {
+                panic!("Expected user function");
             };
 
             name
