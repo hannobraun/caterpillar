@@ -164,6 +164,41 @@ mod tests {
         assert_eq!(call_to_g, "g");
     }
 
+    #[test]
+    #[should_panic] // this is an unfixed bug
+    fn main_function_has_been_tail_call_optimized() {
+        // This test is similar to the previous test, in that it concerns tail
+        // call optimization, and how that prevents functions from showing up in
+        // "active functions", even if they should be there.
+        //
+        // In this case, the function that was optimized away is the `main`
+        // function. This isn't really any different from the perspective of the
+        // compiler and process, but the debugger needs to detect this condition
+        // in a different way.
+
+        let debugger = setup(|script| {
+            script
+                .function("main", [], |s| {
+                    s.r("f");
+                })
+                .function("f", [], |s| {
+                    s.r("brk");
+                });
+        });
+
+        let mut function =
+            debugger.active_functions.expect_functions().remove(1);
+        assert_eq!(function.name, "main");
+
+        let call_to_f = function
+            .body
+            .remove(0)
+            .expect_other()
+            .expression
+            .expect_user_function();
+        assert_eq!(call_to_f, "f");
+    }
+
     fn setup(f: impl FnOnce(&mut Script)) -> Debugger {
         let mut script = Script::default();
         f(&mut script);
