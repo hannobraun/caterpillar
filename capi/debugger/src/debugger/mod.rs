@@ -155,13 +155,13 @@ mod tests {
             debugger.active_functions.expect_functions().remove(1);
         assert_eq!(function.name, "f");
 
-        let call_of_g = function
+        let call_to_g = function
             .body
             .remove(0)
             .expect_other()
             .expression
             .expect_user_function();
-        assert_eq!(call_of_g, "g");
+        assert_eq!(call_to_g, "g");
     }
 
     fn setup(f: impl FnOnce(&mut Script)) -> Debugger {
