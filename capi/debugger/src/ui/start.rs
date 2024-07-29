@@ -39,7 +39,7 @@ pub fn start(
             };
 
             let update = Update::deserialize(update);
-            remote_process.on_update(update);
+            remote_process.on_runtime_update(update);
 
             debugger_write.set(remote_process.to_debugger());
         }

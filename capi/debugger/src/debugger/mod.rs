@@ -70,7 +70,7 @@ mod tests {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            remote_process.on_update(update);
+            remote_process.on_runtime_update(update);
         }
 
         let debugger = remote_process.to_debugger();
@@ -224,7 +224,7 @@ mod tests {
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {
-            remote_process.on_update(update);
+            remote_process.on_runtime_update(update);
         }
 
         remote_process.to_debugger()
