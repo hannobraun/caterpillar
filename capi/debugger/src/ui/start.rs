@@ -27,9 +27,9 @@ pub fn start(
     leptos::spawn_local(async move {
         let source_code = Request::get("/source-code/0").send().await.unwrap();
         let source_code = source_code.text().await.unwrap();
-        let source_code: Versioned<Code> = ron::from_str(&source_code).unwrap();
+        let code: Versioned<Code> = ron::from_str(&source_code).unwrap();
 
-        remote_process.on_code_update(source_code.inner);
+        remote_process.on_code_update(code.inner);
 
         loop {
             let Some(update) = updates_rx.recv().await else {
