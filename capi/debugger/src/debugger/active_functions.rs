@@ -13,10 +13,10 @@ pub enum ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(
-        source_code: Option<&Code>,
+        code: Option<&Code>,
         process: Option<&Process<GameEngineHost>>,
     ) -> Self {
-        let Some(source_code) = source_code else {
+        let Some(source_code) = code else {
             return Self::Message {
                 message: ActiveFunctionsMessage::NoServer,
             };
