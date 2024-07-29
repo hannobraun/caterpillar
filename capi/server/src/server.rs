@@ -15,7 +15,7 @@ use crate::build::CodeRx;
 pub async fn start(
     address: String,
     serve_dir: PathBuf,
-    game: CodeRx,
+    code: CodeRx,
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
@@ -24,7 +24,10 @@ pub async fn start(
         .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(ServerState { serve_dir, game });
+        .with_state(ServerState {
+            serve_dir,
+            game: code,
+        });
 
     let listener = TcpListener::bind(address).await?;
     println!("builder: ready"); // signal the builder we're ready
