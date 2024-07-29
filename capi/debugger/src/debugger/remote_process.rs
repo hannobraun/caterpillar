@@ -2,20 +2,20 @@ use capi_process::Process;
 use capi_protocol::{
     host::GameEngineHost,
     memory::Memory,
-    updates::{SourceCode, Update},
+    updates::{Code, Update},
 };
 
 use super::{ActiveFunctions, Debugger};
 
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
-    pub source_code: Option<SourceCode>,
+    pub source_code: Option<Code>,
     pub process: Option<Process<GameEngineHost>>,
     pub memory: Option<Memory>,
 }
 
 impl RemoteProcess {
-    pub fn on_source_code(&mut self, source_code: SourceCode) {
+    pub fn on_source_code(&mut self, source_code: Code) {
         self.source_code = Some(source_code);
     }
 

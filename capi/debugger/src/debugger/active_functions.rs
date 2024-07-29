@@ -1,7 +1,7 @@
 use std::fmt;
 
 use capi_process::{InstructionAddr, Process};
-use capi_protocol::{host::GameEngineHost, updates::SourceCode};
+use capi_protocol::{host::GameEngineHost, updates::Code};
 
 use super::Function;
 
@@ -13,7 +13,7 @@ pub enum ActiveFunctions {
 
 impl ActiveFunctions {
     pub fn new(
-        source_code: Option<&SourceCode>,
+        source_code: Option<&Code>,
         process: Option<&Process<GameEngineHost>>,
     ) -> Self {
         let Some(source_code) = source_code else {

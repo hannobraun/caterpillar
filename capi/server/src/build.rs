@@ -1,11 +1,11 @@
 use std::str;
 
 use capi_compiler::compile;
-use capi_protocol::{host::GameEngineHost, updates::SourceCode, Versioned};
+use capi_protocol::{host::GameEngineHost, updates::Code, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
-pub type CodeRx = watch::Receiver<Versioned<SourceCode>>;
+pub type CodeRx = watch::Receiver<Versioned<Code>>;
 
 pub async fn build_and_watch(
     mut changes: DebouncedChanges,
@@ -38,7 +38,7 @@ pub async fn build_and_watch(
     Ok(game_rx)
 }
 
-async fn build_once() -> anyhow::Result<SourceCode> {
+async fn build_once() -> anyhow::Result<Code> {
     let script = Command::new("cargo")
         .arg("run")
         .args(["--package", "snake"])
@@ -49,7 +49,7 @@ async fn build_once() -> anyhow::Result<SourceCode> {
     let script = ron::from_str(script).unwrap();
 
     let (fragments, bytecode, source_map) = compile::<GameEngineHost>(script);
-    let source_code = SourceCode {
+    let source_code = Code {
         fragments,
         bytecode,
         source_map,

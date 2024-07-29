@@ -70,7 +70,7 @@ impl Update {
 }
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
-pub struct SourceCode {
+pub struct Code {
     pub fragments: Fragments,
     pub bytecode: Bytecode,
     pub source_map: SourceMap,
