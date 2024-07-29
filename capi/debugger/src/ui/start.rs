@@ -1,4 +1,8 @@
-use capi_protocol::updates::{SerializedUpdate, Update};
+use capi_protocol::{
+    updates::{SerializedUpdate, SourceCode, Update},
+    Versioned,
+};
+use gloo_net::http::Request;
 use leptos::{create_signal, SignalSet};
 use tokio::sync::mpsc;
 
@@ -21,6 +25,15 @@ pub fn start(
     });
 
     leptos::spawn_local(async move {
+        let source_code = Request::get("/source-code/0").send().await.unwrap();
+        let source_code = source_code.text().await.unwrap();
+        let source_code: Versioned<SourceCode> =
+            ron::from_str(&source_code).unwrap();
+
+        let update = Update::SourceCode(source_code.inner);
+
+        remote_process.on_update(update);
+
         loop {
             let Some(update) = updates_rx.recv().await else {
                 // This means the other end has hung up. Nothing we can do,
