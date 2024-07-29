@@ -159,9 +159,13 @@ impl StackFrame {
                 self.bindings.insert(argument.clone(), value);
             }
         } else {
-            // If there's no caller, then there's no place to take arguments
-            // from. Make sure that the function doesn't expect any.
-            assert_eq!(self.function.arguments.len(), 0);
+            assert_eq!(
+                self.function.arguments.len(),
+                0,
+                "Function has no caller, which means there is no stack frame \
+                that the function could take its arguments from. Yet, it has \
+                arguments, which can't work.",
+            );
         }
 
         Ok(())
