@@ -57,7 +57,7 @@ async fn serve_source_code(
     let code = &*state.code.borrow();
     let source_code = Versioned {
         version: code.version,
-        inner: &code.inner.source_code,
+        inner: &code.inner,
     };
     ron::to_string(&source_code).unwrap().as_bytes().to_vec()
 }

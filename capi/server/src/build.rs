@@ -6,40 +6,29 @@ use capi_protocol::{host::GameEngineHost, updates::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
 
-pub type CodeRx = watch::Receiver<Versioned<Code>>;
-
-pub struct Code {
-    pub source_code: SourceCode,
-    pub bytecode: Bytecode,
-}
+pub type CodeRx = watch::Receiver<Versioned<SourceCode>>;
 
 pub async fn build_and_watch(
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<CodeRx> {
     let mut build_number = 0;
 
-    let (source_code, bytecode) = build_once().await?;
+    let (source_code, _) = build_once().await?;
 
     let (game_tx, game_rx) = tokio::sync::watch::channel(Versioned {
         version: build_number,
-        inner: Code {
-            source_code,
-            bytecode,
-        },
+        inner: source_code,
     });
     build_number += 1;
 
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
-            let (source_code, bytecode) = build_once().await.unwrap();
+            let (source_code, _) = build_once().await.unwrap();
             game_tx
                 .send(Versioned {
                     version: build_number,
-                    inner: Code {
-                        source_code,
-                        bytecode,
-                    },
+                    inner: source_code,
                 })
                 .unwrap();
 
