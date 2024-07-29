@@ -207,10 +207,10 @@ mod tests {
             compile::<GameEngineHost>(script);
 
         let mut remote_process = RemoteProcess::default();
-        remote_process.on_update(Update::SourceCode(SourceCode {
+        remote_process.on_source_code(SourceCode {
             fragments: fragments.clone(),
             source_map,
-        }));
+        });
 
         let mut process = Process::default();
         process.reset(&bytecode, []);
