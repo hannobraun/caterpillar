@@ -21,7 +21,6 @@ pub async fn start(
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
         .route("/code/:build_number", get(serve_code))
-        .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
         .with_state(ServerState { serve_dir, code });
@@ -58,15 +57,6 @@ async fn serve_code(State(state): State<ServerState>) -> impl IntoResponse {
         inner: &code.inner,
     };
     ron::to_string(&source_code).unwrap().as_bytes().to_vec()
-}
-
-async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
-    let code = &*state.code.borrow();
-    let bytecode = Versioned {
-        version: code.version,
-        inner: &code.inner.bytecode,
-    };
-    ron::to_string(&bytecode).unwrap().as_bytes().to_vec()
 }
 
 async fn serve_index(State(state): State<ServerState>) -> impl IntoResponse {
