@@ -20,7 +20,7 @@ pub async fn start(
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
-        .route("/code/:build_number", get(serve_source_code))
+        .route("/code/:build_number", get(serve_code))
         .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
@@ -51,9 +51,7 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
     future::pending::<()>().await;
 }
 
-async fn serve_source_code(
-    State(state): State<ServerState>,
-) -> impl IntoResponse {
+async fn serve_code(State(state): State<ServerState>) -> impl IntoResponse {
     let code = &*state.code.borrow();
     let source_code = Versioned {
         version: code.version,
