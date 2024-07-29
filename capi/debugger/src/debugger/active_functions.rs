@@ -56,12 +56,14 @@ impl ActiveFunctions {
                 continue;
             };
 
-            functions.push(Function::new(
+            let next_function = Function::new(
                 function,
                 &source_code.fragments,
                 &source_code.source_map,
                 process,
-            ));
+            );
+
+            functions.push(next_function);
         }
 
         Self::Functions { functions }
