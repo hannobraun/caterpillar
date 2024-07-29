@@ -46,10 +46,10 @@ impl ActiveFunctions {
 
         let functions = call_stack
             .into_iter()
-            .filter_map(|runtime_location| {
+            .filter_map(|instruction| {
                 let fragment_id = source_code
                     .source_map
-                    .instruction_to_fragment(&runtime_location);
+                    .instruction_to_fragment(&instruction);
                 let function = source_code
                     .fragments
                     .find_function_by_fragment(&fragment_id)
