@@ -1,7 +1,6 @@
 use std::str;
 
 use capi_compiler::compile;
-use capi_process::Bytecode;
 use capi_protocol::{host::GameEngineHost, updates::SourceCode, Versioned};
 use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
@@ -13,7 +12,7 @@ pub async fn build_and_watch(
 ) -> anyhow::Result<CodeRx> {
     let mut build_number = 0;
 
-    let (source_code, _) = build_once().await?;
+    let source_code = build_once().await?;
 
     let (game_tx, game_rx) = tokio::sync::watch::channel(Versioned {
         version: build_number,
@@ -24,7 +23,7 @@ pub async fn build_and_watch(
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
-            let (source_code, _) = build_once().await.unwrap();
+            let source_code = build_once().await.unwrap();
             game_tx
                 .send(Versioned {
                     version: build_number,
@@ -39,7 +38,7 @@ pub async fn build_and_watch(
     Ok(game_rx)
 }
 
-async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
+async fn build_once() -> anyhow::Result<SourceCode> {
     let script = Command::new("cargo")
         .arg("run")
         .args(["--package", "snake"])
@@ -56,5 +55,5 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
         source_map,
     };
 
-    Ok((source_code, bytecode))
+    Ok(source_code)
 }
