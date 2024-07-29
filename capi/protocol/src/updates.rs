@@ -1,5 +1,5 @@
 use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
-use capi_process::Process;
+use capi_process::{Bytecode, Process};
 
 use crate::{host::GameEngineHost, memory::Memory};
 
@@ -72,6 +72,7 @@ impl Update {
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct SourceCode {
     pub fragments: Fragments,
+    pub bytecode: Bytecode,
     pub source_map: SourceMap,
 }
 

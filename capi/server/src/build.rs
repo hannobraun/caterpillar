@@ -63,6 +63,7 @@ async fn build_once() -> anyhow::Result<(SourceCode, Bytecode)> {
     let (fragments, bytecode, source_map) = compile::<GameEngineHost>(script);
     let source_code = SourceCode {
         fragments,
+        bytecode: bytecode.clone(),
         source_map,
     };
 

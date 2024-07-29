@@ -209,6 +209,7 @@ mod tests {
         let mut remote_process = RemoteProcess::default();
         remote_process.on_source_code(SourceCode {
             fragments: fragments.clone(),
+            bytecode: bytecode.clone(),
             source_map,
         });
 
