@@ -148,11 +148,11 @@ pub fn on_new_bytecode() -> u64 {
 
     let bytecode = buffer.read_frame();
     let bytecode = str::from_utf8(bytecode).unwrap();
-    let bytecode: Versioned<Code> = ron::from_str(bytecode).unwrap();
+    let code: Versioned<Code> = ron::from_str(bytecode).unwrap();
 
-    state.on_new_bytecode(bytecode.inner.bytecode);
+    state.on_new_bytecode(code.inner.bytecode);
 
-    bytecode.version
+    code.version
 }
 
 #[no_mangle]
