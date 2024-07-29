@@ -54,10 +54,10 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
 async fn serve_source_code(
     State(state): State<ServerState>,
 ) -> impl IntoResponse {
-    let game = &*state.code.borrow();
+    let code = &*state.code.borrow();
     let source_code = Versioned {
-        version: game.version,
-        inner: &game.inner.source_code,
+        version: code.version,
+        inner: &code.inner.source_code,
     };
     ron::to_string(&source_code).unwrap().as_bytes().to_vec()
 }
