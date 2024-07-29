@@ -16,7 +16,7 @@ impl ActiveFunctions {
         code: Option<&Code>,
         process: Option<&Process<GameEngineHost>>,
     ) -> Self {
-        let Some(source_code) = code else {
+        let Some(code) = code else {
             return Self::Message {
                 message: ActiveFunctionsMessage::NoServer,
             };
@@ -47,8 +47,8 @@ impl ActiveFunctions {
 
         for instruction in call_stack {
             let fragment_id =
-                source_code.source_map.instruction_to_fragment(&instruction);
-            let Some(function) = source_code
+                code.source_map.instruction_to_fragment(&instruction);
+            let Some(function) = code
                 .fragments
                 .find_function_by_fragment(&fragment_id)
                 .cloned()
@@ -58,8 +58,8 @@ impl ActiveFunctions {
 
             let next_function = Function::new(
                 function,
-                &source_code.fragments,
-                &source_code.source_map,
+                &code.fragments,
+                &code.source_map,
                 process,
             );
 
