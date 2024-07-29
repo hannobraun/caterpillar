@@ -46,7 +46,7 @@ mod tests {
         assert!(debugger.operands.is_none());
         assert!(debugger.memory.is_none());
 
-        remote_process.on_source_code(Code::default());
+        remote_process.on_code_update(Code::default());
 
         let debugger = remote_process.to_debugger();
         assert_eq!(
@@ -62,7 +62,7 @@ mod tests {
     #[test]
     fn uninitialized_process() {
         let mut remote_process = RemoteProcess::default();
-        remote_process.on_source_code(Code::default());
+        remote_process.on_code_update(Code::default());
 
         let process = Process::default();
         let memory = Memory::default();
@@ -207,7 +207,7 @@ mod tests {
             compile::<GameEngineHost>(script);
 
         let mut remote_process = RemoteProcess::default();
-        remote_process.on_source_code(Code {
+        remote_process.on_code_update(Code {
             fragments: fragments.clone(),
             bytecode: bytecode.clone(),
             source_map,
