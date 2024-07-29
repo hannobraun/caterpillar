@@ -30,9 +30,7 @@ pub fn start(
         let source_code: Versioned<SourceCode> =
             ron::from_str(&source_code).unwrap();
 
-        let update = Update::SourceCode(source_code.inner);
-
-        remote_process.on_update(update);
+        remote_process.on_source_code(source_code.inner);
 
         loop {
             let Some(update) = updates_rx.recv().await else {
