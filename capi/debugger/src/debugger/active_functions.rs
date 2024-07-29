@@ -1,6 +1,6 @@
 use std::fmt;
 
-use capi_process::Process;
+use capi_process::{InstructionAddr, Process};
 use capi_protocol::{host::GameEngineHost, updates::SourceCode};
 
 use super::Function;
@@ -38,10 +38,14 @@ impl ActiveFunctions {
             };
         }
 
-        let functions = process
+        let call_stack: Vec<InstructionAddr> = process
             .stack()
             .all_next_instructions_in_frames()
             .rev()
+            .collect();
+
+        let functions = call_stack
+            .into_iter()
             .filter_map(|runtime_location| {
                 let fragment_id = source_code
                     .source_map
