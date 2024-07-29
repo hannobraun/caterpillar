@@ -27,9 +27,6 @@ impl RemoteProcess {
             Update::Process(process) => {
                 self.process = Some(process);
             }
-            Update::SourceCode(source_code) => {
-                self.on_source_code(source_code);
-            }
         }
     }
 
