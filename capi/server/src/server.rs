@@ -24,10 +24,7 @@ pub async fn start(
         .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
-        .with_state(ServerState {
-            serve_dir,
-            game: code,
-        });
+        .with_state(ServerState { serve_dir, code });
 
     let listener = TcpListener::bind(address).await?;
     println!("builder: ready"); // signal the builder we're ready
@@ -39,7 +36,7 @@ pub async fn start(
 #[derive(Clone)]
 pub struct ServerState {
     serve_dir: PathBuf,
-    game: CodeRx,
+    code: CodeRx,
 }
 
 async fn serve_is_alive() -> StatusCode {
@@ -57,7 +54,7 @@ async fn do_nothing_while_server_is_alive(_: WebSocket) {
 async fn serve_source_code(
     State(state): State<ServerState>,
 ) -> impl IntoResponse {
-    let game = &*state.game.borrow();
+    let game = &*state.code.borrow();
     let source_code = Versioned {
         version: game.version,
         inner: &game.inner.source_code,
@@ -66,7 +63,7 @@ async fn serve_source_code(
 }
 
 async fn serve_bytecode(State(state): State<ServerState>) -> impl IntoResponse {
-    let game = &*state.game.borrow();
+    let game = &*state.code.borrow();
     let bytecode = Versioned {
         version: game.version,
         inner: &game.inner.bytecode,
