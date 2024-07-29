@@ -147,8 +147,8 @@ pub fn on_new_bytecode() -> u64 {
     let buffer = unsafe { CODE.access() };
 
     let bytecode = buffer.read_frame();
-    let bytecode = str::from_utf8(bytecode).unwrap();
-    let code: Versioned<Code> = ron::from_str(bytecode).unwrap();
+    let code = str::from_utf8(bytecode).unwrap();
+    let code: Versioned<Code> = ron::from_str(code).unwrap();
 
     state.on_new_bytecode(code.inner.bytecode);
 
