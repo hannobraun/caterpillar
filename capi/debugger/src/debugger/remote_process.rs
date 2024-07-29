@@ -15,6 +15,10 @@ pub struct RemoteProcess {
 }
 
 impl RemoteProcess {
+    pub fn on_source_code(&mut self, source_code: SourceCode) {
+        self.source_code = Some(source_code);
+    }
+
     pub fn on_update(&mut self, update: Update) {
         match update {
             Update::Memory { memory } => {
@@ -24,7 +28,7 @@ impl RemoteProcess {
                 self.process = Some(process);
             }
             Update::SourceCode(source_code) => {
-                self.source_code = Some(source_code);
+                self.on_source_code(source_code);
             }
         }
     }
