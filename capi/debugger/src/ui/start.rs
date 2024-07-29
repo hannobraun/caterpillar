@@ -25,7 +25,7 @@ pub fn start(
     });
 
     leptos::spawn_local(async move {
-        let code = Request::get("/source-code/0").send().await.unwrap();
+        let code = Request::get("/code/0").send().await.unwrap();
         let code = code.text().await.unwrap();
         let code: Versioned<Code> = ron::from_str(&code).unwrap();
 

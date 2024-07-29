@@ -20,7 +20,7 @@ pub async fn start(
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
         .route("/wait-while-alive", get(serve_wait_while_alive))
-        .route("/source-code/:build_number", get(serve_source_code))
+        .route("/code/:build_number", get(serve_source_code))
         .route("/bytecode/:build_number", get(serve_bytecode))
         .route("/", get(serve_index))
         .route("/*path", get(serve_static))
