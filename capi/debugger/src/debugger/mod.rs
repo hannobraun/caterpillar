@@ -22,7 +22,7 @@ mod tests {
     use capi_protocol::{
         host::GameEngineHost,
         memory::Memory,
-        updates::{SourceCode, Update, Updates},
+        updates::{SourceCode, Updates},
     };
 
     use crate::debugger::{
@@ -46,7 +46,7 @@ mod tests {
         assert!(debugger.operands.is_none());
         assert!(debugger.memory.is_none());
 
-        remote_process.on_update(Update::SourceCode(SourceCode::default()));
+        remote_process.on_source_code(SourceCode::default());
 
         let debugger = remote_process.to_debugger();
         assert_eq!(
@@ -62,7 +62,7 @@ mod tests {
     #[test]
     fn uninitialized_process() {
         let mut remote_process = RemoteProcess::default();
-        remote_process.on_update(Update::SourceCode(SourceCode::default()));
+        remote_process.on_source_code(SourceCode::default());
 
         let process = Process::default();
         let memory = Memory::default();
