@@ -43,26 +43,26 @@ impl ActiveFunctions {
             .all_next_instructions_in_frames()
             .rev()
             .collect();
+        let mut functions = Vec::new();
 
-        let functions = call_stack
-            .into_iter()
-            .filter_map(|instruction| {
-                let fragment_id = source_code
-                    .source_map
-                    .instruction_to_fragment(&instruction);
-                let function = source_code
-                    .fragments
-                    .find_function_by_fragment(&fragment_id)
-                    .cloned()?;
+        for instruction in call_stack {
+            let fragment_id =
+                source_code.source_map.instruction_to_fragment(&instruction);
+            let Some(function) = source_code
+                .fragments
+                .find_function_by_fragment(&fragment_id)
+                .cloned()
+            else {
+                continue;
+            };
 
-                Some(Function::new(
-                    function,
-                    &source_code.fragments,
-                    &source_code.source_map,
-                    process,
-                ))
-            })
-            .collect();
+            functions.push(Function::new(
+                function,
+                &source_code.fragments,
+                &source_code.source_map,
+                process,
+            ));
+        }
 
         Self::Functions { functions }
     }
