@@ -15,8 +15,8 @@ pub struct RemoteProcess {
 }
 
 impl RemoteProcess {
-    pub fn on_code_update(&mut self, source_code: Code) {
-        self.code = Some(source_code);
+    pub fn on_code_update(&mut self, code: Code) {
+        self.code = Some(code);
     }
 
     pub fn on_runtime_update(&mut self, update: Update) {
