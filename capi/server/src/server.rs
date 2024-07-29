@@ -10,12 +10,12 @@ use axum::{
 use capi_protocol::Versioned;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 
-use crate::build::GameRx;
+use crate::build::CodeRx;
 
 pub async fn start(
     address: String,
     serve_dir: PathBuf,
-    game: GameRx,
+    game: CodeRx,
 ) -> anyhow::Result<()> {
     let router = Router::new()
         .route("/is-alive", get(serve_is_alive))
@@ -36,7 +36,7 @@ pub async fn start(
 #[derive(Clone)]
 pub struct ServerState {
     serve_dir: PathBuf,
-    game: GameRx,
+    game: CodeRx,
 }
 
 async fn serve_is_alive() -> StatusCode {
