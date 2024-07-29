@@ -9,14 +9,14 @@ use super::{ActiveFunctions, Debugger};
 
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
-    pub source_code: Option<Code>,
+    pub code: Option<Code>,
     pub process: Option<Process<GameEngineHost>>,
     pub memory: Option<Memory>,
 }
 
 impl RemoteProcess {
     pub fn on_source_code(&mut self, source_code: Code) {
-        self.source_code = Some(source_code);
+        self.code = Some(source_code);
     }
 
     pub fn on_update(&mut self, update: Update) {
@@ -31,10 +31,8 @@ impl RemoteProcess {
     }
 
     pub fn to_debugger(&self) -> Debugger {
-        let active_functions = ActiveFunctions::new(
-            self.source_code.as_ref(),
-            self.process.as_ref(),
-        );
+        let active_functions =
+            ActiveFunctions::new(self.code.as_ref(), self.process.as_ref());
         let operands = self
             .process
             .as_ref()
