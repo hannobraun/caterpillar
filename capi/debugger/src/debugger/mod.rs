@@ -146,7 +146,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // this is an unfixed bug
     fn active_function_has_been_tail_call_optimized() {
         // When a function calls another function, and that call is the last
         // expression in the calling function, the stack frame for the calling

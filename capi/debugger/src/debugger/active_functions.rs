@@ -119,7 +119,61 @@ impl ActiveFunctions {
                 };
 
                 if called_by_caller != &function.name {
-                    dbg!("We have detected a gap in the call stack.");
+                    // The most recent caller did not actually call the function
+                    // that we are currently looking at. This means we have
+                    // detected a gap in the call stack, created by tail call
+                    // optimization.
+                    //
+                    // Before we fix that up, first put back the current
+                    // instruction. After the fixup, we're done with this
+                    // iteration of the loop, and we need it back in place if we
+                    // don't want to use it.
+                    call_stack.push_front(instruction);
+
+                    // Getting the called function is easy enough.
+                    let called_function = code
+                        .fragments
+                        .find_function_by_name(called_by_caller)
+                        .expect(
+                            "We got this function name from an expression that \
+                            is specifically a resolved user function. \
+                            Expecting it to exist.",
+                        );
+
+                    // And so is figuring out which instruction we need to add
+                    // to the call stack to replace the missing frame. It was
+                    // optimized away, so it must be the last instruction in the
+                    // function!
+                    let mut next_id = called_function.start;
+                    let terminator = loop {
+                        let next_fragment =
+                            code.fragments.inner.inner.get(&next_id).expect(
+                                "Fragment is referenced as a next fragment. \
+                                Expecting it to exist.",
+                            );
+
+                        match next_fragment.payload {
+                            FragmentPayload::Expression { next, .. } => {
+                                next_id = next;
+                            }
+                            FragmentPayload::Terminator => {
+                                break next_id;
+                            }
+                        }
+                    };
+
+                    // And we can fix up the gap.
+                    let missing_instruction = code
+                        .source_map
+                        .fragment_to_instruction(&terminator)
+                        .expect("Expecting fragment to map to instruction");
+                    call_stack.push_front(missing_instruction);
+
+                    // We've added the missing stack frame! This might have
+                    // closed the gap, or there might be more stack frames
+                    // missing. Either way, we'll find out in the next iteration
+                    // of the loop.
+                    continue;
                 }
             }
 
