@@ -72,15 +72,11 @@ impl Compiler<'_> {
         arguments: Vec<String>,
         start: FragmentId,
     ) {
-        let first_instruction = self.compile_block(start);
+        let start = self.compile_block(start);
 
-        self.bytecode.functions.insert(
-            name,
-            Function {
-                arguments,
-                start: first_instruction,
-            },
-        );
+        self.bytecode
+            .functions
+            .insert(name, Function { arguments, start });
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddr {
