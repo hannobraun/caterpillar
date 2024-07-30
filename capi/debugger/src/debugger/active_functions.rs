@@ -44,6 +44,16 @@ impl ActiveFunctions {
         let mut previous_instruction: Option<InstructionAddr> = None;
 
         while let Some(instruction) = call_stack.pop_front() {
+            let fragment_id =
+                code.source_map.instruction_to_fragment(&instruction);
+            let function = code
+                .fragments
+                .find_function_by_fragment(&fragment_id)
+                .cloned()
+                .expect(
+                    "Expecting function referenced from call stack to exist.",
+                );
+
             if let Some(previous_instruction) = previous_instruction {
                 let caller_index =
                     previous_instruction.index.checked_sub(1).expect(
@@ -66,16 +76,6 @@ impl ActiveFunctions {
 
                 dbg!(caller_fragment);
             }
-
-            let fragment_id =
-                code.source_map.instruction_to_fragment(&instruction);
-            let function = code
-                .fragments
-                .find_function_by_fragment(&fragment_id)
-                .cloned()
-                .expect(
-                    "Expecting function referenced from call stack to exist.",
-                );
 
             let function = Function::new(
                 function,
