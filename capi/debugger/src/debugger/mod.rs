@@ -211,11 +211,10 @@ mod tests {
     }
 
     fn init() -> TestSetup {
-        TestSetup {
-            remote_process: RemoteProcess::default(),
-        }
+        TestSetup::default()
     }
 
+    #[derive(Default)]
     struct TestSetup {
         remote_process: RemoteProcess,
     }
