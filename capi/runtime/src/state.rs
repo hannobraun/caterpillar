@@ -46,7 +46,7 @@ impl RuntimeState {
     }
 
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.process.reset(&bytecode, self.arguments.clone());
+        self.process.reset(self.arguments.clone());
         self.bytecode = Some(bytecode);
     }
 
@@ -69,7 +69,7 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(bytecode, self.arguments.clone());
+                    self.process.reset(self.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {

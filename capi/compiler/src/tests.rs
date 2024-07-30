@@ -33,7 +33,7 @@ fn closure_in_function() {
     let mut signals = BTreeMap::new();
 
     let mut process = Process::<TestHost>::default();
-    process.reset(&bytecode, []);
+    process.reset([]);
 
     while process.state().can_step() {
         process.step(&bytecode);

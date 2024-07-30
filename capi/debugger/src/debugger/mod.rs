@@ -231,7 +231,7 @@ mod tests {
             );
 
             let mut process = Process::default();
-            process.reset(bytecode, []);
+            process.reset([]);
             while process.state().can_step() {
                 process.step(bytecode);
             }
