@@ -48,15 +48,13 @@ impl ActiveFunctions {
         for instruction in call_stack {
             let fragment_id =
                 code.source_map.instruction_to_fragment(&instruction);
-            let Some(function) = code
+            let function = code
                 .fragments
                 .find_function_by_fragment(&fragment_id)
                 .cloned()
-            else {
-                unreachable!(
-                    "Expecting function referenced from call stack to exist."
+                .expect(
+                    "Expecting function referenced from call stack to exist.",
                 );
-            };
 
             let next_function = Function::new(
                 function,
