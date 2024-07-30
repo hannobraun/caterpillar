@@ -275,7 +275,7 @@ mod tests {
             self
         }
 
-        fn debugger(&mut self) -> Debugger {
+        fn debugger(&self) -> Debugger {
             self.remote_process.to_debugger()
         }
     }
