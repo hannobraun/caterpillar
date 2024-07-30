@@ -18,7 +18,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions: Instructions::default(),
-        functions: BTreeMap::default(),
+        functions_by_name: BTreeMap::default(),
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
@@ -33,7 +33,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         .extend(fragments.by_function.into_iter().map(CompileUnit::Function));
     compiler.compile();
 
-    if let Some(_main) = compiler.functions.get("main") {
+    if let Some(_main) = compiler.functions_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -54,7 +54,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: compiler.instructions,
-        functions_by_name: compiler.functions,
+        functions_by_name: compiler.functions_by_name,
     };
 
     (bytecode, source_map)
@@ -63,7 +63,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
-    functions: BTreeMap<String, Function>,
+    functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
 }
@@ -106,7 +106,8 @@ impl Compiler<'_> {
     ) {
         let start = self.compile_block(start);
 
-        self.functions.insert(name, Function { arguments, start });
+        self.functions_by_name
+            .insert(name, Function { arguments, start });
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddr {
