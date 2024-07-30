@@ -41,8 +41,11 @@ impl ActiveFunctions {
         let mut call_stack: VecDeque<InstructionAddr> =
             process.stack().all_next_instructions_in_frames().collect();
         let mut functions = VecDeque::new();
+        let mut previous_instruction = None;
 
         while let Some(instruction) = call_stack.pop_front() {
+            dbg!(previous_instruction);
+
             let fragment_id =
                 code.source_map.instruction_to_fragment(&instruction);
             let function = code
@@ -61,6 +64,7 @@ impl ActiveFunctions {
             );
 
             functions.push_front(function);
+            previous_instruction = Some(instruction);
         }
 
         Self::Functions {
