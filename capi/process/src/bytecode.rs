@@ -14,5 +14,4 @@ use crate::{Function, InstructionAddr, Instructions};
 pub struct Bytecode {
     pub instructions: Instructions,
     pub functions_by_address: BTreeMap<InstructionAddr, Function>,
-    pub functions_by_name: BTreeMap<String, Function>,
 }
