@@ -140,7 +140,7 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     stack.push_frame(
         Function {
             arguments,
-            first_instruction: address,
+            start: address,
         },
         instructions,
     )?;

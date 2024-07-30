@@ -78,7 +78,7 @@ impl Compiler<'_> {
             name,
             Function {
                 arguments,
-                first_instruction,
+                start: first_instruction,
             },
         );
     }
