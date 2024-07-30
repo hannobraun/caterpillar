@@ -1,5 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
+use capi_compiler::repr::fragments::{FragmentExpression, FragmentPayload};
 use capi_process::{InstructionAddr, Process};
 use capi_protocol::{host::GameEngineHost, updates::Code};
 
@@ -101,8 +102,23 @@ impl ActiveFunctions {
                         "Expecting fragment referenced from call stack to \
                         exist.",
                     );
+                let FragmentPayload::Expression {
+                    expression:
+                        FragmentExpression::ResolvedUserFunction {
+                            name: called_by_caller,
+                        },
+                    ..
+                } = &caller_fragment.payload
+                else {
+                    unreachable!(
+                        "`caller_fragment` specifically is the fragment that \
+                        called the function we're currently looking at. Unless \
+                        there is a bug in the preceding code is incorrect, it \
+                        must thus be an expression of the type that we expect."
+                    );
+                };
 
-                dbg!(caller_fragment);
+                dbg!(called_by_caller);
             }
 
             functions.push_front(function);
