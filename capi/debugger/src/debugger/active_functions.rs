@@ -77,19 +77,22 @@ impl ActiveFunctions {
                 dbg!(caller_fragment);
             }
 
-            let function = Function::new(
-                function,
-                &code.fragments,
-                &code.source_map,
-                process,
-            );
-
             functions.push_front(function);
             previous_instruction = Some(instruction);
         }
 
         Self::Functions {
-            functions: functions.into(),
+            functions: functions
+                .into_iter()
+                .map(|function| {
+                    Function::new(
+                        function,
+                        &code.fragments,
+                        &code.source_map,
+                        process,
+                    )
+                })
+                .collect(),
         }
     }
 }
