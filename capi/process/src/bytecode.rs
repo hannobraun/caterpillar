@@ -15,9 +15,3 @@ pub struct Bytecode {
     pub instructions: Instructions,
     pub functions: BTreeMap<String, Function>,
 }
-
-impl Bytecode {
-    pub fn entry(&self) -> Option<Function> {
-        self.functions.get("main").cloned()
-    }
-}
