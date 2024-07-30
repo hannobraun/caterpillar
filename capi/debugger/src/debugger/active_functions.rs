@@ -40,14 +40,11 @@ impl ActiveFunctions {
 
         // Create a representation of the callback, bottom (leaf function) to
         // top (top-level function).
-        let call_stack: Vec<InstructionAddr> = process
-            .stack()
-            .all_next_instructions_in_frames()
-            .rev()
-            .collect();
+        let mut call_stack: Vec<InstructionAddr> =
+            process.stack().all_next_instructions_in_frames().collect();
         let mut functions = Vec::new();
 
-        for instruction in call_stack {
+        while let Some(instruction) = call_stack.pop() {
             let fragment_id =
                 code.source_map.instruction_to_fragment(&instruction);
             let function = code
