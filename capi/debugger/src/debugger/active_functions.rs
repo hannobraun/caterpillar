@@ -44,7 +44,28 @@ impl ActiveFunctions {
         let mut previous_instruction: Option<InstructionAddr> = None;
 
         while let Some(instruction) = call_stack.pop_front() {
-            dbg!(previous_instruction);
+            if let Some(previous_instruction) = previous_instruction {
+                let caller_index =
+                    previous_instruction.index.checked_sub(1).expect(
+                        "Expected current instruction to not have index `0`. \
+                        This instruction index is reserved for the pseudo \
+                        function that calls the entry function. And that \
+                        should have been removed by tail call optimization, \
+                        therefore not show up in the call stack.",
+                    );
+                let caller_address = InstructionAddr {
+                    index: caller_index,
+                };
+                let caller_fragment_id =
+                    code.source_map.instruction_to_fragment(&caller_address);
+                let caller_fragment =
+                    code.fragments.inner.inner.get(&caller_fragment_id).expect(
+                        "Expecting fragment referenced from call stack to \
+                        exist.",
+                    );
+
+                dbg!(caller_fragment);
+            }
 
             let fragment_id =
                 code.source_map.instruction_to_fragment(&instruction);
