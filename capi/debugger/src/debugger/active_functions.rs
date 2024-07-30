@@ -113,8 +113,8 @@ impl ActiveFunctions {
                     unreachable!(
                         "`caller_fragment` specifically is the fragment that \
                         called the function we're currently looking at. Unless \
-                        there is a bug in the preceding code is incorrect, it \
-                        must thus be an expression of the type that we expect."
+                        there is a bug in the preceding code, it must thus be \
+                        an expression of the type that we expect."
                     );
                 };
 
