@@ -110,6 +110,7 @@ mod tests {
                     .r("eval");
                 });
             })
+            .run_process()
             .debugger();
 
         let other = debugger
@@ -165,6 +166,7 @@ mod tests {
                         s.r("brk");
                     });
             })
+            .run_process()
             .debugger();
 
         let mut function =
@@ -202,6 +204,7 @@ mod tests {
                         s.r("brk");
                     });
             })
+            .run_process()
             .debugger();
 
         let mut function =
@@ -249,7 +252,7 @@ mod tests {
             self
         }
 
-        fn debugger(&mut self) -> Debugger {
+        fn run_process(&mut self) -> &mut Self {
             let bytecode = self.bytecode.as_ref().expect(
                 "Must provide source code via `TestSetup::source_code` before \
                 initializing process.",
@@ -269,6 +272,10 @@ mod tests {
                 self.remote_process.on_runtime_update(update);
             }
 
+            self
+        }
+
+        fn debugger(&mut self) -> Debugger {
             self.remote_process.to_debugger()
         }
     }
