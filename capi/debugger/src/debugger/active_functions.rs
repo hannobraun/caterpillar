@@ -58,14 +58,14 @@ impl ActiveFunctions {
                     "Expecting function referenced from call stack to exist.",
                 );
 
-            let next_function = Function::new(
+            let function = Function::new(
                 function,
                 &code.fragments,
                 &code.source_map,
                 process,
             );
 
-            functions.push(next_function);
+            functions.push(function);
         }
 
         Self::Functions { functions }
