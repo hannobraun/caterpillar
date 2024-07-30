@@ -23,10 +23,34 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         fragments: &fragments.inner,
     };
 
+    // This is a placeholder for the instruction that's going to call the entry
+    // function.
+    let init = compiler.instructions.push(Instruction::Panic);
+    compiler.instructions.push(Instruction::Return);
+
     compiler
         .queue
         .extend(fragments.by_function.into_iter().map(CompileUnit::Function));
     compiler.compile();
+
+    if let Some(_main) = compiler.functions.get("main") {
+        // If we have an entry function, replace that panic instruction we added
+        // as a placeholder.
+        //
+        // Right now, this will just result in an non-descriptive panic, if no
+        // entry function was provided. Eventually, the panic instruction might
+        // grow a "reason" parameter which will provide more clarity in such a
+        // case.
+        //
+        // In addition, this is something that should be detected during pre-
+        // compilation, and result in a nice error message in the debugger.
+        compiler.instructions.replace(
+            init,
+            Instruction::CallFunction {
+                name: "main".to_string(),
+            },
+        );
+    }
 
     let bytecode = Bytecode {
         instructions: compiler.instructions,
