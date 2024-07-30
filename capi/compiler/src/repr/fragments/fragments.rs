@@ -55,7 +55,7 @@ impl FragmentMap {
     }
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
     pub args: Vec<String>,
