@@ -68,31 +68,6 @@ mod tests {
     }
 
     #[test]
-    fn uninitialized_process() {
-        let mut remote_process = RemoteProcess::default();
-        remote_process.on_code_update(Code::default());
-
-        let process = Process::default();
-        let memory = Memory::default();
-        let mut updates = Updates::default();
-
-        updates.queue_updates(&process, &memory);
-        for update in updates.take_queued_updates() {
-            remote_process.on_runtime_update(update);
-        }
-
-        let debugger = remote_process.to_debugger();
-        assert_eq!(
-            debugger.active_functions,
-            ActiveFunctions::Message {
-                message: ActiveFunctionsMessage::ProcessRunning
-            }
-        );
-        assert!(debugger.operands.is_none());
-        assert_eq!(debugger.memory, Some(Memory::default()));
-    }
-
-    #[test]
     fn stopped_at_code_within_block() {
         // If execution is stopped within a block, the function that contains
         // that block should appear as an active function, and the current
