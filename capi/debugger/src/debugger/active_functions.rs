@@ -53,7 +53,9 @@ impl ActiveFunctions {
                 .find_function_by_fragment(&fragment_id)
                 .cloned()
             else {
-                continue;
+                unreachable!(
+                    "Expecting function referenced from call stack to exist."
+                );
             };
 
             let next_function = Function::new(
