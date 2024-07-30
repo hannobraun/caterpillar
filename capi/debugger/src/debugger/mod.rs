@@ -101,7 +101,7 @@ mod tests {
         // that block should appear as an active function, and the current
         // instruction should be visible.
 
-        let debugger = setup(|script| {
+        let debugger = setup().debugger(|script| {
             script.function("main", [], |s| {
                 s.block(|s| {
                     s.r("brk");
@@ -145,7 +145,7 @@ mod tests {
         // debugger has access to the source code, it can figure out what was
         // missing and fill that in.
 
-        let debugger = setup(|script| {
+        let debugger = setup().debugger(|script| {
             script
                 .function("main", [], |s| {
                     s.r("f")
@@ -187,7 +187,7 @@ mod tests {
         // compiler and process, but the debugger needs to detect this condition
         // in a different way.
 
-        let debugger = setup(|script| {
+        let debugger = setup().debugger(|script| {
             script
                 .function("main", [], |s| {
                     s.r("f");
@@ -210,35 +210,43 @@ mod tests {
         assert_eq!(call_to_f, "f");
     }
 
-    fn setup(f: impl FnOnce(&mut Script)) -> Debugger {
-        let mut script = Script::default();
-        f(&mut script);
+    fn setup() -> TestSetup {
+        TestSetup {}
+    }
 
-        let (fragments, bytecode, source_map) =
-            compile::<GameEngineHost>(script);
+    struct TestSetup {}
 
-        let mut remote_process = RemoteProcess::default();
-        remote_process.on_code_update(Code {
-            fragments: fragments.clone(),
-            bytecode: bytecode.clone(),
-            source_map,
-        });
+    impl TestSetup {
+        fn debugger(&mut self, f: impl FnOnce(&mut Script)) -> Debugger {
+            let mut script = Script::default();
+            f(&mut script);
 
-        let mut process = Process::default();
-        process.reset(&bytecode, []);
-        while process.state().can_step() {
-            process.step(&bytecode);
+            let (fragments, bytecode, source_map) =
+                compile::<GameEngineHost>(script);
+
+            let mut remote_process = RemoteProcess::default();
+            remote_process.on_code_update(Code {
+                fragments: fragments.clone(),
+                bytecode: bytecode.clone(),
+                source_map,
+            });
+
+            let mut process = Process::default();
+            process.reset(&bytecode, []);
+            while process.state().can_step() {
+                process.step(&bytecode);
+            }
+
+            let memory = Memory::default();
+            let mut updates = Updates::default();
+
+            updates.queue_updates(&process, &memory);
+            for update in updates.take_queued_updates() {
+                remote_process.on_runtime_update(update);
+            }
+
+            remote_process.to_debugger()
         }
-
-        let memory = Memory::default();
-        let mut updates = Updates::default();
-
-        updates.queue_updates(&process, &memory);
-        for update in updates.take_queued_updates() {
-            remote_process.on_runtime_update(update);
-        }
-
-        remote_process.to_debugger()
     }
 
     trait ActiveFunctionsExt {
