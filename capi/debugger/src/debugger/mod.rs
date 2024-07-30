@@ -34,6 +34,9 @@ mod tests {
 
     #[test]
     fn no_server() {
+        // If `RemoteProcess` has received no updates at all, the active
+        // functions view should display that no server is available.
+
         let remote_process = RemoteProcess::default();
 
         let debugger = remote_process.to_debugger();
@@ -49,6 +52,10 @@ mod tests {
 
     #[test]
     fn no_process() {
+        // If `RemoteProcess` has received a code update but no runtime updates,
+        // the active functions view should display that no process is
+        // available.
+
         let mut remote_process = RemoteProcess::default();
         remote_process.on_code_update(Code::default());
 
