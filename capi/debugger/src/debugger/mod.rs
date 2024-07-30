@@ -37,9 +37,8 @@ mod tests {
         // If `RemoteProcess` has received no updates at all, the active
         // functions view should display that no server is available.
 
-        let remote_process = RemoteProcess::default();
+        let debugger = init().to_debugger();
 
-        let debugger = remote_process.to_debugger();
         assert_eq!(
             debugger.active_functions,
             ActiveFunctions::Message {
