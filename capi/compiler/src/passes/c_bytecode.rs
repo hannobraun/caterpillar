@@ -18,8 +18,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions: Instructions::default(),
-        functions_by_address: BTreeMap::default(),
-        functions_by_name: BTreeMap::default(),
+        functions_by_address: BTreeMap::new(),
+        functions_by_name: BTreeMap::new(),
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
