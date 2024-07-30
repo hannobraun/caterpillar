@@ -70,7 +70,8 @@ pub fn evaluate<H: Host>(
             }
         }
         Instruction::CallFunction { name } => {
-            let function = bytecode.functions.get(name).cloned().unwrap();
+            let function =
+                bytecode.functions_by_name.get(name).cloned().unwrap();
             stack.push_frame(function, &bytecode.instructions)?;
         }
         Instruction::MakeClosure { addr, environment } => {

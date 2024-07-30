@@ -54,7 +54,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: compiler.instructions,
-        functions: compiler.functions,
+        functions_by_name: compiler.functions,
     };
 
     (bytecode, source_map)
