@@ -101,7 +101,7 @@ mod tests {
         // that block should appear as an active function, and the current
         // instruction should be visible.
 
-        let debugger = setup().debugger(|script| {
+        let debugger = init().debugger(|script| {
             script.function("main", [], |s| {
                 s.block(|s| {
                     s.r("brk");
@@ -145,7 +145,7 @@ mod tests {
         // debugger has access to the source code, it can figure out what was
         // missing and fill that in.
 
-        let debugger = setup().debugger(|script| {
+        let debugger = init().debugger(|script| {
             script
                 .function("main", [], |s| {
                     s.r("f")
@@ -187,7 +187,7 @@ mod tests {
         // compiler and process, but the debugger needs to detect this condition
         // in a different way.
 
-        let debugger = setup().debugger(|script| {
+        let debugger = init().debugger(|script| {
             script
                 .function("main", [], |s| {
                     s.r("f");
@@ -210,7 +210,7 @@ mod tests {
         assert_eq!(call_to_f, "f");
     }
 
-    fn setup() -> TestSetup {
+    fn init() -> TestSetup {
         TestSetup {}
     }
 
