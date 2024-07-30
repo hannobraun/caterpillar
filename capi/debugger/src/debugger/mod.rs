@@ -68,6 +68,51 @@ mod tests {
     }
 
     #[test]
+    fn basic_call_stack() {
+        // All functions in the call stack should show up in the active
+        // functions view, if the process is stopped. This test constructs a
+        // scenario that requires no special handling to detect and fix tail
+        // call optimization, to provide a baseline.
+        //
+        // This test expects all defined functions to be active functions. The
+        // order of functions is inner to outer, as it's most useful to the
+        // developer to display the instruction where we're currently paused up
+        // top.
+
+        let debugger = init()
+            .provide_source_code(|script| {
+                script
+                    .function("main", [], |s| {
+                        s.r("f")
+                            // Not triggered. Just here to prevent tail call
+                            // optimization from removing this function from the
+                            // call stack.
+                            .r("brk");
+                    })
+                    .function("f", [], |s| {
+                        s.r("g")
+                            // Not triggered. Just here to prevent tail call
+                            // optimization from removing this function from the
+                            // call stack.
+                            .r("brk");
+                    })
+                    .function("g", [], |s| {
+                        s.r("brk");
+                    });
+            })
+            .run_process()
+            .to_debugger();
+
+        let names = debugger
+            .active_functions
+            .expect_functions()
+            .into_iter()
+            .map(|active_function| active_function.name)
+            .collect::<Vec<_>>();
+        assert_eq!(names, vec!["g", "f", "main"]);
+    }
+
+    #[test]
     fn stopped_at_code_within_block() {
         // If execution is stopped within a block, the function that contains
         // that block should appear as an active function, and the current
