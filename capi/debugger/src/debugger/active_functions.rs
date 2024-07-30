@@ -66,7 +66,7 @@ impl ActiveFunctions {
                 let caller_address = InstructionAddr {
                     index: caller_index,
                 };
-                let caller_fragment_id =
+                let caller_id =
                     code.source_map.instruction_to_fragment(&caller_address);
 
                 let caller_function = functions.front().expect(
@@ -74,8 +74,7 @@ impl ActiveFunctions {
                     function to `functions`.",
                 );
                 assert_eq!(
-                    code.fragments
-                        .find_function_by_fragment(&caller_fragment_id),
+                    code.fragments.find_function_by_fragment(&caller_id),
                     Some(caller_function),
                     "In theory, subtracting from an instruction address can \
                     land you in a different function than the one you started \
@@ -98,7 +97,7 @@ impl ActiveFunctions {
                 );
 
                 let caller_fragment =
-                    code.fragments.inner.inner.get(&caller_fragment_id).expect(
+                    code.fragments.inner.inner.get(&caller_id).expect(
                         "Expecting fragment referenced from call stack to \
                         exist.",
                     );
