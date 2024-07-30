@@ -5,9 +5,7 @@ use crate::{
     Instructions, Operands, Value,
 };
 
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     frames: Vec<StackFrame>,
 
@@ -25,6 +23,14 @@ pub struct Stack {
 }
 
 impl Stack {
+    pub fn new() -> Self {
+        Self {
+            frames: Vec::new(),
+            closures: BTreeMap::new(),
+            next_closure: 0,
+        }
+    }
+
     pub fn bindings(&self) -> Option<&Bindings> {
         self.frames.last().map(|frame| &frame.bindings)
     }
@@ -130,6 +136,12 @@ impl Stack {
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
         let frame = self.frames.last_mut()?;
         Some(frame.take_next_instruction())
+    }
+}
+
+impl Default for Stack {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
