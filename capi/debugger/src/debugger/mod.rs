@@ -55,10 +55,8 @@ mod tests {
         // the active functions view should display that no process is
         // available.
 
-        let mut remote_process = RemoteProcess::default();
-        remote_process.on_code_update(Code::default());
+        let debugger = init().provide_source_code(|_| {}).to_debugger();
 
-        let debugger = remote_process.to_debugger();
         assert_eq!(
             debugger.active_functions,
             ActiveFunctions::Message {
