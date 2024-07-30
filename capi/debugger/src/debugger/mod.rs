@@ -33,8 +33,8 @@ mod tests {
     use super::{Debugger, Function, OtherExpression};
 
     #[test]
-    fn source_code() {
-        let mut remote_process = RemoteProcess::default();
+    fn no_server() {
+        let remote_process = RemoteProcess::default();
 
         let debugger = remote_process.to_debugger();
         assert_eq!(
@@ -45,7 +45,11 @@ mod tests {
         );
         assert!(debugger.operands.is_none());
         assert!(debugger.memory.is_none());
+    }
 
+    #[test]
+    fn no_process() {
+        let mut remote_process = RemoteProcess::default();
         remote_process.on_code_update(Code::default());
 
         let debugger = remote_process.to_debugger();
