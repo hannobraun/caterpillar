@@ -18,6 +18,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions: Instructions::default(),
+        user_function_calls: Vec::new(),
         functions_by_address: BTreeMap::new(),
         functions_by_name: BTreeMap::new(),
         source_map: &mut source_map,
@@ -53,6 +54,12 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
+    for (name, address_of_call) in compiler.user_function_calls {
+        compiler
+            .instructions
+            .replace(address_of_call, Instruction::CallFunction { name });
+    }
+
     let bytecode = Bytecode {
         instructions: compiler.instructions,
         functions_by_address: compiler.functions_by_address,
@@ -65,6 +72,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
+    user_function_calls: Vec<(String, InstructionAddr)>,
     functions_by_address: BTreeMap<InstructionAddr, Function>,
     functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
@@ -197,11 +205,12 @@ impl Compiler<'_> {
                             Instruction::CallBuiltin { name: name.clone() },
                             fragment.id(),
                         ),
-                    FragmentExpression::ResolvedUserFunction { name } => self
-                        .generate(
-                            Instruction::CallFunction { name: name.clone() },
-                            fragment.id(),
-                        ),
+                    FragmentExpression::ResolvedUserFunction { name } => {
+                        let address =
+                            self.generate(Instruction::Panic, fragment.id());
+                        self.user_function_calls.push((name.clone(), address));
+                        address
+                    }
                     FragmentExpression::UnresolvedWord { name: _ } => {
                         self.generate(Instruction::Panic, fragment.id())
                     }
