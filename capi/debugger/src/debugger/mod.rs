@@ -255,7 +255,7 @@ mod tests {
         fn run_process(&mut self) -> &mut Self {
             let bytecode = self.bytecode.as_ref().expect(
                 "Must provide source code via `TestSetup::source_code` before \
-                initializing process.",
+                running process.",
             );
 
             let mut process = Process::default();
