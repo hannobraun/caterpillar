@@ -24,8 +24,10 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
+        let frames = Vec::new();
+
         Self {
-            frames: Vec::new(),
+            frames,
             closures: BTreeMap::new(),
             next_closure: 0,
         }
