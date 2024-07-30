@@ -38,6 +38,8 @@ impl ActiveFunctions {
             };
         }
 
+        // Create a representation of the callback, bottom (leaf function) to
+        // top (top-level function).
         let call_stack: Vec<InstructionAddr> = process
             .stack()
             .all_next_instructions_in_frames()
