@@ -33,15 +33,12 @@ impl<H: Host> Process<H> {
 
     pub fn reset(
         &mut self,
-        bytecode: &Bytecode,
+        _: &Bytecode,
         arguments: impl IntoIterator<Item = Value>,
     ) {
         self.state = ProcessState::default();
         self.stack = Stack::default();
 
-        self.stack
-            .push_frame(bytecode.entry().unwrap(), &bytecode.instructions)
-            .expect("Expected recursion limit to be more than zero.");
         self.push(arguments);
     }
 

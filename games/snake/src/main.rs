@@ -10,8 +10,10 @@ pub fn main() {
 
 fn snake(script: &mut Script) {
     // Main loop
-    script.function("main", [], |s| {
-        s.r("tile_field_size")
+    script.function("main", ["size_x", "size_y"], |s| {
+        s.r("size_x")
+            .r("size_y")
+            .r("tile_field_size")
             .r("vec_store")
             .r("init_frame_count")
             .r("init")
