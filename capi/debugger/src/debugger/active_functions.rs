@@ -44,7 +44,7 @@ impl ActiveFunctions {
             process.stack().all_next_instructions_in_frames().collect();
         let mut functions = VecDeque::new();
 
-        while let Some(instruction) = call_stack.pop_back() {
+        while let Some(instruction) = call_stack.pop_front() {
             let fragment_id =
                 code.source_map.instruction_to_fragment(&instruction);
             let function = code
@@ -62,7 +62,7 @@ impl ActiveFunctions {
                 process,
             );
 
-            functions.push_back(function);
+            functions.push_front(function);
         }
 
         Self::Functions {
