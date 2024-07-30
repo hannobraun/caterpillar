@@ -211,10 +211,14 @@ mod tests {
     }
 
     fn init() -> TestSetup {
-        TestSetup {}
+        TestSetup {
+            remote_process: RemoteProcess::default(),
+        }
     }
 
-    struct TestSetup {}
+    struct TestSetup {
+        remote_process: RemoteProcess,
+    }
 
     impl TestSetup {
         fn debugger(&mut self, f: impl FnOnce(&mut Script)) -> Debugger {
@@ -224,8 +228,7 @@ mod tests {
             let (fragments, bytecode, source_map) =
                 compile::<GameEngineHost>(script);
 
-            let mut remote_process = RemoteProcess::default();
-            remote_process.on_code_update(Code {
+            self.remote_process.on_code_update(Code {
                 fragments: fragments.clone(),
                 bytecode: bytecode.clone(),
                 source_map,
@@ -242,10 +245,10 @@ mod tests {
 
             updates.queue_updates(&process, &memory);
             for update in updates.take_queued_updates() {
-                remote_process.on_runtime_update(update);
+                self.remote_process.on_runtime_update(update);
             }
 
-            remote_process.to_debugger()
+            self.remote_process.to_debugger()
         }
     }
 
