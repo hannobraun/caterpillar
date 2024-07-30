@@ -83,7 +83,7 @@ pub enum Instruction {
         name: String,
     },
     CallFunction {
-        name: String,
+        address: InstructionAddr,
     },
     MakeClosure {
         addr: InstructionAddr,

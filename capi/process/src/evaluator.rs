@@ -69,9 +69,9 @@ pub fn evaluate<H: Host>(
                 }
             }
         }
-        Instruction::CallFunction { name } => {
+        Instruction::CallFunction { address } => {
             let function =
-                bytecode.functions_by_name.get(name).cloned().unwrap();
+                bytecode.functions_by_address.get(address).cloned().unwrap();
             stack.push_frame(function, &bytecode.instructions)?;
         }
         Instruction::MakeClosure { addr, environment } => {

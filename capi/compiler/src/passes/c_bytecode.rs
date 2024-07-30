@@ -35,7 +35,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         .extend(fragments.by_function.into_iter().map(CompileUnit::Function));
     compiler.compile();
 
-    if let Some(_main) = compiler.functions_by_name.get("main") {
+    if let Some(main) = compiler.functions_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -49,15 +49,28 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         compiler.instructions.replace(
             init,
             Instruction::CallFunction {
-                name: "main".to_string(),
+                address: main.start,
             },
         );
     }
 
     for (name, address_of_call) in compiler.user_function_calls {
-        compiler
-            .instructions
-            .replace(address_of_call, Instruction::CallFunction { name });
+        let Some(function) = compiler.functions_by_name.get(&name) else {
+            unreachable!(
+                "Expecting function `{name}` to exist. If it didn't, the \
+                previous compilation step would not have generated the \
+                fragment that caused us to assume that it does."
+            );
+        };
+
+        let address_of_function = function.start;
+
+        compiler.instructions.replace(
+            address_of_call,
+            Instruction::CallFunction {
+                address: address_of_function,
+            },
+        );
     }
 
     let bytecode = Bytecode {
