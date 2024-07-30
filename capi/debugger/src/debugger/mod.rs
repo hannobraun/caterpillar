@@ -85,7 +85,7 @@ mod tests {
     }
 
     #[test]
-    fn code_within_block() {
+    fn stopped_at_code_within_block() {
         // If execution is stopped within a block, the function that contains
         // that block should appear as an active function, and the current
         // instruction should be visible.
