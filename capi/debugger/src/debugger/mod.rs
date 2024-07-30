@@ -18,7 +18,7 @@ mod tests {
         compile,
         repr::{fragments::FragmentExpression, syntax::Script},
     };
-    use capi_process::{CoreEffect, Effect, Process};
+    use capi_process::{Bytecode, CoreEffect, Effect, Process};
     use capi_protocol::{
         host::GameEngineHost,
         memory::Memory,
@@ -101,14 +101,16 @@ mod tests {
         // that block should appear as an active function, and the current
         // instruction should be visible.
 
-        let debugger = init().debugger(|script| {
-            script.function("main", [], |s| {
-                s.block(|s| {
-                    s.r("brk");
-                })
-                .r("eval");
-            });
-        });
+        let debugger = init()
+            .provide_source_code(|script| {
+                script.function("main", [], |s| {
+                    s.block(|s| {
+                        s.r("brk");
+                    })
+                    .r("eval");
+                });
+            })
+            .debugger();
 
         let other = debugger
             .active_functions
@@ -145,22 +147,25 @@ mod tests {
         // debugger has access to the source code, it can figure out what was
         // missing and fill that in.
 
-        let debugger = init().debugger(|script| {
-            script
-                .function("main", [], |s| {
-                    s.r("f")
-                        // This is never triggered. It's just here, so the
-                        // function call is not the last expression, because I
-                        // don't want this function to be optimized away too.
-                        .r("brk");
-                })
-                .function("f", [], |s| {
-                    s.r("g");
-                })
-                .function("g", [], |s| {
-                    s.r("brk");
-                });
-        });
+        let debugger = init()
+            .provide_source_code(|script| {
+                script
+                    .function("main", [], |s| {
+                        s.r("f")
+                            // This is never triggered. It's just here, so the
+                            // function call is not the last expression, because
+                            // I don't want this function to be optimized away
+                            // too.
+                            .r("brk");
+                    })
+                    .function("f", [], |s| {
+                        s.r("g");
+                    })
+                    .function("g", [], |s| {
+                        s.r("brk");
+                    });
+            })
+            .debugger();
 
         let mut function =
             debugger.active_functions.expect_functions().remove(1);
@@ -187,15 +192,17 @@ mod tests {
         // compiler and process, but the debugger needs to detect this condition
         // in a different way.
 
-        let debugger = init().debugger(|script| {
-            script
-                .function("main", [], |s| {
-                    s.r("f");
-                })
-                .function("f", [], |s| {
-                    s.r("brk");
-                });
-        });
+        let debugger = init()
+            .provide_source_code(|script| {
+                script
+                    .function("main", [], |s| {
+                        s.r("f");
+                    })
+                    .function("f", [], |s| {
+                        s.r("brk");
+                    });
+            })
+            .debugger();
 
         let mut function =
             debugger.active_functions.expect_functions().remove(1);
@@ -217,10 +224,14 @@ mod tests {
     #[derive(Default)]
     struct TestSetup {
         remote_process: RemoteProcess,
+        bytecode: Option<Bytecode>,
     }
 
     impl TestSetup {
-        fn debugger(&mut self, f: impl FnOnce(&mut Script)) -> Debugger {
+        fn provide_source_code(
+            &mut self,
+            f: impl FnOnce(&mut Script),
+        ) -> &mut Self {
             let mut script = Script::default();
             f(&mut script);
 
@@ -233,10 +244,21 @@ mod tests {
                 source_map,
             });
 
+            self.bytecode = Some(bytecode);
+
+            self
+        }
+
+        fn debugger(&mut self) -> Debugger {
+            let bytecode = self.bytecode.as_ref().expect(
+                "Must provide source code via `TestSetup::source_code` before \
+                initializing process.",
+            );
+
             let mut process = Process::default();
-            process.reset(&bytecode, []);
+            process.reset(bytecode, []);
             while process.state().can_step() {
-                process.step(&bytecode);
+                process.step(bytecode);
             }
 
             let memory = Memory::default();
