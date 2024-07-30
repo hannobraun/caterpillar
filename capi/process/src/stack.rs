@@ -24,7 +24,10 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
-        let frames = Vec::new();
+        let frames = vec![StackFrame::new(Function {
+            arguments: Vec::new(),
+            start: InstructionAddr { index: 0 },
+        })];
 
         Self {
             frames,
