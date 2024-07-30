@@ -1,6 +1,8 @@
-use std::collections::{BTreeSet, VecDeque};
+use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{Bytecode, Function, Instruction, InstructionAddr};
+use capi_process::{
+    Bytecode, Function, Instruction, InstructionAddr, Instructions,
+};
 
 use crate::{
     repr::fragments::{
@@ -11,12 +13,12 @@ use crate::{
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
-    let mut bytecode = Bytecode::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
         queue: VecDeque::new(),
-        bytecode: &mut bytecode,
+        instructions: Instructions::default(),
+        functions: BTreeMap::default(),
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
@@ -26,12 +28,18 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         .extend(fragments.by_function.into_iter().map(CompileUnit::Function));
     compiler.compile();
 
+    let bytecode = Bytecode {
+        instructions: compiler.instructions,
+        functions: compiler.functions,
+    };
+
     (bytecode, source_map)
 }
 
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
-    bytecode: &'r mut Bytecode,
+    instructions: Instructions,
+    functions: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
 }
@@ -47,7 +55,7 @@ impl Compiler<'_> {
                 } => {
                     let start = self.compile_block(start);
 
-                    self.bytecode.instructions.replace(
+                    self.instructions.replace(
                         addr,
                         Instruction::MakeClosure {
                             addr: start,
@@ -74,9 +82,7 @@ impl Compiler<'_> {
     ) {
         let start = self.compile_block(start);
 
-        self.bytecode
-            .functions
-            .insert(name, Function { arguments, start });
+        self.functions.insert(name, Function { arguments, start });
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddr {
@@ -183,7 +189,7 @@ impl Compiler<'_> {
         instruction: Instruction,
         fragment_id: FragmentId,
     ) -> InstructionAddr {
-        let addr = self.bytecode.instructions.push(instruction);
+        let addr = self.instructions.push(instruction);
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
