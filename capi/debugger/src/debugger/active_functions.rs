@@ -118,7 +118,9 @@ impl ActiveFunctions {
                     );
                 };
 
-                dbg!(called_by_caller);
+                if called_by_caller != &function.name {
+                    dbg!("We have detected a gap in the call stack.");
+                }
             }
 
             functions.push_front(function);
