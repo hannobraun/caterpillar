@@ -111,7 +111,7 @@ mod tests {
                 });
             })
             .run_process()
-            .debugger();
+            .to_debugger();
 
         let other = debugger
             .active_functions
@@ -167,7 +167,7 @@ mod tests {
                     });
             })
             .run_process()
-            .debugger();
+            .to_debugger();
 
         let mut function =
             debugger.active_functions.expect_functions().remove(1);
@@ -205,7 +205,7 @@ mod tests {
                     });
             })
             .run_process()
-            .debugger();
+            .to_debugger();
 
         let mut function =
             debugger.active_functions.expect_functions().remove(1);
@@ -275,7 +275,7 @@ mod tests {
             self
         }
 
-        fn debugger(&self) -> Debugger {
+        fn to_debugger(&self) -> Debugger {
             self.remote_process.to_debugger()
         }
     }
