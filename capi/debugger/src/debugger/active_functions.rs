@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{collections::VecDeque, fmt};
 
 use capi_process::{InstructionAddr, Process};
 use capi_protocol::{host::GameEngineHost, updates::Code};
@@ -42,7 +42,7 @@ impl ActiveFunctions {
         // top (top-level function).
         let mut call_stack: Vec<InstructionAddr> =
             process.stack().all_next_instructions_in_frames().collect();
-        let mut functions = Vec::new();
+        let mut functions = VecDeque::new();
 
         while let Some(instruction) = call_stack.pop() {
             let fragment_id =
@@ -62,10 +62,12 @@ impl ActiveFunctions {
                 process,
             );
 
-            functions.push(function);
+            functions.push_back(function);
         }
 
-        Self::Functions { functions }
+        Self::Functions {
+            functions: functions.into(),
+        }
     }
 }
 
