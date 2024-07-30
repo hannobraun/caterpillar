@@ -68,6 +68,35 @@ impl ActiveFunctions {
                 };
                 let caller_fragment_id =
                     code.source_map.instruction_to_fragment(&caller_address);
+
+                let caller_function = functions.front().expect(
+                    "We have a caller, meaning we must have previously added a \
+                    function to `functions`.",
+                );
+                assert_eq!(
+                    code.fragments
+                        .find_function_by_fragment(&caller_fragment_id),
+                    Some(caller_function),
+                    "In theory, subtracting from an instruction address can \
+                    land you in a different function than the one you started \
+                    with. For this to happen, the original instruction would \
+                    have to be the first in its function.\n\
+                    \n\
+                    The call stack tracks the _next_ instruction to be \
+                    executed in each call frame. If that were also the first \
+                    instruction, that would mean we're dealing with a totally \
+                    fresh stack frame that was just created.\n\
+                    \n\
+                    Such a stack frame could not have called another function, \
+                    since it hasn't done _anything_ yet. And this code \
+                    specifically deals with a caller in the stack frame.\n\
+                    \n\
+                    Therefore, the next instruction could not have been the \
+                    first one in the function. And therefore, subtracting from \
+                    that address could not have resulted in an address that \
+                    points to another function."
+                );
+
                 let caller_fragment =
                     code.fragments.inner.inner.get(&caller_fragment_id).expect(
                         "Expecting fragment referenced from call stack to \
