@@ -48,7 +48,9 @@ impl Expression {
         let instruction = source_map.fragment_to_instruction(&fragment_id);
 
         let has_durable_breakpoint = if let Some(instruction) = &instruction {
-            process.breakpoints().durable_at(instruction)
+            instruction.iter().any(|instruction| {
+                process.breakpoints().durable_at(instruction)
+            })
         } else {
             false
         };
@@ -67,16 +69,19 @@ impl Expression {
             });
 
         let is_on_call_stack = if let Some(instruction) = &instruction {
-            process
-                .stack()
-                .is_next_instruction_in_any_frame(instruction)
+            instruction.iter().any(|instruction| {
+                process
+                    .stack()
+                    .is_next_instruction_in_any_frame(instruction)
+            })
         } else {
             false
         };
 
         Some(Self::Other(OtherExpression {
             expression,
-            instruction,
+            instruction: instruction
+                .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
             is_on_call_stack,
             effect,
