@@ -27,12 +27,12 @@ impl Instructions {
 
     pub fn replace(
         &mut self,
-        addr: InstructionAddress,
+        address: InstructionAddress,
         instruction: Instruction,
     ) {
         let (stored_addr, stored_instruction) =
-            self.inner.get_mut(addr.to_usize()).unwrap();
-        assert_eq!(addr, *stored_addr);
+            self.inner.get_mut(address.to_usize()).unwrap();
+        assert_eq!(address, *stored_addr);
         *stored_instruction = instruction;
     }
 }
