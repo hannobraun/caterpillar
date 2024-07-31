@@ -98,7 +98,7 @@ impl Compiler<'_> {
                 CompileUnit::Block {
                     start,
                     environment,
-                    addr,
+                    address: addr,
                 } => {
                     let start = self.compile_block(start);
 
@@ -180,7 +180,7 @@ impl Compiler<'_> {
                         self.queue.push_front(CompileUnit::Block {
                             start: *start,
                             environment: environment.clone(),
-                            addr,
+                            address: addr,
                         });
 
                         addr
@@ -261,7 +261,7 @@ enum CompileUnit {
     Block {
         start: FragmentId,
         environment: BTreeSet<String>,
-        addr: InstructionAddress,
+        address: InstructionAddress,
     },
     Function(fragments::Function),
 }
