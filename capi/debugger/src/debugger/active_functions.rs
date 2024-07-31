@@ -52,7 +52,11 @@ impl ActiveFunctions {
                     .fragments
                     .find_function_by_name("main")
                     .expect("Expected `main` function to exist.");
-                fix_up_call_stack(&mut call_stack, main_function, code);
+                add_missing_instruction_from_user_function_to_call_stack(
+                    &mut call_stack,
+                    main_function,
+                    code,
+                );
             }
         }
 
@@ -147,7 +151,11 @@ impl ActiveFunctions {
                             Expecting it to exist.",
                         );
 
-                    fix_up_call_stack(&mut call_stack, called_function, code);
+                    add_missing_instruction_from_user_function_to_call_stack(
+                        &mut call_stack,
+                        called_function,
+                        code,
+                    );
 
                     // We've added the missing stack frame! This might have
                     // closed the gap, or there might be more stack frames
@@ -217,7 +225,7 @@ fn instruction_to_function(
         .expect("Expecting function referenced from call stack to exist.")
 }
 
-fn fix_up_call_stack(
+fn add_missing_instruction_from_user_function_to_call_stack(
     call_stack: &mut VecDeque<InstructionAddr>,
     missing_function: &fragments::Function,
     code: &Code,
