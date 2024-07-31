@@ -30,9 +30,9 @@ impl Instructions {
         address: InstructionAddress,
         instruction: Instruction,
     ) {
-        let (stored_addr, stored_instruction) =
+        let (stored_address, stored_instruction) =
             self.inner.get_mut(address.to_usize()).unwrap();
-        assert_eq!(address, *stored_addr);
+        assert_eq!(address, *stored_address);
         *stored_instruction = instruction;
     }
 }
