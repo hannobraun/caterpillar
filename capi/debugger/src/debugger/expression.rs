@@ -68,8 +68,8 @@ impl Expression {
                 }
             });
 
-        let is_on_call_stack = if let Some(instruction) = &instructions {
-            instruction.iter().any(|instruction| {
+        let is_on_call_stack = if let Some(instructions) = &instructions {
+            instructions.iter().any(|instruction| {
                 process
                     .stack()
                     .is_next_instruction_in_any_frame(instruction)
