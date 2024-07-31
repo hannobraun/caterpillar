@@ -105,7 +105,7 @@ impl Compiler<'_> {
                     self.instructions.replace(
                         address,
                         Instruction::MakeClosure {
-                            addr: start,
+                            address: start,
                             environment,
                         },
                     );

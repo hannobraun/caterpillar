@@ -73,7 +73,10 @@ pub fn evaluate<H: Host>(
             let function = bytecode.functions.get(address).cloned().unwrap();
             stack.push_frame(function, &bytecode.instructions)?;
         }
-        Instruction::MakeClosure { addr, environment } => {
+        Instruction::MakeClosure {
+            address: addr,
+            environment,
+        } => {
             let Some(bindings) = stack.bindings() else {
                 unreachable!(
                     "We're currently executing. A stack frame, and thus \

@@ -91,7 +91,7 @@ pub enum Instruction {
         address: InstructionAddress,
     },
     MakeClosure {
-        addr: InstructionAddress,
+        address: InstructionAddress,
         environment: BTreeSet<String>,
     },
     Push {
