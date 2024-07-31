@@ -1,6 +1,5 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_compiler::repr::fragments;
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::{host::GameEngineHost, updates::Code};
 
@@ -45,7 +44,15 @@ impl ActiveFunctions {
         let mut functions = VecDeque::new();
 
         while let Some(instruction) = call_stack.pop_front() {
-            let function = instruction_to_function(&instruction, code);
+            let fragment_id =
+                code.source_map.instruction_to_fragment(&instruction);
+            let function = code
+                .fragments
+                .find_function_by_fragment(&fragment_id)
+                .cloned()
+                .expect(
+                    "Expecting function referenced from call stack to exist.",
+                );
 
             functions.push_front(function);
         }
@@ -93,15 +100,4 @@ impl fmt::Display for ActiveFunctionsMessage {
 
         Ok(())
     }
-}
-
-fn instruction_to_function(
-    instruction: &InstructionAddress,
-    code: &Code,
-) -> fragments::Function {
-    let fragment_id = code.source_map.instruction_to_fragment(instruction);
-    code.fragments
-        .find_function_by_fragment(&fragment_id)
-        .cloned()
-        .expect("Expecting function referenced from call stack to exist.")
 }
