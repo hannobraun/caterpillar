@@ -74,7 +74,7 @@ pub fn evaluate<H: Host>(
             stack.push_frame(function, &bytecode.instructions)?;
         }
         Instruction::MakeClosure {
-            address: addr,
+            address,
             environment,
         } => {
             let Some(bindings) = stack.bindings() else {
@@ -104,7 +104,7 @@ pub fn evaluate<H: Host>(
                 stack.next_closure += 1;
                 next_closure
             };
-            stack.closures.insert(index, (*addr, environment));
+            stack.closures.insert(index, (*address, environment));
 
             stack.push_operand(Value(index.to_le_bytes()));
         }
