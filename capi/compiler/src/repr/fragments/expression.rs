@@ -75,7 +75,7 @@ impl FragmentExpression {
                 hasher.update(name.as_bytes());
             }
             Self::TailRecursiveCall { name } => {
-                hasher.update(b"recursion");
+                hasher.update(b"tail-recursive call");
                 hasher.update(name.as_bytes());
             }
             Self::UnresolvedIdentifier { name } => {
