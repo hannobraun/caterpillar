@@ -97,6 +97,9 @@ fn compile_expression(
             Some(IdentifierTarget::UserFunction) => {
                 FragmentExpression::ResolvedUserFunction { name }
             }
+            Some(IdentifierTarget::SelfRecursion) => {
+                FragmentExpression::ResolvedUserFunction { name }
+            }
             None => FragmentExpression::UnresolvedIdentifier { name },
         },
         Expression::Value(value) => FragmentExpression::Value(value),
