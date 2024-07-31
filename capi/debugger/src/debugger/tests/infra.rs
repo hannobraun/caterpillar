@@ -113,6 +113,7 @@ impl ExpressionExt for Expression {
 
 pub trait FragmentExpressionExt {
     fn expect_builtin_function(self) -> String;
+    #[allow(unused)] // currently not in use, but likely to be useful soon
     fn expect_user_function(self) -> String;
 }
 
