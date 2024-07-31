@@ -1,20 +1,11 @@
-use capi_compiler::{
-    compile,
-    repr::{fragments::FragmentExpression, syntax::Script},
-};
-use capi_process::{Bytecode, CoreEffect, Effect, Process};
-use capi_protocol::{
-    host::GameEngineHost,
-    memory::Memory,
-    updates::{Code, Updates},
-};
+mod infra;
+
+use capi_process::{CoreEffect, Effect};
+use infra::{init, ActiveFunctionsExt, ExpressionExt, FragmentExpressionExt};
 
 use crate::debugger::{
-    active_functions::ActiveFunctionsMessage, ActiveFunctions, Expression,
-    RemoteProcess,
+    active_functions::ActiveFunctionsMessage, ActiveFunctions,
 };
-
-use super::{Debugger, Function, OtherExpression};
 
 #[test]
 fn no_server() {
@@ -212,124 +203,4 @@ fn main_function_has_been_tail_call_optimized() {
         .expression
         .expect_user_function();
     assert_eq!(call_to_f, "f");
-}
-
-fn init() -> TestSetup {
-    TestSetup::default()
-}
-
-#[derive(Default)]
-struct TestSetup {
-    remote_process: RemoteProcess,
-    bytecode: Option<Bytecode>,
-}
-
-impl TestSetup {
-    fn provide_source_code(
-        &mut self,
-        f: impl FnOnce(&mut Script),
-    ) -> &mut Self {
-        let mut script = Script::default();
-        f(&mut script);
-
-        let (fragments, bytecode, source_map) =
-            compile::<GameEngineHost>(script);
-
-        self.remote_process.on_code_update(Code {
-            fragments: fragments.clone(),
-            bytecode: bytecode.clone(),
-            source_map,
-        });
-
-        self.bytecode = Some(bytecode);
-
-        self
-    }
-
-    fn run_process(&mut self) -> &mut Self {
-        let bytecode = self.bytecode.as_ref().expect(
-            "Must provide source code via `TestSetup::source_code` before \
-                running process.",
-        );
-
-        let mut process = Process::default();
-        process.reset([]);
-        while process.state().can_step() {
-            process.step(bytecode);
-        }
-
-        let memory = Memory::default();
-        let mut updates = Updates::default();
-
-        updates.queue_updates(&process, &memory);
-        for update in updates.take_queued_updates() {
-            self.remote_process.on_runtime_update(update);
-        }
-
-        self
-    }
-
-    fn to_debugger(&self) -> Debugger {
-        self.remote_process.to_debugger()
-    }
-}
-
-trait ActiveFunctionsExt {
-    fn expect_functions(self) -> Vec<Function>;
-}
-
-impl ActiveFunctionsExt for ActiveFunctions {
-    fn expect_functions(self) -> Vec<Function> {
-        let ActiveFunctions::Functions { functions } = self else {
-            panic!("Expected active functions to be displayed");
-        };
-
-        functions
-    }
-}
-
-trait ExpressionExt {
-    fn expect_block(self) -> Vec<Expression>;
-    fn expect_other(self) -> OtherExpression;
-}
-
-impl ExpressionExt for Expression {
-    fn expect_block(self) -> Vec<Expression> {
-        let Expression::Block { expressions } = self else {
-            panic!("Expected block");
-        };
-
-        expressions
-    }
-
-    fn expect_other(self) -> OtherExpression {
-        let Expression::Other(other) = self else {
-            panic!("Expected other expression");
-        };
-
-        other
-    }
-}
-
-trait FragmentExpressionExt {
-    fn expect_builtin_function(self) -> String;
-    fn expect_user_function(self) -> String;
-}
-
-impl FragmentExpressionExt for FragmentExpression {
-    fn expect_builtin_function(self) -> String {
-        let FragmentExpression::ResolvedBuiltinFunction { name } = self else {
-            panic!("Expected builtin function");
-        };
-
-        name
-    }
-
-    fn expect_user_function(self) -> String {
-        let FragmentExpression::ResolvedUserFunction { name } = self else {
-            panic!("Expected user function");
-        };
-
-        name
-    }
 }
