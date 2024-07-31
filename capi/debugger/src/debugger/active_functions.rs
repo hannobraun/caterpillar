@@ -143,34 +143,7 @@ impl ActiveFunctions {
                             Expecting it to exist.",
                         );
 
-                    // And so is figuring out which instruction we need to add
-                    // to the call stack to replace the missing frame. It was
-                    // optimized away, so it must be the last instruction in the
-                    // function!
-                    let mut next_id = called_function.start;
-                    let terminator = loop {
-                        let next_fragment =
-                            code.fragments.inner.inner.get(&next_id).expect(
-                                "Fragment is referenced as a next fragment. \
-                                Expecting it to exist.",
-                            );
-
-                        match next_fragment.payload {
-                            FragmentPayload::Expression { next, .. } => {
-                                next_id = next;
-                            }
-                            FragmentPayload::Terminator => {
-                                break next_id;
-                            }
-                        }
-                    };
-
-                    // And we can fix up the gap.
-                    let missing_instruction = code
-                        .source_map
-                        .fragment_to_instruction(&terminator)
-                        .expect("Expecting fragment to map to instruction");
-                    call_stack.push_front(missing_instruction);
+                    fix_up_call_stack(&mut call_stack, called_function, code);
 
                     // We've added the missing stack frame! This might have
                     // closed the gap, or there might be more stack frames
@@ -238,4 +211,38 @@ fn instruction_to_function(
         .find_function_by_fragment(&fragment_id)
         .cloned()
         .expect("Expecting function referenced from call stack to exist.")
+}
+
+fn fix_up_call_stack(
+    call_stack: &mut VecDeque<InstructionAddr>,
+    missing_function: &fragments::Function,
+    code: &Code,
+) {
+    // Figuring out which instruction we need to add to the call stack to
+    // replace the missing stack frame is straight-forward: The function was
+    // optimized away, so the instruction that called the next function must
+    // have been the last one!
+    let mut next_id = missing_function.start;
+    let terminator = loop {
+        let next_fragment = code.fragments.inner.inner.get(&next_id).expect(
+            "Fragment is referenced as a next fragment. \
+                                Expecting it to exist.",
+        );
+
+        match next_fragment.payload {
+            FragmentPayload::Expression { next, .. } => {
+                next_id = next;
+            }
+            FragmentPayload::Terminator => {
+                break next_id;
+            }
+        }
+    };
+
+    // And now we can fix up the gap.
+    let missing_instruction = code
+        .source_map
+        .fragment_to_instruction(&terminator)
+        .expect("Expecting fragment to map to instruction");
+    call_stack.push_front(missing_instruction);
 }
