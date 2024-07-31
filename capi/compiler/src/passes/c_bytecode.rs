@@ -223,7 +223,7 @@ impl Compiler<'_> {
                         self.user_function_calls.push((name.clone(), address));
                         address
                     }
-                    FragmentExpression::UnresolvedWord { name: _ } => {
+                    FragmentExpression::UnresolvedIdentifier { name: _ } => {
                         self.generate(Instruction::Panic, fragment.id())
                     }
                     FragmentExpression::Value(value) => self.generate(

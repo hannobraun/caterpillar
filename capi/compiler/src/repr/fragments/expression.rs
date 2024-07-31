@@ -28,7 +28,7 @@ pub enum FragmentExpression {
     ResolvedUserFunction {
         name: String,
     },
-    UnresolvedWord {
+    UnresolvedIdentifier {
         name: String,
     },
     Value(Value),
@@ -71,7 +71,7 @@ impl FragmentExpression {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
             }
-            Self::UnresolvedWord { name } => {
+            Self::UnresolvedIdentifier { name } => {
                 hasher.update(b"unresolved word");
                 hasher.update(name.as_bytes());
             }
@@ -99,7 +99,7 @@ impl fmt::Display for FragmentExpression {
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
-            Self::UnresolvedWord { name } => write!(f, "{name}"),
+            Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
     }
