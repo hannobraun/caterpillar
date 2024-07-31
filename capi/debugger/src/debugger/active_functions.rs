@@ -1,6 +1,8 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_compiler::repr::fragments::{FragmentExpression, FragmentPayload};
+use capi_compiler::repr::fragments::{
+    self, FragmentExpression, FragmentPayload,
+};
 use capi_process::{InstructionAddr, Process};
 use capi_protocol::{host::GameEngineHost, updates::Code};
 
@@ -45,15 +47,7 @@ impl ActiveFunctions {
         let mut previous_instruction: Option<InstructionAddr> = None;
 
         while let Some(instruction) = call_stack.pop_front() {
-            let fragment_id =
-                code.source_map.instruction_to_fragment(&instruction);
-            let function = code
-                .fragments
-                .find_function_by_fragment(&fragment_id)
-                .cloned()
-                .expect(
-                    "Expecting function referenced from call stack to exist.",
-                );
+            let function = instruction_to_function(&instruction, code);
 
             if let Some(previous_instruction) = previous_instruction {
                 let caller_index =
@@ -224,4 +218,15 @@ impl fmt::Display for ActiveFunctionsMessage {
 
         Ok(())
     }
+}
+
+fn instruction_to_function(
+    instruction: &InstructionAddr,
+    code: &Code,
+) -> fragments::Function {
+    let fragment_id = code.source_map.instruction_to_fragment(instruction);
+    code.fragments
+        .find_function_by_fragment(&fragment_id)
+        .cloned()
+        .expect("Expecting function referenced from call stack to exist.")
 }
