@@ -106,7 +106,7 @@ pub fn evaluate<H: Host>(
             };
             stack.closures.insert(index, (*address, environment));
 
-            stack.push_operand(Value(index.to_le_bytes()));
+            stack.push_operand(index);
         }
         Instruction::Push { value } => stack.push_operand(*value),
         Instruction::Return => {
