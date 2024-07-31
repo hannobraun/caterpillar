@@ -41,7 +41,7 @@ impl SourceMap {
     pub fn fragment_to_instructions(
         &self,
         fragment: &FragmentId,
-    ) -> Option<Vec<InstructionAddress>> {
-        self.fragment_to_instructions.get(fragment).cloned()
+    ) -> Option<&Vec<InstructionAddress>> {
+        self.fragment_to_instructions.get(fragment)
     }
 }
