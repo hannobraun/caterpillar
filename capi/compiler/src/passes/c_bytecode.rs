@@ -174,16 +174,16 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::Block { start, environment } => {
-                        let addr =
+                        let address =
                             self.generate(Instruction::Panic, fragment.id());
 
                         self.queue.push_front(CompileUnit::Block {
                             start: *start,
                             environment: environment.clone(),
-                            address: addr,
+                            address,
                         });
 
-                        addr
+                        address
                     }
                     FragmentExpression::Comment { .. } => {
                         return None;
