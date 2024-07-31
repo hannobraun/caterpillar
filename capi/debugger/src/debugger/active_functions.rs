@@ -43,6 +43,15 @@ impl ActiveFunctions {
 
         let mut call_stack: VecDeque<InstructionAddr> =
             process.stack().all_next_instructions_in_frames().collect();
+
+        if let Some(instruction) = call_stack.front() {
+            let function = instruction_to_function(instruction, code);
+
+            if function.name != "main" {
+                dbg!("Detected missing `main` function in call stack.");
+            }
+        }
+
         let mut functions = VecDeque::new();
         let mut previous_instruction: Option<InstructionAddr> = None;
 
