@@ -98,12 +98,12 @@ impl Compiler<'_> {
                 CompileUnit::Block {
                     start,
                     environment,
-                    address: addr,
+                    address,
                 } => {
                     let start = self.compile_block(start);
 
                     self.instructions.replace(
-                        addr,
+                        address,
                         Instruction::MakeClosure {
                             addr: start,
                             environment,
