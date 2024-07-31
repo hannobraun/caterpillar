@@ -223,7 +223,7 @@ impl Compiler<'_> {
                         self.user_function_calls.push((name.clone(), address));
                         address
                     }
-                    FragmentExpression::TailRecursion { name } => {
+                    FragmentExpression::TailRecursiveCall { name } => {
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
                         self.user_function_calls.push((name.clone(), address));

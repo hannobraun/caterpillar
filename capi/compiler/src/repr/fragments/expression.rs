@@ -28,7 +28,7 @@ pub enum FragmentExpression {
     ResolvedUserFunction {
         name: String,
     },
-    TailRecursion {
+    TailRecursiveCall {
         name: String,
     },
     UnresolvedIdentifier {
@@ -74,7 +74,7 @@ impl FragmentExpression {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
             }
-            Self::TailRecursion { name } => {
+            Self::TailRecursiveCall { name } => {
                 hasher.update(b"recursion");
                 hasher.update(name.as_bytes());
             }
@@ -106,7 +106,7 @@ impl fmt::Display for FragmentExpression {
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::ResolvedUserFunction { name } => write!(f, "{name}"),
-            Self::TailRecursion { name } => write!(f, "{name}"),
+            Self::TailRecursiveCall { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
