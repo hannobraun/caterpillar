@@ -44,7 +44,9 @@ impl Stack {
         self.frames.last().map(|frame| &frame.operands)
     }
 
-    pub fn next_instruction_in_current_frame(&self) -> Option<InstructionAddress> {
+    pub fn next_instruction_in_current_frame(
+        &self,
+    ) -> Option<InstructionAddress> {
         Some(self.frames.last()?.next_instruction())
     }
 
