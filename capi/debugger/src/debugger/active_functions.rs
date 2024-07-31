@@ -254,7 +254,7 @@ fn add_missing_instruction_from_user_function_to_call_stack(
     // And now we can fix up the gap.
     let missing_instruction = code
         .source_map
-        .fragment_to_instruction(&terminator)
+        .fragment_to_instructions(&terminator)
         .expect("Expecting fragment to map to instruction");
     call_stack.push_front(missing_instruction[0]);
 }

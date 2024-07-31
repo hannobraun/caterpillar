@@ -35,7 +35,7 @@ impl SourceMap {
     /// Get the runtime location that a given syntax location is mapped to
     ///
     /// Can return `None`, as comments have no mapping to runtime locations.
-    pub fn fragment_to_instruction(
+    pub fn fragment_to_instructions(
         &self,
         fragment: &FragmentId,
     ) -> Option<Vec<InstructionAddress>> {
