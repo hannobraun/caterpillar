@@ -27,15 +27,15 @@ pub enum Expression {
         text: String,
     },
 
-    /// A reference to a definition
+    /// A name that identifies a definition in the source code
     Identifier {
-        /// The name of the referenced definition, as it appears in the code
+        /// The name of the definition, as it appears in the code
         name: String,
 
-        /// The kind of referenced definition
+        /// The kind of definition that the identifier identifies
         ///
-        /// This might be `None`, while the kind of reference has not been
-        /// determined yet, or if it can not be determined.
+        /// This might be `None`, if the target has not been determined yet, or
+        /// can not be determined.
         target: Option<IdentifierTarget>,
     },
 
