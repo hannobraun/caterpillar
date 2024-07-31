@@ -49,14 +49,14 @@ fn resolve_block<H: Host>(
                 scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, environment, user_functions);
             }
-            Expression::Identifier { name, target: kind } => {
+            Expression::Identifier { name, target } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
                 //
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
                 if scopes.iter().any(|bindings| bindings.contains(name)) {
-                    *kind = Some(IdentifierTarget::Binding);
+                    *target = Some(IdentifierTarget::Binding);
 
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains(name) {
@@ -68,13 +68,13 @@ fn resolve_block<H: Host>(
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
                 {
-                    *kind = Some(IdentifierTarget::BuiltinFunction);
+                    *target = Some(IdentifierTarget::BuiltinFunction);
                 }
                 if H::function(name).is_some() {
-                    *kind = Some(IdentifierTarget::HostFunction);
+                    *target = Some(IdentifierTarget::HostFunction);
                 }
                 if user_functions.contains(name) {
-                    *kind = Some(IdentifierTarget::UserFunction);
+                    *target = Some(IdentifierTarget::UserFunction);
                 }
             }
             _ => {}
