@@ -11,11 +11,11 @@ pub struct Instructions {
 
 impl Instructions {
     pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
-        let addr = InstructionAddress {
+        let address = InstructionAddress {
             index: self.inner.len().try_into().unwrap(),
         };
-        self.inner.push_back((addr, instruction));
-        addr
+        self.inner.push_back((address, instruction));
+        address
     }
 
     pub fn get(&self, addr: &InstructionAddress) -> Option<&Instruction> {
