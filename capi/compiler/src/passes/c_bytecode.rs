@@ -224,10 +224,11 @@ impl Compiler<'_> {
                         address
                     }
                     FragmentExpression::TailRecursiveCall { name } => {
-                        let address =
+                        let address_of_call =
                             self.generate(Instruction::Panic, fragment.id());
-                        self.user_function_calls.push((name.clone(), address));
-                        address
+                        self.user_function_calls
+                            .push((name.clone(), address_of_call));
+                        address_of_call
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
                         self.generate(Instruction::Panic, fragment.id())
