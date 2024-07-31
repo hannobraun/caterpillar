@@ -199,7 +199,6 @@ mod tests {
     }
 
     #[test]
-    #[should_panic] // this is an unfixed bug
     fn main_function_has_been_tail_call_optimized() {
         // This test is similar to the previous test, in that it concerns tail
         // call optimization, and how that prevents functions from showing up in

@@ -48,7 +48,11 @@ impl ActiveFunctions {
             let function = instruction_to_function(instruction, code);
 
             if function.name != "main" {
-                dbg!("Detected missing `main` function in call stack.");
+                let main_function = code
+                    .fragments
+                    .find_function_by_name("main")
+                    .expect("Expected `main` function to exist.");
+                fix_up_call_stack(&mut call_stack, main_function, code);
             }
         }
 
