@@ -101,7 +101,7 @@ impl Stack {
             }
         }
 
-        const RECURSION_LIMIT: usize = 8;
+        const RECURSION_LIMIT: usize = 16;
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
