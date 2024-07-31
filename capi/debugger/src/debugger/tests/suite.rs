@@ -1,3 +1,4 @@
+use capi_compiler::repr::fragments::FragmentExpression;
 use capi_process::{CoreEffect, Effect};
 
 use crate::debugger::{
@@ -5,7 +6,7 @@ use crate::debugger::{
     tests::infra::{
         init, ActiveFunctionsExt, ExpressionExt, FragmentExpressionExt,
     },
-    ActiveFunctions,
+    ActiveFunctions, Expression, OtherExpression,
 };
 
 #[test]
@@ -204,4 +205,99 @@ fn main_function_has_been_tail_call_optimized() {
         .expression
         .expect_user_function();
     assert_eq!(call_to_f, "f");
+}
+
+#[test]
+#[should_panic] // this is a known bug
+fn tail_call_is_a_builtin() {
+    // When a stack frame has been removed due to tail call optimization, its
+    // tail call might not be a user function, as covered by the previous tests,
+    // but a builtin function.
+    //
+    // If it is a builtin function that pushes a stack frame, both the called
+    // function and the builtin function call that calls it should show up in
+    // the active functions.
+
+    let debugger = init()
+        .provide_source_code(|script| {
+            script
+                .function("main", [], |s| {
+                    s.r("f")
+                        // This is never triggered. It's just here, so the
+                        // function call is not the last expression, because
+                        // I don't want this function to be optimized away
+                        // too.
+                        .r("brk");
+                })
+                .function("f", [], |s| {
+                    s.block(|s| {
+                        s.r("brk");
+                    })
+                    .r("eval");
+                });
+        })
+        .run_process()
+        .to_debugger();
+
+    let functions = debugger.active_functions.expect_functions();
+
+    let mut active_expressions = Vec::new();
+    for function in functions {
+        find_active_expressions(
+            &function.name,
+            function.body,
+            &mut active_expressions,
+        );
+    }
+
+    assert_eq!(
+        active_expressions,
+        vec![
+            (
+                "f".to_string(),
+                FragmentExpression::ResolvedBuiltinFunction {
+                    name: "brk".to_string()
+                }
+            ),
+            (
+                "f".to_string(),
+                FragmentExpression::ResolvedBuiltinFunction {
+                    name: "eval".to_string()
+                }
+            ),
+            (
+                "main".to_string(),
+                FragmentExpression::ResolvedUserFunction {
+                    name: "f".to_string()
+                }
+            ),
+        ]
+    );
+
+    fn find_active_expressions(
+        name: &str,
+        expressions: Vec<Expression>,
+        active_expressions: &mut Vec<(String, FragmentExpression)>,
+    ) {
+        for expression in expressions {
+            match expression {
+                Expression::Block { expressions } => {
+                    find_active_expressions(
+                        name,
+                        expressions,
+                        active_expressions,
+                    );
+                }
+                Expression::Other(OtherExpression {
+                    expression,
+                    is_on_call_stack: true,
+                    ..
+                }) => {
+                    active_expressions.push((name.to_string(), expression))
+                    //
+                }
+                _ => {}
+            }
+        }
+    }
 }
