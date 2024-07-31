@@ -14,17 +14,17 @@ use crate::debugger::{
     RemoteProcess,
 };
 
-pub fn init() -> TestSetup {
-    TestSetup::default()
+pub fn init() -> TestInfra {
+    TestInfra::default()
 }
 
 #[derive(Default)]
-pub struct TestSetup {
+pub struct TestInfra {
     remote_process: RemoteProcess,
     bytecode: Option<Bytecode>,
 }
 
-impl TestSetup {
+impl TestInfra {
     pub fn provide_source_code(
         &mut self,
         f: impl FnOnce(&mut Script),
