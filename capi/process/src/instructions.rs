@@ -10,21 +10,25 @@ pub struct Instructions {
 }
 
 impl Instructions {
-    pub fn push(&mut self, instruction: Instruction) -> InstructionAddr {
-        let addr = InstructionAddr {
+    pub fn push(&mut self, instruction: Instruction) -> InstructionAddress {
+        let addr = InstructionAddress {
             index: self.inner.len().try_into().unwrap(),
         };
         self.inner.push_back((addr, instruction));
         addr
     }
 
-    pub fn get(&self, addr: &InstructionAddr) -> Option<&Instruction> {
+    pub fn get(&self, addr: &InstructionAddress) -> Option<&Instruction> {
         let (stored_addr, instruction) = self.inner.get(addr.to_usize())?;
         assert_eq!(addr, stored_addr);
         Some(instruction)
     }
 
-    pub fn replace(&mut self, addr: InstructionAddr, instruction: Instruction) {
+    pub fn replace(
+        &mut self,
+        addr: InstructionAddress,
+        instruction: Instruction,
+    ) {
         let (stored_addr, stored_instruction) =
             self.inner.get_mut(addr.to_usize()).unwrap();
         assert_eq!(addr, *stored_addr);
@@ -41,7 +45,7 @@ impl<'r> IntoIterator for &'r Instructions {
     }
 }
 
-type InstructionsInner = VecDeque<(InstructionAddr, Instruction)>;
+type InstructionsInner = VecDeque<(InstructionAddress, Instruction)>;
 
 #[derive(
     Copy,
@@ -55,11 +59,11 @@ type InstructionsInner = VecDeque<(InstructionAddr, Instruction)>;
     serde::Deserialize,
     serde::Serialize,
 )]
-pub struct InstructionAddr {
+pub struct InstructionAddress {
     pub index: u32,
 }
 
-impl InstructionAddr {
+impl InstructionAddress {
     pub fn increment(&mut self) {
         self.index += 1;
     }
@@ -83,10 +87,10 @@ pub enum Instruction {
         name: String,
     },
     CallFunction {
-        address: InstructionAddr,
+        address: InstructionAddress,
     },
     MakeClosure {
-        addr: InstructionAddr,
+        addr: InstructionAddress,
         environment: BTreeSet<String>,
     },
     Push {

@@ -1,4 +1,4 @@
-use capi_process::{CoreEffect, Effect, InstructionAddr};
+use capi_process::{CoreEffect, Effect, InstructionAddress};
 use capi_protocol::command::Command;
 use leptos::{
     component, ev::MouseEvent, view, wasm_bindgen::JsCast,
@@ -119,7 +119,7 @@ pub fn Expression(
                     // This happens, if the user clicks on a comment.
                     return;
                 };
-                let instruction = InstructionAddr {
+                let instruction = InstructionAddress {
                     index: instruction.parse().expect(
                         "Expected `data-instruction` attribute to be a number",
                     ),

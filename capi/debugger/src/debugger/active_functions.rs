@@ -3,7 +3,7 @@ use std::{collections::VecDeque, fmt};
 use capi_compiler::repr::fragments::{
     self, FragmentExpression, FragmentPayload,
 };
-use capi_process::{InstructionAddr, Process};
+use capi_process::{InstructionAddress, Process};
 use capi_protocol::{host::GameEngineHost, updates::Code};
 
 use super::Function;
@@ -41,7 +41,7 @@ impl ActiveFunctions {
             };
         }
 
-        let mut call_stack: VecDeque<InstructionAddr> =
+        let mut call_stack: VecDeque<InstructionAddress> =
             process.stack().all_next_instructions_in_frames().collect();
 
         if let Some(instruction) = call_stack.front() {
@@ -61,7 +61,7 @@ impl ActiveFunctions {
         }
 
         let mut functions = VecDeque::new();
-        let mut previous_instruction: Option<InstructionAddr> = None;
+        let mut previous_instruction: Option<InstructionAddress> = None;
 
         while let Some(instruction) = call_stack.pop_front() {
             let function = instruction_to_function(&instruction, code);
@@ -75,7 +75,7 @@ impl ActiveFunctions {
                         should have been removed by tail call optimization, \
                         therefore not show up in the call stack.",
                     );
-                let caller_address = InstructionAddr {
+                let caller_address = InstructionAddress {
                     index: caller_index,
                 };
                 let caller_id =
@@ -215,7 +215,7 @@ impl fmt::Display for ActiveFunctionsMessage {
 }
 
 fn instruction_to_function(
-    instruction: &InstructionAddr,
+    instruction: &InstructionAddress,
     code: &Code,
 ) -> fragments::Function {
     let fragment_id = code.source_map.instruction_to_fragment(instruction);
@@ -226,7 +226,7 @@ fn instruction_to_function(
 }
 
 fn add_missing_instruction_from_user_function_to_call_stack(
-    call_stack: &mut VecDeque<InstructionAddr>,
+    call_stack: &mut VecDeque<InstructionAddress>,
     missing_function: &fragments::Function,
     code: &Code,
 ) {

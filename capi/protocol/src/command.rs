@@ -1,15 +1,15 @@
-use capi_process::InstructionAddr;
+use capi_process::InstructionAddress;
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub enum Command {
     BreakpointClear {
-        instruction: InstructionAddr,
+        instruction: InstructionAddress,
     },
     BreakpointSet {
-        instruction: InstructionAddr,
+        instruction: InstructionAddress,
     },
     Continue {
-        and_stop_at: Option<InstructionAddr>,
+        and_stop_at: Option<InstructionAddress>,
     },
     Reset,
     Step,

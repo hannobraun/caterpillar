@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, InstructionAddr,
+    operands::PopOperandError, Function, Instruction, InstructionAddress,
     Instructions, Operands, Value,
 };
 
@@ -18,7 +18,7 @@ pub struct Stack {
     ///
     /// The eventual plan is to put closures on the regular stack, but that is
     /// likely to be impractical while the language is untyped.
-    pub closures: BTreeMap<u32, (InstructionAddr, BTreeMap<String, Value>)>,
+    pub closures: BTreeMap<u32, (InstructionAddress, BTreeMap<String, Value>)>,
     pub next_closure: u32,
 }
 
@@ -26,7 +26,7 @@ impl Stack {
     pub fn new() -> Self {
         let frames = vec![StackFrame::new(Function {
             arguments: Vec::new(),
-            start: InstructionAddr { index: 0 },
+            start: InstructionAddress { index: 0 },
         })];
 
         Self {
@@ -44,11 +44,11 @@ impl Stack {
         self.frames.last().map(|frame| &frame.operands)
     }
 
-    pub fn next_instruction_in_current_frame(&self) -> Option<InstructionAddr> {
+    pub fn next_instruction_in_current_frame(&self) -> Option<InstructionAddress> {
         Some(self.frames.last()?.next_instruction())
     }
 
-    pub fn next_instruction_overall(&self) -> Option<InstructionAddr> {
+    pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
         if let Some(frame) = self.frames.last() {
             return Some(frame.next_instruction());
         }
@@ -58,7 +58,7 @@ impl Stack {
 
     pub fn is_next_instruction_in_any_frame(
         &self,
-        instruction: &InstructionAddr,
+        instruction: &InstructionAddress,
     ) -> bool {
         let mut instruction = *instruction;
         instruction.increment();
@@ -70,7 +70,7 @@ impl Stack {
 
     pub fn all_next_instructions_in_frames(
         &self,
-    ) -> impl DoubleEndedIterator<Item = InstructionAddr> + '_ {
+    ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
         self.frames.iter().map(|frame| frame.next_instruction())
     }
 
@@ -138,7 +138,7 @@ impl Stack {
         frame.operands.pop_any()
     }
 
-    pub fn take_next_instruction(&mut self) -> Option<InstructionAddr> {
+    pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
         let frame = self.frames.last_mut()?;
         Some(frame.take_next_instruction())
     }
@@ -188,11 +188,11 @@ impl StackFrame {
         Ok(())
     }
 
-    fn next_instruction(&self) -> InstructionAddr {
+    fn next_instruction(&self) -> InstructionAddress {
         self.function.start
     }
 
-    fn take_next_instruction(&mut self) -> InstructionAddr {
+    fn take_next_instruction(&mut self) -> InstructionAddress {
         let next = self.function.start;
         self.function.start.increment();
         next

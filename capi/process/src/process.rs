@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use crate::{
     breakpoints::Breakpoints,
     evaluator::{evaluate, EvaluatorState},
-    instructions::InstructionAddr,
+    instructions::InstructionAddress,
     Bytecode, CoreEffect, Effect, Host, Stack, Value,
 };
 
@@ -44,15 +44,18 @@ impl<H: Host> Process<H> {
         }
     }
 
-    pub fn clear_durable_breakpoint(&mut self, instruction: &InstructionAddr) {
+    pub fn clear_durable_breakpoint(
+        &mut self,
+        instruction: &InstructionAddress,
+    ) {
         self.breakpoints.clear_durable(instruction);
     }
 
-    pub fn set_durable_breakpoint(&mut self, instruction: InstructionAddr) {
+    pub fn set_durable_breakpoint(&mut self, instruction: InstructionAddress) {
         self.breakpoints.set_durable(instruction);
     }
 
-    pub fn continue_(&mut self, and_stop_at: Option<InstructionAddr>) {
+    pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
         if let Some(Effect::Core(CoreEffect::Breakpoint)) =
             self.state.first_unhandled_effect()
         {
@@ -111,13 +114,13 @@ impl<H: Host> Default for Process<H> {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProcessState<H: Host> {
-    most_recent_step: Option<InstructionAddr>,
+    most_recent_step: Option<InstructionAddress>,
     unhandled_effects: VecDeque<Effect<H::Effect>>,
     has_finished: bool,
 }
 
 impl<H: Host> ProcessState<H> {
-    pub fn most_recent_step(&self) -> Option<InstructionAddr> {
+    pub fn most_recent_step(&self) -> Option<InstructionAddress> {
         self.most_recent_step.as_ref().copied()
     }
 

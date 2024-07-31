@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use capi_process::{
-    Bytecode, Function, Instruction, InstructionAddr, Instructions,
+    Bytecode, Function, Instruction, InstructionAddress, Instructions,
 };
 
 use crate::{
@@ -84,8 +84,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
-    user_function_calls: Vec<(String, InstructionAddr)>,
-    functions_by_address: BTreeMap<InstructionAddr, Function>,
+    user_function_calls: Vec<(String, InstructionAddress)>,
+    functions_by_address: BTreeMap<InstructionAddress, Function>,
     functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
@@ -140,7 +140,7 @@ impl Compiler<'_> {
             .insert(name, Function { arguments, start });
     }
 
-    fn compile_block(&mut self, start: FragmentId) -> InstructionAddr {
+    fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
         let mut first_instruction = None;
 
         for fragment in self.fragments.iter_from(start) {
@@ -162,7 +162,7 @@ impl Compiler<'_> {
     fn compile_fragment(
         &mut self,
         fragment: &Fragment,
-    ) -> Option<InstructionAddr> {
+    ) -> Option<InstructionAddress> {
         let addr = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
@@ -250,7 +250,7 @@ impl Compiler<'_> {
         &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
-    ) -> InstructionAddr {
+    ) -> InstructionAddress {
         let addr = self.instructions.push(instruction);
         self.source_map.define_mapping(addr, fragment_id);
         addr
@@ -261,7 +261,7 @@ enum CompileUnit {
     Block {
         start: FragmentId,
         environment: BTreeSet<String>,
-        addr: InstructionAddr,
+        addr: InstructionAddress,
     },
     Function(fragments::Function),
 }

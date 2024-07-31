@@ -18,7 +18,7 @@ pub use self::{
     effects::{CoreEffect, Effect},
     function::Function,
     host::{Host, HostFunction, NoHost},
-    instructions::{Instruction, InstructionAddr, Instructions},
+    instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,
     process::{Process, ProcessState},
     stack::Stack,

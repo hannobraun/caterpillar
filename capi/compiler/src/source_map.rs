@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use capi_process::InstructionAddr;
+use capi_process::InstructionAddress;
 
 use crate::repr::fragments::FragmentId;
 
@@ -8,14 +8,14 @@ use crate::repr::fragments::FragmentId;
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct SourceMap {
-    instruction_to_fragment: BTreeMap<InstructionAddr, FragmentId>,
-    fragment_to_instruction: BTreeMap<FragmentId, InstructionAddr>,
+    instruction_to_fragment: BTreeMap<InstructionAddress, FragmentId>,
+    fragment_to_instruction: BTreeMap<FragmentId, InstructionAddress>,
 }
 
 impl SourceMap {
     pub fn define_mapping(
         &mut self,
-        instruction: InstructionAddr,
+        instruction: InstructionAddress,
         fragment: FragmentId,
     ) {
         self.instruction_to_fragment.insert(instruction, fragment);
@@ -24,7 +24,7 @@ impl SourceMap {
 
     pub fn instruction_to_fragment(
         &self,
-        instruction: &InstructionAddr,
+        instruction: &InstructionAddress,
     ) -> FragmentId {
         self.instruction_to_fragment
             .get(instruction)
@@ -38,7 +38,7 @@ impl SourceMap {
     pub fn fragment_to_instruction(
         &self,
         fragment: &FragmentId,
-    ) -> Option<InstructionAddr> {
+    ) -> Option<InstructionAddress> {
         self.fragment_to_instruction.get(fragment).cloned()
     }
 }
