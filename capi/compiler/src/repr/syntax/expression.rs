@@ -36,14 +36,14 @@ pub enum Expression {
         ///
         /// This might be `None`, while the kind of reference has not been
         /// determined yet, or if it can not be determined.
-        kind: Option<ReferenceKind>,
+        kind: Option<IdentifierTarget>,
     },
 
     Value(Value),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum ReferenceKind {
+pub enum IdentifierTarget {
     Binding,
     BuiltinFunction,
     HostFunction,

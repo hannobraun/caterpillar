@@ -5,7 +5,7 @@ use crate::repr::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
         FragmentPayload, Fragments, Function,
     },
-    syntax::{Expression, ReferenceKind, Script},
+    syntax::{Expression, IdentifierTarget, Script},
 };
 
 pub fn generate_fragments(script: Script) -> Fragments {
@@ -85,16 +85,16 @@ fn compile_expression(
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Identifier { name, kind } => match kind {
-            Some(ReferenceKind::Binding) => {
+            Some(IdentifierTarget::Binding) => {
                 FragmentExpression::ResolvedBinding { name }
             }
-            Some(ReferenceKind::BuiltinFunction) => {
+            Some(IdentifierTarget::BuiltinFunction) => {
                 FragmentExpression::ResolvedBuiltinFunction { name }
             }
-            Some(ReferenceKind::HostFunction) => {
+            Some(IdentifierTarget::HostFunction) => {
                 FragmentExpression::ResolvedHostFunction { name }
             }
-            Some(ReferenceKind::UserFunction) => {
+            Some(IdentifierTarget::UserFunction) => {
                 FragmentExpression::ResolvedUserFunction { name }
             }
             None => FragmentExpression::UnresolvedWord { name },

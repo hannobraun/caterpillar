@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use capi_process::{builtin, Host};
 
-use crate::repr::syntax::{Expression, ReferenceKind, Script};
+use crate::repr::syntax::{Expression, IdentifierTarget, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
     let mut scopes = Scopes::new();
@@ -56,7 +56,7 @@ fn resolve_block<H: Host>(
                 // There should at least be a warning, if such shadowing
                 // shouldn't be forbidden outright.
                 if scopes.iter().any(|bindings| bindings.contains(name)) {
-                    *kind = Some(ReferenceKind::Binding);
+                    *kind = Some(IdentifierTarget::Binding);
 
                     if let Some(bindings) = scopes.last() {
                         if !bindings.contains(name) {
@@ -68,13 +68,13 @@ fn resolve_block<H: Host>(
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
                 {
-                    *kind = Some(ReferenceKind::BuiltinFunction);
+                    *kind = Some(IdentifierTarget::BuiltinFunction);
                 }
                 if H::function(name).is_some() {
-                    *kind = Some(ReferenceKind::HostFunction);
+                    *kind = Some(IdentifierTarget::HostFunction);
                 }
                 if user_functions.contains(name) {
-                    *kind = Some(ReferenceKind::UserFunction);
+                    *kind = Some(IdentifierTarget::UserFunction);
                 }
             }
             _ => {}
@@ -92,7 +92,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack};
 
-    use crate::repr::syntax::{Expression, ReferenceKind, Script};
+    use crate::repr::syntax::{Expression, IdentifierTarget, Script};
 
     #[test]
     fn resolve_argument() {
@@ -109,7 +109,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("argument"),
-                kind: Some(ReferenceKind::Binding),
+                kind: Some(IdentifierTarget::Binding),
             })
         );
     }
@@ -129,7 +129,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                kind: Some(ReferenceKind::Binding),
+                kind: Some(IdentifierTarget::Binding),
             })
         );
     }
@@ -159,7 +159,7 @@ mod tests {
             body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                kind: Some(ReferenceKind::Binding),
+                kind: Some(IdentifierTarget::Binding),
             })
         );
 
@@ -207,7 +207,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("brk"),
-                kind: Some(ReferenceKind::BuiltinFunction),
+                kind: Some(IdentifierTarget::BuiltinFunction),
             })
         );
     }
@@ -229,7 +229,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
-                kind: Some(ReferenceKind::HostFunction),
+                kind: Some(IdentifierTarget::HostFunction),
             })
         );
     }
@@ -251,7 +251,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                kind: Some(ReferenceKind::UserFunction),
+                kind: Some(IdentifierTarget::UserFunction),
             })
         );
     }
