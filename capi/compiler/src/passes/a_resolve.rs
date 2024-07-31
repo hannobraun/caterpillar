@@ -49,7 +49,7 @@ fn resolve_block<H: Host>(
                 scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, environment, user_functions);
             }
-            Expression::Reference { name, kind } => {
+            Expression::Identifier { name, kind } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
                 //
@@ -107,7 +107,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("argument"),
                 kind: Some(ReferenceKind::Binding),
             })
@@ -127,7 +127,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("value"),
                 kind: Some(ReferenceKind::Binding),
             })
@@ -157,7 +157,7 @@ mod tests {
 
         assert_eq!(
             body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("value"),
                 kind: Some(ReferenceKind::Binding),
             })
@@ -184,7 +184,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("value"),
                 kind: None,
             })
@@ -205,7 +205,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("brk"),
                 kind: Some(ReferenceKind::BuiltinFunction),
             })
@@ -227,7 +227,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("host_fn"),
                 kind: Some(ReferenceKind::HostFunction),
             })
@@ -249,7 +249,7 @@ mod tests {
 
         assert_eq!(
             script.functions.remove(0).body.last(),
-            Some(&Expression::Reference {
+            Some(&Expression::Identifier {
                 name: String::from("user_fn"),
                 kind: Some(ReferenceKind::UserFunction),
             })

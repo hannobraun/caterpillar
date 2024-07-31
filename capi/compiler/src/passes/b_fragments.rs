@@ -84,7 +84,7 @@ fn compile_expression(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Reference { name, kind } => match kind {
+        Expression::Identifier { name, kind } => match kind {
             Some(ReferenceKind::Binding) => {
                 FragmentExpression::ResolvedBinding { name }
             }

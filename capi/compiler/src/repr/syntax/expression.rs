@@ -28,7 +28,7 @@ pub enum Expression {
     },
 
     /// A reference to a definition
-    Reference {
+    Identifier {
         /// The name of the referenced definition, as it appears in the code
         name: String,
 
