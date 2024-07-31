@@ -40,7 +40,7 @@ impl<'r> SyntaxBuilder<'r> {
     pub fn r(&mut self, name: &str) -> &mut Self {
         self.push_expression(Expression::Identifier {
             name: name.into(),
-            kind: None,
+            target: None,
         })
     }
 

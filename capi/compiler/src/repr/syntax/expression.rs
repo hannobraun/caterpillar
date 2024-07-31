@@ -36,7 +36,7 @@ pub enum Expression {
         ///
         /// This might be `None`, while the kind of reference has not been
         /// determined yet, or if it can not be determined.
-        kind: Option<IdentifierTarget>,
+        target: Option<IdentifierTarget>,
     },
 
     Value(Value),

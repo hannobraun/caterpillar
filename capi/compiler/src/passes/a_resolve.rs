@@ -49,7 +49,7 @@ fn resolve_block<H: Host>(
                 scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, environment, user_functions);
             }
-            Expression::Identifier { name, kind } => {
+            Expression::Identifier { name, target: kind } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
                 //
@@ -109,7 +109,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("argument"),
-                kind: Some(IdentifierTarget::Binding),
+                target: Some(IdentifierTarget::Binding),
             })
         );
     }
@@ -129,7 +129,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                kind: Some(IdentifierTarget::Binding),
+                target: Some(IdentifierTarget::Binding),
             })
         );
     }
@@ -159,7 +159,7 @@ mod tests {
             body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                kind: Some(IdentifierTarget::Binding),
+                target: Some(IdentifierTarget::Binding),
             })
         );
 
@@ -186,7 +186,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
-                kind: None,
+                target: None,
             })
         );
     }
@@ -207,7 +207,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("brk"),
-                kind: Some(IdentifierTarget::BuiltinFunction),
+                target: Some(IdentifierTarget::BuiltinFunction),
             })
         );
     }
@@ -229,7 +229,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
-                kind: Some(IdentifierTarget::HostFunction),
+                target: Some(IdentifierTarget::HostFunction),
             })
         );
     }
@@ -251,7 +251,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                kind: Some(IdentifierTarget::UserFunction),
+                target: Some(IdentifierTarget::UserFunction),
             })
         );
     }
