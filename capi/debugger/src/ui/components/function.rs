@@ -80,7 +80,7 @@ pub fn Expression(
         }
         Expression::Other(OtherExpression {
             expression,
-            instruction,
+            first_instruction,
             has_durable_breakpoint,
             is_on_call_stack,
             effect,
@@ -103,7 +103,7 @@ pub fn Expression(
             }
 
             let data_instruction =
-                instruction.map(|instruction| instruction.index);
+                first_instruction.map(|instruction| instruction.index);
             let data_breakpoint = has_durable_breakpoint;
 
             let error = effect.map(|effect| format!("{:?}", effect));

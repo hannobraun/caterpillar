@@ -80,7 +80,7 @@ impl Expression {
 
         Some(Self::Other(OtherExpression {
             expression,
-            instruction: instruction
+            first_instruction: instruction
                 .and_then(|instruction| instruction.first().copied()),
             has_durable_breakpoint,
             is_on_call_stack,
@@ -92,7 +92,7 @@ impl Expression {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
     pub expression: FragmentExpression,
-    pub instruction: Option<InstructionAddress>,
+    pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_on_call_stack: bool,
     pub effect: Option<Effect<GameEngineEffect>>,
