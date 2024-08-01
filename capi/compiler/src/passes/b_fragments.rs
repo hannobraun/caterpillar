@@ -56,14 +56,14 @@ fn compile_block(
 ) -> FragmentId {
     compile_context(
         expressions.into_iter().map(SyntaxElement::Expression),
-        parent,
+        Some(parent),
         fragments,
     )
 }
 
 fn compile_context<E>(
     elements: E,
-    parent: FragmentParent,
+    parent: Option<FragmentParent>,
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
@@ -72,7 +72,7 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent: Some(parent.clone()),
+            parent: parent.clone(),
             payload: FragmentPayload::Terminator,
         };
         let terminator_id = terminator.id();
@@ -99,7 +99,7 @@ where
 
 fn compile_expression(
     expression: Expression,
-    parent: FragmentParent,
+    parent: Option<FragmentParent>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -148,7 +148,7 @@ fn compile_expression(
     };
 
     Fragment {
-        parent: Some(parent),
+        parent,
         payload: FragmentPayload::Expression { expression, next },
     }
 }
