@@ -11,6 +11,10 @@ Interactive programming is the practice of directly manipulating your running
 program, instead of going through an extended loop of re-compiling, re-starting,
 then navigating to where you can test your change.
 
+The core premise of the project is the hypothesis, that interactive programming
+is underutilized. That using it as the central element the language and its
+tooling are built around, can make development more fun and productive.
+
 ## Status
 
 Caterpillar is still early-stage and experimental. It can hardly be called a
