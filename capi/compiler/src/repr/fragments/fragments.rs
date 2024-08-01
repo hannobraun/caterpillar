@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{Fragment, FragmentId, FragmentParent, Function};
+use super::{Fragment, FragmentId, FragmentParent, FragmentPayload, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -25,6 +25,14 @@ impl Fragments {
 
         loop {
             let fragment = self.inner.inner.get(&fragment_id)?;
+
+            if let FragmentPayload::Function {
+                inner: function, ..
+            } = &fragment.payload
+            {
+                return Some(function);
+            }
+
             match fragment.parent.as_ref()? {
                 FragmentParent::Fragment { id } => {
                     fragment_id = *id;
