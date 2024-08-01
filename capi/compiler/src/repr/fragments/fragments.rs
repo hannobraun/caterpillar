@@ -9,6 +9,11 @@ pub struct Fragments {
 }
 
 impl Fragments {
+    /// Find the function that contains the provided fragment
+    ///
+    /// Any fragment that is syntactically a part of the function body will do.
+    /// This specifically includes fragments within blocks that are defined in
+    /// the function.
     pub fn find_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
