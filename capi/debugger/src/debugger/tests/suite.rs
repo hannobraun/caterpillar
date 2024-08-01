@@ -57,21 +57,21 @@ fn basic_call_stack() {
         .provide_source_code(|script| {
             script
                 .function("main", [], |s| {
-                    s.r("f")
+                    s.ident("f")
                         // Not triggered. Just here to prevent tail call
                         // optimization from removing this function from the
                         // call stack.
-                        .r("brk");
+                        .ident("brk");
                 })
                 .function("f", [], |s| {
-                    s.r("g")
+                    s.ident("g")
                         // Not triggered. Just here to prevent tail call
                         // optimization from removing this function from the
                         // call stack.
-                        .r("brk");
+                        .ident("brk");
                 })
                 .function("g", [], |s| {
-                    s.r("brk");
+                    s.ident("brk");
                 });
         })
         .run_process()
@@ -96,9 +96,9 @@ fn stopped_at_code_within_block() {
         .provide_source_code(|script| {
             script.function("main", [], |s| {
                 s.block(|s| {
-                    s.r("brk");
+                    s.ident("brk");
                 })
-                .r("eval");
+                .ident("eval");
             });
         })
         .run_process()

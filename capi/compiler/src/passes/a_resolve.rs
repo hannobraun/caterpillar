@@ -112,7 +112,7 @@ mod tests {
 
         let mut script = Script::default();
         script.function("f", ["argument"], |s| {
-            s.r("argument");
+            s.ident("argument");
         });
 
         resolve_references(&mut script);
@@ -132,7 +132,7 @@ mod tests {
 
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.v(0).bind(["value"]).r("value");
+            s.v(0).bind(["value"]).ident("value");
         });
 
         resolve_references(&mut script);
@@ -154,7 +154,7 @@ mod tests {
         let mut script = Script::default();
         script.function("f", [], |s| {
             s.v(0).bind(["value"]).block(|s| {
-                s.r("value");
+                s.ident("value");
             });
         });
 
@@ -189,7 +189,7 @@ mod tests {
             s.block(|s| {
                 s.v(0).bind(["value"]);
             })
-            .r("value");
+            .ident("value");
         });
 
         resolve_references(&mut script);
@@ -210,7 +210,7 @@ mod tests {
 
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.r("brk");
+            s.ident("brk");
         });
 
         resolve_references(&mut script);
@@ -232,7 +232,7 @@ mod tests {
 
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.r("host_fn");
+            s.ident("host_fn");
         });
 
         resolve_references(&mut script);
@@ -253,7 +253,7 @@ mod tests {
 
         let mut script = Script::default();
         script.function("f", [], |s| {
-            s.r("user_fn");
+            s.ident("user_fn");
         });
         script.function("user_fn", [], |_| {});
 

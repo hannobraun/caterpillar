@@ -37,7 +37,7 @@ impl<'r> SyntaxBuilder<'r> {
         self.push_expression(Expression::Comment { text: text.into() })
     }
 
-    pub fn r(&mut self, name: &str) -> &mut Self {
+    pub fn ident(&mut self, name: &str) -> &mut Self {
         self.push_expression(Expression::Identifier {
             name: name.into(),
             target: None,

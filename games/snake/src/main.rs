@@ -11,89 +11,95 @@ pub fn main() {
 fn snake(script: &mut Script) {
     // Main loop
     script.function("main", ["size_x", "size_y"], |s| {
-        s.r("size_x")
-            .r("size_y")
-            .r("tile_field_size")
-            .r("vec_store")
-            .r("init_frame_count")
-            .r("init")
-            .r("main_inner");
+        s.ident("size_x")
+            .ident("size_y")
+            .ident("tile_field_size")
+            .ident("vec_store")
+            .ident("init_frame_count")
+            .ident("init")
+            .ident("main_inner");
     });
     script.function("main_inner", [], |s| {
-        s.r("draw").r("count_frame").r("update").r("main_inner");
+        s.ident("draw")
+            .ident("count_frame")
+            .ident("update")
+            .ident("main_inner");
     });
 
     // Draw
     script.function("draw", [], |s| {
-        s.r("clear_pixels")
-            .r("draw_snake")
-            .r("draw_food")
+        s.ident("clear_pixels")
+            .ident("draw_snake")
+            .ident("draw_food")
             .c("This blocks until the display system is ready to process the")
             .c("next frame.")
-            .r("submit_frame");
+            .ident("submit_frame");
     });
     script.function("draw_snake", [], |s| {
-        s.v(0).r("draw_snake_inner");
+        s.v(0).ident("draw_snake_inner");
     });
     script.function("draw_snake_inner", ["index"], |s| {
-        s.r("positions")
-            .r("index")
-            .r("vec_buf_get")
+        s.ident("positions")
+            .ident("index")
+            .ident("vec_buf_get")
             .v(0)
             .v(255)
             .v(0)
             .v(255)
-            .r("set_pixel")
-            .r("positions")
-            .r("vec_buf_len")
-            .r("index")
+            .ident("set_pixel")
+            .ident("positions")
+            .ident("vec_buf_len")
+            .ident("index")
             .v(1)
-            .r("add_i32")
-            .r("sub")
+            .ident("add_i32")
+            .ident("sub")
             .block(|s| {
-                s.r("index").v(1).r("add_i32").r("draw_snake_inner");
+                s.ident("index")
+                    .v(1)
+                    .ident("add_i32")
+                    .ident("draw_snake_inner");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
     script.function("draw_food", [], |s| {
-        s.r("food_position")
-            .r("vec_load")
+        s.ident("food_position")
+            .ident("vec_load")
             .v(255)
             .v(0)
             .v(0)
             .v(255)
-            .r("set_pixel");
+            .ident("set_pixel");
     });
 
     // Draw - clear pixels
     script.function("clear_pixels", [], |s| {
-        s.r("init_tile_index").r("clear_pixels_inner");
+        s.ident("init_tile_index").ident("clear_pixels_inner");
     });
     script.function("clear_pixels_inner", ["tile_x", "tile_y"], |s| {
         s
             .c("This is a recursive function, so we might have been at it for")
             .c("a while, if we make it here. Check if the tile index has gone")
             .c("beyond the last tile, which would let us know that we're done.")
-            .r("tile_y")
-            .r("check_tile_index")
+            .ident("tile_y")
+            .ident("check_tile_index")
             .block(|s| {
                 s
                     .c("Apparently we're not done yet.")
-                    .r("tile_x")
-                    .r("tile_y")
+                    .ident("tile_x")
+                    .ident("tile_y")
                     .v(0)
                     .v(0)
                     .v(0)
                     .v(255)
-                    .r("set_pixel")
-                    .r("tile_x")
-                    .r("tile_y")
-                    .r("increment_tile_index")
-                    .r("clear_pixels_inner");
+                    .ident("set_pixel")
+                    .ident("tile_x")
+                    .ident("tile_y")
+                    .ident("increment_tile_index")
+                    .ident("clear_pixels_inner");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
 
     // Draw - write tiles - tile index
@@ -101,85 +107,85 @@ fn snake(script: &mut Script) {
         s.v(0).v(0);
     });
     script.function("check_tile_index", ["tile_y"], |s| {
-        s.r("tile_field_size")
-            .r("vec_load")
-            .r("vec_y")
-            .r("tile_y")
+        s.ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_y")
+            .ident("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
-            .r("sub");
+            .ident("sub");
     });
     script.function("increment_tile_index", ["tile_x", "tile_y"], |s| {
         s.c("Increment the x-coordinate.")
-            .r("tile_x")
+            .ident("tile_x")
             .v(1)
-            .r("add_i32")
+            .ident("add_i32")
             .bind(["tile_x_new"])
             .c("Check if the x coordinate has advanced beyond the width.")
-            .r("tile_field_size")
-            .r("vec_load")
-            .r("vec_x")
-            .r("tile_x_new")
-            .r("sub")
+            .ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_x")
+            .ident("tile_x_new")
+            .ident("sub")
             .bind(["zero_if_x_overflowed"])
             .c("Unless the x-coordinate has advanced beyond the width, we're")
             .c("done here.")
-            .r("tile_x_new")
-            .r("tile_y")
-            .r("zero_if_x_overflowed")
-            .r("return_if_non_zero")
+            .ident("tile_x_new")
+            .ident("tile_y")
+            .ident("zero_if_x_overflowed")
+            .ident("return_if_non_zero")
             .c("Looks like we're not done!")
             .bind(["tile_x_new", "tile_y"])
             .c("Increment y-coordinate.")
-            .r("tile_y")
+            .ident("tile_y")
             .v(1)
-            .r("add_i32")
+            .ident("add_i32")
             .bind(["tile_y_new"])
             .c("Return updated coordinates")
             .v(0)
-            .r("tile_y_new");
+            .ident("tile_y_new");
     });
 
     // Tile field size
     script.function("is_out_of_bounds", ["x", "y"], |s| {
         s.c("Compare x coordinate against lower bound.")
             .v(0)
-            .r("x")
-            .r("greater")
-            .r("copy")
-            .r("return_if_non_zero")
-            .r("drop")
+            .ident("x")
+            .ident("greater")
+            .ident("copy")
+            .ident("return_if_non_zero")
+            .ident("drop")
             .c("Compare y coordinate against lower bound.")
             .v(0)
-            .r("y")
-            .r("greater")
-            .r("copy")
-            .r("return_if_non_zero")
-            .r("drop")
+            .ident("y")
+            .ident("greater")
+            .ident("copy")
+            .ident("return_if_non_zero")
+            .ident("drop")
             .c("Compare x coordinate against upper bound")
-            .r("x")
-            .r("tile_field_size")
-            .r("vec_load")
-            .r("vec_x")
+            .ident("x")
+            .ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_x")
             .v(1)
-            .r("sub")
-            .r("greater")
-            .r("copy")
-            .r("return_if_non_zero")
-            .r("drop")
+            .ident("sub")
+            .ident("greater")
+            .ident("copy")
+            .ident("return_if_non_zero")
+            .ident("drop")
             .c("Compare y coordinate against upper bound")
-            .r("y")
-            .r("tile_field_size")
-            .r("vec_load")
-            .r("vec_y")
+            .ident("y")
+            .ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_y")
             .v(1)
-            .r("sub")
-            .r("greater");
+            .ident("sub")
+            .ident("greater");
     });
 
     // Frame count
     script.function("init_frame_count", [], |s| {
-        s.v(1).r("frame_count").r("store");
+        s.v(1).ident("frame_count").ident("store");
     });
     script.function("count_frame", [], |s| {
         s
@@ -194,291 +200,298 @@ fn snake(script: &mut Script) {
             .c("prepare the number to compare to for later use.")
             .v(121)
             .c("Grab the current frame count.")
-            .r("frame_count")
-            .r("load")
+            .ident("frame_count")
+            .ident("load")
             .c("Increment the frame count.")
             .v(1)
-            .r("add_i32")
+            .ident("add_i32")
             .c("Place a copy of the new frame count back where it came from.")
-            .r("copy")
-            .r("frame_count")
-            .r("store")
+            .ident("copy")
+            .ident("frame_count")
+            .ident("store")
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
             .c("not, we're done.")
-            .r("sub")
-            .r("return_if_non_zero")
+            .ident("sub")
+            .ident("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
-            .r("init_frame_count");
+            .ident("init_frame_count");
     });
 
     // Game state
     script.function("init", [], |s| {
-        s.r("init_should_game_run")
-            .r("snake_init")
-            .r("init_velocity")
-            .r("init_next_position")
-            .r("food_init");
+        s.ident("init_should_game_run")
+            .ident("snake_init")
+            .ident("init_velocity")
+            .ident("init_next_position")
+            .ident("food_init");
     });
     script.function("update", [], |s| {
         s.c("The update logic does not run every frame.")
-            .r("frame_count")
-            .r("load")
+            .ident("frame_count")
+            .ident("load")
             .v(5)
-            .r("remainder")
-            .r("return_if_non_zero")
+            .ident("remainder")
+            .ident("return_if_non_zero")
             .c("Looks like it's time to run updates!")
-            .r("should_game_run")
-            .r("load")
+            .ident("should_game_run")
+            .ident("load")
             .block(|s| {
-                s.r("handle_input").r("update_positions").r("food_eat");
+                s.ident("handle_input")
+                    .ident("update_positions")
+                    .ident("food_eat");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
 
     // Game state - should game run
     script.function("init_should_game_run", [], |s| {
-        s.v(1).r("should_game_run").r("store");
+        s.v(1).ident("should_game_run").ident("store");
     });
 
     // Game state - velocity
     script.function("init_velocity", [], |s| {
-        s.v(1).v(0).r("velocity").r("vec_store");
+        s.v(1).v(0).ident("velocity").ident("vec_store");
     });
 
     // Game state - next position
     script.function("init_next_position", [], |s| {
-        s.r("positions")
+        s.ident("positions")
             .v(0)
-            .r("vec_buf_get")
-            .r("next_position")
-            .r("vec_store");
+            .ident("vec_buf_get")
+            .ident("next_position")
+            .ident("vec_store");
     });
     script.function("update_next_position", [], |s| {
-        s.r("snake_head")
-            .r("vec_x")
-            .r("velocity")
-            .r("vec_load")
-            .r("vec_x")
-            .r("add_i8")
-            .r("snake_head")
-            .r("vec_y")
-            .r("velocity")
-            .r("vec_load")
-            .r("vec_y")
-            .r("add_i8")
-            .r("next_position")
-            .r("vec_store")
-            .r("next_position")
-            .r("vec_load")
-            .r("is_out_of_bounds")
+        s.ident("snake_head")
+            .ident("vec_x")
+            .ident("velocity")
+            .ident("vec_load")
+            .ident("vec_x")
+            .ident("add_i8")
+            .ident("snake_head")
+            .ident("vec_y")
+            .ident("velocity")
+            .ident("vec_load")
+            .ident("vec_y")
+            .ident("add_i8")
+            .ident("next_position")
+            .ident("vec_store")
+            .ident("next_position")
+            .ident("vec_load")
+            .ident("is_out_of_bounds")
             .block(|s| {
-                s.r("next_position")
-                    .r("vec_load")
+                s.ident("next_position")
+                    .ident("vec_load")
                     .bind(["next_x", "next_y"])
-                    .r("tile_field_size")
-                    .r("vec_load")
+                    .ident("tile_field_size")
+                    .ident("vec_load")
                     .bind(["limit_x", "limit_y"])
-                    .r("next_x")
-                    .r("limit_x")
-                    .r("handle_coordinate_smaller_than_zero")
+                    .ident("next_x")
+                    .ident("limit_x")
+                    .ident("handle_coordinate_smaller_than_zero")
                     .bind(["next_x"])
-                    .r("next_y")
-                    .r("limit_y")
-                    .r("handle_coordinate_smaller_than_zero")
+                    .ident("next_y")
+                    .ident("limit_y")
+                    .ident("handle_coordinate_smaller_than_zero")
                     .bind(["next_y"])
-                    .r("next_x")
-                    .r("limit_x")
-                    .r("handle_coordinate_larger_than_limit")
+                    .ident("next_x")
+                    .ident("limit_x")
+                    .ident("handle_coordinate_larger_than_limit")
                     .bind(["next_x"])
-                    .r("next_y")
-                    .r("limit_y")
-                    .r("handle_coordinate_larger_than_limit")
+                    .ident("next_y")
+                    .ident("limit_y")
+                    .ident("handle_coordinate_larger_than_limit")
                     .bind(["next_y"])
-                    .r("next_x")
-                    .r("next_y")
-                    .r("next_position")
-                    .r("vec_store");
+                    .ident("next_x")
+                    .ident("next_y")
+                    .ident("next_position")
+                    .ident("vec_store");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
     script.function(
         "handle_coordinate_smaller_than_zero",
         ["coord", "limit"],
         |s| {
             s.v(0)
-                .r("coord")
-                .r("greater")
+                .ident("coord")
+                .ident("greater")
                 .bind(["coord_smaller_than_zero"])
-                .r("coord")
-                .r("coord_smaller_than_zero")
+                .ident("coord")
+                .ident("coord_smaller_than_zero")
                 .block(|s| {
-                    s.r("limit").r("add_i32");
+                    s.ident("limit").ident("add_i32");
                 })
                 .block(|_| {})
-                .r("if");
+                .ident("if");
         },
     );
     script.function(
         "handle_coordinate_larger_than_limit",
         ["coord", "limit"],
         |s| {
-            s.r("limit")
-                .r("coord")
-                .r("greater")
+            s.ident("limit")
+                .ident("coord")
+                .ident("greater")
                 .bind(["limit_greater_than_coord"])
-                .r("coord")
-                .r("limit_greater_than_coord")
-                .r("return_if_non_zero")
-                .r("limit")
-                .r("sub");
+                .ident("coord")
+                .ident("limit_greater_than_coord")
+                .ident("return_if_non_zero")
+                .ident("limit")
+                .ident("sub");
         },
     );
 
     // Game state - food
     script.function("food_init", [], |s| {
-        s.r("negatable_random")
-            .r("abs")
-            .r("tile_field_size")
-            .r("vec_load")
-            .r("vec_x")
-            .r("remainder")
-            .r("negatable_random")
-            .r("abs")
-            .r("tile_field_size")
-            .r("vec_load")
-            .r("vec_y")
-            .r("remainder")
-            .r("food_position")
-            .r("vec_store");
+        s.ident("negatable_random")
+            .ident("abs")
+            .ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_x")
+            .ident("remainder")
+            .ident("negatable_random")
+            .ident("abs")
+            .ident("tile_field_size")
+            .ident("vec_load")
+            .ident("vec_y")
+            .ident("remainder")
+            .ident("food_position")
+            .ident("vec_store");
     });
     script.function("food_eat", [], |s| {
-        s.r("_food_collides_with_snake")
+        s.ident("_food_collides_with_snake")
             .block(|s| {
                 s.c("The snake's head and the food are at the same position.")
-                    .r("food_init")
-                    .r("grow_snake");
+                    .ident("food_init")
+                    .ident("grow_snake");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
     script.function("_food_collides_with_snake", [], |s| {
-        s.r("snake_head")
-            .r("food_position")
-            .r("vec_load")
-            .r("vec_eq")
+        s.ident("snake_head")
+            .ident("food_position")
+            .ident("vec_load")
+            .ident("vec_eq")
             .bind(["head_collides"])
-            .r("food_position")
-            .r("vec_load")
-            .r("check_body_collision")
+            .ident("food_position")
+            .ident("vec_load")
+            .ident("check_body_collision")
             .bind(["body_collides"])
-            .r("head_collides")
-            .r("body_collides")
-            .r("add_i32")
+            .ident("head_collides")
+            .ident("body_collides")
+            .ident("add_i32")
             .v(0)
-            .r("greater");
+            .ident("greater");
     });
 
     // Game state - snake
     script.function("snake_init", [], |s| {
         s.v(3)
-            .r("snake_length")
-            .r("store")
-            .r("positions")
-            .r("vec_buf_init")
-            .r("positions")
+            .ident("snake_length")
+            .ident("store")
+            .ident("positions")
+            .ident("vec_buf_init")
+            .ident("positions")
             .v(15)
             .v(15)
-            .r("vec_buf_push");
+            .ident("vec_buf_push");
     });
     script.function("snake_head", [], |s| {
-        s.r("positions").r("vec_buf_last");
+        s.ident("positions").ident("vec_buf_last");
     });
     script.function("update_positions", [], |s| {
-        s.r("update_next_position")
-            .r("snake_head")
-            .r("check_body_collision")
-            .r("return_if_non_zero")
-            .r("positions")
-            .r("next_position")
-            .r("vec_load")
-            .r("vec_buf_push")
-            .r("pop_positions");
+        s.ident("update_next_position")
+            .ident("snake_head")
+            .ident("check_body_collision")
+            .ident("return_if_non_zero")
+            .ident("positions")
+            .ident("next_position")
+            .ident("vec_load")
+            .ident("vec_buf_push")
+            .ident("pop_positions");
     });
     script.function("pop_positions", [], |s| {
-        s.r("positions")
-            .r("vec_buf_len")
-            .r("snake_length")
-            .r("load")
-            .r("greater")
+        s.ident("positions")
+            .ident("vec_buf_len")
+            .ident("snake_length")
+            .ident("load")
+            .ident("greater")
             .block(|s| {
-                s.r("positions").r("vec_buf_pop").r("pop_positions");
+                s.ident("positions")
+                    .ident("vec_buf_pop")
+                    .ident("pop_positions");
             })
             .block(|_| {})
-            .r("if");
+            .ident("if");
     });
     script.function("grow_snake", [], |s| {
-        s.r("snake_length")
-            .r("load")
+        s.ident("snake_length")
+            .ident("load")
             .v(1)
-            .r("add_i32")
+            .ident("add_i32")
             .bind(["snake_length_plus_growth"])
-            .r("snake_length_plus_growth")
-            .r("positions")
-            .r("vec_buf_capacity")
-            .r("greater")
-            .r("return_if_non_zero")
-            .r("snake_length_plus_growth")
-            .r("snake_length")
-            .r("store");
+            .ident("snake_length_plus_growth")
+            .ident("positions")
+            .ident("vec_buf_capacity")
+            .ident("greater")
+            .ident("return_if_non_zero")
+            .ident("snake_length_plus_growth")
+            .ident("snake_length")
+            .ident("store");
     });
     script.function("check_body_collision", ["x", "y"], |s| {
-        s.r("x").r("y").v(0).r("check_body_collision_inner");
+        s.ident("x")
+            .ident("y")
+            .v(0)
+            .ident("check_body_collision_inner");
     });
     script.function("check_body_collision_inner", ["x", "y", "index"], |s| {
-        s.r("positions")
-            .r("vec_buf_len")
+        s.ident("positions")
+            .ident("vec_buf_len")
             .v(1)
-            .r("sub")
-            .r("index")
-            .r("greater")
+            .ident("sub")
+            .ident("index")
+            .ident("greater")
             .block(|s| {
-                s.r("positions")
-                    .r("index")
-                    .r("vec_buf_get")
-                    .r("vec_x")
-                    .r("x")
-                    .r("eq")
+                s.ident("positions")
+                    .ident("index")
+                    .ident("vec_buf_get")
+                    .ident("vec_x")
+                    .ident("x")
+                    .ident("eq")
                     .bind(["x_matches"])
-                    .r("positions")
-                    .r("index")
-                    .r("vec_buf_get")
-                    .r("vec_y")
-                    .r("y")
-                    .r("eq")
+                    .ident("positions")
+                    .ident("index")
+                    .ident("vec_buf_get")
+                    .ident("vec_y")
+                    .ident("y")
+                    .ident("eq")
                     .bind(["y_matches"])
-                    .r("x_matches")
-                    .r("y_matches")
-                    .r("add_i32")
+                    .ident("x_matches")
+                    .ident("y_matches")
+                    .ident("add_i32")
                     .v(2)
-                    .r("eq")
-                    .r("copy")
-                    .r("return_if_non_zero")
-                    .r("drop")
-                    .r("x")
-                    .r("y")
-                    .r("index")
+                    .ident("eq")
+                    .ident("copy")
+                    .ident("return_if_non_zero")
+                    .ident("drop")
+                    .ident("x")
+                    .ident("y")
+                    .ident("index")
                     .v(1)
-                    .r("add_i32")
-                    .r("check_body_collision_inner");
+                    .ident("add_i32")
+                    .ident("check_body_collision_inner");
             })
             .block(|s| {
                 s.v(0);
             })
-            .r("if");
+            .ident("if");
     });
 
     // Input
@@ -495,57 +508,57 @@ fn snake(script: &mut Script) {
             .c("- 2: left")
             .c("- 3: down")
             .c("- 4: right")
-            .r("read_input")
+            .ident("read_input")
             .bind(["input"])
             .c("Return, if no input is available.")
-            .r("input")
-            .r("return_if_zero")
+            .ident("input")
+            .ident("return_if_zero")
             .c("Assume result was `1`, and apply an `up` event.")
             .v(0)
             .v(-1)
-            .r("i32_to_i8")
-            .r("velocity")
-            .r("vec_store")
+            .ident("i32_to_i8")
+            .ident("velocity")
+            .ident("vec_store")
             .c("Now check if it actually was an `up` event, and if so, return.")
-            .r("input")
+            .ident("input")
             .v(1)
-            .r("sub")
-            .r("copy")
-            .r("return_if_zero")
+            .ident("sub")
+            .ident("copy")
+            .ident("return_if_zero")
             .c("Seems it wasn't `up`. Try again for `left`.")
             .v(-1)
-            .r("i32_to_i8")
+            .ident("i32_to_i8")
             .v(0)
-            .r("velocity")
-            .r("vec_store")
-            .r("input")
+            .ident("velocity")
+            .ident("vec_store")
+            .ident("input")
             .v(2)
-            .r("sub")
-            .r("copy")
-            .r("return_if_zero")
+            .ident("sub")
+            .ident("copy")
+            .ident("return_if_zero")
             .c("It wasn't `left` either. Re-try for `down`.")
             .v(0)
             .v(1)
-            .r("velocity")
-            .r("vec_store")
-            .r("input")
+            .ident("velocity")
+            .ident("vec_store")
+            .ident("input")
             .v(3)
-            .r("sub")
-            .r("copy")
-            .r("return_if_zero")
+            .ident("sub")
+            .ident("copy")
+            .ident("return_if_zero")
             .c("Guessed wrong again. One more try for `right`.")
             .v(1)
             .v(0)
-            .r("velocity")
-            .r("vec_store")
-            .r("input")
+            .ident("velocity")
+            .ident("vec_store")
+            .ident("input")
             .v(4)
-            .r("sub")
-            .r("copy")
-            .r("return_if_zero")
+            .ident("sub")
+            .ident("copy")
+            .ident("return_if_zero")
             .c("It wasn't `right` either, which means `read_input` returned")
             .c("an unexpected value.")
-            .r("brk");
+            .ident("brk");
     });
 
     // Memory map
@@ -576,46 +589,46 @@ fn snake(script: &mut Script) {
 
     // Utilities - Vector
     script.function("vec_x", ["x", "_"], |s| {
-        s.r("x");
+        s.ident("x");
     });
     script.function("vec_y", ["_", "y"], |s| {
-        s.r("y");
+        s.ident("y");
     });
     script.function("vec_load", ["address"], |s| {
-        s.r("address")
-            .r("load")
-            .r("address")
+        s.ident("address")
+            .ident("load")
+            .ident("address")
             .v(1)
-            .r("add_i32")
-            .r("load");
+            .ident("add_i32")
+            .ident("load");
     });
     script.function("vec_store", ["x", "y", "address"], |s| {
-        s.r("x")
-            .r("address")
-            .r("store")
-            .r("y")
-            .r("address")
+        s.ident("x")
+            .ident("address")
+            .ident("store")
+            .ident("y")
+            .ident("address")
             .v(1)
-            .r("add_i32")
-            .r("store");
+            .ident("add_i32")
+            .ident("store");
     });
     script.function("vec_copy", ["vx", "vy"], |s| {
-        s.r("vx").r("vy").r("vx").r("vy");
+        s.ident("vx").ident("vy").ident("vx").ident("vy");
     });
     script.function("vec_drop", ["_", "_"], |_| {});
     script.function("vec_eq", ["ax", "ay", "bx", "by"], |s| {
-        s.r("ax")
-            .r("bx")
-            .r("eq")
-            .r("copy")
-            .r("return_if_zero")
-            .r("drop")
-            .r("ay")
-            .r("by")
-            .r("eq")
-            .r("copy")
-            .r("return_if_zero")
-            .r("drop")
+        s.ident("ax")
+            .ident("bx")
+            .ident("eq")
+            .ident("copy")
+            .ident("return_if_zero")
+            .ident("drop")
+            .ident("ay")
+            .ident("by")
+            .ident("eq")
+            .ident("copy")
+            .ident("return_if_zero")
+            .ident("drop")
             .c("Vectors are equal!")
             .v(1);
     });
@@ -623,96 +636,98 @@ fn snake(script: &mut Script) {
     // Utilities - Vector Buffer
     script.function("vec_buf_init", ["vec_buf"], |s| {
         s.v(0)
-            .r("vec_buf")
-            .r("_vec_buf_first")
-            .r("store")
+            .ident("vec_buf")
+            .ident("_vec_buf_first")
+            .ident("store")
             .v(0)
-            .r("vec_buf")
-            .r("_vec_buf_next")
-            .r("store")
+            .ident("vec_buf")
+            .ident("_vec_buf_next")
+            .ident("store")
             .v(64)
-            .r("vec_buf")
-            .r("_vec_buf_capacity")
-            .r("store");
+            .ident("vec_buf")
+            .ident("_vec_buf_capacity")
+            .ident("store");
     });
     script.function("vec_buf_get", ["vec_buf", "index"], |s| {
-        s.r("index")
+        s.ident("index")
             .v(2)
-            .r("mul_i32")
+            .ident("mul_i32")
             .bind(["offset"])
-            .r("vec_buf")
-            .r("_vec_buf_first")
-            .r("load")
+            .ident("vec_buf")
+            .ident("_vec_buf_first")
+            .ident("load")
             .bind(["base"])
-            .r("vec_buf")
-            .r("base")
-            .r("offset")
-            .r("_vec_buf_address")
-            .r("vec_load");
+            .ident("vec_buf")
+            .ident("base")
+            .ident("offset")
+            .ident("_vec_buf_address")
+            .ident("vec_load");
     });
     script.function("vec_buf_last", ["vec_buf"], |s| {
-        s.r("vec_buf")
-            .r("vec_buf_len")
+        s.ident("vec_buf")
+            .ident("vec_buf_len")
             .v(1)
-            .r("sub")
+            .ident("sub")
             .bind(["index"])
-            .r("vec_buf")
-            .r("index")
-            .r("vec_buf_get");
+            .ident("vec_buf")
+            .ident("index")
+            .ident("vec_buf_get");
     });
     script.function("vec_buf_push", ["vec_buf", "x", "y"], |s| {
-        s.r("vec_buf")
-            .r("_vec_buf_next")
+        s.ident("vec_buf")
+            .ident("_vec_buf_next")
             .bind(["next_addr"])
-            .r("vec_buf")
-            .r("next_addr")
-            .r("load")
+            .ident("vec_buf")
+            .ident("next_addr")
+            .ident("load")
             .v(0)
-            .r("_vec_buf_address")
+            .ident("_vec_buf_address")
             .bind(["address"])
-            .r("x")
-            .r("y")
-            .r("address")
-            .r("vec_store")
-            .r("next_addr")
-            .r("_vec_buf_inc_index");
+            .ident("x")
+            .ident("y")
+            .ident("address")
+            .ident("vec_store")
+            .ident("next_addr")
+            .ident("_vec_buf_inc_index");
     });
     script.function("vec_buf_pop", ["vec_buf"], |s| {
-        s.r("vec_buf").r("_vec_buf_first").r("_vec_buf_inc_index");
+        s.ident("vec_buf")
+            .ident("_vec_buf_first")
+            .ident("_vec_buf_inc_index");
     });
     script.function("vec_buf_len", ["vec_buf"], |s| {
-        s.r("vec_buf")
-            .r("_vec_buf_first")
-            .r("load")
+        s.ident("vec_buf")
+            .ident("_vec_buf_first")
+            .ident("load")
             .bind(["first"])
-            .r("vec_buf")
-            .r("_vec_buf_next")
-            .r("load")
+            .ident("vec_buf")
+            .ident("_vec_buf_next")
+            .ident("load")
             .bind(["next"])
-            .r("next")
-            .r("first")
-            .r("sub")
+            .ident("next")
+            .ident("first")
+            .ident("sub")
             .v(2)
-            .r("div")
+            .ident("div")
             .bind(["difference"])
-            .r("difference")
-            .r("difference")
-            .r("return_if_zero")
+            .ident("difference")
+            .ident("difference")
+            .ident("return_if_zero")
             .v(0)
-            .r("difference")
-            .r("greater")
-            .r("return_if_zero")
-            .r("vec_buf")
-            .r("_vec_buf_capacity")
-            .r("load")
-            .r("add_i32");
+            .ident("difference")
+            .ident("greater")
+            .ident("return_if_zero")
+            .ident("vec_buf")
+            .ident("_vec_buf_capacity")
+            .ident("load")
+            .ident("add_i32");
     });
     script.function("vec_buf_capacity", ["vec_buf"], |s| {
-        s.r("vec_buf")
-            .r("_vec_buf_capacity")
-            .r("load")
+        s.ident("vec_buf")
+            .ident("_vec_buf_capacity")
+            .ident("load")
             .v(2)
-            .r("div");
+            .ident("div");
     });
     script.function("_vec_buf_address", ["vec_buf", "base", "offset"], |s| {
         s.c("Compute the memory address of a location within the vector")
@@ -725,57 +740,57 @@ fn snake(script: &mut Script) {
             .c("  within the buffer.")
             .c("- `offset`, which is the offset of the desired address from")
             .c("  `base`.")
-            .r("base")
-            .r("offset")
-            .r("add_u8_wrap")
-            .r("vec_buf")
-            .r("_vec_buf_capacity")
-            .r("load")
-            .r("remainder")
-            .r("vec_buf")
-            .r("_vec_buf_buffer")
-            .r("add_u8_wrap");
+            .ident("base")
+            .ident("offset")
+            .ident("add_u8_wrap")
+            .ident("vec_buf")
+            .ident("_vec_buf_capacity")
+            .ident("load")
+            .ident("remainder")
+            .ident("vec_buf")
+            .ident("_vec_buf_buffer")
+            .ident("add_u8_wrap");
     });
     script.function("_vec_buf_inc_index", ["index_addr"], |s| {
-        s.r("index_addr")
-            .r("load")
+        s.ident("index_addr")
+            .ident("load")
             .v(2)
-            .r("add_u8_wrap")
-            .r("index_addr")
-            .r("store");
+            .ident("add_u8_wrap")
+            .ident("index_addr")
+            .ident("store");
     });
     script.function("_vec_buf_first", ["vec_buf"], |s| {
-        s.r("vec_buf").v(0).r("add_i32");
+        s.ident("vec_buf").v(0).ident("add_i32");
     });
     script.function("_vec_buf_next", ["vec_buf"], |s| {
-        s.r("vec_buf").v(1).r("add_i32");
+        s.ident("vec_buf").v(1).ident("add_i32");
     });
     script.function("_vec_buf_capacity", ["vec_buf"], |s| {
-        s.r("vec_buf").v(2).r("add_i32");
+        s.ident("vec_buf").v(2).ident("add_i32");
     });
     script.function("_vec_buf_buffer", ["vec_buf"], |s| {
-        s.r("vec_buf").v(3).r("add_i32");
+        s.ident("vec_buf").v(3).ident("add_i32");
     });
 
     // Utilities - Miscellaneous
     script.function("negatable_random", [], |s| {
         s.c("Negating the minimum number would result in an integer overflow.")
-            .r("read_random")
-            .r("copy")
-            .r("word_min")
-            .r("eq")
-            .r("return_if_zero")
-            .r("drop")
+            .ident("read_random")
+            .ident("copy")
+            .ident("word_min")
+            .ident("eq")
+            .ident("return_if_zero")
+            .ident("drop")
             .c("Looks like we ran into the minimum. Try again!")
-            .r("negatable_random");
+            .ident("negatable_random");
     });
     script.function("abs", ["v"], |s| {
-        s.r("v")
-            .r("v")
+        s.ident("v")
+            .ident("v")
             .v(-1)
-            .r("greater")
-            .r("return_if_non_zero")
-            .r("neg");
+            .ident("greater")
+            .ident("return_if_non_zero")
+            .ident("neg");
     });
 
     // Utilities - Words
