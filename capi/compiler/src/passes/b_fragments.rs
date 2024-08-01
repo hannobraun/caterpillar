@@ -5,10 +5,10 @@ use crate::repr::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
         FragmentPayload, Fragments, Function,
     },
-    syntax::{Expression, IdentifierTarget, Script},
+    syntax::{self, Expression, IdentifierTarget},
 };
 
-pub fn generate_fragments(script: Script) -> Fragments {
+pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
@@ -26,7 +26,7 @@ pub fn generate_fragments(script: Script) -> Fragments {
         terminator_id
     };
 
-    for function in script.functions {
+    for function in functions {
         let start = compile_block(
             function.body,
             FragmentParent::Function {
@@ -156,7 +156,7 @@ mod tests {
             s.v(1).v(1);
         });
 
-        let fragments = generate_fragments(script);
+        let fragments = generate_fragments(script.functions);
 
         let body = body(fragments);
         assert_eq!(
@@ -173,7 +173,7 @@ mod tests {
         let mut script = Script::default();
         script.function("f", [], |_| {});
 
-        let mut fragments = generate_fragments(script);
+        let mut fragments = generate_fragments(script.functions);
 
         let start = fragments.by_function.remove(0).start;
         let last_fragment = fragments.inner.iter_from(start).last().unwrap();
@@ -187,7 +187,7 @@ mod tests {
             s.block(|_| {});
         });
 
-        let mut fragments = generate_fragments(script);
+        let mut fragments = generate_fragments(script.functions);
 
         let start = fragments.by_function.remove(0).start;
         let function_fragments =
