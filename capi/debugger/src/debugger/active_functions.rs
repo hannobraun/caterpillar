@@ -48,7 +48,7 @@ impl ActiveFunctions {
                 code.source_map.instruction_to_fragment(&instruction);
             let function = code
                 .fragments
-                .find_function_by_fragment(&fragment_id)
+                .find_function_by_fragment_in_body(&fragment_id)
                 .cloned()
                 .expect(
                     "Expecting function referenced from call stack to exist.",

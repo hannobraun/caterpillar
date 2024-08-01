@@ -9,7 +9,7 @@ pub struct Fragments {
 }
 
 impl Fragments {
-    pub fn find_function_by_fragment(
+    pub fn find_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
     ) -> Option<&Function> {
