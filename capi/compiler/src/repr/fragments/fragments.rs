@@ -30,19 +30,22 @@ impl Fragments {
                 return Some(function);
             }
 
-            match fragment.parent.as_ref()? {
-                FragmentParent::Fragment { id } => {
+            match fragment.parent.as_ref() {
+                Some(FragmentParent::Fragment { id }) => {
                     fragment_id = *id;
                 }
-                FragmentParent::Function { name } => {
+                Some(FragmentParent::Function { name }) => {
                     let function = self
                         .by_function
                         .iter()
                         .find(|function| &function.name == name);
                     return function;
                 }
+                None => break,
             };
         }
+
+        None
     }
 }
 
