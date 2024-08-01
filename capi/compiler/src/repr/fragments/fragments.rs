@@ -1,6 +1,9 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{Fragment, FragmentId, FragmentParent, FragmentPayload, Function};
+use super::{
+    Fragment, FragmentExpression, FragmentId, FragmentParent, FragmentPayload,
+    Function,
+};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -26,10 +29,6 @@ impl Fragments {
         loop {
             let fragment = self.inner.inner.get(&fragment_id_2)?;
 
-            if let FragmentPayload::Function(function) = &fragment.payload {
-                return Some(function);
-            }
-
             match fragment.parent.as_ref() {
                 Some(FragmentParent::Fragment { id }) => {
                     fragment_id_2 = *id;
@@ -45,7 +44,58 @@ impl Fragments {
             };
         }
 
-        None
+        let mut fragment_id = *fragment_id;
+
+        loop {
+            let previous = self
+                .inner
+                .inner
+                .values()
+                .find(|fragment| fragment.next() == Some(fragment_id));
+
+            if let Some(previous) = previous {
+                // There's a previous fragment. Continue the search there.
+                fragment_id = previous.id();
+                continue;
+            }
+
+            // If there's no previous fragment, this might be the first fragment
+            // in a block.
+            let block =
+                self.inner.inner.values().find(|fragment| {
+                    match fragment.payload {
+                        FragmentPayload::Expression {
+                            expression: FragmentExpression::Block { start, .. },
+                            ..
+                        } => start == fragment_id,
+                        _ => false,
+                    }
+                });
+
+            if let Some(block) = block {
+                // So there _is_ a block. Continue the search there.
+                fragment_id = block.id();
+                continue;
+            }
+
+            // If there's no previous fragment, nor a block where this is the
+            // first fragment, it's probably the first fragment in the function
+            // we're looking for.
+            let function = self
+                .inner
+                .inner
+                .values()
+                .filter_map(|fragment| match &fragment.payload {
+                    FragmentPayload::Function(function) => Some(function),
+                    _ => None,
+                })
+                .find(|function| function.start == fragment_id);
+
+            // And this is our result. If it's not the function we're looking
+            // for, the fragment was part of the root context and there's no
+            // function to be found.
+            return function;
+        }
     }
 }
 
