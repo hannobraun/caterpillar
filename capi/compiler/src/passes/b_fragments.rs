@@ -14,6 +14,18 @@ pub fn generate_fragments(script: Script) -> Fragments {
     };
     let mut by_function = Vec::new();
 
+    let root = {
+        let terminator = Fragment {
+            parent: None,
+            payload: FragmentPayload::Terminator,
+        };
+        let terminator_id = terminator.id();
+
+        fragments.inner.insert(terminator_id, terminator);
+
+        terminator_id
+    };
+
     for function in script.functions {
         let start = compile_block(
             function.body,
@@ -31,6 +43,7 @@ pub fn generate_fragments(script: Script) -> Fragments {
     }
 
     Fragments {
+        root,
         inner: fragments,
         by_function,
     }
