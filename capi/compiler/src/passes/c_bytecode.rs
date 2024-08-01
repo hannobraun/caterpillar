@@ -239,9 +239,7 @@ impl Compiler<'_> {
                     ),
                 }
             }
-            FragmentPayload::Function {
-                inner: function, ..
-            } => {
+            FragmentPayload::Function(function) => {
                 self.queue
                     .push_front(CompileUnit::Function(function.clone()));
                 return None;

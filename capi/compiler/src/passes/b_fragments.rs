@@ -91,7 +91,7 @@ where
 
                 Fragment {
                     parent: parent.clone(),
-                    payload: FragmentPayload::Function { inner: function },
+                    payload: FragmentPayload::Function(function),
                 }
             }
         };

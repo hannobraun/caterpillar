@@ -21,9 +21,7 @@ impl Fragment {
     pub fn next(&self) -> Option<FragmentId> {
         match self.payload {
             FragmentPayload::Expression { next, .. } => Some(next),
-            FragmentPayload::Function {
-                inner: Function { next, .. },
-            } => Some(next),
+            FragmentPayload::Function(Function { next, .. }) => Some(next),
             FragmentPayload::Terminator => None,
         }
     }
@@ -56,9 +54,7 @@ pub enum FragmentPayload {
         expression: FragmentExpression,
         next: FragmentId,
     },
-    Function {
-        inner: Function,
-    },
+    Function(Function),
     Terminator,
 }
 
@@ -70,15 +66,12 @@ impl FragmentPayload {
                 expression.hash(hasher);
                 next.hash(hasher);
             }
-            Self::Function {
-                inner:
-                    Function {
-                        name,
-                        args,
-                        start,
-                        next,
-                    },
-            } => {
+            Self::Function(Function {
+                name,
+                args,
+                start,
+                next,
+            }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
                 for arg in args {

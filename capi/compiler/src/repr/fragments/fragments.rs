@@ -26,10 +26,7 @@ impl Fragments {
         loop {
             let fragment = self.inner.inner.get(&fragment_id)?;
 
-            if let FragmentPayload::Function {
-                inner: function, ..
-            } = &fragment.payload
-            {
+            if let FragmentPayload::Function(function) = &fragment.payload {
                 return Some(function);
             }
 
