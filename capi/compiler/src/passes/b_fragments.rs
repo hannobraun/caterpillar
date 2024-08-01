@@ -196,8 +196,8 @@ mod tests {
         let mut fragments = generate_fragments(script.functions);
 
         let function = fragments.by_function.remove(0);
-        let start = function.start;
-        let last_fragment = fragments.inner.iter_from(start).last().unwrap();
+        let last_fragment =
+            fragments.inner.iter_from(function.start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
 
@@ -239,10 +239,8 @@ mod tests {
         let mut body = Vec::new();
 
         let function = fragments.by_function.remove(0);
-        let start = function.start;
-
-        body.extend(fragments.inner.iter_from(start).filter_map(|fragment| {
-            match &fragment.payload {
+        body.extend(fragments.inner.iter_from(function.start).filter_map(
+            |fragment| match &fragment.payload {
                 FragmentPayload::Expression { expression, .. } => {
                     Some(expression.clone())
                 }
@@ -253,8 +251,8 @@ mod tests {
                     );
                 }
                 FragmentPayload::Terminator => None,
-            }
-        }));
+            },
+        ));
 
         body
     }
