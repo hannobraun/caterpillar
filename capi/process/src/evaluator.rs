@@ -55,7 +55,16 @@ pub fn evaluate<H: Host>(
         }
         Instruction::CallBuiltin { name } => {
             match (H::function(name), builtin(name)) {
-                (Some(f), _) => f(stack)?,
+                (Some(_), Some(_)) => {
+                    // As of this writing, users can not define custom hosts, so
+                    // the damage of this being a runtime panic is limited. But
+                    // ideally, it should be detected at compile-time.
+                    panic!(
+                        "`{name}` refers to both a built-in function and a \
+                        host function.\n"
+                    );
+                }
+                (Some(f), None) => f(stack)?,
                 (None, Some(f)) => f(stack, &bytecode.instructions)?,
                 (None, None) => {
                     return Err(Effect::Core(CoreEffect::UnknownBuiltin {
