@@ -54,18 +54,13 @@ pub fn evaluate<H: Host>(
             }
         }
         Instruction::CallBuiltin { name } => {
-            if let Some(f) = H::function(name) {
-                f(stack)?
-            } else {
-                match builtin(name) {
-                    Some(f) => {
-                        f(stack, &bytecode.instructions)?;
-                    }
-                    None => {
-                        return Err(Effect::Core(CoreEffect::UnknownBuiltin {
-                            name: name.clone(),
-                        }));
-                    }
+            match (H::function(name), builtin(name)) {
+                (Some(f), _) => f(stack)?,
+                (None, Some(f)) => f(stack, &bytecode.instructions)?,
+                (None, None) => {
+                    return Err(Effect::Core(CoreEffect::UnknownBuiltin {
+                        name: name.clone(),
+                    }));
                 }
             }
         }
