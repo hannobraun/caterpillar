@@ -22,7 +22,7 @@ impl Fragments {
 
         loop {
             let fragment = self.inner.inner.get(&fragment_id)?;
-            match &fragment.parent {
+            match fragment.parent.as_ref()? {
                 FragmentParent::Fragment { id } => {
                     fragment_id = *id;
                 }

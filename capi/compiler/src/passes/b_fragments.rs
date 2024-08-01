@@ -43,7 +43,7 @@ fn compile_block(
 ) -> FragmentId {
     let mut next = {
         let terminator = Fragment {
-            parent: parent.clone(),
+            parent: Some(parent.clone()),
             payload: FragmentPayload::Terminator,
         };
         let terminator_id = terminator.id();
@@ -116,7 +116,7 @@ fn compile_expression(
     };
 
     Fragment {
-        parent,
+        parent: Some(parent),
         payload: FragmentPayload::Expression { expression, next },
     }
 }
@@ -197,15 +197,15 @@ mod tests {
 
         assert_eq!(
             function_fragments[0].parent,
-            FragmentParent::Function {
+            Some(FragmentParent::Function {
                 name: String::from("f")
-            },
+            }),
         );
         assert_eq!(
             block_fragments[0].parent,
-            FragmentParent::Fragment {
+            Some(FragmentParent::Fragment {
                 id: function_fragments[1].id()
-            },
+            }),
         );
     }
 

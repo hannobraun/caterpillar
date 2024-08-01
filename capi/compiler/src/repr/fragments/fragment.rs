@@ -2,7 +2,7 @@ use super::{FragmentExpression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
-    pub parent: FragmentParent,
+    pub parent: Option<FragmentParent>,
     pub payload: FragmentPayload,
 }
 
@@ -10,7 +10,9 @@ impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
 
-        self.parent.hash(&mut hasher);
+        if let Some(parent) = self.parent.as_ref() {
+            parent.hash(&mut hasher);
+        }
         self.payload.hash(&mut hasher);
 
         FragmentId::new(hasher.finalize())
