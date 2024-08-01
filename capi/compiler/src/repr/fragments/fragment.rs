@@ -91,3 +91,10 @@ impl FragmentPayload {
         }
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Function {
+    pub name: String,
+    pub args: Vec<String>,
+    pub start: FragmentId,
+}

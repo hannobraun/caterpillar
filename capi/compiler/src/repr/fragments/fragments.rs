@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, iter};
 
-use super::{Fragment, FragmentId, FragmentParent};
+use super::{Fragment, FragmentId, FragmentParent, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
@@ -57,11 +57,4 @@ impl FragmentMap {
             Some(fragment)
         })
     }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Function {
-    pub name: String,
-    pub args: Vec<String>,
-    pub start: FragmentId,
 }
