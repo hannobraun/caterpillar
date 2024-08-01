@@ -54,6 +54,14 @@ fn compile_block(
     parent: FragmentParent,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
+    compile_context(expressions, parent, fragments)
+}
+
+fn compile_context(
+    expressions: Vec<Expression>,
+    parent: FragmentParent,
+    fragments: &mut FragmentMap,
+) -> FragmentId {
     let mut next = {
         let terminator = Fragment {
             parent: Some(parent.clone()),
