@@ -21,10 +21,10 @@ impl Fragments {
         &self,
         fragment_id: &FragmentId,
     ) -> Option<&Function> {
-        let mut fragment_id = *fragment_id;
+        let mut fragment_id_2 = *fragment_id;
 
         loop {
-            let fragment = self.inner.inner.get(&fragment_id)?;
+            let fragment = self.inner.inner.get(&fragment_id_2)?;
 
             if let FragmentPayload::Function(function) = &fragment.payload {
                 return Some(function);
@@ -32,7 +32,7 @@ impl Fragments {
 
             match fragment.parent.as_ref() {
                 Some(FragmentParent::Fragment { id }) => {
-                    fragment_id = *id;
+                    fragment_id_2 = *id;
                 }
                 Some(FragmentParent::Function { name }) => {
                     let function = self
