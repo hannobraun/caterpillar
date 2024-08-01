@@ -30,16 +30,11 @@ impl Fragment {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentParent {
     Fragment { id: FragmentId },
-    Function { name: String },
 }
 
 impl FragmentParent {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            FragmentParent::Function { name } => {
-                hasher.update(b"function");
-                hasher.update(name.as_bytes());
-            }
             FragmentParent::Fragment { id } => {
                 hasher.update(b"fragment");
                 id.hash(hasher);
