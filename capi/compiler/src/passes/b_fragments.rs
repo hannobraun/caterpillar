@@ -75,9 +75,7 @@ where
             SyntaxElement::Item(function) => {
                 let start = compile_block(
                     function.body,
-                    FragmentParent::Function {
-                        name: function.name.clone(),
-                    },
+                    FragmentParent::Fragment { id: next },
                     fragments,
                 );
 
@@ -243,9 +241,7 @@ mod tests {
 
         assert_eq!(
             function_fragments[0].parent,
-            Some(FragmentParent::Function {
-                name: String::from("f")
-            }),
+            Some(FragmentParent::Fragment { id: function.next }),
         );
         assert_eq!(
             block_fragments[0].parent,
