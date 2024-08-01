@@ -240,7 +240,8 @@ impl Compiler<'_> {
                 }
             }
             FragmentPayload::Function {
-                name, args, start, ..
+                inner: fragments::Function { name, args, start },
+                ..
             } => {
                 self.queue.push_front(CompileUnit::Function(
                     fragments::Function {

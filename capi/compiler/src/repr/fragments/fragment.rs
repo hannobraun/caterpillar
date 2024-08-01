@@ -55,9 +55,7 @@ pub enum FragmentPayload {
         next: FragmentId,
     },
     Function {
-        name: String,
-        args: Vec<String>,
-        start: FragmentId,
+        inner: Function,
         next: FragmentId,
     },
     Terminator,
@@ -72,9 +70,7 @@ impl FragmentPayload {
                 next.hash(hasher);
             }
             Self::Function {
-                name,
-                args,
-                start,
+                inner: Function { name, args, start },
                 next,
             } => {
                 hasher.update(b"function");
