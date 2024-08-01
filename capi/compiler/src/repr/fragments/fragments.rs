@@ -2,7 +2,7 @@ use std::{collections::BTreeMap, iter};
 
 use super::{Fragment, FragmentId, FragmentParent};
 
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
     pub inner: FragmentMap,
     pub by_function: Vec<Function>,
