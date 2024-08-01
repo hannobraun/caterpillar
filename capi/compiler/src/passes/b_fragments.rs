@@ -174,9 +174,20 @@ mod tests {
             s.v(1).v(1);
         });
 
-        let mut fragments = generate_fragments(script.functions);
+        let fragments = generate_fragments(script.functions);
 
-        let function = fragments.by_function.remove(0);
+        let root = fragments
+            .inner
+            .inner
+            .get(&fragments.root)
+            .expect("Defined code, so there must be a root element.");
+        let Fragment {
+            payload: FragmentPayload::Function(function),
+            ..
+        } = root
+        else {
+            unreachable!("`f` must be the root element.");
+        };
         let body = fragments
             .inner
             .iter_from(function.start)
