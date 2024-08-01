@@ -195,7 +195,8 @@ mod tests {
 
         let mut fragments = generate_fragments(script.functions);
 
-        let start = fragments.by_function.remove(0).start;
+        let function = fragments.by_function.remove(0);
+        let start = function.start;
         let last_fragment = fragments.inner.iter_from(start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
@@ -237,7 +238,8 @@ mod tests {
     fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
         let mut body = Vec::new();
 
-        let start = fragments.by_function.remove(0).start;
+        let function = fragments.by_function.remove(0);
+        let start = function.start;
 
         body.extend(fragments.inner.iter_from(start).filter_map(|fragment| {
             match &fragment.payload {
