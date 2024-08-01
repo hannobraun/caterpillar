@@ -54,7 +54,11 @@ fn compile_block(
     parent: FragmentParent,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
-    compile_context(expressions, parent, fragments)
+    compile_context(
+        expressions.into_iter().map(SyntaxElement::Expression),
+        parent,
+        fragments,
+    )
 }
 
 fn compile_context<E>(
@@ -63,7 +67,7 @@ fn compile_context<E>(
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
-    E: IntoIterator<Item = Expression>,
+    E: IntoIterator<Item = SyntaxElement>,
     E::IntoIter: DoubleEndedIterator,
 {
     let mut next = {
@@ -79,8 +83,11 @@ where
     };
 
     for expression in expressions.into_iter().rev() {
-        let fragment =
-            compile_expression(expression, parent.clone(), next, fragments);
+        let fragment = match expression {
+            SyntaxElement::Expression(expression) => {
+                compile_expression(expression, parent.clone(), next, fragments)
+            }
+        };
 
         next = fragment.id();
 
@@ -144,6 +151,10 @@ fn compile_expression(
         parent: Some(parent),
         payload: FragmentPayload::Expression { expression, next },
     }
+}
+
+enum SyntaxElement {
+    Expression(Expression),
 }
 
 #[cfg(test)]
