@@ -14,33 +14,12 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     };
     let mut by_function = Vec::new();
 
-    let root = {
-        let terminator = Fragment {
-            parent: None,
-            payload: FragmentPayload::Terminator,
-        };
-        let terminator_id = terminator.id();
-
-        fragments.inner.insert(terminator_id, terminator);
-
-        terminator_id
-    };
-
-    for function in functions {
-        let start = compile_block(
-            function.body,
-            FragmentParent::Function {
-                name: function.name.clone(),
-            },
-            &mut fragments,
-        );
-
-        by_function.push(Function {
-            name: function.name,
-            args: function.args,
-            start,
-        });
-    }
+    let root = compile_context(
+        functions.into_iter().map(SyntaxElement::Item),
+        None,
+        &mut fragments,
+        &mut by_function,
+    );
 
     Fragments {
         root,
@@ -54,10 +33,15 @@ fn compile_block(
     parent: FragmentParent,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
+    // This is a hack to make the transition away from `by_function` a bit
+    // smoother.
+    let mut by_function = Vec::new();
+
     compile_context(
         expressions.into_iter().map(SyntaxElement::Expression),
         Some(parent),
         fragments,
+        &mut by_function,
     )
 }
 
@@ -65,6 +49,7 @@ fn compile_context<E>(
     elements: E,
     parent: Option<FragmentParent>,
     fragments: &mut FragmentMap,
+    by_function: &mut Vec<Function>,
 ) -> FragmentId
 where
     E: IntoIterator<Item = SyntaxElement>,
@@ -86,6 +71,30 @@ where
         let fragment = match element {
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent.clone(), next, fragments)
+            }
+            SyntaxElement::Item(function) => {
+                let start = compile_block(
+                    function.body,
+                    FragmentParent::Function {
+                        name: function.name.clone(),
+                    },
+                    fragments,
+                );
+
+                let function = Function {
+                    name: function.name,
+                    args: function.args,
+                    start,
+                };
+                by_function.push(function.clone());
+
+                Fragment {
+                    parent: parent.clone(),
+                    payload: FragmentPayload::Function {
+                        inner: function,
+                        next,
+                    },
+                }
             }
         };
 
@@ -155,6 +164,7 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
+    Item(syntax::Function),
 }
 
 #[cfg(test)]
