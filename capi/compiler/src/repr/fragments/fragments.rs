@@ -4,7 +4,9 @@ use super::{Fragment, FragmentId, FragmentParent, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragments {
+    /// The root fragment that indirectly points to all other fragments
     pub root: FragmentId,
+
     pub inner: FragmentMap,
     pub by_function: Vec<Function>,
 }
