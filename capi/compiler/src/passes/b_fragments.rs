@@ -30,7 +30,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
 
 fn compile_block(
     expressions: Vec<Expression>,
-    parent: FragmentParent,
+    parent: FragmentId,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
     // This is a hack to make the transition away from `by_function` a bit
@@ -47,7 +47,7 @@ fn compile_block(
 
 fn compile_context<E>(
     elements: E,
-    parent: Option<FragmentParent>,
+    parent: Option<FragmentId>,
     fragments: &mut FragmentMap,
     by_function: &mut Vec<Function>,
 ) -> FragmentId
@@ -57,7 +57,7 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent: parent.clone(),
+            parent: parent.map(|id| FragmentParent::Fragment { id }),
             payload: FragmentPayload::Terminator,
         };
         let terminator_id = terminator.id();
@@ -70,14 +70,10 @@ where
     for element in elements.into_iter().rev() {
         let fragment = match element {
             SyntaxElement::Expression(expression) => {
-                compile_expression(expression, parent.clone(), next, fragments)
+                compile_expression(expression, parent, next, fragments)
             }
             SyntaxElement::Item(function) => {
-                let start = compile_block(
-                    function.body,
-                    FragmentParent::Fragment { id: next },
-                    fragments,
-                );
+                let start = compile_block(function.body, next, fragments);
 
                 let function = Function {
                     name: function.name,
@@ -88,7 +84,7 @@ where
                 by_function.push(function.clone());
 
                 Fragment {
-                    parent: parent.clone(),
+                    parent: parent.map(|id| FragmentParent::Fragment { id }),
                     payload: FragmentPayload::Function(function),
                 }
             }
@@ -104,7 +100,7 @@ where
 
 fn compile_expression(
     expression: Expression,
-    parent: Option<FragmentParent>,
+    parent: Option<FragmentId>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
@@ -113,11 +109,7 @@ fn compile_expression(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Block { body, environment } => {
-            let start = compile_block(
-                body,
-                FragmentParent::Fragment { id: next },
-                fragments,
-            );
+            let start = compile_block(body, next, fragments);
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
@@ -153,7 +145,7 @@ fn compile_expression(
     };
 
     Fragment {
-        parent,
+        parent: parent.map(|id| FragmentParent::Fragment { id }),
         payload: FragmentPayload::Expression { expression, next },
     }
 }
