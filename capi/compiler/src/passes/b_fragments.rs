@@ -221,9 +221,10 @@ mod tests {
         let mut fragments = generate_fragments(script.functions);
 
         let function = fragments.by_function.remove(0);
-        let start = function.start;
-        let function_fragments =
-            fragments.inner.iter_from(start).collect::<Vec<_>>();
+        let function_fragments = fragments
+            .inner
+            .iter_from(function.start)
+            .collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
                 payload:
