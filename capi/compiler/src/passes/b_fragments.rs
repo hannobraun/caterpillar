@@ -177,9 +177,10 @@ mod tests {
         let mut fragments = generate_fragments(script.functions);
 
         let function = fragments.by_function.remove(0);
-        let mut body = Vec::new();
-        body.extend(fragments.inner.iter_from(function.start).filter_map(
-            |fragment| match &fragment.payload {
+        let body = fragments
+            .inner
+            .iter_from(function.start)
+            .filter_map(|fragment| match &fragment.payload {
                 FragmentPayload::Expression { expression, .. } => {
                     Some(expression.clone())
                 }
@@ -190,8 +191,8 @@ mod tests {
                     );
                 }
                 FragmentPayload::Terminator => None,
-            },
-        ));
+            })
+            .collect::<Vec<_>>();
 
         assert_eq!(
             body,
