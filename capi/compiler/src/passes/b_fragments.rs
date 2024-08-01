@@ -193,9 +193,20 @@ mod tests {
         let mut script = Script::default();
         script.function("f", [], |_| {});
 
-        let mut fragments = generate_fragments(script.functions);
+        let fragments = generate_fragments(script.functions);
 
-        let function = fragments.by_function.remove(0);
+        let root = fragments
+            .inner
+            .inner
+            .get(&fragments.root)
+            .expect("Defined code, so there must be a root element.");
+        let Fragment {
+            payload: FragmentPayload::Function(function),
+            ..
+        } = root
+        else {
+            unreachable!("`f` must be the root element.");
+        };
         let last_fragment =
             fragments.inner.iter_from(function.start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
@@ -208,9 +219,20 @@ mod tests {
             s.block(|_| {});
         });
 
-        let mut fragments = generate_fragments(script.functions);
+        let fragments = generate_fragments(script.functions);
 
-        let function = fragments.by_function.remove(0);
+        let root = fragments
+            .inner
+            .inner
+            .get(&fragments.root)
+            .expect("Defined code, so there must be a root element.");
+        let Fragment {
+            payload: FragmentPayload::Function(function),
+            ..
+        } = root
+        else {
+            unreachable!("`f` must be the root element.");
+        };
         let function_fragments = fragments
             .inner
             .iter_from(function.start)
