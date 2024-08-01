@@ -240,16 +240,10 @@ impl Compiler<'_> {
                 }
             }
             FragmentPayload::Function {
-                inner: fragments::Function { name, args, start },
-                ..
+                inner: function, ..
             } => {
-                self.queue.push_front(CompileUnit::Function(
-                    fragments::Function {
-                        name: name.clone(),
-                        args: args.clone(),
-                        start: *start,
-                    },
-                ));
+                self.queue
+                    .push_front(CompileUnit::Function(function.clone()));
                 return None;
             }
             FragmentPayload::Terminator => {
