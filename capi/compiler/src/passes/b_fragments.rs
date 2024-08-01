@@ -57,11 +57,15 @@ fn compile_block(
     compile_context(expressions, parent, fragments)
 }
 
-fn compile_context(
-    expressions: Vec<Expression>,
+fn compile_context<E>(
+    expressions: E,
     parent: FragmentParent,
     fragments: &mut FragmentMap,
-) -> FragmentId {
+) -> FragmentId
+where
+    E: IntoIterator<Item = Expression>,
+    E::IntoIter: DoubleEndedIterator,
+{
     let mut next = {
         let terminator = Fragment {
             parent: Some(parent.clone()),
