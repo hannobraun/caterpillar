@@ -219,6 +219,12 @@ mod tests {
                 FragmentPayload::Expression { expression, .. } => {
                     Some(expression.clone())
                 }
+                FragmentPayload::Function { .. } => {
+                    unreachable!(
+                        "This test suite does not define functions within \
+                        function bodies."
+                    );
+                }
                 FragmentPayload::Terminator => None,
             }
         }));

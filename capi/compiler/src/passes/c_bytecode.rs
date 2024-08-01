@@ -239,6 +239,18 @@ impl Compiler<'_> {
                     ),
                 }
             }
+            FragmentPayload::Function {
+                name, args, start, ..
+            } => {
+                self.queue.push_front(CompileUnit::Function(
+                    fragments::Function {
+                        name: name.clone(),
+                        args: args.clone(),
+                        start: *start,
+                    },
+                ));
+                return None;
+            }
             FragmentPayload::Terminator => {
                 self.generate(Instruction::Return, fragment.id())
             }

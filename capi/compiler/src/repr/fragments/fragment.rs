@@ -21,6 +21,7 @@ impl Fragment {
     pub fn next(&self) -> Option<FragmentId> {
         match self.payload {
             FragmentPayload::Expression { next, .. } => Some(next),
+            FragmentPayload::Function { next, .. } => Some(next),
             FragmentPayload::Terminator => None,
         }
     }
@@ -53,6 +54,12 @@ pub enum FragmentPayload {
         expression: FragmentExpression,
         next: FragmentId,
     },
+    Function {
+        name: String,
+        args: Vec<String>,
+        start: FragmentId,
+        next: FragmentId,
+    },
     Terminator,
 }
 
@@ -62,6 +69,20 @@ impl FragmentPayload {
             Self::Expression { expression, next } => {
                 hasher.update(b"expression");
                 expression.hash(hasher);
+                next.hash(hasher);
+            }
+            Self::Function {
+                name,
+                args,
+                start,
+                next,
+            } => {
+                hasher.update(b"function");
+                hasher.update(name.as_bytes());
+                for arg in args {
+                    hasher.update(arg.as_bytes());
+                }
+                start.hash(hasher);
                 next.hash(hasher);
             }
             Self::Terminator => {
