@@ -20,17 +20,14 @@ impl Function {
         source_map: &SourceMap,
         process: &Process<GameEngineHost>,
     ) -> Self {
-        let mut body = Vec::new();
-
-        body.extend(
-            fragments
-                .inner
-                .iter_from(function.start)
-                .cloned()
-                .filter_map(|fragment| {
-                    Expression::new(fragment, fragments, source_map, process)
-                }),
-        );
+        let body = fragments
+            .inner
+            .iter_from(function.start)
+            .cloned()
+            .filter_map(|fragment| {
+                Expression::new(fragment, fragments, source_map, process)
+            })
+            .collect();
 
         Self {
             name: function.name,
