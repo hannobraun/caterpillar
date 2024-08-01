@@ -82,8 +82,8 @@ where
         terminator_id
     };
 
-    for expression in elements.into_iter().rev() {
-        let fragment = match expression {
+    for element in elements.into_iter().rev() {
+        let fragment = match element {
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent.clone(), next, fragments)
             }
