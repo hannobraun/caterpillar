@@ -1,8 +1,7 @@
 use std::{collections::BTreeMap, iter};
 
 use super::{
-    Fragment, FragmentExpression, FragmentId, FragmentParent, FragmentPayload,
-    Function,
+    Fragment, FragmentExpression, FragmentId, FragmentPayload, Function,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -24,26 +23,6 @@ impl Fragments {
         &self,
         fragment_id: &FragmentId,
     ) -> Option<&Function> {
-        let mut fragment_id_2 = *fragment_id;
-
-        loop {
-            let fragment = self.inner.inner.get(&fragment_id_2)?;
-
-            match fragment.parent.as_ref() {
-                Some(FragmentParent::Fragment { id }) => {
-                    fragment_id_2 = *id;
-                }
-                Some(FragmentParent::Function { name }) => {
-                    let function = self
-                        .by_function
-                        .iter()
-                        .find(|function| &function.name == name);
-                    return function;
-                }
-                None => break,
-            };
-        }
-
         let mut fragment_id = *fragment_id;
 
         loop {
