@@ -85,15 +85,13 @@ where
                     name: function.name,
                     args: function.args,
                     start,
+                    next,
                 };
                 by_function.push(function.clone());
 
                 Fragment {
                     parent: parent.clone(),
-                    payload: FragmentPayload::Function {
-                        inner: function,
-                        next,
-                    },
+                    payload: FragmentPayload::Function { inner: function },
                 }
             }
         };
