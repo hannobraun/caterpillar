@@ -62,7 +62,7 @@ fn compile_block(
 }
 
 fn compile_context<E>(
-    expressions: E,
+    elements: E,
     parent: FragmentParent,
     fragments: &mut FragmentMap,
 ) -> FragmentId
@@ -82,7 +82,7 @@ where
         terminator_id
     };
 
-    for expression in expressions.into_iter().rev() {
+    for expression in elements.into_iter().rev() {
         let fragment = match expression {
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent.clone(), next, fragments)
