@@ -58,8 +58,8 @@ pub fn evaluate<H: Host>(
                 f(stack)?
             } else {
                 match builtin(name) {
-                    Some(builtin) => {
-                        builtin(stack, &bytecode.instructions)?;
+                    Some(f) => {
+                        f(stack, &bytecode.instructions)?;
                     }
                     None => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
