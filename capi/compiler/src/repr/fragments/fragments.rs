@@ -28,7 +28,8 @@ impl Fragments {
                     fragment_id = *id;
                 }
                 FragmentParent::Function { name } => {
-                    return self.find_function_by_name(name);
+                    let function = self.find_function_by_name(name);
+                    return function;
                 }
             };
         }
