@@ -162,9 +162,7 @@ mod tests {
     use crate::{
         passes::generate_fragments,
         repr::{
-            fragments::{
-                Fragment, FragmentExpression, FragmentPayload, Fragments,
-            },
+            fragments::{Fragment, FragmentExpression, FragmentPayload},
             syntax::Script,
         },
     };
@@ -176,9 +174,25 @@ mod tests {
             s.v(1).v(1);
         });
 
-        let fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.functions);
 
-        let body = body(fragments);
+        let mut body = Vec::new();
+        let function = fragments.by_function.remove(0);
+        body.extend(fragments.inner.iter_from(function.start).filter_map(
+            |fragment| match &fragment.payload {
+                FragmentPayload::Expression { expression, .. } => {
+                    Some(expression.clone())
+                }
+                FragmentPayload::Function { .. } => {
+                    unreachable!(
+                        "This test suite does not define functions within \
+                    function bodies."
+                    );
+                }
+                FragmentPayload::Terminator => None,
+            },
+        ));
+
         assert_eq!(
             body,
             [
@@ -255,27 +269,5 @@ mod tests {
 
         assert_eq!(function_fragments[0].parent, Some(function.next),);
         assert_eq!(block_fragments[0].parent, Some(function_fragments[1].id()));
-    }
-
-    fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
-        let mut body = Vec::new();
-
-        let function = fragments.by_function.remove(0);
-        body.extend(fragments.inner.iter_from(function.start).filter_map(
-            |fragment| match &fragment.payload {
-                FragmentPayload::Expression { expression, .. } => {
-                    Some(expression.clone())
-                }
-                FragmentPayload::Function { .. } => {
-                    unreachable!(
-                        "This test suite does not define functions within \
-                        function bodies."
-                    );
-                }
-                FragmentPayload::Terminator => None,
-            },
-        ));
-
-        body
     }
 }
