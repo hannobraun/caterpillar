@@ -2,7 +2,7 @@ use super::{FragmentExpression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
-    pub parent: Option<FragmentParent>,
+    pub parent: Option<FragmentId>,
     pub payload: FragmentPayload,
 }
 
@@ -23,22 +23,6 @@ impl Fragment {
             FragmentPayload::Expression { next, .. } => Some(next),
             FragmentPayload::Function(Function { next, .. }) => Some(next),
             FragmentPayload::Terminator => None,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FragmentParent {
-    Fragment { id: FragmentId },
-}
-
-impl FragmentParent {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        match self {
-            FragmentParent::Fragment { id } => {
-                hasher.update(b"fragment");
-                id.hash(hasher);
-            }
         }
     }
 }

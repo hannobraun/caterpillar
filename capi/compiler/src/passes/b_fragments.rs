@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::repr::{
     fragments::{
-        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentParent,
-        FragmentPayload, Fragments, Function,
+        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
+        Fragments, Function,
     },
     syntax::{self, Expression, IdentifierTarget},
 };
@@ -57,7 +57,7 @@ where
 {
     let mut next = {
         let terminator = Fragment {
-            parent: parent.map(|id| FragmentParent::Fragment { id }),
+            parent,
             payload: FragmentPayload::Terminator,
         };
         let terminator_id = terminator.id();
@@ -84,7 +84,7 @@ where
                 by_function.push(function.clone());
 
                 Fragment {
-                    parent: parent.map(|id| FragmentParent::Fragment { id }),
+                    parent,
                     payload: FragmentPayload::Function(function),
                 }
             }
@@ -145,7 +145,7 @@ fn compile_expression(
     };
 
     Fragment {
-        parent: parent.map(|id| FragmentParent::Fragment { id }),
+        parent,
         payload: FragmentPayload::Expression { expression, next },
     }
 }
@@ -163,8 +163,7 @@ mod tests {
         passes::generate_fragments,
         repr::{
             fragments::{
-                Fragment, FragmentExpression, FragmentParent, FragmentPayload,
-                Fragments,
+                Fragment, FragmentExpression, FragmentPayload, Fragments,
             },
             syntax::Script,
         },
@@ -231,16 +230,8 @@ mod tests {
             fragments.inner.iter_from(*start).collect::<Vec<_>>()
         };
 
-        assert_eq!(
-            function_fragments[0].parent,
-            Some(FragmentParent::Fragment { id: function.next }),
-        );
-        assert_eq!(
-            block_fragments[0].parent,
-            Some(FragmentParent::Fragment {
-                id: function_fragments[1].id()
-            }),
-        );
+        assert_eq!(function_fragments[0].parent, Some(function.next),);
+        assert_eq!(block_fragments[0].parent, Some(function_fragments[1].id()));
     }
 
     fn body(mut fragments: Fragments) -> Vec<FragmentExpression> {
