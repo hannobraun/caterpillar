@@ -44,12 +44,12 @@ impl Stack {
     pub fn next_instruction_in_current_frame(
         &self,
     ) -> Option<InstructionAddress> {
-        Some(self.frames.last()?.next_instruction())
+        Some(self.frames.last()?.next_instruction)
     }
 
     pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
         if let Some(frame) = self.frames.last() {
-            return Some(frame.next_instruction());
+            return Some(frame.next_instruction);
         }
 
         None
@@ -64,13 +64,13 @@ impl Stack {
 
         self.frames
             .iter()
-            .any(|frame| frame.next_instruction() == instruction)
+            .any(|frame| frame.next_instruction == instruction)
     }
 
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
-        self.frames.iter().map(|frame| frame.next_instruction())
+        self.frames.iter().map(|frame| frame.next_instruction)
     }
 
     pub fn push_frame(
@@ -178,10 +178,6 @@ impl StackFrame {
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
-    }
-
-    fn next_instruction(&self) -> InstructionAddress {
-        self.next_instruction
     }
 
     fn take_next_instruction(&mut self) -> InstructionAddress {
