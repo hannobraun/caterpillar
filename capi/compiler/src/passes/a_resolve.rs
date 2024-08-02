@@ -17,7 +17,6 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         let mut environment = Environment::new();
 
         resolve_block::<H>(
-            &function.name,
             &mut function.body,
             &mut scopes,
             &mut environment,
@@ -32,7 +31,6 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
 }
 
 fn resolve_block<H: Host>(
-    current_function: &str,
     body: &mut [Expression],
     scopes: &mut Scopes,
     environment: &mut Environment,
@@ -49,13 +47,7 @@ fn resolve_block<H: Host>(
             }
             Expression::Block { body, environment } => {
                 scopes.push(Bindings::new());
-                resolve_block::<H>(
-                    current_function,
-                    body,
-                    scopes,
-                    environment,
-                    user_functions,
-                );
+                resolve_block::<H>(body, scopes, environment, user_functions);
             }
             Expression::Identifier { name, target } => {
                 // The way this is written, definitions can silently shadow each
@@ -82,11 +74,7 @@ fn resolve_block<H: Host>(
                     *target = Some(IdentifierTarget::HostFunction);
                 }
                 if user_functions.contains(name) {
-                    *target = if name == current_function {
-                        Some(IdentifierTarget::SelfRecursion)
-                    } else {
-                        Some(IdentifierTarget::UserFunction)
-                    };
+                    *target = Some(IdentifierTarget::UserFunction);
                 }
             }
             _ => {}

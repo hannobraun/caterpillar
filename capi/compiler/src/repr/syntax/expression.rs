@@ -48,5 +48,4 @@ pub enum IdentifierTarget {
     BuiltinFunction,
     HostFunction,
     UserFunction,
-    SelfRecursion,
 }

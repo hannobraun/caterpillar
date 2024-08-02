@@ -116,19 +116,6 @@ fn compile_expression(
             Some(IdentifierTarget::UserFunction) => {
                 FragmentExpression::ResolvedUserFunction { name }
             }
-            Some(IdentifierTarget::SelfRecursion) => {
-                let next_fragment = fragments.inner.get(&next).expect(
-                    "The next fragment should have been generated before this \
-                    one. If it doesn't reference anything, that's a bug in \
-                    this compiler pass.",
-                );
-
-                if let FragmentPayload::Terminator = next_fragment.payload {
-                    FragmentExpression::TailRecursiveCall { name }
-                } else {
-                    FragmentExpression::ResolvedUserFunction { name }
-                }
-            }
             None => FragmentExpression::UnresolvedIdentifier { name },
         },
         Expression::Value(value) => FragmentExpression::Value(value),
