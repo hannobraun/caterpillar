@@ -128,8 +128,15 @@ impl Stack {
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        if let Some(StackElement::ReturnAddress(address)) = self.inner.pop() {
-            self.next_instruction = address;
+        let mut index = self.inner.len();
+        while index > 0 {
+            index -= 1;
+
+            if let StackElement::ReturnAddress(address) = self.inner[index] {
+                self.next_instruction = address;
+                self.inner.remove(index);
+                break;
+            }
         }
 
         let Some(popped_frame) = self.frames.pop() else {
