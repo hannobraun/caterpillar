@@ -2,13 +2,17 @@ use crate::repr::syntax::{Expression, Function};
 
 pub fn determine_tail_position(functions: &mut Vec<Function>) {
     for function in functions {
-        if let Some(Expression::Identifier {
-            is_known_to_be_in_tail_position,
-            ..
-        }) = function.body.last_mut()
-        {
-            *is_known_to_be_in_tail_position = true;
-        }
+        analyze_block(&mut function.body);
+    }
+}
+
+fn analyze_block(block: &mut [Expression]) {
+    if let Some(Expression::Identifier {
+        is_known_to_be_in_tail_position,
+        ..
+    }) = block.last_mut()
+    {
+        *is_known_to_be_in_tail_position = true;
     }
 }
 
