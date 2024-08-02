@@ -44,7 +44,8 @@ impl Stack {
     pub fn next_instruction_in_current_frame(
         &self,
     ) -> Option<InstructionAddress> {
-        Some(self.frames.last()?.next_instruction)
+        let frame = self.frames.last()?;
+        Some(frame.next_instruction)
     }
 
     pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
