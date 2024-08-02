@@ -8,6 +8,7 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
+    next_instruction: InstructionAddress,
 
     /// # Special heap for closures
     ///
@@ -30,6 +31,7 @@ impl Stack {
 
         Self {
             inner,
+            next_instruction,
             closures: BTreeMap::new(),
             next_closure: 0,
         }
@@ -48,8 +50,7 @@ impl Stack {
     }
 
     pub fn next_instruction(&self) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.inner.last()?;
-        Some(frame.next_instruction)
+        Some(self.next_instruction)
     }
 
     pub fn is_next_instruction_in_any_frame(
@@ -119,6 +120,7 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
+        self.next_instruction = new_frame.next_instruction;
         self.inner.push(StackElement::Frame(new_frame));
 
         Ok(())
@@ -134,6 +136,8 @@ impl Stack {
             for value in popped_frame.operands.values() {
                 new_top_frame.operands.push(value);
             }
+
+            self.next_instruction = new_top_frame.next_instruction;
         }
 
         Ok(())
@@ -156,7 +160,10 @@ impl Stack {
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
         let StackElement::Frame(frame) = self.inner.last_mut()?;
+
         let next_instruction = frame.take_next_instruction();
+        self.next_instruction = frame.next_instruction;
+
         Some(next_instruction)
     }
 }
