@@ -12,13 +12,11 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
-    let mut by_function = Vec::new();
 
     let root = compile_context(
         functions.into_iter().map(SyntaxElement::Item),
         None,
         &mut fragments,
-        &mut by_function,
     );
 
     Fragments {
@@ -32,15 +30,10 @@ fn compile_block(
     parent: FragmentId,
     fragments: &mut FragmentMap,
 ) -> FragmentId {
-    // This is a hack to make the transition away from `by_function` a bit
-    // smoother.
-    let mut by_function = Vec::new();
-
     compile_context(
         expressions.into_iter().map(SyntaxElement::Expression),
         Some(parent),
         fragments,
-        &mut by_function,
     )
 }
 
@@ -48,7 +41,6 @@ fn compile_context<E>(
     elements: E,
     parent: Option<FragmentId>,
     fragments: &mut FragmentMap,
-    by_function: &mut Vec<Function>,
 ) -> FragmentId
 where
     E: IntoIterator<Item = SyntaxElement>,
@@ -80,7 +72,6 @@ where
                     start,
                     next,
                 };
-                by_function.push(function.clone());
 
                 Fragment {
                     parent,
