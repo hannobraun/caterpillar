@@ -124,6 +124,14 @@ impl Stack {
         if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
+        if self.inner.len() >= RECURSION_LIMIT {
+            // Applied to the new stack, this is no longer the recursion limit.
+            // But it limits the size of the stack, which serves its purpose for
+            // now.
+            //
+            // Once the legacy stack is gone, this can be cleaned up.
+            return Err(PushStackFrameError::Overflow);
+        }
 
         if !self.frames.is_empty() {
             self.inner
