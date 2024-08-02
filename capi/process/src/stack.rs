@@ -42,14 +42,16 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.inner.last().map(|frame| match frame {
-            StackElement::Frame(frame) => &frame.bindings,
+        self.inner.last().and_then(|frame| match frame {
+            StackElement::ReturnAddress(_) => None,
+            StackElement::Frame(frame) => Some(&frame.bindings),
         })
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.inner.last().map(|frame| match frame {
-            StackElement::Frame(frame) => &frame.operands,
+        self.inner.last().and_then(|frame| match frame {
+            StackElement::ReturnAddress(_) => None,
+            StackElement::Frame(frame) => Some(&frame.operands),
         })
     }
 
@@ -61,6 +63,7 @@ impl Stack {
         instruction.increment();
 
         self.inner.iter().any(|frame| match frame {
+            StackElement::ReturnAddress(_) => false,
             StackElement::Frame(frame) => frame.next_instruction == instruction,
         })
     }
@@ -68,8 +71,9 @@ impl Stack {
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
-        self.inner.iter().map(|frame| match frame {
-            StackElement::Frame(frame) => frame.next_instruction,
+        self.inner.iter().filter_map(|frame| match frame {
+            StackElement::ReturnAddress(_) => None,
+            StackElement::Frame(frame) => Some(frame.next_instruction),
         })
     }
 
@@ -165,7 +169,9 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.inner.last_mut()?;
+        let StackElement::Frame(frame) = self.inner.last_mut()? else {
+            return None;
+        };
 
         let next_instruction = frame.take_next_instruction();
         self.next_instruction = frame.next_instruction;
@@ -182,6 +188,7 @@ impl Default for Stack {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 enum StackElement {
+    ReturnAddress(InstructionAddress),
     Frame(StackFrame),
 }
 
