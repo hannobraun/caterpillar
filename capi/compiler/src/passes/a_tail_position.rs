@@ -14,6 +14,12 @@ fn analyze_block(block: &mut [Expression]) {
     {
         *is_known_to_be_in_tail_position = true;
     }
+
+    for expression in block {
+        if let Expression::Block { body, .. } = expression {
+            analyze_block(body);
+        }
+    }
 }
 
 #[cfg(test)]
@@ -33,6 +39,28 @@ mod tests {
 
         let function = script.functions.remove(0);
         let identifiers = function.body.to_identifiers();
+        assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
+    }
+
+    #[test]
+    fn last_in_block() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.ident("a")
+                .block(|s| {
+                    s.ident("not_tail").ident("tail");
+                })
+                .ident("b");
+        });
+
+        determine_tail_position(&mut script.functions);
+
+        let mut function = script.functions.remove(0);
+        let Expression::Block { body: block, .. } = function.body.remove(1)
+        else {
+            panic!("Expected block.");
+        };
+        let identifiers = block.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
