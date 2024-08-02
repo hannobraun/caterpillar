@@ -43,9 +43,8 @@ impl Stack {
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.frames.last().map(|frame| {
-            let StackElement::Frame(frame) = frame;
-            &frame.operands
+        self.frames.last().map(|frame| match frame {
+            StackElement::Frame(frame) => &frame.operands,
         })
     }
 
