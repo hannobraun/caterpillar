@@ -18,6 +18,7 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
+    frames: Vec<StackFrame>,
     next_instruction: InstructionAddress,
 
     /// # Special heap for closures
@@ -36,7 +37,8 @@ pub struct Stack {
 impl Stack {
     pub fn new() -> Self {
         Self {
-            inner: vec![StackElement::Frame(StackFrame::new())],
+            inner: vec![],
+            frames: vec![StackFrame::new()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
@@ -48,19 +50,11 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.inner.last().and_then(|frame| match frame {
-            StackElement::Operand(_) => None,
-            StackElement::ReturnAddress(_) => None,
-            StackElement::Frame(frame) => Some(&frame.bindings),
-        })
+        self.frames.last().map(|frame| &frame.bindings)
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.inner.last().and_then(|frame| match frame {
-            StackElement::Operand(_) => None,
-            StackElement::ReturnAddress(_) => None,
-            StackElement::Frame(frame) => Some(&frame.operands),
-        })
+        self.frames.last().map(|frame| &frame.operands)
     }
 
     pub fn active_instructions(
@@ -71,7 +65,6 @@ impl Stack {
             .filter_map(|frame| match frame {
                 StackElement::Operand(_) => None,
                 StackElement::ReturnAddress(address) => Some(*address),
-                StackElement::Frame(_) => None,
             })
             .chain([self.next_instruction])
     }
@@ -88,7 +81,7 @@ impl Stack {
         let mut new_frame = StackFrame::new();
 
         // Move arguments into the new frame.
-        if let Some(StackElement::Frame(caller)) = self.inner.last_mut() {
+        if let Some(caller) = self.frames.last_mut() {
             for argument in function.arguments.iter().rev() {
                 let value = caller.operands.pop_any()?;
                 new_frame.bindings.insert(argument.clone(), value);
@@ -116,31 +109,30 @@ impl Stack {
         }
 
         const RECURSION_LIMIT: usize = 16;
-        if self.inner.len() >= RECURSION_LIMIT {
+        if self.frames.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
 
-        if !self.inner.is_empty() {
+        if !self.frames.is_empty() {
             self.inner
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
 
         self.next_instruction = function.start;
-        self.inner.push(StackElement::Frame(new_frame));
+        self.frames.push(new_frame);
 
         Ok(())
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let Some(StackElement::Frame(popped_frame)) = self.inner.pop() else {
+        let Some(popped_frame) = self.frames.pop() else {
             return Err(StackIsEmpty);
         };
         if let Some(StackElement::ReturnAddress(address)) = self.inner.pop() {
             self.next_instruction = address;
         }
 
-        if let Some(StackElement::Frame(new_top_frame)) = self.inner.last_mut()
-        {
+        if let Some(new_top_frame) = self.frames.last_mut() {
             for value in popped_frame.operands.values() {
                 new_top_frame.operands.push(value);
             }
@@ -150,7 +142,7 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+        if let Some(frame) = self.frames.last_mut() {
             frame.bindings.insert(name, value.into());
         } else {
             panic!("Expected stack frame to exist.");
@@ -158,7 +150,7 @@ impl Stack {
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+        if let Some(frame) = self.frames.last_mut() {
             frame.operands.push(operand.into());
         } else {
             panic!("Expected stack frame to exist.");
@@ -166,7 +158,7 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+        if let Some(frame) = self.frames.last_mut() {
             frame.operands.pop_any()
         } else {
             panic!("Expected stack frame to exist.");
@@ -174,9 +166,7 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        let StackElement::Frame(_) = self.inner.last_mut()? else {
-            return None;
-        };
+        self.frames.last_mut()?;
 
         let next_instruction = self.next_instruction;
         self.next_instruction.increment();
@@ -195,7 +185,6 @@ impl Default for Stack {
 enum StackElement {
     Operand(Value),
     ReturnAddress(InstructionAddress),
-    Frame(StackFrame),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
