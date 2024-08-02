@@ -54,10 +54,17 @@ impl Stack {
     }
 
     pub fn operands(&self) -> Vec<Value> {
-        self.frames
-            .last()
-            .map(|frame| frame.operands.values().collect())
-            .unwrap_or_default()
+        self.inner
+            .iter()
+            .rev()
+            .take_while(|element| {
+                !matches!(element, StackElement::ReturnAddress(_))
+            })
+            .filter_map(|element| match element {
+                StackElement::Operand(value) => Some(*value),
+                _ => None,
+            })
+            .collect::<Vec<_>>()
     }
 
     pub fn active_instructions(
