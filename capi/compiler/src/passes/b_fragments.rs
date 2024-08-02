@@ -103,7 +103,7 @@ fn compile_expression(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Identifier { name, target } => match target {
+        Expression::Identifier { name, target, .. } => match target {
             Some(IdentifierTarget::Binding) => {
                 FragmentExpression::ResolvedBinding { name }
             }
