@@ -49,7 +49,7 @@ fn resolve_block<H: Host>(
                 scopes.push(Bindings::new());
                 resolve_block::<H>(body, scopes, environment, user_functions);
             }
-            Expression::Identifier { name, target } => {
+            Expression::Identifier { name, target, .. } => {
                 // The way this is written, definitions can silently shadow each
                 // other in a defined order. This is undesirable.
                 //
