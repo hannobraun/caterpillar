@@ -39,6 +39,7 @@ impl Stack {
 
     pub fn bindings(&self) -> Option<&Bindings> {
         self.inner.last().and_then(|frame| match frame {
+            StackElement::Operand(_) => None,
             StackElement::ReturnAddress(_) => None,
             StackElement::Frame(frame) => Some(&frame.bindings),
         })
@@ -46,6 +47,7 @@ impl Stack {
 
     pub fn operands(&self) -> Option<&Operands> {
         self.inner.last().and_then(|frame| match frame {
+            StackElement::Operand(_) => None,
             StackElement::ReturnAddress(_) => None,
             StackElement::Frame(frame) => Some(&frame.operands),
         })
@@ -57,6 +59,7 @@ impl Stack {
         self.inner
             .iter()
             .filter_map(|frame| match frame {
+                StackElement::Operand(_) => None,
                 StackElement::ReturnAddress(address) => Some(*address),
                 StackElement::Frame(_) => None,
             })
@@ -180,6 +183,7 @@ impl Default for Stack {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 enum StackElement {
+    Operand(Value),
     ReturnAddress(InstructionAddress),
     Frame(StackFrame),
 }
