@@ -48,13 +48,6 @@ impl Stack {
         })
     }
 
-    pub fn next_instruction_in_current_frame(
-        &self,
-    ) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.frames.last()?;
-        Some(frame.next_instruction)
-    }
-
     pub fn next_instruction(&self) -> Option<InstructionAddress> {
         let StackElement::Frame(frame) = self.frames.last()?;
         Some(frame.next_instruction)
@@ -109,7 +102,7 @@ impl Stack {
             );
         }
 
-        if let Some(next_addr) = self.next_instruction_in_current_frame() {
+        if let Some(next_addr) = self.next_instruction() {
             let next_instruction = instructions
                 .get(&next_addr)
                 .expect("Expected instruction referenced on stack to exist");
