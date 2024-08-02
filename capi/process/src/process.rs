@@ -68,7 +68,7 @@ impl<H: Host> Process<H> {
     }
 
     pub fn stop(&mut self) {
-        let next_instruction = self.stack().next_instruction_overall().unwrap();
+        let next_instruction = self.stack().next_instruction().unwrap();
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
@@ -77,7 +77,7 @@ impl<H: Host> Process<H> {
             return;
         }
 
-        let next_instruction = self.stack.next_instruction_overall();
+        let next_instruction = self.stack.next_instruction();
 
         match evaluate::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}

@@ -76,11 +76,8 @@ impl RuntimeState {
                     if let Some(Effect::Core(CoreEffect::Breakpoint)) =
                         self.process.state().first_unhandled_effect()
                     {
-                        let and_stop_at = self
-                            .process
-                            .stack()
-                            .next_instruction_overall()
-                            .unwrap();
+                        let and_stop_at =
+                            self.process.stack().next_instruction().unwrap();
                         self.process.continue_(Some(and_stop_at))
                     }
                 }

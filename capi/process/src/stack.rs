@@ -55,7 +55,7 @@ impl Stack {
         Some(frame.next_instruction)
     }
 
-    pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
+    pub fn next_instruction(&self) -> Option<InstructionAddress> {
         let StackElement::Frame(frame) = self.frames.last()?;
         Some(frame.next_instruction)
     }
