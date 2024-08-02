@@ -1,6 +1,7 @@
-pub mod passes;
 pub mod repr;
 pub mod source_map;
+
+mod passes;
 
 #[cfg(test)]
 mod tests;
