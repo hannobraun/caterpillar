@@ -7,7 +7,7 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
-    frames: Vec<StackElement>,
+    inner: Vec<StackElement>,
 
     /// # Special heap for closures
     ///
@@ -29,26 +29,26 @@ impl Stack {
             vec![StackElement::Frame(StackFrame::new(next_instruction))];
 
         Self {
-            frames,
+            inner: frames,
             closures: BTreeMap::new(),
             next_closure: 0,
         }
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.frames.last().map(|frame| match frame {
+        self.inner.last().map(|frame| match frame {
             StackElement::Frame(frame) => &frame.bindings,
         })
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.frames.last().map(|frame| match frame {
+        self.inner.last().map(|frame| match frame {
             StackElement::Frame(frame) => &frame.operands,
         })
     }
 
     pub fn next_instruction(&self) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.frames.last()?;
+        let StackElement::Frame(frame) = self.inner.last()?;
         Some(frame.next_instruction)
     }
 
@@ -59,7 +59,7 @@ impl Stack {
         let mut instruction = *instruction;
         instruction.increment();
 
-        self.frames.iter().any(|frame| {
+        self.inner.iter().any(|frame| {
             let StackElement::Frame(frame) = frame;
             frame.next_instruction == instruction
         })
@@ -68,7 +68,7 @@ impl Stack {
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
-        self.frames.iter().map(|frame| {
+        self.inner.iter().map(|frame| {
             let StackElement::Frame(frame) = frame;
             frame.next_instruction
         })
@@ -86,7 +86,7 @@ impl Stack {
         let mut new_frame = StackFrame::new(function.start);
 
         // Move arguments into the new frame.
-        if let Some(StackElement::Frame(caller)) = self.frames.last_mut() {
+        if let Some(StackElement::Frame(caller)) = self.inner.last_mut() {
             for argument in function.arguments.iter().rev() {
                 let value = caller.operands.pop_any()?;
                 new_frame.bindings.insert(argument.clone(), value);
@@ -115,21 +115,21 @@ impl Stack {
         }
 
         const RECURSION_LIMIT: usize = 16;
-        if self.frames.len() >= RECURSION_LIMIT {
+        if self.inner.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
 
-        self.frames.push(StackElement::Frame(new_frame));
+        self.inner.push(StackElement::Frame(new_frame));
 
         Ok(())
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let Some(StackElement::Frame(popped_frame)) = self.frames.pop() else {
+        let Some(StackElement::Frame(popped_frame)) = self.inner.pop() else {
             return Err(StackIsEmpty);
         };
 
-        if let Some(StackElement::Frame(new_top_frame)) = self.frames.last_mut()
+        if let Some(StackElement::Frame(new_top_frame)) = self.inner.last_mut()
         {
             for value in popped_frame.operands.values() {
                 new_top_frame.operands.push(value);
@@ -140,22 +140,22 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
         frame.bindings.insert(name, value.into());
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
         frame.operands.push(operand.into());
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
         frame.operands.pop_any()
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.frames.last_mut()?;
+        let StackElement::Frame(frame) = self.inner.last_mut()?;
         Some(frame.take_next_instruction())
     }
 }
