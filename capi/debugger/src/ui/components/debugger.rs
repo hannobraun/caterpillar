@@ -20,6 +20,7 @@ pub fn Debugger(
         let debugger = debugger.get();
 
         let stack_explorer = debugger.operands.map(|current| {
+            let current = current.values().collect();
             view! {
                 <StackExplorer
                     current=current />

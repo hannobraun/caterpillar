@@ -1,12 +1,11 @@
-use capi_process::{Operands, Value};
+use capi_process::Value;
 use leptos::{component, view, CollectView, IntoView};
 
 use crate::ui::components::panel::Panel;
 
 #[allow(unused_braces)] // working around a warning from the `view!` macro
 #[component]
-pub fn StackExplorer(current: Operands) -> impl IntoView {
-    let current = current.values().collect();
+pub fn StackExplorer(current: Vec<Value>) -> impl IntoView {
     view! {
         <Panel class="h-32">
             <div>
