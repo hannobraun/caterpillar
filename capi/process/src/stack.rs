@@ -154,7 +154,7 @@ impl Stack {
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
         if let Some(frame) = self.frames.last_mut() {
-            frame.operands.push(operand.into());
+            frame.operands.push(operand);
         } else {
             panic!("Expected stack frame to exist.");
         }
