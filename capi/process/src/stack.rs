@@ -53,7 +53,7 @@ impl Stack {
         self.frames.last().map(|frame| &frame.bindings)
     }
 
-    pub fn operands(&self) -> impl Iterator<Item = Value> + '_ {
+    pub fn operands(&self) -> impl Iterator<Item = &Value> + '_ {
         self.inner
             .iter()
             .rev()
@@ -61,7 +61,7 @@ impl Stack {
                 !matches!(element, StackElement::ReturnAddress(_))
             })
             .filter_map(|element| match element {
-                StackElement::Operand(value) => Some(*value),
+                StackElement::Operand(value) => Some(value),
                 _ => None,
             })
     }
