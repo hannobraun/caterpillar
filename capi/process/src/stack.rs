@@ -37,6 +37,10 @@ impl Stack {
         }
     }
 
+    pub fn next_instruction(&self) -> InstructionAddress {
+        self.next_instruction
+    }
+
     pub fn bindings(&self) -> Option<&Bindings> {
         self.inner.last().map(|frame| match frame {
             StackElement::Frame(frame) => &frame.bindings,
@@ -47,10 +51,6 @@ impl Stack {
         self.inner.last().map(|frame| match frame {
             StackElement::Frame(frame) => &frame.operands,
         })
-    }
-
-    pub fn next_instruction(&self) -> InstructionAddress {
-        self.next_instruction
     }
 
     pub fn is_next_instruction_in_any_frame(
