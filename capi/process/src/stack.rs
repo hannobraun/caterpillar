@@ -168,9 +168,20 @@ impl Stack {
         } else {
             panic!("Expected stack frame to exist.");
         }
+
+        self.inner.push(StackElement::Operand(operand));
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
+        let (index, _element) = self
+            .inner
+            .iter()
+            .enumerate()
+            .rev()
+            .find(|(_, element)| matches!(element, StackElement::Operand(_)))
+            .ok_or(PopOperandError::MissingOperand)?;
+        self.inner.remove(index);
+
         if let Some(frame) = self.frames.last_mut() {
             frame.operands.pop_any()
         } else {
