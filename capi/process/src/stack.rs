@@ -84,9 +84,9 @@ impl Stack {
         let mut new_frame = StackFrame::new();
 
         // Move arguments into the new frame.
-        if let Some(caller) = self.frames.last_mut() {
+        if !self.frames.is_empty() {
             for argument in function.arguments.iter().rev() {
-                let value = caller.operands.pop_any()?;
+                let value = self.pop_operand()?;
                 new_frame.bindings.insert(argument.clone(), value);
             }
         } else {
