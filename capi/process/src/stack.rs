@@ -121,6 +121,8 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
+        self.inner
+            .push(StackElement::ReturnAddress(self.next_instruction));
         self.next_instruction = new_frame.next_instruction;
         self.inner.push(StackElement::Frame(new_frame));
 
@@ -131,6 +133,7 @@ impl Stack {
         let Some(StackElement::Frame(popped_frame)) = self.inner.pop() else {
             return Err(StackIsEmpty);
         };
+        self.inner.pop();
 
         if let Some(StackElement::Frame(new_top_frame)) = self.inner.last_mut()
         {
