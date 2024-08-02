@@ -156,7 +156,8 @@ impl Stack {
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
         let StackElement::Frame(frame) = self.inner.last_mut()?;
-        Some(frame.take_next_instruction())
+        let next_instruction = frame.take_next_instruction();
+        Some(next_instruction)
     }
 }
 
