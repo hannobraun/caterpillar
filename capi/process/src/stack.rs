@@ -169,8 +169,9 @@ impl Stack {
             return None;
         };
 
-        let next_instruction = frame.take_next_instruction();
-        self.next_instruction = frame.next_instruction;
+        let next_instruction = self.next_instruction;
+        self.next_instruction.increment();
+        frame.next_instruction = self.next_instruction;
 
         Some(next_instruction)
     }
@@ -202,12 +203,6 @@ impl StackFrame {
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
-    }
-
-    fn take_next_instruction(&mut self) -> InstructionAddress {
-        let next = self.next_instruction;
-        self.next_instruction.increment();
-        next
     }
 }
 
