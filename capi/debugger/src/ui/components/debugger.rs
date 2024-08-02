@@ -19,13 +19,14 @@ pub fn Debugger(
     move || {
         let debugger = debugger.get();
 
-        let stack_explorer = debugger.operands.map(|current| {
-            let current = current.values().collect();
-            view! {
-                <StackExplorer
-                    current=current />
-            }
-        });
+        let current = debugger
+            .operands
+            .map(|operands| operands.values().collect())
+            .unwrap_or_default();
+        let stack_explorer = view! {
+            <StackExplorer
+                current=current />
+        };
         let memory_explorer = debugger.memory.map(|memory| {
             view! {
                 <MemoryExplorer
