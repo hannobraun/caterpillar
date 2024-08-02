@@ -7,12 +7,20 @@ pub fn determine_tail_position(functions: &mut Vec<Function>) {
 }
 
 fn analyze_block(block: &mut [Expression]) {
-    if let Some(Expression::Identifier {
-        is_known_to_be_in_tail_position,
-        ..
-    }) = block.last_mut()
-    {
-        *is_known_to_be_in_tail_position = true;
+    for expression in block.iter_mut().rev() {
+        if let Expression::Comment { .. } = expression {
+            continue;
+        }
+
+        if let Expression::Identifier {
+            is_known_to_be_in_tail_position,
+            ..
+        } = expression
+        {
+            *is_known_to_be_in_tail_position = true;
+        }
+
+        break;
     }
 
     for expression in block {
@@ -61,6 +69,20 @@ mod tests {
             panic!("Expected block.");
         };
         let identifiers = block.to_identifiers();
+        assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
+    }
+
+    #[test]
+    fn ignore_comments() {
+        let mut script = Script::default();
+        script.function("f", [], |s| {
+            s.ident("not_tail").ident("tail").c("This is a comment.");
+        });
+
+        determine_tail_position(&mut script.functions);
+
+        let function = script.functions.remove(0);
+        let identifiers = function.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
