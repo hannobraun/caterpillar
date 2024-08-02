@@ -53,7 +53,9 @@ impl Stack {
         self.frames.last().map(|frame| &frame.bindings)
     }
 
-    pub fn operands(&self) -> impl Iterator<Item = &Value> + '_ {
+    pub fn operands_in_current_stack_frame(
+        &self,
+    ) -> impl Iterator<Item = &Value> + '_ {
         self.inner
             .iter()
             .rev()

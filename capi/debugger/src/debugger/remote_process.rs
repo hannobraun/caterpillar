@@ -37,7 +37,11 @@ impl RemoteProcess {
             .process
             .as_ref()
             .map(|process| {
-                process.stack().operands().copied().collect::<Vec<_>>()
+                process
+                    .stack()
+                    .operands_in_current_stack_frame()
+                    .copied()
+                    .collect::<Vec<_>>()
             })
             .unwrap_or_default();
         let memory = self.memory.clone();
