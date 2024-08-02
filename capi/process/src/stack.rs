@@ -53,7 +53,7 @@ impl Stack {
         self.frames.last().map(|frame| &frame.bindings)
     }
 
-    pub fn operands(&self) -> Vec<Value> {
+    pub fn operands(&self) -> impl Iterator<Item = Value> + '_ {
         self.inner
             .iter()
             .rev()
@@ -64,7 +64,6 @@ impl Stack {
                 StackElement::Operand(value) => Some(*value),
                 _ => None,
             })
-            .collect::<Vec<_>>()
     }
 
     pub fn active_instructions(

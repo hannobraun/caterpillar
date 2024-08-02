@@ -42,7 +42,7 @@ pub fn evaluate<H: Host>(
                 stack.define_binding(name.clone(), value);
             }
 
-            if !stack.operands().is_empty() {
+            if stack.operands().count() > 0 {
                 return Err(Effect::Core(CoreEffect::BindingLeftValuesOnStack));
             }
         }
