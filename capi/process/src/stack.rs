@@ -57,7 +57,7 @@ impl Stack {
 
     pub fn all_next_instructions_in_frames(
         &self,
-    ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
+    ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.inner.iter().filter_map(|frame| match frame {
             StackElement::ReturnAddress(_) => None,
             StackElement::Frame(frame) => Some(frame.next_instruction),
