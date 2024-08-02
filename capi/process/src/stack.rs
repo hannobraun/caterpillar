@@ -86,6 +86,15 @@ impl Stack {
         function: Function,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
+        let is_tail_call = {
+            let next_addr = self.next_instruction();
+            let next_instruction = instructions
+                .get(&next_addr)
+                .expect("Expected instruction referenced on stack to exist");
+
+            *next_instruction == Instruction::Return
+        };
+
         // We must create the new stack frame before we do tail call
         // optimization. Otherwise, we might drop the current frame, and if the
         // current frame is the top-level frame, then any potential arguments
@@ -108,14 +117,9 @@ impl Stack {
             );
         }
 
-        let next_addr = self.next_instruction();
-        let next_instruction = instructions
-            .get(&next_addr)
-            .expect("Expected instruction referenced on stack to exist");
-
         // If the current function is finished, pop its stack frame before
         // pushing the next one. This is tail call optimization.
-        if let Instruction::Return = next_instruction {
+        if is_tail_call {
             self.pop_frame()
                 .expect("Currently executing; stack can't be empty");
         }
