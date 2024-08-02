@@ -133,15 +133,15 @@ impl Stack {
         let Some(StackElement::Frame(popped_frame)) = self.inner.pop() else {
             return Err(StackIsEmpty);
         };
-        self.inner.pop();
+        if let Some(StackElement::ReturnAddress(address)) = self.inner.pop() {
+            self.next_instruction = address;
+        }
 
         if let Some(StackElement::Frame(new_top_frame)) = self.inner.last_mut()
         {
             for value in popped_frame.operands.values() {
                 new_top_frame.operands.push(value);
             }
-
-            self.next_instruction = new_top_frame.next_instruction;
         }
 
         Ok(())
