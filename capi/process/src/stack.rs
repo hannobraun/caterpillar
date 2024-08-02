@@ -62,10 +62,8 @@ impl Stack {
         let mut instruction = *instruction;
         instruction.increment();
 
-        self.inner.iter().any(|frame| match frame {
-            StackElement::ReturnAddress(_) => false,
-            StackElement::Frame(frame) => frame.next_instruction == instruction,
-        })
+        self.all_next_instructions_in_frames()
+            .any(|next| next == instruction)
     }
 
     pub fn all_next_instructions_in_frames(
