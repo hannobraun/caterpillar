@@ -39,7 +39,7 @@ impl ActiveFunctions {
         }
 
         let mut call_stack: VecDeque<InstructionAddress> =
-            process.stack().all_next_instructions_in_frames().collect();
+            process.stack().active_instructions().collect();
 
         let mut functions = VecDeque::new();
 

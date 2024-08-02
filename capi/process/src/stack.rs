@@ -55,7 +55,7 @@ impl Stack {
         })
     }
 
-    pub fn all_next_instructions_in_frames(
+    pub fn active_instructions(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.inner

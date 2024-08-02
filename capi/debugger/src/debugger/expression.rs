@@ -74,7 +74,7 @@ impl Expression {
 
                 process
                     .stack()
-                    .all_next_instructions_in_frames()
+                    .active_instructions()
                     .any(|next| next == instruction)
             })
         } else {
