@@ -26,8 +26,7 @@ pub struct Stack {
 impl Stack {
     pub fn new() -> Self {
         let next_instruction = InstructionAddress { index: 0 };
-        let inner =
-            vec![StackElement::Frame(StackFrame::new(next_instruction))];
+        let inner = vec![StackElement::Frame(StackFrame::new())];
 
         Self {
             inner,
@@ -76,7 +75,7 @@ impl Stack {
         // optimization. Otherwise, we might drop the current frame, and if the
         // current frame is the top-level frame, then any potential arguments
         // for the new frame have nowhere to go.
-        let mut new_frame = StackFrame::new(function.start);
+        let mut new_frame = StackFrame::new();
 
         // Move arguments into the new frame.
         if let Some(StackElement::Frame(caller)) = self.inner.last_mut() {
@@ -195,7 +194,7 @@ struct StackFrame {
 }
 
 impl StackFrame {
-    fn new(_: InstructionAddress) -> Self {
+    fn new() -> Self {
         Self {
             bindings: Bindings::default(),
             operands: Operands::default(),
