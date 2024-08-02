@@ -165,13 +165,12 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        let StackElement::Frame(frame) = self.inner.last_mut()? else {
+        let StackElement::Frame(_) = self.inner.last_mut()? else {
             return None;
         };
 
         let next_instruction = self.next_instruction;
         self.next_instruction.increment();
-        frame.next_instruction = self.next_instruction;
 
         Some(next_instruction)
     }
@@ -191,15 +190,13 @@ enum StackElement {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 struct StackFrame {
-    pub next_instruction: InstructionAddress,
     pub bindings: Bindings,
     pub operands: Operands,
 }
 
 impl StackFrame {
-    fn new(next_instruction: InstructionAddress) -> Self {
+    fn new(_: InstructionAddress) -> Self {
         Self {
-            next_instruction,
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
