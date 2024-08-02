@@ -228,7 +228,9 @@ impl Compiler<'_> {
                             Instruction::CallBuiltin { name: name.clone() },
                             fragment.id(),
                         ),
-                    FragmentExpression::ResolvedUserFunction { name } => {
+                    FragmentExpression::ResolvedUserFunction {
+                        name, ..
+                    } => {
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
                         self.user_function_calls.push((name.clone(), address));
