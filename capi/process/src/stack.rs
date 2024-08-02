@@ -162,8 +162,7 @@ impl Stack {
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let operand = operand.into();
-        self.inner.push(StackElement::Operand(operand));
+        self.inner.push(StackElement::Operand(operand.into()));
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
