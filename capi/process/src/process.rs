@@ -68,7 +68,7 @@ impl<H: Host> Process<H> {
     }
 
     pub fn stop(&mut self) {
-        let next_instruction = self.stack().next_instruction().unwrap();
+        let next_instruction = self.stack().next_instruction();
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
@@ -89,15 +89,13 @@ impl<H: Host> Process<H> {
             }
         };
 
-        if let Some(next_instruction) = next_instruction {
-            self.state.most_recent_step = Some(next_instruction);
+        self.state.most_recent_step = Some(next_instruction);
 
-            if self
-                .breakpoints
-                .should_stop_at_and_clear_ephemeral(&next_instruction)
-            {
-                self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
-            }
+        if self
+            .breakpoints
+            .should_stop_at_and_clear_ephemeral(&next_instruction)
+        {
+            self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
         }
     }
 }

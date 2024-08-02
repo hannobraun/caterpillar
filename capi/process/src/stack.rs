@@ -49,8 +49,8 @@ impl Stack {
         })
     }
 
-    pub fn next_instruction(&self) -> Option<InstructionAddress> {
-        Some(self.next_instruction)
+    pub fn next_instruction(&self) -> InstructionAddress {
+        self.next_instruction
     }
 
     pub fn is_next_instruction_in_any_frame(
@@ -102,17 +102,16 @@ impl Stack {
             );
         }
 
-        if let Some(next_addr) = self.next_instruction() {
-            let next_instruction = instructions
-                .get(&next_addr)
-                .expect("Expected instruction referenced on stack to exist");
+        let next_addr = self.next_instruction();
+        let next_instruction = instructions
+            .get(&next_addr)
+            .expect("Expected instruction referenced on stack to exist");
 
-            // If the current function is finished, pop its stack frame before
-            // pushing the next one. This is tail call optimization.
-            if let Instruction::Return = next_instruction {
-                self.pop_frame()
-                    .expect("Currently executing; stack can't be empty");
-            }
+        // If the current function is finished, pop its stack frame before
+        // pushing the next one. This is tail call optimization.
+        if let Instruction::Return = next_instruction {
+            self.pop_frame()
+                .expect("Currently executing; stack can't be empty");
         }
 
         const RECURSION_LIMIT: usize = 16;

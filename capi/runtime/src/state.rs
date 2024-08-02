@@ -77,7 +77,7 @@ impl RuntimeState {
                         self.process.state().first_unhandled_effect()
                     {
                         let and_stop_at =
-                            self.process.stack().next_instruction().unwrap();
+                            self.process.stack().next_instruction();
                         self.process.continue_(Some(and_stop_at))
                     }
                 }
