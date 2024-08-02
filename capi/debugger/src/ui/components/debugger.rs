@@ -19,10 +19,9 @@ pub fn Debugger(
     move || {
         let debugger = debugger.get();
 
-        let current = debugger.operands;
         let stack_explorer = view! {
             <StackExplorer
-                current=current />
+                current=debugger.operands />
         };
         let memory_explorer = debugger.memory.map(|memory| {
             view! {
