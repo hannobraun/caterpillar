@@ -25,12 +25,11 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
-        let next_instruction = InstructionAddress { index: 0 };
         let inner = vec![StackElement::Frame(StackFrame::new())];
 
         Self {
             inner,
-            next_instruction,
+            next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
         }
