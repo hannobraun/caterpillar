@@ -56,11 +56,8 @@ impl Stack {
     }
 
     pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
-        if let Some(StackElement::Frame(frame)) = self.frames.last() {
-            return Some(frame.next_instruction);
-        }
-
-        None
+        let StackElement::Frame(frame) = self.frames.last()?;
+        Some(frame.next_instruction)
     }
 
     pub fn is_next_instruction_in_any_frame(
