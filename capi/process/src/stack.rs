@@ -53,8 +53,11 @@ impl Stack {
         self.frames.last().map(|frame| &frame.bindings)
     }
 
-    pub fn operands(&self) -> Option<&Operands> {
-        self.frames.last().map(|frame| &frame.operands)
+    pub fn operands(&self) -> Vec<Value> {
+        self.frames
+            .last()
+            .map(|frame| frame.operands.values().collect())
+            .unwrap_or_default()
     }
 
     pub fn active_instructions(

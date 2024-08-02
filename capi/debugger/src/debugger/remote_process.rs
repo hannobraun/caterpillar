@@ -36,8 +36,7 @@ impl RemoteProcess {
         let operands = self
             .process
             .as_ref()
-            .and_then(|process| process.stack().operands())
-            .map(|operands| operands.values().collect())
+            .map(|process| process.stack().operands())
             .unwrap_or_default();
         let memory = self.memory.clone();
 

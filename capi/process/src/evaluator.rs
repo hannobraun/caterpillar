@@ -42,14 +42,7 @@ pub fn evaluate<H: Host>(
                 stack.define_binding(name.clone(), value);
             }
 
-            let Some(operands) = stack.operands() else {
-                unreachable!(
-                    "Can't access operands, but we're currently executing. An \
-                    active stack frame, and therefore operands, must exist."
-                );
-            };
-
-            if !operands.is_empty() {
+            if !stack.operands().is_empty() {
                 return Err(Effect::Core(CoreEffect::BindingLeftValuesOnStack));
             }
         }
