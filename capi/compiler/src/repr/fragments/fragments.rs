@@ -10,7 +10,6 @@ pub struct Fragments {
     pub root: FragmentId,
 
     pub inner: FragmentMap,
-    pub by_function: Vec<Function>,
 }
 
 impl Fragments {
