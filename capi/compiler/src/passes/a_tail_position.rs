@@ -1,6 +1,6 @@
 use crate::repr::syntax::{Expression, Function};
 
-pub fn determine_tail_position(functions: &mut Vec<Function>) {
+pub fn determine_tail_positions(functions: &mut Vec<Function>) {
     for function in functions {
         analyze_block(&mut function.body);
     }
@@ -34,7 +34,7 @@ fn analyze_block(block: &mut [Expression]) {
 mod tests {
     use crate::repr::syntax::{Expression, Script};
 
-    use super::determine_tail_position;
+    use super::determine_tail_positions;
 
     #[test]
     fn last_in_function() {
@@ -43,7 +43,7 @@ mod tests {
             s.ident("not_tail").ident("tail");
         });
 
-        determine_tail_position(&mut script.functions);
+        determine_tail_positions(&mut script.functions);
 
         let function = script.functions.remove(0);
         let identifiers = function.body.to_identifiers();
@@ -61,7 +61,7 @@ mod tests {
                 .ident("b");
         });
 
-        determine_tail_position(&mut script.functions);
+        determine_tail_positions(&mut script.functions);
 
         let mut function = script.functions.remove(0);
         let Expression::Block { body: block, .. } = function.body.remove(1)
@@ -79,7 +79,7 @@ mod tests {
             s.ident("not_tail").ident("tail").c("This is a comment.");
         });
 
-        determine_tail_position(&mut script.functions);
+        determine_tail_positions(&mut script.functions);
 
         let function = script.functions.remove(0);
         let identifiers = function.body.to_identifiers();
