@@ -53,6 +53,16 @@ impl Stack {
         self.frames.last().map(|frame| &frame.bindings)
     }
 
+    pub fn bindings_mut(&mut self) -> Option<&mut Bindings> {
+        self.inner
+            .iter_mut()
+            .rev()
+            .find_map(|element| match element {
+                StackElement::Bindings(bindings) => Some(bindings),
+                _ => None,
+            })
+    }
+
     pub fn operands_in_current_stack_frame(
         &self,
     ) -> impl Iterator<Item = &Value> + '_ {
@@ -174,16 +184,9 @@ impl Stack {
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
         let value = value.into();
 
-        let bindings = self
-            .inner
-            .iter_mut()
-            .rev()
-            .find_map(|element| match element {
-                StackElement::Bindings(bindings) => Some(bindings),
-                _ => None,
-            })
-            .expect("Expected stack frame to exist");
-        bindings.insert(name.clone(), value);
+        self.bindings_mut()
+            .expect("Expected stack frame to exist")
+            .insert(name.clone(), value);
 
         if let Some(frame) = self.frames.last_mut() {
             frame.bindings.insert(name, value);
