@@ -1,8 +1,9 @@
+mod a_tail_position;
 mod b_resolve;
 mod c_fragments;
 mod d_bytecode;
 
 pub use {
-    b_resolve::resolve_references, c_fragments::generate_fragments,
-    d_bytecode::generate_bytecode,
+    a_tail_position::determine_tail_position, b_resolve::resolve_references,
+    c_fragments::generate_fragments, d_bytecode::generate_bytecode,
 };
