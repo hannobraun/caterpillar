@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     operands::PopOperandError, Function, Instruction, InstructionAddress,
-    Instructions, Operands, Value,
+    Instructions, Value,
 };
 
 /// # Caterpillar's stack, supposedly
@@ -146,15 +146,9 @@ impl Stack {
             }
         }
 
-        let Some(popped_frame) = self.frames.pop() else {
+        let Some(_) = self.frames.pop() else {
             return Err(StackIsEmpty);
         };
-
-        if let Some(new_top_frame) = self.frames.last_mut() {
-            for value in popped_frame.operands.values() {
-                new_top_frame.operands.push(value);
-            }
-        }
 
         Ok(())
     }
@@ -169,23 +163,10 @@ impl Stack {
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
         let operand = operand.into();
-
-        if let Some(frame) = self.frames.last_mut() {
-            frame.operands.push(operand);
-        } else {
-            panic!("Expected stack frame to exist.");
-        }
-
         self.inner.push(StackElement::Operand(operand));
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        if let Some(frame) = self.frames.last_mut() {
-            frame.operands.pop_any()?;
-        } else {
-            panic!("Expected stack frame to exist.");
-        }
-
         let mut index = self.inner.len();
         while index > 0 {
             index -= 1;
@@ -226,14 +207,12 @@ enum StackElement {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 struct StackFrame {
     pub bindings: Bindings,
-    pub operands: Operands,
 }
 
 impl StackFrame {
     fn new() -> Self {
         Self {
             bindings: Bindings::default(),
-            operands: Operands::default(),
         }
     }
 }
