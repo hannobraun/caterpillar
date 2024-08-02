@@ -110,6 +110,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("argument"),
                 target: Some(IdentifierTarget::Binding),
+                is_known_to_be_in_tail_position: false,
             })
         );
     }
@@ -130,6 +131,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: Some(IdentifierTarget::Binding),
+                is_known_to_be_in_tail_position: false,
             })
         );
     }
@@ -160,6 +162,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: Some(IdentifierTarget::Binding),
+                is_known_to_be_in_tail_position: false,
             })
         );
 
@@ -187,6 +190,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: None,
+                is_known_to_be_in_tail_position: false,
             })
         );
     }
@@ -208,6 +212,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("brk"),
                 target: Some(IdentifierTarget::BuiltinFunction),
+                is_known_to_be_in_tail_position: false,
             })
         );
     }
@@ -230,6 +235,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
                 target: Some(IdentifierTarget::HostFunction),
+                is_known_to_be_in_tail_position: false,
             })
         );
     }
@@ -252,6 +258,7 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
                 target: Some(IdentifierTarget::UserFunction),
+                is_known_to_be_in_tail_position: false,
             })
         );
     }

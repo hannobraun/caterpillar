@@ -41,6 +41,7 @@ impl<'r> SyntaxBuilder<'r> {
         self.push_expression(Expression::Identifier {
             name: name.into(),
             target: None,
+            is_known_to_be_in_tail_position: false,
         })
     }
 
