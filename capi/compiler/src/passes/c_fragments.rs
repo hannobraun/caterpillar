@@ -103,7 +103,11 @@ fn compile_expression(
             FragmentExpression::Block { start, environment }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Identifier { name, target, .. } => match target {
+        Expression::Identifier {
+            name,
+            target,
+            is_known_to_be_in_tail_position,
+        } => match target {
             Some(IdentifierTarget::Binding) => {
                 FragmentExpression::ResolvedBinding { name }
             }
@@ -114,7 +118,11 @@ fn compile_expression(
                 FragmentExpression::ResolvedHostFunction { name }
             }
             Some(IdentifierTarget::UserFunction) => {
-                FragmentExpression::ResolvedUserFunction { name }
+                // By the time we make it to this compiler pass, all expressions
+                // that are in tail position should be known to be so.
+                let is_tail_call = is_known_to_be_in_tail_position;
+
+                FragmentExpression::ResolvedUserFunction { name, is_tail_call }
             }
             None => FragmentExpression::UnresolvedIdentifier { name },
         },

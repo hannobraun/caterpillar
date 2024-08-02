@@ -27,6 +27,9 @@ pub enum FragmentExpression {
     },
     ResolvedUserFunction {
         name: String,
+
+        /// Indicate whether the function call is in tail position
+        is_tail_call: bool,
     },
     UnresolvedIdentifier {
         name: String,
@@ -67,9 +70,10 @@ impl FragmentExpression {
                 hasher.update(b"resolved host function");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedUserFunction { name } => {
+            Self::ResolvedUserFunction { name, is_tail_call } => {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
+                hasher.update(&[(*is_tail_call).into()]);
             }
             Self::UnresolvedIdentifier { name } => {
                 hasher.update(b"unresolved word");
