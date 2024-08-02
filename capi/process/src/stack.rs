@@ -137,6 +137,7 @@ impl Stack {
             self.inner
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
+        self.inner.push(StackElement::Bindings(Bindings::new()));
 
         self.next_instruction = function.start;
         self.frames.push(new_frame);
