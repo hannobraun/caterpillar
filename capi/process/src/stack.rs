@@ -37,7 +37,7 @@ pub struct Stack {
 impl Stack {
     pub fn new() -> Self {
         Self {
-            inner: vec![],
+            inner: Vec::new(),
             frames: vec![StackFrame::new()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
