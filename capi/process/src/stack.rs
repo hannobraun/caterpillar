@@ -24,10 +24,9 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
+        let next_instruction = InstructionAddress { index: 0 };
         let frames =
-            vec![StackElement::Frame(StackFrame::new(InstructionAddress {
-                index: 0,
-            }))];
+            vec![StackElement::Frame(StackFrame::new(next_instruction))];
 
         Self {
             frames,
