@@ -141,18 +141,27 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
-        frame.bindings.insert(name, value.into());
+        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+            frame.bindings.insert(name, value.into());
+        } else {
+            panic!("Expected stack frame to exist.");
+        }
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
-        frame.operands.push(operand.into());
+        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+            frame.operands.push(operand.into());
+        } else {
+            panic!("Expected stack frame to exist.");
+        }
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        let StackElement::Frame(frame) = self.inner.last_mut().unwrap();
-        frame.operands.pop_any()
+        if let Some(StackElement::Frame(frame)) = self.inner.last_mut() {
+            frame.operands.pop_any()
+        } else {
+            panic!("Expected stack frame to exist.");
+        }
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
