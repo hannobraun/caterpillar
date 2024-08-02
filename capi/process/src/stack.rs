@@ -58,10 +58,13 @@ impl Stack {
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
-        self.inner.iter().filter_map(|frame| match frame {
-            StackElement::ReturnAddress(_) => None,
-            StackElement::Frame(frame) => Some(frame.next_instruction),
-        })
+        self.inner
+            .iter()
+            .filter_map(|frame| match frame {
+                StackElement::ReturnAddress(address) => Some(*address),
+                StackElement::Frame(_) => None,
+            })
+            .chain([self.next_instruction])
     }
 
     pub fn push_frame(
