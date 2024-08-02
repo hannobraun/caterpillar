@@ -60,9 +60,8 @@ impl Stack {
         let mut instruction = *instruction;
         instruction.increment();
 
-        self.inner.iter().any(|frame| {
-            let StackElement::Frame(frame) = frame;
-            frame.next_instruction == instruction
+        self.inner.iter().any(|frame| match frame {
+            StackElement::Frame(frame) => frame.next_instruction == instruction,
         })
     }
 
