@@ -116,7 +116,7 @@ impl Stack {
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
 
-        self.next_instruction = new_frame.next_instruction;
+        self.next_instruction = function.start;
         self.inner.push(StackElement::Frame(new_frame));
 
         Ok(())
