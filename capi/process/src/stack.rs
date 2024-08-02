@@ -55,17 +55,6 @@ impl Stack {
         })
     }
 
-    pub fn is_next_instruction_in_any_frame(
-        &self,
-        instruction: &InstructionAddress,
-    ) -> bool {
-        let mut instruction = *instruction;
-        instruction.increment();
-
-        self.all_next_instructions_in_frames()
-            .any(|next| next == instruction)
-    }
-
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {

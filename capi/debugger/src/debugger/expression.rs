@@ -69,10 +69,13 @@ impl Expression {
             });
 
         let is_on_call_stack = if let Some(instructions) = instructions {
-            instructions.iter().any(|instruction| {
+            instructions.iter().copied().any(|mut instruction| {
+                instruction.increment();
+
                 process
                     .stack()
-                    .is_next_instruction_in_any_frame(instruction)
+                    .all_next_instructions_in_frames()
+                    .any(|next| next == instruction)
             })
         } else {
             false
