@@ -74,6 +74,7 @@ impl Stack {
         self.inner
             .iter()
             .filter_map(|frame| match frame {
+                StackElement::Bindings(_) => None,
                 StackElement::Operand(_) => None,
                 StackElement::ReturnAddress(address) => Some(*address),
             })
@@ -200,6 +201,7 @@ impl Default for Stack {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 enum StackElement {
+    Bindings(Bindings),
     Operand(Value),
     ReturnAddress(InstructionAddress),
 }
