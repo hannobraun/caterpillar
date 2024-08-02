@@ -173,21 +173,23 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
+        if let Some(frame) = self.frames.last_mut() {
+            frame.operands.pop_any()?;
+        } else {
+            panic!("Expected stack frame to exist.");
+        }
+
         let mut index = self.inner.len();
         while index > 0 {
             index -= 1;
 
-            if let StackElement::Operand(_) = self.inner[index] {
+            if let StackElement::Operand(value) = self.inner[index] {
                 self.inner.remove(index);
-                break;
+                return Ok(value);
             }
         }
 
-        if let Some(frame) = self.frames.last_mut() {
-            frame.operands.pop_any()
-        } else {
-            panic!("Expected stack frame to exist.");
-        }
+        Err(PopOperandError::MissingOperand)
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
