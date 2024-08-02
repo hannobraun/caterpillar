@@ -68,7 +68,7 @@ impl Expression {
                 }
             });
 
-        let is_on_call_stack = if let Some(instructions) = &instructions {
+        let is_on_call_stack = if let Some(instructions) = instructions {
             instructions.iter().any(|instruction| {
                 process
                     .stack()
