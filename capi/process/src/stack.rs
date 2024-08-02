@@ -156,8 +156,10 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
+        let value = value.into();
+
         if let Some(frame) = self.frames.last_mut() {
-            frame.bindings.insert(name, value.into());
+            frame.bindings.insert(name, value);
         } else {
             panic!("Expected stack frame to exist.");
         }
