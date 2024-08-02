@@ -86,7 +86,22 @@ impl Stack {
         // current frame is the top-level frame, then any potential arguments
         // for the new frame have nowhere to go.
         let mut new_frame = StackFrame::new(function);
-        new_frame.take_arguments(self.frames.last_mut())?;
+
+        // Move arguments into the new frame.
+        if let Some(caller) = self.frames.last_mut() {
+            for argument in new_frame.function.arguments.iter().rev() {
+                let value = caller.operands.pop_any()?;
+                new_frame.bindings.insert(argument.clone(), value);
+            }
+        } else {
+            assert_eq!(
+                new_frame.function.arguments.len(),
+                0,
+                "Function has no caller, which means there is no stack frame \
+                that the function could take its arguments from. Yet, it has \
+                arguments, which can't work.",
+            );
+        }
 
         if let Some(next_addr) = self.next_instruction_in_current_frame() {
             let next_instruction = instructions
@@ -166,28 +181,6 @@ impl StackFrame {
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
-    }
-
-    fn take_arguments(
-        &mut self,
-        caller: Option<&mut StackFrame>,
-    ) -> Result<(), PushStackFrameError> {
-        if let Some(caller) = caller {
-            for argument in self.function.arguments.iter().rev() {
-                let value = caller.operands.pop_any()?;
-                self.bindings.insert(argument.clone(), value);
-            }
-        } else {
-            assert_eq!(
-                self.function.arguments.len(),
-                0,
-                "Function has no caller, which means there is no stack frame \
-                that the function could take its arguments from. Yet, it has \
-                arguments, which can't work.",
-            );
-        }
-
-        Ok(())
     }
 
     fn next_instruction(&self) -> InstructionAddress {
