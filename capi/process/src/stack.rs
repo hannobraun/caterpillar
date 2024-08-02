@@ -154,6 +154,9 @@ impl Stack {
                 self.inner.remove(index);
                 break;
             }
+            if let StackElement::Bindings(_) = self.inner[index] {
+                self.inner.remove(index);
+            }
         }
 
         let Some(_) = self.frames.pop() else {
