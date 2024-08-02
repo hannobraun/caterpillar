@@ -21,7 +21,7 @@ fn no_server() {
             message: ActiveFunctionsMessage::NoServer
         }
     );
-    assert!(debugger.operands.is_none());
+    assert!(debugger.operands.is_empty());
     assert!(debugger.memory.is_none());
 }
 
@@ -38,7 +38,7 @@ fn no_process() {
             message: ActiveFunctionsMessage::NoProcess
         }
     );
-    assert!(debugger.operands.is_none());
+    assert!(debugger.operands.is_empty());
     assert!(debugger.memory.is_none());
 }
 

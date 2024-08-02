@@ -19,10 +19,7 @@ pub fn Debugger(
     move || {
         let debugger = debugger.get();
 
-        let current = debugger
-            .operands
-            .map(|operands| operands.values().collect())
-            .unwrap_or_default();
+        let current = debugger.operands;
         let stack_explorer = view! {
             <StackExplorer
                 current=current />
