@@ -7,7 +7,7 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
-    frames: Vec<StackFrame>,
+    frames: Vec<StackElement>,
 
     /// # Special heap for closures
     ///
@@ -24,7 +24,10 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
-        let frames = vec![StackFrame::new(InstructionAddress { index: 0 })];
+        let frames =
+            vec![StackElement::Frame(StackFrame::new(InstructionAddress {
+                index: 0,
+            }))];
 
         Self {
             frames,
@@ -34,22 +37,28 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.frames.last().map(|frame| &frame.bindings)
+        self.frames.last().map(|frame| {
+            let StackElement::Frame(frame) = frame;
+            &frame.bindings
+        })
     }
 
     pub fn operands(&self) -> Option<&Operands> {
-        self.frames.last().map(|frame| &frame.operands)
+        self.frames.last().map(|frame| {
+            let StackElement::Frame(frame) = frame;
+            &frame.operands
+        })
     }
 
     pub fn next_instruction_in_current_frame(
         &self,
     ) -> Option<InstructionAddress> {
-        let frame = self.frames.last()?;
+        let StackElement::Frame(frame) = self.frames.last()?;
         Some(frame.next_instruction)
     }
 
     pub fn next_instruction_overall(&self) -> Option<InstructionAddress> {
-        if let Some(frame) = self.frames.last() {
+        if let Some(StackElement::Frame(frame)) = self.frames.last() {
             return Some(frame.next_instruction);
         }
 
@@ -63,15 +72,19 @@ impl Stack {
         let mut instruction = *instruction;
         instruction.increment();
 
-        self.frames
-            .iter()
-            .any(|frame| frame.next_instruction == instruction)
+        self.frames.iter().any(|frame| {
+            let StackElement::Frame(frame) = frame;
+            frame.next_instruction == instruction
+        })
     }
 
     pub fn all_next_instructions_in_frames(
         &self,
     ) -> impl DoubleEndedIterator<Item = InstructionAddress> + '_ {
-        self.frames.iter().map(|frame| frame.next_instruction)
+        self.frames.iter().map(|frame| {
+            let StackElement::Frame(frame) = frame;
+            frame.next_instruction
+        })
     }
 
     pub fn push_frame(
@@ -86,7 +99,7 @@ impl Stack {
         let mut new_frame = StackFrame::new(function.start);
 
         // Move arguments into the new frame.
-        if let Some(caller) = self.frames.last_mut() {
+        if let Some(StackElement::Frame(caller)) = self.frames.last_mut() {
             for argument in function.arguments.iter().rev() {
                 let value = caller.operands.pop_any()?;
                 new_frame.bindings.insert(argument.clone(), value);
@@ -119,17 +132,18 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
-        self.frames.push(new_frame);
+        self.frames.push(StackElement::Frame(new_frame));
 
         Ok(())
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let Some(popped_frame) = self.frames.pop() else {
+        let Some(StackElement::Frame(popped_frame)) = self.frames.pop() else {
             return Err(StackIsEmpty);
         };
 
-        if let Some(new_top_frame) = self.frames.last_mut() {
+        if let Some(StackElement::Frame(new_top_frame)) = self.frames.last_mut()
+        {
             for value in popped_frame.operands.values() {
                 new_top_frame.operands.push(value);
             }
@@ -139,22 +153,22 @@ impl Stack {
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
-        let frame = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
         frame.bindings.insert(name, value.into());
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
-        let frame = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
         frame.operands.push(operand.into());
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        let frame = self.frames.last_mut().unwrap();
+        let StackElement::Frame(frame) = self.frames.last_mut().unwrap();
         frame.operands.pop_any()
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        let frame = self.frames.last_mut()?;
+        let StackElement::Frame(frame) = self.frames.last_mut()?;
         Some(frame.take_next_instruction())
     }
 }
@@ -163,6 +177,11 @@ impl Default for Stack {
     fn default() -> Self {
         Self::new()
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+enum StackElement {
+    Frame(StackFrame),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
