@@ -108,8 +108,11 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
-        self.inner
-            .push(StackElement::ReturnAddress(self.next_instruction));
+        if !self.inner.is_empty() {
+            self.inner
+                .push(StackElement::ReturnAddress(self.next_instruction));
+        }
+
         self.next_instruction = new_frame.next_instruction;
         self.inner.push(StackElement::Frame(new_frame));
 
