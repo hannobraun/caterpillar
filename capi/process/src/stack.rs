@@ -128,12 +128,13 @@ impl Stack {
     }
 
     pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
-        let Some(popped_frame) = self.frames.pop() else {
-            return Err(StackIsEmpty);
-        };
         if let Some(StackElement::ReturnAddress(address)) = self.inner.pop() {
             self.next_instruction = address;
         }
+
+        let Some(popped_frame) = self.frames.pop() else {
+            return Err(StackIsEmpty);
+        };
 
         if let Some(new_top_frame) = self.frames.last_mut() {
             for value in popped_frame.operands.values() {
