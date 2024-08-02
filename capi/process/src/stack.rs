@@ -166,7 +166,9 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        self.frames.last_mut()?;
+        if self.frames.is_empty() {
+            return None;
+        }
 
         let next_instruction = self.next_instruction;
         self.next_instruction.increment();
