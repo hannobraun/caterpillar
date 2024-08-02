@@ -173,14 +173,15 @@ impl Stack {
     }
 
     pub fn pop_operand(&mut self) -> Result<Value, PopOperandError> {
-        let (index, _element) = self
-            .inner
-            .iter()
-            .enumerate()
-            .rev()
-            .find(|(_, element)| matches!(element, StackElement::Operand(_)))
-            .ok_or(PopOperandError::MissingOperand)?;
-        self.inner.remove(index);
+        let mut index = self.inner.len();
+        while index > 0 {
+            index -= 1;
+
+            if let StackElement::Operand(_) = self.inner[index] {
+                self.inner.remove(index);
+                break;
+            }
+        }
 
         if let Some(frame) = self.frames.last_mut() {
             frame.operands.pop_any()
