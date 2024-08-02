@@ -98,7 +98,7 @@ impl fmt::Display for FragmentExpression {
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
-            Self::ResolvedUserFunction { name } => write!(f, "{name}"),
+            Self::ResolvedUserFunction { name, .. } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }
