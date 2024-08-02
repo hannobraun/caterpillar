@@ -85,17 +85,17 @@ impl Stack {
         // optimization. Otherwise, we might drop the current frame, and if the
         // current frame is the top-level frame, then any potential arguments
         // for the new frame have nowhere to go.
-        let mut new_frame = StackFrame::new(function);
+        let mut new_frame = StackFrame::new(function.clone());
 
         // Move arguments into the new frame.
         if let Some(caller) = self.frames.last_mut() {
-            for argument in new_frame.function.arguments.iter().rev() {
+            for argument in function.arguments.iter().rev() {
                 let value = caller.operands.pop_any()?;
                 new_frame.bindings.insert(argument.clone(), value);
             }
         } else {
             assert_eq!(
-                new_frame.function.arguments.len(),
+                function.arguments.len(),
                 0,
                 "Function has no caller, which means there is no stack frame \
                 that the function could take its arguments from. Yet, it has \
@@ -169,7 +169,7 @@ impl Default for Stack {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 struct StackFrame {
-    pub function: Function,
+    pub next_instruction: InstructionAddress,
     pub bindings: Bindings,
     pub operands: Operands,
 }
@@ -177,19 +177,19 @@ struct StackFrame {
 impl StackFrame {
     fn new(function: Function) -> Self {
         Self {
-            function,
+            next_instruction: function.start,
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
     }
 
     fn next_instruction(&self) -> InstructionAddress {
-        self.function.start
+        self.next_instruction
     }
 
     fn take_next_instruction(&mut self) -> InstructionAddress {
-        let next = self.function.start;
-        self.function.start.increment();
+        let next = self.next_instruction;
+        self.next_instruction.increment();
         next
     }
 }
