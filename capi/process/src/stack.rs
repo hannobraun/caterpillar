@@ -24,10 +24,7 @@ pub struct Stack {
 
 impl Stack {
     pub fn new() -> Self {
-        let frames = vec![StackFrame::new(Function {
-            arguments: Vec::new(),
-            start: InstructionAddress { index: 0 },
-        })];
+        let frames = vec![StackFrame::new(InstructionAddress { index: 0 })];
 
         Self {
             frames,
@@ -85,7 +82,7 @@ impl Stack {
         // optimization. Otherwise, we might drop the current frame, and if the
         // current frame is the top-level frame, then any potential arguments
         // for the new frame have nowhere to go.
-        let mut new_frame = StackFrame::new(function.clone());
+        let mut new_frame = StackFrame::new(function.start);
 
         // Move arguments into the new frame.
         if let Some(caller) = self.frames.last_mut() {
@@ -175,9 +172,9 @@ struct StackFrame {
 }
 
 impl StackFrame {
-    fn new(function: Function) -> Self {
+    fn new(next_instruction: InstructionAddress) -> Self {
         Self {
-            next_instruction: function.start,
+            next_instruction,
             bindings: Bindings::default(),
             operands: Operands::default(),
         }
