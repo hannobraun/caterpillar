@@ -37,9 +37,8 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.frames.last().map(|frame| {
-            let StackElement::Frame(frame) = frame;
-            &frame.bindings
+        self.frames.last().map(|frame| match frame {
+            StackElement::Frame(frame) => &frame.bindings,
         })
     }
 
