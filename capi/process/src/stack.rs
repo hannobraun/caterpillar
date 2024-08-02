@@ -153,6 +153,8 @@ impl Stack {
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
+        let operand = operand.into();
+
         if let Some(frame) = self.frames.last_mut() {
             frame.operands.push(operand);
         } else {
