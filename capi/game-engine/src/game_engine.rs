@@ -81,6 +81,14 @@ impl GameEngine {
                         continue;
                     }
 
+                    Effect::Host(GameEngineEffect::SubmitFrame) => {
+                        // This effect means that the game is done rendering.
+                        // Let's break out of this loop now, so we can do our
+                        // part in that and return control to the host.
+                        self.process.handle_first_effect();
+                        break;
+                    }
+
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
@@ -120,13 +128,6 @@ impl GameEngine {
                         let color = *color;
 
                         display::set_tile(x.into(), y.into(), color, pixels);
-                    }
-                    Effect::Host(GameEngineEffect::SubmitFrame) => {
-                        // This effect means that the game is done rendering.
-                        // Let's break out of this loop now, so we can do our
-                        // part in that and return control to the host.
-                        self.process.handle_first_effect();
-                        break;
                     }
                 }
 
