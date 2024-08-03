@@ -129,7 +129,6 @@ impl GameEngine {
                     Effect::Host(GameEngineEffect::ReadRandom) => {
                         // See `GameEngine::push_random` for context.
                         let random = self.random.pop_front().unwrap();
-
                         self.process.push([Value(random.to_le_bytes())]);
                     }
                     Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
