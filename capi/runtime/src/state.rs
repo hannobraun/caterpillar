@@ -17,7 +17,6 @@ use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub game_engine: GameEngine,
-    pub memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
     pub commands: Vec<SerializedCommand>,
@@ -41,8 +40,8 @@ impl RuntimeState {
                 arguments,
                 bytecode: None,
                 process,
+                memory,
             },
-            memory,
             input,
             commands: Vec::new(),
             random: VecDeque::new(),
@@ -76,7 +75,7 @@ impl RuntimeState {
                     self.game_engine
                         .process
                         .reset(self.game_engine.arguments.clone());
-                    self.memory = Memory::default();
+                    self.game_engine.memory = Memory::default();
                 }
                 Command::Step => {
                     if let Some(Effect::Core(CoreEffect::Breakpoint)) = self
@@ -115,7 +114,7 @@ impl RuntimeState {
                     }
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
-                        let value = self.memory.inner[address];
+                        let value = self.game_engine.memory.inner[address];
                         let value: i32 = value.into();
                         self.game_engine
                             .process
@@ -128,7 +127,7 @@ impl RuntimeState {
                         value,
                     }) => {
                         let address: usize = (*address).into();
-                        self.memory.inner[address] = *value;
+                        self.game_engine.memory.inner[address] = *value;
 
                         self.game_engine.process.handle_first_effect();
                     }
@@ -185,7 +184,7 @@ impl RuntimeState {
         }
 
         self.updates
-            .queue_updates(&self.game_engine.process, &self.memory);
+            .queue_updates(&self.game_engine.process, &self.game_engine.memory);
     }
 }
 
