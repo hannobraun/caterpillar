@@ -1,5 +1,5 @@
+use capi_game_engine::memory::Memory;
 use capi_process::Value;
-use capi_protocol::memory::Memory;
 
 use super::ActiveFunctions;
 

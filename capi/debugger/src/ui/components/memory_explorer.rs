@@ -1,4 +1,4 @@
-use capi_protocol::memory::Memory;
+use capi_game_engine::memory::Memory;
 use leptos::{component, view, CollectView, IntoView};
 
 use crate::ui::components::panel::Panel;

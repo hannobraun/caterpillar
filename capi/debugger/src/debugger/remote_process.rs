@@ -1,9 +1,6 @@
-use capi_game_engine::host::GameEngineHost;
+use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::Process;
-use capi_protocol::{
-    memory::Memory,
-    updates::{Code, Update},
-};
+use capi_protocol::updates::{Code, Update};
 
 use super::{ActiveFunctions, Debugger};
 
