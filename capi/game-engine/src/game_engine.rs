@@ -10,8 +10,9 @@ use crate::{
 };
 
 pub struct GameEngine {
-    bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
+
+    bytecode: Option<Bytecode>,
     arguments: [Value; 2],
     memory: Memory,
     input: Input,
@@ -21,8 +22,8 @@ pub struct GameEngine {
 impl GameEngine {
     pub fn new() -> Self {
         Self {
-            bytecode: None,
             process: Process::default(),
+            bytecode: None,
             arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory: Memory::default(),
             input: Input::default(),
