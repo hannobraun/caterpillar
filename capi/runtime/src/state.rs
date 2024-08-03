@@ -79,6 +79,11 @@ impl RuntimeState {
                         let and_stop_at =
                             self.process.stack().next_instruction();
                         self.process.continue_(Some(and_stop_at))
+                    } else {
+                        // If we're not stopped at a breakpoint, we can't step.
+                        // It would be better, if this resulted in an explicit
+                        // error that is sent to the debugger, instead of
+                        // silently being ignored here.
                     }
                 }
                 Command::Stop => {
