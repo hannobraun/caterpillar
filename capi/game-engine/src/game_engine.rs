@@ -19,13 +19,12 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> Self {
-        let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
 
         Self {
             bytecode: None,
-            process,
+            process: Process::default(),
             arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory,
             input,
