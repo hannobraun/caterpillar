@@ -90,6 +90,7 @@ impl Stack {
                 StackElement::Bindings(_) => None,
                 StackElement::Operand(_) => None,
                 StackElement::ReturnAddress(address) => Some(*address),
+                StackElement::StartMarker => None,
             })
             .chain([self.next_instruction])
     }
@@ -242,6 +243,19 @@ enum StackElement {
     /// the evaluator needs to jump back to, once it's done with the current
     /// stack frame.
     ReturnAddress(InstructionAddress),
+
+    /// A marker to mark the first stack frame
+    ///
+    /// The first stack frame needs no return address (where would we return
+    /// to?), so it has this marker. The reason we need it, is to know when the
+    /// first stack frame is being dropped, which indicates that the process is
+    /// finished.
+    ///
+    /// Without a start marker, when we pop a frame, we wouldn't be able to
+    /// distinguish whether the process is finished, or if we just happen to
+    /// have an empty stack because of tail call elimination, but should still
+    /// continue running.
+    StartMarker,
 }
 
 pub type Bindings = BTreeMap<String, Value>;
