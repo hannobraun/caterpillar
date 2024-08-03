@@ -50,10 +50,6 @@ impl RuntimeState {
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let Some(bytecode) = &self.game_engine.bytecode else {
-            return;
-        };
-
         for command in self.commands.drain(..) {
             let command = Command::deserialize(command);
 
@@ -99,6 +95,10 @@ impl RuntimeState {
                 }
             }
         }
+
+        let Some(bytecode) = &self.game_engine.bytecode else {
+            return;
+        };
 
         while self.game_engine.process.state().can_step() {
             self.game_engine.process.step(bytecode);
