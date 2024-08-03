@@ -160,7 +160,10 @@ impl Stack {
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
 
-        let bindings = Bindings::new();
+        let mut bindings = Bindings::new();
+        for (name, value) in arguments {
+            bindings.insert(name, value);
+        }
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
