@@ -9,9 +9,9 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub arguments: [Value; 2],
     pub bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
+    pub arguments: [Value; 2],
     pub memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
@@ -24,9 +24,9 @@ impl GameEngine {
         let input = Input::default();
 
         Self {
-            arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             bytecode: None,
             process,
+            arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory,
             input,
             random: VecDeque::new(),
