@@ -19,14 +19,12 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> Self {
-        let input = Input::default();
-
         Self {
             bytecode: None,
             process: Process::default(),
             arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory: Memory::default(),
-            input,
+            input: Input::default(),
             random: VecDeque::new(),
         }
     }
