@@ -1,8 +1,7 @@
 use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
+use capi_game_engine::memory::Memory;
 use capi_process::{Bytecode, Host, Process};
 use serde::{de::DeserializeOwned, Serialize};
-
-use crate::memory::Memory;
 
 pub struct Updates<H: Host> {
     latest_memory: Option<Memory>,
