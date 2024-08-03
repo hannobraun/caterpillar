@@ -107,24 +107,18 @@ pub fn evaluate<H: Host>(
         }
         Instruction::Push { value } => stack.push_operand(*value),
         Instruction::Return => {
-            stack
-                .pop_frame()
-                .expect("Currently executing; stack can't be empty");
+            stack.pop_frame();
         }
         Instruction::ReturnIfNonZero => {
             let value = stack.pop_operand()?;
             if value != Value([0, 0, 0, 0]) {
-                stack
-                    .pop_frame()
-                    .expect("Currently executing; stack can't be empty");
+                stack.pop_frame();
             }
         }
         Instruction::ReturnIfZero => {
             let value = stack.pop_operand()?;
             if value == Value([0, 0, 0, 0]) {
-                stack
-                    .pop_frame()
-                    .expect("Currently executing; stack can't be empty");
+                stack.pop_frame();
             }
         }
         Instruction::Panic => return Err(Effect::Core(CoreEffect::Panic)),

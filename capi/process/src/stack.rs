@@ -119,8 +119,7 @@ impl Stack {
         // If the current function is finished, pop its stack frame before
         // pushing the next one. This is tail call optimization.
         if is_tail_call {
-            self.pop_frame()
-                .expect("Currently executing; stack can't be empty");
+            self.pop_frame();
         }
 
         const STACK_LIMIT: usize = 16;
@@ -145,7 +144,7 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop_frame(&mut self) -> Result<(), StackIsEmpty> {
+    pub fn pop_frame(&mut self) {
         let mut index = self.inner.len();
         while index > 0 {
             index -= 1;
@@ -160,11 +159,7 @@ impl Stack {
             }
         }
 
-        let Some(_) = self.legacy_stack.pop() else {
-            return Err(StackIsEmpty);
-        };
-
-        Ok(())
+        self.legacy_stack.pop();
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
@@ -237,6 +232,3 @@ pub enum PushStackFrameError {
     #[error("Evaluator is already finished")]
     Finished,
 }
-
-#[derive(Debug)]
-pub struct StackIsEmpty;
