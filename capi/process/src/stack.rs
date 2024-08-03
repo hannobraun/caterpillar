@@ -204,10 +204,43 @@ impl Default for Stack {
     }
 }
 
+/// # The things that can be on the stack
+///
+/// ## Implementation Note
+///
+/// This is an enum, because right now a lot of things still happen at runtime,
+/// and the stack logic needs to recognize what kind of element it's looking at
+/// to make an informed decision.
+///
+/// Eventually, the compiler will grow smarter, and be able to figure out what
+/// needs to happen with the stack at compile-time. At that point, we will no
+/// longer need to track this kind of type information at runtime.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 enum StackElement {
+    /// # The bindings in the current stack frame
+    ///
+    /// There should be one of these per stack frame, and it's expected that
+    /// this is the first element after the return address.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Having a map with the names and values of bindings at runtime is
+    /// unnecessary. We need the value, sure, but the compiler can track the
+    /// names and locations of bindings at compile-time.
+    ///
+    /// At some point it will learn to do that, and generate the right
+    /// instructions to access them. Then we won't need to look up bindings by
+    /// name at runtime.
     Bindings(Bindings),
+
+    /// An operand
     Operand(Value),
+
+    /// A return address
+    ///
+    /// This marks the beginning of a stack frame. It carries the address that
+    /// the evaluator needs to jump back to, once it's done with the current
+    /// stack frame.
     ReturnAddress(InstructionAddress),
 }
 
