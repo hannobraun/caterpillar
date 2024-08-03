@@ -25,12 +25,10 @@ impl RuntimeState {
             on_panic(&panic_info.to_string());
         }));
 
-        let updates = Updates::default();
-
         Self {
             game_engine: GameEngine::new(),
             commands: Vec::new(),
-            updates,
+            updates: Updates::default(),
         }
     }
 
