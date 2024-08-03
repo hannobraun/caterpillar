@@ -117,10 +117,6 @@ impl Stack {
             *next_instruction == Instruction::Return
         };
 
-        // We must create the new stack frame before we do tail call
-        // optimization. Otherwise, we might drop the current frame, and if the
-        // current frame is the top-level frame, then any potential arguments
-        // for the new frame have nowhere to go.
         let new_frame = StackFrame::new();
 
         // If the current function is finished, pop its stack frame before
