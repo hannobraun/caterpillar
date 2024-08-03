@@ -107,7 +107,6 @@ impl GameEngine {
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
                         let input = self.input.pop_front().unwrap_or(0);
-
                         self.process.push([input]);
                     }
                     Effect::Host(GameEngineEffect::ReadRandom) => {
