@@ -39,6 +39,10 @@ impl GameEngine {
         self.reset();
     }
 
+    pub fn on_input(&mut self, value: u8) {
+        self.input.buffer.push_back(value);
+    }
+
     pub fn reset(&mut self) {
         self.memory = Memory::default();
         self.process.reset(self.arguments);
