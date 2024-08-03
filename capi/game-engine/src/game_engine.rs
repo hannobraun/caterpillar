@@ -107,7 +107,7 @@ impl GameEngine {
                         self.process.push([Value(random.to_le_bytes())]);
                         self.process.handle_first_effect();
                     }
-                    _ => {
+                    Effect::Core(_) => {
                         // We can't handle any other effects but our own, but we
                         // don't need to:
                         //
