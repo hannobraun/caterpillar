@@ -2,7 +2,7 @@ use capi_compiler::{
     repr::fragments::{self, Fragments},
     source_map::SourceMap,
 };
-use capi_game_engine::GameEngineHost;
+use capi_game_engine::host::GameEngineHost;
 use capi_process::Process;
 
 use super::Expression;

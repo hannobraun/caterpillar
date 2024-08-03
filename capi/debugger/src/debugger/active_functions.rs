@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_game_engine::GameEngineHost;
+use capi_game_engine::host::GameEngineHost;
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 

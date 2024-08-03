@@ -4,7 +4,7 @@ use capi_compiler::{
     },
     source_map::SourceMap,
 };
-use capi_game_engine::{GameEngineEffect, GameEngineHost};
+use capi_game_engine::host::{GameEngineEffect, GameEngineHost};
 use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]

@@ -1,4 +1,4 @@
-use capi_game_engine::GameEngineHost;
+use capi_game_engine::host::GameEngineHost;
 use capi_process::Process;
 use capi_protocol::{
     memory::Memory,
