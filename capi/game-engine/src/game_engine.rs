@@ -82,7 +82,6 @@ impl GameEngine {
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
-                        let value: i32 = value.into();
                         self.process.push([value]);
 
                         self.process.handle_first_effect();
