@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub arguments: Vec<Value>,
+    pub arguments: [Value; 2],
     pub bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
     pub memory: Memory,
@@ -19,7 +19,7 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn new() -> Self {
-        let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
+        let arguments = [Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
         let process = Process::default();
         let memory = Memory::default();
         let input = Input::default();
@@ -41,7 +41,7 @@ impl GameEngine {
 
     pub fn reset(&mut self) {
         self.memory = Memory::default();
-        self.process.reset(self.arguments.clone());
+        self.process.reset(self.arguments);
     }
 }
 
