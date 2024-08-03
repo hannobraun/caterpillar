@@ -125,11 +125,6 @@ impl Stack {
 
         const STACK_LIMIT: usize = 16;
         if self.inner.len() >= STACK_LIMIT {
-            // Applied to the new stack, this is no longer the recursion limit.
-            // But it limits the size of the stack, which serves its purpose for
-            // now.
-            //
-            // Once the legacy stack is gone, this can be cleaned up.
             return Err(PushStackFrameError::Overflow);
         }
 
