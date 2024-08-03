@@ -92,20 +92,6 @@ impl GameEngine {
                         let address: usize = (*address).into();
                         self.memory.inner[address] = *value;
                     }
-                    Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
-                        let x = *x;
-                        let y = *y;
-                        let color = *color;
-
-                        display::set_tile(x.into(), y.into(), color, pixels);
-                    }
-                    Effect::Host(GameEngineEffect::SubmitFrame) => {
-                        // This effect means that the game is done rendering.
-                        // Let's break out of this loop now, so we can do our
-                        // part in that and return control to the host.
-                        self.process.handle_first_effect();
-                        break;
-                    }
                     Effect::Host(GameEngineEffect::ReadInput) => {
                         let input: i32 =
                             self.input.pop_front().unwrap_or(0).into();
@@ -126,6 +112,20 @@ impl GameEngine {
                         let random = self.random.pop_front().unwrap();
 
                         self.process.push([Value(random.to_le_bytes())]);
+                    }
+                    Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
+                        let x = *x;
+                        let y = *y;
+                        let color = *color;
+
+                        display::set_tile(x.into(), y.into(), color, pixels);
+                    }
+                    Effect::Host(GameEngineEffect::SubmitFrame) => {
+                        // This effect means that the game is done rendering.
+                        // Let's break out of this loop now, so we can do our
+                        // part in that and return control to the host.
+                        self.process.handle_first_effect();
+                        break;
                     }
                 }
 
