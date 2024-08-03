@@ -144,6 +144,7 @@ impl Stack {
 
     pub fn pop_frame(&mut self) {
         let mut index = self.inner.len();
+
         loop {
             if index == 0 {
                 break;
