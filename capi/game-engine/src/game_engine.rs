@@ -43,6 +43,16 @@ impl GameEngine {
         self.input.buffer.push_back(value);
     }
 
+    pub fn push_random(&mut self, value: i32) -> bool {
+        if self.random.len() >= 1024 {
+            return false;
+        }
+
+        self.random.push_back(value);
+
+        true
+    }
+
     pub fn reset(&mut self) {
         self.memory = Memory::default();
         self.process.reset(self.arguments);
