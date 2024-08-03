@@ -15,7 +15,7 @@ pub struct GameEngine {
     arguments: [Value; 2],
     memory: Memory,
     input: Input,
-    pub random: VecDeque<i32>,
+    random: VecDeque<i32>,
 }
 
 impl GameEngine {
