@@ -121,22 +121,7 @@ impl Stack {
         // optimization. Otherwise, we might drop the current frame, and if the
         // current frame is the top-level frame, then any potential arguments
         // for the new frame have nowhere to go.
-        let mut new_frame = StackFrame::new();
-
-        // Move arguments into the new frame.
-        if !self.frames.is_empty() {
-            for (name, value) in arguments.iter() {
-                new_frame.bindings.insert(name.clone(), *value);
-            }
-        } else {
-            assert_eq!(
-                arguments.len(),
-                0,
-                "Function has no caller, which means there is no stack frame \
-                that the function could take its arguments from. Yet, it has \
-                arguments, which can't work.",
-            );
-        }
+        let new_frame = StackFrame::new();
 
         // If the current function is finished, pop its stack frame before
         // pushing the next one. This is tail call optimization.
@@ -203,12 +188,6 @@ impl Stack {
         self.bindings_mut()
             .expect("Expected stack frame to exist")
             .insert(name.clone(), value);
-
-        if let Some(frame) = self.frames.last_mut() {
-            frame.bindings.insert(name, value);
-        } else {
-            panic!("Expected stack frame to exist.");
-        }
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
@@ -255,15 +234,11 @@ enum StackElement {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-struct StackFrame {
-    pub bindings: Bindings,
-}
+struct StackFrame {}
 
 impl StackFrame {
     fn new() -> Self {
-        Self {
-            bindings: Bindings::default(),
-        }
+        Self {}
     }
 }
 
