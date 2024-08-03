@@ -11,7 +11,7 @@ pub struct GameEngine {
 
 impl GameEngine {
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.process.reset(self.arguments.clone());
+        self.reset();
         self.bytecode = Some(bytecode);
     }
 
