@@ -10,9 +10,9 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub bytecode: Option<Bytecode>,
+    bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
-    pub arguments: [Value; 2],
+    arguments: [Value; 2],
     pub memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
