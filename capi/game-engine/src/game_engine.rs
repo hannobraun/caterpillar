@@ -109,7 +109,7 @@ impl GameEngine {
                         let input: i32 =
                             self.input.pop_front().unwrap_or(0).into();
 
-                        self.process.push([Value(input.to_le_bytes())]);
+                        self.process.push([input]);
                     }
                     Effect::Host(GameEngineEffect::ReadRandom) => {
                         // We get a lot of random numbers from the host, and
