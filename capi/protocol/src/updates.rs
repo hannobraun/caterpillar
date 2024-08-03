@@ -1,5 +1,6 @@
 use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
-use capi_process::{Bytecode, Process};
+use capi_process::{Bytecode, Host, Process};
+use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{host::GameEngineHost, memory::Memory};
 
@@ -7,7 +8,7 @@ use crate::{host::GameEngineHost, memory::Memory};
 pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process<GameEngineHost>>,
-    queue: Vec<Update>,
+    queue: Vec<Update<GameEngineHost>>,
 }
 
 impl Updates {
@@ -28,7 +29,9 @@ impl Updates {
         }
     }
 
-    pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
+    pub fn take_queued_updates(
+        &mut self,
+    ) -> impl Iterator<Item = Update<GameEngineHost>> + '_ {
         self.queue.drain(..)
     }
 
@@ -53,18 +56,24 @@ impl Updates {
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(serde::Deserialize, serde::Serialize)]
-pub enum Update {
-    Process(Process<GameEngineHost>),
+pub enum Update<H: Host> {
+    Process(Process<H>),
     Memory { memory: Memory },
 }
 
-impl Update {
-    pub fn deserialize(bytes: SerializedUpdate) -> Self {
+impl<H: Host> Update<H> {
+    pub fn deserialize(bytes: SerializedUpdate) -> Self
+    where
+        H: DeserializeOwned,
+    {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
     }
 
-    pub fn serialize(&self) -> SerializedUpdate {
+    pub fn serialize(&self) -> SerializedUpdate
+    where
+        H: Serialize,
+    {
         ron::to_string(self).unwrap().into_bytes()
     }
 }

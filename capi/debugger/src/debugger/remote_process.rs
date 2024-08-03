@@ -19,7 +19,7 @@ impl RemoteProcess {
         self.code = Some(code);
     }
 
-    pub fn on_runtime_update(&mut self, update: Update) {
+    pub fn on_runtime_update(&mut self, update: Update<GameEngineHost>) {
         match update {
             Update::Memory { memory } => {
                 self.memory = Some(memory);
