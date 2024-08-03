@@ -1,12 +1,13 @@
 use std::{str, sync::Mutex};
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
+use capi_game_engine::tiles::NUM_PIXEL_BYTES;
 use capi_protocol::{
     updates::Code, Versioned, CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE,
     UPDATES_BUFFER_SIZE,
 };
 
-use crate::{state::RuntimeState, tiles::NUM_PIXEL_BYTES};
+use crate::state::RuntimeState;
 
 pub static CODE: Shared<FramedBuffer<CODE_BUFFER_SIZE>> =
     Shared::new(FramedBuffer::new());
