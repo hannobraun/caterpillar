@@ -13,7 +13,7 @@ pub struct GameEngine {
     bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
     arguments: [Value; 2],
-    pub memory: Memory,
+    memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
 }
