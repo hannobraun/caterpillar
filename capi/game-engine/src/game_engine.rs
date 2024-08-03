@@ -2,7 +2,11 @@ use std::collections::VecDeque;
 
 use capi_process::{Bytecode, Process, Value};
 
-use crate::{host::GameEngineHost, input::Input, memory::Memory};
+use crate::{
+    host::{GameEngineHost, TILES_PER_AXIS},
+    input::Input,
+    memory::Memory,
+};
 
 pub struct GameEngine {
     pub arguments: Vec<Value>,
@@ -14,6 +18,22 @@ pub struct GameEngine {
 }
 
 impl GameEngine {
+    pub fn new() -> Self {
+        let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
+        let process = Process::default();
+        let memory = Memory::default();
+        let input = Input::default();
+
+        Self {
+            arguments,
+            bytecode: None,
+            process,
+            memory,
+            input,
+            random: VecDeque::new(),
+        }
+    }
+
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
         self.bytecode = Some(bytecode);
         self.reset();
@@ -22,5 +42,11 @@ impl GameEngine {
     pub fn reset(&mut self) {
         self.memory = Memory::default();
         self.process.reset(self.arguments.clone());
+    }
+}
+
+impl Default for GameEngine {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -1,13 +1,11 @@
-use std::{collections::VecDeque, panic};
+use std::panic;
 
 use capi_game_engine::{
     display,
     game_engine::GameEngine,
-    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
-    input::Input,
-    memory::Memory,
+    host::{GameEngineEffect, GameEngineHost},
 };
-use capi_process::{CoreEffect, Effect, Process, Value};
+use capi_process::{CoreEffect, Effect, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
     updates::Updates,
@@ -27,21 +25,10 @@ impl RuntimeState {
             on_panic(&panic_info.to_string());
         }));
 
-        let arguments = vec![Value((TILES_PER_AXIS as i32).to_le_bytes()); 2];
-        let process = Process::default();
-        let memory = Memory::default();
-        let input = Input::default();
         let updates = Updates::default();
 
         Self {
-            game_engine: GameEngine {
-                arguments,
-                bytecode: None,
-                process,
-                memory,
-                input,
-                random: VecDeque::new(),
-            },
+            game_engine: GameEngine::new(),
             commands: Vec::new(),
             updates,
         }
