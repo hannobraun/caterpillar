@@ -144,7 +144,11 @@ impl Stack {
 
     pub fn pop_frame(&mut self) {
         let mut index = self.inner.len();
-        while index > 0 {
+        loop {
+            if index == 0 {
+                break;
+            }
+
             index -= 1;
 
             match self.inner[index] {
