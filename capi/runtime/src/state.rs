@@ -1,12 +1,12 @@
 use std::{collections::VecDeque, panic};
 
-use capi_game_engine::host::{
-    GameEngineEffect, GameEngineHost, TILES_PER_AXIS,
+use capi_game_engine::{
+    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
+    memory::Memory,
 };
 use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
-    memory::Memory,
     updates::Updates,
 };
 
