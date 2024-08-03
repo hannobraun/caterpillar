@@ -24,11 +24,11 @@ pub enum GameEngineEffect {
     Load { address: u8 },
     Store { address: u8, value: u8 },
 
-    SetTile { x: u8, y: u8, color: [u8; 4] },
-    SubmitFrame,
-
     ReadInput,
     ReadRandom,
+
+    SetTile { x: u8, y: u8, color: [u8; 4] },
+    SubmitFrame,
 }
 
 pub fn load(stack: &mut Stack) -> GameEngineResult {
