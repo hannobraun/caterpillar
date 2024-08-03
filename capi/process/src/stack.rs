@@ -37,7 +37,7 @@ pub struct Stack {
 impl Stack {
     pub fn new() -> Self {
         Self {
-            inner: Vec::new(),
+            inner: vec![StackElement::StartMarker],
             legacy_stack: vec![()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
@@ -156,6 +156,10 @@ impl Stack {
                 }
                 StackElement::ReturnAddress(address) => {
                     self.next_instruction = address;
+                    self.inner.remove(index);
+                    break;
+                }
+                StackElement::StartMarker => {
                     self.inner.remove(index);
                     break;
                 }
