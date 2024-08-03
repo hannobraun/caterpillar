@@ -404,6 +404,7 @@ dependencies = [
  "anyhow",
  "axum",
  "capi-compiler",
+ "capi-game-engine",
  "capi-process",
  "capi-protocol",
  "capi-watch",
