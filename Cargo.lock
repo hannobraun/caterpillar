@@ -377,6 +377,7 @@ name = "capi-protocol"
 version = "0.1.0"
 dependencies = [
  "capi-compiler",
+ "capi-game-engine",
  "capi-process",
  "ron",
  "serde",
