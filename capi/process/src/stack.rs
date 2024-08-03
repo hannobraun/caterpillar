@@ -18,7 +18,7 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
-    frames: Vec<StackFrame>,
+    frames: Vec<()>,
     next_instruction: InstructionAddress,
 
     /// # Special heap for closures
@@ -38,7 +38,7 @@ impl Stack {
     pub fn new() -> Self {
         Self {
             inner: Vec::new(),
-            frames: vec![StackFrame::new()],
+            frames: vec![()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
@@ -149,7 +149,7 @@ impl Stack {
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
-        self.frames.push(StackFrame::new());
+        self.frames.push(());
 
         Ok(())
     }
@@ -223,15 +223,6 @@ enum StackElement {
     Bindings(Bindings),
     Operand(Value),
     ReturnAddress(InstructionAddress),
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-struct StackFrame {}
-
-impl StackFrame {
-    fn new() -> Self {
-        Self {}
-    }
 }
 
 pub type Bindings = BTreeMap<String, Value>;
