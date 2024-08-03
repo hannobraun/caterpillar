@@ -1,5 +1,6 @@
+pub use capi_game_engine::memory;
+
 pub mod command;
-pub mod memory;
 pub mod updates;
 
 pub const CODE_BUFFER_SIZE: usize = 1024 * 1024;
