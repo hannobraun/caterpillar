@@ -4,8 +4,8 @@ use capi_compiler::{
     },
     source_map::SourceMap,
 };
+use capi_game_engine::{GameEngineEffect, GameEngineHost};
 use capi_process::{Effect, InstructionAddress, Process};
-use capi_protocol::host::{GameEngineEffect, GameEngineHost};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {

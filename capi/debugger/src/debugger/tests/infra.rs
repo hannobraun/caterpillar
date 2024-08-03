@@ -2,9 +2,9 @@ use capi_compiler::{
     compile,
     repr::{fragments::FragmentExpression, syntax::Script},
 };
+use capi_game_engine::GameEngineHost;
 use capi_process::{Bytecode, Process};
 use capi_protocol::{
-    host::GameEngineHost,
     memory::Memory,
     updates::{Code, Updates},
 };

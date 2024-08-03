@@ -2,8 +2,8 @@ use capi_compiler::{
     repr::fragments::{self, Fragments},
     source_map::SourceMap,
 };
+use capi_game_engine::GameEngineHost;
 use capi_process::Process;
-use capi_protocol::host::GameEngineHost;
 
 use super::Expression;
 
