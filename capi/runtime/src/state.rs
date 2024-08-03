@@ -1,6 +1,7 @@
 use std::{collections::VecDeque, panic};
 
 use capi_game_engine::{
+    display,
     host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     memory::Memory,
 };
@@ -10,7 +11,7 @@ use capi_protocol::{
     updates::Updates,
 };
 
-use crate::{display, ffi_out::on_panic};
+use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub bytecode: Option<Bytecode>,

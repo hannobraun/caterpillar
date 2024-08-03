@@ -1,6 +1,4 @@
-use capi_game_engine::tiles::{
-    NUM_CHANNELS, PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS,
-};
+use crate::tiles::{NUM_CHANNELS, PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS};
 
 pub fn set_tile(
     tile_x: usize,
