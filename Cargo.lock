@@ -359,6 +359,9 @@ version = "0.1.0"
 [[package]]
 name = "capi-game-engine"
 version = "0.1.0"
+dependencies = [
+ "capi-process",
+]
 
 [[package]]
 name = "capi-process"
