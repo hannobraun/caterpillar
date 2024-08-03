@@ -1,5 +1,3 @@
-pub use capi_game_engine::memory;
-
 pub mod command;
 pub mod updates;
 
