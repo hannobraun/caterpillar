@@ -18,7 +18,7 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
-    frames: Vec<()>,
+    legacy_stack: Vec<()>,
     next_instruction: InstructionAddress,
 
     /// # Special heap for closures
@@ -38,7 +38,7 @@ impl Stack {
     pub fn new() -> Self {
         Self {
             inner: Vec::new(),
-            frames: vec![()],
+            legacy_stack: vec![()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
@@ -125,7 +125,7 @@ impl Stack {
         }
 
         const RECURSION_LIMIT: usize = 16;
-        if self.frames.len() >= RECURSION_LIMIT {
+        if self.legacy_stack.len() >= RECURSION_LIMIT {
             return Err(PushStackFrameError::Overflow);
         }
         if self.inner.len() >= RECURSION_LIMIT {
@@ -137,7 +137,7 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
-        if !self.frames.is_empty() {
+        if !self.legacy_stack.is_empty() {
             self.inner
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
@@ -149,7 +149,7 @@ impl Stack {
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
-        self.frames.push(());
+        self.legacy_stack.push(());
 
         Ok(())
     }
@@ -169,7 +169,7 @@ impl Stack {
             }
         }
 
-        let Some(_) = self.frames.pop() else {
+        let Some(_) = self.legacy_stack.pop() else {
             return Err(StackIsEmpty);
         };
 
@@ -201,7 +201,7 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        if self.frames.is_empty() {
+        if self.legacy_stack.is_empty() {
             return None;
         }
 
