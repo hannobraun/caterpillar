@@ -124,7 +124,7 @@ pub fn push_random(random: f64) -> bool {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
-    if state.random.len() >= 1024 {
+    if state.game_engine.random.len() >= 1024 {
         return false;
     }
 
@@ -133,7 +133,7 @@ pub fn push_random(random: f64) -> bool {
 
     let random = min + random * (max - min);
 
-    state.random.push_back(random.floor() as _);
+    state.game_engine.random.push_back(random.floor() as _);
 
     true
 }

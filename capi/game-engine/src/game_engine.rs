@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use capi_process::{Bytecode, Process, Value};
 
 use crate::{host::GameEngineHost, input::Input, memory::Memory};
@@ -8,6 +10,7 @@ pub struct GameEngine {
     pub process: Process<GameEngineHost>,
     pub memory: Memory,
     pub input: Input,
+    pub random: VecDeque<i32>,
 }
 
 impl GameEngine {

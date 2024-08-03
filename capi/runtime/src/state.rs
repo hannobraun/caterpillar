@@ -17,7 +17,6 @@ use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub game_engine: GameEngine,
-    pub random: VecDeque<i32>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates<GameEngineHost>,
 }
@@ -41,9 +40,9 @@ impl RuntimeState {
                 process,
                 memory,
                 input,
+                random: VecDeque::new(),
             },
             commands: Vec::new(),
-            random: VecDeque::new(),
             updates,
         }
     }
@@ -166,7 +165,8 @@ impl RuntimeState {
                         // probably makes more sense to implement a PRNG, either
                         // in Rust or Caterpillar, and only seed that with
                         // randomness from the host.
-                        let random = self.random.pop_front().unwrap();
+                        let random =
+                            self.game_engine.random.pop_front().unwrap();
 
                         self.game_engine
                             .process
