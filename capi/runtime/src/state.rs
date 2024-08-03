@@ -3,6 +3,7 @@ use std::{collections::VecDeque, panic};
 use capi_game_engine::{
     display,
     host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
+    input::Input,
     memory::Memory,
 };
 use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
@@ -179,9 +180,4 @@ impl Default for RuntimeState {
     fn default() -> Self {
         Self::new()
     }
-}
-
-#[derive(Default)]
-pub struct Input {
-    pub buffer: VecDeque<u8>,
 }
