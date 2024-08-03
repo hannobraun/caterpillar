@@ -96,6 +96,8 @@ impl Stack {
         function: Function,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
+        let arguments =
+            function.arguments.into_iter().rev().collect::<Vec<_>>();
         let is_tail_call = {
             let next_addr = self.next_instruction();
             let next_instruction = instructions
@@ -113,13 +115,13 @@ impl Stack {
 
         // Move arguments into the new frame.
         if !self.frames.is_empty() {
-            for argument in function.arguments.iter().rev() {
+            for argument in arguments.iter() {
                 let value = self.pop_operand()?;
                 new_frame.bindings.insert(argument.clone(), value);
             }
         } else {
             assert_eq!(
-                function.arguments.len(),
+                arguments.len(),
                 0,
                 "Function has no caller, which means there is no stack frame \
                 that the function could take its arguments from. Yet, it has \
