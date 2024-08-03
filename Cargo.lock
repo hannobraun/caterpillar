@@ -383,7 +383,6 @@ dependencies = [
  "capi-process",
  "ron",
  "serde",
- "serde-big-array",
 ]
 
 [[package]]

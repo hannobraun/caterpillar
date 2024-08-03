@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 ron = "*"
-serde-big-array = "*"
 
 [dependencies.capi-compiler]
 path = "../compiler"
