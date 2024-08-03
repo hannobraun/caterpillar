@@ -123,8 +123,8 @@ impl Stack {
                 .expect("Currently executing; stack can't be empty");
         }
 
-        const RECURSION_LIMIT: usize = 16;
-        if self.inner.len() >= RECURSION_LIMIT {
+        const STACK_LIMIT: usize = 16;
+        if self.inner.len() >= STACK_LIMIT {
             // Applied to the new stack, this is no longer the recursion limit.
             // But it limits the size of the stack, which serves its purpose for
             // now.
