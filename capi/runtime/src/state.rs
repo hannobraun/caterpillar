@@ -17,7 +17,6 @@ use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub game_engine: GameEngine,
-    pub process: Process<GameEngineHost>,
     pub memory: Memory,
     pub input: Input,
     pub random: VecDeque<i32>,
@@ -41,8 +40,8 @@ impl RuntimeState {
             game_engine: GameEngine {
                 arguments,
                 bytecode: None,
+                process,
             },
-            process,
             memory,
             input,
             commands: Vec::new(),
@@ -52,7 +51,9 @@ impl RuntimeState {
     }
 
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.process.reset(self.game_engine.arguments.clone());
+        self.game_engine
+            .process
+            .reset(self.game_engine.arguments.clone());
         self.game_engine.bytecode = Some(bytecode);
     }
 
@@ -66,25 +67,34 @@ impl RuntimeState {
 
             match command {
                 Command::BreakpointClear { instruction } => {
-                    self.process.clear_durable_breakpoint(&instruction);
+                    self.game_engine
+                        .process
+                        .clear_durable_breakpoint(&instruction);
                 }
                 Command::BreakpointSet { instruction } => {
-                    self.process.set_durable_breakpoint(instruction);
+                    self.game_engine
+                        .process
+                        .set_durable_breakpoint(instruction);
                 }
                 Command::Continue { and_stop_at } => {
-                    self.process.continue_(and_stop_at);
+                    self.game_engine.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(self.game_engine.arguments.clone());
+                    self.game_engine
+                        .process
+                        .reset(self.game_engine.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {
-                    if let Some(Effect::Core(CoreEffect::Breakpoint)) =
-                        self.process.state().first_unhandled_effect()
+                    if let Some(Effect::Core(CoreEffect::Breakpoint)) = self
+                        .game_engine
+                        .process
+                        .state()
+                        .first_unhandled_effect()
                     {
                         let and_stop_at =
-                            self.process.stack().next_instruction();
-                        self.process.continue_(Some(and_stop_at))
+                            self.game_engine.process.stack().next_instruction();
+                        self.game_engine.process.continue_(Some(and_stop_at))
                     } else {
                         // If we're not stopped at a breakpoint, we can't step.
                         // It would be better, if this resulted in an explicit
@@ -93,15 +103,16 @@ impl RuntimeState {
                     }
                 }
                 Command::Stop => {
-                    self.process.stop();
+                    self.game_engine.process.stop();
                 }
             }
         }
 
-        while self.process.state().can_step() {
-            self.process.step(bytecode);
+        while self.game_engine.process.state().can_step() {
+            self.game_engine.process.step(bytecode);
 
-            if let Some(effect) = self.process.state().first_unhandled_effect()
+            if let Some(effect) =
+                self.game_engine.process.state().first_unhandled_effect()
             {
                 match effect {
                     Effect::Core(CoreEffect::Breakpoint) => {
@@ -113,9 +124,11 @@ impl RuntimeState {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
                         let value: i32 = value.into();
-                        self.process.push([Value(value.to_le_bytes())]);
+                        self.game_engine
+                            .process
+                            .push([Value(value.to_le_bytes())]);
 
-                        self.process.handle_first_effect();
+                        self.game_engine.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::Store {
                         address,
@@ -124,14 +137,14 @@ impl RuntimeState {
                         let address: usize = (*address).into();
                         self.memory.inner[address] = *value;
 
-                        self.process.handle_first_effect();
+                        self.game_engine.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
                         let x = *x;
                         let y = *y;
                         let color = *color;
 
-                        self.process.handle_first_effect();
+                        self.game_engine.process.handle_first_effect();
 
                         display::set_tile(x.into(), y.into(), color, pixels);
                     }
@@ -139,15 +152,17 @@ impl RuntimeState {
                         // This effect means that the game is done rendering.
                         // Let's break out of this loop now, so we can do our
                         // part in that and return control to the host.
-                        self.process.handle_first_effect();
+                        self.game_engine.process.handle_first_effect();
                         break;
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
                         let input: i32 =
                             self.input.buffer.pop_front().unwrap_or(0).into();
 
-                        self.process.push([Value(input.to_le_bytes())]);
-                        self.process.handle_first_effect();
+                        self.game_engine
+                            .process
+                            .push([Value(input.to_le_bytes())]);
+                        self.game_engine.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::ReadRandom) => {
                         // We get a lot of random numbers from the host, and
@@ -162,8 +177,10 @@ impl RuntimeState {
                         // randomness from the host.
                         let random = self.random.pop_front().unwrap();
 
-                        self.process.push([Value(random.to_le_bytes())]);
-                        self.process.handle_first_effect();
+                        self.game_engine
+                            .process
+                            .push([Value(random.to_le_bytes())]);
+                        self.game_engine.process.handle_first_effect();
                     }
                     _ => {
                         // Nothing needs to be done. With an unhandled
@@ -174,7 +191,8 @@ impl RuntimeState {
             }
         }
 
-        self.updates.queue_updates(&self.process, &self.memory);
+        self.updates
+            .queue_updates(&self.game_engine.process, &self.memory);
     }
 }
 
