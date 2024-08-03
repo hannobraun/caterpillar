@@ -84,8 +84,6 @@ impl GameEngine {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
                         self.process.push([value]);
-
-                        self.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::Store {
                         address,
@@ -93,15 +91,11 @@ impl GameEngine {
                     }) => {
                         let address: usize = (*address).into();
                         self.memory.inner[address] = *value;
-
-                        self.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
                         let x = *x;
                         let y = *y;
                         let color = *color;
-
-                        self.process.handle_first_effect();
 
                         display::set_tile(x.into(), y.into(), color, pixels);
                     }
@@ -117,7 +111,6 @@ impl GameEngine {
                             self.input.pop_front().unwrap_or(0).into();
 
                         self.process.push([Value(input.to_le_bytes())]);
-                        self.process.handle_first_effect();
                     }
                     Effect::Host(GameEngineEffect::ReadRandom) => {
                         // We get a lot of random numbers from the host, and
@@ -133,9 +126,10 @@ impl GameEngine {
                         let random = self.random.pop_front().unwrap();
 
                         self.process.push([Value(random.to_le_bytes())]);
-                        self.process.handle_first_effect();
                     }
                 }
+
+                self.process.handle_first_effect();
             }
         }
     }
