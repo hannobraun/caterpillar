@@ -2,6 +2,7 @@ use std::{collections::VecDeque, panic};
 
 use capi_game_engine::{
     display,
+    game_engine::GameEngine,
     host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     input::Input,
     memory::Memory,
@@ -15,7 +16,7 @@ use capi_protocol::{
 use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
-    pub bytecode: Option<Bytecode>,
+    pub game_engine: GameEngine,
     pub arguments: Vec<Value>,
     pub process: Process<GameEngineHost>,
     pub memory: Memory,
@@ -38,7 +39,7 @@ impl RuntimeState {
         let updates = Updates::default();
 
         Self {
-            bytecode: None,
+            game_engine: GameEngine { bytecode: None },
             arguments,
             process,
             memory,
@@ -51,11 +52,11 @@ impl RuntimeState {
 
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
         self.process.reset(self.arguments.clone());
-        self.bytecode = Some(bytecode);
+        self.game_engine.bytecode = Some(bytecode);
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
-        let Some(bytecode) = &self.bytecode else {
+        let Some(bytecode) = &self.game_engine.bytecode else {
             return;
         };
 
