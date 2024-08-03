@@ -38,7 +38,7 @@ impl<H: Host> Process<H> {
         self.push(arguments);
     }
 
-    pub fn push(&mut self, values: impl IntoIterator<Item = Value>) {
+    pub fn push(&mut self, values: impl IntoIterator<Item = impl Into<Value>>) {
         for value in values {
             self.stack.push_operand(value);
         }
