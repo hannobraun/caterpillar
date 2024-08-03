@@ -108,9 +108,14 @@ impl GameEngine {
                         self.process.handle_first_effect();
                     }
                     _ => {
-                        // Nothing needs to be done. With an unhandled
-                        // effect, the program won't continue running, and
-                        // the debugger will see the error and display it.
+                        // We can't handle any other effects but our own, but we
+                        // don't need to:
+                        //
+                        // - With the unhandled effect, the process can no
+                        //   longer step, which means this loop is over.
+                        // - The caller can also see the unhandled effect and
+                        //   handle it accordingly (by sending it to the
+                        //   debugger, for example).
                     }
                 }
             }
