@@ -96,8 +96,15 @@ impl Stack {
         function: Function,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
-        let arguments =
-            function.arguments.into_iter().rev().collect::<Vec<_>>();
+        let arguments = function
+            .arguments
+            .into_iter()
+            .rev()
+            .map(|name| {
+                let value = self.pop_operand()?;
+                Ok((name, value))
+            })
+            .collect::<Result<Vec<_>, PushStackFrameError>>()?;
         let is_tail_call = {
             let next_addr = self.next_instruction();
             let next_instruction = instructions
@@ -115,9 +122,8 @@ impl Stack {
 
         // Move arguments into the new frame.
         if !self.frames.is_empty() {
-            for name in arguments.iter() {
-                let value = self.pop_operand()?;
-                new_frame.bindings.insert(name.clone(), value);
+            for (name, value) in arguments.iter() {
+                new_frame.bindings.insert(name.clone(), *value);
             }
         } else {
             assert_eq!(
