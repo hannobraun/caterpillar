@@ -2,21 +2,19 @@ use capi_compiler::{repr::fragments::Fragments, source_map::SourceMap};
 use capi_process::{Bytecode, Host, Process};
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::{host::GameEngineHost, memory::Memory};
+use crate::memory::Memory;
 
-#[derive(Default)]
-pub struct Updates {
+pub struct Updates<H: Host> {
     latest_memory: Option<Memory>,
-    process_at_client: Option<Process<GameEngineHost>>,
-    queue: Vec<Update<GameEngineHost>>,
+    process_at_client: Option<Process<H>>,
+    queue: Vec<Update<H>>,
 }
 
-impl Updates {
-    pub fn queue_updates(
-        &mut self,
-        process: &Process<GameEngineHost>,
-        memory: &Memory,
-    ) {
+impl<H: Host> Updates<H> {
+    pub fn queue_updates(&mut self, process: &Process<H>, memory: &Memory)
+    where
+        H: Clone + PartialEq,
+    {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
@@ -31,11 +29,14 @@ impl Updates {
 
     pub fn take_queued_updates(
         &mut self,
-    ) -> impl Iterator<Item = Update<GameEngineHost>> + '_ {
+    ) -> impl Iterator<Item = Update<H>> + '_ {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Process<GameEngineHost>) -> bool {
+    fn update_is_necessary(&self, process: &Process<H>) -> bool
+    where
+        H: PartialEq,
+    {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
@@ -51,6 +52,16 @@ impl Updates {
         }
 
         self.process_at_client.as_ref() != Some(process)
+    }
+}
+
+impl<H: Host> Default for Updates<H> {
+    fn default() -> Self {
+        Self {
+            latest_memory: Default::default(),
+            process_at_client: Default::default(),
+            queue: Default::default(),
+        }
     }
 }
 

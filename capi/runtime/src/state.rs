@@ -18,7 +18,7 @@ pub struct RuntimeState {
     pub input: Input,
     pub random: VecDeque<i32>,
     pub commands: Vec<SerializedCommand>,
-    pub updates: Updates,
+    pub updates: Updates<GameEngineHost>,
 }
 
 impl RuntimeState {
