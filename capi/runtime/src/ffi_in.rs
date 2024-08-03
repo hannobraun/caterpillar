@@ -161,7 +161,7 @@ pub fn on_key(key_code: u8) {
     let mut state = STATE.lock().unwrap();
     let state = state.get_or_insert_with(Default::default);
 
-    state.input.buffer.push_back(key_code);
+    state.game_engine.input.buffer.push_back(key_code);
 }
 
 #[no_mangle]

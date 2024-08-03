@@ -1,12 +1,13 @@
 use capi_process::{Bytecode, Process, Value};
 
-use crate::{host::GameEngineHost, memory::Memory};
+use crate::{host::GameEngineHost, input::Input, memory::Memory};
 
 pub struct GameEngine {
     pub arguments: Vec<Value>,
     pub bytecode: Option<Bytecode>,
     pub process: Process<GameEngineHost>,
     pub memory: Memory,
+    pub input: Input,
 }
 
 impl GameEngine {

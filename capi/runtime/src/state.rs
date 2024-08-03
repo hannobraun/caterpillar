@@ -17,7 +17,6 @@ use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub game_engine: GameEngine,
-    pub input: Input,
     pub random: VecDeque<i32>,
     pub commands: Vec<SerializedCommand>,
     pub updates: Updates<GameEngineHost>,
@@ -41,8 +40,8 @@ impl RuntimeState {
                 bytecode: None,
                 process,
                 memory,
+                input,
             },
-            input,
             commands: Vec::new(),
             random: VecDeque::new(),
             updates,
@@ -143,8 +142,13 @@ impl RuntimeState {
                         break;
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
-                        let input: i32 =
-                            self.input.buffer.pop_front().unwrap_or(0).into();
+                        let input: i32 = self
+                            .game_engine
+                            .input
+                            .buffer
+                            .pop_front()
+                            .unwrap_or(0)
+                            .into();
 
                         self.game_engine
                             .process
