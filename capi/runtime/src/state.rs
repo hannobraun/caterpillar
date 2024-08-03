@@ -1,9 +1,9 @@
 use std::{collections::VecDeque, panic};
 
+use capi_game_engine::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS};
 use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
-    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     memory::Memory,
     updates::Updates,
 };
