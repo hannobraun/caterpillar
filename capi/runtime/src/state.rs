@@ -17,7 +17,6 @@ use crate::ffi_out::on_panic;
 
 pub struct RuntimeState {
     pub game_engine: GameEngine,
-    pub arguments: Vec<Value>,
     pub process: Process<GameEngineHost>,
     pub memory: Memory,
     pub input: Input,
@@ -39,8 +38,10 @@ impl RuntimeState {
         let updates = Updates::default();
 
         Self {
-            game_engine: GameEngine { bytecode: None },
-            arguments,
+            game_engine: GameEngine {
+                arguments,
+                bytecode: None,
+            },
             process,
             memory,
             input,
@@ -51,7 +52,7 @@ impl RuntimeState {
     }
 
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.process.reset(self.arguments.clone());
+        self.process.reset(self.game_engine.arguments.clone());
         self.game_engine.bytecode = Some(bytecode);
     }
 
@@ -74,7 +75,7 @@ impl RuntimeState {
                     self.process.continue_(and_stop_at);
                 }
                 Command::Reset => {
-                    self.process.reset(self.arguments.clone());
+                    self.process.reset(self.game_engine.arguments.clone());
                     self.memory = Memory::default();
                 }
                 Command::Step => {
