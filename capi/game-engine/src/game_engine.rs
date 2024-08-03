@@ -51,6 +51,16 @@ impl GameEngine {
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {
                 match effect {
+                    Effect::Core(_) => {
+                        // We can't handle any other effects but our own, but we
+                        // don't need to:
+                        //
+                        // - With the unhandled effect, the process can no
+                        //   longer step, which means this loop is over.
+                        // - The caller can also see the unhandled effect and
+                        //   handle it accordingly (by sending it to the
+                        //   debugger, for example).
+                    }
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
@@ -106,16 +116,6 @@ impl GameEngine {
 
                         self.process.push([Value(random.to_le_bytes())]);
                         self.process.handle_first_effect();
-                    }
-                    Effect::Core(_) => {
-                        // We can't handle any other effects but our own, but we
-                        // don't need to:
-                        //
-                        // - With the unhandled effect, the process can no
-                        //   longer step, which means this loop is over.
-                        // - The caller can also see the unhandled effect and
-                        //   handle it accordingly (by sending it to the
-                        //   debugger, for example).
                     }
                 }
             }
