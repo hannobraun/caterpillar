@@ -4,6 +4,7 @@ members = [
     "capi/compiler",
     "capi/debugger",
     "capi/ffi",
+    "capi/game-engine",
     "capi/process",
     "capi/protocol",
     "capi/runtime",
