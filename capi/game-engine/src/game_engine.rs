@@ -14,7 +14,7 @@ pub struct GameEngine {
     pub process: Process<GameEngineHost>,
     arguments: [Value; 2],
     memory: Memory,
-    pub input: Input,
+    input: Input,
     pub random: VecDeque<i32>,
 }
 
