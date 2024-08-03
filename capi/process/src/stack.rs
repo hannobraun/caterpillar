@@ -195,7 +195,7 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        if self.legacy_stack.is_empty() {
+        if self.inner.is_empty() {
             return None;
         }
 
