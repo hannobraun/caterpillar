@@ -115,9 +115,9 @@ impl Stack {
 
         // Move arguments into the new frame.
         if !self.frames.is_empty() {
-            for argument in arguments.iter() {
+            for name in arguments.iter() {
                 let value = self.pop_operand()?;
-                new_frame.bindings.insert(argument.clone(), value);
+                new_frame.bindings.insert(name.clone(), value);
             }
         } else {
             assert_eq!(
