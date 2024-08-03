@@ -127,16 +127,7 @@ impl GameEngine {
                         self.process.push([input]);
                     }
                     Effect::Host(GameEngineEffect::ReadRandom) => {
-                        // We get a lot of random numbers from the host, and
-                        // they are topped off every frame. It should be a
-                        // while, before Caterpillar programs become complex
-                        // enough to run into this limit.
-                        //
-                        // If that happens, and we hit this `unwrap`, we can of
-                        // course just increase the limit. But long-term, it
-                        // probably makes more sense to implement a PRNG, either
-                        // in Rust or Caterpillar, and only seed that with
-                        // randomness from the host.
+                        // See `GameEngine::push_random` for context.
                         let random = self.random.pop_front().unwrap();
 
                         self.process.push([Value(random.to_le_bytes())]);
