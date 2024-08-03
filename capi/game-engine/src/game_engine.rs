@@ -14,4 +14,9 @@ impl GameEngine {
         self.process.reset(self.arguments.clone());
         self.bytecode = Some(bytecode);
     }
+
+    pub fn reset(&mut self) {
+        self.process.reset(self.arguments.clone());
+        self.memory = Memory::default();
+    }
 }

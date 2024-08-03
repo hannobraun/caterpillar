@@ -67,12 +67,7 @@ impl RuntimeState {
                 Command::Continue { and_stop_at } => {
                     self.game_engine.process.continue_(and_stop_at);
                 }
-                Command::Reset => {
-                    self.game_engine
-                        .process
-                        .reset(self.game_engine.arguments.clone());
-                    self.game_engine.memory = Memory::default();
-                }
+                Command::Reset => self.game_engine.reset(),
                 Command::Step => {
                     if let Some(Effect::Core(CoreEffect::Breakpoint)) = self
                         .game_engine
