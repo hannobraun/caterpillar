@@ -391,6 +391,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "capi-ffi",
+ "capi-game-engine",
  "capi-process",
  "capi-protocol",
  "ron",
