@@ -52,14 +52,14 @@ impl GameEngine {
             {
                 match effect {
                     Effect::Core(_) => {
-                        // We can't handle any other effects but our own, but we
-                        // don't need to:
+                        // We can't handle any core effects, and we don't need
+                        // to:
                         //
                         // - With the unhandled effect, the process can no
-                        //   longer step, which means this loop is over.
-                        // - The caller can also see the unhandled effect and
-                        //   handle it accordingly (by sending it to the
-                        //   debugger, for example).
+                        //   longer step, which means this loop is done.
+                        // - The caller can see the unhandled effect and handle
+                        //   it accordingly (by sending it to the debugger, for
+                        //   example).
                     }
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
