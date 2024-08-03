@@ -7,7 +7,7 @@ use capi_game_engine::{
     input::Input,
     memory::Memory,
 };
-use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
+use capi_process::{CoreEffect, Effect, Process, Value};
 use capi_protocol::{
     command::{Command, SerializedCommand},
     updates::Updates,
@@ -48,13 +48,6 @@ impl RuntimeState {
             random: VecDeque::new(),
             updates,
         }
-    }
-
-    pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.game_engine
-            .process
-            .reset(self.game_engine.arguments.clone());
-        self.game_engine.bytecode = Some(bytecode);
     }
 
     pub fn update(&mut self, pixels: &mut [u8]) {
