@@ -82,9 +82,13 @@ impl GameEngine {
                     }
 
                     Effect::Host(GameEngineEffect::SubmitFrame) => {
-                        // This effect means that the game is done rendering.
-                        // Let's break out of this loop now, so we can do our
-                        // part in that and return control to the host.
+                        // The game is done rendering. This is our sign to break
+                        // out of this loop.
+                        //
+                        // Other than that, there's nothing to do. We already
+                        // updates the `pixels` argument, according to what the
+                        // game was drawing. Lower-level code will take care of
+                        // it from here.
                         self.process.handle_first_effect();
                         break;
                     }
