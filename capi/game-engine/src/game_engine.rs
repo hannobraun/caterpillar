@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{Bytecode, CoreEffect, Effect, Process, Value};
+use capi_process::{Bytecode, Effect, Process, Value};
 
 use crate::{
     display,
@@ -51,11 +51,6 @@ impl GameEngine {
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {
                 match effect {
-                    Effect::Core(CoreEffect::Breakpoint) => {
-                        // Nothing to do here. With an unhandled effect, the
-                        // program won't continue running. The debugger is in
-                        // control of what happens next.
-                    }
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
