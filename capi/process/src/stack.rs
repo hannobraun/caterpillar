@@ -242,6 +242,9 @@ pub enum PushStackFrameError {
 
     #[error("Reached recursion limit")]
     Overflow,
+
+    #[error("Evaluator is already finished")]
+    Finished,
 }
 
 #[derive(Debug)]
