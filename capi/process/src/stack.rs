@@ -128,7 +128,7 @@ impl Stack {
             return Err(PushStackFrameError::Overflow);
         }
 
-        if !self.legacy_stack.is_empty() {
+        if !self.inner.is_empty() {
             self.inner
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
