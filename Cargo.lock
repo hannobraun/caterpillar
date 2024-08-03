@@ -361,6 +361,7 @@ name = "capi-game-engine"
 version = "0.1.0"
 dependencies = [
  "capi-process",
+ "serde",
 ]
 
 [[package]]
