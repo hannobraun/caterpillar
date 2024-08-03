@@ -18,7 +18,6 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
-    legacy_stack: Vec<()>,
     next_instruction: InstructionAddress,
 
     /// # Special heap for closures
@@ -38,7 +37,6 @@ impl Stack {
     pub fn new() -> Self {
         Self {
             inner: vec![StackElement::StartMarker],
-            legacy_stack: vec![()],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
@@ -140,7 +138,6 @@ impl Stack {
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
-        self.legacy_stack.push(());
 
         Ok(())
     }
@@ -166,8 +163,6 @@ impl Stack {
                 _ => {}
             }
         }
-
-        self.legacy_stack.pop();
     }
 
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
