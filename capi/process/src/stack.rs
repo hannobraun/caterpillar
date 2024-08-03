@@ -179,7 +179,7 @@ impl Stack {
     pub fn define_binding(&mut self, name: String, value: impl Into<Value>) {
         self.bindings_mut()
             .expect("Expected stack frame to exist")
-            .insert(name.clone(), value.into());
+            .insert(name, value.into());
     }
 
     pub fn push_operand(&mut self, operand: impl Into<Value>) {
