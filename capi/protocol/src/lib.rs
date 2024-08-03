@@ -1,5 +1,6 @@
+pub use capi_game_engine as host;
+
 pub mod command;
-pub mod host;
 pub mod memory;
 pub mod updates;
 
