@@ -150,13 +150,16 @@ impl Stack {
         while index > 0 {
             index -= 1;
 
-            if let StackElement::Bindings(_) = self.inner[index] {
-                self.inner.remove(index);
-            }
-            if let StackElement::ReturnAddress(address) = self.inner[index] {
-                self.next_instruction = address;
-                self.inner.remove(index);
-                break;
+            match self.inner[index] {
+                StackElement::Bindings(_) => {
+                    self.inner.remove(index);
+                }
+                StackElement::ReturnAddress(address) => {
+                    self.next_instruction = address;
+                    self.inner.remove(index);
+                    break;
+                }
+                _ => {}
             }
         }
 
