@@ -109,7 +109,7 @@ impl Stack {
             })
             .collect::<Result<Vec<_>, PushStackFrameError>>()?;
         let is_tail_call = {
-            let next_addr = self.next_instruction();
+            let next_addr = self.next_instruction;
             let next_instruction = instructions
                 .get(&next_addr)
                 .expect("Expected instruction referenced on stack to exist");
