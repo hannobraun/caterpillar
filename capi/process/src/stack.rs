@@ -117,8 +117,6 @@ impl Stack {
             *next_instruction == Instruction::Return
         };
 
-        let new_frame = StackFrame::new();
-
         // If the current function is finished, pop its stack frame before
         // pushing the next one. This is tail call optimization.
         if is_tail_call {
@@ -151,7 +149,7 @@ impl Stack {
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
-        self.frames.push(new_frame);
+        self.frames.push(StackFrame::new());
 
         Ok(())
     }
