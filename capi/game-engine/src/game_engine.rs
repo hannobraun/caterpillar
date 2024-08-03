@@ -43,6 +43,20 @@ impl GameEngine {
         self.input.push_back(value);
     }
 
+    /// # Top off the game engine's random numbers
+    ///
+    /// Whatever code embeds `GameEngine` is expected to call this in a loop
+    /// every frame, until this function returns `false`.
+    ///
+    /// ## Implementation Note
+    ///
+    /// It would make a lot more sense to expect a random seed in the
+    /// constructor, and have a PRNG to get more randomness as needed.
+    ///
+    /// But this works too, and it's fine for now. Ideally, I would like to
+    /// write the PRNG in Caterpillar, and it's a bit too early for that. I'm
+    /// not in hurry to replace this with a Rust-based solution right now.
+    /// We get a lot of random numbers from the host, and
     pub fn push_random(&mut self, value: i32) -> bool {
         if self.random.len() >= 1024 {
             return false;
