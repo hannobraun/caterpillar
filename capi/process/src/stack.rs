@@ -50,7 +50,10 @@ impl Stack {
     }
 
     pub fn bindings(&self) -> Option<&Bindings> {
-        self.frames.last().map(|frame| &frame.bindings)
+        self.inner.iter().rev().find_map(|element| match element {
+            StackElement::Bindings(bindings) => Some(bindings),
+            _ => None,
+        })
     }
 
     pub fn bindings_mut(&mut self) -> Option<&mut Bindings> {
