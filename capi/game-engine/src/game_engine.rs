@@ -30,6 +30,10 @@ impl GameEngine {
         }
     }
 
+    pub fn memory(&self) -> &Memory {
+        &self.memory
+    }
+
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
         self.bytecode = Some(bytecode);
         self.reset();

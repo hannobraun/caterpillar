@@ -72,8 +72,10 @@ impl RuntimeState {
 
         self.game_engine.run_until_end_of_frame(pixels);
 
-        self.updates
-            .queue_updates(&self.game_engine.process, &self.game_engine.memory);
+        self.updates.queue_updates(
+            &self.game_engine.process,
+            self.game_engine.memory(),
+        );
     }
 }
 
