@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 serde = "*"
+serde-big-array = "*"
 
 [dependencies.capi-process]
 path = "../process"
