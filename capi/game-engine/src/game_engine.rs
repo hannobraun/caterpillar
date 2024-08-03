@@ -106,8 +106,7 @@ impl GameEngine {
                         self.memory.inner[address] = *value;
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
-                        let input: i32 =
-                            self.input.pop_front().unwrap_or(0).into();
+                        let input = self.input.pop_front().unwrap_or(0);
 
                         self.process.push([input]);
                     }
