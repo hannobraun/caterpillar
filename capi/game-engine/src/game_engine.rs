@@ -16,7 +16,7 @@ impl GameEngine {
     }
 
     pub fn reset(&mut self) {
-        self.process.reset(self.arguments.clone());
         self.memory = Memory::default();
+        self.process.reset(self.arguments.clone());
     }
 }
