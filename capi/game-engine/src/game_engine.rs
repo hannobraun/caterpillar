@@ -78,6 +78,7 @@ impl GameEngine {
                         // - The caller can see the unhandled effect and handle
                         //   it accordingly (by sending it to the debugger, for
                         //   example).
+                        continue;
                     }
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
