@@ -80,6 +80,7 @@ impl GameEngine {
                         //   example).
                         continue;
                     }
+
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address: usize = (*address).into();
                         let value = self.memory.inner[address];
