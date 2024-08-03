@@ -5,7 +5,6 @@ use capi_process::{Bytecode, Effect, Process, Value};
 use crate::{
     display,
     host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
-    input::Input,
     memory::Memory,
 };
 
@@ -15,7 +14,7 @@ pub struct GameEngine {
     bytecode: Option<Bytecode>,
     arguments: [Value; 2],
     memory: Memory,
-    input: Input,
+    input: VecDeque<u8>,
     random: VecDeque<i32>,
 }
 
@@ -26,7 +25,7 @@ impl GameEngine {
             bytecode: None,
             arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory: Memory::default(),
-            input: Input::default(),
+            input: VecDeque::new(),
             random: VecDeque::new(),
         }
     }
@@ -41,7 +40,7 @@ impl GameEngine {
     }
 
     pub fn on_input(&mut self, value: u8) {
-        self.input.buffer.push_back(value);
+        self.input.push_back(value);
     }
 
     pub fn push_random(&mut self, value: i32) -> bool {
@@ -115,7 +114,7 @@ impl GameEngine {
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
                         let input: i32 =
-                            self.input.buffer.pop_front().unwrap_or(0).into();
+                            self.input.pop_front().unwrap_or(0).into();
 
                         self.process.push([Value(input.to_le_bytes())]);
                         self.process.handle_first_effect();
