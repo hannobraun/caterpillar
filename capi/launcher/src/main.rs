@@ -16,6 +16,8 @@ async fn main() -> anyhow::Result<()> {
     let mut now = Instant::now();
 
     let mut total_frame_times_ms = 0;
+    let mut min_frame_time = None;
+    let mut max_frame_time = None;
     let mut num_frame_times = 0;
 
     while !game_engine.process.state().has_finished() {
@@ -34,12 +36,31 @@ async fn main() -> anyhow::Result<()> {
         total_frame_times_ms += frame_time;
         num_frame_times += 1;
 
+        if let Some(min) = min_frame_time {
+            if frame_time < min {
+                min_frame_time = Some(frame_time);
+            }
+        } else {
+            min_frame_time = Some(frame_time);
+        }
+        if let Some(max) = max_frame_time {
+            if frame_time > max {
+                max_frame_time = Some(frame_time);
+            }
+        } else {
+            max_frame_time = Some(frame_time);
+        }
+
         if total_frame_times_ms >= 1000 {
             let average = total_frame_times_ms / num_frame_times;
+            let max = max_frame_time.unwrap();
+            let min = min_frame_time.unwrap();
 
-            println!("Average: {average} ms",);
+            println!("Average: {average} ms; max: {max}; min: {min}",);
 
             total_frame_times_ms = 0;
+            max_frame_time = None;
+            min_frame_time = None;
             num_frame_times = 0;
         }
 
