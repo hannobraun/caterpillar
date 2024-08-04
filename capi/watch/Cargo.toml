@@ -23,4 +23,4 @@ default-features = false
 
 [dependencies.tokio]
 version = "*"
-features = ["sync"]
+features = ["process", "rt", "sync", "time"]
