@@ -25,6 +25,7 @@ pub async fn build_and_watch(
         while changes.wait_for_change().await {
             dbg!("Change detected.");
             let source_code = build_once().await.unwrap();
+            dbg!("Game built.");
             game_tx
                 .send(Versioned {
                     version: build_number,
