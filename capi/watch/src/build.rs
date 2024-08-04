@@ -44,7 +44,7 @@ pub async fn build_and_watch_game(
     Ok(game_rx)
 }
 
-async fn build_game_once(game: &str) -> anyhow::Result<Code> {
+pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     let script = Command::new("cargo")
         .arg("run")
         .args(["--package", game])
