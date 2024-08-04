@@ -50,11 +50,10 @@ async fn build_once() -> anyhow::Result<Code> {
     let script = ron::from_str(script).unwrap();
 
     let (fragments, bytecode, source_map) = compile::<GameEngineHost>(script);
-    let code = Code {
+
+    Ok(Code {
         fragments,
         bytecode,
         source_map,
-    };
-
-    Ok(code)
+    })
 }
