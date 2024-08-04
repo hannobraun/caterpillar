@@ -13,7 +13,7 @@ async fn main() -> anyhow::Result<()> {
 
     while !game_engine.process.state().has_finished() {
         while game_engine.push_random(random()) {}
-        game_engine.run_until_end_of_frame(&mut pixels)
+        game_engine.run_until_end_of_frame(&mut pixels);
     }
 
     Ok(())
