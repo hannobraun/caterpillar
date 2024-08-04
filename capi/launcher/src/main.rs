@@ -56,7 +56,7 @@ async fn main() -> anyhow::Result<()> {
             let max = max_frame_time.unwrap();
             let min = min_frame_time.unwrap();
 
-            println!("Average: {average} ms; max: {max}; min: {min}",);
+            println!("avg: {average} ms; max: {max}; min: {min}",);
 
             total_frame_times_ms = 0;
             max_frame_time = None;
