@@ -367,6 +367,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "capi-launcher"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "capi-watch",
+]
+
+[[package]]
 name = "capi-process"
 version = "0.1.0"
 dependencies = [
@@ -383,14 +391,6 @@ dependencies = [
  "capi-process",
  "ron",
  "serde",
-]
-
-[[package]]
-name = "capi-runner"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "capi-watch",
 ]
 
 [[package]]
