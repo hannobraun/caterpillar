@@ -1,3 +1,5 @@
+pub mod build;
+
 mod debounce;
 mod watcher;
 

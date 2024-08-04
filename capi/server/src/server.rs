@@ -8,9 +8,8 @@ use axum::{
     Router,
 };
 use capi_protocol::Versioned;
+use capi_watch::build::CodeRx;
 use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
-
-use crate::build::CodeRx;
 
 pub async fn start(
     address: String,

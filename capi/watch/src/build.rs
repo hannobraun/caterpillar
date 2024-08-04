@@ -3,8 +3,9 @@ use std::str;
 use capi_compiler::compile;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::{updates::Code, Versioned};
-use capi_watch::DebouncedChanges;
 use tokio::{process::Command, sync::watch, task};
+
+use crate::DebouncedChanges;
 
 pub type CodeRx = watch::Receiver<Versioned<Code>>;
 
