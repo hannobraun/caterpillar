@@ -3,5 +3,8 @@ name = "capi-runner"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies]
+anyhow = "*"
+
 [dependencies.capi-watch]
 path = "../watch"
