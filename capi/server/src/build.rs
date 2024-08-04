@@ -13,7 +13,7 @@ pub async fn build_and_watch(
 ) -> anyhow::Result<CodeRx> {
     let mut build_number = 0;
 
-    let code = build_once().await?;
+    let code = build_once("snake").await?;
 
     let (game_tx, game_rx) = watch::channel(Versioned {
         version: build_number,
@@ -24,7 +24,7 @@ pub async fn build_and_watch(
     task::spawn(async move {
         while changes.wait_for_change().await {
             dbg!("Change detected.");
-            let source_code = build_once().await.unwrap();
+            let source_code = build_once("snake").await.unwrap();
             dbg!("Game built.");
             game_tx
                 .send(Versioned {
@@ -40,10 +40,10 @@ pub async fn build_and_watch(
     Ok(game_rx)
 }
 
-async fn build_once() -> anyhow::Result<Code> {
+async fn build_once(game: &str) -> anyhow::Result<Code> {
     let script = Command::new("cargo")
         .arg("run")
-        .args(["--package", "snake"])
+        .args(["--package", game])
         .output()
         .await?
         .stdout;
