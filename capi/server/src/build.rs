@@ -13,11 +13,11 @@ pub async fn build_and_watch(
 ) -> anyhow::Result<CodeRx> {
     let mut build_number = 0;
 
-    let source_code = build_once().await?;
+    let code = build_once().await?;
 
     let (game_tx, game_rx) = watch::channel(Versioned {
         version: build_number,
-        inner: source_code,
+        inner: code,
     });
     build_number += 1;
 
