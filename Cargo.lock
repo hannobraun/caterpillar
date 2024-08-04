@@ -424,6 +424,7 @@ dependencies = [
  "capi-game-engine",
  "capi-protocol",
  "notify",
+ "ron",
  "tokio",
  "tracing",
 ]
