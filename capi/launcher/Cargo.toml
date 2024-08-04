@@ -6,6 +6,9 @@ edition = "2021"
 [dependencies]
 anyhow = "*"
 
+[dependencies.capi-game-engine]
+path = "../game-engine"
+
 [dependencies.capi-watch]
 path = "../watch"
 
