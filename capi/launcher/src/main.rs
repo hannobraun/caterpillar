@@ -29,9 +29,9 @@ async fn main() -> anyhow::Result<()> {
             break;
         }
 
-        let frame_time = now.elapsed();
+        let frame_time = now.elapsed().as_millis();
 
-        total_frame_times_ms += frame_time.as_millis();
+        total_frame_times_ms += frame_time;
         num_frame_times += 1;
 
         if total_frame_times_ms >= 1000 {
