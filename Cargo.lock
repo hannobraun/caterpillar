@@ -420,6 +420,9 @@ name = "capi-watch"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "capi-compiler",
+ "capi-game-engine",
+ "capi-protocol",
  "notify",
  "tokio",
  "tracing",
