@@ -8,3 +8,7 @@ anyhow = "*"
 
 [dependencies.capi-watch]
 path = "../watch"
+
+[dependencies.tokio]
+version = "*"
+features = ["full"]
