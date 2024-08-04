@@ -388,6 +388,9 @@ dependencies = [
 [[package]]
 name = "capi-runner"
 version = "0.1.0"
+dependencies = [
+ "capi-watch",
+]
 
 [[package]]
 name = "capi-runtime"
