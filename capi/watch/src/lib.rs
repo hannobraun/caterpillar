@@ -1,4 +1,4 @@
-pub mod build;
+mod build;
 
 mod debounce;
 mod watcher;
