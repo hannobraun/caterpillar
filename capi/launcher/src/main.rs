@@ -52,11 +52,11 @@ async fn main() -> anyhow::Result<()> {
         }
 
         if total_frame_times_ms >= 1000 {
-            let average = total_frame_times_ms / num_frame_times;
+            let avg = total_frame_times_ms / num_frame_times;
             let max = max_frame_time.unwrap();
             let min = min_frame_time.unwrap();
 
-            println!("avg: {average} ms; max: {max} ms; min: {min} ms",);
+            println!("avg: {avg} ms; max: {max} ms; min: {min} ms",);
 
             total_frame_times_ms = 0;
             max_frame_time = None;
