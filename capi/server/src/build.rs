@@ -15,7 +15,7 @@ pub async fn build_and_watch(
 
     let source_code = build_once().await?;
 
-    let (game_tx, game_rx) = tokio::sync::watch::channel(Versioned {
+    let (game_tx, game_rx) = watch::channel(Versioned {
         version: build_number,
         inner: source_code,
     });
