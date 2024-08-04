@@ -22,6 +22,13 @@ async fn main() -> anyhow::Result<()> {
         while game_engine.push_random(random()) {}
         game_engine.run_until_end_of_frame(&mut pixels);
 
+        if let Some(effect) =
+            game_engine.process.state().first_unhandled_effect()
+        {
+            println!("Unhandled effect: {effect:#?}");
+            break;
+        }
+
         let frame_time = now.elapsed();
 
         total_frame_times_ms += frame_time.as_millis();
