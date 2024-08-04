@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "*"
+rand = "*"
 
 [dependencies.capi-game-engine]
 path = "../game-engine"

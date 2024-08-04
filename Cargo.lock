@@ -373,6 +373,7 @@ dependencies = [
  "anyhow",
  "capi-game-engine",
  "capi-watch",
+ "rand",
  "tokio",
 ]
 
