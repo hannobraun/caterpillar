@@ -9,7 +9,7 @@ use crate::DebouncedChanges;
 
 pub type CodeRx = watch::Receiver<Versioned<Code>>;
 
-pub async fn build_and_watch(
+pub async fn build_and_watch_game(
     game: impl Into<String>,
     mut changes: DebouncedChanges,
 ) -> anyhow::Result<CodeRx> {
