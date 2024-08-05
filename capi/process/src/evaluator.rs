@@ -8,6 +8,7 @@ use crate::{
 )]
 pub struct Evaluator {
     pub stack: Stack,
+    pub next_closure: u32,
 }
 
 impl Evaluator {
@@ -113,8 +114,8 @@ impl Evaluator {
                     .collect();
 
                 let index = {
-                    let next_closure = self.stack.next_closure;
-                    self.stack.next_closure += 1;
+                    let next_closure = self.next_closure;
+                    self.next_closure += 1;
                     next_closure
                 };
                 self.stack.closures.insert(index, (*address, environment));
