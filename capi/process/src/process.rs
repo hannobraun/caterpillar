@@ -10,6 +10,7 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process<H: Host> {
     state: ProcessState<H>,
+    evaluator: Evaluator,
     stack: Stack,
     breakpoints: Breakpoints,
 }
@@ -79,7 +80,7 @@ impl<H: Host> Process<H> {
 
         let next_instruction = self.stack.next_instruction();
 
-        match (Evaluator {}).step::<H>(bytecode, &mut self.stack) {
+        match self.evaluator.step::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
@@ -104,6 +105,7 @@ impl<H: Host> Default for Process<H> {
     fn default() -> Self {
         Self {
             state: Default::default(),
+            evaluator: Evaluator {},
             stack: Default::default(),
             breakpoints: Default::default(),
         }
