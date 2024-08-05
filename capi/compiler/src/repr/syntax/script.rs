@@ -18,7 +18,9 @@ impl Script {
     ) -> &mut Self {
         let body = {
             let mut expressions = Vec::new();
-            body(&mut ExpressionBuilder::new(&mut expressions));
+            body(&mut ExpressionBuilder {
+                expressions: &mut expressions,
+            });
             expressions
         };
 
@@ -38,16 +40,14 @@ pub struct ExpressionBuilder<'r> {
 }
 
 impl<'r> ExpressionBuilder<'r> {
-    pub fn new(expressions: &'r mut Vec<Expression>) -> Self {
-        Self { expressions }
-    }
-
     pub fn block(
         &mut self,
         f: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
         let mut body = Vec::new();
-        f(&mut ExpressionBuilder::new(&mut body));
+        f(&mut ExpressionBuilder {
+            expressions: &mut body,
+        });
 
         self.push_expression(Expression::Block {
             body,
