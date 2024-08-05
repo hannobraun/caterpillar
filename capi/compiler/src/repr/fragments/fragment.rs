@@ -68,8 +68,8 @@ impl FragmentPayload {
             }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
-                for arg in arguments {
-                    hasher.update(arg.as_bytes());
+                for argument in arguments {
+                    hasher.update(argument.as_bytes());
                 }
                 start.hash(hasher);
                 next.hash(hasher);
