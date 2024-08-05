@@ -73,6 +73,7 @@ impl FragmentPayload {
                 for argument in arguments {
                     match argument {
                         Pattern::Identifier { name } => {
+                            hasher.update(b"identifier pattern");
                             hasher.update(name.as_bytes());
                         }
                     }
