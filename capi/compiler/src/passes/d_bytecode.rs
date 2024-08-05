@@ -70,9 +70,10 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     {
         let Some(function) = compiler.functions_by_name.get(&name) else {
             unreachable!(
-                "Expecting function `{name}` to exist. If it didn't, the \
-                previous compilation step would not have generated the \
-                fragment that caused us to assume that it does."
+                "Expecting function `{}` to exist. If it didn't, the previous \
+                compilation step would not have generated the fragment that \
+                caused us to assume that it does.",
+                name,
             );
         };
 
