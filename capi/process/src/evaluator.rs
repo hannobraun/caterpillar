@@ -6,7 +6,7 @@ use crate::{
 pub struct Evaluator {}
 
 impl Evaluator {
-    pub fn evaluate<H: Host>(
+    pub fn step<H: Host>(
         bytecode: &Bytecode,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, Effect<H::Effect>> {

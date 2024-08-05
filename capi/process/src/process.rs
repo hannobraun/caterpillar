@@ -79,7 +79,7 @@ impl<H: Host> Process<H> {
 
         let next_instruction = self.stack.next_instruction();
 
-        match Evaluator::evaluate::<H>(bytecode, &mut self.stack) {
+        match Evaluator::step::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
