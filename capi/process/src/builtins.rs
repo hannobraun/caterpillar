@@ -149,7 +149,7 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
         stack.push_operand(value);
     }
 
-    stack.push_frame(arguments, address, instructions)?;
+    stack.push_frame(arguments, instructions)?;
     stack.next_instruction = address;
 
     Ok(())

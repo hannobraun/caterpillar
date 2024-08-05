@@ -98,7 +98,6 @@ impl Stack {
     pub fn push_frame(
         &mut self,
         arguments: Vec<String>,
-        _: InstructionAddress,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
         let arguments = arguments
