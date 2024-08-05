@@ -27,18 +27,19 @@ impl Evaluator {
             Instruction::BindingEvaluate { name } => {
                 let Some(bindings) = stack.bindings() else {
                     unreachable!(
-                    "Can't access bindings, but we're currently executing. An \
-                    active stack frame, and therefore bindings, must exist."
-                );
+                        "Can't access bindings, but we're currently executing. \
+                        An active stack frame, and therefore bindings, must \
+                        exist."
+                    );
                 };
                 let Some(value) = bindings.get(name).copied() else {
                     unreachable!(
                         "Can't find binding `{name}`, but instruction that \
-                    evaluates bindings should only be generated for bindings \
-                    that exist.\n\
-                    \n\
-                    Current stack:\n\
-                    {stack:#?}"
+                        evaluates bindings should only be generated for \
+                        bindings that exist.\n\
+                        \n\
+                        Current stack:\n\
+                        {stack:#?}"
                     );
                 };
                 stack.push_operand(value);
@@ -58,9 +59,10 @@ impl Evaluator {
             Instruction::CallBuiltin { name } => {
                 match (H::function(name), builtin(name)) {
                     (Some(_), Some(_)) => {
-                        // As of this writing, users can not define custom hosts, so
-                        // the damage of this being a runtime panic is limited. But
-                        // ideally, it should be detected at compile-time.
+                        // As of this writing, users can not define custom
+                        // hosts, so the damage of this being a runtime panic is
+                        // limited. But ideally, it should be detected at
+                        // compile-time.
                         panic!(
                         "`{name}` refers to both a built-in function and a \
                         host function.\n"
@@ -87,7 +89,7 @@ impl Evaluator {
                 let Some(bindings) = stack.bindings() else {
                     unreachable!(
                         "We're currently executing. A stack frame, and thus \
-                    bindings, must exist."
+                        bindings, must exist."
                     );
                 };
 
@@ -97,9 +99,9 @@ impl Evaluator {
                     .map(|name| {
                         let Some(value) = bindings.get(&name).cloned() else {
                             unreachable!(
-                            "Binding that is specified in block environment \
-                            must exist."
-                        );
+                                "Binding that is specified in block \
+                                environment must exist."
+                            );
                         };
 
                         (name, value)
