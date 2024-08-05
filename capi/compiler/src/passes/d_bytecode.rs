@@ -74,6 +74,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 call.name,
             );
         };
+        dbg!(call.is_tail_call);
 
         compiler.instructions.replace(
             call.address,
@@ -228,7 +229,8 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::ResolvedUserFunction {
-                        name, ..
+                        name,
+                        is_tail_call,
                     } => {
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
@@ -236,6 +238,7 @@ impl Compiler<'_> {
                             CallToUserDefinedFunction {
                                 name: name.clone(),
                                 address,
+                                is_tail_call: *is_tail_call,
                             },
                         );
                         address
@@ -285,4 +288,5 @@ enum CompileUnit {
 struct CallToUserDefinedFunction {
     name: String,
     address: InstructionAddress,
+    is_tail_call: bool,
 }
