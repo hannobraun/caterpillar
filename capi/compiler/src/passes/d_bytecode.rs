@@ -75,12 +75,10 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             );
         };
 
-        let address_of_function = function.start;
-
         compiler.instructions.replace(
             call.address,
             Instruction::CallFunction {
-                address: address_of_function,
+                address: function.start,
             },
         );
     }
