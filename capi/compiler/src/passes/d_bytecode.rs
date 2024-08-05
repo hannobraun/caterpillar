@@ -192,9 +192,30 @@ impl Compiler<'_> {
                             fragment.id(),
                         ),
                     FragmentExpression::Block { start, environment } => {
+                        // We are currently compiling a function or block
+                        // (otherwise we wouldn't be encountering any
+                        // expression), and the instructions for that will be
+                        // executed linearly.
+                        //
+                        // Which means we can't just start compiling this block
+                        // right now. Its instructions would go into the middle
+                        // of those other instructions and mess everything up.
+                        //
+                        // What _should_ happen instead, is that the block is
+                        // turned into a closure, that can be passed around as a
+                        // value and called whenever so desired.
+                        //
+                        // So for now, let's just generate this instruction as
+                        // a placeholder, to be replaced with another
+                        // instruction that creates that closure, once we have
+                        // everything in place to make that happen.
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
 
+                        // And to make it happen later, we need to put what we
+                        // already have into a queue. Once whatever's currently
+                        // being compiled is out of the way, we can process
+                        // that.
                         self.queue.push_front(CompileUnit::Block {
                             start: *start,
                             environment: environment.clone(),
