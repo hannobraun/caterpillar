@@ -5,5 +5,5 @@ mod script;
 pub use self::{
     expression::{Expression, IdentifierTarget},
     function::Function,
-    script::{Script, SyntaxBuilder},
+    script::{ExpressionBuilder, Script},
 };

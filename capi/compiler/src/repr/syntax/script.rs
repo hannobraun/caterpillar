@@ -14,11 +14,11 @@ impl Script {
         &mut self,
         name: &str,
         arguments: impl IntoIterator<Item = &'r str>,
-        body: impl FnOnce(&mut SyntaxBuilder),
+        body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
         let body = {
             let mut expressions = Vec::new();
-            body(&mut SyntaxBuilder::new(&mut expressions));
+            body(&mut ExpressionBuilder::new(&mut expressions));
             expressions
         };
 
@@ -33,18 +33,21 @@ impl Script {
 }
 
 #[derive(Debug)]
-pub struct SyntaxBuilder<'r> {
+pub struct ExpressionBuilder<'r> {
     expressions: &'r mut Vec<Expression>,
 }
 
-impl<'r> SyntaxBuilder<'r> {
+impl<'r> ExpressionBuilder<'r> {
     pub fn new(expressions: &'r mut Vec<Expression>) -> Self {
         Self { expressions }
     }
 
-    pub fn block(&mut self, f: impl FnOnce(&mut SyntaxBuilder)) -> &mut Self {
+    pub fn block(
+        &mut self,
+        f: impl FnOnce(&mut ExpressionBuilder),
+    ) -> &mut Self {
         let mut body = Vec::new();
-        f(&mut SyntaxBuilder::new(&mut body));
+        f(&mut ExpressionBuilder::new(&mut body));
 
         self.push_expression(Expression::Block {
             body,
