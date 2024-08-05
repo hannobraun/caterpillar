@@ -43,11 +43,11 @@ pub struct ExpressionBuilder<'r> {
 impl ExpressionBuilder<'_> {
     pub fn block(
         &mut self,
-        f: impl FnOnce(&mut ExpressionBuilder),
+        body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
         let body = {
             let mut expressions = Vec::new();
-            f(&mut ExpressionBuilder {
+            body(&mut ExpressionBuilder {
                 expressions: &mut expressions,
             });
             expressions
