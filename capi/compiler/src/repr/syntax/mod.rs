@@ -4,6 +4,6 @@ mod script;
 
 pub use self::{
     expression::{Expression, IdentifierTarget},
-    function::Function,
+    function::{Function, Pattern},
     script::{ExpressionBuilder, Script},
 };
