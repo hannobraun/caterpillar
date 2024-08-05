@@ -82,7 +82,10 @@ impl Evaluator {
                     }
                 }
             }
-            Instruction::CallFunction { address, .. } => {
+            Instruction::CallFunction {
+                address,
+                is_tail_call,
+            } => {
                 let function =
                     bytecode.functions.get(address).cloned().unwrap();
 
@@ -95,18 +98,8 @@ impl Evaluator {
                         Ok((name, value))
                     })
                     .collect::<Result<Vec<_>, PushStackFrameError>>()?;
-                let is_tail_call = {
-                    let next_instruction = bytecode
-                        .instructions
-                        .get(&self.stack.next_instruction)
-                        .expect(
-                            "Expected instruction referenced on stack to exist",
-                        );
 
-                    *next_instruction == Instruction::Return
-                };
-
-                if is_tail_call {
+                if *is_tail_call {
                     self.stack.reuse_frame(arguments);
                 } else {
                     self.stack.push_frame(arguments)?;
