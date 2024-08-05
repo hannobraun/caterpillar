@@ -132,21 +132,13 @@ impl Compiler<'_> {
     fn compile_function(&mut self, function: fragments::Function) {
         let name = function.name;
         let start = self.compile_block(function.start);
-
-        self.functions_by_address.insert(
+        let function = Function {
+            arguments: function.arguments,
             start,
-            Function {
-                arguments: function.arguments.clone(),
-                start,
-            },
-        );
-        self.functions_by_name.insert(
-            name,
-            Function {
-                arguments: function.arguments,
-                start,
-            },
-        );
+        };
+
+        self.functions_by_address.insert(start, function.clone());
+        self.functions_by_name.insert(name, function);
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
