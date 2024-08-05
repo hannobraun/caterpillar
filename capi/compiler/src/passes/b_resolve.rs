@@ -99,9 +99,13 @@ mod tests {
         // Function arguments should be resolved within the function.
 
         let mut script = Script::default();
-        script.function("f", ["argument"], |s| {
-            s.ident("argument");
-        });
+        script.function(
+            "f",
+            |p| p.ident("argument"),
+            |s| {
+                s.ident("argument");
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -120,9 +124,13 @@ mod tests {
         // Bindings defined in the current scope should be resolved.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.v(0).bind(["value"]).ident("value");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.v(0).bind(["value"]).ident("value");
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -142,11 +150,15 @@ mod tests {
         // the current scope.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.v(0).bind(["value"]).block(|s| {
-                s.ident("value");
-            });
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.v(0).bind(["value"]).block(|s| {
+                    s.ident("value");
+                });
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -176,12 +188,16 @@ mod tests {
         // current scope, should not be resolved.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.block(|s| {
-                s.v(0).bind(["value"]);
-            })
-            .ident("value");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.block(|s| {
+                    s.v(0).bind(["value"]);
+                })
+                .ident("value");
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -201,9 +217,13 @@ mod tests {
         // be determined without doubt.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("brk");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("brk");
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -224,9 +244,13 @@ mod tests {
         // is referenced here.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("host_fn");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("host_fn");
+            },
+        );
 
         resolve_references(&mut script);
 
@@ -246,10 +270,14 @@ mod tests {
         // of a matching function in the code.
 
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("user_fn");
-        });
-        script.function("user_fn", [], |_| {});
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("user_fn");
+            },
+        );
+        script.function("user_fn", |p| p, |_| {});
 
         resolve_references(&mut script);
 

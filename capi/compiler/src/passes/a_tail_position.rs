@@ -39,9 +39,13 @@ mod tests {
     #[test]
     fn last_in_function() {
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("not_tail").ident("tail");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("not_tail").ident("tail");
+            },
+        );
 
         determine_tail_positions(&mut script.functions);
 
@@ -53,13 +57,17 @@ mod tests {
     #[test]
     fn last_in_block() {
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("a")
-                .block(|s| {
-                    s.ident("not_tail").ident("tail");
-                })
-                .ident("b");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("a")
+                    .block(|s| {
+                        s.ident("not_tail").ident("tail");
+                    })
+                    .ident("b");
+            },
+        );
 
         determine_tail_positions(&mut script.functions);
 
@@ -75,9 +83,13 @@ mod tests {
     #[test]
     fn ignore_comments() {
         let mut script = Script::default();
-        script.function("f", [], |s| {
-            s.ident("not_tail").ident("tail").c("This is a comment.");
-        });
+        script.function(
+            "f",
+            |p| p,
+            |s| {
+                s.ident("not_tail").ident("tail").c("This is a comment.");
+            },
+        );
 
         determine_tail_positions(&mut script.functions);
 

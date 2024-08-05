@@ -10,13 +10,19 @@ pub struct Script {
 }
 
 impl Script {
-    pub fn function<'r>(
+    pub fn function(
         &mut self,
         name: &str,
-        arguments: impl IntoIterator<Item = &'r str>,
+        arguments: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
-        let arguments = arguments.into_iter().map(String::from).collect();
+        let arguments = {
+            let mut builder = PatternBuilder {
+                patterns: Vec::new(),
+            };
+            arguments(&mut builder);
+            builder.patterns
+        };
         let body = {
             let mut builder = ExpressionBuilder {
                 expressions: Vec::new(),
@@ -31,6 +37,17 @@ impl Script {
             body,
         });
 
+        self
+    }
+}
+
+pub struct PatternBuilder {
+    patterns: Vec<String>,
+}
+
+impl PatternBuilder {
+    pub fn ident(&mut self, name: &str) -> &mut Self {
+        self.patterns.push(name.into());
         self
     }
 }

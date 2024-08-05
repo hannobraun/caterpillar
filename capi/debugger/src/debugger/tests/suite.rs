@@ -56,23 +56,35 @@ fn basic_call_stack() {
     let debugger = init()
         .provide_source_code(|script| {
             script
-                .function("main", [], |s| {
-                    s.ident("f")
-                        // Not triggered. Just here to prevent tail call
-                        // optimization from removing this function from the
-                        // call stack.
-                        .ident("brk");
-                })
-                .function("f", [], |s| {
-                    s.ident("g")
-                        // Not triggered. Just here to prevent tail call
-                        // optimization from removing this function from the
-                        // call stack.
-                        .ident("brk");
-                })
-                .function("g", [], |s| {
-                    s.ident("brk");
-                });
+                .function(
+                    "main",
+                    |p| p,
+                    |s| {
+                        s.ident("f")
+                            // Not triggered. Just here to prevent tail call
+                            // optimization from removing this function from the
+                            // call stack.
+                            .ident("brk");
+                    },
+                )
+                .function(
+                    "f",
+                    |p| p,
+                    |s| {
+                        s.ident("g")
+                            // Not triggered. Just here to prevent tail call
+                            // optimization from removing this function from the
+                            // call stack.
+                            .ident("brk");
+                    },
+                )
+                .function(
+                    "g",
+                    |p| p,
+                    |s| {
+                        s.ident("brk");
+                    },
+                );
         })
         .run_process()
         .to_debugger();
@@ -94,12 +106,16 @@ fn stopped_at_code_within_block() {
 
     let debugger = init()
         .provide_source_code(|script| {
-            script.function("main", [], |s| {
-                s.block(|s| {
-                    s.ident("brk");
-                })
-                .ident("eval");
-            });
+            script.function(
+                "main",
+                |p| p,
+                |s| {
+                    s.block(|s| {
+                        s.ident("brk");
+                    })
+                    .ident("eval");
+                },
+            );
         })
         .run_process()
         .to_debugger();
