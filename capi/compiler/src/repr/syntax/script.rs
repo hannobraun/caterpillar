@@ -16,6 +16,7 @@ impl Script {
         arguments: impl IntoIterator<Item = &'r str>,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
+        let arguments = arguments.into_iter().map(String::from).collect();
         let body = {
             let mut expressions = Vec::new();
             body(&mut ExpressionBuilder {
@@ -26,7 +27,7 @@ impl Script {
 
         self.functions.push(Function {
             name: name.to_string(),
-            arguments: arguments.into_iter().map(String::from).collect(),
+            arguments,
             body,
         });
 
