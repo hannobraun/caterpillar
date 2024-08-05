@@ -36,7 +36,10 @@ pub struct Stack {
 impl Stack {
     pub fn new() -> Self {
         Self {
-            inner: vec![StackElement::StartMarker],
+            inner: vec![
+                StackElement::StartMarker,
+                StackElement::Bindings(Bindings::new()),
+            ],
             next_instruction: InstructionAddress { index: 0 },
             closures: BTreeMap::new(),
             next_closure: 0,
