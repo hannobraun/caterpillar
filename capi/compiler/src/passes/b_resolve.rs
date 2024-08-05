@@ -18,7 +18,9 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
                 .arguments
                 .clone()
                 .into_iter()
-                .map(|Pattern::Identifier { name }| name)
+                .map(|pattern| match pattern {
+                    Pattern::Identifier { name } => name,
+                })
                 .collect(),
         );
         let mut environment = Environment::new();
