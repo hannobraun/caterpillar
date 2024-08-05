@@ -62,13 +62,13 @@ impl FragmentPayload {
             }
             Self::Function(Function {
                 name,
-                arguments: args,
+                arguments,
                 start,
                 next,
             }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
-                for arg in args {
+                for arg in arguments {
                     hasher.update(arg.as_bytes());
                 }
                 start.hash(hasher);
