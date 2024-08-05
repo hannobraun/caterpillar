@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use crate::{
     breakpoints::Breakpoints,
-    evaluator::{evaluate, EvaluatorState},
+    evaluator::{Evaluator, EvaluatorState},
     instructions::InstructionAddress,
     Bytecode, CoreEffect, Effect, Host, Stack, Value,
 };
@@ -79,7 +79,7 @@ impl<H: Host> Process<H> {
 
         let next_instruction = self.stack.next_instruction();
 
-        match evaluate::<H>(bytecode, &mut self.stack) {
+        match Evaluator::evaluate::<H>(bytecode, &mut self.stack) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
