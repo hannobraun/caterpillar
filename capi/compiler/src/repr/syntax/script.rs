@@ -18,11 +18,11 @@ impl Script {
     ) -> &mut Self {
         let arguments = arguments.into_iter().map(String::from).collect();
         let body = {
-            let mut expressions = Vec::new();
-            body(&mut ExpressionBuilder {
-                expressions: &mut expressions,
-            });
-            expressions
+            let mut builder = ExpressionBuilder {
+                expressions: Vec::new(),
+            };
+            body(&mut builder);
+            builder.expressions
         };
 
         self.functions.push(Function {
@@ -36,21 +36,21 @@ impl Script {
 }
 
 #[derive(Debug)]
-pub struct ExpressionBuilder<'r> {
-    expressions: &'r mut Vec<Expression>,
+pub struct ExpressionBuilder {
+    expressions: Vec<Expression>,
 }
 
-impl ExpressionBuilder<'_> {
+impl ExpressionBuilder {
     pub fn block(
         &mut self,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
         let body = {
-            let mut expressions = Vec::new();
-            body(&mut ExpressionBuilder {
-                expressions: &mut expressions,
-            });
-            expressions
+            let mut builder = ExpressionBuilder {
+                expressions: Vec::new(),
+            };
+            body(&mut builder);
+            builder.expressions
         };
 
         self.push_expression(Expression::Block {
