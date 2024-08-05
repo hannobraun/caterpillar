@@ -95,8 +95,22 @@ impl Evaluator {
                         Ok((name, value))
                     })
                     .collect::<Result<Vec<_>, PushStackFrameError>>()?;
+                let is_tail_call = {
+                    let next_instruction = bytecode
+                        .instructions
+                        .get(&self.stack.next_instruction)
+                        .expect(
+                            "Expected instruction referenced on stack to exist",
+                        );
 
-                self.stack.push_frame(arguments, &bytecode.instructions)?;
+                    *next_instruction == Instruction::Return
+                };
+
+                self.stack.push_frame(
+                    arguments,
+                    is_tail_call,
+                    &bytecode.instructions,
+                )?;
                 self.stack.next_instruction = function.start;
             }
             Instruction::MakeClosure {

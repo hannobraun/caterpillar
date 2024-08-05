@@ -1,4 +1,6 @@
-use crate::{value::IntegerOverflow, CoreEffect, Instructions, Stack};
+use crate::{
+    value::IntegerOverflow, CoreEffect, Instruction, Instructions, Stack,
+};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -148,7 +150,15 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
         arguments.push((name, value));
     }
 
-    stack.push_frame(arguments, instructions)?;
+    let is_tail_call = {
+        let next_instruction = instructions
+            .get(&stack.next_instruction)
+            .expect("Expected instruction referenced on stack to exist");
+
+        *next_instruction == Instruction::Return
+    };
+
+    stack.push_frame(arguments, is_tail_call, instructions)?;
     stack.next_instruction = address;
 
     Ok(())

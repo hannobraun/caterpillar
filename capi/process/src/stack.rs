@@ -1,8 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Instruction, InstructionAddress, Instructions,
-    Value,
+    operands::PopOperandError, InstructionAddress, Instructions, Value,
 };
 
 /// # Caterpillar's stack, supposedly
@@ -98,16 +97,9 @@ impl Stack {
     pub fn push_frame(
         &mut self,
         arguments: Vec<(String, Value)>,
-        instructions: &Instructions,
+        is_tail_call: bool,
+        _: &Instructions,
     ) -> Result<(), PushStackFrameError> {
-        let is_tail_call = {
-            let next_instruction = instructions
-                .get(&self.next_instruction)
-                .expect("Expected instruction referenced on stack to exist");
-
-            *next_instruction == Instruction::Return
-        };
-
         if is_tail_call {
             // We are repurposing the existing stack frame.
             //
