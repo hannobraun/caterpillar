@@ -39,7 +39,8 @@ impl Evaluator {
                         bindings that exist.\n\
                         \n\
                         Current stack:\n\
-                        {stack:#?}"
+                        {:#?}",
+                        stack,
                     );
                 };
                 stack.push_operand(value);
