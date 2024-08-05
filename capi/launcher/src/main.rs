@@ -27,7 +27,7 @@ async fn main() -> anyhow::Result<()> {
         if let Some(effect) =
             game_engine.process.state().first_unhandled_effect()
         {
-            println!("Unhandled effect: {effect:#?}");
+            eprintln!("Unhandled effect: {effect:#?}");
             break;
         }
 
@@ -56,7 +56,7 @@ async fn main() -> anyhow::Result<()> {
             let max = max_frame_time.unwrap();
             let min = min_frame_time.unwrap();
 
-            println!("avg: {avg} ms; max: {max} ms; min: {min} ms",);
+            eprintln!("avg: {avg} ms; max: {max} ms; min: {min} ms",);
 
             total_frame_times_ms = 0;
             max_frame_time = None;
