@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, Bytecode, CoreEffect, Effect, Host, Instruction, Stack,
-    Value,
+    builtins::builtin, stack::PushStackFrameError, Bytecode, CoreEffect,
+    Effect, Host, Instruction, Stack, Value,
 };
 
 #[derive(
@@ -85,8 +85,18 @@ impl Evaluator {
             Instruction::CallFunction { address } => {
                 let function =
                     bytecode.functions.get(address).cloned().unwrap();
-                self.stack
-                    .push_frame(function.arguments, &bytecode.instructions)?;
+
+                let arguments = function
+                    .arguments
+                    .into_iter()
+                    .rev()
+                    .map(|name| {
+                        let value = self.stack.pop_operand()?;
+                        Ok((name, value))
+                    })
+                    .collect::<Result<Vec<_>, PushStackFrameError>>()?;
+
+                self.stack.push_frame(arguments, &bytecode.instructions)?;
                 self.stack.next_instruction = function.start;
             }
             Instruction::MakeClosure {

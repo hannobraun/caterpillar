@@ -97,17 +97,9 @@ impl Stack {
 
     pub fn push_frame(
         &mut self,
-        arguments: Vec<String>,
+        arguments: Vec<(String, Value)>,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
-        let arguments = arguments
-            .into_iter()
-            .rev()
-            .map(|name| {
-                let value = self.pop_operand()?;
-                Ok((name, value))
-            })
-            .collect::<Result<Vec<_>, PushStackFrameError>>()?;
         let is_tail_call = {
             let next_instruction = instructions
                 .get(&self.next_instruction)

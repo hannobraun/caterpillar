@@ -1,4 +1,7 @@
-use crate::{value::IntegerOverflow, CoreEffect, Instructions, Stack};
+use crate::{
+    stack::PushStackFrameError, value::IntegerOverflow, CoreEffect,
+    Instructions, Stack,
+};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -148,6 +151,15 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
         arguments.push(name);
         stack.push_operand(value);
     }
+
+    let arguments = arguments
+        .into_iter()
+        .rev()
+        .map(|name| {
+            let value = stack.pop_operand()?;
+            Ok((name, value))
+        })
+        .collect::<std::result::Result<Vec<_>, PushStackFrameError>>()?;
 
     stack.push_frame(arguments, instructions)?;
     stack.next_instruction = address;
