@@ -96,11 +96,10 @@ impl Stack {
 
     pub fn push_frame(
         &mut self,
-        function: Function,
+        Function { arguments, start }: Function,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
-        let arguments = function
-            .arguments
+        let arguments = arguments
             .into_iter()
             .rev()
             .map(|name| {
@@ -166,7 +165,7 @@ impl Stack {
             self.inner.push(StackElement::Bindings(bindings));
         }
 
-        self.next_instruction = function.start;
+        self.next_instruction = start;
 
         Ok(())
     }
