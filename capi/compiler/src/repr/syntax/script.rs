@@ -45,10 +45,13 @@ impl ExpressionBuilder<'_> {
         &mut self,
         f: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
-        let mut body = Vec::new();
-        f(&mut ExpressionBuilder {
-            expressions: &mut body,
-        });
+        let body = {
+            let mut body = Vec::new();
+            f(&mut ExpressionBuilder {
+                expressions: &mut body,
+            });
+            body
+        };
 
         self.push_expression(Expression::Block {
             body,
