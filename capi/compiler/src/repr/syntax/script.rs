@@ -39,7 +39,7 @@ pub struct ExpressionBuilder<'r> {
     expressions: &'r mut Vec<Expression>,
 }
 
-impl<'r> ExpressionBuilder<'r> {
+impl ExpressionBuilder<'_> {
     pub fn block(
         &mut self,
         f: impl FnOnce(&mut ExpressionBuilder),
