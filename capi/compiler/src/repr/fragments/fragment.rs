@@ -64,12 +64,14 @@ impl FragmentPayload {
             }
             Self::Function(Function {
                 name,
+                group_index,
                 arguments,
                 start,
                 next,
             }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
+                hasher.update(&group_index.to_le_bytes());
                 for argument in arguments {
                     match argument {
                         Pattern::Identifier { name } => {
@@ -95,6 +97,7 @@ impl FragmentPayload {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
+    pub group_index: u32,
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
     pub next: FragmentId,

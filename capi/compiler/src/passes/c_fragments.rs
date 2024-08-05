@@ -64,10 +64,15 @@ where
                 compile_expression(expression, parent, next, fragments)
             }
             SyntaxElement::Item(function) => {
+                // If the group index is not set for a function, that means it's
+                // the only function in its group, and its default index is `0`.
+                let group_index = function.group_index.unwrap_or(0);
+
                 let start = compile_block(function.body, next, fragments);
 
                 let function = Function {
                     name: function.name,
+                    group_index,
                     arguments: function.arguments,
                     start,
                     next,
