@@ -70,8 +70,8 @@ impl FragmentPayload {
             }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
-                for Pattern::Identifier { name: argument } in arguments {
-                    hasher.update(argument.as_bytes());
+                for Pattern::Identifier { name } in arguments {
+                    hasher.update(name.as_bytes());
                 }
                 start.hash(hasher);
                 next.hash(hasher);
