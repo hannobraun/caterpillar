@@ -133,8 +133,8 @@ impl Stack {
             Either the initial one, or one that was pushed while the process \
             was running.\n\
             \n\
-            A new stack frame is being pushed right now, hence there must be n \
-            existing one, which means it must be possible to find bindings.",
+            A new stack frame is being pushed right now, hence there must be \
+            an existing one, which means it must be possible to find bindings.",
         );
 
         // Any bindings that remain are no longer accessible, so let's remove
