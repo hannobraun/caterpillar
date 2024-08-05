@@ -18,8 +18,15 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
                 .arguments
                 .clone()
                 .into_iter()
-                .map(|pattern| match pattern {
-                    Pattern::Identifier { name } => name,
+                .filter_map(|pattern| match pattern {
+                    Pattern::Identifier { name } => Some(name),
+                    Pattern::Literal { .. } => {
+                        // The scope is used to resolve identifiers against
+                        // known bindings. Literal patterns don't create
+                        // bindings, as their value is only used to select the
+                        // function to be called.
+                        None
+                    }
                 })
                 .collect(),
         );

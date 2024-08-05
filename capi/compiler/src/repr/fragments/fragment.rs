@@ -76,6 +76,10 @@ impl FragmentPayload {
                             hasher.update(b"identifier pattern");
                             hasher.update(name.as_bytes());
                         }
+                        Pattern::Literal { value } => {
+                            hasher.update(b"literal pattern");
+                            hasher.update(&value.0);
+                        }
                     }
                 }
                 start.hash(hasher);

@@ -139,8 +139,16 @@ impl Compiler<'_> {
             arguments: function
                 .arguments
                 .into_iter()
-                .map(|pattern| match pattern {
-                    Pattern::Identifier { name } => name,
+                .filter_map(|pattern| match pattern {
+                    Pattern::Identifier { name } => Some(name),
+                    Pattern::Literal { .. } => {
+                        // The parameter list of a function is used to provide
+                        // the arguments to the function at runtime. But literal
+                        // patterns aren't relevant to the function itself. They
+                        // are only used to select which function to call in the
+                        // first place.
+                        None
+                    }
                 })
                 .collect(),
             start,
