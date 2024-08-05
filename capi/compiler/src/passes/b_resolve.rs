@@ -2,17 +2,16 @@ use std::collections::BTreeSet;
 
 use capi_process::{builtin, Host};
 
-use crate::repr::syntax::{Expression, IdentifierTarget, Pattern, Script};
+use crate::repr::syntax::{Expression, Function, IdentifierTarget, Pattern};
 
-pub fn resolve_references<H: Host>(script: &mut Script) {
+pub fn resolve_references<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
-    let user_functions = script
-        .functions
+    let user_functions = functions
         .iter()
         .map(|function| function.name.clone())
         .collect();
 
-    for function in &mut script.functions {
+    for function in functions {
         scopes.push(
             function
                 .arguments
@@ -308,7 +307,7 @@ mod tests {
     }
 
     fn resolve_references(script: &mut Script) {
-        super::resolve_references::<TestHost>(script)
+        super::resolve_references::<TestHost>(&mut script.functions)
     }
 
     struct TestHost {}
