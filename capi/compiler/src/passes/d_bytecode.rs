@@ -125,7 +125,7 @@ impl Compiler<'_> {
                 CompileUnit::Function(function) => {
                     self.compile_function(
                         function.name,
-                        function.args,
+                        function.arguments,
                         function.start,
                     );
                 }
