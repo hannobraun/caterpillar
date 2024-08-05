@@ -130,6 +130,7 @@ impl Compiler<'_> {
     }
 
     fn compile_function(&mut self, function: fragments::Function) {
+        let name = function.name;
         let start = self.compile_block(function.start);
 
         self.functions_by_address.insert(
@@ -140,7 +141,7 @@ impl Compiler<'_> {
             },
         );
         self.functions_by_name.insert(
-            function.name,
+            name,
             Function {
                 arguments: function.arguments,
                 start,
