@@ -114,7 +114,7 @@ impl<H: Host> Default for Process<H> {
     fn default() -> Self {
         Self {
             state: Default::default(),
-            evaluator: Evaluator {},
+            evaluator: Evaluator::default(),
             stack: Default::default(),
             breakpoints: Default::default(),
         }

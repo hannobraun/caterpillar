@@ -3,7 +3,9 @@ use crate::{
     Value,
 };
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Evaluator {}
 
 impl Evaluator {
