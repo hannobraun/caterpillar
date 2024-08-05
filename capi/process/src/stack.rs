@@ -18,7 +18,8 @@ use crate::{
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
-    next_instruction: InstructionAddress,
+
+    pub next_instruction: InstructionAddress,
 
     /// # Special heap for closures
     ///
