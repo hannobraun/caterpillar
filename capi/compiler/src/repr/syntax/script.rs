@@ -10,11 +10,11 @@ impl Script {
         &mut self,
         name: &str,
         arguments: impl IntoIterator<Item = &'r str>,
-        f: impl FnOnce(&mut SyntaxBuilder),
+        body: impl FnOnce(&mut SyntaxBuilder),
     ) -> &mut Self {
         let body = {
             let mut expressions = Vec::new();
-            f(&mut SyntaxBuilder::new(&mut expressions));
+            body(&mut SyntaxBuilder::new(&mut expressions));
             expressions
         };
 
