@@ -123,33 +123,29 @@ impl Compiler<'_> {
                     );
                 }
                 CompileUnit::Function(function) => {
-                    self.compile_function(
-                        function.name,
-                        function.arguments,
-                        function.start,
-                    );
+                    self.compile_function(function);
                 }
             }
         }
     }
 
-    fn compile_function(
-        &mut self,
-        name: String,
-        arguments: Vec<String>,
-        start: FragmentId,
-    ) {
-        let start = self.compile_block(start);
+    fn compile_function(&mut self, function: fragments::Function) {
+        let start = self.compile_block(function.start);
 
         self.functions_by_address.insert(
             start,
             Function {
-                arguments: arguments.clone(),
+                arguments: function.arguments.clone(),
                 start,
             },
         );
-        self.functions_by_name
-            .insert(name, Function { arguments, start });
+        self.functions_by_name.insert(
+            function.name,
+            Function {
+                arguments: function.arguments,
+                start,
+            },
+        );
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
