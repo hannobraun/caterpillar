@@ -13,9 +13,9 @@ impl Script {
         f: impl FnOnce(&mut SyntaxBuilder),
     ) -> &mut Self {
         let body = {
-            let mut body = Vec::new();
-            f(&mut SyntaxBuilder::new(&mut body));
-            body
+            let mut expressions = Vec::new();
+            f(&mut SyntaxBuilder::new(&mut expressions));
+            expressions
         };
 
         self.functions.push(Function {
