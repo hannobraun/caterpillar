@@ -29,6 +29,14 @@ pub enum FragmentExpression {
         name: String,
 
         /// Indicate whether the function call is in tail position
+        ///
+        /// This flag is relevant for tail call elimination. It is only required
+        /// for `ResolvedUserFunction`, as only user functions require compile-
+        /// time tail call elimination:
+        ///
+        /// - Built-in and host functions are expected to perform their own tail
+        ///   call elimination at runtime, if necessary.
+        /// - No other expressions can result in a new stack frame.
         is_tail_call: bool,
     },
     UnresolvedIdentifier {
