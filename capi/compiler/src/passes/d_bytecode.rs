@@ -139,7 +139,9 @@ impl Compiler<'_> {
             arguments: function
                 .arguments
                 .into_iter()
-                .map(|Pattern::Identifier { name }| name)
+                .map(|pattern| match pattern {
+                    Pattern::Identifier { name } => name,
+                })
                 .collect(),
             start,
         };
