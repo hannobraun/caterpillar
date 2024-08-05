@@ -18,7 +18,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions: Instructions::default(),
-        user_function_calls: Vec::new(),
+        calls_to_user_defined_functions: Vec::new(),
         functions_by_address: BTreeMap::new(),
         functions_by_name: BTreeMap::new(),
         source_map: &mut source_map,
@@ -65,7 +65,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for (name, address_of_call) in compiler.user_function_calls {
+    for (name, address_of_call) in compiler.calls_to_user_defined_functions {
         let Some(function) = compiler.functions_by_name.get(&name) else {
             unreachable!(
                 "Expecting function `{name}` to exist. If it didn't, the \
@@ -95,7 +95,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
-    user_function_calls: Vec<(String, InstructionAddress)>,
+    calls_to_user_defined_functions: Vec<(String, InstructionAddress)>,
     functions_by_address: BTreeMap<InstructionAddress, Function>,
     functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
@@ -233,7 +233,8 @@ impl Compiler<'_> {
                     } => {
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
-                        self.user_function_calls.push((name.clone(), address));
+                        self.calls_to_user_defined_functions
+                            .push((name.clone(), address));
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
