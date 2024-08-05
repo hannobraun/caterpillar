@@ -21,11 +21,7 @@ impl Script {
                 patterns: Vec::new(),
             };
             arguments(&mut builder);
-            builder
-                .patterns
-                .into_iter()
-                .map(|Pattern::Identifier { name }| name)
-                .collect()
+            builder.patterns
         };
         let body = {
             let mut builder = ExpressionBuilder {

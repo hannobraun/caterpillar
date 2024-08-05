@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use capi_process::{builtin, Host};
 
-use crate::repr::syntax::{Expression, IdentifierTarget, Script};
+use crate::repr::syntax::{Expression, IdentifierTarget, Pattern, Script};
 
 pub fn resolve_references<H: Host>(script: &mut Script) {
     let mut scopes = Scopes::new();
@@ -13,7 +13,14 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
-        scopes.push(function.arguments.clone().into_iter().collect());
+        scopes.push(
+            function
+                .arguments
+                .clone()
+                .into_iter()
+                .map(|Pattern::Identifier { name }| name)
+                .collect(),
+        );
         let mut environment = Environment::new();
 
         resolve_block::<H>(

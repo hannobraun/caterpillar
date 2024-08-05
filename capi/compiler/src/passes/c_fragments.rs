@@ -5,7 +5,7 @@ use crate::repr::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
-    syntax::{self, Expression, IdentifierTarget},
+    syntax::{self, Expression, IdentifierTarget, Pattern},
 };
 
 pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
@@ -68,7 +68,11 @@ where
 
                 let function = Function {
                     name: function.name,
-                    arguments: function.arguments,
+                    arguments: function
+                        .arguments
+                        .into_iter()
+                        .map(|Pattern::Identifier { name }| name)
+                        .collect(),
                     start,
                     next,
                 };
