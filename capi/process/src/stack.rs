@@ -98,7 +98,7 @@ impl Stack {
     pub fn push_frame(
         &mut self,
         arguments: Vec<String>,
-        start: InstructionAddress,
+        _: InstructionAddress,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
         let arguments = arguments
@@ -166,8 +166,6 @@ impl Stack {
             let bindings = arguments.into_iter().collect();
             self.inner.push(StackElement::Bindings(bindings));
         }
-
-        self.next_instruction = start;
 
         Ok(())
     }

@@ -90,6 +90,7 @@ impl Evaluator {
                     function.start,
                     &bytecode.instructions,
                 )?;
+                self.stack.next_instruction = function.start;
             }
             Instruction::MakeClosure {
                 address,
