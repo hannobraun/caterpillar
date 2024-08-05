@@ -118,24 +118,55 @@ impl Stack {
             *next_instruction == Instruction::Return
         };
 
-        // If the current function is finished, pop its stack frame before
-        // pushing the next one. This is tail call optimization.
         if is_tail_call {
-            self.pop_frame();
-        }
+            // We are repurposing the existing stack frame.
+            //
+            // This means the element that marks the start of the stack frame,
+            // either the start marker or a return address, can stay as they
+            // are.
+            //
+            // So can operands. Those that are function arguments, we already
+            // removed. Those that remain are what the tail-calling function
+            // returns, so they can remain and be returned when the stack frame
+            // is eventually done.
+            //
+            // But we need to handle bindings.
 
-        const STACK_LIMIT: usize = 16;
-        if self.inner.len() >= STACK_LIMIT {
-            return Err(PushStackFrameError::Overflow);
-        }
+            let bindings = self.bindings_mut().expect(
+                "Until the process has finished, there is always a stack \
+                frame. Either the initial one, or one that was pushed while \
+                the process was running.\n\
+                \n\
+                A new stack frame is being pushed right now, hence there must \
+                be n existing one, which means it must be possible to find \
+                bindings.",
+            );
 
-        if !self.inner.is_empty() {
+            // Any bindings that remain are no longer accessible, so let's
+            // remove them.
+            bindings.clear();
+
+            // Other than that, we just need to see the re-used bindings map
+            // with the called function's arguments.
+            bindings.extend(arguments);
+        } else {
+            // Not a tail call. This means we need to create a new stack frame.
+            // Let's first check if we can even do that.
+            const STACK_LIMIT: usize = 16;
+            if self.inner.len() >= STACK_LIMIT {
+                return Err(PushStackFrameError::Overflow);
+            }
+
+            // All stack frames but the initial one (which this one can't be, as
+            // the initial one is created with the stack), start with a return
+            // address.
             self.inner
                 .push(StackElement::ReturnAddress(self.next_instruction));
-        }
 
-        let bindings = arguments.into_iter().collect();
-        self.inner.push(StackElement::Bindings(bindings));
+            // And all stack frames need a map of bindings.
+            let bindings = arguments.into_iter().collect();
+            self.inner.push(StackElement::Bindings(bindings));
+        }
 
         self.next_instruction = function.start;
 
