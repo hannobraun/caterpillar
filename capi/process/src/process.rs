@@ -11,7 +11,6 @@ use crate::{
 pub struct Process<H: Host> {
     state: ProcessState<H>,
     evaluator: Evaluator,
-    stack: Stack,
     breakpoints: Breakpoints,
 }
 
@@ -21,7 +20,7 @@ impl<H: Host> Process<H> {
     }
 
     pub fn stack(&self) -> &Stack {
-        &self.stack
+        &self.evaluator.stack
     }
 
     pub fn breakpoints(&self) -> &Breakpoints {
@@ -50,7 +49,7 @@ impl<H: Host> Process<H> {
 
     pub fn push(&mut self, values: impl IntoIterator<Item = impl Into<Value>>) {
         for value in values {
-            self.stack.push_operand(value);
+            self.evaluator.stack.push_operand(value);
         }
     }
 
@@ -87,9 +86,9 @@ impl<H: Host> Process<H> {
             return;
         }
 
-        let next_instruction = self.stack.next_instruction();
+        let next_instruction = self.evaluator.stack.next_instruction();
 
-        match self.evaluator.step::<H>(bytecode, &mut self.stack) {
+        match self.evaluator.step::<H>(bytecode) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
@@ -115,7 +114,6 @@ impl<H: Host> Default for Process<H> {
         Self {
             state: Default::default(),
             evaluator: Evaluator::default(),
-            stack: Default::default(),
             breakpoints: Default::default(),
         }
     }

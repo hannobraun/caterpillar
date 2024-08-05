@@ -6,15 +6,16 @@ use crate::{
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct Evaluator {}
+pub struct Evaluator {
+    pub stack: Stack,
+}
 
 impl Evaluator {
     pub fn step<H: Host>(
         &mut self,
         bytecode: &Bytecode,
-        stack: &mut Stack,
     ) -> Result<EvaluatorState, Effect<H::Effect>> {
-        let Some(addr) = stack.take_next_instruction() else {
+        let Some(addr) = self.stack.take_next_instruction() else {
             return Ok(EvaluatorState::Finished);
         };
 
@@ -25,7 +26,7 @@ impl Evaluator {
 
         match instruction {
             Instruction::BindingEvaluate { name } => {
-                let Some(bindings) = stack.bindings() else {
+                let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
                         "Can't access bindings, but we're currently executing. \
                         An active stack frame, and therefore bindings, must \
@@ -40,18 +41,18 @@ impl Evaluator {
                         \n\
                         Current stack:\n\
                         {:#?}",
-                        stack,
+                        self.stack,
                     );
                 };
-                stack.push_operand(value);
+                self.stack.push_operand(value);
             }
             Instruction::BindingsDefine { names } => {
                 for name in names.iter().rev() {
-                    let value = stack.pop_operand()?;
-                    stack.define_binding(name.clone(), value);
+                    let value = self.stack.pop_operand()?;
+                    self.stack.define_binding(name.clone(), value);
                 }
 
-                if stack.operands_in_current_stack_frame().count() > 0 {
+                if self.stack.operands_in_current_stack_frame().count() > 0 {
                     return Err(Effect::Core(
                         CoreEffect::BindingLeftValuesOnStack,
                     ));
@@ -69,8 +70,10 @@ impl Evaluator {
                         host function.\n"
                     );
                     }
-                    (Some(f), None) => f(stack)?,
-                    (None, Some(f)) => f(stack, &bytecode.instructions)?,
+                    (Some(f), None) => f(&mut self.stack)?,
+                    (None, Some(f)) => {
+                        f(&mut self.stack, &bytecode.instructions)?
+                    }
                     (None, None) => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
                             name: name.clone(),
@@ -81,13 +84,13 @@ impl Evaluator {
             Instruction::CallFunction { address } => {
                 let function =
                     bytecode.functions.get(address).cloned().unwrap();
-                stack.push_frame(function, &bytecode.instructions)?;
+                self.stack.push_frame(function, &bytecode.instructions)?;
             }
             Instruction::MakeClosure {
                 address,
                 environment,
             } => {
-                let Some(bindings) = stack.bindings() else {
+                let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
                         "We're currently executing. A stack frame, and thus \
                         bindings, must exist."
@@ -110,28 +113,28 @@ impl Evaluator {
                     .collect();
 
                 let index = {
-                    let next_closure = stack.next_closure;
-                    stack.next_closure += 1;
+                    let next_closure = self.stack.next_closure;
+                    self.stack.next_closure += 1;
                     next_closure
                 };
-                stack.closures.insert(index, (*address, environment));
+                self.stack.closures.insert(index, (*address, environment));
 
-                stack.push_operand(index);
+                self.stack.push_operand(index);
             }
-            Instruction::Push { value } => stack.push_operand(*value),
+            Instruction::Push { value } => self.stack.push_operand(*value),
             Instruction::Return => {
-                stack.pop_frame();
+                self.stack.pop_frame();
             }
             Instruction::ReturnIfNonZero => {
-                let value = stack.pop_operand()?;
+                let value = self.stack.pop_operand()?;
                 if value != Value([0, 0, 0, 0]) {
-                    stack.pop_frame();
+                    self.stack.pop_frame();
                 }
             }
             Instruction::ReturnIfZero => {
-                let value = stack.pop_operand()?;
+                let value = self.stack.pop_operand()?;
                 if value == Value([0, 0, 0, 0]) {
-                    stack.pop_frame();
+                    self.stack.pop_frame();
                 }
             }
             Instruction::Panic => return Err(Effect::Core(CoreEffect::Panic)),
