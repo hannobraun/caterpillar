@@ -239,8 +239,18 @@ impl Compiler<'_> {
                         name,
                         is_tail_call,
                     } => {
+                        // We know that this expression refers to a user-defined
+                        // function, but we might not have compiled that
+                        // function yet.
+                        //
+                        // For now, just generate a placeholder that we can
+                        // replace with the call later.
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
+
+                        // We can't leave it at that, however. We need to make
+                        // sure this placeholder actually gets replace later,
+                        // and we're doing that by adding it to this list.
                         self.calls_to_user_defined_functions.push(
                             CallToUserDefinedFunction {
                                 name: name.clone(),
@@ -248,6 +258,7 @@ impl Compiler<'_> {
                                 is_tail_call: *is_tail_call,
                             },
                         );
+
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
