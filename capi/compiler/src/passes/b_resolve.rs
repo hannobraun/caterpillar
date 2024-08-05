@@ -13,7 +13,7 @@ pub fn resolve_references<H: Host>(script: &mut Script) {
         .collect();
 
     for function in &mut script.functions {
-        scopes.push(function.args.clone().into_iter().collect());
+        scopes.push(function.arguments.clone().into_iter().collect());
         let mut environment = Environment::new();
 
         resolve_block::<H>(

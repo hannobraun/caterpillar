@@ -68,7 +68,7 @@ where
 
                 let function = Function {
                     name: function.name,
-                    args: function.args,
+                    args: function.arguments,
                     start,
                     next,
                 };

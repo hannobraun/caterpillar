@@ -24,7 +24,7 @@ impl Script {
 
         self.functions.push(Function {
             name: name.to_string(),
-            args: arguments.into_iter().map(String::from).collect(),
+            arguments: arguments.into_iter().map(String::from).collect(),
             body,
         });
 
