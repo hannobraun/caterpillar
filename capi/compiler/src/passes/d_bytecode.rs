@@ -65,7 +65,9 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for (name, address) in compiler.calls_to_user_defined_functions {
+    for CallToUserDefinedFunction { name, address } in
+        compiler.calls_to_user_defined_functions
+    {
         let Some(function) = compiler.functions_by_name.get(&name) else {
             unreachable!(
                 "Expecting function `{name}` to exist. If it didn't, the \
@@ -95,7 +97,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
-    calls_to_user_defined_functions: Vec<(String, InstructionAddress)>,
+    calls_to_user_defined_functions: Vec<CallToUserDefinedFunction>,
     functions_by_address: BTreeMap<InstructionAddress, Function>,
     functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
@@ -233,8 +235,12 @@ impl Compiler<'_> {
                     } => {
                         let address =
                             self.generate(Instruction::Panic, fragment.id());
-                        self.calls_to_user_defined_functions
-                            .push((name.clone(), address));
+                        self.calls_to_user_defined_functions.push(
+                            CallToUserDefinedFunction {
+                                name: name.clone(),
+                                address,
+                            },
+                        );
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
@@ -277,4 +283,9 @@ enum CompileUnit {
         address: InstructionAddress,
     },
     Function(fragments::Function),
+}
+
+struct CallToUserDefinedFunction {
+    name: String,
+    address: InstructionAddress,
 }
