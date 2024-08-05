@@ -158,7 +158,12 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
         *next_instruction == Instruction::Return
     };
 
-    stack.push_frame(arguments, is_tail_call)?;
+    if is_tail_call {
+        stack.reuse_frame(arguments);
+    } else {
+        stack.push_frame(arguments)?;
+    }
+
     stack.next_instruction = address;
 
     Ok(())
