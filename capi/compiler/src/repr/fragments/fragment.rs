@@ -1,3 +1,5 @@
+use crate::repr::syntax::Pattern;
+
 use super::{FragmentExpression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -68,7 +70,7 @@ impl FragmentPayload {
             }) => {
                 hasher.update(b"function");
                 hasher.update(name.as_bytes());
-                for argument in arguments {
+                for Pattern::Identifier { name: argument } in arguments {
                     hasher.update(argument.as_bytes());
                 }
                 start.hash(hasher);
@@ -84,7 +86,7 @@ impl FragmentPayload {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub arguments: Vec<String>,
+    pub arguments: Vec<Pattern>,
     pub start: FragmentId,
     pub next: FragmentId,
 }

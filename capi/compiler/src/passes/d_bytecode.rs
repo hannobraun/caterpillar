@@ -5,9 +5,12 @@ use capi_process::{
 };
 
 use crate::{
-    repr::fragments::{
-        self, Fragment, FragmentExpression, FragmentId, FragmentMap,
-        FragmentPayload, Fragments,
+    repr::{
+        fragments::{
+            self, Fragment, FragmentExpression, FragmentId, FragmentMap,
+            FragmentPayload, Fragments,
+        },
+        syntax::Pattern,
     },
     source_map::SourceMap,
 };
@@ -133,7 +136,11 @@ impl Compiler<'_> {
         let name = function.name;
         let start = self.compile_block(function.start);
         let function = Function {
-            arguments: function.arguments,
+            arguments: function
+                .arguments
+                .into_iter()
+                .map(|Pattern::Identifier { name }| name)
+                .collect(),
             start,
         };
 
