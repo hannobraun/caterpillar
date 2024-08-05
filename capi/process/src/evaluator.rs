@@ -82,7 +82,7 @@ impl Evaluator {
                     }
                 }
             }
-            Instruction::CallFunction { address } => {
+            Instruction::CallFunction { address, .. } => {
                 let function =
                     bytecode.functions.get(address).cloned().unwrap();
 

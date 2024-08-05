@@ -89,6 +89,7 @@ pub enum Instruction {
     },
     CallFunction {
         address: InstructionAddress,
+        is_tail_call: bool,
     },
     MakeClosure {
         address: InstructionAddress,

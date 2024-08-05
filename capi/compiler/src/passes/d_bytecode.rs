@@ -61,6 +61,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             init,
             Instruction::CallFunction {
                 address: main.start,
+                is_tail_call: true,
             },
         );
     }
@@ -74,12 +75,12 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 call.name,
             );
         };
-        dbg!(call.is_tail_call);
 
         compiler.instructions.replace(
             call.address,
             Instruction::CallFunction {
                 address: function.start,
+                is_tail_call: call.is_tail_call,
             },
         );
     }
