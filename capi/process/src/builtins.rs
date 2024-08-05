@@ -1,6 +1,4 @@
-use crate::{
-    value::IntegerOverflow, CoreEffect, Function, Instructions, Stack,
-};
+use crate::{value::IntegerOverflow, CoreEffect, Instructions, Stack};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -137,13 +135,7 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
         stack.push_operand(value);
     }
 
-    stack.push_frame(
-        Function {
-            arguments,
-            start: address,
-        },
-        instructions,
-    )?;
+    stack.push_frame(arguments, address, instructions)?;
 
     Ok(())
 }

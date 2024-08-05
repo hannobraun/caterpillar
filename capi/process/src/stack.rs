@@ -1,8 +1,8 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    operands::PopOperandError, Function, Instruction, InstructionAddress,
-    Instructions, Value,
+    operands::PopOperandError, Instruction, InstructionAddress, Instructions,
+    Value,
 };
 
 /// # Caterpillar's stack, supposedly
@@ -96,7 +96,8 @@ impl Stack {
 
     pub fn push_frame(
         &mut self,
-        Function { arguments, start }: Function,
+        arguments: Vec<String>,
+        start: InstructionAddress,
         instructions: &Instructions,
     ) -> Result<(), PushStackFrameError> {
         let arguments = arguments

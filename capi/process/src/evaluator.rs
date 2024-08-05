@@ -85,7 +85,11 @@ impl Evaluator {
             Instruction::CallFunction { address } => {
                 let function =
                     bytecode.functions.get(address).cloned().unwrap();
-                self.stack.push_frame(function, &bytecode.instructions)?;
+                self.stack.push_frame(
+                    function.arguments,
+                    function.start,
+                    &bytecode.instructions,
+                )?;
             }
             Instruction::MakeClosure {
                 address,
