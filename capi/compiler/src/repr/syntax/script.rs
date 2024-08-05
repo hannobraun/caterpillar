@@ -9,7 +9,7 @@ impl Script {
     pub fn function<'r>(
         &mut self,
         name: &str,
-        args: impl IntoIterator<Item = &'r str>,
+        arguments: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
     ) -> &mut Self {
         let mut body = Vec::new();
@@ -17,7 +17,7 @@ impl Script {
 
         self.functions.push(Function {
             name: name.to_string(),
-            args: args.into_iter().map(String::from).collect(),
+            args: arguments.into_iter().map(String::from).collect(),
             body,
         });
 
