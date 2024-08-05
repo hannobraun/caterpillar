@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, mem};
 
 use crate::{
     breakpoints::Breakpoints,
@@ -33,8 +33,17 @@ impl<H: Host> Process<H> {
     }
 
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
-        self.state = ProcessState::default();
-        self.stack = Stack::default();
+        // All we need to preserve when we reset are the breakpoints. Anything
+        // else needs to go back to start conditions.
+        //
+        // Doing it like this, as opposed to just resetting all other fields,
+        // has the advantage that this code doesn't need to be changed in sync
+        // with new fields being added.
+        let breakpoints = mem::take(&mut self.breakpoints);
+        *self = Self {
+            breakpoints,
+            ..Self::default()
+        };
 
         self.push(arguments);
     }
