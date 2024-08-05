@@ -282,15 +282,14 @@ enum StackElement {
     /// stack frame.
     ReturnAddress(InstructionAddress),
 
-    /// A marker to mark the first stack frame
+    /// A marker to substitute the return address in the initial stack frame
     ///
-    /// The first stack frame needs no return address (where would we return
-    /// to?), so it has this marker. The reason we need it, is to know when the
-    /// first stack frame is being dropped, which indicates that the process is
-    /// finished.
+    /// The initial stack frame needs no return address, so it has this marker.
+    /// The reason we need it, is to know when the first stack frame is being
+    /// dropped, which indicates that the process has finished.
     ///
     /// Without a start marker, when we pop a frame, we wouldn't be able to
-    /// distinguish whether the process is finished, or if we just happen to
+    /// distinguish whether the process has finished, or if we just happen to
     /// have an empty stack because of tail call elimination, but should still
     /// continue running.
     StartMarker,
