@@ -106,11 +106,7 @@ impl Evaluator {
                     *next_instruction == Instruction::Return
                 };
 
-                self.stack.push_frame(
-                    arguments,
-                    is_tail_call,
-                    &bytecode.instructions,
-                )?;
+                self.stack.push_frame(arguments, is_tail_call)?;
                 self.stack.next_instruction = function.start;
             }
             Instruction::MakeClosure {
