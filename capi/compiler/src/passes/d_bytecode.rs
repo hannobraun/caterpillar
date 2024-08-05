@@ -65,22 +65,20 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for CallToUserDefinedFunction { name, address } in
-        compiler.calls_to_user_defined_functions
-    {
-        let Some(function) = compiler.functions_by_name.get(&name) else {
+    for call in compiler.calls_to_user_defined_functions {
+        let Some(function) = compiler.functions_by_name.get(&call.name) else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
                 compilation step would not have generated the fragment that \
                 caused us to assume that it does.",
-                name,
+                call.name,
             );
         };
 
         let address_of_function = function.start;
 
         compiler.instructions.replace(
-            address,
+            call.address,
             Instruction::CallFunction {
                 address: address_of_function,
             },
