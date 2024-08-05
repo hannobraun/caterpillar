@@ -7,6 +7,7 @@ pub struct Evaluator {}
 
 impl Evaluator {
     pub fn step<H: Host>(
+        &mut self,
         bytecode: &Bytecode,
         stack: &mut Stack,
     ) -> Result<EvaluatorState, Effect<H::Effect>> {
