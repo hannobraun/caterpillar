@@ -123,6 +123,20 @@ fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
+/// # Evaluate a block
+///
+/// ## Implementation Note
+///
+/// This duplicates function calling logic that also exists in evaluator. This
+/// should be temporary.
+///
+/// This duplicated logic used to be consolidated within [`Stack::push_frame`],
+/// but moved out as part of an effort to move tail call elimination to compile-
+/// time.
+///
+/// As part of the same effort, this function will likely be removed. It should
+/// eventually get replaced by something equivalent that doesn't need to
+/// duplicate code.
 fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     let closure = stack.pop_operand()?;
     let closure = closure.to_u32();
