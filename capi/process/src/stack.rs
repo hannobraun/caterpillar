@@ -131,10 +131,7 @@ impl Stack {
                 .push(StackElement::ReturnAddress(self.next_instruction));
         }
 
-        let mut bindings = Bindings::new();
-        for (name, value) in arguments {
-            bindings.insert(name, value);
-        }
+        let bindings = arguments.into_iter().collect();
         self.inner.push(StackElement::Bindings(bindings));
 
         self.next_instruction = function.start;
