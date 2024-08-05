@@ -6,3 +6,7 @@ pub struct Function {
     pub arguments: Vec<String>,
     pub body: Vec<Expression>,
 }
+
+pub enum Pattern {
+    Identifier { name: String },
+}

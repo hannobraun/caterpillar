@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use capi_process::Value;
 
-use super::{Expression, Function};
+use super::{function::Pattern, Expression, Function};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
@@ -21,7 +21,11 @@ impl Script {
                 patterns: Vec::new(),
             };
             arguments(&mut builder);
-            builder.patterns
+            builder
+                .patterns
+                .into_iter()
+                .map(|Pattern::Identifier { name }| name)
+                .collect()
         };
         let body = {
             let mut builder = ExpressionBuilder {
@@ -42,12 +46,13 @@ impl Script {
 }
 
 pub struct PatternBuilder {
-    patterns: Vec<String>,
+    patterns: Vec<Pattern>,
 }
 
 impl PatternBuilder {
     pub fn ident(&mut self, name: &str) -> &mut Self {
-        self.patterns.push(name.into());
+        self.patterns
+            .push(Pattern::Identifier { name: name.into() });
         self
     }
 }
