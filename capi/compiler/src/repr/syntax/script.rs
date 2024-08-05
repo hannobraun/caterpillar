@@ -12,8 +12,11 @@ impl Script {
         arguments: impl IntoIterator<Item = &'r str>,
         f: impl FnOnce(&mut SyntaxBuilder),
     ) -> &mut Self {
-        let mut body = Vec::new();
-        f(&mut SyntaxBuilder::new(&mut body));
+        let body = {
+            let mut body = Vec::new();
+            f(&mut SyntaxBuilder::new(&mut body));
+            body
+        };
 
         self.functions.push(Function {
             name: name.to_string(),
