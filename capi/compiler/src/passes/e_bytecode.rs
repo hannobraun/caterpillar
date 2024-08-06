@@ -7,7 +7,7 @@ use crate::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
-    placeholders::{CallToUserDefinedFunction, Placeholders},
+    placeholders::CallToUserDefinedFunction,
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -21,7 +21,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     // ends the process, if executed.
     let main = output.instructions.push(Instruction::Panic);
     output.instructions.push(Instruction::Return);
-    output.placeholders.inner.push(CallToUserDefinedFunction {
+    output.placeholders.push(CallToUserDefinedFunction {
         name: "main".to_string(),
         address: main,
         is_tail_call: true,
@@ -64,7 +64,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         }
     }
 
-    for call in output.placeholders.inner {
+    for call in output.placeholders {
         let Some(address) = functions.addresses_by_name.get(&call.name) else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
@@ -240,7 +240,7 @@ fn compile_fragment(
                     // We can't leave it at that, however. We need to make sure
                     // this placeholder actually gets replace later, and we're
                     // doing that by adding it to this list.
-                    output.placeholders.inner.push(CallToUserDefinedFunction {
+                    output.placeholders.push(CallToUserDefinedFunction {
                         name: name.clone(),
                         address,
                         is_tail_call: *is_tail_call,
@@ -272,7 +272,7 @@ fn compile_fragment(
 #[derive(Default)]
 struct Output {
     instructions: Instructions,
-    placeholders: Placeholders,
+    placeholders: Vec<CallToUserDefinedFunction>,
     source_map: SourceMap,
 }
 
