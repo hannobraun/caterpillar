@@ -24,7 +24,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions,
-        placeholders: Placeholders { inner: Vec::new() },
+        placeholders: Placeholders::default(),
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
         source_map: &mut source_map,
