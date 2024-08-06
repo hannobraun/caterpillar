@@ -22,7 +22,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         queue: VecDeque::new(),
         instructions: Instructions::default(),
         calls_to_user_defined_functions: Vec::new(),
-        functions_by_address: BTreeMap::new(),
+        function_arguments_by_address: BTreeMap::new(),
         functions_by_name: BTreeMap::new(),
         source_map: &mut source_map,
         fragments: &fragments.inner,
@@ -90,7 +90,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: compiler.instructions,
-        function_arguments: compiler.functions_by_address,
+        function_arguments: compiler.function_arguments_by_address,
     };
 
     (bytecode, source_map)
@@ -100,7 +100,7 @@ struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
     calls_to_user_defined_functions: Vec<CallToUserDefinedFunction>,
-    functions_by_address: BTreeMap<InstructionAddress, Vec<String>>,
+    function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     functions_by_name: BTreeMap<String, Function>,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
@@ -154,7 +154,7 @@ impl Compiler<'_> {
             start,
         };
 
-        self.functions_by_address
+        self.function_arguments_by_address
             .insert(start, function.arguments.clone());
         self.functions_by_name.insert(name, function);
     }
