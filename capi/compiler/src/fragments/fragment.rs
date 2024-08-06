@@ -101,6 +101,7 @@ impl Function {
 
         hasher.update(name.as_bytes());
         hasher.update(&group_index.to_le_bytes());
+
         for argument in arguments {
             match argument {
                 Pattern::Identifier { name } => {
@@ -113,6 +114,7 @@ impl Function {
                 }
             }
         }
+
         start.hash(hasher);
         next.hash(hasher);
     }
