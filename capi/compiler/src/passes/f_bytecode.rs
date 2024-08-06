@@ -25,6 +25,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let main = output.instructions.push(Instruction::Panic);
     output.instructions.push(Instruction::Return);
 
+    // Seed the queue from the root context.
     compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
 
     let mut compiler = Compiler {
