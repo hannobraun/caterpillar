@@ -31,10 +31,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue,
         output,
-        functions: Functions {
-            arguments_by_address: BTreeMap::new(),
-            addresses_by_name: BTreeMap::new(),
-        },
+        functions: Functions::default(),
         fragments: &fragments.inner,
     };
 
@@ -328,6 +325,7 @@ impl Output {
     }
 }
 
+#[derive(Default)]
 struct Functions {
     arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     addresses_by_name: BTreeMap<String, InstructionAddress>,
