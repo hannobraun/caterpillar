@@ -288,7 +288,7 @@ impl Compiler<'_> {
             }
             FragmentPayload::Function(function) => {
                 self.queue
-                    .push_front(CompileUnit::Function(function.clone()));
+                    .push_back(CompileUnit::Function(function.clone()));
                 return None;
             }
             FragmentPayload::Terminator => {
