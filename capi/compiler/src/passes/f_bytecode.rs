@@ -145,11 +145,8 @@ impl Compiler<'_> {
         let mut first_instruction = None;
 
         for fragment in self.fragments.iter_from(start) {
-            let addr = Self::compile_fragment(
-                fragment,
-                &mut self.output,
-                &mut self.queue,
-            );
+            let addr =
+                compile_fragment(fragment, &mut self.output, &mut self.queue);
             first_instruction = first_instruction.or(addr);
         }
 
@@ -163,141 +160,133 @@ impl Compiler<'_> {
 
         first_instruction
     }
+}
 
-    fn compile_fragment(
-        fragment: &Fragment,
-        output: &mut Output,
-        queue: &mut VecDeque<CompileUnit>,
-    ) -> Option<InstructionAddress> {
-        let addr = match &fragment.payload {
-            FragmentPayload::Expression { expression, .. } => {
-                match expression {
-                    FragmentExpression::BindingDefinitions { names } => output
-                        .generate_instruction(
-                            Instruction::BindingsDefine {
-                                names: names.clone(),
-                            },
-                            fragment.id(),
-                        ),
-                    FragmentExpression::Block { start, environment } => {
-                        // We are currently compiling a function or block
-                        // (otherwise we wouldn't be encountering any
-                        // expression), and the instructions for that will be
-                        // executed linearly.
-                        //
-                        // Which means we can't just start compiling this block
-                        // right now. Its instructions would go into the middle
-                        // of those other instructions and mess everything up.
-                        //
-                        // What _should_ happen instead, is that the block is
-                        // turned into a closure, that can be passed around as a
-                        // value and called whenever so desired.
-                        //
-                        // So for now, let's just generate this instruction as
-                        // a placeholder, to be replaced with another
-                        // instruction that creates that closure, once we have
-                        // everything in place to make that happen.
-                        let address = output.generate_instruction(
-                            Instruction::Panic,
-                            fragment.id(),
-                        );
+fn compile_fragment(
+    fragment: &Fragment,
+    output: &mut Output,
+    queue: &mut VecDeque<CompileUnit>,
+) -> Option<InstructionAddress> {
+    let addr = match &fragment.payload {
+        FragmentPayload::Expression { expression, .. } => {
+            match expression {
+                FragmentExpression::BindingDefinitions { names } => output
+                    .generate_instruction(
+                        Instruction::BindingsDefine {
+                            names: names.clone(),
+                        },
+                        fragment.id(),
+                    ),
+                FragmentExpression::Block { start, environment } => {
+                    // We are currently compiling a function or block (otherwise
+                    // we wouldn't be encountering any expression), and the
+                    // instructions for that will be executed linearly.
+                    //
+                    // Which means we can't just start compiling this block
+                    // right now. Its instructions would go into the middle of
+                    // those other instructions and mess everything up.
+                    //
+                    // What _should_ happen instead, is that the block is turned
+                    // into a closure, that can be passed around as a value and
+                    // called whenever so desired.
+                    //
+                    // So for now, let's just generate this instruction as a
+                    // placeholder, to be replaced with another instruction that
+                    // creates that closure, once we have everything in place to
+                    // make that happen.
+                    let address = output.generate_instruction(
+                        Instruction::Panic,
+                        fragment.id(),
+                    );
 
-                        // And to make it happen later, we need to put what we
-                        // already have into a queue. Once whatever's currently
-                        // being compiled is out of the way, we can process
-                        // that.
-                        queue.push_front(CompileUnit::Block {
-                            start: *start,
-                            environment: environment.clone(),
-                            address,
-                        });
+                    // And to make it happen later, we need to put what we
+                    // already have into a queue. Once whatever's currently
+                    // being compiled is out of the way, we can process that.
+                    queue.push_front(CompileUnit::Block {
+                        start: *start,
+                        environment: environment.clone(),
+                        address,
+                    });
 
-                        address
-                    }
-                    FragmentExpression::Comment { .. } => {
-                        return None;
-                    }
-                    FragmentExpression::ResolvedBinding { name } => output
-                        .generate_instruction(
-                            Instruction::BindingEvaluate { name: name.clone() },
-                            fragment.id(),
-                        ),
-                    FragmentExpression::ResolvedBuiltinFunction { name } => {
-                        // Here we check for special built-in functions that are
-                        // implemented differently, without making sure
-                        // anywhere, that their name doesn't conflict with any
-                        // user-defined functions.
-                        //
-                        // I think it's fine for now. This seems like a
-                        // temporary hack anyway, while the language is not
-                        // powerful enough to support real conditionals.
-                        let instruction = if name == "return_if_non_zero" {
-                            Instruction::ReturnIfNonZero
-                        } else if name == "return_if_zero" {
-                            Instruction::ReturnIfZero
-                        } else {
-                            Instruction::CallBuiltin { name: name.clone() }
-                        };
-
-                        output.generate_instruction(instruction, fragment.id())
-                    }
-                    FragmentExpression::ResolvedHostFunction { name } => output
-                        .generate_instruction(
-                            Instruction::CallBuiltin { name: name.clone() },
-                            fragment.id(),
-                        ),
-                    FragmentExpression::ResolvedUserFunction {
-                        name,
-                        is_tail_call,
-                    } => {
-                        // We know that this expression refers to a user-defined
-                        // function, but we might not have compiled that
-                        // function yet.
-                        //
-                        // For now, just generate a placeholder that we can
-                        // replace with the call later.
-                        let address = output.generate_instruction(
-                            Instruction::Panic,
-                            fragment.id(),
-                        );
-
-                        // We can't leave it at that, however. We need to make
-                        // sure this placeholder actually gets replace later,
-                        // and we're doing that by adding it to this list.
-                        output.placeholders.inner.push(
-                            CallToUserDefinedFunction {
-                                name: name.clone(),
-                                address,
-                                is_tail_call: *is_tail_call,
-                            },
-                        );
-
-                        address
-                    }
-                    FragmentExpression::UnresolvedIdentifier { name: _ } => {
-                        output.generate_instruction(
-                            Instruction::Panic,
-                            fragment.id(),
-                        )
-                    }
-                    FragmentExpression::Value(value) => output
-                        .generate_instruction(
-                            Instruction::Push { value: *value },
-                            fragment.id(),
-                        ),
+                    address
                 }
-            }
-            FragmentPayload::Function(function) => {
-                queue.push_back(CompileUnit::Function(function.clone()));
-                return None;
-            }
-            FragmentPayload::Terminator => {
-                output.generate_instruction(Instruction::Return, fragment.id())
-            }
-        };
+                FragmentExpression::Comment { .. } => {
+                    return None;
+                }
+                FragmentExpression::ResolvedBinding { name } => output
+                    .generate_instruction(
+                        Instruction::BindingEvaluate { name: name.clone() },
+                        fragment.id(),
+                    ),
+                FragmentExpression::ResolvedBuiltinFunction { name } => {
+                    // Here we check for special built-in functions that are
+                    // implemented differently, without making sure anywhere,
+                    // that their name doesn't conflict with any user-defined
+                    // functions.
+                    //
+                    // I think it's fine for now. This seems like a temporary
+                    // hack anyway, while the language is not powerful enough to
+                    // support real conditionals.
+                    let instruction = if name == "return_if_non_zero" {
+                        Instruction::ReturnIfNonZero
+                    } else if name == "return_if_zero" {
+                        Instruction::ReturnIfZero
+                    } else {
+                        Instruction::CallBuiltin { name: name.clone() }
+                    };
 
-        Some(addr)
-    }
+                    output.generate_instruction(instruction, fragment.id())
+                }
+                FragmentExpression::ResolvedHostFunction { name } => output
+                    .generate_instruction(
+                        Instruction::CallBuiltin { name: name.clone() },
+                        fragment.id(),
+                    ),
+                FragmentExpression::ResolvedUserFunction {
+                    name,
+                    is_tail_call,
+                } => {
+                    // We know that this expression refers to a user-defined
+                    // function, but we might not have compiled that function
+                    // yet.
+                    //
+                    // For now, just generate a placeholder that we can replace
+                    // with the call later.
+                    let address = output.generate_instruction(
+                        Instruction::Panic,
+                        fragment.id(),
+                    );
+
+                    // We can't leave it at that, however. We need to make sure
+                    // this placeholder actually gets replace later, and we're
+                    // doing that by adding it to this list.
+                    output.placeholders.inner.push(CallToUserDefinedFunction {
+                        name: name.clone(),
+                        address,
+                        is_tail_call: *is_tail_call,
+                    });
+
+                    address
+                }
+                FragmentExpression::UnresolvedIdentifier { name: _ } => output
+                    .generate_instruction(Instruction::Panic, fragment.id()),
+                FragmentExpression::Value(value) => output
+                    .generate_instruction(
+                        Instruction::Push { value: *value },
+                        fragment.id(),
+                    ),
+            }
+        }
+        FragmentPayload::Function(function) => {
+            queue.push_back(CompileUnit::Function(function.clone()));
+            return None;
+        }
+        FragmentPayload::Terminator => {
+            output.generate_instruction(Instruction::Return, fragment.id())
+        }
+    };
+
+    Some(addr)
 }
 
 struct Output {
