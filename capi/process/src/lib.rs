@@ -3,7 +3,6 @@ mod builtins;
 mod bytecode;
 mod effects;
 mod evaluator;
-mod function;
 mod host;
 mod instructions;
 mod operands;
@@ -16,7 +15,6 @@ pub use self::{
     builtins::builtin,
     bytecode::Bytecode,
     effects::{CoreEffect, Effect},
-    function::Function,
     host::{Host, HostFunction, NoHost},
     instructions::{Instruction, InstructionAddress, Instructions},
     operands::Operands,

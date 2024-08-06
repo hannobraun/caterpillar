@@ -1,8 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{
-    Bytecode, Function, Instruction, InstructionAddress, Instructions,
-};
+use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     repr::{
@@ -329,4 +327,10 @@ struct CallToUserDefinedFunction {
     name: String,
     address: InstructionAddress,
     is_tail_call: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Function {
+    pub arguments: Vec<String>,
+    pub start: InstructionAddress,
 }
