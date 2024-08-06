@@ -32,7 +32,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         fragments: &fragments.inner,
     };
 
-    Compiler::compile_context(
+    compile_context(
         fragments.root,
         compiler.fragments,
         &mut compiler.output,
@@ -105,7 +105,7 @@ impl Compiler<'_> {
                     environment,
                     address,
                 } => {
-                    let start = Self::compile_context(
+                    let start = compile_context(
                         start,
                         self.fragments,
                         &mut self.output,
@@ -128,7 +128,7 @@ impl Compiler<'_> {
     }
 
     fn compile_function(&mut self, function: Function) {
-        let address = Self::compile_context(
+        let address = compile_context(
             function.start,
             self.fragments,
             &mut self.output,
@@ -155,30 +155,30 @@ impl Compiler<'_> {
         self.function_addresses_by_name
             .insert(function.name, address);
     }
+}
 
-    fn compile_context(
-        start: FragmentId,
-        fragments: &FragmentMap,
-        output: &mut Output,
-        queue: &mut VecDeque<CompileUnit>,
-    ) -> InstructionAddress {
-        let mut first_instruction = None;
+fn compile_context(
+    start: FragmentId,
+    fragments: &FragmentMap,
+    output: &mut Output,
+    queue: &mut VecDeque<CompileUnit>,
+) -> InstructionAddress {
+    let mut first_instruction = None;
 
-        for fragment in fragments.iter_from(start) {
-            let addr = compile_fragment(fragment, output, queue);
-            first_instruction = first_instruction.or(addr);
-        }
-
-        let Some(first_instruction) = first_instruction else {
-            unreachable!(
-                "Must have generated at least one instruction for the block: \
-                the return instruction. If this has not happened, the \
-                fragments have somehow been missing a terminator."
-            );
-        };
-
-        first_instruction
+    for fragment in fragments.iter_from(start) {
+        let addr = compile_fragment(fragment, output, queue);
+        first_instruction = first_instruction.or(addr);
     }
+
+    let Some(first_instruction) = first_instruction else {
+        unreachable!(
+            "Must have generated at least one instruction for the block: the \
+            return instruction. If this has not happened, the fragments have \
+            somehow been missing a terminator."
+        );
+    };
+
+    first_instruction
 }
 
 fn compile_fragment(
