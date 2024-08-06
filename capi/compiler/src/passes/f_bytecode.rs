@@ -29,20 +29,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let init = compiler.instructions.push(Instruction::Panic);
     compiler.instructions.push(Instruction::Return);
 
-    compiler.queue.extend(
-        fragments
-            .inner
-            .iter_from(fragments.root)
-            .filter_map(|fragment| {
-                if let FragmentPayload::Function(function) = &fragment.payload {
-                    Some(function)
-                } else {
-                    None
-                }
-            })
-            .cloned()
-            .map(CompileUnit::Function),
-    );
+    compiler.compile_context(fragments.root);
     compiler.compile();
 
     if let Some(address) = compiler.function_addresses_by_name.get("main") {
