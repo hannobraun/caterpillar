@@ -12,11 +12,12 @@ use crate::{
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+    let instructions = Instructions::default();
     let mut source_map = SourceMap::default();
 
     let mut compiler = Compiler {
         queue: VecDeque::new(),
-        instructions: Instructions::default(),
+        instructions,
         calls_to_user_defined_functions: Vec::new(),
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
