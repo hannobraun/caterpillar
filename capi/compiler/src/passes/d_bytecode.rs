@@ -21,7 +21,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         instructions: Instructions::default(),
         calls_to_user_defined_functions: Vec::new(),
         function_arguments_by_address: BTreeMap::new(),
-        functions_by_name: BTreeMap::new(),
+        function_addresses_by_name: BTreeMap::new(),
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
@@ -47,7 +47,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     );
     compiler.compile();
 
-    if let Some(start) = compiler.functions_by_name.get("main") {
+    if let Some(start) = compiler.function_addresses_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -68,7 +68,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     for call in compiler.calls_to_user_defined_functions {
-        let Some(start) = compiler.functions_by_name.get(&call.name) else {
+        let Some(start) = compiler.function_addresses_by_name.get(&call.name)
+        else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
                 compilation step would not have generated the fragment that \
@@ -99,7 +100,7 @@ struct Compiler<'r> {
     instructions: Instructions,
     calls_to_user_defined_functions: Vec<CallToUserDefinedFunction>,
     function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
-    functions_by_name: BTreeMap<String, InstructionAddress>,
+    function_addresses_by_name: BTreeMap<String, InstructionAddress>,
     source_map: &'r mut SourceMap,
     fragments: &'r FragmentMap,
 }
@@ -154,7 +155,7 @@ impl Compiler<'_> {
 
         self.function_arguments_by_address
             .insert(start, function.arguments.clone());
-        self.functions_by_name.insert(name, function.start);
+        self.function_addresses_by_name.insert(name, function.start);
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
