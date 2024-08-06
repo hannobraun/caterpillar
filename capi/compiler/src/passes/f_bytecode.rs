@@ -14,6 +14,7 @@ use crate::{
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut instructions = Instructions::default();
+    let placeholders = Placeholders::default();
     let mut source_map = SourceMap::default();
 
     // Create placeholder for call to `main` function, and the last return that
@@ -24,7 +25,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions,
-        placeholders: Placeholders::default(),
+        placeholders,
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
         source_map: &mut source_map,
