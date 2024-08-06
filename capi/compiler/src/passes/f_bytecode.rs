@@ -33,16 +33,14 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         output,
         functions: Functions {
             arguments_by_address: BTreeMap::new(),
-            function_addresses_by_name: BTreeMap::new(),
+            addresses_by_name: BTreeMap::new(),
         },
         fragments: &fragments.inner,
     };
 
     compiler.compile();
 
-    if let Some(address) =
-        compiler.functions.function_addresses_by_name.get("main")
-    {
+    if let Some(address) = compiler.functions.addresses_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -63,10 +61,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     for call in compiler.output.placeholders.inner {
-        let Some(address) = compiler
-            .functions
-            .function_addresses_by_name
-            .get(&call.name)
+        let Some(address) =
+            compiler.functions.addresses_by_name.get(&call.name)
         else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
@@ -158,7 +154,7 @@ impl Compiler<'_> {
             .arguments_by_address
             .insert(address, arguments);
         self.functions
-            .function_addresses_by_name
+            .addresses_by_name
             .insert(function.name, address);
     }
 }
@@ -334,7 +330,7 @@ impl Output {
 
 struct Functions {
     arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
-    function_addresses_by_name: BTreeMap<String, InstructionAddress>,
+    addresses_by_name: BTreeMap<String, InstructionAddress>,
 }
 
 enum CompileUnit {
