@@ -13,6 +13,7 @@ use crate::{
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+    let queue = VecDeque::new();
     let mut output = Output {
         instructions: Instructions::default(),
         placeholders: Placeholders::default(),
@@ -25,7 +26,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     output.instructions.push(Instruction::Return);
 
     let mut compiler = Compiler {
-        queue: VecDeque::new(),
+        queue,
         output,
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
