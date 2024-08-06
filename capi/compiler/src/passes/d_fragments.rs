@@ -190,7 +190,7 @@ mod tests {
                 FragmentPayload::Function { .. } => {
                     unreachable!(
                         "This test suite does not define functions within \
-                    function bodies."
+                        function bodies."
                     );
                 }
                 FragmentPayload::Terminator => None,
