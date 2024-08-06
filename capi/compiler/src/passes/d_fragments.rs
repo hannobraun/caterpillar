@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::{
-    repr::fragments::{
+    fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
@@ -150,8 +150,8 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
+        fragments::{Fragment, FragmentExpression, FragmentPayload},
         passes::generate_fragments,
-        repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
         syntax::Script,
     };
 

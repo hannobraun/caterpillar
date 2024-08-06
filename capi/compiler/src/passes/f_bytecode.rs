@@ -5,7 +5,7 @@ use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
 use crate::{
     source_map::SourceMap,
     {
-        repr::fragments::{
+        fragments::{
             Fragment, FragmentExpression, FragmentId, FragmentMap,
             FragmentPayload, Fragments, Function,
         },

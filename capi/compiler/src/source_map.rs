@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use capi_process::InstructionAddress;
 
-use crate::repr::fragments::FragmentId;
+use crate::fragments::FragmentId;
 
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,

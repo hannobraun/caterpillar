@@ -1,3 +1,4 @@
+pub mod fragments;
 pub mod repr;
 pub mod source_map;
 pub mod syntax;
@@ -10,7 +11,7 @@ mod tests;
 pub fn compile<H: capi_process::Host>(
     mut script: crate::syntax::Script,
 ) -> (
-    crate::repr::fragments::Fragments,
+    crate::fragments::Fragments,
     capi_process::Bytecode,
     crate::source_map::SourceMap,
 ) {

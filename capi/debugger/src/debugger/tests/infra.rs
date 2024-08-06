@@ -1,6 +1,4 @@
-use capi_compiler::{
-    compile, repr::fragments::FragmentExpression, syntax::Script,
-};
+use capi_compiler::{compile, fragments::FragmentExpression, syntax::Script};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Bytecode, Process};
 use capi_protocol::updates::{Code, Updates};

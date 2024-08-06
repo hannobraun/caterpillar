@@ -1,5 +1,5 @@
 use capi_compiler::{
-    repr::fragments::{self, Fragments},
+    fragments::{self, Fragments},
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;

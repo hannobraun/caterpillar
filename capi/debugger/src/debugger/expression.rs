@@ -1,7 +1,5 @@
 use capi_compiler::{
-    repr::fragments::{
-        Fragment, FragmentExpression, FragmentPayload, Fragments,
-    },
+    fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
     source_map::SourceMap,
 };
 use capi_game_engine::host::{GameEngineEffect, GameEngineHost};
