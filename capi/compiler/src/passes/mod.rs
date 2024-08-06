@@ -6,6 +6,6 @@ mod e_bytecode;
 
 pub use {
     a_tail_position::determine_tail_positions, b_resolve::resolve_identifiers,
-    c_clusters::group_functions, d_fragments::generate_fragments,
+    c_clusters::find_clusters, d_fragments::generate_fragments,
     e_bytecode::generate_bytecode,
 };

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::syntax::Function;
 
-pub fn group_functions(functions: &mut Vec<Function>) {
+pub fn find_clusters(functions: &mut Vec<Function>) {
     let mut groups = BTreeMap::new();
 
     for function in functions {
