@@ -154,7 +154,7 @@ impl Compiler<'_> {
         };
 
         self.function_arguments_by_address
-            .insert(start, function.arguments.clone());
+            .insert(start, function.arguments);
         self.function_addresses_by_name.insert(name, function.start);
     }
 
