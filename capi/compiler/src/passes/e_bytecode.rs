@@ -113,7 +113,7 @@ fn compile_function(
         .collect();
     let address = compile_context(function.start, fragments, output, queue);
 
-    functions.insert(function.name, arguments, address);
+    functions.insert(function.name, function.group_index, arguments, address);
 }
 
 fn compile_context(
@@ -302,6 +302,7 @@ impl Functions {
     fn insert(
         &mut self,
         name: String,
+        _group_index: u32,
         arguments: Vec<String>,
         address: InstructionAddress,
     ) {
