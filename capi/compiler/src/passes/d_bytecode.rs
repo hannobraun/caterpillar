@@ -155,7 +155,7 @@ impl Compiler<'_> {
         let arguments = function.arguments;
 
         self.function_arguments_by_address.insert(start, arguments);
-        self.function_addresses_by_name.insert(name, function.start);
+        self.function_addresses_by_name.insert(name, start);
     }
 
     fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
