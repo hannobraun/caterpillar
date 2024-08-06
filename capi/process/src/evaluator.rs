@@ -87,7 +87,7 @@ impl Evaluator {
                 is_tail_call,
             } => {
                 let arguments =
-                    bytecode.functions.get(address).cloned().unwrap();
+                    bytecode.function_arguments.get(address).cloned().unwrap();
 
                 let arguments = arguments
                     .into_iter()

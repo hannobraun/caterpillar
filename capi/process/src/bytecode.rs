@@ -13,5 +13,5 @@ use crate::{InstructionAddress, Instructions};
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Bytecode {
     pub instructions: Instructions,
-    pub functions: BTreeMap<InstructionAddress, Vec<String>>,
+    pub function_arguments: BTreeMap<InstructionAddress, Vec<String>>,
 }
