@@ -150,9 +150,8 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        fragments::{Fragment, FragmentExpression, FragmentPayload},
-        passes::generate_fragments,
-        syntax::Script,
+        fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
+        syntax::{self, Script},
     };
 
     #[test]
@@ -283,5 +282,9 @@ mod tests {
 
         assert_eq!(function_fragments[0].parent, Some(function.next),);
         assert_eq!(block_fragments[0].parent, Some(function_fragments[1].id()));
+    }
+
+    fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
+        super::generate_fragments(functions)
     }
 }
