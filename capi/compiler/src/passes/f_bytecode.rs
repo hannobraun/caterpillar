@@ -15,8 +15,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut instructions = Instructions::default();
     let mut source_map = SourceMap::default();
 
-    // This is a placeholder for the instruction that's going to call the entry
-    // function.
+    // Create placeholder for call to `main` function, and the last return that
+    // ends the process, if executed.
     let main = instructions.push(Instruction::Panic);
     instructions.push(Instruction::Return);
 
