@@ -7,6 +7,7 @@ use crate::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
+    placeholders::CallToUserDefinedFunction,
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -305,10 +306,4 @@ enum CompileUnit {
         address: InstructionAddress,
     },
     Function(Function),
-}
-
-pub struct CallToUserDefinedFunction {
-    pub name: String,
-    pub address: InstructionAddress,
-    pub is_tail_call: bool,
 }
