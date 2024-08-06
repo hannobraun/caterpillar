@@ -15,6 +15,7 @@ pub fn compile<H: capi_process::Host>(
 ) {
     passes::determine_tail_positions(&mut script.functions);
     passes::resolve_identifiers::<H>(&mut script.functions);
+    passes::group_functions(&mut script.functions);
     let fragments = passes::generate_fragments(script.functions);
     let (bytecode, source_map) = passes::generate_bytecode(fragments.clone());
 
