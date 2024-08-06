@@ -32,7 +32,12 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         fragments: &fragments.inner,
     };
 
-    compiler.compile_context(fragments.root);
+    Compiler::compile_context(
+        fragments.root,
+        compiler.fragments,
+        &mut compiler.output,
+        &mut compiler.queue,
+    );
     compiler.compile();
 
     if let Some(address) = compiler.function_addresses_by_name.get("main") {
@@ -100,7 +105,12 @@ impl Compiler<'_> {
                     environment,
                     address,
                 } => {
-                    let start = self.compile_context(start);
+                    let start = Self::compile_context(
+                        start,
+                        self.fragments,
+                        &mut self.output,
+                        &mut self.queue,
+                    );
 
                     self.output.instructions.replace(
                         address,
@@ -118,7 +128,12 @@ impl Compiler<'_> {
     }
 
     fn compile_function(&mut self, function: Function) {
-        let address = self.compile_context(function.start);
+        let address = Self::compile_context(
+            function.start,
+            self.fragments,
+            &mut self.output,
+            &mut self.queue,
+        );
         let arguments = function
             .arguments
             .into_iter()
@@ -141,12 +156,16 @@ impl Compiler<'_> {
             .insert(function.name, address);
     }
 
-    fn compile_context(&mut self, start: FragmentId) -> InstructionAddress {
+    fn compile_context(
+        start: FragmentId,
+        fragments: &FragmentMap,
+        output: &mut Output,
+        queue: &mut VecDeque<CompileUnit>,
+    ) -> InstructionAddress {
         let mut first_instruction = None;
 
-        for fragment in self.fragments.iter_from(start) {
-            let addr =
-                compile_fragment(fragment, &mut self.output, &mut self.queue);
+        for fragment in fragments.iter_from(start) {
+            let addr = compile_fragment(fragment, output, queue);
             first_instruction = first_instruction.or(addr);
         }
 
