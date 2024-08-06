@@ -97,7 +97,13 @@ impl FragmentPayload {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
+
+    /// The index of the function within its group
+    ///
+    /// Please refer to the documentation of the respective field in
+    /// `syntax::Function`.
     pub group_index: u32,
+
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
     pub next: FragmentId,
