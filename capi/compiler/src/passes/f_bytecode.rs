@@ -26,7 +26,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let mut compiler = Compiler {
         functions: Functions::default(),
-        fragments: &fragments.inner,
     };
 
     while let Some(unit) = queue.pop_front() {
@@ -38,7 +37,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             } => {
                 let start = compile_context(
                     start,
-                    compiler.fragments,
+                    &fragments.inner,
                     &mut output,
                     &mut queue,
                 );
@@ -54,7 +53,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             CompileUnit::Function(function) => {
                 compile_function(
                     function,
-                    compiler.fragments,
+                    &fragments.inner,
                     &mut output,
                     &mut queue,
                     &mut compiler.functions,
@@ -112,9 +111,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     (bytecode, output.source_map)
 }
 
-struct Compiler<'r> {
+struct Compiler {
     functions: Functions,
-    fragments: &'r FragmentMap,
 }
 
 fn compile_function(
