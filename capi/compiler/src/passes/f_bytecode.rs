@@ -17,7 +17,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     // This is a placeholder for the instruction that's going to call the entry
     // function.
-    let init = instructions.push(Instruction::Panic);
+    let main = instructions.push(Instruction::Panic);
     instructions.push(Instruction::Return);
 
     let mut compiler = Compiler {
@@ -45,7 +45,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         // In addition, this is something that should be detected during pre-
         // compilation, and result in a nice error message in the debugger.
         compiler.instructions.replace(
-            init,
+            main,
             Instruction::CallFunction {
                 address: *address,
                 is_tail_call: true,
