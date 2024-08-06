@@ -13,7 +13,9 @@ impl FragmentId {
     }
 
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
-        hasher.update(self.hash.as_bytes());
+        // Let's destructure `self`, to make sure we don't forget any fields.
+        let Self { hash } = self;
+        hasher.update(hash.as_bytes());
     }
 }
 
