@@ -15,7 +15,7 @@ use crate::{
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut instructions = Instructions::default();
     let placeholders = Placeholders::default();
-    let mut source_map = SourceMap::default();
+    let source_map = SourceMap::default();
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
@@ -28,7 +28,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         placeholders,
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
-        source_map: &mut source_map,
+        source_map,
         fragments: &fragments.inner,
     };
 
@@ -80,7 +80,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         function_arguments: compiler.function_arguments_by_address,
     };
 
-    (bytecode, source_map)
+    (bytecode, compiler.source_map)
 }
 
 struct Compiler<'r> {
@@ -89,7 +89,7 @@ struct Compiler<'r> {
     placeholders: Placeholders,
     function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     function_addresses_by_name: BTreeMap<String, InstructionAddress>,
-    source_map: &'r mut SourceMap,
+    source_map: SourceMap,
     fragments: &'r FragmentMap,
 }
 
