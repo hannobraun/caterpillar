@@ -14,11 +14,7 @@ use crate::{
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut queue = VecDeque::new();
-    let mut output = Output {
-        instructions: Instructions::default(),
-        placeholders: Placeholders::default(),
-        source_map: SourceMap::default(),
-    };
+    let mut output = Output::default();
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
@@ -307,6 +303,7 @@ fn compile_fragment(
     Some(addr)
 }
 
+#[derive(Default)]
 struct Output {
     instructions: Instructions,
     placeholders: Placeholders,
