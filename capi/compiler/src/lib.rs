@@ -19,7 +19,6 @@ pub fn compile<H: capi_process::Host>(
     passes::resolve_identifiers::<H>(&mut script.functions);
     let fragments = passes::generate_fragments(script.functions);
     let (bytecode, source_map) = passes::generate_bytecode(fragments.clone());
-    passes::replace_placeholders();
 
     (fragments, bytecode, source_map)
 }
