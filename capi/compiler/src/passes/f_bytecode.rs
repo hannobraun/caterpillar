@@ -12,8 +12,13 @@ use crate::{
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
-    let instructions = Instructions::default();
+    let mut instructions = Instructions::default();
     let mut source_map = SourceMap::default();
+
+    // This is a placeholder for the instruction that's going to call the entry
+    // function.
+    let init = instructions.push(Instruction::Panic);
+    instructions.push(Instruction::Return);
 
     let mut compiler = Compiler {
         queue: VecDeque::new(),
@@ -24,11 +29,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         source_map: &mut source_map,
         fragments: &fragments.inner,
     };
-
-    // This is a placeholder for the instruction that's going to call the entry
-    // function.
-    let init = compiler.instructions.push(Instruction::Panic);
-    compiler.instructions.push(Instruction::Return);
 
     compiler.compile_context(fragments.root);
     compiler.compile();
