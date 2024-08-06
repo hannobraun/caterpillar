@@ -329,7 +329,7 @@ struct CallToUserDefinedFunction {
     is_tail_call: bool,
 }
 
-pub struct Function {
-    pub arguments: Vec<String>,
-    pub start: InstructionAddress,
+struct Function {
+    arguments: Vec<String>,
+    start: InstructionAddress,
 }
