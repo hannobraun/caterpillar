@@ -15,6 +15,7 @@ use crate::{
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
+    let mut functions = Functions::default();
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
@@ -23,10 +24,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     // Seed the queue from the root context.
     compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
-
-    let mut compiler = Compiler {
-        functions: Functions::default(),
-    };
 
     while let Some(unit) = queue.pop_front() {
         match unit {
@@ -56,13 +53,13 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                     &fragments.inner,
                     &mut output,
                     &mut queue,
-                    &mut compiler.functions,
+                    &mut functions,
                 );
             }
         }
     }
 
-    if let Some(address) = compiler.functions.addresses_by_name.get("main") {
+    if let Some(address) = functions.addresses_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -83,9 +80,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     for call in output.placeholders.inner {
-        let Some(address) =
-            compiler.functions.addresses_by_name.get(&call.name)
-        else {
+        let Some(address) = functions.addresses_by_name.get(&call.name) else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
                 compilation step would not have generated the fragment that \
@@ -105,14 +100,10 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: output.instructions,
-        function_arguments: compiler.functions.arguments_by_address,
+        function_arguments: functions.arguments_by_address,
     };
 
     (bytecode, output.source_map)
-}
-
-struct Compiler {
-    functions: Functions,
 }
 
 fn compile_function(
