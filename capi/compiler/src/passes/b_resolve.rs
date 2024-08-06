@@ -31,7 +31,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
         );
         let mut environment = Environment::new();
 
-        resolve_block::<H>(
+        resolve_in_block::<H>(
             &mut function.body,
             &mut scopes,
             &mut environment,
@@ -45,7 +45,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     }
 }
 
-fn resolve_block<H: Host>(
+fn resolve_in_block<H: Host>(
     body: &mut [Expression],
     scopes: &mut Scopes,
     environment: &mut Environment,
@@ -62,7 +62,12 @@ fn resolve_block<H: Host>(
             }
             Expression::Block { body, environment } => {
                 scopes.push(Bindings::new());
-                resolve_block::<H>(body, scopes, environment, user_functions);
+                resolve_in_block::<H>(
+                    body,
+                    scopes,
+                    environment,
+                    user_functions,
+                );
             }
             Expression::Identifier { name, target, .. } => {
                 // The way this is written, definitions can silently shadow each
