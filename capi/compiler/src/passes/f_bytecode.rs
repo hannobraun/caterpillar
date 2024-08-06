@@ -114,7 +114,7 @@ impl Compiler<'_> {
                     );
                 }
                 CompileUnit::Function(function) => {
-                    Self::compile_function(
+                    compile_function(
                         function,
                         self.fragments,
                         &mut self.output,
@@ -125,34 +125,33 @@ impl Compiler<'_> {
             }
         }
     }
+}
 
-    fn compile_function(
-        function: Function,
-        fragments: &FragmentMap,
-        output: &mut Output,
-        queue: &mut VecDeque<CompileUnit>,
-        functions: &mut Functions,
-    ) {
-        let address = compile_context(function.start, fragments, output, queue);
-        let arguments = function
-            .arguments
-            .into_iter()
-            .filter_map(|pattern| match pattern {
-                Pattern::Identifier { name } => Some(name),
-                Pattern::Literal { .. } => {
-                    // The parameter list of a function is used to provide the
-                    // arguments to the function at runtime. But literal
-                    // patterns aren't relevant to the function itself. They are
-                    // only used to select which function to call in the first
-                    // place.
-                    None
-                }
-            })
-            .collect();
+fn compile_function(
+    function: Function,
+    fragments: &FragmentMap,
+    output: &mut Output,
+    queue: &mut VecDeque<CompileUnit>,
+    functions: &mut Functions,
+) {
+    let address = compile_context(function.start, fragments, output, queue);
+    let arguments = function
+        .arguments
+        .into_iter()
+        .filter_map(|pattern| match pattern {
+            Pattern::Identifier { name } => Some(name),
+            Pattern::Literal { .. } => {
+                // The parameter list of a function is used to provide the
+                // arguments to the function at runtime. But literal patterns
+                // aren't relevant to the function itself. They are only used to
+                // select which function to call in the first place.
+                None
+            }
+        })
+        .collect();
 
-        functions.arguments_by_address.insert(address, arguments);
-        functions.addresses_by_name.insert(function.name, address);
-    }
+    functions.arguments_by_address.insert(address, arguments);
+    functions.addresses_by_name.insert(function.name, address);
 }
 
 fn compile_context(
