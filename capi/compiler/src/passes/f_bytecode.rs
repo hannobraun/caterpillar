@@ -13,22 +13,24 @@ use crate::{
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
-    let mut instructions = Instructions::default();
-    let placeholders = Placeholders::default();
-    let source_map = SourceMap::default();
+    let mut output = Output {
+        instructions: Instructions::default(),
+        placeholders: Placeholders::default(),
+        source_map: SourceMap::default(),
+    };
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
-    let main = instructions.push(Instruction::Panic);
-    instructions.push(Instruction::Return);
+    let main = output.instructions.push(Instruction::Panic);
+    output.instructions.push(Instruction::Return);
 
     let mut compiler = Compiler {
         queue: VecDeque::new(),
-        instructions,
-        placeholders,
+        instructions: output.instructions,
+        placeholders: output.placeholders,
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
-        source_map,
+        source_map: output.source_map,
         fragments: &fragments.inner,
     };
 
@@ -298,6 +300,12 @@ impl Compiler<'_> {
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
+}
+
+struct Output {
+    instructions: Instructions,
+    placeholders: Placeholders,
+    source_map: SourceMap,
 }
 
 enum CompileUnit {
