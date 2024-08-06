@@ -21,6 +21,11 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     // ends the process, if executed.
     let main = output.instructions.push(Instruction::Panic);
     output.instructions.push(Instruction::Return);
+    output.placeholders.inner.push(CallToUserDefinedFunction {
+        name: "main".to_string(),
+        address: main,
+        is_tail_call: true,
+    });
 
     // Seed the queue from the root context.
     compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
@@ -57,26 +62,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 );
             }
         }
-    }
-
-    if let Some(address) = functions.addresses_by_name.get("main") {
-        // If we have an entry function, replace that panic instruction we added
-        // as a placeholder.
-        //
-        // Right now, this will just result in an non-descriptive panic, if no
-        // entry function was provided. Eventually, the panic instruction might
-        // grow a "reason" parameter which will provide more clarity in such a
-        // case.
-        //
-        // In addition, this is something that should be detected during pre-
-        // compilation, and result in a nice error message in the debugger.
-        output.instructions.replace(
-            main,
-            Instruction::CallFunction {
-                address: *address,
-                is_tail_call: true,
-            },
-        );
     }
 
     for call in output.placeholders.inner {
