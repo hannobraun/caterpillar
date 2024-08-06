@@ -5,8 +5,8 @@ use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
 use crate::{
     repr::{
         fragments::{
-            self, Fragment, FragmentExpression, FragmentId, FragmentMap,
-            FragmentPayload, Fragments,
+            Fragment, FragmentExpression, FragmentId, FragmentMap,
+            FragmentPayload, Fragments, Function,
         },
         syntax::Pattern,
     },
@@ -131,7 +131,7 @@ impl Compiler<'_> {
         }
     }
 
-    fn compile_function(&mut self, function: fragments::Function) {
+    fn compile_function(&mut self, function: Function) {
         let name = function.name;
         let start = self.compile_block(function.start);
         let arguments = function
@@ -317,7 +317,7 @@ enum CompileUnit {
         environment: BTreeSet<String>,
         address: InstructionAddress,
     },
-    Function(fragments::Function),
+    Function(Function),
 }
 
 struct CallToUserDefinedFunction {
