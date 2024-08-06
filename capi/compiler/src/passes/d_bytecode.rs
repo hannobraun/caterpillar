@@ -90,7 +90,11 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: compiler.instructions,
-        functions: compiler.functions_by_address,
+        functions: compiler
+            .functions_by_address
+            .into_iter()
+            .map(|(address, function)| (address, function.arguments))
+            .collect(),
     };
 
     (bytecode, source_map)

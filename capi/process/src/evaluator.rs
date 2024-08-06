@@ -86,11 +86,10 @@ impl Evaluator {
                 address,
                 is_tail_call,
             } => {
-                let function =
+                let arguments =
                     bytecode.functions.get(address).cloned().unwrap();
 
-                let arguments = function
-                    .arguments
+                let arguments = arguments
                     .into_iter()
                     .rev()
                     .map(|name| {
