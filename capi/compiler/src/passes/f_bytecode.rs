@@ -24,7 +24,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue: VecDeque::new(),
         instructions,
-        calls_to_user_defined_functions: Placeholders { inner: Vec::new() },
+        placeholders: Placeholders { inner: Vec::new() },
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
         source_map: &mut source_map,
@@ -54,7 +54,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for call in compiler.calls_to_user_defined_functions.inner {
+    for call in compiler.placeholders.inner {
         let Some(address) = compiler.function_addresses_by_name.get(&call.name)
         else {
             unreachable!(
@@ -85,7 +85,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     instructions: Instructions,
-    calls_to_user_defined_functions: Placeholders,
+    placeholders: Placeholders,
     function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     function_addresses_by_name: BTreeMap<String, InstructionAddress>,
     source_map: &'r mut SourceMap,
@@ -256,7 +256,7 @@ impl Compiler<'_> {
                         // We can't leave it at that, however. We need to make
                         // sure this placeholder actually gets replace later,
                         // and we're doing that by adding it to this list.
-                        self.calls_to_user_defined_functions.inner.push(
+                        self.placeholders.inner.push(
                             CallToUserDefinedFunction {
                                 name: name.clone(),
                                 address,
