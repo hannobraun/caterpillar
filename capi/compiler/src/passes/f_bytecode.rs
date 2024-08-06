@@ -112,7 +112,7 @@ impl Compiler<'_> {
                     environment,
                     address,
                 } => {
-                    let start = self.compile_block(start);
+                    let start = self.compile_context(start);
 
                     self.instructions.replace(
                         address,
@@ -130,7 +130,7 @@ impl Compiler<'_> {
     }
 
     fn compile_function(&mut self, function: Function) {
-        let address = self.compile_block(function.start);
+        let address = self.compile_context(function.start);
         let arguments = function
             .arguments
             .into_iter()
@@ -153,7 +153,7 @@ impl Compiler<'_> {
             .insert(function.name, address);
     }
 
-    fn compile_block(&mut self, start: FragmentId) -> InstructionAddress {
+    fn compile_context(&mut self, start: FragmentId) -> InstructionAddress {
         let mut first_instruction = None;
 
         for fragment in self.fragments.iter_from(start) {
