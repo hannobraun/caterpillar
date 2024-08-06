@@ -184,6 +184,12 @@ mod tests {
             .inner
             .iter_from(function.start)
             .filter_map(|fragment| match &fragment.payload {
+                FragmentPayload::Cluster { .. } => {
+                    unreachable!(
+                        "This test suite does not define functions within \
+                        function bodies."
+                    );
+                }
                 FragmentPayload::Expression { expression, .. } => {
                     Some(expression.clone())
                 }

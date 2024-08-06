@@ -37,6 +37,9 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.payload {
+            FragmentPayload::Cluster { members } => {
+                members.last().map(|function| function.next)
+            }
             FragmentPayload::Expression { next, .. } => Some(*next),
             FragmentPayload::Function(Function { next, .. }) => Some(*next),
             FragmentPayload::Terminator => None,
@@ -46,6 +49,14 @@ impl Fragment {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
+    /// A cluster is a group of functions that share a name
+    ///
+    /// Functions are called as a cluster, and the function within the cluster
+    /// is dispatched to via pattern matching on their arguments.
+    Cluster {
+        members: Vec<Function>,
+    },
+
     Expression {
         expression: FragmentExpression,
         next: FragmentId,
@@ -57,6 +68,12 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
+            Self::Cluster { members } => {
+                hasher.update(b"cluster");
+                for function in members {
+                    function.hash(hasher);
+                }
+            }
             Self::Expression { expression, next } => {
                 hasher.update(b"expression");
                 expression.hash(hasher);
