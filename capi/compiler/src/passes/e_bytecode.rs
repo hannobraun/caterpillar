@@ -97,7 +97,6 @@ fn compile_function(
     queue: &mut VecDeque<CompileUnit>,
     functions: &mut Functions,
 ) {
-    let address = compile_context(function.start, fragments, output, queue);
     let arguments = function
         .arguments
         .into_iter()
@@ -112,6 +111,7 @@ fn compile_function(
             }
         })
         .collect();
+    let address = compile_context(function.start, fragments, output, queue);
 
     functions.insert(function.name, arguments, address);
 }
