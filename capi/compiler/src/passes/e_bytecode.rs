@@ -7,7 +7,6 @@ use crate::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
-    placeholders::CallToUserDefinedFunction,
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -286,6 +285,12 @@ impl Output {
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
+}
+
+pub struct CallToUserDefinedFunction {
+    pub name: String,
+    pub address: InstructionAddress,
+    pub is_tail_call: bool,
 }
 
 #[derive(Default)]

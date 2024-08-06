@@ -3,7 +3,6 @@ pub mod source_map;
 pub mod syntax;
 
 mod passes;
-mod placeholders;
 
 #[cfg(test)]
 mod tests;
