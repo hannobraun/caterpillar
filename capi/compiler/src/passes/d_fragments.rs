@@ -8,13 +8,31 @@ use crate::{
     syntax::{self, Expression, IdentifierTarget},
 };
 
-pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
+use super::c_clusters::Cluster;
+
+pub fn generate_fragments(clusters: Vec<Cluster>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
 
     let root = compile_context(
-        functions.into_iter().map(SyntaxElement::Item),
+        clusters
+            .into_iter()
+            .map(|cluster| {
+                let mut functions = cluster.members.into_iter();
+
+                let function = functions.next().expect(
+                    "Clusters must not be empty; what reason to create them \
+                    otherwise?",
+                );
+                assert!(
+                    functions.next().is_none(),
+                    "Clusters with multiple members are not supported yet."
+                );
+
+                function
+            })
+            .map(SyntaxElement::Item),
         None,
         &mut fragments,
     );
@@ -151,6 +169,7 @@ mod tests {
 
     use crate::{
         fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
+        passes::find_clusters,
         syntax::{self, Script},
     };
 
@@ -285,6 +304,7 @@ mod tests {
     }
 
     fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
-        super::generate_fragments(functions)
+        let clusters = find_clusters(functions);
+        super::generate_fragments(clusters)
     }
 }
