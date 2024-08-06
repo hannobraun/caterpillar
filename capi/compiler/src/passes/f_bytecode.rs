@@ -25,7 +25,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
 
     let mut compiler = Compiler {
-        output,
         functions: Functions::default(),
         fragments: &fragments.inner,
     };
@@ -40,11 +39,11 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 let start = compile_context(
                     start,
                     compiler.fragments,
-                    &mut compiler.output,
+                    &mut output,
                     &mut queue,
                 );
 
-                compiler.output.instructions.replace(
+                output.instructions.replace(
                     address,
                     Instruction::MakeClosure {
                         address: start,
@@ -56,7 +55,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 compile_function(
                     function,
                     compiler.fragments,
-                    &mut compiler.output,
+                    &mut output,
                     &mut queue,
                     &mut compiler.functions,
                 );
@@ -75,7 +74,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         //
         // In addition, this is something that should be detected during pre-
         // compilation, and result in a nice error message in the debugger.
-        compiler.output.instructions.replace(
+        output.instructions.replace(
             main,
             Instruction::CallFunction {
                 address: *address,
@@ -84,7 +83,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for call in compiler.output.placeholders.inner {
+    for call in output.placeholders.inner {
         let Some(address) =
             compiler.functions.addresses_by_name.get(&call.name)
         else {
@@ -96,7 +95,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             );
         };
 
-        compiler.output.instructions.replace(
+        output.instructions.replace(
             call.address,
             Instruction::CallFunction {
                 address: *address,
@@ -106,15 +105,14 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     let bytecode = Bytecode {
-        instructions: compiler.output.instructions,
+        instructions: output.instructions,
         function_arguments: compiler.functions.arguments_by_address,
     };
 
-    (bytecode, compiler.output.source_map)
+    (bytecode, output.source_map)
 }
 
 struct Compiler<'r> {
-    output: Output,
     functions: Functions,
     fragments: &'r FragmentMap,
 }
