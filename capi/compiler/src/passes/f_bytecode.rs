@@ -307,8 +307,8 @@ enum CompileUnit {
     Function(Function),
 }
 
-struct CallToUserDefinedFunction {
-    name: String,
-    address: InstructionAddress,
-    is_tail_call: bool,
+pub struct CallToUserDefinedFunction {
+    pub name: String,
+    pub address: InstructionAddress,
+    pub is_tail_call: bool,
 }
