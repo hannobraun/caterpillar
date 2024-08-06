@@ -145,7 +145,11 @@ impl Compiler<'_> {
         let mut first_instruction = None;
 
         for fragment in self.fragments.iter_from(start) {
-            let addr = self.compile_fragment(fragment);
+            let addr = Self::compile_fragment(
+                fragment,
+                &mut self.output,
+                &mut self.queue,
+            );
             first_instruction = first_instruction.or(addr);
         }
 
@@ -161,20 +165,20 @@ impl Compiler<'_> {
     }
 
     fn compile_fragment(
-        &mut self,
         fragment: &Fragment,
+        output: &mut Output,
+        queue: &mut VecDeque<CompileUnit>,
     ) -> Option<InstructionAddress> {
         let addr = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
-                    FragmentExpression::BindingDefinitions { names } => {
-                        self.output.generate_instruction(
+                    FragmentExpression::BindingDefinitions { names } => output
+                        .generate_instruction(
                             Instruction::BindingsDefine {
                                 names: names.clone(),
                             },
                             fragment.id(),
-                        )
-                    }
+                        ),
                     FragmentExpression::Block { start, environment } => {
                         // We are currently compiling a function or block
                         // (otherwise we wouldn't be encountering any
@@ -193,7 +197,7 @@ impl Compiler<'_> {
                         // a placeholder, to be replaced with another
                         // instruction that creates that closure, once we have
                         // everything in place to make that happen.
-                        let address = self.output.generate_instruction(
+                        let address = output.generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                         );
@@ -202,7 +206,7 @@ impl Compiler<'_> {
                         // already have into a queue. Once whatever's currently
                         // being compiled is out of the way, we can process
                         // that.
-                        self.queue.push_front(CompileUnit::Block {
+                        queue.push_front(CompileUnit::Block {
                             start: *start,
                             environment: environment.clone(),
                             address,
@@ -213,12 +217,11 @@ impl Compiler<'_> {
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
-                    FragmentExpression::ResolvedBinding { name } => {
-                        self.output.generate_instruction(
+                    FragmentExpression::ResolvedBinding { name } => output
+                        .generate_instruction(
                             Instruction::BindingEvaluate { name: name.clone() },
                             fragment.id(),
-                        )
-                    }
+                        ),
                     FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
@@ -236,15 +239,13 @@ impl Compiler<'_> {
                             Instruction::CallBuiltin { name: name.clone() }
                         };
 
-                        self.output
-                            .generate_instruction(instruction, fragment.id())
+                        output.generate_instruction(instruction, fragment.id())
                     }
-                    FragmentExpression::ResolvedHostFunction { name } => {
-                        self.output.generate_instruction(
+                    FragmentExpression::ResolvedHostFunction { name } => output
+                        .generate_instruction(
                             Instruction::CallBuiltin { name: name.clone() },
                             fragment.id(),
-                        )
-                    }
+                        ),
                     FragmentExpression::ResolvedUserFunction {
                         name,
                         is_tail_call,
@@ -255,7 +256,7 @@ impl Compiler<'_> {
                         //
                         // For now, just generate a placeholder that we can
                         // replace with the call later.
-                        let address = self.output.generate_instruction(
+                        let address = output.generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                         );
@@ -263,7 +264,7 @@ impl Compiler<'_> {
                         // We can't leave it at that, however. We need to make
                         // sure this placeholder actually gets replace later,
                         // and we're doing that by adding it to this list.
-                        self.output.placeholders.inner.push(
+                        output.placeholders.inner.push(
                             CallToUserDefinedFunction {
                                 name: name.clone(),
                                 address,
@@ -274,27 +275,25 @@ impl Compiler<'_> {
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
-                        self.output.generate_instruction(
+                        output.generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                         )
                     }
-                    FragmentExpression::Value(value) => {
-                        self.output.generate_instruction(
+                    FragmentExpression::Value(value) => output
+                        .generate_instruction(
                             Instruction::Push { value: *value },
                             fragment.id(),
-                        )
-                    }
+                        ),
                 }
             }
             FragmentPayload::Function(function) => {
-                self.queue
-                    .push_back(CompileUnit::Function(function.clone()));
+                queue.push_back(CompileUnit::Function(function.clone()));
                 return None;
             }
-            FragmentPayload::Terminator => self
-                .output
-                .generate_instruction(Instruction::Return, fragment.id()),
+            FragmentPayload::Terminator => {
+                output.generate_instruction(Instruction::Return, fragment.id())
+            }
         };
 
         Some(addr)
