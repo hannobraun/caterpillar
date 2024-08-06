@@ -31,14 +31,18 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     let mut compiler = Compiler {
         queue,
         output,
-        function_arguments_by_address: BTreeMap::new(),
-        function_addresses_by_name: BTreeMap::new(),
+        functions: Functions {
+            function_arguments_by_address: BTreeMap::new(),
+            function_addresses_by_name: BTreeMap::new(),
+        },
         fragments: &fragments.inner,
     };
 
     compiler.compile();
 
-    if let Some(address) = compiler.function_addresses_by_name.get("main") {
+    if let Some(address) =
+        compiler.functions.function_addresses_by_name.get("main")
+    {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -59,7 +63,10 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     for call in compiler.output.placeholders.inner {
-        let Some(address) = compiler.function_addresses_by_name.get(&call.name)
+        let Some(address) = compiler
+            .functions
+            .function_addresses_by_name
+            .get(&call.name)
         else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
@@ -80,7 +87,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let bytecode = Bytecode {
         instructions: compiler.output.instructions,
-        function_arguments: compiler.function_arguments_by_address,
+        function_arguments: compiler.functions.function_arguments_by_address,
     };
 
     (bytecode, compiler.output.source_map)
@@ -89,8 +96,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
     output: Output,
-    function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
-    function_addresses_by_name: BTreeMap<String, InstructionAddress>,
+    functions: Functions,
     fragments: &'r FragmentMap,
 }
 
@@ -148,9 +154,11 @@ impl Compiler<'_> {
             })
             .collect();
 
-        self.function_arguments_by_address
+        self.functions
+            .function_arguments_by_address
             .insert(address, arguments);
-        self.function_addresses_by_name
+        self.functions
+            .function_addresses_by_name
             .insert(function.name, address);
     }
 }
@@ -322,6 +330,11 @@ impl Output {
         self.source_map.define_mapping(addr, fragment_id);
         addr
     }
+}
+
+struct Functions {
+    function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
+    function_addresses_by_name: BTreeMap<String, InstructionAddress>,
 }
 
 enum CompileUnit {
