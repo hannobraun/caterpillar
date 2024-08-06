@@ -1,5 +1,9 @@
 use capi_process::InstructionAddress;
 
+pub struct Placeholders {
+    pub inner: Vec<CallToUserDefinedFunction>,
+}
+
 pub struct CallToUserDefinedFunction {
     pub name: String,
     pub address: InstructionAddress,
