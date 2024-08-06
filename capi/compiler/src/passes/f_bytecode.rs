@@ -3,14 +3,14 @@ use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
 
 use crate::{
-    repr::{
-        fragments::{
+    source_map::SourceMap,
+    {
+        repr::fragments::{
             Fragment, FragmentExpression, FragmentId, FragmentMap,
             FragmentPayload, Fragments, Function,
         },
         syntax::Pattern,
     },
-    source_map::SourceMap,
 };
 
 pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {

@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
-use crate::repr::{
-    fragments::{
+use crate::{
+    repr::fragments::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
@@ -151,10 +151,8 @@ mod tests {
 
     use crate::{
         passes::generate_fragments,
-        repr::{
-            fragments::{Fragment, FragmentExpression, FragmentPayload},
-            syntax::Script,
-        },
+        repr::fragments::{Fragment, FragmentExpression, FragmentPayload},
+        syntax::Script,
     };
 
     #[test]

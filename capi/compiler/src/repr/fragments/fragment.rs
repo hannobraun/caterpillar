@@ -1,4 +1,4 @@
-use crate::repr::syntax::Pattern;
+use crate::syntax::Pattern;
 
 use super::{FragmentExpression, FragmentId};
 

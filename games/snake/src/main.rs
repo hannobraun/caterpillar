@@ -1,4 +1,4 @@
-use capi_compiler::repr::syntax::Script;
+use capi_compiler::syntax::Script;
 
 pub fn main() {
     let mut script = Script::default();

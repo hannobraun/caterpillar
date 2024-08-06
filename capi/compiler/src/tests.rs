@@ -14,7 +14,7 @@ use std::collections::BTreeMap;
 
 use capi_process::{Effect, Host, Process, Stack};
 
-use crate::{compile, repr::syntax::Script};
+use crate::{compile, syntax::Script};
 
 #[test]
 fn closure_in_function() {

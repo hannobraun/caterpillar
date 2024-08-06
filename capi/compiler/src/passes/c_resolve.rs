@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use capi_process::{builtin, Host};
 
-use crate::repr::syntax::{Expression, Function, IdentifierTarget, Pattern};
+use crate::syntax::{Expression, Function, IdentifierTarget, Pattern};
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
@@ -112,7 +112,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack};
 
-    use crate::repr::syntax::{Expression, IdentifierTarget, Script};
+    use crate::syntax::{Expression, IdentifierTarget, Script};
 
     #[test]
     fn resolve_argument() {

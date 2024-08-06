@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::repr::syntax::Function;
+use crate::syntax::Function;
 
 pub fn group_functions(functions: &mut Vec<Function>) {
     let mut groups = BTreeMap::new();

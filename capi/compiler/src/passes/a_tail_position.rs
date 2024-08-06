@@ -1,4 +1,4 @@
-use crate::repr::syntax::{Expression, Function};
+use crate::syntax::{Expression, Function};
 
 pub fn determine_tail_positions(functions: &mut Vec<Function>) {
     for function in functions {
@@ -32,7 +32,7 @@ fn analyze_block(block: &mut [Expression]) {
 
 #[cfg(test)]
 mod tests {
-    use crate::repr::syntax::{Expression, Script};
+    use crate::syntax::{Expression, Script};
 
     use super::determine_tail_positions;
 
