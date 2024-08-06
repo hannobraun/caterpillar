@@ -62,30 +62,9 @@ impl FragmentPayload {
                 expression.hash(hasher);
                 next.hash(hasher);
             }
-            Self::Function(Function {
-                name,
-                group_index,
-                arguments,
-                start,
-                next,
-            }) => {
+            Self::Function(function) => {
                 hasher.update(b"function");
-                hasher.update(name.as_bytes());
-                hasher.update(&group_index.to_le_bytes());
-                for argument in arguments {
-                    match argument {
-                        Pattern::Identifier { name } => {
-                            hasher.update(b"identifier pattern");
-                            hasher.update(name.as_bytes());
-                        }
-                        Pattern::Literal { value } => {
-                            hasher.update(b"literal pattern");
-                            hasher.update(&value.0);
-                        }
-                    }
-                }
-                start.hash(hasher);
-                next.hash(hasher);
+                function.hash(hasher);
             }
             Self::Terminator => {
                 hasher.update(b"terminator");
@@ -107,4 +86,34 @@ pub struct Function {
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
     pub next: FragmentId,
+}
+
+impl Function {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        // Let's destructure `self`, to make sure we don't forget any fields.
+        let Self {
+            name,
+            group_index,
+            arguments,
+            start,
+            next,
+        } = self;
+
+        hasher.update(name.as_bytes());
+        hasher.update(&group_index.to_le_bytes());
+        for argument in arguments {
+            match argument {
+                Pattern::Identifier { name } => {
+                    hasher.update(b"identifier pattern");
+                    hasher.update(name.as_bytes());
+                }
+                Pattern::Literal { value } => {
+                    hasher.update(b"literal pattern");
+                    hasher.update(&value.0);
+                }
+            }
+        }
+        start.hash(hasher);
+        next.hash(hasher);
+    }
 }
