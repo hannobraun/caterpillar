@@ -68,7 +68,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     for call in compiler.calls_to_user_defined_functions {
-        let Some(start) = compiler.function_addresses_by_name.get(&call.name)
+        let Some(address) = compiler.function_addresses_by_name.get(&call.name)
         else {
             unreachable!(
                 "Expecting function `{}` to exist. If it didn't, the previous \
@@ -81,7 +81,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         compiler.instructions.replace(
             call.address,
             Instruction::CallFunction {
-                address: *start,
+                address: *address,
                 is_tail_call: call.is_tail_call,
             },
         );
