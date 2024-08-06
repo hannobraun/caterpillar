@@ -134,25 +134,21 @@ impl Compiler<'_> {
     fn compile_function(&mut self, function: fragments::Function) {
         let name = function.name;
         let start = self.compile_block(function.start);
-        let function = Function {
-            arguments: function
-                .arguments
-                .into_iter()
-                .filter_map(|pattern| match pattern {
-                    Pattern::Identifier { name } => Some(name),
-                    Pattern::Literal { .. } => {
-                        // The parameter list of a function is used to provide
-                        // the arguments to the function at runtime. But literal
-                        // patterns aren't relevant to the function itself. They
-                        // are only used to select which function to call in the
-                        // first place.
-                        None
-                    }
-                })
-                .collect(),
-            start,
-        };
-        let arguments = function.arguments;
+        let arguments = function
+            .arguments
+            .into_iter()
+            .filter_map(|pattern| match pattern {
+                Pattern::Identifier { name } => Some(name),
+                Pattern::Literal { .. } => {
+                    // The parameter list of a function is used to provide the
+                    // arguments to the function at runtime. But literal
+                    // patterns aren't relevant to the function itself. They are
+                    // only used to select which function to call in the first
+                    // place.
+                    None
+                }
+            })
+            .collect();
 
         self.function_arguments_by_address.insert(start, arguments);
         self.function_addresses_by_name.insert(name, start);
@@ -328,9 +324,4 @@ struct CallToUserDefinedFunction {
     name: String,
     address: InstructionAddress,
     is_tail_call: bool,
-}
-
-struct Function {
-    arguments: Vec<String>,
-    start: InstructionAddress,
 }
