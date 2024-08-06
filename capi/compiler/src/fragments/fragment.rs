@@ -36,9 +36,9 @@ impl Fragment {
     }
 
     pub fn next(&self) -> Option<FragmentId> {
-        match self.payload {
-            FragmentPayload::Expression { next, .. } => Some(next),
-            FragmentPayload::Function(Function { next, .. }) => Some(next),
+        match &self.payload {
+            FragmentPayload::Expression { next, .. } => Some(*next),
+            FragmentPayload::Function(Function { next, .. }) => Some(*next),
             FragmentPayload::Terminator => None,
         }
     }
