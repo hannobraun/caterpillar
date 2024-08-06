@@ -168,7 +168,7 @@ impl Compiler<'_> {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
                     FragmentExpression::BindingDefinitions { names } => {
-                        generate(
+                        generate_instruction(
                             Instruction::BindingsDefine {
                                 names: names.clone(),
                             },
@@ -194,7 +194,7 @@ impl Compiler<'_> {
                         // a placeholder, to be replaced with another
                         // instruction that creates that closure, once we have
                         // everything in place to make that happen.
-                        let address = generate(
+                        let address = generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                             &mut self.output,
@@ -215,11 +215,13 @@ impl Compiler<'_> {
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
-                    FragmentExpression::ResolvedBinding { name } => generate(
-                        Instruction::BindingEvaluate { name: name.clone() },
-                        fragment.id(),
-                        &mut self.output,
-                    ),
+                    FragmentExpression::ResolvedBinding { name } => {
+                        generate_instruction(
+                            Instruction::BindingEvaluate { name: name.clone() },
+                            fragment.id(),
+                            &mut self.output,
+                        )
+                    }
                     FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
@@ -237,10 +239,14 @@ impl Compiler<'_> {
                             Instruction::CallBuiltin { name: name.clone() }
                         };
 
-                        generate(instruction, fragment.id(), &mut self.output)
+                        generate_instruction(
+                            instruction,
+                            fragment.id(),
+                            &mut self.output,
+                        )
                     }
                     FragmentExpression::ResolvedHostFunction { name } => {
-                        generate(
+                        generate_instruction(
                             Instruction::CallBuiltin { name: name.clone() },
                             fragment.id(),
                             &mut self.output,
@@ -256,7 +262,7 @@ impl Compiler<'_> {
                         //
                         // For now, just generate a placeholder that we can
                         // replace with the call later.
-                        let address = generate(
+                        let address = generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                             &mut self.output,
@@ -276,13 +282,13 @@ impl Compiler<'_> {
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
-                        generate(
+                        generate_instruction(
                             Instruction::Panic,
                             fragment.id(),
                             &mut self.output,
                         )
                     }
-                    FragmentExpression::Value(value) => generate(
+                    FragmentExpression::Value(value) => generate_instruction(
                         Instruction::Push { value: *value },
                         fragment.id(),
                         &mut self.output,
@@ -294,16 +300,18 @@ impl Compiler<'_> {
                     .push_back(CompileUnit::Function(function.clone()));
                 return None;
             }
-            FragmentPayload::Terminator => {
-                generate(Instruction::Return, fragment.id(), &mut self.output)
-            }
+            FragmentPayload::Terminator => generate_instruction(
+                Instruction::Return,
+                fragment.id(),
+                &mut self.output,
+            ),
         };
 
         Some(addr)
     }
 }
 
-fn generate(
+fn generate_instruction(
     instruction: Instruction,
     fragment_id: FragmentId,
     output: &mut Output,
