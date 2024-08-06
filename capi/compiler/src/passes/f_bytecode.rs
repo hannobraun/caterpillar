@@ -167,13 +167,15 @@ impl Compiler<'_> {
         let addr = match &fragment.payload {
             FragmentPayload::Expression { expression, .. } => {
                 match expression {
-                    FragmentExpression::BindingDefinitions { names } => self
-                        .generate(
+                    FragmentExpression::BindingDefinitions { names } => {
+                        Self::generate(
                             Instruction::BindingsDefine {
                                 names: names.clone(),
                             },
                             fragment.id(),
-                        ),
+                            &mut self.output,
+                        )
+                    }
                     FragmentExpression::Block { start, environment } => {
                         // We are currently compiling a function or block
                         // (otherwise we wouldn't be encountering any
@@ -192,8 +194,11 @@ impl Compiler<'_> {
                         // a placeholder, to be replaced with another
                         // instruction that creates that closure, once we have
                         // everything in place to make that happen.
-                        let address =
-                            self.generate(Instruction::Panic, fragment.id());
+                        let address = Self::generate(
+                            Instruction::Panic,
+                            fragment.id(),
+                            &mut self.output,
+                        );
 
                         // And to make it happen later, we need to put what we
                         // already have into a queue. Once whatever's currently
@@ -210,11 +215,13 @@ impl Compiler<'_> {
                     FragmentExpression::Comment { .. } => {
                         return None;
                     }
-                    FragmentExpression::ResolvedBinding { name } => self
-                        .generate(
+                    FragmentExpression::ResolvedBinding { name } => {
+                        Self::generate(
                             Instruction::BindingEvaluate { name: name.clone() },
                             fragment.id(),
-                        ),
+                            &mut self.output,
+                        )
+                    }
                     FragmentExpression::ResolvedBuiltinFunction { name } => {
                         // Here we check for special built-in functions that are
                         // implemented differently, without making sure
@@ -232,13 +239,19 @@ impl Compiler<'_> {
                             Instruction::CallBuiltin { name: name.clone() }
                         };
 
-                        self.generate(instruction, fragment.id())
+                        Self::generate(
+                            instruction,
+                            fragment.id(),
+                            &mut self.output,
+                        )
                     }
-                    FragmentExpression::ResolvedHostFunction { name } => self
-                        .generate(
+                    FragmentExpression::ResolvedHostFunction { name } => {
+                        Self::generate(
                             Instruction::CallBuiltin { name: name.clone() },
                             fragment.id(),
-                        ),
+                            &mut self.output,
+                        )
+                    }
                     FragmentExpression::ResolvedUserFunction {
                         name,
                         is_tail_call,
@@ -249,8 +262,11 @@ impl Compiler<'_> {
                         //
                         // For now, just generate a placeholder that we can
                         // replace with the call later.
-                        let address =
-                            self.generate(Instruction::Panic, fragment.id());
+                        let address = Self::generate(
+                            Instruction::Panic,
+                            fragment.id(),
+                            &mut self.output,
+                        );
 
                         // We can't leave it at that, however. We need to make
                         // sure this placeholder actually gets replace later,
@@ -266,11 +282,16 @@ impl Compiler<'_> {
                         address
                     }
                     FragmentExpression::UnresolvedIdentifier { name: _ } => {
-                        self.generate(Instruction::Panic, fragment.id())
+                        Self::generate(
+                            Instruction::Panic,
+                            fragment.id(),
+                            &mut self.output,
+                        )
                     }
-                    FragmentExpression::Value(value) => self.generate(
+                    FragmentExpression::Value(value) => Self::generate(
                         Instruction::Push { value: *value },
                         fragment.id(),
+                        &mut self.output,
                     ),
                 }
             }
@@ -279,21 +300,23 @@ impl Compiler<'_> {
                     .push_back(CompileUnit::Function(function.clone()));
                 return None;
             }
-            FragmentPayload::Terminator => {
-                self.generate(Instruction::Return, fragment.id())
-            }
+            FragmentPayload::Terminator => Self::generate(
+                Instruction::Return,
+                fragment.id(),
+                &mut self.output,
+            ),
         };
 
         Some(addr)
     }
 
     fn generate(
-        &mut self,
         instruction: Instruction,
         fragment_id: FragmentId,
+        output: &mut Output,
     ) -> InstructionAddress {
-        let addr = self.output.instructions.push(instruction);
-        self.output.source_map.define_mapping(addr, fragment_id);
+        let addr = output.instructions.push(instruction);
+        output.source_map.define_mapping(addr, fragment_id);
         addr
     }
 }
