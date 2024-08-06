@@ -4,7 +4,7 @@ use capi_process::{builtin, Host};
 
 use crate::repr::syntax::{Expression, Function, IdentifierTarget, Pattern};
 
-pub fn resolve_references<H: Host>(functions: &mut Vec<Function>) {
+pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
     let user_functions = functions
         .iter()
@@ -307,7 +307,7 @@ mod tests {
     }
 
     fn resolve_references(script: &mut Script) {
-        super::resolve_references::<TestHost>(&mut script.functions)
+        super::resolve_identifiers::<TestHost>(&mut script.functions)
     }
 
     struct TestHost {}
