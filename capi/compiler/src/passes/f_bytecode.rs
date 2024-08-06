@@ -31,7 +31,39 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         fragments: &fragments.inner,
     };
 
-    compiler.compile();
+    while let Some(unit) = compiler.queue.pop_front() {
+        match unit {
+            CompileUnit::Block {
+                start,
+                environment,
+                address,
+            } => {
+                let start = compile_context(
+                    start,
+                    compiler.fragments,
+                    &mut compiler.output,
+                    &mut compiler.queue,
+                );
+
+                compiler.output.instructions.replace(
+                    address,
+                    Instruction::MakeClosure {
+                        address: start,
+                        environment,
+                    },
+                );
+            }
+            CompileUnit::Function(function) => {
+                compile_function(
+                    function,
+                    compiler.fragments,
+                    &mut compiler.output,
+                    &mut compiler.queue,
+                    &mut compiler.functions,
+                );
+            }
+        }
+    }
 
     if let Some(address) = compiler.functions.addresses_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
@@ -87,44 +119,6 @@ struct Compiler<'r> {
     output: Output,
     functions: Functions,
     fragments: &'r FragmentMap,
-}
-
-impl Compiler<'_> {
-    fn compile(&mut self) {
-        while let Some(unit) = self.queue.pop_front() {
-            match unit {
-                CompileUnit::Block {
-                    start,
-                    environment,
-                    address,
-                } => {
-                    let start = compile_context(
-                        start,
-                        self.fragments,
-                        &mut self.output,
-                        &mut self.queue,
-                    );
-
-                    self.output.instructions.replace(
-                        address,
-                        Instruction::MakeClosure {
-                            address: start,
-                            environment,
-                        },
-                    );
-                }
-                CompileUnit::Function(function) => {
-                    compile_function(
-                        function,
-                        self.fragments,
-                        &mut self.output,
-                        &mut self.queue,
-                        &mut self.functions,
-                    );
-                }
-            }
-        }
-    }
 }
 
 fn compile_function(
