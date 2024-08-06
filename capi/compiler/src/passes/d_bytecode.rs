@@ -47,7 +47,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     );
     compiler.compile();
 
-    if let Some(start) = compiler.function_addresses_by_name.get("main") {
+    if let Some(address) = compiler.function_addresses_by_name.get("main") {
         // If we have an entry function, replace that panic instruction we added
         // as a placeholder.
         //
@@ -61,7 +61,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         compiler.instructions.replace(
             init,
             Instruction::CallFunction {
-                address: *start,
+                address: *address,
                 is_tail_call: true,
             },
         );
