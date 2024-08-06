@@ -26,11 +26,9 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     let mut compiler = Compiler {
         queue: VecDeque::new(),
-        instructions: output.instructions,
-        placeholders: output.placeholders,
+        output,
         function_arguments_by_address: BTreeMap::new(),
         function_addresses_by_name: BTreeMap::new(),
-        source_map: output.source_map,
         fragments: &fragments.inner,
     };
 
@@ -48,7 +46,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         //
         // In addition, this is something that should be detected during pre-
         // compilation, and result in a nice error message in the debugger.
-        compiler.instructions.replace(
+        compiler.output.instructions.replace(
             main,
             Instruction::CallFunction {
                 address: *address,
@@ -57,7 +55,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
         );
     }
 
-    for call in compiler.placeholders.inner {
+    for call in compiler.output.placeholders.inner {
         let Some(address) = compiler.function_addresses_by_name.get(&call.name)
         else {
             unreachable!(
@@ -68,7 +66,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             );
         };
 
-        compiler.instructions.replace(
+        compiler.output.instructions.replace(
             call.address,
             Instruction::CallFunction {
                 address: *address,
@@ -78,20 +76,18 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     }
 
     let bytecode = Bytecode {
-        instructions: compiler.instructions,
+        instructions: compiler.output.instructions,
         function_arguments: compiler.function_arguments_by_address,
     };
 
-    (bytecode, compiler.source_map)
+    (bytecode, compiler.output.source_map)
 }
 
 struct Compiler<'r> {
     queue: VecDeque<CompileUnit>,
-    instructions: Instructions,
-    placeholders: Placeholders,
+    output: Output,
     function_arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     function_addresses_by_name: BTreeMap<String, InstructionAddress>,
-    source_map: SourceMap,
     fragments: &'r FragmentMap,
 }
 
@@ -106,7 +102,7 @@ impl Compiler<'_> {
                 } => {
                     let start = self.compile_context(start);
 
-                    self.instructions.replace(
+                    self.output.instructions.replace(
                         address,
                         Instruction::MakeClosure {
                             address: start,
@@ -259,7 +255,7 @@ impl Compiler<'_> {
                         // We can't leave it at that, however. We need to make
                         // sure this placeholder actually gets replace later,
                         // and we're doing that by adding it to this list.
-                        self.placeholders.inner.push(
+                        self.output.placeholders.inner.push(
                             CallToUserDefinedFunction {
                                 name: name.clone(),
                                 address,
@@ -296,8 +292,8 @@ impl Compiler<'_> {
         instruction: Instruction,
         fragment_id: FragmentId,
     ) -> InstructionAddress {
-        let addr = self.instructions.push(instruction);
-        self.source_map.define_mapping(addr, fragment_id);
+        let addr = self.output.instructions.push(instruction);
+        self.output.source_map.define_mapping(addr, fragment_id);
         addr
     }
 }
