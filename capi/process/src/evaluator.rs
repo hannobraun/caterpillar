@@ -105,7 +105,7 @@ impl Evaluator {
                     self.stack.push_frame(arguments)?;
                 }
 
-                self.stack.next_instruction = function.start;
+                self.stack.next_instruction = *address;
             }
             Instruction::MakeClosure {
                 address,
