@@ -114,19 +114,26 @@ impl Compiler<'_> {
                     );
                 }
                 CompileUnit::Function(function) => {
-                    self.compile_function(function);
+                    Self::compile_function(
+                        function,
+                        self.fragments,
+                        &mut self.output,
+                        &mut self.queue,
+                        &mut self.functions,
+                    );
                 }
             }
         }
     }
 
-    fn compile_function(&mut self, function: Function) {
-        let address = compile_context(
-            function.start,
-            self.fragments,
-            &mut self.output,
-            &mut self.queue,
-        );
+    fn compile_function(
+        function: Function,
+        fragments: &FragmentMap,
+        output: &mut Output,
+        queue: &mut VecDeque<CompileUnit>,
+        functions: &mut Functions,
+    ) {
+        let address = compile_context(function.start, fragments, output, queue);
         let arguments = function
             .arguments
             .into_iter()
@@ -143,12 +150,8 @@ impl Compiler<'_> {
             })
             .collect();
 
-        self.functions
-            .arguments_by_address
-            .insert(address, arguments);
-        self.functions
-            .addresses_by_name
-            .insert(function.name, address);
+        functions.arguments_by_address.insert(address, arguments);
+        functions.addresses_by_name.insert(function.name, address);
     }
 }
 
