@@ -113,8 +113,7 @@ fn compile_function(
         })
         .collect();
 
-    functions.arguments_by_address.insert(address, arguments);
-    functions.addresses_by_name.insert(function.name, address);
+    functions.insert(function.name, arguments, address);
 }
 
 fn compile_context(
@@ -297,6 +296,18 @@ pub struct CallToUserDefinedFunction {
 struct Functions {
     arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     addresses_by_name: BTreeMap<String, InstructionAddress>,
+}
+
+impl Functions {
+    fn insert(
+        &mut self,
+        name: String,
+        arguments: Vec<String>,
+        address: InstructionAddress,
+    ) {
+        self.arguments_by_address.insert(address, arguments);
+        self.addresses_by_name.insert(name, address);
+    }
 }
 
 enum CompileUnit {
