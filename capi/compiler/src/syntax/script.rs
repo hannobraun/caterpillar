@@ -52,8 +52,10 @@ impl PatternBuilder {
         self
     }
 
-    pub fn lit(&mut self, value: Value) -> &mut Self {
-        self.patterns.push(Pattern::Literal { value });
+    pub fn lit(&mut self, value: impl Into<Value>) -> &mut Self {
+        self.patterns.push(Pattern::Literal {
+            value: value.into(),
+        });
         self
     }
 }
