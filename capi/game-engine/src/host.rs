@@ -6,6 +6,10 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
+    fn arguments_to_main() -> Vec<String> {
+        ["size_x", "size_y"].map(String::from).into()
+    }
+
     fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
         match name {
             "load" => Some(load),

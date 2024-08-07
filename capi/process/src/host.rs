@@ -9,6 +9,8 @@ pub trait Host {
         + for<'de> serde::Deserialize<'de>
         + serde::Serialize;
 
+    fn arguments_to_main() -> Vec<String>;
+
     fn function(name: &str) -> Option<HostFunction<Self::Effect>>;
 }
 
@@ -18,6 +20,10 @@ pub struct NoHost {}
 
 impl Host for NoHost {
     type Effect = ();
+
+    fn arguments_to_main() -> Vec<String> {
+        Vec::new()
+    }
 
     fn function(_name: &str) -> Option<HostFunction<Self::Effect>> {
         None
