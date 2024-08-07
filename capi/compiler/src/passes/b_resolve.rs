@@ -112,7 +112,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack};
 
-    use crate::syntax::{Expression, IdentifierTarget, Script};
+    use crate::syntax::{Expression, Function, IdentifierTarget, Script};
 
     #[test]
     fn resolve_argument() {
@@ -127,10 +127,10 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("argument"),
                 target: Some(IdentifierTarget::Binding),
@@ -152,10 +152,10 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: Some(IdentifierTarget::Binding),
@@ -180,9 +180,9 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
-        let mut function = script.functions.remove(0);
+        let mut function = functions.remove(0);
         let Some(Expression::Block { body, environment }) =
             function.body.last_mut()
         else {
@@ -219,10 +219,10 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: None,
@@ -245,10 +245,10 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("brk"),
                 target: Some(IdentifierTarget::BuiltinFunction),
@@ -272,10 +272,10 @@ mod tests {
             },
         );
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
                 target: Some(IdentifierTarget::HostFunction),
@@ -299,10 +299,10 @@ mod tests {
         );
         script.function("user_fn", |p| p, |_| {});
 
-        resolve_identifiers(&mut script);
+        let mut functions = resolve_identifiers(script);
 
         assert_eq!(
-            script.functions.remove(0).body.last(),
+            functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
                 target: Some(IdentifierTarget::Cluster),
@@ -311,8 +311,9 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(script: &mut Script) {
+    fn resolve_identifiers(mut script: Script) -> Vec<Function> {
         super::resolve_identifiers::<TestHost>(&mut script.functions);
+        script.functions
     }
 
     struct TestHost {}
