@@ -27,14 +27,12 @@ pub enum FragmentExpression {
     ///
     /// ## Implementation Note
     ///
-    /// This enum variant duplicates some data that is already available in
-    /// `Cluster` itself. It should instead reference the respective cluster
-    /// directly, using an `id: FragmentId` field.
+    /// This enum variant references the cluster by name. It should instead
+    /// reference the cluster using an `id: FragmentId` field.
     ///
-    /// This would not only be cleaner, consolidating the redundant definition
-    /// of data, it would also have the advantage of versioning this call. It
-    /// could refer to any available version of the cluster, which is a useful
-    /// feature to have for many reasons.
+    /// This would have the advantage of versioning this call. It could refer to
+    /// any available version of the cluster, which is a useful feature to have
+    /// for many reasons.
     ///
     /// Unfortunately, this is not easy. There are two main hurdles, as best I
     /// can tell:
