@@ -1,6 +1,4 @@
-use crate::syntax::Pattern;
-
-use super::{FragmentExpression, FragmentId};
+use super::{Cluster, FragmentExpression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
@@ -80,62 +78,6 @@ impl FragmentPayload {
             }
             Self::Terminator => {
                 hasher.update(b"terminator");
-            }
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Cluster {
-    pub name: String,
-    pub members: Vec<Function>,
-}
-
-impl Cluster {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        // Let's destructure `self`, so we don't forget any fields.
-        let Self { name, members } = self;
-
-        hasher.update(name.as_bytes());
-        for function in members {
-            function.hash(hasher);
-        }
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Function {
-    pub arguments: Arguments,
-    pub start: FragmentId,
-}
-
-impl Function {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        // Let's destructure `self`, so we don't forget any fields.
-        let Self { arguments, start } = self;
-
-        arguments.hash(hasher);
-        start.hash(hasher);
-    }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Arguments {
-    pub inner: Vec<Pattern>,
-}
-
-impl Arguments {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        for argument in &self.inner {
-            match argument {
-                Pattern::Identifier { name } => {
-                    hasher.update(b"identifier pattern");
-                    hasher.update(name.as_bytes());
-                }
-                Pattern::Literal { value } => {
-                    hasher.update(b"literal pattern");
-                    hasher.update(&value.0);
-                }
             }
         }
     }

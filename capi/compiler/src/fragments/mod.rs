@@ -3,11 +3,13 @@
 mod expression;
 mod fragment;
 mod fragments;
+mod functions;
 mod id;
 
 pub use self::{
     expression::FragmentExpression,
-    fragment::{Arguments, Cluster, Fragment, FragmentPayload, Function},
+    fragment::{Fragment, FragmentPayload},
     fragments::{FragmentMap, Fragments},
+    functions::{Arguments, Cluster, Function},
     id::FragmentId,
 };
