@@ -104,7 +104,6 @@ impl Function {
         } = self;
 
         hasher.update(name.as_bytes());
-
         for argument in arguments {
             match argument {
                 Pattern::Identifier { name } => {
@@ -117,7 +116,6 @@ impl Function {
                 }
             }
         }
-
         start.hash(hasher);
     }
 }
