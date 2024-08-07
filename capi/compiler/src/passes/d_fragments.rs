@@ -8,9 +8,9 @@ use crate::{
     syntax::{Expression, IdentifierTarget},
 };
 
-use super::c_clusters::Cluster;
+use super::c_clusters;
 
-pub fn generate_fragments(clusters: Vec<Cluster>) -> Fragments {
+pub fn generate_fragments(clusters: Vec<c_clusters::Cluster>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
@@ -146,7 +146,7 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
-    Item(Cluster),
+    Item(c_clusters::Cluster),
 }
 
 #[cfg(test)]
