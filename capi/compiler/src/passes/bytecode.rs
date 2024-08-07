@@ -241,7 +241,7 @@ fn compile_fragment(
                     );
 
                     // We can't leave it at that, however. We need to make sure
-                    // this placeholder actually gets replace later, and we're
+                    // this placeholder actually gets replaced later, and we're
                     // doing that by adding it to this list.
                     output.placeholders.push(CallToCluster {
                         name: name.clone(),
