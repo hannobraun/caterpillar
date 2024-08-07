@@ -85,6 +85,8 @@ impl Evaluator {
                 is_tail_call,
             } => {
                 let arguments = arguments
+                    .first()
+                    .expect("Clusters must not be empty.")
                     .iter()
                     .cloned()
                     .rev()

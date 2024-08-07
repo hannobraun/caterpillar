@@ -97,21 +97,26 @@ pub fn generate_instructions(
             1,
             "Pattern matching in function definitions is not supported yet.",
         );
-        let (arguments, address) = cluster
+        let (_, address) = cluster
             .first()
             .expect("Just checked that there is one address");
 
-        let arguments = arguments
-            .inner
+        let arguments = cluster
             .iter()
-            .cloned()
-            .map(|pattern| match pattern {
-                Pattern::Identifier { name } => {
-                    capi_process::Pattern::Identifier { name }
-                }
-                Pattern::Literal { value } => {
-                    capi_process::Pattern::Literal { value }
-                }
+            .map(|(arguments, _)| {
+                arguments
+                    .inner
+                    .iter()
+                    .cloned()
+                    .map(|pattern| match pattern {
+                        Pattern::Identifier { name } => {
+                            capi_process::Pattern::Identifier { name }
+                        }
+                        Pattern::Literal { value } => {
+                            capi_process::Pattern::Literal { value }
+                        }
+                    })
+                    .collect()
             })
             .collect();
 

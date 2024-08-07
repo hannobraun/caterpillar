@@ -97,7 +97,7 @@ pub enum Instruction {
         name: String,
     },
     CallCluster {
-        arguments: Vec<Pattern>,
+        arguments: Vec<Vec<Pattern>>,
         address: InstructionAddress,
         is_tail_call: bool,
     },
