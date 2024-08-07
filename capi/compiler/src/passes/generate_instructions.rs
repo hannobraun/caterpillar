@@ -56,23 +56,6 @@ pub fn generate_instructions<H: Host>(
             }
             CompileUnit::Cluster { name, members } => {
                 for function in members {
-                    let arguments = function
-                        .arguments
-                        .inner
-                        .into_iter()
-                        .filter_map(|pattern| match pattern {
-                            Pattern::Identifier { name } => Some(name),
-                            Pattern::Literal { .. } => {
-                                // The parameter list of a function is used to
-                                // provide the arguments to the function at
-                                // runtime. But literal patterns aren't relevant
-                                // to the function itself. They are only used to
-                                // select which function to call in the first
-                                // place.
-                                None
-                            }
-                        })
-                        .collect();
                     let address = compile_context(
                         function.start,
                         &fragments.inner,
@@ -80,7 +63,7 @@ pub fn generate_instructions<H: Host>(
                         &mut queue,
                     );
 
-                    clusters.insert(name.clone(), arguments, address);
+                    clusters.insert(name.clone(), address);
                 }
             }
         }
@@ -339,12 +322,7 @@ struct Clusters {
 }
 
 impl Clusters {
-    fn insert(
-        &mut self,
-        name: String,
-        _: Vec<String>,
-        address: InstructionAddress,
-    ) {
+    fn insert(&mut self, name: String, address: InstructionAddress) {
         self.addresses_by_name.insert(name, address);
     }
 }
