@@ -59,5 +59,5 @@ pub enum IdentifierTarget {
     Binding,
     BuiltinFunction,
     HostFunction,
-    UserFunction,
+    Cluster,
 }

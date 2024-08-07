@@ -94,7 +94,7 @@ fn resolve_in_block<H: Host>(
                     *target = Some(IdentifierTarget::HostFunction);
                 }
                 if user_functions.contains(name) {
-                    *target = Some(IdentifierTarget::UserFunction);
+                    *target = Some(IdentifierTarget::Cluster);
                 }
             }
             _ => {}
@@ -305,7 +305,7 @@ mod tests {
             script.functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                target: Some(IdentifierTarget::UserFunction),
+                target: Some(IdentifierTarget::Cluster),
                 is_known_to_be_in_tail_position: false,
             })
         );
