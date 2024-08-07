@@ -176,12 +176,13 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Function(function),
+            payload: FragmentPayload::Cluster { mut members },
             ..
         } = root
         else {
             unreachable!("`f` must be the root element.");
         };
+        let function = members.remove(0);
         let body = fragments
             .inner
             .iter_from(function.start)
@@ -227,12 +228,13 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Function(function),
+            payload: FragmentPayload::Cluster { mut members },
             ..
         } = root
         else {
             unreachable!("`f` must be the root element.");
         };
+        let function = members.remove(0);
         let last_fragment =
             fragments.inner.iter_from(function.start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
@@ -257,12 +259,13 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Function(function),
+            payload: FragmentPayload::Cluster { mut members },
             ..
         } = root
         else {
             unreachable!("`f` must be the root element.");
         };
+        let function = members.remove(0);
         let function_fragments = fragments
             .inner
             .iter_from(function.start)
