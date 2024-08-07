@@ -1,4 +1,4 @@
-use capi_process::{Bytecode, Host};
+use capi_process::{Host, Instructions};
 
 use crate::{
     fragments::Fragments,
@@ -12,12 +12,12 @@ use crate::{
 
 pub fn compile<H: Host>(
     mut script: Script,
-) -> (Fragments, Bytecode, SourceMap) {
+) -> (Fragments, Instructions, SourceMap) {
     determine_tail_positions(&mut script.functions);
     let mut clusters = find_clusters(script.functions);
     resolve_identifiers::<H>(&mut clusters);
     let fragments = generate_fragments(clusters);
     let (bytecode, source_map) = generate_bytecode::<H>(fragments.clone());
 
-    (fragments, bytecode, source_map)
+    (fragments, bytecode.instructions, source_map)
 }

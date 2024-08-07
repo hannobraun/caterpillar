@@ -32,7 +32,7 @@ fn closure_in_function() {
         },
     );
 
-    let (_, bytecode, _) = compile::<TestHost>(script);
+    let (_, instructions, _) = compile::<TestHost>(script);
 
     let mut signals = BTreeMap::new();
 
@@ -40,7 +40,7 @@ fn closure_in_function() {
     process.reset([]);
 
     while process.state().can_step() {
-        process.step(&bytecode.instructions);
+        process.step(&instructions);
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {
@@ -53,7 +53,7 @@ fn closure_in_function() {
                         "Unexpected effect: {effect}\n\
                         Process: {process:#?}\n\
                         Instructions: {:#?}",
-                        bytecode.instructions
+                        instructions
                     );
                 }
             }

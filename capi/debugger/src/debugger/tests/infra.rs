@@ -26,16 +26,16 @@ impl TestInfra {
         let mut script = Script::default();
         f(&mut script);
 
-        let (fragments, bytecode, source_map) =
+        let (fragments, instructions, source_map) =
             compile::<GameEngineHost>(script);
 
         self.remote_process.on_code_update(Code {
             fragments: fragments.clone(),
-            instructions: bytecode.instructions.clone(),
+            instructions: instructions.clone(),
             source_map,
         });
 
-        self.instructions = Some(bytecode.instructions);
+        self.instructions = Some(instructions);
 
         self
     }

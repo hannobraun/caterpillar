@@ -54,11 +54,12 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     let script = str::from_utf8(&script).unwrap();
     let script = ron::from_str(script).unwrap();
 
-    let (fragments, bytecode, source_map) = compile::<GameEngineHost>(script);
+    let (fragments, instructions, source_map) =
+        compile::<GameEngineHost>(script);
 
     Ok(Code {
         fragments,
-        instructions: bytecode.instructions,
+        instructions,
         source_map,
     })
 }
