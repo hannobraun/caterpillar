@@ -52,6 +52,9 @@ pub enum FragmentPayload {
     ///
     /// Functions are called as a cluster, and the function within the cluster
     /// is dispatched to via pattern matching on their arguments.
+    ///
+    /// For the sake of uniformity, all functions are organized within clusters,
+    /// so a cluster might have a single member.
     Cluster {
         members: Vec<Function>,
     },
