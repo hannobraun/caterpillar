@@ -83,6 +83,8 @@ impl Evaluator {
                 cluster,
                 is_tail_call,
             } => {
+                let mut any_member_matched = false;
+
                 for (arguments, address) in cluster {
                     let mut used_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
@@ -110,6 +112,7 @@ impl Evaluator {
                         }
 
                         self.stack.next_instruction = *address;
+                        any_member_matched = true;
 
                         break;
                     } else {
@@ -119,6 +122,9 @@ impl Evaluator {
                     }
                 }
 
+                if !any_member_matched {
+                    return Err(Effect::Core(CoreEffect::NoMatch));
+                }
             }
             Instruction::MakeClosure {
                 address,
