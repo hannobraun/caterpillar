@@ -83,15 +83,13 @@ impl Evaluator {
                 }
             }
             Instruction::CallFunction {
+                arguments,
                 address,
                 is_tail_call,
-                ..
             } => {
-                let arguments =
-                    bytecode.function_arguments.get(address).cloned().unwrap();
-
                 let arguments = arguments
-                    .into_iter()
+                    .iter()
+                    .cloned()
                     .rev()
                     .map(|name| {
                         let value = self.stack.pop_operand()?;
