@@ -20,7 +20,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     // ends the process, if executed.
     let main = output.instructions.push(Instruction::Panic);
     output.instructions.push(Instruction::Return);
-    output.placeholders.push(CallToUserDefinedFunction {
+    output.placeholders.push(CallToCluster {
         name: "main".to_string(),
         address: main,
         is_tail_call: true,
@@ -251,7 +251,7 @@ fn compile_fragment(
                     // We can't leave it at that, however. We need to make sure
                     // this placeholder actually gets replace later, and we're
                     // doing that by adding it to this list.
-                    output.placeholders.push(CallToUserDefinedFunction {
+                    output.placeholders.push(CallToCluster {
                         name: name.clone(),
                         address,
                         is_tail_call: *is_tail_call,
@@ -279,7 +279,7 @@ fn compile_fragment(
 #[derive(Default)]
 struct Output {
     instructions: Instructions,
-    placeholders: Vec<CallToUserDefinedFunction>,
+    placeholders: Vec<CallToCluster>,
     source_map: SourceMap,
 }
 
@@ -295,7 +295,7 @@ impl Output {
     }
 }
 
-pub struct CallToUserDefinedFunction {
+pub struct CallToCluster {
     pub name: String,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
