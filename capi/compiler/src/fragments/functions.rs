@@ -42,7 +42,7 @@ pub struct Arguments {
 }
 
 impl Arguments {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
+    pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         for argument in &self.inner {
             match argument {
                 Pattern::Identifier { name } => {
