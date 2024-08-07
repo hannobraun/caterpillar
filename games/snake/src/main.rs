@@ -301,7 +301,8 @@ fn snake(script: &mut Script) {
                 .ident("should_game_run")
                 .ident("load")
                 .block(|s| {
-                    s.ident("handle_input")
+                    s.ident("read_input")
+                        .ident("handle_input")
                         .ident("update_positions")
                         .ident("food_eat");
                 })
@@ -617,7 +618,7 @@ fn snake(script: &mut Script) {
     // Input
     script.function(
         "handle_input",
-        |p| p,
+        |p| p.ident("input"),
         |s| {
             s.c("This function handles a single input event, so the absence of")
             .c("any recursive calls is by design. The next input event should")
@@ -631,8 +632,6 @@ fn snake(script: &mut Script) {
             .c("- 2: left")
             .c("- 3: down")
             .c("- 4: right")
-            .ident("read_input")
-            .bind(["input"])
             .c("Return, if no input is available.")
             .ident("input")
             .ident("return_if_zero")
