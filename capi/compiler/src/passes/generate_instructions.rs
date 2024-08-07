@@ -335,7 +335,6 @@ pub struct CallToCluster {
 
 #[derive(Default)]
 struct Clusters {
-    arguments_by_address: BTreeMap<InstructionAddress, Vec<String>>,
     addresses_by_name: BTreeMap<String, InstructionAddress>,
 }
 
@@ -343,10 +342,9 @@ impl Clusters {
     fn insert(
         &mut self,
         name: String,
-        arguments: Vec<String>,
+        _: Vec<String>,
         address: InstructionAddress,
     ) {
-        self.arguments_by_address.insert(address, arguments);
         self.addresses_by_name.insert(name, address);
     }
 }
