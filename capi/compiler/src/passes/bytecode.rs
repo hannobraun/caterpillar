@@ -1,8 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{
-    Bytecode, Host, Instruction, InstructionAddress, Instructions,
-};
+use capi_process::{Host, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
@@ -118,11 +116,7 @@ pub fn generate_bytecode<H: Host>(
         );
     }
 
-    let bytecode = Bytecode {
-        instructions: output.instructions,
-    };
-
-    (bytecode.instructions, output.source_map)
+    (output.instructions, output.source_map)
 }
 
 fn compile_context(
