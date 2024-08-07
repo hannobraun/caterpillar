@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{Evaluator, EvaluatorState},
     instructions::InstructionAddress,
-    Bytecode, CoreEffect, Effect, Host, Stack, Value,
+    CoreEffect, Effect, Host, Instructions, Stack, Value,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -81,14 +81,14 @@ impl<H: Host> Process<H> {
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
-    pub fn step(&mut self, bytecode: &Bytecode) {
+    pub fn step(&mut self, instructions: &Instructions) {
         if !self.state.can_step() {
             return;
         }
 
         let next_instruction = self.evaluator.stack.next_instruction();
 
-        match self.evaluator.step::<H>(&bytecode.instructions) {
+        match self.evaluator.step::<H>(instructions) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;

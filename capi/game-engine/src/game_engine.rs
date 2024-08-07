@@ -81,7 +81,7 @@ impl GameEngine {
         };
 
         while self.process.state().can_step() {
-            self.process.step(bytecode);
+            self.process.step(&bytecode.instructions);
 
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {

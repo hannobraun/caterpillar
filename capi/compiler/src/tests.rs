@@ -40,7 +40,7 @@ fn closure_in_function() {
     process.reset([]);
 
     while process.state().can_step() {
-        process.step(&bytecode);
+        process.step(&bytecode.instructions);
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {

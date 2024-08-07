@@ -49,7 +49,7 @@ impl TestInfra {
         let mut process = Process::default();
         process.reset([0, 0].map(Value::from));
         while process.state().can_step() {
-            process.step(bytecode);
+            process.step(&bytecode.instructions);
         }
 
         let memory = Memory::default();
