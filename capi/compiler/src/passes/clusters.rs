@@ -24,6 +24,7 @@ pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
     clusters
 }
 
+#[derive(Clone)]
 pub struct Cluster {
     pub name: String,
     pub members: Vec<Function>,
