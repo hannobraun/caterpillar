@@ -2,6 +2,8 @@ use std::collections::BTreeSet;
 
 use capi_process::Value;
 
+use super::Pattern;
+
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Expression {
     Binding {
@@ -58,6 +60,6 @@ pub enum Expression {
 pub enum IdentifierTarget {
     Binding,
     BuiltinFunction,
-    Cluster,
+    Cluster { all_arguments: Vec<Vec<Pattern>> },
     HostFunction,
 }
