@@ -105,7 +105,6 @@ impl Cluster {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
-    pub name: String,
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
 }
@@ -113,13 +112,8 @@ pub struct Function {
 impl Function {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
-        let Self {
-            name,
-            arguments,
-            start,
-        } = self;
+        let Self { arguments, start } = self;
 
-        hasher.update(name.as_bytes());
         for argument in arguments {
             match argument {
                 Pattern::Identifier { name } => {

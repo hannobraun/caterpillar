@@ -72,7 +72,6 @@ where
                     let start = compile_block(function.body, next, fragments);
 
                     members.push(Function {
-                        name: function.name,
                         arguments: function.arguments,
                         start,
                     });
