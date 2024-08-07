@@ -4,8 +4,8 @@ use capi_process::{Host, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Cluster, Fragment, FragmentExpression, FragmentId, FragmentMap,
-        FragmentPayload, Fragments, Function,
+        Arguments, Cluster, Fragment, FragmentExpression, FragmentId,
+        FragmentMap, FragmentPayload, Fragments, Function,
     },
     source_map::SourceMap,
     syntax::Pattern,
@@ -67,7 +67,7 @@ pub fn generate_instructions<H: Host>(
                         .by_name
                         .entry(name.clone())
                         .or_default()
-                        .push(address);
+                        .push((function.arguments, address));
                 }
             }
         }
@@ -98,7 +98,7 @@ pub fn generate_instructions<H: Host>(
             1,
             "Pattern matching in function definitions is not supported yet.",
         );
-        let address = cluster
+        let (_, address) = cluster
             .first()
             .expect("Just checked that there is one address");
 
@@ -331,7 +331,7 @@ pub struct CallToCluster {
 
 #[derive(Default)]
 struct Clusters {
-    by_name: BTreeMap<String, Vec<InstructionAddress>>,
+    by_name: BTreeMap<String, Vec<(Arguments, InstructionAddress)>>,
 }
 
 enum CompileUnit {
