@@ -25,6 +25,10 @@ impl SourceMap {
             .push(instruction);
     }
 
+    /// Get the ID of the fragment that the given instruction maps to
+    ///
+    /// Can return `None`, as there are a few compiler-generated instructions
+    /// that call the `main` function.
     pub fn instruction_to_fragment(
         &self,
         instruction: &InstructionAddress,
