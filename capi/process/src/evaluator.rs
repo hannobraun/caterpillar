@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, instructions::Pattern, stack::PushStackFrameError,
-    CoreEffect, Effect, Host, Instruction, Instructions, Stack, Value,
+    builtins::builtin, instructions::Pattern, CoreEffect, Effect, Host,
+    Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -83,34 +83,42 @@ impl Evaluator {
                 cluster,
                 is_tail_call,
             } => {
-                let (arguments, address) =
-                    cluster.first().expect("Clusters must not be empty.");
-                let arguments = arguments
-                    .iter()
-                    .cloned()
-                    .rev()
-                    .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => name,
-                        Pattern::Literal { .. } => {
-                            panic!(
-                                "Pattern matching in function definitions is \
-                                not supported yet."
-                            );
-                        }
-                    })
-                    .map(|name| {
-                        let value = self.stack.pop_operand()?;
-                        Ok((name, value))
-                    })
-                    .collect::<Result<Vec<_>, PushStackFrameError>>()?;
+                for (arguments, address) in cluster {
+                    let mut used_operands = Vec::new();
+                    let mut bound_arguments = Vec::new();
 
-                if *is_tail_call {
-                    self.stack.reuse_frame(arguments);
-                } else {
-                    self.stack.push_frame(arguments)?;
+                    let mut member_matches = true;
+                    for argument in arguments.iter().rev() {
+                        let operand = self.stack.pop_operand()?;
+                        used_operands.push(operand);
+
+                        match argument {
+                            Pattern::Identifier { name } => {
+                                bound_arguments.push((name.clone(), operand));
+                            }
+                            Pattern::Literal { value } => {
+                                member_matches &= *value == operand;
+                            }
+                        }
+                    }
+
+                    if member_matches {
+                        if *is_tail_call {
+                            self.stack.reuse_frame(bound_arguments);
+                        } else {
+                            self.stack.push_frame(bound_arguments)?;
+                        }
+
+                        self.stack.next_instruction = *address;
+
+                        break;
+                    } else {
+                        for value in used_operands.into_iter().rev() {
+                            self.stack.push_operand(value);
+                        }
+                    }
                 }
 
-                self.stack.next_instruction = *address;
             }
             Instruction::MakeClosure {
                 address,
