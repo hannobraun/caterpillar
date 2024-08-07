@@ -70,7 +70,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
-        let Some(address) = clusters.addresses_by_name.get(&call.name) else {
+        let Some(addresses) = clusters.addresses_by_name.get(&call.name) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -90,11 +90,11 @@ pub fn generate_instructions<H: Host>(
         };
 
         assert_eq!(
-            address.len(),
+            addresses.len(),
             1,
             "Pattern matching in function definitions is not supported yet.",
         );
-        let address = address
+        let address = addresses
             .first()
             .expect("Just checked that there is one address");
 
