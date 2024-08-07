@@ -52,8 +52,7 @@ fn closure_in_function() {
                     panic!(
                         "Unexpected effect: {effect}\n\
                         Process: {process:#?}\n\
-                        Instructions: {:#?}",
-                        instructions
+                        Instructions: {instructions:#?}",
                     );
                 }
             }
