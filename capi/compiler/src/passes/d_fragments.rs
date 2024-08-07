@@ -168,12 +168,12 @@ mod tests {
             },
         );
 
-        let fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
             .inner
-            .get(&fragments.root)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload: FragmentPayload::Function(function),
@@ -219,12 +219,12 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |p| p, |_| {});
 
-        let fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
             .inner
-            .get(&fragments.root)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload: FragmentPayload::Function(function),
@@ -249,12 +249,12 @@ mod tests {
             },
         );
 
-        let fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
             .inner
-            .get(&fragments.root)
+            .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload: FragmentPayload::Function(function),
