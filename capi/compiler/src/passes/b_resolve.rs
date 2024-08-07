@@ -312,7 +312,7 @@ mod tests {
     }
 
     fn resolve_identifiers(script: &mut Script) {
-        super::resolve_identifiers::<TestHost>(&mut script.functions)
+        super::resolve_identifiers::<TestHost>(&mut script.functions);
     }
 
     struct TestHost {}
