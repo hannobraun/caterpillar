@@ -5,7 +5,7 @@ use crate::{
         Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function,
     },
-    syntax::{self, Expression, IdentifierTarget},
+    syntax::{Expression, IdentifierTarget},
 };
 
 use super::c_clusters::Cluster;
@@ -16,23 +16,7 @@ pub fn generate_fragments(clusters: Vec<Cluster>) -> Fragments {
     };
 
     let root = compile_context(
-        clusters
-            .into_iter()
-            .map(|cluster| {
-                let mut functions = cluster.members.into_iter();
-
-                let function = functions.next().expect(
-                    "Clusters must not be empty; what reason to create them \
-                    otherwise?",
-                );
-                assert!(
-                    functions.next().is_none(),
-                    "Clusters with multiple members are not supported yet."
-                );
-
-                function
-            })
-            .map(SyntaxElement::Item),
+        clusters.into_iter().map(SyntaxElement::Item),
         None,
         &mut fragments,
     );
@@ -81,24 +65,30 @@ where
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent, next, fragments)
             }
-            SyntaxElement::Item(function) => {
-                // If the group index is not set for a function, that means it's
-                // the only function in its group, and its default index is `0`.
-                let group_index = function.group_index.unwrap_or(0);
+            SyntaxElement::Item(cluster) => {
+                let mut members = Vec::new();
 
-                let start = compile_block(function.body, next, fragments);
+                for function in cluster.members {
+                    // If the group index is not set for a function, that means
+                    // it's the only function in its group, and its default
+                    // index is `0`.
+                    let group_index = function.group_index.unwrap_or(0);
 
-                let function = Function {
-                    name: function.name,
-                    group_index,
-                    arguments: function.arguments,
-                    start,
-                    next,
-                };
+                    let start = compile_block(function.body, next, fragments);
+
+                    let function = Function {
+                        name: function.name,
+                        group_index,
+                        arguments: function.arguments,
+                        start,
+                        next,
+                    };
+                    members.push(function);
+                }
 
                 Fragment {
                     parent,
-                    payload: FragmentPayload::Function(function),
+                    payload: FragmentPayload::Cluster { members },
                 }
             }
         };
@@ -160,7 +150,7 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
-    Item(syntax::Function),
+    Item(Cluster),
 }
 
 #[cfg(test)]
