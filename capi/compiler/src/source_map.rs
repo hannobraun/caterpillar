@@ -36,9 +36,9 @@ impl SourceMap {
         self.instruction_to_fragment.get(instruction).cloned()
     }
 
-    /// Get the runtime location that a given syntax location is mapped to
+    /// Get the address of the instruction that the given fragment maps to
     ///
-    /// Can return `None`, as comments have no mapping to runtime locations.
+    /// Can return `None`, as comments have no mapping to instructions.
     pub fn fragment_to_instructions(
         &self,
         fragment: &FragmentId,
