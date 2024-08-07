@@ -88,6 +88,7 @@ pub enum Instruction {
         name: String,
     },
     CallFunction {
+        arguments: Vec<String>,
         address: InstructionAddress,
         is_tail_call: bool,
     },

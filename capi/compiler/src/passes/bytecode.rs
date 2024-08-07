@@ -108,11 +108,10 @@ pub fn generate_bytecode<H: Host>(
             continue;
         };
 
-        dbg!(call.arguments);
-
         output.instructions.replace(
             call.address,
             Instruction::CallFunction {
+                arguments: call.arguments,
                 address: *address,
                 is_tail_call: call.is_tail_call,
             },
