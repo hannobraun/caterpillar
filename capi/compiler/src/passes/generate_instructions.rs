@@ -94,8 +94,8 @@ pub fn generate_instructions(
 
         let arguments = cluster
             .iter()
-            .map(|(arguments, _)| {
-                arguments
+            .map(|(arguments, address)| {
+                let arguments = arguments
                     .inner
                     .iter()
                     .cloned()
@@ -107,7 +107,8 @@ pub fn generate_instructions(
                             capi_process::Pattern::Literal { value }
                         }
                     })
-                    .collect()
+                    .collect();
+                (arguments, *address)
             })
             .collect();
 

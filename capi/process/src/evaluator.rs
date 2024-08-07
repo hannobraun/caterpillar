@@ -87,6 +87,7 @@ impl Evaluator {
                 let arguments = cluster
                     .first()
                     .expect("Clusters must not be empty.")
+                    .0
                     .iter()
                     .cloned()
                     .rev()
