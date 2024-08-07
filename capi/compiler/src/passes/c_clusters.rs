@@ -5,7 +5,7 @@ pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
 
     for function in functions {
         clusters.push(Cluster {
-            members: vec![function.clone()],
+            members: vec![function],
         });
     }
 
