@@ -15,7 +15,7 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        _: Cluster,
+        cluster: Cluster,
         function: fragments::Function,
         fragments: &Fragments,
         source_map: &SourceMap,
@@ -31,7 +31,7 @@ impl Function {
             .collect();
 
         Self {
-            name: function.name,
+            name: cluster.name,
             body,
         }
     }
