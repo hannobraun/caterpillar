@@ -76,14 +76,13 @@ where
 
                     let start = compile_block(function.body, next, fragments);
 
-                    let function = Function {
+                    members.push(Function {
                         name: function.name,
                         group_index,
                         arguments: function.arguments,
                         start,
                         next,
-                    };
-                    members.push(function);
+                    });
                 }
 
                 Fragment {
