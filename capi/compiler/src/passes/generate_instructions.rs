@@ -91,7 +91,6 @@ pub fn generate_instructions(
             );
             continue;
         };
-
         let cluster = cluster
             .iter()
             .map(|(arguments, address)| {
