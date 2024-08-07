@@ -15,7 +15,7 @@ use crate::{
 
 pub fn generate_bytecode<H: Host>(
     fragments: Fragments,
-) -> (Bytecode, SourceMap) {
+) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
     let mut functions = Functions::default();
@@ -122,7 +122,7 @@ pub fn generate_bytecode<H: Host>(
         instructions: output.instructions,
     };
 
-    (bytecode, output.source_map)
+    (bytecode.instructions, output.source_map)
 }
 
 fn compile_context(
