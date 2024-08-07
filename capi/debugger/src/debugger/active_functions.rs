@@ -45,8 +45,15 @@ impl ActiveFunctions {
         let mut functions = VecDeque::new();
 
         while let Some(instruction) = call_stack.pop_front() {
-            let fragment_id =
-                code.source_map.instruction_to_fragment(&instruction);
+            let Some(fragment_id) =
+                code.source_map.instruction_to_fragment(&instruction)
+            else {
+                panic!(
+                    "Expecting all instructions referenced on call stack to \
+                    map to a fragment, but instruction `{instruction}` does \
+                    not."
+                );
+            };
             let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)

@@ -28,11 +28,8 @@ impl SourceMap {
     pub fn instruction_to_fragment(
         &self,
         instruction: &InstructionAddress,
-    ) -> FragmentId {
-        self.instruction_to_fragment
-            .get(instruction)
-            .cloned()
-            .expect("Expect every runtime location to map to a syntax location")
+    ) -> Option<FragmentId> {
+        self.instruction_to_fragment.get(instruction).cloned()
     }
 
     /// Get the runtime location that a given syntax location is mapped to
