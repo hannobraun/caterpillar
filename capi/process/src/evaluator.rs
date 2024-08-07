@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, stack::PushStackFrameError, CoreEffect, Effect, Host,
-    Instruction, Instructions, Stack, Value,
+    builtins::builtin, instructions::Pattern, stack::PushStackFrameError,
+    CoreEffect, Effect, Host, Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -88,6 +88,15 @@ impl Evaluator {
                     .iter()
                     .cloned()
                     .rev()
+                    .map(|pattern| match pattern {
+                        Pattern::Identifier { name } => name,
+                        Pattern::Literal { .. } => {
+                            panic!(
+                                "Pattern matching in function definitions is \
+                                not supported yet."
+                            );
+                        }
+                    })
                     .map(|name| {
                         let value = self.stack.pop_operand()?;
                         Ok((name, value))

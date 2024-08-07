@@ -107,13 +107,13 @@ pub fn generate_instructions(
                 arguments: arguments
                     .inner
                     .iter()
+                    .cloned()
                     .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => name.clone(),
-                        Pattern::Literal { .. } => {
-                            panic!(
-                                "Pattern matching in function definitions is \
-                                not supported yet."
-                            );
+                        Pattern::Identifier { name } => {
+                            capi_process::Pattern::Identifier { name }
+                        }
+                        Pattern::Literal { value } => {
+                            capi_process::Pattern::Literal { value }
                         }
                     })
                     .collect(),

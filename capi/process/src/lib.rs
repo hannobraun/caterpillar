@@ -14,7 +14,7 @@ pub use self::{
     builtins::builtin,
     effects::{CoreEffect, Effect},
     host::{Host, HostFunction, NoHost},
-    instructions::{Instruction, InstructionAddress, Instructions},
+    instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,
     process::{Process, ProcessState},
     stack::Stack,
