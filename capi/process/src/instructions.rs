@@ -96,7 +96,7 @@ pub enum Instruction {
     CallBuiltin {
         name: String,
     },
-    CallFunction {
+    CallCluster {
         arguments: Vec<String>,
         address: InstructionAddress,
         is_tail_call: bool,

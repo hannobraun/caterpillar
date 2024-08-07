@@ -91,7 +91,7 @@ pub fn generate_instructions<H: Host>(
 
         output.instructions.replace(
             call.address,
-            Instruction::CallFunction {
+            Instruction::CallCluster {
                 arguments: call.arguments,
                 address: *address,
                 is_tail_call: call.is_tail_call,

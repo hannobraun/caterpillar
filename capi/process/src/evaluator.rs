@@ -79,7 +79,7 @@ impl Evaluator {
                     }
                 }
             }
-            Instruction::CallFunction {
+            Instruction::CallCluster {
                 arguments,
                 address,
                 is_tail_call,
