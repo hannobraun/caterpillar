@@ -85,6 +85,7 @@ impl Evaluator {
             Instruction::CallFunction {
                 address,
                 is_tail_call,
+                ..
             } => {
                 let arguments =
                     bytecode.function_arguments.get(address).cloned().unwrap();
