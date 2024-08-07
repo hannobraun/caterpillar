@@ -53,7 +53,7 @@ fn resolve_in_block<H: Host>(
     body: &mut [Expression],
     scopes: &mut Scopes,
     environment: &mut Environment,
-    user_functions: &BTreeSet<String>,
+    known_clusters: &BTreeSet<String>,
 ) {
     for expression in body {
         match expression {
@@ -70,7 +70,7 @@ fn resolve_in_block<H: Host>(
                     body,
                     scopes,
                     environment,
-                    user_functions,
+                    known_clusters,
                 );
             }
             Expression::Identifier { name, target, .. } => {
@@ -97,7 +97,7 @@ fn resolve_in_block<H: Host>(
                 if H::function(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
-                if user_functions.contains(name) {
+                if known_clusters.contains(name) {
                     *target = Some(IdentifierTarget::Cluster);
                 }
             }
