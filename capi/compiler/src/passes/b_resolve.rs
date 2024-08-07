@@ -8,7 +8,7 @@ use super::c_clusters::Cluster;
 
 pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
     let mut scopes = Scopes::new();
-    let user_functions = clusters
+    let known_clusters = clusters
         .iter()
         .map(|function| function.name.clone())
         .collect();
@@ -38,7 +38,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
                 &mut function.body,
                 &mut scopes,
                 &mut environment,
-                &user_functions,
+                &known_clusters,
             );
 
             assert!(
