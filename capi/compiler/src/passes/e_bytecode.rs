@@ -4,8 +4,8 @@ use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
-        Fragments, Function,
+        Cluster, Fragment, FragmentExpression, FragmentId, FragmentMap,
+        FragmentPayload, Fragments, Function,
     },
     source_map::SourceMap,
     syntax::Pattern,
@@ -148,7 +148,10 @@ fn compile_fragment(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
-        FragmentPayload::Cluster { name, members, .. } => {
+        FragmentPayload::Cluster {
+            cluster: Cluster { name, members },
+            ..
+        } => {
             queue.push_back(CompileUnit::Cluster {
                 name: name.clone(),
                 members: members.clone(),

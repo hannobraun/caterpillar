@@ -54,8 +54,7 @@ pub enum FragmentPayload {
     /// For the sake of uniformity, all functions are organized within clusters,
     /// so a cluster might have a single member.
     Cluster {
-        name: String,
-        members: Vec<Function>,
+        cluster: Cluster,
         next: FragmentId,
     },
 
@@ -70,8 +69,7 @@ impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             Self::Cluster {
-                name,
-                members,
+                cluster: Cluster { name, members },
                 next,
             } => {
                 hasher.update(b"cluster");
@@ -91,6 +89,12 @@ impl FragmentPayload {
             }
         }
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Cluster {
+    pub name: String,
+    pub members: Vec<Function>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

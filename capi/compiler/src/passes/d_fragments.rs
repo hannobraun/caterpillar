@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
-        Fragments, Function,
+        Cluster, Fragment, FragmentExpression, FragmentId, FragmentMap,
+        FragmentPayload, Fragments, Function,
     },
     syntax::{Expression, IdentifierTarget},
 };
@@ -81,8 +81,10 @@ where
                 Fragment {
                     parent,
                     payload: FragmentPayload::Cluster {
-                        name: cluster.name,
-                        members,
+                        cluster: Cluster {
+                            name: cluster.name,
+                            members,
+                        },
                         next,
                     },
                 }
@@ -154,7 +156,9 @@ mod tests {
     use capi_process::Value;
 
     use crate::{
-        fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
+        fragments::{
+            Cluster, Fragment, FragmentExpression, FragmentPayload, Fragments,
+        },
         passes::find_clusters,
         syntax::{self, Script},
     };
@@ -178,7 +182,11 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Cluster { mut members, .. },
+            payload:
+                FragmentPayload::Cluster {
+                    cluster: Cluster { mut members, .. },
+                    ..
+                },
             ..
         } = root
         else {
@@ -224,7 +232,11 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Cluster { mut members, .. },
+            payload:
+                FragmentPayload::Cluster {
+                    cluster: Cluster { mut members, .. },
+                    ..
+                },
             ..
         } = root
         else {
@@ -257,7 +269,9 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    mut members, next, ..
+                    cluster: Cluster { mut members, .. },
+                    next,
+                    ..
                 },
             ..
         } = root

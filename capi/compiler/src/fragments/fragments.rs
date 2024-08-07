@@ -1,7 +1,8 @@
 use std::{collections::BTreeMap, iter};
 
 use super::{
-    Fragment, FragmentExpression, FragmentId, FragmentPayload, Function,
+    fragment::Cluster, Fragment, FragmentExpression, FragmentId,
+    FragmentPayload, Function,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -64,7 +65,10 @@ impl Fragments {
                 .inner
                 .values()
                 .filter_map(|fragment| match &fragment.payload {
-                    FragmentPayload::Cluster { members, .. } => Some(members),
+                    FragmentPayload::Cluster {
+                        cluster: Cluster { members, .. },
+                        ..
+                    } => Some(members),
                     _ => None,
                 })
                 .flatten()
