@@ -64,9 +64,10 @@ impl Fragments {
                 .inner
                 .values()
                 .filter_map(|fragment| match &fragment.payload {
-                    FragmentPayload::Function(function) => Some(function),
+                    FragmentPayload::Cluster { members } => Some(members),
                     _ => None,
                 })
+                .flatten()
                 .find(|function| function.start == fragment_id);
 
             // And this is our result. If it's not the function we're looking
