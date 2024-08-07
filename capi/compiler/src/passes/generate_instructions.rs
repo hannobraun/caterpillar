@@ -112,12 +112,6 @@ pub fn generate_instructions(
             })
             .collect();
 
-        assert_eq!(
-            cluster.len(),
-            1,
-            "Pattern matching in function definitions is not supported yet.",
-        );
-
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
