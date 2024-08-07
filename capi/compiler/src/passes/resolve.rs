@@ -10,7 +10,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
     let mut scopes = Scopes::new();
     let known_clusters = clusters
         .iter()
-        .map(|function| function.name.clone())
+        .map(|cluster| cluster.name.clone())
         .collect();
 
     for cluster in clusters {
