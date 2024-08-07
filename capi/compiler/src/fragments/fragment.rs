@@ -114,7 +114,19 @@ impl Function {
         // Let's destructure `self`, so we don't forget any fields.
         let Self { arguments, start } = self;
 
-        for argument in &arguments.inner {
+        arguments.hash(hasher);
+        start.hash(hasher);
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Arguments {
+    pub inner: Vec<Pattern>,
+}
+
+impl Arguments {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        for argument in &self.inner {
             match argument {
                 Pattern::Identifier { name } => {
                     hasher.update(b"identifier pattern");
@@ -126,11 +138,5 @@ impl Function {
                 }
             }
         }
-        start.hash(hasher);
     }
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Arguments {
-    pub inner: Vec<Pattern>,
 }
