@@ -92,15 +92,6 @@ pub fn generate_instructions(
             continue;
         };
 
-        assert_eq!(
-            cluster.len(),
-            1,
-            "Pattern matching in function definitions is not supported yet.",
-        );
-        let (_, address) = cluster
-            .first()
-            .expect("Just checked that there is one address");
-
         let arguments = cluster
             .iter()
             .map(|(arguments, _)| {
@@ -119,6 +110,15 @@ pub fn generate_instructions(
                     .collect()
             })
             .collect();
+
+        assert_eq!(
+            cluster.len(),
+            1,
+            "Pattern matching in function definitions is not supported yet.",
+        );
+        let (_, address) = cluster
+            .first()
+            .expect("Just checked that there is one address");
 
         output.instructions.replace(
             call.address,
