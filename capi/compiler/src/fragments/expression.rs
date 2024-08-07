@@ -25,7 +25,7 @@ pub enum FragmentExpression {
     ResolvedHostFunction {
         name: String,
     },
-    ResolvedUserFunction {
+    ResolvedCluster {
         name: String,
 
         /// Indicate whether the call is in tail position
@@ -78,7 +78,7 @@ impl FragmentExpression {
                 hasher.update(b"resolved host function");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedUserFunction { name, is_tail_call } => {
+            Self::ResolvedCluster { name, is_tail_call } => {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
                 hasher.update(&[(*is_tail_call).into()]);
@@ -110,7 +110,7 @@ impl fmt::Display for FragmentExpression {
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedHostFunction { name } => write!(f, "{name}"),
-            Self::ResolvedUserFunction { name, .. } => write!(f, "{name}"),
+            Self::ResolvedCluster { name, .. } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }

@@ -233,10 +233,7 @@ fn compile_fragment(
                         Instruction::CallBuiltin { name: name.clone() },
                         fragment.id(),
                     ),
-                FragmentExpression::ResolvedUserFunction {
-                    name,
-                    is_tail_call,
-                } => {
+                FragmentExpression::ResolvedCluster { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
                     // yet.
