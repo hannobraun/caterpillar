@@ -1,4 +1,7 @@
-use std::collections::{BTreeSet, VecDeque};
+use std::{
+    collections::{BTreeSet, VecDeque},
+    fmt,
+};
 
 use crate::Value;
 
@@ -73,6 +76,12 @@ impl InstructionAddress {
         self.index
             .try_into()
             .expect("Expected `usize` to cover full range of `u32`")
+    }
+}
+
+impl fmt::Display for InstructionAddress {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.index)
     }
 }
 
