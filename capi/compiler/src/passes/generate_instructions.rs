@@ -64,7 +64,7 @@ pub fn generate_instructions<H: Host>(
                     );
 
                     clusters
-                        .addresses_by_name
+                        .by_name
                         .entry(name.clone())
                         .or_default()
                         .push(address);
@@ -74,7 +74,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
-        let Some(addresses) = clusters.addresses_by_name.get(&call.name) else {
+        let Some(addresses) = clusters.by_name.get(&call.name) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -331,7 +331,7 @@ pub struct CallToCluster {
 
 #[derive(Default)]
 struct Clusters {
-    addresses_by_name: BTreeMap<String, Vec<InstructionAddress>>,
+    by_name: BTreeMap<String, Vec<InstructionAddress>>,
 }
 
 enum CompileUnit {
