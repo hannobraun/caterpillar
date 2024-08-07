@@ -53,13 +53,30 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             }
             CompileUnit::Cluster { members } => {
                 for function in members {
-                    compile_function(
-                        function,
+                    let arguments = function
+                        .arguments
+                        .into_iter()
+                        .filter_map(|pattern| match pattern {
+                            Pattern::Identifier { name } => Some(name),
+                            Pattern::Literal { .. } => {
+                                // The parameter list of a function is used to
+                                // provide the arguments to the function at
+                                // runtime. But literal patterns aren't relevant
+                                // to the function itself. They are only used to
+                                // select which function to call in the first
+                                // place.
+                                None
+                            }
+                        })
+                        .collect();
+                    let address = compile_context(
+                        function.start,
                         &fragments.inner,
                         &mut output,
                         &mut queue,
-                        &mut functions,
                     );
+
+                    functions.insert(function.name, arguments, address);
                 }
             }
         }
@@ -99,32 +116,6 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     };
 
     (bytecode, output.source_map)
-}
-
-fn compile_function(
-    function: Function,
-    fragments: &FragmentMap,
-    output: &mut Output,
-    queue: &mut VecDeque<CompileUnit>,
-    functions: &mut Functions,
-) {
-    let arguments = function
-        .arguments
-        .into_iter()
-        .filter_map(|pattern| match pattern {
-            Pattern::Identifier { name } => Some(name),
-            Pattern::Literal { .. } => {
-                // The parameter list of a function is used to provide the
-                // arguments to the function at runtime. But literal patterns
-                // aren't relevant to the function itself. They are only used to
-                // select which function to call in the first place.
-                None
-            }
-        })
-        .collect();
-    let address = compile_context(function.start, fragments, output, queue);
-
-    functions.insert(function.name, arguments, address);
 }
 
 fn compile_context(
