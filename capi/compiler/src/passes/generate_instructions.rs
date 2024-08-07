@@ -117,15 +117,11 @@ pub fn generate_instructions(
             1,
             "Pattern matching in function definitions is not supported yet.",
         );
-        let (_, address) = cluster
-            .first()
-            .expect("Just checked that there is one address");
 
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
                 cluster: arguments,
-                address: *address,
                 is_tail_call: call.is_tail_call,
             },
         );

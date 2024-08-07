@@ -98,7 +98,6 @@ pub enum Instruction {
     },
     CallCluster {
         cluster: Vec<(Vec<Pattern>, InstructionAddress)>,
-        address: InstructionAddress,
         is_tail_call: bool,
     },
     MakeClosure {

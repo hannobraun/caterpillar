@@ -81,7 +81,6 @@ impl Evaluator {
             }
             Instruction::CallCluster {
                 cluster,
-                address: _,
                 is_tail_call,
             } => {
                 let (arguments, address) =
