@@ -51,8 +51,8 @@ pub enum FragmentPayload {
     /// Functions are called by cluster, and the call is dispatched to a
     /// function within the cluster using pattern matching on their arguments.
     ///
-    /// For the sake of uniformity, all functions are organized within clusters,
-    /// so a cluster might have a single member.
+    /// For the sake of uniformity, all functions are organized into clusters,
+    /// so a cluster might have only a single member.
     Cluster {
         cluster: Cluster,
         next: FragmentId,
