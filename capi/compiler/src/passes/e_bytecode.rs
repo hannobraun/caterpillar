@@ -155,7 +155,7 @@ fn compile_fragment(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
-        FragmentPayload::Cluster { members } => {
+        FragmentPayload::Cluster { members, .. } => {
             for function in members {
                 queue.push_back(CompileUnit::Function(function.clone()));
             }
