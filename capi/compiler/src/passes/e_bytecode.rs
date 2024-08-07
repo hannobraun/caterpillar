@@ -51,7 +51,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                     },
                 );
             }
-            CompileUnit::Cluster { members } => {
+            CompileUnit::Cluster { name, members } => {
                 for function in members {
                     let arguments = function
                         .arguments
@@ -76,7 +76,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                         &mut queue,
                     );
 
-                    functions.insert(function.name, arguments, address);
+                    functions.insert(name.clone(), arguments, address);
                 }
             }
         }
@@ -148,8 +148,9 @@ fn compile_fragment(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
-        FragmentPayload::Cluster { members, .. } => {
+        FragmentPayload::Cluster { name, members, .. } => {
             queue.push_back(CompileUnit::Cluster {
+                name: name.clone(),
                 members: members.clone(),
             });
             return None;
@@ -321,6 +322,7 @@ enum CompileUnit {
         address: InstructionAddress,
     },
     Cluster {
+        name: String,
         members: Vec<Function>,
     },
 }
