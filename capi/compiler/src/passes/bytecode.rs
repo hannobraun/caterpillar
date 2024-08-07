@@ -120,7 +120,6 @@ pub fn generate_bytecode<H: Host>(
 
     let bytecode = Bytecode {
         instructions: output.instructions,
-        function_arguments: functions.arguments_by_address,
     };
 
     (bytecode, output.source_map)
