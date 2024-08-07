@@ -84,10 +84,9 @@ impl Evaluator {
                 address,
                 is_tail_call,
             } => {
-                let arguments = cluster
-                    .first()
-                    .expect("Clusters must not be empty.")
-                    .0
+                let (arguments, _) =
+                    cluster.first().expect("Clusters must not be empty.");
+                let arguments = arguments
                     .iter()
                     .cloned()
                     .rev()
