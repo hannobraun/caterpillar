@@ -58,7 +58,7 @@ fn basic_call_stack() {
             script
                 .function(
                     "main",
-                    |p| p,
+                    |p| p.ident("size_x").ident("size_y"),
                     |s| {
                         s.ident("f")
                             // Not triggered. Just here to prevent tail call
@@ -108,7 +108,7 @@ fn stopped_at_code_within_block() {
         .provide_source_code(|script| {
             script.function(
                 "main",
-                |p| p,
+                |p| p.ident("size_x").ident("size_y"),
                 |s| {
                     s.block(|s| {
                         s.ident("brk");

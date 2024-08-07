@@ -1,6 +1,6 @@
 use capi_compiler::{compile, fragments::FragmentExpression, syntax::Script};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
-use capi_process::{Bytecode, Process};
+use capi_process::{Bytecode, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
@@ -47,7 +47,7 @@ impl TestInfra {
         );
 
         let mut process = Process::default();
-        process.reset([]);
+        process.reset([0, 0].map(Value::from));
         while process.state().can_step() {
             process.step(bytecode);
         }
