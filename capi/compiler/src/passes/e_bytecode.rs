@@ -65,12 +65,21 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
 
     for call in output.placeholders {
         let Some(address) = functions.addresses_by_name.get(&call.name) else {
-            unreachable!(
-                "Expecting function `{}` to exist. If it didn't, the previous \
-                compilation step would not have generated the fragment that \
-                caused us to assume that it does.",
-                call.name,
+            // This won't happen for any regular function, because we only
+            // create placeholders for functions that we actually encounter. But
+            // it can happen for the `main` function, since we create a
+            // placeholder for that unconditionally.
+            //
+            // If that happens, let's just leave the panic. It's not great, as
+            // it doesn't provide any context to the user. But while we don't
+            // have any way to make panics more descriptive, it'll have to do.
+            assert_eq!(
+                &call.name, "main",
+                "Replacement found for function that doesn't exist, but only \
+                the replacement for the `main` function is generated without \
+                encountering that first.",
             );
+            continue;
         };
 
         output.instructions.replace(
