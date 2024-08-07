@@ -1,7 +1,7 @@
 use crate::syntax::Function;
 
 pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
-    let mut clusters = Vec::new();
+    let mut clusters = Vec::<Cluster>::new();
 
     for function in functions {
         clusters.push(Cluster {
