@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, Fragments},
+    fragments::{self, Cluster, Fragments},
     source_map::SourceMap,
 };
 use capi_game_engine::host::GameEngineHost;
@@ -15,6 +15,7 @@ pub struct Function {
 
 impl Function {
     pub fn new(
+        _: Cluster,
         function: fragments::Function,
         fragments: &Fragments,
         source_map: &SourceMap,

@@ -50,7 +50,7 @@ impl ActiveFunctions {
             let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .map(|(_cluster, function)| function.clone())
+                .map(|(cluster, function)| (cluster.clone(), function.clone()))
                 .expect(
                     "Expecting function referenced from call stack to exist.",
                 );
@@ -61,8 +61,9 @@ impl ActiveFunctions {
         Self::Functions {
             functions: functions
                 .into_iter()
-                .map(|function| {
+                .map(|(cluster, function)| {
                     Function::new(
+                        cluster,
                         function,
                         &code.fragments,
                         &code.source_map,
