@@ -123,7 +123,7 @@ pub fn generate_instructions(
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
-                arguments,
+                cluster: arguments,
                 address: *address,
                 is_tail_call: call.is_tail_call,
             },

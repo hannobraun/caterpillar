@@ -80,7 +80,7 @@ impl Evaluator {
                 }
             }
             Instruction::CallCluster {
-                arguments,
+                cluster: arguments,
                 address,
                 is_tail_call,
             } => {
