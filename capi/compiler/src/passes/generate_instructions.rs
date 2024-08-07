@@ -101,22 +101,24 @@ pub fn generate_instructions(
             .first()
             .expect("Just checked that there is one address");
 
+        let arguments = arguments
+            .inner
+            .iter()
+            .cloned()
+            .map(|pattern| match pattern {
+                Pattern::Identifier { name } => {
+                    capi_process::Pattern::Identifier { name }
+                }
+                Pattern::Literal { value } => {
+                    capi_process::Pattern::Literal { value }
+                }
+            })
+            .collect();
+
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
-                arguments: arguments
-                    .inner
-                    .iter()
-                    .cloned()
-                    .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => {
-                            capi_process::Pattern::Identifier { name }
-                        }
-                        Pattern::Literal { value } => {
-                            capi_process::Pattern::Literal { value }
-                        }
-                    })
-                    .collect(),
+                arguments,
                 address: *address,
                 is_tail_call: call.is_tail_call,
             },
