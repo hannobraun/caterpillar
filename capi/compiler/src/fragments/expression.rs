@@ -22,9 +22,6 @@ pub enum FragmentExpression {
     ResolvedBuiltinFunction {
         name: String,
     },
-    ResolvedHostFunction {
-        name: String,
-    },
     ResolvedCluster {
         name: String,
 
@@ -38,6 +35,9 @@ pub enum FragmentExpression {
         ///   call elimination at runtime, if necessary.
         /// - No other expressions can result in a new stack frame.
         is_tail_call: bool,
+    },
+    ResolvedHostFunction {
+        name: String,
     },
     UnresolvedIdentifier {
         name: String,
@@ -74,14 +74,14 @@ impl FragmentExpression {
                 hasher.update(b"resolved built-in function");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedHostFunction { name } => {
-                hasher.update(b"resolved host function");
-                hasher.update(name.as_bytes());
-            }
             Self::ResolvedCluster { name, is_tail_call } => {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
                 hasher.update(&[(*is_tail_call).into()]);
+            }
+            Self::ResolvedHostFunction { name } => {
+                hasher.update(b"resolved host function");
+                hasher.update(name.as_bytes());
             }
             Self::UnresolvedIdentifier { name } => {
                 hasher.update(b"unresolved word");
@@ -109,8 +109,8 @@ impl fmt::Display for FragmentExpression {
             Self::Comment { text } => write!(f, "# {text}"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
-            Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::ResolvedCluster { name, .. } => write!(f, "{name}"),
+            Self::ResolvedHostFunction { name } => write!(f, "{name}"),
             Self::UnresolvedIdentifier { name } => write!(f, "{name}"),
             Self::Value(value) => write!(f, "{value}"),
         }

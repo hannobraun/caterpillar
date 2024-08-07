@@ -228,11 +228,6 @@ fn compile_fragment(
 
                     output.generate_instruction(instruction, fragment.id())
                 }
-                FragmentExpression::ResolvedHostFunction { name } => output
-                    .generate_instruction(
-                        Instruction::CallBuiltin { name: name.clone() },
-                        fragment.id(),
-                    ),
                 FragmentExpression::ResolvedCluster { name, is_tail_call } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
@@ -256,6 +251,11 @@ fn compile_fragment(
 
                     address
                 }
+                FragmentExpression::ResolvedHostFunction { name } => output
+                    .generate_instruction(
+                        Instruction::CallBuiltin { name: name.clone() },
+                        fragment.id(),
+                    ),
                 FragmentExpression::UnresolvedIdentifier { name: _ } => output
                     .generate_instruction(Instruction::Panic, fragment.id()),
                 FragmentExpression::Value(value) => output
