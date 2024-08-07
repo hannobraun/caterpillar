@@ -80,7 +80,11 @@ where
 
                 Fragment {
                     parent,
-                    payload: FragmentPayload::Cluster { members, next },
+                    payload: FragmentPayload::Cluster {
+                        name: cluster.name,
+                        members,
+                        next,
+                    },
                 }
             }
         };
