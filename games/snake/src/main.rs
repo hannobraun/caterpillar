@@ -616,73 +616,59 @@ fn snake(script: &mut Script) {
     );
 
     // Input
-    script.function(
-        "handle_input",
-        |p| p.ident("input"),
-        |s| {
-            s.c("This function handles a single input event, so the absence of")
-            .c("any recursive calls is by design. The next input event should")
-            .c("only be applied, after the effects of the current one have")
-            .c("been processed.")
-            .c("")
-            .c("This call returns a number with the following")
-            .c("meaning:")
-            .c("- 0: No input available.")
-            .c("- 1: up")
-            .c("- 2: left")
-            .c("- 3: down")
-            .c("- 4: right")
-            .c("Return, if no input is available.")
-            .ident("input")
-            .ident("return_if_zero")
-            .c("Assume result was `1`, and apply an `up` event.")
-            .v(0)
-            .v(-1)
-            .ident("i32_to_i8")
-            .ident("velocity")
-            .ident("vec_store")
-            .c("Now check if it actually was an `up` event, and if so, return.")
-            .ident("input")
-            .v(1)
-            .ident("sub")
-            .ident("copy")
-            .ident("return_if_zero")
-            .c("Seems it wasn't `up`. Try again for `left`.")
-            .v(-1)
-            .ident("i32_to_i8")
-            .v(0)
-            .ident("velocity")
-            .ident("vec_store")
-            .ident("input")
-            .v(2)
-            .ident("sub")
-            .ident("copy")
-            .ident("return_if_zero")
-            .c("It wasn't `left` either. Re-try for `down`.")
-            .v(0)
-            .v(1)
-            .ident("velocity")
-            .ident("vec_store")
-            .ident("input")
-            .v(3)
-            .ident("sub")
-            .ident("copy")
-            .ident("return_if_zero")
-            .c("Guessed wrong again. One more try for `right`.")
-            .v(1)
-            .v(0)
-            .ident("velocity")
-            .ident("vec_store")
-            .ident("input")
-            .v(4)
-            .ident("sub")
-            .ident("copy")
-            .ident("return_if_zero")
-            .c("It wasn't `right` either, which means `read_input` returned")
-            .c("an unexpected value.")
-            .ident("brk");
-        },
-    );
+    script
+        .function(
+            "handle_input",
+            |p| p.lit(0),
+            |e| {
+                e.c("No input available.");
+            },
+        )
+        .function(
+            "handle_input",
+            |p| p.lit(1),
+            |e| {
+                e.c("up")
+                    .v(0)
+                    .v(-1)
+                    .ident("i32_to_i8")
+                    .ident("velocity")
+                    .ident("vec_store");
+            },
+        )
+        .function(
+            "handle_input",
+            |p| p.lit(2),
+            |e| {
+                e.c("left")
+                    .v(-1)
+                    .ident("i32_to_i8")
+                    .v(0)
+                    .ident("velocity")
+                    .ident("vec_store");
+            },
+        )
+        .function(
+            "handle_input",
+            |p| p.lit(3),
+            |e| {
+                e.c("down").v(0).v(1).ident("velocity").ident("vec_store");
+            },
+        )
+        .function(
+            "handle_input",
+            |p| p.lit(4),
+            |e| {
+                e.c("right").v(1).v(0).ident("velocity").ident("vec_store");
+            },
+        )
+        .function(
+            "handle_input",
+            |p| p.ident("_"),
+            |e| {
+                e.c("unexpected value").ident("brk");
+            },
+        );
 
     // Memory map
     script.function(
