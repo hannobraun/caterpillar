@@ -92,7 +92,7 @@ pub fn generate_instructions(
             continue;
         };
 
-        let arguments = cluster
+        let cluster = cluster
             .iter()
             .map(|(arguments, address)| {
                 let arguments = arguments
@@ -115,7 +115,7 @@ pub fn generate_instructions(
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
-                cluster: arguments,
+                cluster,
                 is_tail_call: call.is_tail_call,
             },
         );
