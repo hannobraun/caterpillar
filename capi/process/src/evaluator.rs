@@ -80,11 +80,11 @@ impl Evaluator {
                 }
             }
             Instruction::CallCluster {
-                cluster: arguments,
+                cluster,
                 address,
                 is_tail_call,
             } => {
-                let arguments = arguments
+                let arguments = cluster
                     .first()
                     .expect("Clusters must not be empty.")
                     .iter()
