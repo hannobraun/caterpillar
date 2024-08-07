@@ -68,12 +68,11 @@ where
             SyntaxElement::Item(cluster) => {
                 let mut members = Vec::new();
 
-                for (i, function) in cluster.members.into_iter().enumerate() {
+                for function in cluster.members {
                     let start = compile_block(function.body, next, fragments);
 
                     members.push(Function {
                         name: function.name,
-                        group_index: i as u32,
                         arguments: function.arguments,
                         start,
                     });

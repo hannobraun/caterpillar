@@ -90,13 +90,6 @@ impl FragmentPayload {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-
-    /// The index of the function within its group
-    ///
-    /// Please refer to the documentation of the respective field in
-    /// `syntax::Function`.
-    pub group_index: u32,
-
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
 }
@@ -106,13 +99,11 @@ impl Function {
         // Let's destructure `self`, so we don't forget any fields.
         let Self {
             name,
-            group_index,
             arguments,
             start,
         } = self;
 
         hasher.update(name.as_bytes());
-        hasher.update(&group_index.to_le_bytes());
 
         for argument in arguments {
             match argument {
