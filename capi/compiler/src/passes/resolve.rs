@@ -4,7 +4,7 @@ use capi_process::{builtin, Host};
 
 use crate::syntax::{Expression, IdentifierTarget, Pattern};
 
-use super::c_clusters::Cluster;
+use super::clusters::Cluster;
 
 pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
     let mut scopes = Scopes::new();
