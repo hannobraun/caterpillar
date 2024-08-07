@@ -251,7 +251,10 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Cluster { mut members, next },
+            payload:
+                FragmentPayload::Cluster {
+                    mut members, next, ..
+                },
             ..
         } = root
         else {
