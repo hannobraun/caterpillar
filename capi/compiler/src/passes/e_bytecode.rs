@@ -89,9 +89,10 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             // it can happen for the `main` function, since we create a
             // placeholder for that unconditionally.
             //
-            // If that happens, let's just leave the panic. It's not great, as
-            // it doesn't provide any context to the user. But while we don't
-            // have any way to make panics more descriptive, it'll have to do.
+            // If that happens, let's just leave the placeholder panic. It's not
+            // great, as it doesn't provide any context to the user. But while
+            // we don't have any way to make panics more descriptive, it'll have
+            // to do.
             assert_eq!(
                 &call.name, "main",
                 "Replacement found for function that doesn't exist, but only \
