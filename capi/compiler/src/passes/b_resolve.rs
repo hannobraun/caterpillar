@@ -2,46 +2,50 @@ use std::collections::BTreeSet;
 
 use capi_process::{builtin, Host};
 
-use crate::syntax::{Expression, Function, IdentifierTarget, Pattern};
+use crate::syntax::{Expression, IdentifierTarget, Pattern};
 
-pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
+use super::c_clusters::Cluster;
+
+pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
     let mut scopes = Scopes::new();
-    let user_functions = functions
+    let user_functions = clusters
         .iter()
         .map(|function| function.name.clone())
         .collect();
 
-    for function in functions {
-        scopes.push(
-            function
-                .arguments
-                .clone()
-                .into_iter()
-                .filter_map(|pattern| match pattern {
-                    Pattern::Identifier { name } => Some(name),
-                    Pattern::Literal { .. } => {
-                        // The scope is used to resolve identifiers against
-                        // known bindings. Literal patterns don't create
-                        // bindings, as their value is only used to select the
-                        // function to be called.
-                        None
-                    }
-                })
-                .collect(),
-        );
-        let mut environment = Environment::new();
+    for cluster in clusters {
+        for function in &mut cluster.members {
+            scopes.push(
+                function
+                    .arguments
+                    .clone()
+                    .into_iter()
+                    .filter_map(|pattern| match pattern {
+                        Pattern::Identifier { name } => Some(name),
+                        Pattern::Literal { .. } => {
+                            // The scope is used to resolve identifiers against
+                            // known bindings. Literal patterns don't create
+                            // bindings, as their value is only used to select
+                            // the function to be called.
+                            None
+                        }
+                    })
+                    .collect(),
+            );
+            let mut environment = Environment::new();
 
-        resolve_in_block::<H>(
-            &mut function.body,
-            &mut scopes,
-            &mut environment,
-            &user_functions,
-        );
+            resolve_in_block::<H>(
+                &mut function.body,
+                &mut scopes,
+                &mut environment,
+                &user_functions,
+            );
 
-        assert!(
-            environment.is_empty(),
-            "Functions do not have an environment that they could access.",
-        );
+            assert!(
+                environment.is_empty(),
+                "Functions do not have an environment that they could access.",
+            );
+        }
     }
 }
 
@@ -112,7 +116,10 @@ type Environment = BTreeSet<String>;
 mod tests {
     use capi_process::{Effect, Host, HostFunction, Stack};
 
-    use crate::syntax::{Expression, Function, IdentifierTarget, Script};
+    use crate::{
+        passes::find_clusters,
+        syntax::{Expression, Function, IdentifierTarget, Script},
+    };
 
     #[test]
     fn resolve_argument() {
@@ -311,9 +318,14 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(mut script: Script) -> Vec<Function> {
-        super::resolve_identifiers::<TestHost>(&mut script.functions);
-        script.functions
+    fn resolve_identifiers(script: Script) -> Vec<Function> {
+        let mut clusters = find_clusters(script.functions);
+        super::resolve_identifiers::<TestHost>(&mut clusters);
+
+        clusters
+            .into_iter()
+            .flat_map(|cluster| cluster.members)
+            .collect()
     }
 
     struct TestHost {}
