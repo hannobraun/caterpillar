@@ -57,6 +57,7 @@ pub enum FragmentPayload {
     /// so a cluster might have a single member.
     Cluster {
         members: Vec<Function>,
+        next: FragmentId,
     },
 
     Expression {
@@ -69,11 +70,12 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Cluster { members } => {
+            Self::Cluster { members, next } => {
                 hasher.update(b"cluster");
                 for function in members {
                     function.hash(hasher);
                 }
+                next.hash(hasher);
             }
             Self::Expression { expression, next } => {
                 hasher.update(b"expression");

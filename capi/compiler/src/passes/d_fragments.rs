@@ -82,7 +82,7 @@ where
 
                 Fragment {
                     parent,
-                    payload: FragmentPayload::Cluster { members },
+                    payload: FragmentPayload::Cluster { members, next },
                 }
             }
         };
