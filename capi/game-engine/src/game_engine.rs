@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{Bytecode, Effect, Instructions, Process, Value};
+use capi_process::{Effect, Instructions, Process, Value};
 
 use crate::{
     display,
@@ -34,8 +34,8 @@ impl GameEngine {
         &self.memory
     }
 
-    pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.instructions = Some(bytecode.instructions);
+    pub fn on_new_bytecode(&mut self, instructions: Instructions) {
+        self.instructions = Some(instructions);
         self.reset();
     }
 
