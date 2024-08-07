@@ -11,7 +11,7 @@ use crate::{
     syntax::Pattern,
 };
 
-pub fn generate_bytecode<H: Host>(
+pub fn generate_instructions<H: Host>(
     fragments: Fragments,
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
