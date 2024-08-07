@@ -2,8 +2,6 @@ use std::collections::BTreeSet;
 
 use capi_process::Value;
 
-use super::Pattern;
-
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Expression {
     Binding {
@@ -62,21 +60,7 @@ pub enum IdentifierTarget {
     BuiltinFunction,
 
     /// The identifier resolves to a cluster of functions
-    Cluster {
-        /// # The arguments of all functions in the cluster
-        ///
-        /// ## Implementation Note
-        ///
-        /// Making this available here is a bit of a hack. It is only required
-        /// to also make the arguments available in
-        /// `FragmentExpression::ResolvedCluster`, which itself is a hack to
-        /// avoid some larger complications that would go to far right now. See
-        /// documentation of that, for more information.
-        ///
-        /// Once the arguments are no longer required there, this field can
-        /// probably be removed too.
-        all_arguments: Vec<Vec<Pattern>>,
-    },
+    Cluster,
 
     HostFunction,
 }

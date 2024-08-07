@@ -97,13 +97,8 @@ fn resolve_in_block<H: Host>(
                 if H::function(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
-                if let Some(cluster) = known_clusters.get(name) {
-                    let all_arguments = cluster
-                        .members
-                        .iter()
-                        .map(|function| function.arguments.clone())
-                        .collect();
-                    *target = Some(IdentifierTarget::Cluster { all_arguments });
+                if let Some(_cluster) = known_clusters.get(name) {
+                    *target = Some(IdentifierTarget::Cluster);
                 }
             }
             _ => {}
@@ -317,9 +312,7 @@ mod tests {
             functions.remove(0).body.last(),
             Some(&Expression::Identifier {
                 name: String::from("user_fn"),
-                target: Some(IdentifierTarget::Cluster {
-                    all_arguments: vec![vec![]],
-                }),
+                target: Some(IdentifierTarget::Cluster),
                 is_known_to_be_in_tail_position: false,
             })
         );
