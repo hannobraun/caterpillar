@@ -89,6 +89,15 @@ pub fn generate_instructions<H: Host>(
             continue;
         };
 
+        assert_eq!(
+            address.len(),
+            1,
+            "Pattern matching in function definitions is not supported yet.",
+        );
+        let address = address
+            .first()
+            .expect("Just checked that there is one address");
+
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
@@ -318,12 +327,15 @@ pub struct CallToCluster {
 
 #[derive(Default)]
 struct Clusters {
-    addresses_by_name: BTreeMap<String, InstructionAddress>,
+    addresses_by_name: BTreeMap<String, Vec<InstructionAddress>>,
 }
 
 impl Clusters {
     fn insert(&mut self, name: String, address: InstructionAddress) {
-        self.addresses_by_name.insert(name, address);
+        self.addresses_by_name
+            .entry(name)
+            .or_default()
+            .push(address);
     }
 }
 
