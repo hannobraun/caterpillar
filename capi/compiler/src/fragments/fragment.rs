@@ -105,7 +105,7 @@ impl Cluster {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
-    pub arguments: Vec<Pattern>,
+    pub arguments: Arguments,
     pub start: FragmentId,
 }
 
@@ -114,7 +114,7 @@ impl Function {
         // Let's destructure `self`, so we don't forget any fields.
         let Self { arguments, start } = self;
 
-        for argument in arguments {
+        for argument in &arguments.inner {
             match argument {
                 Pattern::Identifier { name } => {
                     hasher.update(b"identifier pattern");
@@ -128,4 +128,9 @@ impl Function {
         }
         start.hash(hasher);
     }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Arguments {
+    pub inner: Vec<Pattern>,
 }

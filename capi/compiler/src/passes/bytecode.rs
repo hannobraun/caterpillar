@@ -55,6 +55,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                 for function in members {
                     let arguments = function
                         .arguments
+                        .inner
                         .into_iter()
                         .filter_map(|pattern| match pattern {
                             Pattern::Identifier { name } => Some(name),
