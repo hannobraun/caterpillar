@@ -2,7 +2,7 @@ use std::{collections::BTreeSet, fmt};
 
 use capi_process::Value;
 
-use super::{Arguments, FragmentId};
+use super::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentExpression {
@@ -54,9 +54,6 @@ pub enum FragmentExpression {
     ResolvedCluster {
         name: String,
 
-        /// The arguments of each function in the cluster
-        all_arguments: Vec<Arguments>,
-
         /// Indicate whether the call is in tail position
         ///
         /// This flag is relevant for tail call elimination. It is only required
@@ -106,16 +103,9 @@ impl FragmentExpression {
                 hasher.update(b"resolved built-in function");
                 hasher.update(name.as_bytes());
             }
-            Self::ResolvedCluster {
-                name,
-                all_arguments,
-                is_tail_call,
-            } => {
+            Self::ResolvedCluster { name, is_tail_call } => {
                 hasher.update(b"resolved user function");
                 hasher.update(name.as_bytes());
-                for arguments in all_arguments {
-                    arguments.hash(hasher);
-                }
                 hasher.update(&[(*is_tail_call).into()]);
             }
             Self::ResolvedHostFunction { name } => {

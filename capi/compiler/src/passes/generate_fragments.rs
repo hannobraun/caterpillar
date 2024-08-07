@@ -126,21 +126,12 @@ fn compile_expression(
             Some(IdentifierTarget::BuiltinFunction) => {
                 FragmentExpression::ResolvedBuiltinFunction { name }
             }
-            Some(IdentifierTarget::Cluster { all_arguments }) => {
+            Some(IdentifierTarget::Cluster { .. }) => {
                 // By the time we make it to this compiler pass, all expressions
                 // that are in tail position should be known to be so.
                 let is_tail_call = is_known_to_be_in_tail_position;
 
-                let all_arguments = all_arguments
-                    .into_iter()
-                    .map(|arguments| Arguments { inner: arguments })
-                    .collect();
-
-                FragmentExpression::ResolvedCluster {
-                    name,
-                    all_arguments,
-                    is_tail_call,
-                }
+                FragmentExpression::ResolvedCluster { name, is_tail_call }
             }
             Some(IdentifierTarget::HostFunction) => {
                 FragmentExpression::ResolvedHostFunction { name }
