@@ -1,6 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{Bytecode, Instruction, InstructionAddress, Instructions};
+use capi_process::{
+    Bytecode, Host, Instruction, InstructionAddress, Instructions,
+};
 
 use crate::{
     fragments::{
@@ -11,7 +13,9 @@ use crate::{
     syntax::Pattern,
 };
 
-pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
+pub fn generate_bytecode<H: Host>(
+    fragments: Fragments,
+) -> (Bytecode, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
     let mut functions = Functions::default();
@@ -22,6 +26,7 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
     output.instructions.push(Instruction::Return);
     output.placeholders.push(CallToCluster {
         name: "main".to_string(),
+        arguments: H::arguments_to_main(),
         address: main,
         is_tail_call: true,
     });
@@ -102,6 +107,8 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
             );
             continue;
         };
+
+        dbg!(call.arguments);
 
         output.instructions.replace(
             call.address,
@@ -231,9 +238,38 @@ fn compile_fragment(
                 }
                 FragmentExpression::ResolvedCluster {
                     name,
+                    all_arguments,
                     is_tail_call,
-                    ..
                 } => {
+                    // We are still in the process of implementing pattern
+                    // matching in function definitions. For now, we simply
+                    // don't support it here.
+                    assert_eq!(
+                        all_arguments.len(),
+                        1,
+                        "Pattern matching in function definitions is not \
+                        supported yet."
+                    );
+                    let arguments = all_arguments
+                        .first()
+                        .expect(
+                            "Each cluster must have at least one member, which \
+                            means we can expect to find one set of arguments \
+                            here.",
+                        )
+                        .inner
+                        .iter()
+                        .map(|argument| match argument {
+                            Pattern::Identifier { name } => name.clone(),
+                            Pattern::Literal { .. } => {
+                                panic!(
+                                    "Pattern matching in function definitions \
+                                    is not supported yet."
+                                );
+                            }
+                        })
+                        .collect();
+
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
                     // yet.
@@ -250,6 +286,7 @@ fn compile_fragment(
                     // doing that by adding it to this list.
                     output.placeholders.push(CallToCluster {
                         name: name.clone(),
+                        arguments,
                         address,
                         is_tail_call: *is_tail_call,
                     });
@@ -299,6 +336,7 @@ impl Output {
 
 pub struct CallToCluster {
     pub name: String,
+    pub arguments: Vec<String>,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }

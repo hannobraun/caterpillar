@@ -17,7 +17,7 @@ pub fn compile<H: Host>(
     let mut clusters = find_clusters(script.functions);
     resolve_identifiers::<H>(&mut clusters);
     let fragments = generate_fragments(clusters);
-    let (bytecode, source_map) = generate_bytecode(fragments.clone());
+    let (bytecode, source_map) = generate_bytecode::<H>(fragments.clone());
 
     (fragments, bytecode, source_map)
 }
