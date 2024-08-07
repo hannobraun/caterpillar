@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{Bytecode, Effect, Process, Value};
+use capi_process::{Bytecode, Effect, Instructions, Process, Value};
 
 use crate::{
     display,
@@ -11,7 +11,7 @@ use crate::{
 pub struct GameEngine {
     pub process: Process<GameEngineHost>,
 
-    bytecode: Option<Bytecode>,
+    instructions: Option<Instructions>,
     arguments: [Value; 2],
     memory: Memory,
     input: VecDeque<u8>,
@@ -22,7 +22,7 @@ impl GameEngine {
     pub fn new() -> Self {
         Self {
             process: Process::default(),
-            bytecode: None,
+            instructions: None,
             arguments: [Value::from(TILES_PER_AXIS as i32); 2],
             memory: Memory::default(),
             input: VecDeque::new(),
@@ -35,7 +35,7 @@ impl GameEngine {
     }
 
     pub fn on_new_bytecode(&mut self, bytecode: Bytecode) {
-        self.bytecode = Some(bytecode);
+        self.instructions = Some(bytecode.instructions);
         self.reset();
     }
 
@@ -76,11 +76,7 @@ impl GameEngine {
     }
 
     pub fn run_until_end_of_frame(&mut self, pixels: &mut [u8]) {
-        let Some(instructions) = self
-            .bytecode
-            .as_ref()
-            .map(|bytecode| &bytecode.instructions)
-        else {
+        let Some(instructions) = &self.instructions else {
             return;
         };
 
