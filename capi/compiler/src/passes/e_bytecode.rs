@@ -51,14 +51,16 @@ pub fn generate_bytecode(fragments: Fragments) -> (Bytecode, SourceMap) {
                     },
                 );
             }
-            CompileUnit::Function(function) => {
-                compile_function(
-                    function,
-                    &fragments.inner,
-                    &mut output,
-                    &mut queue,
-                    &mut functions,
-                );
+            CompileUnit::Cluster { members } => {
+                for function in members {
+                    compile_function(
+                        function,
+                        &fragments.inner,
+                        &mut output,
+                        &mut queue,
+                        &mut functions,
+                    );
+                }
             }
         }
     }
@@ -156,9 +158,9 @@ fn compile_fragment(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Cluster { members, .. } => {
-            for function in members {
-                queue.push_back(CompileUnit::Function(function.clone()));
-            }
+            queue.push_back(CompileUnit::Cluster {
+                members: members.clone(),
+            });
             return None;
         }
         FragmentPayload::Expression { expression, .. } => {
@@ -327,5 +329,7 @@ enum CompileUnit {
         environment: BTreeSet<String>,
         address: InstructionAddress,
     },
-    Function(Function),
+    Cluster {
+        members: Vec<Function>,
+    },
 }
