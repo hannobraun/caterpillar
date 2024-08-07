@@ -41,7 +41,6 @@ impl Fragment {
                 members.last().map(|function| function.next)
             }
             FragmentPayload::Expression { next, .. } => Some(*next),
-            FragmentPayload::Function(Function { next, .. }) => Some(*next),
             FragmentPayload::Terminator => None,
         }
     }
@@ -61,7 +60,6 @@ pub enum FragmentPayload {
         expression: FragmentExpression,
         next: FragmentId,
     },
-    Function(Function),
     Terminator,
 }
 
@@ -78,10 +76,6 @@ impl FragmentPayload {
                 hasher.update(b"expression");
                 expression.hash(hasher);
                 next.hash(hasher);
-            }
-            Self::Function(function) => {
-                hasher.update(b"function");
-                function.hash(hasher);
             }
             Self::Terminator => {
                 hasher.update(b"terminator");

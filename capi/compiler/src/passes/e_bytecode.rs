@@ -270,10 +270,6 @@ fn compile_fragment(
                     ),
             }
         }
-        FragmentPayload::Function(function) => {
-            queue.push_back(CompileUnit::Function(function.clone()));
-            return None;
-        }
         FragmentPayload::Terminator => {
             output.generate_instruction(Instruction::Return, fragment.id())
         }
