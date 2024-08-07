@@ -76,12 +76,16 @@ impl GameEngine {
     }
 
     pub fn run_until_end_of_frame(&mut self, pixels: &mut [u8]) {
-        let Some(bytecode) = &self.bytecode else {
+        let Some(instructions) = self
+            .bytecode
+            .as_ref()
+            .map(|bytecode| &bytecode.instructions)
+        else {
             return;
         };
 
         while self.process.state().can_step() {
-            self.process.step(&bytecode.instructions);
+            self.process.step(instructions);
 
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {
