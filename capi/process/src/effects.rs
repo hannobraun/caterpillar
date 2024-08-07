@@ -53,6 +53,9 @@ pub enum CoreEffect {
     #[error(transparent)]
     IntegerOverflow(#[from] IntegerOverflow),
 
+    #[error("Pattern matching resulted in no match")]
+    NoMatch,
+
     #[error("Operand is out of bounds")]
     OperandOutOfBounds,
 
