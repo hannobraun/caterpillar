@@ -63,7 +63,11 @@ pub fn generate_instructions<H: Host>(
                         &mut queue,
                     );
 
-                    clusters.insert(name.clone(), address);
+                    clusters
+                        .addresses_by_name
+                        .entry(name.clone())
+                        .or_default()
+                        .push(address);
                 }
             }
         }
@@ -328,15 +332,6 @@ pub struct CallToCluster {
 #[derive(Default)]
 struct Clusters {
     addresses_by_name: BTreeMap<String, Vec<InstructionAddress>>,
-}
-
-impl Clusters {
-    fn insert(&mut self, name: String, address: InstructionAddress) {
-        self.addresses_by_name
-            .entry(name)
-            .or_default()
-            .push(address);
-    }
 }
 
 enum CompileUnit {
