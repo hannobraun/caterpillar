@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, stack::PushStackFrameError, Bytecode, CoreEffect,
-    Effect, Host, Instruction, Stack, Value,
+    builtins::builtin, stack::PushStackFrameError, CoreEffect, Effect, Host,
+    Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -14,14 +14,13 @@ pub struct Evaluator {
 impl Evaluator {
     pub fn step<H: Host>(
         &mut self,
-        bytecode: &Bytecode,
+        instructions: &Instructions,
     ) -> Result<EvaluatorState, Effect<H::Effect>> {
         let Some(addr) = self.stack.take_next_instruction() else {
             return Ok(EvaluatorState::Finished);
         };
 
-        let instruction = bytecode
-            .instructions
+        let instruction = instructions
             .get(&addr)
             .expect("Expected instruction referenced on stack to exist");
 
@@ -72,9 +71,7 @@ impl Evaluator {
                     );
                     }
                     (Some(f), None) => f(&mut self.stack)?,
-                    (None, Some(f)) => {
-                        f(&mut self.stack, &bytecode.instructions)?
-                    }
+                    (None, Some(f)) => f(&mut self.stack, instructions)?,
                     (None, None) => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
                             name: name.clone(),
