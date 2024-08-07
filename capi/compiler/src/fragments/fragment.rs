@@ -68,15 +68,9 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Cluster {
-                cluster: Cluster { name, members },
-                next,
-            } => {
+            Self::Cluster { cluster, next } => {
                 hasher.update(b"cluster");
-                hasher.update(name.as_bytes());
-                for function in members {
-                    function.hash(hasher);
-                }
+                cluster.hash(hasher);
                 next.hash(hasher);
             }
             Self::Expression { expression, next } => {
@@ -95,6 +89,18 @@ impl FragmentPayload {
 pub struct Cluster {
     pub name: String,
     pub members: Vec<Function>,
+}
+
+impl Cluster {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        // Let's destructure `self`, so we don't forget any fields.
+        let Self { name, members } = self;
+
+        hasher.update(name.as_bytes());
+        for function in members {
+            function.hash(hasher);
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
