@@ -37,9 +37,7 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.payload {
-            FragmentPayload::Cluster { members, .. } => {
-                members.last().map(|function| function.next)
-            }
+            FragmentPayload::Cluster { next, .. } => Some(*next),
             FragmentPayload::Expression { next, .. } => Some(*next),
             FragmentPayload::Terminator => None,
         }
