@@ -1,6 +1,6 @@
 use capi_compiler::{compile, fragments::FragmentExpression, syntax::Script};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
-use capi_process::{Bytecode, Process, Value};
+use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
@@ -15,7 +15,7 @@ pub fn init() -> TestInfra {
 #[derive(Default)]
 pub struct TestInfra {
     remote_process: RemoteProcess,
-    bytecode: Option<Bytecode>,
+    instructions: Option<Instructions>,
 }
 
 impl TestInfra {
@@ -35,20 +35,16 @@ impl TestInfra {
             source_map,
         });
 
-        self.bytecode = Some(bytecode);
+        self.instructions = Some(bytecode.instructions);
 
         self
     }
 
     pub fn run_process(&mut self) -> &mut Self {
-        let instructions = self
-            .bytecode
-            .as_ref()
-            .map(|bytecode| &bytecode.instructions)
-            .expect(
-                "Must provide source code via `TestSetup::source_code` before \
-                running process.",
-            );
+        let instructions = self.instructions.as_ref().expect(
+            "Must provide source code via `TestSetup::source_code` before \
+            running process.",
+        );
 
         let mut process = Process::default();
         process.reset([0, 0].map(Value::from));
