@@ -68,17 +68,12 @@ where
             SyntaxElement::Item(cluster) => {
                 let mut members = Vec::new();
 
-                for function in cluster.members {
-                    // If the group index is not set for a function, that means
-                    // it's the only function in its group, and its default
-                    // index is `0`.
-                    let group_index = function.group_index.unwrap_or(0);
-
+                for (i, function) in cluster.members.into_iter().enumerate() {
                     let start = compile_block(function.body, next, fragments);
 
                     members.push(Function {
                         name: function.name,
-                        group_index,
+                        group_index: i as u32,
                         arguments: function.arguments,
                         start,
                         next,
