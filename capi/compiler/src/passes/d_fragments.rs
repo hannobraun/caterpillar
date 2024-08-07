@@ -76,7 +76,6 @@ where
                         group_index: i as u32,
                         arguments: function.arguments,
                         start,
-                        next,
                     });
                 }
 

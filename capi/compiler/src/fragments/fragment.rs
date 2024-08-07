@@ -99,7 +99,6 @@ pub struct Function {
 
     pub arguments: Vec<Pattern>,
     pub start: FragmentId,
-    pub next: FragmentId,
 }
 
 impl Function {
@@ -110,7 +109,6 @@ impl Function {
             group_index,
             arguments,
             start,
-            next,
         } = self;
 
         hasher.update(name.as_bytes());
@@ -130,6 +128,5 @@ impl Function {
         }
 
         start.hash(hasher);
-        next.hash(hasher);
     }
 }
