@@ -41,15 +41,19 @@ impl TestInfra {
     }
 
     pub fn run_process(&mut self) -> &mut Self {
-        let bytecode = self.bytecode.as_ref().expect(
-            "Must provide source code via `TestSetup::source_code` before \
+        let instructions = self
+            .bytecode
+            .as_ref()
+            .map(|bytecode| &bytecode.instructions)
+            .expect(
+                "Must provide source code via `TestSetup::source_code` before \
                 running process.",
-        );
+            );
 
         let mut process = Process::default();
         process.reset([0, 0].map(Value::from));
         while process.state().can_step() {
-            process.step(&bytecode.instructions);
+            process.step(instructions);
         }
 
         let memory = Memory::default();
