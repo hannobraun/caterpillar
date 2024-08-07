@@ -145,9 +145,7 @@ pub fn on_new_bytecode() -> u64 {
     let code = str::from_utf8(code).unwrap();
     let code: Versioned<Code> = ron::from_str(code).unwrap();
 
-    state
-        .game_engine
-        .on_new_bytecode(code.inner.bytecode.instructions);
+    state.game_engine.on_new_bytecode(code.inner.instructions);
 
     code.version
 }

@@ -31,7 +31,7 @@ impl TestInfra {
 
         self.remote_process.on_code_update(Code {
             fragments: fragments.clone(),
-            bytecode: bytecode.clone(),
+            instructions: bytecode.instructions.clone(),
             source_map,
         });
 

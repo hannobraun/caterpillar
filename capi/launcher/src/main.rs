@@ -11,7 +11,7 @@ async fn main() -> anyhow::Result<()> {
     let mut pixels = [0; NUM_PIXEL_BYTES];
     let mut game_engine = GameEngine::new();
 
-    game_engine.on_new_bytecode(code.bytecode.instructions);
+    game_engine.on_new_bytecode(code.instructions);
 
     let mut now = Instant::now();
 

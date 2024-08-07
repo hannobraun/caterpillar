@@ -1,6 +1,6 @@
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
-use capi_process::{Bytecode, Host, Process};
+use capi_process::{Host, Instructions, Process};
 use serde::{de::DeserializeOwned, Serialize};
 
 pub struct Updates<H: Host> {
@@ -91,7 +91,7 @@ impl<H: Host> Update<H> {
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Code {
     pub fragments: Fragments,
-    pub bytecode: Bytecode,
+    pub instructions: Instructions,
     pub source_map: SourceMap,
 }
 

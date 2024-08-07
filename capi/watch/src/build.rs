@@ -58,7 +58,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
 
     Ok(Code {
         fragments,
-        bytecode,
+        instructions: bytecode.instructions,
         source_map,
     })
 }
