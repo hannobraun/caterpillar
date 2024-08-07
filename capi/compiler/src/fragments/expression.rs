@@ -22,6 +22,35 @@ pub enum FragmentExpression {
     ResolvedBuiltinFunction {
         name: String,
     },
+
+    /// # A call to a cluster of functions
+    ///
+    /// ## Implementation Note
+    ///
+    /// This enum variant duplicates some data that is already available in
+    /// `Cluster` itself. It should instead reference the respective cluster
+    /// directly, using an `id: FragmentId` field.
+    ///
+    /// This would not only be cleaner, consolidating the redundant definition
+    /// of data, it would also have the advantage of versioning this call. It
+    /// could refer to any available version of the cluster, which is a useful
+    /// feature to have for many reasons.
+    ///
+    /// Unfortunately, this is not easy. There are two main hurdles, as best I
+    /// can tell:
+    ///
+    /// 1. It requires cluster fragments to be created in the correct order, as
+    ///    the called cluster must be created before its caller.
+    /// 2. There would need to be special handling of recursive calls, or there
+    ///    would be a dependency cycle when hashing the calls and their targets.
+    ///
+    /// I think what we need, is a new compiler pass that creates a call graph.
+    /// This call graph can then be used to order the creating of fragments,
+    /// from the leaves up, as well as to detect recursive call cycles.
+    ///
+    /// As for the handling of those, here is some information on how Unison
+    /// does that, which might prove useful:
+    /// https://stackoverflow.com/a/73343072/8369834
     ResolvedCluster {
         name: String,
 
