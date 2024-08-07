@@ -97,7 +97,7 @@ fn resolve_in_block<H: Host>(
                 if H::function(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
-                if let Some(_cluster) = known_clusters.get(name) {
+                if known_clusters.contains_key(name) {
                     *target = Some(IdentifierTarget::Cluster);
                 }
             }
