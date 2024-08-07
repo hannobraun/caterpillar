@@ -253,7 +253,7 @@ mod tests {
             .remove(&fragments.root)
             .expect("Defined code, so there must be a root element.");
         let Fragment {
-            payload: FragmentPayload::Cluster { mut members, .. },
+            payload: FragmentPayload::Cluster { mut members, next },
             ..
         } = root
         else {
@@ -280,7 +280,7 @@ mod tests {
             fragments.inner.iter_from(*start).collect::<Vec<_>>()
         };
 
-        assert_eq!(function_fragments[0].parent, Some(function.next));
+        assert_eq!(function_fragments[0].parent, Some(next));
         assert_eq!(block_fragments[0].parent, Some(function_fragments[1].id()));
     }
 
