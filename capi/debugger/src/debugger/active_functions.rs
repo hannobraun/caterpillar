@@ -50,7 +50,7 @@ impl ActiveFunctions {
             let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .cloned()
+                .map(|(_cluster, function)| function.clone())
                 .expect(
                     "Expecting function referenced from call stack to exist.",
                 );

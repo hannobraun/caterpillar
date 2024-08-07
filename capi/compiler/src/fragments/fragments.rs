@@ -22,7 +22,7 @@ impl Fragments {
     pub fn find_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
-    ) -> Option<&Function> {
+    ) -> Option<(&Cluster, &Function)> {
         let mut fragment_id = *fragment_id;
 
         loop {
@@ -65,14 +65,16 @@ impl Fragments {
                 .inner
                 .values()
                 .filter_map(|fragment| match &fragment.payload {
-                    FragmentPayload::Cluster {
-                        cluster: Cluster { members, .. },
-                        ..
-                    } => Some(members),
+                    FragmentPayload::Cluster { cluster, .. } => Some(cluster),
                     _ => None,
                 })
-                .flatten()
-                .find(|function| function.start == fragment_id);
+                .find_map(|cluster| {
+                    let function = cluster
+                        .members
+                        .iter()
+                        .find(|function| function.start == fragment_id)?;
+                    Some((cluster, function))
+                });
 
             // And this is our result. If it's not the function we're looking
             // for, the fragment was part of the root context and there's no
