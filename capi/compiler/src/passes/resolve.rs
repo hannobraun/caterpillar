@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 use capi_process::{builtin, Host};
 
@@ -10,7 +10,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
     let mut scopes = Scopes::new();
     let known_clusters = clusters
         .iter()
-        .map(|cluster| cluster.name.clone())
+        .map(|cluster| (cluster.name.clone(), cluster.clone()))
         .collect();
 
     for cluster in clusters {
@@ -53,7 +53,7 @@ fn resolve_in_block<H: Host>(
     body: &mut [Expression],
     scopes: &mut Scopes,
     environment: &mut Environment,
-    known_clusters: &BTreeSet<String>,
+    known_clusters: &BTreeMap<String, Cluster>,
 ) {
     for expression in body {
         match expression {
@@ -97,7 +97,7 @@ fn resolve_in_block<H: Host>(
                 if H::function(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
-                if known_clusters.contains(name) {
+                if known_clusters.contains_key(name) {
                     *target = Some(IdentifierTarget::Cluster);
                 }
             }
