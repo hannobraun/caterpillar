@@ -127,7 +127,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -152,7 +152,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -180,7 +180,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         let mut function = script.functions.remove(0);
         let Some(Expression::Block { body, environment }) =
@@ -219,7 +219,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -245,7 +245,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -272,7 +272,7 @@ mod tests {
             },
         );
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -299,7 +299,7 @@ mod tests {
         );
         script.function("user_fn", |p| p, |_| {});
 
-        resolve_references(&mut script);
+        resolve_identifiers(&mut script);
 
         assert_eq!(
             script.functions.remove(0).body.last(),
@@ -311,7 +311,7 @@ mod tests {
         );
     }
 
-    fn resolve_references(script: &mut Script) {
+    fn resolve_identifiers(script: &mut Script) {
         super::resolve_identifiers::<TestHost>(&mut script.functions)
     }
 
