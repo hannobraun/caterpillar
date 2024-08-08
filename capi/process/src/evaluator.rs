@@ -82,20 +82,16 @@ impl Evaluator {
                 cluster,
                 is_tail_call,
             } => {
-                let operands = self
-                    .stack
-                    .operands_in_current_stack_frame()
-                    .copied()
-                    .collect::<Vec<_>>();
-
                 let mut any_member_matched = false;
 
                 for (arguments, address) in cluster {
+                    let mut used_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
 
                     let mut member_matches = true;
-                    for (i, argument) in arguments.iter().rev().enumerate() {
-                        let operand = operands[i];
+                    for argument in arguments.iter().rev() {
+                        let operand = self.stack.pop_operand()?;
+                        used_operands.push(operand);
 
                         match argument {
                             Pattern::Identifier { name } => {
@@ -108,10 +104,6 @@ impl Evaluator {
                     }
 
                     if member_matches {
-                        for _ in arguments {
-                            self.stack.pop_operand()?;
-                        }
-
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
@@ -129,6 +121,10 @@ impl Evaluator {
                         any_member_matched = true;
 
                         break;
+                    } else {
+                        for value in used_operands.into_iter().rev() {
+                            self.stack.push_operand(value);
+                        }
                     }
                 }
 
