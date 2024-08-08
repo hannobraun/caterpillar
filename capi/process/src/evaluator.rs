@@ -32,6 +32,10 @@ impl Evaluator {
                     ));
                 }
             }
+            Instruction::Bind { name } => {
+                let value = self.stack.pop_operand()?;
+                self.stack.define_binding(name.clone(), value);
+            }
             Instruction::BindingEvaluate { name } => {
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
@@ -52,10 +56,6 @@ impl Evaluator {
                     );
                 };
                 self.stack.push_operand(value);
-            }
-            Instruction::Bind { name } => {
-                let value = self.stack.pop_operand()?;
-                self.stack.define_binding(name.clone(), value);
             }
             Instruction::CallBuiltin { name } => {
                 match (H::function(name), builtin(name)) {
