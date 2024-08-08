@@ -90,15 +90,3 @@ Both the written and the canonical representation would live side-by-side in
 version control.
 
 [Unison]: https://www.unison-lang.org/
-
-## Future Extensions
-
-This design is, as stated in the introduction, not complete. Besides accidental
-omissions, I'm actively thinking about the following topics:
-
-- [Interaction nets]: Those could be a better basis for computation, but I need
-  to study them more. This is also inspired by HVM.
-- Homoiconicity: Seems like a desirable property, but it's not something I have
-  thought about much, so far.
-
-[Interaction nets]: https://en.wikipedia.org/wiki/Interaction_nets
