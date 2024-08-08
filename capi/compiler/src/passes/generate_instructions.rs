@@ -166,22 +166,7 @@ fn compile_fragment(
         FragmentPayload::Expression { expression, .. } => {
             match expression {
                 FragmentExpression::BindingDefinitions { names } => {
-                    let mut first_address = None;
-
-                    for name in names.iter().rev() {
-                        let address = output.generate_instruction(
-                            Instruction::Bind { name: name.clone() },
-                            fragment.id(),
-                        );
-                        first_address = first_address.or(Some(address));
-                    }
-
-                    let assert_address = output.generate_instruction(
-                        Instruction::AssertBindingLeftNoOperands,
-                        fragment.id(),
-                    );
-
-                    first_address.unwrap_or(assert_address)
+                    output.generate_binding(names, fragment.id())
                 }
                 FragmentExpression::Block { start, environment } => {
                     // We are currently compiling a function or block (otherwise
@@ -308,6 +293,29 @@ impl Output {
         let addr = self.instructions.push(instruction);
         self.source_map.define_mapping(addr, fragment_id);
         addr
+    }
+
+    fn generate_binding(
+        &mut self,
+        names: &[String],
+        fragment_id: FragmentId,
+    ) -> InstructionAddress {
+        let mut first_address = None;
+
+        for name in names.iter().rev() {
+            let address = self.generate_instruction(
+                Instruction::Bind { name: name.clone() },
+                fragment_id,
+            );
+            first_address = first_address.or(Some(address));
+        }
+
+        let assert_address = self.generate_instruction(
+            Instruction::AssertBindingLeftNoOperands,
+            fragment_id,
+        );
+
+        first_address.unwrap_or(assert_address)
     }
 }
 
