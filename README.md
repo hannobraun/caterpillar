@@ -13,7 +13,8 @@ then navigating to where you can test your change.
 
 The core premise of the project is the hypothesis, that interactive programming
 is underutilized. That using it as the central element the language and its
-tooling are built around, can make development more fun and productive.
+tooling are built around, can make development more fun, productive, and
+intuitive.
 
 ## Status
 
