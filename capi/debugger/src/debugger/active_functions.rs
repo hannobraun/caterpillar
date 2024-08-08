@@ -57,12 +57,11 @@ impl ActiveFunctions {
             let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .map(|(cluster, function)| (cluster.clone(), function.clone()))
-                .expect(
-                    "Expecting function referenced from call stack to exist.",
-                );
+                .map(|(cluster, function)| (cluster.clone(), function.clone()));
 
-            functions.push_front(function);
+            if let Some(function) = function {
+                functions.push_front(function);
+            }
         }
 
         Self::Functions {
