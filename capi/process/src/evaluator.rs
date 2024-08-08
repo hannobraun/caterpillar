@@ -58,12 +58,6 @@ impl Evaluator {
                     let value = self.stack.pop_operand()?;
                     self.stack.define_binding(name.clone(), value);
                 }
-
-                if self.stack.operands_in_current_stack_frame().count() > 0 {
-                    return Err(Effect::Core(
-                        CoreEffect::BindingLeftValuesOnStack,
-                    ));
-                }
             }
             Instruction::CallBuiltin { name } => {
                 match (H::function(name), builtin(name)) {
