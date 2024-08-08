@@ -251,7 +251,7 @@ mod tests {
                     InstructionAddress { index: 3 },
                 ),
             ],
-            is_tail_call: false,
+            is_tail_call: true,
         });
 
         let EvaluatorState::Running =
