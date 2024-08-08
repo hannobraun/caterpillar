@@ -220,7 +220,7 @@ impl Default for Stack {
 /// needs to happen with the stack at compile-time. At that point, we will no
 /// longer need to track this kind of type information at runtime.
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-enum StackElement {
+pub enum StackElement {
     /// # The bindings in the current stack frame
     ///
     /// There should be one of these per stack frame, and it's expected that
