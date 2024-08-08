@@ -53,7 +53,9 @@ pub fn generate_instructions(
                     },
                 );
             }
-            CompileUnit::Cluster { name, members } => {
+            CompileUnit::Cluster { id, name, members } => {
+                dbg!(id);
+
                 for function in members {
                     let address = compile_context(
                         function.start,
@@ -158,6 +160,7 @@ fn compile_fragment(
             ..
         } => {
             queue.push_back(CompileUnit::Cluster {
+                id: fragment.id(),
                 name: name.clone(),
                 members: members.clone(),
             });
@@ -337,6 +340,7 @@ enum CompileUnit {
         address: InstructionAddress,
     },
     Cluster {
+        id: FragmentId,
         name: String,
         members: Vec<Function>,
     },
