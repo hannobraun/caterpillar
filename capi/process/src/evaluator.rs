@@ -107,23 +107,16 @@ impl Evaluator {
                     if member_matches {
                         if *is_tail_call {
                             self.stack.reuse_frame();
-                            self.stack
-                                .bindings_mut()
-                                .expect(
-                                    "Currently executing; stack frame must \
-                                    exist",
-                                )
-                                .extend(bound_arguments);
                         } else {
                             self.stack.push_frame()?;
-                            self.stack
-                                .bindings_mut()
-                                .expect(
-                                    "Currently executing; stack frame must \
-                                    exist",
-                                )
-                                .extend(bound_arguments);
                         }
+
+                        self.stack
+                            .bindings_mut()
+                            .expect(
+                                "Currently executing; stack frame must exist",
+                            )
+                            .extend(bound_arguments);
 
                         self.stack.next_instruction = *address;
                         any_member_matched = true;
