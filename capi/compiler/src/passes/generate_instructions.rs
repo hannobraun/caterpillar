@@ -165,13 +165,19 @@ fn compile_fragment(
         }
         FragmentPayload::Expression { expression, .. } => {
             match expression {
-                FragmentExpression::BindingDefinitions { names } => output
-                    .generate_instruction(
+                FragmentExpression::BindingDefinitions { names } => {
+                    let address = output.generate_instruction(
                         Instruction::BindingsDefine {
                             names: names.clone(),
                         },
                         fragment.id(),
-                    ),
+                    );
+                    output.generate_instruction(
+                        Instruction::AssertBindingLeftNoOperands,
+                        fragment.id(),
+                    );
+                    address
+                }
                 FragmentExpression::Block { start, environment } => {
                     // We are currently compiling a function or block (otherwise
                     // we wouldn't be encountering any expression), and the
