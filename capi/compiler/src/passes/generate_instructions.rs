@@ -169,7 +169,15 @@ fn compile_fragment(
         FragmentPayload::Expression { expression, .. } => {
             match expression {
                 FragmentExpression::BindingDefinitions { names } => {
-                    output.generate_binding(names, fragment.id())
+                    let bindings_address =
+                        output.generate_binding(names, fragment.id());
+
+                    let assert_address = output.generate_instruction(
+                        Instruction::AssertBindingLeftNoOperands,
+                        fragment.id(),
+                    );
+
+                    bindings_address.unwrap_or(assert_address)
                 }
                 FragmentExpression::Block { start, environment } => {
                     // We are currently compiling a function or block (otherwise
@@ -302,7 +310,7 @@ impl Output {
         &mut self,
         names: N,
         fragment_id: FragmentId,
-    ) -> InstructionAddress
+    ) -> Option<InstructionAddress>
     where
         N: IntoIterator<Item = &'r String>,
         N::IntoIter: DoubleEndedIterator,
@@ -317,12 +325,7 @@ impl Output {
             first_address = first_address.or(Some(address));
         }
 
-        let assert_address = self.generate_instruction(
-            Instruction::AssertBindingLeftNoOperands,
-            fragment_id,
-        );
-
-        first_address.unwrap_or(assert_address)
+        first_address
     }
 }
 
