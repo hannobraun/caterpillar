@@ -97,10 +97,50 @@ pub enum Instruction {
     CallBuiltin {
         name: String,
     },
+
+    /// # Call a cluster, selecting the right function via pattern matching
+    ///
+    /// ## Implementation Note
+    ///
+    /// This instruction is overly complex. I think ideally, there would be two
+    /// simple instructions instead:
+    ///
+    /// - `PushFrame`, to push a new stack frame, and do nothing else with it.
+    /// - `ReuseFrame`, to prepare the existing stack frame for reuse. (If
+    ///   bindings were just regular values whose addresses were managed by the
+    ///   compiler, instead of being a special thing handled by the stack at
+    ///   runtime, then we probably wouldn't need this at all, and could reuse
+    ///   any stack frame without preparation. That's a different story,
+    ///   however.)
+    ///
+    /// Those would just take a single address as an argument, and jump there
+    /// directly. (And maybe even pushing a frame and jumping to an instructions
+    /// could and should be decoupled eventually.)
+    ///
+    /// Pattern matching could move into the functions themselves. The compiler
+    /// could generate the necessary code as required, using the following
+    /// approach:
+    ///
+    /// - If there are no literal patterns among the arguments, just generate
+    ///   nothing.
+    /// - If there are literal patterns, generate code that compares them
+    ///   against the call stack.
+    ///   - If all patterns match, remove the respective operands from the
+    ///     stack and continue with the rest of the function as normal.
+    ///     (Although probably the next step would be the compiler-generated
+    ///     code that handles the arguments.
+    ///   - If the patterns don't match, leave the operands as-is and jump
+    ///     directly to the next function, which continues with its own pattern
+    ///     matching.
+    ///
+    /// This would require some new instructions for doing the comparison and
+    /// jumping to another address, but that seems like the right direction to
+    /// go in anyway.
     CallCluster {
         cluster: Vec<(Vec<Pattern>, InstructionAddress)>,
         is_tail_call: bool,
     },
+
     MakeClosure {
         address: InstructionAddress,
         environment: BTreeSet<String>,
