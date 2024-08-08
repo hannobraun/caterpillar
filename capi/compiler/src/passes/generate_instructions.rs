@@ -166,17 +166,22 @@ fn compile_fragment(
         FragmentPayload::Expression { expression, .. } => {
             match expression {
                 FragmentExpression::BindingDefinitions { names } => {
-                    let address = output.generate_instruction(
-                        Instruction::BindingsDefine {
-                            names: names.clone(),
-                        },
-                        fragment.id(),
-                    );
-                    output.generate_instruction(
+                    let mut first_address = None;
+
+                    for name in names.iter().rev() {
+                        let address = output.generate_instruction(
+                            Instruction::BindingsDefine { name: name.clone() },
+                            fragment.id(),
+                        );
+                        first_address = first_address.or(Some(address));
+                    }
+
+                    let assert_address = output.generate_instruction(
                         Instruction::AssertBindingLeftNoOperands,
                         fragment.id(),
                     );
-                    address
+
+                    first_address.unwrap_or(assert_address)
                 }
                 FragmentExpression::Block { start, environment } => {
                     // We are currently compiling a function or block (otherwise

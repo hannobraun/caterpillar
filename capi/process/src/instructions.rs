@@ -92,7 +92,7 @@ pub enum Instruction {
         name: String,
     },
     BindingsDefine {
-        names: Vec<String>,
+        name: String,
     },
     CallBuiltin {
         name: String,

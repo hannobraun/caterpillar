@@ -53,11 +53,9 @@ impl Evaluator {
                 };
                 self.stack.push_operand(value);
             }
-            Instruction::BindingsDefine { names } => {
-                for name in names.iter().rev() {
-                    let value = self.stack.pop_operand()?;
-                    self.stack.define_binding(name.clone(), value);
-                }
+            Instruction::BindingsDefine { name } => {
+                let value = self.stack.pop_operand()?;
+                self.stack.define_binding(name.clone(), value);
             }
             Instruction::CallBuiltin { name } => {
                 match (H::function(name), builtin(name)) {
