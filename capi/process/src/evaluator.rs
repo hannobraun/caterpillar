@@ -115,7 +115,14 @@ impl Evaluator {
                                 )
                                 .extend(bound_arguments);
                         } else {
-                            self.stack.push_frame(bound_arguments)?;
+                            self.stack.push_frame()?;
+                            self.stack
+                                .bindings_mut()
+                                .expect(
+                                    "Currently executing; stack frame must \
+                                    exist",
+                                )
+                                .extend(bound_arguments);
                         }
 
                         self.stack.next_instruction = *address;

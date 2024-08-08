@@ -92,10 +92,7 @@ impl Stack {
             .chain([self.next_instruction])
     }
 
-    pub fn push_frame(
-        &mut self,
-        arguments: Vec<(String, Value)>,
-    ) -> Result<(), PushStackFrameError> {
+    pub fn push_frame(&mut self) -> Result<(), PushStackFrameError> {
         // Not a tail call. This means we need to create a new stack frame.
         // Let's first check if we can even do that.
         const STACK_LIMIT: usize = 16;
@@ -109,8 +106,7 @@ impl Stack {
             .push(StackElement::ReturnAddress(self.next_instruction));
 
         // And all stack frames need a map of bindings.
-        let bindings = arguments.into_iter().collect();
-        self.inner.push(StackElement::Bindings(bindings));
+        self.inner.push(StackElement::Bindings(Bindings::new()));
 
         Ok(())
     }

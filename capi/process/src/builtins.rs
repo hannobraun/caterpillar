@@ -165,7 +165,11 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
             .expect("Currently executing; stack frame must exist")
             .extend(arguments);
     } else {
-        stack.push_frame(arguments)?;
+        stack.push_frame()?;
+        stack
+            .bindings_mut()
+            .expect("Currently executing; stack frame must exist")
+            .extend(arguments);
     }
 
     stack.next_instruction = address;
