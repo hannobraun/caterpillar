@@ -87,6 +87,7 @@ impl fmt::Display for InstructionAddress {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Instruction {
+    AssertBindingLeftNoOperands,
     BindingEvaluate {
         name: String,
     },

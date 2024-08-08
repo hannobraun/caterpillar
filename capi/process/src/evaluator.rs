@@ -25,6 +25,13 @@ impl Evaluator {
             .expect("Expected instruction referenced on stack to exist");
 
         match instruction {
+            Instruction::AssertBindingLeftNoOperands => {
+                if self.stack.operands_in_current_stack_frame().count() > 0 {
+                    return Err(Effect::Core(
+                        CoreEffect::BindingLeftValuesOnStack,
+                    ));
+                }
+            }
             Instruction::BindingEvaluate { name } => {
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
