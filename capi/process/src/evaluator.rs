@@ -86,6 +86,7 @@ impl Evaluator {
 
                 for (arguments, address) in cluster {
                     let mut used_operands = Vec::new();
+                    let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
 
                     let mut member_matches = true;
@@ -96,6 +97,7 @@ impl Evaluator {
                         match argument {
                             Pattern::Identifier { name } => {
                                 bound_arguments.push((name.clone(), operand));
+                                argument_operands.push(operand);
                             }
                             Pattern::Literal { value } => {
                                 member_matches &= *value == operand;
@@ -104,18 +106,15 @@ impl Evaluator {
                     }
 
                     if member_matches {
+                        for value in argument_operands.into_iter().rev() {
+                            self.stack.push_operand(value);
+                        }
+
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
                             self.stack.push_frame()?;
                         }
-
-                        self.stack
-                            .bindings_mut()
-                            .expect(
-                                "Currently executing; stack frame must exist",
-                            )
-                            .extend(bound_arguments);
 
                         self.stack.next_instruction = *address;
                         any_member_matched = true;
@@ -201,6 +200,7 @@ pub enum EvaluatorState {
 mod tests {
     use crate::{
         evaluator::{Evaluator, EvaluatorState},
+        stack::StackElement,
         InstructionAddress, Instructions, NoHost, Pattern, Value,
     };
 
@@ -257,5 +257,13 @@ mod tests {
         };
 
         assert_eq!(evaluator.stack.next_instruction.index, 2);
+        assert!(matches!(
+            evaluator.stack.into_inner().as_slice(),
+            &[
+                StackElement::StartMarker,
+                StackElement::Bindings(_),
+                StackElement::Operand(Value([2, 0, 0, 0]))
+            ]
+        ));
     }
 }

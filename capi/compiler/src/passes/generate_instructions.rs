@@ -54,16 +54,32 @@ pub fn generate_instructions(
                 );
             }
             CompileUnit::Cluster { id, name, members } => {
-                dbg!(id);
-
                 for function in members {
-                    let address = compile_context(
+                    let arguments =
+                        function.arguments.inner.iter().filter_map(|pattern| {
+                            match pattern {
+                                Pattern::Identifier { name } => Some(name),
+                                Pattern::Literal { .. } => {
+                                    // Literal patterns are only relevant when
+                                    // selecting the cluster member to be
+                                    // executed. They no longer have meaning
+                                    // once the function actually starts
+                                    // executing.
+                                    None
+                                }
+                            }
+                        });
+                    let bindings_address =
+                        output.generate_binding(arguments, id);
+
+                    let context_address = compile_context(
                         function.start,
                         &fragments.inner,
                         &mut output,
                         &mut queue,
                     );
 
+                    let address = bindings_address.unwrap_or(context_address);
                     clusters
                         .by_name
                         .entry(name.clone())
