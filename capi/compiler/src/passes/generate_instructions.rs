@@ -298,14 +298,18 @@ impl Output {
         addr
     }
 
-    fn generate_binding(
+    fn generate_binding<'r, N>(
         &mut self,
-        names: &[String],
+        names: N,
         fragment_id: FragmentId,
-    ) -> InstructionAddress {
+    ) -> InstructionAddress
+    where
+        N: IntoIterator<Item = &'r String>,
+        N::IntoIter: DoubleEndedIterator,
+    {
         let mut first_address = None;
 
-        for name in names.iter().rev() {
+        for name in names.into_iter().rev() {
             let address = self.generate_instruction(
                 Instruction::Bind { name: name.clone() },
                 fragment_id,
