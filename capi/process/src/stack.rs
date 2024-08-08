@@ -200,6 +200,10 @@ impl Stack {
 
         Some(next_instruction)
     }
+
+    pub fn into_inner(self) -> Vec<StackElement> {
+        self.inner
+    }
 }
 
 impl Default for Stack {
