@@ -196,3 +196,66 @@ pub enum EvaluatorState {
     Running,
     Finished,
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        evaluator::{Evaluator, EvaluatorState},
+        InstructionAddress, Instructions, NoHost, Pattern, Value,
+    };
+
+    #[test]
+    fn call_cluster() {
+        let mut evaluator = Evaluator::default();
+        evaluator.stack.push_operand(1);
+        evaluator.stack.push_operand(2);
+
+        let mut instructions = Instructions::default();
+        instructions.push(crate::Instruction::CallCluster {
+            cluster: vec![
+                (
+                    vec![
+                        Pattern::Literal {
+                            value: Value::from(0),
+                        },
+                        Pattern::Identifier {
+                            name: String::from("x"),
+                        },
+                    ],
+                    InstructionAddress { index: 1 },
+                ),
+                (
+                    vec![
+                        Pattern::Literal {
+                            value: Value::from(1),
+                        },
+                        Pattern::Identifier {
+                            name: String::from("x"),
+                        },
+                    ],
+                    InstructionAddress { index: 2 },
+                ),
+                (
+                    vec![
+                        Pattern::Literal {
+                            value: Value::from(2),
+                        },
+                        Pattern::Identifier {
+                            name: String::from("x"),
+                        },
+                    ],
+                    InstructionAddress { index: 3 },
+                ),
+            ],
+            is_tail_call: false,
+        });
+
+        let EvaluatorState::Running =
+            evaluator.step::<NoHost>(&instructions).unwrap()
+        else {
+            panic!("Did not expect evaluation to be finished.");
+        };
+
+        assert_eq!(evaluator.stack.next_instruction.index, 2);
+    }
+}
