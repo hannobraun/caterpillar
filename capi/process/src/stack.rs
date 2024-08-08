@@ -115,7 +115,7 @@ impl Stack {
         Ok(())
     }
 
-    pub fn reuse_frame(&mut self, arguments: Vec<(String, Value)>) {
+    pub fn reuse_frame(&mut self) {
         // We are repurposing the existing stack frame.
         //
         // This means the element that marks the start of the stack frame,
@@ -140,10 +140,6 @@ impl Stack {
         // Any bindings that remain are no longer accessible, so let's remove
         // them.
         bindings.clear();
-
-        // Other than that, we just need to see the re-used bindings map with
-        // the called function's arguments.
-        bindings.extend(arguments);
     }
 
     pub fn pop_frame(&mut self) {

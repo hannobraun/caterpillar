@@ -159,7 +159,11 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     };
 
     if is_tail_call {
-        stack.reuse_frame(arguments);
+        stack.reuse_frame();
+        stack
+            .bindings_mut()
+            .expect("Currently executing; stack frame must exist")
+            .extend(arguments);
     } else {
         stack.push_frame(arguments)?;
     }
