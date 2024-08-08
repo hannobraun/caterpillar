@@ -53,7 +53,7 @@ impl Evaluator {
                 };
                 self.stack.push_operand(value);
             }
-            Instruction::BindingsDefine { name } => {
+            Instruction::Bind { name } => {
                 let value = self.stack.pop_operand()?;
                 self.stack.define_binding(name.clone(), value);
             }

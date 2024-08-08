@@ -91,7 +91,7 @@ pub enum Instruction {
     BindingEvaluate {
         name: String,
     },
-    BindingsDefine {
+    Bind {
         name: String,
     },
     CallBuiltin {

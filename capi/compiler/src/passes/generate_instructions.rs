@@ -170,7 +170,7 @@ fn compile_fragment(
 
                     for name in names.iter().rev() {
                         let address = output.generate_instruction(
-                            Instruction::BindingsDefine { name: name.clone() },
+                            Instruction::Bind { name: name.clone() },
                             fragment.id(),
                         );
                         first_address = first_address.or(Some(address));
