@@ -66,5 +66,4 @@ pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
 
 type GameEngineResult = Result<(), Effect<GameEngineEffect>>;
 
-pub const TILES_PER_AXIS: usize = TILES_PER_AXIS_U8 as usize;
 pub const TILES_PER_AXIS_U8: u8 = 32;
