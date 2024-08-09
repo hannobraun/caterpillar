@@ -30,5 +30,3 @@ pub enum GameEngineEffect {
     SetPixel,
     SubmitFrame,
 }
-
-pub const TILES_PER_AXIS: u8 = 32;

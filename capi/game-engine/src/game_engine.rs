@@ -4,8 +4,9 @@ use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 
 use crate::{
     display,
-    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
+    host::{GameEngineEffect, GameEngineHost},
     memory::Memory,
+    tiles::TILES_PER_AXIS,
 };
 
 pub struct GameEngine {

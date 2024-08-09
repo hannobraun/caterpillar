@@ -1,4 +1,4 @@
-use crate::host::TILES_PER_AXIS;
+pub const TILES_PER_AXIS: u8 = 32;
 
 pub const PIXELS_PER_TILE_AXIS: usize = 8;
 pub const PIXELS_PER_AXIS: usize =
