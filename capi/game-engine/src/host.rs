@@ -27,7 +27,7 @@ pub enum GameEngineEffect {
     ReadInput,
     ReadRandom,
 
-    SetTile,
+    SetPixel,
     SubmitFrame,
 }
 
@@ -44,7 +44,7 @@ pub fn read_random(_: &mut Stack) -> GameEngineResult {
 }
 
 pub fn set_pixel(_: &mut Stack) -> GameEngineResult {
-    Err(Effect::Host(GameEngineEffect::SetTile))
+    Err(Effect::Host(GameEngineEffect::SetPixel))
 }
 
 pub fn store(stack: &mut Stack) -> GameEngineResult {

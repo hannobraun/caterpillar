@@ -152,7 +152,7 @@ impl GameEngine {
                 let random = self.random.pop_front().unwrap();
                 self.process.stack_mut().push_operand(random);
             }
-            Effect::Host(GameEngineEffect::SetTile) => {
+            Effect::Host(GameEngineEffect::SetPixel) => {
                 let a = self.process.stack_mut().pop_operand()?;
                 let b = self.process.stack_mut().pop_operand()?;
                 let g = self.process.stack_mut().pop_operand()?;
