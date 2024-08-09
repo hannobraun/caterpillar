@@ -27,8 +27,8 @@ impl<H: Host> Process<H> {
         &self.breakpoints
     }
 
-    pub fn handle_first_effect(&mut self) {
-        self.state.unhandled_effects.pop_front();
+    pub fn handle_first_effect(&mut self) -> Option<Effect<H::Effect>> {
+        self.state.unhandled_effects.pop_front()
     }
 
     /// Trigger the provided effect
