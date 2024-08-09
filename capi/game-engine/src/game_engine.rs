@@ -1,10 +1,12 @@
 use std::collections::VecDeque;
 
-use capi_process::{Effect, Instructions, Process, Value};
+use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 
 use crate::{
     display,
-    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
+    host::{
+        GameEngineEffect, GameEngineHost, TILES_PER_AXIS, TILES_PER_AXIS_I32,
+    },
     memory::Memory,
 };
 
@@ -150,10 +152,72 @@ impl GameEngine {
                 let random = self.random.pop_front().unwrap();
                 self.process.stack_mut().push_operand(random);
             }
-            Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
-                let x = *x;
-                let y = *y;
-                let color = *color;
+            Effect::Host(GameEngineEffect::SetTile) => {
+                let a = self.process.stack_mut().pop_operand()?;
+                let b = self.process.stack_mut().pop_operand()?;
+                let g = self.process.stack_mut().pop_operand()?;
+                let r = self.process.stack_mut().pop_operand()?;
+                let y = self.process.stack_mut().pop_operand()?;
+                let x = self.process.stack_mut().pop_operand()?;
+
+                let x = i32::from_le_bytes(x.0);
+                let y = i32::from_le_bytes(y.0);
+                let r = i32::from_le_bytes(r.0);
+                let g = i32::from_le_bytes(g.0);
+                let b = i32::from_le_bytes(b.0);
+                let a = i32::from_le_bytes(a.0);
+
+                if x < 0 {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if y < 0 {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if x >= TILES_PER_AXIS_I32 {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if y >= TILES_PER_AXIS_I32 {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+
+                let color_channel_min: i32 = u8::MIN.into();
+                let color_channel_max: i32 = u8::MAX.into();
+
+                if r < color_channel_min {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if g < color_channel_min {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if b < color_channel_min {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if a < color_channel_min {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if r > color_channel_max {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if r > color_channel_max {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if r > color_channel_max {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+                if r > color_channel_max {
+                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                }
+
+                let [x, y]: [u8; 2] = [x, y].map(|coord| {
+                    coord.try_into().expect(
+                        "Just checked that coordinates are within bounds",
+                    )
+                });
+                let color = [r, g, b, a].map(|channel| {
+                    channel.try_into().expect(
+                        "Just checked that color channels are within bounds",
+                    )
+                });
 
                 display::set_tile(x.into(), y.into(), color, pixels);
             }

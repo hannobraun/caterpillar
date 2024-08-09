@@ -1,4 +1,4 @@
-use capi_process::{CoreEffect, Effect, Host, HostFunction, Stack};
+use capi_process::{Effect, Host, HostFunction, Stack};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
@@ -27,7 +27,7 @@ pub enum GameEngineEffect {
     ReadInput,
     ReadRandom,
 
-    SetTile { x: u8, y: u8, color: [u8; 4] },
+    SetTile,
     SubmitFrame,
 }
 
@@ -43,74 +43,8 @@ pub fn read_random(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::ReadRandom))
 }
 
-pub fn set_pixel(stack: &mut Stack) -> GameEngineResult {
-    let a = stack.pop_operand()?;
-    let b = stack.pop_operand()?;
-    let g = stack.pop_operand()?;
-    let r = stack.pop_operand()?;
-    let y = stack.pop_operand()?;
-    let x = stack.pop_operand()?;
-
-    let x = i32::from_le_bytes(x.0);
-    let y = i32::from_le_bytes(y.0);
-    let r = i32::from_le_bytes(r.0);
-    let g = i32::from_le_bytes(g.0);
-    let b = i32::from_le_bytes(b.0);
-    let a = i32::from_le_bytes(a.0);
-
-    if x < 0 {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if y < 0 {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if x >= TILES_PER_AXIS_I32 {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if y >= TILES_PER_AXIS_I32 {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-
-    let color_channel_min: i32 = u8::MIN.into();
-    let color_channel_max: i32 = u8::MAX.into();
-
-    if r < color_channel_min {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if g < color_channel_min {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if b < color_channel_min {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if a < color_channel_min {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if r > color_channel_max {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if r > color_channel_max {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if r > color_channel_max {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-    if r > color_channel_max {
-        return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-    }
-
-    let [x, y] = [x, y].map(|coord| {
-        coord
-            .try_into()
-            .expect("Just checked that coordinates are within bounds")
-    });
-    let color = [r, g, b, a].map(|channel| {
-        channel
-            .try_into()
-            .expect("Just checked that color channels are within bounds")
-    });
-
-    Err(Effect::Host(GameEngineEffect::SetTile { x, y, color }))
+pub fn set_pixel(_: &mut Stack) -> GameEngineResult {
+    Err(Effect::Host(GameEngineEffect::SetTile))
 }
 
 pub fn store(stack: &mut Stack) -> GameEngineResult {
