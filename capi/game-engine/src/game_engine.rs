@@ -185,9 +185,8 @@ impl GameEngine {
                         "Just checked that coordinates are within bounds",
                     )
                 });
-                let color = [r, g, b, a];
 
-                display::set_tile(x.into(), y.into(), color, pixels);
+                display::set_tile(x.into(), y.into(), [r, g, b, a], pixels);
             }
         }
 
