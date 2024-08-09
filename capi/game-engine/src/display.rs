@@ -1,6 +1,6 @@
 use crate::tiles::{NUM_CHANNELS, PIXELS_PER_AXIS, PIXELS_PER_TILE_AXIS};
 
-pub fn set_tile(
+pub fn set_pixel(
     tile_x: usize,
     tile_y: usize,
     color: [u8; 4],

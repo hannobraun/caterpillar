@@ -186,7 +186,7 @@ impl GameEngine {
                     )
                 });
 
-                display::set_tile(x.into(), y.into(), [r, g, b, a], pixels);
+                display::set_pixel(x.into(), y.into(), [r, g, b, a], pixels);
             }
         }
 
