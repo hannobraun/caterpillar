@@ -4,9 +4,7 @@ use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 
 use crate::{
     display,
-    host::{
-        GameEngineEffect, GameEngineHost, TILES_PER_AXIS, TILES_PER_AXIS_U8,
-    },
+    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS_U8},
     memory::Memory,
 };
 
@@ -25,7 +23,7 @@ impl GameEngine {
         Self {
             process: Process::default(),
             instructions: None,
-            arguments: [Value::from(TILES_PER_AXIS as i32); 2],
+            arguments: [Value::from(TILES_PER_AXIS_U8); 2],
             memory: Memory::default(),
             input: VecDeque::new(),
             random: VecDeque::new(),
