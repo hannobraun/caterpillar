@@ -333,10 +333,6 @@ mod tests {
     impl Host for TestHost {
         type Effect = ();
 
-        fn arguments_to_main() -> Vec<String> {
-            Vec::new()
-        }
-
         fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
             match name {
                 "host_fn" => Some(host_fn),

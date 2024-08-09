@@ -69,10 +69,6 @@ struct TestHost {}
 impl Host for TestHost {
     type Effect = TestEffect;
 
-    fn arguments_to_main() -> Vec<String> {
-        Vec::new()
-    }
-
     fn function(
         name: &str,
     ) -> Option<capi_process::HostFunction<Self::Effect>> {
