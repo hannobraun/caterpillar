@@ -84,7 +84,7 @@ impl GameEngine {
             self.process.step(instructions);
 
             if let Some(effect) = self.process.handle_first_effect() {
-                match effect.clone() {
+                match effect {
                     Effect::Core(_) => {
                         // We can't handle any core effects, and we don't need
                         // to:
