@@ -57,12 +57,8 @@ impl<H: Host> Process<H> {
             ..Self::default()
         };
 
-        self.push(arguments);
-    }
-
-    pub fn push(&mut self, values: impl IntoIterator<Item = impl Into<Value>>) {
-        for value in values {
-            self.evaluator.stack.push_operand(value);
+        for argument in arguments {
+            self.evaluator.stack.push_operand(argument);
         }
     }
 
