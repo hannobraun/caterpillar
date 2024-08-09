@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, ops::ControlFlow};
+use std::collections::VecDeque;
 
 use capi_process::{Effect, Instructions, Process, Value};
 
@@ -85,8 +85,15 @@ impl GameEngine {
 
             if let Some(effect) = self.process.handle_first_effect() {
                 match self.handle_effect(&effect, pixels) {
-                    ControlFlow::Continue(()) => continue,
-                    ControlFlow::Break(()) => break,
+                    EffectOutcome::Handled => {
+                        continue;
+                    }
+                    EffectOutcome::WasSubmit => {
+                        break;
+                    }
+                    EffectOutcome::Unhandled => {
+                        continue;
+                    }
                 }
             }
         }
@@ -96,7 +103,7 @@ impl GameEngine {
         &mut self,
         effect: &Effect<GameEngineEffect>,
         pixels: &mut [u8],
-    ) -> ControlFlow<(), ()> {
+    ) -> EffectOutcome {
         match effect {
             Effect::Core(_) => {
                 // We can't handle any core effects, and we don't need to:
@@ -106,7 +113,7 @@ impl GameEngine {
                 // - The caller can see the unhandled effect and handle it
                 //   accordingly (by sending it to the debugger, for example).
                 self.process.trigger_effect(effect.clone());
-                return ControlFlow::Continue(());
+                return EffectOutcome::Unhandled;
             }
 
             Effect::Host(GameEngineEffect::SubmitFrame) => {
@@ -116,7 +123,7 @@ impl GameEngine {
                 // Other than that, there's nothing to do. We already updates
                 // the `pixels` argument, according to what the game was
                 // drawing. Lower-level code will take care of it from here.
-                return ControlFlow::Break(());
+                return EffectOutcome::WasSubmit;
             }
 
             Effect::Host(GameEngineEffect::Load { address }) => {
@@ -125,7 +132,7 @@ impl GameEngine {
                     Err(new_effect) => {
                         self.process.trigger_effect(effect.clone());
                         self.process.trigger_effect(new_effect);
-                        return ControlFlow::Continue(());
+                        return EffectOutcome::Handled;
                     }
                 };
                 let address: usize = address.into();
@@ -155,7 +162,7 @@ impl GameEngine {
             }
         }
 
-        ControlFlow::Continue(())
+        EffectOutcome::Handled
     }
 }
 
@@ -163,4 +170,10 @@ impl Default for GameEngine {
     fn default() -> Self {
         Self::new()
     }
+}
+
+enum EffectOutcome {
+    Handled,
+    WasSubmit,
+    Unhandled,
 }
