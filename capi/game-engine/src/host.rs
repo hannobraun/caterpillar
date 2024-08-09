@@ -34,8 +34,7 @@ pub enum GameEngineEffect {
 pub fn load(stack: &mut Stack) -> GameEngineResult {
     let address = stack.pop_operand()?;
 
-    let address = i32::from_le_bytes(address.0);
-    let address = address.try_into()?;
+    let address = address.to_u8()?;
 
     Err(Effect::Host(GameEngineEffect::Load { address }))
 }
