@@ -68,6 +68,6 @@ type GameEngineResult = Result<(), Effect<GameEngineEffect>>;
 
 pub const TILES_PER_AXIS: usize = 32;
 
-// The value is within the bounds of an `i32`. The `as` here should never
+// The value is within the bounds of an `u8`. The `as` here should never
 // truncate.
 pub const TILES_PER_AXIS_U8: u8 = TILES_PER_AXIS as u8;
