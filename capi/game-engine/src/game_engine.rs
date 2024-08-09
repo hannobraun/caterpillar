@@ -111,7 +111,15 @@ impl GameEngine {
                     }
 
                     Effect::Host(GameEngineEffect::Load { address }) => {
-                        let address: usize = (*address).into();
+                        let address = match address.to_u8() {
+                            Ok(address) => address,
+                            Err(effect) => {
+                                self.process.trigger_effect(effect);
+                                continue;
+                            }
+                        };
+                        let address: usize = address.into();
+
                         let value = self.memory.inner[address];
                         self.process.push([value]);
                     }
