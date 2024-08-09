@@ -5,7 +5,7 @@ use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 use crate::{
     display,
     host::{
-        GameEngineEffect, GameEngineHost, TILES_PER_AXIS, TILES_PER_AXIS_I32,
+        GameEngineEffect, GameEngineHost, TILES_PER_AXIS, TILES_PER_AXIS_U8,
     },
     memory::Memory,
 };
@@ -160,31 +160,19 @@ impl GameEngine {
                 let y = self.process.stack_mut().pop_operand()?;
                 let x = self.process.stack_mut().pop_operand()?;
 
-                let x = i32::from_le_bytes(x.0);
-                let y = i32::from_le_bytes(y.0);
+                let x = x.to_u8()?;
+                let y = y.to_u8()?;
                 let r = r.to_u8()?;
                 let g = g.to_u8()?;
                 let b = b.to_u8()?;
                 let a = a.to_u8()?;
 
-                if x < 0 {
+                if x >= TILES_PER_AXIS_U8 {
                     return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
                 }
-                if y < 0 {
+                if y >= TILES_PER_AXIS_U8 {
                     return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
                 }
-                if x >= TILES_PER_AXIS_I32 {
-                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-                }
-                if y >= TILES_PER_AXIS_I32 {
-                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
-                }
-
-                let [x, y]: [u8; 2] = [x, y].map(|coord| {
-                    coord.try_into().expect(
-                        "Just checked that coordinates are within bounds",
-                    )
-                });
 
                 display::set_pixel(x.into(), y.into(), [r, g, b, a], pixels);
             }
