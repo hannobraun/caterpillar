@@ -83,8 +83,7 @@ impl GameEngine {
         while self.process.state().can_step() {
             self.process.step(instructions);
 
-            if let Some(effect) = self.process.state().first_unhandled_effect()
-            {
+            if let Some(effect) = self.process.handle_first_effect() {
                 match effect.clone() {
                     Effect::Core(_) => {
                         // We can't handle any core effects, and we don't need
@@ -95,6 +94,7 @@ impl GameEngine {
                         // - The caller can see the unhandled effect and handle
                         //   it accordingly (by sending it to the debugger, for
                         //   example).
+                        self.process.trigger_effect(effect);
                         continue;
                     }
 
@@ -106,7 +106,6 @@ impl GameEngine {
                         // updates the `pixels` argument, according to what the
                         // game was drawing. Lower-level code will take care of
                         // it from here.
-                        self.process.handle_first_effect();
                         break;
                     }
 
@@ -114,6 +113,7 @@ impl GameEngine {
                         let address = match address.to_u8() {
                             Ok(address) => address,
                             Err(new_effect) => {
+                                self.process.trigger_effect(effect);
                                 self.process.trigger_effect(new_effect);
                                 continue;
                             }
@@ -143,8 +143,6 @@ impl GameEngine {
                         display::set_tile(x.into(), y.into(), color, pixels);
                     }
                 }
-
-                self.process.handle_first_effect();
             }
         }
     }
