@@ -85,10 +85,10 @@ impl GameEngine {
 
             if let Some(effect) = self.process.handle_first_effect() {
                 match self.handle_effect(&effect, pixels) {
-                    EffectOutcome::Handled => {
+                    Ok(EffectOutcome::Handled) => {
                         continue;
                     }
-                    EffectOutcome::WasSubmit => {
+                    Ok(EffectOutcome::WasSubmit) => {
                         // The game is done rendering. This is our sign to break
                         // out of this loop.
                         //
@@ -98,9 +98,13 @@ impl GameEngine {
                         // it from here.
                         break;
                     }
-                    EffectOutcome::Unhandled => {
+                    Ok(EffectOutcome::Unhandled) => {
                         self.process.trigger_effect(effect);
                         continue;
+                    }
+                    Err(new_effect) => {
+                        self.process.trigger_effect(effect);
+                        self.process.trigger_effect(new_effect);
                     }
                 }
             }
@@ -111,7 +115,7 @@ impl GameEngine {
         &mut self,
         effect: &Effect<GameEngineEffect>,
         pixels: &mut [u8],
-    ) -> EffectOutcome {
+    ) -> Result<EffectOutcome, Effect<GameEngineEffect>> {
         match effect {
             Effect::Core(_) => {
                 // We can't handle any core effects, and we don't need to:
@@ -120,11 +124,11 @@ impl GameEngine {
                 //   which means this loop is done.
                 // - The caller can see the unhandled effect and handle it
                 //   accordingly (by sending it to the debugger, for example).
-                return EffectOutcome::Unhandled;
+                return Ok(EffectOutcome::Unhandled);
             }
 
             Effect::Host(GameEngineEffect::SubmitFrame) => {
-                return EffectOutcome::WasSubmit;
+                return Ok(EffectOutcome::WasSubmit);
             }
 
             Effect::Host(GameEngineEffect::Load { address }) => {
@@ -133,7 +137,7 @@ impl GameEngine {
                     Err(new_effect) => {
                         self.process.trigger_effect(effect.clone());
                         self.process.trigger_effect(new_effect);
-                        return EffectOutcome::Handled;
+                        return Ok(EffectOutcome::Handled);
                     }
                 };
                 let address: usize = address.into();
@@ -163,7 +167,7 @@ impl GameEngine {
             }
         }
 
-        EffectOutcome::Handled
+        Ok(EffectOutcome::Handled)
     }
 }
 
