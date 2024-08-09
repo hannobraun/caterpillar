@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, ops::ControlFlow};
 
 use capi_process::{Effect, Instructions, Process, Value};
 
@@ -84,67 +84,74 @@ impl GameEngine {
             self.process.step(instructions);
 
             if let Some(effect) = self.process.handle_first_effect() {
-                match effect {
-                    Effect::Core(_) => {
-                        // We can't handle any core effects, and we don't need
-                        // to:
-                        //
-                        // - With the unhandled effect, the process can no
-                        //   longer step, which means this loop is done.
-                        // - The caller can see the unhandled effect and handle
-                        //   it accordingly (by sending it to the debugger, for
-                        //   example).
-                        self.process.trigger_effect(effect);
-                        continue;
-                    }
-
-                    Effect::Host(GameEngineEffect::SubmitFrame) => {
-                        // The game is done rendering. This is our sign to break
-                        // out of this loop.
-                        //
-                        // Other than that, there's nothing to do. We already
-                        // updates the `pixels` argument, according to what the
-                        // game was drawing. Lower-level code will take care of
-                        // it from here.
-                        break;
-                    }
-
-                    Effect::Host(GameEngineEffect::Load { address }) => {
-                        let address = match address.to_u8() {
-                            Ok(address) => address,
-                            Err(new_effect) => {
-                                self.process.trigger_effect(effect);
-                                self.process.trigger_effect(new_effect);
-                                continue;
-                            }
-                        };
-                        let address: usize = address.into();
-
-                        let value = self.memory.inner[address];
-                        self.process.push([value]);
-                    }
-                    Effect::Host(GameEngineEffect::Store {
-                        address,
-                        value,
-                    }) => {
-                        let address: usize = address.into();
-                        self.memory.inner[address] = value;
-                    }
-                    Effect::Host(GameEngineEffect::ReadInput) => {
-                        let input = self.input.pop_front().unwrap_or(0);
-                        self.process.push([input]);
-                    }
-                    Effect::Host(GameEngineEffect::ReadRandom) => {
-                        // See `GameEngine::push_random` for context.
-                        let random = self.random.pop_front().unwrap();
-                        self.process.push([random]);
-                    }
-                    Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
-                        display::set_tile(x.into(), y.into(), color, pixels);
-                    }
+                match self.handle_effect(effect, pixels) {
+                    ControlFlow::Continue(()) => continue,
+                    ControlFlow::Break(()) => break,
                 }
             }
         }
+    }
+
+    fn handle_effect(
+        &mut self,
+        effect: Effect<GameEngineEffect>,
+        pixels: &mut [u8],
+    ) -> ControlFlow<(), ()> {
+        match effect {
+            Effect::Core(_) => {
+                // We can't handle any core effects, and we don't need to:
+                //
+                // - With the unhandled effect, the process can no longer step,
+                //   which means this loop is done.
+                // - The caller can see the unhandled effect and handle it
+                //   accordingly (by sending it to the debugger, for example).
+                self.process.trigger_effect(effect);
+                return ControlFlow::Continue(());
+            }
+
+            Effect::Host(GameEngineEffect::SubmitFrame) => {
+                // The game is done rendering. This is our sign to break out of
+                // this loop.
+                //
+                // Other than that, there's nothing to do. We already updates
+                // the `pixels` argument, according to what the game was
+                // drawing. Lower-level code will take care of it from here.
+                return ControlFlow::Break(());
+            }
+
+            Effect::Host(GameEngineEffect::Load { address }) => {
+                let address = match address.to_u8() {
+                    Ok(address) => address,
+                    Err(new_effect) => {
+                        self.process.trigger_effect(effect);
+                        self.process.trigger_effect(new_effect);
+                        return ControlFlow::Continue(());
+                    }
+                };
+                let address: usize = address.into();
+
+                let value = self.memory.inner[address];
+                self.process.push([value]);
+            }
+            Effect::Host(GameEngineEffect::Store { address, value }) => {
+                let address: usize = address.into();
+                self.memory.inner[address] = value;
+            }
+            Effect::Host(GameEngineEffect::ReadInput) => {
+                let input = self.input.pop_front().unwrap_or(0);
+                self.process.push([input]);
+            }
+            Effect::Host(GameEngineEffect::ReadRandom) => {
+                // See `GameEngine::push_random` for context.
+                let random = self.random.pop_front().unwrap();
+                self.process.push([random]);
+            }
+            Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
+                display::set_tile(x.into(), y.into(), color, pixels);
+            }
+        }
+
+        ControlFlow::Continue(())
     }
 }
 
