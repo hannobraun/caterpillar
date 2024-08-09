@@ -69,8 +69,12 @@ impl Evaluator {
                         host function.\n"
                     );
                     }
-                    (Some(f), None) => f(&mut self.stack)?,
-                    (None, Some(f)) => f(&mut self.stack, instructions)?,
+                    (Some(f), None) => {
+                        f(&mut self.stack)?;
+                    }
+                    (None, Some(f)) => {
+                        f(&mut self.stack, instructions)?;
+                    }
                     (None, None) => {
                         return Err(Effect::Core(CoreEffect::UnknownBuiltin {
                             name: name.clone(),
