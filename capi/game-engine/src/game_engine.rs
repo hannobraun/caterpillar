@@ -142,9 +142,7 @@ impl GameEngine {
                 let value = self.process.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
-
-                let value = i32::from_le_bytes(value.0);
-                let value: u8 = value.try_into()?;
+                let value = value.to_u8()?;
 
                 let address: usize = address.into();
                 self.memory.inner[address] = value;
