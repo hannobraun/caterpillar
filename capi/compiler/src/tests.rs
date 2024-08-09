@@ -44,8 +44,11 @@ fn closure_in_function() {
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {
-                Effect::Host(TestEffect { channel }) => {
-                    *signals.entry(*channel).or_default() += 1;
+                Effect::Host(TestEffect) => {
+                    let channel = process.stack_mut().pop_operand().unwrap();
+                    let channel: u32 = u32::from_le_bytes(channel.0);
+
+                    *signals.entry(channel).or_default() += 1;
                     process.handle_first_effect();
                 }
                 effect => {
@@ -79,14 +82,9 @@ impl Host for TestHost {
     }
 }
 
-fn send(stack: &mut Stack) -> Result<(), Effect<TestEffect>> {
-    let channel = stack.pop_operand()?;
-    let channel: u32 = u32::from_le_bytes(channel.0);
-
-    Err(Effect::Host(TestEffect { channel }))
+fn send(_: &mut Stack) -> Result<(), Effect<TestEffect>> {
+    Err(Effect::Host(TestEffect))
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-struct TestEffect {
-    channel: u32,
-}
+struct TestEffect;
