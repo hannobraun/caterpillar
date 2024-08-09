@@ -136,4 +136,4 @@ pub const TILES_PER_AXIS: usize = 32;
 
 // The value is within the bounds of an `i32`. The `as` here should never
 // truncate.
-const TILES_PER_AXIS_I32: i32 = TILES_PER_AXIS as i32;
+pub const TILES_PER_AXIS_I32: i32 = TILES_PER_AXIS as i32;
