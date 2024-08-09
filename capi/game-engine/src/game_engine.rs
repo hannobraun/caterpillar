@@ -113,8 +113,8 @@ impl GameEngine {
                     Effect::Host(GameEngineEffect::Load { address }) => {
                         let address = match address.to_u8() {
                             Ok(address) => address,
-                            Err(effect) => {
-                                self.process.trigger_effect(effect);
+                            Err(new_effect) => {
+                                self.process.trigger_effect(new_effect);
                                 continue;
                             }
                         };
