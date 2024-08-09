@@ -4,7 +4,7 @@ use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 
 use crate::{
     display,
-    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS_U8},
+    host::{GameEngineEffect, GameEngineHost, TILES_PER_AXIS},
     memory::Memory,
 };
 
@@ -23,7 +23,7 @@ impl GameEngine {
         Self {
             process: Process::default(),
             instructions: None,
-            arguments: [Value::from(TILES_PER_AXIS_U8); 2],
+            arguments: [Value::from(TILES_PER_AXIS); 2],
             memory: Memory::default(),
             input: VecDeque::new(),
             random: VecDeque::new(),
@@ -165,10 +165,10 @@ impl GameEngine {
                 let b = b.to_u8()?;
                 let a = a.to_u8()?;
 
-                if x >= TILES_PER_AXIS_U8 {
+                if x >= TILES_PER_AXIS {
                     return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
                 }
-                if y >= TILES_PER_AXIS_U8 {
+                if y >= TILES_PER_AXIS {
                     return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
                 }
 

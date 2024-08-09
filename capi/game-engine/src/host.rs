@@ -66,4 +66,4 @@ pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
 
 type GameEngineResult = Result<(), Effect<GameEngineEffect>>;
 
-pub const TILES_PER_AXIS_U8: u8 = 32;
+pub const TILES_PER_AXIS: u8 = 32;
