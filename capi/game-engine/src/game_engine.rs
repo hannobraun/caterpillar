@@ -133,7 +133,7 @@ impl GameEngine {
                 let address: usize = address.into();
 
                 let value = self.memory.inner[address];
-                self.process.push([value]);
+                self.process.stack_mut().push_operand(value);
             }
             Effect::Host(GameEngineEffect::Store { address, value }) => {
                 let address: usize = (*address).into();
@@ -141,12 +141,12 @@ impl GameEngine {
             }
             Effect::Host(GameEngineEffect::ReadInput) => {
                 let input = self.input.pop_front().unwrap_or(0);
-                self.process.push([input]);
+                self.process.stack_mut().push_operand(input);
             }
             Effect::Host(GameEngineEffect::ReadRandom) => {
                 // See `GameEngine::push_random` for context.
                 let random = self.random.pop_front().unwrap();
-                self.process.push([random]);
+                self.process.stack_mut().push_operand(random);
             }
             Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
                 let x = *x;
