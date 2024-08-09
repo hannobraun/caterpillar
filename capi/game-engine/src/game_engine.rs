@@ -85,9 +85,7 @@ impl GameEngine {
 
             if let Some(effect) = self.process.handle_first_effect() {
                 match self.handle_effect(&effect, pixels) {
-                    Ok(EffectOutcome::Handled) => {
-                        continue;
-                    }
+                    Ok(EffectOutcome::Handled) => {}
                     Ok(EffectOutcome::WasSubmit) => {
                         // The game is done rendering. This is our sign to break
                         // out of this loop.
@@ -100,7 +98,6 @@ impl GameEngine {
                     }
                     Ok(EffectOutcome::Unhandled) => {
                         self.process.trigger_effect(effect);
-                        continue;
                     }
                     Err(new_effect) => {
                         self.process.trigger_effect(effect);
