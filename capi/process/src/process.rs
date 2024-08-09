@@ -23,6 +23,10 @@ impl<H: Host> Process<H> {
         &self.evaluator.stack
     }
 
+    pub fn stack_mut(&mut self) -> &mut Stack {
+        &mut self.evaluator.stack
+    }
+
     pub fn breakpoints(&self) -> &Breakpoints {
         &self.breakpoints
     }
