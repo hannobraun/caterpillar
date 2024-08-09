@@ -65,9 +65,9 @@ impl Evaluator {
                         // limited. But ideally, it should be detected at
                         // compile-time.
                         panic!(
-                        "`{name}` refers to both a built-in function and a \
-                        host function.\n"
-                    );
+                            "`{name}` refers to both a built-in function and a \
+                            host function.\n"
+                        );
                     }
                     (Some(f), None) => {
                         f(&mut self.stack)?;
