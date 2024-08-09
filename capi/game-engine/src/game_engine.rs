@@ -132,9 +132,10 @@ impl GameEngine {
                 let address = self.process.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
-                let address: usize = address.into();
 
+                let address: usize = address.into();
                 let value = self.memory.inner[address];
+
                 self.process.stack_mut().push_operand(value);
             }
             Effect::Host(GameEngineEffect::Store) => {
