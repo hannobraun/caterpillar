@@ -1,4 +1,4 @@
-use capi_process::{CoreEffect, Effect, Host, HostFunction, Stack, Value};
+use capi_process::{CoreEffect, Effect, Host, HostFunction, Stack};
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
@@ -21,7 +21,7 @@ impl Host for GameEngineHost {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum GameEngineEffect {
-    Load { address: Value },
+    Load,
     Store { address: u8, value: u8 },
 
     ReadInput,
@@ -31,9 +31,8 @@ pub enum GameEngineEffect {
     SubmitFrame,
 }
 
-pub fn load(stack: &mut Stack) -> GameEngineResult {
-    let address = stack.pop_operand()?;
-    Err(Effect::Host(GameEngineEffect::Load { address }))
+pub fn load(_: &mut Stack) -> GameEngineResult {
+    Err(Effect::Host(GameEngineEffect::Load))
 }
 
 pub fn read_input(_: &mut Stack) -> GameEngineResult {

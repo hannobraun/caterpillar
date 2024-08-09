@@ -128,7 +128,9 @@ impl GameEngine {
                 return Ok(EffectOutcome::WasSubmit);
             }
 
-            Effect::Host(GameEngineEffect::Load { address }) => {
+            Effect::Host(GameEngineEffect::Load) => {
+                let address = self.process.stack_mut().pop_operand()?;
+
                 let address = address.to_u8()?;
                 let address: usize = address.into();
 
