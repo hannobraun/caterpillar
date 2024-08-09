@@ -137,9 +137,18 @@ impl GameEngine {
                 let value = self.memory.inner[address];
                 self.process.stack_mut().push_operand(value);
             }
-            Effect::Host(GameEngineEffect::Store { address, value }) => {
-                let address: usize = (*address).into();
-                self.memory.inner[address] = *value;
+            Effect::Host(GameEngineEffect::Store) => {
+                let address = self.process.stack_mut().pop_operand()?;
+                let value = self.process.stack_mut().pop_operand()?;
+
+                let address = i32::from_le_bytes(address.0);
+                let address: u8 = address.try_into()?;
+
+                let value = i32::from_le_bytes(value.0);
+                let value: u8 = value.try_into()?;
+
+                let address: usize = address.into();
+                self.memory.inner[address] = value;
             }
             Effect::Host(GameEngineEffect::ReadInput) => {
                 let input = self.input.pop_front().unwrap_or(0);

@@ -22,7 +22,7 @@ impl Host for GameEngineHost {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum GameEngineEffect {
     Load,
-    Store { address: u8, value: u8 },
+    Store,
 
     ReadInput,
     ReadRandom,
@@ -47,17 +47,8 @@ pub fn set_pixel(_: &mut Stack) -> GameEngineResult {
     Err(Effect::Host(GameEngineEffect::SetPixel))
 }
 
-pub fn store(stack: &mut Stack) -> GameEngineResult {
-    let address = stack.pop_operand()?;
-    let value = stack.pop_operand()?;
-
-    let address = i32::from_le_bytes(address.0);
-    let address = address.try_into()?;
-
-    let value = i32::from_le_bytes(value.0);
-    let value = value.try_into()?;
-
-    Err(Effect::Host(GameEngineEffect::Store { address, value }))
+pub fn store(_: &mut Stack) -> GameEngineResult {
+    Err(Effect::Host(GameEngineEffect::Store))
 }
 
 pub fn submit_frame(_: &mut Stack) -> GameEngineResult {
