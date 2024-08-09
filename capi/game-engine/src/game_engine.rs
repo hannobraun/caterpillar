@@ -84,7 +84,7 @@ impl GameEngine {
             self.process.step(instructions);
 
             if let Some(effect) = self.process.handle_first_effect() {
-                match self.handle_effect(effect, pixels) {
+                match self.handle_effect(&effect, pixels) {
                     ControlFlow::Continue(()) => continue,
                     ControlFlow::Break(()) => break,
                 }
@@ -94,7 +94,7 @@ impl GameEngine {
 
     fn handle_effect(
         &mut self,
-        effect: Effect<GameEngineEffect>,
+        effect: &Effect<GameEngineEffect>,
         pixels: &mut [u8],
     ) -> ControlFlow<(), ()> {
         match effect {
@@ -105,7 +105,7 @@ impl GameEngine {
                 //   which means this loop is done.
                 // - The caller can see the unhandled effect and handle it
                 //   accordingly (by sending it to the debugger, for example).
-                self.process.trigger_effect(effect);
+                self.process.trigger_effect(effect.clone());
                 return ControlFlow::Continue(());
             }
 
@@ -123,7 +123,7 @@ impl GameEngine {
                 let address = match address.to_u8() {
                     Ok(address) => address,
                     Err(new_effect) => {
-                        self.process.trigger_effect(effect);
+                        self.process.trigger_effect(effect.clone());
                         self.process.trigger_effect(new_effect);
                         return ControlFlow::Continue(());
                     }
@@ -134,8 +134,8 @@ impl GameEngine {
                 self.process.push([value]);
             }
             Effect::Host(GameEngineEffect::Store { address, value }) => {
-                let address: usize = address.into();
-                self.memory.inner[address] = value;
+                let address: usize = (*address).into();
+                self.memory.inner[address] = *value;
             }
             Effect::Host(GameEngineEffect::ReadInput) => {
                 let input = self.input.pop_front().unwrap_or(0);
@@ -147,6 +147,10 @@ impl GameEngine {
                 self.process.push([random]);
             }
             Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
+                let x = *x;
+                let y = *y;
+                let color = *color;
+
                 display::set_tile(x.into(), y.into(), color, pixels);
             }
         }
