@@ -92,6 +92,7 @@ impl GameEngine {
                         break;
                     }
                     EffectOutcome::Unhandled => {
+                        self.process.trigger_effect(effect);
                         continue;
                     }
                 }
@@ -112,7 +113,6 @@ impl GameEngine {
                 //   which means this loop is done.
                 // - The caller can see the unhandled effect and handle it
                 //   accordingly (by sending it to the debugger, for example).
-                self.process.trigger_effect(effect.clone());
                 return EffectOutcome::Unhandled;
             }
 
