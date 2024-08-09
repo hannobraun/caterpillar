@@ -93,7 +93,7 @@ impl GameEngine {
                         // out of this loop.
                         //
                         // Other than that, there's nothing to do. We already
-                        // updates the `pixels` argument, according to what the
+                        // updated the `pixels` argument, according to what the
                         // game was drawing. Lower-level code will take care of
                         // it from here.
                         break;
