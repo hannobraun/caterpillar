@@ -1,7 +1,8 @@
-use crate::host::TILES_PER_AXIS;
+use crate::host::TILES_PER_AXIS_U8;
 
 pub const PIXELS_PER_TILE_AXIS: usize = 8;
-pub const PIXELS_PER_AXIS: usize = TILES_PER_AXIS * PIXELS_PER_TILE_AXIS;
+pub const PIXELS_PER_AXIS: usize =
+    TILES_PER_AXIS_U8 as usize * PIXELS_PER_TILE_AXIS;
 pub const NUM_PIXELS: usize = PIXELS_PER_AXIS * PIXELS_PER_AXIS;
 pub const NUM_CHANNELS: usize = 4;
 pub const NUM_PIXEL_BYTES: usize = NUM_PIXELS * NUM_CHANNELS;
