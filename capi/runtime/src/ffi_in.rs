@@ -1,7 +1,7 @@
 use std::{str, sync::Mutex};
 
 use capi_ffi::{framed_buffer::FramedBuffer, shared::Shared};
-use capi_game_engine::tiles::NUM_PIXEL_BYTES;
+use capi_game_engine::display::NUM_PIXEL_BYTES;
 use capi_protocol::{
     updates::Code, Versioned, CODE_BUFFER_SIZE, COMMANDS_BUFFER_SIZE,
     UPDATES_BUFFER_SIZE,

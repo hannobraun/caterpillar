@@ -3,10 +3,9 @@ use std::collections::VecDeque;
 use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
 
 use crate::{
-    display,
+    display::{self, TILES_PER_AXIS},
     host::{GameEngineEffect, GameEngineHost},
     memory::Memory,
-    tiles::TILES_PER_AXIS,
 };
 
 pub struct GameEngine {

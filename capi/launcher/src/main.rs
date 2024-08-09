@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use capi_game_engine::{game_engine::GameEngine, tiles::NUM_PIXEL_BYTES};
+use capi_game_engine::{display::NUM_PIXEL_BYTES, game_engine::GameEngine};
 use capi_watch::build_game_once;
 use rand::random;
 
