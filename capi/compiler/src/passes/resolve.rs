@@ -114,7 +114,7 @@ type Environment = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
-    use capi_process::{Effect, Host, HostFunction, Stack};
+    use capi_process::Host;
 
     use crate::{
         passes::find_clusters,
@@ -333,15 +333,11 @@ mod tests {
     impl Host for TestHost {
         type Effect = ();
 
-        fn function(name: &str) -> Option<HostFunction<Self::Effect>> {
+        fn function(name: &str) -> Option<Self::Effect> {
             match name {
-                "host_fn" => Some(host_fn),
+                "host_fn" => Some(()),
                 _ => None,
             }
         }
-    }
-
-    fn host_fn(_: &mut Stack) -> Result<(), Effect<()>> {
-        Ok(())
     }
 }

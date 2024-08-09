@@ -69,8 +69,8 @@ impl Evaluator {
                             host function.\n"
                         );
                     }
-                    (Some(f), None) => {
-                        f(&mut self.stack)?;
+                    (Some(effect), None) => {
+                        return Err(Effect::Host(effect));
                     }
                     (None, Some(f)) => {
                         f(&mut self.stack, instructions)?;

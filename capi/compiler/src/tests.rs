@@ -12,7 +12,7 @@
 
 use std::collections::BTreeMap;
 
-use capi_process::{Effect, Host, Process, Stack};
+use capi_process::{Effect, Host, Process};
 
 use crate::{compile, syntax::Script};
 
@@ -72,18 +72,12 @@ struct TestHost {}
 impl Host for TestHost {
     type Effect = TestEffect;
 
-    fn function(
-        name: &str,
-    ) -> Option<capi_process::HostFunction<Self::Effect>> {
+    fn function(name: &str) -> Option<Self::Effect> {
         match name {
-            "send" => Some(send),
+            "send" => Some(TestEffect),
             _ => None,
         }
     }
-}
-
-fn send(_: &mut Stack) -> Result<(), Effect<TestEffect>> {
-    Err(Effect::Host(TestEffect))
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

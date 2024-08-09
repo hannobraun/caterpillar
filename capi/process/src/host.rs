@@ -9,7 +9,7 @@ pub trait Host {
         + for<'de> serde::Deserialize<'de>
         + serde::Serialize;
 
-    fn function(name: &str) -> Option<HostFunction<Self::Effect>>;
+    fn function(name: &str) -> Option<Self::Effect>;
 }
 
 pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
@@ -19,7 +19,7 @@ pub struct NoHost {}
 impl Host for NoHost {
     type Effect = ();
 
-    fn function(_name: &str) -> Option<HostFunction<Self::Effect>> {
+    fn function(_name: &str) -> Option<Self::Effect> {
         None
     }
 }
