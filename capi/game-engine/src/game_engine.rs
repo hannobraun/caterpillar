@@ -85,7 +85,7 @@ impl GameEngine {
 
             if let Some(effect) = self.process.state().first_unhandled_effect()
             {
-                match effect {
+                match effect.clone() {
                     Effect::Core(_) => {
                         // We can't handle any core effects, and we don't need
                         // to:
@@ -127,8 +127,8 @@ impl GameEngine {
                         address,
                         value,
                     }) => {
-                        let address: usize = (*address).into();
-                        self.memory.inner[address] = *value;
+                        let address: usize = address.into();
+                        self.memory.inner[address] = value;
                     }
                     Effect::Host(GameEngineEffect::ReadInput) => {
                         let input = self.input.pop_front().unwrap_or(0);
@@ -140,10 +140,6 @@ impl GameEngine {
                         self.process.push([random]);
                     }
                     Effect::Host(GameEngineEffect::SetTile { x, y, color }) => {
-                        let x = *x;
-                        let y = *y;
-                        let color = *color;
-
                         display::set_tile(x.into(), y.into(), color, pixels);
                     }
                 }
