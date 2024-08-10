@@ -1,7 +1,5 @@
 use std::fmt::Debug;
 
-use crate::{Effect, Stack};
-
 pub trait Host {
     type Effect: Clone
         + Debug
@@ -11,8 +9,6 @@ pub trait Host {
 
     fn function(name: &str) -> Option<Self::Effect>;
 }
-
-pub type HostFunction<H> = fn(&mut Stack) -> Result<(), Effect<H>>;
 
 pub struct NoHost {}
 
