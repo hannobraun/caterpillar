@@ -94,6 +94,28 @@ pub enum Instruction {
     BindingEvaluate {
         name: String,
     },
+
+    /// # Call a built-in function (or host function)
+    ///
+    /// Call a built-in function (or host function), by name.
+    ///
+    /// ## Implementation Note
+    ///
+    /// For historical reasons, this instructions lumps both built-in and host
+    /// functions together. Since all that host functions do is trigger an
+    /// effect (and the effect handler is responsible for anything else), it
+    /// would make sense to just have a `TriggerEffect` instruction and directly
+    /// compile host functions into those.
+    ///
+    /// Unfortunately, there are a few open questions about that. If the new
+    /// instruction carried the actual effect type (either the full `Effect`, or
+    /// an implementation of `HostEffect`), it would need to be generic over the
+    /// host effect type. Since `Instruction` is a very basic type that is used
+    /// in a lot of places, this would infect a lot of code with a type
+    /// parameter that it otherwise doesn't care about.
+    ///
+    /// An alternative would be to encode the effect as a number. This actually
+    /// seems like a decent solution, but it would have to be explored further.
     CallBuiltin {
         name: String,
     },
