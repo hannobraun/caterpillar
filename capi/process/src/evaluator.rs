@@ -209,7 +209,7 @@ mod tests {
     use crate::{
         evaluator::{Evaluator, EvaluatorState},
         stack::StackElement,
-        InstructionAddress, Instructions, NoHost, Pattern, Value,
+        Instruction, InstructionAddress, Instructions, NoHost, Pattern, Value,
     };
 
     #[test]
@@ -219,7 +219,7 @@ mod tests {
         evaluator.stack.push_operand(2);
 
         let mut instructions = Instructions::default();
-        instructions.push(crate::Instruction::CallCluster {
+        instructions.push(Instruction::CallCluster {
             cluster: vec![
                 (
                     vec![
