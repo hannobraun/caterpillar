@@ -188,7 +188,9 @@ impl Evaluator {
                     self.stack.pop_frame();
                 }
             }
-            Instruction::Panic => return Err(Effect::Core(CoreEffect::Panic)),
+            Instruction::Panic => {
+                return Err(Effect::Core(CoreEffect::Panic));
+            }
         }
 
         Ok(EvaluatorState::Running)
