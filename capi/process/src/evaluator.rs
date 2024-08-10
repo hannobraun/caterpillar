@@ -170,7 +170,9 @@ impl Evaluator {
 
                 self.stack.push_operand(index);
             }
-            Instruction::Push { value } => self.stack.push_operand(*value),
+            Instruction::Push { value } => {
+                self.stack.push_operand(*value);
+            }
             Instruction::Return => {
                 self.stack.pop_frame();
             }
