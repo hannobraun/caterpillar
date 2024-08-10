@@ -5,6 +5,18 @@ use crate::{
     value::IntegerOverflow,
 };
 
+/// # An effect that interrupts code execution
+///
+/// Effects are produced when calling a host function, and can be produced by
+/// various built-in functions, mostly (but not only) in case of an error.
+///
+/// Effects can be handled, which is common for host effects, which are designed
+/// to pause the process and provide an opportunity for the host to interact
+/// with it.
+///
+/// Other effects, error conditions, are meant to halt the process completely.
+/// They can be displayed in the debugger, so the developer can learn what's
+/// going on and fix their code accordingly.
 #[derive(
     Clone,
     Debug,
