@@ -3,7 +3,7 @@ use std::fmt::Debug;
 pub trait Host {
     type Effect: HostEffect;
 
-    fn function(name: &str) -> Option<Self::Effect>;
+    fn function(name: &str) -> Option<u8>;
 }
 
 pub trait HostEffect:
@@ -23,7 +23,7 @@ pub struct NoHost {}
 impl Host for NoHost {
     type Effect = ();
 
-    fn function(_name: &str) -> Option<Self::Effect> {
+    fn function(_name: &str) -> Option<u8> {
         None
     }
 }

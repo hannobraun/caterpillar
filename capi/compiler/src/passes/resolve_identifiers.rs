@@ -333,9 +333,9 @@ mod tests {
     impl Host for TestHost {
         type Effect = ();
 
-        fn function(name: &str) -> Option<Self::Effect> {
+        fn function(name: &str) -> Option<u8> {
             match name {
-                "host_fn" => Some(()),
+                "host_fn" => Some(0),
                 _ => None,
             }
         }

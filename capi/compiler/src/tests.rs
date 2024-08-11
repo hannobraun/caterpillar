@@ -75,9 +75,9 @@ struct TestHost {}
 impl Host for TestHost {
     type Effect = TestEffect;
 
-    fn function(name: &str) -> Option<Self::Effect> {
+    fn function(name: &str) -> Option<u8> {
         match name {
-            "send" => Some(TestEffect),
+            "send" => Some(0),
             _ => None,
         }
     }

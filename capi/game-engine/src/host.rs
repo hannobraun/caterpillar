@@ -6,8 +6,8 @@ pub struct GameEngineHost;
 impl Host for GameEngineHost {
     type Effect = GameEngineEffect;
 
-    fn function(name: &str) -> Option<Self::Effect> {
-        match name {
+    fn function(name: &str) -> Option<u8> {
+        let effect = match name {
             "load" => Some(GameEngineEffect::Load),
             "read_input" => Some(GameEngineEffect::ReadInput),
             "read_random" => Some(GameEngineEffect::ReadRandom),
@@ -15,7 +15,9 @@ impl Host for GameEngineHost {
             "store" => Some(GameEngineEffect::Store),
             "submit_frame" => Some(GameEngineEffect::SubmitFrame),
             _ => None,
-        }
+        };
+
+        effect.map(Into::into)
     }
 }
 

@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use capi_process::{
-    Effect, Host, HostEffect, Instruction, InstructionAddress, Instructions,
+    Effect, Host, Instruction, InstructionAddress, Instructions,
 };
 
 use crate::{
@@ -300,7 +300,7 @@ fn compile_fragment<H: Host>(
                         Some(effect) => {
                             let address = output.generate_instruction(
                                 Instruction::Push {
-                                    value: effect.to_number().into(),
+                                    value: effect.into(),
                                 },
                                 fragment.id(),
                             );
