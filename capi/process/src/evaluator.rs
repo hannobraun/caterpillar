@@ -71,7 +71,7 @@ impl Evaluator {
                     }
                     (Some(effect), None) => {
                         self.stack.push_operand(effect.to_number());
-                        return Err(Effect::Host2);
+                        return Err(Effect::Host);
                     }
                     (None, Some(f)) => {
                         f(&mut self.stack, instructions)?;

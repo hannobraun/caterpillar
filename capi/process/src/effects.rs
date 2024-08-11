@@ -36,7 +36,7 @@ pub enum Effect {
     /// to do so, is expected to be present on the operand stack, when this
     /// effect is triggered.
     #[error("Host-specific effect")]
-    Host2,
+    Host,
 }
 
 impl<T> From<T> for Effect

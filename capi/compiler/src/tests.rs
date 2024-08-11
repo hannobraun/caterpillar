@@ -44,7 +44,7 @@ fn closure_in_function() {
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {
-                Effect::Host2 => {
+                Effect::Host => {
                     let effect = process.stack_mut().pop_operand().unwrap();
                     assert_eq!(effect.to_u32(), 0);
 

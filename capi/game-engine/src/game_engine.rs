@@ -123,7 +123,7 @@ impl GameEngine {
                 //   accordingly (by sending it to the debugger, for example).
                 return Ok(EffectOutcome::Unhandled);
             }
-            Effect::Host2 => {
+            Effect::Host => {
                 let effect = self.process.stack_mut().pop_operand()?;
                 let effect = effect
                     .to_u8()
