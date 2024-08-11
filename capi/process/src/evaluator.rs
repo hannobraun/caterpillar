@@ -185,9 +185,6 @@ impl Evaluator {
                     self.stack.pop_frame();
                 }
             }
-            Instruction::Panic => {
-                return Err(Effect::Panic);
-            }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
             }
