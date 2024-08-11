@@ -1,14 +1,13 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{
-    Effect, Host, Instruction, InstructionAddress, Instructions,
-};
+use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
         Arguments, Cluster, Fragment, FragmentExpression, FragmentId,
         FragmentMap, FragmentPayload, Fragments, Function,
     },
+    host::Host,
     source_map::SourceMap,
     syntax::Pattern,
 };

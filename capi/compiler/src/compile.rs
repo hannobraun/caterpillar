@@ -1,7 +1,8 @@
-use capi_process::{Host, Instructions};
+use capi_process::Instructions;
 
 use crate::{
     fragments::Fragments,
+    host::Host,
     passes::{
         determine_tail_positions, find_clusters, generate_fragments,
         generate_instructions, resolve_identifiers,

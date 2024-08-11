@@ -1,4 +1,4 @@
-use capi_process::Host;
+use capi_compiler::host::Host;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;

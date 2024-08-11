@@ -1,4 +1,5 @@
 pub mod fragments;
+pub mod host;
 pub mod source_map;
 pub mod syntax;
 

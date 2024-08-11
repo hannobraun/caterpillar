@@ -2,7 +2,6 @@ mod breakpoints;
 mod builtins;
 mod effects;
 mod evaluator;
-mod host;
 mod instructions;
 mod operands;
 mod process;
@@ -13,7 +12,6 @@ pub use self::{
     breakpoints::Breakpoints,
     builtins::builtin,
     effects::Effect,
-    host::{Host, NoHost},
     instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,
     process::{Process, ProcessState},

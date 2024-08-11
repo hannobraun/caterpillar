@@ -1,8 +1,11 @@
 use std::collections::BTreeSet;
 
-use capi_process::{builtin, Host};
+use capi_process::builtin;
 
-use crate::syntax::{Expression, IdentifierTarget, Pattern};
+use crate::{
+    host::Host,
+    syntax::{Expression, IdentifierTarget, Pattern},
+};
 
 use super::clusters::Cluster;
 
@@ -114,9 +117,8 @@ type Environment = BTreeSet<String>;
 
 #[cfg(test)]
 mod tests {
-    use capi_process::Host;
-
     use crate::{
+        host::Host,
         passes::find_clusters,
         syntax::{Expression, Function, IdentifierTarget, Script},
     };

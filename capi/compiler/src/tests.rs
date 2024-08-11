@@ -12,9 +12,9 @@
 
 use std::collections::BTreeMap;
 
-use capi_process::{Effect, Host, Process};
+use capi_process::{Effect, Process};
 
-use crate::{compile, syntax::Script};
+use crate::{compile, host::Host, syntax::Script};
 
 #[test]
 fn closure_in_function() {
