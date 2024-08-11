@@ -1,6 +1,6 @@
 use crate::{
     builtins::builtin, instructions::Pattern, CoreEffect, Effect, Host,
-    Instruction, Instructions, Stack, Value,
+    HostEffect, Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -70,7 +70,8 @@ impl Evaluator {
                         );
                     }
                     (Some(effect), None) => {
-                        return Err(Effect::Host(effect));
+                        self.stack.push_operand(effect.to_number());
+                        return Err(Effect::Host2);
                     }
                     (None, Some(f)) => {
                         f(&mut self.stack, instructions)?;
