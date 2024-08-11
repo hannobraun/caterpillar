@@ -80,6 +80,3 @@ impl Host for TestHost {
         }
     }
 }
-
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-struct TestEffect;
