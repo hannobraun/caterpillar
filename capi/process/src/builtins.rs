@@ -1,6 +1,4 @@
-use crate::{
-    value::IntegerOverflow, CoreEffect, Instruction, Instructions, Stack,
-};
+use crate::{value::IntegerOverflow, Effect, Instruction, Instructions, Stack};
 
 pub fn builtin(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -77,7 +75,7 @@ fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
 }
 
 fn brk(_: &mut Stack, _: &Instructions) -> Result {
-    Err(CoreEffect::Breakpoint)
+    Err(Effect::Breakpoint)
 }
 
 fn copy(stack: &mut Stack, _: &Instructions) -> Result {
@@ -97,7 +95,7 @@ fn div(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i32();
 
     if b == 0 {
-        return Err(CoreEffect::DivideByZero);
+        return Err(Effect::DivideByZero);
     }
     let Some(c) = a.checked_div(b) else {
         // Can't be divide by zero. Already handled that.
@@ -258,7 +256,7 @@ fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_i32();
 
     if b == 0 {
-        return Err(CoreEffect::DivideByZero);
+        return Err(Effect::DivideByZero);
     }
     let c = a % b;
 
@@ -283,4 +281,4 @@ fn sub(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-pub type Result = std::result::Result<(), CoreEffect>;
+pub type Result = std::result::Result<(), Effect>;

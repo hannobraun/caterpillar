@@ -1,4 +1,4 @@
-use capi_process::{CoreEffect, Effect};
+use capi_process::Effect;
 
 use crate::debugger::{
     active_functions::ActiveFunctionsMessage,
@@ -129,7 +129,7 @@ fn stopped_at_code_within_block() {
         .expect_block()
         .remove(0)
         .expect_other();
-    assert_eq!(other.effect, Some(Effect::Core(CoreEffect::Breakpoint)));
+    assert_eq!(other.effect, Some(Effect::Breakpoint));
 
     let builtin = other.expression.expect_builtin_function();
     assert_eq!(builtin, "brk");

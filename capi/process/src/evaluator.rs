@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, instructions::Pattern, CoreEffect, Effect, Host,
-    HostEffect, Instruction, Instructions, Stack, Value,
+    builtins::builtin, instructions::Pattern, Effect, Host, HostEffect,
+    Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -27,9 +27,7 @@ impl Evaluator {
         match instruction {
             Instruction::AssertBindingLeftNoOperands => {
                 if self.stack.operands_in_current_stack_frame().count() > 0 {
-                    return Err(Effect::Core(
-                        CoreEffect::BindingLeftValuesOnStack,
-                    ));
+                    return Err(Effect::BindingLeftValuesOnStack);
                 }
             }
             Instruction::Bind { name } => {
@@ -77,9 +75,9 @@ impl Evaluator {
                         f(&mut self.stack, instructions)?;
                     }
                     (None, None) => {
-                        return Err(Effect::Core(CoreEffect::UnknownBuiltin {
+                        return Err(Effect::UnknownBuiltin {
                             name: name.clone(),
-                        }));
+                        });
                     }
                 }
             }
@@ -133,7 +131,7 @@ impl Evaluator {
                 }
 
                 if !any_member_matched {
-                    return Err(Effect::Core(CoreEffect::NoMatch));
+                    return Err(Effect::NoMatch);
                 }
             }
             Instruction::MakeClosure {
@@ -190,7 +188,7 @@ impl Evaluator {
                 }
             }
             Instruction::Panic => {
-                return Err(Effect::Core(CoreEffect::Panic));
+                return Err(Effect::Panic);
             }
         }
 

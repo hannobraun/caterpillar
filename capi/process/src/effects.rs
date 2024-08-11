@@ -27,37 +27,6 @@ use crate::{
     thiserror::Error,
 )]
 pub enum Effect {
-    #[error(transparent)]
-    Core(CoreEffect),
-
-    /// A host-specific effect
-    ///
-    /// This host is expected to handle this effect. Any information it requires
-    /// to do so, is expected to be present on the operand stack, when this
-    /// effect is triggered.
-    #[error("Host-specific effect")]
-    Host,
-}
-
-impl<T> From<T> for Effect
-where
-    T: Into<CoreEffect>,
-{
-    fn from(value: T) -> Self {
-        Self::Core(value.into())
-    }
-}
-
-#[derive(
-    Clone,
-    Debug,
-    Eq,
-    PartialEq,
-    serde::Deserialize,
-    serde::Serialize,
-    thiserror::Error,
-)]
-pub enum CoreEffect {
     #[error("Binding expression left values on stack")]
     BindingLeftValuesOnStack,
 
@@ -90,12 +59,20 @@ pub enum CoreEffect {
 
     #[error("Panic")]
     Panic,
+
+    /// A host-specific effect
+    ///
+    /// This host is expected to handle this effect. Any information it requires
+    /// to do so, is expected to be present on the operand stack, when this
+    /// effect is triggered.
+    #[error("Host-specific effect")]
+    Host,
 }
 
 // This conversion is implemented manually, because doing it automatically using
 // `thiserror`'s `#[from]` would add an instance of the error into the type, and
 // it doesn't implement `serde::Deserialize`.
-impl From<TryFromIntError> for CoreEffect {
+impl From<TryFromIntError> for Effect {
     fn from(_: TryFromIntError) -> Self {
         Self::OperandOutOfBounds
     }

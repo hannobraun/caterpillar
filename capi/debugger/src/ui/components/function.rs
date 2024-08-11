@@ -1,4 +1,4 @@
-use capi_process::{CoreEffect, Effect, InstructionAddress};
+use capi_process::{Effect, InstructionAddress};
 use capi_protocol::command::Command;
 use leptos::{
     component, ev::MouseEvent, view, wasm_bindgen::JsCast,
@@ -92,9 +92,7 @@ pub fn Expression(
             let mut class_inner = String::from("px-0.5");
             if let Some(effect) = &effect {
                 match effect {
-                    Effect::Core(CoreEffect::Breakpoint) => {
-                        class_inner.push_str(" bg-green-300")
-                    }
+                    Effect::Breakpoint => class_inner.push_str(" bg-green-300"),
                     _ => class_inner.push_str(" bg-red-300"),
                 }
             }

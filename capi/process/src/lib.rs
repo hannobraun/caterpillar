@@ -12,7 +12,7 @@ mod value;
 pub use self::{
     breakpoints::Breakpoints,
     builtins::builtin,
-    effects::{CoreEffect, Effect},
+    effects::Effect,
     host::{Host, HostEffect, NoHost},
     instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,

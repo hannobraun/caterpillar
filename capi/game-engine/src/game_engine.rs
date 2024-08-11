@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-use capi_process::{CoreEffect, Effect, Instructions, Process, Value};
+use capi_process::{Effect, Instructions, Process, Value};
 
 use crate::{
     display::{self, TILES_PER_AXIS},
@@ -116,11 +116,10 @@ impl GameEngine {
         let host_effect = match effect {
             Effect::Host => {
                 let effect = self.process.stack_mut().pop_operand()?;
-                let effect = effect
-                    .to_u8()
-                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?;
+                let effect =
+                    effect.to_u8().map_err(|_| Effect::InvalidHostEffect)?;
                 GameEngineEffect::try_from(effect)
-                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
+                    .map_err(|_| Effect::InvalidHostEffect)?
             }
             _ => {
                 return Ok(EffectOutcome::Unhandled);
@@ -177,10 +176,10 @@ impl GameEngine {
                 let a = a.to_u8()?;
 
                 if x >= TILES_PER_AXIS {
-                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                    return Err(Effect::OperandOutOfBounds);
                 }
                 if y >= TILES_PER_AXIS {
-                    return Err(Effect::Core(CoreEffect::OperandOutOfBounds));
+                    return Err(Effect::OperandOutOfBounds);
                 }
 
                 display::set_pixel(x.into(), y.into(), [r, g, b, a], pixels);

@@ -1,7 +1,7 @@
 use std::panic;
 
 use capi_game_engine::game_engine::GameEngine;
-use capi_process::{CoreEffect, Effect};
+use capi_process::Effect;
 use capi_protocol::{
     command::{Command, SerializedCommand},
     updates::Updates,
@@ -48,7 +48,7 @@ impl RuntimeState {
                 }
                 Command::Reset => self.game_engine.reset(),
                 Command::Step => {
-                    if let Some(Effect::Core(CoreEffect::Breakpoint)) = self
+                    if let Some(Effect::Breakpoint) = self
                         .game_engine
                         .process
                         .state()

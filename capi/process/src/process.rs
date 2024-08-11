@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{Evaluator, EvaluatorState},
     instructions::InstructionAddress,
-    CoreEffect, Effect, Host, Instructions, Stack, Value,
+    Effect, Host, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -76,9 +76,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Core(CoreEffect::Breakpoint)) =
-            self.state.first_unhandled_effect()
-        {
+        if let Some(Effect::Breakpoint) = self.state.first_unhandled_effect() {
             if let Some(instruction) = and_stop_at {
                 self.breakpoints.set_ephemeral(instruction);
             }
@@ -115,7 +113,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
+            self.state.add_effect(Effect::Breakpoint);
         }
     }
 }
