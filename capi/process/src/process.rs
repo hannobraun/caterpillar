@@ -9,13 +9,14 @@ use crate::{
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Process<H: Host> {
-    state: ProcessState<H>,
+    state: ProcessState,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
+    _host: PhantomData<H>,
 }
 
 impl<H: Host> Process<H> {
-    pub fn state(&self) -> &ProcessState<H> {
+    pub fn state(&self) -> &ProcessState {
         &self.state
     }
 
@@ -124,19 +125,21 @@ impl<H: Host> Default for Process<H> {
             state: Default::default(),
             evaluator: Evaluator::default(),
             breakpoints: Default::default(),
+            _host: Default::default(),
         }
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ProcessState<H: Host> {
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
+pub struct ProcessState {
     most_recent_step: Option<InstructionAddress>,
     unhandled_effects: VecDeque<Effect>,
     has_finished: bool,
-    _host: PhantomData<H>,
 }
 
-impl<H: Host> ProcessState<H> {
+impl ProcessState {
     pub fn most_recent_step(&self) -> Option<InstructionAddress> {
         self.most_recent_step.as_ref().copied()
     }
@@ -159,16 +162,5 @@ impl<H: Host> ProcessState<H> {
 
     pub fn add_effect(&mut self, effect: Effect) {
         self.unhandled_effects.push_back(effect);
-    }
-}
-
-impl<H: Host> Default for ProcessState<H> {
-    fn default() -> Self {
-        Self {
-            most_recent_step: Default::default(),
-            unhandled_effects: Default::default(),
-            has_finished: Default::default(),
-            _host: Default::default(),
-        }
     }
 }
