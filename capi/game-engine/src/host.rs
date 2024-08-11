@@ -21,6 +21,7 @@ impl Host for GameEngineHost {
 
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,
