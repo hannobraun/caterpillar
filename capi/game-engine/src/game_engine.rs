@@ -129,7 +129,7 @@ impl GameEngine {
                 )
             }
 
-            Effect::Host(host_effect) => host_effect,
+            Effect::Host(host_effect) => *host_effect,
         };
 
         match host_effect {
