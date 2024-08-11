@@ -54,8 +54,8 @@ pub enum Effect {
     #[error(transparent)]
     PushStackFrame(#[from] PushStackFrameError),
 
-    #[error("Unknown builtin: {name}")]
-    UnknownBuiltin { name: String },
+    #[error("Unknown builtin")]
+    UnknownBuiltin,
 
     #[error("Panic")]
     Panic,

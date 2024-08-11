@@ -75,9 +75,7 @@ impl Evaluator {
                         f(&mut self.stack, instructions)?;
                     }
                     (None, None) => {
-                        return Err(Effect::UnknownBuiltin {
-                            name: name.clone(),
-                        });
+                        return Err(Effect::UnknownBuiltin);
                     }
                 }
             }
