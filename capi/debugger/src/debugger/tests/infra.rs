@@ -53,7 +53,7 @@ impl TestInfra {
         }
 
         let memory = Memory::default();
-        let mut updates = Updates::<GameEngineHost>::default();
+        let mut updates = Updates::default();
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {

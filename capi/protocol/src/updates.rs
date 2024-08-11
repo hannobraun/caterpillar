@@ -1,21 +1,16 @@
-use std::marker::PhantomData;
-
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
-use capi_process::{Host, Instructions, Process};
+use capi_process::{Instructions, Process};
 
-pub struct Updates<H: Host> {
+#[derive(Default)]
+pub struct Updates {
     latest_memory: Option<Memory>,
     process_at_client: Option<Process>,
     queue: Vec<Update>,
-    _host: PhantomData<H>,
 }
 
-impl<H: Host> Updates<H> {
-    pub fn queue_updates(&mut self, process: &Process, memory: &Memory)
-    where
-        H: Clone + PartialEq,
-    {
+impl Updates {
+    pub fn queue_updates(&mut self, process: &Process, memory: &Memory) {
         self.latest_memory = Some(memory.clone());
 
         if self.update_is_necessary(process) {
@@ -32,10 +27,7 @@ impl<H: Host> Updates<H> {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Process) -> bool
-    where
-        H: PartialEq,
-    {
+    fn update_is_necessary(&self, process: &Process) -> bool {
         if let Some(process_at_client) = &self.process_at_client {
             // The client has previously received a program. We don't want to
             // saturate the connection with useless updates, so use that to
@@ -51,17 +43,6 @@ impl<H: Host> Updates<H> {
         }
 
         self.process_at_client.as_ref() != Some(process)
-    }
-}
-
-impl<H: Host> Default for Updates<H> {
-    fn default() -> Self {
-        Self {
-            latest_memory: Default::default(),
-            process_at_client: Default::default(),
-            queue: Default::default(),
-            _host: PhantomData,
-        }
     }
 }
 

@@ -1,6 +1,6 @@
 use std::panic;
 
-use capi_game_engine::{game_engine::GameEngine, host::GameEngineHost};
+use capi_game_engine::game_engine::GameEngine;
 use capi_process::{CoreEffect, Effect};
 use capi_protocol::{
     command::{Command, SerializedCommand},
@@ -12,7 +12,7 @@ use crate::ffi_out::on_panic;
 pub struct RuntimeState {
     pub game_engine: GameEngine,
     pub commands: Vec<SerializedCommand>,
-    pub updates: Updates<GameEngineHost>,
+    pub updates: Updates,
 }
 
 impl RuntimeState {
