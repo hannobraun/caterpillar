@@ -124,9 +124,12 @@ impl GameEngine {
                 return Ok(EffectOutcome::Unhandled);
             }
             Effect::Host2 => {
-                unreachable!(
-                    "New-style host effects should not get triggered yet."
-                )
+                let effect = self.process.stack_mut().pop_operand()?;
+                let effect = effect
+                    .to_u8()
+                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?;
+                GameEngineEffect::try_from(effect)
+                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
             }
 
             Effect::Host(host_effect) => *host_effect,
