@@ -94,7 +94,7 @@ fn resolve_in_block<H: Host>(
                 {
                     *target = Some(IdentifierTarget::BuiltinFunction);
                 }
-                if H::function(name).is_some() {
+                if H::function_name_to_effect_number(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
                 if known_clusters.contains(name) {
@@ -333,7 +333,7 @@ mod tests {
     impl Host for TestHost {
         type Effect = ();
 
-        fn function(name: &str) -> Option<u8> {
+        fn function_name_to_effect_number(name: &str) -> Option<u8> {
             match name {
                 "host_fn" => Some(0),
                 _ => None,

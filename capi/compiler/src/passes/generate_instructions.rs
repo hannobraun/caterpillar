@@ -296,7 +296,7 @@ fn compile_fragment<H: Host>(
                     address
                 }
                 FragmentExpression::ResolvedHostFunction { name } => {
-                    match H::function(name) {
+                    match H::function_name_to_effect_number(name) {
                         Some(effect) => {
                             let address = output.generate_instruction(
                                 Instruction::Push {
