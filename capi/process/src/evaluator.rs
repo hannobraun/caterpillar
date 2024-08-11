@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin, instructions::Pattern, Effect, Host, HostEffect,
-    Instruction, Instructions, Stack, Value,
+    builtins::builtin, instructions::Pattern, Effect, Instruction,
+    Instructions, Stack, Value,
 };
 
 #[derive(
@@ -12,7 +12,7 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn step<H: Host>(
+    pub fn step(
         &mut self,
         instructions: &Instructions,
     ) -> Result<EvaluatorState, Effect> {
@@ -55,30 +55,14 @@ impl Evaluator {
                 };
                 self.stack.push_operand(value);
             }
-            Instruction::CallBuiltin { name } => {
-                match (H::function(name), builtin(name)) {
-                    (Some(_), Some(_)) => {
-                        // As of this writing, users can not define custom
-                        // hosts, so the damage of this being a runtime panic is
-                        // limited. But ideally, it should be detected at
-                        // compile-time.
-                        panic!(
-                            "`{name}` refers to both a built-in function and a \
-                            host function.\n"
-                        );
-                    }
-                    (Some(effect), None) => {
-                        self.stack.push_operand(effect.to_number());
-                        return Err(Effect::Host);
-                    }
-                    (None, Some(f)) => {
-                        f(&mut self.stack, instructions)?;
-                    }
-                    (None, None) => {
-                        return Err(Effect::UnknownBuiltin);
-                    }
+            Instruction::CallBuiltin { name } => match builtin(name) {
+                Some(f) => {
+                    f(&mut self.stack, instructions)?;
                 }
-            }
+                None => {
+                    return Err(Effect::UnknownBuiltin);
+                }
+            },
             Instruction::CallCluster {
                 cluster,
                 is_tail_call,
@@ -206,7 +190,7 @@ mod tests {
     use crate::{
         evaluator::{Evaluator, EvaluatorState},
         stack::StackElement,
-        Instruction, InstructionAddress, Instructions, NoHost, Pattern, Value,
+        Instruction, InstructionAddress, Instructions, Pattern, Value,
     };
 
     #[test]
@@ -255,8 +239,7 @@ mod tests {
             is_tail_call: true,
         });
 
-        let EvaluatorState::Running =
-            evaluator.step::<NoHost>(&instructions).unwrap()
+        let EvaluatorState::Running = evaluator.step(&instructions).unwrap()
         else {
             panic!("Did not expect evaluation to be finished.");
         };

@@ -97,7 +97,7 @@ impl Process {
 
         let next_instruction = self.evaluator.stack.next_instruction();
 
-        match self.evaluator.step::<H>(instructions) {
+        match self.evaluator.step(instructions) {
             Ok(EvaluatorState::Running) => {}
             Ok(EvaluatorState::Finished) => {
                 self.state.has_finished = true;
