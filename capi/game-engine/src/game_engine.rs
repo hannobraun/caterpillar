@@ -122,7 +122,7 @@ impl GameEngine {
                 GameEngineEffect::try_from(effect)
                     .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
             }
-            Effect::Core(_) => {
+            _ => {
                 // We can't handle any core effects, and we don't need to:
                 //
                 // - With the unhandled effect, the process can no longer step,
