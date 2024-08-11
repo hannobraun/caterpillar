@@ -123,6 +123,11 @@ impl GameEngine {
                 //   accordingly (by sending it to the debugger, for example).
                 return Ok(EffectOutcome::Unhandled);
             }
+            Effect::Host2 => {
+                unreachable!(
+                    "New-style host effects should not get triggered yet."
+                )
+            }
 
             Effect::Host(GameEngineEffect::SubmitFrame) => {
                 return Ok(EffectOutcome::WasSubmit);

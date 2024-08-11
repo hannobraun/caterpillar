@@ -32,6 +32,14 @@ pub enum Effect<H> {
 
     #[error("Host-specific effect")]
     Host(H),
+
+    /// A host-specific effect
+    ///
+    /// This host is expected to handle this effect. Any information it requires
+    /// to do so, is expected to be present on the operand stack, when this
+    /// effect is triggered.
+    #[error("Host-specific effect")]
+    Host2,
 }
 
 impl<T, H> From<T> for Effect<H>
