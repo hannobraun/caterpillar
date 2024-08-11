@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, marker::PhantomData, mem};
+use std::{collections::VecDeque, mem};
 
 use crate::{
     breakpoints::Breakpoints,
@@ -7,15 +7,16 @@ use crate::{
     CoreEffect, Effect, Host, Instructions, Stack, Value,
 };
 
-#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Process<H: Host> {
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
+pub struct Process {
     state: ProcessState,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
-    _host: PhantomData<H>,
 }
 
-impl<H: Host> Process<H> {
+impl Process {
     pub fn state(&self) -> &ProcessState {
         &self.state
     }
@@ -91,7 +92,7 @@ impl<H: Host> Process<H> {
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
-    pub fn step(&mut self, instructions: &Instructions) {
+    pub fn step<H: Host>(&mut self, instructions: &Instructions) {
         if !self.state.can_step() {
             return;
         }
@@ -115,17 +116,6 @@ impl<H: Host> Process<H> {
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
             self.state.add_effect(Effect::Core(CoreEffect::Breakpoint));
-        }
-    }
-}
-
-impl<H: Host> Default for Process<H> {
-    fn default() -> Self {
-        Self {
-            state: Default::default(),
-            evaluator: Evaluator::default(),
-            breakpoints: Default::default(),
-            _host: Default::default(),
         }
     }
 }

@@ -36,11 +36,11 @@ fn closure_in_function() {
 
     let mut signals = BTreeMap::new();
 
-    let mut process = Process::<TestHost>::default();
+    let mut process = Process::default();
     process.reset([]);
 
     while process.state().can_step() {
-        process.step(&instructions);
+        process.step::<TestHost>(&instructions);
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {

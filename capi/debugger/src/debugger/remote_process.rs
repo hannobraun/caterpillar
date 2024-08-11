@@ -1,4 +1,4 @@
-use capi_game_engine::{host::GameEngineHost, memory::Memory};
+use capi_game_engine::memory::Memory;
 use capi_process::Process;
 use capi_protocol::updates::{Code, Update};
 
@@ -7,7 +7,7 @@ use super::{ActiveFunctions, Debugger};
 #[derive(Debug, Default)]
 pub struct RemoteProcess {
     pub code: Option<Code>,
-    pub process: Option<Process<GameEngineHost>>,
+    pub process: Option<Process>,
     pub memory: Option<Memory>,
 }
 
@@ -16,7 +16,7 @@ impl RemoteProcess {
         self.code = Some(code);
     }
 
-    pub fn on_runtime_update(&mut self, update: Update<GameEngineHost>) {
+    pub fn on_runtime_update(&mut self, update: Update) {
         match update {
             Update::Memory { memory } => {
                 self.memory = Some(memory);

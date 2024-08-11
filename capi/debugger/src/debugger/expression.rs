@@ -2,7 +2,6 @@ use capi_compiler::{
     fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
     source_map::SourceMap,
 };
-use capi_game_engine::host::GameEngineHost;
 use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -17,7 +16,7 @@ impl Expression {
         fragment: Fragment,
         fragments: &Fragments,
         source_map: &SourceMap,
-        process: &Process<GameEngineHost>,
+        process: &Process,
     ) -> Option<Self> {
         let fragment_id = fragment.id();
         let FragmentPayload::Expression { expression, .. } = fragment.payload

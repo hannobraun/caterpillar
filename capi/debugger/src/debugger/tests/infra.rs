@@ -49,11 +49,11 @@ impl TestInfra {
         let mut process = Process::default();
         process.reset([0, 0].map(Value::from));
         while process.state().can_step() {
-            process.step(instructions);
+            process.step::<GameEngineHost>(instructions);
         }
 
         let memory = Memory::default();
-        let mut updates = Updates::default();
+        let mut updates = Updates::<GameEngineHost>::default();
 
         updates.queue_updates(&process, &memory);
         for update in updates.take_queued_updates() {

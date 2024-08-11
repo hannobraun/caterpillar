@@ -1,6 +1,5 @@
 use std::{collections::VecDeque, fmt};
 
-use capi_game_engine::host::GameEngineHost;
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
@@ -13,10 +12,7 @@ pub enum ActiveFunctions {
 }
 
 impl ActiveFunctions {
-    pub fn new(
-        code: Option<&Code>,
-        process: Option<&Process<GameEngineHost>>,
-    ) -> Self {
+    pub fn new(code: Option<&Code>, process: Option<&Process>) -> Self {
         let Some(code) = code else {
             return Self::Message {
                 message: ActiveFunctionsMessage::NoServer,

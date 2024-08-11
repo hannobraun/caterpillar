@@ -1,16 +1,18 @@
+use std::marker::PhantomData;
+
 use capi_compiler::{fragments::Fragments, source_map::SourceMap};
 use capi_game_engine::memory::Memory;
 use capi_process::{Host, Instructions, Process};
-use serde::{de::DeserializeOwned, Serialize};
 
 pub struct Updates<H: Host> {
     latest_memory: Option<Memory>,
-    process_at_client: Option<Process<H>>,
-    queue: Vec<Update<H>>,
+    process_at_client: Option<Process>,
+    queue: Vec<Update>,
+    _host: PhantomData<H>,
 }
 
 impl<H: Host> Updates<H> {
-    pub fn queue_updates(&mut self, process: &Process<H>, memory: &Memory)
+    pub fn queue_updates(&mut self, process: &Process, memory: &Memory)
     where
         H: Clone + PartialEq,
     {
@@ -26,13 +28,11 @@ impl<H: Host> Updates<H> {
         }
     }
 
-    pub fn take_queued_updates(
-        &mut self,
-    ) -> impl Iterator<Item = Update<H>> + '_ {
+    pub fn take_queued_updates(&mut self) -> impl Iterator<Item = Update> + '_ {
         self.queue.drain(..)
     }
 
-    fn update_is_necessary(&self, process: &Process<H>) -> bool
+    fn update_is_necessary(&self, process: &Process) -> bool
     where
         H: PartialEq,
     {
@@ -60,30 +60,25 @@ impl<H: Host> Default for Updates<H> {
             latest_memory: Default::default(),
             process_at_client: Default::default(),
             queue: Default::default(),
+            _host: PhantomData,
         }
     }
 }
 
 #[allow(clippy::large_enum_variant)] // haven't optimized this yet
 #[derive(serde::Deserialize, serde::Serialize)]
-pub enum Update<H: Host> {
-    Process(Process<H>),
+pub enum Update {
+    Process(Process),
     Memory { memory: Memory },
 }
 
-impl<H: Host> Update<H> {
-    pub fn deserialize(bytes: SerializedUpdate) -> Self
-    where
-        H: DeserializeOwned,
-    {
+impl Update {
+    pub fn deserialize(bytes: SerializedUpdate) -> Self {
         let string = std::str::from_utf8(&bytes).unwrap();
         ron::from_str(string).unwrap()
     }
 
-    pub fn serialize(&self) -> SerializedUpdate
-    where
-        H: Serialize,
-    {
+    pub fn serialize(&self) -> SerializedUpdate {
         ron::to_string(self).unwrap().into_bytes()
     }
 }

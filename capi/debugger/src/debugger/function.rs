@@ -2,7 +2,6 @@ use capi_compiler::{
     fragments::{self, Cluster, Fragments},
     source_map::SourceMap,
 };
-use capi_game_engine::host::GameEngineHost;
 use capi_process::Process;
 
 use super::Expression;
@@ -19,7 +18,7 @@ impl Function {
         function: fragments::Function,
         fragments: &Fragments,
         source_map: &SourceMap,
-        process: &Process<GameEngineHost>,
+        process: &Process,
     ) -> Self {
         let body = fragments
             .inner

@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub struct GameEngine {
-    pub process: Process<GameEngineHost>,
+    pub process: Process,
 
     instructions: Option<Instructions>,
     arguments: [Value; 2],
@@ -81,7 +81,7 @@ impl GameEngine {
                 return;
             };
 
-            self.process.step(instructions);
+            self.process.step::<GameEngineHost>(instructions);
 
             if let Some(effect) = self.process.handle_first_effect() {
                 match self.handle_effect(&effect, pixels) {
