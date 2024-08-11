@@ -113,7 +113,7 @@ impl GameEngine {
         effect: &Effect<GameEngineEffect>,
         pixels: &mut [u8],
     ) -> Result<EffectOutcome, Effect<GameEngineEffect>> {
-        match effect {
+        let host_effect = match effect {
             Effect::Core(_) => {
                 // We can't handle any core effects, and we don't need to:
                 //
@@ -129,11 +129,15 @@ impl GameEngine {
                 )
             }
 
-            Effect::Host(GameEngineEffect::SubmitFrame) => {
+            Effect::Host(host_effect) => host_effect,
+        };
+
+        match host_effect {
+            GameEngineEffect::SubmitFrame => {
                 return Ok(EffectOutcome::WasSubmit);
             }
 
-            Effect::Host(GameEngineEffect::Load) => {
+            GameEngineEffect::Load => {
                 let address = self.process.stack_mut().pop_operand()?;
 
                 let address = address.to_u8()?;
@@ -143,7 +147,7 @@ impl GameEngine {
 
                 self.process.stack_mut().push_operand(value);
             }
-            Effect::Host(GameEngineEffect::Store) => {
+            GameEngineEffect::Store => {
                 let address = self.process.stack_mut().pop_operand()?;
                 let value = self.process.stack_mut().pop_operand()?;
 
@@ -153,16 +157,16 @@ impl GameEngine {
                 let address: usize = address.into();
                 self.memory.inner[address] = value;
             }
-            Effect::Host(GameEngineEffect::ReadInput) => {
+            GameEngineEffect::ReadInput => {
                 let input = self.input.pop_front().unwrap_or(0);
                 self.process.stack_mut().push_operand(input);
             }
-            Effect::Host(GameEngineEffect::ReadRandom) => {
+            GameEngineEffect::ReadRandom => {
                 // See `GameEngine::push_random` for context.
                 let random = self.random.pop_front().unwrap();
                 self.process.stack_mut().push_operand(random);
             }
-            Effect::Host(GameEngineEffect::SetPixel) => {
+            GameEngineEffect::SetPixel => {
                 let a = self.process.stack_mut().pop_operand()?;
                 let b = self.process.stack_mut().pop_operand()?;
                 let g = self.process.stack_mut().pop_operand()?;
