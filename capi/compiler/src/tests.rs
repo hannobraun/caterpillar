@@ -44,6 +44,16 @@ fn closure_in_function() {
 
         while let Some(effect) = process.state().first_unhandled_effect() {
             match effect {
+                Effect::Host2 => {
+                    let effect = process.stack_mut().pop_operand().unwrap();
+                    assert_eq!(effect.to_u32(), 0);
+
+                    let channel = process.stack_mut().pop_operand().unwrap();
+                    let channel: u32 = u32::from_le_bytes(channel.0);
+
+                    *signals.entry(channel).or_default() += 1;
+                    process.handle_first_effect();
+                }
                 Effect::Host(TestEffect) => {
                     let channel = process.stack_mut().pop_operand().unwrap();
                     let channel: u32 = u32::from_le_bytes(channel.0);
