@@ -188,6 +188,9 @@ impl Evaluator {
             Instruction::Panic => {
                 return Err(Effect::Panic);
             }
+            Instruction::TriggerEffect { effect } => {
+                return Err(*effect);
+            }
         }
 
         Ok(EvaluatorState::Running)

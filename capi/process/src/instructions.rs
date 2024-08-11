@@ -3,7 +3,7 @@ use std::{
     fmt,
 };
 
-use crate::Value;
+use crate::{Effect, Value};
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -174,6 +174,11 @@ pub enum Instruction {
     ReturnIfNonZero,
     ReturnIfZero,
     Panic,
+
+    /// Trigger an effect
+    TriggerEffect {
+        effect: Effect,
+    },
 }
 
 /// # A pattern in a function argument
