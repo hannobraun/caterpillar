@@ -1,5 +1,5 @@
 use crate::{
-    builtins::builtin, instructions::Pattern, Effect, Instruction,
+    builtins::builtin_by_name, instructions::Pattern, Effect, Instruction,
     Instructions, Stack, Value,
 };
 
@@ -55,7 +55,7 @@ impl Evaluator {
                 };
                 self.stack.push_operand(value);
             }
-            Instruction::CallBuiltin { name } => match builtin(name) {
+            Instruction::CallBuiltin { name } => match builtin_by_name(name) {
                 Some(f) => {
                     f(&mut self.stack, instructions)?;
                 }

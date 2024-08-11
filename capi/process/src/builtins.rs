@@ -1,6 +1,6 @@
 use crate::{value::IntegerOverflow, Effect, Instruction, Instructions, Stack};
 
-pub fn builtin(name: &str) -> Option<Builtin> {
+pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "add_i8" => add_i8,
         "add_i32" => add_i32,

@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use capi_process::builtin;
+use capi_process::builtin_by_name;
 
 use crate::{
     host::Host,
@@ -91,7 +91,7 @@ fn resolve_in_block<H: Host>(
                         }
                     }
                 }
-                if builtin(name).is_some()
+                if builtin_by_name(name).is_some()
                     || name == "return_if_non_zero"
                     || name == "return_if_zero"
                 {
