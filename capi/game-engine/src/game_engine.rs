@@ -123,12 +123,6 @@ impl GameEngine {
                     .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
             }
             _ => {
-                // We can't handle any core effects, and we don't need to:
-                //
-                // - With the unhandled effect, the process can no longer step,
-                //   which means this loop is done.
-                // - The caller can see the unhandled effect and handle it
-                //   accordingly (by sending it to the debugger, for example).
                 return Ok(EffectOutcome::Unhandled);
             }
         };
