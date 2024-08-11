@@ -73,6 +73,9 @@ pub enum CoreEffect {
     #[error(transparent)]
     IntegerOverflow(#[from] IntegerOverflow),
 
+    #[error("Invalid host effect")]
+    InvalidHostEffect,
+
     #[error("Pattern matching resulted in no match")]
     NoMatch,
 
