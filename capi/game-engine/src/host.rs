@@ -26,6 +26,7 @@ impl Host for GameEngineHost {
     Eq,
     PartialEq,
     num_enum::IntoPrimitive,
+    num_enum::TryFromPrimitive,
     serde::Deserialize,
     serde::Serialize,
 )]
