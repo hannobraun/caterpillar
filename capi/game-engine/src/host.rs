@@ -8,16 +8,18 @@ impl Host for GameEngineHost {
 
     fn function(name: &str) -> Option<u8> {
         let effect = match name {
-            "load" => Some(GameEngineEffect::Load),
-            "read_input" => Some(GameEngineEffect::ReadInput),
-            "read_random" => Some(GameEngineEffect::ReadRandom),
-            "set_pixel" => Some(GameEngineEffect::SetPixel),
-            "store" => Some(GameEngineEffect::Store),
-            "submit_frame" => Some(GameEngineEffect::SubmitFrame),
-            _ => None,
+            "load" => GameEngineEffect::Load,
+            "read_input" => GameEngineEffect::ReadInput,
+            "read_random" => GameEngineEffect::ReadRandom,
+            "set_pixel" => GameEngineEffect::SetPixel,
+            "store" => GameEngineEffect::Store,
+            "submit_frame" => GameEngineEffect::SubmitFrame,
+            _ => {
+                return None;
+            }
         };
 
-        effect.map(Into::into)
+        Some(effect.into())
     }
 }
 
