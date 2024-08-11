@@ -4,8 +4,6 @@ use capi_process::{Host, HostEffect};
 pub struct GameEngineHost;
 
 impl Host for GameEngineHost {
-    type Effect = GameEngineEffect;
-
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         let effect = match name {
             "load" => GameEngineEffect::Load,

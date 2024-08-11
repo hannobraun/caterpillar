@@ -73,8 +73,6 @@ fn closure_in_function() {
 struct TestHost {}
 
 impl Host for TestHost {
-    type Effect = TestEffect;
-
     fn function_name_to_effect_number(name: &str) -> Option<u8> {
         match name {
             "send" => Some(0),

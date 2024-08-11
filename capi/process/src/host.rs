@@ -1,8 +1,6 @@
 use std::fmt::Debug;
 
 pub trait Host {
-    type Effect: HostEffect;
-
     fn function_name_to_effect_number(name: &str) -> Option<u8>;
 }
 
@@ -21,8 +19,6 @@ impl HostEffect for () {
 pub struct NoHost {}
 
 impl Host for NoHost {
-    type Effect = ();
-
     fn function_name_to_effect_number(_name: &str) -> Option<u8> {
         None
     }

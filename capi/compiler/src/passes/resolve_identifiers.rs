@@ -331,8 +331,6 @@ mod tests {
     struct TestHost {}
 
     impl Host for TestHost {
-        type Effect = ();
-
         fn function_name_to_effect_number(name: &str) -> Option<u8> {
             match name {
                 "host_fn" => Some(0),
