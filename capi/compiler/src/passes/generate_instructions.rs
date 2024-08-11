@@ -1,6 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
+use capi_process::{
+    Effect, Host, HostEffect, Instruction, InstructionAddress, Instructions,
+};
 
 use crate::{
     fragments::{
@@ -11,7 +13,7 @@ use crate::{
     syntax::Pattern,
 };
 
-pub fn generate_instructions(
+pub fn generate_instructions<H: Host>(
     fragments: Fragments,
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
@@ -31,7 +33,12 @@ pub fn generate_instructions(
     });
 
     // Seed the queue from the root context.
-    compile_context(fragments.root, &fragments.inner, &mut output, &mut queue);
+    compile_context::<H>(
+        fragments.root,
+        &fragments.inner,
+        &mut output,
+        &mut queue,
+    );
 
     while let Some(unit) = queue.pop_front() {
         match unit {
@@ -40,7 +47,7 @@ pub fn generate_instructions(
                 environment,
                 address,
             } => {
-                let start = compile_context(
+                let start = compile_context::<H>(
                     start,
                     &fragments.inner,
                     &mut output,
@@ -74,7 +81,7 @@ pub fn generate_instructions(
                     let bindings_address =
                         output.generate_binding(arguments, id);
 
-                    let context_address = compile_context(
+                    let context_address = compile_context::<H>(
                         function.start,
                         &fragments.inner,
                         &mut output,
@@ -143,7 +150,7 @@ pub fn generate_instructions(
     (output.instructions, output.source_map)
 }
 
-fn compile_context(
+fn compile_context<H: Host>(
     start: FragmentId,
     fragments: &FragmentMap,
     output: &mut Output,
@@ -152,7 +159,7 @@ fn compile_context(
     let mut first_instruction = None;
 
     for fragment in fragments.iter_from(start) {
-        let addr = compile_fragment(fragment, output, queue);
+        let addr = compile_fragment::<H>(fragment, output, queue);
         first_instruction = first_instruction.or(addr);
     }
 
@@ -167,7 +174,7 @@ fn compile_context(
     first_instruction
 }
 
-fn compile_fragment(
+fn compile_fragment<H: Host>(
     fragment: &Fragment,
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
@@ -288,11 +295,32 @@ fn compile_fragment(
 
                     address
                 }
-                FragmentExpression::ResolvedHostFunction { name } => output
-                    .generate_instruction(
-                        Instruction::CallBuiltin { name: name.clone() },
-                        fragment.id(),
-                    ),
+                FragmentExpression::ResolvedHostFunction { name } => {
+                    match H::function(name) {
+                        Some(effect) => {
+                            let address = output.generate_instruction(
+                                Instruction::Push {
+                                    value: effect.to_number().into(),
+                                },
+                                fragment.id(),
+                            );
+                            output.generate_instruction(
+                                Instruction::TriggerEffect {
+                                    effect: Effect::Host,
+                                },
+                                fragment.id(),
+                            );
+                            address
+                        }
+                        None => output.generate_instruction(
+                            Instruction::TriggerEffect {
+                                effect: Effect::Panic,
+                            },
+                            fragment.id(),
+                        ),
+                    }
+                }
+
                 FragmentExpression::UnresolvedIdentifier { name: _ } => output
                     .generate_instruction(
                         Instruction::TriggerEffect {
