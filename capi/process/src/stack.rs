@@ -268,6 +268,7 @@ pub type Bindings = BTreeMap<String, Value>;
 
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,

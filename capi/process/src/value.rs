@@ -68,6 +68,7 @@ impl fmt::Display for Value {
 
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,

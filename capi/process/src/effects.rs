@@ -19,6 +19,7 @@ use crate::{
 /// going on and fix their code accordingly.
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,

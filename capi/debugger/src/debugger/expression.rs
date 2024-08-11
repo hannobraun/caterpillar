@@ -61,7 +61,7 @@ impl Expression {
                     .expect("Expecting effects to originate from user code.");
 
                 if effect_fragment == fragment_id {
-                    Some(effect.clone())
+                    Some(*effect)
                 } else {
                     None
                 }

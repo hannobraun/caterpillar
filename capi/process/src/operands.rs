@@ -28,6 +28,7 @@ impl Operands {
 
 #[derive(
     Clone,
+    Copy,
     Debug,
     Eq,
     PartialEq,
