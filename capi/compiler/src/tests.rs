@@ -54,16 +54,6 @@ fn closure_in_function() {
                     *signals.entry(channel).or_default() += 1;
                     process.handle_first_effect();
                 }
-                Effect::Host(TestEffect) => {
-                    // This duplicates the same effect handling code from above.
-                    // It doesn't matter, as this variant will soon be removed.
-
-                    let channel = process.stack_mut().pop_operand().unwrap();
-                    let channel: u32 = u32::from_le_bytes(channel.0);
-
-                    *signals.entry(channel).or_default() += 1;
-                    process.handle_first_effect();
-                }
                 effect => {
                     panic!(
                         "Unexpected effect: {effect}\n\

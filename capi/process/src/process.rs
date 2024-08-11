@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, mem};
+use std::{collections::VecDeque, marker::PhantomData, mem};
 
 use crate::{
     breakpoints::Breakpoints,
@@ -31,7 +31,7 @@ impl<H: Host> Process<H> {
         &self.breakpoints
     }
 
-    pub fn handle_first_effect(&mut self) -> Option<Effect<H::Effect>> {
+    pub fn handle_first_effect(&mut self) -> Option<Effect> {
         self.state.unhandled_effects.pop_front()
     }
 
@@ -40,7 +40,7 @@ impl<H: Host> Process<H> {
     /// If there already is an unhandled effect, this new effect will displace
     /// it as the first effect, meaning the existing effect will be moved back
     /// in the list.
-    pub fn trigger_effect(&mut self, effect: impl Into<Effect<H::Effect>>) {
+    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
         self.state.unhandled_effects.push_front(effect.into());
     }
 
@@ -131,8 +131,9 @@ impl<H: Host> Default for Process<H> {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ProcessState<H: Host> {
     most_recent_step: Option<InstructionAddress>,
-    unhandled_effects: VecDeque<Effect<H::Effect>>,
+    unhandled_effects: VecDeque<Effect>,
     has_finished: bool,
+    _host: PhantomData<H>,
 }
 
 impl<H: Host> ProcessState<H> {
@@ -140,7 +141,7 @@ impl<H: Host> ProcessState<H> {
         self.most_recent_step.as_ref().copied()
     }
 
-    pub fn first_unhandled_effect(&self) -> Option<&Effect<H::Effect>> {
+    pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
     }
 
@@ -156,7 +157,7 @@ impl<H: Host> ProcessState<H> {
         self.is_running() && self.unhandled_effects.is_empty()
     }
 
-    pub fn add_effect(&mut self, effect: Effect<H::Effect>) {
+    pub fn add_effect(&mut self, effect: Effect) {
         self.unhandled_effects.push_back(effect);
     }
 }
@@ -167,6 +168,7 @@ impl<H: Host> Default for ProcessState<H> {
             most_recent_step: Default::default(),
             unhandled_effects: Default::default(),
             has_finished: Default::default(),
+            _host: Default::default(),
         }
     }
 }

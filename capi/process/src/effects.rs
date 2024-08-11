@@ -26,12 +26,9 @@ use crate::{
     serde::Serialize,
     thiserror::Error,
 )]
-pub enum Effect<H> {
+pub enum Effect {
     #[error(transparent)]
     Core(CoreEffect),
-
-    #[error("Host-specific effect")]
-    Host(H),
 
     /// A host-specific effect
     ///
@@ -42,7 +39,7 @@ pub enum Effect<H> {
     Host2,
 }
 
-impl<T, H> From<T> for Effect<H>
+impl<T> From<T> for Effect
 where
     T: Into<CoreEffect>,
 {

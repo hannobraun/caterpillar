@@ -2,7 +2,7 @@ use capi_compiler::{
     fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
     source_map::SourceMap,
 };
-use capi_game_engine::host::{GameEngineEffect, GameEngineHost};
+use capi_game_engine::host::GameEngineHost;
 use capi_process::{Effect, InstructionAddress, Process};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -98,5 +98,5 @@ pub struct OtherExpression {
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_on_call_stack: bool,
-    pub effect: Option<Effect<GameEngineEffect>>,
+    pub effect: Option<Effect>,
 }

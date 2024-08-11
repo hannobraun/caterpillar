@@ -110,9 +110,9 @@ impl GameEngine {
 
     fn handle_effect(
         &mut self,
-        effect: &Effect<GameEngineEffect>,
+        effect: &Effect,
         pixels: &mut [u8],
-    ) -> Result<EffectOutcome, Effect<GameEngineEffect>> {
+    ) -> Result<EffectOutcome, Effect> {
         let host_effect = match effect {
             Effect::Core(_) => {
                 // We can't handle any core effects, and we don't need to:
@@ -131,8 +131,6 @@ impl GameEngine {
                 GameEngineEffect::try_from(effect)
                     .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
             }
-
-            Effect::Host(host_effect) => *host_effect,
         };
 
         match host_effect {

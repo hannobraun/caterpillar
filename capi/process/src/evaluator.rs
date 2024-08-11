@@ -15,7 +15,7 @@ impl Evaluator {
     pub fn step<H: Host>(
         &mut self,
         instructions: &Instructions,
-    ) -> Result<EvaluatorState, Effect<H::Effect>> {
+    ) -> Result<EvaluatorState, Effect> {
         let Some(addr) = self.stack.take_next_instruction() else {
             return Ok(EvaluatorState::Finished);
         };
