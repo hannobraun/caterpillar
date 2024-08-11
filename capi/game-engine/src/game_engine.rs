@@ -4,7 +4,7 @@ use capi_process::{Effect, Instructions, Process, Value};
 
 use crate::{
     display::{self, TILES_PER_AXIS},
-    host::{GameEngineEffect, GameEngineHost},
+    host::GameEngineEffect,
     memory::Memory,
 };
 
@@ -81,7 +81,7 @@ impl GameEngine {
                 return;
             };
 
-            self.process.step::<GameEngineHost>(instructions);
+            self.process.step(instructions);
 
             if let Some(effect) = self.process.handle_first_effect() {
                 match self.handle_effect(&effect, pixels) {

@@ -4,7 +4,7 @@ use crate::{
     breakpoints::Breakpoints,
     evaluator::{Evaluator, EvaluatorState},
     instructions::InstructionAddress,
-    Effect, Host, Instructions, Stack, Value,
+    Effect, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -90,7 +90,7 @@ impl Process {
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
-    pub fn step<H: Host>(&mut self, instructions: &Instructions) {
+    pub fn step(&mut self, instructions: &Instructions) {
         if !self.state.can_step() {
             return;
         }
