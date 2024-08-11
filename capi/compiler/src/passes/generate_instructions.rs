@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
-use capi_process::{Instruction, InstructionAddress, Instructions};
+use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
@@ -20,7 +20,9 @@ pub fn generate_instructions(
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
-    let main = output.instructions.push(Instruction::Panic);
+    let main = output.instructions.push(Instruction::TriggerEffect {
+        effect: Effect::Panic,
+    });
     output.instructions.push(Instruction::Return);
     output.placeholders.push(CallToCluster {
         name: "main".to_string(),
@@ -213,7 +215,9 @@ fn compile_fragment(
                     // creates that closure, once we have everything in place to
                     // make that happen.
                     let address = output.generate_instruction(
-                        Instruction::Panic,
+                        Instruction::TriggerEffect {
+                            effect: Effect::Panic,
+                        },
                         fragment.id(),
                     );
 
@@ -267,7 +271,9 @@ fn compile_fragment(
                     // For now, just generate a placeholder that we can replace
                     // with the call later.
                     let address = output.generate_instruction(
-                        Instruction::Panic,
+                        Instruction::TriggerEffect {
+                            effect: Effect::Panic,
+                        },
                         fragment.id(),
                     );
 
@@ -288,7 +294,12 @@ fn compile_fragment(
                         fragment.id(),
                     ),
                 FragmentExpression::UnresolvedIdentifier { name: _ } => output
-                    .generate_instruction(Instruction::Panic, fragment.id()),
+                    .generate_instruction(
+                        Instruction::TriggerEffect {
+                            effect: Effect::Panic,
+                        },
+                        fragment.id(),
+                    ),
                 FragmentExpression::Value(value) => output
                     .generate_instruction(
                         Instruction::Push { value: *value },
