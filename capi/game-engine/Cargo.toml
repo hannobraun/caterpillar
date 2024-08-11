@@ -8,5 +8,8 @@ num_enum = "*"
 serde = "*"
 serde-big-array = "*"
 
+[dependencies.capi-compiler]
+path = "../compiler"
+
 [dependencies.capi-process]
 path = "../process"
