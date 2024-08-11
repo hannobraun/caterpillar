@@ -12,7 +12,7 @@
 
 use std::collections::BTreeMap;
 
-use capi_process::{Effect, Host, HostEffect, Process};
+use capi_process::{Effect, Host, Process};
 
 use crate::{compile, syntax::Script};
 
@@ -83,9 +83,3 @@ impl Host for TestHost {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 struct TestEffect;
-
-impl HostEffect for TestEffect {
-    fn to_number(self) -> u8 {
-        0
-    }
-}

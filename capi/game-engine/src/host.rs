@@ -1,4 +1,4 @@
-use capi_process::{Host, HostEffect};
+use capi_process::Host;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct GameEngineHost;
@@ -42,10 +42,4 @@ pub enum GameEngineEffect {
 
     SetPixel,
     SubmitFrame,
-}
-
-impl HostEffect for GameEngineEffect {
-    fn to_number(self) -> u8 {
-        self.into()
-    }
 }
