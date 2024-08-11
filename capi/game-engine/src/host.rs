@@ -20,6 +20,7 @@ impl Host for GameEngineHost {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[repr(u8)]
 pub enum GameEngineEffect {
     Load,
     Store,
