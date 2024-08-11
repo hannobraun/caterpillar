@@ -114,6 +114,14 @@ impl GameEngine {
         pixels: &mut [u8],
     ) -> Result<EffectOutcome, Effect> {
         let host_effect = match effect {
+            Effect::Host => {
+                let effect = self.process.stack_mut().pop_operand()?;
+                let effect = effect
+                    .to_u8()
+                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?;
+                GameEngineEffect::try_from(effect)
+                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
+            }
             Effect::Core(_) => {
                 // We can't handle any core effects, and we don't need to:
                 //
@@ -122,14 +130,6 @@ impl GameEngine {
                 // - The caller can see the unhandled effect and handle it
                 //   accordingly (by sending it to the debugger, for example).
                 return Ok(EffectOutcome::Unhandled);
-            }
-            Effect::Host => {
-                let effect = self.process.stack_mut().pop_operand()?;
-                let effect = effect
-                    .to_u8()
-                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?;
-                GameEngineEffect::try_from(effect)
-                    .map_err(|_| Effect::Core(CoreEffect::InvalidHostEffect))?
             }
         };
 
