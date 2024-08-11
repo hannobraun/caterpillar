@@ -83,4 +83,8 @@ impl Host for TestHost {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 struct TestEffect;
 
-impl HostEffect for TestEffect {}
+impl HostEffect for TestEffect {
+    fn to_number(self) -> u8 {
+        0
+    }
+}

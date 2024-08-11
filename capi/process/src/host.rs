@@ -9,9 +9,14 @@ pub trait Host {
 pub trait HostEffect:
     Clone + Debug + Eq + for<'de> serde::Deserialize<'de> + serde::Serialize
 {
+    fn to_number(self) -> u8;
 }
 
-impl HostEffect for () {}
+impl HostEffect for () {
+    fn to_number(self) -> u8 {
+        0
+    }
+}
 
 pub struct NoHost {}
 

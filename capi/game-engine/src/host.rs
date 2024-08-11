@@ -40,4 +40,8 @@ pub enum GameEngineEffect {
     SubmitFrame,
 }
 
-impl HostEffect for GameEngineEffect {}
+impl HostEffect for GameEngineEffect {
+    fn to_number(self) -> u8 {
+        self.into()
+    }
+}
