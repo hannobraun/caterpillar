@@ -417,7 +417,7 @@ fn snake(script: &mut Script) {
                 .bind(["coord_smaller_than_zero"])
                 .ident("coord_smaller_than_zero")
                 .block(|s| {
-                    s.ident("coord").ident("limit").ident("add_i32");
+                    s.ident("coord").ident("limit").ident("add_i8");
                 })
                 .block(|e| {
                     e.ident("coord");
