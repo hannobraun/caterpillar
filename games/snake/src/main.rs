@@ -308,7 +308,7 @@ fn snake(script: &mut Script) {
                 .ident("frame_count")
                 .ident("load")
                 .v(5)
-                .ident("remainder")
+                .ident("remainder_i32")
                 .ident("return_if_non_zero")
                 .c("Looks like it's time to run updates!")
                 .ident("should_game_run")
@@ -451,13 +451,13 @@ fn snake(script: &mut Script) {
                 .ident("tile_field_size")
                 .ident("vec_load")
                 .ident("vec_x")
-                .ident("remainder")
+                .ident("remainder_i32")
                 .ident("negatable_random")
                 .ident("abs")
                 .ident("tile_field_size")
                 .ident("vec_load")
                 .ident("vec_y")
-                .ident("remainder")
+                .ident("remainder_i32")
                 .ident("food_position")
                 .ident("vec_store");
         },
@@ -956,7 +956,7 @@ fn snake(script: &mut Script) {
             .ident("vec_buf")
             .ident("_vec_buf_capacity")
             .ident("load")
-            .ident("remainder")
+            .ident("remainder_i32")
             .ident("vec_buf")
             .ident("_vec_buf_buffer")
             .ident("add_u8_wrap");

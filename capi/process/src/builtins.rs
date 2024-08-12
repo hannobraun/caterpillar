@@ -18,7 +18,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "mul_i32" => mul_i32,
         "mul_u8_wrap" => mul_u8_wrap,
         "neg_i32" => neg_i32,
-        "remainder" => remainder_i32,
+        "remainder_i32" => remainder_i32,
         "sub_i32" => sub_i32,
         "sub_u8" => sub_u8,
         "sub_u8_wrap" => sub_u8_wrap,
