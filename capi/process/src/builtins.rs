@@ -18,7 +18,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "mul_u8_wrap" => mul_u8_wrap,
         "neg" => neg,
         "remainder" => remainder,
-        "sub" => sub,
+        "sub_i32" => sub,
 
         _ => {
             return None;

@@ -71,7 +71,7 @@ fn snake(script: &mut Script) {
                 .ident("index")
                 .v(1)
                 .ident("add_i32")
-                .ident("sub")
+                .ident("sub_i32")
                 .block(|s| {
                     s.ident("index")
                         .v(1)
@@ -152,7 +152,7 @@ fn snake(script: &mut Script) {
             .ident("tile_y")
             .c("Leave zero, if the y-coordinate has advanced beyond the last")
             .c("line of the tile field. Otherwise, leave non-zero value.")
-            .ident("sub");
+            .ident("sub_i32");
         },
     );
     script.function(
@@ -169,7 +169,7 @@ fn snake(script: &mut Script) {
             .ident("vec_load")
             .ident("vec_x")
             .ident("tile_x_new")
-            .ident("sub")
+            .ident("sub_i32")
             .bind(["zero_if_x_overflowed"])
             .c("Unless the x-coordinate has advanced beyond the width, we're")
             .c("done here.")
@@ -215,7 +215,7 @@ fn snake(script: &mut Script) {
                 .ident("vec_load")
                 .ident("vec_x")
                 .v(1)
-                .ident("sub")
+                .ident("sub_i32")
                 .ident("greater")
                 .ident("copy")
                 .ident("return_if_non_zero")
@@ -226,7 +226,7 @@ fn snake(script: &mut Script) {
                 .ident("vec_load")
                 .ident("vec_y")
                 .v(1)
-                .ident("sub")
+                .ident("sub_i32")
                 .ident("greater");
         },
     );
@@ -267,7 +267,7 @@ fn snake(script: &mut Script) {
             .c("We have a copy of the new frame count left on the top of the")
             .c("stack. Let's see if we counted up to the maximum value. If")
             .c("not, we're done.")
-            .ident("sub")
+            .ident("sub_i32")
             .ident("return_if_non_zero")
             .c("We have counted up to the maximum value. Reset the frame")
             .c("count.")
@@ -423,7 +423,7 @@ fn snake(script: &mut Script) {
                 .ident("limit_greater_than_coord")
                 .ident("return_if_non_zero")
                 .ident("limit")
-                .ident("sub");
+                .ident("sub_i32");
         },
     );
 
@@ -575,7 +575,7 @@ fn snake(script: &mut Script) {
             s.ident("positions")
                 .ident("vec_buf_len")
                 .v(1)
-                .ident("sub")
+                .ident("sub_i32")
                 .ident("index")
                 .ident("greater")
                 .block(|s| {
@@ -843,7 +843,7 @@ fn snake(script: &mut Script) {
             s.ident("vec_buf")
                 .ident("vec_buf_len")
                 .v(1)
-                .ident("sub")
+                .ident("sub_i32")
                 .bind(["index"])
                 .ident("vec_buf")
                 .ident("index")
@@ -894,7 +894,7 @@ fn snake(script: &mut Script) {
                 .bind(["next"])
                 .ident("next")
                 .ident("first")
-                .ident("sub")
+                .ident("sub_i32")
                 .v(2)
                 .ident("div")
                 .bind(["difference"])
