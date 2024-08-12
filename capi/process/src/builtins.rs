@@ -8,7 +8,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "add_u8_wrap" => add_u8_wrap,
         "brk" => brk,
         "copy" => copy,
-        "div" => div,
+        "div" => div_i32,
         "drop" => drop,
         "eq" => eq,
         "eval" => eval,
@@ -107,7 +107,7 @@ fn copy(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn div(stack: &mut Stack, _: &Instructions) -> Result {
+fn div_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
