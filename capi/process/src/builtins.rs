@@ -8,7 +8,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "add_u8_wrap" => add_u8_wrap,
         "brk" => brk,
         "copy" => copy,
-        "div" => div_i32,
+        "div_i32" => div_i32,
         "drop" => drop,
         "eq" => eq,
         "eval" => eval,

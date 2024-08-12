@@ -910,7 +910,7 @@ fn snake(script: &mut Script) {
                 .ident("first")
                 .ident("sub_u8_wrap")
                 .v(2)
-                .ident("div")
+                .ident("div_i32")
                 .bind(["difference"])
                 .ident("difference")
                 .ident("difference")
@@ -933,7 +933,7 @@ fn snake(script: &mut Script) {
                 .ident("_vec_buf_capacity")
                 .ident("load")
                 .v(2)
-                .ident("div");
+                .ident("div_i32");
         },
     );
     script.function(
