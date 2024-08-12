@@ -12,7 +12,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "drop" => drop,
         "eq" => eq,
         "eval" => eval,
-        "greater" => greater_i32,
+        "greater_i32" => greater_i32,
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
         "mul_i32" => mul_i32,

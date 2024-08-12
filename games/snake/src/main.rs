@@ -211,14 +211,14 @@ fn snake(script: &mut Script) {
             s.c("Compare x coordinate against lower bound.")
                 .v(0)
                 .ident("x")
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
                 .c("Compare y coordinate against lower bound.")
                 .v(0)
                 .ident("y")
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
@@ -229,7 +229,7 @@ fn snake(script: &mut Script) {
                 .ident("vec_x")
                 .v(1)
                 .ident("sub_i32")
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
@@ -240,7 +240,7 @@ fn snake(script: &mut Script) {
                 .ident("vec_y")
                 .v(1)
                 .ident("sub_i32")
-                .ident("greater");
+                .ident("greater_i32");
         },
     );
 
@@ -413,7 +413,7 @@ fn snake(script: &mut Script) {
         |s| {
             s.v(0)
                 .ident("coord")
-                .ident("greater")
+                .ident("greater_i32")
                 .bind(["coord_smaller_than_zero"])
                 .ident("coord_smaller_than_zero")
                 .block(|s| {
@@ -431,7 +431,7 @@ fn snake(script: &mut Script) {
         |s| {
             s.ident("limit")
                 .ident("coord")
-                .ident("greater")
+                .ident("greater_i32")
                 .bind(["limit_greater_than_coord"])
                 .ident("coord")
                 .ident("limit_greater_than_coord")
@@ -493,7 +493,7 @@ fn snake(script: &mut Script) {
                 .ident("body_collides")
                 .ident("add_i32")
                 .v(0)
-                .ident("greater");
+                .ident("greater_i32");
         },
     );
 
@@ -543,7 +543,7 @@ fn snake(script: &mut Script) {
                 .ident("vec_buf_len")
                 .ident("snake_length")
                 .ident("load")
-                .ident("greater")
+                .ident("greater_i32")
                 .block(|s| {
                     s.ident("positions")
                         .ident("vec_buf_pop")
@@ -565,7 +565,7 @@ fn snake(script: &mut Script) {
                 .ident("snake_length_plus_growth")
                 .ident("positions")
                 .ident("vec_buf_capacity")
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("return_if_non_zero")
                 .ident("snake_length_plus_growth")
                 .ident("snake_length")
@@ -591,7 +591,7 @@ fn snake(script: &mut Script) {
                 .v(1)
                 .ident("sub_i32")
                 .ident("index")
-                .ident("greater")
+                .ident("greater_i32")
                 .block(|s| {
                     s.ident("positions")
                         .ident("index")
@@ -917,7 +917,7 @@ fn snake(script: &mut Script) {
                 .ident("return_if_zero")
                 .v(0)
                 .ident("difference")
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("return_if_zero")
                 .ident("vec_buf")
                 .ident("_vec_buf_capacity")
@@ -1022,7 +1022,7 @@ fn snake(script: &mut Script) {
             s.ident("v")
                 .ident("v")
                 .v(-1)
-                .ident("greater")
+                .ident("greater_i32")
                 .ident("return_if_non_zero")
                 .ident("neg");
         },
