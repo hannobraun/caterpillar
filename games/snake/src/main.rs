@@ -52,7 +52,41 @@ fn snake(script: &mut Script) {
             "draw_snake",
             |p| p,
             |s| {
-                s.v(0).ident("draw_snake_inner");
+                s.v(0).ident("_draw_snake_inner");
+            },
+        )
+        .function(
+            "_draw_snake_inner",
+            |p| p.ident("index"),
+            |e| {
+                e.ident("positions")
+                    .ident("vec_buf_len")
+                    .ident("index")
+                    .ident("greater")
+                    .bind(["index_is_within_bounds"])
+                    .ident("index_is_within_bounds")
+                    .ident("index")
+                    .ident("_draw_snake_draw_rest_of_snake");
+            },
+        )
+        .function(
+            "_draw_snake_draw_rest_of_snake",
+            |p| p.lit(0).ident("_"),
+            |e| {
+                e.c("Index is out of bounds. We're done");
+            },
+        )
+        .function(
+            "_draw_snake_draw_rest_of_snake",
+            |p| p.lit(1).ident("index"),
+            |e| {
+                e.c("Index is valid. Continue drawing the snake.")
+                    .ident("index")
+                    .ident("_draw_snake_draw_body_segment")
+                    .ident("index")
+                    .v(1)
+                    .ident("add_u8")
+                    .ident("_draw_snake_inner");
             },
         )
         .function(
@@ -73,28 +107,6 @@ fn snake(script: &mut Script) {
                 e.v(0).v(255).v(0).v(255);
             },
         );
-    script.function(
-        "draw_snake_inner",
-        |p| p.ident("index"),
-        |s| {
-            s.ident("index")
-                .ident("_draw_snake_draw_body_segment")
-                .ident("positions")
-                .ident("vec_buf_len")
-                .ident("index")
-                .v(1)
-                .ident("add_i32")
-                .ident("sub_i32")
-                .block(|s| {
-                    s.ident("index")
-                        .v(1)
-                        .ident("add_i32")
-                        .ident("draw_snake_inner");
-                })
-                .block(|_| {})
-                .ident("if");
-        },
-    );
     script.function(
         "draw_food",
         |p| p,
