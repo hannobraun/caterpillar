@@ -15,6 +15,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
         "mul_i32" => mul_i32,
+        "mul_u8_wrap" => mul_u8_wrap,
         "neg" => neg,
         "remainder" => remainder,
         "sub" => sub,
@@ -228,6 +229,19 @@ fn mul_i32(stack: &mut Stack, _: &Instructions) -> Result {
         return Err(IntegerOverflow.into());
     };
 
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn mul_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
+
+    let c = a.wrapping_mul(b);
     stack.push_operand(c);
 
     Ok(())
