@@ -47,25 +47,34 @@ fn snake(script: &mut Script) {
             .ident("submit_frame");
         },
     );
-    script.function(
-        "draw_snake",
-        |p| p,
-        |s| {
-            s.v(0).ident("draw_snake_inner");
-        },
-    );
+    script
+        .function(
+            "draw_snake",
+            |p| p,
+            |s| {
+                s.v(0).ident("draw_snake_inner");
+            },
+        )
+        .function(
+            "_draw_snake_draw_body_segment",
+            |p| p.ident("index"),
+            |e| {
+                e.ident("positions")
+                    .ident("index")
+                    .ident("vec_buf_get")
+                    .v(0)
+                    .v(255)
+                    .v(0)
+                    .v(255)
+                    .ident("set_pixel");
+            },
+        );
     script.function(
         "draw_snake_inner",
         |p| p.ident("index"),
         |s| {
-            s.ident("positions")
-                .ident("index")
-                .ident("vec_buf_get")
-                .v(0)
-                .v(255)
-                .v(0)
-                .v(255)
-                .ident("set_pixel")
+            s.ident("index")
+                .ident("_draw_snake_draw_body_segment")
                 .ident("positions")
                 .ident("vec_buf_len")
                 .ident("index")
