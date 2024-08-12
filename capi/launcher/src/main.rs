@@ -28,6 +28,7 @@ async fn main() -> anyhow::Result<()> {
             game_engine.process.state().first_unhandled_effect()
         {
             eprintln!("Unhandled effect: {effect:#?}");
+            eprintln!("Current stack:\n{:#?}", game_engine.process.stack());
             break;
         }
 
