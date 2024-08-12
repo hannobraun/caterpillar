@@ -413,7 +413,7 @@ fn snake(script: &mut Script) {
         |s| {
             s.v(0)
                 .ident("coord")
-                .ident("greater_i32")
+                .ident("greater_i8")
                 .bind(["coord_smaller_than_zero"])
                 .ident("coord_smaller_than_zero")
                 .block(|s| {
