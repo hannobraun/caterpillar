@@ -894,7 +894,7 @@ fn snake(script: &mut Script) {
                 .bind(["next"])
                 .ident("next")
                 .ident("first")
-                .ident("sub_i32")
+                .ident("sub_u8_wrap")
                 .v(2)
                 .ident("div")
                 .bind(["difference"])
