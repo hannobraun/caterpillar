@@ -843,7 +843,7 @@ fn snake(script: &mut Script) {
             s.ident("vec_buf")
                 .ident("vec_buf_len")
                 .v(1)
-                .ident("sub_i32")
+                .ident("sub_u8")
                 .bind(["index"])
                 .ident("vec_buf")
                 .ident("index")
