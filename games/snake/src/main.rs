@@ -415,12 +415,13 @@ fn snake(script: &mut Script) {
                 .ident("coord")
                 .ident("greater")
                 .bind(["coord_smaller_than_zero"])
-                .ident("coord")
                 .ident("coord_smaller_than_zero")
                 .block(|s| {
-                    s.ident("limit").ident("add_i32");
+                    s.ident("coord").ident("limit").ident("add_i32");
                 })
-                .block(|_| {})
+                .block(|e| {
+                    e.ident("coord");
+                })
                 .ident("if");
         },
     );
