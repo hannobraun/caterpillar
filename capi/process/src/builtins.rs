@@ -20,6 +20,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "remainder" => remainder,
         "sub_i32" => sub_i32,
         "sub_u8" => sub_u8,
+        "sub_u8_wrap" => sub_u8_wrap,
 
         _ => {
             return None;
@@ -307,6 +308,19 @@ fn sub_u8(stack: &mut Stack, _: &Instructions) -> Result {
         return Err(IntegerOverflow.into());
     };
 
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn sub_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
+
+    let c = a.wrapping_sub(b);
     stack.push_operand(c);
 
     Ok(())
