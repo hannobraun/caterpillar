@@ -19,6 +19,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "neg" => neg,
         "remainder" => remainder,
         "sub_i32" => sub_i32,
+        "sub_u8" => sub_u8,
 
         _ => {
             return None;
@@ -285,6 +286,22 @@ fn sub_i32(stack: &mut Stack, _: &Instructions) -> Result {
 
     let a = a.to_i32();
     let b = b.to_i32();
+
+    let Some(c) = a.checked_sub(b) else {
+        return Err(IntegerOverflow.into());
+    };
+
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn sub_u8(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
 
     let Some(c) = a.checked_sub(b) else {
         return Err(IntegerOverflow.into());
