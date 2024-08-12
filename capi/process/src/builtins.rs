@@ -12,7 +12,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "drop" => drop,
         "eq" => eq,
         "eval" => eval,
-        "greater" => greater,
+        "greater" => greater_i32,
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
         "mul_i32" => mul_i32,
@@ -192,7 +192,7 @@ fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
     Ok(())
 }
 
-fn greater(stack: &mut Stack, _: &Instructions) -> Result {
+fn greater_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
