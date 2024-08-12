@@ -18,7 +18,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "mul_u8_wrap" => mul_u8_wrap,
         "neg" => neg,
         "remainder" => remainder,
-        "sub_i32" => sub,
+        "sub_i32" => sub_i32,
 
         _ => {
             return None;
@@ -279,7 +279,7 @@ fn remainder(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn sub(stack: &mut Stack, _: &Instructions) -> Result {
+fn sub_i32(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
