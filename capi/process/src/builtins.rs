@@ -4,6 +4,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
         "add_i8" => add_i8,
         "add_i32" => add_i32,
+        "add_u8" => add_u8,
         "add_u8_wrap" => add_u8_wrap,
         "brk" => brk,
         "copy" => copy,
@@ -54,6 +55,22 @@ fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
 
     let a = a.to_i32();
     let b = b.to_i32();
+
+    let Some(c) = a.checked_add(b) else {
+        return Err(IntegerOverflow.into());
+    };
+
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn add_u8(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
 
     let Some(c) = a.checked_add(b) else {
         return Err(IntegerOverflow.into());
