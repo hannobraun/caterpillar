@@ -1024,7 +1024,7 @@ fn snake(script: &mut Script) {
                 .v(-1)
                 .ident("greater_i32")
                 .ident("return_if_non_zero")
-                .ident("neg");
+                .ident("neg_i32");
         },
     );
 
