@@ -62,11 +62,15 @@ fn snake(script: &mut Script) {
                 e.ident("positions")
                     .ident("index")
                     .ident("vec_buf_get")
-                    .v(0)
-                    .v(255)
-                    .v(0)
-                    .v(255)
+                    .ident("_draw_snake_body_color")
                     .ident("set_pixel");
+            },
+        )
+        .function(
+            "_draw_snake_body_color",
+            |p| p,
+            |e| {
+                e.v(0).v(255).v(0).v(255);
             },
         );
     script.function(
