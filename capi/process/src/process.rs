@@ -15,6 +15,10 @@ pub struct Process {
 }
 
 impl Process {
+    pub fn most_recent_step(&self) -> Option<InstructionAddress> {
+        self.state.most_recent_step()
+    }
+
     pub fn can_step(&self) -> bool {
         !self.has_finished() && self.state.unhandled_effects.is_empty()
     }
