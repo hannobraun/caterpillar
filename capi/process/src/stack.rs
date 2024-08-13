@@ -42,6 +42,20 @@ impl Stack {
         }
     }
 
+    /// # Determine wether any stack frames are left
+    ///
+    /// The stack starts out with an initial stack frame on initialization. If
+    /// no more stack frames are left, this means that the process is finished.
+    ///
+    /// ## Implementation Note
+    ///
+    /// In principle, no stack frames being left does not mean that the stack is
+    /// empty. The process could have left some (frame-less) return value, and a
+    /// host might expect such a thing.
+    ///
+    /// But right now, this method checks whether the stack is completely empty.
+    /// This is a bug, which is tracked here:
+    /// <https://github.com/hannobraun/caterpillar/issues/44>
     pub fn no_frames_left(&self) -> bool {
         // This won't work, if the hosts expects the process to finish and leave
         // return values on the stack.
