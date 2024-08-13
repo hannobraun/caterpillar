@@ -52,7 +52,7 @@ fn closure_in_function() {
                     let channel: u32 = u32::from_le_bytes(channel.0);
 
                     *signals.entry(channel).or_default() += 1;
-                    process.handle_first_effect();
+                    process.effects_mut().handle_first_effect();
                 }
                 effect => {
                     panic!(

@@ -48,10 +48,6 @@ impl Process {
         &self.breakpoints
     }
 
-    pub fn handle_first_effect(&mut self) -> Option<Effect> {
-        self.effects.unhandled_effects.pop_front()
-    }
-
     /// Trigger the provided effect
     ///
     /// If there already is an unhandled effect, this new effect will displace
@@ -97,7 +93,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(instruction);
             }
 
-            self.handle_first_effect();
+            self.effects.handle_first_effect();
         }
     }
 
@@ -142,5 +138,9 @@ impl Effects {
 
     pub fn add_effect(&mut self, effect: Effect) {
         self.unhandled_effects.push_back(effect);
+    }
+
+    pub fn handle_first_effect(&mut self) -> Option<Effect> {
+        self.unhandled_effects.pop_front()
     }
 }
