@@ -15,6 +15,14 @@ pub struct Process {
 }
 
 impl Process {
+    pub fn can_step(&self) -> bool {
+        !self.has_finished() && self.state.unhandled_effects.is_empty()
+    }
+
+    pub fn has_finished(&self) -> bool {
+        self.evaluator.stack.no_frames_left()
+    }
+
     pub fn state(&self) -> &ProcessState {
         &self.state
     }
@@ -29,14 +37,6 @@ impl Process {
 
     pub fn breakpoints(&self) -> &Breakpoints {
         &self.breakpoints
-    }
-
-    pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.state.unhandled_effects.is_empty()
-    }
-
-    pub fn has_finished(&self) -> bool {
-        self.evaluator.stack.no_frames_left()
     }
 
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
