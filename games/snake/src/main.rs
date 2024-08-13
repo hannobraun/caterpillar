@@ -187,10 +187,8 @@ fn snake(script: &mut Script) {
             |s| {
                 s.ident("tile_x")
                     .ident("_increment_tile_index_increment_coord")
-                    .bind(["tile_x_new"])
-                    .ident("tile_x_new")
                     .ident("_increment_tile_index_is_tile_x_within_limit")
-                    .bind(["tile_x_within_limit"])
+                    .bind(["tile_x_new", "tile_x_within_limit"])
                     .c("Unless the x-coordinate has advanced beyond the width,")
                     .c("we're done here.")
                     .ident("tile_x_new")
@@ -222,7 +220,10 @@ fn snake(script: &mut Script) {
                     .ident("vec_load")
                     .ident("vec_x")
                     .ident("tile_x")
-                    .ident("greater_u8");
+                    .ident("greater_u8")
+                    .bind(["tile_x_within_limit"])
+                    .ident("tile_x")
+                    .ident("tile_x_within_limit");
             },
         );
 
