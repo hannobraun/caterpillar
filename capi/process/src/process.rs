@@ -10,7 +10,7 @@ use crate::{
 )]
 pub struct Process {
     most_recent_step: Option<InstructionAddress>,
-    state: ProcessState,
+    state: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }
@@ -28,7 +28,7 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
-    pub fn state(&self) -> &ProcessState {
+    pub fn state(&self) -> &Effects {
         &self.state
     }
 
@@ -126,11 +126,11 @@ impl Process {
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
-pub struct ProcessState {
+pub struct Effects {
     unhandled_effects: VecDeque<Effect>,
 }
 
-impl ProcessState {
+impl Effects {
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
     }

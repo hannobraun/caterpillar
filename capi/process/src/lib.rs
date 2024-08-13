@@ -14,7 +14,7 @@ pub use self::{
     effects::Effect,
     instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,
-    process::{Process, ProcessState},
+    process::{Effects, Process},
     stack::Stack,
     value::Value,
 };
