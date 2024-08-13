@@ -286,41 +286,37 @@ fn snake(script: &mut Script) {
             s.v(1).ident("frame_count").ident("store");
         },
     );
-    script.function(
-        "count_frame",
-        |p| p,
-        |s| {
-            s
-            .c("We only have 7 bits to count (our 8-bit values are signed), so")
-            .c("we need to reset the count every so often. To keep things")
-            .c("predictable, let's reset only at full seconds. Assuming 60")
-            .c("frames per second, `120` is the highest number we can count up")
-            .c("to.")
-            .c("")
-            .c("Since we start counting at `1`, we need to reset *after* we")
-            .c("reach that number, or we won't reset on a full second. Let's")
-            .c("prepare the number to compare to for later use.")
-            .v(121)
-            .c("Grab the current frame count.")
-            .ident("frame_count")
-            .ident("load")
-            .c("Increment the frame count.")
-            .v(1)
-            .ident("add_i32")
-            .c("Place a copy of the new frame count back where it came from.")
-            .ident("copy")
-            .ident("frame_count")
-            .ident("store")
-            .c("We have a copy of the new frame count left on the top of the")
-            .c("stack. Let's see if we counted up to the maximum value. If")
-            .c("not, we're done.")
-            .ident("sub_i32")
-            .ident("return_if_non_zero")
-            .c("We have counted up to the maximum value. Reset the frame")
-            .c("count.")
-            .ident("init_frame_count");
-        },
-    );
+    script
+        .function(
+            "count_frame",
+            |p| p,
+            |s| {
+                s.c("Grab the current frame count.")
+                    .ident("frame_count")
+                    .ident("load")
+                    .c("Increment the frame count.")
+                    .v(1)
+                    .ident("add_i32")
+                    .c("Place a copy of the new frame count back where it came")
+                    .c("from.")
+                    .ident("copy")
+                    .ident("frame_count")
+                    .ident("store")
+                    .ident("_count_frame_reset_frame_count_if_necessary");
+            },
+        )
+        .function(
+            "_count_frame_reset_frame_count_if_necessary",
+            |p| p.lit(121),
+            |e| {
+                e.ident("init_frame_count");
+            },
+        )
+        .function(
+            "_count_frame_reset_frame_count_if_necessary",
+            |p| p.ident("_"),
+            |_| {},
+        );
 
     // Game state
     script.function(
