@@ -216,12 +216,12 @@ fn snake(script: &mut Script) {
         )
         .function(
             "_increment_tile_index_is_tile_x_within_limit",
-            |p| p.ident("tile_x_new"),
+            |p| p.ident("tile_x"),
             |e| {
                 e.ident("tile_field_size")
                     .ident("vec_load")
                     .ident("vec_x")
-                    .ident("tile_x_new")
+                    .ident("tile_x")
                     .ident("sub_i32");
             },
         );
