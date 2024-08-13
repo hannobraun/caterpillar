@@ -136,10 +136,6 @@ impl Effects {
         self.unhandled_effects.push_front(effect.into());
     }
 
-    pub fn add_effect(&mut self, effect: Effect) {
-        self.unhandled_effects.push_back(effect);
-    }
-
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
         self.unhandled_effects.pop_front()
     }
