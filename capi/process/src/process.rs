@@ -1,8 +1,9 @@
-use std::{collections::VecDeque, mem};
+use std::mem;
 
 use crate::{
     breakpoints::Breakpoints, evaluator::Evaluator,
-    instructions::InstructionAddress, Effect, Instructions, Stack, Value,
+    instructions::InstructionAddress, Effect, Effects, Instructions, Stack,
+    Value,
 };
 
 #[derive(
@@ -111,36 +112,5 @@ impl Process {
         }
 
         self.most_recent_step = Some(next_instruction);
-    }
-}
-
-/// The queue of currently active effects
-#[derive(
-    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
-)]
-pub struct Effects {
-    queue: VecDeque<Effect>,
-}
-
-impl Effects {
-    /// Look at the first effect in the queue
-    pub fn first(&self) -> Option<&Effect> {
-        self.queue.front()
-    }
-
-    /// Handle the first effect in the queue
-    ///
-    /// If it can't be handled for some reason, which is probably a fatal
-    /// failure, it should be re-triggered, to make sure all required
-    /// information is available for debugging.
-    pub fn handle_first(&mut self) -> Option<Effect> {
-        self.queue.pop_front()
-    }
-
-    /// Trigger the provided effect
-    ///
-    /// The new effect is added to the front of the queue.
-    pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        self.queue.push_front(effect.into());
     }
 }

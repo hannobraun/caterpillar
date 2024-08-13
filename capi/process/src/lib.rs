@@ -11,10 +11,10 @@ mod value;
 pub use self::{
     breakpoints::Breakpoints,
     builtins::builtin_by_name,
-    effects::Effect,
+    effects::{Effect, Effects},
     instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,
-    process::{Effects, Process},
+    process::Process,
     stack::Stack,
     value::Value,
 };
