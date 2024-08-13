@@ -339,10 +339,10 @@ fn snake(script: &mut Script) {
                 .ident("load")
                 .v(5)
                 .ident("remainder_i32")
-                .ident("return_if_non_zero")
-                .c("Looks like it's time to run updates!")
+                .ident("not")
                 .ident("should_game_run")
                 .ident("load")
+                .ident("and")
                 .block(|s| {
                     s.ident("read_input")
                         .ident("handle_input")
