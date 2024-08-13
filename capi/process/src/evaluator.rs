@@ -12,12 +12,9 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
-    pub fn step(
-        &mut self,
-        instructions: &Instructions,
-    ) -> Result<EvaluatorState, Effect> {
+    pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
         let Some(addr) = self.stack.take_next_instruction() else {
-            return Ok(EvaluatorState::Finished);
+            return Ok(());
         };
 
         let instruction = instructions
@@ -174,15 +171,8 @@ impl Evaluator {
             }
         }
 
-        Ok(EvaluatorState::Running)
+        Ok(())
     }
-}
-
-#[derive(Debug)]
-#[must_use]
-pub enum EvaluatorState {
-    Running,
-    Finished,
 }
 
 #[cfg(test)]
@@ -238,7 +228,7 @@ mod tests {
             is_tail_call: true,
         });
 
-        let _ = evaluator.step(&instructions).unwrap();
+        evaluator.step(&instructions).unwrap();
         assert!(!evaluator.stack.no_frames_left());
 
         assert_eq!(evaluator.stack.next_instruction.index, 2);

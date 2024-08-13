@@ -1,10 +1,8 @@
 use std::{collections::VecDeque, mem};
 
 use crate::{
-    breakpoints::Breakpoints,
-    evaluator::{Evaluator, EvaluatorState},
-    instructions::InstructionAddress,
-    Effect, Instructions, Stack, Value,
+    breakpoints::Breakpoints, evaluator::Evaluator,
+    instructions::InstructionAddress, Effect, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -106,8 +104,7 @@ impl Process {
         let next_instruction = self.evaluator.stack.next_instruction();
 
         match self.evaluator.step(instructions) {
-            Ok(EvaluatorState::Running) => {}
-            Ok(EvaluatorState::Finished) => {}
+            Ok(()) => {}
             Err(effect) => {
                 self.state.add_effect(effect);
             }
