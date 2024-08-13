@@ -48,15 +48,6 @@ impl Process {
         &self.breakpoints
     }
 
-    /// Trigger the provided effect
-    ///
-    /// If there already is an unhandled effect, this new effect will displace
-    /// it as the first effect, meaning the existing effect will be moved back
-    /// in the list.
-    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
-        self.effects.unhandled_effects.push_front(effect.into());
-    }
-
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
         // All we need to preserve when we reset are the breakpoints. Anything
         // else needs to go back to start conditions.
@@ -134,6 +125,15 @@ pub struct Effects {
 impl Effects {
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
+    }
+
+    /// Trigger the provided effect
+    ///
+    /// If there already is an unhandled effect, this new effect will displace
+    /// it as the first effect, meaning the existing effect will be moved back
+    /// in the list.
+    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
+        self.unhandled_effects.push_front(effect.into());
     }
 
     pub fn add_effect(&mut self, effect: Effect) {
