@@ -1026,17 +1026,31 @@ fn snake(script: &mut Script) {
     );
 
     // Utilities - Miscellaneous
-    script.function("negatable_random", |p| p, |s| {
-        s.c("Negating the minimum number would result in an integer overflow.")
-            .ident("read_random")
-            .ident("copy")
-            .ident("word_min")
-            .ident("eq")
-            .ident("return_if_zero")
-            .ident("drop")
-            .c("Looks like we ran into the minimum. Try again!")
-            .ident("negatable_random");
-    });
+    script
+        .function(
+            "negatable_random",
+            |p| p,
+            |s| {
+                s.ident("read_random")
+                    .ident("_negatable_random_return_or_continue");
+            },
+        )
+        .function(
+            "_negatable_random_return_or_continue",
+            |p| p.lit(i32::MIN),
+            |e| {
+                e.c("Negating the minimum number would result in an integer")
+                    .c("overflow.")
+                    .ident("negatable_random");
+            },
+        )
+        .function(
+            "_negatable_random_return_or_continue",
+            |p| p.ident("random"),
+            |e| {
+                e.ident("random");
+            },
+        );
     script.function(
         "abs",
         |p| p.ident("v"),
