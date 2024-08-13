@@ -190,11 +190,8 @@ fn snake(script: &mut Script) {
                     .bind(["tile_x_new"])
                     .c("Check if the x coordinate has advanced beyond the")
                     .c("width.")
-                    .ident("tile_field_size")
-                    .ident("vec_load")
-                    .ident("vec_x")
                     .ident("tile_x_new")
-                    .ident("sub_i32")
+                    .ident("_increment_tile_index_is_tile_x_within_limit")
                     .bind(["zero_if_x_overflowed"])
                     .c("Unless the x-coordinate has advanced beyond the width,")
                     .c("we're done here.")
@@ -217,6 +214,17 @@ fn snake(script: &mut Script) {
             |p| p.ident("coord"),
             |e| {
                 e.ident("coord").v(1).ident("add_u8");
+            },
+        )
+        .function(
+            "_increment_tile_index_is_tile_x_within_limit",
+            |p| p.ident("tile_x_new"),
+            |e| {
+                e.ident("tile_field_size")
+                    .ident("vec_load")
+                    .ident("vec_x")
+                    .ident("tile_x_new")
+                    .ident("sub_i32");
             },
         );
 
