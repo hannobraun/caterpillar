@@ -21,7 +21,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.effects.queue.is_empty()
+        !self.has_finished() && self.effects.first().is_none()
     }
 
     pub fn has_finished(&self) -> bool {
