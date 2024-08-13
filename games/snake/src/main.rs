@@ -914,13 +914,13 @@ fn snake(script: &mut Script) {
                     .bind(["next"])
                     .ident("next")
                     .ident("first")
-                    .ident("abs_difference_u8")
+                    .ident("_vec_buf_len_difference")
                     .v(2)
                     .ident("div_u8");
             },
         )
         .function(
-            "abs_difference_u8",
+            "_vec_buf_len_difference",
             |p| p.ident("a").ident("b"),
             |e| {
                 e.ident("a")
