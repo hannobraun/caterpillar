@@ -185,8 +185,7 @@ fn snake(script: &mut Script) {
             "increment_tile_index",
             |p| p.ident("tile_x").ident("tile_y"),
             |s| {
-                s.c("Increment the x-coordinate.")
-                    .ident("tile_x")
+                s.ident("tile_x")
                     .ident("_increment_tile_index_increment_coord")
                     .bind(["tile_x_new"])
                     .c("Check if the x coordinate has advanced beyond the")
@@ -205,7 +204,6 @@ fn snake(script: &mut Script) {
                     .ident("return_if_non_zero")
                     .c("Looks like we're not done!")
                     .bind(["tile_x_new", "tile_y"])
-                    .c("Increment y-coordinate.")
                     .ident("tile_y")
                     .ident("_increment_tile_index_increment_coord")
                     .bind(["tile_y_new"])
