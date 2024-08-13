@@ -216,7 +216,7 @@ fn snake(script: &mut Script) {
             "_increment_tile_index_increment_coord",
             |p| p.ident("coord"),
             |e| {
-                e.ident("coord").v(1).ident("add_i32");
+                e.ident("coord").v(1).ident("add_u8");
             },
         );
 
