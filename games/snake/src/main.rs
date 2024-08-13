@@ -921,14 +921,14 @@ fn snake(script: &mut Script) {
         )
         .function(
             "_vec_buf_len_difference",
-            |p| p.ident("a").ident("b"),
+            |p| p.ident("first").ident("b"),
             |e| {
-                e.ident("a")
+                e.ident("first")
                     .ident("b")
                     .ident("greater_u8")
                     .bind(["a_greater_b"])
                     .ident("a_greater_b")
-                    .ident("a")
+                    .ident("first")
                     .ident("b")
                     .ident("_vec_buf_len_difference_inner");
             },
