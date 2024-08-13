@@ -34,7 +34,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        self.state.can_step()
+        !self.state.has_finished() && self.state.unhandled_effects.is_empty()
     }
 
     pub fn has_finished(&self) -> bool {
@@ -146,10 +146,6 @@ impl ProcessState {
 
     pub fn has_finished(&self) -> bool {
         self.has_finished
-    }
-
-    pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.unhandled_effects.is_empty()
     }
 
     pub fn add_effect(&mut self, effect: Effect) {
