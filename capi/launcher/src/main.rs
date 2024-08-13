@@ -20,7 +20,7 @@ async fn main() -> anyhow::Result<()> {
     let mut max_frame_time = None;
     let mut num_frame_times = 0;
 
-    while !game_engine.process.state().has_finished() {
+    while !game_engine.process.has_finished() {
         while game_engine.push_random(random()) {}
         game_engine.run_until_end_of_frame(&mut pixels);
 

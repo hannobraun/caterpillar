@@ -33,6 +33,10 @@ impl Process {
         &self.breakpoints
     }
 
+    pub fn has_finished(&self) -> bool {
+        self.state.has_finished()
+    }
+
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
         self.state.unhandled_effects.pop_front()
     }

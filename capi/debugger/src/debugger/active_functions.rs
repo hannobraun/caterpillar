@@ -29,7 +29,7 @@ impl ActiveFunctions {
                 message: ActiveFunctionsMessage::ProcessRunning,
             };
         }
-        if process.state().has_finished() {
+        if process.has_finished() {
             return Self::Message {
                 message: ActiveFunctionsMessage::ProcessFinished,
             };
