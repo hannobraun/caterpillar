@@ -250,7 +250,10 @@ fn snake(script: &mut Script) {
         "is_out_of_bounds",
         |p| p.ident("x").ident("y"),
         |s| {
-            s.c("Compare x coordinate against lower bound.")
+            s.ident("tile_field_size")
+                .ident("vec_load")
+                .bind(["limit_x", "limit_y"])
+                .c("Compare x coordinate against lower bound.")
                 .v(0)
                 .ident("x")
                 .ident("greater_i32")
@@ -266,9 +269,7 @@ fn snake(script: &mut Script) {
                 .ident("drop")
                 .c("Compare x coordinate against upper bound")
                 .ident("x")
-                .ident("tile_field_size")
-                .ident("vec_load")
-                .ident("vec_x")
+                .ident("limit_x")
                 .v(1)
                 .ident("sub_i32")
                 .ident("greater_i32")
@@ -277,9 +278,7 @@ fn snake(script: &mut Script) {
                 .ident("drop")
                 .c("Compare y coordinate against upper bound")
                 .ident("y")
-                .ident("tile_field_size")
-                .ident("vec_load")
-                .ident("vec_y")
+                .ident("limit_y")
                 .v(1)
                 .ident("sub_i32")
                 .ident("greater_i32");
