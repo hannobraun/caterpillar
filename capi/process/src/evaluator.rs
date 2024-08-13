@@ -188,9 +188,8 @@ pub enum EvaluatorState {
 #[cfg(test)]
 mod tests {
     use crate::{
-        evaluator::{Evaluator, EvaluatorState},
-        stack::StackElement,
-        Instruction, InstructionAddress, Instructions, Pattern, Value,
+        evaluator::Evaluator, stack::StackElement, Instruction,
+        InstructionAddress, Instructions, Pattern, Value,
     };
 
     #[test]
@@ -239,10 +238,8 @@ mod tests {
             is_tail_call: true,
         });
 
-        let EvaluatorState::Running = evaluator.step(&instructions).unwrap()
-        else {
-            panic!("Did not expect evaluation to be finished.");
-        };
+        let _ = evaluator.step(&instructions).unwrap();
+        assert!(!evaluator.stack.no_frames_left());
 
         assert_eq!(evaluator.stack.next_instruction.index, 2);
         assert!(matches!(
