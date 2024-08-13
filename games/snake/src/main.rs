@@ -899,54 +899,25 @@ fn snake(script: &mut Script) {
                 .ident("_vec_buf_inc_index");
         },
     );
-    script
-        .function(
-            "vec_buf_len",
-            |p| p.ident("vec_buf"),
-            |s| {
-                s.ident("vec_buf")
-                    .ident("_vec_buf_first")
-                    .ident("load")
-                    .bind(["first"])
-                    .ident("vec_buf")
-                    .ident("_vec_buf_next")
-                    .ident("load")
-                    .bind(["next"])
-                    .ident("next")
-                    .ident("first")
-                    .ident("_vec_buf_len_difference")
-                    .v(2)
-                    .ident("div_u8");
-            },
-        )
-        .function(
-            "_vec_buf_len_difference",
-            |p| p.ident("first").ident("next"),
-            |e| {
-                e.ident("first")
-                    .ident("next")
-                    .ident("greater_u8")
-                    .bind(["first_greater_next"])
-                    .ident("first_greater_next")
-                    .ident("first")
-                    .ident("next")
-                    .ident("_vec_buf_len_difference_inner");
-            },
-        )
-        .function(
-            "_vec_buf_len_difference_inner",
-            |p| p.lit(0).ident("first").ident("next"),
-            |e| {
-                e.ident("next").ident("first").ident("sub_u8");
-            },
-        )
-        .function(
-            "_vec_buf_len_difference_inner",
-            |p| p.lit(1).ident("first").ident("next"),
-            |e| {
-                e.ident("first").ident("next").ident("sub_u8");
-            },
-        );
+    script.function(
+        "vec_buf_len",
+        |p| p.ident("vec_buf"),
+        |s| {
+            s.ident("vec_buf")
+                .ident("_vec_buf_first")
+                .ident("load")
+                .bind(["first"])
+                .ident("vec_buf")
+                .ident("_vec_buf_next")
+                .ident("load")
+                .bind(["next"])
+                .ident("next")
+                .ident("first")
+                .ident("sub_u8_wrap")
+                .v(2)
+                .ident("div_u8");
+        },
+    );
     script.function(
         "vec_buf_capacity",
         |p| p.ident("vec_buf"),
