@@ -15,6 +15,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "eval" => eval,
         "greater_i8" => greater_i8,
         "greater_i32" => greater_i32,
+        "greater_u8" => greater_u8,
         "i32_to_i8" => i32_to_i8,
         "if" => if_,
         "mul_i32" => mul_i32,
@@ -225,6 +226,20 @@ fn greater_i32(stack: &mut Stack, _: &Instructions) -> Result {
 
     let a = a.to_i32();
     let b = b.to_i32();
+
+    let c = if a > b { 1 } else { 0 };
+
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn greater_u8(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let a = a.to_u8()?;
+    let b = b.to_u8()?;
 
     let c = if a > b { 1 } else { 0 };
 
