@@ -188,8 +188,6 @@ fn snake(script: &mut Script) {
                 s.ident("tile_x")
                     .ident("_increment_tile_index_increment_coord")
                     .bind(["tile_x_new"])
-                    .c("Check if the x coordinate has advanced beyond the")
-                    .c("width.")
                     .ident("tile_x_new")
                     .ident("_increment_tile_index_is_tile_x_within_limit")
                     .bind(["zero_if_x_overflowed"])
