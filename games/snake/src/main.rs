@@ -62,7 +62,7 @@ fn snake(script: &mut Script) {
                 e.ident("positions")
                     .ident("vec_buf_len")
                     .ident("index")
-                    .ident("greater")
+                    .ident("greater_i8")
                     .bind(["index_is_within_bounds"])
                     .ident("index_is_within_bounds")
                     .ident("index")
