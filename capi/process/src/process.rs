@@ -137,7 +137,7 @@ impl ProcessState {
     }
 
     pub fn is_running(&self) -> bool {
-        !self.has_finished
+        !self.has_finished()
     }
 
     pub fn has_finished(&self) -> bool {
