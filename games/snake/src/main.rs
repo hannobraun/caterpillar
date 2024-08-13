@@ -180,40 +180,47 @@ fn snake(script: &mut Script) {
             .ident("sub_i32");
         },
     );
-    script.function(
-        "increment_tile_index",
-        |p| p.ident("tile_x").ident("tile_y"),
-        |s| {
-            s.c("Increment the x-coordinate.")
-            .ident("tile_x")
-            .v(1)
-            .ident("add_i32")
-            .bind(["tile_x_new"])
-            .c("Check if the x coordinate has advanced beyond the width.")
-            .ident("tile_field_size")
-            .ident("vec_load")
-            .ident("vec_x")
-            .ident("tile_x_new")
-            .ident("sub_i32")
-            .bind(["zero_if_x_overflowed"])
-            .c("Unless the x-coordinate has advanced beyond the width, we're")
-            .c("done here.")
-            .ident("tile_x_new")
-            .ident("tile_y")
-            .ident("zero_if_x_overflowed")
-            .ident("return_if_non_zero")
-            .c("Looks like we're not done!")
-            .bind(["tile_x_new", "tile_y"])
-            .c("Increment y-coordinate.")
-            .ident("tile_y")
-            .v(1)
-            .ident("add_i32")
-            .bind(["tile_y_new"])
-            .c("Return updated coordinates")
-            .v(0)
-            .ident("tile_y_new");
-        },
-    );
+    script
+        .function(
+            "increment_tile_index",
+            |p| p.ident("tile_x").ident("tile_y"),
+            |s| {
+                s.c("Increment the x-coordinate.")
+                    .ident("tile_x")
+                    .ident("_increment_tile_index_increment_coord")
+                    .bind(["tile_x_new"])
+                    .c("Check if the x coordinate has advanced beyond the")
+                    .c("width.")
+                    .ident("tile_field_size")
+                    .ident("vec_load")
+                    .ident("vec_x")
+                    .ident("tile_x_new")
+                    .ident("sub_i32")
+                    .bind(["zero_if_x_overflowed"])
+                    .c("Unless the x-coordinate has advanced beyond the width,")
+                    .c("we're done here.")
+                    .ident("tile_x_new")
+                    .ident("tile_y")
+                    .ident("zero_if_x_overflowed")
+                    .ident("return_if_non_zero")
+                    .c("Looks like we're not done!")
+                    .bind(["tile_x_new", "tile_y"])
+                    .c("Increment y-coordinate.")
+                    .ident("tile_y")
+                    .ident("_increment_tile_index_increment_coord")
+                    .bind(["tile_y_new"])
+                    .c("Return updated coordinates")
+                    .v(0)
+                    .ident("tile_y_new");
+            },
+        )
+        .function(
+            "_increment_tile_index_increment_coord",
+            |p| p.ident("coord"),
+            |e| {
+                e.ident("coord").v(1).ident("add_i32");
+            },
+        );
 
     // Tile field size
     script.function(
