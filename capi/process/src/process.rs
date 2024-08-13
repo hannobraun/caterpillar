@@ -34,7 +34,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        !self.state.has_finished() && self.state.unhandled_effects.is_empty()
+        !self.has_finished() && self.state.unhandled_effects.is_empty()
     }
 
     pub fn has_finished(&self) -> bool {
