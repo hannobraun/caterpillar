@@ -160,12 +160,6 @@ impl Evaluator {
                     self.stack.pop_frame();
                 }
             }
-            Instruction::ReturnIfZero => {
-                let value = self.stack.pop_operand()?;
-                if value == Value([0, 0, 0, 0]) {
-                    self.stack.pop_frame();
-                }
-            }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
             }

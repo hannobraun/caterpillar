@@ -172,7 +172,6 @@ pub enum Instruction {
     },
     Return,
     ReturnIfNonZero,
-    ReturnIfZero,
 
     /// Trigger an effect
     TriggerEffect {
