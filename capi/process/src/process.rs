@@ -101,7 +101,7 @@ impl Process {
         let next_instruction = self.evaluator.stack.next_instruction();
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects.add_effect(effect);
+            self.effects.trigger_effect(effect);
         }
 
         self.most_recent_step = Some(next_instruction);
