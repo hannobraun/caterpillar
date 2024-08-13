@@ -810,17 +810,10 @@ fn snake(script: &mut Script) {
             s.ident("ax")
                 .ident("bx")
                 .ident("eq")
-                .ident("copy")
-                .ident("return_if_zero")
-                .ident("drop")
                 .ident("ay")
                 .ident("by")
                 .ident("eq")
-                .ident("copy")
-                .ident("return_if_zero")
-                .ident("drop")
-                .c("Vectors are equal!")
-                .v(1);
+                .ident("and");
         },
     );
 
