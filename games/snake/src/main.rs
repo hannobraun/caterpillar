@@ -942,9 +942,9 @@ fn snake(script: &mut Script) {
         )
         .function(
             "_vec_buf_len_difference_inner",
-            |p| p.lit(1).ident("a").ident("b"),
+            |p| p.lit(1).ident("first").ident("b"),
             |e| {
-                e.ident("a").ident("b").ident("sub_u8");
+                e.ident("first").ident("b").ident("sub_u8");
             },
         );
     script.function(
