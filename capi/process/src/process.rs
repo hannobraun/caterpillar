@@ -32,6 +32,10 @@ impl Process {
         &self.effects
     }
 
+    pub fn effects_mut(&mut self) -> &mut Effects {
+        &mut self.effects
+    }
+
     pub fn stack(&self) -> &Stack {
         &self.evaluator.stack
     }
