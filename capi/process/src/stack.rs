@@ -191,6 +191,11 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
+        // This won't work, if the hosts expects the process to finish and leave
+        // return values on the stack.
+        //
+        // This is tracked in the following issue:
+        // https://github.com/hannobraun/caterpillar/issues/44
         if self.inner.is_empty() {
             return None;
         }
