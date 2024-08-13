@@ -246,35 +246,41 @@ fn snake(script: &mut Script) {
         );
 
     // Tile field size
-    script.function(
-        "is_out_of_bounds",
-        |p| p.ident("x").ident("y"),
-        |s| {
-            s.ident("tile_field_size")
-                .ident("vec_load")
-                .bind(["limit_x", "limit_y"])
-                .ident("x")
-                .v(0)
-                .ident("greater_u8")
-                .ident("limit_x")
-                .ident("x")
-                .ident("greater_u8")
-                .ident("and")
-                .bind(["x_within_bounds"])
-                .ident("y")
-                .v(0)
-                .ident("greater_u8")
-                .ident("limit_y")
-                .ident("y")
-                .ident("greater_u8")
-                .ident("and")
-                .bind(["y_within_bounds"])
-                .ident("x_within_bounds")
-                .ident("y_within_bounds")
-                .ident("and")
-                .ident("not");
-        },
-    );
+    script
+        .function(
+            "is_out_of_bounds",
+            |p| p.ident("x").ident("y"),
+            |s| {
+                s.ident("tile_field_size")
+                    .ident("vec_load")
+                    .bind(["limit_x", "limit_y"])
+                    .ident("x")
+                    .ident("limit_x")
+                    .ident("_is_out_of_bounds_is_coord_within_bounds")
+                    .bind(["x_within_bounds"])
+                    .ident("y")
+                    .ident("limit_y")
+                    .ident("_is_out_of_bounds_is_coord_within_bounds")
+                    .bind(["y_within_bounds"])
+                    .ident("x_within_bounds")
+                    .ident("y_within_bounds")
+                    .ident("and")
+                    .ident("not");
+            },
+        )
+        .function(
+            "_is_out_of_bounds_is_coord_within_bounds",
+            |p| p.ident("coord").ident("limit"),
+            |e| {
+                e.ident("coord")
+                    .v(0)
+                    .ident("greater_u8")
+                    .ident("limit")
+                    .ident("coord")
+                    .ident("greater_u8")
+                    .ident("and");
+            },
+        );
 
     // Frame count
     script.function(
