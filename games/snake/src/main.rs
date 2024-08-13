@@ -1063,13 +1063,4 @@ fn snake(script: &mut Script) {
                 .ident("neg_i32");
         },
     );
-
-    // Utilities - Words
-    script.function(
-        "word_min",
-        |p| p,
-        |s| {
-            s.v(i32::MIN);
-        },
-    );
 }
