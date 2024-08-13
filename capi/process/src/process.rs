@@ -139,9 +139,7 @@ impl Effects {
 
     /// Trigger the provided effect
     ///
-    /// If there already is an unhandled effect, this new effect will displace
-    /// it as the first effect, meaning the existing effect will be moved back
-    /// in the queue.
+    /// The new effect is added to the front of the queue.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
         self.queue.push_front(effect.into());
     }
