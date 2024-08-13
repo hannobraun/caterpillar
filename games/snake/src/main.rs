@@ -899,37 +899,54 @@ fn snake(script: &mut Script) {
                 .ident("_vec_buf_inc_index");
         },
     );
-    script.function(
-        "vec_buf_len",
-        |p| p.ident("vec_buf"),
-        |s| {
-            s.ident("vec_buf")
-                .ident("_vec_buf_first")
-                .ident("load")
-                .bind(["first"])
-                .ident("vec_buf")
-                .ident("_vec_buf_next")
-                .ident("load")
-                .bind(["next"])
-                .ident("next")
-                .ident("first")
-                .ident("sub_u8_wrap")
-                .v(2)
-                .ident("div_i32")
-                .bind(["difference"])
-                .ident("difference")
-                .ident("difference")
-                .ident("return_if_zero")
-                .v(0)
-                .ident("difference")
-                .ident("greater_i32")
-                .ident("return_if_zero")
-                .ident("vec_buf")
-                .ident("_vec_buf_capacity")
-                .ident("load")
-                .ident("add_i32");
-        },
-    );
+    script
+        .function(
+            "vec_buf_len",
+            |p| p.ident("vec_buf"),
+            |s| {
+                s.ident("vec_buf")
+                    .ident("_vec_buf_first")
+                    .ident("load")
+                    .bind(["first"])
+                    .ident("vec_buf")
+                    .ident("_vec_buf_next")
+                    .ident("load")
+                    .bind(["next"])
+                    .ident("next")
+                    .ident("first")
+                    .ident("abs_difference_u8")
+                    .v(2)
+                    .ident("div_u8");
+            },
+        )
+        .function(
+            "abs_difference_u8",
+            |p| p.ident("a").ident("b"),
+            |e| {
+                e.ident("a")
+                    .ident("b")
+                    .ident("greater_u8")
+                    .bind(["a_greater_b"])
+                    .ident("a_greater_b")
+                    .ident("a")
+                    .ident("b")
+                    .ident("_abs_difference_u8_inner");
+            },
+        )
+        .function(
+            "_abs_difference_u8_inner",
+            |p| p.lit(0).ident("a").ident("b"),
+            |e| {
+                e.ident("b").ident("a").ident("sub_u8");
+            },
+        )
+        .function(
+            "_abs_difference_u8_inner",
+            |p| p.lit(1).ident("a").ident("b"),
+            |e| {
+                e.ident("a").ident("b").ident("sub_u8");
+            },
+        );
     script.function(
         "vec_buf_capacity",
         |p| p.ident("vec_buf"),
