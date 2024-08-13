@@ -38,7 +38,7 @@ impl Process {
     }
 
     pub fn has_finished(&self) -> bool {
-        self.state.has_finished()
+        self.state.has_finished
     }
 
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
@@ -142,10 +142,6 @@ impl ProcessState {
 
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
-    }
-
-    pub fn has_finished(&self) -> bool {
-        self.has_finished
     }
 
     pub fn add_effect(&mut self, effect: Effect) {
