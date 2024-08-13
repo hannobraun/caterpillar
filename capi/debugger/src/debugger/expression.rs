@@ -52,25 +52,17 @@ impl Expression {
             false
         };
 
-        let effect =
-            process
-                .effects()
-                .first_unhandled_effect()
-                .and_then(|effect| {
-                    let effect_fragment = source_map
-                        .instruction_to_fragment(
-                            &process.most_recent_step().unwrap(),
-                        )
-                        .expect(
-                            "Expecting effects to originate from user code.",
-                        );
+        let effect = process.effects().first().and_then(|effect| {
+            let effect_fragment = source_map
+                .instruction_to_fragment(&process.most_recent_step().unwrap())
+                .expect("Expecting effects to originate from user code.");
 
-                    if effect_fragment == fragment_id {
-                        Some(*effect)
-                    } else {
-                        None
-                    }
-                });
+            if effect_fragment == fragment_id {
+                Some(*effect)
+            } else {
+                None
+            }
+        });
 
         let is_on_call_stack = if let Some(instructions) = instructions {
             instructions.iter().copied().any(|mut instruction| {

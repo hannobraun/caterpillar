@@ -52,7 +52,7 @@ impl RuntimeState {
                         .game_engine
                         .process
                         .effects()
-                        .first_unhandled_effect()
+                        .first()
                     {
                         let and_stop_at =
                             self.game_engine.process.stack().next_instruction();

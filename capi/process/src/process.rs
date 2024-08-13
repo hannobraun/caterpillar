@@ -78,8 +78,7 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Breakpoint) = self.effects.first_unhandled_effect()
-        {
+        if let Some(Effect::Breakpoint) = self.effects.first() {
             if let Some(instruction) = and_stop_at {
                 self.breakpoints.set_ephemeral(instruction);
             }
@@ -123,7 +122,7 @@ pub struct Effects {
 }
 
 impl Effects {
-    pub fn first_unhandled_effect(&self) -> Option<&Effect> {
+    pub fn first(&self) -> Option<&Effect> {
         self.queue.front()
     }
 
