@@ -38,7 +38,7 @@ impl Process {
     }
 
     pub fn has_finished(&self) -> bool {
-        self.state.has_finished
+        self.evaluator.stack.no_frames_left()
     }
 
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
