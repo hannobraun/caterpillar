@@ -128,7 +128,7 @@ pub struct ProcessState {
 
 impl ProcessState {
     pub fn most_recent_step(&self) -> Option<InstructionAddress> {
-        self.most_recent_step.as_ref().copied()
+        self.most_recent_step
     }
 
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
