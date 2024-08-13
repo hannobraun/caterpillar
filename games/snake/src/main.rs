@@ -930,18 +930,18 @@ fn snake(script: &mut Script) {
                     .ident("a_greater_b")
                     .ident("a")
                     .ident("b")
-                    .ident("_abs_difference_u8_inner");
+                    .ident("_vec_buf_len_difference_inner");
             },
         )
         .function(
-            "_abs_difference_u8_inner",
+            "_vec_buf_len_difference_inner",
             |p| p.lit(0).ident("a").ident("b"),
             |e| {
                 e.ident("b").ident("a").ident("sub_u8");
             },
         )
         .function(
-            "_abs_difference_u8_inner",
+            "_vec_buf_len_difference_inner",
             |p| p.lit(1).ident("a").ident("b"),
             |e| {
                 e.ident("a").ident("b").ident("sub_u8");
