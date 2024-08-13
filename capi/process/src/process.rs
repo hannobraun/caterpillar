@@ -104,11 +104,11 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.effects.trigger_effect(Effect::Breakpoint);
+            self.effects.trigger(Effect::Breakpoint);
         }
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.effects.trigger_effect(effect);
+            self.effects.trigger(effect);
         }
 
         self.most_recent_step = Some(next_instruction);
@@ -132,7 +132,7 @@ impl Effects {
     /// If there already is an unhandled effect, this new effect will displace
     /// it as the first effect, meaning the existing effect will be moved back
     /// in the queue.
-    pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
+    pub fn trigger(&mut self, effect: impl Into<Effect>) {
         self.unhandled_effects.push_front(effect.into());
     }
 
