@@ -107,9 +107,7 @@ impl Process {
 
         match self.evaluator.step(instructions) {
             Ok(EvaluatorState::Running) => {}
-            Ok(EvaluatorState::Finished) => {
-                self.state.has_finished = true;
-            }
+            Ok(EvaluatorState::Finished) => {}
             Err(effect) => {
                 self.state.add_effect(effect);
             }
@@ -132,7 +130,6 @@ impl Process {
 pub struct ProcessState {
     most_recent_step: Option<InstructionAddress>,
     unhandled_effects: VecDeque<Effect>,
-    has_finished: bool,
 }
 
 impl ProcessState {
