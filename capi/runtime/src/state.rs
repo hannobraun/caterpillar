@@ -36,7 +36,8 @@ impl RuntimeState {
                 Command::BreakpointClear { instruction } => {
                     self.game_engine
                         .process
-                        .clear_durable_breakpoint(&instruction);
+                        .breakpoints_mut()
+                        .clear_durable(&instruction);
                 }
                 Command::BreakpointSet { instruction } => {
                     self.game_engine

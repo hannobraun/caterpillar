@@ -71,13 +71,6 @@ impl Process {
         }
     }
 
-    pub fn clear_durable_breakpoint(
-        &mut self,
-        instruction: &InstructionAddress,
-    ) {
-        self.breakpoints.clear_durable(instruction);
-    }
-
     pub fn set_durable_breakpoint(&mut self, instruction: InstructionAddress) {
         self.breakpoints.set_durable(instruction);
     }
