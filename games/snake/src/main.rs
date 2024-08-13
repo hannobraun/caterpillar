@@ -926,8 +926,8 @@ fn snake(script: &mut Script) {
                 e.ident("first")
                     .ident("next")
                     .ident("greater_u8")
-                    .bind(["a_greater_b"])
-                    .ident("a_greater_b")
+                    .bind(["first_greater_next"])
+                    .ident("first_greater_next")
                     .ident("first")
                     .ident("next")
                     .ident("_vec_buf_len_difference_inner");
