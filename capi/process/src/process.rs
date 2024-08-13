@@ -84,7 +84,7 @@ impl Process {
                 self.breakpoints.set_ephemeral(instruction);
             }
 
-            self.effects.handle_first_effect();
+            self.effects.handle_first();
         }
     }
 
@@ -136,7 +136,7 @@ impl Effects {
         self.unhandled_effects.push_front(effect.into());
     }
 
-    pub fn handle_first_effect(&mut self) -> Option<Effect> {
+    pub fn handle_first(&mut self) -> Option<Effect> {
         self.unhandled_effects.pop_front()
     }
 }
