@@ -22,6 +22,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "mul_i32" => mul_i32,
         "mul_u8_wrap" => mul_u8_wrap,
         "neg_i32" => neg_i32,
+        "not" => not,
         "remainder_i32" => remainder_i32,
         "sub_i32" => sub_i32,
         "sub_u8" => sub_u8,
@@ -339,6 +340,15 @@ fn neg_i32(stack: &mut Stack, _: &Instructions) -> Result {
     }
     let b = -a;
 
+    stack.push_operand(b);
+
+    Ok(())
+}
+
+fn not(stack: &mut Stack, _: &Instructions) -> Result {
+    let a = stack.pop_operand()?;
+
+    let b = if a.0 == [0; 4] { 1 } else { 0 };
     stack.push_operand(b);
 
     Ok(())
