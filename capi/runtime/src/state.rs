@@ -48,11 +48,8 @@ impl RuntimeState {
                 }
                 Command::Reset => self.game_engine.reset(),
                 Command::Step => {
-                    if let Some(Effect::Breakpoint) = self
-                        .game_engine
-                        .process
-                        .effects()
-                        .first()
+                    if let Some(Effect::Breakpoint) =
+                        self.game_engine.process.effects().first()
                     {
                         let and_stop_at =
                             self.game_engine.process.stack().next_instruction();
