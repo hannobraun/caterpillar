@@ -10,7 +10,7 @@ use crate::{
 )]
 pub struct Process {
     most_recent_step: Option<InstructionAddress>,
-    state: Effects,
+    effects: Effects,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
 }
@@ -21,7 +21,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.state.unhandled_effects.is_empty()
+        !self.has_finished() && self.effects.unhandled_effects.is_empty()
     }
 
     pub fn has_finished(&self) -> bool {
@@ -29,7 +29,7 @@ impl Process {
     }
 
     pub fn state(&self) -> &Effects {
-        &self.state
+        &self.effects
     }
 
     pub fn stack(&self) -> &Stack {
@@ -45,7 +45,7 @@ impl Process {
     }
 
     pub fn handle_first_effect(&mut self) -> Option<Effect> {
-        self.state.unhandled_effects.pop_front()
+        self.effects.unhandled_effects.pop_front()
     }
 
     /// Trigger the provided effect
@@ -54,7 +54,7 @@ impl Process {
     /// it as the first effect, meaning the existing effect will be moved back
     /// in the list.
     pub fn trigger_effect(&mut self, effect: impl Into<Effect>) {
-        self.state.unhandled_effects.push_front(effect.into());
+        self.effects.unhandled_effects.push_front(effect.into());
     }
 
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
@@ -87,7 +87,8 @@ impl Process {
     }
 
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
-        if let Some(Effect::Breakpoint) = self.state.first_unhandled_effect() {
+        if let Some(Effect::Breakpoint) = self.effects.first_unhandled_effect()
+        {
             if let Some(instruction) = and_stop_at {
                 self.breakpoints.set_ephemeral(instruction);
             }
@@ -109,7 +110,7 @@ impl Process {
         let next_instruction = self.evaluator.stack.next_instruction();
 
         if let Err(effect) = self.evaluator.step(instructions) {
-            self.state.add_effect(effect);
+            self.effects.add_effect(effect);
         }
 
         self.most_recent_step = Some(next_instruction);
@@ -118,7 +119,7 @@ impl Process {
             .breakpoints
             .should_stop_at_and_clear_ephemeral(&next_instruction)
         {
-            self.state.add_effect(Effect::Breakpoint);
+            self.effects.add_effect(Effect::Breakpoint);
         }
     }
 }
