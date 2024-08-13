@@ -127,6 +127,10 @@ impl Effects {
         self.unhandled_effects.front()
     }
 
+    pub fn handle_first(&mut self) -> Option<Effect> {
+        self.unhandled_effects.pop_front()
+    }
+
     /// Trigger the provided effect
     ///
     /// If there already is an unhandled effect, this new effect will displace
@@ -134,9 +138,5 @@ impl Effects {
     /// in the queue.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
         self.unhandled_effects.push_front(effect.into());
-    }
-
-    pub fn handle_first(&mut self) -> Option<Effect> {
-        self.unhandled_effects.pop_front()
     }
 }
