@@ -222,7 +222,7 @@ fn snake(script: &mut Script) {
                     .ident("vec_load")
                     .ident("vec_x")
                     .ident("tile_x")
-                    .ident("sub_i32");
+                    .ident("greater_u8");
             },
         );
 
