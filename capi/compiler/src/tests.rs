@@ -42,7 +42,7 @@ fn closure_in_function() {
     while process.can_step() {
         process.step(&instructions);
 
-        while let Some(effect) = process.state().first_unhandled_effect() {
+        while let Some(effect) = process.effects().first_unhandled_effect() {
             match effect {
                 Effect::Host => {
                     let effect = process.stack_mut().pop_operand().unwrap();

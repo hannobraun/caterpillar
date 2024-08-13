@@ -28,7 +28,7 @@ impl Process {
         self.evaluator.stack.no_frames_left()
     }
 
-    pub fn state(&self) -> &Effects {
+    pub fn effects(&self) -> &Effects {
         &self.effects
     }
 

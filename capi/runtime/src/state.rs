@@ -51,7 +51,7 @@ impl RuntimeState {
                     if let Some(Effect::Breakpoint) = self
                         .game_engine
                         .process
-                        .state()
+                        .effects()
                         .first_unhandled_effect()
                     {
                         let and_stop_at =
