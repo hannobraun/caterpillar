@@ -71,10 +71,6 @@ impl Process {
         }
     }
 
-    pub fn set_durable_breakpoint(&mut self, instruction: InstructionAddress) {
-        self.breakpoints.set_durable(instruction);
-    }
-
     pub fn continue_(&mut self, and_stop_at: Option<InstructionAddress>) {
         if let Some(Effect::Breakpoint) = self.effects.first() {
             if let Some(instruction) = and_stop_at {

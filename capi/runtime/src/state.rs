@@ -42,7 +42,8 @@ impl RuntimeState {
                 Command::BreakpointSet { instruction } => {
                     self.game_engine
                         .process
-                        .set_durable_breakpoint(instruction);
+                        .breakpoints_mut()
+                        .set_durable(instruction);
                 }
                 Command::Continue { and_stop_at } => {
                     self.game_engine.process.continue_(and_stop_at);
