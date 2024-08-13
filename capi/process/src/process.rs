@@ -49,6 +49,10 @@ impl Process {
         &self.breakpoints
     }
 
+    pub fn breakpoints_mut(&mut self) -> &mut Breakpoints {
+        &mut self.breakpoints
+    }
+
     pub fn reset(&mut self, arguments: impl IntoIterator<Item = Value>) {
         // All we need to preserve when we reset are the breakpoints. Anything
         // else needs to go back to start conditions.
