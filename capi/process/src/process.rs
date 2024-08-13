@@ -16,7 +16,7 @@ pub struct Process {
 
 impl Process {
     pub fn most_recent_step(&self) -> Option<InstructionAddress> {
-        self.state.most_recent_step()
+        self.state.most_recent_step
     }
 
     pub fn can_step(&self) -> bool {
@@ -131,10 +131,6 @@ pub struct ProcessState {
 }
 
 impl ProcessState {
-    pub fn most_recent_step(&self) -> Option<InstructionAddress> {
-        self.most_recent_step
-    }
-
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
         self.unhandled_effects.front()
     }
