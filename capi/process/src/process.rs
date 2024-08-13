@@ -21,7 +21,7 @@ impl Process {
     }
 
     pub fn can_step(&self) -> bool {
-        !self.has_finished() && self.effects.unhandled_effects.is_empty()
+        !self.has_finished() && self.effects.queue.is_empty()
     }
 
     pub fn has_finished(&self) -> bool {
@@ -119,16 +119,16 @@ impl Process {
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Effects {
-    unhandled_effects: VecDeque<Effect>,
+    queue: VecDeque<Effect>,
 }
 
 impl Effects {
     pub fn first_unhandled_effect(&self) -> Option<&Effect> {
-        self.unhandled_effects.front()
+        self.queue.front()
     }
 
     pub fn handle_first(&mut self) -> Option<Effect> {
-        self.unhandled_effects.pop_front()
+        self.queue.pop_front()
     }
 
     /// Trigger the provided effect
@@ -137,6 +137,6 @@ impl Effects {
     /// it as the first effect, meaning the existing effect will be moved back
     /// in the queue.
     pub fn trigger(&mut self, effect: impl Into<Effect>) {
-        self.unhandled_effects.push_front(effect.into());
+        self.queue.push_front(effect.into());
     }
 }
