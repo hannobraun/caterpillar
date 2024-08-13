@@ -100,18 +100,18 @@ impl Process {
 
         let next_instruction = self.evaluator.stack.next_instruction();
 
+        if self
+            .breakpoints
+            .should_stop_at_and_clear_ephemeral(&next_instruction)
+        {
+            self.effects.trigger_effect(Effect::Breakpoint);
+        }
+
         if let Err(effect) = self.evaluator.step(instructions) {
             self.effects.trigger_effect(effect);
         }
 
         self.most_recent_step = Some(next_instruction);
-
-        if self
-            .breakpoints
-            .should_stop_at_and_clear_ephemeral(&next_instruction)
-        {
-            self.effects.add_effect(Effect::Breakpoint);
-        }
     }
 }
 
