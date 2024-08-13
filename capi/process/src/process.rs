@@ -33,6 +33,10 @@ impl Process {
         &self.breakpoints
     }
 
+    pub fn can_step(&self) -> bool {
+        self.state.can_step()
+    }
+
     pub fn has_finished(&self) -> bool {
         self.state.has_finished()
     }

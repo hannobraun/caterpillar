@@ -76,7 +76,7 @@ impl GameEngine {
     }
 
     pub fn run_until_end_of_frame(&mut self, pixels: &mut [u8]) {
-        while self.process.state().can_step() {
+        while self.process.can_step() {
             let Some(instructions) = &self.instructions else {
                 return;
             };

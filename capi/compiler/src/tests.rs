@@ -39,7 +39,7 @@ fn closure_in_function() {
     let mut process = Process::default();
     process.reset([]);
 
-    while process.state().can_step() {
+    while process.can_step() {
         process.step(&instructions);
 
         while let Some(effect) = process.state().first_unhandled_effect() {
