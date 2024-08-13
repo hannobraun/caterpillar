@@ -257,13 +257,9 @@ fn snake(script: &mut Script) {
                     .ident("x")
                     .ident("limit_x")
                     .ident("_is_out_of_bounds_is_coord_within_bounds")
-                    .bind(["x_within_bounds"])
                     .ident("y")
                     .ident("limit_y")
                     .ident("_is_out_of_bounds_is_coord_within_bounds")
-                    .bind(["y_within_bounds"])
-                    .ident("x_within_bounds")
-                    .ident("y_within_bounds")
                     .ident("and")
                     .ident("not");
             },
