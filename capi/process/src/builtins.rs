@@ -6,6 +6,7 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "add_i32" => add_i32,
         "add_u8" => add_u8,
         "add_u8_wrap" => add_u8_wrap,
+        "and" => and,
         "brk" => brk,
         "copy" => copy,
         "div_i32" => div_i32,
@@ -90,6 +91,17 @@ fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
     let b = b.to_u8()?;
 
     let c = a.wrapping_add(b);
+    stack.push_operand(c);
+
+    Ok(())
+}
+
+fn and(stack: &mut Stack, _: &Instructions) -> Result {
+    let b = stack.pop_operand()?;
+    let a = stack.pop_operand()?;
+
+    let c = if a.0 == [0; 4] || b.0 == [0; 4] { 0 } else { 1 };
+
     stack.push_operand(c);
 
     Ok(())
