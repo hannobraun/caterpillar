@@ -99,7 +99,7 @@ impl Process {
     }
 
     pub fn step(&mut self, instructions: &Instructions) {
-        if !self.state.can_step() {
+        if !self.can_step() {
             return;
         }
 
