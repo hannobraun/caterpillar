@@ -9,6 +9,7 @@ use crate::{
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct Process {
+    most_recent_step: Option<InstructionAddress>,
     state: ProcessState,
     evaluator: Evaluator,
     breakpoints: Breakpoints,
@@ -16,7 +17,7 @@ pub struct Process {
 
 impl Process {
     pub fn most_recent_step(&self) -> Option<InstructionAddress> {
-        self.state.most_recent_step
+        self.most_recent_step
     }
 
     pub fn can_step(&self) -> bool {
@@ -111,7 +112,7 @@ impl Process {
             self.state.add_effect(effect);
         }
 
-        self.state.most_recent_step = Some(next_instruction);
+        self.most_recent_step = Some(next_instruction);
 
         if self
             .breakpoints
@@ -126,7 +127,6 @@ impl Process {
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
 pub struct ProcessState {
-    most_recent_step: Option<InstructionAddress>,
     unhandled_effects: VecDeque<Effect>,
 }
 
