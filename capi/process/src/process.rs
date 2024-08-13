@@ -114,6 +114,7 @@ impl Process {
     }
 }
 
+/// The currently active effects of a process
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
@@ -122,10 +123,16 @@ pub struct Effects {
 }
 
 impl Effects {
+    /// Look at the first effect in the queue
     pub fn first(&self) -> Option<&Effect> {
         self.queue.front()
     }
 
+    /// Handle the first effect in the queue
+    ///
+    /// If it can't be handled for some reason, which is probably a fatal
+    /// failure, it should be re-triggered, to make sure all required
+    /// information is available for debugging.
     pub fn handle_first(&mut self) -> Option<Effect> {
         self.queue.pop_front()
     }
