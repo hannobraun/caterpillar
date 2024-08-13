@@ -57,11 +57,6 @@ impl Stack {
     /// This is a bug, which is tracked here:
     /// <https://github.com/hannobraun/caterpillar/issues/44>
     pub fn no_frames_left(&self) -> bool {
-        // This won't work, if the hosts expects the process to finish and leave
-        // return values on the stack.
-        //
-        // This is tracked in the following issue:
-        // https://github.com/hannobraun/caterpillar/issues/44
         self.inner.is_empty()
     }
 
