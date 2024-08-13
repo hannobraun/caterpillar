@@ -103,12 +103,9 @@ impl Process {
 
         let next_instruction = self.evaluator.stack.next_instruction();
 
-        match self.evaluator.step(instructions) {
-            Ok(()) => {}
-            Err(effect) => {
-                self.state.add_effect(effect);
-            }
-        };
+        if let Err(effect) = self.evaluator.step(instructions) {
+            self.state.add_effect(effect);
+        }
 
         self.state.most_recent_step = Some(next_instruction);
 
