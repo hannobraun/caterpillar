@@ -188,6 +188,7 @@ fn snake(script: &mut Script) {
                 s.ident("tile_x")
                     .ident("_increment_tile_index_increment_coord")
                     .ident("_increment_tile_index_is_tile_x_within_limit")
+                    .ident("_increment_tile_index_reset_x_if_overflowed")
                     .bind(["tile_x_new", "tile_x_within_limit"])
                     .c("Unless the x-coordinate has advanced beyond the width,")
                     .c("we're done here.")
@@ -201,7 +202,7 @@ fn snake(script: &mut Script) {
                     .ident("_increment_tile_index_increment_coord")
                     .bind(["tile_y_new"])
                     .c("Return updated coordinates")
-                    .v(0)
+                    .ident("tile_x_new")
                     .ident("tile_y_new");
             },
         )
@@ -224,6 +225,20 @@ fn snake(script: &mut Script) {
                     .bind(["tile_x_within_limit"])
                     .ident("tile_x")
                     .ident("tile_x_within_limit");
+            },
+        )
+        .function(
+            "_increment_tile_index_reset_x_if_overflowed",
+            |p| p.ident("_").lit(0),
+            |e| {
+                e.v(0).v(0);
+            },
+        )
+        .function(
+            "_increment_tile_index_reset_x_if_overflowed",
+            |p| p.ident("tile_x").lit(1),
+            |e| {
+                e.ident("tile_x").v(1);
             },
         );
 
