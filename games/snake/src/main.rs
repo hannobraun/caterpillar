@@ -256,14 +256,14 @@ fn snake(script: &mut Script) {
                 .c("Compare x coordinate against lower bound.")
                 .v(0)
                 .ident("x")
-                .ident("greater_i32")
+                .ident("greater_u8")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
                 .c("Compare y coordinate against lower bound.")
                 .v(0)
                 .ident("y")
-                .ident("greater_i32")
+                .ident("greater_u8")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
@@ -272,7 +272,7 @@ fn snake(script: &mut Script) {
                 .ident("limit_x")
                 .v(1)
                 .ident("sub_i32")
-                .ident("greater_i32")
+                .ident("greater_u8")
                 .ident("copy")
                 .ident("return_if_non_zero")
                 .ident("drop")
@@ -281,7 +281,7 @@ fn snake(script: &mut Script) {
                 .ident("limit_y")
                 .v(1)
                 .ident("sub_i32")
-                .ident("greater_i32");
+                .ident("greater_u8");
         },
     );
 
