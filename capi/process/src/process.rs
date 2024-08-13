@@ -140,16 +140,12 @@ impl ProcessState {
         self.unhandled_effects.front()
     }
 
-    pub fn is_running(&self) -> bool {
-        !self.has_finished()
-    }
-
     pub fn has_finished(&self) -> bool {
         self.has_finished
     }
 
     pub fn can_step(&self) -> bool {
-        self.is_running() && self.unhandled_effects.is_empty()
+        !self.has_finished() && self.unhandled_effects.is_empty()
     }
 
     pub fn add_effect(&mut self, effect: Effect) {
