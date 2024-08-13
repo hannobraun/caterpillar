@@ -114,7 +114,7 @@ impl Process {
     }
 }
 
-/// The currently active effects of a process
+/// The queue of currently active effects
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
 )]
