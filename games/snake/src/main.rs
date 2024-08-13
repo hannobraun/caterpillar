@@ -189,21 +189,8 @@ fn snake(script: &mut Script) {
                     .ident("_increment_tile_index_increment_coord")
                     .ident("_increment_tile_index_is_tile_x_within_limit")
                     .ident("_increment_tile_index_reset_x_if_overflowed")
-                    .bind(["tile_x_new", "tile_x_within_limit"])
-                    .c("Unless the x-coordinate has advanced beyond the width,")
-                    .c("we're done here.")
-                    .ident("tile_x_new")
                     .ident("tile_y")
-                    .ident("tile_x_within_limit")
-                    .ident("return_if_non_zero")
-                    .c("Looks like we're not done!")
-                    .bind(["tile_x_new", "tile_y"])
-                    .ident("tile_y")
-                    .ident("_increment_tile_index_increment_coord")
-                    .bind(["tile_y_new"])
-                    .c("Return updated coordinates")
-                    .ident("tile_x_new")
-                    .ident("tile_y_new");
+                    .ident("_increment_tile_index_increment_y_if_necessary");
             },
         )
         .function(
@@ -239,6 +226,22 @@ fn snake(script: &mut Script) {
             |p| p.ident("tile_x").lit(1),
             |e| {
                 e.ident("tile_x").v(1);
+            },
+        )
+        .function(
+            "_increment_tile_index_increment_y_if_necessary",
+            |p| p.ident("tile_x").lit(0).ident("tile_y"),
+            |e| {
+                e.ident("tile_x")
+                    .ident("tile_y")
+                    .ident("_increment_tile_index_increment_coord");
+            },
+        )
+        .function(
+            "_increment_tile_index_increment_y_if_necessary",
+            |p| p.ident("tile_x").lit(1).ident("tile_y"),
+            |e| {
+                e.ident("tile_x").ident("tile_y");
             },
         );
 
