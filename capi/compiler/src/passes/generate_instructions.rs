@@ -257,8 +257,6 @@ fn compile_fragment<H: Host>(
                     // support real conditionals.
                     let instruction = if name == "return_if_non_zero" {
                         Instruction::ReturnIfNonZero
-                    } else if name == "return_if_zero" {
-                        Instruction::ReturnIfZero
                     } else {
                         Instruction::CallBuiltin { name: name.clone() }
                     };

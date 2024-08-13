@@ -93,7 +93,6 @@ fn resolve_in_block<H: Host>(
                 }
                 if builtin_by_name(name).is_some()
                     || name == "return_if_non_zero"
-                    || name == "return_if_zero"
                 {
                     *target = Some(IdentifierTarget::BuiltinFunction);
                 }
