@@ -20,7 +20,17 @@ use super::{
 /// collisions quite likely, through sloppy use of the hash function. The
 /// following rules are designed to prevent that.
 ///
-/// **1. Implementations must only access fields via destructuring.**
+/// **1. Each implementation must start by feeding a unique string.**
+///
+/// Different implementation might have field types, even identical field names.
+/// If two instances of similar implementations happened to feature the same
+/// data, this would result in a hash collision.
+///
+/// By feeding a unique string to the hasher, we prevent this case from
+/// occurring. Any unique string string will do, but by convention, we use the
+/// name of the type.
+///
+/// **2. Implementations must only access fields via destructuring.**
 ///
 /// This happens automatically when implementing this trait for an enum, but not
 /// when implementing it for a struct. `..` in patterns is forbidden in all
@@ -32,7 +42,7 @@ use super::{
 /// lead to hash collisions between different values that only differ in fields
 /// that are not included in the hash.
 ///
-/// **2. Hashing an enum variant must include the variant's name.**
+/// **3. Hashing an enum variant must include the variant's name.**
 ///
 /// Different variants of an enum might have similar fields. To prevent hash
 /// collisions between different variants that happen to have equal values in
