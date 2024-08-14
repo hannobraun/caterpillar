@@ -61,7 +61,7 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Cluster { id, name, branches } => {
+            CompileUnit::Function { id, name, branches } => {
                 for branch in branches {
                     let arguments =
                         branch.parameters.inner.iter().filter_map(|pattern| {
@@ -182,7 +182,7 @@ fn compile_fragment<H: Host>(
             function: Function { name, branches },
             ..
         } => {
-            queue.push_back(CompileUnit::Cluster {
+            queue.push_back(CompileUnit::Function {
                 id: fragment.id(),
                 name: name.clone(),
                 branches: branches.clone(),
@@ -397,7 +397,7 @@ enum CompileUnit {
         environment: BTreeSet<String>,
         address: InstructionAddress,
     },
-    Cluster {
+    Function {
         id: FragmentId,
         name: String,
         branches: Vec<Branch>,
