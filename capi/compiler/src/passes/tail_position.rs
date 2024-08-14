@@ -1,8 +1,8 @@
 use crate::syntax::{Branch, Expression};
 
 pub fn determine_tail_positions(branches: &mut Vec<Branch>) {
-    for function in branches {
-        analyze_block(&mut function.body);
+    for branch in branches {
+        analyze_block(&mut branch.body);
     }
 }
 
