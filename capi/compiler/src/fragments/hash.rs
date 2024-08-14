@@ -135,16 +135,11 @@ impl FragmentHash for FragmentExpression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::Block { start, environment } => {
+            Self::Block { function } => {
                 hasher.update(b"Block");
 
-                hasher.update(b"start");
-                start.hash(hasher);
-
-                hasher.update(b"environment");
-                for binding in environment {
-                    hasher.update(binding.as_bytes());
-                }
+                hasher.update(b"function");
+                function.hash(hasher);
             }
             Self::Comment { text } => {
                 hasher.update(b"Comment");

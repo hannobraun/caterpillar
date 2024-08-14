@@ -111,7 +111,15 @@ fn compile_expression(
         }
         Expression::Block { body, environment } => {
             let start = compile_block(body, next, fragments);
-            FragmentExpression::Block { start, environment }
+            let function = Function {
+                name: None,
+                branches: vec![Branch {
+                    parameters: Parameters { inner: Vec::new() },
+                    start,
+                }],
+                environment,
+            };
+            FragmentExpression::Block { function }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Identifier {
@@ -286,7 +294,7 @@ mod tests {
             let Fragment {
                 payload:
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Block { start, .. },
+                        expression: FragmentExpression::Block { function },
                         ..
                     },
                 ..
@@ -295,7 +303,9 @@ mod tests {
                 panic!("Expected block")
             };
 
-            fragments.inner.iter_from(*start).collect::<Vec<_>>()
+            let branch = function.branches.first().unwrap();
+
+            fragments.inner.iter_from(branch.start).collect::<Vec<_>>()
         };
 
         assert_eq!(branch_fragments[0].parent, Some(next));

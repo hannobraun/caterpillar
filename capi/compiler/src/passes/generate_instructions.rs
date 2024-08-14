@@ -205,7 +205,7 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.unwrap_or(assert_address)
                 }
-                FragmentExpression::Block { start, environment } => {
+                FragmentExpression::Block { function } => {
                     // We are currently compiling a function or block (otherwise
                     // we wouldn't be encountering any expression), and the
                     // instructions for that will be executed linearly.
@@ -229,12 +229,24 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     );
 
+                    let branch = function
+                        .branches
+                        .first()
+                        .expect("All functions must have at least one branch.");
+                    assert_eq!(
+                        function.branches.len(),
+                        1,
+                        "Blocks with multiple branches should not get \
+                        generated yet. Before this can happen, this code needs \
+                        to be updated."
+                    );
+
                     // And to make it happen later, we need to put what we
                     // already have into a queue. Once whatever's currently
                     // being compiled is out of the way, we can process that.
                     queue.push_front(CompileUnit::Block {
-                        start: *start,
-                        environment: environment.clone(),
+                        start: branch.start,
+                        environment: function.environment.clone(),
                         address,
                     });
 

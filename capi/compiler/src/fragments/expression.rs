@@ -1,8 +1,8 @@
-use std::{collections::BTreeSet, fmt};
+use std::fmt;
 
 use capi_process::Value;
 
-use super::FragmentId;
+use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentExpression {
@@ -10,8 +10,7 @@ pub enum FragmentExpression {
         names: Vec<String>,
     },
     Block {
-        start: FragmentId,
-        environment: BTreeSet<String>,
+        function: Function,
     },
     Comment {
         text: String,

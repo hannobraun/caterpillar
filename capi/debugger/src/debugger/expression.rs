@@ -24,10 +24,21 @@ impl Expression {
             return None;
         };
 
-        if let FragmentExpression::Block { start, .. } = expression {
+        if let FragmentExpression::Block { function } = expression {
+            let branch = function
+                .branches
+                .first()
+                .expect("All functions must have at least one branch.");
+            assert_eq!(
+                function.branches.len(),
+                1,
+                "Blocks with multiple branches should not get generated yet. \
+                Before this can happen, this code needs to be updated."
+            );
+
             let expressions = fragments
                 .inner
-                .iter_from(start)
+                .iter_from(branch.start)
                 .cloned()
                 .filter_map(|fragment| {
                     Self::new(fragment, fragments, source_map, process)

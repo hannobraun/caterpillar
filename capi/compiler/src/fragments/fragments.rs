@@ -42,9 +42,12 @@ impl Fragments {
             let block = self.inner.inner.values().find(|fragment| {
                 match &fragment.payload {
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Block { start, .. },
+                        expression: FragmentExpression::Block { function },
                         ..
-                    } => *start == fragment_id,
+                    } => function
+                        .branches
+                        .iter()
+                        .any(|branch| branch.start == fragment_id),
                     _ => false,
                 }
             });
