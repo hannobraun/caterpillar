@@ -64,6 +64,18 @@ use super::{
 /// moving the end of the first list to the beginning of the second, for
 /// example, would result in the same hash. We prevent this case by using a
 /// unique string as a separator between the lists.
+///
+/// ## Limitations
+///
+/// Rule 4 can be circumvented, if struct fields contain data that is equal to a
+/// field name. It would probably be better to generate long, random strings to
+/// use instead of field names, but it's unclear how to generate those. (Every
+/// contributor should be able to do this, so we'd need tooling in this
+/// repository.)
+///
+/// Either way, with or without random strings, this scheme won't stand up to
+/// any effort by a motivated attacher, and must not be relied upon for this
+/// purpose.
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
