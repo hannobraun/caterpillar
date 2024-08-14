@@ -20,6 +20,7 @@ impl Branch {
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
+        let name = function.name;
         let body = fragments
             .inner
             .iter_from(branch.start)
@@ -29,9 +30,6 @@ impl Branch {
             })
             .collect();
 
-        Self {
-            name: function.name,
-            body,
-        }
+        Self { name, body }
     }
 }
