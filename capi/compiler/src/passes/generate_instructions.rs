@@ -25,11 +25,14 @@ pub fn generate_instructions<H: Host>(
         effect: Effect::Panic,
     });
     output.instructions.push(Instruction::Return);
-    output.placeholders.push(CallToFunction {
-        name: "main".to_string(),
-        address: main,
-        is_tail_call: true,
-    });
+    if let Some(id) = fragments.inner.find_function_by_name("main") {
+        output.placeholders.push(CallToFunction {
+            name: "main".to_string(),
+            id,
+            address: main,
+            is_tail_call: true,
+        });
+    }
 
     // Seed the queue from the root context.
     compile_context::<H>(
@@ -98,6 +101,8 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
+        dbg!(call.id);
+
         let Some(function) = functions.by_name.get(&call.name) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
@@ -174,7 +179,7 @@ fn compile_context<H: Host>(
 
 fn compile_fragment<H: Host>(
     fragment: &Fragment,
-    _: &FragmentMap,
+    fragments: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
@@ -284,11 +289,14 @@ fn compile_fragment<H: Host>(
                     // We can't leave it at that, however. We need to make sure
                     // this placeholder actually gets replaced later, and we're
                     // doing that by adding it to this list.
-                    output.placeholders.push(CallToFunction {
-                        name: name.clone(),
-                        address,
-                        is_tail_call: *is_tail_call,
-                    });
+                    if let Some(id) = fragments.find_function_by_name(name) {
+                        output.placeholders.push(CallToFunction {
+                            name: name.clone(),
+                            id,
+                            address,
+                            is_tail_call: *is_tail_call,
+                        });
+                    }
 
                     address
                 }
@@ -383,6 +391,7 @@ impl Output {
 
 pub struct CallToFunction {
     pub name: String,
+    pub id: FragmentId,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
 }
