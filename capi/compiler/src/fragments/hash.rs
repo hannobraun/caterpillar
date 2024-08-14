@@ -44,7 +44,6 @@ pub(super) trait FragmentHash {
 
 impl FragmentHash for Branch {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        // Let's destructure `self`, so we don't forget any fields.
         let Self { parameters, start } = self;
 
         parameters.hash(hasher);
@@ -117,7 +116,6 @@ impl FragmentHash for FragmentExpression {
 
 impl FragmentHash for FragmentId {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        // Let's destructure `self`, so we don't forget any fields.
         let Self { hash } = self;
 
         hasher.update(hash.as_bytes());
@@ -146,7 +144,6 @@ impl FragmentHash for FragmentPayload {
 
 impl FragmentHash for Function {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        // Let's destructure `self`, so we don't forget any fields.
         let Self { name, branches } = self;
 
         if let Some(name) = name {
