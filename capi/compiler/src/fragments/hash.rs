@@ -76,6 +76,18 @@ use super::{
 /// Either way, with or without random strings, this scheme won't stand up to
 /// any effort by a motivated attacher, and must not be relied upon for this
 /// purpose.
+///
+/// ## Implementation Note
+///
+/// It would be nice to automate this via a derive macro, but that would have to
+/// be written, and then require ongoing maintenance. It's unclear if and when
+/// doing so would actually be an advantage.
+///
+/// In addition, if random strings were used as per the discussion in the
+/// section on limitations, we'd have to store the random strings in the
+/// repository and make them accessible to the derive macro. Otherwise, hashes
+/// would not be stable over builds, making them unsuitable for some of the
+/// intended use cases.
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
