@@ -50,12 +50,12 @@ impl ActiveFunctions {
                     not."
                 );
             };
-            let function = code
+            let function_and_branch = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
                 .map(|(function, branch)| (function.clone(), branch.clone()));
 
-            if let Some(function) = function {
+            if let Some(function) = function_and_branch {
                 functions.push_front(function);
             }
         }
