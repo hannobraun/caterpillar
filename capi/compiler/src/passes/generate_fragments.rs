@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Arguments, Branch, Cluster, Fragment, FragmentExpression, FragmentId,
+        Arguments, Branch, Function, Fragment, FragmentExpression, FragmentId,
         FragmentMap, FragmentPayload, Fragments,
     },
     syntax::{Expression, IdentifierTarget},
@@ -82,7 +82,7 @@ where
                 Fragment {
                     parent,
                     payload: FragmentPayload::Cluster {
-                        cluster: Cluster {
+                        cluster: Function {
                             name: cluster.name,
                             members,
                         },
@@ -158,7 +158,7 @@ mod tests {
 
     use crate::{
         fragments::{
-            Cluster, Fragment, FragmentExpression, FragmentPayload, Fragments,
+            Function, Fragment, FragmentExpression, FragmentPayload, Fragments,
         },
         passes::find_clusters,
         syntax::{self, Script},
@@ -185,7 +185,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Cluster { mut members, .. },
+                    cluster: Function { mut members, .. },
                     ..
                 },
             ..
@@ -235,7 +235,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Cluster { mut members, .. },
+                    cluster: Function { mut members, .. },
                     ..
                 },
             ..
@@ -270,7 +270,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Cluster { mut members, .. },
+                    cluster: Function { mut members, .. },
                     next,
                     ..
                 },

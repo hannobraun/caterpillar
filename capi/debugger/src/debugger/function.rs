@@ -14,7 +14,7 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        cluster: fragments::Cluster,
+        cluster: fragments::Function,
         function: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,

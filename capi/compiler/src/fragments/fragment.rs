@@ -1,4 +1,4 @@
-use super::{Cluster, FragmentExpression, FragmentId};
+use super::{FragmentExpression, FragmentId, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
@@ -52,7 +52,7 @@ pub enum FragmentPayload {
     /// For the sake of uniformity, all functions are organized into clusters,
     /// so a cluster might have only a single member.
     Cluster {
-        cluster: Cluster,
+        cluster: Function,
         next: FragmentId,
     },
 

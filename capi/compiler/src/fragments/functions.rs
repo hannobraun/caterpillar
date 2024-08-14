@@ -3,12 +3,12 @@ use crate::syntax::Pattern;
 use super::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Cluster {
+pub struct Function {
     pub name: String,
     pub members: Vec<Branch>,
 }
 
-impl Cluster {
+impl Function {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
         let Self { name, members } = self;

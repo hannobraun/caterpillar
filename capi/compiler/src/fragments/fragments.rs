@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, iter};
 
 use super::{
-    Branch, Cluster, Fragment, FragmentExpression, FragmentId, FragmentPayload,
+    Branch, Function, Fragment, FragmentExpression, FragmentId, FragmentPayload,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
@@ -21,7 +21,7 @@ impl Fragments {
     pub fn find_function_by_fragment_in_body(
         &self,
         fragment_id: &FragmentId,
-    ) -> Option<(&Cluster, &Branch)> {
+    ) -> Option<(&Function, &Branch)> {
         let mut fragment_id = *fragment_id;
 
         loop {

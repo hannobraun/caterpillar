@@ -4,7 +4,7 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Arguments, Branch, Cluster, Fragment, FragmentExpression, FragmentId,
+        Arguments, Branch, Function, Fragment, FragmentExpression, FragmentId,
         FragmentMap, FragmentPayload, Fragments,
     },
     host::Host,
@@ -180,7 +180,7 @@ fn compile_fragment<H: Host>(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Cluster {
-            cluster: Cluster { name, members },
+            cluster: Function { name, members },
             ..
         } => {
             queue.push_back(CompileUnit::Cluster {
