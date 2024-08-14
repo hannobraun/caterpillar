@@ -2,7 +2,7 @@ use capi_process::Value;
 
 use super::Expression;
 
-#[derive(Clone)]
+#[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
     pub branches: Vec<Branch>,
