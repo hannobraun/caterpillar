@@ -66,13 +66,13 @@ impl Evaluator {
             } => {
                 let mut any_member_matched = false;
 
-                for (arguments, address) in function {
+                for (parameters, address) in function {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
 
                     let mut member_matches = true;
-                    for argument in arguments.iter().rev() {
+                    for argument in parameters.iter().rev() {
                         let operand = self.stack.pop_operand()?;
                         used_operands.push(operand);
 
