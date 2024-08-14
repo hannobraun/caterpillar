@@ -5,12 +5,10 @@ use crate::{
         Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
         FragmentPayload, Fragments, Function, Parameters,
     },
-    syntax::{Expression, IdentifierTarget},
+    syntax::{self, Expression, IdentifierTarget},
 };
 
-use super::clusters;
-
-pub fn generate_fragments(functions: Vec<clusters::Function>) -> Fragments {
+pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
@@ -149,7 +147,7 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
-    Item(clusters::Function),
+    Item(syntax::Function),
 }
 
 #[cfg(test)]

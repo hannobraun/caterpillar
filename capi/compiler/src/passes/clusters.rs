@@ -1,4 +1,4 @@
-use crate::syntax::Branch;
+use crate::syntax::{Branch, Function};
 
 pub fn find_functions(branches: Vec<Branch>) -> Vec<Function> {
     let mut functions = Vec::<Function>::new();
@@ -22,10 +22,4 @@ pub fn find_functions(branches: Vec<Branch>) -> Vec<Function> {
     }
 
     functions
-}
-
-#[derive(Clone)]
-pub struct Function {
-    pub name: String,
-    pub branches: Vec<Branch>,
 }

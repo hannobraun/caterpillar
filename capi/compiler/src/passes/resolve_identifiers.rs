@@ -4,10 +4,8 @@ use capi_process::builtin_by_name;
 
 use crate::{
     host::Host,
-    syntax::{Expression, IdentifierTarget, Pattern},
+    syntax::{Expression, Function, IdentifierTarget, Pattern},
 };
-
-use super::clusters::Function;
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
