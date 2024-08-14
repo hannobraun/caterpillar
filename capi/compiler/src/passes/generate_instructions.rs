@@ -179,7 +179,7 @@ fn compile_fragment<H: Host>(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
-        FragmentPayload::Cluster {
+        FragmentPayload::Function {
             function: Function { name, members },
             ..
         } => {

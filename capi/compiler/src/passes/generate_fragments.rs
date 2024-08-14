@@ -81,7 +81,7 @@ where
 
                 Fragment {
                     parent,
-                    payload: FragmentPayload::Cluster {
+                    payload: FragmentPayload::Function {
                         function: Function {
                             name: cluster.name,
                             members,
@@ -184,7 +184,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Cluster {
+                FragmentPayload::Function {
                     function: Function { mut members, .. },
                     ..
                 },
@@ -198,7 +198,7 @@ mod tests {
             .inner
             .iter_from(function.start)
             .filter_map(|fragment| match &fragment.payload {
-                FragmentPayload::Cluster { .. } => {
+                FragmentPayload::Function { .. } => {
                     unreachable!(
                         "This test suite does not define functions within \
                         function bodies."
@@ -234,7 +234,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Cluster {
+                FragmentPayload::Function {
                     function: Function { mut members, .. },
                     ..
                 },
@@ -269,7 +269,7 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Cluster {
+                FragmentPayload::Function {
                     function: Function { mut members, .. },
                     next,
                     ..

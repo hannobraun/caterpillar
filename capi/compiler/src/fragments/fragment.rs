@@ -35,7 +35,7 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.payload {
-            FragmentPayload::Cluster { next, .. } => Some(*next),
+            FragmentPayload::Function { next, .. } => Some(*next),
             FragmentPayload::Expression { next, .. } => Some(*next),
             FragmentPayload::Terminator => None,
         }
@@ -51,7 +51,7 @@ pub enum FragmentPayload {
     ///
     /// For the sake of uniformity, all functions are organized into clusters,
     /// so a cluster might have only a single member.
-    Cluster {
+    Function {
         function: Function,
         next: FragmentId,
     },
@@ -66,7 +66,7 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Cluster { function, next } => {
+            Self::Function { function, next } => {
                 hasher.update(b"cluster");
                 function.hash(hasher);
                 next.hash(hasher);
