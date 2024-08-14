@@ -302,7 +302,7 @@ mod tests {
         assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].id()));
     }
 
-    fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
+    fn generate_fragments(functions: Vec<syntax::Branch>) -> Fragments {
         let clusters = find_clusters(functions);
         super::generate_fragments(clusters)
     }

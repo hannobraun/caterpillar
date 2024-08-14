@@ -2,11 +2,11 @@ use std::collections::BTreeSet;
 
 use capi_process::Value;
 
-use super::{function::Pattern, Expression, Function};
+use super::{function::Pattern, Branch, Expression};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
-    pub functions: Vec<Function>,
+    pub functions: Vec<Branch>,
 }
 
 impl Script {
@@ -31,7 +31,7 @@ impl Script {
             builder.expressions
         };
 
-        self.functions.push(Function {
+        self.functions.push(Branch {
             name: name.to_string(),
             parameters: arguments,
             body,

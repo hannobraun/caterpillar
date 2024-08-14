@@ -1,6 +1,6 @@
-use crate::syntax::{Expression, Function};
+use crate::syntax::{Branch, Expression};
 
-pub fn determine_tail_positions(functions: &mut Vec<Function>) {
+pub fn determine_tail_positions(functions: &mut Vec<Branch>) {
     for function in functions {
         analyze_block(&mut function.body);
     }

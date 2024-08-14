@@ -1,6 +1,6 @@
-use crate::syntax::Function;
+use crate::syntax::Branch;
 
-pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
+pub fn find_clusters(functions: Vec<Branch>) -> Vec<Cluster> {
     let mut clusters = Vec::<Cluster>::new();
 
     for function in functions {
@@ -27,5 +27,5 @@ pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
 #[derive(Clone)]
 pub struct Cluster {
     pub name: String,
-    pub branches: Vec<Function>,
+    pub branches: Vec<Branch>,
 }
