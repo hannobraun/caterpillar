@@ -81,7 +81,7 @@ where
                     parent,
                     payload: FragmentPayload::Function {
                         function: Function {
-                            name: function.name,
+                            name: Some(function.name),
                             branches,
                         },
                         next,

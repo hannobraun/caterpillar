@@ -4,7 +4,7 @@ use super::FragmentId;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
-    pub name: String,
+    pub name: Option<String>,
 
     /// # The branches of this function
     ///
@@ -19,7 +19,9 @@ impl Function {
         // Let's destructure `self`, so we don't forget any fields.
         let Self { name, branches } = self;
 
-        hasher.update(name.as_bytes());
+        if let Some(name) = name {
+            hasher.update(name.as_bytes());
+        }
         for branch in branches {
             branch.hash(hasher);
         }

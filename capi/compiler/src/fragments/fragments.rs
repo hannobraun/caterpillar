@@ -100,7 +100,13 @@ impl FragmentMap {
                 }
                 _ => None,
             })
-            .find_map(|(n, id)| if n == name { Some(id) } else { None })
+            .find_map(|(n, id)| {
+                if n.as_deref() == Some(name) {
+                    Some(id)
+                } else {
+                    None
+                }
+            })
     }
 
     pub fn iter_from(&self, id: FragmentId) -> impl Iterator<Item = &Fragment> {
