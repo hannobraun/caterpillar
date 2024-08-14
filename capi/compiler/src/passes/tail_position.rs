@@ -39,7 +39,7 @@ mod tests {
     #[test]
     fn last_in_function() {
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -59,7 +59,7 @@ mod tests {
     #[test]
     fn last_in_block() {
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -87,7 +87,7 @@ mod tests {
     #[test]
     fn ignore_comments() {
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,

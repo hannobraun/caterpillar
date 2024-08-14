@@ -2,16 +2,18 @@ use std::collections::BTreeSet;
 
 use capi_process::Value;
 
-use super::{function::Pattern, Branch, Expression};
+use super::{function::Pattern, Branch, Expression, Function};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
+    pub functions: Vec<Function>,
     pub branches: Vec<Branch>,
 }
 
 impl Script {
     pub fn function(
         &mut self,
+        name: &str,
         branches: impl FnOnce(&mut BranchBuilder) -> &mut BranchBuilder,
     ) -> &mut Self {
         let branches = {
@@ -22,7 +24,11 @@ impl Script {
             builder.branches
         };
 
-        self.branches.extend(branches);
+        self.branches.extend(branches.clone());
+        self.functions.push(Function {
+            name: name.to_string(),
+            branches,
+        });
 
         self
     }

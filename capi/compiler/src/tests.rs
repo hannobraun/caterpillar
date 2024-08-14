@@ -19,7 +19,7 @@ use crate::{compile, host::Host, syntax::Script};
 #[test]
 fn closure_in_function() {
     let mut script = Script::default();
-    script.function(|b| {
+    script.function("main", |b| {
         b.branch(
             "main",
             |p| p,

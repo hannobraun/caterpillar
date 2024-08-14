@@ -10,7 +10,7 @@ pub fn main() {
 
 fn snake(script: &mut Script) {
     // Main loop
-    script.function(|b| {
+    script.function("main", |b| {
         b.branch(
             "main",
             |p| p.ident("size_x").ident("size_y"),
@@ -25,7 +25,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("main_inner", |b| {
         b.branch(
             "main_inner",
             |p| p,
@@ -39,7 +39,7 @@ fn snake(script: &mut Script) {
     });
 
     // Draw
-    script.function(|b| {
+    script.function("draw", |b| {
         b.branch(
             "draw",
             |p| p,
@@ -54,7 +54,7 @@ fn snake(script: &mut Script) {
         )
     });
     script
-        .function(|b| {
+        .function("draw_snake", |b| {
             b.branch(
                 "draw_snake",
                 |p| p,
@@ -63,7 +63,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_draw_snake_inner", |b| {
             b.branch(
                 "_draw_snake_inner",
                 |p| p.ident("index"),
@@ -79,7 +79,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_draw_snake_draw_rest_of_snake", |b| {
             b.branch(
                 "_draw_snake_draw_rest_of_snake",
                 |p| p.lit(0).ident("_"),
@@ -88,7 +88,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_draw_snake_draw_rest_of_snake", |b| {
             b.branch(
                 "_draw_snake_draw_rest_of_snake",
                 |p| p.lit(1).ident("index"),
@@ -103,7 +103,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_draw_snake_draw_body_segment", |b| {
             b.branch(
                 "_draw_snake_draw_body_segment",
                 |p| p.ident("index"),
@@ -116,7 +116,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_draw_snake_body_color", |b| {
             b.branch(
                 "_draw_snake_body_color",
                 |p| p,
@@ -125,7 +125,7 @@ fn snake(script: &mut Script) {
                 },
             )
         });
-    script.function(|b| {
+    script.function("draw_food", |b| {
         b.branch(
             "draw_food",
             |p| p,
@@ -142,7 +142,7 @@ fn snake(script: &mut Script) {
     });
 
     // Draw - clear pixels
-    script.function(|b| {
+    script.function("clear_pixels", |b| {
         b.branch(
             "clear_pixels",
             |p| p,
@@ -151,7 +151,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("clear_pixels_inner", |b| {
         b.branch(
             "clear_pixels_inner",
             |p| p.ident("tile_x").ident("tile_y"),
@@ -184,7 +184,7 @@ fn snake(script: &mut Script) {
     });
 
     // Draw - write tiles - tile index
-    script.function(|b| {
+    script.function("init_tile_index", |b| {
         b.branch(
             "init_tile_index",
             |p| p,
@@ -193,7 +193,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("check_tile_index", |b| {
         b.branch(
             "check_tile_index",
             |p| p.ident("tile_y"),
@@ -209,7 +209,7 @@ fn snake(script: &mut Script) {
         )
     });
     script
-        .function(|b| {
+        .function("increment_tile_index", |b| {
             b.branch(
                 "increment_tile_index",
                 |p| p.ident("tile_x").ident("tile_y"),
@@ -225,7 +225,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_increment_coord", |b| {
             b.branch(
                 "_increment_tile_index_increment_coord",
                 |p| p.ident("coord"),
@@ -234,7 +234,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_is_tile_x_within_limit", |b| {
             b.branch(
                 "_increment_tile_index_is_tile_x_within_limit",
                 |p| p.ident("tile_x"),
@@ -250,7 +250,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_reset_x_if_overflowed", |b| {
             b.branch(
                 "_increment_tile_index_reset_x_if_overflowed",
                 |p| p.ident("_").lit(0),
@@ -259,7 +259,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_reset_x_if_overflowed", |b| {
             b.branch(
                 "_increment_tile_index_reset_x_if_overflowed",
                 |p| p.ident("tile_x").lit(1),
@@ -268,7 +268,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_increment_y_if_necessary", |b| {
             b.branch(
                 "_increment_tile_index_increment_y_if_necessary",
                 |p| p.ident("tile_x").lit(0).ident("tile_y"),
@@ -279,7 +279,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_increment_tile_index_increment_y_if_necessary", |b| {
             b.branch(
                 "_increment_tile_index_increment_y_if_necessary",
                 |p| p.ident("tile_x").lit(1).ident("tile_y"),
@@ -291,7 +291,7 @@ fn snake(script: &mut Script) {
 
     // Tile field size
     script
-        .function(|b| {
+        .function("is_out_of_bounds", |b| {
             b.branch(
                 "is_out_of_bounds",
                 |p| p.ident("x").ident("y"),
@@ -310,7 +310,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_is_out_of_bounds_is_coord_within_bounds", |b| {
             b.branch(
                 "_is_out_of_bounds_is_coord_within_bounds",
                 |p| p.ident("coord").ident("limit"),
@@ -327,7 +327,7 @@ fn snake(script: &mut Script) {
         });
 
     // Frame count
-    script.function(|b| {
+    script.function("init_frame_count", |b| {
         b.branch(
             "init_frame_count",
             |p| p,
@@ -337,7 +337,7 @@ fn snake(script: &mut Script) {
         )
     });
     script
-        .function(|b| {
+        .function("count_frame", |b| {
             b.branch(
                 "count_frame",
                 |p| p,
@@ -357,7 +357,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_count_frame_reset_frame_count_if_necessary", |b| {
             b.branch(
                 "_count_frame_reset_frame_count_if_necessary",
                 |p| p.lit(121),
@@ -366,7 +366,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_count_frame_reset_frame_count_if_necessary", |b| {
             b.branch(
                 "_count_frame_reset_frame_count_if_necessary",
                 |p| p.ident("_"),
@@ -375,7 +375,7 @@ fn snake(script: &mut Script) {
         });
 
     // Game state
-    script.function(|b| {
+    script.function("init", |b| {
         b.branch(
             "init",
             |p| p,
@@ -388,7 +388,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("update", |b| {
         b.branch(
             "update",
             |p| p,
@@ -415,7 +415,7 @@ fn snake(script: &mut Script) {
     });
 
     // Game state - should game run
-    script.function(|b| {
+    script.function("init_should_game_run", |b| {
         b.branch(
             "init_should_game_run",
             |p| p,
@@ -426,7 +426,7 @@ fn snake(script: &mut Script) {
     });
 
     // Game state - velocity
-    script.function(|b| {
+    script.function("init_velocity", |b| {
         b.branch(
             "init_velocity",
             |p| p,
@@ -437,7 +437,7 @@ fn snake(script: &mut Script) {
     });
 
     // Game state - next position
-    script.function(|b| {
+    script.function("init_next_position", |b| {
         b.branch(
             "init_next_position",
             |p| p,
@@ -450,7 +450,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("update_next_position", |b| {
         b.branch(
             "update_next_position",
             |p| p,
@@ -505,7 +505,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("handle_coordinate_smaller_than_zero", |b| {
         b.branch(
             "handle_coordinate_smaller_than_zero",
             |p| p.ident("coord").ident("limit"),
@@ -525,7 +525,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("handle_coordinate_larger_than_limit", |b| {
         b.branch(
             "handle_coordinate_larger_than_limit",
             |p| p.ident("coord").ident("limit"),
@@ -544,7 +544,7 @@ fn snake(script: &mut Script) {
     });
 
     // Game state - food
-    script.function(|b| {
+    script.function("food_init", |b| {
         b.branch(
             "food_init",
             |p| p,
@@ -566,7 +566,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("food_eat", |b| {
         b.branch(
             "food_eat",
             |p| p,
@@ -582,7 +582,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_food_collides_with_snake", |b| {
         b.branch(
             "_food_collides_with_snake",
             |p| p,
@@ -606,7 +606,7 @@ fn snake(script: &mut Script) {
     });
 
     // Game state - snake
-    script.function(|b| {
+    script.function("snake_init", |b| {
         b.branch(
             "snake_init",
             |p| p,
@@ -623,7 +623,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("snake_head", |b| {
         b.branch(
             "snake_head",
             |p| p,
@@ -632,7 +632,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("update_positions", |b| {
         b.branch(
             "update_positions",
             |p| p,
@@ -649,7 +649,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("pop_positions", |b| {
         b.branch(
             "pop_positions",
             |p| p,
@@ -669,7 +669,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("grow_snake", |b| {
         b.branch(
             "grow_snake",
             |p| p,
@@ -690,7 +690,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("check_body_collision", |b| {
         b.branch(
             "check_body_collision",
             |p| p.ident("x").ident("y"),
@@ -702,7 +702,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("check_body_collision_inner", |b| {
         b.branch(
             "check_body_collision_inner",
             |p| p.ident("x").ident("y").ident("index"),
@@ -753,7 +753,7 @@ fn snake(script: &mut Script) {
 
     // Input
     script
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.lit(0),
@@ -762,7 +762,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.lit(1),
@@ -776,7 +776,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.lit(2),
@@ -790,7 +790,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.lit(3),
@@ -799,7 +799,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.lit(4),
@@ -808,7 +808,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("handle_input", |b| {
             b.branch(
                 "handle_input",
                 |p| p.ident("_"),
@@ -819,7 +819,7 @@ fn snake(script: &mut Script) {
         });
 
     // Memory map
-    script.function(|b| {
+    script.function("tile_field_size", |b| {
         b.branch(
             "tile_field_size",
             |p| p,
@@ -828,7 +828,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("frame_count", |b| {
         b.branch(
             "frame_count",
             |p| p,
@@ -837,7 +837,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("should_game_run", |b| {
         b.branch(
             "should_game_run",
             |p| p,
@@ -846,7 +846,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("velocity", |b| {
         b.branch(
             "velocity",
             |p| p,
@@ -855,7 +855,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("next_position", |b| {
         b.branch(
             "next_position",
             |p| p,
@@ -864,7 +864,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("food_position", |b| {
         b.branch(
             "food_position",
             |p| p,
@@ -873,7 +873,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("snake_length", |b| {
         b.branch(
             "snake_length",
             |p| p,
@@ -882,7 +882,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("positions", |b| {
         b.branch(
             "positions",
             |p| p,
@@ -893,7 +893,7 @@ fn snake(script: &mut Script) {
     });
 
     // Utilities - Vector
-    script.function(|b| {
+    script.function("vec_x", |b| {
         b.branch(
             "vec_x",
             |p| p.ident("x").ident("_"),
@@ -902,7 +902,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_y", |b| {
         b.branch(
             "vec_y",
             |p| p.ident("_").ident("y"),
@@ -911,7 +911,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_load", |b| {
         b.branch(
             "vec_load",
             |p| p.ident("address"),
@@ -925,7 +925,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_store", |b| {
         b.branch(
             "vec_store",
             |p| p.ident("x").ident("y").ident("address"),
@@ -941,7 +941,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_copy", |b| {
         b.branch(
             "vec_copy",
             |p| p.ident("vx").ident("vy"),
@@ -950,10 +950,10 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_drop", |b| {
         b.branch("vec_drop", |p| p.ident("_").ident("_"), |_| {})
     });
-    script.function(|b| {
+    script.function("vec_eq", |b| {
         b.branch(
             "vec_eq",
             |p| p.ident("ax").ident("ay").ident("bx").ident("by"),
@@ -970,7 +970,7 @@ fn snake(script: &mut Script) {
     });
 
     // Utilities - Vector Buffer
-    script.function(|b| {
+    script.function("vec_buf_init", |b| {
         b.branch(
             "vec_buf_init",
             |p| p.ident("vec_buf"),
@@ -990,7 +990,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_get", |b| {
         b.branch(
             "vec_buf_get",
             |p| p.ident("vec_buf").ident("index"),
@@ -1011,7 +1011,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_last", |b| {
         b.branch(
             "vec_buf_last",
             |p| p.ident("vec_buf"),
@@ -1027,7 +1027,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_push", |b| {
         b.branch(
             "vec_buf_push",
             |p| p.ident("vec_buf").ident("x").ident("y"),
@@ -1050,7 +1050,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_pop", |b| {
         b.branch(
             "vec_buf_pop",
             |p| p.ident("vec_buf"),
@@ -1061,7 +1061,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_len", |b| {
         b.branch(
             "vec_buf_len",
             |p| p.ident("vec_buf"),
@@ -1082,7 +1082,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("vec_buf_capacity", |b| {
         b.branch(
             "vec_buf_capacity",
             |p| p.ident("vec_buf"),
@@ -1095,7 +1095,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_vec_buf_address", |b| {
         b.branch(
         "_vec_buf_address",
         |p| p.ident("vec_buf").ident("base").ident("offset"),
@@ -1123,7 +1123,7 @@ fn snake(script: &mut Script) {
         },
     )
     });
-    script.function(|b| {
+    script.function("_vec_buf_inc_index", |b| {
         b.branch(
             "_vec_buf_inc_index",
             |p| p.ident("index_addr"),
@@ -1137,7 +1137,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_vec_buf_first", |b| {
         b.branch(
             "_vec_buf_first",
             |p| p.ident("vec_buf"),
@@ -1146,7 +1146,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_vec_buf_next", |b| {
         b.branch(
             "_vec_buf_next",
             |p| p.ident("vec_buf"),
@@ -1155,7 +1155,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_vec_buf_capacity", |b| {
         b.branch(
             "_vec_buf_capacity",
             |p| p.ident("vec_buf"),
@@ -1164,7 +1164,7 @@ fn snake(script: &mut Script) {
             },
         )
     });
-    script.function(|b| {
+    script.function("_vec_buf_buffer", |b| {
         b.branch(
             "_vec_buf_buffer",
             |p| p.ident("vec_buf"),
@@ -1176,7 +1176,7 @@ fn snake(script: &mut Script) {
 
     // Utilities - Miscellaneous
     script
-        .function(|b| {
+        .function("negatable_random", |b| {
             b.branch(
                 "negatable_random",
                 |p| p,
@@ -1186,7 +1186,7 @@ fn snake(script: &mut Script) {
                 },
             )
         })
-        .function(|b| {
+        .function("_negatable_random_return_or_continue", |b| {
             b.branch(
             "_negatable_random_return_or_continue",
             |p| p.lit(i32::MIN),
@@ -1197,7 +1197,7 @@ fn snake(script: &mut Script) {
             },
             )
         })
-        .function(|b| {
+        .function("_negatable_random_return_or_continue", |b| {
             b.branch(
                 "_negatable_random_return_or_continue",
                 |p| p.ident("random"),
@@ -1206,7 +1206,7 @@ fn snake(script: &mut Script) {
                 },
             )
         });
-    script.function(|b| {
+    script.function("abs", |b| {
         b.branch(
             "abs",
             |p| p.ident("v"),

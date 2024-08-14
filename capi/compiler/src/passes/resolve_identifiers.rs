@@ -125,7 +125,7 @@ mod tests {
         // Function arguments should be resolved within the function.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p.ident("argument"),
@@ -152,7 +152,7 @@ mod tests {
         // Bindings defined in the current scope should be resolved.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -180,7 +180,7 @@ mod tests {
         // the current scope.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -220,7 +220,7 @@ mod tests {
         // current scope, should not be resolved.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -251,7 +251,7 @@ mod tests {
         // be determined without doubt.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -280,7 +280,7 @@ mod tests {
         // is referenced here.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -308,7 +308,7 @@ mod tests {
         // of a matching function in the code.
 
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -317,7 +317,7 @@ mod tests {
                 },
             )
         });
-        script.function(|b| b.branch("user_fn", |p| p, |_| {}));
+        script.function("user_fn", |b| b.branch("user_fn", |p| p, |_| {}));
 
         let mut functions = resolve_identifiers(script);
 

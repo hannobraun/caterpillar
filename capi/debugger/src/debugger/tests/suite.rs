@@ -56,7 +56,7 @@ fn basic_call_stack() {
     let debugger = init()
         .provide_source_code(|script| {
             script
-                .function(|b| {
+                .function("main", |b| {
                     b.branch(
                         "main",
                         |p| p.ident("size_x").ident("size_y"),
@@ -69,7 +69,7 @@ fn basic_call_stack() {
                         },
                     )
                 })
-                .function(|b| {
+                .function("f", |b| {
                     b.branch(
                         "f",
                         |p| p,
@@ -82,7 +82,7 @@ fn basic_call_stack() {
                         },
                     )
                 })
-                .function(|b| {
+                .function("g", |b| {
                     b.branch(
                         "g",
                         |p| p,
@@ -112,7 +112,7 @@ fn stopped_at_code_within_block() {
 
     let debugger = init()
         .provide_source_code(|script| {
-            script.function(|b| {
+            script.function("main", |b| {
                 b.branch(
                     "main",
                     |p| p.ident("size_x").ident("size_y"),

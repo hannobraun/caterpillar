@@ -165,7 +165,7 @@ mod tests {
     #[test]
     fn duplicate_payload() {
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
@@ -223,7 +223,7 @@ mod tests {
     #[test]
     fn terminator() {
         let mut script = Script::default();
-        script.function(|b| b.branch("f", |p| p, |_| {}));
+        script.function("f", |b| b.branch("f", |p| p, |_| {}));
 
         let mut fragments = generate_fragments(script.branches);
 
@@ -252,7 +252,7 @@ mod tests {
     #[test]
     fn block_parent() {
         let mut script = Script::default();
-        script.function(|b| {
+        script.function("f", |b| {
             b.branch(
                 "f",
                 |p| p,
