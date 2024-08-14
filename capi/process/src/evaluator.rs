@@ -61,7 +61,7 @@ impl Evaluator {
                 }
             },
             Instruction::CallCluster {
-                cluster,
+                function: cluster,
                 is_tail_call,
             } => {
                 let mut any_member_matched = false;
@@ -184,7 +184,7 @@ mod tests {
 
         let mut instructions = Instructions::default();
         instructions.push(Instruction::CallCluster {
-            cluster: vec![
+            function: vec![
                 (
                     vec![
                         Pattern::Literal {

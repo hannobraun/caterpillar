@@ -159,7 +159,7 @@ pub enum Instruction {
     /// jumping to another address, but that seems like the right direction to
     /// go in anyway.
     CallCluster {
-        cluster: Vec<(Vec<Pattern>, InstructionAddress)>,
+        function: Vec<(Vec<Pattern>, InstructionAddress)>,
         is_tail_call: bool,
     },
 
