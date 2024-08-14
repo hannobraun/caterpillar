@@ -91,6 +91,18 @@ pub struct FragmentMap {
 }
 
 impl FragmentMap {
+    pub fn find_function_by_name(&self, name: &str) -> Option<FragmentId> {
+        self.inner
+            .values()
+            .filter_map(|fragment| match &fragment.payload {
+                FragmentPayload::Function { function, .. } => {
+                    Some((&function.name, fragment.id()))
+                }
+                _ => None,
+            })
+            .find_map(|(n, id)| if n == name { Some(id) } else { None })
+    }
+
     pub fn iter_from(&self, id: FragmentId) -> impl Iterator<Item = &Fragment> {
         let mut next = Some(id);
 
