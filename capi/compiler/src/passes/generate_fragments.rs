@@ -129,7 +129,7 @@ fn compile_expression(
                 // that are in tail position should be known to be so.
                 let is_tail_call = is_known_to_be_in_tail_position;
 
-                FragmentExpression::ResolvedCluster { name, is_tail_call }
+                FragmentExpression::ResolvedFunction { name, is_tail_call }
             }
             Some(IdentifierTarget::HostFunction) => {
                 FragmentExpression::ResolvedHostFunction { name }

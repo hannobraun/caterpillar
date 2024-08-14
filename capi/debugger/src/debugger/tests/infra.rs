@@ -121,7 +121,7 @@ impl FragmentExpressionExt for FragmentExpression {
     }
 
     fn expect_user_function(self) -> String {
-        let FragmentExpression::ResolvedCluster { name, .. } = self else {
+        let FragmentExpression::ResolvedFunction { name, .. } = self else {
             panic!("Expected user function");
         };
 

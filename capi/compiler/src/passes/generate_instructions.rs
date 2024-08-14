@@ -262,7 +262,7 @@ fn compile_fragment<H: Host>(
 
                     output.generate_instruction(instruction, fragment.id())
                 }
-                FragmentExpression::ResolvedCluster {
+                FragmentExpression::ResolvedFunction {
                     name,
                     is_tail_call,
                     ..
