@@ -10,12 +10,12 @@ pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
 
         match cluster {
             Some(cluster) => {
-                cluster.members.push(function);
+                cluster.branches.push(function);
             }
             None => {
                 clusters.push(Cluster {
                     name: function.name.clone(),
-                    members: vec![function],
+                    branches: vec![function],
                 });
             }
         }
@@ -27,5 +27,5 @@ pub fn find_clusters(functions: Vec<Function>) -> Vec<Cluster> {
 #[derive(Clone)]
 pub struct Cluster {
     pub name: String,
-    pub members: Vec<Function>,
+    pub branches: Vec<Function>,
 }

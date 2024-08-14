@@ -17,7 +17,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
         .collect();
 
     for cluster in clusters {
-        for function in &mut cluster.members {
+        for function in &mut cluster.branches {
             scopes.push(
                 function
                     .arguments
@@ -325,7 +325,7 @@ mod tests {
 
         clusters
             .into_iter()
-            .flat_map(|cluster| cluster.members)
+            .flat_map(|cluster| cluster.branches)
             .collect()
     }
 

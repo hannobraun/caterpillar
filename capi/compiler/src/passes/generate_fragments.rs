@@ -68,7 +68,7 @@ where
             SyntaxElement::Item(function) => {
                 let mut branches = Vec::new();
 
-                for function in function.members {
+                for function in function.branches {
                     let start = compile_block(function.body, next, fragments);
 
                     branches.push(Branch {
