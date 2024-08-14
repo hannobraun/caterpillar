@@ -24,12 +24,7 @@ pub struct Fragment {
 impl Fragment {
     pub fn id(&self) -> FragmentId {
         let mut hasher = blake3::Hasher::new();
-
-        if let Some(parent) = self.parent.as_ref() {
-            parent.hash(&mut hasher);
-        }
-        self.payload.hash(&mut hasher);
-
+        self.hash(&mut hasher);
         FragmentId::new(hasher.finalize())
     }
 

@@ -1,8 +1,8 @@
 use crate::syntax::Pattern;
 
 use super::{
-    Branch, FragmentExpression, FragmentId, FragmentPayload, Function,
-    Parameters,
+    Branch, Fragment, FragmentExpression, FragmentId, FragmentPayload,
+    Function, Parameters,
 };
 
 /// # Extension trait for types that provide a hash
@@ -21,6 +21,15 @@ impl FragmentHash for Branch {
 
         parameters.hash(hasher);
         start.hash(hasher);
+    }
+}
+
+impl FragmentHash for Fragment {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        if let Some(parent) = self.parent.as_ref() {
+            parent.hash(hasher);
+        }
+        self.payload.hash(hasher);
     }
 }
 
