@@ -193,10 +193,10 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = branches.remove(0);
+        let branch = branches.remove(0);
         let body = fragments
             .inner
-            .iter_from(function.start)
+            .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.payload {
                 FragmentPayload::Function { .. } => {
                     unreachable!(
@@ -243,9 +243,9 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = branches.remove(0);
+        let branch = branches.remove(0);
         let last_fragment =
-            fragments.inner.iter_from(function.start).last().unwrap();
+            fragments.inner.iter_from(branch.start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
     }
 
@@ -279,11 +279,9 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = branches.remove(0);
-        let function_fragments = fragments
-            .inner
-            .iter_from(function.start)
-            .collect::<Vec<_>>();
+        let branch = branches.remove(0);
+        let function_fragments =
+            fragments.inner.iter_from(branch.start).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
                 payload:
