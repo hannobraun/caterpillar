@@ -61,12 +61,8 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Cluster {
-                id,
-                name,
-                branches: members,
-            } => {
-                for function in members {
+            CompileUnit::Cluster { id, name, branches } => {
+                for function in branches {
                     let arguments =
                         function.parameters.inner.iter().filter_map(
                             |pattern| {
