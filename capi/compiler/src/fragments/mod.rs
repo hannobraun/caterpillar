@@ -3,7 +3,7 @@
 mod expression;
 mod fragment;
 mod fragments;
-mod functions;
+mod function;
 mod hash;
 mod id;
 
@@ -11,6 +11,6 @@ pub use self::{
     expression::FragmentExpression,
     fragment::{Fragment, FragmentPayload},
     fragments::{FragmentMap, Fragments},
-    functions::{Branch, Function, Parameters},
+    function::{Branch, Function, Parameters},
     id::FragmentId,
 };
