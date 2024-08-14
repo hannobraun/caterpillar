@@ -62,27 +62,25 @@ pub fn generate_instructions<H: Host>(
                 );
             }
             CompileUnit::Cluster { id, name, branches } => {
-                for function in branches {
+                for branch in branches {
                     let arguments =
-                        function.parameters.inner.iter().filter_map(
-                            |pattern| {
-                                match pattern {
-                                    Pattern::Identifier { name } => Some(name),
-                                    Pattern::Literal { .. } => {
-                                        // Literal patterns are only relevant
-                                        // when selecting the branch to execute.
-                                        // They no longer have meaning once the
-                                        // function actually starts executing.
-                                        None
-                                    }
+                        branch.parameters.inner.iter().filter_map(|pattern| {
+                            match pattern {
+                                Pattern::Identifier { name } => Some(name),
+                                Pattern::Literal { .. } => {
+                                    // Literal patterns are only relevant
+                                    // when selecting the branch to execute.
+                                    // They no longer have meaning once the
+                                    // function actually starts executing.
+                                    None
                                 }
-                            },
-                        );
+                            }
+                        });
                     let bindings_address =
                         output.generate_binding(arguments, id);
 
                     let context_address = compile_context::<H>(
-                        function.start,
+                        branch.start,
                         &fragments.inner,
                         &mut output,
                         &mut queue,
@@ -93,7 +91,7 @@ pub fn generate_instructions<H: Host>(
                         .by_name
                         .entry(name.clone())
                         .or_default()
-                        .push((function.parameters, address));
+                        .push((branch.parameters, address));
                 }
             }
         }
