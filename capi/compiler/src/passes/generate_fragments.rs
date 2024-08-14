@@ -158,7 +158,6 @@ mod tests {
         fragments::{
             Fragment, FragmentExpression, FragmentPayload, Fragments, Function,
         },
-        passes::find_functions,
         syntax::{self, Script},
     };
 
@@ -175,7 +174,7 @@ mod tests {
             )
         });
 
-        let mut fragments = generate_fragments(script.branches);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
@@ -225,7 +224,7 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| b.branch("f", |p| p, |_| {}));
 
-        let mut fragments = generate_fragments(script.branches);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
@@ -262,7 +261,7 @@ mod tests {
             )
         });
 
-        let mut fragments = generate_fragments(script.branches);
+        let mut fragments = generate_fragments(script.functions);
 
         let root = fragments
             .inner
@@ -304,8 +303,7 @@ mod tests {
         assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].id()));
     }
 
-    fn generate_fragments(branches: Vec<syntax::Branch>) -> Fragments {
-        let functions = find_functions(branches);
+    fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
         super::generate_fragments(functions)
     }
 }
