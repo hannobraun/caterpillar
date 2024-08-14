@@ -19,18 +19,20 @@ use crate::{compile, host::Host, syntax::Script};
 #[test]
 fn closure_in_function() {
     let mut script = Script::default();
-    script.function(
-        "main",
-        |p| p,
-        |s| {
-            s.v(0)
-                .bind(["channel"])
-                .block(|s| {
-                    s.ident("channel").ident("send");
-                })
-                .ident("eval");
-        },
-    );
+    script.function(|b| {
+        b.branch(
+            "main",
+            |p| p,
+            |s| {
+                s.v(0)
+                    .bind(["channel"])
+                    .block(|s| {
+                        s.ident("channel").ident("send");
+                    })
+                    .ident("eval");
+            },
+        )
+    });
 
     let (_, instructions, _) = compile::<TestHost>(script);
 

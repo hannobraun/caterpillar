@@ -12,6 +12,29 @@ pub struct Script {
 impl Script {
     pub fn function(
         &mut self,
+        branches: impl FnOnce(&mut BranchBuilder) -> &mut BranchBuilder,
+    ) -> &mut Self {
+        let branches = {
+            let mut builder = BranchBuilder {
+                branches: Vec::new(),
+            };
+            branches(&mut builder);
+            builder.branches
+        };
+
+        self.branches.extend(branches);
+
+        self
+    }
+}
+
+pub struct BranchBuilder {
+    branches: Vec<Branch>,
+}
+
+impl BranchBuilder {
+    pub fn branch(
+        &mut self,
         name: &str,
         parameters: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
