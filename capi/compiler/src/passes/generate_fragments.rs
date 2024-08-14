@@ -278,11 +278,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function:
-                        Function {
-                            branches: mut members,
-                            ..
-                        },
+                    function: Function { mut branches, .. },
                     next,
                     ..
                 },
@@ -291,7 +287,7 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = members.remove(0);
+        let function = branches.remove(0);
         let function_fragments = fragments
             .inner
             .iter_from(function.start)
