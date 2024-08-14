@@ -82,7 +82,7 @@ impl fmt::Display for FragmentExpression {
                 }
                 write!(f, " .")
             }
-            Self::Block { start, .. } => write!(f, "block@{start}"),
+            Self::Block { .. } => write!(f, "block"),
             Self::Comment { text } => write!(f, "# {text}"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
