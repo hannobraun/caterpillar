@@ -71,7 +71,7 @@ impl FragmentHash for Fragment {
 
         let Self { parent, payload } = self;
 
-        if let Some(parent) = parent.as_ref() {
+        if let Some(parent) = parent {
             parent.hash(hasher);
         }
         payload.hash(hasher);
