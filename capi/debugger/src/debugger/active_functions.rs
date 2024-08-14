@@ -63,9 +63,9 @@ impl ActiveFunctions {
         Self::Functions {
             functions: functions_and_branches
                 .into_iter()
-                .map(|(cluster, branch)| {
+                .map(|(function, branch)| {
                     Branch::new(
-                        cluster,
+                        function,
                         branch,
                         &code.fragments,
                         &code.source_map,
