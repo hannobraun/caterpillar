@@ -1169,14 +1169,15 @@ fn snake(script: &mut Script) {
         })
         .function("_negatable_random_return_or_continue", |b| {
             b.branch(
-            "_negatable_random_return_or_continue",
-            |p| p.lit(i32::MIN),
-            |e| {
-                e.c("Negating the minimum number would result in an integer")
-                    .c("overflow.")
-                    .ident("negatable_random");
-            },
-            ).branch(
+                "_negatable_random_return_or_continue",
+                |p| p.lit(i32::MIN),
+                |e| {
+                    e.c("Negating the minimum number would result in an")
+                        .c("integer overflow.")
+                        .ident("negatable_random");
+                },
+            )
+            .branch(
                 "_negatable_random_return_or_continue",
                 |p| p.ident("random"),
                 |e| {
