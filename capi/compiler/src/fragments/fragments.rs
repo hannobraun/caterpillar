@@ -52,9 +52,9 @@ impl Fragments {
                 }
             });
 
-            if let Some(block) = function {
+            if let Some(function) = function {
                 // So there _is_ a block. Continue the search there.
-                fragment_id = block.id();
+                fragment_id = function.id();
                 continue;
             }
 
