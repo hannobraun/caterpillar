@@ -66,7 +66,7 @@ pub fn generate_instructions<H: Host>(
             }
             CompileUnit::Function { id, branches } => {
                 for branch in branches {
-                    let arguments =
+                    let parameters =
                         branch.parameters.inner.iter().filter_map(|pattern| {
                             match pattern {
                                 Pattern::Identifier { name } => Some(name),
@@ -80,7 +80,7 @@ pub fn generate_instructions<H: Host>(
                             }
                         });
                     let bindings_address =
-                        output.generate_binding(arguments, id);
+                        output.generate_binding(parameters, id);
 
                     let context_address = compile_context::<H>(
                         branch.start,
