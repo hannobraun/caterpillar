@@ -42,7 +42,7 @@ use super::{
 /// lead to hash collisions between different values that only differ in fields
 /// that are not included in the hash.
 ///
-/// **3. Hashing an enum variant must include the variant's name.**
+/// **3. Hashing an enum variant must start with a unique string.**
 ///
 /// Different variants of an enum might have similar fields. To prevent hash
 /// collisions between different variants that happen to have equal values in
