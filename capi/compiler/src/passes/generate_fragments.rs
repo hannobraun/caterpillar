@@ -73,7 +73,7 @@ where
 
                     branches.push(Branch {
                         parameters: Parameters {
-                            inner: branch.arguments,
+                            inner: branch.parameters,
                         },
                         start,
                     });

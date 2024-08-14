@@ -20,7 +20,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
         for branch in &mut cluster.branches {
             scopes.push(
                 branch
-                    .arguments
+                    .parameters
                     .clone()
                     .into_iter()
                     .filter_map(|pattern| match pattern {

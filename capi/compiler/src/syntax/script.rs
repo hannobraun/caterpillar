@@ -33,7 +33,7 @@ impl Script {
 
         self.functions.push(Function {
             name: name.to_string(),
-            arguments,
+            parameters: arguments,
             body,
         });
 
