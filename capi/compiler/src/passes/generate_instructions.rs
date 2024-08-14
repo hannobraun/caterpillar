@@ -181,17 +181,13 @@ fn compile_fragment<H: Host>(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Function {
-            function:
-                Function {
-                    name,
-                    branches: members,
-                },
+            function: Function { name, branches },
             ..
         } => {
             queue.push_back(CompileUnit::Cluster {
                 id: fragment.id(),
                 name: name.clone(),
-                members: members.clone(),
+                members: branches.clone(),
             });
             return None;
         }
