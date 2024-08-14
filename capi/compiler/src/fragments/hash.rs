@@ -66,48 +66,48 @@ impl FragmentHash for FragmentExpression {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             Self::BindingDefinitions { names } => {
-                hasher.update(b"binding definition");
+                hasher.update(b"BindingDefinitions");
 
                 for name in names {
                     hasher.update(name.as_bytes());
                 }
             }
             Self::Block { start, environment } => {
-                hasher.update(b"block");
+                hasher.update(b"Block");
                 start.hash(hasher);
                 for binding in environment {
                     hasher.update(binding.as_bytes());
                 }
             }
             Self::Comment { text } => {
-                hasher.update(b"comment");
+                hasher.update(b"Comment");
                 hasher.update(text.as_bytes());
             }
             Self::ResolvedBinding { name } => {
-                hasher.update(b"resolved binding");
+                hasher.update(b"ResolvedBinding");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedBuiltinFunction { name } => {
-                hasher.update(b"resolved built-in function");
+                hasher.update(b"ResolvedBuiltinFunction");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedFunction { name, is_tail_call } => {
-                hasher.update(b"resolved user function");
+                hasher.update(b"ResolvedFunction");
                 hasher.update(name.as_bytes());
                 hasher.update(&[(*is_tail_call).into()]);
             }
             Self::ResolvedHostFunction { name } => {
-                hasher.update(b"resolved host function");
+                hasher.update(b"ResolvedHostFunction");
                 hasher.update(name.as_bytes());
             }
             Self::UnresolvedIdentifier { name } => {
-                hasher.update(b"unresolved word");
+                hasher.update(b"UnresolvedIdentifier");
                 hasher.update(name.as_bytes());
             }
             Self::Value(value) => {
                 let Value(value) = value;
 
-                hasher.update(b"value");
+                hasher.update(b"Value");
                 hasher.update(value);
             }
         }
@@ -126,17 +126,17 @@ impl FragmentHash for FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
             Self::Function { function, next } => {
-                hasher.update(b"cluster");
+                hasher.update(b"Function");
                 function.hash(hasher);
                 next.hash(hasher);
             }
             Self::Expression { expression, next } => {
-                hasher.update(b"expression");
+                hasher.update(b"Expression");
                 expression.hash(hasher);
                 next.hash(hasher);
             }
             Self::Terminator => {
-                hasher.update(b"terminator");
+                hasher.update(b"Terminator");
             }
         }
     }
@@ -162,11 +162,11 @@ impl FragmentHash for Parameters {
         for argument in inner {
             match argument {
                 Pattern::Identifier { name } => {
-                    hasher.update(b"identifier pattern");
+                    hasher.update(b"Identifier");
                     hasher.update(name.as_bytes());
                 }
                 Pattern::Literal { value } => {
-                    hasher.update(b"literal pattern");
+                    hasher.update(b"Literal");
                     hasher.update(&value.0);
                 }
             }
