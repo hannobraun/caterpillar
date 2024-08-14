@@ -13,20 +13,12 @@ use super::{
 /// and also to provide a central place where guidelines for such code can be
 /// documented.
 ///
-/// ## Dangers of Sloppy Implementation
+/// ## Rules for Implementations
 ///
 /// With a good hash function, it should be exceedingly unlikely to get hash
 /// collisions for different values. It is, however, still possible to make hash
-/// collisions quite likely, through sloppy use of the hash function.
-///
-/// For example, if a struct has to subsequent fields that are both lists of
-/// strings, and those strings are just fed to the hash function sequentially
-/// without any values in between, then the same series of strings will lead to
-/// the same hash, regardless of which list the strings actually come from.
-///
-/// The following rules are designed to prevent problems like this.
-///
-/// ## Rules for Implementations
+/// collisions quite likely, through sloppy use of the hash function. The
+/// following rules are designed to prevent that.
 ///
 /// **1. Implementations must only access fields via destructuring.**
 ///
@@ -37,7 +29,8 @@ use super::{
 /// By following this rule, we make sure that adding a new field to a struct or
 /// enum results in a compiler error in the respective implementation. By
 /// ignoring it, we risk forgetting to update the implementation, which could
-/// lead to an increased likelihood of hash collisions.
+/// lead to hash collisions between different values that only differ in fields
+/// that are not included in the hash.
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
