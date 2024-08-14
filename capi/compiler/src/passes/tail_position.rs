@@ -1,8 +1,10 @@
-use crate::syntax::{Branch, Expression};
+use crate::syntax::{Expression, Function};
 
-pub fn determine_tail_positions(branches: &mut Vec<Branch>) {
-    for branch in branches {
-        analyze_block(&mut branch.body);
+pub fn determine_tail_positions(functions: &mut Vec<Function>) {
+    for function in functions {
+        for branch in &mut function.branches {
+            analyze_block(&mut branch.body);
+        }
     }
 }
 
@@ -49,9 +51,10 @@ mod tests {
             )
         });
 
-        determine_tail_positions(&mut script.branches);
+        determine_tail_positions(&mut script.functions);
 
-        let branch = script.branches.remove(0);
+        let mut function = script.functions.remove(0);
+        let branch = function.branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
@@ -73,9 +76,10 @@ mod tests {
             )
         });
 
-        determine_tail_positions(&mut script.branches);
+        determine_tail_positions(&mut script.functions);
 
-        let mut branch = script.branches.remove(0);
+        let mut function = script.functions.remove(0);
+        let mut branch = function.branches.remove(0);
         let Expression::Block { body: block, .. } = branch.body.remove(1)
         else {
             panic!("Expected block.");
@@ -97,9 +101,10 @@ mod tests {
             )
         });
 
-        determine_tail_positions(&mut script.branches);
+        determine_tail_positions(&mut script.functions);
 
-        let branch = script.branches.remove(0);
+        let mut function = script.functions.remove(0);
+        let branch = function.branches.remove(0);
         let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }

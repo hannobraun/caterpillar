@@ -12,10 +12,10 @@ use crate::{
 };
 
 pub fn compile<H: Host>(
-    mut script: Script,
+    script: Script,
 ) -> (Fragments, Instructions, SourceMap) {
-    determine_tail_positions(&mut script.branches);
     let mut functions = find_functions(script.branches);
+    determine_tail_positions(&mut functions);
     resolve_identifiers::<H>(&mut functions);
     let fragments = generate_fragments(functions);
     let (instructions, source_map) =
