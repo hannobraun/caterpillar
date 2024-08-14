@@ -325,7 +325,7 @@ mod tests {
 
         functions
             .into_iter()
-            .flat_map(|cluster| cluster.branches)
+            .flat_map(|function| function.branches)
             .collect()
     }
 
