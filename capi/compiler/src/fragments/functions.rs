@@ -5,6 +5,12 @@ use super::FragmentId;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
+
+    /// # The branches of this function
+    ///
+    /// A function is made up of one or more branches. When a function is
+    /// called, its arguments are matched against the parameters of each branch,
+    /// until one branch matches. This branch is then evaluated.
     pub branches: Vec<Branch>,
 }
 
