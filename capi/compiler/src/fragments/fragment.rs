@@ -66,12 +66,9 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Cluster {
-                function: cluster,
-                next,
-            } => {
+            Self::Cluster { function, next } => {
                 hasher.update(b"cluster");
-                cluster.hash(hasher);
+                function.hash(hasher);
                 next.hash(hasher);
             }
             Self::Expression { expression, next } => {
