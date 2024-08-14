@@ -1,3 +1,5 @@
+use capi_process::Value;
+
 use crate::syntax::Pattern;
 
 use super::{
@@ -26,10 +28,12 @@ impl FragmentHash for Branch {
 
 impl FragmentHash for Fragment {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        if let Some(parent) = self.parent.as_ref() {
+        let Self { parent, payload } = self;
+
+        if let Some(parent) = parent.as_ref() {
             parent.hash(hasher);
         }
-        self.payload.hash(hasher);
+        payload.hash(hasher);
     }
 }
 
@@ -76,8 +80,10 @@ impl FragmentHash for FragmentExpression {
                 hasher.update(name.as_bytes());
             }
             Self::Value(value) => {
+                let Value(value) = value;
+
                 hasher.update(b"value");
-                hasher.update(&value.0);
+                hasher.update(value);
             }
         }
     }
@@ -128,7 +134,9 @@ impl FragmentHash for Function {
 
 impl FragmentHash for Parameters {
     fn hash(&self, hasher: &mut blake3::Hasher) {
-        for argument in &self.inner {
+        let Self { inner } = self;
+
+        for argument in inner {
             match argument {
                 Pattern::Identifier { name } => {
                     hasher.update(b"identifier pattern");
