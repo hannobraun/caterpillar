@@ -82,7 +82,7 @@ where
                 Fragment {
                     parent,
                     payload: FragmentPayload::Cluster {
-                        cluster: Function {
+                        function: Function {
                             name: cluster.name,
                             members,
                         },
@@ -185,7 +185,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Function { mut members, .. },
+                    function: Function { mut members, .. },
                     ..
                 },
             ..
@@ -235,7 +235,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Function { mut members, .. },
+                    function: Function { mut members, .. },
                     ..
                 },
             ..
@@ -270,7 +270,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Cluster {
-                    cluster: Function { mut members, .. },
+                    function: Function { mut members, .. },
                     next,
                     ..
                 },

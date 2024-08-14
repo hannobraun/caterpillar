@@ -52,7 +52,7 @@ pub enum FragmentPayload {
     /// For the sake of uniformity, all functions are organized into clusters,
     /// so a cluster might have only a single member.
     Cluster {
-        cluster: Function,
+        function: Function,
         next: FragmentId,
     },
 
@@ -66,7 +66,10 @@ pub enum FragmentPayload {
 impl FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         match self {
-            Self::Cluster { cluster, next } => {
+            Self::Cluster {
+                function: cluster,
+                next,
+            } => {
                 hasher.update(b"cluster");
                 cluster.hash(hasher);
                 next.hash(hasher);

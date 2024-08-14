@@ -180,7 +180,7 @@ fn compile_fragment<H: Host>(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Cluster {
-            cluster: Function { name, members },
+            function: Function { name, members },
             ..
         } => {
             queue.push_back(CompileUnit::Cluster {
