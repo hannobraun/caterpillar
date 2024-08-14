@@ -60,7 +60,7 @@ pub enum IdentifierTarget {
     BuiltinFunction,
 
     /// The identifier resolves to a cluster of functions
-    Cluster,
+    Function,
 
     HostFunction,
 }
