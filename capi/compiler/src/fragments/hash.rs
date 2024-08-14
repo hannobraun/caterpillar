@@ -28,7 +28,9 @@ use super::{
 ///
 /// By feeding a unique string to the hasher, we prevent this case from
 /// occurring. Any unique string string will do, but by convention, we use the
-/// name of the type.
+/// name under which the type is imported into the module with all the
+/// implementations. (That last bit prevents collisions between types with the
+/// same names.)
 ///
 /// **2. Implementations must only access fields via destructuring.**
 ///
