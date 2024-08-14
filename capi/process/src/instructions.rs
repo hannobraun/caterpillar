@@ -120,7 +120,7 @@ pub enum Instruction {
         name: String,
     },
 
-    /// # Call a cluster, selecting the right function via pattern matching
+    /// # Call a function, selecting the right branch via pattern matching
     ///
     /// ## Implementation Note
     ///
