@@ -10,7 +10,7 @@ use crate::{
 
 use super::clusters;
 
-pub fn generate_fragments(clusters: Vec<clusters::Cluster>) -> Fragments {
+pub fn generate_fragments(clusters: Vec<clusters::Function>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
@@ -149,7 +149,7 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
-    Item(clusters::Cluster),
+    Item(clusters::Function),
 }
 
 #[cfg(test)]

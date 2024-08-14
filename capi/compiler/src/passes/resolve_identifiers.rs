@@ -7,9 +7,9 @@ use crate::{
     syntax::{Expression, IdentifierTarget, Pattern},
 };
 
-use super::clusters::Cluster;
+use super::clusters::Function;
 
-pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
+pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
     let known_clusters = clusters
         .iter()

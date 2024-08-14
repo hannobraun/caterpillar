@@ -1,7 +1,7 @@
 use crate::syntax::Branch;
 
-pub fn find_clusters(branches: Vec<Branch>) -> Vec<Cluster> {
-    let mut clusters = Vec::<Cluster>::new();
+pub fn find_clusters(branches: Vec<Branch>) -> Vec<Function> {
+    let mut clusters = Vec::<Function>::new();
 
     for branch in branches {
         let cluster = clusters
@@ -13,7 +13,7 @@ pub fn find_clusters(branches: Vec<Branch>) -> Vec<Cluster> {
                 cluster.branches.push(branch);
             }
             None => {
-                clusters.push(Cluster {
+                clusters.push(Function {
                     name: branch.name.clone(),
                     branches: vec![branch],
                 });
@@ -25,7 +25,7 @@ pub fn find_clusters(branches: Vec<Branch>) -> Vec<Cluster> {
 }
 
 #[derive(Clone)]
-pub struct Cluster {
+pub struct Function {
     pub name: String,
     pub branches: Vec<Branch>,
 }
