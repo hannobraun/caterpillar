@@ -15,9 +15,9 @@ pub fn compile<H: Host>(
     mut script: Script,
 ) -> (Fragments, Instructions, SourceMap) {
     determine_tail_positions(&mut script.branches);
-    let mut clusters = find_functions(script.branches);
-    resolve_identifiers::<H>(&mut clusters);
-    let fragments = generate_fragments(clusters);
+    let mut functions = find_functions(script.branches);
+    resolve_identifiers::<H>(&mut functions);
+    let fragments = generate_fragments(functions);
     let (instructions, source_map) =
         generate_instructions::<H>(fragments.clone());
 
