@@ -4,6 +4,7 @@ mod expression;
 mod fragment;
 mod fragments;
 mod functions;
+mod hash;
 mod id;
 
 pub use self::{

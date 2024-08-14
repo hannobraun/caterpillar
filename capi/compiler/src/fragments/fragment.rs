@@ -1,4 +1,4 @@
-use super::{FragmentExpression, FragmentId, Function};
+use super::{hash::FragmentHash, FragmentExpression, FragmentId, Function};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
@@ -53,24 +53,4 @@ pub enum FragmentPayload {
         next: FragmentId,
     },
     Terminator,
-}
-
-impl FragmentPayload {
-    fn hash(&self, hasher: &mut blake3::Hasher) {
-        match self {
-            Self::Function { function, next } => {
-                hasher.update(b"cluster");
-                function.hash(hasher);
-                next.hash(hasher);
-            }
-            Self::Expression { expression, next } => {
-                hasher.update(b"expression");
-                expression.hash(hasher);
-                next.hash(hasher);
-            }
-            Self::Terminator => {
-                hasher.update(b"terminator");
-            }
-        }
-    }
 }

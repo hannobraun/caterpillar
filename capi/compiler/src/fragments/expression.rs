@@ -72,56 +72,6 @@ pub enum FragmentExpression {
     Value(Value),
 }
 
-impl FragmentExpression {
-    pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
-        match self {
-            Self::BindingDefinitions { names } => {
-                hasher.update(b"binding definition");
-
-                for name in names {
-                    hasher.update(name.as_bytes());
-                }
-            }
-            Self::Block { start, environment } => {
-                hasher.update(b"block");
-                start.hash(hasher);
-                for binding in environment {
-                    hasher.update(binding.as_bytes());
-                }
-            }
-            Self::Comment { text } => {
-                hasher.update(b"comment");
-                hasher.update(text.as_bytes());
-            }
-            Self::ResolvedBinding { name } => {
-                hasher.update(b"resolved binding");
-                hasher.update(name.as_bytes());
-            }
-            Self::ResolvedBuiltinFunction { name } => {
-                hasher.update(b"resolved built-in function");
-                hasher.update(name.as_bytes());
-            }
-            Self::ResolvedFunction { name, is_tail_call } => {
-                hasher.update(b"resolved user function");
-                hasher.update(name.as_bytes());
-                hasher.update(&[(*is_tail_call).into()]);
-            }
-            Self::ResolvedHostFunction { name } => {
-                hasher.update(b"resolved host function");
-                hasher.update(name.as_bytes());
-            }
-            Self::UnresolvedIdentifier { name } => {
-                hasher.update(b"unresolved word");
-                hasher.update(name.as_bytes());
-            }
-            Self::Value(value) => {
-                hasher.update(b"value");
-                hasher.update(&value.0);
-            }
-        }
-    }
-}
-
 impl fmt::Display for FragmentExpression {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {

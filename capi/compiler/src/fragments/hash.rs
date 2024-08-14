@@ -1,0 +1,135 @@
+use crate::syntax::Pattern;
+
+use super::{
+    Branch, FragmentExpression, FragmentId, FragmentPayload, Function,
+    Parameters,
+};
+
+/// # Extension trait for types that provide a hash
+///
+/// The purpose of this extension trait is to centralize all hash-related code,
+/// and also to provide a central place where guidelines for such code can be
+/// documented.
+pub(super) trait FragmentHash {
+    fn hash(&self, hasher: &mut blake3::Hasher);
+}
+
+impl FragmentHash for Branch {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        // Let's destructure `self`, so we don't forget any fields.
+        let Self { parameters, start } = self;
+
+        parameters.hash(hasher);
+        start.hash(hasher);
+    }
+}
+
+impl FragmentHash for FragmentExpression {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        match self {
+            Self::BindingDefinitions { names } => {
+                hasher.update(b"binding definition");
+
+                for name in names {
+                    hasher.update(name.as_bytes());
+                }
+            }
+            Self::Block { start, environment } => {
+                hasher.update(b"block");
+                start.hash(hasher);
+                for binding in environment {
+                    hasher.update(binding.as_bytes());
+                }
+            }
+            Self::Comment { text } => {
+                hasher.update(b"comment");
+                hasher.update(text.as_bytes());
+            }
+            Self::ResolvedBinding { name } => {
+                hasher.update(b"resolved binding");
+                hasher.update(name.as_bytes());
+            }
+            Self::ResolvedBuiltinFunction { name } => {
+                hasher.update(b"resolved built-in function");
+                hasher.update(name.as_bytes());
+            }
+            Self::ResolvedFunction { name, is_tail_call } => {
+                hasher.update(b"resolved user function");
+                hasher.update(name.as_bytes());
+                hasher.update(&[(*is_tail_call).into()]);
+            }
+            Self::ResolvedHostFunction { name } => {
+                hasher.update(b"resolved host function");
+                hasher.update(name.as_bytes());
+            }
+            Self::UnresolvedIdentifier { name } => {
+                hasher.update(b"unresolved word");
+                hasher.update(name.as_bytes());
+            }
+            Self::Value(value) => {
+                hasher.update(b"value");
+                hasher.update(&value.0);
+            }
+        }
+    }
+}
+
+impl FragmentHash for FragmentId {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        // Let's destructure `self`, so we don't forget any fields.
+        let Self { hash } = self;
+
+        hasher.update(hash.as_bytes());
+    }
+}
+
+impl FragmentHash for FragmentPayload {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        match self {
+            Self::Function { function, next } => {
+                hasher.update(b"cluster");
+                function.hash(hasher);
+                next.hash(hasher);
+            }
+            Self::Expression { expression, next } => {
+                hasher.update(b"expression");
+                expression.hash(hasher);
+                next.hash(hasher);
+            }
+            Self::Terminator => {
+                hasher.update(b"terminator");
+            }
+        }
+    }
+}
+
+impl FragmentHash for Function {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        // Let's destructure `self`, so we don't forget any fields.
+        let Self { name, branches } = self;
+
+        if let Some(name) = name {
+            hasher.update(name.as_bytes());
+        }
+        for branch in branches {
+            branch.hash(hasher);
+        }
+    }
+}
+
+impl FragmentHash for Parameters {
+    fn hash(&self, hasher: &mut blake3::Hasher) {
+        for argument in &self.inner {
+            match argument {
+                Pattern::Identifier { name } => {
+                    hasher.update(b"identifier pattern");
+                    hasher.update(name.as_bytes());
+                }
+                Pattern::Literal { value } => {
+                    hasher.update(b"literal pattern");
+                    hasher.update(&value.0);
+                }
+            }
+        }
+    }
+}
