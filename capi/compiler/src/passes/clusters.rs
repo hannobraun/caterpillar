@@ -1,9 +1,9 @@
 use crate::syntax::Branch;
 
-pub fn find_clusters(functions: Vec<Branch>) -> Vec<Cluster> {
+pub fn find_clusters(branches: Vec<Branch>) -> Vec<Cluster> {
     let mut clusters = Vec::<Cluster>::new();
 
-    for function in functions {
+    for function in branches {
         let cluster = clusters
             .iter_mut()
             .find(|cluster| cluster.name == function.name);
