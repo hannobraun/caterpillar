@@ -46,6 +46,8 @@ pub(super) trait FragmentHash {
 
 impl FragmentHash for Branch {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"Branch");
+
         let Self { parameters, start } = self;
 
         parameters.hash(hasher);
@@ -55,6 +57,8 @@ impl FragmentHash for Branch {
 
 impl FragmentHash for Fragment {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"Fragment");
+
         let Self { parent, payload } = self;
 
         if let Some(parent) = parent.as_ref() {
@@ -66,6 +70,8 @@ impl FragmentHash for Fragment {
 
 impl FragmentHash for FragmentExpression {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"FragmentExpression");
+
         match self {
             Self::BindingDefinitions { names } => {
                 hasher.update(b"BindingDefinitions");
@@ -118,6 +124,8 @@ impl FragmentHash for FragmentExpression {
 
 impl FragmentHash for FragmentId {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"FragmentId");
+
         let Self { hash } = self;
 
         hasher.update(hash.as_bytes());
@@ -126,6 +134,8 @@ impl FragmentHash for FragmentId {
 
 impl FragmentHash for FragmentPayload {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"FragmentPayload");
+
         match self {
             Self::Function { function, next } => {
                 hasher.update(b"Function");
@@ -146,6 +156,8 @@ impl FragmentHash for FragmentPayload {
 
 impl FragmentHash for Function {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"Function");
+
         let Self { name, branches } = self;
 
         if let Some(name) = name {
@@ -159,6 +171,8 @@ impl FragmentHash for Function {
 
 impl FragmentHash for Parameters {
     fn hash(&self, hasher: &mut blake3::Hasher) {
+        hasher.update(b"Parameters");
+
         let Self { inner } = self;
 
         for argument in inner {
