@@ -205,6 +205,9 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.unwrap_or(assert_address)
                 }
+                FragmentExpression::Comment { .. } => {
+                    return None;
+                }
                 FragmentExpression::Function { function } => {
                     // We are currently compiling a function or block (otherwise
                     // we wouldn't be encountering any expression), and the
@@ -251,9 +254,6 @@ fn compile_fragment<H: Host>(
                     });
 
                     address
-                }
-                FragmentExpression::Comment { .. } => {
-                    return None;
                 }
                 FragmentExpression::ResolvedBinding { name } => output
                     .generate_instruction(

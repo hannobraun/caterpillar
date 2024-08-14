@@ -135,17 +135,17 @@ impl FragmentHash for FragmentExpression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::Function { function } => {
-                hasher.update(b"Block");
-
-                hasher.update(b"function");
-                function.hash(hasher);
-            }
             Self::Comment { text } => {
                 hasher.update(b"Comment");
 
                 hasher.update(b"text");
                 hasher.update(text.as_bytes());
+            }
+            Self::Function { function } => {
+                hasher.update(b"Block");
+
+                hasher.update(b"function");
+                function.hash(hasher);
             }
             Self::ResolvedBinding { name } => {
                 hasher.update(b"ResolvedBinding");

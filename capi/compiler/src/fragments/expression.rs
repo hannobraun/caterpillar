@@ -9,11 +9,11 @@ pub enum FragmentExpression {
     BindingDefinitions {
         names: Vec<String>,
     },
-    Function {
-        function: Function,
-    },
     Comment {
         text: String,
+    },
+    Function {
+        function: Function,
     },
     ResolvedBinding {
         name: String,
@@ -81,8 +81,8 @@ impl fmt::Display for FragmentExpression {
                 }
                 write!(f, " .")
             }
-            Self::Function { .. } => write!(f, "block"),
             Self::Comment { text } => write!(f, "# {text}"),
+            Self::Function { .. } => write!(f, "block"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedFunction { name, .. } => write!(f, "{name}"),
