@@ -5,13 +5,16 @@ use super::FragmentId;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub members: Vec<Branch>,
+    pub branches: Vec<Branch>,
 }
 
 impl Function {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
-        let Self { name, members } = self;
+        let Self {
+            name,
+            branches: members,
+        } = self;
 
         hasher.update(name.as_bytes());
         for function in members {

@@ -71,7 +71,7 @@ impl Fragments {
                 })
                 .find_map(|cluster| {
                     let function = cluster
-                        .members
+                        .branches
                         .iter()
                         .find(|function| function.start == fragment_id)?;
                     Some((cluster, function))

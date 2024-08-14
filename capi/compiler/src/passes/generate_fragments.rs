@@ -84,7 +84,7 @@ where
                     payload: FragmentPayload::Function {
                         function: Function {
                             name: cluster.name,
-                            members,
+                            branches: members,
                         },
                         next,
                     },
@@ -185,7 +185,11 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function: Function { mut members, .. },
+                    function:
+                        Function {
+                            branches: mut members,
+                            ..
+                        },
                     ..
                 },
             ..
@@ -235,7 +239,11 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function: Function { mut members, .. },
+                    function:
+                        Function {
+                            branches: mut members,
+                            ..
+                        },
                     ..
                 },
             ..
@@ -270,7 +278,11 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function: Function { mut members, .. },
+                    function:
+                        Function {
+                            branches: mut members,
+                            ..
+                        },
                     next,
                     ..
                 },
