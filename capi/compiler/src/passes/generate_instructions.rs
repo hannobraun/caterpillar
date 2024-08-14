@@ -64,19 +64,21 @@ pub fn generate_instructions<H: Host>(
             CompileUnit::Cluster { id, name, members } => {
                 for function in members {
                     let arguments =
-                        function.arguments.inner.iter().filter_map(|pattern| {
-                            match pattern {
-                                Pattern::Identifier { name } => Some(name),
-                                Pattern::Literal { .. } => {
-                                    // Literal patterns are only relevant when
-                                    // selecting the cluster member to be
-                                    // executed. They no longer have meaning
-                                    // once the function actually starts
-                                    // executing.
-                                    None
+                        function.parameters.inner.iter().filter_map(
+                            |pattern| {
+                                match pattern {
+                                    Pattern::Identifier { name } => Some(name),
+                                    Pattern::Literal { .. } => {
+                                        // Literal patterns are only relevant
+                                        // when selecting the cluster member to
+                                        // be executed. They no longer have
+                                        // meaning once the function actually
+                                        // starts executing.
+                                        None
+                                    }
                                 }
-                            }
-                        });
+                            },
+                        );
                     let bindings_address =
                         output.generate_binding(arguments, id);
 
@@ -92,7 +94,7 @@ pub fn generate_instructions<H: Host>(
                         .by_name
                         .entry(name.clone())
                         .or_default()
-                        .push((function.arguments, address));
+                        .push((function.parameters, address));
                 }
             }
         }

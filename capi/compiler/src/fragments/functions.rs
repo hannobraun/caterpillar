@@ -31,14 +31,17 @@ impl Function {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Branch {
-    pub arguments: Parameters,
+    pub parameters: Parameters,
     pub start: FragmentId,
 }
 
 impl Branch {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
-        let Self { arguments, start } = self;
+        let Self {
+            parameters: arguments,
+            start,
+        } = self;
 
         arguments.hash(hasher);
         start.hash(hasher);

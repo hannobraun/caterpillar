@@ -72,7 +72,7 @@ where
                     let start = compile_block(function.body, next, fragments);
 
                     members.push(Branch {
-                        arguments: Parameters {
+                        parameters: Parameters {
                             inner: function.arguments,
                         },
                         start,
