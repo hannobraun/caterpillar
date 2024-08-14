@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Arguments, Branch, Fragment, FragmentExpression, FragmentId,
-        FragmentMap, FragmentPayload, Fragments, Function,
+        Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
+        FragmentPayload, Fragments, Function, Parameters,
     },
     host::Host,
     source_map::SourceMap,
@@ -393,7 +393,7 @@ pub struct CallToCluster {
 
 #[derive(Default)]
 struct Clusters {
-    by_name: BTreeMap<String, Vec<(Arguments, InstructionAddress)>>,
+    by_name: BTreeMap<String, Vec<(Parameters, InstructionAddress)>>,
 }
 
 enum CompileUnit {

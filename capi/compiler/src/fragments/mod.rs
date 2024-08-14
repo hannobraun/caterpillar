@@ -10,6 +10,6 @@ pub use self::{
     expression::FragmentExpression,
     fragment::{Fragment, FragmentPayload},
     fragments::{FragmentMap, Fragments},
-    functions::{Arguments, Branch, Function},
+    functions::{Branch, Function, Parameters},
     id::FragmentId,
 };

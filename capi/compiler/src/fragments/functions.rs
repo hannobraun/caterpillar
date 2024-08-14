@@ -31,7 +31,7 @@ impl Function {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Branch {
-    pub arguments: Arguments,
+    pub arguments: Parameters,
     pub start: FragmentId,
 }
 
@@ -46,11 +46,11 @@ impl Branch {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Arguments {
+pub struct Parameters {
     pub inner: Vec<Pattern>,
 }
 
-impl Arguments {
+impl Parameters {
     pub(super) fn hash(&self, hasher: &mut blake3::Hasher) {
         for argument in &self.inner {
             match argument {

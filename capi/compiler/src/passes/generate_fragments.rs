@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Arguments, Branch, Fragment, FragmentExpression, FragmentId,
-        FragmentMap, FragmentPayload, Fragments, Function,
+        Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
+        FragmentPayload, Fragments, Function, Parameters,
     },
     syntax::{Expression, IdentifierTarget},
 };
@@ -72,7 +72,7 @@ where
                     let start = compile_block(function.body, next, fragments);
 
                     members.push(Branch {
-                        arguments: Arguments {
+                        arguments: Parameters {
                             inner: function.arguments,
                         },
                         start,
