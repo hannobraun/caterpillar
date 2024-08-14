@@ -39,7 +39,7 @@ pub struct BranchBuilder {
 impl BranchBuilder {
     pub fn branch(
         &mut self,
-        name: &str,
+        _: &str,
         parameters: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
@@ -58,11 +58,7 @@ impl BranchBuilder {
             builder.expressions
         };
 
-        self.branches.push(Branch {
-            name: name.to_string(),
-            parameters,
-            body,
-        });
+        self.branches.push(Branch { parameters, body });
 
         self
     }

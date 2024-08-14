@@ -10,7 +10,6 @@ pub struct Function {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Branch {
-    pub name: String,
     pub parameters: Vec<Pattern>,
     pub body: Vec<Expression>,
 }
