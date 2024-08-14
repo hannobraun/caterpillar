@@ -70,10 +70,9 @@ pub fn generate_instructions<H: Host>(
                                     Pattern::Identifier { name } => Some(name),
                                     Pattern::Literal { .. } => {
                                         // Literal patterns are only relevant
-                                        // when selecting the cluster member to
-                                        // be executed. They no longer have
-                                        // meaning once the function actually
-                                        // starts executing.
+                                        // when selecting the branch to execute.
+                                        // They no longer have meaning once the
+                                        // function actually starts executing.
                                         None
                                     }
                                 }
