@@ -28,7 +28,7 @@ use super::{
 ///
 /// ## Rules for Implementations
 ///
-/// 1. **Implementations must only access fields via destructuring.**
+/// **1. Implementations must only access fields via destructuring.**
 ///
 /// This happens automatically when implementing this trait for an enum, but not
 /// when implementing it for a struct. `..` in patterns is forbidden in all
