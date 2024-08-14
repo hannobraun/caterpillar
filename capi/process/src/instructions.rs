@@ -158,7 +158,7 @@ pub enum Instruction {
     /// This would require some new instructions for doing the comparison and
     /// jumping to another address, but that seems like the right direction to
     /// go in anyway.
-    CallCluster {
+    CallFunction {
         function: Vec<(Vec<Pattern>, InstructionAddress)>,
         is_tail_call: bool,
     },

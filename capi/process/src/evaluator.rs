@@ -60,7 +60,7 @@ impl Evaluator {
                     return Err(Effect::UnknownBuiltin);
                 }
             },
-            Instruction::CallCluster {
+            Instruction::CallFunction {
                 function,
                 is_tail_call,
             } => {
@@ -183,7 +183,7 @@ mod tests {
         evaluator.stack.push_operand(2);
 
         let mut instructions = Instructions::default();
-        instructions.push(Instruction::CallCluster {
+        instructions.push(Instruction::CallFunction {
             function: vec![
                 (
                     vec![
