@@ -17,7 +17,7 @@ pub fn generate_instructions<H: Host>(
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
-    let mut clusters = Functions::default();
+    let mut functions = Functions::default();
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
@@ -87,7 +87,7 @@ pub fn generate_instructions<H: Host>(
                     );
 
                     let address = bindings_address.unwrap_or(context_address);
-                    clusters
+                    functions
                         .by_name
                         .entry(name.clone())
                         .or_default()
@@ -98,7 +98,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
-        let Some(cluster) = clusters.by_name.get(&call.name) else {
+        let Some(cluster) = functions.by_name.get(&call.name) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
