@@ -13,14 +13,14 @@ impl Script {
     pub fn function(
         &mut self,
         name: &str,
-        arguments: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
+        parameters: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
         let parameters = {
             let mut builder = PatternBuilder {
                 patterns: Vec::new(),
             };
-            arguments(&mut builder);
+            parameters(&mut builder);
             builder.patterns
         };
         let body = {
