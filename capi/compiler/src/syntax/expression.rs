@@ -58,9 +58,6 @@ pub enum Expression {
 pub enum IdentifierTarget {
     Binding,
     BuiltinFunction,
-
-    /// The identifier resolves to a cluster of functions
     Function,
-
     HostFunction,
 }
