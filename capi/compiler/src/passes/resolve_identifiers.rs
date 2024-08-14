@@ -116,7 +116,6 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         host::Host,
-        passes::find_functions,
         syntax::{Branch, Expression, IdentifierTarget, Script},
     };
 
@@ -331,11 +330,11 @@ mod tests {
         );
     }
 
-    fn resolve_identifiers(script: Script) -> Vec<Branch> {
-        let mut functions = find_functions(script.branches);
-        super::resolve_identifiers::<TestHost>(&mut functions);
+    fn resolve_identifiers(mut script: Script) -> Vec<Branch> {
+        super::resolve_identifiers::<TestHost>(&mut script.functions);
 
-        functions
+        script
+            .functions
             .into_iter()
             .flat_map(|function| function.branches)
             .collect()
