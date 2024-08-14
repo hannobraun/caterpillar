@@ -280,7 +280,7 @@ mod tests {
             unreachable!("`f` must be the root element.");
         };
         let branch = branches.remove(0);
-        let function_fragments =
+        let branch_fragments =
             fragments.inner.iter_from(branch.start).collect::<Vec<_>>();
         let block_fragments = {
             let Fragment {
@@ -290,7 +290,7 @@ mod tests {
                         ..
                     },
                 ..
-            } = function_fragments[0]
+            } = branch_fragments[0]
             else {
                 panic!("Expected block")
             };
@@ -298,8 +298,8 @@ mod tests {
             fragments.inner.iter_from(*start).collect::<Vec<_>>()
         };
 
-        assert_eq!(function_fragments[0].parent, Some(next));
-        assert_eq!(block_fragments[0].parent, Some(function_fragments[1].id()));
+        assert_eq!(branch_fragments[0].parent, Some(next));
+        assert_eq!(block_fragments[0].parent, Some(branch_fragments[1].id()));
     }
 
     fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
