@@ -39,7 +39,6 @@ pub struct BranchBuilder {
 impl BranchBuilder {
     pub fn branch(
         &mut self,
-        _: &str,
         parameters: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {

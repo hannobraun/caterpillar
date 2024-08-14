@@ -21,7 +21,6 @@ fn closure_in_function() {
     let mut script = Script::default();
     script.function("main", |b| {
         b.branch(
-            "main",
             |p| p,
             |s| {
                 s.v(0)

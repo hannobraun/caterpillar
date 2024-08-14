@@ -166,7 +166,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.v(1).v(1);
@@ -222,7 +221,7 @@ mod tests {
     #[test]
     fn terminator() {
         let mut script = Script::default();
-        script.function("f", |b| b.branch("f", |p| p, |_| {}));
+        script.function("f", |b| b.branch(|p| p, |_| {}));
 
         let mut fragments = generate_fragments(script.functions);
 
@@ -253,7 +252,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.block(|_| {});

@@ -126,7 +126,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p.ident("argument"),
                 |s| {
                     s.ident("argument");
@@ -153,7 +152,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.v(0).bind(["value"]).ident("value");
@@ -181,7 +179,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.v(0).bind(["value"]).block(|s| {
@@ -221,7 +218,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.block(|s| {
@@ -252,7 +248,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("brk");
@@ -281,7 +276,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("host_fn");
@@ -309,14 +303,13 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("user_fn");
                 },
             )
         });
-        script.function("user_fn", |b| b.branch("user_fn", |p| p, |_| {}));
+        script.function("user_fn", |b| b.branch(|p| p, |_| {}));
 
         let mut functions = resolve_identifiers(script);
 

@@ -58,7 +58,6 @@ fn basic_call_stack() {
             script
                 .function("main", |b| {
                     b.branch(
-                        "main",
                         |p| p.ident("size_x").ident("size_y"),
                         |s| {
                             s.ident("f")
@@ -71,7 +70,6 @@ fn basic_call_stack() {
                 })
                 .function("f", |b| {
                     b.branch(
-                        "f",
                         |p| p,
                         |s| {
                             s.ident("g")
@@ -84,7 +82,6 @@ fn basic_call_stack() {
                 })
                 .function("g", |b| {
                     b.branch(
-                        "g",
                         |p| p,
                         |s| {
                             s.ident("brk");
@@ -114,7 +111,6 @@ fn stopped_at_code_within_block() {
         .provide_source_code(|script| {
             script.function("main", |b| {
                 b.branch(
-                    "main",
                     |p| p.ident("size_x").ident("size_y"),
                     |s| {
                         s.block(|s| {

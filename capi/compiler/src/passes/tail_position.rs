@@ -43,7 +43,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("not_tail").ident("tail");
@@ -64,7 +63,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("a")
@@ -93,7 +91,6 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |b| {
             b.branch(
-                "f",
                 |p| p,
                 |s| {
                     s.ident("not_tail").ident("tail").c("This is a comment.");
