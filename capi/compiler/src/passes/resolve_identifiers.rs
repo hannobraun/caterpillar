@@ -9,14 +9,14 @@ use crate::{
 
 use super::clusters::Function;
 
-pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Function>) {
+pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
-    let known_clusters = clusters
+    let known_clusters = functions
         .iter()
         .map(|cluster| cluster.name.clone())
         .collect();
 
-    for cluster in clusters {
+    for cluster in functions {
         for branch in &mut cluster.branches {
             scopes.push(
                 branch
