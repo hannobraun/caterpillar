@@ -17,9 +17,9 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
         .collect();
 
     for cluster in clusters {
-        for function in &mut cluster.branches {
+        for branch in &mut cluster.branches {
             scopes.push(
-                function
+                branch
                     .arguments
                     .clone()
                     .into_iter()
@@ -38,7 +38,7 @@ pub fn resolve_identifiers<H: Host>(clusters: &mut Vec<Cluster>) {
             let mut environment = Environment::new();
 
             resolve_in_block::<H>(
-                &mut function.body,
+                &mut branch.body,
                 &mut scopes,
                 &mut environment,
                 &known_clusters,
