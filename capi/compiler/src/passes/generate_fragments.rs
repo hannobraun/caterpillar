@@ -303,7 +303,7 @@ mod tests {
     }
 
     fn generate_fragments(branches: Vec<syntax::Branch>) -> Fragments {
-        let clusters = find_functions(branches);
-        super::generate_fragments(clusters)
+        let functions = find_functions(branches);
+        super::generate_fragments(functions)
     }
 }
