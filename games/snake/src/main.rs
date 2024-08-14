@@ -1003,30 +1003,30 @@ fn snake(script: &mut Script) {
     });
     script.function("_vec_buf_address", |b| {
         b.branch(
-        |p| p.ident("vec_buf").ident("base").ident("offset"),
-        |s| {
-            s.c("Compute the memory address of a location within the vector")
-            .c("buffer.")
-            .c("")
-            .c("Takes two arguments:")
-            .c("")
-            .c("- `base`, which is an index into the buffer, as opposed to a")
-            .c("  real address. It can be larger than any actual address")
-            .c("  within the buffer.")
-            .c("- `offset`, which is the offset of the desired address from")
-            .c("  `base`.")
-            .ident("base")
-            .ident("offset")
-            .ident("add_u8_wrap")
-            .ident("vec_buf")
-            .ident("_vec_buf_capacity")
-            .ident("load")
-            .ident("remainder_i32")
-            .ident("vec_buf")
-            .ident("_vec_buf_buffer")
-            .ident("add_u8_wrap");
-        },
-    )
+            |p| p.ident("vec_buf").ident("base").ident("offset"),
+            |s| {
+                s.c("Compute the memory address of a location within the")
+                    .c("vector buffer.")
+                    .c("")
+                    .c("Takes two arguments:")
+                    .c("")
+                    .c("- `base`, which is an index into the buffer, as")
+                    .c("  opposed to a real address. It can be larger than any")
+                    .c("  actual address within the buffer.")
+                    .c("- `offset`, which is the offset of the desired address")
+                    .c("  `from base`.")
+                    .ident("base")
+                    .ident("offset")
+                    .ident("add_u8_wrap")
+                    .ident("vec_buf")
+                    .ident("_vec_buf_capacity")
+                    .ident("load")
+                    .ident("remainder_i32")
+                    .ident("vec_buf")
+                    .ident("_vec_buf_buffer")
+                    .ident("add_u8_wrap");
+            },
+        )
     });
     script.function("_vec_buf_inc_index", |b| {
         b.branch(
