@@ -87,9 +87,7 @@ fn snake(script: &mut Script) {
                     e.c("Index is out of bounds. We're done");
                 },
             )
-        })
-        .function("_draw_snake_draw_rest_of_snake", |b| {
-            b.branch(
+            .branch(
                 "_draw_snake_draw_rest_of_snake",
                 |p| p.lit(1).ident("index"),
                 |e| {
@@ -258,9 +256,7 @@ fn snake(script: &mut Script) {
                     e.v(0).v(0);
                 },
             )
-        })
-        .function("_increment_tile_index_reset_x_if_overflowed", |b| {
-            b.branch(
+            .branch(
                 "_increment_tile_index_reset_x_if_overflowed",
                 |p| p.ident("tile_x").lit(1),
                 |e| {
@@ -278,9 +274,7 @@ fn snake(script: &mut Script) {
                         .ident("_increment_tile_index_increment_coord");
                 },
             )
-        })
-        .function("_increment_tile_index_increment_y_if_necessary", |b| {
-            b.branch(
+            .branch(
                 "_increment_tile_index_increment_y_if_necessary",
                 |p| p.ident("tile_x").lit(1).ident("tile_y"),
                 |e| {
@@ -365,9 +359,7 @@ fn snake(script: &mut Script) {
                     e.ident("init_frame_count");
                 },
             )
-        })
-        .function("_count_frame_reset_frame_count_if_necessary", |b| {
-            b.branch(
+            .branch(
                 "_count_frame_reset_frame_count_if_necessary",
                 |p| p.ident("_"),
                 |_| {},
@@ -752,71 +744,60 @@ fn snake(script: &mut Script) {
     });
 
     // Input
-    script
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.lit(0),
-                |e| {
-                    e.c("No input available.");
-                },
-            )
-        })
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.lit(1),
-                |e| {
-                    e.c("up")
-                        .v(0)
-                        .v(-1)
-                        .ident("i32_to_i8")
-                        .ident("velocity")
-                        .ident("vec_store");
-                },
-            )
-        })
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.lit(2),
-                |e| {
-                    e.c("left")
-                        .v(-1)
-                        .ident("i32_to_i8")
-                        .v(0)
-                        .ident("velocity")
-                        .ident("vec_store");
-                },
-            )
-        })
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.lit(3),
-                |e| {
-                    e.c("down").v(0).v(1).ident("velocity").ident("vec_store");
-                },
-            )
-        })
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.lit(4),
-                |e| {
-                    e.c("right").v(1).v(0).ident("velocity").ident("vec_store");
-                },
-            )
-        })
-        .function("handle_input", |b| {
-            b.branch(
-                "handle_input",
-                |p| p.ident("_"),
-                |e| {
-                    e.c("unexpected value").ident("brk");
-                },
-            )
-        });
+    script.function("handle_input", |b| {
+        b.branch(
+            "handle_input",
+            |p| p.lit(0),
+            |e| {
+                e.c("No input available.");
+            },
+        )
+        .branch(
+            "handle_input",
+            |p| p.lit(1),
+            |e| {
+                e.c("up")
+                    .v(0)
+                    .v(-1)
+                    .ident("i32_to_i8")
+                    .ident("velocity")
+                    .ident("vec_store");
+            },
+        )
+        .branch(
+            "handle_input",
+            |p| p.lit(2),
+            |e| {
+                e.c("left")
+                    .v(-1)
+                    .ident("i32_to_i8")
+                    .v(0)
+                    .ident("velocity")
+                    .ident("vec_store");
+            },
+        )
+        .branch(
+            "handle_input",
+            |p| p.lit(3),
+            |e| {
+                e.c("down").v(0).v(1).ident("velocity").ident("vec_store");
+            },
+        )
+        .branch(
+            "handle_input",
+            |p| p.lit(4),
+            |e| {
+                e.c("right").v(1).v(0).ident("velocity").ident("vec_store");
+            },
+        )
+        .branch(
+            "handle_input",
+            |p| p.ident("_"),
+            |e| {
+                e.c("unexpected value").ident("brk");
+            },
+        )
+    });
 
     // Memory map
     script.function("tile_field_size", |b| {
@@ -1195,10 +1176,7 @@ fn snake(script: &mut Script) {
                     .c("overflow.")
                     .ident("negatable_random");
             },
-            )
-        })
-        .function("_negatable_random_return_or_continue", |b| {
-            b.branch(
+            ).branch(
                 "_negatable_random_return_or_continue",
                 |p| p.ident("random"),
                 |e| {
