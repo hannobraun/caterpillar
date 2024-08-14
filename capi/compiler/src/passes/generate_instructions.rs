@@ -68,10 +68,10 @@ pub fn generate_instructions<H: Host>(
                             match pattern {
                                 Pattern::Identifier { name } => Some(name),
                                 Pattern::Literal { .. } => {
-                                    // Literal patterns are only relevant
-                                    // when selecting the branch to execute.
-                                    // They no longer have meaning once the
-                                    // function actually starts executing.
+                                    // Literal patterns are only relevant when
+                                    // selecting the branch to execute. They no
+                                    // longer have meaning once the function
+                                    // actually starts executing.
                                     None
                                 }
                             }
