@@ -49,8 +49,8 @@ mod tests {
 
         determine_tail_positions(&mut script.branches);
 
-        let function = script.branches.remove(0);
-        let identifiers = function.body.to_identifiers();
+        let branch = script.branches.remove(0);
+        let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
@@ -71,8 +71,8 @@ mod tests {
 
         determine_tail_positions(&mut script.branches);
 
-        let mut function = script.branches.remove(0);
-        let Expression::Block { body: block, .. } = function.body.remove(1)
+        let mut branch = script.branches.remove(0);
+        let Expression::Block { body: block, .. } = branch.body.remove(1)
         else {
             panic!("Expected block.");
         };
@@ -93,8 +93,8 @@ mod tests {
 
         determine_tail_positions(&mut script.branches);
 
-        let function = script.branches.remove(0);
-        let identifiers = function.body.to_identifiers();
+        let branch = script.branches.remove(0);
+        let identifiers = branch.body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
