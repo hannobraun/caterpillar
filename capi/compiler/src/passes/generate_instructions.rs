@@ -25,7 +25,7 @@ pub fn generate_instructions<H: Host>(
         effect: Effect::Panic,
     });
     output.instructions.push(Instruction::Return);
-    output.placeholders.push(CallToCluster {
+    output.placeholders.push(CallToFunction {
         name: "main".to_string(),
         address: main,
         is_tail_call: true,
@@ -283,7 +283,7 @@ fn compile_fragment<H: Host>(
                     // We can't leave it at that, however. We need to make sure
                     // this placeholder actually gets replaced later, and we're
                     // doing that by adding it to this list.
-                    output.placeholders.push(CallToCluster {
+                    output.placeholders.push(CallToFunction {
                         name: name.clone(),
                         address,
                         is_tail_call: *is_tail_call,
@@ -342,7 +342,7 @@ fn compile_fragment<H: Host>(
 #[derive(Default)]
 struct Output {
     instructions: Instructions,
-    placeholders: Vec<CallToCluster>,
+    placeholders: Vec<CallToFunction>,
     source_map: SourceMap,
 }
 
@@ -380,7 +380,7 @@ impl Output {
     }
 }
 
-pub struct CallToCluster {
+pub struct CallToFunction {
     pub name: String,
     pub address: InstructionAddress,
     pub is_tail_call: bool,
