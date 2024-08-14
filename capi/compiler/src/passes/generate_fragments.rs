@@ -10,13 +10,13 @@ use crate::{
 
 use super::clusters;
 
-pub fn generate_fragments(clusters: Vec<clusters::Function>) -> Fragments {
+pub fn generate_fragments(functions: Vec<clusters::Function>) -> Fragments {
     let mut fragments = FragmentMap {
         inner: BTreeMap::new(),
     };
 
     let root = compile_context(
-        clusters.into_iter().map(SyntaxElement::Item),
+        functions.into_iter().map(SyntaxElement::Item),
         None,
         &mut fragments,
     );
