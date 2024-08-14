@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{self, Cluster, Fragments},
+    fragments::{self, Fragments},
     source_map::SourceMap,
 };
 use capi_process::Process;
@@ -14,7 +14,7 @@ pub struct Function {
 
 impl Function {
     pub fn new(
-        cluster: Cluster,
+        cluster: fragments::Cluster,
         function: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,
