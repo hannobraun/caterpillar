@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Arguments, Branch, Function, Fragment, FragmentExpression, FragmentId,
-        FragmentMap, FragmentPayload, Fragments,
+        Arguments, Branch, Fragment, FragmentExpression, FragmentId,
+        FragmentMap, FragmentPayload, Fragments, Function,
     },
     syntax::{Expression, IdentifierTarget},
 };
@@ -158,7 +158,7 @@ mod tests {
 
     use crate::{
         fragments::{
-            Function, Fragment, FragmentExpression, FragmentPayload, Fragments,
+            Fragment, FragmentExpression, FragmentPayload, Fragments, Function,
         },
         passes::find_clusters,
         syntax::{self, Script},

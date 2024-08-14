@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Arguments, Branch, Function, Fragment, FragmentExpression, FragmentId,
-        FragmentMap, FragmentPayload, Fragments,
+        Arguments, Branch, Fragment, FragmentExpression, FragmentId,
+        FragmentMap, FragmentPayload, Fragments, Function,
     },
     host::Host,
     source_map::SourceMap,
