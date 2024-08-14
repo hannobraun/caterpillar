@@ -23,28 +23,28 @@ pub enum FragmentExpression {
         name: String,
     },
 
-    /// # A call to a cluster of functions
+    /// # A call to a user-defined function
     ///
     /// ## Implementation Note
     ///
-    /// This enum variant references the cluster by name. It should instead
-    /// reference the cluster using an `id: FragmentId` field.
+    /// This enum variant references the function by name. It should instead
+    /// reference the function using an `id: FragmentId` field.
     ///
     /// This would have the advantage of versioning this call. It could refer to
-    /// any available version of the cluster, which is a useful feature to have
+    /// any available version of the function, which is a useful feature to have
     /// for many reasons.
     ///
     /// Unfortunately, this is not easy. There are two main hurdles, as best I
     /// can tell:
     ///
-    /// 1. It requires cluster fragments to be created in the correct order, as
-    ///    the called cluster must be created before its caller.
+    /// 1. It requires function fragments to be created in the correct order, as
+    ///    the called function must be created before its caller.
     /// 2. There would need to be special handling of recursive calls, or there
     ///    would be a dependency cycle when hashing the calls and their targets.
     ///
     /// I think what we need, is a new compiler pass that creates a call graph.
-    /// This call graph can then be used to order the creating of fragments,
-    /// from the leaves up, as well as to detect recursive call cycles.
+    /// This call graph can then be used to order the creation of fragments,
+    /// from the leaves up, as well as to detect any recursive call cycles.
     ///
     /// As for the handling of those, here is some information on how Unison
     /// does that, which might prove useful:
@@ -55,11 +55,11 @@ pub enum FragmentExpression {
         /// Indicate whether the call is in tail position
         ///
         /// This flag is relevant for tail call elimination. It is only required
-        /// for cluster calls, as only those require compile-time tail call
-        /// elimination:
+        /// for calls to user-defined functions, as only those require compile-
+        /// time tail call elimination:
         ///
-        /// - Built-in and host functions are expected to perform their own tail
-        ///   call elimination at runtime, if necessary.
+        /// - Built-in functions are expected to perform their own tail call
+        ///   elimination at runtime, if necessary.
         /// - No other expressions can result in a new stack frame.
         is_tail_call: bool,
     },
