@@ -3,19 +3,19 @@ use crate::syntax::Branch;
 pub fn find_clusters(branches: Vec<Branch>) -> Vec<Cluster> {
     let mut clusters = Vec::<Cluster>::new();
 
-    for function in branches {
+    for branch in branches {
         let cluster = clusters
             .iter_mut()
-            .find(|cluster| cluster.name == function.name);
+            .find(|cluster| cluster.name == branch.name);
 
         match cluster {
             Some(cluster) => {
-                cluster.branches.push(function);
+                cluster.branches.push(branch);
             }
             None => {
                 clusters.push(Cluster {
-                    name: function.name.clone(),
-                    branches: vec![function],
+                    name: branch.name.clone(),
+                    branches: vec![branch],
                 });
             }
         }
