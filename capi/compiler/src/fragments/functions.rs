@@ -38,12 +38,9 @@ pub struct Branch {
 impl Branch {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
-        let Self {
-            parameters: arguments,
-            start,
-        } = self;
+        let Self { parameters, start } = self;
 
-        arguments.hash(hasher);
+        parameters.hash(hasher);
         start.hash(hasher);
     }
 }
