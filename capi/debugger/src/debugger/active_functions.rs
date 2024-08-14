@@ -53,7 +53,7 @@ impl ActiveFunctions {
             let function = code
                 .fragments
                 .find_function_by_fragment_in_body(&fragment_id)
-                .map(|(cluster, branch)| (cluster.clone(), branch.clone()));
+                .map(|(function, branch)| (function.clone(), branch.clone()));
 
             if let Some(function) = function {
                 functions.push_front(function);
