@@ -16,8 +16,8 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
         .map(|cluster| cluster.name.clone())
         .collect();
 
-    for cluster in functions {
-        for branch in &mut cluster.branches {
+    for function in functions {
+        for branch in &mut function.branches {
             scopes.push(
                 branch
                     .parameters
