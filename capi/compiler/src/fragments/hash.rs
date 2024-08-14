@@ -192,8 +192,10 @@ impl FragmentHash for Parameters {
                     hasher.update(name.as_bytes());
                 }
                 Pattern::Literal { value } => {
+                    let Value(value) = value;
+
                     hasher.update(b"Literal");
-                    hasher.update(&value.0);
+                    hasher.update(value);
                 }
             }
         }
