@@ -205,7 +205,7 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.unwrap_or(assert_address)
                 }
-                FragmentExpression::Block { function } => {
+                FragmentExpression::Function { function } => {
                     // We are currently compiling a function or block (otherwise
                     // we wouldn't be encountering any expression), and the
                     // instructions for that will be executed linearly.

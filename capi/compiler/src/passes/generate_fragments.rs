@@ -119,7 +119,7 @@ fn compile_expression(
                 }],
                 environment,
             };
-            FragmentExpression::Block { function }
+            FragmentExpression::Function { function }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Identifier {
@@ -294,7 +294,7 @@ mod tests {
             let Fragment {
                 payload:
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Block { function },
+                        expression: FragmentExpression::Function { function },
                         ..
                     },
                 ..

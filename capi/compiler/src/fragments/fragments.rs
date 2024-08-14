@@ -42,7 +42,7 @@ impl Fragments {
             let block = self.inner.inner.values().find(|fragment| {
                 match &fragment.payload {
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Block { function },
+                        expression: FragmentExpression::Function { function },
                         ..
                     } => function
                         .branches

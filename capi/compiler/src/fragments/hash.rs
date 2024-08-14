@@ -135,7 +135,7 @@ impl FragmentHash for FragmentExpression {
                     hasher.update(name.as_bytes());
                 }
             }
-            Self::Block { function } => {
+            Self::Function { function } => {
                 hasher.update(b"Block");
 
                 hasher.update(b"function");
