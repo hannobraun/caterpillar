@@ -20,8 +20,8 @@ impl Function {
         let Self { name, branches } = self;
 
         hasher.update(name.as_bytes());
-        for function in branches {
-            function.hash(hasher);
+        for branch in branches {
+            branch.hash(hasher);
         }
     }
 }
