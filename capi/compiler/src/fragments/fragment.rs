@@ -44,18 +44,10 @@ impl Fragment {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
-    /// A cluster is a group of functions that share a name
-    ///
-    /// Functions are called by cluster, and the call is dispatched to a
-    /// function within the cluster using pattern matching on their arguments.
-    ///
-    /// For the sake of uniformity, all functions are organized into clusters,
-    /// so a cluster might have only a single member.
     Function {
         function: Function,
         next: FragmentId,
     },
-
     Expression {
         expression: FragmentExpression,
         next: FragmentId,
