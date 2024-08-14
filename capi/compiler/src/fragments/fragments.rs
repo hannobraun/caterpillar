@@ -39,7 +39,7 @@ impl Fragments {
 
             // If there's no previous fragment, this might be the first fragment
             // in a block.
-            let block = self.inner.inner.values().find(|fragment| {
+            let function = self.inner.inner.values().find(|fragment| {
                 match &fragment.payload {
                     FragmentPayload::Expression {
                         expression: FragmentExpression::Function { function },
@@ -52,7 +52,7 @@ impl Fragments {
                 }
             });
 
-            if let Some(block) = block {
+            if let Some(block) = function {
                 // So there _is_ a block. Continue the search there.
                 fragment_id = block.id();
                 continue;
