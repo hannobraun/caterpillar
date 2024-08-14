@@ -72,11 +72,11 @@ impl Evaluator {
                     let mut bound_arguments = Vec::new();
 
                     let mut member_matches = true;
-                    for argument in parameters.iter().rev() {
+                    for parameter in parameters.iter().rev() {
                         let operand = self.stack.pop_operand()?;
                         used_operands.push(operand);
 
-                        match argument {
+                        match parameter {
                             Pattern::Identifier { name } => {
                                 bound_arguments.push((name.clone(), operand));
                                 argument_operands.push(operand);
