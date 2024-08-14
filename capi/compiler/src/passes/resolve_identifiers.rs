@@ -11,7 +11,7 @@ use super::clusters::Function;
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
-    let known_clusters = functions
+    let known_functions = functions
         .iter()
         .map(|cluster| cluster.name.clone())
         .collect();
@@ -41,7 +41,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
                 &mut branch.body,
                 &mut scopes,
                 &mut environment,
-                &known_clusters,
+                &known_functions,
             );
 
             assert!(
