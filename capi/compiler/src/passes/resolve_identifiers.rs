@@ -118,7 +118,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         host::Host,
-        passes::find_clusters,
+        passes::find_functions,
         syntax::{Branch, Expression, IdentifierTarget, Script},
     };
 
@@ -320,7 +320,7 @@ mod tests {
     }
 
     fn resolve_identifiers(script: Script) -> Vec<Branch> {
-        let mut clusters = find_clusters(script.branches);
+        let mut clusters = find_functions(script.branches);
         super::resolve_identifiers::<TestHost>(&mut clusters);
 
         clusters

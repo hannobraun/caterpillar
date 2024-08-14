@@ -1,6 +1,6 @@
 use crate::syntax::Branch;
 
-pub fn find_clusters(branches: Vec<Branch>) -> Vec<Function> {
+pub fn find_functions(branches: Vec<Branch>) -> Vec<Function> {
     let mut functions = Vec::<Function>::new();
 
     for branch in branches {

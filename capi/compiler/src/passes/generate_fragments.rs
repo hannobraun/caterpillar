@@ -160,7 +160,7 @@ mod tests {
         fragments::{
             Fragment, FragmentExpression, FragmentPayload, Fragments, Function,
         },
-        passes::find_clusters,
+        passes::find_functions,
         syntax::{self, Script},
     };
 
@@ -303,7 +303,7 @@ mod tests {
     }
 
     fn generate_fragments(branches: Vec<syntax::Branch>) -> Fragments {
-        let clusters = find_clusters(branches);
+        let clusters = find_functions(branches);
         super::generate_fragments(clusters)
     }
 }
