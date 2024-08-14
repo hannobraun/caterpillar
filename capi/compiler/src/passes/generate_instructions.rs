@@ -116,7 +116,7 @@ pub fn generate_instructions<H: Host>(
             );
             continue;
         };
-        let cluster = function
+        let function = function
             .iter()
             .map(|(arguments, address)| {
                 let arguments = arguments
@@ -139,7 +139,7 @@ pub fn generate_instructions<H: Host>(
         output.instructions.replace(
             call.address,
             Instruction::CallCluster {
-                cluster,
+                cluster: function,
                 is_tail_call: call.is_tail_call,
             },
         );
