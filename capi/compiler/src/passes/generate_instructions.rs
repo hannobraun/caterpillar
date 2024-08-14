@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Arguments, Cluster, Fragment, FragmentExpression, FragmentId,
-        FragmentMap, FragmentPayload, Fragments, Function,
+        Arguments, Branch, Cluster, Fragment, FragmentExpression, FragmentId,
+        FragmentMap, FragmentPayload, Fragments,
     },
     host::Host,
     source_map::SourceMap,
@@ -401,6 +401,6 @@ enum CompileUnit {
     Cluster {
         id: FragmentId,
         name: String,
-        members: Vec<Function>,
+        members: Vec<Branch>,
     },
 }

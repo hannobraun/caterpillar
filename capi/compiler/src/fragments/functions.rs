@@ -5,7 +5,7 @@ use super::FragmentId;
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Cluster {
     pub name: String,
-    pub members: Vec<Function>,
+    pub members: Vec<Branch>,
 }
 
 impl Cluster {
@@ -21,12 +21,12 @@ impl Cluster {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Function {
+pub struct Branch {
     pub arguments: Arguments,
     pub start: FragmentId,
 }
 
-impl Function {
+impl Branch {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         // Let's destructure `self`, so we don't forget any fields.
         let Self { arguments, start } = self;
