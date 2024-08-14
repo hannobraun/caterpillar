@@ -64,7 +64,7 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Function { id, name, branches } => {
+            CompileUnit::Function { id, branches } => {
                 for branch in branches {
                     let arguments =
                         branch.parameters.inner.iter().filter_map(|pattern| {
@@ -92,7 +92,7 @@ pub fn generate_instructions<H: Host>(
                     let address = bindings_address.unwrap_or(context_address);
                     functions
                         .by_name
-                        .entry(name.clone())
+                        .entry(id)
                         .or_default()
                         .push((branch.parameters, address));
                 }
@@ -101,9 +101,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
-        dbg!(call.id);
-
-        let Some(function) = functions.by_name.get(&call.name) else {
+        let Some(function) = functions.by_name.get(&call.id) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -185,12 +183,11 @@ fn compile_fragment<H: Host>(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Function {
-            function: Function { name, branches },
+            function: Function { branches, .. },
             ..
         } => {
             queue.push_back(CompileUnit::Function {
                 id: fragment.id(),
-                name: name.clone(),
                 branches: branches.clone(),
             });
             return None;
@@ -398,7 +395,7 @@ pub struct CallToFunction {
 
 #[derive(Default)]
 struct Functions {
-    by_name: BTreeMap<String, Vec<(Parameters, InstructionAddress)>>,
+    by_name: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 }
 
 enum CompileUnit {
@@ -409,7 +406,6 @@ enum CompileUnit {
     },
     Function {
         id: FragmentId,
-        name: String,
         branches: Vec<Branch>,
     },
 }
