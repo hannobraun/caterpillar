@@ -39,16 +39,15 @@ impl Fragments {
 
             // If there's no previous fragment, this might be the first fragment
             // in a block.
-            let block =
-                self.inner.inner.values().find(|fragment| {
-                    match fragment.payload {
-                        FragmentPayload::Expression {
-                            expression: FragmentExpression::Block { start, .. },
-                            ..
-                        } => start == fragment_id,
-                        _ => false,
-                    }
-                });
+            let block = self.inner.inner.values().find(|fragment| {
+                match &fragment.payload {
+                    FragmentPayload::Expression {
+                        expression: FragmentExpression::Block { start, .. },
+                        ..
+                    } => *start == fragment_id,
+                    _ => false,
+                }
+            });
 
             if let Some(block) = block {
                 // So there _is_ a block. Continue the search there.
