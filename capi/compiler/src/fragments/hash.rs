@@ -242,7 +242,11 @@ impl FragmentHash for Function {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         hasher.update(b"Function");
 
-        let Self { name, branches } = self;
+        let Self {
+            name,
+            branches,
+            environment,
+        } = self;
 
         hasher.update(b"name");
         if let Some(name) = name {
@@ -252,6 +256,11 @@ impl FragmentHash for Function {
         hasher.update(b"branches");
         for branch in branches {
             branch.hash(hasher);
+        }
+
+        hasher.update(b"environment");
+        for binding in environment {
+            hasher.update(binding.as_bytes());
         }
     }
 }

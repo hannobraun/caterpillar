@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use crate::syntax::Pattern;
 
 use super::FragmentId;
@@ -25,6 +27,22 @@ pub struct Function {
     /// called, its arguments are matched against the parameters of each branch,
     /// until one branch matches. This branch is then evaluated.
     pub branches: Vec<Branch>,
+
+    /// # Values captured by the function from an enclosing scope
+    ///
+    /// All functions in Caterpillar are closures that can use values from
+    /// enclosing scopes. The names of those values are stored here.
+    ///
+    /// ## Implementation Note
+    ///
+    /// Right now, this is always empty for named functions, and only used for
+    /// anonymous ones. This is just a snapshot of the current situation,
+    /// however, and will most likely change as the language becomes less
+    /// limited.
+    ///
+    /// This field refers to the captured values by name. It is likely that
+    /// there are advantages to instead referring to them by fragment ID.
+    pub environment: BTreeSet<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
