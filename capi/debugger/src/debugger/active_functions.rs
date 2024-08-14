@@ -38,7 +38,7 @@ impl ActiveFunctions {
         let mut call_stack: VecDeque<InstructionAddress> =
             process.stack().active_instructions().collect();
 
-        let mut functions = VecDeque::new();
+        let mut functions_and_branches = VecDeque::new();
 
         while let Some(instruction) = call_stack.pop_front() {
             let Some(fragment_id) =
@@ -56,12 +56,12 @@ impl ActiveFunctions {
                 .map(|(function, branch)| (function.clone(), branch.clone()));
 
             if let Some(function_and_branch) = function_and_branch {
-                functions.push_front(function_and_branch);
+                functions_and_branches.push_front(function_and_branch);
             }
         }
 
         Self::Functions {
-            functions: functions
+            functions: functions_and_branches
                 .into_iter()
                 .map(|(cluster, function)| {
                     Branch::new(
