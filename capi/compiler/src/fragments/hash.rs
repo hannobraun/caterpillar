@@ -31,6 +31,15 @@ use super::{
 /// ignoring it, we risk forgetting to update the implementation, which could
 /// lead to hash collisions between different values that only differ in fields
 /// that are not included in the hash.
+///
+/// **2. Hashing an enum variant must include the variant's name.**
+///
+/// Different variants of an enum might have similar fields. To prevent hash
+/// collisions between different variants that happen to have equal values in
+/// their fields, we need to feed different data to the respective hashers.
+///
+/// Any unique string will do, but by convention, we use the name of the enum
+/// variant.
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
