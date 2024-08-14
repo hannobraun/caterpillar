@@ -60,7 +60,10 @@ impl FragmentHash for Branch {
 
         let Self { parameters, start } = self;
 
+        hasher.update(b"parameters");
         parameters.hash(hasher);
+
+        hasher.update(b"start");
         start.hash(hasher);
     }
 }
@@ -71,9 +74,12 @@ impl FragmentHash for Fragment {
 
         let Self { parent, payload } = self;
 
+        hasher.update(b"parent");
         if let Some(parent) = parent {
             parent.hash(hasher);
         }
+
+        hasher.update(b"payload");
         payload.hash(hasher);
     }
 }
@@ -86,46 +92,67 @@ impl FragmentHash for FragmentExpression {
             Self::BindingDefinitions { names } => {
                 hasher.update(b"BindingDefinitions");
 
+                hasher.update(b"names");
                 for name in names {
                     hasher.update(name.as_bytes());
                 }
             }
             Self::Block { start, environment } => {
                 hasher.update(b"Block");
+
+                hasher.update(b"start");
                 start.hash(hasher);
+
+                hasher.update(b"environment");
                 for binding in environment {
                     hasher.update(binding.as_bytes());
                 }
             }
             Self::Comment { text } => {
                 hasher.update(b"Comment");
+
+                hasher.update(b"text");
                 hasher.update(text.as_bytes());
             }
             Self::ResolvedBinding { name } => {
                 hasher.update(b"ResolvedBinding");
+
+                hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedBuiltinFunction { name } => {
                 hasher.update(b"ResolvedBuiltinFunction");
+
+                hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
             Self::ResolvedFunction { name, is_tail_call } => {
                 hasher.update(b"ResolvedFunction");
+
+                hasher.update(b"name");
                 hasher.update(name.as_bytes());
+
+                hasher.update(b"is_tail_call");
                 hasher.update(&[(*is_tail_call).into()]);
             }
             Self::ResolvedHostFunction { name } => {
                 hasher.update(b"ResolvedHostFunction");
+
+                hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
             Self::UnresolvedIdentifier { name } => {
                 hasher.update(b"UnresolvedIdentifier");
+
+                hasher.update(b"name");
                 hasher.update(name.as_bytes());
             }
             Self::Value(value) => {
                 let Value(value) = value;
 
                 hasher.update(b"Value");
+
+                hasher.update(b"value");
                 hasher.update(value);
             }
         }
@@ -138,6 +165,7 @@ impl FragmentHash for FragmentId {
 
         let Self { hash } = self;
 
+        hasher.update(b"hash");
         hasher.update(hash.as_bytes());
     }
 }
@@ -149,12 +177,20 @@ impl FragmentHash for FragmentPayload {
         match self {
             Self::Function { function, next } => {
                 hasher.update(b"Function");
+
+                hasher.update(b"function");
                 function.hash(hasher);
+
+                hasher.update(b"next");
                 next.hash(hasher);
             }
             Self::Expression { expression, next } => {
                 hasher.update(b"Expression");
+
+                hasher.update(b"expression");
                 expression.hash(hasher);
+
+                hasher.update(b"next");
                 next.hash(hasher);
             }
             Self::Terminator => {
@@ -170,9 +206,12 @@ impl FragmentHash for Function {
 
         let Self { name, branches } = self;
 
+        hasher.update(b"name");
         if let Some(name) = name {
             hasher.update(name.as_bytes());
         }
+
+        hasher.update(b"branches");
         for branch in branches {
             branch.hash(hasher);
         }
@@ -185,16 +224,21 @@ impl FragmentHash for Parameters {
 
         let Self { inner } = self;
 
+        hasher.update(b"inner");
         for argument in inner {
             match argument {
                 Pattern::Identifier { name } => {
                     hasher.update(b"Identifier");
+
+                    hasher.update(b"name");
                     hasher.update(name.as_bytes());
                 }
                 Pattern::Literal { value } => {
                     let Value(value) = value;
 
                     hasher.update(b"Literal");
+
+                    hasher.update(b"value");
                     hasher.update(value);
                 }
             }
