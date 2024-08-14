@@ -65,10 +65,10 @@ where
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent, next, fragments)
             }
-            SyntaxElement::Item(cluster) => {
+            SyntaxElement::Item(function) => {
                 let mut branches = Vec::new();
 
-                for function in cluster.members {
+                for function in function.members {
                     let start = compile_block(function.body, next, fragments);
 
                     branches.push(Branch {
@@ -83,7 +83,7 @@ where
                     parent,
                     payload: FragmentPayload::Function {
                         function: Function {
-                            name: cluster.name,
+                            name: function.name,
                             branches,
                         },
                         next,
