@@ -61,7 +61,11 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Cluster { id, name, members } => {
+            CompileUnit::Cluster {
+                id,
+                name,
+                branches: members,
+            } => {
                 for function in members {
                     let arguments =
                         function.parameters.inner.iter().filter_map(
@@ -187,7 +191,7 @@ fn compile_fragment<H: Host>(
             queue.push_back(CompileUnit::Cluster {
                 id: fragment.id(),
                 name: name.clone(),
-                members: branches.clone(),
+                branches: branches.clone(),
             });
             return None;
         }
@@ -402,6 +406,6 @@ enum CompileUnit {
     Cluster {
         id: FragmentId,
         name: String,
-        members: Vec<Branch>,
+        branches: Vec<Branch>,
     },
 }
