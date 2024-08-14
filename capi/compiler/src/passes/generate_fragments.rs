@@ -185,11 +185,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function:
-                        Function {
-                            branches: mut members,
-                            ..
-                        },
+                    function: Function { mut branches, .. },
                     ..
                 },
             ..
@@ -197,7 +193,7 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = members.remove(0);
+        let function = branches.remove(0);
         let body = fragments
             .inner
             .iter_from(function.start)
@@ -239,11 +235,7 @@ mod tests {
         let Fragment {
             payload:
                 FragmentPayload::Function {
-                    function:
-                        Function {
-                            branches: mut members,
-                            ..
-                        },
+                    function: Function { mut branches, .. },
                     ..
                 },
             ..
@@ -251,7 +243,7 @@ mod tests {
         else {
             unreachable!("`f` must be the root element.");
         };
-        let function = members.remove(0);
+        let function = branches.remove(0);
         let last_fragment =
             fragments.inner.iter_from(function.start).last().unwrap();
         assert_eq!(last_fragment.payload, FragmentPayload::Terminator);
