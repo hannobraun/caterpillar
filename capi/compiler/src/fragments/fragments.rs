@@ -64,9 +64,7 @@ impl Fragments {
                 .inner
                 .values()
                 .filter_map(|fragment| match &fragment.payload {
-                    FragmentPayload::Cluster {
-                        function: cluster, ..
-                    } => Some(cluster),
+                    FragmentPayload::Cluster { function, .. } => Some(function),
                     _ => None,
                 })
                 .find_map(|cluster| {
