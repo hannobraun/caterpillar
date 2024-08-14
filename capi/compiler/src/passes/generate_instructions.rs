@@ -91,7 +91,7 @@ pub fn generate_instructions<H: Host>(
 
                     let address = bindings_address.unwrap_or(context_address);
                     functions
-                        .by_name
+                        .by_id
                         .entry(id)
                         .or_default()
                         .push((branch.parameters, address));
@@ -101,7 +101,7 @@ pub fn generate_instructions<H: Host>(
     }
 
     for call in output.placeholders {
-        let Some(function) = functions.by_name.get(&call.id) else {
+        let Some(function) = functions.by_id.get(&call.id) else {
             // This won't happen for any regular function, because we only
             // create placeholders for functions that we actually encounter. But
             // it can happen for the `main` function, since we create a
@@ -395,7 +395,7 @@ pub struct CallToFunction {
 
 #[derive(Default)]
 struct Functions {
-    by_name: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
+    by_id: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 }
 
 enum CompileUnit {
