@@ -61,12 +61,12 @@ impl Evaluator {
                 }
             },
             Instruction::CallCluster {
-                function: cluster,
+                function,
                 is_tail_call,
             } => {
                 let mut any_member_matched = false;
 
-                for (arguments, address) in cluster {
+                for (arguments, address) in function {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
