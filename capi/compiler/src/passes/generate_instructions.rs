@@ -17,7 +17,7 @@ pub fn generate_instructions<H: Host>(
 ) -> (Instructions, SourceMap) {
     let mut queue = VecDeque::new();
     let mut output = Output::default();
-    let mut clusters = Clusters::default();
+    let mut clusters = Functions::default();
 
     // Create placeholder for call to `main` function, and the last return that
     // ends the process, if executed.
@@ -387,7 +387,7 @@ pub struct CallToFunction {
 }
 
 #[derive(Default)]
-struct Clusters {
+struct Functions {
     by_name: BTreeMap<String, Vec<(Parameters, InstructionAddress)>>,
 }
 
