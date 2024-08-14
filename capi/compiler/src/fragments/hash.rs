@@ -50,6 +50,18 @@ use super::{
 ///
 /// Any unique string will do, but by convention, we use the name of the enum
 /// variant.
+///
+/// **4. Hashing any field must start with a unique string.**
+///
+/// Hashing _any_ field, whether from a struct or enum variant, and regardless
+/// if that happens to follow struct or tuple style, must start by feeding a
+/// unique string to the hasher.
+///
+/// If subsequent fields contain similar data, for example lists of strings, but
+/// there is no unique string to serve as a separator between those lists, then
+/// moving the end of the first list to the beginning of the second, for
+/// example, would result in the same hash. We prevent this case by using a
+/// unique string as a separator between the lists.
 pub(super) trait FragmentHash {
     fn hash(&self, hasher: &mut blake3::Hasher);
 }
