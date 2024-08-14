@@ -15,14 +15,14 @@ pub struct Function {
 impl Function {
     pub fn new(
         cluster: fragments::Function,
-        function: fragments::Branch,
+        branch: fragments::Branch,
         fragments: &Fragments,
         source_map: &SourceMap,
         process: &Process,
     ) -> Self {
         let body = fragments
             .inner
-            .iter_from(function.start)
+            .iter_from(branch.start)
             .cloned()
             .filter_map(|fragment| {
                 Expression::new(fragment, fragments, source_map, process)
