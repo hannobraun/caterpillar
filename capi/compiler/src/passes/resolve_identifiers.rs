@@ -320,10 +320,10 @@ mod tests {
     }
 
     fn resolve_identifiers(script: Script) -> Vec<Branch> {
-        let mut clusters = find_functions(script.branches);
-        super::resolve_identifiers::<TestHost>(&mut clusters);
+        let mut functions = find_functions(script.branches);
+        super::resolve_identifiers::<TestHost>(&mut functions);
 
-        clusters
+        functions
             .into_iter()
             .flat_map(|cluster| cluster.branches)
             .collect()
