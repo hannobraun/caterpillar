@@ -11,6 +11,6 @@ pub use self::{
     active_functions::ActiveFunctions,
     debugger::Debugger,
     expression::{Expression, OtherExpression},
-    function::Function,
+    function::Branch,
     remote_process::RemoteProcess,
 };

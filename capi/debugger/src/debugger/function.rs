@@ -7,12 +7,12 @@ use capi_process::Process;
 use super::Expression;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Function {
+pub struct Branch {
     pub name: String,
     pub body: Vec<Expression>,
 }
 
-impl Function {
+impl Branch {
     pub fn new(
         function: fragments::Function,
         branch: fragments::Branch,

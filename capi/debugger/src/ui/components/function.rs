@@ -6,12 +6,12 @@ use leptos::{
 };
 
 use crate::{
-    debugger::{Expression, Function, OtherExpression},
+    debugger::{Branch, Expression, OtherExpression},
     ui::{send_command, CommandsTx},
 };
 
 #[component]
-pub fn Function(function: Function, commands: CommandsTx) -> impl IntoView {
+pub fn Function(function: Branch, commands: CommandsTx) -> impl IntoView {
     view! {
         <div class="m-2 mb-4">
             <div class="font-bold">

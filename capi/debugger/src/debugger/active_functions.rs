@@ -3,11 +3,11 @@ use std::{collections::VecDeque, fmt};
 use capi_process::{InstructionAddress, Process};
 use capi_protocol::updates::Code;
 
-use super::Function;
+use super::Branch;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ActiveFunctions {
-    Functions { functions: Vec<Function> },
+    Functions { functions: Vec<Branch> },
     Message { message: ActiveFunctionsMessage },
 }
 
@@ -64,7 +64,7 @@ impl ActiveFunctions {
             functions: functions
                 .into_iter()
                 .map(|(cluster, function)| {
-                    Function::new(
+                    Branch::new(
                         cluster,
                         function,
                         &code.fragments,

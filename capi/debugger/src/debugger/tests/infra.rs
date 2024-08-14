@@ -4,7 +4,7 @@ use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
 
 use crate::debugger::{
-    ActiveFunctions, Debugger, Expression, Function, OtherExpression,
+    ActiveFunctions, Branch, Debugger, Expression, OtherExpression,
     RemoteProcess,
 };
 
@@ -69,11 +69,11 @@ impl TestInfra {
 }
 
 pub trait ActiveFunctionsExt {
-    fn expect_functions(self) -> Vec<Function>;
+    fn expect_functions(self) -> Vec<Branch>;
 }
 
 impl ActiveFunctionsExt for ActiveFunctions {
-    fn expect_functions(self) -> Vec<Function> {
+    fn expect_functions(self) -> Vec<Branch> {
         let ActiveFunctions::Functions { functions } = self else {
             panic!("Expected active functions to be displayed");
         };
