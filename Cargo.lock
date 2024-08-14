@@ -189,7 +189,7 @@ dependencies = [
  "base64 0.21.7",
  "bytes",
  "futures-util",
- "http 1.1.0",
+ "http",
  "http-body",
  "http-body-util",
  "hyper",
@@ -224,7 +224,7 @@ dependencies = [
  "async-trait",
  "bytes",
  "futures-util",
- "http 1.1.0",
+ "http",
  "http-body",
  "http-body-util",
  "mime",
@@ -358,7 +358,7 @@ dependencies = [
  "capi-protocol",
  "console_error_panic_hook",
  "console_log",
- "gloo-net 0.6.0",
+ "gloo-net",
  "leptos",
  "log",
  "ron",
@@ -902,27 +902,6 @@ checksum = "40ecd4077b5ae9fd2e9e169b102c6c330d0605168eb0e8bf79952b256dbefffd"
 
 [[package]]
 name = "gloo-net"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43aaa242d1239a8822c15c645f02166398da4f8b5c4bae795c1f5b44e9eee173"
-dependencies = [
- "futures-channel",
- "futures-core",
- "futures-sink",
- "gloo-utils",
- "http 0.2.12",
- "js-sys",
- "pin-project",
- "serde",
- "serde_json",
- "thiserror",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
-]
-
-[[package]]
-name = "gloo-net"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c06f627b1a58ca3d42b45d6104bf1e1a03799df472df00988b6ba21accc10580"
@@ -931,7 +910,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "gloo-utils",
- "http 1.1.0",
+ "http",
  "js-sys",
  "pin-project",
  "serde",
@@ -1013,17 +992,6 @@ dependencies = [
 
 [[package]]
 name = "http"
-version = "0.2.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "601cbb57e577e2f5ef5be8e7b83f0f63994f25aa94d673e54a92d5c516d101f1"
-dependencies = [
- "bytes",
- "fnv",
- "itoa",
-]
-
-[[package]]
-name = "http"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21b9ddb458710bc376481b842f5da65cdf31522de232c1ca8146abce2a358258"
@@ -1040,7 +1008,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1efedce1fb8e6913f23e0c92de8e62cd5b772a67e7b3946df930a62566c93184"
 dependencies = [
  "bytes",
- "http 1.1.0",
+ "http",
 ]
 
 [[package]]
@@ -1051,7 +1019,7 @@ checksum = "793429d76616a256bcb62c2a2ec2bed781c8307e797e2598c50010f2bee2544f"
 dependencies = [
  "bytes",
  "futures-util",
- "http 1.1.0",
+ "http",
  "http-body",
  "pin-project-lite",
 ]
@@ -1077,7 +1045,7 @@ dependencies = [
  "bytes",
  "futures-channel",
  "futures-util",
- "http 1.1.0",
+ "http",
  "http-body",
  "httparse",
  "httpdate",
@@ -1095,7 +1063,7 @@ checksum = "cde7055719c54e36e95e8719f95883f22072a48ede39db7fc17a4e1d5281e9b9"
 dependencies = [
  "bytes",
  "futures-util",
- "http 1.1.0",
+ "http",
  "http-body",
  "hyper",
  "pin-project-lite",
@@ -1153,9 +1121,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.3.0"
+version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de3fc2e30ba82dd1b3911c8de1ffc143c74a914a14e99514d7637e3099df5ea0"
+checksum = "93ead53efc7ea8ed3cfb0c79fc8023fbb782a5432b52830b6518941cebe6505c"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.5",
@@ -1258,9 +1226,9 @@ checksum = "884e2677b40cc8c339eaefcb701c32ef1fd2493d71118dc0ca4b6a736c93bd67"
 
 [[package]]
 name = "leptos"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57727cd8f6d1e78aa9721270002037d7f63b5a7a2b60a7830239f6938cbca9b7"
+checksum = "a15911b4e53bb6e1b033d717eadb39924418a4a288279128122e5a65c70ba3e6"
 dependencies = [
  "cfg-if",
  "leptos_config",
@@ -1278,9 +1246,9 @@ dependencies = [
 
 [[package]]
 name = "leptos_config"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e519478cf13b84e0169f14660fda6425a419d181903cf511cec416555c9ff51"
+checksum = "dbc4d78fba18c1ccab48ffc9f3d35b39821f896b0a28bdd616a846b6241036c9"
 dependencies = [
  "config",
  "regex",
@@ -1291,9 +1259,9 @@ dependencies = [
 
 [[package]]
 name = "leptos_dom"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46a32ccb530d95c82b522ff86827a9c14efb3d3a75c508c20605d4603beb1695"
+checksum = "1ccb04d4763603bb665fa35cb9642d0bd75313117d10efda9b79243c023e69df"
 dependencies = [
  "async-recursion",
  "cfg-if",
@@ -1301,7 +1269,7 @@ dependencies = [
  "futures",
  "getrandom",
  "html-escape",
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "itertools",
  "js-sys",
  "leptos_reactive",
@@ -1321,13 +1289,13 @@ dependencies = [
 
 [[package]]
 name = "leptos_hot_reload"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71eb2b309ff0e526d147e32afcbbbf39b43c1ed5b7264b7abfb6635c388c0e9e"
+checksum = "2cc61e5cce26761562cd3332630b3fbaddb1c4f77744e41474c7212ad279c5d9"
 dependencies = [
  "anyhow",
  "camino",
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "parking_lot",
  "proc-macro2",
  "quote",
@@ -1339,9 +1307,9 @@ dependencies = [
 
 [[package]]
 name = "leptos_macro"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d38b41f4e38b6f0e26858ae40464e12702096d2219c48afd41b79693fd025a9d"
+checksum = "90eaea005cabb879c091c84cfec604687ececfd540469e5a30a60c93489a2f23"
 dependencies = [
  "attribute-derive",
  "cfg-if",
@@ -1362,14 +1330,14 @@ dependencies = [
 
 [[package]]
 name = "leptos_reactive"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc38db7b14f2d48cb427dd4c197ee58354f5de9407fb3417f2ee7ff85097ffd3"
+checksum = "0ef2f99f377472459b0d320b46e9a9516b0e68dee5ed8c9eeb7e8eb9fefec5d2"
 dependencies = [
  "base64 0.22.1",
  "cfg-if",
  "futures",
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "js-sys",
  "oco_ref",
  "paste",
@@ -1389,9 +1357,9 @@ dependencies = [
 
 [[package]]
 name = "leptos_server"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c0ea6eed569e70fa4eed722ee3f042ed76c40d2b0a82b7240eb660893d6a5e9"
+checksum = "9f07be202a433baa8c50050de4f9c116efccffc57208bcda7bd1bb9b8e87dca9"
 dependencies = [
  "inventory",
  "lazy_static",
@@ -2102,17 +2070,17 @@ dependencies = [
 
 [[package]]
 name = "server_fn"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e9aaae169927ef701a4734d680adcb08f13269c9f0af822bf175d681fe56d65c"
+checksum = "024b400db1aca5bd4188714f7bbbf7a2e1962b9a12a80b2a21e937e509086963"
 dependencies = [
  "bytes",
  "ciborium",
  "const_format",
  "dashmap",
  "futures",
- "gloo-net 0.5.0",
- "http 1.1.0",
+ "gloo-net",
+ "http",
  "js-sys",
  "once_cell",
  "send_wrapper",
@@ -2131,9 +2099,9 @@ dependencies = [
 
 [[package]]
 name = "server_fn_macro"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "583085903fd5d091884eb52d99550e32777015af21f0f5dbec49bedcc320ce82"
+checksum = "9cf0e6f71fc924df36e87f27dfbd447f0bedd092d365db3a5396878256d9f00c"
 dependencies = [
  "const_format",
  "convert_case",
@@ -2145,9 +2113,9 @@ dependencies = [
 
 [[package]]
 name = "server_fn_macro_default"
-version = "0.6.13"
+version = "0.6.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b628649700e28cf8bc33e0df5de5c9d591a1828ba005a25b425477055f1e0e74"
+checksum = "556e4fd51eb9ee3e7d9fb0febec6cef486dcbc8f7f427591dfcfebee1abe1ad4"
 dependencies = [
  "server_fn_macro",
  "syn 2.0.74",
@@ -2409,7 +2377,7 @@ version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a8534fd7f78b5405e860340ad6575217ce99f38d4d5c8f2442cb5ecb50090e1"
 dependencies = [
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "toml_datetime",
  "winnow 0.5.40",
 ]
@@ -2420,7 +2388,7 @@ version = "0.22.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "583c44c02ad26b0c3f3066fe629275e50627026c51ac2e595cca4c230ce1ce1d"
 dependencies = [
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -2445,15 +2413,15 @@ dependencies = [
 
 [[package]]
 name = "tower-layer"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c20c8dbed6283a09604c3e69b4b7eeb54e298b8a600d4d5ecb5ad39de609f1d0"
+checksum = "121c2a6cda46980bb0fcd1647ffaf6cd3fc79a013de288782836f6df9c48780e"
 
 [[package]]
 name = "tower-service"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6bc1c9ce2b5135ac7f93c72918fc37feb872bdc6a5533a8b85eb4b86bfdae52"
+checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
 
 [[package]]
 name = "tracing"
@@ -2526,7 +2494,7 @@ dependencies = [
  "byteorder",
  "bytes",
  "data-encoding",
- "http 1.1.0",
+ "http",
  "httparse",
  "log",
  "rand",
@@ -2867,7 +2835,7 @@ dependencies = [
  "ahash",
  "bitflags 2.6.0",
  "hashbrown 0.14.5",
- "indexmap 2.3.0",
+ "indexmap 2.4.0",
  "semver",
  "serde",
 ]
