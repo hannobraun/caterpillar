@@ -14,8 +14,8 @@ use crate::{
 pub fn compile<H: Host>(
     mut script: Script,
 ) -> (Fragments, Instructions, SourceMap) {
-    determine_tail_positions(&mut script.functions);
-    let mut clusters = find_clusters(script.functions);
+    determine_tail_positions(&mut script.branches);
+    let mut clusters = find_clusters(script.branches);
     resolve_identifiers::<H>(&mut clusters);
     let fragments = generate_fragments(clusters);
     let (instructions, source_map) =

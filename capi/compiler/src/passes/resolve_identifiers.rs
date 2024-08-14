@@ -119,7 +119,7 @@ mod tests {
     use crate::{
         host::Host,
         passes::find_clusters,
-        syntax::{Expression, Branch, IdentifierTarget, Script},
+        syntax::{Branch, Expression, IdentifierTarget, Script},
     };
 
     #[test]
@@ -320,7 +320,7 @@ mod tests {
     }
 
     fn resolve_identifiers(script: Script) -> Vec<Branch> {
-        let mut clusters = find_clusters(script.functions);
+        let mut clusters = find_clusters(script.branches);
         super::resolve_identifiers::<TestHost>(&mut clusters);
 
         clusters

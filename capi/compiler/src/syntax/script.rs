@@ -6,7 +6,7 @@ use super::{function::Pattern, Branch, Expression};
 
 #[derive(Clone, Default, serde::Deserialize, serde::Serialize)]
 pub struct Script {
-    pub functions: Vec<Branch>,
+    pub branches: Vec<Branch>,
 }
 
 impl Script {
@@ -31,7 +31,7 @@ impl Script {
             builder.expressions
         };
 
-        self.functions.push(Branch {
+        self.branches.push(Branch {
             name: name.to_string(),
             parameters,
             body,

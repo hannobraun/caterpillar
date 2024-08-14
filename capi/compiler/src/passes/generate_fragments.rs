@@ -175,7 +175,7 @@ mod tests {
             },
         );
 
-        let mut fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.branches);
 
         let root = fragments
             .inner
@@ -225,7 +225,7 @@ mod tests {
         let mut script = Script::default();
         script.function("f", |p| p, |_| {});
 
-        let mut fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.branches);
 
         let root = fragments
             .inner
@@ -260,7 +260,7 @@ mod tests {
             },
         );
 
-        let mut fragments = generate_fragments(script.functions);
+        let mut fragments = generate_fragments(script.branches);
 
         let root = fragments
             .inner
