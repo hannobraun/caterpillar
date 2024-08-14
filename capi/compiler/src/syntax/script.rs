@@ -16,7 +16,7 @@ impl Script {
         arguments: impl FnOnce(&mut PatternBuilder) -> &mut PatternBuilder,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {
-        let arguments = {
+        let parameters = {
             let mut builder = PatternBuilder {
                 patterns: Vec::new(),
             };
@@ -33,7 +33,7 @@ impl Script {
 
         self.functions.push(Branch {
             name: name.to_string(),
-            parameters: arguments,
+            parameters,
             body,
         });
 
