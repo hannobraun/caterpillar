@@ -157,7 +157,7 @@ fn compile_context<H: Host>(
     let mut first_instruction = None;
 
     for fragment in fragments.iter_from(start) {
-        let addr = compile_fragment::<H>(fragment, output, queue);
+        let addr = compile_fragment::<H>(fragment, fragments, output, queue);
         first_instruction = first_instruction.or(addr);
     }
 
@@ -174,6 +174,7 @@ fn compile_context<H: Host>(
 
 fn compile_fragment<H: Host>(
     fragment: &Fragment,
+    _: &FragmentMap,
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
