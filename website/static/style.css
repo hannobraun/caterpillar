@@ -120,7 +120,7 @@ address {
     text-decoration-line: underline;
 }
 
-/* Applies to code produced by `code`, but not whole code block. */
+/* Applies to code produced by `code`, but not whole code blocks. */
 .prose p>code,
 .prose li>code {
     /* Tailwind's `bg-neutral-200` */
