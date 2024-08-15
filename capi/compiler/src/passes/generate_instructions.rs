@@ -43,71 +43,68 @@ pub fn generate_instructions<H: Host>(
     );
 
     while let Some(unit) = queue.pop_front() {
-        match unit {
-            CompileUnit::Function {
-                id,
-                function,
-                address,
-            } => {
-                let mut start = None;
+        let CompileUnit {
+            id,
+            function,
+            address,
+        } = unit;
 
-                for branch in function.branches {
-                    let parameters =
-                        branch.parameters.inner.iter().filter_map(|pattern| {
-                            match pattern {
-                                Pattern::Identifier { name } => Some(name),
-                                Pattern::Literal { .. } => {
-                                    // Literal patterns are only relevant when
-                                    // selecting the branch to execute. They no
-                                    // longer have meaning once the function
-                                    // actually starts executing.
-                                    None
-                                }
-                            }
-                        });
-                    let bindings_address =
-                        output.generate_binding(parameters, id);
+        let mut start = None;
 
-                    let context_address = compile_context::<H>(
-                        branch.start,
-                        &fragments.inner,
-                        &mut output,
-                        &mut queue,
-                    );
+        for branch in function.branches {
+            let parameters =
+                branch.parameters.inner.iter().filter_map(|pattern| {
+                    match pattern {
+                        Pattern::Identifier { name } => Some(name),
+                        Pattern::Literal { .. } => {
+                            // Literal patterns are only relevant when
+                            // selecting the branch to execute. They no
+                            // longer have meaning once the function
+                            // actually starts executing.
+                            None
+                        }
+                    }
+                });
+            let bindings_address = output.generate_binding(parameters, id);
 
-                    let address = bindings_address.unwrap_or(context_address);
-                    functions
-                        .by_id
-                        .entry(id)
-                        .or_default()
-                        .push((branch.parameters, address));
+            let context_address = compile_context::<H>(
+                branch.start,
+                &fragments.inner,
+                &mut output,
+                &mut queue,
+            );
 
-                    start = start.or(Some(address));
-                }
+            let address = bindings_address.unwrap_or(context_address);
+            functions
+                .by_id
+                .entry(id)
+                .or_default()
+                .push((branch.parameters, address));
 
-                let start = start.expect(
-                    "We don't have a start address, which means we haven't \
+            start = start.or(Some(address));
+        }
+
+        let start = start.expect(
+            "We don't have a start address, which means we haven't \
                     processed a single branch. But all functions must have at
                     least one branch.",
-                );
+        );
 
-                if let Some(address) = address {
-                    output.instructions.replace(
-                        address,
-                        Instruction::MakeClosure {
-                            address: start,
-                            environment: function.environment,
-                        },
-                    );
-                } else {
-                    assert!(
-                        function.environment.is_empty(),
-                        "We were not provided an address where to put a \"make \
+        if let Some(address) = address {
+            output.instructions.replace(
+                address,
+                Instruction::MakeClosure {
+                    address: start,
+                    environment: function.environment,
+                },
+            );
+        } else {
+            assert!(
+                function.environment.is_empty(),
+                "We were not provided an address where to put a \"make \
                         closure \" instruction, and yet the function has an \
                         environment. This si a bug.",
-                    );
-                }
-            }
+            );
         }
     }
 
@@ -194,7 +191,7 @@ fn compile_fragment<H: Host>(
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
         FragmentPayload::Function { function, .. } => {
-            queue.push_back(CompileUnit::Function {
+            queue.push_back(CompileUnit {
                 id: fragment.id(),
                 function: function.clone(),
                 address: None,
@@ -244,7 +241,7 @@ fn compile_fragment<H: Host>(
                     // And to make it happen later, we need to put what we
                     // already have into a queue. Once whatever's currently
                     // being compiled is out of the way, we can process that.
-                    queue.push_front(CompileUnit::Function {
+                    queue.push_front(CompileUnit {
                         id: fragment.id(),
                         function: function.clone(),
                         address: Some(address),
@@ -407,10 +404,8 @@ struct Functions {
     by_id: BTreeMap<FragmentId, Vec<(Parameters, InstructionAddress)>>,
 }
 
-enum CompileUnit {
-    Function {
-        id: FragmentId,
-        function: Function,
-        address: Option<InstructionAddress>,
-    },
+struct CompileUnit {
+    id: FragmentId,
+    function: Function,
+    address: Option<InstructionAddress>,
 }
