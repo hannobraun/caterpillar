@@ -57,7 +57,7 @@ impl Fragments {
                         .any(|branch| branch.start == fragment_id)
                 });
 
-            if let Some((id, _)) = function {
+            if let Some((id, _function)) = function {
                 // So there _is_ a block. Continue the search there.
                 fragment_id = id;
                 continue;
