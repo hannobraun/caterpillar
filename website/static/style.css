@@ -138,6 +138,23 @@ address {
     max-width: 100%;
 }
 
+.prose ol {
+    list-style-type: decimal;
+    list-style-position: outside;
+
+    padding-left: 1.75rem;
+
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.prose ol li {
+    padding-left: 0.25rem;
+
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .prose video {
     max-width: 100%;
 }
