@@ -25,6 +25,40 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     }
 }
 
+fn compile_function(
+    function: syntax::Function,
+    parent: Option<FragmentId>,
+    next: FragmentId,
+    fragments: &mut FragmentMap,
+) -> Fragment {
+    let mut branches = Vec::new();
+
+    for branch in function.branches {
+        let start = compile_branch(branch.body, next, fragments);
+
+        branches.push(Branch {
+            parameters: Parameters {
+                inner: branch.parameters,
+            },
+            start,
+        });
+    }
+
+    Fragment {
+        parent,
+        payload: FragmentPayload::Expression {
+            expression: FragmentExpression::Function {
+                function: Function {
+                    name: Some(function.name),
+                    branches,
+                    environment: BTreeSet::new(),
+                },
+            },
+            next,
+        },
+    }
+}
+
 fn compile_branch(
     expressions: Vec<Expression>,
     parent: FragmentId,
@@ -64,32 +98,7 @@ where
                 compile_expression(expression, parent, next, fragments)
             }
             SyntaxElement::Item(function) => {
-                let mut branches = Vec::new();
-
-                for branch in function.branches {
-                    let start = compile_branch(branch.body, next, fragments);
-
-                    branches.push(Branch {
-                        parameters: Parameters {
-                            inner: branch.parameters,
-                        },
-                        start,
-                    });
-                }
-
-                Fragment {
-                    parent,
-                    payload: FragmentPayload::Expression {
-                        expression: FragmentExpression::Function {
-                            function: Function {
-                                name: Some(function.name),
-                                branches,
-                                environment: BTreeSet::new(),
-                            },
-                        },
-                        next,
-                    },
-                }
+                compile_function(function, parent, next, fragments)
             }
         };
 
