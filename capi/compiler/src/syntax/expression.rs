@@ -1,6 +1,6 @@
-use std::collections::BTreeSet;
-
 use capi_process::Value;
+
+use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Expression {
@@ -14,16 +14,7 @@ pub enum Expression {
 
     /// A function expression
     Function {
-        /// The body of the function
-        body: Vec<Expression>,
-
-        /// The environment of the function
-        ///
-        /// These are the values that the function captured from parent scopes.
-        ///
-        /// The environment is empty on construction, until it is filled in
-        /// during the resolve pass.
-        environment: BTreeSet<String>,
+        function: Function,
     },
 
     /// A name that identifies a definition in the source code

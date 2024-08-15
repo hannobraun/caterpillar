@@ -69,14 +69,16 @@ fn resolve_in_block<H: Host>(
                     }
                 }
             }
-            Expression::Function { body, environment } => {
-                scopes.push(Bindings::new());
-                resolve_in_block::<H>(
-                    body,
-                    scopes,
-                    environment,
-                    known_named_functions,
-                );
+            Expression::Function { function } => {
+                for branch in &mut function.branches {
+                    scopes.push(Bindings::new());
+                    resolve_in_block::<H>(
+                        &mut branch.body,
+                        scopes,
+                        &mut function.environment,
+                        known_named_functions,
+                    );
+                }
             }
             Expression::Identifier { name, target, .. } => {
                 // The way this is written, definitions can silently shadow each
@@ -195,14 +197,13 @@ mod tests {
         let mut functions = resolve_identifiers(script);
 
         let mut function = functions.remove(0);
-        let Some(Expression::Function { body, environment }) =
-            function.body.last_mut()
+        let Some(Expression::Function { function }) = function.body.last_mut()
         else {
             panic!("Last expression in the function is a block.");
         };
 
         assert_eq!(
-            body.last(),
+            function.branches.first().unwrap().body.last(),
             Some(&Expression::Identifier {
                 name: String::from("value"),
                 target: Some(IdentifierTarget::Binding),
@@ -210,8 +211,8 @@ mod tests {
             })
         );
 
-        assert!(environment.remove("value"));
-        assert!(environment.is_empty());
+        assert!(function.environment.remove("value"));
+        assert!(function.environment.is_empty());
     }
 
     #[test]

@@ -102,8 +102,14 @@ impl ExpressionBuilder {
         };
 
         self.push_expression(Expression::Function {
-            body,
-            environment: BTreeSet::new(),
+            function: Function {
+                name: None,
+                branches: vec![Branch {
+                    parameters: Vec::new(),
+                    body,
+                }],
+                environment: BTreeSet::new(),
+            },
         })
     }
 

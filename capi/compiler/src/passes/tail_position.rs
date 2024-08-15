@@ -26,8 +26,10 @@ fn analyze_block(block: &mut [Expression]) {
     }
 
     for expression in block {
-        if let Expression::Function { body, .. } = expression {
-            analyze_block(body);
+        if let Expression::Function { function } = expression {
+            for branch in &mut function.branches {
+                analyze_block(&mut branch.body);
+            }
         }
     }
 }
@@ -78,10 +80,11 @@ mod tests {
 
         let mut function = script.functions.remove(0);
         let mut branch = function.branches.remove(0);
-        let Expression::Function { body, .. } = branch.body.remove(1) else {
+        let Expression::Function { function } = branch.body.remove(1) else {
             panic!("Expected block.");
         };
-        let identifiers = body.to_identifiers();
+        let identifiers =
+            function.branches.first().unwrap().body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 

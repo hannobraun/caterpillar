@@ -113,15 +113,7 @@ fn compile_expression(
             FragmentExpression::BindingDefinitions { names }
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Function { body, environment } => {
-            let function = syntax::Function {
-                name: None,
-                branches: vec![syntax::Branch {
-                    parameters: Vec::new(),
-                    body,
-                }],
-                environment,
-            };
+        Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
         }
         Expression::Identifier {
