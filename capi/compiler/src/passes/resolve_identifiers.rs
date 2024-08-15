@@ -11,7 +11,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
     let known_functions = functions
         .iter()
-        .map(|cluster| cluster.name.clone())
+        .map(|function| function.name.clone())
         .collect();
 
     for function in functions {
