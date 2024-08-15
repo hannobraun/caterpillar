@@ -36,8 +36,7 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start =
-            compile_context(branch.body.into_iter(), Some(next), fragments);
+        let start = compile_context(branch.body, Some(next), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
