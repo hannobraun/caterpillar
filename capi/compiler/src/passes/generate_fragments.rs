@@ -49,7 +49,7 @@ fn compile_function(
         payload: FragmentPayload::Expression {
             expression: FragmentExpression::Function {
                 function: Function {
-                    name: Some(function.name),
+                    name: function.name,
                     branches,
                     environment: BTreeSet::new(),
                 },
