@@ -190,14 +190,6 @@ fn compile_fragment<H: Host>(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     match &fragment.payload {
-        FragmentPayload::Function { function, .. } => {
-            queue.push_back(CompileUnit {
-                id: fragment.id(),
-                function: function.clone(),
-                address: None,
-            });
-            None
-        }
         FragmentPayload::Expression { expression, .. } => {
             match expression {
                 FragmentExpression::BindingDefinitions { names } => {

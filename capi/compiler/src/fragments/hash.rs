@@ -208,15 +208,6 @@ impl FragmentHash for FragmentPayload {
         hasher.update(b"FragmentPayload");
 
         match self {
-            Self::Function { function, next } => {
-                hasher.update(b"Function");
-
-                hasher.update(b"function");
-                function.hash(hasher);
-
-                hasher.update(b"next");
-                next.hash(hasher);
-            }
             Self::Expression { expression, next } => {
                 hasher.update(b"Expression");
 

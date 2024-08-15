@@ -210,12 +210,6 @@ mod tests {
             .inner
             .iter_from(branch.start)
             .filter_map(|fragment| match &fragment.payload {
-                FragmentPayload::Function { .. } => {
-                    unreachable!(
-                        "This test suite does not define functions within \
-                        function bodies."
-                    );
-                }
                 FragmentPayload::Expression { expression, .. } => {
                     Some(expression.clone())
                 }

@@ -73,32 +73,6 @@ impl Fragments {
                 }
             }
 
-            // If there's no previous fragment, nor a block where this is the
-            // first fragment, it's probably the first fragment in the function
-            // we're looking for.
-            let function = self
-                .inner
-                .inner
-                .values()
-                .filter_map(|fragment| match &fragment.payload {
-                    FragmentPayload::Function { function, .. } => {
-                        Some(function)
-                    }
-                    _ => None,
-                })
-                .find_map(|cluster| {
-                    let function = cluster
-                        .branches
-                        .iter()
-                        .find(|function| function.start == fragment_id)?;
-                    Some((cluster, function))
-                });
-
-            if let Some(function) = function {
-                // We have found what we're looking for!
-                return Some(function);
-            }
-
             // We haven't found anything. Not even a new fragment to look at.
             // We're done here.
             break None;
@@ -116,9 +90,6 @@ impl FragmentMap {
         self.inner
             .values()
             .filter_map(|fragment| match &fragment.payload {
-                FragmentPayload::Function { function, .. } => {
-                    Some((&function.name, fragment.id()))
-                }
                 FragmentPayload::Expression {
                     expression: FragmentExpression::Function { function },
                     ..

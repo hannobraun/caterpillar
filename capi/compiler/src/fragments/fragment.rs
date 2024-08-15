@@ -1,4 +1,4 @@
-use super::{hash::FragmentHash, FragmentExpression, FragmentId, Function};
+use super::{hash::FragmentHash, FragmentExpression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
@@ -30,7 +30,6 @@ impl Fragment {
 
     pub fn next(&self) -> Option<FragmentId> {
         match &self.payload {
-            FragmentPayload::Function { next, .. } => Some(*next),
             FragmentPayload::Expression { next, .. } => Some(*next),
             FragmentPayload::Terminator => None,
         }
@@ -39,10 +38,6 @@ impl Fragment {
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
-    Function {
-        function: Function,
-        next: FragmentId,
-    },
     Expression {
         expression: FragmentExpression,
         next: FragmentId,
