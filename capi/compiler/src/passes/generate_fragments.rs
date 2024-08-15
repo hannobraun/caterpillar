@@ -111,6 +111,7 @@ fn compile_expression(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
+        Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Function { body, environment } => {
             let start = compile_block(body, next, fragments);
             let function = Function {
@@ -123,7 +124,6 @@ fn compile_expression(
             };
             FragmentExpression::Function { function }
         }
-        Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Identifier {
             name,
             target,

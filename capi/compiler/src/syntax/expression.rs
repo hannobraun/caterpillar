@@ -8,6 +8,10 @@ pub enum Expression {
         names: Vec<String>,
     },
 
+    Comment {
+        text: String,
+    },
+
     /// A function expression
     Function {
         /// The body of the function
@@ -20,10 +24,6 @@ pub enum Expression {
         /// The environment is empty on construction, until it is filled in
         /// during the resolve pass.
         environment: BTreeSet<String>,
-    },
-
-    Comment {
-        text: String,
     },
 
     /// A name that identifies a definition in the source code
