@@ -90,7 +90,8 @@ where
                 compile_expression(expression, parent, next, fragments)
             }
             SyntaxElement::Item(function) => {
-                compile_function(function, parent, next, fragments)
+                let expression = Expression::Function { function };
+                compile_expression(expression, parent, next, fragments)
             }
         };
 
