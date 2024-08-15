@@ -94,10 +94,14 @@ impl Fragments {
                     Some((cluster, function))
                 });
 
-            // And this is our result. If it's not the function we're looking
-            // for, the fragment was part of the root context and there's no
-            // function to be found.
-            return function;
+            if let Some(function) = function {
+                // We have found what we're looking for!
+                return Some(function);
+            }
+
+            // We haven't found anything. Not even a new fragment to look at.
+            // We're done here.
+            break None;
         }
     }
 }
