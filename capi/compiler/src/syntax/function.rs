@@ -6,6 +6,9 @@ use super::Expression;
 
 #[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
 pub struct Function {
+    /// The name of the function, if available
+    ///
+    /// This is `Some` for named functions, `None` for anonymous ones.
     pub name: Option<String>,
 
     pub branches: Vec<Branch>,
