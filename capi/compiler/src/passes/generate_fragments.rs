@@ -14,7 +14,10 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     };
 
     let root = compile_context(
-        functions.into_iter().map(SyntaxElement::Item),
+        functions
+            .into_iter()
+            .map(|function| Expression::Function { function })
+            .map(SyntaxElement::Expression),
         None,
         &mut fragments,
     );
@@ -89,10 +92,6 @@ where
             SyntaxElement::Expression(expression) => {
                 compile_expression(expression, parent, next, fragments)
             }
-            SyntaxElement::Item(function) => {
-                let expression = Expression::Function { function };
-                compile_expression(expression, parent, next, fragments)
-            }
         };
 
         next = fragment.id();
@@ -151,7 +150,6 @@ fn compile_expression(
 
 enum SyntaxElement {
     Expression(Expression),
-    Item(syntax::Function),
 }
 
 #[cfg(test)]
