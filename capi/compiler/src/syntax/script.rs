@@ -91,23 +91,20 @@ pub struct ExpressionBuilder {
 impl ExpressionBuilder {
     pub fn fun(
         &mut self,
-        body: impl FnOnce(&mut ExpressionBuilder),
+        branches: impl FnOnce(&mut BranchBuilder) -> &mut BranchBuilder,
     ) -> &mut Self {
-        let body = {
-            let mut builder = ExpressionBuilder {
-                expressions: Vec::new(),
+        let branches = {
+            let mut builder = BranchBuilder {
+                branches: Vec::new(),
             };
-            body(&mut builder);
-            builder.expressions
+            branches(&mut builder);
+            builder.branches
         };
 
         self.push_expression(Expression::Function {
             function: Function {
                 name: None,
-                branches: vec![Branch {
-                    parameters: Vec::new(),
-                    body,
-                }],
+                branches,
                 environment: BTreeSet::new(),
             },
         })

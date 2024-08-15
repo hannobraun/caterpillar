@@ -113,8 +113,13 @@ fn stopped_at_code_within_block() {
                 b.branch(
                     |p| p.ident("size_x").ident("size_y"),
                     |s| {
-                        s.fun(|s| {
-                            s.ident("brk");
+                        s.fun(|b| {
+                            b.branch(
+                                |b| b,
+                                |s| {
+                                    s.ident("brk");
+                                },
+                            )
                         })
                         .ident("eval");
                     },

@@ -68,8 +68,13 @@ mod tests {
                 |p| p,
                 |s| {
                     s.ident("a")
-                        .fun(|s| {
-                            s.ident("not_tail").ident("tail");
+                        .fun(|b| {
+                            b.branch(
+                                |b| b,
+                                |s| {
+                                    s.ident("not_tail").ident("tail");
+                                },
+                            )
                         })
                         .ident("b");
                 },

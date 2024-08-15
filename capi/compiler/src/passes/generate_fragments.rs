@@ -243,7 +243,7 @@ mod tests {
             b.branch(
                 |p| p,
                 |s| {
-                    s.fun(|_| {});
+                    s.fun(|b| b.branch(|b| b, |_| {}));
                 },
             )
         });

@@ -148,7 +148,7 @@ fn snake(script: &mut Script) {
             .c("beyond the last tile, which would let us know that we're done.")
             .ident("tile_y")
             .ident("check_tile_index")
-            .fun(|s| {
+            .fun(|b| b.branch(|b| b, |s| {
                 s
                     .c("Apparently we're not done yet.")
                     .ident("tile_x")
@@ -162,8 +162,8 @@ fn snake(script: &mut Script) {
                     .ident("tile_y")
                     .ident("increment_tile_index")
                     .ident("clear_pixels_inner");
-            })
-            .fun(|_| {})
+            }))
+            .fun(|b| b.branch(|b| b, |_| {}))
             .ident("if");
             },
         )
@@ -362,13 +362,18 @@ fn snake(script: &mut Script) {
                     .ident("should_game_run")
                     .ident("load")
                     .ident("and")
-                    .fun(|s| {
-                        s.ident("read_input")
-                            .ident("handle_input")
-                            .ident("update_positions")
-                            .ident("food_eat");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.ident("read_input")
+                                    .ident("handle_input")
+                                    .ident("update_positions")
+                                    .ident("food_eat");
+                            },
+                        )
                     })
-                    .fun(|_| {})
+                    .fun(|b| b.branch(|b| b, |_| {}))
                     .ident("if");
             },
         )
@@ -428,35 +433,48 @@ fn snake(script: &mut Script) {
                     .ident("next_position")
                     .ident("vec_load")
                     .ident("is_out_of_bounds")
-                    .fun(|s| {
-                        s.ident("next_position")
-                            .ident("vec_load")
-                            .bind(["next_x", "next_y"])
-                            .ident("tile_field_size")
-                            .ident("vec_load")
-                            .bind(["limit_x", "limit_y"])
-                            .ident("next_x")
-                            .ident("limit_x")
-                            .ident("handle_coordinate_smaller_than_zero")
-                            .bind(["next_x"])
-                            .ident("next_y")
-                            .ident("limit_y")
-                            .ident("handle_coordinate_smaller_than_zero")
-                            .bind(["next_y"])
-                            .ident("next_x")
-                            .ident("limit_x")
-                            .ident("handle_coordinate_larger_than_limit")
-                            .bind(["next_x"])
-                            .ident("next_y")
-                            .ident("limit_y")
-                            .ident("handle_coordinate_larger_than_limit")
-                            .bind(["next_y"])
-                            .ident("next_x")
-                            .ident("next_y")
-                            .ident("next_position")
-                            .ident("vec_store");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.ident("next_position")
+                                    .ident("vec_load")
+                                    .bind(["next_x", "next_y"])
+                                    .ident("tile_field_size")
+                                    .ident("vec_load")
+                                    .bind(["limit_x", "limit_y"])
+                                    .ident("next_x")
+                                    .ident("limit_x")
+                                    .ident(
+                                        "handle_coordinate_smaller_than_zero",
+                                    )
+                                    .bind(["next_x"])
+                                    .ident("next_y")
+                                    .ident("limit_y")
+                                    .ident(
+                                        "handle_coordinate_smaller_than_zero",
+                                    )
+                                    .bind(["next_y"])
+                                    .ident("next_x")
+                                    .ident("limit_x")
+                                    .ident(
+                                        "handle_coordinate_larger_than_limit",
+                                    )
+                                    .bind(["next_x"])
+                                    .ident("next_y")
+                                    .ident("limit_y")
+                                    .ident(
+                                        "handle_coordinate_larger_than_limit",
+                                    )
+                                    .bind(["next_y"])
+                                    .ident("next_x")
+                                    .ident("next_y")
+                                    .ident("next_position")
+                                    .ident("vec_store");
+                            },
+                        )
                     })
-                    .fun(|_| {})
+                    .fun(|b| b.branch(|b| b, |_| {}))
                     .ident("if");
             },
         )
@@ -470,11 +488,21 @@ fn snake(script: &mut Script) {
                     .ident("greater_i8")
                     .bind(["coord_smaller_than_zero"])
                     .ident("coord_smaller_than_zero")
-                    .fun(|s| {
-                        s.ident("coord").ident("limit").ident("add_i8");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.ident("coord").ident("limit").ident("add_i8");
+                            },
+                        )
                     })
-                    .fun(|e| {
-                        e.ident("coord");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |e| {
+                                e.ident("coord");
+                            },
+                        )
                     })
                     .ident("if");
             },
@@ -524,13 +552,15 @@ fn snake(script: &mut Script) {
             |p| p,
             |s| {
                 s.ident("_food_collides_with_snake")
-            .fun(|s| {
+                    .fun(|b| {
+                        b.branch(|b| b, |s| {
                 s.c("The snake's head and the food are at the same position.")
                     .ident("food_init")
                     .ident("grow_snake");
             })
-            .fun(|_| {})
-            .ident("if");
+                    })
+                    .fun(|b| b.branch(|b| b, |_| {}))
+                    .ident("if");
             },
         )
     });
@@ -606,12 +636,17 @@ fn snake(script: &mut Script) {
                     .ident("snake_length")
                     .ident("load")
                     .ident("greater_i32")
-                    .fun(|s| {
-                        s.ident("positions")
-                            .ident("vec_buf_pop")
-                            .ident("pop_positions");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.ident("positions")
+                                    .ident("vec_buf_pop")
+                                    .ident("pop_positions");
+                            },
+                        )
                     })
-                    .fun(|_| {})
+                    .fun(|b| b.branch(|b| b, |_| {}))
                     .ident("if");
             },
         )
@@ -657,38 +692,48 @@ fn snake(script: &mut Script) {
                     .ident("sub_i32")
                     .ident("index")
                     .ident("greater_i32")
-                    .fun(|s| {
-                        s.ident("positions")
-                            .ident("index")
-                            .ident("vec_buf_get")
-                            .ident("vec_x")
-                            .ident("x")
-                            .ident("eq")
-                            .bind(["x_matches"])
-                            .ident("positions")
-                            .ident("index")
-                            .ident("vec_buf_get")
-                            .ident("vec_y")
-                            .ident("y")
-                            .ident("eq")
-                            .bind(["y_matches"])
-                            .ident("x_matches")
-                            .ident("y_matches")
-                            .ident("add_i32")
-                            .v(2)
-                            .ident("eq")
-                            .ident("copy")
-                            .ident("return_if_non_zero")
-                            .ident("drop")
-                            .ident("x")
-                            .ident("y")
-                            .ident("index")
-                            .v(1)
-                            .ident("add_i32")
-                            .ident("check_body_collision_inner");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.ident("positions")
+                                    .ident("index")
+                                    .ident("vec_buf_get")
+                                    .ident("vec_x")
+                                    .ident("x")
+                                    .ident("eq")
+                                    .bind(["x_matches"])
+                                    .ident("positions")
+                                    .ident("index")
+                                    .ident("vec_buf_get")
+                                    .ident("vec_y")
+                                    .ident("y")
+                                    .ident("eq")
+                                    .bind(["y_matches"])
+                                    .ident("x_matches")
+                                    .ident("y_matches")
+                                    .ident("add_i32")
+                                    .v(2)
+                                    .ident("eq")
+                                    .ident("copy")
+                                    .ident("return_if_non_zero")
+                                    .ident("drop")
+                                    .ident("x")
+                                    .ident("y")
+                                    .ident("index")
+                                    .v(1)
+                                    .ident("add_i32")
+                                    .ident("check_body_collision_inner");
+                            },
+                        )
                     })
-                    .fun(|s| {
-                        s.v(0);
+                    .fun(|b| {
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.v(0);
+                            },
+                        )
                     })
                     .ident("if");
             },
