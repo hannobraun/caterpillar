@@ -83,8 +83,7 @@ where
         terminator_id
     };
 
-    for element in elements.into_iter().rev() {
-        let expression = element;
+    for expression in elements.into_iter().rev() {
         let fragment = compile_expression(expression, parent, next, fragments);
 
         next = fragment.id();
