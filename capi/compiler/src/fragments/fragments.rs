@@ -50,17 +50,27 @@ impl Fragments {
                     } => Some((fragment.id(), function)),
                     _ => None,
                 })
-                .find(|(_, function)| {
-                    function
+                .find_map(|(id, function)| {
+                    let branch = function
                         .branches
                         .iter()
-                        .any(|branch| branch.start == fragment_id)
+                        .find(|branch| branch.start == fragment_id)?;
+                    Some((id, function, branch))
                 });
 
-            if let Some((id, _function)) = function {
-                // So there _is_ a block. Continue the search there.
-                fragment_id = id;
-                continue;
+            if let Some((id, function, branch)) = function {
+                // We have found a function!
+
+                if function.name.is_some() {
+                    // It's a named function! Exactly what we've been looking
+                    // for.
+                    return Some((function, branch));
+                } else {
+                    // An anonymous function. Let's continue our search in the
+                    // context where it was defined.
+                    fragment_id = id;
+                    continue;
+                }
             }
 
             // If there's no previous fragment, nor a block where this is the
