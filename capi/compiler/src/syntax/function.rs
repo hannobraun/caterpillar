@@ -4,7 +4,9 @@ use capi_process::Value;
 
 use super::Expression;
 
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Function {
     /// The name of the function, if available
     ///
