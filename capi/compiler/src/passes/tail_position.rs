@@ -78,11 +78,10 @@ mod tests {
 
         let mut function = script.functions.remove(0);
         let mut branch = function.branches.remove(0);
-        let Expression::Function { body: block, .. } = branch.body.remove(1)
-        else {
+        let Expression::Function { body, .. } = branch.body.remove(1) else {
             panic!("Expected block.");
         };
-        let identifiers = block.to_identifiers();
+        let identifiers = body.to_identifiers();
         assert_eq!(identifiers, vec![("not_tail", false), ("tail", true)]);
     }
 
