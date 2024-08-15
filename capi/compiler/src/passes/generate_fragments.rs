@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
@@ -51,7 +51,7 @@ fn compile_function(
                 function: Function {
                     name: function.name,
                     branches,
-                    environment: BTreeSet::new(),
+                    environment: function.environment,
                 },
             },
             next,
