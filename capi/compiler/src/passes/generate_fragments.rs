@@ -79,11 +79,13 @@ where
 
                 Fragment {
                     parent,
-                    payload: FragmentPayload::Function {
-                        function: Function {
-                            name: Some(function.name),
-                            branches,
-                            environment: BTreeSet::new(),
+                    payload: FragmentPayload::Expression {
+                        expression: FragmentExpression::Function {
+                            function: Function {
+                                name: Some(function.name),
+                                branches,
+                                environment: BTreeSet::new(),
+                            },
                         },
                         next,
                     },
@@ -191,8 +193,11 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Function {
-                    function: Function { mut branches, .. },
+                FragmentPayload::Expression {
+                    expression:
+                        FragmentExpression::Function {
+                            function: Function { mut branches, .. },
+                        },
                     ..
                 },
             ..
@@ -241,8 +246,11 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Function {
-                    function: Function { mut branches, .. },
+                FragmentPayload::Expression {
+                    expression:
+                        FragmentExpression::Function {
+                            function: Function { mut branches, .. },
+                        },
                     ..
                 },
             ..
@@ -277,8 +285,11 @@ mod tests {
             .expect("Defined code, so there must be a root element.");
         let Fragment {
             payload:
-                FragmentPayload::Function {
-                    function: Function { mut branches, .. },
+                FragmentPayload::Expression {
+                    expression:
+                        FragmentExpression::Function {
+                            function: Function { mut branches, .. },
+                        },
                     next,
                     ..
                 },
