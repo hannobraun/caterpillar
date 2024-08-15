@@ -1,4 +1,4 @@
-use capi_compiler::{compile, fragments::FragmentExpression, syntax::Script};
+use capi_compiler::{compile, fragments, syntax::Script};
 use capi_game_engine::{host::GameEngineHost, memory::Memory};
 use capi_process::{Instructions, Process, Value};
 use capi_protocol::updates::{Code, Updates};
@@ -111,9 +111,11 @@ pub trait FragmentExpressionExt {
     fn expect_user_function(self) -> String;
 }
 
-impl FragmentExpressionExt for FragmentExpression {
+impl FragmentExpressionExt for fragments::FragmentExpression {
     fn expect_builtin_function(self) -> String {
-        let FragmentExpression::ResolvedBuiltinFunction { name } = self else {
+        let fragments::FragmentExpression::ResolvedBuiltinFunction { name } =
+            self
+        else {
             panic!("Expected builtin function");
         };
 
@@ -121,7 +123,8 @@ impl FragmentExpressionExt for FragmentExpression {
     }
 
     fn expect_user_function(self) -> String {
-        let FragmentExpression::ResolvedFunction { name, .. } = self else {
+        let fragments::FragmentExpression::ResolvedFunction { name, .. } = self
+        else {
             panic!("Expected user function");
         };
 
