@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet, VecDeque};
+use std::collections::{BTreeMap, VecDeque};
 
 use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
@@ -44,31 +44,13 @@ pub fn generate_instructions<H: Host>(
 
     while let Some(unit) = queue.pop_front() {
         match unit {
-            CompileUnit::Block {
-                start,
-                environment,
-                address,
-            } => {
-                let start = compile_context::<H>(
-                    start,
-                    &fragments.inner,
-                    &mut output,
-                    &mut queue,
-                );
-
-                output.instructions.replace(
-                    address,
-                    Instruction::MakeClosure {
-                        address: start,
-                        environment,
-                    },
-                );
-            }
             CompileUnit::Function {
                 id,
                 function,
                 address,
             } => {
+                let mut start = None;
+
                 for branch in function.branches {
                     let parameters =
                         branch.parameters.inner.iter().filter_map(|pattern| {
@@ -99,9 +81,32 @@ pub fn generate_instructions<H: Host>(
                         .entry(id)
                         .or_default()
                         .push((branch.parameters, address));
+
+                    start = start.or(Some(address));
                 }
 
-                dbg!(address);
+                let start = start.expect(
+                    "We don't have a start address, which means we haven't \
+                    processed a single branch. But all functions must have at
+                    least one branch.",
+                );
+
+                if let Some(address) = address {
+                    output.instructions.replace(
+                        address,
+                        Instruction::MakeClosure {
+                            address: start,
+                            environment: function.environment,
+                        },
+                    );
+                } else {
+                    assert!(
+                        function.environment.is_empty(),
+                        "We were not provided an address where to put a \"make \
+                        closure \" instruction, and yet the function has an \
+                        environment. This si a bug.",
+                    );
+                }
             }
         }
     }
@@ -236,25 +241,13 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     );
 
-                    let branch = function
-                        .branches
-                        .first()
-                        .expect("All functions must have at least one branch.");
-                    assert_eq!(
-                        function.branches.len(),
-                        1,
-                        "Blocks with multiple branches should not get \
-                        generated yet. Before this can happen, this code needs \
-                        to be updated."
-                    );
-
                     // And to make it happen later, we need to put what we
                     // already have into a queue. Once whatever's currently
                     // being compiled is out of the way, we can process that.
-                    queue.push_front(CompileUnit::Block {
-                        start: branch.start,
-                        environment: function.environment.clone(),
-                        address,
+                    queue.push_front(CompileUnit::Function {
+                        id: fragment.id(),
+                        function: function.clone(),
+                        address: Some(address),
                     });
 
                     address
@@ -415,11 +408,6 @@ struct Functions {
 }
 
 enum CompileUnit {
-    Block {
-        start: FragmentId,
-        environment: BTreeSet<String>,
-        address: InstructionAddress,
-    },
     Function {
         id: FragmentId,
         function: Function,
