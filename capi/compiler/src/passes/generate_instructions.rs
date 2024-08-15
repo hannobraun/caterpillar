@@ -85,9 +85,8 @@ pub fn generate_instructions<H: Host>(
         }
 
         let start = start.expect(
-            "We don't have a start address, which means we haven't \
-                    processed a single branch. But all functions must have at
-                    least one branch.",
+            "We don't have a start address, which means we haven't processed a \
+            single branch. But all functions must have at least one branch.",
         );
 
         if let Some(address) = address {
