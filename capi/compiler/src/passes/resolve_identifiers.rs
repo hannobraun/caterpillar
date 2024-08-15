@@ -42,10 +42,14 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
                 &known_named_functions,
             );
 
-            assert!(
-                environment.is_empty(),
-                "Functions do not have an environment that they could access.",
-            );
+            if !environment.is_empty() {
+                panic!(
+                    "Named functions do not have an environment that they \
+                    could access.\n\
+                    \n\
+                    Environment: {environment:#?}",
+                );
+            }
         }
     }
 }
