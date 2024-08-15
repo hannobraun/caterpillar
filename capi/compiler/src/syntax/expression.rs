@@ -8,15 +8,14 @@ pub enum Expression {
         names: Vec<String>,
     },
 
-    /// A block of code
+    /// A function expression
     Function {
-        /// The body of the block
+        /// The body of the function
         body: Vec<Expression>,
 
-        /// The block's environment
+        /// The environment of the function
         ///
-        /// These are the bindings defined in parent blocks that are referenced
-        /// from the block's body.
+        /// These are the values that the function captured from parent scopes.
         ///
         /// The environment is empty on construction, until it is filled in
         /// during the resolve pass.
