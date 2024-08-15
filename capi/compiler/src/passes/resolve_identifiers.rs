@@ -35,7 +35,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
             );
             let mut environment = Environment::new();
 
-            resolve_in_block::<H>(
+            resolve_in_branch::<H>(
                 &mut branch.body,
                 &mut scopes,
                 &mut environment,
@@ -54,7 +54,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     }
 }
 
-fn resolve_in_block<H: Host>(
+fn resolve_in_branch<H: Host>(
     body: &mut [Expression],
     scopes: &mut Scopes,
     environment: &mut Environment,
@@ -72,7 +72,7 @@ fn resolve_in_block<H: Host>(
             Expression::Function { function } => {
                 for branch in &mut function.branches {
                     scopes.push(Bindings::new());
-                    resolve_in_block::<H>(
+                    resolve_in_branch::<H>(
                         &mut branch.body,
                         scopes,
                         &mut function.environment,
