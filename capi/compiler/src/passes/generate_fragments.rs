@@ -25,7 +25,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     }
 }
 
-fn compile_block(
+fn compile_branch(
     expressions: Vec<Expression>,
     parent: FragmentId,
     fragments: &mut FragmentMap,
@@ -67,7 +67,7 @@ where
                 let mut branches = Vec::new();
 
                 for branch in function.branches {
-                    let start = compile_block(branch.body, next, fragments);
+                    let start = compile_branch(branch.body, next, fragments);
 
                     branches.push(Branch {
                         parameters: Parameters {
@@ -113,7 +113,7 @@ fn compile_expression(
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Function { body, environment } => {
-            let start = compile_block(body, next, fragments);
+            let start = compile_branch(body, next, fragments);
             let function = Function {
                 name: None,
                 branches: vec![Branch {
