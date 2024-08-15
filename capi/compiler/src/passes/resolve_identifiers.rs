@@ -47,7 +47,8 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
                     "Named functions do not have an environment that they \
                     could access.\n\
                     \n\
-                    Environment: {environment:#?}",
+                    Environment: {:#?}",
+                    environment,
                 );
             }
         }
