@@ -5,7 +5,7 @@ use crate::{
         Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
         FragmentPayload, Fragments, Function, Parameters,
     },
-    syntax::{self, Expression, IdentifierTarget},
+    syntax::{self, IdentifierTarget},
 };
 
 pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
@@ -16,7 +16,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     let root = compile_context(
         functions
             .into_iter()
-            .map(|function| Expression::Function { function }),
+            .map(|function| syntax::Expression::Function { function }),
         None,
         &mut fragments,
     );
@@ -33,7 +33,7 @@ fn compile_context<E>(
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
-    E: IntoIterator<Item = Expression>,
+    E: IntoIterator<Item = syntax::Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
     let mut next = {
@@ -94,20 +94,22 @@ fn compile_function(
 }
 
 fn compile_expression(
-    expression: Expression,
+    expression: syntax::Expression,
     parent: Option<FragmentId>,
     next: FragmentId,
     fragments: &mut FragmentMap,
 ) -> Fragment {
     let expression = match expression {
-        Expression::Binding { names } => {
+        syntax::Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Comment { text } => FragmentExpression::Comment { text },
-        Expression::Function { function } => {
+        syntax::Expression::Comment { text } => {
+            FragmentExpression::Comment { text }
+        }
+        syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
         }
-        Expression::Identifier {
+        syntax::Expression::Identifier {
             name,
             target,
             is_known_to_be_in_tail_position,
@@ -130,7 +132,7 @@ fn compile_expression(
             }
             None => FragmentExpression::UnresolvedIdentifier { name },
         },
-        Expression::Value(value) => FragmentExpression::Value(value),
+        syntax::Expression::Value(value) => FragmentExpression::Value(value),
     };
 
     Fragment {
