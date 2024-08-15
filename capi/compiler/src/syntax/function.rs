@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use capi_process::Value;
 
 use super::Expression;
@@ -6,6 +8,14 @@ use super::Expression;
 pub struct Function {
     pub name: String,
     pub branches: Vec<Branch>,
+
+    /// The environment of the function
+    ///
+    /// These are the values that the function captured from parent scopes.
+    ///
+    /// The environment is empty on construction, until it is filled in during
+    /// the resolve pass.
+    pub environment: BTreeSet<String>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]

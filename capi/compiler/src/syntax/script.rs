@@ -26,6 +26,7 @@ impl Script {
         self.functions.push(Function {
             name: name.to_string(),
             branches,
+            environment: BTreeSet::new(),
         });
 
         self
