@@ -34,7 +34,11 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_branch(branch.body, next, fragments);
+        let start = compile_context(
+            branch.body.into_iter().map(SyntaxElement::Expression),
+            Some(next),
+            fragments,
+        );
 
         branches.push(Branch {
             parameters: Parameters {
@@ -57,18 +61,6 @@ fn compile_function(
             next,
         },
     }
-}
-
-fn compile_branch(
-    expressions: Vec<Expression>,
-    parent: FragmentId,
-    fragments: &mut FragmentMap,
-) -> FragmentId {
-    compile_context(
-        expressions.into_iter().map(SyntaxElement::Expression),
-        Some(parent),
-        fragments,
-    )
 }
 
 fn compile_context<E>(
