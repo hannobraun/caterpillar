@@ -27,6 +27,38 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     }
 }
 
+fn compile_context<E>(
+    expressions: E,
+    parent: Option<FragmentId>,
+    fragments: &mut FragmentMap,
+) -> FragmentId
+where
+    E: IntoIterator<Item = Expression>,
+    E::IntoIter: DoubleEndedIterator,
+{
+    let mut next = {
+        let terminator = Fragment {
+            parent,
+            payload: FragmentPayload::Terminator,
+        };
+        let terminator_id = terminator.id();
+
+        fragments.inner.insert(terminator_id, terminator);
+
+        terminator_id
+    };
+
+    for expression in expressions.into_iter().rev() {
+        let fragment = compile_expression(expression, parent, next, fragments);
+
+        next = fragment.id();
+
+        fragments.inner.insert(fragment.id(), fragment);
+    }
+
+    next
+}
+
 fn compile_function(
     function: syntax::Function,
     parent: Option<FragmentId>,
@@ -59,38 +91,6 @@ fn compile_function(
             next,
         },
     }
-}
-
-fn compile_context<E>(
-    expressions: E,
-    parent: Option<FragmentId>,
-    fragments: &mut FragmentMap,
-) -> FragmentId
-where
-    E: IntoIterator<Item = Expression>,
-    E::IntoIter: DoubleEndedIterator,
-{
-    let mut next = {
-        let terminator = Fragment {
-            parent,
-            payload: FragmentPayload::Terminator,
-        };
-        let terminator_id = terminator.id();
-
-        fragments.inner.insert(terminator_id, terminator);
-
-        terminator_id
-    };
-
-    for expression in expressions.into_iter().rev() {
-        let fragment = compile_expression(expression, parent, next, fragments);
-
-        next = fragment.id();
-
-        fragments.inner.insert(fragment.id(), fragment);
-    }
-
-    next
 }
 
 fn compile_expression(
