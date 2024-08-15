@@ -38,7 +38,7 @@ impl Fragments {
             }
 
             // If there's no previous fragment, this might be the first fragment
-            // in a block.
+            // in a branch of a function.
             let function = self
                 .inner
                 .inner
