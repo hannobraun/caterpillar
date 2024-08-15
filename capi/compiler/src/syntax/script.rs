@@ -100,7 +100,7 @@ impl ExpressionBuilder {
             builder.expressions
         };
 
-        self.push_expression(Expression::Block {
+        self.push_expression(Expression::Function {
             body,
             environment: BTreeSet::new(),
         })

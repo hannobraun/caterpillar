@@ -111,7 +111,7 @@ fn compile_expression(
         Expression::Binding { names } => {
             FragmentExpression::BindingDefinitions { names }
         }
-        Expression::Block { body, environment } => {
+        Expression::Function { body, environment } => {
             let start = compile_block(body, next, fragments);
             let function = Function {
                 name: None,

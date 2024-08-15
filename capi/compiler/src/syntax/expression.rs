@@ -9,7 +9,7 @@ pub enum Expression {
     },
 
     /// A block of code
-    Block {
+    Function {
         /// The body of the block
         body: Vec<Expression>,
 

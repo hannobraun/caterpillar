@@ -26,7 +26,7 @@ fn analyze_block(block: &mut [Expression]) {
     }
 
     for expression in block {
-        if let Expression::Block { body, .. } = expression {
+        if let Expression::Function { body, .. } = expression {
             analyze_block(body);
         }
     }
@@ -78,7 +78,7 @@ mod tests {
 
         let mut function = script.functions.remove(0);
         let mut branch = function.branches.remove(0);
-        let Expression::Block { body: block, .. } = branch.body.remove(1)
+        let Expression::Function { body: block, .. } = branch.body.remove(1)
         else {
             panic!("Expected block.");
         };

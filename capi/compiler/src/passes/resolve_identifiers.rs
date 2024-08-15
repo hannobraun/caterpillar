@@ -65,7 +65,7 @@ fn resolve_in_block<H: Host>(
                     }
                 }
             }
-            Expression::Block { body, environment } => {
+            Expression::Function { body, environment } => {
                 scopes.push(Bindings::new());
                 resolve_in_block::<H>(
                     body,
@@ -191,7 +191,7 @@ mod tests {
         let mut functions = resolve_identifiers(script);
 
         let mut function = functions.remove(0);
-        let Some(Expression::Block { body, environment }) =
+        let Some(Expression::Function { body, environment }) =
             function.body.last_mut()
         else {
             panic!("Last expression in the function is a block.");
