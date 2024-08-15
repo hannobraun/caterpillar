@@ -189,14 +189,14 @@ fn compile_fragment<H: Host>(
     output: &mut Output,
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
-    let addr = match &fragment.payload {
+    match &fragment.payload {
         FragmentPayload::Function { function, .. } => {
             queue.push_back(CompileUnit {
                 id: fragment.id(),
                 function: function.clone(),
                 address: None,
             });
-            return None;
+            None
         }
         FragmentPayload::Expression { expression, .. } => {
             match expression {
@@ -209,11 +209,9 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     );
 
-                    bindings_address.unwrap_or(assert_address)
+                    bindings_address.or(Some(assert_address))
                 }
-                FragmentExpression::Comment { .. } => {
-                    return None;
-                }
+                FragmentExpression::Comment { .. } => None,
                 FragmentExpression::Function { function } => {
                     // We are currently compiling a function or block (otherwise
                     // we wouldn't be encountering any expression), and the
@@ -247,13 +245,14 @@ fn compile_fragment<H: Host>(
                         address: Some(address),
                     });
 
-                    address
+                    Some(address)
                 }
-                FragmentExpression::ResolvedBinding { name } => output
-                    .generate_instruction(
+                FragmentExpression::ResolvedBinding { name } => {
+                    Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },
                         fragment.id(),
-                    ),
+                    ))
+                }
                 FragmentExpression::ResolvedBuiltinFunction { name } => {
                     // Here we check for special built-in functions that are
                     // implemented differently, without making sure anywhere,
@@ -269,7 +268,9 @@ fn compile_fragment<H: Host>(
                         Instruction::CallBuiltin { name: name.clone() }
                     };
 
-                    output.generate_instruction(instruction, fragment.id())
+                    Some(
+                        output.generate_instruction(instruction, fragment.id()),
+                    )
                 }
                 FragmentExpression::ResolvedFunction {
                     name,
@@ -301,7 +302,7 @@ fn compile_fragment<H: Host>(
                         });
                     }
 
-                    address
+                    Some(address)
                 }
                 FragmentExpression::ResolvedHostFunction { name } => {
                     match H::function_name_to_effect_number(name) {
@@ -318,37 +319,37 @@ fn compile_fragment<H: Host>(
                                 },
                                 fragment.id(),
                             );
-                            address
+                            Some(address)
                         }
-                        None => output.generate_instruction(
+                        None => Some(output.generate_instruction(
                             Instruction::TriggerEffect {
                                 effect: Effect::Panic,
                             },
                             fragment.id(),
-                        ),
+                        )),
                     }
                 }
 
-                FragmentExpression::UnresolvedIdentifier { name: _ } => output
-                    .generate_instruction(
+                FragmentExpression::UnresolvedIdentifier { name: _ } => {
+                    Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::Panic,
                         },
                         fragment.id(),
-                    ),
-                FragmentExpression::Value(value) => output
-                    .generate_instruction(
+                    ))
+                }
+                FragmentExpression::Value(value) => {
+                    Some(output.generate_instruction(
                         Instruction::Push { value: *value },
                         fragment.id(),
-                    ),
+                    ))
+                }
             }
         }
-        FragmentPayload::Terminator => {
-            output.generate_instruction(Instruction::Return, fragment.id())
-        }
-    };
-
-    Some(addr)
+        FragmentPayload::Terminator => Some(
+            output.generate_instruction(Instruction::Return, fragment.id()),
+        ),
+    }
 }
 
 #[derive(Default)]
