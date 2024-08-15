@@ -213,28 +213,27 @@ fn compile_fragment<H: Host>(
                 }
                 FragmentExpression::Comment { .. } => None,
                 FragmentExpression::Function { function } => {
-                    // We are currently compiling a function or block (otherwise
-                    // we wouldn't be encountering any expression), and the
-                    // instructions for that will be executed linearly.
-                    //
-                    // Which means we can't just start compiling this block
-                    // right now. Its instructions would go into the middle of
-                    // those other instructions and mess everything up.
-                    //
-                    // What _should_ happen instead, is that the block is turned
-                    // into a closure, that can be passed around as a value and
-                    // called whenever so desired.
-                    //
-                    // So for now, let's just generate this instruction as a
-                    // placeholder, to be replaced with another instruction that
-                    // creates that closure, once we have everything in place to
-                    // make that happen.
-                    let address = output.generate_instruction(
-                        Instruction::TriggerEffect {
-                            effect: Effect::Panic,
-                        },
-                        fragment.id(),
-                    );
+                    let address = if function.name.is_none() {
+                        // If this is an anonymous function, we need to emit an
+                        // instruction that allocates it, and takes care of its
+                        // environment.
+                        //
+                        // But we haven't compiled the anonymous function yet,
+                        // so we don't have the required information to do that.
+                        // For now, let's create a placeholder for that
+                        // instruction.
+                        //
+                        // Once the function gets compiled, we'll replace the
+                        // placeholder with the real instruction.
+                        Some(output.generate_instruction(
+                            Instruction::TriggerEffect {
+                                effect: Effect::Panic,
+                            },
+                            fragment.id(),
+                        ))
+                    } else {
+                        None
+                    };
 
                     // And to make it happen later, we need to put what we
                     // already have into a queue. Once whatever's currently
@@ -242,10 +241,10 @@ fn compile_fragment<H: Host>(
                     queue.push_front(CompileUnit {
                         id: fragment.id(),
                         function: function.clone(),
-                        address: Some(address),
+                        address,
                     });
 
-                    Some(address)
+                    address
                 }
                 FragmentExpression::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
