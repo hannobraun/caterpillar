@@ -64,7 +64,11 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Function { id, function } => {
+            CompileUnit::Function {
+                id,
+                function,
+                address,
+            } => {
                 for branch in function.branches {
                     let parameters =
                         branch.parameters.inner.iter().filter_map(|pattern| {
@@ -96,6 +100,8 @@ pub fn generate_instructions<H: Host>(
                         .or_default()
                         .push((branch.parameters, address));
                 }
+
+                dbg!(address);
             }
         }
     }
@@ -186,6 +192,7 @@ fn compile_fragment<H: Host>(
             queue.push_back(CompileUnit::Function {
                 id: fragment.id(),
                 function: function.clone(),
+                address: None,
             });
             return None;
         }
@@ -416,5 +423,6 @@ enum CompileUnit {
     Function {
         id: FragmentId,
         function: Function,
+        address: Option<InstructionAddress>,
     },
 }
