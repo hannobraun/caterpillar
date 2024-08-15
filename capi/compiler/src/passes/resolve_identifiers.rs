@@ -33,22 +33,21 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
                     })
                     .collect(),
             );
-            let mut environment = Environment::new();
 
             resolve_in_branch::<H>(
                 &mut branch.body,
                 &mut scopes,
-                &mut environment,
+                &mut function.environment,
                 &known_named_functions,
             );
 
-            if !environment.is_empty() {
+            if !function.environment.is_empty() {
                 panic!(
                     "Named functions do not have an environment that they \
                     could access.\n\
                     \n\
                     Environment: {:#?}",
-                    environment,
+                    function.environment,
                 );
             }
         }
