@@ -3,8 +3,8 @@ use capi_process::Value;
 use crate::syntax::Pattern;
 
 use super::{
-    Branch, Fragment, Expression, FragmentId, FragmentPayload,
-    Function, Parameters,
+    Branch, Expression, Fragment, FragmentId, FragmentPayload, Function,
+    Parameters,
 };
 
 /// # Extension trait for types that provide a hash

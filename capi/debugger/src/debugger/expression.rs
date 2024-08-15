@@ -24,8 +24,7 @@ impl Expression {
             return None;
         };
 
-        if let fragments::Expression::Function { function } = expression
-        {
+        if let fragments::Expression::Function { function } = expression {
             let branch = function
                 .branches
                 .first()

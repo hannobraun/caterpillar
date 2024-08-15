@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, iter};
 
 use super::{
-    Branch, Fragment, Expression, FragmentId, FragmentPayload, Function,
+    Branch, Expression, Fragment, FragmentId, FragmentPayload, Function,
 };
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
