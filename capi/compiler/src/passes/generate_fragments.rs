@@ -63,7 +63,7 @@ fn compile_function(
 }
 
 fn compile_context<E>(
-    elements: E,
+    expressions: E,
     parent: Option<FragmentId>,
     fragments: &mut FragmentMap,
 ) -> FragmentId
@@ -83,7 +83,7 @@ where
         terminator_id
     };
 
-    for expression in elements.into_iter().rev() {
+    for expression in expressions.into_iter().rev() {
         let fragment = compile_expression(expression, parent, next, fragments);
 
         next = fragment.id();
