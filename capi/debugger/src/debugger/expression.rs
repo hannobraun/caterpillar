@@ -1,5 +1,5 @@
 use capi_compiler::{
-    fragments::{Fragment, FragmentExpression, FragmentPayload, Fragments},
+    fragments::{self, Fragment, FragmentPayload, Fragments},
     source_map::SourceMap,
 };
 use capi_process::{Effect, InstructionAddress, Process};
@@ -24,7 +24,8 @@ impl Expression {
             return None;
         };
 
-        if let FragmentExpression::Function { function } = expression {
+        if let fragments::FragmentExpression::Function { function } = expression
+        {
             let branch = function
                 .branches
                 .first()
@@ -47,7 +48,7 @@ impl Expression {
 
             return Some(Self::Block { expressions });
         }
-        if let FragmentExpression::Comment { text } = expression {
+        if let fragments::FragmentExpression::Comment { text } = expression {
             return Some(Self::Comment {
                 text: format!("# {text}"),
             });
@@ -101,7 +102,7 @@ impl Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
-    pub expression: FragmentExpression,
+    pub expression: fragments::FragmentExpression,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_on_call_stack: bool,
