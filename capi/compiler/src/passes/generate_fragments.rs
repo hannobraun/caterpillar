@@ -122,16 +122,15 @@ fn compile_expression(
         }
         Expression::Comment { text } => FragmentExpression::Comment { text },
         Expression::Function { body, environment } => {
-            let start = compile_branch(body, next, fragments);
-            let function = Function {
+            let function = syntax::Function {
                 name: None,
-                branches: vec![Branch {
-                    parameters: Parameters { inner: Vec::new() },
-                    start,
+                branches: vec![syntax::Branch {
+                    parameters: Vec::new(),
+                    body,
                 }],
                 environment,
             };
-            FragmentExpression::Function { function }
+            return compile_function(function, parent, next, fragments);
         }
         Expression::Identifier {
             name,
