@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
-        FragmentPayload, Fragments, Function, Parameters,
+        Branch, Expression, Fragment, FragmentId, FragmentMap, FragmentPayload,
+        Fragments, Function, Parameters,
     },
     syntax::{self, IdentifierTarget},
 };
@@ -81,7 +81,7 @@ fn compile_function(
     Fragment {
         parent,
         payload: FragmentPayload::Expression {
-            expression: FragmentExpression::Function {
+            expression: Expression::Function {
                 function: Function {
                     name: function.name,
                     branches,
@@ -101,11 +101,9 @@ fn compile_expression(
 ) -> Fragment {
     let expression = match expression {
         syntax::Expression::Binding { names } => {
-            FragmentExpression::BindingDefinitions { names }
+            Expression::BindingDefinitions { names }
         }
-        syntax::Expression::Comment { text } => {
-            FragmentExpression::Comment { text }
-        }
+        syntax::Expression::Comment { text } => Expression::Comment { text },
         syntax::Expression::Function { function } => {
             return compile_function(function, parent, next, fragments);
         }
@@ -115,24 +113,24 @@ fn compile_expression(
             is_known_to_be_in_tail_position,
         } => match target {
             Some(IdentifierTarget::Binding) => {
-                FragmentExpression::ResolvedBinding { name }
+                Expression::ResolvedBinding { name }
             }
             Some(IdentifierTarget::BuiltinFunction) => {
-                FragmentExpression::ResolvedBuiltinFunction { name }
+                Expression::ResolvedBuiltinFunction { name }
             }
             Some(IdentifierTarget::Function) => {
                 // By the time we make it to this compiler pass, all expressions
                 // that are in tail position should be known to be so.
                 let is_tail_call = is_known_to_be_in_tail_position;
 
-                FragmentExpression::ResolvedFunction { name, is_tail_call }
+                Expression::ResolvedFunction { name, is_tail_call }
             }
             Some(IdentifierTarget::HostFunction) => {
-                FragmentExpression::ResolvedHostFunction { name }
+                Expression::ResolvedHostFunction { name }
             }
-            None => FragmentExpression::UnresolvedIdentifier { name },
+            None => Expression::UnresolvedIdentifier { name },
         },
-        syntax::Expression::Value(value) => FragmentExpression::Value(value),
+        syntax::Expression::Value(value) => Expression::Value(value),
     };
 
     Fragment {
@@ -147,7 +145,7 @@ mod tests {
 
     use crate::{
         fragments::{
-            Fragment, FragmentExpression, FragmentPayload, Fragments, Function,
+            Expression, Fragment, FragmentPayload, Fragments, Function,
         },
         syntax::{self, Script},
     };
@@ -175,7 +173,7 @@ mod tests {
             payload:
                 FragmentPayload::Expression {
                     expression:
-                        FragmentExpression::Function {
+                        Expression::Function {
                             function: Function { mut branches, .. },
                         },
                     ..
@@ -200,8 +198,8 @@ mod tests {
         assert_eq!(
             body,
             [
-                FragmentExpression::Value(Value(1i32.to_le_bytes())),
-                FragmentExpression::Value(Value(1i32.to_le_bytes())),
+                Expression::Value(Value(1i32.to_le_bytes())),
+                Expression::Value(Value(1i32.to_le_bytes())),
             ]
         );
     }
@@ -222,7 +220,7 @@ mod tests {
             payload:
                 FragmentPayload::Expression {
                     expression:
-                        FragmentExpression::Function {
+                        Expression::Function {
                             function: Function { mut branches, .. },
                         },
                     ..
@@ -261,7 +259,7 @@ mod tests {
             payload:
                 FragmentPayload::Expression {
                     expression:
-                        FragmentExpression::Function {
+                        Expression::Function {
                             function: Function { mut branches, .. },
                         },
                     next,
@@ -279,7 +277,7 @@ mod tests {
             let Fragment {
                 payload:
                     FragmentPayload::Expression {
-                        expression: FragmentExpression::Function { function },
+                        expression: Expression::Function { function },
                         ..
                     },
                 ..

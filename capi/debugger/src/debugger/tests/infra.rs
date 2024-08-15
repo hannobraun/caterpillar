@@ -111,9 +111,9 @@ pub trait FragmentExpressionExt {
     fn expect_user_function(self) -> String;
 }
 
-impl FragmentExpressionExt for fragments::FragmentExpression {
+impl FragmentExpressionExt for fragments::Expression {
     fn expect_builtin_function(self) -> String {
-        let fragments::FragmentExpression::ResolvedBuiltinFunction { name } =
+        let fragments::Expression::ResolvedBuiltinFunction { name } =
             self
         else {
             panic!("Expected builtin function");
@@ -123,7 +123,7 @@ impl FragmentExpressionExt for fragments::FragmentExpression {
     }
 
     fn expect_user_function(self) -> String {
-        let fragments::FragmentExpression::ResolvedFunction { name, .. } = self
+        let fragments::Expression::ResolvedFunction { name, .. } = self
         else {
             panic!("Expected user function");
         };

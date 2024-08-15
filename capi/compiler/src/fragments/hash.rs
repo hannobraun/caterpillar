@@ -3,7 +3,7 @@ use capi_process::Value;
 use crate::syntax::Pattern;
 
 use super::{
-    Branch, Fragment, FragmentExpression, FragmentId, FragmentPayload,
+    Branch, Fragment, Expression, FragmentId, FragmentPayload,
     Function, Parameters,
 };
 
@@ -122,7 +122,7 @@ impl FragmentHash for Fragment {
     }
 }
 
-impl FragmentHash for FragmentExpression {
+impl FragmentHash for Expression {
     fn hash(&self, hasher: &mut blake3::Hasher) {
         hasher.update(b"FragmentExpression");
 

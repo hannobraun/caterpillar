@@ -4,7 +4,7 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
+        Expression, Fragment, FragmentId, FragmentMap, FragmentPayload,
         Fragments, Function, Parameters,
     },
     host::Host,
@@ -191,7 +191,7 @@ fn compile_fragment<H: Host>(
     match &fragment.payload {
         FragmentPayload::Expression { expression, .. } => {
             match expression {
-                FragmentExpression::BindingDefinitions { names } => {
+                Expression::BindingDefinitions { names } => {
                     let bindings_address =
                         output.generate_binding(names, fragment.id());
 
@@ -202,8 +202,8 @@ fn compile_fragment<H: Host>(
 
                     bindings_address.or(Some(assert_address))
                 }
-                FragmentExpression::Comment { .. } => None,
-                FragmentExpression::Function { function } => {
+                Expression::Comment { .. } => None,
+                Expression::Function { function } => {
                     let address = if function.name.is_none() {
                         // If this is an anonymous function, we need to emit an
                         // instruction that allocates it, and takes care of its
@@ -237,13 +237,13 @@ fn compile_fragment<H: Host>(
 
                     address
                 }
-                FragmentExpression::ResolvedBinding { name } => {
+                Expression::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },
                         fragment.id(),
                     ))
                 }
-                FragmentExpression::ResolvedBuiltinFunction { name } => {
+                Expression::ResolvedBuiltinFunction { name } => {
                     // Here we check for special built-in functions that are
                     // implemented differently, without making sure anywhere,
                     // that their name doesn't conflict with any user-defined
@@ -262,10 +262,8 @@ fn compile_fragment<H: Host>(
                         output.generate_instruction(instruction, fragment.id()),
                     )
                 }
-                FragmentExpression::ResolvedFunction {
-                    name,
-                    is_tail_call,
-                    ..
+                Expression::ResolvedFunction {
+                    name, is_tail_call, ..
                 } => {
                     // We know that this expression refers to a user-defined
                     // function, but we might not have compiled that function
@@ -294,7 +292,7 @@ fn compile_fragment<H: Host>(
 
                     Some(address)
                 }
-                FragmentExpression::ResolvedHostFunction { name } => {
+                Expression::ResolvedHostFunction { name } => {
                     match H::function_name_to_effect_number(name) {
                         Some(effect) => {
                             let address = output.generate_instruction(
@@ -320,7 +318,7 @@ fn compile_fragment<H: Host>(
                     }
                 }
 
-                FragmentExpression::UnresolvedIdentifier { name: _ } => {
+                Expression::UnresolvedIdentifier { name: _ } => {
                     Some(output.generate_instruction(
                         Instruction::TriggerEffect {
                             effect: Effect::Panic,
@@ -328,12 +326,10 @@ fn compile_fragment<H: Host>(
                         fragment.id(),
                     ))
                 }
-                FragmentExpression::Value(value) => {
-                    Some(output.generate_instruction(
-                        Instruction::Push { value: *value },
-                        fragment.id(),
-                    ))
-                }
+                Expression::Value(value) => Some(output.generate_instruction(
+                    Instruction::Push { value: *value },
+                    fragment.id(),
+                )),
             }
         }
         FragmentPayload::Terminator => Some(

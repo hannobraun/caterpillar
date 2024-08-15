@@ -1,4 +1,4 @@
-use super::{hash::FragmentHash, FragmentExpression, FragmentId};
+use super::{hash::FragmentHash, Expression, FragmentId};
 
 #[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Fragment {
@@ -39,7 +39,7 @@ impl Fragment {
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum FragmentPayload {
     Expression {
-        expression: FragmentExpression,
+        expression: Expression,
         next: FragmentId,
     },
     Terminator,

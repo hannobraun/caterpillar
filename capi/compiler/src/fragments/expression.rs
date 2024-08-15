@@ -5,7 +5,7 @@ use capi_process::Value;
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum FragmentExpression {
+pub enum Expression {
     BindingDefinitions {
         names: Vec<String>,
     },
@@ -71,7 +71,7 @@ pub enum FragmentExpression {
     Value(Value),
 }
 
-impl fmt::Display for FragmentExpression {
+impl fmt::Display for Expression {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Self::BindingDefinitions { names } => {

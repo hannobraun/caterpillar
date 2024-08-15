@@ -24,7 +24,7 @@ impl Expression {
             return None;
         };
 
-        if let fragments::FragmentExpression::Function { function } = expression
+        if let fragments::Expression::Function { function } = expression
         {
             let branch = function
                 .branches
@@ -48,7 +48,7 @@ impl Expression {
 
             return Some(Self::Block { expressions });
         }
-        if let fragments::FragmentExpression::Comment { text } = expression {
+        if let fragments::Expression::Comment { text } = expression {
             return Some(Self::Comment {
                 text: format!("# {text}"),
             });
@@ -102,7 +102,7 @@ impl Expression {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OtherExpression {
-    pub expression: fragments::FragmentExpression,
+    pub expression: fragments::Expression,
     pub first_instruction: Option<InstructionAddress>,
     pub has_durable_breakpoint: bool,
     pub is_on_call_stack: bool,

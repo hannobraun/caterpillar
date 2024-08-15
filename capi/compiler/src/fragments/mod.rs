@@ -8,7 +8,7 @@ mod hash;
 mod id;
 
 pub use self::{
-    expression::FragmentExpression,
+    expression::Expression,
     fragment::{Fragment, FragmentPayload},
     fragments::{FragmentMap, Fragments},
     function::{Branch, Function, Parameters},
