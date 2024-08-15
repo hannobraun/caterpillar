@@ -39,22 +39,27 @@ impl Fragments {
 
             // If there's no previous fragment, this might be the first fragment
             // in a block.
-            let function = self.inner.inner.values().find(|fragment| {
-                match &fragment.payload {
+            let function = self
+                .inner
+                .inner
+                .values()
+                .filter_map(|fragment| match &fragment.payload {
                     FragmentPayload::Expression {
                         expression: FragmentExpression::Function { function },
                         ..
-                    } => function
+                    } => Some((fragment.id(), function)),
+                    _ => None,
+                })
+                .find(|(_, function)| {
+                    function
                         .branches
                         .iter()
-                        .any(|branch| branch.start == fragment_id),
-                    _ => false,
-                }
-            });
+                        .any(|branch| branch.start == fragment_id)
+                });
 
-            if let Some(function) = function {
+            if let Some((id, _)) = function {
                 // So there _is_ a block. Continue the search there.
-                fragment_id = function.id();
+                fragment_id = id;
                 continue;
             }
 
