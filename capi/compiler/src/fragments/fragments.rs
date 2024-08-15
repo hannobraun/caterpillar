@@ -119,6 +119,10 @@ impl FragmentMap {
                 FragmentPayload::Function { function, .. } => {
                     Some((&function.name, fragment.id()))
                 }
+                FragmentPayload::Expression {
+                    expression: FragmentExpression::Function { function },
+                    ..
+                } => Some((&function.name, fragment.id())),
                 _ => None,
             })
             .find_map(|(n, id)| {
