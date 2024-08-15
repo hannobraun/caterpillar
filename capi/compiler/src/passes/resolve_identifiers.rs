@@ -9,7 +9,7 @@ use crate::{
 
 pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
     let mut scopes = Scopes::new();
-    let known_functions = functions
+    let known_named_functions = functions
         .iter()
         .map(|function| function.name.clone())
         .collect();
@@ -39,7 +39,7 @@ pub fn resolve_identifiers<H: Host>(functions: &mut Vec<Function>) {
                 &mut branch.body,
                 &mut scopes,
                 &mut environment,
-                &known_functions,
+                &known_named_functions,
             );
 
             assert!(
