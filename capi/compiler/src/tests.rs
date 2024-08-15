@@ -25,7 +25,7 @@ fn closure_in_function() {
             |s| {
                 s.v(0)
                     .bind(["channel"])
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("channel").ident("send");
                     })
                     .ident("eval");

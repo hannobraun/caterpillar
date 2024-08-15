@@ -257,7 +257,7 @@ mod tests {
             b.branch(
                 |p| p,
                 |s| {
-                    s.block(|_| {});
+                    s.fun(|_| {});
                 },
             )
         });

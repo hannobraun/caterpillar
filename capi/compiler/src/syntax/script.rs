@@ -89,7 +89,7 @@ pub struct ExpressionBuilder {
 }
 
 impl ExpressionBuilder {
-    pub fn block(
+    pub fn fun(
         &mut self,
         body: impl FnOnce(&mut ExpressionBuilder),
     ) -> &mut Self {

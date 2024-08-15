@@ -68,7 +68,7 @@ mod tests {
                 |p| p,
                 |s| {
                     s.ident("a")
-                        .block(|s| {
+                        .fun(|s| {
                             s.ident("not_tail").ident("tail");
                         })
                         .ident("b");

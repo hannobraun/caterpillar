@@ -148,7 +148,7 @@ fn snake(script: &mut Script) {
             .c("beyond the last tile, which would let us know that we're done.")
             .ident("tile_y")
             .ident("check_tile_index")
-            .block(|s| {
+            .fun(|s| {
                 s
                     .c("Apparently we're not done yet.")
                     .ident("tile_x")
@@ -163,7 +163,7 @@ fn snake(script: &mut Script) {
                     .ident("increment_tile_index")
                     .ident("clear_pixels_inner");
             })
-            .block(|_| {})
+            .fun(|_| {})
             .ident("if");
             },
         )
@@ -362,13 +362,13 @@ fn snake(script: &mut Script) {
                     .ident("should_game_run")
                     .ident("load")
                     .ident("and")
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("read_input")
                             .ident("handle_input")
                             .ident("update_positions")
                             .ident("food_eat");
                     })
-                    .block(|_| {})
+                    .fun(|_| {})
                     .ident("if");
             },
         )
@@ -428,7 +428,7 @@ fn snake(script: &mut Script) {
                     .ident("next_position")
                     .ident("vec_load")
                     .ident("is_out_of_bounds")
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("next_position")
                             .ident("vec_load")
                             .bind(["next_x", "next_y"])
@@ -456,7 +456,7 @@ fn snake(script: &mut Script) {
                             .ident("next_position")
                             .ident("vec_store");
                     })
-                    .block(|_| {})
+                    .fun(|_| {})
                     .ident("if");
             },
         )
@@ -470,10 +470,10 @@ fn snake(script: &mut Script) {
                     .ident("greater_i8")
                     .bind(["coord_smaller_than_zero"])
                     .ident("coord_smaller_than_zero")
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("coord").ident("limit").ident("add_i8");
                     })
-                    .block(|e| {
+                    .fun(|e| {
                         e.ident("coord");
                     })
                     .ident("if");
@@ -524,12 +524,12 @@ fn snake(script: &mut Script) {
             |p| p,
             |s| {
                 s.ident("_food_collides_with_snake")
-            .block(|s| {
+            .fun(|s| {
                 s.c("The snake's head and the food are at the same position.")
                     .ident("food_init")
                     .ident("grow_snake");
             })
-            .block(|_| {})
+            .fun(|_| {})
             .ident("if");
             },
         )
@@ -606,12 +606,12 @@ fn snake(script: &mut Script) {
                     .ident("snake_length")
                     .ident("load")
                     .ident("greater_i32")
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("positions")
                             .ident("vec_buf_pop")
                             .ident("pop_positions");
                     })
-                    .block(|_| {})
+                    .fun(|_| {})
                     .ident("if");
             },
         )
@@ -657,7 +657,7 @@ fn snake(script: &mut Script) {
                     .ident("sub_i32")
                     .ident("index")
                     .ident("greater_i32")
-                    .block(|s| {
+                    .fun(|s| {
                         s.ident("positions")
                             .ident("index")
                             .ident("vec_buf_get")
@@ -687,7 +687,7 @@ fn snake(script: &mut Script) {
                             .ident("add_i32")
                             .ident("check_body_collision_inner");
                     })
-                    .block(|s| {
+                    .fun(|s| {
                         s.v(0);
                     })
                     .ident("if");

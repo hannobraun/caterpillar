@@ -187,7 +187,7 @@ mod tests {
             b.branch(
                 |p| p,
                 |s| {
-                    s.v(0).bind(["value"]).block(|s| {
+                    s.v(0).bind(["value"]).fun(|s| {
                         s.ident("value");
                     });
                 },
@@ -225,7 +225,7 @@ mod tests {
             b.branch(
                 |p| p,
                 |s| {
-                    s.block(|s| {
+                    s.fun(|s| {
                         s.v(0).bind(["value"]);
                     })
                     .ident("value");
