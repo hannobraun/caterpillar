@@ -4,8 +4,8 @@ use capi_process::{Effect, Instruction, InstructionAddress, Instructions};
 
 use crate::{
     fragments::{
-        Branch, Fragment, FragmentExpression, FragmentId, FragmentMap,
-        FragmentPayload, Fragments, Function, Parameters,
+        Fragment, FragmentExpression, FragmentId, FragmentMap, FragmentPayload,
+        Fragments, Function, Parameters,
     },
     host::Host,
     source_map::SourceMap,
@@ -64,8 +64,8 @@ pub fn generate_instructions<H: Host>(
                     },
                 );
             }
-            CompileUnit::Function { id, branches } => {
-                for branch in branches {
+            CompileUnit::Function { id, function } => {
+                for branch in function.branches {
                     let parameters =
                         branch.parameters.inner.iter().filter_map(|pattern| {
                             match pattern {
@@ -182,13 +182,10 @@ fn compile_fragment<H: Host>(
     queue: &mut VecDeque<CompileUnit>,
 ) -> Option<InstructionAddress> {
     let addr = match &fragment.payload {
-        FragmentPayload::Function {
-            function: Function { branches, .. },
-            ..
-        } => {
+        FragmentPayload::Function { function, .. } => {
             queue.push_back(CompileUnit::Function {
                 id: fragment.id(),
-                branches: branches.clone(),
+                function: function.clone(),
             });
             return None;
         }
@@ -418,6 +415,6 @@ enum CompileUnit {
     },
     Function {
         id: FragmentId,
-        branches: Vec<Branch>,
+        function: Function,
     },
 }
