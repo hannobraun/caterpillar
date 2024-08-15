@@ -16,8 +16,7 @@ pub fn generate_fragments(functions: Vec<syntax::Function>) -> Fragments {
     let root = compile_context(
         functions
             .into_iter()
-            .map(|function| Expression::Function { function })
-            .map(SyntaxElement::Expression),
+            .map(|function| Expression::Function { function }),
         None,
         &mut fragments,
     );
@@ -37,11 +36,8 @@ fn compile_function(
     let mut branches = Vec::new();
 
     for branch in function.branches {
-        let start = compile_context(
-            branch.body.into_iter().map(SyntaxElement::Expression),
-            Some(next),
-            fragments,
-        );
+        let start =
+            compile_context(branch.body.into_iter(), Some(next), fragments);
 
         branches.push(Branch {
             parameters: Parameters {
@@ -72,7 +68,7 @@ fn compile_context<E>(
     fragments: &mut FragmentMap,
 ) -> FragmentId
 where
-    E: IntoIterator<Item = SyntaxElement>,
+    E: IntoIterator<Item = Expression>,
     E::IntoIter: DoubleEndedIterator,
 {
     let mut next = {
@@ -88,11 +84,8 @@ where
     };
 
     for element in elements.into_iter().rev() {
-        let fragment = match element {
-            SyntaxElement::Expression(expression) => {
-                compile_expression(expression, parent, next, fragments)
-            }
-        };
+        let expression = element;
+        let fragment = compile_expression(expression, parent, next, fragments);
 
         next = fragment.id();
 
@@ -146,10 +139,6 @@ fn compile_expression(
         parent,
         payload: FragmentPayload::Expression { expression, next },
     }
-}
-
-enum SyntaxElement {
-    Expression(Expression),
 }
 
 #[cfg(test)]
