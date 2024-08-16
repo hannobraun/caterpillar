@@ -568,7 +568,7 @@ fn snake(script: &mut Script) {
                 s.ident("_food_collides_with_snake")
                     .fun(|b| {
                         b.branch(
-                            |b| b,
+                            |p| p,
                             |s| {
                                 s.c("The snake's head and the food are at the")
                                     .c("same position.")
