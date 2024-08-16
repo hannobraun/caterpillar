@@ -1193,8 +1193,16 @@ fn snake(script: &mut Script) {
                     .ident("v")
                     .v(-1)
                     .ident("greater_i32")
-                    .ident("return_if_non_zero")
-                    .ident("neg_i32");
+                    .fun(|b| {
+                        b.branch(
+                            |p| p.lit(0),
+                            |e| {
+                                e.ident("neg_i32");
+                            },
+                        )
+                        .branch(|p| p.ident("_"), |_| {})
+                    })
+                    .ident("eval");
             },
         )
     });
