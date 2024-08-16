@@ -130,7 +130,7 @@ impl Evaluator {
                         .ok_or(Effect::InvalidFunction)?
                 };
 
-                let (address, environment) = {
+                let address = {
                     let branch = function.branches.remove(0);
                     assert_eq!(
                         function.branches.len(),
@@ -138,11 +138,11 @@ impl Evaluator {
                         "`eval` does not support pattern-matching functions"
                     );
 
-                    (branch.start, function.environment)
+                    branch.start
                 };
 
                 let mut arguments = Vec::new();
-                for (name, value) in environment {
+                for (name, value) in function.environment {
                     arguments.push((name, value));
                 }
 
