@@ -13,7 +13,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "div_u8" => div_u8,
         "drop" => drop,
         "eq" => eq,
-        "eval" => eval,
         "greater_i8" => greater_i8,
         "greater_i32" => greater_i32,
         "greater_u8" => greater_u8,
