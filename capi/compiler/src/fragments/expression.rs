@@ -2,6 +2,8 @@ use std::fmt;
 
 use capi_process::Value;
 
+use crate::intrinsics::Intrinsic;
+
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -15,6 +17,12 @@ pub enum Expression {
     Function {
         function: Function,
     },
+
+    /// A compiler intrinsic
+    Intrinsic {
+        intrinsic: Intrinsic,
+    },
+
     ResolvedBinding {
         name: String,
     },
@@ -83,6 +91,7 @@ impl fmt::Display for Expression {
             }
             Self::Comment { text } => write!(f, "# {text}"),
             Self::Function { .. } => write!(f, "block"),
+            Self::Intrinsic { intrinsic } => write!(f, "{intrinsic}"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedFunction { name, .. } => write!(f, "{name}"),

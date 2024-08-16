@@ -4,6 +4,7 @@ pub mod source_map;
 pub mod syntax;
 
 mod compile;
+mod intrinsics;
 mod passes;
 
 #[cfg(test)]

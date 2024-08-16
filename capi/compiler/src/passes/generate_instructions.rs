@@ -237,6 +237,7 @@ fn compile_fragment<H: Host>(
 
                     address
                 }
+                Expression::Intrinsic { intrinsic } => match *intrinsic {},
                 Expression::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },

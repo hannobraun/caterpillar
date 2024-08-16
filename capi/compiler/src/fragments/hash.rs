@@ -147,6 +147,12 @@ impl FragmentHash for Expression {
                 hasher.update(b"function");
                 function.hash(hasher);
             }
+            Self::Intrinsic { intrinsic } => {
+                hasher.update(b"Intrinsic");
+
+                hasher.update(b"intrinsic");
+                hasher.update(intrinsic.to_string().as_bytes());
+            }
             Self::ResolvedBinding { name } => {
                 hasher.update(b"ResolvedBinding");
 
