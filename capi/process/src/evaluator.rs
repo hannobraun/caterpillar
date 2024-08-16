@@ -102,7 +102,8 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame()?;
+                            self.stack
+                                .push_frame(self.stack.next_instruction)?;
                         }
 
                         self.stack.next_instruction = branch.start;
@@ -167,7 +168,8 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack.push_frame()?;
+                            self.stack
+                                .push_frame(self.stack.next_instruction)?;
                         }
 
                         self.stack

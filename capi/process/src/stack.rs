@@ -94,7 +94,10 @@ impl Stack {
             .chain([self.next_instruction])
     }
 
-    pub fn push_frame(&mut self) -> Result<(), PushStackFrameError> {
+    pub fn push_frame(
+        &mut self,
+        return_address: InstructionAddress,
+    ) -> Result<(), PushStackFrameError> {
         // Not a tail call. This means we need to create a new stack frame.
         // Let's first check if we can even do that.
         const STACK_LIMIT: usize = 16;
@@ -104,8 +107,7 @@ impl Stack {
 
         // All stack frames but the initial one (which this one can't be, as the
         // initial one is created with the stack), start with a return address.
-        self.inner
-            .push(StackElement::ReturnAddress(self.next_instruction));
+        self.inner.push(StackElement::ReturnAddress(return_address));
 
         // And all stack frames need a map of bindings.
         self.inner.push(StackElement::Bindings(Bindings::new()));
