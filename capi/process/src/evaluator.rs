@@ -120,8 +120,8 @@ impl Evaluator {
                 // See implementation note on `Instruction::Eval` for contest on
                 // this.
 
-                let closure = self.stack.pop_operand()?;
-                let closure = closure.to_u32();
+                let index = self.stack.pop_operand()?;
+                let closure = index.to_u32();
 
                 let (address, environment) = {
                     let mut function =
