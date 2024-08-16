@@ -123,13 +123,13 @@ impl Evaluator {
                 let index = self.stack.pop_operand()?;
                 let index = index.to_u32();
 
-                let (address, environment) = {
-                    let mut function = self
-                        .stack
-                        .closures
-                        .remove(&index)
-                        .ok_or(Effect::InvalidFunction)?;
+                let mut function = self
+                    .stack
+                    .closures
+                    .remove(&index)
+                    .ok_or(Effect::InvalidFunction)?;
 
+                let (address, environment) = {
                     let branch = function.branches.remove(0);
                     assert_eq!(
                         function.branches.len(),
