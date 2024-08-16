@@ -190,11 +190,13 @@ impl Evaluator {
                 branches,
                 environment,
             } => {
-                let address = branches.first().unwrap();
-                let branches = vec![Branch {
-                    parameters: Vec::new(),
-                    start: *address,
-                }];
+                let branches = branches
+                    .iter()
+                    .map(|address| Branch {
+                        parameters: Vec::new(),
+                        start: *address,
+                    })
+                    .collect();
 
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
