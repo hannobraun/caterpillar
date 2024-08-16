@@ -91,7 +91,7 @@ impl fmt::Display for Expression {
             }
             Self::Comment { text } => write!(f, "# {text}"),
             Self::Function { .. } => write!(f, "block"),
-            Self::Intrinsic { intrinsic } => write!(f, "{intrinsic}"),
+            Self::Intrinsic { intrinsic, .. } => write!(f, "{intrinsic}"),
             Self::ResolvedBinding { name } => write!(f, "{name}"),
             Self::ResolvedBuiltinFunction { name } => write!(f, "{name}"),
             Self::ResolvedFunction { name, .. } => write!(f, "{name}"),
