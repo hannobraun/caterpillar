@@ -120,14 +120,15 @@ impl Evaluator {
                 // See implementation note on `Instruction::Eval` for contest on
                 // this.
 
-                let index = self.stack.pop_operand()?;
-                let index = index.to_u32();
+                let mut function = {
+                    let index = self.stack.pop_operand()?;
+                    let index = index.to_u32();
 
-                let mut function = self
-                    .stack
-                    .closures
-                    .remove(&index)
-                    .ok_or(Effect::InvalidFunction)?;
+                    self.stack
+                        .closures
+                        .remove(&index)
+                        .ok_or(Effect::InvalidFunction)?
+                };
 
                 let (address, environment) = {
                     let branch = function.branches.remove(0);
