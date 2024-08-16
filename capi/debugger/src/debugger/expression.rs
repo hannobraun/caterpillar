@@ -80,7 +80,7 @@ impl Expression {
                 instruction.increment();
 
                 process
-                    .stack()
+                    .evaluator()
                     .active_instructions()
                     .any(|next| next == instruction)
             })

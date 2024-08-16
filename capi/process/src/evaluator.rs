@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     builtins::builtin_by_name, function::Pattern, Effect, Function,
-    Instruction, Instructions, Stack,
+    Instruction, InstructionAddress, Instructions, Stack,
 };
 
 #[derive(
@@ -16,6 +16,12 @@ pub struct Evaluator {
 }
 
 impl Evaluator {
+    pub fn active_instructions(
+        &self,
+    ) -> impl Iterator<Item = InstructionAddress> + '_ {
+        self.stack.active_instructions()
+    }
+
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
         if self.stack.no_frames_left() {
             return Ok(());
