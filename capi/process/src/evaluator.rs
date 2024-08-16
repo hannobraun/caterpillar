@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
     builtins::builtin_by_name, function::Pattern, Effect, Function,
     Instruction, Instructions, Stack,
@@ -8,6 +10,7 @@ use crate::{
 )]
 pub struct Evaluator {
     pub stack: Stack,
+    pub closures: BTreeMap<u32, Function>,
     pub next_closure: u32,
 }
 
@@ -124,8 +127,7 @@ impl Evaluator {
                     let index = self.stack.pop_operand()?;
                     let index = index.to_u32();
 
-                    self.stack
-                        .closures
+                    self.closures
                         .remove(&index)
                         .ok_or(Effect::InvalidFunction)?
                 };
@@ -217,7 +219,7 @@ impl Evaluator {
                     self.next_closure += 1;
                     next_closure
                 };
-                self.stack.closures.insert(
+                self.closures.insert(
                     index,
                     Function {
                         branches: branches.clone(),

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{operands::PopOperandError, Function, InstructionAddress, Value};
+use crate::{operands::PopOperandError, InstructionAddress, Value};
 
 /// # Caterpillar's stack, supposedly
 ///
@@ -17,17 +17,6 @@ pub struct Stack {
     inner: Vec<StackElement>,
 
     pub next_instruction: InstructionAddress,
-
-    /// # Special heap for closures
-    ///
-    /// ## Implementation Note
-    ///
-    /// This doesn't belong here. It just was a convenient place to put it, as
-    /// all code that needs to deal with closures has access to `Stack`.
-    ///
-    /// The eventual plan is to put closures on the regular stack, but that is
-    /// likely to be impractical while the language is untyped.
-    pub closures: BTreeMap<u32, Function>,
 }
 
 impl Stack {
@@ -38,7 +27,6 @@ impl Stack {
                 StackElement::Bindings(Bindings::new()),
             ],
             next_instruction: InstructionAddress { index: 0 },
-            closures: BTreeMap::new(),
         }
     }
 
