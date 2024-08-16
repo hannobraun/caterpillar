@@ -15,8 +15,6 @@ use crate::{operands::PopOperandError, InstructionAddress, Value};
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Stack {
     inner: Vec<StackElement>,
-
-    pub next_instruction: InstructionAddress,
 }
 
 impl Stack {
@@ -26,7 +24,6 @@ impl Stack {
                 StackElement::StartMarker,
                 StackElement::Bindings(Bindings::new()),
             ],
-            next_instruction: InstructionAddress { index: 0 },
         }
     }
 

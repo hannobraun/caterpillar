@@ -10,6 +10,7 @@ use crate::{
 )]
 pub struct Evaluator {
     pub stack: Stack,
+    pub next_instruction: InstructionAddress,
 
     closures: BTreeMap<u32, Function>,
     next_closure: u32,
@@ -19,9 +20,7 @@ impl Evaluator {
     pub fn active_instructions(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
-        self.stack
-            .return_addresses()
-            .chain([self.stack.next_instruction])
+        self.stack.return_addresses().chain([self.next_instruction])
     }
 
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
@@ -29,8 +28,8 @@ impl Evaluator {
             return Ok(());
         }
 
-        let address = self.stack.next_instruction;
-        self.stack.next_instruction.increment();
+        let address = self.next_instruction;
+        self.next_instruction.increment();
 
         let instruction = instructions
             .get(&address)
@@ -110,11 +109,10 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack
-                                .push_frame(self.stack.next_instruction)?;
+                            self.stack.push_frame(self.next_instruction)?;
                         }
 
-                        self.stack.next_instruction = branch.start;
+                        self.next_instruction = branch.start;
                         any_member_matched = true;
 
                         break;
@@ -176,8 +174,7 @@ impl Evaluator {
                         if *is_tail_call {
                             self.stack.reuse_frame();
                         } else {
-                            self.stack
-                                .push_frame(self.stack.next_instruction)?;
+                            self.stack.push_frame(self.next_instruction)?;
                         }
 
                         self.stack
@@ -187,7 +184,7 @@ impl Evaluator {
                             )
                             .extend(function.environment);
 
-                        self.stack.next_instruction = branch.start;
+                        self.next_instruction = branch.start;
                         any_member_matched = true;
 
                         break;
@@ -248,7 +245,7 @@ impl Evaluator {
             }
             Instruction::Return => {
                 if let Some(return_address) = self.stack.pop_frame() {
-                    self.stack.next_instruction = return_address;
+                    self.next_instruction = return_address;
                 }
             }
             Instruction::TriggerEffect { effect } => {
@@ -321,7 +318,7 @@ mod tests {
         evaluator.step(&instructions).unwrap();
         assert!(!evaluator.stack.no_frames_left());
 
-        assert_eq!(evaluator.stack.next_instruction.index, 2);
+        assert_eq!(evaluator.next_instruction.index, 2);
         assert!(matches!(
             evaluator.stack.into_inner().as_slice(),
             &[
