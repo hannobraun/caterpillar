@@ -368,8 +368,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.ident("read_input")
+                            |e| {
+                                e.ident("read_input")
                                     .ident("handle_input")
                                     .ident("update_positions")
                                     .ident("food_eat");
