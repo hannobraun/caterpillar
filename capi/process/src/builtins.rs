@@ -256,14 +256,11 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
         (then, else_)
     };
 
-    // `eval` consumes the closure we evaluate, but we have to discard the other
-    // one here, to no leak memory.
+    let evaluate = evaluate.to_u32();
+    let (address, environment) = stack.closures.remove(&evaluate).unwrap();
+
     let discard = discard.to_u32();
     stack.closures.remove(&discard);
-
-    let evaluate = evaluate.to_u32();
-
-    let (address, environment) = stack.closures.remove(&evaluate).unwrap();
 
     let mut arguments = Vec::new();
     for (name, value) in environment {
