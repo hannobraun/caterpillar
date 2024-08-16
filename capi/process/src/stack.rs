@@ -83,15 +83,12 @@ impl Stack {
     pub fn active_instructions(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
-        self.inner
-            .iter()
-            .filter_map(|frame| match frame {
-                StackElement::Bindings(_) => None,
-                StackElement::Operand(_) => None,
-                StackElement::ReturnAddress(address) => Some(*address),
-                StackElement::StartMarker => None,
-            })
-            .chain([self.next_instruction])
+        self.inner.iter().filter_map(|frame| match frame {
+            StackElement::Bindings(_) => None,
+            StackElement::Operand(_) => None,
+            StackElement::ReturnAddress(address) => Some(*address),
+            StackElement::StartMarker => None,
+        })
     }
 
     pub fn push_frame(

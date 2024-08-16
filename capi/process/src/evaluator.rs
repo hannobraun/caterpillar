@@ -19,7 +19,9 @@ impl Evaluator {
     pub fn active_instructions(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
-        self.stack.active_instructions()
+        self.stack
+            .active_instructions()
+            .chain([self.stack.next_instruction])
     }
 
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
