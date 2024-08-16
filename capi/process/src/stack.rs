@@ -192,11 +192,11 @@ impl Stack {
         Err(PopOperandError::MissingOperand)
     }
 
-    pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
+    pub fn take_next_instruction(&mut self) -> InstructionAddress {
         let next_instruction = self.next_instruction;
         self.next_instruction.increment();
 
-        Some(next_instruction)
+        next_instruction
     }
 
     pub fn into_inner(self) -> Vec<StackElement> {

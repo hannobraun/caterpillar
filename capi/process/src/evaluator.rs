@@ -20,9 +20,7 @@ impl Evaluator {
             return Ok(());
         }
 
-        let Some(addr) = self.stack.take_next_instruction() else {
-            return Ok(());
-        };
+        let addr = self.stack.take_next_instruction();
 
         let instruction = instructions
             .get(&addr)
