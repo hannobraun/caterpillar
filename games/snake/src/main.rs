@@ -685,10 +685,18 @@ fn snake(script: &mut Script) {
                     .ident("positions")
                     .ident("vec_buf_capacity")
                     .ident("greater_i32")
-                    .ident("return_if_non_zero")
-                    .ident("snake_length_plus_growth")
-                    .ident("snake_length")
-                    .ident("store");
+                    .fun(|b| {
+                        b.branch(
+                            |p| p.lit(0),
+                            |e| {
+                                e.ident("snake_length_plus_growth")
+                                    .ident("snake_length")
+                                    .ident("store");
+                            },
+                        )
+                        .branch(|p| p.ident("_"), |_| {})
+                    })
+                    .ident("eval");
             },
         )
     });
