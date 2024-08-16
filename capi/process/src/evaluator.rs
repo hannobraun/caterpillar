@@ -1,5 +1,5 @@
 use crate::{
-    builtins::builtin_by_name, instructions::Pattern, Effect, Function,
+    builtins::builtin_by_name, function::Pattern, Effect, Function,
     Instruction, Instructions, Stack, Value,
 };
 
