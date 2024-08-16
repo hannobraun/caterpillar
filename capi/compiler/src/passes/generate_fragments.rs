@@ -111,25 +111,27 @@ fn compile_expression(
             name,
             target,
             is_known_to_be_in_tail_position,
-        } => match target {
-            Some(IdentifierTarget::Binding) => {
-                Expression::ResolvedBinding { name }
-            }
-            Some(IdentifierTarget::BuiltinFunction) => {
-                Expression::ResolvedBuiltinFunction { name }
-            }
-            Some(IdentifierTarget::Function) => {
-                // By the time we make it to this compiler pass, all expressions
-                // that are in tail position should be known to be so.
-                let is_tail_call = is_known_to_be_in_tail_position;
+        } => {
+            // By the time we make it to this compiler pass, all expressions
+            // that are in tail position should be known to be so.
+            let is_tail_call = is_known_to_be_in_tail_position;
 
-                Expression::ResolvedFunction { name, is_tail_call }
+            match target {
+                Some(IdentifierTarget::Binding) => {
+                    Expression::ResolvedBinding { name }
+                }
+                Some(IdentifierTarget::BuiltinFunction) => {
+                    Expression::ResolvedBuiltinFunction { name }
+                }
+                Some(IdentifierTarget::Function) => {
+                    Expression::ResolvedFunction { name, is_tail_call }
+                }
+                Some(IdentifierTarget::HostFunction) => {
+                    Expression::ResolvedHostFunction { name }
+                }
+                None => Expression::UnresolvedIdentifier { name },
             }
-            Some(IdentifierTarget::HostFunction) => {
-                Expression::ResolvedHostFunction { name }
-            }
-            None => Expression::UnresolvedIdentifier { name },
-        },
+        }
         syntax::Expression::Value(value) => Expression::Value(value),
     };
 
