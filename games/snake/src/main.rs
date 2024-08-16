@@ -142,29 +142,33 @@ fn snake(script: &mut Script) {
         b.branch(
             |p| p.ident("tile_x").ident("tile_y"),
             |s| {
-                s
-            .c("This is a recursive function, so we might have been at it for")
-            .c("a while, if we make it here. Check if the tile index has gone")
-            .c("beyond the last tile, which would let us know that we're done.")
-            .ident("tile_y")
-            .ident("check_tile_index")
-            .fun(|b| b.branch(|p| p, |e| {
-                e
-                    .c("Apparently we're not done yet.")
-                    .ident("tile_x")
+                s.c("This is a recursive function, so we might have been at")
+                    .c("it for a while, if we make it here. Check if the tile")
+                    .c("index has gone beyond the last tile, which would let")
+                    .c("us know that we're done.")
                     .ident("tile_y")
-                    .v(0)
-                    .v(0)
-                    .v(0)
-                    .v(255)
-                    .ident("set_pixel")
-                    .ident("tile_x")
-                    .ident("tile_y")
-                    .ident("increment_tile_index")
-                    .ident("clear_pixels_inner");
-            }))
-            .fun(|b| b.branch(|p| p, |_| {}))
-            .ident("if");
+                    .ident("check_tile_index")
+                    .fun(|b| {
+                        b.branch(
+                            |p| p,
+                            |e| {
+                                e.c("Apparently we're not done yet.")
+                                    .ident("tile_x")
+                                    .ident("tile_y")
+                                    .v(0)
+                                    .v(0)
+                                    .v(0)
+                                    .v(255)
+                                    .ident("set_pixel")
+                                    .ident("tile_x")
+                                    .ident("tile_y")
+                                    .ident("increment_tile_index")
+                                    .ident("clear_pixels_inner");
+                            },
+                        )
+                    })
+                    .fun(|b| b.branch(|p| p, |_| {}))
+                    .ident("if");
             },
         )
     });
