@@ -163,7 +163,7 @@ fn snake(script: &mut Script) {
                     .ident("increment_tile_index")
                     .ident("clear_pixels_inner");
             }))
-            .fun(|b| b.branch(|b| b, |_| {}))
+            .fun(|b| b.branch(|p| p, |_| {}))
             .ident("if");
             },
         )
