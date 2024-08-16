@@ -178,55 +178,6 @@ fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-/// # Evaluate a block
-///
-/// ## Implementation Note
-///
-/// This duplicates function calling logic that also exists in evaluator. This
-/// should be temporary.
-///
-/// This duplicated logic used to be consolidated within [`Stack::push_frame`],
-/// but moved out as part of an effort to move tail call elimination to compile-
-/// time.
-///
-/// As part of the same effort, this function will likely be removed. It should
-/// eventually get replaced by something equivalent that doesn't need to
-/// duplicate code.
-fn eval(stack: &mut Stack, instructions: &Instructions) -> Result {
-    let closure = stack.pop_operand()?;
-    let closure = closure.to_u32();
-
-    let (address, environment) = stack.closures.remove(&closure).unwrap();
-
-    let mut arguments = Vec::new();
-    for (name, value) in environment {
-        arguments.push((name, value));
-    }
-
-    let is_tail_call = {
-        let next_instruction = instructions
-            .get(&stack.next_instruction)
-            .expect("Expected instruction referenced on stack to exist");
-
-        *next_instruction == Instruction::Return
-    };
-
-    if is_tail_call {
-        stack.reuse_frame();
-    } else {
-        stack.push_frame()?;
-    }
-
-    stack
-        .bindings_mut()
-        .expect("Currently executing; stack frame must exist")
-        .extend(arguments);
-
-    stack.next_instruction = address;
-
-    Ok(())
-}
-
 fn greater_i8(stack: &mut Stack, _: &Instructions) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
@@ -280,6 +231,20 @@ fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
+/// # Evaluate a condition and evaluate a closure accordingly
+///
+/// ## Implementation Note
+///
+/// This duplicates function calling logic that also exists in evaluator. This
+/// should be temporary.
+///
+/// This duplicated logic used to be consolidated within [`Stack::push_frame`],
+/// but moved out as part of an effort to move tail call elimination to compile-
+/// time.
+///
+/// As part of the same effort, this function will likely be removed. It should
+/// eventually get replaced by something equivalent that doesn't need to
+/// duplicate code.
 fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let else_ = stack.pop_operand()?;
     let then = stack.pop_operand()?;
@@ -297,7 +262,39 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     stack.closures.remove(&discard);
 
     stack.push_operand(evaluate);
-    eval(stack, instructions)
+
+    let closure = stack.pop_operand()?;
+    let closure = closure.to_u32();
+
+    let (address, environment) = stack.closures.remove(&closure).unwrap();
+
+    let mut arguments = Vec::new();
+    for (name, value) in environment {
+        arguments.push((name, value));
+    }
+
+    let is_tail_call = {
+        let next_instruction = instructions
+            .get(&stack.next_instruction)
+            .expect("Expected instruction referenced on stack to exist");
+
+        *next_instruction == Instruction::Return
+    };
+
+    if is_tail_call {
+        stack.reuse_frame();
+    } else {
+        stack.push_frame()?;
+    }
+
+    stack
+        .bindings_mut()
+        .expect("Currently executing; stack frame must exist")
+        .extend(arguments);
+
+    stack.next_instruction = address;
+
+    Ok(())
 }
 
 fn mul_i32(stack: &mut Stack, _: &Instructions) -> Result {
