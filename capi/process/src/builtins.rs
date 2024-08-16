@@ -257,7 +257,18 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     };
 
     let evaluate = evaluate.to_u32();
-    let (address, environment) = stack.closures.remove(&evaluate).unwrap();
+    let (address, environment) = {
+        let mut function = stack.closures.remove(&evaluate).unwrap();
+
+        let branch = function.branches.remove(0);
+        assert_eq!(
+            function.branches.len(),
+            0,
+            "`if` does not support pattern-matching functions"
+        );
+
+        (branch.start, function.environment)
+    };
 
     let discard = discard.to_u32();
     stack.closures.remove(&discard);

@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin_by_name, instructions::Pattern, Effect, Instruction,
-    Instructions, Stack, Value,
+    builtins::builtin_by_name, instructions::Pattern, Branch, Effect, Function,
+    Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -123,8 +123,19 @@ impl Evaluator {
                 let closure = self.stack.pop_operand()?;
                 let closure = closure.to_u32();
 
-                let (address, environment) =
-                    self.stack.closures.remove(&closure).unwrap();
+                let (address, environment) = {
+                    let mut function =
+                        self.stack.closures.remove(&closure).unwrap();
+
+                    let branch = function.branches.remove(0);
+                    assert_eq!(
+                        function.branches.len(),
+                        0,
+                        "`eval` does not support pattern-matching functions"
+                    );
+
+                    (branch.start, function.environment)
+                };
 
                 let mut arguments = Vec::new();
                 for (name, value) in environment {
@@ -175,7 +186,16 @@ impl Evaluator {
                     self.next_closure += 1;
                     next_closure
                 };
-                self.stack.closures.insert(index, (*address, environment));
+                self.stack.closures.insert(
+                    index,
+                    Function {
+                        branches: vec![Branch {
+                            parameters: Vec::new(),
+                            start: *address,
+                        }],
+                        environment,
+                    },
+                );
 
                 self.stack.push_operand(index);
             }

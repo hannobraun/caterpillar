@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{operands::PopOperandError, InstructionAddress, Value};
+use crate::{operands::PopOperandError, Function, InstructionAddress, Value};
 
 /// # Caterpillar's stack, supposedly
 ///
@@ -27,7 +27,7 @@ pub struct Stack {
     ///
     /// The eventual plan is to put closures on the regular stack, but that is
     /// likely to be impractical while the language is untyped.
-    pub closures: BTreeMap<u32, (InstructionAddress, BTreeMap<String, Value>)>,
+    pub closures: BTreeMap<u32, Function>,
 }
 
 impl Stack {
