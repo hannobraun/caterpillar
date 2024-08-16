@@ -273,12 +273,10 @@ fn compile_fragment<H: Host>(
                     ))
                 }
                 Expression::ResolvedBuiltinFunction { name } => {
-                    let instruction =
-                        Instruction::CallBuiltin { name: name.clone() };
-
-                    Some(
-                        output.generate_instruction(instruction, fragment.id()),
-                    )
+                    Some(output.generate_instruction(
+                        Instruction::CallBuiltin { name: name.clone() },
+                        fragment.id(),
+                    ))
                 }
                 Expression::ResolvedFunction {
                     name, is_tail_call, ..
