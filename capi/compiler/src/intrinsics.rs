@@ -6,9 +6,9 @@ pub enum Intrinsic {
 }
 
 impl fmt::Display for Intrinsic {
-    fn fmt(&self, _f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Intrinsic::Eval => write!(_f, "eval"),
+            Intrinsic::Eval => write!(f, "eval"),
         }
     }
 }
