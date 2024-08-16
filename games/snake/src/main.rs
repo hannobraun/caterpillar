@@ -516,11 +516,24 @@ fn snake(script: &mut Script) {
                     .ident("coord")
                     .ident("greater_u8")
                     .bind(["limit_greater_than_coord"])
-                    .ident("coord")
                     .ident("limit_greater_than_coord")
-                    .ident("return_if_non_zero")
-                    .ident("limit")
-                    .ident("sub_i32");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b.lit(0),
+                            |b| {
+                                b.ident("coord")
+                                    .ident("limit")
+                                    .ident("sub_i32");
+                            },
+                        )
+                        .branch(
+                            |b| b.lit(1),
+                            |b| {
+                                b.ident("coord");
+                            },
+                        )
+                    })
+                    .ident("eval");
             },
         )
     });
