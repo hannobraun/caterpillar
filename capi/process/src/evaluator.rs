@@ -124,8 +124,11 @@ impl Evaluator {
                 let index = index.to_u32();
 
                 let (address, environment) = {
-                    let mut function =
-                        self.stack.closures.remove(&index).unwrap();
+                    let mut function = self
+                        .stack
+                        .closures
+                        .remove(&index)
+                        .ok_or(Effect::InvalidFunction)?;
 
                     let branch = function.branches.remove(0);
                     assert_eq!(
