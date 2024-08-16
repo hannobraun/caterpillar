@@ -50,7 +50,7 @@ pub fn generate_instructions<H: Host>(
             address,
         } = unit;
 
-        let mut start = None;
+        let mut branches = Vec::new();
 
         for branch in function.branches {
             let parameters =
@@ -82,19 +82,14 @@ pub fn generate_instructions<H: Host>(
                 .or_default()
                 .push((branch.parameters, address));
 
-            start = start.or(Some(address));
+            branches.push(address);
         }
-
-        let start = start.expect(
-            "We don't have a start address, which means we haven't processed a \
-            single branch. But all functions must have at least one branch.",
-        );
 
         if let Some(address) = address {
             output.instructions.replace(
                 address,
                 Instruction::MakeClosure {
-                    branches: vec![start],
+                    branches,
                     environment: function.environment,
                 },
             );
