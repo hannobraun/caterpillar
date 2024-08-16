@@ -1,4 +1,4 @@
-use crate::{value::IntegerOverflow, Effect, Instruction, Instructions, Stack};
+use crate::{value::IntegerOverflow, Effect, Instructions, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -17,7 +17,6 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
         "greater_i32" => greater_i32,
         "greater_u8" => greater_u8,
         "i32_to_i8" => i32_to_i8,
-        "if" => if_,
         "mul_i32" => mul_i32,
         "mul_u8_wrap" => mul_u8_wrap,
         "neg_i32" => neg_i32,
@@ -227,77 +226,6 @@ fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
     let v: i8 = v.try_into()?;
 
     stack.push_operand(v);
-
-    Ok(())
-}
-
-/// # Evaluate a condition and evaluate a closure accordingly
-///
-/// ## Implementation Note
-///
-/// This duplicates function calling logic that also exists in evaluator. This
-/// should be temporary.
-///
-/// This duplicated logic used to be consolidated within [`Stack::push_frame`],
-/// but moved out as part of an effort to move tail call elimination to compile-
-/// time.
-///
-/// As part of the same effort, this function will likely be removed. It should
-/// eventually get replaced by something equivalent that doesn't need to
-/// duplicate code.
-fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
-    let else_ = stack.pop_operand()?;
-    let then = stack.pop_operand()?;
-    let condition = stack.pop_operand()?;
-
-    let (evaluate, discard) = if condition.0 == [0, 0, 0, 0] {
-        (else_, then)
-    } else {
-        (then, else_)
-    };
-
-    let evaluate = evaluate.to_u32();
-    let (address, environment) = {
-        let mut function = stack.closures.remove(&evaluate).unwrap();
-
-        let branch = function.branches.remove(0);
-        assert_eq!(
-            function.branches.len(),
-            0,
-            "`if` does not support pattern-matching functions"
-        );
-
-        (branch.start, function.environment)
-    };
-
-    let discard = discard.to_u32();
-    stack.closures.remove(&discard);
-
-    let mut arguments = Vec::new();
-    for (name, value) in environment {
-        arguments.push((name, value));
-    }
-
-    let is_tail_call = {
-        let next_instruction = instructions
-            .get(&stack.next_instruction)
-            .expect("Expected instruction referenced on stack to exist");
-
-        *next_instruction == Instruction::Return
-    };
-
-    if is_tail_call {
-        stack.reuse_frame();
-    } else {
-        stack.push_frame()?;
-    }
-
-    stack
-        .bindings_mut()
-        .expect("Currently executing; stack frame must exist")
-        .extend(arguments);
-
-    stack.next_instruction = address;
 
     Ok(())
 }
