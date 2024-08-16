@@ -10,8 +10,9 @@ use crate::{
 )]
 pub struct Evaluator {
     pub stack: Stack,
-    pub closures: BTreeMap<u32, Function>,
-    pub next_closure: u32,
+
+    closures: BTreeMap<u32, Function>,
+    next_closure: u32,
 }
 
 impl Evaluator {
