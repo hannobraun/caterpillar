@@ -187,9 +187,11 @@ impl Evaluator {
                 }
             }
             Instruction::MakeClosure {
-                address,
+                branches,
                 environment,
             } => {
+                let address = branches.first().unwrap();
+
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
                         "We're currently executing. A stack frame, and thus \

@@ -168,7 +168,7 @@ pub enum Instruction {
     },
 
     MakeClosure {
-        address: InstructionAddress,
+        branches: Vec<InstructionAddress>,
         environment: BTreeSet<String>,
     },
     Push {

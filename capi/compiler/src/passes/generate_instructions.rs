@@ -94,7 +94,7 @@ pub fn generate_instructions<H: Host>(
             output.instructions.replace(
                 address,
                 Instruction::MakeClosure {
-                    address: start,
+                    branches: vec![start],
                     environment: function.environment,
                 },
             );
