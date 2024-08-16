@@ -191,6 +191,10 @@ impl Evaluator {
                 environment,
             } => {
                 let address = branches.first().unwrap();
+                let branches = vec![Branch {
+                    parameters: Vec::new(),
+                    start: *address,
+                }];
 
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
@@ -222,10 +226,7 @@ impl Evaluator {
                 self.stack.closures.insert(
                     index,
                     Function {
-                        branches: vec![Branch {
-                            parameters: Vec::new(),
-                            start: *address,
-                        }],
+                        branches,
                         environment,
                     },
                 );
