@@ -664,7 +664,7 @@ fn snake(script: &mut Script) {
                     .ident("greater_i32")
                     .fun(|b| {
                         b.branch(
-                            |b| b,
+                            |p| p,
                             |s| {
                                 s.ident("positions")
                                     .ident("vec_buf_pop")
