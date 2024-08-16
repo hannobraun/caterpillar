@@ -1,6 +1,6 @@
 use crate::{
     builtins::builtin_by_name, function::Pattern, Effect, Function,
-    Instruction, Instructions, Stack, Value,
+    Instruction, Instructions, Stack,
 };
 
 #[derive(
@@ -232,12 +232,6 @@ impl Evaluator {
             }
             Instruction::Return => {
                 self.stack.pop_frame();
-            }
-            Instruction::ReturnIfNonZero => {
-                let value = self.stack.pop_operand()?;
-                if value != Value([0, 0, 0, 0]) {
-                    self.stack.pop_frame();
-                }
             }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
