@@ -20,7 +20,7 @@ impl Evaluator {
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.stack
-            .active_instructions()
+            .return_addresses()
             .chain([self.stack.next_instruction])
     }
 

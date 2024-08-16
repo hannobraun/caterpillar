@@ -80,7 +80,7 @@ impl Stack {
             })
     }
 
-    pub fn active_instructions(
+    pub fn return_addresses(
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.inner.iter().filter_map(|frame| match frame {
