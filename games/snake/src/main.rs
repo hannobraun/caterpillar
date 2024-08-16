@@ -567,11 +567,15 @@ fn snake(script: &mut Script) {
             |s| {
                 s.ident("_food_collides_with_snake")
                     .fun(|b| {
-                        b.branch(|b| b, |s| {
-                s.c("The snake's head and the food are at the same position.")
-                    .ident("food_init")
-                    .ident("grow_snake");
-            })
+                        b.branch(
+                            |b| b,
+                            |s| {
+                                s.c("The snake's head and the food are at the")
+                                    .c("same position.")
+                                    .ident("food_init")
+                                    .ident("grow_snake");
+                            },
+                        )
                     })
                     .fun(|b| b.branch(|b| b, |_| {}))
                     .ident("if");
