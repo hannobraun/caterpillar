@@ -774,8 +774,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.v(0);
+                            |e| {
+                                e.v(0);
                             },
                         )
                     })
