@@ -261,10 +261,7 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let discard = discard.to_u32();
     stack.closures.remove(&discard);
 
-    stack.push_operand(evaluate);
-
-    let closure = stack.pop_operand()?;
-    let closure = closure.to_u32();
+    let closure = evaluate.to_u32();
 
     let (address, environment) = stack.closures.remove(&closure).unwrap();
 
