@@ -130,29 +130,61 @@ impl Evaluator {
                         .ok_or(Effect::InvalidFunction)?
                 };
 
-                let address = {
-                    let branch = function.branches.first().unwrap();
-                    assert_eq!(
-                        function.branches.len(),
-                        1,
-                        "`eval` does not support pattern-matching functions"
-                    );
+                let mut any_member_matched = false;
 
-                    branch.start
-                };
+                for branch in &function.branches {
+                    let mut used_operands = Vec::new();
+                    let mut argument_operands = Vec::new();
+                    let mut bound_arguments = Vec::new();
 
-                if *is_tail_call {
-                    self.stack.reuse_frame();
-                } else {
-                    self.stack.push_frame()?;
+                    let mut member_matches = true;
+                    for parameter in branch.parameters.iter().rev() {
+                        let operand = self.stack.pop_operand()?;
+                        used_operands.push(operand);
+
+                        match parameter {
+                            Pattern::Identifier { name } => {
+                                bound_arguments.push((name.clone(), operand));
+                                argument_operands.push(operand);
+                            }
+                            Pattern::Literal { value } => {
+                                member_matches &= *value == operand;
+                            }
+                        }
+                    }
+
+                    if member_matches {
+                        for value in argument_operands.into_iter().rev() {
+                            self.stack.push_operand(value);
+                        }
+
+                        if *is_tail_call {
+                            self.stack.reuse_frame();
+                        } else {
+                            self.stack.push_frame()?;
+                        }
+
+                        self.stack
+                            .bindings_mut()
+                            .expect(
+                                "Currently executing; stack frame must exist",
+                            )
+                            .extend(function.environment);
+
+                        self.stack.next_instruction = branch.start;
+                        any_member_matched = true;
+
+                        break;
+                    } else {
+                        for value in used_operands.into_iter().rev() {
+                            self.stack.push_operand(value);
+                        }
+                    }
                 }
 
-                self.stack
-                    .bindings_mut()
-                    .expect("Currently executing; stack frame must exist")
-                    .extend(function.environment);
-
-                self.stack.next_instruction = address;
+                if !any_member_matched {
+                    return Err(Effect::NoMatch);
+                }
             }
             Instruction::MakeClosure {
                 address,
