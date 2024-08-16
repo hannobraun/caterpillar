@@ -1,0 +1,886 @@
+# Main loop
+main: {
+    |size_x size_y|
+        size_x
+        size_y
+        tile_field_size
+        vec_store
+        init_frame_count
+        init
+        main_inner
+}
+
+main_inner: {
+    ||
+        draw
+        count_frame
+        update
+        main_inner
+}
+
+# Draw
+draw: {
+    ||
+        clear_pixels
+        draw_snake
+        draw_food
+        # This blocks until the display system is ready to process the
+        # next frame.
+        submit_frame
+}
+
+draw_snake: {
+    ||
+        0 _draw_snake_inner
+}
+
+_draw_snake_inner: {
+    |index|
+        positions
+        vec_buf_len
+        index
+        greater_i8
+        => index_is_within_bounds .
+        index_is_within_bounds
+        index
+        _draw_snake_draw_rest_of_snake
+}
+
+_draw_snake_draw_rest_of_snake: {
+    |0 _|
+        # Index is out of bounds. We're done.
+
+    |1 index|
+        # Index is valid. Continue drawing the snake.
+        index
+        _draw_snake_draw_body_segment
+        index
+        1
+        add_u8
+        _draw_snake_inner
+}
+
+_draw_snake_draw_body_segment: {
+    |index|
+        positions
+        index
+        vec_buf_get
+        _draw_snake_body_color
+        set_pixel
+}
+
+_draw_snake_body_color: {
+    ||
+        0 255 0 255
+}
+
+draw_food: {
+    ||
+        food_position
+        vec_load
+        255
+        0
+        0
+        255
+        set_pixel
+}
+
+# Draw - clear pixels
+clear_pixels: {
+    ||
+        init_tile_index clear_pixels_inner
+}
+
+clear_pixels_inner: {
+    |tile_x tile_y|
+        # This is a recursive function, so we might have been at
+        # it for a while, if we make it here. Check if the tile
+        # index has gone beyond the last tile, which would let
+        # us know that we're done.
+        tile_y
+        check_tile_index
+        {
+            |0|
+                # Done.
+
+            |_|
+                # Apparently we're not done yet.
+                tile_x
+                tile_y
+                0
+                0
+                0
+                255
+                set_pixel
+                tile_x
+                tile_y
+                increment_tile_index
+                clear_pixels_inner
+        }
+            eval
+}
+
+# Draw - write tiles - tile index
+init_tile_index: {
+    ||
+        0 0
+}
+
+check_tile_index: {
+    |tile_y|
+        tile_field_size
+        vec_load
+        vec_y
+        tile_y
+        # Leave zero, if the y-coordinate has advanced beyond the last
+        # line of the tile field. Otherwise, leave non-zero value.
+        sub_i32
+}
+
+increment_tile_index: {
+    |tile_x tile_y|
+        tile_x
+        _increment_tile_index_increment_coord
+        _increment_tile_index_is_tile_x_within_limit
+        _increment_tile_index_reset_x_if_overflowed
+        tile_y
+        _increment_tile_index_increment_y_if_necessary
+}
+
+_increment_tile_index_increment_coord: {
+    |coord|
+        coord 1 add_u8
+}
+
+_increment_tile_index_is_tile_x_within_limit: {
+    |tile_x|
+        tile_field_size
+        vec_load
+        vec_x
+        tile_x
+        greater_u8
+        => tile_x_within_limit .
+        tile_x
+        tile_x_within_limit
+}
+
+_increment_tile_index_reset_x_if_overflowed: {
+    |_ 0|
+        0 0
+
+    |tile_x 1|
+        tile_x 1
+}
+
+_increment_tile_index_increment_y_if_necessary: {
+    |tile_x 0 tile_y|
+        tile_x
+        tile_y
+        _increment_tile_index_increment_coord
+
+    |tile_x 1 tile_y|
+        tile_x tile_y
+}
+
+# Tile field size
+is_out_of_bounds: {
+    |x y|
+        tile_field_size
+        vec_load
+        limit_x limit_y
+        x
+        limit_x
+        _is_out_of_bounds_is_coord_within_bounds
+        y
+        limit_y
+        _is_out_of_bounds_is_coord_within_bounds
+        and
+        not
+}
+
+_is_out_of_bounds_is_coord_within_bounds: {
+    |coord limit|
+        coord
+        0
+        greater_u8
+        limit
+        coord
+        greater_u8
+        and
+}
+
+# Frame count
+init_frame_count: {
+    ||
+        1 frame_count store
+}
+
+count_frame: {
+    ||
+        # Grab the current frame count.
+        frame_count
+        load
+        # Increment the frame count.
+        1
+        add_i32
+        # Place a copy of the new frame count back where it came
+        # from.
+        copy
+        frame_count
+        store
+        _count_frame_reset_frame_count_if_necessary
+}
+
+_count_frame_reset_frame_count_if_necessary: {
+    |121|
+        init_frame_count
+
+    |_|
+        # Not reset necessary.
+}
+
+# Game state
+init: {
+    ||
+        init_should_game_run
+        snake_init
+        init_velocity
+        init_next_position
+        food_init
+}
+
+update: {
+    ||
+        # The update logic does not run every frame.
+        frame_count
+        load
+        5
+        remainder_i32
+        not
+        should_game_run
+        load
+        and
+        {
+            |1|
+                read_input
+                handle_input
+                update_positions
+                food_eat
+
+            |_|
+                # Nothing to do.
+        }
+            eval
+}
+
+# Game state - should game run
+init_should_game_run: {
+    ||
+        1 should_game_run store
+}
+
+# Game state - velocity
+init_velocity: {
+    ||
+        1 0 velocity vec_store
+}
+
+# Game state - next position
+init_next_position: {
+    ||
+        positions
+        0
+        vec_buf_get
+        next_position
+        vec_store
+}
+
+update_next_position: {
+    ||
+        snake_head
+        vec_x
+        velocity
+        vec_load
+        vec_x
+        add_i8
+        snake_head
+        vec_y
+        velocity
+        vec_load
+        vec_y
+        add_i8
+        next_position
+        vec_store
+        next_position
+        vec_load
+        is_out_of_bounds
+        {
+            |1|
+                next_position
+                vec_load
+                next_x next_y
+                tile_field_size
+                vec_load
+                limit_x limit_y
+                next_x
+                limit_x
+                handle_coordinate_smaller_than_zero
+                => next_x .
+                next_y
+                limit_y
+                handle_coordinate_smaller_than_zero
+                => next_y .
+                next_x
+                limit_x
+                handle_coordinate_larger_than_limit
+                => next_x .
+                next_y
+                limit_y
+                handle_coordinate_larger_than_limit
+                => next_y .
+                next_x
+                next_y
+                next_position
+                vec_store
+
+            |_|
+                # Not out of bounds. Nothing to do.
+        }
+            eval
+}
+
+handle_coordinate_smaller_than_zero: {
+    |coord limit|
+        0
+        coord
+        greater_i8
+        => coord_smaller_than_zero .
+        coord_smaller_than_zero
+        {
+            |1|
+                coord limit add_i8
+
+            |_|
+                coord
+        }
+            eval
+}
+
+handle_coordinate_larger_than_limit: {
+    |coord limit|
+        limit
+        coord
+        greater_u8
+        => limit_greater_than_coord .
+        limit_greater_than_coord
+        {
+            |0|
+                coord
+                limit
+                sub_i32
+
+            |1|
+                coord
+        }
+            eval
+}
+
+# Game state - food
+food_init: {
+    ||
+        negatable_random
+        abs
+        tile_field_size
+        vec_load
+        vec_x
+        remainder_i32
+        negatable_random
+        abs
+        tile_field_size
+        vec_load
+        vec_y
+        remainder_i32
+        food_position
+        vec_store
+}
+
+food_eat: {
+    ||
+        _food_collides_with_snake
+        {
+            |1|
+                # The snake's head and the food are at the
+                # same position.
+                food_init
+                grow_snake
+
+            |_|
+        }
+            eval
+}
+
+_food_collides_with_snake: {
+    ||
+        snake_head
+        food_position
+        vec_load
+        vec_eq
+        => head_collides .
+        food_position
+        vec_load
+        check_body_collision
+        => body_collides .
+        head_collides
+        body_collides
+        add_i32
+        0
+        greater_i32
+}
+
+# Game state - snake
+snake_init: {
+    ||
+        3
+        snake_length
+        store
+        positions
+        vec_buf_init
+        positions
+        15
+        15
+        vec_buf_push
+}
+
+snake_head: {
+    ||
+        positions vec_buf_last
+}
+
+update_positions: {
+    ||
+        update_next_position
+        snake_head
+        check_body_collision
+        {
+            |0|
+                positions
+                next_position
+                vec_load
+                vec_buf_push
+                pop_positions
+
+            |1|
+                # Collision. Do nothing.
+        }
+            eval
+}
+
+pop_positions: {
+    ||
+        positions
+        vec_buf_len
+        snake_length
+        load
+        greater_i32
+        {
+            |1|
+                positions
+                vec_buf_pop
+                pop_positions
+
+            |_|
+        }
+            eval
+}
+
+grow_snake: {
+    ||
+        snake_length
+        load
+        1
+        add_i32
+        => snake_length_plus_growth .
+        snake_length_plus_growth
+        positions
+        vec_buf_capacity
+        greater_i32
+        {
+            |0|
+                snake_length_plus_growth
+                snake_length
+                store
+
+            |_|
+        }
+            eval
+}
+
+check_body_collision: {
+    |x y|
+        x
+        y
+        0
+        check_body_collision_inner
+}
+
+check_body_collision_inner: {
+    |x y index|
+        positions
+        vec_buf_len
+        1
+        sub_i32
+        index
+        greater_i32
+        {
+            |1|
+                positions
+                index
+                vec_buf_get
+                vec_x
+                x
+                eq
+                => x_matches .
+                positions
+                index
+                vec_buf_get
+                vec_y
+                y
+                eq
+                => y_matches .
+                x_matches
+                y_matches
+                add_i32
+                2
+                eq
+                copy
+                {
+                    |0|
+                        drop
+                        x
+                        y
+                        index
+                        1
+                        add_i32
+                        check_body_collision_inner
+
+                    |_|
+                }
+                    eval
+
+            |_|
+                0
+        }
+            eval
+}
+
+# Input
+handle_input: {
+    |0|
+        # No input available.
+
+    |1|
+        # up
+        0
+        -1
+        i32_to_i8
+        velocity
+        vec_store
+
+    |2|
+        # left
+        -1
+        i32_to_i8
+        0
+        velocity
+        vec_store
+
+    |3|
+        # down
+        0 1 velocity vec_store
+
+    |4|
+        # right
+        1 0 velocity vec_store
+
+    |_|
+        # unexpected value
+        brk
+}
+
+# Memory map
+tile_field_size: {
+    ||
+        0
+}
+
+frame_count: {
+    ||
+        2
+}
+
+should_game_run: {
+    ||
+        3
+}
+
+velocity: {
+    ||
+        4
+}
+
+next_position: {
+    ||
+        6
+}
+
+food_position: {
+    ||
+        8
+}
+
+snake_length: {
+    ||
+        10
+}
+
+positions: {
+    ||
+        11
+}
+
+# Utilities - Vector
+vec_x: {
+    |x _|
+        x
+}
+
+vec_y: {
+    |_ y|
+        y
+}
+
+vec_load: {
+    |address|
+        address
+        load
+        address
+        1
+        add_i32
+        load
+}
+
+vec_store: {
+    |x y address|
+        x
+        address
+        store
+        y
+        address
+        1
+        add_i32
+        store
+}
+
+vec_copy: {
+    |vx vy|
+        vx vy vx vy
+}
+
+vec_drop: {
+    |_ _|
+}
+
+vec_eq: {
+    |ax ay bx by|
+        ax
+        bx
+        eq
+        ay
+        by
+        eq
+        and
+}
+
+# Utilities - Vector Buffer
+vec_buf_init: {
+    |vec_buf|
+        0
+        vec_buf
+        _vec_buf_first
+        store
+        0
+        vec_buf
+        _vec_buf_next
+        store
+        64
+        vec_buf
+        _vec_buf_capacity
+        store
+}
+
+vec_buf_get: {
+    |vec_buf index|
+        index
+        2
+        mul_u8_wrap
+        => offset .
+        vec_buf
+        _vec_buf_first
+        load
+        => base .
+        vec_buf
+        base
+        offset
+        _vec_buf_address
+        vec_load
+}
+
+vec_buf_last: {
+    |vec_buf|
+        vec_buf
+        vec_buf_len
+        1
+        sub_u8
+        => index .
+        vec_buf
+        index
+        vec_buf_get
+}
+
+vec_buf_push: {
+    |vec_buf x y|
+        vec_buf
+        _vec_buf_next
+        => next_addr .
+        vec_buf
+        next_addr
+        load
+        0
+        _vec_buf_address
+        => address .
+        x
+        y
+        address
+        vec_store
+        next_addr
+        _vec_buf_inc_index
+}
+
+vec_buf_pop: {
+    |vec_buf|
+        vec_buf
+        _vec_buf_first
+        _vec_buf_inc_index
+}
+
+vec_buf_len: {
+    |vec_buf|
+        vec_buf
+        _vec_buf_first
+        load
+        => first .
+        vec_buf
+        _vec_buf_next
+        load
+        => next .
+        next
+        first
+        sub_u8_wrap
+        2
+        div_u8
+}
+
+vec_buf_capacity: {
+    |vec_buf|
+        vec_buf
+        _vec_buf_capacity
+        load
+        2
+        div_i32
+}
+
+_vec_buf_address: {
+    |vec_buf base offset|
+        # Compute the memory address of a location within the
+        # vector buffer.
+        #
+        # Takes two arguments:
+        #
+        # - `base`, which is an index into the buffer, as
+        #   opposed to a real address. It can be larger than any
+        #   actual address within the buffer.
+        # - `offset`, which is the offset of the desired address
+        #   `from base`.
+        base
+        offset
+        add_u8_wrap
+        vec_buf
+        _vec_buf_capacity
+        load
+        remainder_i32
+        vec_buf
+        _vec_buf_buffer
+        add_u8_wrap
+}
+
+_vec_buf_inc_index: {
+    |index_addr|
+        index_addr
+        load
+        2
+        add_u8_wrap
+        index_addr
+        store
+}
+
+_vec_buf_first: {
+    |vec_buf|
+        vec_buf 0 add_i32
+}
+
+_vec_buf_next: {
+    |vec_buf|
+        vec_buf 1 add_i32
+}
+
+_vec_buf_capacity: {
+    |vec_buf|
+        vec_buf 2 add_i32
+}
+
+_vec_buf_buffer: {
+    |vec_buf|
+        vec_buf 3 add_i32
+}
+
+# Utilities - Miscellaneous
+negatable_random: {
+    ||
+        read_random
+        _negatable_random_return_or_continue
+}
+
+_negatable_random_return_or_continue: {
+    |-2147483648|
+        # Negating the minimum number would result in an
+        # integer overflow.
+        negatable_random
+
+    |random|
+        random
+}
+
+abs: {
+    |v|
+        v
+        v
+        -1
+        greater_i32
+        {
+            |0|
+                neg_i32
+
+            |_|
+        }
+            eval
+}
