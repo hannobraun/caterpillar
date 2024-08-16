@@ -745,14 +745,24 @@ fn snake(script: &mut Script) {
                                     .v(2)
                                     .ident("eq")
                                     .ident("copy")
-                                    .ident("return_if_non_zero")
-                                    .ident("drop")
-                                    .ident("x")
-                                    .ident("y")
-                                    .ident("index")
-                                    .v(1)
-                                    .ident("add_i32")
-                                    .ident("check_body_collision_inner");
+                                    .fun(|b| {
+                                        b.branch(
+                                            |p| p.lit(0),
+                                            |e| {
+                                                e.ident("drop")
+                                                .ident("x")
+                                                .ident("y")
+                                                .ident("index")
+                                                .v(1)
+                                                .ident("add_i32")
+                                                .ident(
+                                                    "check_body_collision_inner"
+                                                );
+                                            },
+                                        )
+                                        .branch(|p| p.ident("_"), |_| {})
+                                    })
+                                    .ident("eval");
                             },
                         )
                     })
