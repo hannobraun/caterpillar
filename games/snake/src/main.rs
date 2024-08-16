@@ -367,7 +367,7 @@ fn snake(script: &mut Script) {
                     .ident("and")
                     .fun(|b| {
                         b.branch(
-                            |p| p,
+                            |p| p.lit(1),
                             |e| {
                                 e.ident("read_input")
                                     .ident("handle_input")
@@ -375,9 +375,9 @@ fn snake(script: &mut Script) {
                                     .ident("food_eat");
                             },
                         )
+                        .branch(|p| p.ident("_"), |_| {})
                     })
-                    .fun(|b| b.branch(|p| p, |_| {}))
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
