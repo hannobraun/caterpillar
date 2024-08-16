@@ -54,7 +54,7 @@ impl Evaluator {
             }
             Instruction::CallBuiltin { name } => match builtin_by_name(name) {
                 Some(f) => {
-                    f(&mut self.stack, instructions)?;
+                    f(&mut self.stack)?;
                 }
                 None => {
                     return Err(Effect::UnknownBuiltin);

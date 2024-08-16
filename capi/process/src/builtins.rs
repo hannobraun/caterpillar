@@ -1,4 +1,4 @@
-use crate::{value::IntegerOverflow, Effect, Instructions, Stack};
+use crate::{value::IntegerOverflow, Effect, Stack};
 
 pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     let builtin = match name {
@@ -34,9 +34,9 @@ pub fn builtin_by_name(name: &str) -> Option<Builtin> {
     Some(builtin)
 }
 
-pub type Builtin = fn(&mut Stack, &Instructions) -> Result;
+pub type Builtin = fn(&mut Stack) -> Result;
 
-fn add_i8(stack: &mut Stack, _: &Instructions) -> Result {
+fn add_i8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -52,7 +52,7 @@ fn add_i8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn add_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -68,7 +68,7 @@ fn add_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn add_u8(stack: &mut Stack, _: &Instructions) -> Result {
+fn add_u8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -84,7 +84,7 @@ fn add_u8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+fn add_u8_wrap(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -97,7 +97,7 @@ fn add_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn and(stack: &mut Stack, _: &Instructions) -> Result {
+fn and(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -108,11 +108,11 @@ fn and(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn brk(_: &mut Stack, _: &Instructions) -> Result {
+fn brk(_: &mut Stack) -> Result {
     Err(Effect::Breakpoint)
 }
 
-fn copy(stack: &mut Stack, _: &Instructions) -> Result {
+fn copy(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     stack.push_operand(a);
@@ -121,7 +121,7 @@ fn copy(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn div_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn div_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -141,7 +141,7 @@ fn div_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn div_u8(stack: &mut Stack, _: &Instructions) -> Result {
+fn div_u8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -161,12 +161,12 @@ fn div_u8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn drop(stack: &mut Stack, _: &Instructions) -> Result {
+fn drop(stack: &mut Stack) -> Result {
     stack.pop_operand()?;
     Ok(())
 }
 
-fn eq(stack: &mut Stack, _: &Instructions) -> Result {
+fn eq(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -177,7 +177,7 @@ fn eq(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn greater_i8(stack: &mut Stack, _: &Instructions) -> Result {
+fn greater_i8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -191,7 +191,7 @@ fn greater_i8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn greater_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn greater_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -205,7 +205,7 @@ fn greater_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn greater_u8(stack: &mut Stack, _: &Instructions) -> Result {
+fn greater_u8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -219,7 +219,7 @@ fn greater_u8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
+fn i32_to_i8(stack: &mut Stack) -> Result {
     let v = stack.pop_operand()?;
 
     let v = v.to_i32();
@@ -230,7 +230,7 @@ fn i32_to_i8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn mul_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn mul_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -246,7 +246,7 @@ fn mul_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn mul_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+fn mul_u8_wrap(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -259,7 +259,7 @@ fn mul_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn neg_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn neg_i32(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     let a = a.to_i32();
@@ -274,7 +274,7 @@ fn neg_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn not(stack: &mut Stack, _: &Instructions) -> Result {
+fn not(stack: &mut Stack) -> Result {
     let a = stack.pop_operand()?;
 
     let b = if a.0 == [0; 4] { 1 } else { 0 };
@@ -283,7 +283,7 @@ fn not(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn remainder_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn remainder_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -300,7 +300,7 @@ fn remainder_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn sub_i32(stack: &mut Stack, _: &Instructions) -> Result {
+fn sub_i32(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -316,7 +316,7 @@ fn sub_i32(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn sub_u8(stack: &mut Stack, _: &Instructions) -> Result {
+fn sub_u8(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
@@ -332,7 +332,7 @@ fn sub_u8(stack: &mut Stack, _: &Instructions) -> Result {
     Ok(())
 }
 
-fn sub_u8_wrap(stack: &mut Stack, _: &Instructions) -> Result {
+fn sub_u8_wrap(stack: &mut Stack) -> Result {
     let b = stack.pop_operand()?;
     let a = stack.pop_operand()?;
 
