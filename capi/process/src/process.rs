@@ -82,7 +82,7 @@ impl Process {
     }
 
     pub fn stop(&mut self) {
-        let next_instruction = self.stack().next_instruction();
+        let next_instruction = self.stack().next_instruction;
         self.breakpoints.set_ephemeral(next_instruction);
     }
 
@@ -91,7 +91,7 @@ impl Process {
             return;
         }
 
-        let next_instruction = self.evaluator.stack.next_instruction();
+        let next_instruction = self.evaluator.stack.next_instruction;
 
         if self
             .breakpoints

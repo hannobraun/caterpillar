@@ -54,7 +54,7 @@ impl RuntimeState {
                         self.game_engine.process.effects().first()
                     {
                         let and_stop_at =
-                            self.game_engine.process.stack().next_instruction();
+                            self.game_engine.process.stack().next_instruction;
                         self.game_engine.process.continue_(Some(and_stop_at))
                     } else {
                         // If we're not stopped at a breakpoint, we can't step.

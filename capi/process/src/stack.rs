@@ -48,10 +48,6 @@ impl Stack {
         self.inner.is_empty()
     }
 
-    pub fn next_instruction(&self) -> InstructionAddress {
-        self.next_instruction
-    }
-
     pub fn bindings(&self) -> Option<&Bindings> {
         self.inner.iter().rev().find_map(|element| match element {
             StackElement::Bindings(bindings) => Some(bindings),
