@@ -84,10 +84,8 @@ impl Stack {
         &self,
     ) -> impl Iterator<Item = InstructionAddress> + '_ {
         self.inner.iter().filter_map(|frame| match frame {
-            StackElement::Bindings(_) => None,
-            StackElement::Operand(_) => None,
             StackElement::ReturnAddress(address) => Some(*address),
-            StackElement::StartMarker => None,
+            _ => None,
         })
     }
 
