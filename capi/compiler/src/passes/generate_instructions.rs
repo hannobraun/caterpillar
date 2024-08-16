@@ -273,19 +273,8 @@ fn compile_fragment<H: Host>(
                     ))
                 }
                 Expression::ResolvedBuiltinFunction { name } => {
-                    // Here we check for special built-in functions that are
-                    // implemented differently, without making sure anywhere,
-                    // that their name doesn't conflict with any user-defined
-                    // functions.
-                    //
-                    // I think it's fine for now. This seems like a temporary
-                    // hack anyway, while the language is not powerful enough to
-                    // support real conditionals.
-                    let instruction = if name == "return_if_non_zero" {
-                        Instruction::ReturnIfNonZero
-                    } else {
-                        Instruction::CallBuiltin { name: name.clone() }
-                    };
+                    let instruction =
+                        Instruction::CallBuiltin { name: name.clone() };
 
                     Some(
                         output.generate_instruction(instruction, fragment.id()),

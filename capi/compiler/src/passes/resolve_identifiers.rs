@@ -96,9 +96,7 @@ fn resolve_in_branch<H: Host>(
                         }
                     }
                 }
-                if builtin_by_name(name).is_some()
-                    || name == "return_if_non_zero"
-                {
+                if builtin_by_name(name).is_some() {
                     *target = Some(IdentifierTarget::BuiltinFunction);
                 }
                 if let Some(intrinsic) = Intrinsic::from_name(name) {
