@@ -141,11 +141,6 @@ impl Evaluator {
                     branch.start
                 };
 
-                let mut arguments = Vec::new();
-                for (name, value) in function.environment {
-                    arguments.push((name, value));
-                }
-
                 if *is_tail_call {
                     self.stack.reuse_frame();
                 } else {
@@ -155,7 +150,7 @@ impl Evaluator {
                 self.stack
                     .bindings_mut()
                     .expect("Currently executing; stack frame must exist")
-                    .extend(arguments);
+                    .extend(function.environment);
 
                 self.stack.next_instruction = address;
             }
