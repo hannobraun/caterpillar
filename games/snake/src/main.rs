@@ -148,7 +148,7 @@ fn snake(script: &mut Script) {
             .c("beyond the last tile, which would let us know that we're done.")
             .ident("tile_y")
             .ident("check_tile_index")
-            .fun(|b| b.branch(|b| b, |s| {
+            .fun(|b| b.branch(|p| p, |s| {
                 s
                     .c("Apparently we're not done yet.")
                     .ident("tile_x")
