@@ -71,6 +71,9 @@ pub enum Effect {
     #[error(transparent)]
     IntegerOverflow(#[from] IntegerOverflow),
 
+    #[error("Invalid function")]
+    InvalidFunction,
+
     #[error("Invalid host effect")]
     InvalidHostEffect,
 
