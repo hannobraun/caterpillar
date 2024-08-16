@@ -145,7 +145,10 @@ pub fn generate_instructions<H: Host>(
                         })
                         .collect();
 
-                    (parameters, *address)
+                    capi_process::Branch {
+                        parameters,
+                        start: *address,
+                    }
                 })
                 .collect(),
         };

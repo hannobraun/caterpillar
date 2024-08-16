@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin_by_name, instructions::Pattern, Effect, Instruction,
-    Instructions, Stack, Value,
+    builtins::builtin_by_name, instructions::Pattern, Branch, Effect,
+    Instruction, Instructions, Stack, Value,
 };
 
 #[derive(
@@ -66,7 +66,11 @@ impl Evaluator {
             } => {
                 let mut any_member_matched = false;
 
-                for (parameters, address) in &function.branches {
+                for Branch {
+                    parameters,
+                    start: address,
+                } in &function.branches
+                {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
@@ -203,8 +207,8 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        evaluator::Evaluator, stack::StackElement, Function, Instruction,
-        InstructionAddress, Instructions, Pattern, Value,
+        evaluator::Evaluator, stack::StackElement, Branch, Function,
+        Instruction, InstructionAddress, Instructions, Pattern, Value,
     };
 
     #[test]
@@ -217,8 +221,8 @@ mod tests {
         instructions.push(Instruction::CallFunction {
             function: Function {
                 branches: vec![
-                    (
-                        vec![
+                    Branch {
+                        parameters: vec![
                             Pattern::Literal {
                                 value: Value::from(0),
                             },
@@ -226,10 +230,10 @@ mod tests {
                                 name: String::from("x"),
                             },
                         ],
-                        InstructionAddress { index: 1 },
-                    ),
-                    (
-                        vec![
+                        start: InstructionAddress { index: 1 },
+                    },
+                    Branch {
+                        parameters: vec![
                             Pattern::Literal {
                                 value: Value::from(1),
                             },
@@ -237,10 +241,10 @@ mod tests {
                                 name: String::from("x"),
                             },
                         ],
-                        InstructionAddress { index: 2 },
-                    ),
-                    (
-                        vec![
+                        start: InstructionAddress { index: 2 },
+                    },
+                    Branch {
+                        parameters: vec![
                             Pattern::Literal {
                                 value: Value::from(2),
                             },
@@ -248,8 +252,8 @@ mod tests {
                                 name: String::from("x"),
                             },
                         ],
-                        InstructionAddress { index: 3 },
-                    ),
+                        start: InstructionAddress { index: 3 },
+                    },
                 ],
             },
             is_tail_call: true,

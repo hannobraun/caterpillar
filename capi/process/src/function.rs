@@ -5,4 +5,8 @@ pub struct Function {
     pub branches: Vec<Branch>,
 }
 
-pub type Branch = (Vec<Pattern>, InstructionAddress);
+#[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Branch {
+    pub parameters: Vec<Pattern>,
+    pub start: InstructionAddress,
+}
