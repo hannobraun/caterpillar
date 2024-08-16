@@ -20,7 +20,8 @@ impl Evaluator {
             return Ok(());
         }
 
-        let address = self.stack.take_next_instruction();
+        let address = self.stack.next_instruction;
+        self.stack.next_instruction.increment();
 
         let instruction = instructions
             .get(&address)
