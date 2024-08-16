@@ -20,10 +20,10 @@ impl Evaluator {
             return Ok(());
         }
 
-        let addr = self.stack.take_next_instruction();
+        let address = self.stack.take_next_instruction();
 
         let instruction = instructions
-            .get(&addr)
+            .get(&address)
             .expect("Expected instruction referenced on stack to exist");
 
         match instruction {
