@@ -102,8 +102,8 @@ pub fn generate_instructions<H: Host>(
             assert!(
                 function.environment.is_empty(),
                 "We were not provided an address where to put a \"make \
-                        closure \" instruction, and yet the function has an \
-                        environment. This si a bug.",
+                closure \" instruction, and yet the function has an \
+                environment. This si a bug.",
             );
         }
     }
