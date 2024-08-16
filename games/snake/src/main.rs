@@ -665,8 +665,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.ident("positions")
+                            |e| {
+                                e.ident("positions")
                                     .ident("vec_buf_pop")
                                     .ident("pop_positions");
                             },
