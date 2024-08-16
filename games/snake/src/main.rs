@@ -493,7 +493,7 @@ fn snake(script: &mut Script) {
                     .ident("coord_smaller_than_zero")
                     .fun(|b| {
                         b.branch(
-                            |b| b,
+                            |p| p,
                             |s| {
                                 s.ident("coord").ident("limit").ident("add_i8");
                             },
