@@ -190,8 +190,6 @@ impl Evaluator {
                 branches,
                 environment,
             } => {
-                let branches = branches.clone();
-
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
                         "We're currently executing. A stack frame, and thus \
@@ -222,7 +220,7 @@ impl Evaluator {
                 self.stack.closures.insert(
                     index,
                     Function {
-                        branches,
+                        branches: branches.clone(),
                         environment,
                     },
                 );
