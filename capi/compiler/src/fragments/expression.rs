@@ -21,6 +21,7 @@ pub enum Expression {
     /// A compiler intrinsic
     Intrinsic {
         intrinsic: Intrinsic,
+        is_in_tail_position: bool,
     },
 
     ResolvedBinding {
