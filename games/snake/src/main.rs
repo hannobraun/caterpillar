@@ -439,8 +439,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.ident("next_position")
+                            |e| {
+                                e.ident("next_position")
                                     .ident("vec_load")
                                     .bind(["next_x", "next_y"])
                                     .ident("tile_field_size")
