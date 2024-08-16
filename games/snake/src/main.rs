@@ -729,8 +729,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.ident("positions")
+                            |e| {
+                                e.ident("positions")
                                     .ident("index")
                                     .ident("vec_buf_get")
                                     .ident("vec_x")
