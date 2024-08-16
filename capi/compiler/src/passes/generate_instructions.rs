@@ -130,7 +130,7 @@ pub fn generate_instructions<H: Host>(
         let function = function
             .iter()
             .map(|(parameters, address)| {
-                let arguments = parameters
+                let parameters = parameters
                     .inner
                     .iter()
                     .cloned()
@@ -143,7 +143,7 @@ pub fn generate_instructions<H: Host>(
                         }
                     })
                     .collect();
-                (arguments, *address)
+                (parameters, *address)
             })
             .collect();
 
