@@ -155,7 +155,6 @@ impl Stack {
                     self.inner.remove(index);
                 }
                 StackElement::ReturnAddress(address) => {
-                    self.next_instruction = address;
                     self.inner.remove(index);
                     break Some(address);
                 }

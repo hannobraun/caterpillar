@@ -236,7 +236,9 @@ impl Evaluator {
                 self.stack.push_operand(*value);
             }
             Instruction::Return => {
-                self.stack.pop_frame();
+                if let Some(return_address) = self.stack.pop_frame() {
+                    self.stack.next_instruction = return_address;
+                }
             }
             Instruction::TriggerEffect { effect } => {
                 return Err(*effect);
