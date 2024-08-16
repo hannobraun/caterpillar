@@ -1,5 +1,5 @@
 use crate::{
-    builtins::builtin_by_name, instructions::Pattern, Branch, Effect, Function,
+    builtins::builtin_by_name, instructions::Pattern, Effect, Function,
     Instruction, Instructions, Stack, Value,
 };
 
@@ -190,13 +190,7 @@ impl Evaluator {
                 branches,
                 environment,
             } => {
-                let branches = branches
-                    .iter()
-                    .map(|branch| Branch {
-                        parameters: Vec::new(),
-                        start: branch.start,
-                    })
-                    .collect();
+                let branches = branches.clone();
 
                 let Some(bindings) = self.stack.bindings() else {
                     unreachable!(
