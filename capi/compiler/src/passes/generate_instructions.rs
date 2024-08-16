@@ -8,6 +8,7 @@ use crate::{
         Fragments, Function, Parameters,
     },
     host::Host,
+    intrinsics::Intrinsic,
     source_map::SourceMap,
     syntax::Pattern,
 };
@@ -239,8 +240,15 @@ fn compile_fragment<H: Host>(
                 }
                 Expression::Intrinsic {
                     intrinsic,
-                    is_in_tail_position: _,
-                } => match *intrinsic {},
+                    is_in_tail_position,
+                } => match intrinsic {
+                    Intrinsic::Eval => Some(output.generate_instruction(
+                        Instruction::Eval {
+                            is_tail_call: *is_in_tail_position,
+                        },
+                        fragment.id(),
+                    )),
+                },
                 Expression::ResolvedBinding { name } => {
                     Some(output.generate_instruction(
                         Instruction::BindingEvaluate { name: name.clone() },
