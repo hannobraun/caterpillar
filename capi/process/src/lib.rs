@@ -13,7 +13,7 @@ pub use self::{
     breakpoints::Breakpoints,
     builtins::builtin_by_name,
     effects::{Effect, Effects},
-    function::Function,
+    function::{Branch, Function},
     instructions::{Instruction, InstructionAddress, Instructions, Pattern},
     operands::Operands,
     process::Process,
