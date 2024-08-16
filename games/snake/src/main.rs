@@ -514,7 +514,7 @@ fn snake(script: &mut Script) {
             |s| {
                 s.ident("limit")
                     .ident("coord")
-                    .ident("greater_i32")
+                    .ident("greater_u8")
                     .bind(["limit_greater_than_coord"])
                     .ident("coord")
                     .ident("limit_greater_than_coord")
