@@ -261,9 +261,9 @@ fn if_(stack: &mut Stack, instructions: &Instructions) -> Result {
     let discard = discard.to_u32();
     stack.closures.remove(&discard);
 
-    let closure = evaluate.to_u32();
+    let evaluate = evaluate.to_u32();
 
-    let (address, environment) = stack.closures.remove(&closure).unwrap();
+    let (address, environment) = stack.closures.remove(&evaluate).unwrap();
 
     let mut arguments = Vec::new();
     for (name, value) in environment {
