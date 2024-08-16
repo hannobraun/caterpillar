@@ -202,6 +202,8 @@ impl Evaluator {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeMap;
+
     use crate::{
         evaluator::Evaluator, stack::StackElement, Branch, Function,
         Instruction, InstructionAddress, Instructions, Pattern, Value,
@@ -251,6 +253,7 @@ mod tests {
                         start: InstructionAddress { index: 3 },
                     },
                 ],
+                environment: BTreeMap::new(),
             },
             is_tail_call: true,
         });

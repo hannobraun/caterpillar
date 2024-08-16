@@ -151,6 +151,7 @@ pub fn generate_instructions<H: Host>(
                     }
                 })
                 .collect(),
+            environment: BTreeMap::new(),
         };
 
         output.instructions.replace(
