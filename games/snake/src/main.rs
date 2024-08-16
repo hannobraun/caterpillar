@@ -569,8 +569,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.c("The snake's head and the food are at the")
+                            |e| {
+                                e.c("The snake's head and the food are at the")
                                     .c("same position.")
                                     .ident("food_init")
                                     .ident("grow_snake");
