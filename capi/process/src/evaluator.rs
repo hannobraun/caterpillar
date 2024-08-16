@@ -117,7 +117,7 @@ impl Evaluator {
                 // This duplicates code from other places, which is unfortunate,
                 // but works for now.
                 //
-                // See implementation note on `Instruction::Eval` for contest on
+                // See implementation note on `Instruction::Eval` for context on
                 // this.
 
                 let function = {
