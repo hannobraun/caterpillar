@@ -113,6 +113,37 @@ impl Evaluator {
                     return Err(Effect::NoMatch);
                 }
             }
+            Instruction::Eval { is_tail_call } => {
+                // This duplicates code from other places, which is unfortunate,
+                // but works for now.
+                //
+                // See implementation note on `Instruction::Eval` for contest on
+                // this.
+
+                let closure = self.stack.pop_operand()?;
+                let closure = closure.to_u32();
+
+                let (address, environment) =
+                    self.stack.closures.remove(&closure).unwrap();
+
+                let mut arguments = Vec::new();
+                for (name, value) in environment {
+                    arguments.push((name, value));
+                }
+
+                if *is_tail_call {
+                    self.stack.reuse_frame();
+                } else {
+                    self.stack.push_frame()?;
+                }
+
+                self.stack
+                    .bindings_mut()
+                    .expect("Currently executing; stack frame must exist")
+                    .extend(arguments);
+
+                self.stack.next_instruction = address;
+            }
             Instruction::MakeClosure {
                 address,
                 environment,

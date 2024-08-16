@@ -143,6 +143,22 @@ pub enum Instruction {
         is_tail_call: bool,
     },
 
+    /// # Evaluate the current function on the stack
+    ///
+    /// ## Implementation Note
+    ///
+    /// This instruction is too high-level, and it's partially redundant with
+    /// other high-level instructions. The duplicated code in their
+    /// implementations within `Evaluator` is supporting evidence of this.
+    ///
+    /// Like other instructions, it needs to be replaced by smaller, more
+    /// low-level ones. This requires the compiler to become smarter. Which is
+    /// the direction I'd like things to go into anyway, but it hasn't fully
+    /// happened yet.
+    Eval {
+        is_tail_call: bool,
+    },
+
     MakeClosure {
         address: InstructionAddress,
         environment: BTreeSet<String>,
