@@ -129,8 +129,8 @@ pub fn generate_instructions<H: Host>(
         };
         let function = function
             .iter()
-            .map(|(arguments, address)| {
-                let arguments = arguments
+            .map(|(parameters, address)| {
+                let arguments = parameters
                     .inner
                     .iter()
                     .cloned()
