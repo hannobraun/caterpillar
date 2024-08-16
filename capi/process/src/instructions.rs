@@ -3,7 +3,7 @@ use std::{
     fmt,
 };
 
-use crate::{Effect, Value};
+use crate::{Effect, Function, Value};
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -147,7 +147,7 @@ pub enum Instruction {
     /// jumping to another address, but that seems like the right direction to
     /// go in anyway.
     CallFunction {
-        function: Vec<(Vec<Pattern>, InstructionAddress)>,
+        function: Function,
         is_tail_call: bool,
     },
 
