@@ -494,8 +494,8 @@ fn snake(script: &mut Script) {
                     .fun(|b| {
                         b.branch(
                             |p| p,
-                            |s| {
-                                s.ident("coord").ident("limit").ident("add_i8");
+                            |e| {
+                                e.ident("coord").ident("limit").ident("add_i8");
                             },
                         )
                     })
