@@ -4,6 +4,7 @@ use capi_process::builtin_by_name;
 
 use crate::{
     host::Host,
+    intrinsics::Intrinsic,
     syntax::{Expression, Function, IdentifierTarget, Pattern},
 };
 
@@ -100,6 +101,9 @@ fn resolve_in_branch<H: Host>(
                 {
                     *target = Some(IdentifierTarget::BuiltinFunction);
                 }
+                if let Some(intrinsic) = Intrinsic::from_name(name) {
+                    *target = Some(IdentifierTarget::Intrinsic { intrinsic });
+                }
                 if H::function_name_to_effect_number(name).is_some() {
                     *target = Some(IdentifierTarget::HostFunction);
                 }
@@ -122,6 +126,7 @@ type Environment = BTreeSet<String>;
 mod tests {
     use crate::{
         host::Host,
+        intrinsics::Intrinsic,
         syntax::{Branch, Expression, IdentifierTarget, Script},
     };
 
@@ -305,6 +310,36 @@ mod tests {
             Some(&Expression::Identifier {
                 name: String::from("host_fn"),
                 target: Some(IdentifierTarget::HostFunction),
+                is_known_to_be_in_tail_position: false,
+            })
+        );
+    }
+
+    #[test]
+    fn resolve_intrinsic() {
+        // Compiler intrinsics are special functions that aren't defined by the
+        // host or user, but the compiler. They are translated into a series of
+        // instructions at compile-time.
+
+        let mut script = Script::default();
+        script.function("f", |b| {
+            b.branch(
+                |p| p,
+                |s| {
+                    s.ident("eval");
+                },
+            )
+        });
+
+        let mut functions = resolve_identifiers(script);
+
+        assert_eq!(
+            functions.remove(0).body.last(),
+            Some(&Expression::Identifier {
+                name: String::from("eval"),
+                target: Some(IdentifierTarget::Intrinsic {
+                    intrinsic: Intrinsic::Eval
+                }),
                 is_known_to_be_in_tail_position: false,
             })
         );
