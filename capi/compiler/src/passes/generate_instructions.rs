@@ -80,9 +80,24 @@ pub fn generate_instructions<H: Host>(
                 .by_id
                 .entry(id)
                 .or_default()
-                .push((branch.parameters, address));
+                .push((branch.parameters.clone(), address));
 
-            branches.push(address);
+            branches.push(capi_process::Branch {
+                parameters: branch
+                    .parameters
+                    .inner
+                    .into_iter()
+                    .map(|pattern| match pattern {
+                        Pattern::Identifier { name } => {
+                            capi_process::Pattern::Identifier { name }
+                        }
+                        Pattern::Literal { value } => {
+                            capi_process::Pattern::Literal { value }
+                        }
+                    })
+                    .collect(),
+                start: address,
+            });
         }
 
         if let Some(address) = address {

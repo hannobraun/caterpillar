@@ -3,7 +3,7 @@ use std::{
     fmt,
 };
 
-use crate::{Effect, Function, Value};
+use crate::{Branch, Effect, Function, Value};
 
 #[derive(
     Clone, Debug, Eq, PartialEq, Default, serde::Deserialize, serde::Serialize,
@@ -168,7 +168,7 @@ pub enum Instruction {
     },
 
     MakeClosure {
-        branches: Vec<InstructionAddress>,
+        branches: Vec<Branch>,
         environment: BTreeSet<String>,
     },
     Push {

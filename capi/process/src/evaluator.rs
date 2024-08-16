@@ -192,9 +192,9 @@ impl Evaluator {
             } => {
                 let branches = branches
                     .iter()
-                    .map(|address| Branch {
+                    .map(|branch| Branch {
                         parameters: Vec::new(),
-                        start: *address,
+                        start: branch.start,
                     })
                     .collect();
 
