@@ -149,8 +149,8 @@ fn snake(script: &mut Script) {
                     .ident("tile_y")
                     .ident("check_tile_index")
                     .fun(|b| {
-                        b.branch(
-                            |p| p,
+                        b.branch(|p| p.lit(0), |_| {}).branch(
+                            |p| p.ident("_"),
                             |e| {
                                 e.c("Apparently we're not done yet.")
                                     .ident("tile_x")
@@ -167,8 +167,7 @@ fn snake(script: &mut Script) {
                             },
                         )
                     })
-                    .fun(|b| b.branch(|p| p, |_| {}))
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
