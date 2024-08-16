@@ -121,11 +121,11 @@ impl Evaluator {
                 // this.
 
                 let index = self.stack.pop_operand()?;
-                let closure = index.to_u32();
+                let index = index.to_u32();
 
                 let (address, environment) = {
                     let mut function =
-                        self.stack.closures.remove(&closure).unwrap();
+                        self.stack.closures.remove(&index).unwrap();
 
                     let branch = function.branches.remove(0);
                     assert_eq!(
