@@ -1,6 +1,6 @@
 use crate::{
-    builtins::builtin_by_name, instructions::Pattern, Branch, Effect,
-    Instruction, Instructions, Stack, Value,
+    builtins::builtin_by_name, instructions::Pattern, Effect, Instruction,
+    Instructions, Stack, Value,
 };
 
 #[derive(
@@ -66,17 +66,13 @@ impl Evaluator {
             } => {
                 let mut any_member_matched = false;
 
-                for Branch {
-                    parameters,
-                    start: address,
-                } in &function.branches
-                {
+                for branch in &function.branches {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
 
                     let mut member_matches = true;
-                    for parameter in parameters.iter().rev() {
+                    for parameter in branch.parameters.iter().rev() {
                         let operand = self.stack.pop_operand()?;
                         used_operands.push(operand);
 
@@ -102,7 +98,7 @@ impl Evaluator {
                             self.stack.push_frame()?;
                         }
 
-                        self.stack.next_instruction = *address;
+                        self.stack.next_instruction = branch.start;
                         any_member_matched = true;
 
                         break;
