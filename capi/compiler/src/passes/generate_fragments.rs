@@ -114,7 +114,7 @@ fn compile_expression(
         } => {
             // By the time we make it to this compiler pass, all expressions
             // that are in tail position should be known to be so.
-            let is_tail_call = is_known_to_be_in_tail_position;
+            let is_in_tail_position = is_known_to_be_in_tail_position;
 
             match target {
                 Some(IdentifierTarget::Binding) => {
@@ -124,7 +124,10 @@ fn compile_expression(
                     Expression::ResolvedBuiltinFunction { name }
                 }
                 Some(IdentifierTarget::Function) => {
-                    Expression::ResolvedFunction { name, is_tail_call }
+                    Expression::ResolvedFunction {
+                        name,
+                        is_tail_call: is_in_tail_position,
+                    }
                 }
                 Some(IdentifierTarget::HostFunction) => {
                     Expression::ResolvedHostFunction { name }
