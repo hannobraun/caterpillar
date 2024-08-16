@@ -631,12 +631,20 @@ fn snake(script: &mut Script) {
                 s.ident("update_next_position")
                     .ident("snake_head")
                     .ident("check_body_collision")
-                    .ident("return_if_non_zero")
-                    .ident("positions")
-                    .ident("next_position")
-                    .ident("vec_load")
-                    .ident("vec_buf_push")
-                    .ident("pop_positions");
+                    .fun(|b| {
+                        b.branch(
+                            |b| b.lit(0),
+                            |b| {
+                                b.ident("positions")
+                                    .ident("next_position")
+                                    .ident("vec_load")
+                                    .ident("vec_buf_push")
+                                    .ident("pop_positions");
+                            },
+                        )
+                        .branch(|b| b.lit(1), |_| {})
+                    })
+                    .ident("eval");
             },
         )
     });
