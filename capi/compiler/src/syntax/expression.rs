@@ -1,5 +1,7 @@
 use capi_process::Value;
 
+use crate::intrinsics::Intrinsic;
+
 use super::Function;
 
 #[derive(Clone, Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -50,4 +52,5 @@ pub enum IdentifierTarget {
     BuiltinFunction,
     Function,
     HostFunction,
+    Intrinsic { intrinsic: Intrinsic },
 }

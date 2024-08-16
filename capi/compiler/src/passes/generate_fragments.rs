@@ -132,6 +132,12 @@ fn compile_expression(
                 Some(IdentifierTarget::HostFunction) => {
                     Expression::ResolvedHostFunction { name }
                 }
+                Some(IdentifierTarget::Intrinsic { intrinsic }) => {
+                    Expression::Intrinsic {
+                        intrinsic,
+                        is_in_tail_position,
+                    }
+                }
                 None => Expression::UnresolvedIdentifier { name },
             }
         }
