@@ -664,16 +664,16 @@ fn snake(script: &mut Script) {
                     .ident("greater_i32")
                     .fun(|b| {
                         b.branch(
-                            |p| p,
+                            |p| p.lit(1),
                             |e| {
                                 e.ident("positions")
                                     .ident("vec_buf_pop")
                                     .ident("pop_positions");
                             },
                         )
+                        .branch(|p| p.ident("_"), |_| {})
                     })
-                    .fun(|b| b.branch(|p| p, |_| {}))
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
