@@ -140,12 +140,12 @@ impl Stack {
         bindings.clear();
     }
 
-    pub fn pop_frame(&mut self) {
+    pub fn pop_frame(&mut self) -> Option<InstructionAddress> {
         let mut index = self.inner.len();
 
         loop {
             if index == 0 {
-                break;
+                break None;
             }
 
             index -= 1;
@@ -157,11 +157,11 @@ impl Stack {
                 StackElement::ReturnAddress(address) => {
                     self.next_instruction = address;
                     self.inner.remove(index);
-                    break;
+                    break Some(address);
                 }
                 StackElement::StartMarker => {
                     self.inner.remove(index);
-                    break;
+                    break None;
                 }
                 _ => {}
             }
