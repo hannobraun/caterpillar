@@ -193,10 +193,6 @@ impl Stack {
     }
 
     pub fn take_next_instruction(&mut self) -> Option<InstructionAddress> {
-        if self.no_frames_left() {
-            return None;
-        }
-
         let next_instruction = self.next_instruction;
         self.next_instruction.increment();
 

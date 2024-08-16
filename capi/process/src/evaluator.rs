@@ -16,6 +16,10 @@ pub struct Evaluator {
 
 impl Evaluator {
     pub fn step(&mut self, instructions: &Instructions) -> Result<(), Effect> {
+        if self.stack.no_frames_left() {
+            return Ok(());
+        }
+
         let Some(addr) = self.stack.take_next_instruction() else {
             return Ok(());
         };
