@@ -728,7 +728,7 @@ fn snake(script: &mut Script) {
                     .ident("greater_i32")
                     .fun(|b| {
                         b.branch(
-                            |p| p,
+                            |p| p.lit(1),
                             |e| {
                                 e.ident("positions")
                                     .ident("index")
@@ -770,16 +770,14 @@ fn snake(script: &mut Script) {
                                     .ident("eval");
                             },
                         )
-                    })
-                    .fun(|b| {
-                        b.branch(
-                            |p| p,
+                        .branch(
+                            |p| p.ident("_"),
                             |e| {
                                 e.v(0);
                             },
                         )
                     })
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
