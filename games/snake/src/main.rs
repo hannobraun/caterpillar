@@ -501,7 +501,7 @@ fn snake(script: &mut Script) {
                     })
                     .fun(|b| {
                         b.branch(
-                            |b| b,
+                            |p| p,
                             |e| {
                                 e.ident("coord");
                             },
