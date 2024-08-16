@@ -438,7 +438,7 @@ fn snake(script: &mut Script) {
                     .ident("is_out_of_bounds")
                     .fun(|b| {
                         b.branch(
-                            |p| p,
+                            |p| p.lit(1),
                             |e| {
                                 e.ident("next_position")
                                     .ident("vec_load")
@@ -476,9 +476,9 @@ fn snake(script: &mut Script) {
                                     .ident("vec_store");
                             },
                         )
+                        .branch(|p| p.ident("_"), |_| {})
                     })
-                    .fun(|b| b.branch(|p| p, |_| {}))
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
