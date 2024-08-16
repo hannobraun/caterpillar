@@ -66,7 +66,7 @@ impl Evaluator {
             } => {
                 let mut any_member_matched = false;
 
-                for (parameters, address) in function {
+                for (parameters, address) in &function.branches {
                     let mut used_operands = Vec::new();
                     let mut argument_operands = Vec::new();
                     let mut bound_arguments = Vec::new();
@@ -203,7 +203,7 @@ impl Evaluator {
 #[cfg(test)]
 mod tests {
     use crate::{
-        evaluator::Evaluator, stack::StackElement, Instruction,
+        evaluator::Evaluator, stack::StackElement, Function, Instruction,
         InstructionAddress, Instructions, Pattern, Value,
     };
 
@@ -215,41 +215,43 @@ mod tests {
 
         let mut instructions = Instructions::default();
         instructions.push(Instruction::CallFunction {
-            function: vec![
-                (
-                    vec![
-                        Pattern::Literal {
-                            value: Value::from(0),
-                        },
-                        Pattern::Identifier {
-                            name: String::from("x"),
-                        },
-                    ],
-                    InstructionAddress { index: 1 },
-                ),
-                (
-                    vec![
-                        Pattern::Literal {
-                            value: Value::from(1),
-                        },
-                        Pattern::Identifier {
-                            name: String::from("x"),
-                        },
-                    ],
-                    InstructionAddress { index: 2 },
-                ),
-                (
-                    vec![
-                        Pattern::Literal {
-                            value: Value::from(2),
-                        },
-                        Pattern::Identifier {
-                            name: String::from("x"),
-                        },
-                    ],
-                    InstructionAddress { index: 3 },
-                ),
-            ],
+            function: Function {
+                branches: vec![
+                    (
+                        vec![
+                            Pattern::Literal {
+                                value: Value::from(0),
+                            },
+                            Pattern::Identifier {
+                                name: String::from("x"),
+                            },
+                        ],
+                        InstructionAddress { index: 1 },
+                    ),
+                    (
+                        vec![
+                            Pattern::Literal {
+                                value: Value::from(1),
+                            },
+                            Pattern::Identifier {
+                                name: String::from("x"),
+                            },
+                        ],
+                        InstructionAddress { index: 2 },
+                    ),
+                    (
+                        vec![
+                            Pattern::Literal {
+                                value: Value::from(2),
+                            },
+                            Pattern::Identifier {
+                                name: String::from("x"),
+                            },
+                        ],
+                        InstructionAddress { index: 3 },
+                    ),
+                ],
+            },
             is_tail_call: true,
         });
 

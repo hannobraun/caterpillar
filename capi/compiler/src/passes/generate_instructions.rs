@@ -127,25 +127,28 @@ pub fn generate_instructions<H: Host>(
             );
             continue;
         };
-        let function = function
-            .iter()
-            .map(|(parameters, address)| {
-                let parameters = parameters
-                    .inner
-                    .iter()
-                    .cloned()
-                    .map(|pattern| match pattern {
-                        Pattern::Identifier { name } => {
-                            capi_process::Pattern::Identifier { name }
-                        }
-                        Pattern::Literal { value } => {
-                            capi_process::Pattern::Literal { value }
-                        }
-                    })
-                    .collect();
-                (parameters, *address)
-            })
-            .collect();
+        let function = capi_process::Function {
+            branches: function
+                .iter()
+                .map(|(parameters, address)| {
+                    let parameters = parameters
+                        .inner
+                        .iter()
+                        .cloned()
+                        .map(|pattern| match pattern {
+                            Pattern::Identifier { name } => {
+                                capi_process::Pattern::Identifier { name }
+                            }
+                            Pattern::Literal { value } => {
+                                capi_process::Pattern::Literal { value }
+                            }
+                        })
+                        .collect();
+
+                    (parameters, *address)
+                })
+                .collect(),
+        };
 
         output.instructions.replace(
             call.address,
