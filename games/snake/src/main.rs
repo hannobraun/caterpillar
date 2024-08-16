@@ -493,21 +493,19 @@ fn snake(script: &mut Script) {
                     .ident("coord_smaller_than_zero")
                     .fun(|b| {
                         b.branch(
-                            |p| p,
+                            |p| p.lit(1),
                             |e| {
                                 e.ident("coord").ident("limit").ident("add_i8");
                             },
                         )
-                    })
-                    .fun(|b| {
-                        b.branch(
-                            |p| p,
+                        .branch(
+                            |p| p.ident("_"),
                             |e| {
                                 e.ident("coord");
                             },
                         )
                     })
-                    .ident("if");
+                    .ident("eval");
             },
         )
     });
