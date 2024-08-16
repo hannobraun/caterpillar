@@ -120,7 +120,7 @@ impl Evaluator {
                 // See implementation note on `Instruction::Eval` for contest on
                 // this.
 
-                let mut function = {
+                let function = {
                     let index = self.stack.pop_operand()?;
                     let index = index.to_u32();
 
@@ -131,10 +131,10 @@ impl Evaluator {
                 };
 
                 let address = {
-                    let branch = function.branches.remove(0);
+                    let branch = function.branches.first().unwrap();
                     assert_eq!(
                         function.branches.len(),
-                        0,
+                        1,
                         "`eval` does not support pattern-matching functions"
                     );
 
