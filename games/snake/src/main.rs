@@ -577,7 +577,7 @@ fn snake(script: &mut Script) {
                             },
                         )
                     })
-                    .fun(|b| b.branch(|b| b, |_| {}))
+                    .fun(|b| b.branch(|p| p, |_| {}))
                     .ident("if");
             },
         )
