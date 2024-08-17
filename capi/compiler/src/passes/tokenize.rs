@@ -10,11 +10,12 @@ pub fn tokenize(source: String) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
-                    buffer.take();
+                    tokens
+                        .extend(buffer.take_if_not_empty().map(Token::Invalid));
                     state = State::Comment;
                 }
                 ch => {
-                    eprintln!("Unexpected char: `{ch}`");
+                    buffer.push(ch);
                 }
             },
             State::Comment => match ch {
@@ -38,6 +39,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
 #[derive(Debug)]
 pub enum Token {
     Comment { text: String },
+    Invalid(String),
 }
 
 enum State {
@@ -57,5 +59,13 @@ impl Buffer {
 
     pub fn take(&mut self) -> String {
         mem::take(&mut self.inner)
+    }
+
+    pub fn take_if_not_empty(&mut self) -> Option<String> {
+        if self.inner.is_empty() {
+            None
+        } else {
+            Some(self.take())
+        }
     }
 }
