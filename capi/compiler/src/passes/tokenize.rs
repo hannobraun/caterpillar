@@ -24,7 +24,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     state = State::Initial;
                 }
                 c => {
-                    buffer.inner.push(c);
+                    buffer.push(c);
                     state = State::Comment
                 }
             },
@@ -50,6 +50,10 @@ struct Buffer {
 }
 
 impl Buffer {
+    pub fn push(&mut self, ch: char) {
+        self.inner.push(ch);
+    }
+
     pub fn take(&mut self) -> String {
         mem::take(&mut self.inner)
     }
