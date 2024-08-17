@@ -4,7 +4,9 @@ use capi_process::Value;
 
 use super::{function::Pattern, Branch, Expression, Function};
 
-#[derive(Clone, Debug, Default, serde::Deserialize, serde::Serialize)]
+#[derive(
+    Clone, Debug, Default, Eq, PartialEq, serde::Deserialize, serde::Serialize,
+)]
 pub struct Script {
     pub functions: Vec<Function>,
 }
