@@ -13,6 +13,11 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     buffer.take_invalid(&mut tokens);
                     state = State::CommentStart;
                 }
+                ':' => {
+                    tokens.push(Token::FunctionName {
+                        name: buffer.take(),
+                    });
+                }
                 ch if ch.is_whitespace() => {
                     buffer.take_invalid(&mut tokens);
                 }
@@ -47,6 +52,8 @@ pub fn tokenize(source: String) -> Vec<Token> {
 #[derive(Debug)]
 pub enum Token {
     Comment { text: String },
+    FunctionName { name: String },
+
     Invalid(String),
 }
 
