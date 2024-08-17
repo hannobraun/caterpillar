@@ -62,6 +62,13 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
 }
 
 fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
+    match tokens.take()? {
+        Token::BranchHeadBoundary => {}
+        token => {
+            panic!("Unexpected token: {token:?}");
+        }
+    }
+
     loop {
         match tokens.peek()? {
             Token::FunctionStart => {
