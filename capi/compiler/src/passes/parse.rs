@@ -101,6 +101,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
+    let body = Vec::new();
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
@@ -115,10 +116,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    Some(Branch {
-        parameters,
-        body: Vec::new(),
-    })
+    Some(Branch { parameters, body })
 }
 
 struct Tokens {
