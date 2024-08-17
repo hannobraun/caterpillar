@@ -31,9 +31,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     buffer.push(ch);
 
                     for (s, token) in &eager_tokens {
-                        if buffer.inner.ends_with(s) {
-                            buffer.inner.truncate(buffer.inner.len() - s.len());
-                            buffer.take_identifier(&mut tokens);
+                        if buffer.take_from_end(s) {
                             tokens.push(token.clone());
                         }
                     }
@@ -109,5 +107,14 @@ impl Buffer {
             self.take_if_not_empty()
                 .map(|name| Token::Identifier { name }),
         );
+    }
+
+    pub fn take_from_end(&mut self, s: &str) -> bool {
+        if self.inner.ends_with(s) {
+            self.inner.truncate(self.inner.len() - s.len());
+            true
+        } else {
+            false
+        }
     }
 }
