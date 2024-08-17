@@ -51,7 +51,12 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
         .args(["--package", game])
         .output()
         .await?;
+
+    let stderr = str::from_utf8(&output.stderr)?;
     let stdout = str::from_utf8(&output.stdout)?;
+
+    eprintln!("{stderr}");
+
     let script = ron::from_str(stdout).with_context(|| {
         format!("Failed to parse message from game:\n{stdout}")
     })?;
