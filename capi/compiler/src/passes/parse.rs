@@ -114,7 +114,13 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                 Token::Comment { text } => {
                     body.push(Expression::Comment { text });
                 }
-                Token::Identifier { name: _ } => {}
+                Token::Identifier { name } => {
+                    body.push(Expression::Identifier {
+                        name,
+                        target: None,
+                        is_known_to_be_in_tail_position: false,
+                    });
+                }
                 Token::IntegerLiteral { value: _ } => {}
                 Token::BindStart | Token::BindEnd => {}
 
