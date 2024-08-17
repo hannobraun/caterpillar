@@ -58,7 +58,7 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
     eprintln!("{stderr}");
 
     let script = ron::from_str(stdout).with_context(|| {
-        format!("Failed to parse message from game:\n{stdout}")
+        format!("Failed to parse output from game:\n{stdout}")
     })?;
 
     let (fragments, instructions, source_map) =
