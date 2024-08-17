@@ -105,7 +105,7 @@ impl Buffer {
     pub fn take_identifier(&mut self, tokens: &mut Vec<Token>) {
         tokens.extend(
             self.take_if_not_empty()
-                .map(|name| Token::Identifier { name }),
+                .map(|token| Token::Identifier { name: token }),
         );
     }
 
