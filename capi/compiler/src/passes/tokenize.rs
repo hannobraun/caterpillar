@@ -34,6 +34,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
 
                     for (s, token) in &eager_tokens {
                         if buffer.take_from_end(s) {
+                            buffer.take_literal_or_identifier(&mut tokens);
                             tokens.push(token.clone());
                         }
                     }
