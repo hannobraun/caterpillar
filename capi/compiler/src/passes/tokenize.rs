@@ -38,8 +38,8 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     });
                     state = State::Initial;
                 }
-                c => {
-                    buffer.push(c);
+                ch => {
+                    buffer.push(ch);
                     state = State::CommentText
                 }
             },
