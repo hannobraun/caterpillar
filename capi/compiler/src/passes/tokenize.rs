@@ -6,6 +6,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         ("}", Token::FunctionClose),
         ("|", Token::BranchHeadBoundary),
         ("=>", Token::BindStart),
+        (".", Token::BindEnd),
     ];
 
     let mut state = State::Initial;
@@ -75,6 +76,7 @@ pub enum Token {
     IntegerLiteral { value: u128 },
 
     BindStart,
+    BindEnd,
 }
 
 enum State {
