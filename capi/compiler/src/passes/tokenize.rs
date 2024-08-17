@@ -10,7 +10,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
-                    buffer.take_invalid(&mut tokens);
+                    buffer.take_identifier(&mut tokens);
                     state = State::CommentStart;
                 }
                 ':' => {
@@ -19,15 +19,15 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     });
                 }
                 '{' => {
-                    buffer.take_invalid(&mut tokens);
+                    buffer.take_identifier(&mut tokens);
                     tokens.push(Token::CurlyBracketOpen);
                 }
                 '|' => {
-                    buffer.take_invalid(&mut tokens);
+                    buffer.take_identifier(&mut tokens);
                     tokens.push(Token::BranchHeadBoundary);
                 }
                 ch if ch.is_whitespace() => {
-                    buffer.take_invalid(&mut tokens);
+                    buffer.take_identifier(&mut tokens);
                 }
                 ch => {
                     buffer.push(ch);
@@ -96,7 +96,7 @@ impl Buffer {
         }
     }
 
-    pub fn take_invalid(&mut self, tokens: &mut Vec<Token>) {
+    pub fn take_identifier(&mut self, tokens: &mut Vec<Token>) {
         tokens.extend(
             self.take_if_not_empty()
                 .map(|name| Token::Identifier { name }),
