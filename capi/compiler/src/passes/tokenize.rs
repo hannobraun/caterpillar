@@ -63,11 +63,14 @@ pub fn tokenize(source: String) -> Vec<Token> {
 
 #[derive(Debug)]
 pub enum Token {
-    BranchHeadBoundary,
     Comment { text: String },
+
+    BranchHeadBoundary,
+
+    FunctionName { name: String },
     FunctionOpen,
     FunctionClose,
-    FunctionName { name: String },
+
     Identifier { name: String },
 }
 
