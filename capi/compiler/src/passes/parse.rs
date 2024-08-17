@@ -1,6 +1,6 @@
 use std::collections::{BTreeSet, VecDeque};
 
-use crate::syntax::{Function, Script};
+use crate::syntax::{Branch, Function, Script};
 
 use super::tokenize::Token;
 
@@ -49,6 +49,16 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
+    while parse_branch(tokens).is_some() {}
+
+    Some(Function {
+        name: None,
+        branches: Vec::new(),
+        environment: BTreeSet::new(),
+    })
+}
+
+fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
@@ -64,11 +74,7 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
         }
     }
 
-    Some(Function {
-        name: None,
-        branches: Vec::new(),
-        environment: BTreeSet::new(),
-    })
+    None
 }
 
 struct Tokens {
