@@ -1,11 +1,13 @@
 use capi_compiler::syntax::Script;
 
-pub fn main() {
+pub fn main() -> anyhow::Result<()> {
     let mut script = Script::default();
     snake(&mut script);
 
     let script = ron::to_string(&script).unwrap();
     println!("{script}");
+
+    Ok(())
 }
 
 fn snake(script: &mut Script) {
