@@ -2,9 +2,7 @@ use std::mem;
 
 pub fn tokenize(source: String) -> Vec<Token> {
     let mut state = State::Initial;
-    let mut buffer = Buffer {
-        inner: String::new(),
-    };
+    let mut buffer = Buffer::default();
 
     let mut tokens = Vec::new();
 
@@ -46,6 +44,7 @@ enum State {
     Comment,
 }
 
+#[derive(Default)]
 struct Buffer {
     inner: String,
 }
