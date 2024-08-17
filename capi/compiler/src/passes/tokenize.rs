@@ -1,3 +1,5 @@
+use std::mem;
+
 pub fn tokenize(source: String) -> Vec<Token> {
     let mut state = State::Initial;
     let mut buffer = Buffer {
@@ -50,8 +52,6 @@ struct Buffer {
 
 impl Buffer {
     pub fn take(&mut self) -> String {
-        let s = self.inner.clone();
-        self.inner.clear();
-        s
+        mem::take(&mut self.inner)
     }
 }
