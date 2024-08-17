@@ -19,7 +19,8 @@ pub fn parse(tokens: Vec<Token>) -> Script {
 
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
     let name = loop {
-        match tokens.inner.pop_front()? {
+        let token = tokens.inner.pop_front()?;
+        match token {
             Token::Comment { .. } => {
                 // Comments in the top-level context are currently ignored.
                 continue;
