@@ -72,6 +72,7 @@ pub enum Token {
     FunctionClose,
 
     Identifier { name: String },
+    IntegerLiteral { value: u128 },
 }
 
 enum State {
@@ -103,10 +104,13 @@ impl Buffer {
     }
 
     pub fn take_identifier(&mut self, tokens: &mut Vec<Token>) {
-        tokens.extend(
-            self.take_if_not_empty()
-                .map(|token| Token::Identifier { name: token }),
-        );
+        tokens.extend(self.take_if_not_empty().map(|token| {
+            if let Ok(value) = token.parse() {
+                Token::IntegerLiteral { value }
+            } else {
+                Token::Identifier { name: token }
+            }
+        }));
     }
 
     pub fn take_from_end(&mut self, s: &str) -> bool {
