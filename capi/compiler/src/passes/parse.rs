@@ -108,7 +108,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                 parse_function(tokens);
             }
             Token::BindingStart => {
-                parse_binding(tokens);
+                body.extend(parse_binding(tokens));
             }
             Token::BranchHeadBoundary | Token::FunctionEnd => {
                 break;
