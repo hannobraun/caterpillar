@@ -20,7 +20,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
                 }
                 '{' => {
                     buffer.take_identifier(&mut tokens);
-                    tokens.push(Token::CurlyBracketOpen);
+                    tokens.push(Token::FunctionOpen);
                 }
                 '}' => {
                     buffer.take_identifier(&mut tokens);
@@ -65,7 +65,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
 pub enum Token {
     BranchHeadBoundary,
     Comment { text: String },
-    CurlyBracketOpen,
+    FunctionOpen,
     CurlyBracketClose,
     FunctionName { name: String },
     Identifier { name: String },
