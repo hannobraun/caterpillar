@@ -63,6 +63,7 @@ pub enum Token {
     Comment { text: String },
     CurlyBracketOpen,
     FunctionName { name: String },
+    Identifier { name: String },
 
     Invalid(String),
 }
@@ -96,6 +97,9 @@ impl Buffer {
     }
 
     pub fn take_invalid(&mut self, tokens: &mut Vec<Token>) {
-        tokens.extend(self.take_if_not_empty().map(Token::Invalid));
+        tokens.extend(
+            self.take_if_not_empty()
+                .map(|name| Token::Identifier { name }),
+        );
     }
 }
