@@ -10,8 +10,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
-                    tokens
-                        .extend(buffer.take_if_not_empty().map(Token::Invalid));
+                    buffer.take_invalid(&mut tokens);
                     state = State::CommentStart;
                 }
                 ch => {
@@ -74,5 +73,9 @@ impl Buffer {
         } else {
             Some(self.take())
         }
+    }
+
+    pub fn take_invalid(&mut self, tokens: &mut Vec<Token>) {
+        tokens.extend(self.take_if_not_empty().map(Token::Invalid));
     }
 }
