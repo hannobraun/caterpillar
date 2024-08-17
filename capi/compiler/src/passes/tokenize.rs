@@ -1,27 +1,30 @@
 pub fn tokenize(_source: String) -> Vec<Token> {
     let mut state = State::Initial;
+    let mut buffer = String::new();
+
     let mut tokens = Vec::new();
 
     for c in _source.chars() {
         match state {
             State::Initial => match c {
                 '#' => {
-                    state = State::Comment {
-                        buffer: String::new(),
-                    };
+                    state = State::Comment;
                 }
                 c => {
                     eprintln!("Unexpected char: `{c}`");
                 }
             },
-            State::Comment { mut buffer } => match c {
+            State::Comment => match c {
                 '\n' => {
-                    tokens.push(Token::Comment { text: buffer });
+                    tokens.push(Token::Comment {
+                        text: buffer.clone(),
+                    });
+                    buffer.clear();
                     state = State::Initial;
                 }
                 c => {
                     buffer.push(c);
-                    state = State::Comment { buffer }
+                    state = State::Comment
                 }
             },
         }
@@ -37,5 +40,5 @@ pub enum Token {
 
 enum State {
     Initial,
-    Comment { buffer: String },
+    Comment,
 }
