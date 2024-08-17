@@ -1,6 +1,6 @@
 use std::collections::{BTreeSet, VecDeque};
 
-use crate::syntax::{Branch, Function, Pattern, Script};
+use crate::syntax::{Branch, Expression, Function, Pattern, Script};
 
 use super::tokenize::Token;
 
@@ -101,7 +101,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    let body = Vec::new();
+    let mut body = Vec::new();
     while let Some(token) = tokens.peek() {
         match token {
             Token::FunctionStart => {
@@ -110,9 +110,18 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
             Token::BranchHeadBoundary | Token::FunctionEnd => {
                 break;
             }
-            _ => {
-                tokens.take();
-            }
+            _ => match tokens.take()? {
+                Token::Comment { text } => {
+                    body.push(Expression::Comment { text });
+                }
+                Token::Identifier { name: _ } => {}
+                Token::IntegerLiteral { value: _ } => {}
+                Token::BindStart | Token::BindEnd => {}
+
+                token => {
+                    panic!("Unexpected token: {token:?}");
+                }
+            },
         }
     }
 
