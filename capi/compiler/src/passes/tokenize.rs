@@ -74,7 +74,7 @@ pub enum Token {
     BranchHeadBoundary,
 
     Identifier { name: String },
-    IntegerLiteral { value: u32 },
+    IntegerLiteral { value: i32 },
 
     BindingStart,
     BindingEnd,
