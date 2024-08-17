@@ -10,6 +10,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         match state {
             State::Initial => match ch {
                 '#' => {
+                    buffer.take();
                     state = State::Comment;
                 }
                 ch => {
