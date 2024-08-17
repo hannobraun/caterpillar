@@ -62,8 +62,8 @@ fn parse_function(tokens: &mut Tokens) -> Option<Function> {
 }
 
 fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
-    while let Some(token) = tokens.peek() {
-        match token {
+    loop {
+        match tokens.peek()? {
             Token::FunctionStart => {
                 parse_function(tokens);
             }
