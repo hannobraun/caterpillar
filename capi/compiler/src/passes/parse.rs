@@ -121,7 +121,9 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                         is_known_to_be_in_tail_position: false,
                     });
                 }
-                Token::IntegerLiteral { value: _ } => {}
+                Token::IntegerLiteral { value } => {
+                    body.push(Expression::Value(value.into()));
+                }
                 Token::BindStart | Token::BindEnd => {}
 
                 token => {
