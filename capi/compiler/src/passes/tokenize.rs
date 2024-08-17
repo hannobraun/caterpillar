@@ -22,6 +22,10 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     buffer.take_invalid(&mut tokens);
                     tokens.push(Token::CurlyBracketOpen);
                 }
+                '|' => {
+                    buffer.take_invalid(&mut tokens);
+                    tokens.push(Token::BranchHeadBoundary);
+                }
                 ch if ch.is_whitespace() => {
                     buffer.take_invalid(&mut tokens);
                 }
@@ -55,6 +59,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
 
 #[derive(Debug)]
 pub enum Token {
+    BranchHeadBoundary,
     Comment { text: String },
     CurlyBracketOpen,
     FunctionName { name: String },
