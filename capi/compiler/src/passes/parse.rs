@@ -81,12 +81,25 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    loop {
-        match tokens.peek()? {
+    while let Some(token) = tokens.take() {
+        match token {
+            Token::Identifier { name: _ } => {}
+            Token::IntegerLiteral { value: _ } => {}
+            Token::BranchHeadBoundary => {
+                break;
+            }
+            token => {
+                panic!("Unexpected token: {token:?}");
+            }
+        }
+    }
+
+    while let Some(token) = tokens.peek() {
+        match token {
             Token::FunctionStart => {
                 parse_function(tokens);
             }
-            Token::FunctionEnd => {
+            Token::BranchHeadBoundary | Token::FunctionEnd => {
                 break;
             }
             _ => {
@@ -95,7 +108,10 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
         }
     }
 
-    None
+    Some(Branch {
+        parameters: Vec::new(),
+        body: Vec::new(),
+    })
 }
 
 struct Tokens {
