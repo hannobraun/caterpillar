@@ -25,9 +25,7 @@ fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
             continue;
         }
 
-        let token = tokens.inner.pop_front()?;
-
-        match token {
+        match tokens.inner.pop_front()? {
             Token::FunctionName { name } => {
                 break name;
             }
