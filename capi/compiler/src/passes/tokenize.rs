@@ -1,6 +1,8 @@
 pub fn tokenize(source: String) -> Vec<Token> {
     let mut state = State::Initial;
-    let mut buffer = String::new();
+    let mut buffer = Buffer {
+        inner: String::new(),
+    };
 
     let mut tokens = Vec::new();
 
@@ -17,13 +19,13 @@ pub fn tokenize(source: String) -> Vec<Token> {
             State::Comment => match ch {
                 '\n' => {
                     tokens.push(Token::Comment {
-                        text: buffer.clone(),
+                        text: buffer.inner.clone(),
                     });
-                    buffer.clear();
+                    buffer.inner.clear();
                     state = State::Initial;
                 }
                 c => {
-                    buffer.push(c);
+                    buffer.inner.push(c);
                     state = State::Comment
                 }
             },
@@ -41,4 +43,8 @@ pub enum Token {
 enum State {
     Initial,
     Comment,
+}
+
+struct Buffer {
+    inner: String,
 }
