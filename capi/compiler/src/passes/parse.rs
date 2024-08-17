@@ -145,9 +145,12 @@ fn parse_binding(tokens: &mut Tokens) -> Option<Expression> {
         }
     }
 
+    let mut names = Vec::new();
     loop {
         match tokens.take()? {
-            Token::Identifier { name: _ } => {}
+            Token::Identifier { name } => {
+                names.push(name);
+            }
             Token::BindingEnd => {
                 break;
             }
@@ -157,7 +160,7 @@ fn parse_binding(tokens: &mut Tokens) -> Option<Expression> {
         }
     }
 
-    None
+    Some(Expression::Binding { names })
 }
 
 struct Tokens {
