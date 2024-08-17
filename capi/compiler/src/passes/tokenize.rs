@@ -64,8 +64,6 @@ pub enum Token {
     CurlyBracketOpen,
     FunctionName { name: String },
     Identifier { name: String },
-
-    Invalid(String),
 }
 
 enum State {
