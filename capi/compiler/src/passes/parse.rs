@@ -20,11 +20,13 @@ pub fn parse(tokens: Vec<Token>) -> Script {
 fn parse_named_function(tokens: &mut Tokens) -> Option<Function> {
     let name = loop {
         let token = tokens.inner.pop_front()?;
+
+        if let Token::Comment { .. } = token {
+            // Comments in the top-level context are currently ignored.
+            continue;
+        }
+
         match token {
-            Token::Comment { .. } => {
-                // Comments in the top-level context are currently ignored.
-                continue;
-            }
             Token::FunctionName { name } => {
                 break name;
             }
