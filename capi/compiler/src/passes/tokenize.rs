@@ -3,7 +3,7 @@ use std::mem;
 pub fn tokenize(source: String) -> Vec<Token> {
     let eager_tokens = vec![
         ("{", Token::FunctionStart),
-        ("}", Token::FunctionClose),
+        ("}", Token::FunctionEnd),
         ("|", Token::BranchHeadBoundary),
         ("=>", Token::BindStart),
         (".", Token::BindEnd),
@@ -69,7 +69,7 @@ pub enum Token {
 
     FunctionName { name: String },
     FunctionStart,
-    FunctionClose,
+    FunctionEnd,
     BranchHeadBoundary,
 
     Identifier { name: String },
