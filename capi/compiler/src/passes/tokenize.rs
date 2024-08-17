@@ -12,8 +12,8 @@ pub fn tokenize(source: String) -> Vec<Token> {
                 '#' => {
                     state = State::Comment;
                 }
-                c => {
-                    eprintln!("Unexpected char: `{c}`");
+                ch => {
+                    eprintln!("Unexpected char: `{ch}`");
                 }
             },
             State::Comment => match ch {
