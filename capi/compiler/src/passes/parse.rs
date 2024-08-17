@@ -124,7 +124,7 @@ fn parse_branch(tokens: &mut Tokens) -> Option<Branch> {
                 Token::IntegerLiteral { value } => {
                     body.push(Expression::Value(value.into()));
                 }
-                Token::BindStart | Token::BindEnd => {}
+                Token::BindingStart | Token::BindEnd => {}
 
                 token => {
                     panic!("Unexpected token: {token:?}");

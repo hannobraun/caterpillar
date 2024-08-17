@@ -5,7 +5,7 @@ pub fn tokenize(source: String) -> Vec<Token> {
         ("{", Token::FunctionStart),
         ("}", Token::FunctionEnd),
         ("|", Token::BranchHeadBoundary),
-        ("=>", Token::BindStart),
+        ("=>", Token::BindingStart),
         (".", Token::BindEnd),
     ];
 
@@ -76,7 +76,7 @@ pub enum Token {
     Identifier { name: String },
     IntegerLiteral { value: u32 },
 
-    BindStart,
+    BindingStart,
     BindEnd,
 }
 
