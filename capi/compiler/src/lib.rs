@@ -10,4 +10,4 @@ mod passes;
 #[cfg(test)]
 mod tests;
 
-pub use self::compile::compile;
+pub use self::{compile::compile, passes::tokenize};
