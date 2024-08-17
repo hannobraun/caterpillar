@@ -4,9 +4,9 @@ pub fn tokenize(_source: String) -> Vec<Token> {
 
     let mut tokens = Vec::new();
 
-    for c in _source.chars() {
+    for ch in _source.chars() {
         match state {
-            State::Initial => match c {
+            State::Initial => match ch {
                 '#' => {
                     state = State::Comment;
                 }
@@ -14,7 +14,7 @@ pub fn tokenize(_source: String) -> Vec<Token> {
                     eprintln!("Unexpected char: `{c}`");
                 }
             },
-            State::Comment => match c {
+            State::Comment => match ch {
                 '\n' => {
                     tokens.push(Token::Comment {
                         text: buffer.clone(),
