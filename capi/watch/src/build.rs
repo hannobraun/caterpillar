@@ -51,8 +51,8 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
         .output()
         .await?
         .stdout;
-    let script = str::from_utf8(&script).unwrap();
-    let script = ron::from_str(script).unwrap();
+    let script = str::from_utf8(&script)?;
+    let script = ron::from_str(script)?;
 
     let (fragments, instructions, source_map) =
         compile::<GameEngineHost>(script);
