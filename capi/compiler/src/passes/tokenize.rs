@@ -18,31 +18,24 @@ pub fn tokenize(source: String) -> Vec<Token> {
                     buffer.push(ch);
                 }
             },
+
+            State::CommentStart | State::CommentText if ch == '\n' => {
+                tokens.push(Token::Comment {
+                    text: buffer.take(),
+                });
+                state = State::Initial;
+            }
             State::CommentStart => match ch {
-                '\n' => {
-                    tokens.push(Token::Comment {
-                        text: buffer.take(),
-                    });
-                    state = State::Initial;
-                }
                 ch if ch.is_whitespace() => {}
                 ch => {
                     buffer.push(ch);
                     state = State::CommentText;
                 }
             },
-            State::CommentText => match ch {
-                '\n' => {
-                    tokens.push(Token::Comment {
-                        text: buffer.take(),
-                    });
-                    state = State::Initial;
-                }
-                ch => {
-                    buffer.push(ch);
-                    state = State::CommentText
-                }
-            },
+            State::CommentText => {
+                buffer.push(ch);
+                state = State::CommentText
+            }
         }
     }
 
