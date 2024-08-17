@@ -1,5 +1,6 @@
 use std::str;
 
+use anyhow::Context;
 use capi_compiler::compile;
 use capi_game_engine::host::GameEngineHost;
 use capi_protocol::{updates::Code, Versioned};
@@ -52,7 +53,9 @@ pub async fn build_game_once(game: &str) -> anyhow::Result<Code> {
         .await?
         .stdout;
     let script = str::from_utf8(&script)?;
-    let script = ron::from_str(script)?;
+    let script = ron::from_str(script).with_context(|| {
+        format!("Failed to parse message from game:\n{script}")
+    })?;
 
     let (fragments, instructions, source_map) =
         compile::<GameEngineHost>(script);
